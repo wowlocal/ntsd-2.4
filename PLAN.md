@@ -1,227 +1,289 @@
-# NTSD 2.4 Full Recreation in Godot 4 for macOS
+# NTSD 2.4 for macOS — Reverse Engineering & Port Plan
 
 ## Context
 
-Recreate NTSD 2.4 (Naruto The Setting Dawn 2.4) — a 2.5D fighting game mod of Little Fighter 2 — as a native Godot 4 game targeting macOS. The goal is an exact faithful reproduction of the original gameplay feel, mechanics, character roster, and game modes. Assets will be sourced from the LF2/NTSD modding community. The original game's `.dat` character data files can be imported directly.
+Port NTSD 2.4 (Naruto The Setting Dawn 2.4) to macOS by forking **F.LF**, an existing open-source clean-room JavaScript reimplementation of the LF2 engine, and loading NTSD 2.4's original data files into it. Wrap the result in **Tauri** for a native macOS desktop app.
 
-## Key Insight: LF2 `.dat` Import Pipeline
-
-The original NTSD 2.4 characters are defined in LF2 `.dat` files (lightly XOR-encrypted text) that specify every frame's sprite, timing, hitboxes, hurtboxes, knockback values, and state transitions. By building an importer, we can bring over all 20+ characters semi-automatically with exact original frame data — this is the fastest path to "exact experience."
-
-Reference: [lf2_codec](https://github.com/azriel91/lf2_codec), [LF2 Data Changing docs](https://www.lf-empire.de/27-lfe-v10/data-changing)
+This approach skips building a game engine from scratch — F.LF already implements the complete LF2 engine (state machine, 2.5D physics, hitbox system, AI, networking). Our work is: data conversion, NTSD-specific tweaks, and native packaging.
 
 ---
 
-## Project Structure
+## Why This Approach
 
-```
-ntsd_godot/
-├── project.godot
-├── addons/godot_rollback_netcode/     # Snopek rollback addon
-├── assets/
-│   ├── sprites/characters/{name}/     # Per-character sprite sheets (PNG)
-│   ├── sprites/projectiles/
-│   ├── sprites/effects/
-│   ├── audio/{sfx,bgm,voice}/
-│   ├── fonts/
-│   └── backgrounds/
-├── data/
-│   ├── characters/{name}.tres         # CharacterData resources
-│   └── stages/{name}.tres
-├── src/
-│   ├── autoload/                      # Singletons: game_manager, input_manager, audio_manager, network_manager
-│   ├── characters/
-│   │   ├── fighter.gd / .tscn         # Base fighter (CharacterBody2D)
-│   │   ├── fighter_animator.gd        # Custom frame driver (not AnimatedSprite2D)
-│   │   ├── character_data.gd          # Resource: sprites, stats, frames, commands
-│   │   ├── frame_data.gd             # Resource: per-frame sprite/hitbox/state data
-│   │   ├── itr_data.gd              # Resource: hitbox interaction data
-│   │   ├── hitbox_component.gd
-│   │   ├── hurtbox_component.gd
-│   │   ├── chakra_component.gd
-│   │   └── states/                    # Node-based state machine
-│   │       ├── state_machine.gd, state.gd (base)
-│   │       ├── idle, walk, run, jump, fall, attack, special_attack, hell_move
-│   │       ├── hit, knockdown, recovery, block, charge, grab, grabbed
-│   ├── combat/
-│   │   ├── combat_system.gd           # Hit detection, damage calc, combo tracking
-│   │   ├── input_buffer.gd            # 60-frame ring buffer
-│   │   ├── command_parser.gd          # D>J>A sequence detection for specials/hell moves
-│   │   └── projectile.gd
-│   ├── physics/
-│   │   └── movement_2_5d.gd           # Custom deterministic: X(horizontal), Y(depth), Z(height)
-│   ├── ai/
-│   │   ├── ai_controller.gd           # Utility-based, replaces human input
-│   │   └── ai_difficulty.gd           # Configurable reaction time, combo chance, aggression
-│   ├── ui/
-│   │   ├── hud/ (battle_hud, health_bar, chakra_bar)
-│   │   ├── menus/ (main_menu, character_select, stage_select, pause, results)
-│   ├── modes/
-│   │   ├── mode_base.gd, vs_mode, stage_mode, tournament_mode, battle_mode
-│   ├── stages/
-│   │   ├── arena.gd/.tscn, arena_camera.gd
-│   └── tools/
-│       ├── lf2_dat_importer.gd        # Decrypt + parse .dat -> CharacterData .tres
-│       └── sprite_sheet_slicer.gd
-```
-
----
-
-## Core Architecture Decisions
-
-| Decision | Choice | Why |
+| | From-scratch (Godot) | Fork F.LF + NTSD data |
 |---|---|---|
-| Physics | Custom deterministic (integer math, no Godot physics) | Required for rollback netcode; LF2 mechanics are too specific |
-| State machine | Node-based (one GDScript per state) | Clean, debuggable, Godot 4 best practice |
-| Animation | Custom frame driver reading frame_data | LF2 frames have conditional branching, variable wait, hit callbacks — too custom for AnimatedSprite2D |
-| Character data | Custom Resources (.tres) imported from LF2 .dat | Inspector-editable + faithful import from originals |
-| 2.5D depth | Fake Z-axis: screen_y = depth_y - height_z, Y-sort for draw order | Faithful to LF2 movement model |
-| Netcode | Rollback via Snopek addon | Fighting games demand it |
-| AI | Utility-based with difficulty params | Simple, effective for fighting games |
+| Engine work | Build everything | Already done (v0.9.9) |
+| Physics/combat | Reimplement | Already faithful to LF2 |
+| Character import | Build importer + validate | Convert .dat → JSON (tooling exists) |
+| Timeline | Months | Weeks |
+| Accuracy risk | High (subtle feel differences) | Low (F.LF already matches LF2) |
 
 ---
 
-## 2.5D Movement System
+## Key Components
 
-LF2's coordinate system (critical to get right):
-- **X**: horizontal position (maps directly to screen X)
-- **Y**: depth on ground plane (forward/backward)
-- **Z**: vertical height (jumping, knockback up)
-- **Screen position**: `screen_x = X`, `screen_y = Y - Z`
-- **Draw order**: higher Y = drawn in front
-- **Shadow**: always drawn at `(X, Y)` on the ground
-- **Gravity** pulls Z back to 0; landing when Z ≤ 0
-- All values integer for determinism
+### 1. F.LF Engine (existing)
+- **Repo**: `Project-F/F.LF` on GitHub
+- **Language**: JavaScript/HTML5 (56.6% JS, 41.6% HTML)
+- **Status**: v0.9.9, 11 characters, networking, AI, near-complete
+- **Runs**: Opens `game/game.html` in any browser — works on macOS already
+- **Core modules** (22 files in `/LF`):
+  - `mechanics.js` — game rules, physics
+  - `character.js` — character data/properties
+  - `livingobject.js` — base entity class
+  - `specialattack.js` — special moves
+  - `sprite.js` — sprite rendering
+  - `AI.js` — bot logic
+  - `network.js` — WebSocket multiplayer
+  - `loader.js` / `loader-config.js` — asset loading
+  - `manager.js` — game loop orchestration
 
----
+### 2. lf2_codec (existing)
+- **Repo**: `azriel91/lf2_codec` on GitHub
+- **Language**: Rust
+- **What it does**: Decrypts LF2 `.dat` files (Caesar cipher, 123-byte header skip)
+- **Usage**: `lf2_codec decode character.dat > character.txt`
+- **Output**: Human-readable text with frame definitions, hitboxes, etc.
 
-## Combat System
-
-- **Hitboxes** (itr) active only during attack frames, driven by frame data
-- **Hurtboxes** (bdy) per-frame, also from data
-- **Damage**: `injury * multiplier - defense`
-- **Knockback**: `dvx`, `dvy` from itr data applied to victim
-- **Combos**: counter increments until victim hits ground; floating combo counter UI
-- **Blocking**: if defending + facing attacker → chip damage + pushback only
-- **Chakra**: charged via Defend+Jump+Attack held; spent on specials/hell moves
-- **Command input**: ring buffer + pattern matcher for `D>J>A`, `D>v>A>D>^>A` etc.
-
----
-
-## Character Roster (import order)
-
-**Batch 1** (core): Naruto, Sasuke, Sakura, Rock Lee, Neji, Kakashi
-**Batch 2**: Tenten, Shikamaru, Kiba, Shino, Gaara, Kankuro, Temari
-**Batch 3**: Yamato, Jiraiya, Chiyo, Hinata
-**Batch 4** (variants): Naruto Kyubi, Sasuke Curse Mark
-**Batch 5** (secret): Yondaime, Tobi, Haku, Kimimaro, Tonton, Master Hand, God
+### 3. NTSD 2.4 Data Files
+- **Format**: Standard LF2 `.dat` (encrypted) + BMP sprite sheets (magenta transparency)
+- **Sources**: ModDB, NTSD forums (ntsd.forumotion.com), Little Fighter Empire
+- **Key fact**: NTSD 2.4 uses **unmodified LF2 engine** — no custom itr types or engine extensions. All standard LF2 frame states and interaction types work as-is in F.LF.
 
 ---
 
-## Game Modes
+## Architecture
 
-- **VS Mode**: Char select → Stage select → Fight → Results. 1-8 fighters, local/online, team/FFA
-- **Stage Mode**: Linear campaign with scripted encounters, boss fights, story screens, unlocks
-- **Tournament**: 1v1 and 2v2 bracket, auto-generated, progression to finals
-- **Battle Mode**: Survival / endless waves with scoring
-
----
-
-## Asset Pipeline
-
-1. Source NTSD 2.4 `.dat` files + BMP sprite sheets from community
-2. Convert BMP (magenta transparency) → PNG with alpha via script
-3. Import PNGs into Godot with Nearest filter, no mipmaps (pixel art)
-4. Run `lf2_dat_importer.gd` to decrypt `.dat` → parse → generate `.tres` resources
-5. Each character's `CharacterData.tres` references its sprite sheets and contains all frame data
+```
+ntsd-macos/
+├── src-tauri/                     # Tauri Rust backend
+│   ├── Cargo.toml
+│   ├── src/
+│   │   └── main.rs               # Tauri app entry, window config
+│   └── tauri.conf.json            # App metadata, window size, permissions
+│
+├── game/                          # F.LF fork (the actual game)
+│   ├── LF/                        # Core engine modules (22 JS files)
+│   │   ├── mechanics.js
+│   │   ├── character.js
+│   │   ├── livingobject.js
+│   │   ├── sprite.js
+│   │   ├── loader.js
+│   │   ├── loader-config.js       # ← MODIFY: point to NTSD data
+│   │   ├── AI.js
+│   │   ├── network.js
+│   │   └── ...
+│   ├── core/                      # Engine infrastructure
+│   ├── game/
+│   │   └── game.html              # Entry point
+│   ├── third_party/               # Dependencies
+│   └── docs/
+│
+├── data/                          # NTSD 2.4 converted data
+│   ├── characters/                # JSON character definitions
+│   │   ├── naruto.json
+│   │   ├── sasuke.json
+│   │   └── ...
+│   ├── stages/                    # Stage/background definitions
+│   └── sounds/                    # Sound effects
+│
+├── assets/                        # NTSD 2.4 converted sprites
+│   ├── sprites/
+│   │   ├── naruto/                # PNG sprite sheets (converted from BMP)
+│   │   ├── sasuke/
+│   │   └── ...
+│   └── backgrounds/
+│
+├── tools/                         # Conversion pipeline
+│   ├── dat2json.js                # .dat (decrypted text) → F.LF JSON converter
+│   ├── bmp2png.sh                 # BMP (magenta key) → PNG (alpha) batch converter
+│   └── import_ntsd.sh             # Full pipeline: decrypt → convert → copy
+│
+├── package.json                   # Node deps (Tauri CLI, dev server)
+└── README.md
+```
 
 ---
 
 ## Implementation Phases
 
-### Phase 1: Core Foundation
-- Godot 4 project setup with full folder structure
-- `movement_2_5d.gd` with X/Y/Z, gravity, ground collision
-- `state_machine.gd` + Idle, Walk, Run, Jump, Fall states
-- `fighter_animator.gd` with test sprites
-- `input_manager.gd` for P1
-- `Arena` scene with background + camera
-- **Deliverable**: One character moving and jumping
+### Phase 1: Setup & Proof of Concept
+**Goal**: F.LF running in browser with one NTSD character
 
-### Phase 2: Combat Foundation
-- Attack states with 3-hit basic combo chain
-- Hitbox/hurtbox system
-- `combat_system.gd`: hit detection, damage, knockback
-- Hit, Knockdown, Recovery, Block states
-- Health bars in HUD
-- **Deliverable**: P1 vs P2 local fighting
+1. **Fork F.LF** into `game/` directory
+2. **Get F.LF running** locally — open `game/game.html`, verify base LF2 works
+3. **Install lf2_codec**: `cargo install lf2_codec`
+4. **Download NTSD 2.4** data files from community sources
+5. **Decrypt one character** (Naruto): `lf2_codec decode naruto.dat > naruto.txt`
+6. **Build `dat2json.js`** — parse the decrypted text format into F.LF's JSON schema:
+   - Parse `<bmp_begin>` section → sprite file references
+   - Parse `<frame>` blocks → frame array (pic, state, wait, next, dvx, dvy, centerx, centery)
+   - Parse `bdy:` blocks → body/hurtbox rects
+   - Parse `itr:` blocks → interaction/hitbox data (kind, x, y, w, h, dvx, dvy, injury, fall, bdefend)
+   - Parse `opoint:` blocks → projectile spawn points
+   - Parse `cpoint:` blocks → grab/catch points
+7. **Convert Naruto's BMP sprites** → PNG with alpha (ImageMagick: `convert input.bmp -transparent "#FF00FF" output.png`)
+8. **Modify `loader-config.js`** to load NTSD character data from `data/characters/`
+9. **Test**: Naruto playable in browser with original sprites and moveset
 
-### Phase 3: Data-Driven Characters
-- `CharacterData`, `FrameData`, `ItrData` Resource classes
-- `lf2_dat_importer.gd` (decrypt + parse LF2 .dat files)
-- Sprite sheet pipeline (BMP→PNG converter)
-- Import Naruto from actual NTSD 2.4 data
-- `command_parser.gd` + `input_buffer.gd` for specials
-- Chakra system
-- **Deliverable**: Naruto with full original moveset
+**Deliverable**: Naruto fighting in F.LF with exact original frame data
 
-### Phase 4: Full Roster Import
-- Import all characters batch by batch (see roster order above)
-- Implement `opoint` (projectile spawning) and `cpoint` (grabs)
-- Character transformation system (Kyubi, Curse Mark)
-- Test and validate each character against original
-- **Deliverable**: All 20+ characters playable
+### Phase 2: Full Data Import
+**Goal**: All NTSD 2.4 characters and stages converted and loaded
 
-### Phase 5: Game Modes
-- VS Mode with full char/stage select flow
-- Tournament Mode with bracket system
-- Stage Mode with campaign data format and scripted encounters
-- Battle Mode survival
+1. **Batch decrypt** all `.dat` files
+2. **Batch convert** all BMP sprite sheets → PNG
+3. **Run `dat2json.js`** on every character
+4. **Import stages/backgrounds** — same decrypt + convert pipeline
+5. **Update `loader-config.js`** with full NTSD roster
+6. **Modify character select UI** to show NTSD character grid
+7. **Test each character** — verify sprites display correctly, moves work, hitboxes land
 
-### Phase 6: AI
-- `ai_controller.gd` utility-based decision making
-- Difficulty levels (Easy → Insane)
-- Per-character AI tuning
+**Deliverable**: All 20+ characters playable in browser
 
-### Phase 7: UI/Audio Polish
-- Main menu, character select with portraits, stage select
-- Full HUD polish (animations, transitions)
-- Sound effects and background music integration
-- Settings menu (controls, volume, display)
+### Phase 3: NTSD-Specific Features
+**Goal**: Anything NTSD adds beyond vanilla LF2
 
-### Phase 8: Networking
-- Audit all game code for determinism
-- Integrate Snopek rollback netcode
-- State serialization for all game objects
-- Lobby system (WebRTC peer-to-peer)
-- Scale to 4+ players, spectator mode
+1. **Hell Moves** — verify F.LF's command input system handles NTSD's longer sequences (D>v>A>D>^>A). If not, extend `mechanics.js` input buffer
+2. **Chakra system** — verify F.LF's MP system maps correctly to NTSD's chakra mechanics
+3. **Character transformations** — Naruto Kyubi form, Sasuke Curse Mark (mid-match form switches via opoint or state transitions)
+4. **Stage Mode** — NTSD's campaign following Naruto Part 2 storyline; script encounter sequences
+5. **Tournament modes** — 1v1 and 2v2 bracket UI
+6. **NTSD main menu** — recreate the original menu layout and flow
+7. **Sound effects** — import NTSD audio files, wire into `soundpack.js`
 
-### Phase 9: macOS Release
-- Export config, code signing, notarization
-- DMG installer, app icon
-- Performance optimization
-- Controller/gamepad support
-- Retina/HiDPI support
+**Deliverable**: Feature-complete NTSD 2.4 in browser
+
+### Phase 4: Tauri Desktop App
+**Goal**: Native macOS app with DMG installer
+
+1. **Init Tauri project**: `npm create tauri-app`
+2. **Configure `tauri.conf.json`**:
+   - Window size matching LF2 resolution (794×550 or scaled up)
+   - App title: "NTSD 2.4"
+   - macOS bundle identifier
+   - Disable browser dev tools in production
+3. **Point Tauri at `game/game.html`** as the frontend
+4. **Keyboard input** — ensure all LF2 key mappings work through Tauri's webview
+5. **Fullscreen toggle** — F11 or ⌘F for macOS fullscreen
+6. **App icon** — NTSD-themed icon for dock/Finder
+7. **Build**: `npm run tauri build` → produces `.dmg`
+8. **Code sign & notarize** for macOS Gatekeeper
+
+**Deliverable**: `NTSD-2.4.dmg` that installs and runs natively
+
+### Phase 5: Polish & Multiplayer
+**Goal**: Production-ready experience
+
+1. **Performance** — profile in Tauri webview, optimize sprite rendering if needed
+2. **Retina/HiDPI** — scale canvas for macOS Retina displays (2x pixel density)
+3. **Gamepad support** — map gamepad input via Gamepad API (already available in webview)
+4. **Online multiplayer** — F.LF already has WebSocket networking; set up a relay server or use WebRTC for P2P
+5. **Save state** — persist settings, unlocked characters, tournament progress to local storage
+6. **Auto-update** — Tauri's built-in updater for future patches
+
+**Deliverable**: Polished, shippable macOS app
+
+---
+
+## Data Conversion Details
+
+### .dat File Format (after decryption)
+
+```
+<bmp_begin>
+file(0-69): sprite\naruto_0.bmp  w: 79  h: 79  row: 10  col: 7
+file(70-139): sprite\naruto_1.bmp  w: 79  h: 79  row: 10  col: 7
+<bmp_end>
+
+<frame> 0 standing
+   pic: 0  state: 0  wait: 3  next: 1  dvx: 0  dvy: 0  centerx: 39  centery: 79
+   bdy:
+      kind: 0  x: 22  y: 16  w: 33  h: 62
+   bdy_end:
+<frame_end>
+
+<frame> 60 punch1
+   pic: 60  state: 3  wait: 2  next: 61  dvx: 5  dvy: 0  centerx: 39  centery: 79
+   bdy:
+      kind: 0  x: 20  y: 14  w: 30  h: 64
+   bdy_end:
+   itr:
+      kind: 0  x: 50  y: 20  w: 30  h: 30  dvx: 8  dvy: 0  fall: 20  injury: 30
+   itr_end:
+<frame_end>
+```
+
+### F.LF JSON Target Format
+
+```json
+{
+  "name": "Naruto",
+  "file": [
+    { "file": "sprites/naruto/naruto_0.png", "w": 79, "h": 79, "row": 10, "col": 7 }
+  ],
+  "frame": {
+    "0": {
+      "pic": 0, "state": 0, "wait": 3, "next": 1,
+      "dvx": 0, "dvy": 0, "centerx": 39, "centery": 79,
+      "bdy": { "kind": 0, "x": 22, "y": 16, "w": 33, "h": 62 }
+    },
+    "60": {
+      "pic": 60, "state": 3, "wait": 2, "next": 61,
+      "dvx": 5, "dvy": 0, "centerx": 39, "centery": 79,
+      "bdy": { "kind": 0, "x": 20, "y": 14, "w": 30, "h": 64 },
+      "itr": { "kind": 0, "x": 50, "y": 20, "w": 30, "h": 30, "dvx": 8, "dvy": 0, "fall": 20, "injury": 30 }
+    }
+  }
+}
+```
+
+### BMP → PNG Conversion
+
+```bash
+# Single file
+convert input.bmp -transparent "#FF00FF" output.png
+
+# Batch (all BMPs in a directory)
+for f in *.bmp; do
+  convert "$f" -transparent "#FF00FF" "${f%.bmp}.png"
+done
+```
+
+Requires ImageMagick: `brew install imagemagick`
 
 ---
 
 ## Verification Plan
 
-- **Phase 1-2**: Run project, verify character movement/combat feels responsive
-- **Phase 3**: Import original Naruto `.dat`, compare frame timings and hitboxes frame-by-frame against original NTSD 2.4
-- **Phase 4**: Play-test each character; record and compare combos/damage values to originals
-- **Phase 5**: Complete each game mode flow start-to-finish
-- **Phase 6**: AI plays itself for extended sessions; no softlocks
-- **Phase 8**: Network play test with simulated latency (200ms+); verify rollback smoothness
-- **Phase 9**: macOS build runs at 60fps stable; DMG installs cleanly
+- **Phase 1**: Naruto walks, jumps, attacks in browser — compare side-by-side with original NTSD 2.4 footage
+- **Phase 2**: Every character loads without errors; spot-check 5 characters' full movesets
+- **Phase 3**: Hell moves execute with correct input sequences; Stage Mode plays through at least 3 stages
+- **Phase 4**: `.dmg` installs on clean macOS; app launches, plays, and quits cleanly
+- **Phase 5**: Two players can fight over network with <100ms perceived latency; gamepad works
+
+---
+
+## Tools & Dependencies
+
+| Tool | Purpose | Install |
+|---|---|---|
+| lf2_codec | Decrypt .dat files | `cargo install lf2_codec` |
+| ImageMagick | BMP → PNG conversion | `brew install imagemagick` |
+| Node.js | dat2json converter, Tauri CLI | `brew install node` |
+| Rust/Cargo | Tauri backend, lf2_codec | `brew install rust` |
+| Tauri CLI | Build macOS app | `npm install @tauri-apps/cli` |
 
 ---
 
 ## References
 
+- [F.LF — open source LF2 engine](https://github.com/Project-F/F.LF)
+- [F.LF live demo](https://project-f.github.io/F.LF/)
+- [lf2_codec — .dat file decoder](https://github.com/azriel91/lf2_codec)
 - [LF2 .dat file format](https://www.lf-empire.de/27-lfe-v10/data-changing)
-- [lf2_codec (dat decryptor)](https://github.com/azriel91/lf2_codec)
-- [F.LF open source LF2](https://github.com/Project-F/F.LF)
-- [Snopek Rollback Netcode](https://gitlab.com/snopek-games/godot-rollback-netcode)
+- [LF2 frame elements (itr, bdy, opoint, cpoint)](https://www.lf-empire.de/lf2-empire/data-changing/frame-elements)
+- [LF2 states reference](https://www.lf-empire.de/lf2-empire/data-changing/reference-pages/182-states)
 - [NTSD on ModDB](https://www.moddb.com/mods/ntsd-naruto-the-setting-dawn)
-- [LF2 Empire data changing reference](https://www.lf-empire.de/lf2-empire/data-changing/frame-elements)
+- [NTSD forums](https://ntsd.forumotion.com/)
+- [Tauri — Rust desktop app framework](https://tauri.app/)
