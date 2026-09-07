@@ -1,0 +1,182 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "evidence": "S: verified instruction bytes and layout arithmetic; no complete catalog execution",
+  "storageBytes": 81273768,
+  "regions": [
+    {
+      "name": "object pointer table",
+      "start": 0,
+      "end": 2000,
+      "entryBytes": 4,
+      "inferredCapacity": 500,
+      "limit": "Capacity inferred from next region, not a demonstrated bounds check"
+    },
+    {
+      "name": "stages",
+      "start": 2000,
+      "end": 81026480,
+      "entries": 60,
+      "stride": 1350408,
+      "phaseStride": 13504,
+      "phaseIterations": 100,
+      "repeatedEntryStride": 224,
+      "repeatedEntryIterations": 60,
+      "limit": "Repeated-entry stride is not proof of a standalone sizeof(entry); untouched gaps and field semantics remain open"
+    },
+    {
+      "name": "background records including special slots",
+      "start": 81026480,
+      "end": 81273728,
+      "inferredCapacity": 101,
+      "stride": 2448,
+      "specialSlots": {
+        "99": "Lee On Road",
+        "100": "Random name"
+      }
+    },
+    {
+      "name": "loaded object count",
+      "start": 81273728,
+      "end": 81273732
+    },
+    {
+      "name": "loaded background count",
+      "start": 81273732,
+      "end": 81273736
+    },
+    {
+      "name": "source filename",
+      "start": 81273736,
+      "end": 81273768,
+      "limit": "32-byte tail; original copy loop has no observed length check"
+    }
+  ],
+  "instructions": [
+    {
+      "address": "0x40c220",
+      "bytes": "69db90090000",
+      "instruction": "imul ebx, ebx, 0x990"
+    },
+    {
+      "address": "0x40c22f",
+      "bytes": "8983cc5dd404",
+      "instruction": "mov dword ptr [ebx + 0x4d45dcc], eax"
+    },
+    {
+      "address": "0x40c957",
+      "bytes": "8d83d0070000",
+      "instruction": "lea eax, [ebx + 0x7d0]"
+    },
+    {
+      "address": "0x40c95d",
+      "bytes": "b93c000000",
+      "instruction": "mov ecx, 0x3c"
+    },
+    {
+      "address": "0x40c962",
+      "bytes": "c700ffffffff",
+      "instruction": "mov dword ptr [eax], 0xffffffff"
+    },
+    {
+      "address": "0x40c968",
+      "bytes": "05089b1400",
+      "instruction": "add eax, 0x149b08"
+    },
+    {
+      "address": "0x40ca0d",
+      "bytes": "89841ad8070000",
+      "instruction": "mov dword ptr [edx + ebx + 0x7d8], eax"
+    },
+    {
+      "address": "0x40ca51",
+      "bytes": "c7841fbc080000ffffffff",
+      "instruction": "mov dword ptr [edi + ebx + 0x8bc], 0xffffffff"
+    },
+    {
+      "address": "0x40cb33",
+      "bytes": "05e0000000",
+      "instruction": "add eax, 0xe0"
+    },
+    {
+      "address": "0x40cb38",
+      "bytes": "3d80340000",
+      "instruction": "cmp eax, 0x3480"
+    },
+    {
+      "address": "0x40cb4e",
+      "bytes": "81c1c0340000",
+      "instruction": "add ecx, 0x34c0"
+    },
+    {
+      "address": "0x40cb54",
+      "bytes": "81f9009b1400",
+      "instruction": "cmp ecx, 0x149b00"
+    },
+    {
+      "address": "0x41233b",
+      "bytes": "c7856010d80460090000",
+      "instruction": "mov dword ptr [ebp + 0x4d81060], 0x960"
+    },
+    {
+      "address": "0x412373",
+      "bytes": "89952c14d804",
+      "instruction": "mov dword ptr [ebp + 0x4d8142c], edx"
+    },
+    {
+      "address": "0x4124ff",
+      "bytes": "898dbc1dd804",
+      "instruction": "mov dword ptr [ebp + 0x4d81dbc], ecx"
+    },
+    {
+      "address": "0x41252b",
+      "bytes": "8d918823d804",
+      "instruction": "lea edx, [ecx + 0x4d82388]"
+    },
+    {
+      "address": "0x41253d",
+      "bytes": "899d8423d804",
+      "instruction": "mov dword ptr [ebp + 0x4d82384], ebx"
+    },
+    {
+      "address": "0x412543",
+      "bytes": "899d8023d804",
+      "instruction": "mov dword ptr [ebp + 0x4d82380], ebx"
+    },
+    {
+      "address": "0x4126a4",
+      "bytes": "89449500",
+      "instruction": "mov dword ptr [ebp + 4*edx], eax"
+    },
+    {
+      "address": "0x4126a8",
+      "bytes": "83858023d80401",
+      "instruction": "add dword ptr [ebp + 0x4d82380], 0x1"
+    },
+    {
+      "address": "0x4127cd",
+      "bytes": "e83ea1ffff",
+      "instruction": "call 0x40c910"
+    },
+    {
+      "address": "0x41a2dd",
+      "bytes": "81bc11b05dd4041a030000",
+      "instruction": "cmp dword ptr [ecx + edx + 0x4d45db0], 0x31a"
+    },
+    {
+      "address": "0x41bfeb",
+      "bytes": "68a823d804",
+      "instruction": "push 0x4d823a8"
+    }
+  ],
+  "registryFileSHA256": "65b2143c03433665986dd84f96989ffd0466d897b56b9ad0dea664e0fc947ecd",
+  "firstRegistryEntry": {
+    "id": 50,
+    "type": 0,
+    "file": "chars\\pein.dat"
+  },
+  "limits": [
+    "No implied defaults for unassigned bytes",
+    "Loaded object/background counts are not capacities",
+    "The full catalog, object/background/stage loaders and their CRT conversions still require execution witnesses"
+  ]
+}

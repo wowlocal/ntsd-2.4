@@ -8,9 +8,12 @@ let package = Package(
                .executable(name: "NTSDFrameCheck", targets: ["NTSDFrameCheck"]),
                .executable(name: "NTSDMovementCheck", targets: ["NTSDMovementCheck"]),
                .executable(name: "NTSDCombatCheck", targets: ["NTSDCombatCheck"]),
-               .executable(name: "NTSDStateCheck", targets: ["NTSDStateCheck"])],
+               .executable(name: "NTSDStateCheck", targets: ["NTSDStateCheck"]),
+               .executable(name: "NTSDBootstrapCheck", targets: ["NTSDBootstrapCheck"])],
     targets: [
         .target(name: "NTSDCore"),
+        .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
+        .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDFrameCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
@@ -18,7 +21,7 @@ let package = Package(
         .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore"],
                           linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                            .linkedFramework("AVFoundation")]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore"], resources: [.copy("Fixtures")])
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks"], resources: [.copy("Fixtures")])
     ],
     swiftLanguageModes: [.v5]
 )

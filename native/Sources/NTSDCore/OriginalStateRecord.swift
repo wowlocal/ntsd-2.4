@@ -81,23 +81,32 @@ public struct OriginalStateRecord: Equatable, Sendable {
     /// Constructor execution has no intermediate callbacks except memset.
     public static func actor(over initialBytes: [UInt8]) throws -> Self {
         var record = try backing(initialBytes, size: actorSize, kind: "Actor")
+        try record.reconstructActor()
+        return record
+    }
+
+    /// Calling the constructor on an existing allocation preserves untouched bytes
+    /// AND their prior initialization provenance (e.g. Object* and +0x31c).
+    public mutating func reconstructActor() throws {
+        guard bytes.count == Self.actorSize else {
+            throw OriginalStateError.invalidStorage("Actor reconstruction needs \(Self.actorSize) bytes")
+        }
         // Sparse ranges deliberately omit untouched bytes, Object*, and the opaque 0x370..0x3e7 area.
         for range in [0..<0x24, 0x58..<0x81, 0x84..<0xbd, 0xbe..<0xdd,
                       0xe0..<0x31c, 0x320..<0x368, 0x36c..<0x370, 0x3e8..<0x41c] {
-            record.zero(range)
+            zero(range)
         }
         // Exact binary64 constant at 0x447920, loaded/stored with x87 in the EXE.
         for offset in stride(from: 0x28, through: 0x50, by: 8) {
-            try record.write(UInt64(0x3fb999999999999a), at: offset)
+            try write(UInt64(0x3fb999999999999a), at: offset)
         }
-        for offset in [0x2e8, 0x2ec, 0x2f0] { try record.write(Int32(1000), at: offset) }
+        for offset in [0x2e8, 0x2ec, 0x2f0] { try write(Int32(1000), at: offset) }
         for offset in [0x2f4, 0x2f8, 0x324, 0x328, 0x32c, 0x33c, 0x360, 0x3f8] {
-            try record.write(Int32(-1), at: offset)
+            try write(Int32(-1), at: offset)
         }
-        for offset in [0x2fc, 0x300, 0x304, 0x308] { try record.write(Int32(500), at: offset) }
-        try record.write(Int32(99), at: 0x354)
-        for offset in [0x3fc, 0x400] { try record.write(Int32(-1000), at: offset) }
-        return record
+        for offset in [0x2fc, 0x300, 0x304, 0x308] { try write(Int32(500), at: offset) }
+        try write(Int32(99), at: 0x354)
+        for offset in [0x3fc, 0x400] { try write(Int32(-1000), at: offset) }
     }
 
     /// EXE 0x419e40..0x419e5f only clears selector + 400 activity bytes.

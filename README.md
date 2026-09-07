@@ -13,6 +13,8 @@ and resource recovery. The new control-flow traces do not prove full native fide
 [R02.1 state findings](docs/research/STATE_LAYOUT.md) add byte-checked native
 Actor/World constructors and raw snapshots preserving unknown fields. Full match
 initialization and integration with the game loop remain pending.
+The [loading-time pool](docs/research/BOOTSTRAP.md) now also matches the EXE for
+all 400 slots. Its eight staging actors are separate from selected-player spawning.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

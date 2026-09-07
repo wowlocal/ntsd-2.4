@@ -1,0 +1,21 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Loading-time pool 41c052..41c2f5, non-null allocations and supplied catalog[0]/Object+90; not match spawning or whole loader",
+  "corpusSHA256": "9379b64a9b852f14cfe0038d58793ad379e213496bfdd9c2cc78b33e218ac4a5",
+  "fixtureSHA256": "aa71fcf2b4f43ae4190ccb79638e304a4616997b49a00de107f25f8f795c0601",
+  "cases": 8,
+  "checkpoints": 16,
+  "records": 6416,
+  "actorConstructorOrder": "slots 0..399, then 0..7",
+  "activeAfterStaging": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "nativeComparison": "All record bytes and initialization masks; confirmed pointer fields normalized to non-null registry/slot ordinals"
+}

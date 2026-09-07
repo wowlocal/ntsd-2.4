@@ -26,6 +26,8 @@ D означает проверку ограниченного поведени�
 | R01/R15 | `0x43eca1 → 0x4151d0`, `0x43ecba → 0x4246b0`, `0x43ecd3 → 0x414b70`, call sites | Вызовы из ветвей верхнего диспетчера | При `4593a0=0`: `4246b0(ECX=458b00)`, при World[0]=2 — `41bc90`; обычный путь S/D, остальные режимы не закрыты |
 | R01 | `0x41bc90..0x422ab8`, функция, ret 4 | Обработчик матча вместе с вводом, графикой, HUD и звуком | S: 6 822 инструкции, один обычный возврат; D: 29 вызовов на синтетических данных, включая паузу; не эквивалентность Swift |
 | R02/R03/R06 | `0x41bff0`, `0x41c013`, `0x41c070..0x41c091` | Аллокация каталога 0x4d823a8, загрузка `4122f0`, Actor по 0x420 байт | S; полная инициализация остаётся R02.1/R03.1 |
+| R02/R06 | `0x41c052..0x41c2f5`, фрагмент | Загрузочный пул: 400 Actor, повторный конструктор/активация 0–7, первая запись каталога | D против Swift по полным записям/маскам: [BOOTSTRAP.md](BOOTSTRAP.md); не появление выбранных игроков |
+| R02/R03 | `0x40c957..0x40c970`, `0x40cb4e..0x40cb54`, `0x40c220`, `0x41253d..0x412543` | Основные области каталога: стадии, фоны, счётчики | S байтов/арифметики: [catalog-layout.json](../evidence/catalog-layout.json); загрузка целиком ещё открыта |
 | R02/R06 | `0x4061d0..0x4064cc`, функция | Конструктор Actor: пишет 913/1056 байт | S/D побайтно и по маске против Swift: [STATE_LAYOUT.md](STATE_LAYOUT.md); практика отдельно меняет spawn/скорости |
 | R02 | `0x419e40..0x419e5f`, функция; `0x446300..0x446305`, статический инициализатор | World: конструктор обнуляет только selector + 400 байт активности | D конструктора; S статического адреса 458b00. Полный lifecycle открыт |
 | R02/R03 | `0x412660..0x412695` | Object: аллокация 0x25360 и вызов 40ef70 | S; сырой снимок хранит всю аллокацию, загрузка целиком требует R03.1 |
@@ -75,7 +77,8 @@ D означает проверку ограниченного поведени�
 | Блок | Текущий нативный код | Проверка |
 | --- | --- | --- |
 | R01/R02 | [OriginalMelee.swift](../../native/Sources/NTSDCore/OriginalMelee.swift), [OriginalClock.swift](../../native/Sources/NTSDCore/OriginalClock.swift) | [oracle_projectiles.py](../../tools/oracle_projectiles.py), [oracle_presentation.py](../../tools/oracle_presentation.py); полного такта пока нет |
-| R02 | [OriginalStateRecord.swift](../../native/Sources/NTSDCore/OriginalStateRecord.swift) | [oracle_state.py](../../tools/oracle_state.py), [oracle_state_trace.py](../../tools/oracle_state_trace.py); нативное сравнение пока только конструкторов |
+| R02 | [OriginalStateRecord.swift](../../native/Sources/NTSDCore/OriginalStateRecord.swift) | [oracle_state.py](../../tools/oracle_state.py), [oracle_state_trace.py](../../tools/oracle_state_trace.py); конструкторы D против Swift, полный такт ещё не сравнивается |
+| R02/R06 | [OriginalWorldBootstrap.swift](../../native/Sources/NTSDCore/OriginalWorldBootstrap.swift) | [oracle_bootstrap.py](../../tools/oracle_bootstrap.py); 400 слотов с исходным порядком конструкторов, отдельная загрузочная стадия |
 | R02/R16 | [OriginalRandom.swift](../../native/Sources/NTSDCore/OriginalRandom.swift) | [oracle_combat.py](../../tools/oracle_combat.py), [original_replay.py](../../tools/original_replay.py) |
 | R03 | [OriginalFrameLoader.swift](../../native/Sources/NTSDCore/OriginalFrameLoader.swift), [GameData.swift](../../native/Sources/NTSDCore/GameData.swift) | [oracle_frames.py](../../tools/oracle_frames.py); импорт JSON не равен выполнению внешнего загрузчика |
 | R04/R05 | [OriginalFighter.swift](../../native/Sources/NTSDCore/OriginalFighter.swift), [OriginalMovement.swift](../../native/Sources/NTSDCore/OriginalMovement.swift) | [oracle_movement.py](../../tools/oracle_movement.py), combat/projectiles corpora |

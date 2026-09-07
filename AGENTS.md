@@ -41,6 +41,15 @@ raw snapshots retain all Actor/Object/globals and mapped catalog/heap regions in
 the six R01.1 fixtures. Full initialization provenance, pointer normalization,
 catalog and remaining types are still open. Native OriginalStateRecord is not
 yet wired into practice; its constructors are not match/spawn defaults.
+The [bootstrap study](docs/research/BOOTSTRAP.md) now verifies the full loading-time
+400-slot pool plus reconstruction/activation of slots 0..7 against native Swift.
+Those eight use catalog entry zero and are not the selected players' match spawn.
+Known pointers normalize to non-null registry/slot ordinals; do not treat ordinal
+zero as null or normalize arbitrary opaque words. Reconstructing an Actor must
+preserve the initialization mask of untouched fields. Catalog region boundaries
+are now statically mapped; execute 4122f0 and its loaders next. Reference checks
+are a development-only Swift target, not an app dependency. Run SwiftPM commands
+sequentially since they share native/.build.
 R01.2 follows R02.1/R03.1 with a wider execution oracle.
 Follow the map's dependencies; keep analysis, native implementation and
 verification statuses separate. Update the map/card after completing a bounded
