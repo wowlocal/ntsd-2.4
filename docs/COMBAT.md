@@ -3,13 +3,12 @@
 Baseline: `downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe`.
 SHA-256: `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 
-The default native app is now a two-character practice on District. Naruto can
-move, jump, punch, defend and perform his running attack. Sasuke can punch and
-defend using separate practice keys. Normal hits, guard damage, hitstop,
-knockback, falling, ground bounce, lying and standing back up are implemented.
-Original frame audio and the invisible one-frame voice objects play original WAVs.
-This remains a bounded practice scene, not a complete match or the full NTSD
-combat system. No rules were taken from the rejected JavaScript implementation.
+This document records the original melee milestone and its retained evidence.
+The default app now also supports Sasuke's snake and Chidori needles, MP spending
+and player selection. Read [PROJECTILES.md](PROJECTILES.md) for that extension,
+its additional x86 comparisons and current controls. The older melee-only API
+and fixture remain regression tests. This is still bounded practice, not a
+complete match; no rules come from the rejected JavaScript implementation.
 
 Read [MOVEMENT.md](MOVEMENT.md) and [FRAME_LOADER.md](FRAME_LOADER.md) for the
 movement, timer, background and frame-loader foundations. The earlier movement
@@ -152,10 +151,10 @@ verifies rollback of both actors, sounds, RNG and next-tick input edges.
 
 ## Native host and remaining work
 
-Arrows/WASD and Space control Naruto's movement; J attacks and K defends.
-I attacks and O defends for Sasuke. The opponent has no AI. Esc pauses,
+Tab selects the controlled fighter. Arrows/WASD, Space and J/K control that
+fighter; I/O attack/defend for the other. The opponent has no AI. Esc pauses,
 R resets and M mutes; losing focus clears both sets of held keys. The 33 ms
-original clock governs simulation. The HP panels and practice footer are new
+original clock governs simulation. HP/MP panels and the practice footer are new
 host UI; original menus/full HUD are pending.
 
 The packaged arm64 app was visually checked with original District layers,
@@ -167,12 +166,12 @@ added to change the recovered sampled-input semantics for that tool.
 
 Unsupported branches stop the practice, discard the entire attempted tick and
 show “Приём пока недоступен · R — заново”. This includes aerial/dash attacks,
-rolls, combo techniques and objects other than the verified voices. In
-particular Sasuke's strong attack spawns object 224, and his running attack
-continues into an unported frame. Original definitions are not edited to hide
+rolls, combo techniques other than Sasuke’s Chidori needles, and objects beyond
+the verified voices/snake/needles. Sasuke’s running attack still continues into
+an unported frame. Original definitions are not edited to hide
 these branches. Naruto's strong melee attack is within the recovered slice.
 
-Still pending: projectiles, grabs/thrown-body damage, chakra spending/recovery,
+Still pending: other projectiles, grabs/thrown-body damage, chakra recovery,
 other interaction/effect kinds, hit-spark rendering, AI, match/spawn/death
 lifecycle, HP/MP regeneration, full HUD/menus, music and other modes. SpriteKit
 only presents original bitmaps; exact raster output, stereo mix and latency
@@ -180,6 +179,6 @@ have not been compared to a complete original game running on Windows.
 Intel and a clean second Mac have not been tested. The x86 harness, Python,
 reference EXE/replays and native check executables are absent from the `.app`.
 
-Next milestone: recover object spawning and projectile collisions so Sasuke's
-strong attack and a first chakra technique can run with the same comparison
-against original instructions. Keep unsupported mechanics explicit until verified.
+The spawning/first-technique milestone is recorded in [PROJECTILES.md](PROJECTILES.md).
+Remaining basic attacks and rolls come next. Keep unsupported mechanics explicit
+until verified.

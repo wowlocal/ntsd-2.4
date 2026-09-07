@@ -36,11 +36,13 @@ public struct OriginalFighter {
     public internal(set) var state: FighterState
     private var previousInput: FighterInput = []
     private var currentInput: FighterInput = []
+    var enablesChidoriNeedles = false
+    public private(set) var mpSpent = 0
 
     public static func frameNumbers(name: String) -> Set<Int> {
         var result = OriginalMovement.frameNumbers.union(60...74).union(110...114)
             .union(180...191).union(220...231).union([85,95])
-        if name == "Sasuke" { result.formUnion(240...242) }
+        if name == "Sasuke" { result.formUnion(240...242); result.formUnion(261...266); result.insert(246) }
         return result
     }
     public static func sections(in text: String, name: String, numbers: Set<Int>? = nil) -> [String] {
@@ -210,13 +212,13 @@ public struct OriginalFighter {
     }
 
     /// 0x412800..0x413077 and invalidation helper 0x40e170. Recognition is
-    /// recovered even though the resulting special techniques are not yet ported.
+    /// recovered; only Sasuke hit_Fa=261 may transfer into a technique here.
     private mutating func sampleCombos() throws {
-        let buffers = [state.defendBuffer, state.rightBuffer, state.leftBuffer,
-                       state.upBuffer, state.downBuffer, state.jumpBuffer, state.attackBuffer]
         let routes = [(1,6,"hit_Fa"),(2,6,"hit_Fa"),(3,6,"hit_Ua"),(4,6,"hit_Da"),
                       (1,5,"hit_Fj"),(2,5,"hit_Fj"),(3,5,"hit_Uj"),(4,5,"hit_Dj"),(5,6,"hit_ja")]
         for (i, route) in routes.enumerated() {
+            let buffers = [state.defendBuffer, state.rightBuffer, state.leftBuffer,
+                           state.upBuffer, state.downBuffer, state.jumpBuffer, state.attackBuffer]
             var changed = false
             if state.combos[i] == 0 && buffers[0] == 5 { state.combos[i] = 1; changed = true }
             for stage in 1...3 where state.combos[i] == stage {
@@ -224,7 +226,20 @@ public struct OriginalFighter {
                 if stage < 3 && buffers[stage == 1 ? route.0 : route.1] == 5 {
                     state.combos[i] += 1; changed = true
                 } else if stage == 3 && currentFrame.field(route.2) != 0 {
-                    throw unsupported("technique \(currentFrame.field(route.2)!)")
+                    let target = Int(currentFrame.field(route.2)!)
+                    guard enablesChidoriNeedles, parameters["name"] == "Sasuke", target == 261, i < 2,
+                          let next = frames[target] else { throw unsupported("technique \(target)") }
+                    // 0x40e2d0: mp packs health cost in thousands and chakra in
+                    // the remainder. Insufficient resources leave the frame alone.
+                    let cost = Int(next.field("mp")!), hpCost = (cost / 1000) * 10, mpCost = cost % 1000
+                    if state.mp >= mpCost && state.hp > hpCost {
+                        state.hp -= hpCost; state.damageReceived += hpCost
+                        state.mp -= mpCost; mpSpent += mpCost; state.frame = target
+                        state.attackBuffer = 0; state.jumpBuffer = 0; state.defendBuffer = 0
+                        state.rightBuffer = 0; state.leftBuffer = 0; state.upBuffer = 0; state.downBuffer = 0
+                    }
+                    // 0x4128be / 0x4129ae apply even when affordability failed.
+                    state.facing = i; state.combos[i] = 0
                 } else if buffers.indices.contains(where: { (!changed || $0 != previous) && buffers[$0] == 5 }) {
                     state.combos[i] = 0
                 }
@@ -324,7 +339,7 @@ public struct OriginalFighter {
             state.frame = 186; state.vy = -3; state.hitVY = -3; state.y = -1; state.iy = -1
         }
     }
-    private static func friction(_ value: Double) -> Double {
+    static func friction(_ value: Double) -> Double {
         var result = value
         if result > 0.0001 { result -= 1; if result <= 0.0001 { result = 0 } }
         if result < -0.0001 { result += 1; if result > -0.0001 { result = 0 } }

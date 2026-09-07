@@ -1,0 +1,29 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sequences": 575,
+  "ticks": 16685,
+  "projectileSequences": 51,
+  "projectileTicks": 4470,
+  "fixtureSequences": 20,
+  "fixtureTicks": 2010,
+  "corpusSHA256": "8f3643331fb82cf7615a60fe8bc05f7c71250f0d50acdc84677a59764b7d27aa",
+  "fixtureSHA256": "42467b39267e4da268ed6e509777fc75d24fc9bf81c329200ad69cb15158d10c",
+  "replaySHA256": "9555710ff6b79e624d6f97a5d2373ae7b4d46135d5e9f45940b787f4e1663630",
+  "addresses": {
+    "constructor": "0x4061d0",
+    "headerDefaults": "0x40efe2..0x40f01a",
+    "input": "0x4198f0",
+    "control": "0x413080",
+    "comboTransfer": "0x40e2d0",
+    "physics": "0x40e490",
+    "collision": "0x419380",
+    "hit": "0x42e100",
+    "boundsCamera": "0x41b5d0..0x41bc74",
+    "pending": "0x4196f0",
+    "scheduler": "0x40d960",
+    "postScheduler": "0x41fb0b..0x41fc61",
+    "spawn": "0x41fc61..0x420e93",
+    "deletion": "0x4213a9..0x4214c6"
+  },
+  "scope": "Two Naruto/Sasuke fighters, voice 203, snake 224, Chidori needles 440; original replay RNG. Exact per-tick states, 400-slot vrest, draw poses, sounds and MP spending. Includes previous melee/movement sequences with the object pipeline enabled. No whole-match, regeneration, pixel/audio-mix or latency equivalence."
+}

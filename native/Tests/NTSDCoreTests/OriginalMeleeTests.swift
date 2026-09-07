@@ -5,14 +5,16 @@ import XCTest
 final class OriginalMeleeTests: XCTestCase {
     private struct Corpus: Decodable {
         let exeSHA256: String, headers: [Fields], definitions: [[String]], voiceDefinitions: [String]
+        let projectileDefinitions: [ProjectileDefinition]?
         let random: OriginalRandom, randomSamples: [Sample], cases: [Case]
         struct Sample: Decodable { let range: Int, value: Int, index: Int, counter: Int }
         struct Case: Decodable {
+            let localPlayer: Int?
             let label: String, initial: [[String: Double]], inputs: [[UInt8]], states: [MeleeState]
         }
     }
-    private func corpus() throws -> Corpus {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "original-combat", withExtension: "json", subdirectory: "Fixtures"))
+    private func corpus(_ name: String = "original-combat") throws -> Corpus {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Fixtures"))
         return try JSONDecoder().decode(Corpus.self, from: Data(contentsOf: url))
     }
     private func engine(_ corpus: Corpus, initial: [[String: Double]]) throws -> OriginalMelee {
@@ -28,7 +30,7 @@ final class OriginalMeleeTests: XCTestCase {
             return try JSONDecoder().decode(FighterState.self, from: JSONSerialization.data(withJSONObject: values))
         }
         return try OriginalMelee(headers: corpus.headers, definitions: corpus.definitions,
-                                 voiceDefinitions: corpus.voiceDefinitions, random: corpus.random, initial: states)
+                                 voiceDefinitions: corpus.voiceDefinitions, random: corpus.random, initial: states, projectileDefinitions: corpus.projectileDefinitions)
     }
     func testMeleeAgainstOriginalX86() throws {
         let reference = try corpus()
@@ -46,6 +48,40 @@ final class OriginalMeleeTests: XCTestCase {
         }
         XCTAssertEqual(count, 3_709)
         XCTAssertEqual(reference.cases.count, 466)
+    }
+    func testProjectilesAgainstOriginalX86() throws {
+        let reference = try corpus("original-projectiles")
+        XCTAssertEqual(reference.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
+        var count = 0
+        for test in reference.cases {
+            var world = try engine(reference, initial: test.initial)
+            world.selectPlayer(test.localPlayer ?? 0)
+            XCTAssertEqual(test.inputs.count, test.states.count)
+            for (tick, masks) in test.inputs.enumerated() {
+                let actual = try world.tick(masks.map(FighterInput.init(rawValue:)))
+                XCTAssertEqual(actual, test.states[tick], "\(test.label), tick \(tick)")
+                guard actual == test.states[tick] else { return }
+                count += 1
+            }
+        }
+        XCTAssertEqual(count, 2_010)
+        XCTAssertEqual(reference.cases.count, 20)
+    }
+    func testUnsupportedAttackPreservesLiveObjectsAndSpentChakra() throws {
+        let reference = try corpus("original-projectiles")
+        var world = try engine(reference, initial: [["frame": 212, "y": -500, "x": 400], ["x": 580]])
+        for tick in 0..<22 {
+            let input: FighterInput = tick > 2 ? [] : [.defend, .left, .attack][tick]
+            try world.tick([[], input])
+        }
+        XCTAssertEqual(world.state.projectiles?.count, 5)
+        XCTAssertEqual(world.state.mpSpent, [0, 100])
+        let before = world.state, random = world.random
+        var untouched = world
+        XCTAssertThrowsError(try world.tick([.attack, []]))
+        XCTAssertEqual(world.state, before)
+        XCTAssertEqual(world.random, random)
+        XCTAssertEqual(try world.tick([[], []]), try untouched.tick([[], []]))
     }
     func testReplayRandomAgainstOriginalX86IncludingWraparound() throws {
         let reference = try corpus()

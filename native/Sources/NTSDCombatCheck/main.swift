@@ -4,8 +4,10 @@ import NTSDCore
 struct Corpus: Decodable {
     var headers: [Fields], definitions: [[String]], voiceDefinitions: [String], random: OriginalRandom, cases: [Case]
     var randomSamples: [RandomSample]
+    var projectileDefinitions: [ProjectileDefinition]?
     struct RandomSample: Decodable { var range: Int, value: Int, index: Int, counter: Int }
     struct Case: Decodable {
+        var localPlayer: Int?
         var label: String, initial: [[String: Double]], inputs: [[UInt8]], states: [MeleeState]
     }
 }
@@ -28,15 +30,27 @@ do {
             values["renderFrame"] = values["frame"]
             return try JSONDecoder().decode(FighterState.self, from: JSONSerialization.data(withJSONObject: values))
         }
-        var engine = try OriginalMelee(headers: corpus.headers, definitions: corpus.definitions, voiceDefinitions: corpus.voiceDefinitions, random: corpus.random, initial: initial)
+        var engine = try OriginalMelee(headers: corpus.headers, definitions: corpus.definitions, voiceDefinitions: corpus.voiceDefinitions, random: corpus.random, initial: initial, projectileDefinitions: corpus.projectileDefinitions)
+        engine.selectPlayer(test.localPlayer ?? 0)
         for (tick, masks) in test.inputs.enumerated() {
             let actual = try engine.tick(masks.map(FighterInput.init(rawValue:)))
             let expected = test.states[tick]
             guard actual == expected else {
                 let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
                 print("Mismatch \(test.label) tick \(tick)")
-                print("actual", String(data: try encoder.encode(actual), encoding: .utf8)!)
-                print("expected", String(data: try encoder.encode(expected), encoding: .utf8)!)
+                let a = try JSONSerialization.jsonObject(with: encoder.encode(actual))
+                let e = try JSONSerialization.jsonObject(with: encoder.encode(expected))
+                func differences(_ a: Any?, _ e: Any?, path: String) {
+                    if let a = a as? [String:Any], let e = e as? [String:Any] {
+                        for k in Set(a.keys).union(e.keys).sorted() { differences(a[k], e[k], path: path + "." + k) }
+                    } else if let a = a as? [Any], let e = e as? [Any] {
+                        if a.count != e.count { print(path, "count actual", a.count, "expected", e.count) }
+                        for i in 0..<min(a.count,e.count) { differences(a[i],e[i],path: path + "[\(i)]") }
+                    } else if String(describing: a) != String(describing: e) {
+                        print(path, "actual", a ?? "missing", "expected", e ?? "missing")
+                    }
+                }
+                differences(a,e,path: "state")
                 exit(1)
             }
             count += 1

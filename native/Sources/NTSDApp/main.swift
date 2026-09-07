@@ -139,6 +139,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     private func launchMelee(assets: Assets) throws {
         let scene = try MeleeScene(assets: assets)
+        if argument("--screenshot") != nil, let preview = argument("--practice-preview") { try scene.preview(preview) }
         let view = MeleeView(frame: NSRect(x: 0, y: 50, width: 794, height: 550))
         meleeView = view; view.preferredFramesPerSecond = 60
         view.ignoresSiblingOrder = true; view.presentScene(scene)
@@ -149,9 +150,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         window.delegate = self
         let content = NSView(); window.contentView = content
         view.translatesAutoresizingMaskIntoConstraints = false; content.addSubview(view)
-        let controls = NSTextField(labelWithString: "Наруто: стрелки / WASD · Пробел — прыжок · J — удар · K — блок     Саске: I — удар · O — блок")
+        let controls = NSTextField(labelWithString: "Tab — сменить бойца · Стрелки / WASD · Пробел — прыжок · J — удар · K — блок · I / O — удар / блок второго")
         controls.font = .systemFont(ofSize: 11)
-        let status = NSTextField(labelWithString: "Esc — пауза · R — заново · M — звук · Двойное ← / → — бег     |     Тренировка ближнего боя")
+        let status = NSTextField(labelWithString: "Саске: K, затем ←/→, затем J — иглы Чидори (100 чакры)    |    Esc — пауза · R — заново · M — звук")
         status.font = .systemFont(ofSize: 11); status.textColor = .secondaryLabelColor
         for label in [controls, status] { label.translatesAutoresizingMaskIntoConstraints = false; content.addSubview(label) }
         NSLayoutConstraint.activate([
@@ -217,9 +218,33 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
     private func capture(to path: String) {
-        guard let view = window.contentView, let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { NSApp.terminate(nil); return }
+        guard let view = window.contentView, let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+            fputs("Cannot allocate screenshot bitmap\n", stderr); exit(1)
+        }
         view.cacheDisplay(in: view.bounds, to: rep)
-        if let data = rep.representation(using: .png, properties: [:]) { try? data.write(to: URL(fileURLWithPath: path)) }
+        // AppKit's cacheDisplay omits the Metal-backed SKView. Render its scene
+        // through SpriteKit, then place it in the window-content bitmap.
+        let spriteView: SKView? = meleeView ?? movementView ?? skView
+        if let spriteView, let scene = spriteView.scene {
+            guard let texture = spriteView.texture(from: scene, crop: scene.frame),
+                  let context = NSGraphicsContext(bitmapImageRep: rep) else {
+                fputs("Cannot capture SpriteKit scene\n", stderr); exit(1)
+            }
+            NSGraphicsContext.saveGraphicsState(); NSGraphicsContext.current = context
+            let region = spriteView.convert(spriteView.bounds, to: view)
+            let factor = min(region.width / scene.size.width, region.height / scene.size.height)
+            let size = NSSize(width: scene.size.width * factor, height: scene.size.height * factor)
+            let rect = NSRect(x: region.midX - size.width / 2, y: region.midY - size.height / 2,
+                              width: size.width, height: size.height)
+            NSImage(cgImage: texture.cgImage(), size: scene.size).draw(in: rect)
+            NSGraphicsContext.restoreGraphicsState()
+        }
+        do {
+            guard let data = rep.representation(using: .png, properties: [:]) else {
+                fputs("Cannot encode screenshot\n", stderr); exit(1)
+            }
+            try data.write(to: URL(fileURLWithPath: path))
+        } catch { fputs("Cannot save screenshot: \(error)\n", stderr); exit(1) }
         NSApp.terminate(nil)
     }
 }
