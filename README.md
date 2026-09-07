@@ -19,6 +19,11 @@ The [catalog parent](docs/research/CATALOG_REGISTRY.md) reproduces registry orde
 load requests and sparse initialization, including all 137 source objects and
 17 backgrounds. Child loader contents remain open; these requests do not make
 the additional characters playable yet.
+The [continuous Object loader](docs/research/OBJECT_LOADER.md) now reads complete
+Naruto/Sasuke/kunai data with shared sound registration and sprite-sheet metadata.
+Native decoding, headers, frame records and bitmap tables match the original at
+explicit CRT/device boundaries. Actual MSVCR80 behavior, full catalog integration
+and the game's visual/audio output remain open; practice still uses its prior import.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
@@ -82,6 +87,7 @@ uv run tools/oracle_presentation.py
 uv run tools/oracle_combat.py
 uv run tools/oracle_projectiles.py
 uv run tools/oracle_catalog.py
+uv run tools/oracle_objects.py --suite
 swift test --package-path native
 ```
 
@@ -99,8 +105,10 @@ tests retain another 2,010 ticks; see [projectile evidence](docs/evidence/projec
 These comparisons do not establish whole-match or end-to-end latency equivalence.
 
 The recovered frame-section loader matches 15,044 original definitions and
-12 edge cases; 349 groups and whole-file loading remain outside its verified
-domain. See [frame-loader evidence](docs/FRAME_LOADER.md). The CPU harness and all
+12 edge cases; 349 groups remain outside that isolated domain. A separate
+[whole-object corpus](docs/research/OBJECT_LOADER.md) checks three source files
+and one synthetic stream, including kunai's unclosed itr across a frame boundary.
+See [frame-loader evidence](docs/FRAME_LOADER.md). The CPU harness and all
 native check executables are absent from the `.app`.
 
 Generated imports and full differential corpora live under `build/`; original

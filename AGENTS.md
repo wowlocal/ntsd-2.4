@@ -51,8 +51,19 @@ preserve the initialization mask of untouched fields. The
 requests and parent-owned bytes/masks for all source entries and bounded probes.
 Its Object/BG/Stage/bitmap children remain explicit opaque boundaries; the parent
 checksum excludes child contributions. Registry ordinals are not source IDs and
-duplicate IDs remain separate. This is not a loaded catalog. Execute Object
-40ef70 next, then BG 40c160 and Stage 40c910; preserve the declared CRT domain.
+duplicate IDs remain separate. This is not a loaded catalog. The separate
+[Object loader](docs/research/OBJECT_LOADER.md) now executes 40ef70/4148a0/43ee50
+and matches native decoding/header/frame/bitmap behavior for Naruto, Sasuke,
+kunai and a control stream. Read that document before extending this loader.
+Its shared Frame parser consumes a continuous stream: kunai frame 49 is swallowed
+by frame 48's unclosed itr. Do not repair the DAT or restore an artificial boundary.
+Actual MSVCR80 rounding/stdio remain open: the old decoder used raw stdio; the new
+corpus retains both raw/text contracts and their different tails/checksums.
+Object bitmap/string references use index+1 with zero null, unlike the bootstrap's
+non-null ordinals. Raw Frame pointers/padding and dead malloc blocks are retained
+only in the research snapshot, not yet compared to native raw storage. The new
+loader is not wired to practice or to the parent. Execute BG 40c160 next, then
+Stage 40c910 and join the real child loaders in source registry order.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

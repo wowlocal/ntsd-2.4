@@ -35,8 +35,12 @@ D означает проверку ограниченного поведени�
 | R02 | `0x419e40..0x419e5f`, функция; `0x446300..0x446305`, статический инициализатор | World: конструктор обнуляет только selector + 400 байт активности | D конструктора; S статического адреса 458b00. Полный lifecycle открыт |
 | R02/R03 | `0x412660..0x412695` | Object: аллокация 0x25360 и вызов 40ef70 | S; сырой снимок хранит всю аллокацию, загрузка целиком требует R03.1 |
 | R02/R03 | `0x40bbf0`, функция | Начальное состояние записи кадра | D: [FRAME_LOADER.md](../FRAME_LOADER.md) |
-| R03 | `0x40efc3..0x40f01a`, фрагмент | 400 конструкторов кадров, defaults заголовка объекта | S; defaults используются в D стенде снарядов; внешний загрузчик не выполняется целиком |
+| R03 | `0x40ef70..0x4122e7`, функция, ret 16 | Целый Object: конструкторы, декодирование, заголовки, кадры, ресурсы | D против Swift: [OBJECT_LOADER.md](OBJECT_LOADER.md); три исходных файла и контроль, CRT/device-границы, не весь каталог |
+| R03 | `0x40efc3..0x40f0c0`, фрагмент | 400 конструкторов кадров, defaults заголовка объекта | D полного загрузчика: 130 894 определённых байта Object после этого участка; неизвестные байты сохранены |
 | R03 | `0x40f799..0x40fa5a`, фрагмент | Численные параметры движения заголовка | S: смещения известны; MSVCR80 `%lf` здесь не проверен |
+| R03/R13 | `0x40f254..0x40f6a2`, `0x40fd28..0x410165` | Завершение листа, cumulative row*col, прямые/зеркальные сетки | D заголовков и полных bitmap-записей; пиксели/DirectDraw отдельно |
+| R03/R14 | `0x40bd90..0x40be68`, функция | Регистрация оружейного звука; сохранение прежнего индекса при неизвестном новом пути | D kunai/control; Frame sound сбрасывает индекс в -1 перед поиском (`41097b`) |
+| R03/R13 | `0x43ee50..0x43ef41`, функция | Bitmap wrapper, загрузка размеров и установка color key | D с границами `43ed10`/DirectDraw; отсутствие mirror проверено как заданный device failure |
 | R03 | `0x4103f8..0x412277`, фрагмент | Загрузка одной секции кадра и постобработка | D: [oracle_frames.py](../../tools/oracle_frames.py); 349 групп за границей |
 | R03/R14 | `0x41098e..0x410a99`, фрагмент | Регистрация пути звука в общем кэше | D отдельных случаев, звуковое устройство выключено |
 | R04 | `0x4198f0`, функция | Нормализованный ввод в формате повтора | D нескольких входных слотов; не Windows-клавиатура |
@@ -83,7 +87,7 @@ D означает проверку ограниченного поведени�
 | R02 | [OriginalStateRecord.swift](../../native/Sources/NTSDCore/OriginalStateRecord.swift) | [oracle_state.py](../../tools/oracle_state.py), [oracle_state_trace.py](../../tools/oracle_state_trace.py); конструкторы D против Swift, полный такт ещё не сравнивается |
 | R02/R06 | [OriginalWorldBootstrap.swift](../../native/Sources/NTSDCore/OriginalWorldBootstrap.swift) | [oracle_bootstrap.py](../../tools/oracle_bootstrap.py); 400 слотов с исходным порядком конструкторов, отдельная загрузочная стадия |
 | R02/R16 | [OriginalRandom.swift](../../native/Sources/NTSDCore/OriginalRandom.swift) | [oracle_combat.py](../../tools/oracle_combat.py), [original_replay.py](../../tools/original_replay.py) |
-| R03 | [OriginalFrameLoader.swift](../../native/Sources/NTSDCore/OriginalFrameLoader.swift), [GameData.swift](../../native/Sources/NTSDCore/GameData.swift) | [oracle_frames.py](../../tools/oracle_frames.py); импорт JSON не равен выполнению внешнего загрузчика |
+| R03 | [OriginalObjectLoader.swift](../../native/Sources/NTSDCore/OriginalObjectLoader.swift), [OriginalDATDecoder.swift](../../native/Sources/NTSDCore/OriginalDATDecoder.swift), [OriginalFrameLoader.swift](../../native/Sources/NTSDCore/OriginalFrameLoader.swift) | [oracle_objects.py](../../tools/oracle_objects.py), [oracle_frames.py](../../tools/oracle_frames.py); практика пока отдельно использует импорт JSON |
 | R04/R05 | [OriginalFighter.swift](../../native/Sources/NTSDCore/OriginalFighter.swift), [OriginalMovement.swift](../../native/Sources/NTSDCore/OriginalMovement.swift) | [oracle_movement.py](../../tools/oracle_movement.py), combat/projectiles corpora |
 | R06/R07/R08 | [OriginalMelee.swift](../../native/Sources/NTSDCore/OriginalMelee.swift), [OriginalProjectile.swift](../../native/Sources/NTSDCore/OriginalProjectile.swift) | combat/projectiles corpora; текущий каталог намеренно ограничен |
 | R13/R14/R17 | [MeleeScene.swift](../../native/Sources/NTSDApp/MeleeScene.swift), [Assets.swift](../../native/Sources/NTSDApp/Assets.swift), [main.swift](../../native/Sources/NTSDApp/main.swift) | oracle_presentation, позы/события из корпусов, UI-проверки; пиксели/сведение/задержка открыты |

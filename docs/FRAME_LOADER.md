@@ -180,3 +180,18 @@ explicitly; it does not fix the source or guess whole-file behavior.
 Native Lab continues to display the raw source occurrences. Its convenience
 `frames` JSON dictionary is still not the original loader output. The new Swift
 loader is an independent core component and is exercised by the native checker.
+
+## Continuous Object stream follow-up
+
+[OBJECT_LOADER.md](research/OBJECT_LOADER.md) now executes the complete Object
+loader for Naruto, Sasuke and kunai, plus a control stream. It reuses this native
+frame parser with a continuous scanner and a sound registry shared across objects.
+In kunai, frame 48's unclosed itr consumes frame 49; the latter remains absent.
+That whole-file result does not change the 349 exclusions of the isolated corpus.
+All 15,056 isolated definitions were compared again after the parser refactor.
+Four other malformed heart files, long names and overflow groups remain open.
+
+The new native DAT decoder also exposes a limitation of the old decoder oracle:
+its stdio boundary did not translate CRLF. Both contracts now have retained full
+Object comparisons; their EOF tails/checksums differ. This does not establish
+actual MSVCR80 `%d`/`%lf` or Windows equivalence. The old import is unchanged.

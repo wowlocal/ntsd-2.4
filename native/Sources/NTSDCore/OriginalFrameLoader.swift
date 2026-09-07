@@ -40,7 +40,7 @@ public enum OriginalLoaderError: Error, CustomStringConvertible {
 /// Reference: docs/FRAME_LOADER.md, original EXE constructor and frame branch.
 public struct OriginalFrameLoader {
     public private(set) var frames: [Int: OriginalFrameRecord] = [:]
-    private var sounds = OriginalSoundRegistry()
+    var sounds = OriginalSoundRegistry()
     public init() {}
 
     static let frameFields: [String: Int] = [
@@ -76,7 +76,20 @@ public struct OriginalFrameLoader {
     /// Failed/unsupported occurrences leave this loader unchanged.
     @discardableResult public mutating func apply(_ source: String) throws -> OriginalFrameRecord {
         var input = try OriginalFrameScanner(source)
-        guard try input.token() == "<frame>", let index = try input.integer(), (0..<400).contains(index) else {
+        guard try input.token() == "<frame>" else {
+            throw OriginalLoaderError.outsideVerifiedDomain("Expected a frame section")
+        }
+        var candidate = self
+        let record = try candidate.consumeFrameBody(&input)
+        guard input.isAtEnd else { throw OriginalLoaderError.outsideVerifiedDomain("Expected one complete frame section") }
+        self = candidate
+        return record
+    }
+
+    /// Shared parser used by both isolated sections and the continuous Object
+    /// stream. The caller has consumed <frame>; no artificial section EOF here.
+    mutating func consumeFrameBody(_ input: inout OriginalFrameScanner) throws -> OriginalFrameRecord {
+        guard let index = try input.integer(), (0..<400).contains(index) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Expected a frame index in 0...399")
         }
         let name = try input.token()
@@ -129,7 +142,6 @@ public struct OriginalFrameLoader {
             }
             // Original %s loop ignores unknown tokens; it does not strip comments.
         }
-        guard input.isAtEnd else { throw OriginalLoaderError.outsideVerifiedDomain("Expected one complete frame section") }
         record.words[String(0x128)] = Int32(record.interactions.count)
         record.words[String(0x12c)] = Int32(record.bodies.count)
         // 0x411ef0–0x412274: signed comparisons and wrapping 32-bit ADD/SUB.
@@ -157,10 +169,10 @@ public struct OriginalFrameLoader {
 /// 21-byte path overlaps the following entry; a later write can change lookup.
 /// Preserve those bytes within a bounded Swift array, without unsafe writes.
 /// 0x41098e–0x410a99, cache base 0x455638, count stored at 0x458438.
-private struct OriginalSoundRegistry {
-    private var bytes = [UInt8](repeating: 0, count: 0x2e00)
-    private var count = 0
-    mutating func register(_ path: String) throws -> Int32 {
+struct OriginalSoundRegistry {
+    private(set) var bytes = [UInt8](repeating: 0, count: 0x2e00)
+    private(set) var count = 0
+    mutating func register(_ path: String, previous: Int32 = -1) throws -> Int32 {
         let incoming = path.unicodeScalars.map { UInt8($0.value) } + [0]
         guard incoming.count <= 256 else {
             throw OriginalLoaderError.outsideVerifiedDomain("Original sound scratch buffer")
@@ -171,6 +183,9 @@ private struct OriginalSoundRegistry {
                 return Int32(index)
             }
         }
+        // Weapon helper 40bd90 only allocates a new index when its destination
+        // still contains -1. Frame registration uses the default -1 argument.
+        if previous != -1 { return previous }
         let start = count*20
         guard start+incoming.count <= bytes.count else {
             throw OriginalLoaderError.outsideVerifiedDomain("Sound cache would overwrite the original count/global storage")
@@ -183,9 +198,10 @@ private struct OriginalSoundRegistry {
 
 /// The tested subset of fscanf: ASCII whitespace, %s, decimal %d prefixes.
 /// Conversion failure retains the destination; out-of-range conversion throws.
-private struct OriginalFrameScanner {
+struct OriginalFrameScanner {
     let bytes: [UInt8]
     var position = 0
+    private(set) var eof = false
     init(_ text: String) throws {
         guard text.unicodeScalars.allSatisfy({ $0.value <= 255 }) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Decoded DAT must contain Latin-1 bytes")
@@ -196,10 +212,15 @@ private struct OriginalFrameScanner {
     mutating func skipSpace() { while position < bytes.count && whitespace(bytes[position]) { position += 1 } }
     var isAtEnd: Bool { bytes[position...].allSatisfy(whitespace) }
     mutating func token() throws -> String {
+        guard let result = optionalToken() else { throw OriginalLoaderError.outsideVerifiedDomain("Unexpected end of frame") }
+        return result
+    }
+    mutating func optionalToken() -> String? {
         skipSpace()
         let start = position
         while position < bytes.count && !whitespace(bytes[position]) { position += 1 }
-        guard position > start else { throw OriginalLoaderError.outsideVerifiedDomain("Unexpected end of frame") }
+        if position == bytes.count { eof = true }
+        guard position > start else { return nil }
         return String(String.UnicodeScalarView(bytes[start..<position].map { UnicodeScalar($0) }))
     }
     mutating func integer() throws -> Int32? {
@@ -220,6 +241,22 @@ private struct OriginalFrameScanner {
         }
         guard cursor > start else { return nil }
         position = cursor
+        if position == bytes.count { eof = true }
         return Int32(negative ? -value : value)
+    }
+
+    /// Declared finite-decimal CRT boundary. This does not establish MSVCR80
+    /// rounding; the reference harness supplies Python binary64 at the same boundary.
+    mutating func binary64() throws -> Double? {
+        skipSpace()
+        let suffix = String(String.UnicodeScalarView(bytes[position...].map { UnicodeScalar($0) }))
+        guard let range = suffix.range(of: #"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"#, options: .regularExpression) else { return nil }
+        let literal = String(suffix[range])
+        guard let value = Double(literal), value.isFinite else {
+            throw OriginalLoaderError.outsideVerifiedDomain("Non-finite decimal is outside the object-loader domain")
+        }
+        position += literal.utf8.count
+        if position == bytes.count { eof = true }
+        return value
     }
 }
