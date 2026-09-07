@@ -4,6 +4,9 @@ The target is a native macOS game preserving the original Windows NTSD behavior.
 Only the pristine Windows distribution is the behavioral reference. The previous
 JavaScript approach is not used. See [PLAN.md](PLAN.md) for the implementation
 stages and [original-engine evidence](docs/ORIGINAL_ENGINE.md) for verified findings.
+The [research map](docs/RESEARCH_MAP.md) tracks mechanisms, dependencies, analysis,
+native implementation and verification separately. Its next prepared task is
+[R01.1: establish the complete match-tick boundary](docs/research/R01.1.md).
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
@@ -88,8 +91,10 @@ domain. See [frame-loader evidence](docs/FRAME_LOADER.md). The CPU harness and a
 native check executables are absent from the `.app`.
 
 Generated imports and full differential corpora live under `build/`; original
-game files remain read-only inputs. Next are the remaining basic attacks and
-rolls, followed by other techniques and match systems.
+game files remain read-only inputs. The next work follows the research map:
+full-tick boundaries and state, complete object loading, then generic transitions
+and object creation. Characters are source-data cases for shared engine rules;
+ID-specific behavior is retained only where the original EXE establishes it.
 
 ## Existing Windows game through CrossOver
 

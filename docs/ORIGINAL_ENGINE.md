@@ -3,6 +3,11 @@
 Baseline inspected on 2026-09-07. Only the original Windows distribution is a
 behavioral reference. Nothing here treats another LF2 implementation as an oracle.
 
+The current research order and status are maintained in
+[RESEARCH_MAP.md](RESEARCH_MAP.md); the cross-subsystem address index is
+[research/ADDRESS_BOOK.md](research/ADDRESS_BOOK.md). This ledger retains the
+original evidence and its scope; newer melee/projectile comparisons are linked below.
+
 ## Identity
 
 | Property | Original value |
@@ -60,7 +65,7 @@ Run `uv run tools/oracle_dat.py`. Verified byte-for-byte on:
 The generated report `build/original/decoder-oracle.json` records EXE and decoded
 payload hashes. This is not yet verification of the DAT parser or combat logic.
 
-## Main-loop scheduling — static, not yet a complete timing model
+## Timer branch — verified arithmetic, unresolved complete-loop context
 
 `WINMM!timeGetTime` is imported at IAT VA `0x447250`; `KERNEL32!Sleep` at `0x447098`.
 
@@ -77,9 +82,15 @@ initial file value is 1. In the nonzero branch:
 The zero branch uses 3 ms (`0x43d1a4`, `0x43d1c0`). The flag is modified in several
 other locations, including `0x416e3e`–`0x416e4b`.
 
-**Unresolved:** exact relation of the dispatched update to combat ticks, input
-sampling, rendering, pauses, network modes and speed controls. Do not turn this
-finding into a universal `30 Hz`, `33 ms` or `wait+1` simulation assumption yet.
+The normal branch now has a differential comparison over 36 clock samples,
+including catch-up and rollover; see [MOVEMENT.md](MOVEMENT.md). That test replaces
+`0x43e9a0` with a counter. It verifies timer arithmetic, not a complete game tick.
+
+**Unresolved:** the connection of this outer dispatch to the ordinary match path,
+input sampling, rendering, pauses, network modes and speed controls. Inspection
+of `0x43e9a0..0x43ed01` also finds loading and mode branches, so this dispatcher
+must not be treated as a pure world-update function without tracing its callers
+and callees. [R01.1](research/R01.1.md) is the next prepared investigation.
 
 ## DAT frame storage — differential verification within a defined domain
 
@@ -132,16 +143,17 @@ the complete decoded text, including parts not interpreted by the inspector.
 
 `frames` is a convenience lookup for analysis, not the original loader's output.
 The `--inspect` laboratory displays `frameOccurrences` in source order. The default
-app now runs the separately verified Naruto movement slice; see [MOVEMENT.md](MOVEMENT.md).
+app now runs bounded Naruto/Sasuke combat with snake and Chidori needles; see
+[MOVEMENT.md](MOVEMENT.md), [COMBAT.md](COMBAT.md) and [PROJECTILES.md](PROJECTILES.md).
 
 ## Next original-code targets
 
-1. Extend verified frame loading to the outer file stream and remaining 349
-   groups; recover actual MSVCR80 overflow and overlapping frame-name writes.
-2. Extend the verified Naruto frame scheduler/input/movement routines to combat.
-3. Recover collision collection and hit resolution (`0x419380`, `0x42e100`).
-4. Compare one melee exchange and obtain full-match Windows reference captures.
-5. Expand to all NTSD-specific mechanics; keep unsupported behavior explicit.
+Follow [RESEARCH_MAP.md](RESEARCH_MAP.md) for the live sequence. The next prepared
+card, R01.1, establishes the whole-tick control-flow boundary and omissions from
+the existing harness. State layout and whole-file loading follow, then generic
+transition/spawn mechanisms. The earlier movement, collision and projectile
+milestones are implemented within their documented domains; they do not close
+these larger blocks. Full-match Windows captures remain outstanding.
 
 Disassembly can be regenerated locally with Xcode's tool:
 

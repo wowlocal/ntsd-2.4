@@ -180,5 +180,6 @@ Intel and a clean second Mac have not been tested. The x86 harness, Python,
 reference EXE/replays and native check executables are absent from the `.app`.
 
 The spawning/first-technique milestone is recorded in [PROJECTILES.md](PROJECTILES.md).
-Remaining basic attacks and rolls come next. Keep unsupported mechanics explicit
-until verified.
+The current sequence is maintained in [RESEARCH_MAP.md](RESEARCH_MAP.md), starting
+with the complete tick boundary and shared mechanisms. Remaining attacks and rolls
+stay open; unsupported mechanics remain explicit until verified.
