@@ -28,7 +28,7 @@ final class OriginalFrameLoaderTests: XCTestCase {
         var loader = OriginalFrameLoader()
         let prior = try loader.apply("<frame> 1 prior\npic: 7 sound: data\\001.wav\n<frame_end>")
         let inputs = [
-            "<frame> 1 change\npic: 8 sound: data\\002.wav mp: 999999999999999999999999\n<frame_end>",
+            "<frame> 1 change\npic: 8 sound: data\\002.wav\n<frame_end> trailing-input",
             "<frame> 400 outside\n<frame_end>",
             "<frame> 1 name_longer_than_the_original_buffer\n<frame_end>",
             "<frame> 1 excess\n" + String(repeating: "bdy: x: 2 bdy_end: ", count: 6) + "<frame_end>",

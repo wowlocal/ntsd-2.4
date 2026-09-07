@@ -57,7 +57,7 @@ and matches native decoding/header/frame/bitmap behavior for Naruto, Sasuke,
 kunai and a control stream. Read that document before extending this loader.
 Its shared Frame parser consumes a continuous stream: kunai frame 49 is swallowed
 by frame 48's unclosed itr. Do not repair the DAT or restore an artificial boundary.
-Actual MSVCR80 rounding/stdio remain open: the old decoder used raw stdio; the new
+General MSVCR80 rounding/file translation remain open: the old decoder used raw stdio; the new
 corpus retains both raw/text contracts and their different tails/checksums.
 Object bitmap/string references use index+1 with zero null, unlike the bootstrap's
 non-null ordinals. Raw Frame pointers/padding and dead malloc blocks are retained
@@ -81,8 +81,22 @@ boss/soldier and parameter order matter; pre-id fields overlap the music area.
 Stage contributes no checksum and its fields must not be pointer-normalized.
 Its full-record evidence uses lossless DEFLATE only in development reference code.
 Stage gameplay, Windows CRT, full catalog and selected-match initialization remain
-open. Next join real child loaders at 4122f0 and extend Object loading to all 137
-source registry entries in their original order, including shared sound/checksum,
+open. The [CRT scanner study](docs/research/CRT_SCANNER.md) now executes the pinned
+MSVCR80 8.0.50727.6195 from the repository's original redistributable. Its publisher
+policy includes the EXE's requested .762; actual Windows assembly binding remains
+unverified. Native %d/%ld wraps at 32 bits and consumes a failed optional sign;
+5364 cases / 16092 DLL executions include all 867 source integer tokens, 39 outside
+Int32. Pein/Naruto/Sasuke and a numeric control also match with actual DLL scanf
+(817 occurrences, 216480 header/bitmap bytes/masks). %lf matches those whole-file
+inputs only; its general lexer/rounding, especially incomplete exponents, is open.
+The separate original-instruction Object pass now loads all 137 source entries
+in order: 15388 occurrences, 808 bitmaps, 400 shared sounds, checksum 30847120.
+This is research evidence, NOT native equivalence or a joined catalog. Preserve
+opaque Frame sound pointers; never dereference or silently reinterpret them as
+strings. 38 frames have such pointers after name overlap, sometimes also changing
+the sound index. 4TK_ball uses ten sheets; the native bound is still nine.
+Next recover raw Frame name/pointer/index retention and the tenth sheet, compare
+all 137 natively, then join real children at 4122f0 including shared sound/checksum,
 parent embedded bitmaps and built-in BG records. Do not stub remaining Object data.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
@@ -120,5 +134,7 @@ complete original tick. Actor allocation is 0x420; the harness spacing is 0x500.
 
 `NTSDCore/OriginalFrameLoader.swift` implements the recovered frame-section
 loader. Read `docs/FRAME_LOADER.md` before extending it. Do not silently coerce
-unsupported numeric overflow or treat the isolated frame tests as whole-file
-equivalence. The inspector still shows raw occurrences, not normalized records.
+numeric conversions beyond the recovered CRT rules or treat the isolated frame
+tests as whole-file equivalence. The retained isolated corpus still has its old
+349 exclusions; do not rewrite that historical scope. The inspector still shows
+raw occurrences, not normalized records.

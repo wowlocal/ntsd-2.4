@@ -4,6 +4,16 @@ import NTSDReferenceChecks
 @testable import NTSDCore
 
 final class OriginalObjectTests: XCTestCase {
+    func testObjectStreamsWithMicrosoftScanf() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "original-objects-msvcr80", withExtension: "json", subdirectory: "Fixtures"))
+        let result = try ObjectReference.compareSuite(Data(contentsOf: url))
+        XCTAssertEqual(result.objects, 4)
+        XCTAssertEqual(result.occurrences, 817)
+        XCTAssertEqual(result.finalFrames, 1600)
+        XCTAssertEqual(result.bitmaps, 26)
+        XCTAssertEqual(result.bytes, 216480)
+    }
+
     func testCompleteObjectStreamsAgainstOriginalInstructions() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "original-objects", withExtension: "json", subdirectory: "Fixtures"))
         let result = try ObjectReference.compareSuite(Data(contentsOf: url))

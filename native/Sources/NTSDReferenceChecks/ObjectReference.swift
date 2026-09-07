@@ -10,6 +10,7 @@ public enum ObjectReference {
     public struct Result { public let objects: Int, occurrences: Int, finalFrames: Int, bytes: Int, bitmaps: Int }
     private struct Corpus: Decodable {
         let exeSHA256: String, bitmapFill: UInt8, surfaceAddress: UInt32
+        let crtSHA256: String?
         let translation: OriginalFileTranslation
         let cases: [Case], assetInputs: [OriginalBitmapInput]
     }
@@ -55,6 +56,9 @@ public enum ObjectReference {
                       finalFrames: results.reduce(0) { $0 + $1.finalFrames }, bytes: results.reduce(0) { $0 + $1.bytes }, bitmaps: results.reduce(0) { $0 + $1.bitmaps })
     }
     private static func compare(_ corpus: Corpus) throws -> Result {
+        if let crt = corpus.crtSHA256, crt != "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d" {
+            throw OriginalStateError.invalidStorage("Unknown Microsoft CRT capture")
+        }
         guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c", !corpus.cases.isEmpty else {
             throw OriginalStateError.invalidStorage("Unknown or empty Object corpus")
         }

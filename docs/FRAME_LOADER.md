@@ -153,7 +153,7 @@ The corpus input/snapshots remain in ignored `build/original/frame-oracle.json`;
 `docs/evidence/frame-corpus-oracle.json` records the EXE hash, fixture hash and every
 excluded group. These counts refer to frame data, not implemented game mechanics.
 
-349 original groups remain outside this verification domain:
+349 original groups remain outside this retained isolated verification domain:
 
 | Reason | Groups |
 | --- | ---: |
@@ -168,8 +168,9 @@ explicitly; it does not fix the source or guess whole-file behavior.
 
 ## Remaining work
 
-- Identify and execute the Windows MSVCR80 version used by the original setup for
-  integer-overflow conversion; no such DLL is supplied by this distribution.
+- See the newer [CRT study](research/CRT_SCANNER.md): the repository's installer
+  now supplies hash-pinned VC80 .6195 evidence for decimal overflow. Actual Windows
+  assembly binding, the EXE-requested .762 and full file translation remain open.
 - Extend the harness to the outer file stream, including malformed sections and
   frame-name writes that overlap following storage.
 - Recover object/header loading, sprite-sheet metadata, movement parameters and
@@ -201,3 +202,15 @@ Its original-instruction controls exposed missing EOF on a numeric conversion
 with no remaining input. The shared integer scanner now sets EOF without assigning
 a value; it no longer counts a stale outer token twice in that path. Full Object
 and isolated-frame comparisons are repeated after this change.
+
+## Microsoft CRT follow-up
+
+[CRT_SCANNER.md](research/CRT_SCANNER.md) now verifies `%d/%ld` against actual
+VC80 .6195 instructions, including every unique source integer literal. The
+shared native scanner accumulates modulo 2^32 and consumes an optional sign even
+on matching failure. The old isolated oracle deliberately retains its original
+domain and 349 exclusions; its snapshots remain a useful regression corpus.
+Four whole Object loads also match with actual scanf, including numeric controls.
+All 137 source Object loads have now executed in the research harness. Their
+raw results expose 38 frames with opaque sound pointers after name writes and a
+tenth sheet in 4TK_ball. Those results still need native raw-storage comparison.

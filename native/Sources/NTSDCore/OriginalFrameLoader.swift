@@ -36,7 +36,7 @@ public enum OriginalLoaderError: Error, CustomStringConvertible {
 }
 
 /// Decoded <frame> sections only. This is not yet the object/header loader.
-/// Int32 overflow and original buffer overruns are rejected pending recovery.
+/// Original buffer overruns remain outside the recovered domain.
 /// Reference: docs/FRAME_LOADER.md, original EXE constructor and frame branch.
 public struct OriginalFrameLoader {
     public private(set) var frames: [Int: OriginalFrameRecord] = [:]
@@ -197,7 +197,8 @@ struct OriginalSoundRegistry {
 }
 
 /// The tested subset of fscanf: ASCII whitespace, %s, decimal %d prefixes.
-/// Conversion failure retains the destination; out-of-range conversion throws.
+/// VC80 decimal accumulation wraps at 32 bits. Failed conversion consumes its
+/// optional sign but retains the destination. See docs/research/CRT_SCANNER.md.
 struct OriginalFrameScanner {
     let bytes: [UInt8]
     var position = 0
@@ -227,24 +228,19 @@ struct OriginalFrameScanner {
         skipSpace()
         // fscanf sets EOF even when no assignment can be made after whitespace.
         guard position < bytes.count else { eof = true; return nil }
-        var cursor = position
         var negative = false
-        if cursor < bytes.count && (bytes[cursor] == 43 || bytes[cursor] == 45) {
-            negative = bytes[cursor] == 45; cursor += 1
+        if bytes[position] == 43 || bytes[position] == 45 {
+            negative = bytes[position] == 45; position += 1
         }
-        let start = cursor
-        var value: Int64 = 0
-        while cursor < bytes.count && (48...57).contains(bytes[cursor]) {
-            value = value * 10 + Int64(bytes[cursor]-48)
-            guard value <= (negative ? 2_147_483_648 : 2_147_483_647) else {
-                throw OriginalLoaderError.outsideVerifiedDomain("MSVCR80 decimal overflow is not yet verified")
-            }
-            cursor += 1
+        let start = position
+        var value: UInt32 = 0
+        while position < bytes.count && (48...57).contains(bytes[position]) {
+            value = value &* 10 &+ UInt32(bytes[position]-48)
+            position += 1
         }
-        guard cursor > start else { return nil }
-        position = cursor
         if position == bytes.count { eof = true }
-        return Int32(negative ? -value : value)
+        guard position > start else { return nil }
+        return Int32(bitPattern: negative ? 0 &- value : value)
     }
 
     /// Declared finite-decimal CRT boundary. This does not establish MSVCR80
