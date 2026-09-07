@@ -5,11 +5,14 @@ Only the pristine Windows distribution is the behavioral reference. The previous
 JavaScript approach is not used. See [PLAN.md](PLAN.md) for the implementation
 stages and [original-engine evidence](docs/ORIGINAL_ENGINE.md) for verified findings.
 The [research map](docs/RESEARCH_MAP.md) tracks mechanisms, dependencies, analysis,
-native implementation and verification separately. Its next prepared task is
+native implementation and verification separately. Its active task is
 [R02.1: complete tick state and initialization](docs/research/R02.1.md).
 [R01.1 findings](docs/research/TICK_PIPELINE.md) establish the original dispatch
 path and expose gaps in the composed native/reference slice, including item RNG
 and resource recovery. The new control-flow traces do not prove full native fidelity.
+[R02.1 state findings](docs/research/STATE_LAYOUT.md) add byte-checked native
+Actor/World constructors and raw snapshots preserving unknown fields. Full match
+initialization and integration with the game loop remain pending.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

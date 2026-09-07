@@ -1,0 +1,709 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Raw fixture storage and partial pointer annotations; not complete initialization, portable state equivalence or Windows validation",
+  "limits": [
+    "Synthetic initialization inherited from TickTrace, no complete defined-byte provenance",
+    "Whole Actor allocations, Object allocations and PE .data; only mapped catalog slices and allocated fixture heap prefix",
+    "Pointer annotations cover World, Actor.Object, catalog entries, live frame boxes and sound paths only; other bytes stay opaque",
+    "No stack, registers, immutable PE sections, platform device state or host boundary bookkeeping",
+    "Access inventory covers the declared regions after fixture initialization; host writes from CRT/platform boundaries are not hooked"
+  ],
+  "corpusSHA256": "390a832bce8fca8c353fe019a721221cddc5acde1a7d2143207ce89a3a0b1b1d",
+  "blobs": 67,
+  "cases": [
+    {
+      "name": "ordinary",
+      "snapshots": 5,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 9255,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              15244,
+              15245
+            ],
+            [
+              15292,
+              15293
+            ],
+            [
+              15300,
+              15301
+            ],
+            [
+              15304,
+              15305
+            ],
+            [
+              15308,
+              15309
+            ],
+            [
+              15312,
+              15313
+            ],
+            [
+              15316,
+              15317
+            ],
+            [
+              15352,
+              15356
+            ],
+            [
+              15412,
+              15413
+            ],
+            [
+              15416,
+              15435
+            ]
+          ]
+        },
+        {
+          "region": "actor:0",
+          "changedByteRanges": [
+            [
+              112,
+              113
+            ],
+            [
+              116,
+              117
+            ],
+            [
+              120,
+              121
+            ]
+          ]
+        },
+        {
+          "region": "actor:1",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 4,
+          "period3": 1,
+          "alternate": 0,
+          "inputTicks": 4,
+          "randomIndex": 15,
+          "randomCounter": 4,
+          "cameraX": 4,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 1,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "paused",
+      "snapshots": 5,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 1015,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              15416,
+              15435
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 1,
+          "pendingPause": 1,
+          "followingPause": 1,
+          "period12": 0,
+          "period3": 0,
+          "alternate": 0,
+          "inputTicks": 0,
+          "randomIndex": 11,
+          "randomCounter": 0,
+          "cameraX": 0,
+          "cameraVelocity": 0
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "single-step-command",
+      "snapshots": 5,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 9246,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              11104,
+              11105
+            ],
+            [
+              15244,
+              15245
+            ],
+            [
+              15292,
+              15293
+            ],
+            [
+              15300,
+              15301
+            ],
+            [
+              15304,
+              15305
+            ],
+            [
+              15308,
+              15309
+            ],
+            [
+              15312,
+              15313
+            ],
+            [
+              15316,
+              15317
+            ],
+            [
+              15352,
+              15356
+            ],
+            [
+              15412,
+              15413
+            ],
+            [
+              15416,
+              15435
+            ]
+          ]
+        },
+        {
+          "region": "actor:0",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        },
+        {
+          "region": "actor:1",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 1,
+          "pendingPause": 1,
+          "followingPause": 1,
+          "period12": 2,
+          "period3": 2,
+          "alternate": 0,
+          "inputTicks": 2,
+          "randomIndex": 13,
+          "randomCounter": 2,
+          "cameraX": 2,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "resource-recovery",
+      "snapshots": 13,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 9453,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              15244,
+              15245
+            ],
+            [
+              15292,
+              15293
+            ],
+            [
+              15300,
+              15301
+            ],
+            [
+              15304,
+              15305
+            ],
+            [
+              15308,
+              15309
+            ],
+            [
+              15352,
+              15356
+            ],
+            [
+              15412,
+              15413
+            ],
+            [
+              15416,
+              15435
+            ]
+          ]
+        },
+        {
+          "region": "actor:0",
+          "changedByteRanges": [
+            [
+              112,
+              113
+            ],
+            [
+              116,
+              117
+            ],
+            [
+              120,
+              121
+            ],
+            [
+              124,
+              125
+            ],
+            [
+              764,
+              765
+            ],
+            [
+              776,
+              777
+            ]
+          ]
+        },
+        {
+          "region": "actor:1",
+          "changedByteRanges": [
+            [
+              112,
+              113
+            ],
+            [
+              116,
+              117
+            ],
+            [
+              120,
+              121
+            ],
+            [
+              124,
+              125
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 0,
+          "period3": 0,
+          "alternate": 0,
+          "inputTicks": 12,
+          "randomIndex": 23,
+          "randomCounter": 12,
+          "cameraX": 12,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 3,
+            "hp": 401,
+            "mp": 107
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 2,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "type-three-pass",
+      "snapshots": 3,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 9783,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              15244,
+              15245
+            ],
+            [
+              15292,
+              15293
+            ],
+            [
+              15300,
+              15301
+            ],
+            [
+              15304,
+              15305
+            ],
+            [
+              15308,
+              15309
+            ],
+            [
+              15312,
+              15313
+            ],
+            [
+              15316,
+              15317
+            ],
+            [
+              15352,
+              15356
+            ],
+            [
+              15412,
+              15413
+            ],
+            [
+              15416,
+              15435
+            ]
+          ]
+        },
+        {
+          "region": "actor:0",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        },
+        {
+          "region": "actor:1",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        },
+        {
+          "region": "actor:50",
+          "changedByteRanges": [
+            [
+              16,
+              17
+            ],
+            [
+              40,
+              72
+            ],
+            [
+              80,
+              88
+            ],
+            [
+              93,
+              95
+            ],
+            [
+              96,
+              110
+            ],
+            [
+              112,
+              113
+            ],
+            [
+              116,
+              117
+            ],
+            [
+              120,
+              121
+            ],
+            [
+              124,
+              125
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 2,
+          "period3": 2,
+          "alternate": 0,
+          "inputTicks": 2,
+          "randomIndex": 13,
+          "randomCounter": 2,
+          "cameraX": 2,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 50,
+            "id": 440,
+            "frame": 3,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "timer-through-dispatch",
+      "snapshots": 7,
+      "regions": 409,
+      "bytesPerSnapshot": 1538892,
+      "distinctAccesses": 9240,
+      "changes": [
+        {
+          "region": "globals",
+          "changedByteRanges": [
+            [
+              15244,
+              15245
+            ],
+            [
+              15248,
+              15249
+            ],
+            [
+              15292,
+              15293
+            ],
+            [
+              15300,
+              15301
+            ],
+            [
+              15304,
+              15305
+            ],
+            [
+              15308,
+              15309
+            ],
+            [
+              15312,
+              15313
+            ],
+            [
+              15320,
+              15321
+            ],
+            [
+              15352,
+              15356
+            ],
+            [
+              15412,
+              15413
+            ],
+            [
+              15416,
+              15435
+            ]
+          ]
+        },
+        {
+          "region": "actor:0",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        },
+        {
+          "region": "actor:1",
+          "changedByteRanges": [
+            [
+              136,
+              137
+            ]
+          ]
+        }
+      ],
+      "catalogHoles": [
+        [
+          "0x1f2bb000",
+          "0x24000000"
+        ]
+      ],
+      "finalState": {
+        "globals": {
+          "phase": 1,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 3,
+          "period3": 0,
+          "alternate": 1,
+          "inputTicks": 3,
+          "randomIndex": 14,
+          "randomCounter": 3,
+          "cameraX": 3,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    }
+  ]
+}

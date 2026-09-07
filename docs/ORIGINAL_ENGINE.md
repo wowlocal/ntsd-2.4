@@ -154,9 +154,11 @@ app now runs bounded Naruto/Sasuke combat with snake and Chidori needles; see
 
 ## Next original-code targets
 
-Follow [RESEARCH_MAP.md](RESEARCH_MAP.md) for the live sequence. The next prepared
+Follow [RESEARCH_MAP.md](RESEARCH_MAP.md) for the live sequence. The active
 card is [R02.1](research/R02.1.md), complete state and initialization, following
-the completed R01.1 boundary study. Whole-file loading and a wider execution
+the completed R01.1 boundary study. [State findings](research/STATE_LAYOUT.md)
+now cover byte-checked Actor/World constructors and raw fixture snapshots;
+full initialization and remaining types are still open. Whole-file loading and a wider execution
 oracle follow, then generic transition/spawn mechanisms. The earlier movement, collision and projectile
 milestones are implemented within their documented domains; they do not close
 these larger blocks. Full-match Windows captures remain outstanding.

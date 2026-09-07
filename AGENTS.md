@@ -34,8 +34,14 @@ seeds and their evidence limits are in
 R01.1 established the ordinary dispatch/match boundary and the gap map:
 [docs/research/TICK_PIPELINE.md](docs/research/TICK_PIPELINE.md),
 [docs/research/TICK_GAPS.md](docs/research/TICK_GAPS.md).
-The next prepared task is [R02.1](docs/research/R02.1.md): recover complete state,
-types and initialization. R01.2 follows R02.1/R03.1 with a wider execution oracle.
+The active task is [R02.1](docs/research/R02.1.md): recover complete state,
+types and initialization. Its partial result is [STATE_LAYOUT.md](docs/research/STATE_LAYOUT.md).
+Actor/World constructor bytes and defined masks match native storage in 16 cases;
+raw snapshots retain all Actor/Object/globals and mapped catalog/heap regions in
+the six R01.1 fixtures. Full initialization provenance, pointer normalization,
+catalog and remaining types are still open. Native OriginalStateRecord is not
+yet wired into practice; its constructors are not match/spawn defaults.
+R01.2 follows R02.1/R03.1 with a wider execution oracle.
 Follow the map's dependencies; keep analysis, native implementation and
 verification statuses separate. Update the map/card after completing a bounded
 piece of work. Creating this map does not extend verified gameplay coverage.

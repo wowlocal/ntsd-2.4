@@ -26,7 +26,9 @@ D означает проверку ограниченного поведени�
 | R01/R15 | `0x43eca1 → 0x4151d0`, `0x43ecba → 0x4246b0`, `0x43ecd3 → 0x414b70`, call sites | Вызовы из ветвей верхнего диспетчера | При `4593a0=0`: `4246b0(ECX=458b00)`, при World[0]=2 — `41bc90`; обычный путь S/D, остальные режимы не закрыты |
 | R01 | `0x41bc90..0x422ab8`, функция, ret 4 | Обработчик матча вместе с вводом, графикой, HUD и звуком | S: 6 822 инструкции, один обычный возврат; D: 29 вызовов на синтетических данных, включая паузу; не эквивалентность Swift |
 | R02/R03/R06 | `0x41bff0`, `0x41c013`, `0x41c070..0x41c091` | Аллокация каталога 0x4d823a8, загрузка `4122f0`, Actor по 0x420 байт | S; полная инициализация остаётся R02.1/R03.1 |
-| R02/R06 | `0x4061d0`, функция | Конструктор экземпляра Actor | D в [oracle_combat.py](../../tools/oracle_combat.py) и [oracle_projectiles.py](../../tools/oracle_projectiles.py); практика затем меняет spawn/скорости |
+| R02/R06 | `0x4061d0..0x4064cc`, функция | Конструктор Actor: пишет 913/1056 байт | S/D побайтно и по маске против Swift: [STATE_LAYOUT.md](STATE_LAYOUT.md); практика отдельно меняет spawn/скорости |
+| R02 | `0x419e40..0x419e5f`, функция; `0x446300..0x446305`, статический инициализатор | World: конструктор обнуляет только selector + 400 байт активности | D конструктора; S статического адреса 458b00. Полный lifecycle открыт |
+| R02/R03 | `0x412660..0x412695` | Object: аллокация 0x25360 и вызов 40ef70 | S; сырой снимок хранит всю аллокацию, загрузка целиком требует R03.1 |
 | R02/R03 | `0x40bbf0`, функция | Начальное состояние записи кадра | D: [FRAME_LOADER.md](../FRAME_LOADER.md) |
 | R03 | `0x40efc3..0x40f01a`, фрагмент | 400 конструкторов кадров, defaults заголовка объекта | S; defaults используются в D стенде снарядов; внешний загрузчик не выполняется целиком |
 | R03 | `0x40f799..0x40fa5a`, фрагмент | Численные параметры движения заголовка | S: смещения известны; MSVCR80 `%lf` здесь не проверен |
@@ -73,6 +75,7 @@ D означает проверку ограниченного поведени�
 | Блок | Текущий нативный код | Проверка |
 | --- | --- | --- |
 | R01/R02 | [OriginalMelee.swift](../../native/Sources/NTSDCore/OriginalMelee.swift), [OriginalClock.swift](../../native/Sources/NTSDCore/OriginalClock.swift) | [oracle_projectiles.py](../../tools/oracle_projectiles.py), [oracle_presentation.py](../../tools/oracle_presentation.py); полного такта пока нет |
+| R02 | [OriginalStateRecord.swift](../../native/Sources/NTSDCore/OriginalStateRecord.swift) | [oracle_state.py](../../tools/oracle_state.py), [oracle_state_trace.py](../../tools/oracle_state_trace.py); нативное сравнение пока только конструкторов |
 | R02/R16 | [OriginalRandom.swift](../../native/Sources/NTSDCore/OriginalRandom.swift) | [oracle_combat.py](../../tools/oracle_combat.py), [original_replay.py](../../tools/original_replay.py) |
 | R03 | [OriginalFrameLoader.swift](../../native/Sources/NTSDCore/OriginalFrameLoader.swift), [GameData.swift](../../native/Sources/NTSDCore/GameData.swift) | [oracle_frames.py](../../tools/oracle_frames.py); импорт JSON не равен выполнению внешнего загрузчика |
 | R04/R05 | [OriginalFighter.swift](../../native/Sources/NTSDCore/OriginalFighter.swift), [OriginalMovement.swift](../../native/Sources/NTSDCore/OriginalMovement.swift) | [oracle_movement.py](../../tools/oracle_movement.py), combat/projectiles corpora |
@@ -120,7 +123,7 @@ D означает проверку ограниченного поведени�
 | Actor `+0xf0` | 400 signed-byte vrest | D корпуса с объектами |
 | Actor `+0x2fc/+0x300/+0x308` | HP / recoverable HP / MP | Восстановление между тактами ещё не перенесено |
 | Actor `+0x348/+0x34c/+0x350`, `+0x354/+0x364/+0x368` | Урон нанесён/получен, MP потрачено; owner/team/Object pointer | D ограниченного боя; прочие статистики не считать нулевыми автоматически |
-| World `+0`, `+4`, `+0x194`, `+0x7d4` | Селектор диспетчера, активность слотов, указатели Actor, ссылка на каталог/фоновые данные | Обычный World по 0x458b00; полный layout/конструктор и каталог требуют R02.1/R03.1 |
+| World `+0`, `+4`, `+0x194`, `+0x7d4` | Селектор диспетчера, активность слотов, указатели Actor, ссылка на каталог/фоновые данные | World по 458b00; конструктор записывает только первые 404 байта. Полный layout/каталог открыты |
 | `0x450b90`, `0x450bfc`, `0x44fb60`, `0x44fcb0` | Фаза и очередь паузы | S/D R01.1; полный ввод — R04 |
 | `0x450bd0`, `0x450bd4`, `0x450bd8` | Счётчики modulo 12/3 и переключатель неприостановленного пути | S/D R01.1; в старом нативном состоянии отсутствуют |
 | `0x44ff90`, `0x450bcc`, `0x450c34` | Таблица RNG, индекс, счётчик | Восстановление seed D; инициализация нового матча открыта |
@@ -132,7 +135,8 @@ D означает проверку ограниченного поведени�
 `ACTOR=0x22000000`, `WORLD=0x23000000`, шаг `0x500` между Actor и другие адреса
 `0x2…` в Python — **размещение памяти тестовым стендом**, не адреса/stride
 исходной игры. R01.1 установила аллокацию Actor по **0x420 байт**; остальные
-размеры и полный layout — R02.1. Нейтральные render-поля ProjectileState —
+размеры и полный layout — R02.1. Точные маски и новые опоры —
+[STATE_LAYOUT.md](STATE_LAYOUT.md). Нейтральные render-поля ProjectileState —
 также схема снимка, не оригинальные поля.
 
 ## Начальный реестр исключений R11
