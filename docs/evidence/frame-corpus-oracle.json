@@ -1,0 +1,1408 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "constructorVA": "0x40bbf0",
+  "entryVA": "0x4103f8",
+  "stopVA": "0x412277",
+  "groups": 15025,
+  "definitions": 15056,
+  "fixturesSHA256": "5904de1b07b4c6011209d2e2fb30dd257827894a82c49ecb5584563b45d1499b",
+  "excluded": [
+    {
+      "label": "chars/kyubi.dat:304",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:305",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:306",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:311",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:315",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:316",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:317",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:318",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:319",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:320",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:321",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:325",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:326",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:327",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:328",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:329",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:330",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:331",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:332",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:333",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:334",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:335",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:336",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:337",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:338",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:339",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:360",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:361",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kyubi.dat:362",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/sasori.dat:0",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:1",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:2",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:3",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:5",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:8",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:9",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:10",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:281",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:315",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:316",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:325",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sasori.dat:326",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/reaper.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/reaper.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/reaper.dat:235",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/reaper.dat:238",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:60",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:65",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:280",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/nckakuzu.dat:356",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/sand_creature.dat:275",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sand_creature.dat:276",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sand_creature.dat:277",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sand_creature.dat:278",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sound_nin.dat:246",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sound_nin.dat:380",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sound_nin.dat:384",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sound_nin.dat:387",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:180",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:181",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:182",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:183",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:184",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:185",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:186",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:187",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:188",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:189",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:190",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:191",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:200",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:201",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:203",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:204",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:220",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:221",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:222",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:223",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:224",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:225",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:226",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:227",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:228",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:229",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:258",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:259",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:260",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:261",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakashi.dat:262",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:17",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:18",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:19",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:351",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:352",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:353",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:354",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/yamato.dat:355",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/shikamaru.dat:282",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/shikamaru.dat:283",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:300",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:301",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:302",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:303",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:304",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:305",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:306",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:307",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:308",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:309",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:310",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:311",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:312",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:313",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:314",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:315",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:316",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:317",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/chiyo.dat:345",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kankuro.dat:248",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kankuro.dat:355",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kankuro.dat:356",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:220",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:221",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:222",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:223",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:224",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:225",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:226",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:227",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:228",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:229",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:331",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:332",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:333",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:354",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:355",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:356",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:360",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:361",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:362",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:363",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:364",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:365",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:366",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:367",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:368",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:369",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:370",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:371",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:372",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:373",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:374",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:375",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:376",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:377",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:378",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:379",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:380",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:381",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:382",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:383",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/temari.dat:384",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kisame.dat:340",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:0",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:1",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:5",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:6",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:9",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:110",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:153",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:180",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:181",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:182",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:183",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:184",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:185",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:186",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:187",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:188",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:189",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:190",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:191",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:200",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:201",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:203",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:204",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:205",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:206",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:210",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:220",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:221",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:222",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:223",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:224",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:225",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:226",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:227",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:228",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:229",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:301",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:305",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:307",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:386",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi.dat:389",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/hidan.dat:230",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/hidan.dat:231",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/hidan.dat:238",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kakuzu.dat:315",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:0",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:20",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:25",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:30",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:35",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:40",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:45",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:52",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:53",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:215",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:218",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:219",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:234",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:240",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:241",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:250",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/kabuto.dat:330",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/kabuto.dat:335",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/orochimaru.dat:62",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/orochimaru.dat:67",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/orochimaru.dat:275",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/orochimaru.dat:280",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/weapon4.dat:48",
+      "reason": "Unexpected end of frame"
+    },
+    {
+      "label": "chars/criminal.dat:52",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/criminal.dat:53",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/criminal.dat:54",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/criminal.dat:111",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/heart.dat:48",
+      "reason": "Unexpected end of frame"
+    },
+    {
+      "label": "chars/heart.dat:64",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart.dat:70",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart.dat:71",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart.dat:72",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart.dat:122",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart.dat:399",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/heart2.dat:48",
+      "reason": "Unexpected end of frame"
+    },
+    {
+      "label": "chars/heart3.dat:48",
+      "reason": "Unexpected end of frame"
+    },
+    {
+      "label": "chars/heart0.dat:48",
+      "reason": "Unexpected end of frame"
+    },
+    {
+      "label": "chars/sakura_ball.dat:0",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sakura_ball.dat:1",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sakura_ball.dat:2",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sakura_ball.dat:3",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sakura_ball.dat:36",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/sakura_ball.dat:37",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/death.dat:135",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/charge.dat:315",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wind.dat:305",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:82",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:83",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:84",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:85",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:86",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:87",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/poison.dat:88",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/flash.dat:65",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/flash.dat:75",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/flash.dat:76",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:81",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:82",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:273",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:274",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:280",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:281",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:282",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:283",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:284",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:285",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:286",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:287",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:288",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:289",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:290",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:291",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:295",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:296",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:297",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:298",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:299",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:300",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:301",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:302",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:303",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:304",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:305",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:306",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:310",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:311",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:312",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:313",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:314",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:320",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:321",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:322",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:323",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:324",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/crow_2.dat:325",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/ironsand.dat:211",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/ironsand.dat:250",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mega_ex.dat:375",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/snake.dat:105",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/criminal2.dat:1",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/criminal2.dat:143",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/tree.dat:10",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/tree.dat:20",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/tree.dat:21",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/tree.dat:30",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/itachi_kunai.dat:6",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:104",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:105",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:106",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:107",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:108",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:109",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:110",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:111",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:112",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:113",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/wood.dat:114",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:135",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:136",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:203",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:206",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:215",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:216",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:218",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/4TK_ball.dat:221",
+      "reason": "Original 20-byte name buffer"
+    },
+    {
+      "label": "chars/4TK_ball.dat:233",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/air_creature.dat:60",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/fire_creature.dat:30",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mirror.dat:72",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mirror.dat:73",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mirror.dat:100",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mirror.dat:101",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    },
+    {
+      "label": "chars/mirror.dat:102",
+      "reason": "MSVCR80 decimal overflow is not yet verified"
+    }
+  ],
+  "scope": "Decoded frame sections, Int32 decimal domain, sound device disabled; not complete object loading or gameplay."
+}

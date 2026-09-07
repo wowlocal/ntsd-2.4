@@ -1,0 +1,30 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "entryVA": "0x4148a0",
+  "cases": [
+    {
+      "file": "chars/naruto.dat",
+      "bytes": 129655,
+      "decodedSHA256": "c13d2064032789573e09fd9e0bd1547e5cb87ee113e0f710983cba344712b61f",
+      "equal": true
+    },
+    {
+      "file": "chars/sasuke.dat",
+      "bytes": 99911,
+      "decodedSHA256": "1b7d8d19d162cf8f93a2a3493a7ff016dc6494358a870bcbf6eacd9dcb28d392",
+      "equal": true
+    },
+    {
+      "file": "chars/flash.dat",
+      "bytes": 6852,
+      "decodedSHA256": "42b0e2d967c60122ba604308b07bd356e59aeeb2fe9fdcfc495e9c7c85dfad19",
+      "equal": true
+    },
+    {
+      "file": "bg/sys/Valley/bg.dat",
+      "bytes": 934,
+      "decodedSHA256": "7f300739402f5fa6e84db54800cc4954b4babb7fe661d7ce3dbe2d98322ec51a",
+      "equal": true
+    }
+  ]
+}

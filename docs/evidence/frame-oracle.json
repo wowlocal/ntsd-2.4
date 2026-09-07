@@ -1,0 +1,11 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "constructorVA": "0x40bbf0",
+  "entryVA": "0x4103f8",
+  "stopVA": "0x412277",
+  "groups": 32,
+  "definitions": 39,
+  "fixturesSHA256": "b9380ff27fcbc5f34cc3093a3bd4c51c170e81a719a9cc03b90fd2a3536aa548",
+  "excluded": [],
+  "scope": "Decoded frame sections, Int32 decimal domain, sound device disabled; not complete object loading or gameplay."
+}

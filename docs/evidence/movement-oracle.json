@@ -1,0 +1,16 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sequences": 58,
+  "ticks": 8506,
+  "fixtureTicks": 3770,
+  "corpusSHA256": "d3ba4779bb5edf163a26b361fb9c21e172769ef02939748d5fd25acb7c2cd6c9",
+  "fixtureSHA256": "add6630c59cb4fb92017d683f562b98b59b3b9b4107e8a52ae8243319677e50f",
+  "addresses": {
+    "input": "0x4198f0",
+    "control": "0x413080",
+    "physics": "0x40e490",
+    "boundsCamera": "0x41b5d0..0x41bc74",
+    "scheduler": "0x40d960"
+  },
+  "scope": "One unarmed Naruto, arrows/jump, neutral practice spawn, no enemies/items/combat. Exact numerical comparisons, not whole-match fidelity."
+}
