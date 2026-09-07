@@ -123,12 +123,36 @@ they are not filesystem paths. Layers remain delayed. Stage contributes zero CRC
 The joined capture compares final whole Object/Stage storage; per-occurrence Frame
 and per-phase Stage byte comparisons remain in their earlier standalone corpora.
 No Windows startup, pixels, sound output, selected match or full tick is proved.
-Next connect this loaded catalog with World/400 Actor and recover selected-match
-initialization/provenance for R01.2. Do not restore synthetic Object headers.
+The catalog is now connected with World/400 Actor and the
+[common match preparation](docs/research/MATCH_PREPARATION.md), 42d1ff..42d6ed.
+Read that study before extending this state. OriginalMatchPreparation uses the
+real loaded catalog, bootstrap and shared bitmap resources. Two chained corpora
+(a5/ramp Actor/World backing) compare 50 scenarios / 52102 records / 79596336
+bytes and masks, 19324 preparation constructors, 720 RNG calls, 796 new bitmap
+records and 766 releases. Both include all 137 source Object bindings (controlled
+menu inputs, not UI-selectable roster), all 17 arenas, Naruto/Sasuke District,
+restart, Stage, BG99, status limits and RNG wrap. No per-character handlers.
+Status 1..10 targets base slot, >10 targets seat+10; <=0 skips reconstruction.
+Clear only activity 10..399, preserve the first ten input flags; do not guess
+menu deactivation. Team=0 becomes slot+10 only when active. Random BG uses
+count-2, result count-3 becomes99. Stage overrides x after the earlier RNG calls.
+Only inactive slots 20..399 are reconstructed at the end; input reset 431c70
+sets its 300-byte buffer to 0x75. BG release/load retains original stale pointers.
+The reference restores the pinned complete catalog capture; native comparison
+rebuilds and validates it before continuing through bootstrap/preparation.
+Actual PE/BSS globals plus menu/RNG stimuli and disabled music remain supplied
+boundaries. Do not call this whole menu startup or full match equivalence.
+Next recover menu/RNG input provenance, prelude 42cf8a..42d1ff, replay init 43d2c0
+and continuation after 42d701, then connect to R01.2. Enabled music 402020 uses
+DirectShow and remains explicitly unsupported; empty-path 4025b0 was executed.
+The native preparation is not wired into practice. Do not restore synthetic
+Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
 OriginalLoadedCatalogTests passed (135.451s), all on this shared-state change.
 Release comparisons for all three packed fixtures also passed before acceptance.
-Reference checks
+The preparation stage additionally passed all 31 Swift tests in 398.752s,
+including the new two-corpus comparison in 75.717s; both release comparisons
+passed before fixture acceptance. Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.
 R01.2 follows R02.1/R03.1 with a wider execution oracle.

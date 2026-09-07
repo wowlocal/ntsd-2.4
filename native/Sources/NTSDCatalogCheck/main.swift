@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--match-preparation" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try MatchPreparationReference.compare(loaded: loaded, corpora: corpora)
+        print("Match preparation matches original: \(result.cases) cases, \(result.records) records, \(result.bytes) bytes/masks, \(result.constructors) constructors, \(result.randomCalls) RNG calls, \(result.bitmaps) new bitmaps, \(result.releases) releases")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--loaded" {
         let result = try LoadedCatalogReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Loaded catalog matches original: \(result.objects) objects, \(result.backgrounds) backgrounds, \(result.stages) stages / \(result.phases) phases, \(result.frames) frame occurrences, \(result.bitmaps) bitmaps, \(result.allocations) Frame allocations, \(result.bytes) bytes/masks, checksum \(result.checksum)")

@@ -26,9 +26,13 @@ boundaries. The old [parent-only study](docs/research/CATALOG_REGISTRY.md) and
 [individual Object](docs/research/RAW_FRAME_STORAGE.md),
 [BG](docs/research/BACKGROUND_LOADER.md) and [Stage](docs/research/STAGE_LOADER.md)
 corpora keep their separate verification scopes.
-Selected-match initialization, full gameplay, Windows startup and visual/audio
-output remain open. Practice still uses its prior import; the next step connects
-the loaded catalog with World/Actor and the wider tick reference.
+The [common match preparation](docs/research/MATCH_PREPARATION.md) now continues
+from that loaded catalog through World/400 Actor: 50 chained scenarios match
+native Swift, including RNG, placement, arena lifecycle and input reset. Menu/RNG
+input provenance, the mode prelude, replay initialization and the remaining start
+sequence are still open, as are full gameplay, Windows startup and visual/audio
+output. Practice still uses its prior import; the new state is not yet a complete
+match or wired into the wider tick reference.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

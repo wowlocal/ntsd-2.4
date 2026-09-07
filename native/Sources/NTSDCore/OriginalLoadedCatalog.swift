@@ -11,6 +11,7 @@ public struct OriginalCatalogChildObservation {
 /// Actual child loaders composed at the original 4122f0 request boundaries.
 /// This is loading state, not selected-match initialization or a game loop.
 public struct OriginalLoadedCatalog {
+    let resources: OriginalLoaderResources
     public let registry: OriginalCatalogRegistry
     public let objects: [OriginalLoadedObject]
     public let backgrounds: [OriginalStateRecord]
@@ -94,6 +95,7 @@ public struct OriginalLoadedCatalog {
         backgrounds[100] = registry.records[0x4d819f0]!
         self.registry = registry; self.objects = objects; self.backgrounds = backgrounds; self.stages = stageLoader.records
         self.bitmaps = resources.bitmaps; self.frameAllocations = resources.frameHeap.allocations
+        self.resources = resources
         self.checksum = registry.checksum; self.soundCount = resources.sounds.count; self.soundBytes = resources.sounds.bytes
     }
 }

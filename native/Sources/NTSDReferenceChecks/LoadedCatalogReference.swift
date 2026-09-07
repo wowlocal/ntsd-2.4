@@ -32,7 +32,7 @@ public enum LoadedCatalogReference {
         let assets: [OriginalBitmapInput], events: [Event], blobs: [String: Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Loaded catalog reference: \(text)") }
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data, onLoaded: (OriginalLoadedCatalog) throws -> Void = { _ in }) throws -> Result {
         struct Packed: Decodable { let deflate: String?, count: Int?, sha256: String? }
         let packed = try JSONDecoder().decode(Packed.self, from: data)
         var decoded = data
@@ -217,6 +217,7 @@ public enum LoadedCatalogReference {
             guard actual.address == expected.address, actual.kind == frameKinds[expected.caller] else { throw error("Frame heap identity") }
             try check(actual.storage, record(expected.storage), "Frame heap \(index)")
         }
+        try onLoaded(catalog)
         return .init(objects: catalog.objects.count, backgrounds: corpus.children.filter { $0.kind == .background }.count,
                      stages: stageIDs.count, phases: phaseIDs.count, frames: occurrences, bitmaps: catalog.bitmaps.count,
                      allocations: catalog.frameAllocations.count, bytes: bytes, checksum: catalog.checksum)
