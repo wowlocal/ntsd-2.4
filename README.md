@@ -15,23 +15,20 @@ Actor/World constructors and raw snapshots preserving unknown fields. Full match
 initialization and integration with the game loop remain pending.
 The [loading-time pool](docs/research/BOOTSTRAP.md) now also matches the EXE for
 all 400 slots. Its eight staging actors are separate from selected-player spawning.
-The [catalog parent](docs/research/CATALOG_REGISTRY.md) reproduces registry order,
-load requests and sparse initialization, including all 137 source objects and
-17 backgrounds. Child loader contents remain open; these requests do not make
-the additional characters playable yet.
-The [continuous Object loader](docs/research/OBJECT_LOADER.md) now reads complete
-Naruto/Sasuke/kunai data with shared sound registration and sprite-sheet metadata.
-Native decoding, headers, frame records and bitmap tables match the original at
-explicit CRT/device boundaries. Actual MSVCR80 behavior, full catalog integration
-and the game's visual/audio output remain open; practice still uses its prior import.
-The [background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17
-source arenas for metadata, delayed layer loading and resource release/reload.
-All BG/bitmap bytes and initialization masks, file checksums and resource order
-are compared. Rendering and menu-driven arena selection remain separate work.
-The [Stage loader](docs/research/STAGE_LOADER.md) also matches the complete source
-stage.dat: 25 stages / 138 phases, with all 60 storage slots and initialization
-masks retained. Stage gameplay remains open. Full Object registry coverage and
-joining the catalog children are next.
+The [complete catalog loader](docs/research/LOADED_CATALOG.md) now executes the
+original parent with real Object/BG/Stage/bitmap/sound children and matches native
+Swift for all 137 source objects, 17 backgrounds and 25 stages / 138 phases.
+The comparison retains all 101 BG and 60 Stage slots, whole Object/Frame bytes
+and masks, 829 bitmap wrappers, raw Frame allocations, shared checksum and sounds
+after each child call. It covers text and raw file contracts plus interleaved
+children with repeated IDs, using the pinned VC80 scanf at explicit file/device
+boundaries. The old [parent-only study](docs/research/CATALOG_REGISTRY.md) and
+[individual Object](docs/research/RAW_FRAME_STORAGE.md),
+[BG](docs/research/BACKGROUND_LOADER.md) and [Stage](docs/research/STAGE_LOADER.md)
+corpora keep their separate verification scopes.
+Selected-match initialization, full gameplay, Windows startup and visual/audio
+output remain open. Practice still uses its prior import; the next step connects
+the loaded catalog with World/Actor and the wider tick reference.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
@@ -95,6 +92,10 @@ uv run tools/oracle_presentation.py
 uv run tools/oracle_combat.py
 uv run tools/oracle_projectiles.py
 uv run tools/oracle_catalog.py
+uv run tools/oracle_loaded_catalog.py
+uv run tools/oracle_loaded_catalog.py --raw-zero
+uv run tools/oracle_loaded_catalog.py --interleaved
+uv run tools/oracle_loaded_catalog.py --accept
 uv run tools/oracle_objects.py --suite
 swift test --package-path native
 ```
@@ -121,7 +122,7 @@ native check executables are absent from the `.app`.
 
 Generated imports and full differential corpora live under `build/`; original
 game files remain read-only inputs. The next work follows the research map:
-complete tick state, complete object loading, a wider oracle, then generic transitions
+connect loaded catalog and match state, a wider oracle, then generic transitions
 and object creation. Characters are source-data cases for shared engine rules;
 ID-specific behavior is retained only where the original EXE establishes it.
 

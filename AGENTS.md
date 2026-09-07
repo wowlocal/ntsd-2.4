@@ -39,7 +39,7 @@ types and initialization. Its partial result is [STATE_LAYOUT.md](docs/research/
 Actor/World constructor bytes and defined masks match native storage in 16 cases;
 raw snapshots retain all Actor/Object/globals and mapped catalog/heap regions in
 the six R01.1 fixtures. Full initialization provenance, pointer normalization,
-catalog and remaining types are still open. Native OriginalStateRecord is not
+and remaining types are still open. Native OriginalStateRecord is not
 yet wired into practice; its constructors are not match/spawn defaults.
 The [bootstrap study](docs/research/BOOTSTRAP.md) now verifies the full loading-time
 400-slot pool plus reconstruction/activation of slots 0..7 against native Swift.
@@ -49,9 +49,9 @@ zero as null or normalize arbitrary opaque words. Reconstructing an Actor must
 preserve the initialization mask of untouched fields. The
 [catalog parent](docs/research/CATALOG_REGISTRY.md) now matches native registry
 requests and parent-owned bytes/masks for all source entries and bounded probes.
-Its Object/BG/Stage/bitmap children remain explicit opaque boundaries; the parent
-checksum excludes child contributions. Registry ordinals are not source IDs and
-duplicate IDs remain separate. This is not a loaded catalog. The separate
+That older corpus keeps Object/BG/Stage/bitmap children as opaque boundaries; its
+parent checksum excludes child contributions. The joined study below now executes
+real children. Registry ordinals are not source IDs and duplicate IDs remain separate. The separate
 [Object loader](docs/research/OBJECT_LOADER.md) now executes 40ef70/4148a0/43ee50
 and matches native decoding/header/frame/bitmap behavior for Naruto, Sasuke,
 kunai and a control stream. Read that document before extending this loader.
@@ -64,7 +64,7 @@ non-null ordinals. Frame references now remain explicit 32-bit arena addresses,
 supplied at the allocator boundary for raw comparison; never normalize partially
 overwritten pointers. Full Frame bytes/masks and live/dead Frame malloc records
 are compared by the newer raw suite described below. The new
-loader is not wired to practice or to the parent. The separate
+loader is not wired to practice; its parent composition is described below. The separate
 [Background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17 source
 arenas through metadata parse 40c160, layer allocation 40c030 and release 40c0e0.
 It preserves all BG/bitmap bytes and masks, delayed layer loading, rect conversion,
@@ -82,7 +82,7 @@ Read that document before extending Stage. bound rewrites all 60 x values;
 boss/soldier and parameter order matter; pre-id fields overlap the music area.
 Stage contributes no checksum and its fields must not be pointer-normalized.
 Its full-record evidence uses lossless DEFLATE only in development reference code.
-Stage gameplay, Windows CRT, full catalog and selected-match initialization remain
+Stage gameplay, Windows startup and selected-match initialization remain
 open. The [CRT scanner study](docs/research/CRT_SCANNER.md) now executes the pinned
 MSVCR80 8.0.50727.6195 from the repository's original redistributable. Its publisher
 policy includes the EXE's requested .762; actual Windows assembly binding remains
@@ -104,9 +104,30 @@ host memory or silently replace with null. Native names are bounded at 27 bytes
 within one Frame, covering all source names (max 25); crossing records is open.
 The tenth sheet is now supported and compared; its last bitmap pointer ends at
 Object+7a4. Frame data storage is shared by the existing parser, not a second set
-of per-character rules. This is not a joined catalog or full gameplay equivalence.
-Next join real children at 4122f0 including shared sound/checksum,
-parent embedded bitmaps and built-in BG records. Do not stub remaining Object data.
+of per-character rules. This raw-Frame study alone is not full gameplay equivalence.
+The [joined catalog](docs/research/LOADED_CATALOG.md) now executes 4122f0 with real
+Object/BG/Stage/bitmap/sound children in one VM, with actual VC80 scanf outside
+decoder %c. Native OriginalLoadedCatalog composes the existing loaders through
+OriginalCatalogRegistry.onLoad and shared OriginalLoaderResources. Two whole
+source passes (text/a5 and raw/00) plus interleaved/repeated-ID control match
+all Catalog/Object/bitmap/Frame-allocation bytes and masks. Each whole pass:
+137 Object, 17 BG, 25 Stage/138 phases, 15388 Frame occurrences, 829 bitmaps,
+14586 Frame allocations. Checksum text=31475378, raw=31461560, both 400 sounds.
+The parent-only parentChecksum still excludes children; checksum includes them.
+All 101 BG and 60 Stage are retained, including untouched regions. In the joined
+backgrounds array, the four known BG99 pointers explicitly convert to index+1 /
+zero-null; registry.records retains old non-null ordinals. Never infer nullness
+without knowing the representation. Frame pointers remain raw supplied addresses.
+The four embedded bitmap keys resolve to PE DIB dimensions at the device boundary;
+they are not filesystem paths. Layers remain delayed. Stage contributes zero CRC.
+The joined capture compares final whole Object/Stage storage; per-occurrence Frame
+and per-phase Stage byte comparisons remain in their earlier standalone corpora.
+No Windows startup, pixels, sound output, selected match or full tick is proved.
+Next connect this loaded catalog with World/400 Actor and recover selected-match
+initialization/provenance for R01.2. Do not restore synthetic Object headers.
+Verification: the existing 27 Swift tests passed (198.991s), then the three new
+OriginalLoadedCatalogTests passed (135.451s), all on this shared-state change.
+Release comparisons for all three packed fixtures also passed before acceptance.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

@@ -251,7 +251,7 @@ class Objects(Constructors):
         elif name == "fscanf":
             h, fmt = self.handles[arg(0)], self.cstr(arg(1))
             assert not h['closed'] and h['mode'] == b'r'
-            assert fmt in (b'%s', b'%c', b'%d', b'%d %d', b'%d %s', b'%lf', b'%ld', b'%s %s %d %d'), fmt
+            assert fmt in (b'%s', b'%c', b'%d', b'%d %d', b'%d %s', b'%lf', b'%ld', b'%s %s %d %d', b'%d %s %d %s %s', b'%d %s %s'), fmt
             if self.crt is not None and fmt != b'%c':
                 before = h['pos']
                 result = self.crt.scan(h['data'][before:], fmt)

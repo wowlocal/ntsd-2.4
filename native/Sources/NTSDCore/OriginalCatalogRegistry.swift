@@ -16,8 +16,9 @@ public struct OriginalCatalogLoadRequest: Codable, Equatable, Sendable {
     }
 }
 
-/// Parent-owned behavior of EXE 0x4122f0. Child loading remains an explicit open
-/// dependency. This must not be used as a fully loaded catalog or match state.
+/// Parent-owned behavior of EXE 0x4122f0. onLoad supplies child work at each call
+/// boundary; its default only records requests. OriginalLoadedCatalog composes
+/// the actual native children. A registry alone is not loaded or match state.
 /// The modeled CRT domain is C-locale %s and in-range %d with complete sections.
 public struct OriginalCatalogRegistry: Equatable, Sendable {
     public static let regionSizes = [0: 0x7d0, 0x4d81060: 0x990, 0x4d819f0: 0x990, 0x4d82380: 0x28]
@@ -26,13 +27,16 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
     /// Initial value plus ONLY parent token contributions. Children also modify
     /// the original global +0x44f620; this is not a full-game checksum.
     public let parentChecksum: UInt32
+    /// Includes effects returned by onLoad, in the original call order.
+    public let checksum: UInt32
     public let outerTokens: [[UInt8]]
 
     /// Records preserve supplied bytes/masks. Only established pointers are bound
     /// to non-null ordinals: object entries -> object request index; built-in bitmap
     /// pointers -> bitmap request index. Ordinal zero is a valid bound reference.
     public init(source: [UInt8], fileName: [UInt8], initialChecksum: UInt32,
-                backing: [Int: OriginalStateRecord]) throws {
+                backing: [Int: OriginalStateRecord],
+                onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
         guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.bytes.count == $0.value }) else {
             throw OriginalStateError.invalidStorage("Catalog parent region sizes differ")
         }
@@ -41,7 +45,12 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         }
         var scanner = try CatalogScanner(source)
         var records = backing, requests: [OriginalCatalogLoadRequest] = [], checksum = initialChecksum
+        var parentChecksum = initialChecksum
         var outerTokens: [[UInt8]] = []
+        func request(_ item: OriginalCatalogLoadRequest) throws {
+            requests.append(item)
+            checksum = try onLoad(item, checksum)
+        }
         func write<T: FixedWidthInteger>(_ value: T, region: Int, at offset: Int) throws {
             try records[region]!.write(value, at: offset)
         }
@@ -57,7 +66,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         for (index, item) in [("shadow1", 0x3a4, 0x98c), ("back99_1", 0x20, 0x914),
                               ("back99_2", 0x3e, 0x918), ("back99_3", 0x5c, 0x91c)].enumerated() {
             try writeString(Array(item.0.utf8), region: builtIn, at: item.1)
-            requests.append(.init(.bitmap, index: index, path: item.0))
+            try request(.init(.bitmap, index: index, path: item.0))
             try write(UInt32(index), region: builtIn, at: item.2)
         }
         try writeString(Array("Random".utf8), region: 0x4d819f0, at: 0x3cc)
@@ -73,7 +82,9 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
             guard let current = token else { throw CatalogScanner.error("No initialized outer token") }
             outerTokens.append(current)
             for (index, byte) in current.enumerated() {
-                checksum &+= UInt32(bitPattern: Int32(Int8(bitPattern: byte))) &* UInt32(index)
+                let contribution = UInt32(bitPattern: Int32(Int8(bitPattern: byte))) &* UInt32(index)
+                checksum &+= contribution
+                parentChecksum &+= contribution
             }
             if token == Array("<object>".utf8) {
                 token = try scanner.requiredString()
@@ -86,8 +97,8 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                         token = try scanner.requiredString()
                         let path = CatalogScanner.byteString(try scanner.requiredString())
                         guard objectCount < 500 else { throw CatalogScanner.error("Object table capacity exceeded") }
-                        requests.append(.init(.progress, path: path))
-                        requests.append(.init(.object, index: objectCount, id: id, objectType: type, path: path))
+                        try request(.init(.progress, path: path))
+                        try request(.init(.object, index: objectCount, id: id, objectType: type, path: path))
                         try write(UInt32(objectCount), region: 0, at: objectCount * 4)
                         objectCount += 1
                         try write(Int32(objectCount), region: 0x4d82380, at: 0)
@@ -104,7 +115,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                         token = try scanner.requiredString()
                         let path = CatalogScanner.byteString(try scanner.requiredString(limit: 180))
                         guard backgroundCount < 99 else { throw CatalogScanner.error("Unverified collision with built-in backgrounds") }
-                        requests.append(.init(.background, index: backgroundCount, id: id, path: path))
+                        try request(.init(.background, index: backgroundCount, id: id, path: path))
                         backgroundCount += 1
                         try write(Int32(backgroundCount), region: 0x4d82380, at: 4)
                     }
@@ -112,9 +123,9 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 }
             }
         }
-        requests.append(.init(.stages)) // 4127c2 closes the registry before 4127cd.
+        try request(.init(.stages)) // 4127c2 closes the registry before 4127cd.
         self.records = records; self.requests = requests
-        self.parentChecksum = checksum; self.outerTokens = outerTokens
+        self.parentChecksum = parentChecksum; self.checksum = checksum; self.outerTokens = outerTokens
     }
 }
 

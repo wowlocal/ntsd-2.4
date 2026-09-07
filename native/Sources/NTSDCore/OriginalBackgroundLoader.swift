@@ -5,8 +5,13 @@ import Foundation
 /// References use session bitmap index + 1 (0 is null), as in OriginalObjectLoader.
 public struct OriginalBackgroundLoader {
     public static let recordSize = 0x990
-    public private(set) var checksum: UInt32
-    public private(set) var bitmaps: [OriginalLoadedBitmap] = []
+    var resources = OriginalLoaderResources()
+    public private(set) var checksum: UInt32 {
+        get { resources.checksum } set { resources.checksum = newValue }
+    }
+    public private(set) var bitmaps: [OriginalLoadedBitmap] {
+        get { resources.bitmaps } set { resources.bitmaps = newValue }
+    }
     /// Records remain available for evidence after their original release/free.
     public private(set) var releasedBitmaps: Set<Int> = []
     public private(set) var outerTokens: [String] = []

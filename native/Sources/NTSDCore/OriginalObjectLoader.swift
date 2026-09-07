@@ -42,10 +42,19 @@ public struct OriginalLoadedObject: Equatable, Sendable {
 /// DAT decoding, filesystem/image decoding, pixels and audio devices are separate
 /// boundaries. Nothing here selects a character or changes the source data.
 public struct OriginalObjectLoader {
-    public private(set) var bitmaps: [OriginalLoadedBitmap] = []
-    public private(set) var checksum: UInt32 = 0
-    private var sounds = OriginalSoundRegistry()
-    private var frameHeap = OriginalFrameHeap()
+    var resources = OriginalLoaderResources()
+    public private(set) var bitmaps: [OriginalLoadedBitmap] {
+        get { resources.bitmaps } set { resources.bitmaps = newValue }
+    }
+    public private(set) var checksum: UInt32 {
+        get { resources.checksum } set { resources.checksum = newValue }
+    }
+    private var sounds: OriginalSoundRegistry {
+        get { resources.sounds } set { resources.sounds = newValue }
+    }
+    private var frameHeap: OriginalFrameHeap {
+        get { resources.frameHeap } set { resources.frameHeap = newValue }
+    }
     public var frameAllocations: [OriginalFrameAllocation] { frameHeap.allocations }
     public var soundCount: Int { sounds.count }
     public var soundBytes: [UInt8] { sounds.bytes }
