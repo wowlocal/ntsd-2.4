@@ -1,0 +1,80 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "evidence": "S: static address index",
+  "indexSHA256": "d7db642858ce22c597fc18726f089123ab0fb587eca0aa9c3c9809241cbf89b5",
+  "functions": {
+    "outerLoop": {
+      "start": "0x43cf40",
+      "endExclusive": "0x43d222",
+      "instructions": 232,
+      "bytesSHA256": "8ada5575cb15d979780c9a50040c0e2de8017e0f83a8ed2b519f775ad8b65adc",
+      "returns": [
+        {
+          "address": "0x43cf91",
+          "instruction": "ret\t0x10"
+        },
+        {
+          "address": "0x43d21f",
+          "instruction": "ret\t0x10"
+        }
+      ],
+      "directCallers": [
+        "0x4453da"
+      ],
+      "callSites": 43,
+      "branches": 21
+    },
+    "dispatcher": {
+      "start": "0x43e9a0",
+      "endExclusive": "0x43ed02",
+      "instructions": 236,
+      "bytesSHA256": "c1d7afd9de65ed109a3e4f4c62ed70a60cc6586d09deda67698e8fb7e97da033",
+      "returns": [
+        {
+          "address": "0x43ed01",
+          "instruction": "ret"
+        }
+      ],
+      "directCallers": [
+        "0x43d182",
+        "0x43d1c3"
+      ],
+      "callSites": 19,
+      "branches": 38
+    },
+    "modeDispatcher": {
+      "start": "0x4246b0",
+      "endExclusive": "0x428808",
+      "instructions": 3382,
+      "bytesSHA256": "80c5db50070ae0112824524e6baedf62319e0fe18a01dae5755749d07a289dc7",
+      "returns": [
+        {
+          "address": "0x428805",
+          "instruction": "ret\t0x4"
+        }
+      ],
+      "directCallers": [
+        "0x43ecba"
+      ],
+      "callSites": 207,
+      "branches": 285
+    },
+    "match": {
+      "start": "0x41bc90",
+      "endExclusive": "0x422abb",
+      "instructions": 6822,
+      "bytesSHA256": "3eb3f9dc043dfcaa40f65b39d4345a7128a85c70e6d877e527bddc82cbdaf5a1",
+      "returns": [
+        {
+          "address": "0x422ab8",
+          "instruction": "ret\t0x4"
+        }
+      ],
+      "directCallers": [
+        "0x424741"
+      ],
+      "callSites": 334,
+      "branches": 1085
+    }
+  }
+}

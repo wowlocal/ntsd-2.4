@@ -31,9 +31,11 @@ CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 Use [docs/RESEARCH_MAP.md](docs/RESEARCH_MAP.md) as the working queue. Address
 seeds and their evidence limits are in
 [docs/research/ADDRESS_BOOK.md](docs/research/ADDRESS_BOOK.md).
-The next prepared task is
-[docs/research/R01.1.md](docs/research/R01.1.md): establish the complete ordinary
-match-tick boundary and map gaps in the current isolated-function harness.
+R01.1 established the ordinary dispatch/match boundary and the gap map:
+[docs/research/TICK_PIPELINE.md](docs/research/TICK_PIPELINE.md),
+[docs/research/TICK_GAPS.md](docs/research/TICK_GAPS.md).
+The next prepared task is [R02.1](docs/research/R02.1.md): recover complete state,
+types and initialization. R01.2 follows R02.1/R03.1 with a wider execution oracle.
 Follow the map's dependencies; keep analysis, native implementation and
 verification statuses separate. Update the map/card after completing a bounded
 piece of work. Creating this map does not extend verified gameplay coverage.
@@ -56,8 +58,13 @@ behavior, other techniques/projectiles, regeneration and AI remain incomplete.
 Unsupported combat ticks roll back completely. Sprite drawing precedes frame
 scheduling and post-scheduler recovery in the tested original path. Practice RNG
 comes from the supplied replay; do not substitute host randomness.
-The external timer comparison stubs the dispatcher; it is not proof of a whole
-match tick. R01.1 must establish that wider control-flow context.
+The older timer comparison stubs the dispatcher. `oracle_tick_trace.py` now runs
+the original dispatch/match entries through returns with synthetic loaded data
+and explicit platform boundaries. It is a control-flow witness, not full-match
+or native equivalence. It exposes missing item-spawn RNG, type-separated hit
+passes, input/pause phases, linked-object passes and resource recovery. Do not
+patch expected fixtures to hide these gaps or call the old composed pipeline a
+complete original tick. Actor allocation is 0x420; the harness spacing is 0x500.
 
 `NTSDCore/OriginalFrameLoader.swift` implements the recovered frame-section
 loader. Read `docs/FRAME_LOADER.md` before extending it. Do not silently coerce

@@ -1,0 +1,400 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Synthetic loaded-world control-flow witnesses; not Windows captures or native equivalence",
+  "corpusSHA256": "151ac88c4f772051957bbb6fbc755070d5fcea617eaaffe36ff5ecee222f015c",
+  "boundaries": {
+    "0x401250": {
+      "cleanup": 0,
+      "arguments": 2,
+      "meaning": "surface clear"
+    },
+    "0x401290": {
+      "cleanup": 0,
+      "arguments": 6,
+      "meaning": "platform text output"
+    },
+    "0x43f010": {
+      "cleanup": 24,
+      "arguments": 6,
+      "meaning": "bitmap output"
+    },
+    "0x43f310": {
+      "cleanup": 28,
+      "arguments": 7,
+      "meaning": "bitmap rectangle output"
+    },
+    "0x43e940": {
+      "cleanup": 0,
+      "arguments": 1,
+      "meaning": "DirectDraw presentation dispatch"
+    },
+    "0x43f396": {
+      "cleanup": 16,
+      "arguments": 4,
+      "meaning": "WSOCK32 ordinal 101; return 0, no events"
+    },
+    "0x43f3d8": {
+      "cleanup": 12,
+      "arguments": 3,
+      "meaning": "WSOCK32 ordinal 12; return 0, zero pending bytes"
+    }
+  },
+  "sliceComparison": {
+    "scope": "Only RNG counter and actor 0 HP/MP; same initial resources and no pressed buttons, different declared harnesses",
+    "legacy": [
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 0,
+        "hp": 400,
+        "mp": 100
+      }
+    ],
+    "wide": [
+      {
+        "randomCounter": 1,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 2,
+        "hp": 400,
+        "mp": 100
+      },
+      {
+        "randomCounter": 3,
+        "hp": 400,
+        "mp": 102
+      },
+      {
+        "randomCounter": 4,
+        "hp": 400,
+        "mp": 102
+      },
+      {
+        "randomCounter": 5,
+        "hp": 400,
+        "mp": 102
+      },
+      {
+        "randomCounter": 6,
+        "hp": 400,
+        "mp": 104
+      },
+      {
+        "randomCounter": 7,
+        "hp": 400,
+        "mp": 104
+      },
+      {
+        "randomCounter": 8,
+        "hp": 400,
+        "mp": 104
+      },
+      {
+        "randomCounter": 9,
+        "hp": 400,
+        "mp": 106
+      },
+      {
+        "randomCounter": 10,
+        "hp": 400,
+        "mp": 106
+      },
+      {
+        "randomCounter": 11,
+        "hp": 400,
+        "mp": 106
+      },
+      {
+        "randomCounter": 12,
+        "hp": 401,
+        "mp": 107
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "ordinary",
+      "observations": 4,
+      "matchCalls": 4,
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 4,
+          "period3": 1,
+          "alternate": 0,
+          "inputTicks": 4,
+          "randomIndex": 15,
+          "randomCounter": 4,
+          "cameraX": 4,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 1,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "paused",
+      "observations": 4,
+      "matchCalls": 4,
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 1,
+          "pendingPause": 1,
+          "followingPause": 1,
+          "period12": 0,
+          "period3": 0,
+          "alternate": 0,
+          "inputTicks": 0,
+          "randomIndex": 11,
+          "randomCounter": 0,
+          "cameraX": 0,
+          "cameraVelocity": 0
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "single-step-command",
+      "observations": 4,
+      "matchCalls": 4,
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 1,
+          "pendingPause": 1,
+          "followingPause": 1,
+          "period12": 2,
+          "period3": 2,
+          "alternate": 0,
+          "inputTicks": 2,
+          "randomIndex": 13,
+          "randomCounter": 2,
+          "cameraX": 2,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "resource-recovery",
+      "observations": 12,
+      "matchCalls": 12,
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 0,
+          "period3": 0,
+          "alternate": 0,
+          "inputTicks": 12,
+          "randomIndex": 23,
+          "randomCounter": 12,
+          "cameraX": 12,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 3,
+            "hp": 401,
+            "mp": 107
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 2,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "type-three-pass",
+      "observations": 2,
+      "matchCalls": 2,
+      "finalState": {
+        "globals": {
+          "phase": 0,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 2,
+          "period3": 2,
+          "alternate": 0,
+          "inputTicks": 2,
+          "randomIndex": 13,
+          "randomCounter": 2,
+          "cameraX": 2,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 50,
+            "id": 440,
+            "frame": 3,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "timer-through-dispatch",
+      "observations": 6,
+      "matchCalls": 3,
+      "finalState": {
+        "globals": {
+          "phase": 1,
+          "pause": 0,
+          "pendingPause": 0,
+          "followingPause": 0,
+          "period12": 3,
+          "period3": 0,
+          "alternate": 1,
+          "inputTicks": 3,
+          "randomIndex": 14,
+          "randomCounter": 3,
+          "cameraX": 3,
+          "cameraVelocity": 1
+        },
+        "actors": [
+          {
+            "slot": 0,
+            "id": 2,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          },
+          {
+            "slot": 1,
+            "id": 11,
+            "frame": 0,
+            "hp": 500,
+            "mp": 500
+          }
+        ]
+      }
+    }
+  ]
+}

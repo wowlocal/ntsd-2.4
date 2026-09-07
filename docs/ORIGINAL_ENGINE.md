@@ -65,7 +65,7 @@ Run `uv run tools/oracle_dat.py`. Verified byte-for-byte on:
 The generated report `build/original/decoder-oracle.json` records EXE and decoded
 payload hashes. This is not yet verification of the DAT parser or combat logic.
 
-## Timer branch — verified arithmetic, unresolved complete-loop context
+## Timer branch and ordinary match boundary
 
 `WINMM!timeGetTime` is imported at IAT VA `0x447250`; `KERNEL32!Sleep` at `0x447098`.
 
@@ -86,11 +86,17 @@ The normal branch now has a differential comparison over 36 clock samples,
 including catch-up and rollover; see [MOVEMENT.md](MOVEMENT.md). That test replaces
 `0x43e9a0` with a counter. It verifies timer arithmetic, not a complete game tick.
 
-**Unresolved:** the connection of this outer dispatch to the ordinary match path,
-input sampling, rendering, pauses, network modes and speed controls. Inspection
-of `0x43e9a0..0x43ed01` also finds loading and mode branches, so this dispatcher
-must not be treated as a pure world-update function without tracing its callers
-and callees. [R01.1](research/R01.1.md) is the next prepared investigation.
+[R01.1](research/TICK_PIPELINE.md) now establishes the ordinary path:
+`43e9a0 → 4246b0 → 41bc90`, with match return at `422ab8`. A separate trace
+executes these routines and the normal timer boundary with synthetic loaded
+data and explicit platform stubs. It exposes alternating input phases, pause
+queuing, type-separated hit passes, item-spawn RNG and resource recovery omitted
+from the old composed slice. This dispatcher also contains loading/mode branches;
+neither it nor the match routine is a pure simulation function.
+
+**Unresolved:** full initialization, state snapshots and broad native comparison;
+network/replay modes, complete speed controls, device timing and Windows fidelity.
+See [the gap map](research/TICK_GAPS.md) and [R01.2](research/R01.2.md).
 
 ## DAT frame storage — differential verification within a defined domain
 
@@ -149,9 +155,9 @@ app now runs bounded Naruto/Sasuke combat with snake and Chidori needles; see
 ## Next original-code targets
 
 Follow [RESEARCH_MAP.md](RESEARCH_MAP.md) for the live sequence. The next prepared
-card, R01.1, establishes the whole-tick control-flow boundary and omissions from
-the existing harness. State layout and whole-file loading follow, then generic
-transition/spawn mechanisms. The earlier movement, collision and projectile
+card is [R02.1](research/R02.1.md), complete state and initialization, following
+the completed R01.1 boundary study. Whole-file loading and a wider execution
+oracle follow, then generic transition/spawn mechanisms. The earlier movement, collision and projectile
 milestones are implemented within their documented domains; they do not close
 these larger blocks. Full-match Windows captures remain outstanding.
 

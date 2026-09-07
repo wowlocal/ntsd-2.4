@@ -17,6 +17,12 @@ This extends [COMBAT.md](COMBAT.md), [MOVEMENT.md](MOVEMENT.md) and the recovere
 [frame loader](FRAME_LOADER.md). All definitions come from original DATs;
 no game data or behavior from the rejected JS version is used.
 
+Later [R01.1 research](research/TICK_PIPELINE.md) executes the surrounding original
+dispatch/match routine on synthetic data and records [gaps](research/TICK_GAPS.md)
+in this composed slice: item-spawn RNG, separate type-0/type-positive hit passes,
+input/pause phases, linked objects and resource recovery. The accepted comparisons
+below retain their bounded meaning; they are not whole-match equivalence.
+
 ## Source instructions and verified rules
 
 | Rule | Original EXE source |

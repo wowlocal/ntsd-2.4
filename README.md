@@ -6,7 +6,10 @@ JavaScript approach is not used. See [PLAN.md](PLAN.md) for the implementation
 stages and [original-engine evidence](docs/ORIGINAL_ENGINE.md) for verified findings.
 The [research map](docs/RESEARCH_MAP.md) tracks mechanisms, dependencies, analysis,
 native implementation and verification separately. Its next prepared task is
-[R01.1: establish the complete match-tick boundary](docs/research/R01.1.md).
+[R02.1: complete tick state and initialization](docs/research/R02.1.md).
+[R01.1 findings](docs/research/TICK_PIPELINE.md) establish the original dispatch
+path and expose gaps in the composed native/reference slice, including item RNG
+and resource recovery. The new control-flow traces do not prove full native fidelity.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
@@ -92,7 +95,7 @@ native check executables are absent from the `.app`.
 
 Generated imports and full differential corpora live under `build/`; original
 game files remain read-only inputs. The next work follows the research map:
-full-tick boundaries and state, complete object loading, then generic transitions
+complete tick state, complete object loading, a wider oracle, then generic transitions
 and object creation. Characters are source-data cases for shared engine rules;
 ID-specific behavior is retained only where the original EXE establishes it.
 
