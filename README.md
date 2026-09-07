@@ -15,6 +15,10 @@ Actor/World constructors and raw snapshots preserving unknown fields. Full match
 initialization and integration with the game loop remain pending.
 The [loading-time pool](docs/research/BOOTSTRAP.md) now also matches the EXE for
 all 400 slots. Its eight staging actors are separate from selected-player spawning.
+The [catalog parent](docs/research/CATALOG_REGISTRY.md) reproduces registry order,
+load requests and sparse initialization, including all 137 source objects and
+17 backgrounds. Child loader contents remain open; these requests do not make
+the additional characters playable yet.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
@@ -77,6 +81,7 @@ uv run tools/oracle_movement.py
 uv run tools/oracle_presentation.py
 uv run tools/oracle_combat.py
 uv run tools/oracle_projectiles.py
+uv run tools/oracle_catalog.py
 swift test --package-path native
 ```
 

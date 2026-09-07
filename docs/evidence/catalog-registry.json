@@ -1,0 +1,1401 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Catalog parent 4122f0 registry, bootstrap writes and child-call order; opaque Object/BG/Stage/bitmap children, bounded CRT scanner and frozen clock; not whole-file loading",
+  "corpusSHA256": "72218336021b76a2f5ca9094f29c1faf81c62f30c4b7e237543a3870e66e3903",
+  "fixtureSHA256": "aac3750eee017d3e324588cb9a80c40de1e51b334d97574ca48c5b9dd5027757",
+  "sourceSHA256": "65b2143c03433665986dd84f96989ffd0466d897b56b9ad0dea664e0fc947ecd",
+  "cases": 12,
+  "comparedBytes": 83232,
+  "casesSummary": [
+    {
+      "label": "baseline-0",
+      "objects": 137,
+      "backgrounds": 17,
+      "checksum": 57858,
+      "definedBytes": 660
+    },
+    {
+      "label": "baseline-1",
+      "objects": 137,
+      "backgrounds": 17,
+      "checksum": 54053,
+      "definedBytes": 660
+    },
+    {
+      "label": "baseline-no-trailing-space-0",
+      "objects": 137,
+      "backgrounds": 17,
+      "checksum": 45922,
+      "definedBytes": 660
+    },
+    {
+      "label": "baseline-no-trailing-space-1",
+      "objects": 137,
+      "backgrounds": 17,
+      "checksum": 42117,
+      "definedBytes": 660
+    },
+    {
+      "label": "repeated-sections-and-ids-0",
+      "objects": 3,
+      "backgrounds": 3,
+      "checksum": 32663,
+      "definedBytes": 125
+    },
+    {
+      "label": "repeated-sections-and-ids-1",
+      "objects": 3,
+      "backgrounds": 3,
+      "checksum": 28858,
+      "definedBytes": 125
+    },
+    {
+      "label": "signed-checksum-and-numeric-prefix-0",
+      "objects": 1,
+      "backgrounds": 1,
+      "checksum": 9598,
+      "definedBytes": 134
+    },
+    {
+      "label": "signed-checksum-and-numeric-prefix-1",
+      "objects": 1,
+      "backgrounds": 1,
+      "checksum": 5793,
+      "definedBytes": 134
+    },
+    {
+      "label": "empty-sections-0",
+      "objects": 0,
+      "backgrounds": 0,
+      "checksum": 21191,
+      "definedBytes": 100
+    },
+    {
+      "label": "empty-sections-1",
+      "objects": 0,
+      "backgrounds": 0,
+      "checksum": 17386,
+      "definedBytes": 100
+    },
+    {
+      "label": "registry-capacities-0",
+      "objects": 500,
+      "backgrounds": 99,
+      "checksum": 21191,
+      "definedBytes": 2116
+    },
+    {
+      "label": "registry-capacities-1",
+      "objects": 500,
+      "backgrounds": 99,
+      "checksum": 17386,
+      "definedBytes": 2116
+    }
+  ],
+  "boundaries": [
+    "fopen/fclose/feof/fscanf: in-memory text stream, C-locale ASCII whitespace, successful in-range %d/%s",
+    "timeGetTime=100, Sleep(5) no wait; original 4242e0 fast path executes",
+    "4450ac: successful opaque allocation tokens, varied addresses",
+    "43ee50: bitmap constructor returns this without device/storage writes",
+    "40ef70: captures Object id/type/path/surface and returns this, no child writes",
+    "40c160: captures BG ordinal/id/path, no child writes",
+    "40c910: records final Stage loader call, no child writes"
+  ],
+  "accesses": [
+    {
+      "mode": "read",
+      "region": 81273728,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x41269e"
+    },
+    {
+      "mode": "read",
+      "region": 81273728,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x4126a8"
+    },
+    {
+      "mode": "read",
+      "region": 81273728,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x412766"
+    },
+    {
+      "mode": "read",
+      "region": 81273728,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x412780"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 8,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 12,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 16,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 20,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 24,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 28,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 32,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 36,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 40,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 44,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 48,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 52,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 56,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 60,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 64,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 68,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 72,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 76,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 80,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 84,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 88,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 92,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 96,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 100,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 104,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 108,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 112,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 116,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 120,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 124,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 128,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 132,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 136,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 140,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 144,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 148,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 152,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 156,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 160,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 164,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 168,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 172,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 176,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 180,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 184,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 188,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 192,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 196,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 200,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 204,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 208,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 212,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 216,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 220,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 224,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 228,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 232,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 236,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 240,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 244,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 248,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 252,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 256,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 260,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 264,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 268,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 272,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 276,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 280,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 284,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 288,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 292,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 296,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 300,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 304,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 308,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 312,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 316,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 320,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 324,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 328,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 332,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 336,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 340,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 344,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 348,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 352,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 356,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 360,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 364,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 368,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 372,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 376,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 380,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 384,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 388,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 392,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 396,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 400,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 404,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 408,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 412,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 416,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 420,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 424,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 428,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 432,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 436,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 440,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 444,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 448,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 452,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 456,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 460,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 464,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 468,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 472,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 476,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 480,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 484,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 488,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 492,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 496,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 500,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 504,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 508,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 512,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 516,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 520,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 524,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 528,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 532,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 536,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 540,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 0,
+      "offset": 544,
+      "size": 4,
+      "instruction": "0x4126a4"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x41233b"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x412345"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 8,
+      "size": 4,
+      "instruction": "0x41234f"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 20,
+      "size": 4,
+      "instruction": "0x412359"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 24,
+      "size": 4,
+      "instruction": "0x412363"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 32,
+      "size": 4,
+      "instruction": "0x4123ed"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 36,
+      "size": 4,
+      "instruction": "0x4123f5"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 40,
+      "size": 1,
+      "instruction": "0x41240c"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 62,
+      "size": 4,
+      "instruction": "0x41244b"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 66,
+      "size": 4,
+      "instruction": "0x412453"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 70,
+      "size": 1,
+      "instruction": "0x412467"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 92,
+      "size": 4,
+      "instruction": "0x4124a6"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 96,
+      "size": 4,
+      "instruction": "0x4124ae"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 100,
+      "size": 1,
+      "instruction": "0x4124c2"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 932,
+      "size": 4,
+      "instruction": "0x4123a4"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 936,
+      "size": 4,
+      "instruction": "0x4123b0"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 972,
+      "size": 4,
+      "instruction": "0x412373"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 976,
+      "size": 4,
+      "instruction": "0x412382"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 980,
+      "size": 4,
+      "instruction": "0x412392"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 2324,
+      "size": 4,
+      "instruction": "0x412439"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 2328,
+      "size": 4,
+      "instruction": "0x412494"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 2332,
+      "size": 4,
+      "instruction": "0x4124f3"
+    },
+    {
+      "mode": "write",
+      "region": 81268832,
+      "offset": 2444,
+      "size": 4,
+      "instruction": "0x4123db"
+    },
+    {
+      "mode": "write",
+      "region": 81271280,
+      "offset": 972,
+      "size": 4,
+      "instruction": "0x4124ff"
+    },
+    {
+      "mode": "write",
+      "region": 81271280,
+      "offset": 976,
+      "size": 2,
+      "instruction": "0x41250c"
+    },
+    {
+      "mode": "write",
+      "region": 81271280,
+      "offset": 978,
+      "size": 1,
+      "instruction": "0x41251c"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x412543"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 0,
+      "size": 4,
+      "instruction": "0x4126a8"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x41253d"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 4,
+      "size": 4,
+      "instruction": "0x412780"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 8,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 9,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 10,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 11,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 12,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 13,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 14,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 15,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 16,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 17,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 18,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 19,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 20,
+      "size": 1,
+      "instruction": "0x412533"
+    },
+    {
+      "mode": "write",
+      "region": 81273728,
+      "offset": 21,
+      "size": 1,
+      "instruction": "0x412533"
+    }
+  ]
+}

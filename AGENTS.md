@@ -46,8 +46,14 @@ The [bootstrap study](docs/research/BOOTSTRAP.md) now verifies the full loading-
 Those eight use catalog entry zero and are not the selected players' match spawn.
 Known pointers normalize to non-null registry/slot ordinals; do not treat ordinal
 zero as null or normalize arbitrary opaque words. Reconstructing an Actor must
-preserve the initialization mask of untouched fields. Catalog region boundaries
-are now statically mapped; execute 4122f0 and its loaders next. Reference checks
+preserve the initialization mask of untouched fields. The
+[catalog parent](docs/research/CATALOG_REGISTRY.md) now matches native registry
+requests and parent-owned bytes/masks for all source entries and bounded probes.
+Its Object/BG/Stage/bitmap children remain explicit opaque boundaries; the parent
+checksum excludes child contributions. Registry ordinals are not source IDs and
+duplicate IDs remain separate. This is not a loaded catalog. Execute Object
+40ef70 next, then BG 40c160 and Stage 40c910; preserve the declared CRT domain.
+Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.
 R01.2 follows R02.1/R03.1 with a wider execution oracle.
