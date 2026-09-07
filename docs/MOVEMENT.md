@@ -3,7 +3,7 @@
 Baseline: `downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe`.
 SHA-256: `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 
-The default native application now contains a controllable, unarmed Naruto on
+The `--movement` native application mode contains a controllable, unarmed Naruto on
 District: standing, walking, turning, double-tap running, stopping, jumping,
 running jumps/dashes, turning in flight and landing. This is a movement practice
 slice, not a complete match. No behavior comes from the discarded JS project,
@@ -132,7 +132,7 @@ original game has not run on Windows in this session; no claim of full-match,
 end-to-end keyboard latency, audio-mix or pixel equivalence follows from these
 isolated tests. Intel and a clean second Mac have not been tested.
 
-Next: the first melee exchange against a second character—recover attack/defend
-transitions and collision/hit resolution from `0x419380` and `0x42e100`, then
-compare frame-by-frame HP, hitstun, knockback, falling and audio events. Carry the
-same reference-first approach into combat rather than accepting visual similarity.
+The following milestone is now implemented as the default Naruto/Sasuke melee
+practice. See [COMBAT.md](COMBAT.md) for the recovered attack/defend transitions,
+collision/hit resolution, damage, falling and voice-object comparison. The
+movement-only reference and this scene remain available for regression checks.

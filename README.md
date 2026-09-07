@@ -5,10 +5,11 @@ Only the pristine Windows distribution is the behavioral reference. The previous
 JavaScript approach is not used. See [PLAN.md](PLAN.md) for the implementation
 stages and [original-engine evidence](docs/ORIGINAL_ENGINE.md) for verified findings.
 
-**Current status:** a native movement practice slice is playable: Naruto on the
-original District arena, with walking, turning, double-tap running, stopping,
-jumping/dashing and landing. Combat, opponents and game modes are still pending.
-[Movement evidence and limits](docs/MOVEMENT.md) describe the exact scope.
+**Current status:** native melee practice with Naruto and Sasuke on the original
+District arena. Movement, ordinary punches, defense, damage, hitstop, knockback,
+falling and getting back up are implemented in a bounded slice. The opponent
+uses separate practice keys; AI, techniques and full game modes remain pending.
+[Combat evidence and limits](docs/COMBAT.md) describe the exact scope.
 
 ## Run the native application
 
@@ -30,14 +31,21 @@ Rebuild with `--build` after source or data changes.
 | Arrows / WASD | Walk and turn; up/down change depth |
 | Double-tap left/right (or A/D) | Run; press the opposite direction to stop |
 | Space | Jump; dash while running |
+| J / K | Naruto: attack / defend |
+| I / O | Sasuke: attack / defend (no AI) |
 | Esc | Pause / resume |
 | R | Reset practice |
 | M | Mute / unmute |
 
-Losing window focus pauses movement and clears held keys. The original graphics,
-frame timing, movement and camera rules are used; original menus and combat are
-not implemented. The practice spawn is a controlled starting point, not match RNG.
+Losing window focus pauses practice and clears held keys. Original BMP/WAVs,
+frame timing and recovered movement/combat rules are used. The HP panels are
+practice UI; original menus and the full HUD are pending. Spawn positions are
+controlled; attack randomness starts from a fixed RNG state in a supplied
+Windows replay. R restores this state. An unsupported technique pauses practice
+with a reset prompt, including Sasuke’s projectile-based strong attack and
+aerial attacks. See [the supported domain](docs/COMBAT.md).
 
+The earlier Naruto movement scene is available with `./run-native.sh --movement`.
 The source inspector remains available with `./run-native.sh --inspect`. It shows
 all objects and raw source frame occurrences, including duplicates, original
 sprites, body/interaction boxes and individual frame audio. Its arrow buttons
@@ -54,6 +62,7 @@ uv run tools/oracle_frames.py
 uv run tools/oracle_frames.py --corpus
 uv run tools/oracle_movement.py
 uv run tools/oracle_presentation.py
+uv run tools/oracle_combat.py
 swift test --package-path native
 ```
 
@@ -61,15 +70,21 @@ The oracle tools need `uv` and execute bounded original EXE routines in a
 development-only CPU harness. Movement matches **8,506 original x86 ticks in
 58 sequences**, including camera and pre-scheduler render frames. Offline tests
 retain 3,770 movement ticks, 36 timer samples and 120 District draw lists.
-These comparisons do not establish whole-match or end-to-end latency equivalence.
+The extended combat corpus matches **12,215 ticks in 524 sequences**: both actors,
+hit counters, HP, input combos, render poses and ordered sound events, plus
+**6,500 original RNG calls**. Offline tests retain 3,709 melee ticks.
+Accepted counts and hashes are in [combat evidence](docs/evidence/combat-oracle.json).
+Offline tests retain the melee sequences and RNG samples. These comparisons
+do not establish whole-match or end-to-end latency equivalence.
 
 The recovered frame-section loader matches 15,044 original definitions and
 12 edge cases; 349 groups and whole-file loading remain outside its verified
-domain. See [frame-loader evidence](docs/FRAME_LOADER.md). The CPU harness and both
+domain. See [frame-loader evidence](docs/FRAME_LOADER.md). The CPU harness and all
 native check executables are absent from the `.app`.
 
 Generated imports and full differential corpora live under `build/`; original
-game files remain read-only inputs. Next is the first verified melee exchange.
+game files remain read-only inputs. Next are projectile spawning/collisions and
+a first chakra technique, followed by the remaining match systems.
 
 ## Existing Windows game through CrossOver
 

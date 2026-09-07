@@ -1,0 +1,26 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sequences": 524,
+  "ticks": 12215,
+  "fixtureSequences": 466,
+  "fixtureTicks": 3709,
+  "randomSamples": 6500,
+  "corpusSHA256": "e3b84cfb4ad2984fa49443ed07aee54de264fd8f0a90c11e41c2be7629de03be",
+  "fixtureSHA256": "99f2533216f53cc718648f0ff737f51d0dff0c57ae6ce0d1eb0b4f3ab229af47",
+  "replaySHA256": "9555710ff6b79e624d6f97a5d2373ae7b4d46135d5e9f45940b787f4e1663630",
+  "addresses": {
+    "input": "0x4198f0",
+    "control": "0x413080",
+    "physics": "0x40e490",
+    "collision": "0x419380",
+    "hit": "0x42e100",
+    "pendingVelocity": "0x4196f0",
+    "scheduler": "0x40d960",
+    "postScheduler": "0x41fb0b..0x41fc61",
+    "voiceObjects": "0x41fc61..0x420e93",
+    "random": "0x417170",
+    "replayPrefix": "0x43e766..0x43e7d3",
+    "replayRestore": "0x43e3c5..0x43e3f8"
+  },
+  "scope": "Two unarmed Naruto/Sasuke actors with controlled spawn and original replay RNG seed. Normal melee, guard, damage, falling, recovery, voices and prior movement corpus. Exact per-tick comparisons; no whole-match, hit-spark pixels, audio-mix or input latency equivalence."
+}

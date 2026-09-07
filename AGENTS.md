@@ -28,10 +28,14 @@ CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 ## Current implementation
 
-`native/` contains a Swift/AppKit/SpriteKit Naruto movement practice slice and a
-resource inspector (`--inspect`). Read `docs/MOVEMENT.md` before extending gameplay.
-The original functions match 8,506 movement ticks; combat and full-match behavior
-remain incomplete. Sprite drawing precedes frame scheduling in the original.
+`native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke melee practice, the
+earlier movement slice (`--movement`) and a resource inspector (`--inspect`).
+Read `docs/MOVEMENT.md` and `docs/COMBAT.md` before extending gameplay. The original
+functions match the retained movement and bounded melee corpora; see evidence
+JSON for counts/hashes. Full-match behavior, techniques, projectiles and AI remain
+incomplete. Unsupported combat ticks roll back completely. Sprite drawing
+precedes frame scheduling and post-scheduler recovery in the original. Practice
+RNG comes from the supplied replay; do not substitute host randomness.
 See `PLAN.md` and `docs/ORIGINAL_ENGINE.md` for further evidence.
 
 `NTSDCore/OriginalFrameLoader.swift` implements the recovered frame-section

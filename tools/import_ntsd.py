@@ -174,7 +174,8 @@ def import_game(source: Path, output: Path) -> dict:
                   "The frames lookup shows the last occurrence for convenience only, not original loader semantics.",
                   "frameOccurrences retains every definition in source order. The native inspector uses this list."]}
     output.mkdir(parents=True, exist_ok=True)
-    (output / "game.json").write_text(json.dumps({"objects": objects, "backgrounds": backgrounds,
+    from original_replay import replay_random
+    (output / "game.json").write_text(json.dumps({"practiceRandom": replay_random(source, exe), "objects": objects, "backgrounds": backgrounds,
                                                  "files": file_map}, ensure_ascii=True), encoding="utf-8")
     (output / "audit.json").write_text(json.dumps(report, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
     return report

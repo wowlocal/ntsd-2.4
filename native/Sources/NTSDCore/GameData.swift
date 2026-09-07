@@ -68,6 +68,7 @@ public struct BackgroundDefinition: Codable, Sendable {
 }
 
 public struct GameData: Codable, Sendable {
+    public let practiceRandom: OriginalRandom?
     public let objects: [ObjectDefinition]
     public let backgrounds: [BackgroundDefinition]
     public let files: [String: String]

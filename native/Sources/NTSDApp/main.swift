@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     let sourceLabel = NSTextField(wrappingLabelWithString: "")
     var choices: [FrameOccurrence] = []
     var movementView: MovementView?
+    var meleeView: MeleeView?
 
     init(game: GameData) {
         self.game = game
@@ -31,7 +32,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         let assets = Assets(game: game, root: assetsURL)
         if !arguments.contains("--inspect") {
-            do { try launchMovement(assets: assets) }
+            do {
+                if arguments.contains("--movement") { try launchMovement(assets: assets) }
+                else { try launchMelee(assets: assets) }
+            }
             catch {
                 let alert = NSAlert(error: error); alert.runModal(); NSApp.terminate(nil)
             }
@@ -133,11 +137,50 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in scene.writeState(to: statePath) }
         }
     }
+    private func launchMelee(assets: Assets) throws {
+        let scene = try MeleeScene(assets: assets)
+        let view = MeleeView(frame: NSRect(x: 0, y: 50, width: 794, height: 550))
+        meleeView = view; view.preferredFramesPerSecond = 60
+        view.ignoresSiblingOrder = true; view.presentScene(scene)
+        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 794, height: 600),
+                          styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+        window.title = "NTSD 2.4 — Naruto / Sasuke · District"
+        window.minSize = NSSize(width: 600, height: 460); window.isReleasedWhenClosed = false
+        window.delegate = self
+        let content = NSView(); window.contentView = content
+        view.translatesAutoresizingMaskIntoConstraints = false; content.addSubview(view)
+        let controls = NSTextField(labelWithString: "Наруто: стрелки / WASD · Пробел — прыжок · J — удар · K — блок     Саске: I — удар · O — блок")
+        controls.font = .systemFont(ofSize: 11)
+        let status = NSTextField(labelWithString: "Esc — пауза · R — заново · M — звук · Двойное ← / → — бег     |     Тренировка ближнего боя")
+        status.font = .systemFont(ofSize: 11); status.textColor = .secondaryLabelColor
+        for label in [controls, status] { label.translatesAutoresizingMaskIntoConstraints = false; content.addSubview(label) }
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: content.topAnchor), view.leadingAnchor.constraint(equalTo: content.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: content.trailingAnchor), view.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -50),
+            controls.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12), controls.bottomAnchor.constraint(equalTo: status.topAnchor, constant: -4),
+            status.leadingAnchor.constraint(equalTo: controls.leadingAnchor), status.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -9)
+        ])
+        let bar = NSMenu(); let item = NSMenuItem(); bar.addItem(item)
+        let menu = NSMenu(); item.submenu = menu
+        menu.addItem(withTitle: "Завершить NTSD", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        NSApp.mainMenu = bar
+        window.center(); window.makeKeyAndOrderFront(nil); window.makeFirstResponder(view)
+        NSApp.activate(ignoringOtherApps: true)
+        if let screenshot = argument("--screenshot") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { self.capture(to: screenshot) }
+        }
+        if let statePath = argument("--capture-state") {
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in scene.writeState(to: statePath) }
+        }
+    }
     func windowDidResignKey(_ notification: Notification) {
         movementView?.clearInput(); movementView?.movementScene.setActive(false)
+        meleeView?.clearInput(); meleeView?.meleeScene.setActive(false)
     }
     func windowDidBecomeKey(_ notification: Notification) {
         movementView?.clearInput(); movementView?.movementScene.setActive(true)
+        meleeView?.clearInput(); meleeView?.meleeScene.setActive(true)
+        if let view = meleeView { window.makeFirstResponder(view) }
         if let view = movementView { window.makeFirstResponder(view) }
     }
 
