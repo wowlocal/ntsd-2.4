@@ -12,7 +12,8 @@ let package = Package(
                .executable(name: "NTSDBootstrapCheck", targets: ["NTSDBootstrapCheck"]),
                .executable(name: "NTSDCatalogCheck", targets: ["NTSDCatalogCheck"]),
                .executable(name: "NTSDObjectCheck", targets: ["NTSDObjectCheck"]),
-               .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"])],
+               .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
+               .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"])],
     targets: [
         .target(name: "NTSDCore"),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
@@ -20,6 +21,7 @@ let package = Package(
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDObjectCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDBGCheck", dependencies: ["NTSDReferenceChecks"]),
+        .executableTarget(name: "NTSDStageCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDFrameCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),

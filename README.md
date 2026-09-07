@@ -28,7 +28,10 @@ The [background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17
 source arenas for metadata, delayed layer loading and resource release/reload.
 All BG/bitmap bytes and initialization masks, file checksums and resource order
 are compared. Rendering and menu-driven arena selection remain separate work.
-Stage loading and joining the catalog children are next.
+The [Stage loader](docs/research/STAGE_LOADER.md) also matches the complete source
+stage.dat: 25 stages / 138 phases, with all 60 storage slots and initialization
+masks retained. Stage gameplay remains open. Full Object registry coverage and
+joining the catalog children are next.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

@@ -72,7 +72,18 @@ Read that document before extending arena loading; pixels, menu-driven selection
 and true CRT/device behavior remain open. Source ID is unused in BG 40c160;
 ordinal chooses the record. A numeric conversion at EOF must set scanner EOF even
 when it assigns nothing. Native bitmap records are shared by the two loaders.
-Execute Stage 40c910 next, then join real child loaders in source registry order.
+The [Stage loader](docs/research/STAGE_LOADER.md) now executes 40c910/414a30 and
+matches all 25 original stages / 138 phases, plus repeat/order/100-phase controls.
+It keeps all 60 records (0x149b08 each) and byte provenance: only count=-1 is set
+for absent stages, and repeated initialization preserves old untouched masks.
+Read that document before extending Stage. bound rewrites all 60 x values;
+boss/soldier and parameter order matter; pre-id fields overlap the music area.
+Stage contributes no checksum and its fields must not be pointer-normalized.
+Its full-record evidence uses lossless DEFLATE only in development reference code.
+Stage gameplay, Windows CRT, full catalog and selected-match initialization remain
+open. Next join real child loaders at 4122f0 and extend Object loading to all 137
+source registry entries in their original order, including shared sound/checksum,
+parent embedded bitmaps and built-in BG records. Do not stub remaining Object data.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.
