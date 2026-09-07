@@ -59,9 +59,11 @@ Its shared Frame parser consumes a continuous stream: kunai frame 49 is swallowe
 by frame 48's unclosed itr. Do not repair the DAT or restore an artificial boundary.
 General MSVCR80 rounding/file translation remain open: the old decoder used raw stdio; the new
 corpus retains both raw/text contracts and their different tails/checksums.
-Object bitmap/string references use index+1 with zero null, unlike the bootstrap's
-non-null ordinals. Raw Frame pointers/padding and dead malloc blocks are retained
-only in the research snapshot, not yet compared to native raw storage. The new
+Object header bitmap/string references use index+1 with zero null, unlike the bootstrap's
+non-null ordinals. Frame references now remain explicit 32-bit arena addresses,
+supplied at the allocator boundary for raw comparison; never normalize partially
+overwritten pointers. Full Frame bytes/masks and live/dead Frame malloc records
+are compared by the newer raw suite described below. The new
 loader is not wired to practice or to the parent. The separate
 [Background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17 source
 arenas through metadata parse 40c160, layer allocation 40c030 and release 40c0e0.
@@ -89,14 +91,21 @@ unverified. Native %d/%ld wraps at 32 bits and consumes a failed optional sign;
 Int32. Pein/Naruto/Sasuke and a numeric control also match with actual DLL scanf
 (817 occurrences, 216480 header/bitmap bytes/masks). %lf matches those whole-file
 inputs only; its general lexer/rounding, especially incomplete exponents, is open.
-The separate original-instruction Object pass now loads all 137 source entries
-in order: 15388 occurrences, 808 bitmaps, 400 shared sounds, checksum 30847120.
-This is research evidence, NOT native equivalence or a joined catalog. Preserve
-opaque Frame sound pointers; never dereference or silently reinterpret them as
-strings. 38 frames have such pointers after name overlap, sometimes also changing
-the sound index. 4TK_ball uses ten sheets; the native bound is still nine.
-Next recover raw Frame name/pointer/index retention and the tenth sheet, compare
-all 137 natively, then join real children at 4122f0 including shared sound/checksum,
+The [raw Frame study](docs/research/RAW_FRAME_STORAGE.md) now compares ALL 137
+source Objects in order natively: 15388 occurrences, 808 bitmaps, 400 sounds,
+checksum 30847120. Complete Frame bytes/masks at every occurrence and EOF plus
+live/dead Frame allocations match with externally supplied malloc addresses.
+Including two controls: 71006 raw Frame observations, 14598 allocations,
+37036545 compared bytes/masks. Frame constructor writes 325/376 bytes; keep
+padding, names and unused array pointers/slots untouched. A repeated name writes
+only itself plus NUL, can overlap sound pointer/index, and later sound writes can
+change the readable name. Preserve opaque pointers; never dereference them as
+host memory or silently replace with null. Native names are bounded at 27 bytes
+within one Frame, covering all source names (max 25); crossing records is open.
+The tenth sheet is now supported and compared; its last bitmap pointer ends at
+Object+7a4. Frame data storage is shared by the existing parser, not a second set
+of per-character rules. This is not a joined catalog or full gameplay equivalence.
+Next join real children at 4122f0 including shared sound/checksum,
 parent embedded bitmaps and built-in BG records. Do not stub remaining Object data.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands

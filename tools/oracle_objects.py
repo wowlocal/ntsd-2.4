@@ -10,12 +10,14 @@ The legacy boundary supplies Python binary64 for finite decimal tokens. Optional
 --msvcr80 executes the pinned Microsoft DLL's scanf. Pixels remain opaque.
 """
 import argparse
+import base64
 import hashlib
 import json
 import math
 import re
 import struct
 import subprocess
+import zlib
 
 from import_ntsd import DEFAULT_SOURCE, EXE_SHA256, ROOT, read_bytes
 from inspect_original import PE
@@ -52,15 +54,29 @@ itr: x: -4564896489452763489789879 w: 4294967296 catchingact: +12suffix 9 itr_en
 <frame> 1 again mp: +nope dvx: --12 dvy: -99999898425321456555555 <frame_end>
 '''.replace(b'\n', b'\r\n')
 
+RAW_PROBE = (b'<bmp_begin>\r\n' + b''.join(
+    b'file(%d-%d): sprite\\sys\\kunai.bmp w: 3 h: 4 row: 1 col: 1\r\n' % (i, i) for i in range(10)) + b'<bmp_end>\r\n' + br'''
+<frame> 1 four_tails_chakra_blast bdy: x: 2 w: 3 bdy_end: itr: y: 4 h: 5 itr_end: <frame_end>
+<frame> 1 X <frame_end>
+<frame> 1 four_tails_chakra_blast sound: data\001.wav <frame_end>
+<frame> 1 four_tails_chakra_blast <frame_end>
+<frame> 1 killthembeforetheyexplode <frame_end>
+<frame> 1 X sound: data\002.wav <frame_end>
+<frame> 1 short bdy: x: -4 bdy_end: bdy: y: 3 bdy_end: <frame_end>
+<frame> 2 ABCDEFGHIJKLMNOPQRSTUVWXYZA <frame_end>
+<frame> 3 ABCDEFGHIJKLMNOPQRSTUVWXYZ1 sound: data\003.wav <frame_end>
+'''.replace(b'\n', b'\r\n'))
+
 
 class Objects(Constructors):
-    def __init__(self, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, capacity=4, retain_opaque_frames=False):
+    def __init__(self, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, capacity=4, retain_opaque_frames=False, raw_frames=False):
         super().__init__()
         assert 1 <= capacity <= 137
         self.object_base = BASE if capacity <= 4 else 0x50000000
         self.object_arena_size = capacity * 0x40000
         self.heap_size = 0x400000 if capacity <= 4 else 0xF00000  # below Constructors' 0x22000000 arena
         self.retain_opaque_frames = retain_opaque_frames
+        self.raw_frames = raw_frames
         self._region_cache = None
         if use_crt:
             from oracle_crt import CRT
@@ -363,6 +379,8 @@ class Objects(Constructors):
         record = dict(number=n, name=name, words=words, sound=self.cstr(pointer).decode('latin1') if pointer and allocated else None, **arrays)
         if not allocated:
             record['opaqueSoundPointer'] = hex(pointer)
+        if self.raw_frames:
+            record['storage'] = dict(bytes=bytes(self.uc.mem_read(base, FRAME_SIZE)).hex(), defined=bytes(mask).hex())
         return record
 
     def snapshot_region(self, r):
@@ -404,10 +422,16 @@ class Objects(Constructors):
 
 
 def compact(doc):
-    assert not any('opaqueSoundPointer' in f for c in doc['cases'] for f in c['frames'] + c['frameOccurrences']), 'Raw Frame references require native recovery before comparison'
+    raw_frames = doc.get('rawFrames', False)
+    assert raw_frames or not any('opaqueSoundPointer' in f for c in doc['cases'] for f in c['frames'] + c['frameOccurrences']), 'Opaque Frame references require complete raw storage comparison'
     def region(r, start=0, end=None):
         return {key: bytes.fromhex(r[key])[start:end].hex() for key in ('initial', 'bytes', 'defined')}
     records = {r['address']: r for r in doc['regions']}
+    allocations = {a['address']: a for a in doc['allocations']}
+    owned = {}; current = None
+    for r in doc['regions']:
+        if r['kind'] == 'object': current = r['address']; owned[current] = []
+        elif current is not None: owned[current].append(r)
     cases = []
     for c in doc['cases']:
         sounds = {}
@@ -422,29 +446,37 @@ def compact(doc):
         cases.append({**{k: c[k] for k in ('path', 'id', 'type', 'source', 'sourceSHA256', 'decoded', 'initialChecksum', 'checksum', 'frames', 'frameOccurrences', 'events', 'soundCount', 'soundBytes')},
                       'header': region(c['storage'], 0, 0x7A4), 'tail': region(c['storage'], 0x25324),
                       'weaponSoundPaths': sounds, 'bitmaps': [{**b, 'storage': region(records[b['address']])} for b in c['bitmaps']]})
+        if raw_frames:
+            kinds = {'0x410935': 'sound', '0x4114ab': 'interactions', '0x411b85': 'bodies'}
+            cases[-1]['frameStorage'] = region(c['storage'], 0x7a4, 0x25324)
+            cases[-1]['frameStorageOccurrences'] = [dict(number=f['number'], **f['storage']) for f in c['frameOccurrences']]
+            cases[-1]['frameAllocations'] = [dict(address=r['address'], kind=kinds[allocations[r['address']]['caller']], storage=region(r))
+                                            for r in owned[c['storage']['address']] if allocations[r['address']]['caller'] in kinds]
+            for field in ('frames', 'frameOccurrences'):
+                cases[-1][field] = [{key: value for key, value in f.items() if key != 'storage'} for f in c[field]]
     result = dict(exeSHA256=EXE_SHA256, translation='text' if doc['textMode'] else 'raw', bitmapFill=doc['bitmapFill'], surfaceAddress=DEVICE, cases=cases, assetInputs=doc['assetInputs'])
     if 'crtSHA256' in doc:
         result['crtSHA256'] = doc['crtSHA256']
     return result
 
 
-def capture(names, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, all_registry=False):
+def capture(names, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, all_registry=False, raw_frames=False):
     source_registry = (DEFAULT_SOURCE / 'data/data.txt').read_text()
     registry = re.findall(r'id:\s*(-?\d+)\s+type:\s*(-?\d+)\s+file:\s*(\S+)', source_registry)
     if all_registry:
         assert use_crt and len(registry) == 137
         names = [p for _, _, p in registry]
     vm = Objects(text_mode=text_mode, pattern=pattern, missing_mirrors=missing_mirrors, use_crt=use_crt,
-                 capacity=137 if all_registry else 4, retain_opaque_frames=all_registry)
+                 capacity=137 if all_registry else 4, retain_opaque_frames=all_registry or raw_frames, raw_frames=raw_frames)
     cases = []
     for ordinal, name in enumerate(names):
         if all_registry:
             object_id, object_type, path = registry[ordinal]
             item = vm.load(path, int(object_id), int(object_type))
             item['sourceKind'] = 'baseline file in source registry order'
-        elif name in ('@probe', '@crt-probe'):
+        elif name in ('@probe', '@crt-probe', '@raw-probe'):
             path = 'data\\object-probe.txt'
-            item = vm.load(path, -17, 6, CRT_PROBE if name == '@crt-probe' else PROBE)
+            item = vm.load(path, -17, 6, {'@probe': PROBE, '@crt-probe': CRT_PROBE, '@raw-probe': RAW_PROBE}[name])
             item['sourceKind'] = 'synthetic control using unchanged baseline bitmap resources'
         else:
             path = 'chars\\' + name + '.dat'
@@ -466,12 +498,15 @@ def capture(names, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=
         doc['scope'] = 'Complete Object instructions with actual VC80 8.0.50727.6195 fscanf for all formats except decoder %c; supplied translated _read buffers, thread/lock/device boundaries. No Windows startup or pixel/audio output.'
         suffix += '-msvcr80-' + ('registry' if all_registry else '-'.join(n.removeprefix('@') for n in names))
     if pattern == 0: suffix += '-zero'
+    if raw_frames:
+        doc['rawFrames'] = True
+        suffix += '-raw-frames'
     if names == ['@probe']: suffix += '-probe'
     output = ROOT / 'build/original' / ('objects' + suffix + '.json')
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(doc, separators=(',', ':')) + '\n')
     print(f"Unaccepted research corpus: {output}; {len(vm.reads_before_writes)} distinct reads before observed writes", flush=True)
-    if all_registry:
+    if all_registry and not raw_frames:
         registry_report(doc, output)
     return doc, output
 
@@ -509,21 +544,28 @@ def main():
     parser.add_argument('--zero-fill', action='store_true')
     parser.add_argument('--msvcr80', action='store_true', help='Execute hash-pinned VC80 fscanf for all non-decoder scans')
     parser.add_argument('--all-registry', action='store_true', help='Research capture of all 137 objects in source order with raw unresolved Frame references; requires --msvcr80')
+    parser.add_argument('--raw-frames', action='store_true', help='Retain complete Frame bytes/masks at every occurrence and EOF')
+    parser.add_argument('--raw-suite', action='store_true', help='Compare all source Objects and raw Frame/heap controls before accepting compressed fixture')
     parser.add_argument('--crt-suite', action='store_true', help='Compare and accept Pein/Naruto/Sasuke and numeric controls with actual VC80 scanf')
     parser.add_argument('--suite', action='store_true', help='Capture both stdio contracts and missing-mirror weapon probe; accept fixtures only after native comparison')
     args = parser.parse_args()
+    if args.raw_suite:
+        accept([capture([], use_crt=True, all_registry=True, raw_frames=True),
+                capture(['@raw-probe'], use_crt=True, raw_frames=True),
+                capture(['@raw-probe'], use_crt=True, raw_frames=True, pattern=0)], crt=True, raw_frames=True)
+        return
     if args.crt_suite:
         accept([capture(['pein', 'naruto', 'sasuke', '@crt-probe'], use_crt=True)], crt=True)
         return
     if not args.suite:
-        capture(args.files, not args.legacy_raw_stdio, 0 if args.zero_fill else 0xA5, args.missing_mirrors, use_crt=args.msvcr80, all_registry=args.all_registry)
+        capture(args.files, not args.legacy_raw_stdio, 0 if args.zero_fill else 0xA5, args.missing_mirrors, use_crt=args.msvcr80, all_registry=args.all_registry, raw_frames=args.raw_frames)
         return
     captured = [capture(['naruto', 'sasuke']), capture(['naruto', 'sasuke'], text_mode=False),
                 capture(['weapon4'], pattern=0, missing_mirrors=True), capture(['@probe'])]
     accept(captured)
 
 
-def accept(captured, crt=False):
+def accept(captured, crt=False, raw_frames=False):
     subprocess.run(['swift', 'build', '--package-path', str(ROOT / 'native'), '-c', 'release', '--product', 'NTSDObjectCheck'], check=True)
     checks, summaries = [], []
     for doc, output in captured:
@@ -540,8 +582,15 @@ def accept(captured, crt=False):
                                           bitmaps=len(c['bitmaps']), soundCount=c['soundCount'], checksum=c['checksum'],
                                           initializedBytes=sum(bytes.fromhex(c['initialization']['defined'])), loadedBytes=sum(bytes.fromhex(c['storage']['defined']))) for c in doc['cases']],
                               readsBeforeWrites=doc['readsBeforeWrites']))
-    fixture = ROOT / ('native/Tests/NTSDCoreTests/Fixtures/original-objects-msvcr80.json' if crt else 'native/Tests/NTSDCoreTests/Fixtures/original-objects.json')
-    fixture.write_text(json.dumps(dict(corpora=checks), separators=(',', ':')) + '\n')
+    fixture = ROOT / 'native/Tests/NTSDCoreTests/Fixtures' / ('original-objects-raw.json' if raw_frames else 'original-objects-msvcr80.json' if crt else 'original-objects.json')
+    suite = (json.dumps(dict(corpora=checks), separators=(',', ':')) + '\n').encode()
+    if raw_frames:
+        assert all(doc.get('rawFrames') for doc, _ in captured)
+        compressor = zlib.compressobj(9, zlib.DEFLATED, -15)
+        packed = compressor.compress(suite) + compressor.flush()
+        fixture.write_text(json.dumps(dict(count=len(suite), sha256=hashlib.sha256(suite).hexdigest(), deflate=base64.b64encode(packed).decode()), separators=(',', ':')) + '\n')
+    else:
+        fixture.write_bytes(suite)
     report = dict(exeSHA256=EXE_SHA256, scope=captured[0][0]['scope'],
                   nativeScope='Decoded bytes under each explicit stdio contract; all header/tail/bitmap bytes and initialization masks; every defined frame word, box and name/sound after each occurrence and at EOF; shared sound cache, checksum and missing-mirror source request. Raw frame padding/pointers and dead malloc blocks are retained only in full research captures.',
                   fixtureSHA256=hashlib.sha256(fixture.read_bytes()).hexdigest(), corpora=summaries,
@@ -549,7 +598,12 @@ def accept(captured, crt=False):
     if crt:
         from oracle_crt import DLL_SHA256
         report['crtSHA256'] = DLL_SHA256
-    (ROOT / ('docs/evidence/object-loader-msvcr80.json' if crt else 'docs/evidence/object-loader.json')).write_text(json.dumps(report, indent=2) + '\n')
+    if raw_frames:
+        report['nativeScope'] = 'Complete Frame bytes/masks at each occurrence and EOF, including untouched padding, name/sound pointer/index overlap and stale array pointers; all live/dead Frame malloc records with externally supplied allocation addresses and checked request order/size. Full previous Object header/tail/bitmap, decoded bytes, projections, shared sounds/checksum also compared. Parent/BG/Stage not joined; no Windows/device verification.'
+        report['rawFrameRecords'] = sum(400 + len(c['frameOccurrences']) for check in checks for c in check['cases'])
+        report['frameAllocations'] = sum(len(c['frameAllocations']) for check in checks for c in check['cases'])
+        report['uncompressedFixtureBytes'] = len(suite)
+    (ROOT / ('docs/evidence/object-loader-raw.json' if raw_frames else 'docs/evidence/object-loader-msvcr80.json' if crt else 'docs/evidence/object-loader.json')).write_text(json.dumps(report, indent=2) + '\n')
 
 
 if __name__ == '__main__':

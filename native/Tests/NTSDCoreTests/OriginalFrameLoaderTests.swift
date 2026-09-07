@@ -27,6 +27,7 @@ final class OriginalFrameLoaderTests: XCTestCase {
     func testUnsupportedInputDoesNotCommitPartialState() throws {
         var loader = OriginalFrameLoader()
         let prior = try loader.apply("<frame> 1 prior\npic: 7 sound: data\\001.wav\n<frame_end>")
+        let priorStorage = loader.storage, priorAllocations = loader.heap.allocations
         let inputs = [
             "<frame> 1 change\npic: 8 sound: data\\002.wav\n<frame_end> trailing-input",
             "<frame> 400 outside\n<frame_end>",
@@ -37,6 +38,8 @@ final class OriginalFrameLoaderTests: XCTestCase {
         for source in inputs {
             XCTAssertThrowsError(try loader.apply(source))
             XCTAssertEqual(loader.frames, [1: prior])
+            XCTAssertEqual(loader.storage, priorStorage)
+            XCTAssertEqual(loader.heap.allocations, priorAllocations)
         }
         let next = try loader.apply("<frame> 2 next\nsound: data\\003.wav\n<frame_end>")
         XCTAssertEqual(next[0x174], 1, "An unsupported frame must not add a sound to the registry")

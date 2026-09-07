@@ -4,6 +4,18 @@ import NTSDReferenceChecks
 @testable import NTSDCore
 
 final class OriginalObjectTests: XCTestCase {
+    func testAllSourceObjectsAndRawFrameStorage() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource: "original-objects-raw", withExtension: "json", subdirectory: "Fixtures"))
+        let result = try ObjectReference.compareSuite(Data(contentsOf: url))
+        XCTAssertEqual(result.objects, 139) // 137 unchanged source entries + two allocator-fill controls
+        XCTAssertEqual(result.occurrences, 15406)
+        XCTAssertEqual(result.finalFrames, 55600)
+        XCTAssertEqual(result.bitmaps, 848)
+        XCTAssertEqual(result.rawFrames, 71006)
+        XCTAssertEqual(result.allocations, 14598)
+        XCTAssertEqual(result.bytes, 37036545)
+    }
+
     func testObjectStreamsWithMicrosoftScanf() throws {
         let url = try XCTUnwrap(Bundle.module.url(forResource: "original-objects-msvcr80", withExtension: "json", subdirectory: "Fixtures"))
         let result = try ObjectReference.compareSuite(Data(contentsOf: url))
@@ -40,6 +52,7 @@ final class OriginalObjectTests: XCTestCase {
                                             headerBacking: Array(repeating: 0xa5, count: 0x7a4), tailBacking: Array(repeating: 0xa5, count: 0x3c),
                                             bitmapSource: { .init(path: $0, present: true, width: 8, height: 8) }))
         XCTAssertTrue(loader.bitmaps.isEmpty)
+        XCTAssertTrue(loader.frameAllocations.isEmpty)
         XCTAssertEqual(loader.soundCount, 0)
         XCTAssertEqual(loader.soundBytes, beforeSounds)
         XCTAssertEqual(loader.checksum, 0)

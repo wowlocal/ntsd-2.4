@@ -5,6 +5,11 @@ Baseline EXE SHA-256:
 Only this Windows binary supplies engine behavior. The Swift implementation is
 `native/Sources/NTSDCore/OriginalFrameLoader.swift`.
 
+The newer [raw-storage study](research/RAW_FRAME_STORAGE.md) extends this work to
+all 137 original Object streams, complete Frame bytes/masks, overlapping names
+and Frame allocations. The isolated corpora described below retain their original
+scope and exclusions.
+
 ## What runs in the reference test
 
 `tools/oracle_frames.py` maps the original EXE's code/data into Unicorn, executes
@@ -213,4 +218,20 @@ domain and 349 exclusions; its snapshots remain a useful regression corpus.
 Four whole Object loads also match with actual scanf, including numeric controls.
 All 137 source Object loads have now executed in the research harness. Their
 raw results expose 38 frames with opaque sound pointers after name writes and a
-tenth sheet in 4TK_ball. Those results still need native raw-storage comparison.
+tenth sheet in 4TK_ball. The follow-up below supplies raw-storage comparison.
+
+## Complete raw Frame comparison
+
+[RAW_FRAME_STORAGE.md](research/RAW_FRAME_STORAGE.md) now verifies full 0x178-byte
+records and masks. The shared parser writes those bytes directly; its numerical/
+string view is a projection. All 137 original Object streams match Swift,
+including name/sound-pointer/index overlap, stale pointers after repeated frames,
+all used/unused bytes of Frame malloc blocks, and the tenth sprite sheet.
+Two controls exercise names up to 27 bytes and later sound writes that change the
+readable name. Allocator addresses are explicit external inputs to the comparison,
+not normalized after partial overwrites or interpreted as host pointers.
+
+Across the source registry and two fills of the control stream, 71006 raw Frame
+observations and 14598 Frame allocations match. The retained isolated fixtures
+and their historical exclusions remain unchanged. Catalog joining, teardown,
+Windows startup and subsequent gameplay use of these records remain open.

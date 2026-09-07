@@ -9,17 +9,15 @@ public struct OriginalFrameRecord: Codable, Equatable, Sendable {
     public internal(set) var name: String
     public internal(set) var words: [String: Int32]
     public internal(set) var sound: String?
+    /// A name write can replace part/all of the original pointer. Keep its bits
+    /// explicitly; it is neither a valid path nor a null pointer.
+    public internal(set) var opaqueSoundPointer: String? = nil
     public internal(set) var interactions: [[Int32]] = []
     public internal(set) var bodies: [[Int32]] = []
 
     init(number: Int) {
-        self.number = number; name = ""; words = ["0": 0, "372": -1]
-        // Original constructor 0x40bbf0–0x40bd83. In particular c4–d4 are unset.
-        for range in [0x04...0xc0, 0xd8...0x12c, 0x138...0x158] {
-            for offset in stride(from: range.lowerBound, through: range.upperBound, by: 4) {
-                words[String(offset)] = 0
-            }
-        }
+        self.number = number; name = ""; words = [:]
+        // Defaults live in OriginalStateRecord.frame; this is only a projection.
     }
     public subscript(offset: Int) -> Int32? { words[String(offset)] }
     public func field(_ name: String) -> Int32? {
@@ -35,13 +33,51 @@ public enum OriginalLoaderError: Error, CustomStringConvertible {
     }
 }
 
-/// Decoded <frame> sections only. This is not yet the object/header loader.
-/// Original buffer overruns remain outside the recovered domain.
+/// Shared Frame mechanism for continuous Object streams and isolated sections.
+/// Name writes within the whole record are preserved, including sound overlap;
+/// writes beyond that record or the five-box allocations remain unsupported.
 /// Reference: docs/FRAME_LOADER.md, original EXE constructor and frame branch.
 public struct OriginalFrameLoader {
     public private(set) var frames: [Int: OriginalFrameRecord] = [:]
+    public private(set) var storage: [Int: OriginalStateRecord] = [:]
+    var heap = OriginalFrameHeap()
+    var backing: [UInt8]? = nil
     var sounds = OriginalSoundRegistry()
     public init() {}
+
+    public func storage(at index: Int) throws -> OriginalStateRecord {
+        if let record = storage[index] { return record }
+        guard (0..<400).contains(index) else { throw OriginalStateError.invalidStorage("Frame index") }
+        let raw = backing.map { Array($0[index*0x178..<(index+1)*0x178]) } ?? Array(repeating: UInt8(0xa5), count: 0x178)
+        return try .frame(over: raw)
+    }
+
+    func projected(at index: Int, record: OriginalStateRecord) throws -> OriginalFrameRecord {
+        var result = OriginalFrameRecord(number: index)
+        result.words = ["0": Int32(try record.integer(at: 0, as: UInt8.self))]
+        for offset in stride(from: 4, to: 0x178, by: 4) where offset != 0x130 && offset != 0x134 && !(0x15c..<0x174).contains(offset) {
+            if record.defined[offset..<(offset+4)].allSatisfy({ $0 }) {
+                result.words[String(offset)] = try record.integer(at: offset, as: Int32.self)
+            }
+        }
+        result.name = result.words["0"] == 0 ? "" : try OriginalFrameHeap.string(in: record, at: 0x15c)
+        for (countOffset, pointerOffset, stride) in [(0x128, 0x130, 20), (0x12c, 0x134, 10)] {
+            let count = Int(try record.integer(at: countOffset, as: Int32.self))
+            guard (0...5).contains(count) else { throw OriginalStateError.invalidStorage("Frame box count") }
+            if count > 0 {
+                let pointer = try record.integer(at: pointerOffset, as: UInt32.self)
+                let words = try heap.words(at: pointer, count: count*stride)
+                let boxes = (0..<count).map { Array(words[$0*stride..<($0+1)*stride]) }
+                if countOffset == 0x128 { result.interactions = boxes } else { result.bodies = boxes }
+            }
+        }
+        let pointer = try record.integer(at: 0x170, as: UInt32.self)
+        if pointer != 0 {
+            result.sound = try heap.string(at: pointer)
+            if result.sound == nil { result.opaqueSoundPointer = "0x" + String(pointer, radix: 16) }
+        }
+        return result
+    }
 
     static let frameFields: [String: Int] = [
         "pic:": 0x04, "state:": 0x08, "wait:": 0x0c, "next:": 0x10,
@@ -88,41 +124,49 @@ public struct OriginalFrameLoader {
 
     /// Shared parser used by both isolated sections and the continuous Object
     /// stream. The caller has consumed <frame>; no artificial section EOF here.
-    mutating func consumeFrameBody(_ input: inout OriginalFrameScanner) throws -> OriginalFrameRecord {
+    mutating func consumeFrameBody(_ input: inout OriginalFrameScanner,
+                                  allocate: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil }) throws -> OriginalFrameRecord {
         guard let index = try input.integer(), (0..<400).contains(index) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Expected a frame index in 0...399")
         }
         let name = try input.token()
-        guard name.unicodeScalars.count <= 19 else {
-            throw OriginalLoaderError.outsideVerifiedDomain("Original frame name exceeds 19 bytes")
+        let nameBytes = name.unicodeScalars.map { UInt8($0.value) } + [0]
+        guard nameBytes.count <= 0x1c else {
+            throw OriginalLoaderError.outsideVerifiedDomain("Frame name crosses the end of its record")
         }
-        var record = frames[Int(index)] ?? OriginalFrameRecord(number: Int(index))
+        var record = try storage(at: Int(index))
         var updatedSounds = sounds
-        record.name = name
+        for (offset, byte) in nameBytes.enumerated() { try record.write(byte, at: 0x15c + offset) }
         // 0x41043b–0x41046e: only these counters are reset at frame entry.
-        record.words["0"] = 1
-        record.words[String(0x128)] = 0; record.words[String(0x12c)] = 0
-        record.interactions = []; record.bodies = []
+        try record.write(UInt8(1), at: 0)
+        try record.write(Int32(0), at: 0x128); try record.write(Int32(0), at: 0x12c)
+        var interactions: [[Int32]] = [], bodies: [[Int32]] = []
         while true {
             let token = try input.token()
             if token == "<frame_end>" { break }
             if let offset = Self.frameFields[token] {
-                if let value = try input.integer() { record.words[String(offset)] = value }
+                if let value = try input.integer() { try record.write(value, at: offset) }
             } else if let fields = Self.pointFields[token] {
                 let end = String(token.dropLast()) + "_end:"
                 while true {
                     let tag = try input.token()
                     if tag == end { break }
                     if let offset = fields[tag], let value = try input.integer() {
-                        record.words[String(offset)] = value
+                        try record.write(value, at: offset)
                     }
                 }
             } else if token == "itr:" || token == "bdy:" {
                 let isInteraction = token == "itr:"
-                let count = isInteraction ? record.interactions.count : record.bodies.count
+                let count = isInteraction ? interactions.count : bodies.count
                 guard count < 5 else { throw OriginalLoaderError.outsideVerifiedDomain("Original allocation holds five boxes") }
                 let fields = isInteraction ? Self.interactionFields : Self.bodyFields
                 var box = [Int32](repeating: 0, count: isInteraction ? 20 : 10)
+                let kind: OriginalFrameAllocationKind = isInteraction ? .interactions : .bodies
+                let size = isInteraction ? 400 : 200, pointerOffset = isInteraction ? 0x130 : 0x134
+                if count == 0 {
+                    let pointer = try heap.allocate(size, kind: kind, address: allocate(kind, size))
+                    try record.write(pointer, at: pointerOffset)
+                }
                 let end = isInteraction ? "itr_end:" : "bdy_end:"
                 while true {
                     let tag = try input.token()
@@ -134,25 +178,32 @@ public struct OriginalFrameLoader {
                         }
                     }
                 }
-                if isInteraction { record.interactions.append(box) } else { record.bodies.append(box) }
+                let pointer = try record.integer(at: pointerOffset, as: UInt32.self)
+                for (offset, value) in box.enumerated() { try heap.write(value, at: pointer, offset: (count*box.count + offset)*4) }
+                if isInteraction { interactions.append(box) } else { bodies.append(box) }
             } else if token == "sound:" {
                 let sound = try input.token()
-                record.sound = sound
-                record.words[String(0x174)] = try updatedSounds.register(sound)
+                let bytes = sound.unicodeScalars.map { UInt8($0.value) } + [0]
+                guard bytes.count <= 256 else { throw OriginalLoaderError.outsideVerifiedDomain("Sound scratch buffer") }
+                let pointer = try heap.allocate(bytes.count, kind: .sound, address: allocate(.sound, bytes.count))
+                try record.write(pointer, at: 0x170)
+                for (offset, byte) in bytes.enumerated() { try heap.write(byte, at: pointer, offset: offset) }
+                try record.write(try updatedSounds.register(sound), at: 0x174)
             }
             // Original %s loop ignores unknown tokens; it does not strip comments.
         }
-        record.words[String(0x128)] = Int32(record.interactions.count)
-        record.words[String(0x12c)] = Int32(record.bodies.count)
+        try record.write(Int32(interactions.count), at: 0x128)
+        try record.write(Int32(bodies.count), at: 0x12c)
         // 0x411ef0–0x412274: signed comparisons and wrapping 32-bit ADD/SUB.
         // Empty arrays leave the old aggregate bounds in place.
-        Self.updateBounds(record.interactions, offset: 0x138, record: &record)
-        Self.updateBounds(record.bodies, offset: 0x148, record: &record)
-        frames[Int(index)] = record; sounds = updatedSounds
-        return record
+        try Self.updateBounds(interactions, offset: 0x138, record: &record)
+        try Self.updateBounds(bodies, offset: 0x148, record: &record)
+        let result = try projected(at: Int(index), record: record)
+        storage[Int(index)] = record; frames[Int(index)] = result; sounds = updatedSounds
+        return result
     }
 
-    private static func updateBounds(_ boxes: [[Int32]], offset: Int, record: inout OriginalFrameRecord) {
+    private static func updateBounds(_ boxes: [[Int32]], offset: Int, record: inout OriginalStateRecord) throws {
         guard let first = boxes.first else { return }
         var x = first[1], y = first[2], right = first[1] &+ first[3], bottom = first[2] &+ first[4]
         for box in boxes.dropFirst() {
@@ -160,7 +211,7 @@ public struct OriginalFrameLoader {
             right = max(right, box[1] &+ box[3]); bottom = max(bottom, box[2] &+ box[4])
         }
         for (i, value) in [x, y, right &- x, bottom &- y].enumerated() {
-            record.words[String(offset+i*4)] = value
+            try record.write(value, at: offset+i*4)
         }
     }
 }

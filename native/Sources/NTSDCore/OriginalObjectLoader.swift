@@ -34,6 +34,7 @@ public struct OriginalLoadedObject: Equatable, Sendable {
     public let header: OriginalStateRecord
     public let nameTail: OriginalStateRecord
     public let frames: [OriginalFrameRecord]
+    public let frameStorage: [OriginalStateRecord]
     public let weaponSoundPaths: [Int: String]
 }
 
@@ -44,6 +45,8 @@ public struct OriginalObjectLoader {
     public private(set) var bitmaps: [OriginalLoadedBitmap] = []
     public private(set) var checksum: UInt32 = 0
     private var sounds = OriginalSoundRegistry()
+    private var frameHeap = OriginalFrameHeap()
+    public var frameAllocations: [OriginalFrameAllocation] { frameHeap.allocations }
     public var soundCount: Int { sounds.count }
     public var soundBytes: [UInt8] { sounds.bytes }
     public init() {}
@@ -54,24 +57,31 @@ public struct OriginalObjectLoader {
     /// The snapshot adapter binds only established pointers, never arbitrary words.
     public mutating func load(decoded: String, id: Int32, type: Int32,
                               headerBacking: [UInt8], tailBacking: [UInt8], bitmapFill: UInt8 = 0xa5,
+                              frameBacking: [UInt8]? = nil,
+                              frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
                               bitmapSource: (String) throws -> OriginalBitmapInput,
-                              onFrame: (OriginalFrameRecord) -> Void = { _ in }) throws -> OriginalLoadedObject {
+                              onFrame: (OriginalFrameRecord) -> Void = { _ in },
+                              onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in }) throws -> OriginalLoadedObject {
         var candidate = self
         let result = try candidate.consume(decoded: decoded, id: id, type: type, headerBacking: headerBacking,
-                                           tailBacking: tailBacking, bitmapFill: bitmapFill, bitmapSource: bitmapSource, onFrame: onFrame)
+                                           tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation,
+                                           bitmapSource: bitmapSource, onFrame: onFrame, onFrameStorage: onFrameStorage)
         self = candidate
         return result
     }
 
     private mutating func consume(decoded: String, id: Int32, type: Int32, headerBacking: [UInt8], tailBacking: [UInt8],
-                                  bitmapFill: UInt8, bitmapSource: (String) throws -> OriginalBitmapInput,
-                                  onFrame: (OriginalFrameRecord) -> Void) throws -> OriginalLoadedObject {
+                                  bitmapFill: UInt8, frameBacking: [UInt8]?, frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32?,
+                                  bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  onFrame: (OriginalFrameRecord) -> Void, onFrameStorage: (Int, OriginalStateRecord) -> Void) throws -> OriginalLoadedObject {
         guard headerBacking.count == 0x7a4, tailBacking.count == 0x3c else { throw Self.error("Object storage size") }
+        guard frameBacking == nil || frameBacking?.count == 400*0x178 else { throw Self.error("Frame backing size") }
         guard !decoded.unicodeScalars.contains(where: { $0.value == 0 || $0.value == 0x1a }) else { throw Self.error("NUL/DOS EOF in decoded stream") }
         var input = try OriginalFrameScanner(decoded)
         var header = try OriginalStateRecord(bytes: headerBacking, defined: Array(repeating: false, count: 0x7a4))
         var tail = try OriginalStateRecord(bytes: tailBacking, defined: Array(repeating: false, count: 0x3c))
         var frames = OriginalFrameLoader(); frames.sounds = sounds
+        frames.backing = frameBacking; frames.heap = frameHeap; frames.heap.fill = bitmapFill
         var weaponPaths: [Int: String] = [:]
         for offset in stride(from: 0x90, through: 0xa0, by: 4) { try header.write(Int32(0), at: offset) }
         for offset in [0xa4, 0xa8, 0xac] { try header.write(Int32(-1), at: offset) }
@@ -96,7 +106,7 @@ public struct OriginalObjectLoader {
                         var count = try header.integer(at: 0x498, as: Int32.self)
                         if count > 0 { try finishSheet(Int(count), header: &header, bitmapFill: bitmapFill, source: bitmapSource) }
                         count += 1
-                        guard (1...9).contains(count) else { throw Self.error("Sprite sheet arrays outside verified non-overlapping domain") }
+                        guard (1...10).contains(count) else { throw Self.error("Sprite sheet arrays outside verified storage") }
                         try header.write(count, at: 0x498)
                         try Self.string(try input.token(), at: 0x474 + Int(count)*40, limit: 40, in: &header)
                     }
@@ -144,14 +154,18 @@ public struct OriginalObjectLoader {
                 }
             }
             if token == "<frame>" {
-                let record = try frames.consumeFrameBody(&input)
+                let record = try frames.consumeFrameBody(&input, allocate: frameAllocation)
                 onFrame(record)
+                onFrameStorage(record.number, try frames.storage(at: record.number))
                 token = "<frame_end>"
             }
         }
         sounds = frames.sounds
+        frameHeap = frames.heap
+        let rawFrames = try (0..<400).map { try frames.storage(at: $0) }
         return OriginalLoadedObject(header: header, nameTail: tail,
-                                    frames: (0..<400).map { frames.frames[$0] ?? OriginalFrameRecord(number: $0) }, weaponSoundPaths: weaponPaths)
+                                    frames: try (0..<400).map { try frames.projected(at: $0, record: rawFrames[$0]) },
+                                    frameStorage: rawFrames, weaponSoundPaths: weaponPaths)
     }
 
     private mutating func appendBitmap(_ path: String, optional: Bool, fill: UInt8,
