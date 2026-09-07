@@ -214,7 +214,7 @@ class Objects(Constructors):
         elif name == "fscanf":
             h, fmt = self.handles[arg(0)], self.cstr(arg(1))
             assert not h['closed'] and h['mode'] == b'r'
-            assert fmt in (b'%s', b'%c', b'%d', b'%d %d', b'%d %s', b'%lf'), fmt
+            assert fmt in (b'%s', b'%c', b'%d', b'%d %d', b'%d %s', b'%lf', b'%ld', b'%s %s %d %d'), fmt
             assigned, before = 0, h['pos']
             for i, spec in enumerate(fmt.split()):
                 if spec != b'%c':
@@ -233,12 +233,12 @@ class Objects(Constructors):
                     raw = h['data'][start:end] + b'\0'
                     assert len(raw) <= 256, "Scratch buffer domain"
                 else:
-                    expression = rb'[+-]?[0-9]+' if spec == b'%d' else rb'[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?'
+                    expression = rb'[+-]?[0-9]+' if spec in (b'%d', b'%ld') else rb'[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?'
                     match = re.match(expression, h['data'][start:])
                     if not match:
                         break
                     end = start + len(match[0])
-                    if spec == b'%d':
+                    if spec in (b'%d', b'%ld'):
                         number = int(match[0]); assert -(2**31) <= number < 2**31, ("MSVCR80 overflow", match[0], hex(self.u32(sp)))
                         raw = struct.pack('<i', number)
                     else:

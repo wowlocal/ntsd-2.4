@@ -195,3 +195,9 @@ The new native DAT decoder also exposes a limitation of the old decoder oracle:
 its stdio boundary did not translate CRLF. Both contracts now have retained full
 Object comparisons; their EOF tails/checksums differ. This does not establish
 actual MSVCR80 `%d`/`%lf` or Windows equivalence. The old import is unchanged.
+
+[BACKGROUND_LOADER.md](research/BACKGROUND_LOADER.md) reuses the same scanner.
+Its original-instruction controls exposed missing EOF on a numeric conversion
+with no remaining input. The shared integer scanner now sets EOF without assigning
+a value; it no longer counts a stale outer token twice in that path. Full Object
+and isolated-frame comparisons are repeated after this change.

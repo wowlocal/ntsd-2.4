@@ -24,6 +24,11 @@ Naruto/Sasuke/kunai data with shared sound registration and sprite-sheet metadat
 Native decoding, headers, frame records and bitmap tables match the original at
 explicit CRT/device boundaries. Actual MSVCR80 behavior, full catalog integration
 and the game's visual/audio output remain open; practice still uses its prior import.
+The [background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17
+source arenas for metadata, delayed layer loading and resource release/reload.
+All BG/bitmap bytes and initialization masks, file checksums and resource order
+are compared. Rendering and menu-driven arena selection remain separate work.
+Stage loading and joining the catalog children are next.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

@@ -62,8 +62,17 @@ corpus retains both raw/text contracts and their different tails/checksums.
 Object bitmap/string references use index+1 with zero null, unlike the bootstrap's
 non-null ordinals. Raw Frame pointers/padding and dead malloc blocks are retained
 only in the research snapshot, not yet compared to native raw storage. The new
-loader is not wired to practice or to the parent. Execute BG 40c160 next, then
-Stage 40c910 and join the real child loaders in source registry order.
+loader is not wired to practice or to the parent. The separate
+[Background loader](docs/research/BACKGROUND_LOADER.md) now matches all 17 source
+arenas through metadata parse 40c160, layer allocation 40c030 and release 40c0e0.
+It preserves all BG/bitmap bytes and masks, delayed layer loading, rect conversion,
+name truncation, and the first-pointer release sentinel with stale remaining refs.
+Its references use index+1/zero-null like Object, not the bootstrap ordinal scheme.
+Read that document before extending arena loading; pixels, menu-driven selection
+and true CRT/device behavior remain open. Source ID is unused in BG 40c160;
+ordinal chooses the record. A numeric conversion at EOF must set scanner EOF even
+when it assigns nothing. Native bitmap records are shared by the two loaders.
+Execute Stage 40c910 next, then join real child loaders in source registry order.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

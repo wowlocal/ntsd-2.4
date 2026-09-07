@@ -16,6 +16,18 @@ public struct OriginalLoadedBitmap: Equatable, Sendable {
     public internal(set) var storage: OriginalStateRecord
     /// Device operation requested by the original missing-mirror fallback.
     public internal(set) var mirroredFrom: Int? = nil
+
+    /// Storage writes of 43ee50 with image dimensions supplied by a device adapter.
+    /// Used by both Object sheets and background resources.
+    static func construct(_ resource: OriginalBitmapInput, optional: Bool, fill: UInt8) throws -> Self {
+        var record = try OriginalStateRecord(bytes: Array(repeating: fill, count: 0x1f50), defined: Array(repeating: false, count: 0x1f50))
+        try record.write(UInt32(resource.present ? 1 : 0), at: 0)
+        if resource.present {
+            guard let width = resource.width, let height = resource.height, width > 0, height > 0 else { throw OriginalLoaderError.outsideVerifiedDomain("Invalid supplied bitmap dimensions") }
+            try record.write(width, at: 4); try record.write(height, at: 8)
+        } else if !optional { throw OriginalLoaderError.outsideVerifiedDomain("Required bitmap is unavailable") }
+        return Self(input: resource, optional: optional, storage: record)
+    }
 }
 
 public struct OriginalLoadedObject: Equatable, Sendable {
@@ -146,14 +158,9 @@ public struct OriginalObjectLoader {
                                        source: (String) throws -> OriginalBitmapInput) throws -> Int {
         let resource = try source(path)
         guard resource.path == path else { throw Self.error("Bitmap provider returned a different path") }
-        var record = try OriginalStateRecord(bytes: Array(repeating: fill, count: 0x1f50), defined: Array(repeating: false, count: 0x1f50))
-        try record.write(UInt32(resource.present ? 1 : 0), at: 0)
-        if resource.present {
-            guard let width = resource.width, let height = resource.height, width > 0, height > 0 else { throw Self.error("Invalid supplied bitmap dimensions") }
-            try record.write(width, at: 4); try record.write(height, at: 8)
-        } else if !optional { throw Self.error("Required bitmap is unavailable") }
+        let bitmap = try OriginalLoadedBitmap.construct(resource, optional: optional, fill: fill)
         let index = bitmaps.count
-        bitmaps.append(OriginalLoadedBitmap(input: resource, optional: optional, storage: record))
+        bitmaps.append(bitmap)
         return index
     }
 

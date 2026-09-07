@@ -225,6 +225,8 @@ struct OriginalFrameScanner {
     }
     mutating func integer() throws -> Int32? {
         skipSpace()
+        // fscanf sets EOF even when no assignment can be made after whitespace.
+        guard position < bytes.count else { eof = true; return nil }
         var cursor = position
         var negative = false
         if cursor < bytes.count && (bytes[cursor] == 43 || bytes[cursor] == 45) {
