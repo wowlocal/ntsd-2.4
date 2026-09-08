@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--initial-interface" {
+        let r = try InitialInterfaceReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Initial interface matches original: \(r.cases) passes, \(r.sources) embedded DIBs, \(r.constructors) bitmap / \(r.poolConstructors) Actor constructors, \(r.records) records, \(r.bytes) bytes/masks, \(r.events) events, \(r.nullAllocations) null allocations, \(r.messages) messages, \(r.releases) surface releases")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--wave-loader" {
         let result = try WaveLoaderReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Wave loader matches original: \(result.sources) source WAVs, \(result.cases) cases, \(result.startupPasses) startup passes / \(result.startupLoads) real child loads, \(result.bytes) bytes/masks, \(result.events) events, \(result.restores) restores, \(result.messages) messages, \(result.leaks) retained short-read allocations, \(result.invalidContinuations) invalid create continuations")

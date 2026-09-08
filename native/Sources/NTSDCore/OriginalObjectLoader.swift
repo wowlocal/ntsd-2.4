@@ -20,13 +20,21 @@ public struct OriginalLoadedBitmap: Equatable, Sendable {
     /// Storage writes of 43ee50 with image dimensions supplied by a device adapter.
     /// Used by both Object sheets and background resources.
     static func construct(_ resource: OriginalBitmapInput, optional: Bool, fill: UInt8) throws -> Self {
-        var record = try OriginalStateRecord(bytes: Array(repeating: fill, count: 0x1f50), defined: Array(repeating: false, count: 0x1f50))
+        if !resource.present && !optional { throw OriginalLoaderError.outsideVerifiedDomain("Required bitmap is unavailable") }
+        return Self(input: resource, optional: optional, storage: try constructionStorage(resource, backing: Array(repeating: fill, count: 0x1f50)))
+    }
+
+    /// Shared wrapper writes; the caller decides how to handle a missing required
+    /// resource. Device lifecycle and error reporting live in OriginalBitmapConstructor.
+    static func constructionStorage(_ resource: OriginalBitmapInput, backing: [UInt8]) throws -> OriginalStateRecord {
+        guard backing.count == 0x1f50 else { throw OriginalLoaderError.outsideVerifiedDomain("Bitmap allocation extent") }
+        var record = try OriginalStateRecord(bytes: backing, defined: Array(repeating: false, count: 0x1f50))
         try record.write(UInt32(resource.present ? 1 : 0), at: 0)
         if resource.present {
             guard let width = resource.width, let height = resource.height, width > 0, height > 0 else { throw OriginalLoaderError.outsideVerifiedDomain("Invalid supplied bitmap dimensions") }
             try record.write(width, at: 4); try record.write(height, at: 8)
-        } else if !optional { throw OriginalLoaderError.outsideVerifiedDomain("Required bitmap is unavailable") }
-        return Self(input: resource, optional: optional, storage: record)
+        }
+        return record
     }
 }
 

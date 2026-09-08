@@ -297,13 +297,23 @@ sizeof(entry) или нормализации чисел в указатели. 
 
 | Globals / запись | Тип и действие |
 | --- | --- |
-| `44d05c` | Int32 first-load selector: exact1 выбирает41be98. В bounded sound caller сохраняется1, как и в прежнем конечном presentation/replay state. S: обнуление только41c577 после каталога, пула и10 UI bitmap |
+| `44d05c` | Int32 first-load selector: exact1 выбирает41be98. В bounded sound caller сохраняется1, как и в прежнем конечном presentation/replay state. D следующего UI caller: обнуление41c577 после десяти stores, даже при отказах; полный loading path ещё не соединён |
 | `451db0`,18 dword; `45843c` | UInt32 buffer tokens общих звуков в фиксированном EXE-порядке. После18 вызовов count всегда18, даже при отключённом устройстве или ошибке файла |
 | `457588`,1600 bytes; `453e10`,320 bytes | Целиком обнуляются перед первой загрузкой WAV; другие globals сохраняются, кроме выходных sound slots/count |
 | `44eecc` / destination slot | При device0 WAV helper возвращает1 и сохраняет прежний slot. Иначе сразу очищает slot; успех записывает предоставленный buffer pointer, обычная ошибка оставляет0 |
 | WAVEFORMATEX,18 bytes | Первые16 берутся из format payload; последние2 равны low16(destination) из перекрытого сохранённого this. Все байты определены, cbSize не нормализуется |
 | DSBUFFERDESC,36 bytes | size36, flagsE0, payload size, stack format pointer; остальные поля0. Только проверенный целый pointer+16 нормализуется; прочие байты сохраняются |
 | Temporary PCM allocation | Размер data.cksize; при коротком/неуспешном чтении остаётся live с фактической маской записей. Успех освобождает после Unlock; create failure освобождает и достигает отдельной неподдержанной границы продолжения |
+
+Дополнение [первых UI bitmap](INITIAL_INTERFACE.md), D после реального пула:
+
+| Globals / запись | Тип и действие |
+| --- | --- |
+| `44ff8c/44f8f8` | UInt32 wrapper pointers PAUSE/DEMO; каждый получает отдельную allocation1f50 либо0 при null malloc |
+| `44fcb4/44fd8c/44f88c/44f87c` | Четыре UInt32 wrapper pointers SCORE_BOARD1..4, в указанном порядке |
+| `44fd90/44fd94/44fb64/44fd7c` | UInt32 pointers WIN_ALIVE/WIN_DEAD/LOSE_DEAD/BARS; после последней записи сбрасывается44d05c |
+| `457578` | UInt32 DirectDraw device token передаётся43ed10 с flags40; происхождение устройства здесь supplied |
+| Bitmap+`0/4/8` | Surface pointer/Int32 width/height. Key failure освобождает surface и очищает только+0; отсутствующий ресурс вообще не записывает размеры. Остальные bytes/masks allocation сохраняются |
 
 ## Снимок: что сохраняется и что пока неизвестно
 

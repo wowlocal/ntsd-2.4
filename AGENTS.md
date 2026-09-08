@@ -302,10 +302,36 @@ supplied, and41bfeb leaves the present argument on the stack for later cleanup.
 Crucially44d05c is still1 in the earlier presentation/preparation/replay corpus.
 Do not clear it by hand to enter a full tick. First41bc90 must load18 sounds,
 catalog,400 Actors and10 UI bitmaps before41c577 clears it. Next recover those
-10 bitmap allocations/constructors41c2f5..41c55e and join the whole loading path.
+10 bitmap allocations/constructors41c2f5..41c55e (now recovered below) and join
+the whole loading path.
 The existing full catalog uses disabled audio; connect enabled Object-registry
 sound calls410a48/410a65 to this shared loader in a subsequent joined corpus.
 This stage adds no playable coverage, mixer, Windows output or clean-macOS proof.
+The [initial interface study](docs/research/INITIAL_INTERFACE.md) now extends
+the real400-slot bootstrap through41c2f5..41c581 and all43ee50 constructors.
+Read it before extending bitmap lifecycle or first loading.13 passes match
+114 bitmap/5304 Actor constructors,5470 records/13029720 bytes/masks,519 events,
+16 null allocations,23 messages and12 surface releases. Ten original embedded
+DIBs are pinned, including dimensions;43ed10 itself remains a device boundary.
+The fixed keys are PAUSE,DEMO,SCORE_BOARD1..4,WIN_ALIVE,WIN_DEAD,LOSE_DEAD,BARS.
+Each malloc requests1f50. Null skips constructor and stores0; device failure
+still returns a wrapper. All10 global stores precede the unconditional44d05c=0
+at41c577, including failure controls. Previous global pointers are not released.
+Native OriginalBitmapConstructor shares constructionStorage with Object/BG.
+SetColorKey(+74,flags8,two zero dwords) tests SIGNED HRESULT: positives succeed,
+negatives request message/debug,Release(+8),then clear only surface+0. Width/
+height stay defined. Missing required surface requests message/debug and leaves
+dimensions untouched. Source input.present is43ed10 availability, not current
+surface liveness after a key failure; inspect storage+0. Surface pointer alone
+normalizes1/0; wrapper pointers stay explicit supplied allocator tokens.
+Full globals after every store and flag clear, all wrappers/masks and the whole
+unchanged Actor/World pool match Swift. Real ret12/cookie/register preservation
+is verified. The enclosing function has not returned; at41c581 ESP is the
+supplied1000f000 and EDI comes from local+38. The parent catalog[0]/Object+90
+and outer frame are supplied, not a complete loading path. Next connect enabled
+Object sound registry410a48/410a65 to the WAV helper, then join18 common sounds,
+full catalog,bootstrap and UI in41bc90 before input/menu/429730 andR01.2.
+Historical fixtures are unchanged. Practice and full Windows/macOS checks remain open.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -346,6 +372,11 @@ The WAV stage passed two targeted tests in150.419s: all409 WAVs plus initial
 sound loading21.556s, historical presentation/full parent chain128.863s.
 Release comparison passed before accepting the new fixture; existing fixtures
 are unchanged. Release NTSDNative passed in2.30s. No playback claim follows.
+The initial-interface stage passed six targeted tests in137.528s: new corpus
+3.917s, historical bootstrap two tests1.681s and three loaded-catalog tests
+131.930s. These cover the shared bitmap storage refactor in Object/BG and all
+source catalogs. Release comparison passed before new fixture acceptance;
+old fixtures unchanged. Release NTSDNative passed in2.24s. No new Practice/W proof.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

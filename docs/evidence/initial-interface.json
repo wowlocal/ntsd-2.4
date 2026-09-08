@@ -1,0 +1,125 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real400-slot bootstrap followed by10 UI bitmap constructors and first-load clear.\n\nThe catalog[0]/Object+90, allocator backing and43ed10/COM/OS responses are\nexplicit boundaries. Actual43ee50, its ret12/cookie and parent41c2f5..41c581\nexecute. Embedded DIBs supply dimensions, not a claim of rendered pixels.\n",
+  "corpus": "initial-interface.json",
+  "corpusSHA256": "5d9d32e14628c7b9298bf5e57aa1ff7bf3d64046b2cd1af5b0315263feb90089",
+  "cases": 13,
+  "sources": [
+    {
+      "path": "PAUSE",
+      "resourcePath": [
+        2,
+        "PAUSE",
+        1028
+      ],
+      "sha256": "41ebe6af86437d5ced9d6e6288982c4f81443f88e5216a07f2df73401a39d20d",
+      "width": 84,
+      "height": 23
+    },
+    {
+      "path": "DEMO",
+      "resourcePath": [
+        2,
+        "DEMO",
+        1028
+      ],
+      "sha256": "78839ea3448314c39f48b74ed6091abcd52a628a790e34b4deba0499a6936962",
+      "width": 84,
+      "height": 23
+    },
+    {
+      "path": "SCORE_BOARD1",
+      "resourcePath": [
+        2,
+        "SCORE_BOARD1",
+        1028
+      ],
+      "sha256": "285d670a481a6fed0abf4181bf153224b892a11b29623f053de6fb3933fe6224",
+      "width": 490,
+      "height": 61
+    },
+    {
+      "path": "SCORE_BOARD2",
+      "resourcePath": [
+        2,
+        "SCORE_BOARD2",
+        1028
+      ],
+      "sha256": "02a99941d7b2abcafbe6c4c4f62268ecf73712f6812c374f3bce02c0e77ece05",
+      "width": 490,
+      "height": 45
+    },
+    {
+      "path": "SCORE_BOARD3",
+      "resourcePath": [
+        2,
+        "SCORE_BOARD3",
+        1028
+      ],
+      "sha256": "e4c42fc8efa11ce193ed4ed726869551a45f49c83cc578b566acd16c2c794e39",
+      "width": 490,
+      "height": 32
+    },
+    {
+      "path": "SCORE_BOARD4",
+      "resourcePath": [
+        2,
+        "SCORE_BOARD4",
+        1028
+      ],
+      "sha256": "986141e4436f8b8ebc70107db9905cb093c405effe9441c79c9f1f6e10addfb5",
+      "width": 490,
+      "height": 45
+    },
+    {
+      "path": "WIN_ALIVE",
+      "resourcePath": [
+        2,
+        "WIN_ALIVE",
+        1028
+      ],
+      "sha256": "8ce9f349d8b7ee78f05b21ff59cc9747a42b30c568fca39ba0d72dc340b21ee9",
+      "width": 53,
+      "height": 11
+    },
+    {
+      "path": "WIN_DEAD",
+      "resourcePath": [
+        2,
+        "WIN_DEAD",
+        1028
+      ],
+      "sha256": "e491ed303a064376525128f88a0ec490adc5994117467e4ac0e7c06dc6f68c3f",
+      "width": 53,
+      "height": 11
+    },
+    {
+      "path": "LOSE_DEAD",
+      "resourcePath": [
+        2,
+        "LOSE_DEAD",
+        1028
+      ],
+      "sha256": "af95b0602a142eb031325d4ec7e9d7b126b2438ba873b480d1e95bcff01e5953",
+      "width": 53,
+      "height": 11
+    },
+    {
+      "path": "BARS",
+      "resourcePath": [
+        2,
+        "BARS",
+        1028
+      ],
+      "sha256": "c59c4282b7c1a29bb970e750726422554c50ca74ec474baac965c89e9129981a",
+      "width": 150,
+      "height": 51
+    }
+  ],
+  "constructors": 114,
+  "events": 519,
+  "nativeComparison": "Initial interface matches original: 13 passes, 10 embedded DIBs, 114 bitmap / 5304 Actor constructors, 5470 records, 13029720 bytes/masks, 519 events, 16 null allocations, 23 messages, 12 surface releases",
+  "fixture": "original-initial-interface.json",
+  "fixtureSHA256": "be6051502123296f2d3f8242f81b010f6847ee34767ff6e64a643bab4433af88",
+  "fixtureBytes": 578668
+}
