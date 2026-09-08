@@ -357,6 +357,24 @@ sizeof(entry) или нормализации чисел в указатели. 
 | Playback buffer+`630bb8/630bbc` | Сохранённые UInt32 значения458428/45842c, которые caller возвращает после43df00 |
 | `4588a8/4588ac` | Два replay pointers: shared shutdown освобождает оба и очищает только указатели; буферные bytes/masks сохраняются в проверке ownership |
 
+Дополнение [команд и записи повтора](REPLAY_TICK.md): S и D против Swift,
+2 268 случаев после свежих loading/local/control родителей.
+
+| Поле / буфер | Тип и действие |
+| --- | --- |
+| `450b8c` | Int32 tick: signed деление/остаток150, рост любого unpaused пути до647999. Запись пакета предшествует ограничению; достижение предела снизу ещё не выключает recording |
+| `450b80` / `450b84` | Int32 flags, проверка !=0: запись / воспроизведение. Checksum error может выключить playback до выбора источника записи |
+| Caller stack+`434` / `440` | Prefix41bdce очищает оба10-byte buffers даже при паузе; unpaused playback затем читает43dc50 в+440 |
+| Caller stack+`44` | Playback checksum entry пишет signed `tick/150` при любом остатке; это тот же scratch word, который control мог передать ioctl |
+| Buffer+`2b38 + 10*tick` | Все10 packet bytes; UInt32 адресная арифметика. Metadata overlap сохраняется, выход за owned allocation отклоняется |
+| Buffer+`14b8 + 4*(tick/150)` | Int32 сумма HP первых20 World seats с activity ровно1, сложение с переполнением. При tick216000 перекрывает первые packet bytes |
+| `450bdc` | Replay checksum error сохраняет этот timer, хотя hotkey416cd0 очищает его |
+| `450b88`, `451160`, `44d020` | Checksum error при playback!=0/menu!=10: mode6, условный43df00/возврат flags, clear450b88/450b84, menu10. Буфер не освобождается |
+
+Ссылки двух replay pointers на одну аллокацию проверены. Произвольное наложение
+буферов с globals/стеком не входит в этот API; полное происхождение playback
+storage и settings остаётся отдельной задачей startup/file IO.
+
 ## Снимок: что сохраняется и что пока неизвестно
 
 [oracle_state_trace.py](../../tools/oracle_state_trace.py) повторяет шесть случаев

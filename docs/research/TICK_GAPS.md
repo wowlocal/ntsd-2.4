@@ -18,9 +18,12 @@ keyboard/joystick bytes и упаковку. Она ещё не подключе
 [Control/network участок](INPUT_CONTROL.md) теперь закрывает41c5e5..41d46f
 в обоих первых caller после загрузки: hotkeys, packets/checksums, shutdown,
 input reset и возврат сохранённых настроек совпали с native в5 986 случаях.
-AI bodies, OS acquisition, реальный сетевой транспорт, playback source/
-checksum/recording и дальнейшая пауза остаются открытыми; прежняя таблица ниже
-описывает ограничения существующего прототипа.
+[Replay tick](REPLAY_TICK.md) теперь закрывает источник43dc50, запись43db40,
+checksum/counter до41d714 в2 268 случаях:614 связанных цепочек продолжают
+prefix/local/control/received/tail, включая24 последовательных шага на проход.
+AI bodies, OS acquisition, реальный сетевой транспорт, ранний playback prefix,
+startup/file IO и дальнейшая пауза остаются открытыми; прежняя таблица ниже
+описывает ограничения существующего оконного прототипа.
 
 | Стадия оригинала | Python / Swift сейчас | Следствие и очередь |
 | --- | --- | --- |

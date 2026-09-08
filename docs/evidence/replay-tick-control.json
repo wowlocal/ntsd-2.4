@@ -1,0 +1,42 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real43dc50/43db40, command prefix41bdce..41be8b and checksum/recording\n41d4b7/41d5db..41d714 after freshly reproduced full loading/local/control.\nLinked probes continue prefix->local->control->received->replay tail on the\nsame World/CPU/stack. Playback buffers/settings, keys, flags and OS responses\nare declared inputs; earlier playback camera/startup/file IO, AI and later\npause/menu/gameplay are not replaced or claimed here.\n",
+  "corpus": "replay-tick-control.json",
+  "sha256": "64e37355d511b05d33b68b6418ebeba260df59378578e9530e314301c2161bac",
+  "cases": 1134,
+  "events": {
+    "readPacket": 315,
+    "writePacket": 513,
+    "readChecksum": 339,
+    "writeChecksum": 273,
+    "message": 148,
+    "inputReset": 57,
+    "restorePlayback": 28
+  },
+  "nativeComparison": "Replay tick matches original: 1134 cases, 315 packet reads /513 writes, 612 checksum operations, 148 messages, 307 connected input chains, 1673 events, 872088 records /28900704192 bytes/masks; linked 2993 control cases and complete loading. Playback startup, Windows and full match remain open",
+  "fixture": "original-replay-tick-control.json",
+  "fixtureSHA256": "12486a1b17ca1797608473196df1be699435c54cc99247a03ac232b143d32281",
+  "fixtureBytes": 2652540,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading-control.json",
+      "sha256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog-control.json",
+      "sha256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds-control.json",
+      "sha256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265"
+    },
+    "local-input": {
+      "fixture": "original-local-input-control.json",
+      "sha256": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c"
+    },
+    "input-control": {
+      "fixture": "original-input-control-control.json",
+      "sha256": "eed910a682485e2c7f495221639c9c30fdcbd0e70ba43a778d7705f3d4d6e9aa"
+    }
+  }
+}

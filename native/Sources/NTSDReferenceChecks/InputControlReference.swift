@@ -6,33 +6,33 @@ public enum InputControlReference {
         public let local: LocalInputReference.Result
         public let cases: Int, records: Int, bytes: Int, events: Int, actions: Int, sends: Int, receives: Int, messages: Int, restores: Int, resets: Int
     }
-    private struct Blob: Decodable { let count: Int, deflate: String }
-    private struct Memory: Decodable { let bytes: String, defined: String, live: Bool }
-    private struct Snapshot: Decodable {
+    struct Blob: Decodable { let count: Int, deflate: String }
+    struct Memory: Decodable { let bytes: String, defined: String, live: Bool }
+    struct Snapshot: Decodable {
         let poolBytes: String, poolMask: String, globals: String, saved: String, pointers: String, memory: [Memory]
     }
-    private struct GlobalWrite: Decodable { let address: UInt32, bytes: String }
-    private struct ActorWrite: Decodable { let slot: Int, offset: Int, bytes: String }
-    private struct WorldWrite: Decodable { let offset: Int, bytes: String }
-    private struct BufferWrite: Decodable { let index: Int, offset: Int, bytes: String }
-    private struct Stimulus: Decodable {
+    struct GlobalWrite: Decodable { let address: UInt32, bytes: String }
+    struct ActorWrite: Decodable { let slot: Int, offset: Int, bytes: String }
+    struct WorldWrite: Decodable { let offset: Int, bytes: String }
+    struct BufferWrite: Decodable { let index: Int, offset: Int, bytes: String }
+    struct Stimulus: Decodable {
         let globals: [GlobalWrite], actors: [ActorWrite], world: [WorldWrite], seats: [Int], buffers: [BufferWrite]
         let saved: [UInt8]?, pointers: [UInt32]?, live: [Bool]?, commands: [UInt8]?, playback: [UInt8]?
     }
-    private struct Platform: Decodable {
+    struct Platform: Decodable {
         let asyncResults: [Int32], ioctlResults: [Int32], ioctlBytes: [UInt8], sendResult: Int32
         let receives: [OriginalInputControlResponse], methodResult: Int32, messageResult: Int32, postResult: Int32
     }
-    private struct Event: Decodable {
+    struct Event: Decodable {
         let kind: OriginalInputControlRequest.Kind, arguments: [UInt32], data: [[UInt8]], response: OriginalInputControlResponse?
     }
-    private struct Call: Decodable { let entry: UInt32, entrySP: UInt32, returnAddress: UInt32, arguments: [UInt32], saved: [UInt32], returnSP: UInt32 }
-    private struct Case: Decodable {
+    struct Call: Decodable { let entry: UInt32, entrySP: UInt32, returnAddress: UInt32, arguments: [UInt32], saved: [UInt32], returnSP: UInt32 }
+    struct Case: Decodable {
         let label: String, stimulus: Stimulus, platform: Platform, paused: Int32, inherited: Bool
         let stackBefore: [UInt8], stackAfter: [UInt8], scratchBefore: UInt32, scratchAfter: UInt32
         let events: [Event], helperCalls: [Call], receiveCalls: [Call], control: Snapshot, controlCommands: [UInt8], menuRegister: UInt32, after: Snapshot, endPC: UInt32
     }
-    private struct Parent: Decodable { let fixture: String, sha256: String }
+    struct Parent: Decodable { let fixture: String, sha256: String }
     private struct Corpus: Decodable {
         let exeSHA256: String, control: Bool, parents: [String:Parent], worldAddress: UInt32, objectAddresses: [UInt32], actorAddresses: [UInt32]
         let bodySP: UInt32, bufferAddresses: [UInt32], initialContext: Snapshot, messages: [String:[UInt8]], cases: [Case], blobs: [String:Blob]
@@ -46,7 +46,8 @@ public enum InputControlReference {
         return try stride(from: 0,to: text.count,by: 2).map { try digit(text[$0])*16+digit(text[$0+1]) }
     }
 
-    public static func compare(control: Data, local: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(control: Data, local: Data, loading: Data, catalog: Data, sounds: Data,
+                               onNatural: ((OriginalMatchPreparation, OriginalInputControlContext, [UInt8], [UInt8], Bool, OriginalReplayTickEntry) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(control,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.worldAddress == 0x68000020, c.bodySP == 0x1000e9fc, c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -239,6 +240,9 @@ public enum InputControlReference {
                 var stack = item.stackBefore; stack.replaceSubrange(4..<14,with: commands)
                 guard stack == item.stackAfter, item.endPC == (next == .playbackChecksum ? 0x41d4b7 : 0x41d5db) else { throw error(item.label+" received result") }
                 try snapshot(state,context,item.after,item.label+" received")
+                if index == 0 {
+                    try onNatural?(state,context,commands,playback,item.paused != 0,next == .playbackChecksum ? .playbackChecksum : .recording)
+                }
             }
         })
         guard callbacks == 1 else { throw error("Missing native parent") }

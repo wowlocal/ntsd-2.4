@@ -198,7 +198,7 @@ class InputControl(LocalInput):
                     scratchBefore=scratch,scratchAfter=self.u32(self.body_sp+0x44),events=self.control_events,helperCalls=self.helper_calls,receiveCalls=self.receive_calls,
                     control=intermediate,controlCommands=control_commands,menuRegister=menu,after=self.control_snapshot(),endPC=stop)
 
-    def capture_control(self):
+    def capture_parent_control(self):
         suffix='-control' if self.control else '';parents={}
         for key,doc in zip(('initial-loading','initial-loading-catalog','initial-loading-sounds'),InitialLoading.capture(self)):
             r=json.loads((ROOT/'docs/evidence'/f'initial-loading{suffix}.json').read_bytes())[key];raw=(ROOT/'build/original'/r['corpus']).read_bytes()
@@ -210,8 +210,12 @@ class InputControl(LocalInput):
         assert transport(dict(case=natural),self.blobs)==transport(dict(case=old['cases'][0]),old['blobs'])
         parents['local-input']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256']);del raw,old
         self.install_boundaries();self.messages={};context=self.control_snapshot()
-        cases=[self.control_step('natural-phase-control',paused=int(self.control),inherited=True)]
+        natural=self.control_step('natural-phase-control',paused=int(self.control),inherited=True)
         print('Original loading/local input reproduced; natural control and received-input continuation passed',flush=True)
+        return parents,context,natural
+
+    def capture_control(self):
+        parents,context,natural=self.capture_parent_control();cases=[natural]
 
         def inputs(mask=0,network=0,phase=0,replay=0,remote=0,words=None,seats=None,receive_results=None,faults=(),weights=None,activity=None):
             values={0x450B90:phase,0x44D020:0,0x451160:0,0x450B88:replay,0x450B84:int(replay!=0),0x450B80:1,

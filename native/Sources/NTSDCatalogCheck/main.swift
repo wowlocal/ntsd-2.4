@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 8, CommandLine.arguments[1] == "--replay-tick" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try ReplayTickReference.compare(replay: values[0],control: values[1],local: values[2],loading: values[3],catalog: values[4],sounds: values[5])
+        print("Replay tick matches original: \(r.cases) cases, \(r.reads) packet reads /\(r.writes) writes, \(r.checks) checksum operations, \(r.messages) messages, \(r.chains) connected input chains, \(r.events) events, \(r.records) records /\(r.bytes) bytes/masks; linked \(r.parent.cases) control cases and complete loading. Playback startup, Windows and full match remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 7, CommandLine.arguments[1] == "--input-control" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try InputControlReference.compare(control: values[0],local: values[1],loading: values[2],catalog: values[3],sounds: values[4])

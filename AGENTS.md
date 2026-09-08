@@ -501,6 +501,43 @@ The new reference comparator checks full byte representations for speed in
 debug, with semantic Bool-array fallback if mask representations differ. It
 does not sample or rely only on hashes. Both release comparisons passed again
 after this reference-only optimization; all10 fixture hashes stayed unchanged.
+The [replay tick study](docs/research/REPLAY_TICK.md) now executes43dc50/43db40,
+prefix41bdce..41be8b and checksum/recording41d4b7/41d5db..41d714. Read it before
+extending playback or the pause/menu continuation. Both fresh loading/local/
+control parents reproduced exactly before the natural tail; native receives
+its own verified parent through InputControlReference.onNatural. Two1134-case
+passes match Swift:630 packet reads/1026 writes,1224 checksum operations,
+296 messages,114 real input resets/56 restores and614 connected input chains.
+Each pass compares872088 records/28900704192 bytes/masks, including both FULL
+buffers. All10 older fixtures stay unchanged; complete2993-case control,
+303-case local and loading native comparisons still run after the new callback.
+Prefix clears BOTH10-byte stack buffers even paused; only unpaused playback
+reads43dc50. Offset2b38+10*tick uses32-bit wrap. Owned metadata overlap is
+preserved; arbitrary globals/stack aliasing and out-of-allocation access are
+unsupported, not clamped. Checksum sums HP first20 World references only for
+activity EXACT1 with Int32 wrap, at14b8+4*(signed tick/150). At216000 this
+overwrites the first packet. Checksum error runs431c70 and conditional43df00,
+sets mode6/menu10 and clears playback flags, but does NOT clear450bdc or free.
+Recording picks its source AFTER that error path, writes packet then checksum
+BEFORE clamping tick647999. Reaching cap from below keeps recording; an old
+tick at/above cap writes first, then clears recording/messages. Paused skips
+record/counter. Explicit tick648000 writes saved flags at630bb8 before clamp.
+Two24-step chains retain tick146..169/Actor/World/settings/buffers; onlyphase
+is a new persistent-state input. Caller stack/registers are declared anew for
+each chain, whose prefix clears commands itself. The earlier phase prologue
+is outside. No AI/object child is stubbed in these
+chains: active tails are absent, and reaching such a body fails the harness.
+Playback buffers/settings and platform outputs remain declared inputs, not
+startup/file provenance. Next pause/menu after41d714 toward429730, earlier
+playback prefix/camera, file lifecycle and animated loading. Practice/W/full
+match/clean macOS remain open; this is not a whole tick or a runtime integration.
+Both replay XCTest passed in219.856s (109.519+110.337), including all five
+native parents. The first debug run was deliberately stopped after sampling
+identified repeated conversion of the same6.49MB initialization mask. Only
+ReplayTickReference now caches validated mask values per blob; every snapshot
+still compares full bytes/masks. No runtime code or fixture changed for this.
+Both final release comparisons passed again after that change; all12 fixture
+SHA and both raw corpora stayed unchanged. Release NTSDNative passed in2.56s.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
