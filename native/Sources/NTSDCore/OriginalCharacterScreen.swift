@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage }
+public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude }
 
 public struct OriginalCharacterScreenCheckpoint: Equatable, Sendable {
     public let pc: UInt32, seat: Int
@@ -13,6 +13,10 @@ public struct OriginalCharacterScreenDraw: Equatable, Sendable {
     public let bitmap: Bitmap
     public let x: Int32, y: Int32
     public let target: UInt32
+    public let frame: Int32, colorKey: UInt32
+    public init(bitmap: Bitmap, x: Int32, y: Int32, target: UInt32, frame: Int32 = -1, colorKey: UInt32 = 0) {
+        self.bitmap = bitmap;self.x = x;self.y = y;self.target = target;self.frame = frame;self.colorKey = colorKey
+    }
 }
 
 /// Common human-seat portion of429730: dispatcher429e5a, menu3 initialization,
@@ -25,7 +29,9 @@ public enum OriginalCharacterScreen {
         input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
+        includeTailCheckpoint: Bool = false,
+        selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var candidate = state
         let base = OriginalMatchPreparation.globalBase
         var local: [Int:Int32] = [0x20:0,0x28:0,0x34:0,0x38:0,0x3c:Int32(bitPattern: selectionAtEntry)]
@@ -218,7 +224,11 @@ public enum OriginalCharacterScreen {
         } else { try write(0x44d078,150) }
         let selection = try word(0x4512c8)
         try write(0x44d074,selection)
-        if (1...3).contains(selection) { return finish(.selectionStage) }
+        if (1...3).contains(selection) {
+            let exit = try selectionStage(&candidate,&local)
+            return finish(exit)
+        }
+        if includeTailCheckpoint { try mark(0x42e0b6) }
         if try word(0x44d078) <= 0 && word(0x4512c8) == 0 { try write(0x4512c8,1) }
         try mark(0x42e0d2)
         return finish(.returned)

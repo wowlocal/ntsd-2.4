@@ -209,7 +209,12 @@ probes не означают выполнение всего внешнего ц
 | `4246b0` → `41bc90` → `429e5a` | Повторный собственный World2, phase/input/round/menu | D8 вызовов [MENU_CYCLE](MENU_CYCLE.md):6 полных ret4,2 остановки перед character-selection dispatch; acquired key без подстановки Actor/menu/phase |
 | `41bcd0..41bd24`, `41bdce..41be92` | Повторный non-playback пролог и оба command buffers после завершённой загрузки | D фаз0/1/0/1, собственного подтверждения VS и отложенного отпускания; playback prefix остаётся отдельной границей |
 | `42a69e..42a6c6` | Right-navigation gate для signed sourceID/10 групп3 и5 | D собственного закрытого gate и обхода до Naruto/Sasuke; открытый gate/left/up/jump требуют дополнительных probes |
-| `42a25a..42b290`, `42e0b6..42e0d2` | Human-seat render/join/roster/team/ready, activity и countdown | D68 собственных экранов/816 внутренних checkpoints; следующий computer count42b296 ещё открыт, альтернативные modes/edge cases пока S |
+| `42a25a..42b290`, `42e0b6..42e0d2` | Human-seat render/join/roster/team/ready, activity и countdown | D68 экранов CHARACTER_SCREEN, дополнительно100 экранов MATCH_SELECTION с реальным jump/countdown; альтернативные modes/edge cases пока S |
+| `42b296..42b959` | Computer count и popup0..7; min/max, input latch, подтверждение | D собственной VS/count0 ветви [MATCH_SELECTION](MATCH_SELECTION.md); положительный CPU count и mode2/3 открыты |
+| `42b621..42b72f` | Случайный подбор всех мест с selected<0, включая неактивные | D6 списков/tagd7 на проход, общее правило type0/sourceID<30/исключение8 выбранных |
+| `42b964..42cb86` | Dispatch computer character/team; при count0 всё равно читает current seat | D собственного нулевого CPU пути; компьютерные тела остаются открытыми |
+| `42cb86..42cf8a` | Панель настроек, BG name/difficulty, input и Start | D50+50 собственных кадров через District до42cf8a; Stage/War альтернативы S |
+| `402130..4025a5` | Music selection/title; Random каждый кадр расходует417170 | D29 вызовов на проход с choice0; left/right/OFF/Stage имеют S правила, wider D открыт |
 
 ## Известные структуры: опоры для R02.1
 

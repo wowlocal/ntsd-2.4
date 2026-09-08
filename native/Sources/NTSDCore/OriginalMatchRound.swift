@@ -56,12 +56,10 @@ extension OriginalMatchPreparation {
 
     private func roundStopMusic(observe: (OriginalMatchRoundEvent) throws -> Void) throws {
         try observe(.init(.stopMusic))
-        let position = try globals.integer(at: 0x44f04c-Self.globalBase,as: UInt32.self)
-        guard position != 0 else { return }
-        let control = try globals.integer(at: 0x44f044-Self.globalBase,as: UInt32.self)
-        guard control != 0 else { throw Self.error("Round music control interface") }
-        try observe(.init(.method,[control,0x24]))
-        try observe(.init(.method,[position,0x20,0,0])) // Original binary64 +0.
+        try OriginalMusicPlayback.stop(globals: globals) { event in
+            guard event.kind == .method else { throw Self.error("Round music method") }
+            try observe(.init(.method,event.arguments));return .init()
+        }
     }
 
     private func roundSound(observe: (OriginalMatchRoundEvent) throws -> Void) throws {

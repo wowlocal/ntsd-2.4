@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own ready Naruto/Sasuke -> countdown -> zero CPUs -> District -> Start.\nFresh complete CHARACTER_SCREEN and its parents execute before the continuation\non the same CPU, stack, World, loaded catalog, resources and RNG. Only acquired\nkeyboard bytes and the inherited platform/caller boundary are supplied. Stop\nBEFORE42cf8a match prelude; native comparison and Windows output remain open.\n",
+  "corpus": "match-selection-control.json",
+  "sha256": "e57e983f4928c0b8d4c0c83296b4ce1d951e9e8b8c42cc0edb51bb0b64f65f16",
+  "bytes": 13576178,
+  "cases": 50,
+  "nativeCompared": true,
+  "nativeComparison": "Match selection matches original: own ready character parent -> 50 whole outer entries /49 complete returns, 349 draws /8987 events /1839 helpers /1513 checkpoints /601751 records /794723172 bytes+masks. Own countdown, zero CPUs and District ->42cf8a Start boundary. Preparation, app UI, full match and Windows still open",
+  "fixture": "original-match-selection-control.json",
+  "fixtureSHA256": "493c6c18911e708c7174034657c901d1bd6e5980c140bb1a9ecd959423bffeab",
+  "fixtureBytes": 3809652,
+  "parent": {
+    "fixture": "original-character-screen-control.json",
+    "sha256": "e38bed4c9cbe063fbbe2935bc9d2621685a1549eae82b1d7b2393c5e0d721cdf"
+  },
+  "returns": 49,
+  "screenEvents": 8788,
+  "screenHelpers": 1741,
+  "screenCheckpoints": 768,
+  "randomCalls": 35,
+  "formats": 61
+}

@@ -2,6 +2,14 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 12,["--match-selection","--match-selection-partial"].contains(CommandLine.arguments[1]) {
+        let complete = CommandLine.arguments[1] == "--match-selection"
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MatchSelectionReference.compare(selection: inputs[0],character: inputs[1],cycle: inputs[2],returning: inputs[3],screen: inputs[4],startup: inputs[5],menu: inputs[6],loading: inputs[7],catalog: inputs[8],sounds: inputs[9],requireComplete: complete)
+        if !complete { print("DIAGNOSTIC selection prefix matches: \(r.cases) cases, \(r.records) records /\(r.bytes) bytes+masks. Not fixture acceptance");exit(0) }
+        print("Match selection matches original: own ready character parent -> \(r.cases) whole outer entries /\(r.returns) complete returns, \(r.draws) draws /\(r.events) events /\(r.helpers) helpers /\(r.checkpoints) checkpoints /\(r.records) records /\(r.bytes) bytes+masks. Own countdown, zero CPUs and District ->42cf8a Start boundary. Preparation, app UI, full match and Windows still open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 11,["--character-screen","--character-screen-partial"].contains(CommandLine.arguments[1]) {
         let complete = CommandLine.arguments[1] == "--character-screen"
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

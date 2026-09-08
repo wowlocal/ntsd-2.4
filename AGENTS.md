@@ -1277,6 +1277,45 @@ rules but need wider D. WinMain five menu-sound loads are still S; initial
 slots remain0 in this chain. App UI/full match/Windows/full-game goal stay open.
 
 
+The [own match selection](docs/research/MATCH_SELECTION.md) now continues
+CHARACTER_SCREEN's own complete return through countdown/jump, zero computers,
+VS settings/District and Start BEFORE42cf8a. Both fresh50-frame passes match
+native:100NEW whole4246b0 entries/98whole nested returns/2prelude boundaries,
+3026checkpoints/16840events/3516helpers,1203502records/1589446344bytes+masks.
+Only acquired keyboard bytes from own control.txt are supplied; no countdown/
+selection/Actor/menu/RNG stimuli. All full34-frame character and earlier parents
+are revalidated. Native OriginalMatchSelection composes the existing human
+screen, bitmap/text/fill/sound, generic random roster and continueMenu.
+The same roster candidate method now serves old continuation and computer-count
+confirmation: inactive seats also consume RNG and exclude their selected ordinal.
+Each pass has6tagd7 draws followed by29tag1 music draws.402130 Random consumes
+RNG EVERY settings frame, even without input. OriginalMusicConfiguration retains
+path/label tails; OFF/Stage/manual choices have S rules and need wider D.
+OriginalMusicPlayback.stop factors the previously verified round402100 helper.
+Computer count D is min0/max6/confirmation0; positive CPUs, alternate modes and
+other selector edges remain explicit open domains, not missing-character hacks.
+Current native runner rejects unconnected CPU bodies and reselection/reroll
+caller locals. Those old standalone commands remain implemented/verified.
+Source prefix fill observer now accepts an optional validated rectangle;
+new caller checks four popup borders by returnPC/ESI. Both first diagnostics
+stopped there after18 complete new frames; both full retries re-executed ALL
+parents and50 frames. No expected snapshots or Core rules were changed to
+hide that failure. Both18-frame native diagnostic prefixes also matched.
+CharacterScreenReference.compareCases/onLast preserves the whole old comparison;
+raw UInt32 locals decode as signed, including+28=-1. Five old release tests
+passed77.301s/build91.95s; two new tests35.904s/build90.17s, total7checks/113.205s.
+Release CatalogCheck92.61s, acceptance build88.05s, finalNTSDNative34.23s.
+All source/SwiftPM/comparison jobs terminal. All102old fixture hashes unchanged;
+new SHA/size/full raw-packed JSON equality checked,104pins at
+build/research/match-selection-fixture-pins.json. Last OWN42cf8a: World2/menu1/
+mode0,selection3,option0,CPU0,District0/random0,countdown-53,pulse24; selected
+17,21,24,38,39,32,22,36, only first2status3/activity1/team0; phase0attack held,
+latches1/0. RNG index35/counter35, choice0/lastpath bgm\boss2.wma. Continue this
+own state through prelude, full preparation with enabled4025b0->402020,43d2c0,
+whole return and next full outer gameplay entry. Do not disable music or reset
+RNG/selection to bypass missing composition. App UI/first full match/Windows/
+clean macOS and the full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

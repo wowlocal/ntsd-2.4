@@ -49,6 +49,15 @@ public enum OriginalMusicPlayback {
         return try request(.init(.method,[resource,offset]+args,strings)).result
     }
 
+    /// Whole402100: a missing position interface skips both calls. HRESULTs
+    /// are ignored; seek receives the original binary64 positive zero.
+    public static func stop(globals: OriginalStateRecord, request: Request) throws {
+        let position = try word(globals,0x44f04c)
+        guard position != 0 else { return }
+        try method(word(globals,0x44f044),0x24,request: request)
+        try method(position,0x20,[0,0],request: request)
+    }
+
     /// Whole401d30, shared by track replacement and application shutdown.
     public static func release(globals: inout OriginalStateRecord, request: Request) throws {
         var state = globals

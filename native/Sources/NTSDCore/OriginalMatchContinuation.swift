@@ -8,6 +8,16 @@ public enum OriginalMatchContinuationEvent {
 }
 
 extension OriginalMatchPreparation {
+    /// Shared42b660/42ca80/42d840/42dfd0 roster rule. Rebuild after each seat;
+    /// inactive selections also exclude their ordinals. Source IDs are signed.
+    func randomRosterCandidates() throws -> [Int] {
+        let selected = try Set((0..<8).map { try global(0x451248+$0*4) })
+        return try catalog.objects.indices.dropFirst().filter { ordinal in
+            let object = catalog.objects[ordinal].header
+            return try object.integer(at: 0x6f8, as: Int32.self) == 0
+                && object.integer(at: 0x6f4, as: Int32.self) < 30 && !selected.contains(Int32(ordinal))
+        }
+    }
     /// Original 42d704..42e0d2 state effects. Confirmation is the original menu
     /// stack local, not a newly interpreted keyboard action. Native execution
     /// needs no SEH/cookie wrapper; the oracle separately checks the real return.
@@ -42,14 +52,6 @@ extension OriginalMatchPreparation {
         func sound() throws {
             try OriginalMatchPrelude.confirmationSound(in: globals) { try observe(.device($0)) }
         }
-        func choices() throws -> [Int] {
-            let selected = try Set((0..<8).map { try global(0x451248+$0*4) })
-            return try catalog.objects.indices.dropFirst().filter { ordinal in
-                let object = catalog.objects[ordinal].header
-                return try object.integer(at: 0x6f8, as: Int32.self) == 0
-                    && object.integer(at: 0x6f4, as: Int32.self) < 30 && !selected.contains(Int32(ordinal))
-            }
-        }
         if confirmation != 0 {
             if action == 4 {
                 var difficulty = try global(0x450c30) &- 1
@@ -74,7 +76,7 @@ extension OriginalMatchPreparation {
             guard (0..<count).contains(background) || background == 99 else { throw Self.error("Continuation arena") }
             try setGlobal(0x44d024, background)
             for seat in 0..<8 {
-                let candidates = try choices()
+                let candidates = try randomRosterCandidates()
                 guard !candidates.isEmpty else { throw Self.error("Empty random roster requires original stack scratch provenance") }
                 try observe(.candidates(seat: seat, ordinals: candidates))
                 let ordinal = candidates[Int(try draw(0xe1, Int32(candidates.count)))]
@@ -165,7 +167,7 @@ extension OriginalMatchPreparation {
             if action == 2 {
                 try sound()
                 for seat in 0..<8 where try global(0x451228+seat*4) != 0 {
-                    let candidates = try choices()
+                    let candidates = try randomRosterCandidates()
                     guard !candidates.isEmpty else { throw Self.error("Empty random roster requires original stack scratch provenance") }
                     try observe(.candidates(seat: seat, ordinals: candidates))
                     let ordinal = candidates[Int(try draw(0xea, Int32(candidates.count)))]

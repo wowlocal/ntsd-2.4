@@ -30,6 +30,8 @@ from unicorn.x86_const import UC_X86_REG_EAX,UC_X86_REG_EBP,UC_X86_REG_ECX,UC_X8
 HELPERS=BODY_HELPERS|{0x415160:0,0x431C70:0}
 
 class CharacterScreen(MenuCycle):
+ character_stops={0x42E0D2:'returned',0x42B296:'selectionStage',0x42B964:'selectionStage',0x438B40:'selectionStage'}
+ def character_extra_code(self,uc,pc,size,data):return False
  def imported(self,uc,pc,size,data):
   if not getattr(self,'character_running',False):super().imported(uc,pc,size,data)
  def checkpoint(self,uc,pc,size,data):
@@ -57,11 +59,9 @@ class CharacterScreen(MenuCycle):
    c=self.character_pending.pop();assert sp==c['entrySP']+4+c['pop'] and c['saved']==[uc.reg_read(r) for r in REGISTERS]
    c.update(returnSP=sp,result=uc.reg_read(UC_X86_REG_EAX));self.character_helpers.append(c)
   if pc in (0x42A114,0x42A1BE,0x42A25A,0x42B246,0x42E0D2):self.character_checkpoints.append(self.character_checkpoint(pc))
-  if pc==0x42E0D2:
+  if pc in self.character_stops:
    assert not self.character_pending and not e.body_pending and e.prefix_return is None
-   self.character_end='returned';uc.emu_stop();return
-  if pc in (0x42B296,0x42B964,0x438B40):
-   self.character_end='selectionStage';uc.emu_stop();return
+   self.character_end=self.character_stops[pc];uc.emu_stop();return
   if pc in HELPERS:self.character_pending.append(dict(entry=pc,entrySP=sp,returnPC=self.u32(sp),pop=HELPERS[pc],saved=[uc.reg_read(r) for r in REGISTERS]))
   if pc==0x415160:self.start_prefix(pc,sp)
   if e.prefix_return is not None:
@@ -78,6 +78,7 @@ class CharacterScreen(MenuCycle):
    FrontScreenBody.code(e,uc,pc,size,data)
    if not e.body_pending:e.loading_draw_return=None
    return
+  if self.character_extra_code(uc,pc,size,data):return
   assert any(a<=pc<=b for a,b in [(0x429E5A,0x42B295),(0x42B94D,0x42B95F),(0x42E0B6,0x42E0D2),(0x431C70,0x431D09)]),hex(pc)
  def character_step(self,label):
   self.position(0x429E5A);assert self.u32(0x44D020) in (1,3)

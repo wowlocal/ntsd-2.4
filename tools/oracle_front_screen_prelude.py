@@ -83,7 +83,7 @@ class FrontScreenPrelude(SettingsLoading):
         if address in HELPERS:
             self.calls_pending.append(dict(entry=address,entrySP=sp,returnPC=self.u32(sp),pop=HELPERS[address],saved=[uc.reg_read(r) for r in REGISTERS]))
         if address==0x415160:
-            assert [arg(i) for i in range(5)]==[0,0,794,550,self.input.get('fillColor',0x10206C)]
+            assert [arg(i) for i in range(5)]==(getattr(self,'prefix_fill_arguments',None) or [0,0,794,550,self.input.get('fillColor',0x10206C)])
             self.fill_effects=sp-100;self.fill_backing=self.blob(uc.mem_read(self.fill_effects,100));self.fill_mask=[False]*100
         if address==0x43F010:
             self.current_bitmap=uc.reg_read(UC_X86_REG_ECX)
