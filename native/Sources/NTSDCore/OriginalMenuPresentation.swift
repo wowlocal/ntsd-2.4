@@ -44,6 +44,22 @@ public enum OriginalMenuPresentationEntry: String, Codable, Sendable {
 /// Shared 4246b0 presentation/return, and its exact World+0==1 branch.
 /// Rendering, COM/GDI and allocator IO are explicit requests. No Windows runtime.
 public enum OriginalMenuPresentation {
+    /// 43e940 is shared by startup, menus and the match display path.
+    public static func presentSurface(globals: OriginalStateRecord,
+                                      observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
+        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Present globals extent") }
+        func word(_ address: Int) throws -> UInt32 { try globals.integer(at: address-OriginalMatchPreparation.globalBase, as: UInt32.self) }
+        let mode = try word(0x458348)
+        if mode == 1 || mode == 2 {
+            let resource = try word(mode == 1 ? 0x453e0c : 0x455634)
+            guard resource != 0 else { throw OriginalStateError.invalidStorage("Null flip surface") }
+            try observe(.init(.method, [resource, 0x2c, 0, 1]))
+        } else if mode == 3 {
+            let resource = try word(0x455634), start = 0x453ccc-OriginalMatchPreparation.globalBase
+            guard resource != 0 else { throw OriginalStateError.invalidStorage("Null blit destination") }
+            try observe(.init(.method, [resource, 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [Array(globals.bytes[start..<(start+16)])]))
+        }
+    }
     public static func apply(_ entry: OriginalMenuPresentationEntry, input: OriginalMenuPresentationInput,
                              world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
                              memory: inout OriginalMenuPresentationMemory,
@@ -179,16 +195,7 @@ public enum OriginalMenuPresentation {
             }
         }
         func present(_ observe: Observer) throws {
-            switch try word(0x458348) {
-            case 1: try method(word(0x453e0c), 0x2c, [0, 1], observe)
-            case 2: try method(word(0x455634), 0x2c, [0, 1], observe)
-            case 3:
-                let start = 0x453ccc-OriginalMatchPreparation.globalBase
-                let rect = Array(globals.bytes[start..<(start+16)])
-                guard try word(0x455634) != 0 else { throw error("Null blit destination") }
-                try observe(.init(.method, [word(0x455634), 0x14, 0x453ccc, word(0x455608), 0, 0x1000000, 0], [rect]))
-            default: break
-            }
+            try OriginalMenuPresentation.presentSurface(globals: globals, observe: observe)
         }
         mutating func shutdown(_ observe: Observer) throws {
             // 4019b0 gates both lists on the audio device; only that device

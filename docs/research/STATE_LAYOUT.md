@@ -293,6 +293,18 @@ sizeof(entry) или нормализации чисел в указатели. 
 | `455608/455634/453e0c`, `453ccc` | Surface tokens и16 bytes rect; overlay использует455608 независимо от переданного ему аргумента |
 | `4588a8/4588ac` | Два внешних к ordinary globals UInt32 replay allocation pointers;43d2a0 освобождает и очищает каждый, не сбрасывая notice flags |
 
+Дополнение [загрузки WAV и общих звуков](WAVE_LOADING.md), D против native:
+
+| Globals / запись | Тип и действие |
+| --- | --- |
+| `44d05c` | Int32 first-load selector: exact1 выбирает41be98. В bounded sound caller сохраняется1, как и в прежнем конечном presentation/replay state. S: обнуление только41c577 после каталога, пула и10 UI bitmap |
+| `451db0`,18 dword; `45843c` | UInt32 buffer tokens общих звуков в фиксированном EXE-порядке. После18 вызовов count всегда18, даже при отключённом устройстве или ошибке файла |
+| `457588`,1600 bytes; `453e10`,320 bytes | Целиком обнуляются перед первой загрузкой WAV; другие globals сохраняются, кроме выходных sound slots/count |
+| `44eecc` / destination slot | При device0 WAV helper возвращает1 и сохраняет прежний slot. Иначе сразу очищает slot; успех записывает предоставленный buffer pointer, обычная ошибка оставляет0 |
+| WAVEFORMATEX,18 bytes | Первые16 берутся из format payload; последние2 равны low16(destination) из перекрытого сохранённого this. Все байты определены, cbSize не нормализуется |
+| DSBUFFERDESC,36 bytes | size36, flagsE0, payload size, stack format pointer; остальные поля0. Только проверенный целый pointer+16 нормализуется; прочие байты сохраняются |
+| Temporary PCM allocation | Размер data.cksize; при коротком/неуспешном чтении остаётся live с фактической маской записей. Успех освобождает после Unlock; create failure освобождает и достигает отдельной неподдержанной границы продолжения |
+
 ## Снимок: что сохраняется и что пока неизвестно
 
 [oracle_state_trace.py](../../tools/oracle_state_trace.py) повторяет шесть случаев

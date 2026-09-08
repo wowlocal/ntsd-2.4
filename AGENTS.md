@@ -279,6 +279,33 @@ Core and reference callbacks compose the same native state, not expected
 snapshots. Older fixtures are unchanged. Next recover screen/offset/resources
 and the World2/41bc90 menu path to429730, then R01.2 with full provenance.
 This remains separate from Practice and does not prove full startup or W.
+The [WAV loading study](docs/research/WAVE_LOADING.md) now executes4014e0 for
+all409 original WAVs and22 controls, plus the real initial-sound caller
+41be98..41bfeb in3 passes/54 child calls. Native OriginalWaveLoader and
+OriginalInitialSoundLoading match75829038 bytes/masks,6982 ordered events,
+93 restores,13 messages,2 retained short-read allocations and2 explicit invalid
+create continuations. Read it before extending sound or first loading.
+MMIO/COM/allocator outputs are supplied boundaries, not Windows DLL execution.
+Format read requests18 even for the100 fmt16 files. Descend-format flags0
+means next chunk, not a fmt search. WAVEFORMATEX cbSize overlaps saved this:
+copy low16(destination), never zero it or treat it as unknown padding.
+Any nonzero CreateSoundBuffer result frees payload then falls through toward
+Lock; the recovered domain stops at40187a, not a fabricated return0/1.
+Data short reads leak the payload; final Lock/Restore/Unlock results are ignored.
+Only88780096 triggers Restore and one retry. Source PCM bytes stay unchanged.
+The initial caller draws45118c, clears1600 bytes457588 and320 bytes453e10,
+loads18 fixed paths into451db0+4*i, writes45843c=18 and presents through the
+same43e940 native method as menus. No device preserves old slots; ordinary
+file failures leave slot0 and do not stop the caller. Global state after every
+real child ret4, full records/masks and ABI are compared. Entry context remains
+supplied, and41bfeb leaves the present argument on the stack for later cleanup.
+Crucially44d05c is still1 in the earlier presentation/preparation/replay corpus.
+Do not clear it by hand to enter a full tick. First41bc90 must load18 sounds,
+catalog,400 Actors and10 UI bitmaps before41c577 clears it. Next recover those
+10 bitmap allocations/constructors41c2f5..41c55e and join the whole loading path.
+The existing full catalog uses disabled audio; connect enabled Object-registry
+sound calls410a48/410a65 to this shared loader in a subsequent joined corpus.
+This stage adds no playable coverage, mixer, Windows output or clean-macOS proof.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -315,6 +342,10 @@ The presentation stage passed two targeted tests in249.281s: new tail/World1
 chain132.072s and historical MainMenu117.209s. Both packed a5/ramp comparisons
 passed before acceptance; older fixtures unchanged. Release NTSDNative passed
 in2.53s. This does not increase verified Practice gameplay or close R01.2/W.
+The WAV stage passed two targeted tests in150.419s: all409 WAVs plus initial
+sound loading21.556s, historical presentation/full parent chain128.863s.
+Release comparison passed before accepting the new fixture; existing fixtures
+are unchanged. Release NTSDNative passed in2.30s. No playback claim follows.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

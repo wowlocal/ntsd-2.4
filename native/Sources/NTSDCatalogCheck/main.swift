@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--wave-loader" {
+        let result = try WaveLoaderReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Wave loader matches original: \(result.sources) source WAVs, \(result.cases) cases, \(result.startupPasses) startup passes / \(result.startupLoads) real child loads, \(result.bytes) bytes/masks, \(result.events) events, \(result.restores) restores, \(result.messages) messages, \(result.leaks) retained short-read allocations, \(result.invalidContinuations) invalid create continuations")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--menu-presentation" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
