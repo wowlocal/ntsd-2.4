@@ -26,13 +26,14 @@ REGISTERS=[UC_X86_REG_EBX,UC_X86_REG_EBP,UC_X86_REG_ESI,UC_X86_REG_EDI]
 
 
 class SoundCatalog(LoadedCatalog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, uc=None, second_pointer=SECOND):
+        super().__init__(uc=uc)
         # This hook precedes the wave's temporary instruction hook, so caller
         # return disables wave-domain checking before execution resumes there.
         for pc in (0x4014E0,0x40BE1D,0x410A4D):self.uc.hook_add(UC_HOOK_CODE,self.sound_call,begin=pc,end=pc)
-        self.wave=WaveLoader(uc=self.uc);self.sound_calls=[];self.sound_sources={};self.sound_pending=None;self.wave_hooks=[]
-        self.put(0x44EECC,DEVICE);self.put(VTABLE+0x3C,STOP+0xB00)
+        self.wave=WaveLoader(uc=self.uc,second_pointer=second_pointer);self.sound_calls=[];self.sound_sources={};self.sound_pending=None;self.wave_hooks=[]
+        if uc is None:self.put(0x44EECC,DEVICE)
+        self.put(VTABLE+0x3C,STOP+0xB00)
         self.uc.hook_add(UC_HOOK_CODE,self.sound_volume,begin=STOP+0xB00,end=STOP+0xB00)
         for pc in (0x4450A6,0x4450C2):self.uc.hook_add(UC_HOOK_CODE,self.wave_crt,begin=pc,end=pc)
 
@@ -52,11 +53,12 @@ class SoundCatalog(LoadedCatalog):
             assert destination==0x452948+index*4
             path=self.cstr(self.u32(sp+4));raw=(DEFAULT_SOURCE/path.decode('latin1').replace('\\','/')).read_bytes()
             kind={0x40BE1D:'weapon',0x410A4D:'frame'}[self.u32(sp)]
-            w.path=path;w.raw=raw;w.p=platform(raw,index,destination=destination);w.wave_entry_sp=sp
+            w.path=path;w.raw=raw;w.p=platform(raw,index,destination=destination,device=self.u32(0x44EECC));w.wave_entry_sp=sp
+            if w.p['secondPointer']:w.p['secondPointer']=w.second_pointer
             w.put(w.p['buffer'],VTABLE)
             w.regions={};w.events=[];w.device_format=w.descriptor=None;w.descents=w.reads=w.locks=0;w.stack_mask=bytearray(0x10000)
             w.region('first',FIRST,w.p['firstCount'])
-            if w.p['secondPointer']:w.region('second',SECOND,w.p['secondCount'])
+            if w.p['secondPointer']:w.region('second',w.p['secondPointer'],w.p['secondCount'])
             self.sound_pending=dict(index=index,kind=kind,path=list(path),file=w.blob(raw),input=w.p,
                 beforeGlobals=w.blob(uc.mem_read(GLOBAL,GLOBAL_SIZE)),outputBefore=self.u32(destination),
                 cacheBefore=w.blob(uc.mem_read(0x455638,0x2E00)),entrySP=sp,returnAddress=self.u32(sp),

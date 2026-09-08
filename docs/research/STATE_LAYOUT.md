@@ -712,3 +712,19 @@ printf count. Полный FILE/CRT lifetime остаётся открытым. 
 задаётся перед body как raw input и проверяется после его записей. Проходы без
 body не объявляют полный caller scratch восстановленным. Partial state после
 null FILE сохранено; следующий probe — новый внешний caller, не Windows SEH recovery.
+
+Дополнение [меню→первая загрузка](MENU_LOADING.md), S/D:
+
+| Состояние | Проверенный переход |
+| --- | --- |
+| World22000020 | Собственный constructor/menu World2 продолжается41bc90; указатели catalog/400 Actor записаны исходными загрузчиками, без нового World |
+| ESP1000eff8 | Реальный return424746 и argument28002020; пролог41bc90 выравнивает стек к body1000e9bc |
+| `44eecc/453e0c/455634/458348` | До первого меню объявлены audio/surfaces28002020 и mode1/3. Они сохраняются до common loading и каталога |
+| `45118c` | Реальный ранний MENU_WAIT в41bea9; сохранены count+0c, raw reads, clip, ret24/EAX. A5:1 Blt; ramp:2 Blt |
+| `452948+4*index` | Каждый из400 новых registry outputs получает собственное before-значение исходного меню; общий звук не очищает эти слова. Native связывает также прежний44eecc с каждым WAV input |
+| Ранние bitmap | Все26 records/liveness неизменны после loading; текущий фон уже dead, старый фон live. Новые10 UI wrappers принадлежат загрузчику отдельно |
+| World mask | Один общий tracker конструктора/меню/loading. Присоединение наблюдателей не обнуляет bytes или provenance |
+
+Загрузчик Native получает World/globals от своего проверенного раннего
+dispatcher. Raw after snapshots только проверяются. Frozen timer/file/scanner/
+COM boundaries сохранены; полный41bc90 ret и Windows lifecycle остаются открытыми.

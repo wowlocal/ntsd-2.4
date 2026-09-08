@@ -1046,6 +1046,47 @@ Six targeted XCTest passed in17.337s: new loop7.122s, historical completion
 7.552s, historical prefix2.663s. Release NTSDNative passed in2.48s. SwiftPM
 commands were sequential; all processes were terminal before the milestone.
 
+The [early-menu to loading composition](docs/research/MENU_LOADING.md) now
+continues the same menu World2/stack/CPU at actual424741/41bc90 through41c581.
+Both fresh119-menu-call chains match native before/after loading:36common/
+800registry WAVs,274Objects,816Actor/20UI constructors,363365426bytes+masks
+after the menu parent. MENU_WAIT now executes actual43f010/43ef70 with its
+retained early bitmap, including ret24/EAX and1/2Blt for A5/ramp.26early bitmap
+records per pass (one dead), CRT and replay pointers remain owned; the10new UI
+records belong to OriginalInitialLoading separately. Do not free old wrappers
+when a later UI global replaces their reference unless the EXE actually does.
+Read the study before changing attached loading observers. Constructors/Objects/
+LoadedCatalog/SoundCatalog/InitialLoading accept an existing UC without resetting
+PE/stack/World/globals. The existing World's mask is shared. Parent inactive
+code/memset observers yield to the new loading domain. Audio second segment
+uses2d000020:28000020 overlaps early bitmap memory,2c000020 overlaps panel memory.
+OriginalWaveLoader.prefix_draw optionally executes the real early bitmap child;
+default standalone capture retains its old opaque drawing boundary. Real audio/
+presentation device tokens are declared BEFORE the first early resources and
+retained through loading; attaching observers asserts unchanged registers,
+entire stack, World/globals, early resources and CRT. Windows device creation
+is not implied. The catalog keeps its old declared scanner VM boundary.
+FrontMenuLoopReference.onLoading exposes its own checked native World/globals/
+CRT/ownership. InitialLoadingReference.initialState bypasses standalone World2
+construction and uses those records. The new bridge additionally binds every
+registry WAV device/output-before to its own initial globals. No expected
+after-state supplies the continuation. Native shared loading rules are unchanged.
+Both new raw and packed sets passed before acceptance. Historical primary
+initial-loading/catalog/sounds and all blobs reproduced exactly;431old WAV
+cases/3initial passes and every blob also reproduced. The first historical
+comparison needed JSON normalization of Python globalWrites tuples; after
+correcting the check, a complete fresh replay matched. Four old XCTest passed
+in175.906s (loop7.691s,initial-loading168.215s). Next continue this combined
+state after41c581 through input/round/menu; frozen progress/animated4242e0,
+full41bc90 return/held clear424746, remaining selectors, app integration and
+Windows remain open. R02.1/R01.2/full-game goal are not complete.
+Two new joined XCTest passed in168.500s; with the four old tests,6checks/
+344.406s passed. All82previous fixture hashes are unchanged. All8new raw/
+packed SHA/length/full-unpack checks passed, including declared catalog
+transport filtering;90fixture pins at build/research/menu-loading-fixture-pins.json.
+Release NTSDNative passed in0.17s. No SwiftPM or source-capture process remained
+active before the milestone commit.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

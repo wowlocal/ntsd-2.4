@@ -1,0 +1,39 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh early menus -> actual424741/41bc90 -> full initial loading41c581.\nOne game CPU/stack/World and retained early resources. New observers attach\nwithout replacing PE globals, registers, stack, World or loaded resources.\nCommon MENU_WAIT uses its real early bitmap/clip children through COM; the\nwhole source catalog,18+400 WAVs,400-slot pool and10 UI constructors follow.\nFile/CRT/device/clock/allocator inputs are explicit. No Windows/full-match claim.\n",
+  "nativeCompared": true,
+  "menu-loading": {
+    "corpus": "menu-loading-control.json",
+    "sha256": "f065c3015a21d8593f19ff90e0cccb05c2eefc8dac4167531a5327baefb4d002",
+    "bytes": 13271528,
+    "fixture": "original-menu-loading-control.json",
+    "fixtureSHA256": "54334dd243f5c24ee52e47d386e07a214bc76dff209c30c1d954276ead7b6efd",
+    "fixtureBytes": 6570704
+  },
+  "menu-loading-state": {
+    "corpus": "menu-loading-state-control.json",
+    "sha256": "060d0f0b6c096b67b49272ae74d2ac9b90d333d4ed48ecc5efcdab2b9250797c",
+    "bytes": 2334854,
+    "fixture": "original-menu-loading-state-control.json",
+    "fixtureSHA256": "ec76d7eaa3ae05231c8b03660bb219bfe7f81b6ece7ac35f8ba105c4fdf3e47e",
+    "fixtureBytes": 1180315
+  },
+  "menu-loading-catalog": {
+    "corpus": "menu-loading-catalog-control.json",
+    "sha256": "d8644e3eb1b3ae1353c480ac5b15444b4a152aef392339ed175afb6b7dcc73c2",
+    "bytes": 95291059,
+    "fixture": "original-menu-loading-catalog-control.json",
+    "fixtureSHA256": "24d3d4ba6c5d238c18880a494b4b68e1a8968a47b01dd18e953c3bd505c1627a",
+    "fixtureBytes": 4793983
+  },
+  "menu-loading-sounds": {
+    "corpus": "menu-loading-sounds-control.json",
+    "sha256": "7e96f9ee522e034569c4e59225508c0d90238c99faefe057e77f8af61fdfe963",
+    "bytes": 51166992,
+    "fixture": "original-menu-loading-sounds-control.json",
+    "fixtureSHA256": "37ea6643bab721478160b4ee7d413a7512a27efd863260a5aa86c490daffe0ee",
+    "fixtureBytes": 50330096
+  },
+  "nativeComparison": "Menu to loading matches original: 119 menu calls /547 phases -> 18+400 WAVs /137 Objects /408 Actor /10 UI constructors; common bitmap 1 draws /10 reads /2 clips /2 blits /3 helper returns; 28 retained records /256568 retained +3152264 loading +66210142 audio +112063739 catalog bytes/masks; checksum 31475378. Same own World/globals/resources across the loading caller; full loading return, app UI and Windows open"
+}

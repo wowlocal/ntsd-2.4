@@ -35,6 +35,8 @@ public enum InitialLoadingReference {
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Initial loading reference: \(message)") }
 
     public static func compare(loading: Data, catalog: Data, sounds: Data,
+                               initialState: (world: OriginalStateRecord, globals: OriginalStateRecord)? = nil,
+                               onCommonEvent: (OriginalInitialSoundEvent) throws -> Void = { _ in },
                                onLoaded: (OriginalInitialLoading) throws -> Void = { _ in }) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(loading))
         let identity = try JSONDecoder().decode(CatalogIdentity.self, from: MatchPreparationReference.unpack(catalog))
@@ -91,14 +93,20 @@ public enum InitialLoadingReference {
                 try check(actual.actors[i],actor,"Actor\(i)")
             }
         }
-        guard let initialWorld = c.worldBefore.initial else { throw error("World allocator input") }
-        var world = try OriginalStateRecord.worldPrefix(over: blob(initialWorld))
-        try world.write(Int32(2),at: 0) // Explicit outer selector; preceding menu transition is a separate corpus.
+        var world: OriginalStateRecord
+        if let initialState { world = initialState.world }
+        else {
+            guard let initialWorld = c.worldBefore.initial else { throw error("World allocator input") }
+            world = try OriginalStateRecord.worldPrefix(over: blob(initialWorld))
+            try world.write(Int32(2),at: 0) // Explicit standalone caller; joined callers supply their own World.
+        }
         try check(world,record(c.worldBefore),"World constructor")
         let actorBacking = try c.allocated.actors.map { item -> [UInt8] in
             guard let initial = item.initial else { throw error("Actor allocator input") }; return try blob(initial)
         }
-        let before = try state(blob(c.beforeGlobals))
+        let before: OriginalStateRecord
+        if let initialState { before = initialState.globals;try global(before,c.beforeGlobals,"Own preceding menu globals") }
+        else { before = try state(blob(c.beforeGlobals)) }
         var commonEvents: [OriginalInitialSoundEvent] = [], progressEvents: [OriginalLoadingProgressEvent] = [], interfaceEvents: [OriginalInterfaceEvent] = []
         var comparison: CatalogSoundsReference.Result?, timerIndex = 0
         let timerInputs = c.progressCalls.filter { $0.kind == .timeGetTime }.map(\.returned)
@@ -150,7 +158,7 @@ public enum InitialLoadingReference {
                 let point = c.interface.checkpoints[i]
                 guard point.slot == OriginalInitialInterfaceLoading.slots[i], point.value == c.interface.allocations[i].address else { throw error("Interface global store") }
                 try global(globals,point.globals,"Interface globals\(i)")
-            }, observeCommon: { commonEvents.append($0) }, observeProgress: { progressEvents.append($0) }, observeInterface: { interfaceEvents.append($0) })
+            }, observeCommon: { commonEvents.append($0);try onCommonEvent($0) }, observeProgress: { progressEvents.append($0) }, observeInterface: { interfaceEvents.append($0) })
         try global(native.globals,c.afterGlobals,"Final globals")
         guard timerIndex == timerInputs.count, commonEvents == c.common.events, progressEvents == c.progressCalls,
               interfaceEvents == c.interface.events, native.commands == c.commands, native.paused == (c.paused == 1),

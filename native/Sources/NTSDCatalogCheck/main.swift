@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 6,CommandLine.arguments[1] == "--menu-loading" {
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MenuLoadingReference.compare(menu: inputs[0],loading: inputs[1],catalog: inputs[2],sounds: inputs[3])
+        print("Menu to loading matches original: \(r.menu.cases) menu calls /\(r.menu.phases) phases -> \(r.loading.commonLoads)+\(r.loading.catalog.calls) WAVs /\(r.loading.catalog.catalog.objects) Objects /\(r.loading.poolConstructors) Actor /\(r.loading.interfaceConstructors) UI constructors; common bitmap \(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits /\(r.helpers) helper returns; \(r.records) retained records /\(r.bytes) retained +\(r.loading.bytes) loading +\(r.loading.catalog.bytes) audio +\(r.loading.catalog.catalog.bytes) catalog bytes/masks; checksum \(r.loading.catalog.catalog.checksum). Same own World/globals/resources across the loading caller; full loading return, app UI and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-menu-loop" {
         let r = try FrontMenuLoopReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Front menu loop matches original: \(r.cases) calls /\(r.phases) phases /\(r.returns) returns /\(r.boundaries) boundaries /\(r.loading) loading entries; \(r.bodies) bodies /\(r.main) main menus /\(r.tails) tails /\(r.worldOne) World1 transitions; \(r.helpers) helper returns /\(r.events) events, \(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits /\(r.fills) fills; \(r.constructors) constructors /\(r.frees) frees /\(r.tables) RNG tables /\(r.random) actual DLL draws; \(r.settings) settings calls /\(r.settingsReturns) returns /\(r.settingsEvents) writer events /\(r.prints) fprintf /\(r.fileWrites) writes /\(r.failedWrites) failed or short; \(r.records) records /\(r.bytes) bytes/masks, own first return \(r.parent.cases). Loading body, other selectors, app UI and Windows remain open")

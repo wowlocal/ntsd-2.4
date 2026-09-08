@@ -39,9 +39,9 @@ id: 5 type: 0 file: chars\sasuke.dat <object_end>
 
 
 class LoadedCatalog(Objects):
-    def __init__(self, pattern=0xA5, text_mode=True):
+    def __init__(self, pattern=0xA5, text_mode=True, uc=None):
         super().__init__(pattern=pattern, text_mode=text_mode, use_crt=True, capacity=137,
-                         retain_opaque_frames=True, raw_frames=False)
+                         retain_opaque_frames=True, raw_frames=False, uc=uc)
         self.uc.mem_map(CATALOG & ~0xFFF, (CATALOG_SIZE + 0x20 + 16 + 4095) & ~4095)
         self.catalog = self.add_region(CATALOG, CATALOG_SIZE, 'catalog')
         for hook, callback in [(UC_HOOK_MEM_READ, self.track_read), (UC_HOOK_MEM_WRITE, self.track_write)]:

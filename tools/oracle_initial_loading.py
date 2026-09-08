@@ -16,6 +16,7 @@ from oracle_catalog_sounds import SoundCatalog, REGISTERS, pack
 from oracle_loaded_catalog import CATALOG, CATALOG_SIZE
 from oracle_objects import BITMAP_SIZE, DEVICE as GRAPHICS, STUB
 from oracle_wave_loader import GLOBAL, GLOBAL_SIZE, SURFACE, digest
+from oracle_wave_loader import SECOND
 from oracle_state import STACK, STOP, ACTOR_SIZE, WORLD_PREFIX
 from oracle_initial_interface import STORES, SLOTS
 from unicorn import UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE
@@ -34,13 +35,19 @@ def transport(doc, blobs):
 
 
 class InitialLoading(SoundCatalog):
-    def __init__(self, control=False):
-        super().__init__()
+    def __init__(self, control=False, uc=None, existing_world=None, second_pointer=SECOND):
+        super().__init__(uc=uc,second_pointer=second_pointer)
         self.phase='world';self.control=control;self.pool=[];self.actor_calls=[];self.ui_allocations=[];self.ui_inputs=[];self.ui_events=[];self.ui_calls=[];self.ui_pending=None;self.ui_stores=[]
         self.global_writes=set();self.progress_calls=[]
-        self.uc.mem_map(WORLD & ~4095,0x1000);self.uc.mem_map(POOL & ~4095,0x80000)
-        self.world=self.add_backing(WORLD,WORLD_PREFIX,'world')
-        for start,count in ((WORLD,WORLD_PREFIX),(POOL,0x7D000)):
+        self.world_address=WORLD if existing_world is None else existing_world['address']
+        if existing_world is None:
+            self.uc.mem_map(self.world_address & ~4095,0x1000)
+            self.world=self.add_backing(self.world_address,WORLD_PREFIX,'world')
+        else:
+            assert uc is not None and existing_world['size']==WORLD_PREFIX and existing_world['kind']=='world'
+            self.world=existing_world;self.regions.append(self.world)
+        self.uc.mem_map(POOL & ~4095,0x80000)
+        for start,count in ((self.world_address,WORLD_PREFIX),(POOL,0x7D000)):
             self.uc.hook_add(UC_HOOK_MEM_READ,self.track_read,begin=start,end=start+count-1)
             self.uc.hook_add(UC_HOOK_MEM_WRITE,self.track_write,begin=start,end=start+count-1)
         self.uc.hook_add(UC_HOOK_MEM_WRITE,self.global_write,begin=GLOBAL,end=GLOBAL+GLOBAL_SIZE-1)
@@ -55,12 +62,12 @@ class InitialLoading(SoundCatalog):
     def global_write(self,uc,access,address,size,value,data):
         self.global_writes.add((self.phase,address,size,uc.reg_read(UC_X86_REG_EIP)))
     def write_host(self,address,raw):
-        if WORLD<=address<WORLD+WORLD_PREFIX or POOL<=address<POOL+0x7D000:
+        if self.world_address<=address<self.world_address+WORLD_PREFIX or POOL<=address<POOL+0x7D000:
             self.track_write(self.uc,0,address,len(raw),0,None);self.uc.mem_write(address,raw)
         else:super().write_host(address,raw)
     def memset(self,uc,address,size,data):
         sp=uc.reg_read(UC_X86_REG_ESP);dst,value,count=[self.u32(sp+i) for i in (4,8,12)]
-        if WORLD<=dst<WORLD+WORLD_PREFIX or POOL<=dst<POOL+0x7D000:
+        if self.world_address<=dst<self.world_address+WORLD_PREFIX or POOL<=dst<POOL+0x7D000:
             self.write_host(dst,bytes([value&255])*count);self.ret(dst)
         else:super().memset(uc,address,size,data)
     def sound_call(self,uc,address,size,data):
@@ -116,13 +123,19 @@ class InitialLoading(SoundCatalog):
     def globals(self):return self.blob(self.uc.mem_read(GLOBAL,GLOBAL_SIZE))
     def pool_snapshot(self):return dict(world=self.record(self.world),actors=[self.record(r) for r in self.pool],constructorSlots=self.actor_calls.copy())
     def capture(self):
-        self.put(STACK+0xF000,STOP);self.uc.reg_write(UC_X86_REG_ESP,STACK+0xF000);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
-        self.execute(0x419E40,STOP);self.put(WORLD,2)
+        self.put(STACK+0xF000,STOP);self.uc.reg_write(UC_X86_REG_ESP,STACK+0xF000);self.uc.reg_write(UC_X86_REG_ECX,self.world_address)
+        self.execute(0x419E40,STOP);self.put(self.world_address,2)
         for at,v in [(0x44D05C,1),(0x450B84,0),(0x450B90,1 if self.control else 0),(0x450BFC,0),(0x44FB60,1 if self.control else 0),(0x44FCB0,3 if self.control else 0),
                      (0x45118C,0x12345678),(0x455608,SURFACE),(0x455634,SURFACE),(0x453E0C,SURFACE),(0x458348,3 if self.control else 1),(0x457578,0x10203040)]:self.put(at,v)
-        before=self.globals();world_before=self.record(self.world)
         entry=STACK+0xF004;self.uc.mem_write(entry,struct.pack('<II',STOP,SURFACE))
-        self.uc.reg_write(UC_X86_REG_ESP,entry);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
+        self.uc.reg_write(UC_X86_REG_ESP,entry);self.uc.reg_write(UC_X86_REG_ECX,self.world_address)
+        self.uc.reg_write(UC_X86_REG_EIP,0x41BC90)
+        return self.continue_loading()
+
+    def continue_loading(self):
+        """Resume the actual caller at41bc90 without setting World/CPU/stack."""
+        assert self.uc.reg_read(UC_X86_REG_EIP)==0x41BC90 and self.uc.reg_read(UC_X86_REG_ECX)==self.world_address
+        entry=self.uc.reg_read(UC_X86_REG_ESP);before=self.globals();world_before=self.record(self.world)
         self.phase='prologue';self.execute(0x41BC90,0x41BE98)
         body=self.uc.reg_read(UC_X86_REG_ESP);prologue=self.globals();paused=self.u32(body+0x38)
         commands=bytes(self.uc.mem_read(body+0x434,10))+bytes(self.uc.mem_read(body+0x440,10));assert commands==bytes(20)
@@ -133,9 +146,10 @@ class InitialLoading(SoundCatalog):
         w.prefix=w.running=False
         for h in hooks:self.uc.hook_del(h)
         common=dict(beforeGlobals=prologue,afterGlobals=self.globals(),loads=w.prefix_loads,events=w.prefix_events)
+        checksum_before=self.u32(0x44F620)
         self.phase='catalog';self.execute(0x41BFEB,0x41C052)
         assert self.uc.reg_read(UC_X86_REG_EAX)==CATALOG and self.uc.reg_read(UC_X86_REG_ESP)==body
-        catalog=self.capture_catalog();catalog={**catalog,'events':list(catalog['events'])}
+        catalog=self.capture_catalog(initial_checksum=checksum_before);catalog={**catalog,'events':list(catalog['events'])}
         after_catalog=self.globals()
         self.phase='pool';self.execute(0x41C052,0x41C0D8);allocated=self.pool_snapshot()
         self.execute(0x41C0D8,0x41C2F5);staged=self.pool_snapshot();assert self.actor_calls==list(range(400))+list(range(8))
@@ -146,7 +160,7 @@ class InitialLoading(SoundCatalog):
         assert staged==self.pool_snapshot()
         ui=dict(allocations=self.ui_allocations,inputs=self.ui_inputs,events=self.ui_events,calls=self.ui_calls,checkpoints=self.ui_stores,
                 records=[dict(address=a['address'],storage=self.record(self.region(a['address'],BITMAP_SIZE))) for a in self.ui_allocations])
-        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,worldAddress=WORLD,actorAddresses=[r['address'] for r in self.pool],worldBefore=world_before,
+        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,worldAddress=self.world_address,actorAddresses=[r['address'] for r in self.pool],worldBefore=world_before,
                  beforeGlobals=before,afterPrologue=prologue,afterCatalog=after_catalog,afterGlobals=self.globals(),common=common,
                  catalogAllocation=self.catalog_allocation,allocated=allocated,staged=staged,interface=ui,progressCalls=self.progress_calls,
                  entrySP=entry,bodySP=body,endPC=0x41C581,paused=paused,commands=list(commands),globalWrites=sorted(self.global_writes))

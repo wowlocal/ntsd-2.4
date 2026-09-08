@@ -36,19 +36,22 @@ def ranges(mask):
 
 
 class Constructors:
-    def __init__(self):
+    def __init__(self, uc=None):
         exe = read_bytes(DEFAULT_SOURCE / "NTSD 2.4.exe")
         if hashlib.sha256(exe).hexdigest() != EXE_SHA256:
             raise ValueError("Unidentified EXE")
-        self.uc = Uc(UC_ARCH_X86, UC_MODE_32)
-        self.uc.mem_map(0x400000, 0x100000)
-        for section in PE(exe).sections:
-            if section["name"] != ".rsrc":
-                self.uc.mem_write(0x400000 + section["rva"],
-                                  exe[section["fileOffset"]:section["fileOffset"] + section["fileSize"]])
-        for start, size in [(STACK, 0x10000), (AREA, 0x4000), (STOP, 0x1000)]:
-            self.uc.mem_map(start, size)
-        self.uc.hook_add(UC_HOOK_MEM_WRITE, self.written, begin=AREA, end=AREA + 0x3FFF)
+        self.uc = uc if uc is not None else Uc(UC_ARCH_X86, UC_MODE_32)
+        if uc is None:
+            self.uc.mem_map(0x400000, 0x100000)
+            for section in PE(exe).sections:
+                if section["name"] != ".rsrc":
+                    self.uc.mem_write(0x400000 + section["rva"],
+                                      exe[section["fileOffset"]:section["fileOffset"] + section["fileSize"]])
+            for start, size in [(STACK, 0x10000), (AREA, 0x4000), (STOP, 0x1000)]:
+                self.uc.mem_map(start, size)
+            self.uc.hook_add(UC_HOOK_MEM_WRITE, self.written, begin=AREA, end=AREA + 0x3FFF)
+        # An attached observer must preserve the parent's PE, stack and arena.
+        # Its own declared regions install their corresponding write observers.
         self.uc.hook_add(UC_HOOK_CODE, self.memset, begin=0x4450A0, end=0x4450A0)
 
     def u32(self, address):

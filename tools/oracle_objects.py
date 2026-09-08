@@ -69,8 +69,8 @@ RAW_PROBE = (b'<bmp_begin>\r\n' + b''.join(
 
 
 class Objects(Constructors):
-    def __init__(self, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, capacity=4, retain_opaque_frames=False, raw_frames=False):
-        super().__init__()
+    def __init__(self, text_mode=True, pattern=0xA5, missing_mirrors=False, use_crt=False, capacity=4, retain_opaque_frames=False, raw_frames=False, uc=None):
+        super().__init__(uc=uc)
         assert 1 <= capacity <= 137
         self.object_base = BASE if capacity <= 4 else 0x50000000
         self.object_arena_size = capacity * 0x40000
@@ -85,7 +85,7 @@ class Objects(Constructors):
             self.crt = None
         self.text_mode, self.pattern = text_mode, pattern
         self.missing_mirrors = missing_mirrors
-        self.uc.mem_map(0, 0x1000)  # only SEH FS:0 is used
+        if uc is None:self.uc.mem_map(0, 0x1000)  # only SEH FS:0 is used
         self.uc.mem_map(self.object_base, self.object_arena_size)
         self.uc.mem_map(HEAP, self.heap_size)
         self.uc.mem_map(DEVICE, 0x10000)
@@ -95,10 +95,11 @@ class Objects(Constructors):
         self.scans, self.outer_tokens, self.frame_occurrences, self.constructors = [], [], [], []
         self.current = None
         self.bump = HEAP + 0x20
-        self.put(0x44EECC, 0)  # actual sound registration still executes
-        self.put(0x458438, 0)
-        self.put(0x44F620, 0)
-        self.put(0x4511C0, 0)
+        if uc is None:
+            self.put(0x44EECC, 0)  # actual sound registration still executes
+            self.put(0x458438, 0)
+            self.put(0x44F620, 0)
+            self.put(0x4511C0, 0)
         self.put(DEVICE, DEVICE + 0x100)
         self.put(DEVICE + 0x100 + 0x74, STUB + 0x300)  # IDirectDrawSurface::SetColorKey
         self.put(DEVICE + 0x100 + 0x14, STUB + 0x310)  # IDirectDrawSurface::Blt

@@ -61,7 +61,7 @@ def platform(raw,index,**changes):
 
 
 class WaveLoader(Constructors):
-    def __init__(self, uc=None):
+    def __init__(self, uc=None, second_pointer=SECOND):
         # An attached loader shares the parent's real CPU/stack and uses a
         # disjoint import range. The parent enables instruction/mask hooks only
         # during a wave call, and routes its existing allocator hooks here.
@@ -69,8 +69,9 @@ class WaveLoader(Constructors):
         else:self.uc=uc
         self.stub_base=STOP+(0x100 if uc is None else 0x800)
         self.blobs={};self.running=False;self.prefix=False;self.events=[];self.regions={}
+        self.second_pointer=second_pointer;self.prefix_draw=None
         if uc is None:self.uc.mem_map(0x24000000,0x10000)
-        for address in (ALLOC,FIRST,SECOND):self.uc.mem_map(address & ~4095,0x200000)
+        for address in (ALLOC,FIRST,second_pointer):self.uc.mem_map(address & ~4095,0x200000)
         self.uc.mem_write(DEVICE,struct.pack('<I',VTABLE))
         self.imports={}
         for index,(iat,name) in enumerate([(0x447254,'open'),(0x447258,'descend'),(0x44725C,'close'),
@@ -107,6 +108,7 @@ class WaveLoader(Constructors):
     def allowed(self,uc,address,size,data):
         if not self.running:return
         if self.prefix:
+            if self.prefix_draw is not None and self.prefix_draw(uc,address,size,data):return
             if self.prefix_current is not None and address==self.prefix_current['returnAddress']:
                 item=self.prefix_current;self.prefix_current=None
                 assert uc.reg_read(UC_X86_REG_ESP)==item['entrySP']+8
@@ -126,13 +128,14 @@ class WaveLoader(Constructors):
                 index=len(self.prefix_loads)
                 self.p=platform(self.raw,500+index,destination=destination,device=self.u32(0x44EECC),
                                 stream=0 if self.prefix_mode==3 and index==7 else 0x23450001)
+                if self.p['secondPointer']:self.p['secondPointer']=self.second_pointer
                 self.put(self.p['buffer'],VTABLE)
                 self.prefix_current=dict(returnAddress=self.u32(sp),entrySP=sp,outputBefore=self.u32(destination),
                     beforeGlobals=self.blob(uc.mem_read(GLOBAL,GLOBAL_SIZE)),
                     savedRegisters=[uc.reg_read(r) for r in (UC_X86_REG_EBX,UC_X86_REG_EBP,UC_X86_REG_ESI,UC_X86_REG_EDI)])
                 self.regions={};self.events=[];self.device_format=self.descriptor=None;self.descents=self.reads=self.locks=0
                 self.region('first',FIRST,self.p['firstCount'])
-                if self.p['secondPointer']:self.region('second',SECOND,self.p['secondCount'])
+                if self.p['secondPointer']:self.region('second',self.p['secondPointer'],self.p['secondCount'])
                 self.prefix_events.append(dict(wave=dict(kind='load',arguments=[destination],strings=[list(self.path)])))
             if address==0x43F010:
                 sp=uc.reg_read(UC_X86_REG_ESP)
@@ -232,14 +235,14 @@ class WaveLoader(Constructors):
         else:
             dest,source,count=[self.u32(sp+i) for i in (4,8,12)]
             assert self.regions['temporary']['live'] and ALLOC<=source<=source+count<=ALLOC+self.regions['temporary']['count']
-            part=0 if dest==FIRST else 1;assert dest in (FIRST,SECOND)
+            part=0 if dest==FIRST else 1;assert dest in (FIRST,self.second_pointer)
             self.event('copy',[part,source-ALLOC,count]);self.host_write(dest,bytes(uc.mem_read(source,count)));self.ret(dest)
 
     def run(self,label,path,raw,p):
         self.p=p;self.raw=raw;self.path=path;self.regions={};self.events=[];self.descents=self.reads=self.locks=0
         self.device_format=self.descriptor=None
         self.region('first',FIRST,p['firstCount'])
-        if p['secondPointer']!=0:self.region('second',SECOND,p['secondCount'])
+        if p['secondPointer']!=0:self.region('second',p['secondPointer'],p['secondCount'])
         self.put(DEVICE,VTABLE);self.put(p['buffer'],VTABLE);self.put(0x44EECC,p['device']);self.put(p['destination'],0x87654321)
         self.uc.mem_write(AREA+0x1000,path+b'\0')
         backing=bytes(i%256 for i in range(0x400)) if p['ramp'] else b'\xA5'*0x400

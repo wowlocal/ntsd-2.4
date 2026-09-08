@@ -73,7 +73,7 @@ public enum FrontMenuLoopReference {
     private struct Corpus: Decodable { let exeSHA256: String, dllSHA256: String, initialGlobals: String, initialCRT: UInt32, sources: [Source], cases: [Case], blobs: [String:Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front menu loop reference: "+text) }
 
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data,onLoading: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",!c.cases.isEmpty else { throw error("Source identity") }
@@ -291,7 +291,9 @@ public enum FrontMenuLoopReference {
             case .alternateBoundary:guard item.endPC == 0x423260,item.endSP == 0x1000efdc else { throw error("FILE boundary") };result.boundaries += 1
             default:throw error("Unprobed outer boundary")
             }
-            try snapshot(item.after,world,state,item.label+" whole call");result.cases += 1
+            try snapshot(item.after,world,state,item.label+" whole call")
+            if end == .loading { try onLoading?(world,state,crt,memory) }
+            result.cases += 1
         }
         return result
     }

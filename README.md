@@ -41,8 +41,12 @@ The [repeated early-menu calls](docs/research/FRONT_MENU_LOOP.md) now continue
 their own fresh first return through complete subsequent menu entries. Both
 reference corpora match native phase selection, settings/waiting sequences,
 retained graphics resources and CRT state, ending at the actual first loading
-call. This composition remains separate from the app UI; joining that early
-state to the loading body and full character-selection flow is still pending.
+call. The [menu-to-loading composition](docs/research/MENU_LOADING.md) now
+continues that same state through the full initial loading body: common sounds,
+all source catalog entries, the400-slot pool and initial interface resources.
+It retains the earlier graphics resources and executes their loading-screen
+draw. This composition remains separate from the app UI; continuing its loaded
+state through input and the full character-selection flow is still pending.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
