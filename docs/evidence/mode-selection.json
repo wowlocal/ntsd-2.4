@@ -1,0 +1,16 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "431b70 and mode-screen keyboard4322ad..4328f8, with real sound/release/shutdown.\nExplicit caller-state probes, not a resumed startup or whole431d10 screen.\nEight raw Actor pointers may alias; no Object/character behavior is supplied.\nCOM/free/PostMessage/PostQuit are observed responses. Playback stops BEFORE\n43249c; rendering, panel, file IO and Windows remain outside this corpus.\n",
+  "corpus": "mode-selection.json",
+  "sha256": "0c68f192abbd9c406cfc630af869d7686a8df1b12c83050d0eb98737b988113e",
+  "bytes": 9913141,
+  "cases": 1345,
+  "events": 1813,
+  "helpers": 2159,
+  "playback": 23,
+  "nativeCompared": true,
+  "nativeComparison": "Mode selection matches original: 1345 cases /616 input /729 selection /23 playback boundaries, 1813 events /2159 helpers /20175 records /88382640 bytes+masks. Supplied caller probes; whole screen, startup integration, playback files, app UI and Windows open",
+  "fixture": "original-mode-selection.json",
+  "fixtureSHA256": "cf886ba8f4d35a739d2ad882e11844f02f573d7ea670cc237d6dc5f077b802f2",
+  "fixtureBytes": 1372587
+}

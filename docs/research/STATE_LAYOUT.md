@@ -745,3 +745,20 @@ COM boundaries сохранены; полный41bc90 ret и Windows lifecycle �
 - Native теперь соединяет local/control/received/replay/round в
   OriginalLoadedMatchEntry. Music и character-menu resources используют его
   собственный menu результат; selection dispatch431d10 пока открыт.
+
+Дополнение [общий ввод и режимы](MODE_SELECTION.md), S/D самостоятельного
+corpus; происхождение собственного caller431d10 ещё не соединено:
+
+| Поле | Восстановленное назначение |
+| --- | --- |
+| `World+194`,8 pointers |431b70 читает все восемь независимо от activity/status/Object; alias допустим |
+| `Actor+cd/ce/d0/cf/d1/d2/d3` | Приоритет up/down/right/left/attack/jump/defend; любой ненулевой byte |
+| `451320+4*seat` | DWORD-защёлка места; любой ненулевой запрещает новый edge, полностью отпущенный проход сбрасывает в0 |
+| `4513a4/a8/b0/ac/b4/b8/bc` | Общие DWORD edges, обнуляются431b70 каждый раз; разные места могут выставить разные флаги |
+| `451160` | В431d10 — выбранный режим0..7; signed wrapping navigation и network skip6 |
+| `4512c8` | Четвёртый аргумент431d10, selection/seat; не указатель на mode. Обнуляется при подтверждении0/1/4 |
+| `4513c0` | Таймер подсказки; navigation/attack сбрасывают0. Полный help/tail ещё открыт |
+| `44d020` | При confirmation0/1/4 становится3;2→20;3→120;5→2 |
+| `44d024/44d028` |0/1/4 задают100/1;2/3 задают0/0;5 сохраняет прежние значения |
+| `44d780` |0..5 confirmation задаёт-1 до освобождения фонового wrapper |
+| `44eecc` | Quit вызывает только4019b0. Music/replay здесь не освобождаются; это не весь ранний shutdown |

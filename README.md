@@ -49,6 +49,11 @@ draw. The [startup continuation](docs/research/MENU_STARTUP.md) now carries that
 same state through input, round control, enabled menu music and all11 character-menu
 resource constructors. This composition remains separate from the app UI;
 character-selection dispatch and the full selection flow are still pending.
+The next431d10 screen selects the game mode before characters. Its
+[shared input and keyboard transitions](docs/research/MODE_SELECTION.md) now
+match the original in2690 standalone cases, including button priority, held
+input, aliased seats and actual background/sound-device release. Connecting
+the whole screen to its own startup state and the app UI remains pending.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

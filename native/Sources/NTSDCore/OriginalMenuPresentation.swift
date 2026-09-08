@@ -44,11 +44,32 @@ public enum OriginalMenuPresentationEntry: String, Codable, Sendable {
 /// Shared 4246b0 presentation/return, and its exact World+0==1 branch.
 /// Rendering, COM/GDI and allocator IO are explicit requests. No Windows runtime.
 public enum OriginalMenuPresentation {
-    /// Shared4019b0/401d30/43d2a0 then PostMessage(close), also called on
-    /// network mismatches. Keep stale buffer slots/counts after device release.
-    public static func shutdown(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
-                                observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+    /// Entire423910/43ef50. Reused by the early menu and mode confirmation.
+    public static func releaseBackground(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
+                                         observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
         var state = globals, owned = memory
+        let offset = 0x4511ac-OriginalMatchPreparation.globalBase
+        let pointer = try state.integer(at: offset, as: UInt32.self)
+        if pointer == 0 { return }
+        guard var allocation = owned.allocations[pointer], allocation.live,
+              allocation.storage.bytes.count == 0x1f50 else {
+            throw OriginalStateError.invalidStorage("Menu bitmap ownership")
+        }
+        let surface = try allocation.storage.integer(at: 0, as: UInt32.self)
+        if surface != 0 {
+            try observe(.init(.method, [surface,8]))
+            try allocation.storage.write(UInt32(0), at: 0)
+        }
+        try observe(.init(.free, [pointer]))
+        allocation.live = false; owned.allocations[pointer] = allocation
+        try state.write(UInt32(0), at: offset)
+        globals = state; memory = owned
+    }
+    /// Entire4019b0, also called alone by the mode screen. Other shutdown
+    /// children belong to their callers. Keep stale buffer slots/counts.
+    public static func releaseSoundDevice(globals: inout OriginalStateRecord,
+                                          observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+        var state = globals
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-OriginalMatchPreparation.globalBase,as: UInt32.self) }
         func method(_ resource: UInt32) throws {
             guard resource != 0 else { throw OriginalStateError.invalidStorage("Null shutdown COM resource") }
@@ -62,6 +83,14 @@ public enum OriginalMenuPresentation {
             }
             try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
         }
+        globals = state
+    }
+    /// Shared4019b0/401d30/43d2a0 then PostMessage(close), also called on
+    /// network mismatches. Keep stale buffer slots/counts after device release.
+    public static func shutdown(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
+                                observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+        var state = globals, owned = memory
+        try releaseSoundDevice(globals: &state, observe: observe)
         try OriginalMusicPlayback.release(globals: &state) { event in
             try observe(.init(.method,event.arguments,event.strings))
             return .init()
@@ -74,7 +103,7 @@ public enum OriginalMenuPresentation {
                 try owned.replayPointers.write(UInt32(0),at: offset)
             }
         }
-        try observe(.init(.postMessage,[word(0x4546f4),0x10,0,0]))
+        try observe(.init(.postMessage,[state.integer(at: 0x4546f4-OriginalMatchPreparation.globalBase,as: UInt32.self),0x10,0,0]))
         globals = state; memory = owned
     }
     /// 43e940 is shared by startup, menus and the match display path.
@@ -133,18 +162,7 @@ public enum OriginalMenuPresentation {
             allocation.live = false; memory.allocations[address] = allocation
         }
         mutating func releaseMenuBitmap(_ observe: Observer) throws {
-            let pointer = try word(0x4511ac)
-            if pointer == 0 { return }
-            guard var allocation = memory.allocations[pointer], allocation.live,
-                  allocation.storage.bytes.count == 0x1f50 else { throw error("Menu bitmap ownership") }
-            let surface = try allocation.storage.integer(at: 0, as: UInt32.self)
-            if surface != 0 {
-                try method(surface, 8, [], observe)
-                try allocation.storage.write(UInt32(0), at: 0)
-                memory.allocations[pointer] = allocation
-            }
-            try free(pointer, observe)
-            try write(0x4511ac, 0)
+            try OriginalMenuPresentation.releaseBackground(globals: &globals, memory: &memory, observe: observe)
         }
         /// 401f30: query IBasicAudio, read volume, set it only after a successful
         /// read, release the queried interface on both read/set outcomes.

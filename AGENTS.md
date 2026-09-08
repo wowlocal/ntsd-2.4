@@ -1128,6 +1128,40 @@ unpack checks passed,92pins at build/research/menu-startup-fixture-pins.json.
 Primary raw/packed546495/346002bytes, control564383/335670bytes. No SwiftPM
 or source-capture process remained active before the milestone commit.
 
+The [shared menu input and mode transitions](docs/research/MODE_SELECTION.md)
+now execute all431b70 and keyboard4322ad..4328f8 independently with real
+401a30/423910/43ef50/4019b0. Both raw/packed corpora match native:2690cases,
+3626events/4318helper returns/40350records/176765280bytes+masks. These are
+explicit caller-state probes, NOT continuation of the own MENU_STARTUP CPU.
+Menu10/431d10 selects MODE before characters; CHAR* resource names do not
+establish screen semantics. Caller429eb2 passes target,menu44d020,mode451160,
+selection4512c8; the last argument is not mode. Common431b70 reads eight World
+pointers regardless of activity/status/Object. Button priority is cd,ce,d0,cf,
+d1,d2,d3; each seat's DWORD451320 latch blocks any further edge until all seven
+bytes are zero. Nonzero bytes/latches need not be1, and Actor aliases do not
+merge seat latches. Native OriginalMenuInput implements this shared mechanism.
+OriginalModeSelection handles sequential up/down, signed wrapped remainder,
+network Int8>0 skip6 and confirmation. Its46 playback probes stop BEFORE43249c;
+no reset/file dialog/load success is invented. Quit calls ONLY4019b0, then
+PostQuitMessage(0) iff458434==0. It preserves music/replay, unlike the earlier
+composed shutdown. Shared releaseSoundDevice and releaseBackground were factored
+from OriginalMenuPresentation; old callers retain their original sequences.
+Native comparison retains all raw Actor/World/globals, bitmap/replay storage,
+masks/liveness and events; expected after-states are never inputs. Source write
+traces are retained, but native checkpoints are whole probe exits, not every
+machine write. No CRT DLL or actual OS output is involved in this corpus.
+Next continue the OWN429e5a through WHOLE431d10 with original rendering/panel/
+key-name422b00/help/mouse/ret16, then character selection and selected match.
+Do not replace that own state with these standalone inputs. Enabled423b00 and
+playback431c70/GetOpenFileNameA/43e620/43dfa0 remain dependencies; empty stubs
+cannot close them.422b00 ends at422f59 (S only); full-screen/UI/W/R02.1 goal open.
+Six targeted XCTest passed in23.563s (new mode7.957s, old completion8.122s,
+old repeated loop7.483s). Release CatalogCheck80.83s, accept build0.18s.
+Release NTSDNative passed in2.84s; all SwiftPM/source/comparison processes were
+terminal before the milestone commit. This does not extend Practice gameplay.
+All92old fixture hashes unchanged; SHA/size/full unpack of both new files
+checked,94pins at build/research/mode-selection-fixture-pins.json.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and
