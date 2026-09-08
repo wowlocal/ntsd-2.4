@@ -1,0 +1,21 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole423230 settings writer with actual VC80 fprintf/fclose.\nIndependent helper calls on persistent PE/global storage; first field inputs\nare explicitly derived from original control.txt, not Windows startup. Shared\ndeclared FILE flags102/output buffer and descriptor IO boundaries retain every\nprint/flush/close snapshot. Names share raw globals and11-byte strides. Null\nFILE stops BEFORE first fprintf423260; unterminated strings stop before the\nfirst out-of-domain read. No real filesystem, menu caller or Windows claim.\n",
+  "corpus": "settings-writing-control.json",
+  "sha256": "a211bf77bd5d0e72660cda0b7923593eda74d302e5eeeea72fd7be5bc4ceea79",
+  "cases": 226,
+  "events": {
+    "close": 221,
+    "closeFile": 221,
+    "open": 226,
+    "print": 11982,
+    "write": 4070,
+    "writeFile": 36813
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Settings writing matches original: 226 cases /221 returns /4 null FILE /1 string boundaries, 11982 fprintf /221 fclose, 36813 writes /54 failed or short, 53533 events /4070 parent writes, 149067 records /2307985161 bytes/masks; original control bytes roundtrip. Menu caller, full FILE/Windows IO remain open",
+  "fixture": "original-settings-writing-control.json",
+  "fixtureSHA256": "17099312266eeafa96ef385adb06b1c9b8c27dffff9b09dc3fcdbc21c4edabae",
+  "fixtureBytes": 1891396
+}

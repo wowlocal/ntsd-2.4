@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--settings-writing" {
+        let r = try SettingsWritingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Settings writing matches original: \(r.cases) cases /\(r.returns) returns /\(r.nullFiles) null FILE /\(r.stringBoundaries) string boundaries, \(r.prints) fprintf /\(r.closes) fclose, \(r.fileWrites) writes /\(r.failedWrites) failed or short, \(r.events) events /\(r.parentWrites) parent writes, \(r.records) records /\(r.bytes) bytes/masks; original control bytes roundtrip. Menu caller, full FILE/Windows IO remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-screen-body" {
         let r = try FrontScreenBodyReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Front screen body matches original: \(r.cases) cases, \(r.helpers) child returns, \(r.events) events, \(r.texts) texts /\(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits, \(r.sounds) sounds /\(r.shells) links, \(r.boundaries) boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh panel parent \(r.parent.cases). Alternate screens, platform output and Windows open")

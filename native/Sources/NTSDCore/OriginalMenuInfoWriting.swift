@@ -4,6 +4,7 @@ import Foundation
 /// non-append descriptor, ordinary write errors, no EILSEQ replacement).
 /// Writes expose logical bytes before the platform's text translation.
 public struct OriginalBufferedTextOutput: Sendable {
+    public enum Argument: Sendable { case integer(Int32), bytes([UInt8]) }
     public let fileAddress: UInt32, bufferAddress: UInt32, descriptor: UInt32
     public private(set) var buffer: OriginalStateRecord
     public private(set) var position = 0, count: Int32, flags: UInt32 = 0x102
@@ -35,6 +36,42 @@ public struct OriginalBufferedTextOutput: Sendable {
             total += 1
         }
         return total
+    }
+    /// VC80 output_l for the recovered unadorned %d/%s formats. Prefix and
+    /// value are separate write_string calls (78141f5d/78141fdf), each entered
+    /// even when the prefix changed the shared count to -1. A successful value
+    /// byte can increment that count back to zero. The outer format loop checks
+    /// count<0 only before its next format byte (78141871).
+    public mutating func printFormat(_ format: String,arguments: [Argument],write: Write) throws -> Int32 {
+        let bytes = Array(format.utf8)
+        guard bytes.allSatisfy({ $0 > 0 && $0 < 128 }) else { throw OriginalStateError.invalidStorage("Output format domain") }
+        var stream = self,total: Int32 = 0,index = 0,argument = 0
+        func segment(_ bytes: [UInt8]) throws {
+            for byte in bytes {
+                let value = try stream.printBytes([byte],write: write)
+                total = value < 0 ? -1 : total &+ 1
+                if total == -1 { break }
+            }
+        }
+        while index < bytes.count && total >= 0 {
+            let byte = bytes[index];index += 1
+            if byte != 37 { try segment([byte]);continue }
+            guard index < bytes.count,argument < arguments.count else { throw OriginalStateError.invalidStorage("Missing output conversion") }
+            let kind = bytes[index];index += 1
+            switch (kind,arguments[argument]) {
+            case (100,.integer(let value)):
+                let text = Array(String(value).utf8)
+                if value < 0 { try segment([45]);try segment(Array(text.dropFirst())) }
+                else { try segment(text) }
+            case (115,.bytes(let text)):
+                guard !text.contains(0) else { throw OriginalStateError.invalidStorage("Output string domain") }
+                try segment(text)
+            default:throw OriginalStateError.invalidStorage("Unrecovered output conversion")
+            }
+            argument += 1
+        }
+        if total >= 0 && argument != arguments.count { throw OriginalStateError.invalidStorage("Extra output arguments") }
+        self = stream;return total
     }
     public mutating func close(write: Write,close: (OriginalBufferedTextOutput) throws -> Int32) throws -> Int32 {
         var result: Int32 = 0
@@ -90,14 +127,14 @@ public enum OriginalMenuInfoWriting {
         func save() throws -> UInt32 {
             try emit(.init("open",[available ? stream.fileAddress : 0],[Array("data\\adinfo.txt".utf8),Array("w".utf8)]))
             guard available else { return 0 }
-            var e = OriginalMenuInfoWriteEvent("print",[stream.fileAddress]), bytes: [UInt8]
-            if mode == .defaults { e.format = "now 0 4 <end>\n";bytes = Array(e.format!.utf8) }
+            var e = OriginalMenuInfoWriteEvent("print",[stream.fileAddress]), arguments: [OriginalBufferedTextOutput.Argument] = []
+            if mode == .defaults { e.format = "now 0 4 <end>\n" }
             else {
                 let date = try string(0x4527b0),index = try word(0x44d784),period = try word(0x44d788)
                 e.format = "%s %d %d <end>\n";e.arguments += [UInt32(bitPattern: index),UInt32(bitPattern: period)];e.strings = [date]
-                bytes = date+Array(" \(index) \(period) <end>\n".utf8)
+                arguments = [.bytes(date),.integer(index),.integer(period)]
             }
-            e.result = UInt32(bitPattern: try stream.printBytes(bytes,write: writeFile));try emit(e)
+            e.result = UInt32(bitPattern: try stream.printFormat(e.format!,arguments: arguments,write: writeFile));try emit(e)
             let result = try stream.close(write: writeFile) { snapshot in
                 let result = try close();var e = OriginalMenuInfoWriteEvent("closeFile",[snapshot.descriptor]);e.result = UInt32(bitPattern: result);try emit(e,snapshot);return result
             }

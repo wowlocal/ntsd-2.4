@@ -640,3 +640,21 @@ before-input. Все25 ранних bitmap и World сохраняются по�
 bitmap — caller local+20. GetDC HRESULT возвращается неизменным; его ошибка
 не отменяет родительскую обработку клика. Прежний notice overlay использует
 тот же общий native401290. Actual GDI raster/Windows и альтернативы4275cb открыты.
+
+Дополнение [сохранения настроек](SETTINGS_WRITING.md), S/D423230:
+
+| Поле | Правило |
+| --- | --- |
+| `44fb70+50*g+4*i`, g0..3/i0..10 |44 signed32 значения, отдельный `%d ` для каждого, затем newline для каждой группы; остальные байты не меняются |
+| `44fcc0+11*i`, i0..3 | Временные byte replacements: backtick→apostrophe, иначе space→backtick; длина пересчитывается, строки могут пересекаться |
+| Пустые четыре имени | Только UInt16 digit/NUL; сохранившийся хвост не очищается |
+| `44fd18/44f900/44f890` | Только при первом byte0 — исходные name/info/email defaults, после fprintf четырёх имён; записи4/4/2 и дополнительный byte email |
+| `450be8/450be4` | Последовательные signed `%d\n` после default metadata |
+| Имена после fclose | Только backtick→space; предыдущие апострофы остаются, включая результат перекрывающихся проходов |
+| EAX helper | Последняя вычисленная длина четвёртого имени, независимо от fclose result |
+
+Shared printf output count — отдельная величина от FILE count. Ошибка byte
+ставит output count−1, следующий segment всё равно начинает запись и может
+увеличить count до0. Prefix и value разделены. FILE flags/error и пользовательский
+buffer сохраняют прежние правила `_flsbuf`; их нельзя обнулить при восстановлении
+printf count. Полный FILE/CRT lifetime и настоящий menu caller остаются открытыми.

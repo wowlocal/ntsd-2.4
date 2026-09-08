@@ -846,6 +846,37 @@ Five targeted XCTest passed in150.890s: new body6.062s, old panel12.507s and
 historical full menu-presentation chain132.322s, covering the shared text refactor.
 Release NTSDNative passed in2.37s. No app UI/pixels/Windows or full-match claim;
 R02.1 remains open.
+The [settings writer](docs/research/SETTINGS_WRITING.md) now executes whole423230
+with actual VC80 fprintf/fclose in452 standalone cases. Native matches442 returns,
+23964 prints/442 closes,73626 descriptor writes/108 failed or short,107066 events/
+8140 parent writes,298134 records/4615970322 bytes/masks. The first explicit field
+inputs come from original control.txt and the logical full output roundtrips.
+This is supplied PE/BSS/helper state, not a continuous427688/427704 menu caller.
+Four groups of11 integers use stride50 and separate%d-space/newline calls.
+Name bases44fcc0+11*i have NO11-byte limit: encode backtick to apostrophe,
+otherwise space to backtick; repeat strlen each iteration. Empty names get ONLY
+UInt16 digit/NUL. Print four names BEFORE defaulting profile name44fd18/info44f900/
+email44f890. Then450be8/450be4, name/email with LF, info without final LF, close,
+restore only backticks to spaces. Overlapping passes may turn an original space
+into an apostrophe; metadata defaults can change a spanning name. EAX is the
+last length of the fourth name after restoration, not fclose result.
+The new shared OriginalBufferedTextOutput.printFormat handles plain%d/%s plus
+ASCII literals. BOTH menu-info and settings writers use it. Actual DLL78141671
+sets count=-1 on byte failure;781416c8 starts another segment even with count=-1.
+Prefix78141f5d and digits78141fdf are separate calls: failed minus can be followed
+by successful digits restoring count>=0; outer guard is78141871. Do not flatten
+the whole format or globally stop at a failed prefix. Six source probes retain
+FILE error bit but fprintf returns10 after this failure. Low-level printBytes/
+flsbuf/close are unchanged; width/precision/other conversions/wide/EILSEQ42 open.
+Eight null-FILE cases stop BEFORE423260; two no-NUL cases stop BEFORE423297
+outside declared globals, after44 integers/four line breaks, without close.
+No safe false-return or Windows invalid-parameter behavior is implied. Original
+source file stays unchanged. Next compose writer with selector-3 at4275cb, then
+selector-1 at4277f3 and main-menu/tail; app UI/Windows remain open.
+Both new packed corpora compared before acceptance; all35 previous pinned
+fixture hashes unchanged, both new raw/packed SHA/full unpack verified. Six
+targeted XCTest passed in84.404s (settings67.138s, old info4.925s, joined panel
+12.341s); release NTSDNative passed in2.69s. No old Python helper was changed.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

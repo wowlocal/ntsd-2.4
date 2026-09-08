@@ -127,3 +127,10 @@ Release-сравнения [основного](../evidence/menu-info-writing.js
 content43c780, bitmap43cc60 и оба writer после свежих ранних ресурсов/настроек/
 первого рисунка. Worker, более ранний startup43cf40, остальной экран и интеграция
 в приложение остаются открытыми; это не доказательство полного матча или Windows W.
+
+Последующее [сохранение настроек](SETTINGS_WRITING.md) обнаружило отдельные
+prefix/value segments в настоящем CRT printf. После failed minus цифры могут
+продолжить вывод и снова сделать shared count неотрицательным. Оба menu-info
+writer теперь используют этот же `OriginalBufferedTextOutput.printFormat`.
+Прежние два корпуса и joined panel повторно прошли без изменения fixtures;
+их исторический объём не расширяется автоматически до новых settings сценариев.
