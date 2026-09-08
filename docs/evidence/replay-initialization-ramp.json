@@ -1,0 +1,2343 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Full catalog/bootstrap and 25 chained common preparations, actual caller 42d6fc and recording init43d2c0..43db38; supplied menu/RNG/metadata, calloc/free/device boundaries; no full startup or replay playback",
+  "corpus": "replay-initialization-ramp.json",
+  "corpusSHA256": "c77a183243fcabd5c6e2d49ec584bca725fc9c30c1315b7b7dd94f987a5b7c4a",
+  "loadedCatalogSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "cases": 25,
+  "bufferBytes": 6491672,
+  "allocations": 25,
+  "frees": 25,
+  "nativeComparison": "Replay initialization matches original: 50 complete buffers, 324583600 bytes/masks, 50 allocations / 50 releases; 50 chained preparations, 77252 state records, 115486336 state bytes/masks",
+  "readOnlySourcesPreserved": true,
+  "readsBeforeWrites": [],
+  "writeSchema": [
+    {
+      "instruction": "0x43d2fd",
+      "ranges": [
+        [
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d30a",
+      "ranges": [
+        [
+          8,
+          12
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d319",
+      "ranges": [
+        [
+          12,
+          16
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d32e",
+      "ranges": [
+        [
+          4,
+          8
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d339",
+      "ranges": [
+        [
+          328,
+          332
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d356",
+      "ranges": [
+        [
+          332,
+          338
+        ],
+        [
+          343,
+          360
+        ],
+        [
+          365,
+          420
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d382",
+      "ranges": [
+        [
+          6491072,
+          6491172
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d3a2",
+      "ranges": [
+        [
+          6491172,
+          6491272
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d3c2",
+      "ranges": [
+        [
+          6491572,
+          6491672
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d3da",
+      "ranges": [
+        [
+          420,
+          424
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d5d2",
+      "ranges": [
+        [
+          424,
+          428
+        ],
+        [
+          436,
+          440
+        ],
+        [
+          448,
+          452
+        ],
+        [
+          460,
+          464
+        ],
+        [
+          472,
+          476
+        ],
+        [
+          484,
+          488
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d5ed",
+      "ranges": [
+        [
+          496,
+          500
+        ],
+        [
+          508,
+          512
+        ],
+        [
+          520,
+          524
+        ],
+        [
+          532,
+          536
+        ],
+        [
+          544,
+          548
+        ],
+        [
+          556,
+          560
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d603",
+      "ranges": [
+        [
+          568,
+          572
+        ],
+        [
+          580,
+          584
+        ],
+        [
+          592,
+          596
+        ],
+        [
+          604,
+          608
+        ],
+        [
+          616,
+          620
+        ],
+        [
+          628,
+          632
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d618",
+      "ranges": [
+        [
+          640,
+          644
+        ],
+        [
+          652,
+          656
+        ],
+        [
+          664,
+          668
+        ],
+        [
+          676,
+          680
+        ],
+        [
+          688,
+          692
+        ],
+        [
+          700,
+          704
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d62d",
+      "ranges": [
+        [
+          712,
+          716
+        ],
+        [
+          724,
+          728
+        ],
+        [
+          736,
+          740
+        ],
+        [
+          748,
+          752
+        ],
+        [
+          760,
+          764
+        ],
+        [
+          772,
+          776
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d645",
+      "ranges": [
+        [
+          784,
+          788
+        ],
+        [
+          796,
+          800
+        ],
+        [
+          808,
+          812
+        ],
+        [
+          820,
+          824
+        ],
+        [
+          832,
+          836
+        ],
+        [
+          844,
+          848
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d65a",
+      "ranges": [
+        [
+          856,
+          860
+        ],
+        [
+          868,
+          872
+        ],
+        [
+          880,
+          884
+        ],
+        [
+          892,
+          896
+        ],
+        [
+          904,
+          908
+        ],
+        [
+          916,
+          920
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d672",
+      "ranges": [
+        [
+          928,
+          932
+        ],
+        [
+          940,
+          944
+        ],
+        [
+          952,
+          956
+        ],
+        [
+          964,
+          968
+        ],
+        [
+          976,
+          980
+        ],
+        [
+          988,
+          992
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d68a",
+      "ranges": [
+        [
+          1000,
+          1004
+        ],
+        [
+          1012,
+          1016
+        ],
+        [
+          1024,
+          1028
+        ],
+        [
+          1036,
+          1040
+        ],
+        [
+          1048,
+          1052
+        ],
+        [
+          1060,
+          1064
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d6a5",
+      "ranges": [
+        [
+          1072,
+          1076
+        ],
+        [
+          1084,
+          1088
+        ],
+        [
+          1096,
+          1100
+        ],
+        [
+          1108,
+          1112
+        ],
+        [
+          1120,
+          1124
+        ],
+        [
+          1132,
+          1136
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d6bd",
+      "ranges": [
+        [
+          1144,
+          1148
+        ],
+        [
+          1156,
+          1160
+        ],
+        [
+          1168,
+          1172
+        ],
+        [
+          1180,
+          1184
+        ],
+        [
+          1192,
+          1196
+        ],
+        [
+          1204,
+          1208
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d6d5",
+      "ranges": [
+        [
+          1216,
+          1220
+        ],
+        [
+          1228,
+          1232
+        ],
+        [
+          1240,
+          1244
+        ],
+        [
+          1252,
+          1256
+        ],
+        [
+          1264,
+          1268
+        ],
+        [
+          1276,
+          1280
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d6ed",
+      "ranges": [
+        [
+          1288,
+          1292
+        ],
+        [
+          1300,
+          1304
+        ],
+        [
+          1312,
+          1316
+        ],
+        [
+          1324,
+          1328
+        ],
+        [
+          1336,
+          1340
+        ],
+        [
+          1348,
+          1352
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d708",
+      "ranges": [
+        [
+          428,
+          432
+        ],
+        [
+          440,
+          444
+        ],
+        [
+          452,
+          456
+        ],
+        [
+          464,
+          468
+        ],
+        [
+          476,
+          480
+        ],
+        [
+          488,
+          492
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d726",
+      "ranges": [
+        [
+          500,
+          504
+        ],
+        [
+          512,
+          516
+        ],
+        [
+          524,
+          528
+        ],
+        [
+          536,
+          540
+        ],
+        [
+          548,
+          552
+        ],
+        [
+          560,
+          564
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d738",
+      "ranges": [
+        [
+          572,
+          576
+        ],
+        [
+          584,
+          588
+        ],
+        [
+          596,
+          600
+        ],
+        [
+          608,
+          612
+        ],
+        [
+          620,
+          624
+        ],
+        [
+          632,
+          636
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d74d",
+      "ranges": [
+        [
+          644,
+          648
+        ],
+        [
+          656,
+          660
+        ],
+        [
+          668,
+          672
+        ],
+        [
+          680,
+          684
+        ],
+        [
+          692,
+          696
+        ],
+        [
+          704,
+          708
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d765",
+      "ranges": [
+        [
+          716,
+          720
+        ],
+        [
+          728,
+          732
+        ],
+        [
+          740,
+          744
+        ],
+        [
+          752,
+          756
+        ],
+        [
+          764,
+          768
+        ],
+        [
+          776,
+          780
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d77a",
+      "ranges": [
+        [
+          788,
+          792
+        ],
+        [
+          800,
+          804
+        ],
+        [
+          812,
+          816
+        ],
+        [
+          824,
+          828
+        ],
+        [
+          836,
+          840
+        ],
+        [
+          848,
+          852
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d78f",
+      "ranges": [
+        [
+          860,
+          864
+        ],
+        [
+          872,
+          876
+        ],
+        [
+          884,
+          888
+        ],
+        [
+          896,
+          900
+        ],
+        [
+          908,
+          912
+        ],
+        [
+          920,
+          924
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d7a7",
+      "ranges": [
+        [
+          932,
+          936
+        ],
+        [
+          944,
+          948
+        ],
+        [
+          956,
+          960
+        ],
+        [
+          968,
+          972
+        ],
+        [
+          980,
+          984
+        ],
+        [
+          992,
+          996
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d7bf",
+      "ranges": [
+        [
+          1004,
+          1008
+        ],
+        [
+          1016,
+          1020
+        ],
+        [
+          1028,
+          1032
+        ],
+        [
+          1040,
+          1044
+        ],
+        [
+          1052,
+          1056
+        ],
+        [
+          1064,
+          1068
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d7d7",
+      "ranges": [
+        [
+          1076,
+          1080
+        ],
+        [
+          1088,
+          1092
+        ],
+        [
+          1100,
+          1104
+        ],
+        [
+          1112,
+          1116
+        ],
+        [
+          1124,
+          1128
+        ],
+        [
+          1136,
+          1140
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d7ef",
+      "ranges": [
+        [
+          1148,
+          1152
+        ],
+        [
+          1160,
+          1164
+        ],
+        [
+          1172,
+          1176
+        ],
+        [
+          1184,
+          1188
+        ],
+        [
+          1196,
+          1200
+        ],
+        [
+          1208,
+          1212
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d807",
+      "ranges": [
+        [
+          1220,
+          1224
+        ],
+        [
+          1232,
+          1236
+        ],
+        [
+          1244,
+          1248
+        ],
+        [
+          1256,
+          1260
+        ],
+        [
+          1268,
+          1272
+        ],
+        [
+          1280,
+          1284
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d81f",
+      "ranges": [
+        [
+          1292,
+          1296
+        ],
+        [
+          1304,
+          1308
+        ],
+        [
+          1316,
+          1320
+        ],
+        [
+          1328,
+          1332
+        ],
+        [
+          1340,
+          1344
+        ],
+        [
+          1352,
+          1356
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d836",
+      "ranges": [
+        [
+          432,
+          436
+        ],
+        [
+          444,
+          448
+        ],
+        [
+          456,
+          460
+        ],
+        [
+          468,
+          472
+        ],
+        [
+          480,
+          484
+        ],
+        [
+          492,
+          496
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d853",
+      "ranges": [
+        [
+          504,
+          508
+        ],
+        [
+          516,
+          520
+        ],
+        [
+          528,
+          532
+        ],
+        [
+          540,
+          544
+        ],
+        [
+          552,
+          556
+        ],
+        [
+          564,
+          568
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d866",
+      "ranges": [
+        [
+          576,
+          580
+        ],
+        [
+          588,
+          592
+        ],
+        [
+          600,
+          604
+        ],
+        [
+          612,
+          616
+        ],
+        [
+          624,
+          628
+        ],
+        [
+          636,
+          640
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d87a",
+      "ranges": [
+        [
+          648,
+          652
+        ],
+        [
+          660,
+          664
+        ],
+        [
+          672,
+          676
+        ],
+        [
+          684,
+          688
+        ],
+        [
+          696,
+          700
+        ],
+        [
+          708,
+          712
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d88e",
+      "ranges": [
+        [
+          720,
+          724
+        ],
+        [
+          732,
+          736
+        ],
+        [
+          744,
+          748
+        ],
+        [
+          756,
+          760
+        ],
+        [
+          768,
+          772
+        ],
+        [
+          780,
+          784
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d8a2",
+      "ranges": [
+        [
+          792,
+          796
+        ],
+        [
+          804,
+          808
+        ],
+        [
+          816,
+          820
+        ],
+        [
+          828,
+          832
+        ],
+        [
+          840,
+          844
+        ],
+        [
+          852,
+          856
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d8b6",
+      "ranges": [
+        [
+          864,
+          868
+        ],
+        [
+          876,
+          880
+        ],
+        [
+          888,
+          892
+        ],
+        [
+          900,
+          904
+        ],
+        [
+          912,
+          916
+        ],
+        [
+          924,
+          928
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d8cd",
+      "ranges": [
+        [
+          936,
+          940
+        ],
+        [
+          948,
+          952
+        ],
+        [
+          960,
+          964
+        ],
+        [
+          972,
+          976
+        ],
+        [
+          984,
+          988
+        ],
+        [
+          996,
+          1000
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d8e7",
+      "ranges": [
+        [
+          1008,
+          1012
+        ],
+        [
+          1020,
+          1024
+        ],
+        [
+          1032,
+          1036
+        ],
+        [
+          1044,
+          1048
+        ],
+        [
+          1056,
+          1060
+        ],
+        [
+          1068,
+          1072
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d901",
+      "ranges": [
+        [
+          1080,
+          1084
+        ],
+        [
+          1092,
+          1096
+        ],
+        [
+          1104,
+          1108
+        ],
+        [
+          1116,
+          1120
+        ],
+        [
+          1128,
+          1132
+        ],
+        [
+          1140,
+          1144
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d91b",
+      "ranges": [
+        [
+          1152,
+          1156
+        ],
+        [
+          1164,
+          1168
+        ],
+        [
+          1176,
+          1180
+        ],
+        [
+          1188,
+          1192
+        ],
+        [
+          1200,
+          1204
+        ],
+        [
+          1212,
+          1216
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d935",
+      "ranges": [
+        [
+          1224,
+          1228
+        ],
+        [
+          1236,
+          1240
+        ],
+        [
+          1248,
+          1252
+        ],
+        [
+          1260,
+          1264
+        ],
+        [
+          1272,
+          1276
+        ],
+        [
+          1284,
+          1288
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d95a",
+      "ranges": [
+        [
+          1296,
+          1300
+        ],
+        [
+          1308,
+          1312
+        ],
+        [
+          1320,
+          1324
+        ],
+        [
+          1332,
+          1336
+        ],
+        [
+          1344,
+          1348
+        ],
+        [
+          1356,
+          1360
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d976",
+      "ranges": [
+        [
+          1360,
+          1380
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d98d",
+      "ranges": [
+        [
+          1860,
+          1864
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d99f",
+      "ranges": [
+        [
+          1864,
+          1868
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d9d9",
+      "ranges": [
+        [
+          1868,
+          1956
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d9e5",
+      "ranges": [
+        [
+          1956,
+          2044
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43d9f2",
+      "ranges": [
+        [
+          2044,
+          2132
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da02",
+      "ranges": [
+        [
+          2132,
+          2220
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da1f",
+      "ranges": [
+        [
+          2244,
+          2248
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da3c",
+      "ranges": [
+        [
+          2248,
+          5249
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da58",
+      "ranges": [
+        [
+          5256,
+          5260
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da69",
+      "ranges": [
+        [
+          5260,
+          5264
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da7a",
+      "ranges": [
+        [
+          5264,
+          5268
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da8b",
+      "ranges": [
+        [
+          5268,
+          5272
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43da9c",
+      "ranges": [
+        [
+          5272,
+          5276
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43daad",
+      "ranges": [
+        [
+          5276,
+          5280
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43dabe",
+      "ranges": [
+        [
+          5280,
+          5284
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43dacf",
+      "ranges": [
+        [
+          5284,
+          5288
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43dae0",
+      "ranges": [
+        [
+          5288,
+          5292
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43daf1",
+      "ranges": [
+        [
+          5292,
+          5296
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43db02",
+      "ranges": [
+        [
+          5296,
+          5300
+        ]
+      ]
+    },
+    {
+      "instruction": "0x43db13",
+      "ranges": [
+        [
+          5300,
+          5304
+        ]
+      ]
+    }
+  ],
+  "casesSummary": [
+    {
+      "label": "naruto-sasuke-district",
+      "mode": 0,
+      "buffer": 1912602656,
+      "storage": "45a842c674b336a15e54da535f515b01bf6a4b128c1d7f12f0534d4c7829ffc3",
+      "beforeRandom": {
+        "index": 15,
+        "counter": 4
+      },
+      "afterRandom": {
+        "index": 15,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "calloc",
+          "address": 1912602656,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3406
+    },
+    {
+      "label": "restart-district",
+      "mode": 0,
+      "buffer": 1919156256,
+      "storage": "5b416b5f60b61898100e64217df71bb97792ed494bd414f13f03894b3175839b",
+      "beforeRandom": {
+        "index": 19,
+        "counter": 4
+      },
+      "afterRandom": {
+        "index": 19,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1912602656,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1919156256,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3409
+    },
+    {
+      "label": "catalog-batch-0",
+      "mode": 0,
+      "buffer": 1925709856,
+      "storage": "63292e153302ef90b65667e6accaff01c514926312cce40601db45b3ef213226",
+      "beforeRandom": {
+        "index": 35,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 35,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1919156256,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1925709856,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3436
+    },
+    {
+      "label": "catalog-batch-1",
+      "mode": 1,
+      "buffer": 1932263456,
+      "storage": "322156ee85cf2568fdfae803cd26cbacc8a88f0d25501ab5c9080ce63066dd85",
+      "beforeRandom": {
+        "index": 60,
+        "counter": 25
+      },
+      "afterRandom": {
+        "index": 60,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1925709856,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1932263456,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3703
+    },
+    {
+      "label": "catalog-batch-2",
+      "mode": 0,
+      "buffer": 1938817056,
+      "storage": "a51e43a7d337e1d0daaa5a712c6f87a1098efcaf31649a573d9afa83fbb04ea6",
+      "beforeRandom": {
+        "index": 76,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 76,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1932263456,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1938817056,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3406
+    },
+    {
+      "label": "catalog-batch-3",
+      "mode": 1,
+      "buffer": 1945370656,
+      "storage": "a6b44fae67b5f11444b43217bb9a174caed1c9473ef868e6c72e84771be6604e",
+      "beforeRandom": {
+        "index": 100,
+        "counter": 24
+      },
+      "afterRandom": {
+        "index": 100,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1938817056,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1945370656,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3409
+    },
+    {
+      "label": "catalog-batch-4",
+      "mode": 0,
+      "buffer": 1951924256,
+      "storage": "7367e8065a2cc08f5843baf41a7b174cbf51ee235b930bededd867887b71e980",
+      "beforeRandom": {
+        "index": 116,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 116,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1945370656,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1951924256,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3436
+    },
+    {
+      "label": "catalog-batch-5",
+      "mode": 1,
+      "buffer": 1958477856,
+      "storage": "25bb7b90703733515b0c7a25e2d9b4273f2cfe4a1cc78889117abf8de7cb6054",
+      "beforeRandom": {
+        "index": 134,
+        "counter": 18
+      },
+      "afterRandom": {
+        "index": 134,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1951924256,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1958477856,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3703
+    },
+    {
+      "label": "catalog-batch-6",
+      "mode": 0,
+      "buffer": 1965031456,
+      "storage": "4ee9f216e0c8ed0b3185981aafc8fc7bd730391d578bb2ddcc105fdabc0a3bdf",
+      "beforeRandom": {
+        "index": 150,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 150,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1958477856,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1965031456,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3406
+    },
+    {
+      "label": "catalog-batch-7",
+      "mode": 1,
+      "buffer": 1971585056,
+      "storage": "beb172a43c60c2e9c4557a7a733702d75a5eefe1cb1e1711be82e0d83992ffa2",
+      "beforeRandom": {
+        "index": 166,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 166,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1965031456,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1971585056,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3409
+    },
+    {
+      "label": "catalog-batch-8",
+      "mode": 0,
+      "buffer": 1978138656,
+      "storage": "90d97b77f7593c37e327d0d0c2755810296749e0ba5bbdbbbe86ef1f01835547",
+      "beforeRandom": {
+        "index": 182,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 182,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1971585056,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1978138656,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3445
+    },
+    {
+      "label": "catalog-batch-9",
+      "mode": 1,
+      "buffer": 1984692256,
+      "storage": "1f12ef94f540274f94986fc07f172de0cb428f5b37b838e946166367336ce8bb",
+      "beforeRandom": {
+        "index": 198,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 198,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1978138656,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1984692256,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3712
+    },
+    {
+      "label": "catalog-batch-10",
+      "mode": 0,
+      "buffer": 1991245856,
+      "storage": "53b1fafdb81a5c164de9295b2b1ea0af01c9155bf19d724e169ba2b3dd010fe3",
+      "beforeRandom": {
+        "index": 214,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 214,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1984692256,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1991245856,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3415
+    },
+    {
+      "label": "catalog-batch-11",
+      "mode": 1,
+      "buffer": 1997799456,
+      "storage": "528e04fb459cf860416e590d1000cea4df9e53ceb975aa22f887c94546e1022c",
+      "beforeRandom": {
+        "index": 230,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 230,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1991245856,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 1997799456,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3418
+    },
+    {
+      "label": "catalog-batch-12",
+      "mode": 0,
+      "buffer": 2004353056,
+      "storage": "a63690e625025449cbb9cbaf666605703cdeb68c2741be6d85cac3f2d95c19d8",
+      "beforeRandom": {
+        "index": 246,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 246,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 1997799456,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2004353056,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3445
+    },
+    {
+      "label": "catalog-batch-13",
+      "mode": 1,
+      "buffer": 2010906656,
+      "storage": "512507ad3443b26d292c2b0eaf1d2cb201426a6063528c6715bfe7d165fbf7f3",
+      "beforeRandom": {
+        "index": 262,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 262,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2004353056,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2010906656,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3712
+    },
+    {
+      "label": "catalog-batch-14",
+      "mode": 0,
+      "buffer": 2017460256,
+      "storage": "38a770c30f8ea38122d0e2ae8f79c47b77279c369580fed49a5799418d61d515",
+      "beforeRandom": {
+        "index": 278,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 278,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2010906656,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2017460256,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3415
+    },
+    {
+      "label": "catalog-batch-15",
+      "mode": 1,
+      "buffer": 2024013856,
+      "storage": "63cd215927e5177b7e6a6ceee99211b1e4356f69c2490fd895dad6e9d7715415",
+      "beforeRandom": {
+        "index": 294,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 294,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2017460256,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2024013856,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3418
+    },
+    {
+      "label": "catalog-batch-16",
+      "mode": 0,
+      "buffer": 2030567456,
+      "storage": "e318b298ec4f0038df3b05359f642af2b6175c28bae1a3bade7320cf957a370e",
+      "beforeRandom": {
+        "index": 310,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 310,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2024013856,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2030567456,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3445
+    },
+    {
+      "label": "catalog-batch-17",
+      "mode": 1,
+      "buffer": 2037121056,
+      "storage": "c11e32ab56d0d5b554dfae1f04ad7841713e828c7ef8b6a013bd4f9443cc08be",
+      "beforeRandom": {
+        "index": 333,
+        "counter": 23
+      },
+      "afterRandom": {
+        "index": 333,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2030567456,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2037121056,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3712
+    },
+    {
+      "label": "status-boundaries-stage",
+      "mode": 1,
+      "buffer": 2043674656,
+      "storage": "7d0f9ec274751821f78a7c7dfa30a4a4b7aa720a9d841cd97c5ffa766b2571df",
+      "beforeRandom": {
+        "index": 349,
+        "counter": 16
+      },
+      "afterRandom": {
+        "index": 349,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2037121056,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2043674656,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3444
+    },
+    {
+      "label": "random-special-99",
+      "mode": 0,
+      "buffer": 2050228256,
+      "storage": "556fbfe0a383370aa3812416d67e7d9ab0be9ba16e9bb155f7025693184c3100",
+      "beforeRandom": {
+        "index": 9,
+        "counter": 5
+      },
+      "afterRandom": {
+        "index": 9,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2043674656,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2050228256,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3418
+    },
+    {
+      "label": "rng-index-counter-wrap",
+      "mode": 1,
+      "buffer": 2056781856,
+      "storage": "3338ee2dc087748a38a786559c164a8860eccb80e0abceaeee999e4446946bf5",
+      "beforeRandom": {
+        "index": 6,
+        "counter": 6
+      },
+      "afterRandom": {
+        "index": 6,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 1,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2050228256,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2056781856,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3445
+    },
+    {
+      "label": "direct-special-99",
+      "mode": 2,
+      "buffer": 2063335456,
+      "storage": "d84a512846a2bc640decd1b30c91949ec2067556852a58223534cab33703aa20",
+      "beforeRandom": {
+        "index": 16,
+        "counter": 10
+      },
+      "afterRandom": {
+        "index": 16,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 2,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2056781856,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2063335456,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3712
+    },
+    {
+      "label": "empty-selection",
+      "mode": 0,
+      "buffer": 2069889056,
+      "storage": "99cf77b4f27ffcb58f4a4c0c94db135e5dd77d560b67638af17e67573a77addf",
+      "beforeRandom": {
+        "index": 16,
+        "counter": 0
+      },
+      "afterRandom": {
+        "index": 16,
+        "counter": 0
+      },
+      "lifecycle": [
+        {
+          "kind": "entry",
+          "caller": "0x42d701",
+          "mode": 0,
+          "activity": 1744830500,
+          "actors": 1744830900
+        },
+        {
+          "kind": "free",
+          "address": 2063335456,
+          "caller": "0x43d292"
+        },
+        {
+          "kind": "calloc",
+          "address": 2069889056,
+          "count": 1,
+          "size": 6491672,
+          "caller": "0x43d2de"
+        }
+      ],
+      "distinctWriteSites": 3415
+    }
+  ],
+  "fixture": "original-replay-initialization-ramp.json",
+  "fixtureSHA256": "dfea7380748d172ad797c3ce8789ec9b3146ce2f56a0ba333a1dc0c96627c70e",
+  "fixtureBytes": 1600792,
+  "verification": {
+    "command": "swift test --package-path native",
+    "tests": 32,
+    "failures": 0,
+    "seconds": 514.61,
+    "newTestSeconds": 113.006,
+    "testLogSHA256": "ba7d74e66320721ebcd8c4970401b4107e92fe7788353a3fd4278e98f3dcb8a6",
+    "releaseLogSHA256": "fbf7d0c06db2405bbc0731a30af843f5b23a3041c20ce32433b67fe047614bc0"
+  }
+}

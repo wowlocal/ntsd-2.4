@@ -29,9 +29,12 @@ corpora keep their separate verification scopes.
 The [common match preparation](docs/research/MATCH_PREPARATION.md) now continues
 from that loaded catalog through World/400 Actor: 50 chained scenarios match
 native Swift, including RNG, placement, arena lifecycle and input reset. Menu/RNG
-input provenance, the mode prelude, replay initialization and the remaining start
-sequence are still open, as are full gameplay, Windows startup and visual/audio
-output. Practice still uses its prior import; the new state is not yet a complete
+input provenance, the mode prelude and the remaining start
+sequence are still open. [Recording initialization](docs/research/REPLAY_INITIALIZATION.md)
+now follows that preparation: 50 complete buffers match, including source IDs,
+inactive slots, settings, strings, allocation/free order and the RNG counter reset.
+Replay playback/file IO, full gameplay, Windows startup and visual/audio
+output remain open. Practice still uses its prior import; the new state is not yet a complete
 match or wired into the wider tick reference.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s

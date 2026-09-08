@@ -142,9 +142,28 @@ The reference restores the pinned complete catalog capture; native comparison
 rebuilds and validates it before continuing through bootstrap/preparation.
 Actual PE/BSS globals plus menu/RNG stimuli and disabled music remain supplied
 boundaries. Do not call this whole menu startup or full match equivalence.
-Next recover menu/RNG input provenance, prelude 42cf8a..42d1ff, replay init 43d2c0
-and continuation after 42d701, then connect to R01.2. Enabled music 402020 uses
-DirectShow and remains explicitly unsupported; empty-path 4025b0 was executed.
+The [recording initialization](docs/research/REPLAY_INITIALIZATION.md) now follows
+that preparation through the real menu call 42d6fc, all of 43d2c0..43db38, and
+caller cleanup to 42d704. Read this study before extending replay/startup. Native
+OriginalReplayRecording matches 50 complete calloc buffers (0x630e18 each),
+324583600 bytes/masks, 50 allocations/50 frees; the linked preparation adds
+77252 state records / 115486336 bytes/masks. Two 25-case chains retain full catalog
+and bootstrap, metadata stimuli, all source bindings/arenas, restarts and control
+byte patterns. Replay init copies ALL first 18 slots, including inactive ones,
+as 13 arrays of 18 dwords. Object+6f4 exports the source ID, never registry ordinal.
+Activity sign-extends Int8; strings copy through NUL (11-byte name stride is not
+a length limit). RNG copies index and exactly 3001 table bytes, then RESETS
+450c34 to 0, as well as 450bd0/4/8. The snapshot at 42d6ed is therefore not the final
+RNG state before gameplay. The replay buffer has no pointer normalization;
+recording ownership maps an optional native buffer/generation to 4588a8 only.
+43d280 clears the recording pointer on free and leaves recording flags unchanged.
+The neighbor 4588ac remains 0 in this corpus; playback/file IO/tick recording and
+network remain open. Original calloc/free and metadata are supplied boundaries.
+The old preparation fixtures retain their earlier stop and are not rewritten.
+Next recover menu/RNG input provenance, prelude 42cf8a..42d1ff and continuation
+after 42d704, then connect to R01.2. Enabled music 402020 uses DirectShow and remains
+unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
+music disabled; this is not sound output or Windows startup.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
@@ -152,7 +171,9 @@ OriginalLoadedCatalogTests passed (135.451s), all on this shared-state change.
 Release comparisons for all three packed fixtures also passed before acceptance.
 The preparation stage additionally passed all 31 Swift tests in 398.752s,
 including the new two-corpus comparison in 75.717s; both release comparisons
-passed before fixture acceptance. Reference checks
+passed before fixture acceptance. The recording initialization stage then passed
+all 32 Swift tests in 514.610s (new two-corpus test 113.006s), plus the release
+comparison of both packed corpora before accepting them. Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.
 R01.2 follows R02.1/R03.1 with a wider execution oracle.

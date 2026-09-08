@@ -29,6 +29,7 @@ public enum MatchPreparationReference {
     private struct Case: Decodable {
         let label: String, mode: Int32, stimulus: [Write], before: Snapshot, after: Snapshot
         let constructors: [Int], calls: [Call], bitmaps: [Bitmap], events: [Event]
+        let continued: Snapshot?
     }
     private struct Corpus: Decodable {
         let exeSHA256: String, loadedFixtureSHA256: String, loadedCatalogSHA256: String
@@ -38,8 +39,8 @@ public enum MatchPreparationReference {
         let blobs: [String: Blob]
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match preparation reference: \(message)") }
-    private static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
-    private static func inflate(_ text: String, count: Int) throws -> [UInt8] {
+    static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
+    static func inflate(_ text: String, count: Int) throws -> [UInt8] {
         guard (0...20_000_000).contains(count), let source = Data(base64Encoded: text) else { throw error("Invalid compressed block") }
         var bytes = [UInt8](repeating: 0, count: count+1)
         let actual = bytes.withUnsafeMutableBufferPointer { output in
@@ -51,21 +52,30 @@ public enum MatchPreparationReference {
         bytes.removeLast(); return bytes
     }
 
-    public static func compare(loaded: Data, corpora: [Data]) throws -> Result {
+    static func unpack(_ input: Data) throws -> Data {
+        guard let packed = try? JSONDecoder().decode(Packed.self, from: input) else { return input }
+        let data = Data(try inflate(packed.deflate, count: packed.count))
+        guard digest(data) == packed.sha256 else { throw error("Envelope digest") }
+        return data
+    }
+
+    public static func compare(loaded: Data, corpora: [Data],
+                               afterPreparation: (Int, Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _, _ in }) throws -> Result {
         guard !corpora.isEmpty else { throw error("Missing preparation corpus") }
         var result = Result()
         _ = try LoadedCatalogReference.compare(loaded) { catalog in
-            for data in corpora { try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result) }
+            for (index, data) in corpora.enumerated() {
+                try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result) { caseIndex, state in
+                    try afterPreparation(index, caseIndex, catalog, &state)
+                }
+            }
         }
         return result
     }
 
-    private static func compare(_ input: Data, loadedSHA256: String, catalog: OriginalLoadedCatalog, result: inout Result) throws {
-        var data = input
-        if let packed = try? JSONDecoder().decode(Packed.self, from: input) {
-            data = Data(try inflate(packed.deflate, count: packed.count))
-            guard digest(data) == packed.sha256 else { throw error("Envelope digest") }
-        }
+    private static func compare(_ input: Data, loadedSHA256: String, catalog: OriginalLoadedCatalog, result: inout Result,
+                                 afterPreparation: (Int, inout OriginalMatchPreparation) throws -> Void) throws {
+        let data = try unpack(input)
         let corpus = try JSONDecoder().decode(Corpus.self, from: data)
         guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               corpus.loadedFixtureSHA256 == loadedSHA256,
@@ -141,7 +151,7 @@ public enum MatchPreparationReference {
         }
         try snapshot(corpus.staged, "bootstrap")
         let assets = Dictionary(uniqueKeysWithValues: corpus.assets.map { ($0.path, $0) })
-        for item in corpus.cases {
+        for (caseIndex, item) in corpus.cases.enumerated() {
             for write in item.stimulus {
                 let characters = Array(write.bytes.utf8)
                 guard characters.count % 2 == 0 else { throw error("Stimulus hex") }
@@ -205,6 +215,8 @@ public enum MatchPreparationReference {
             }
             guard released == state.releasedBitmapOrder else { throw error("Layer release order") }
             try snapshot(item.after, item.label+" after")
+            try afterPreparation(caseIndex, &state)
+            if let continued = item.continued { try snapshot(continued, item.label+" continued") }
             result.cases += 1; result.constructors += constructors.count; result.bitmaps += item.bitmaps.count
             result.releases += released.count; result.randomCalls += calls.filter { $0.kind == "rng" }.count
         }

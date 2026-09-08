@@ -337,24 +337,7 @@ def accept():
         report_path.write_text(json.dumps(report, indent=2)+'\n')
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ramp', action='store_true', help='ramp Actor/World backing; catalog remains the pinned text/a5 capture')
-    parser.add_argument('--accept', action='store_true', help='compare both existing captures natively before accepting fixtures')
-    args = parser.parse_args()
-    if args.accept:
-        assert not args.ramp
-        accept()
-        return
-    report = json.loads((ROOT/'docs/evidence/loaded-catalog.json').read_text())
-    provenance = next(c for c in report['corpora'] if c['corpus'] == 'loaded-catalog.json')
-    path = ROOT/'build/original'/provenance['corpus']
-    raw = path.read_bytes()
-    assert digest(raw) == provenance['corpusSHA256'], 'Regenerate/verify the full catalog before restoring it'
-    capture = json.loads(raw)
-    vm = MatchPreparation(capture, None if args.ramp else 0xA5)
-    del raw, capture
-    staged = vm.bootstrap()
+def run_scenarios(vm):
     by_path = {o['path']: o['index'] for o in vm.object_inputs}
     naruto, sasuke = by_path['chars\\naruto.dat'], by_path['chars\\sasuke.dat']
     two = [(1, naruto, 0), (11, sasuke, 0)]+[(0, 0, 0)]*6
@@ -374,6 +357,28 @@ def main():
     cases.append(vm.scenario('rng-index-counter-wrap', 1, 0, two, random_index=2999, random_counter=1233))
     cases.append(vm.scenario('direct-special-99', 2, 99, boundary))
     cases.append(vm.scenario('empty-selection', 0, 0, [(0, 0, 0)]*8))
+    return cases
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--ramp', action='store_true', help='ramp Actor/World backing; catalog remains the pinned text/a5 capture')
+    parser.add_argument('--accept', action='store_true', help='compare both existing captures natively before accepting fixtures')
+    args = parser.parse_args()
+    if args.accept:
+        assert not args.ramp
+        accept()
+        return
+    report = json.loads((ROOT/'docs/evidence/loaded-catalog.json').read_text())
+    provenance = next(c for c in report['corpora'] if c['corpus'] == 'loaded-catalog.json')
+    path = ROOT/'build/original'/provenance['corpus']
+    raw = path.read_bytes()
+    assert digest(raw) == provenance['corpusSHA256'], 'Regenerate/verify the full catalog before restoring it'
+    capture = json.loads(raw)
+    vm = MatchPreparation(capture, None if args.ramp else 0xA5)
+    del raw, capture
+    staged = vm.bootstrap()
+    cases = run_scenarios(vm)
     vm.verify_immutable()
     scope = 'Original 42d1ff..42d6ed after full loaded-catalog restore and real World/bootstrap; supplied menu/RNG/music boundaries, no native comparison'
     doc = dict(exeSHA256=EXE_SHA256, scope=scope, loadedCatalog=provenance['corpus'],

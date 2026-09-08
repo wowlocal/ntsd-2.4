@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--replay-initialization" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try ReplayInitializationReference.compare(loaded: loaded, corpora: corpora)
+        print("Replay initialization matches original: \(result.buffers) complete buffers, \(result.bytes) bytes/masks, \(result.allocations) allocations / \(result.releases) releases; \(result.preparation.cases) chained preparations, \(result.preparation.records) state records, \(result.preparation.bytes) state bytes/masks")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--match-preparation" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
