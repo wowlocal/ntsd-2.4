@@ -2,6 +2,14 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 11,["--character-screen","--character-screen-partial"].contains(CommandLine.arguments[1]) {
+        let complete = CommandLine.arguments[1] == "--character-screen"
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try CharacterScreenReference.compare(character: inputs[0],cycle: inputs[1],returning: inputs[2],screen: inputs[3],startup: inputs[4],menu: inputs[5],loading: inputs[6],catalog: inputs[7],sounds: inputs[8],requireComplete: complete)
+        if !complete { print("DIAGNOSTIC prefix matches: \(r.cases) cases, \(r.records) records /\(r.bytes) bytes+masks. Not fixture acceptance");exit(0) }
+        print("Character screen matches original: own parent -> \(r.cases) calls /\(r.returns) complete returns, \(r.draws) draws /\(r.events) events /\(r.helpers) helpers /\(r.checkpoints) checkpoints /\(r.records) records /\(r.bytes) bytes+masks. Selected ready Naruto/Sasuke through own keyboard phases; computer/arena selection, app UI, full match and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 10,CommandLine.arguments[1] == "--menu-cycle" {
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MenuCycleReference.compare(cycle: inputs[0],returning: inputs[1],screen: inputs[2],startup: inputs[3],menu: inputs[4],loading: inputs[5],catalog: inputs[6],sounds: inputs[7])

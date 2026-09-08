@@ -1,0 +1,18 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own menu3 -> eight human selection seats -> selected Naruto/Sasuke, ready.\nFresh loading/startup/mode/return/cycle parents are checked before continuing\nthe same CPU/stack/World. Subsequent calls supply only acquired keyboard bytes\nresolved from own control.txt and the external caller ABI. Real original\ncharacter/portrait/text/fill/input/sound and complete nested returns execute.\nResearch capture only: Native comparison, computer/arena selection, physical\ninput acquisition, Windows pixels/audio and complete game validation are open.\n",
+  "corpus": "character-screen.json",
+  "sha256": "91dc0da2ce9cbc8c0ab2a4706011c7e15a412b953fcb0653c9daccead6ca31cc",
+  "bytes": 8666757,
+  "cases": 34,
+  "nativeCompared": true,
+  "nativeComparison": "Character screen matches original: own parent -> 34 calls /34 complete returns, 312 draws /4795 events /1086 helpers /908 checkpoints /359924 records /482678794 bytes+masks. Selected ready Naruto/Sasuke through own keyboard phases; computer/arena selection, app UI, full match and Windows open",
+  "fixture": "original-character-screen.json",
+  "fixtureSHA256": "f9596b31377e66bbf0a7b948c499546d6e06b2c731debe59f1376360606abc75",
+  "fixtureBytes": 2213495,
+  "parent": {
+    "fixture": "original-menu-cycle.json",
+    "sha256": "eec5226d5a0c104e8f14718c6665f4d0e2081f4f52b998a73665736228688f4b"
+  }
+}

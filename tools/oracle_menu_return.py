@@ -80,11 +80,12 @@ class MenuReturn(ModeScreen):
    return
   assert any(a<=pc<=b for a,b in [(0x429EB7,0x429EB7),(0x42E0D2,0x42E0F9),(0x4229E2,0x422AB8),(0x424746,0x424750),(0x4287DE,0x428805),
    (0x402810,0x402A5F),(0x401F30,0x401FFF),(0x43E940,0x43E99E),(0x4450B2,0x4450BA),(0x78130000,0x7822FFFF),(STOP+0x6000,STOP+0x7FFF)]),hex(pc)
- def return_step(self,label,writes=(),inherited=False,method=0,dc=0,query=0,get=0,milliseconds=100):
+ def return_step(self,label,writes=(),inherited=False,method=0,dc=0,query=0,get=0,milliseconds=100,entry_pc=0x429EB7):
   stimulus=[]
   for p,v in writes:
    raw=struct.pack('<I',v&0xFFFFFFFF) if isinstance(v,int) else v;self.uc.mem_write(p,raw);stimulus.append(dict(address=p,bytes=raw.hex()))
-  if inherited:assert self.uc.reg_read(UC_X86_REG_EIP)==0x429EB7
+  assert entry_pc in (0x429EB7,0x42E0D2)
+  if inherited:assert self.uc.reg_read(UC_X86_REG_EIP)==entry_pc
   else:self.uc.reg_write(UC_X86_REG_ESP,self.return_sp)
   before=self.control_snapshot();retained=self.early.snapshot()
   p=dict(targetSurface=SOURCE,methodResult=method,queryResult=query,audioGetResult=get,audioSetResult=method,queriedAudio=self.music_tokens[4],audioVolume=-1234,dcResult=dc,dc=0x12345678,postResult=0)
@@ -96,7 +97,7 @@ class MenuReturn(ModeScreen):
   e.gdi.presentation_input=p;e.gdi.presentation_events=self.mode_events
   self.return_running=True
   try:
-   self.uc.emu_start(0x429EB7 if inherited else 0x4229E2,0,count=2_000_000);assert self.return_finished
+   self.uc.emu_start(entry_pc if inherited else 0x4229E2,0,count=2_000_000);assert self.return_finished
   except Exception:
    print('RETURN FAILURE',label,hex(self.uc.reg_read(UC_X86_REG_EIP)),self.mode_events[-4:],flush=True);raise
   finally:self.return_running=False;e.body_active=False;e.completion_active=False;e.prefix_active=False

@@ -1242,6 +1242,41 @@ and character selection using retained menu bitmap; then selected arena/match.
 New S-only left/up/attack/jump/latch and roster seeds are in MENU_CYCLE.md.
 Application UI/full match/Windows/full-game goal remain open.
 
+The [own character screen](docs/research/CHARACTER_SCREEN.md) now continues
+MENU_CYCLE's own429e5a/menu3 through initialization and human-seat selection.
+Both34-frame corpora match Native:68screens/68whole nested returns,66NEW
+outer4246b0 entries,1816checkpoints/11382events/2428helpers,719848records/
+965357588bytes+masks. The first screen completes the last entry already
+counted in MENU_CYCLE; do not double-count it as a new outer call. Only acquired
+keyboard100/117 from OWN control.txt selects Naruto17/Sasuke21 and team/ready;
+no Actor/menu/phase/status/Object-binding stimuli. Generic Core traverses the
+catalog by ordinal/type/source-ID gate; no character-name/ID selection handler.
+Human status0/1/2/3 can fall through in the same frame. Ready status3 clears
+latch when jump is absent, even after status2 confirmed with held attack.
+All8 World activity bytes are rewritten after each seat,400 team fields are
+checked before rendering. Portraits use own catalog bitmaps/name tails and
+all raw read/clip/Blt events match, including undefined constructor fields.
+Catalog tracker readsBeforeWrites belong to the character stage; do not carry
+them into the next input guard. This metadata covers catalog allocations,
+while draw events cover BOTH catalog and menu allocations. The first source
+diagnostics failed that scope boundary after9 frames; both fresh retries
+reproved all parents/34 frames. First Native acceptance also corrected only
+the metadata comparison scope. Core rules/expected snapshots were unchanged.
+Both9-frame diagnostic native prefixes matched; old2release MENU_CYCLE tests
+passed25.187s/build87.59s, new2character tests28.747s/build87.12s. Release
+CatalogCheck55.57s, final acceptance reference build53.89s, NTSDNative32.46s.
+All source/SwiftPM/comparison jobs terminal. All100old fixture hashes unchanged,
+both new raw/packed SHA/size/full unpack checked;102pins at
+build/research/character-screen-fixture-pins.json. Last own complete return:
+World2/menu1/mode0,selection0,countdown147,pulse4,selected17/21,status3/3,
+team0/0,latch0/0,current attack released afterphase0. Continue that own World
+through real outer calls/countdown (or actual jump acceleration), then computer
+count42b296/arena/settings/preparation. Do NOT set selection1/countdown0 by hand.
+Alternative modes, left/up/jump/team-exclusion/countdown boundaries have S
+rules but need wider D. WinMain five menu-sound loads are still S; initial
+slots remain0 in this chain. App UI/full match/Windows/full-game goal stay open.
+
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

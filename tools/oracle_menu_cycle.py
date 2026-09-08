@@ -81,7 +81,7 @@ class MenuCycle(MenuReturn):
   result=dict(label=label,stimulus=stimulus,before=before,earlyBefore=retained,prefix=prefix,local=local,inputControl=control,replay=replay,round=outcome,music=music,resources=resources,mode=mode,returned=returned,after=self.control_snapshot(),earlyAfter=self.early.snapshot(),end=dict(pc=self.uc.reg_read(UC_X86_REG_EIP),sp=self.uc.reg_read(UC_X86_REG_ESP)))
   print('CYCLE',label,'phase',prefix['phase'],'menu',self.u32(0x44D020),'control events',len(control['events']),'at',hex(self.uc.reg_read(UC_X86_REG_EIP)),flush=True)
   return result
- def capture_return(self,first):
+ def capture_return(self,first,after_cycle=None):
   suffix='-control' if self.control else '';r=json.loads((ROOT/'docs/evidence'/f'mode-screen{suffix}.json').read_bytes());raw=(ROOT/'build/original'/r['corpus']).read_bytes()
   assert digest(raw)==r['sha256'];old=json.loads(raw)
   assert first['cases']==old['cases'][:1] and all(old['blobs'][k]==v for k,v in first['blobs'].items())
@@ -98,7 +98,8 @@ class MenuCycle(MenuReturn):
    (ROOT/'build/research'/f'menu-cycle-partial{suffix}.json').write_text(json.dumps(document(),separators=(',',':'))+'\n')
   assert [c['prefix']['phase'] for c in cases]==[0,1,0,1]
   assert self.u32(0x44D020)==3
-  return document()
+  result=document()
+  return result if after_cycle is None else after_cycle(self,result)
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--control',action='store_true');p.add_argument('--accept',action='store_true');a=p.parse_args()

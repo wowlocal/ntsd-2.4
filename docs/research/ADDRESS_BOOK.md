@@ -205,10 +205,11 @@ probes не означают выполнение всего внешнего ц
 | `42e0d2..42e0f9` | Эпилог429730/ret12 | D двух собственных первых возвратов [MENU_RETURN](MENU_RETURN.md); caller`4229dd`, return`4229e2` |
 | `4229e2..422ab8` | Network notice, volume/present, menu0 timer,41bc90 ret4 | D190 output cases, только два первых исполняют эпилог; остальные188 останавливаются до422a95 |
 | `424746..424750`, `4287de..428805` | held457580=0 и ранний ret4 после41bc90 | D двух собственных первых возвратов: ESP/SEH/nonvolatile восстановлены; cursor/44d060/второй present здесь отсутствуют |
-| `429f09..42a1ea` | Начало menu3/1 character selection, teams и CHARMENU | S; ещё не новое native/D покрытие |
+| `429f09..42a1ea` | Menu3/1 character initialization,400 teams и CHARMENU | D в68 собственных [CHARACTER_SCREEN](CHARACTER_SCREEN.md); Stage/War альтернативы пока S |
 | `4246b0` → `41bc90` → `429e5a` | Повторный собственный World2, phase/input/round/menu | D8 вызовов [MENU_CYCLE](MENU_CYCLE.md):6 полных ret4,2 остановки перед character-selection dispatch; acquired key без подстановки Actor/menu/phase |
 | `41bcd0..41bd24`, `41bdce..41be92` | Повторный non-playback пролог и оба command buffers после завершённой загрузки | D фаз0/1/0/1, собственного подтверждения VS и отложенного отпускания; playback prefix остаётся отдельной границей |
-| `42a69e..42a6c6` | Right-navigation gate для signed sourceID/10 групп3 и5 | S: доступ только458428==1; общий фильтр каталога, остальные navigation ветви открыты |
+| `42a69e..42a6c6` | Right-navigation gate для signed sourceID/10 групп3 и5 | D собственного закрытого gate и обхода до Naruto/Sasuke; открытый gate/left/up/jump требуют дополнительных probes |
+| `42a25a..42b290`, `42e0b6..42e0d2` | Human-seat render/join/roster/team/ready, activity и countdown | D68 собственных экранов/816 внутренних checkpoints; следующий computer count42b296 ещё открыт, альтернативные modes/edge cases пока S |
 
 ## Известные структуры: опоры для R02.1
 
