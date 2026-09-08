@@ -81,9 +81,15 @@ public enum OriginalMatchPrelude {
     /// Shared original 401a30 path for the loop=0 requests made by this menu.
     static func confirmationSound(in state: OriginalStateRecord,
                                   observe: (OriginalMatchPreludeEvent) throws -> Void) throws {
+        try playSound(in: state,slot: 0x455610,observe: observe)
+    }
+
+    /// The same401a30 loop=0 helper also serves both input-control toggles.
+    static func playSound(in state: OriginalStateRecord, slot: Int,
+                          observe: (OriginalMatchPreludeEvent) throws -> Void) throws {
         try observe(.soundRequest(loop: false))
         if try state.integer(at: 0x44eecc-OriginalMatchPreparation.globalBase, as: UInt32.self) == 0 { return }
-        let resource = try state.integer(at: 0x455610-OriginalMatchPreparation.globalBase, as: UInt32.self)
+        let resource = try state.integer(at: slot-OriginalMatchPreparation.globalBase, as: UInt32.self)
         if resource == 0 { return }
         // All three methods execute even when an earlier HRESULT fails.
         try observe(.soundMethod(resource: resource, vtableOffset: 0x48, arguments: []))

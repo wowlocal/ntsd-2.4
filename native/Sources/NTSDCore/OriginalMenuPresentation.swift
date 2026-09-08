@@ -44,6 +44,39 @@ public enum OriginalMenuPresentationEntry: String, Codable, Sendable {
 /// Shared 4246b0 presentation/return, and its exact World+0==1 branch.
 /// Rendering, COM/GDI and allocator IO are explicit requests. No Windows runtime.
 public enum OriginalMenuPresentation {
+    /// Shared4019b0/401d30/43d2a0 then PostMessage(close), also called on
+    /// network mismatches. Keep stale buffer slots/counts after device release.
+    public static func shutdown(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
+                                observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+        var state = globals, owned = memory
+        func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-OriginalMatchPreparation.globalBase,as: UInt32.self) }
+        func method(_ resource: UInt32) throws {
+            guard resource != 0 else { throw OriginalStateError.invalidStorage("Null shutdown COM resource") }
+            try observe(.init(.method,[resource,8]))
+        }
+        if try word(0x44eecc) != 0 {
+            for (countAddress,arrayAddress) in [(0x458438,0x452948),(0x45843c,0x451db0)] {
+                let count = Int32(bitPattern: try word(countAddress))
+                guard count <= (OriginalMatchPreparation.globalBase+state.bytes.count-arrayAddress)/4 else { throw OriginalStateError.invalidStorage("Sound release list extent") }
+                if count > 0 { for index in 0..<Int(count) { try method(word(arrayAddress+index*4)) } }
+            }
+            try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
+        }
+        for address in [0x44f04c,0x44f048,0x44f044,0x44f040] {
+            let pointer = try word(address)
+            if pointer != 0 { try method(pointer); try state.write(UInt32(0),at: address-OriginalMatchPreparation.globalBase) }
+        }
+        for offset in [0,4] {
+            let pointer = try owned.replayPointers.integer(at: offset,as: UInt32.self)
+            if pointer != 0 {
+                guard var allocation = owned.allocations[pointer], allocation.live else { throw OriginalStateError.invalidStorage("Unknown/dead shutdown allocation") }
+                try observe(.init(.free,[pointer])); allocation.live = false; owned.allocations[pointer] = allocation
+                try owned.replayPointers.write(UInt32(0),at: offset)
+            }
+        }
+        try observe(.init(.postMessage,[word(0x4546f4),0x10,0,0]))
+        globals = state; memory = owned
+    }
     /// 43e940 is shared by startup, menus and the match display path.
     public static func presentSurface(globals: OriginalStateRecord,
                                       observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
@@ -198,32 +231,7 @@ public enum OriginalMenuPresentation {
             try OriginalMenuPresentation.presentSurface(globals: globals, observe: observe)
         }
         mutating func shutdown(_ observe: Observer) throws {
-            // 4019b0 gates both lists on the audio device; only that device
-            // pointer is cleared, not the lists/counts or their entries.
-            if try word(0x44eecc) != 0 {
-                for (countAddress, arrayAddress) in [(0x458438,0x452948), (0x45843c,0x451db0)] {
-                    let count = try signed(countAddress)
-                    // Storage bounds only, not an inferred game list capacity.
-                    guard count <= (OriginalMatchPreparation.globalBase+globals.bytes.count-arrayAddress)/4 else { throw error("Sound release list extent") }
-                    if count > 0 {
-                        for index in 0..<Int(count) { try method(word(arrayAddress+index*4), 8, [], observe) }
-                    }
-                }
-                try method(word(0x44eecc), 8, [], observe)
-                try write(0x44eecc, 0)
-            }
-            for address in [0x44f04c,0x44f048,0x44f044,0x44f040] {
-                let pointer = try word(address)
-                if pointer != 0 { try method(pointer, 8, [], observe); try write(address, 0) }
-            }
-            for offset in [0,4] {
-                let pointer = try memory.replayPointers.integer(at: offset, as: UInt32.self)
-                if pointer != 0 {
-                    try free(pointer, observe)
-                    try memory.replayPointers.write(UInt32(0), at: offset)
-                }
-            }
-            try observe(.init(.postMessage, [word(0x4546f4), 0x10, 0, 0]))
+            try OriginalMenuPresentation.shutdown(globals: &globals,memory: &memory,observe: observe)
         }
         mutating func run(_ entry: OriginalMenuPresentationEntry, _ observe: Observer) throws {
             guard world.bytes.count == OriginalStateRecord.worldPrefixSize,

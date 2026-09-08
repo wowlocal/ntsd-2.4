@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 7, CommandLine.arguments[1] == "--input-control" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try InputControlReference.compare(control: values[0],local: values[1],loading: values[2],catalog: values[3],sounds: values[4])
+        print("Input control matches original: \(r.cases) cases, \(r.actions) real hotkey calls, \(r.events) ordered events, \(r.sends) send /\(r.receives) receive boundaries, \(r.messages) messages, \(r.restores) playback restores /\(r.resets) input resets, \(r.records) records /\(r.bytes) bytes/masks; linked \(r.local.cases) local cases and complete first loading. Windows transport, playback startup and full match remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 7, CommandLine.arguments[1] == "--received-input" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try ReceivedInputReference.compare(received: values[0],local: values[1],loading: values[2],catalog: values[3],sounds: values[4])

@@ -1,0 +1,42 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real41c5e5..41d46f phase0 control and network path, then received input,\nafter reproduced full initial loading/natural local input. Real hotkey, sound,\nshutdown/free, input-reset and saved-playback restore helpers execute. Winsock,\nCOM, MessageBox, free and PostMessage results are explicit supplied boundaries.\nPlayback saved settings/buffers are declared inputs, not full file/startup IO.\nThe inherited memset boundary also performs431c70's300-byte keyboard reset.\n",
+  "corpus": "input-control-control.json",
+  "sha256": "670aa407423b6423ce8e5ae4ada645f582f983b1bcf2cf30be70d3e90d4eb3b9",
+  "cases": 2993,
+  "events": {
+    "action": 12992,
+    "asyncSelect": 5930,
+    "ioctl": 5930,
+    "send": 498,
+    "receive": 548,
+    "message": 76,
+    "method": 23870,
+    "free": 80,
+    "postMessage": 76,
+    "inputReset": 15,
+    "restorePlayback": 2
+  },
+  "nativeComparison": "Input control matches original: 2993 cases, 12992 real hotkey calls, 52407 ordered events, 498 send /548 receive boundaries, 76 messages, 2 playback restores /15 input resets, 2430722 records /80553312848 bytes/masks; linked 303 local cases and complete first loading. Windows transport, playback startup and full match remain open",
+  "fixture": "original-input-control-control.json",
+  "fixtureSHA256": "eed910a682485e2c7f495221639c9c30fdcbd0e70ba43a778d7705f3d4d6e9aa",
+  "fixtureBytes": 6721108,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading-control.json",
+      "sha256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog-control.json",
+      "sha256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds-control.json",
+      "sha256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265"
+    },
+    "local-input": {
+      "fixture": "original-local-input-control.json",
+      "sha256": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c"
+    }
+  }
+}

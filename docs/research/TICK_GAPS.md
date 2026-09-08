@@ -14,9 +14,13 @@
 keyboard/joystick bytes и упаковку. Она ещё не подключена к оконному Practice.
 Новый [received-input участок](RECEIVED_INPUT.md) также сравнивает4198f0/4197a0
 и их caller: status−1 remote, все восемь playback, сырые previous/phase0 current,
-полный байт записи и порядок повторных Actor-ссылок. AI bodies, OS acquisition,
-сетевой транспорт/hotkeys, playback checksum/recording и дальнейшая пауза остаются
-открытыми; прежняя таблица ниже описывает ограничения существующего прототипа.
+полный байт записи и порядок повторных Actor-ссылок.
+[Control/network участок](INPUT_CONTROL.md) теперь закрывает41c5e5..41d46f
+в обоих первых caller после загрузки: hotkeys, packets/checksums, shutdown,
+input reset и возврат сохранённых настроек совпали с native в5 986 случаях.
+AI bodies, OS acquisition, реальный сетевой транспорт, playback source/
+checksum/recording и дальнейшая пауза остаются открытыми; прежняя таблица ниже
+описывает ограничения существующего прототипа.
 
 | Стадия оригинала | Python / Swift сейчас | Следствие и очередь |
 | --- | --- | --- |

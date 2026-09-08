@@ -156,7 +156,9 @@ public struct OriginalMatchPreparation {
         for address in stride(from: 0x4513a4, through: 0x4513bc, by: 4) { try setGlobal(address, 0) }
         for slot in 0..<8 {
             try setGlobal(0x451320+slot*4, 0)
-            for offset in [0xd3, 0xd2, 0xd1, 0xcf, 0xd0, 0xce, 0xcd] { try actors[slot].write(UInt8(0), at: offset) }
+            let actor = try world.integer(at: 0x194+slot*4,as: UInt32.self)
+            guard actor < actors.count else { throw Self.error("Input reset Actor binding") }
+            for offset in [0xd3, 0xd2, 0xd1, 0xcf, 0xd0, 0xce, 0xcd] { try actors[Int(actor)].write(UInt8(0), at: offset) }
         }
         for address in 0x455378..<(0x455378+300) { try globals.write(UInt8(0x75), at: address-Self.globalBase) }
     }

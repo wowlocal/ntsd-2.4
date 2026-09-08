@@ -74,6 +74,10 @@ D означает проверку ограниченного поведени�
 | R03/R14 | `0x41098e..0x410a99`, фрагмент | Регистрация пути звука в общем кэше | D отдельных случаев, звуковое устройство выключено |
 | R04/R16 | `0x4198f0`, функция | Применение сетевых команд мест со status ровно−1; запись полного байта | D1452 случаев /757 remote returns [RECEIVED_INPUT](RECEIVED_INPUT.md), все256 byte values/phase/status/alias controls; socket transport отдельно |
 | R04/R16 | `0x4197a0`, функция | Применение команд повтора ко всем восьми местам | D того же корпуса: raw previous, phase0 decoding, игнорирование status/activity; источник playback packet отдельно |
+| R02/R04/R16 | `0x41c5e5..0x41d46f`, фрагмент | Phase0 local hotkeys, два порядка packet exchange, checksums и ошибки | D5 986 случаев против Swift: [INPUT_CONTROL](INPUT_CONTROL.md), оба первых caller непрерывны от загрузки; Winsock/COM/MessageBox/free/PostMessage — явные границы |
+| R04/R15 | `0x416c70..0x416fad`, группа helpers | Общие команды: flags, pause/step, menu, дополнительные запросы и счётчики | D25 984 настоящих вызовов; исходные menu/mode/phase/timer gates и Int32 wrap; последующие игровые эффекты команд отдельно |
+| R02/R16 | `0x43df00..0x43df93`; caller `0x416d58..0x416d74` | Возврат saved settings/строк и звуковых флагов из playback buffer | D4 восстановлений; saved320 bytes и обе allocations supplied, строки через NUL внутри extent. Полный save/playback startup и файл открыты |
+| R04 | `0x431c70..0x431d0d`, функция | Сброс семи current bytes через восемь ссылок World и300 keyboard bytes | D30 вызовов в control corpus, включая повторные Actor-ссылки; memset — объявленная граница |
 | R02/R04/R16 | `0x41d469..0x41d4b7`, `0x41d495..0x41d5db` (без playback) | Caller remote→playback, обход при локальной паузе | D обоих корпусов, первый phase1 переход из41c5e5 непрерывен; первый phase0 control — supplied caller entry. Network/hotkeys и playback checksum вне границ |
 | R04/R17 | `0x419a60`, функция | Путь ввода локальных игроков | D606 cases/601 ret12 [LOCAL_INPUT](LOCAL_INPUT.md): keyboard/joystick bytes, phase/status/packing; AI dispatch с явными child boundaries. OS polling и Windows input/latency открыты |
 | R04/R05 | `0x413080`, функция | Буферы, управляющие переходы и скорости кадра | D срезов движения/боя/игл; прочие ветви открыты |
@@ -117,6 +121,7 @@ D означает проверку ограниченного поведени�
 | R01/R02 | [OriginalMelee.swift](../../native/Sources/NTSDCore/OriginalMelee.swift), [OriginalClock.swift](../../native/Sources/NTSDCore/OriginalClock.swift) | [oracle_projectiles.py](../../tools/oracle_projectiles.py), [oracle_presentation.py](../../tools/oracle_presentation.py); полного такта пока нет |
 | R02 | [OriginalStateRecord.swift](../../native/Sources/NTSDCore/OriginalStateRecord.swift) | [oracle_state.py](../../tools/oracle_state.py), [oracle_state_trace.py](../../tools/oracle_state_trace.py); конструкторы D против Swift, полный такт ещё не сравнивается |
 | R02/R06 | [OriginalWorldBootstrap.swift](../../native/Sources/NTSDCore/OriginalWorldBootstrap.swift) | [oracle_bootstrap.py](../../tools/oracle_bootstrap.py); 400 слотов с исходным порядком конструкторов, отдельная загрузочная стадия |
+| R02/R04/R16 | [OriginalInputControl.swift](../../native/Sources/NTSDCore/OriginalInputControl.swift) | [oracle_input_control.py](../../tools/oracle_input_control.py); общий control после полной загрузки, shared sound/shutdown/reset и receiveInput. Platform IO и Practice пока отдельно |
 | R02/R16 | [OriginalRandom.swift](../../native/Sources/NTSDCore/OriginalRandom.swift) | [oracle_combat.py](../../tools/oracle_combat.py), [original_replay.py](../../tools/original_replay.py) |
 | R02/R03 | [OriginalStageLoader.swift](../../native/Sources/NTSDCore/OriginalStageLoader.swift) | [oracle_stages.py](../../tools/oracle_stages.py); полный storage/порядок загрузки, не Stage gameplay |
 | R03/R13 | [OriginalBackgroundLoader.swift](../../native/Sources/NTSDCore/OriginalBackgroundLoader.swift) | [oracle_backgrounds.py](../../tools/oracle_backgrounds.py); metadata и layer resource lifecycle, не renderer |
@@ -170,7 +175,7 @@ D означает проверку ограниченного поведени�
 | `0x450b90`, `0x450bfc`, `0x44fb60`, `0x44fcb0` | Фаза и очередь паузы | S/D R01.1; полный ввод — R04 |
 | `0x450bd0`, `0x450bd4`, `0x450bd8` | Счётчики modulo 12/3 и переключатель неприостановленного пути | S/D R01.1; в старом нативном состоянии отсутствуют |
 | `0x44ff90`, `0x450bcc`, `0x450c34` | Таблица RNG, индекс, счётчик | Восстановление seed D; инициализация нового матча открыта |
-| `0x450b4c`, восемь 32-битных ячеек | Режимы входных слотов | -1 используется для входов повтора; для камеры стенд временно меняет выбранный слот |
+| `0x450b4c`, восемь 32-битных ячеек | Режимы входных слотов |4198f0 выбирает ровно−1 для remote input;4197a0 применяет playback ко всем восьми независимо от статуса. Для камеры старый стенд временно меняет выбранный слот |
 | `0x450bc4`, `0x450bc8` | Положение и скорость камеры | D для District |
 | `0x44d034` | Флаг учёта стоимости перехода | Стоимость включена в стенде снарядов; все режимы изменения флага открыты |
 | `0x455638`, шаг 20 байт | Кэш звуковых путей | D повторов и перекрытия; это не независимые безопасные строки |

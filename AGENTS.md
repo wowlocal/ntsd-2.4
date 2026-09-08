@@ -453,6 +453,54 @@ The received-input stage passed both new XCTest in199.401s with no failures;
 they also replay both entire old local-input and full-loading native comparisons.
 Release NTSDNative passed in2.70s. All eight inherited fixture hashes verified;
 no old fixtures or baseline assets changed. No new Practice/Windows/full-match proof.
+The [input-control study](docs/research/INPUT_CONTROL.md) now executes
+41c5e5..41d46f, whole416c70..416fad hotkey helpers and the received-input caller
+after two freshly reproduced full loading/local parents. Both first callers,
+including paused phase0, now continue on the same CPU/stack. Two2993-case
+corpora match native Swift:25984 real hotkey calls,104810 ordered events,
+996 sends/1096 receives,152 messages/close requests,160 frees,30 input resets
+and4 saved-settings restores. Each pass compares2430722 records and80553312848
+bytes/masks, including both FULL replay buffers at every checkpoint; this large
+repeated byte count is not gameplay coverage. Both packed release comparisons
+passed before accepting new fixtures. The entire303-case old local corpus
+and full native loading still compare after the new onNatural callback.
+All8 parent fixture SHA values are unchanged. Read the study before extending
+network, playback or41d4b7. No Practice/W/full-match claim follows.
+Phase!=0 skips control. Phase0 always calls two AsyncSelect then two ioctl,
+even network0; first ioctl argp is NULL, second points to a zeroed scratch word.
+The network byte is tested for EXACT0/1/2, unlike local-input's signed>0 test.
+1 sends22 then receives fragments;2 receives then sends. Send failures are
+ignored. Received total is unsigned; last result is signed. Old packet bytes
+survive incomplete receive. Sequence is wrapping(old+1)%50; checksum is wrapping
+sum of HP Actor+2fc in first20 seats with activity EXACT1, then%100+1.
+44f620 is catalog checksum, not RNG. Three header bytes sign-extend before
+comparison; catalog bytes compare raw. Each mismatch calls shared shutdown and
+posts close, then CONTINUES through later checks/commands. Preserve repeated
+messages, stale sound lists/counts and cleared device/replay pointers.
+OriginalMatchPrelude.playSound shares real401a30 loop0 for455610/455618/45561c.
+Control probes explicitly bind455618/c to two loaded registry buffers; their
+actual startup slot assignment and audio output remain unproved.
+OriginalMenuPresentation.shutdown is shared with these error exits.
+resetOriginalInput now resolves all8 World table references in order, including
+aliases, rather than assuming the first8 allocations. Real431c70 executes;
+only its standard memset(455378,75,300) remains the inherited CRT boundary.
+OriginalInputControlContext owns supplied saved320 bytes and the shared replay
+allocation registry.43df00 restores signed byte45877c,8 names/3 strings through
+NUL; caller restores flags from buffer+630bb8/c. Strings must terminate within
+the supplied extent. Playback startup/save/file IO and out-of-extent overlaps
+remain open. Helpers are observed, not stubbed; only OS/COM/free responses are
+supplied. Explicit code hooks stop the harness at41d46f/41d4b7/41d5db because
+cached translated blocks could cross a later emu_start until boundary. Diagnostic
+snapshot restoration was not accepted as continuous evidence; both accepted
+captures reran full loading. Next43dc50 playback source,41d4b7 checksum,
+43db40 recording and counters through41d714, then pause/menu429730.
+Shared preparation/menu regressions passed2 XCTest in220.747s. Both new fixture
+XCTest passed in193.315s (97.052+96.263), no failures. Release NTSDNative built
+in2.61s. This does not verify Practice, devices, Windows or clean macOS.
+The new reference comparator checks full byte representations for speed in
+debug, with semantic Bool-array fallback if mask representations differ. It
+does not sample or rely only on hashes. Both release comparisons passed again
+after this reference-only optimization; all10 fixture hashes stayed unchanged.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
