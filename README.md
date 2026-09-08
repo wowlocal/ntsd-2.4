@@ -68,13 +68,17 @@ costs in14,624 original-instruction probes, comparing every Actor byte and mask.
 It has no per-technique allowlist. Two fresh source runs also continue the own
 launch through the complete control and physics callers, revealing the original
 first landing frame219 from constructor velocities0.1. Native comparison of
-those whole passes and their remaining tick stages is still pending.
+the control pass is described below; physics and remaining tick stages are pending.
 
 The [whole Actor control function](docs/research/ACTOR_CONTROL.md) now builds on
 that input component: walking/running, airborne actions, rolls, DAT velocities,
 RNG and deferred stereo contributions.25,795 synthetic cases and5,376 cases
-using all42 original type0 Objects match Swift. Connecting this function to
-the own World caller, physics and the rest of the complete tick remains open.
+using all42 original type0 Objects match Swift. The
+[complete World control caller](docs/research/WORLD_CONTROL.md) now connects
+this function to generic teleportation, transformation and linked-object rules.
+1,491 controlled cases and both own match-launch chains match through41e634,
+including the full pool, retained resources, music and replay buffer. Full
+physics, the remaining tick stages and application UI integration are still open.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

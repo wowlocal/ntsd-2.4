@@ -1,0 +1,27 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Entire41e339..41e634 with real413080/403270 and helper ABIs.\nDeclared synthetic400-Actor pool, four Objects and initialized globals, with\noriginal constructors and full pool bytes/masks. Not a natural match capture.\nIncludes aliasing, duplicate IDs, slot order and signed/overflow controls.\n",
+  "corpus": "world-control.json",
+  "sha256": "dc9213448f092f8946ecb74628c44c542fd2d3c893bb54ce3e3a66b80a0d1616",
+  "bytes": 1101145,
+  "cases": 1491,
+  "groups": {
+    "teleport": 1176,
+    "transform-gates": 56,
+    "linked-order": 216,
+    "catalog-count": 24,
+    "teleport-alias": 4,
+    "selection-order": 6,
+    "state-reload": 2,
+    "input-transition": 4,
+    "all-slots": 1,
+    "ordered-events": 1,
+    "empty": 1
+  },
+  "helpers": 45461,
+  "instructions": 949,
+  "nativeCompared": true,
+  "fixture": "original-world-control.json",
+  "fixtureSHA256": "e4bd1bbad9abd1cd3682bd0e428a74c8fac99a911514acebd4fe7752dc5f723d",
+  "fixtureBytes": 111751
+}

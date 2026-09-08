@@ -174,3 +174,7 @@ Practice/replay. Сначала весь проход активных400 мес
 с реальным `413080(phase,mode)` и окружающими state400/401/500/501, затем
 физика `41e640..41eecb` и остальные стадии [R01.1](TICK_PIPELINE.md).
 Существующие bounded movement/combat/projectile функции не подменяют этот caller.
+
+Продолжение [WORLD_CONTROL](WORLD_CONTROL.md) теперь нативно сравнивает оба
+собственных запуска через полный control caller до41e634, сохраняя весь pool,
+ресурсы и replay. Следом полная40e490 и оставшийся physics caller до41eed1.

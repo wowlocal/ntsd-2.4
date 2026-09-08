@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -32,9 +32,28 @@ public enum MatchLaunchReference {
         let exeSHA256: String,dllSHA256: String,parent: InputControlReference.Parent,worldAddress: UInt32
         let actorAddresses: [UInt32],objectAddresses: [UInt32],localTime: [UInt16],cases: [Case],blobs: [String:InputControlReference.Blob]
     }
+    struct Control: Decodable {
+        struct Checkpoint: Decodable { let label: String,pc: UInt32,slot: Int,actor: Storage }
+        struct Helper: Decodable { let entry: UInt32,entrySP: UInt32,returnSP: UInt32,pop: UInt32,saved: [UInt32],this: UInt32,arguments: [UInt32] }
+        struct Section: Decodable {
+            let label: String,before: State,after: State,helpers: [Helper],checkpoints: [Checkpoint]
+            let readsBeforeWrites: [CharacterScreenReference.UndefinedRead],end: MenuStartupReference.Position
+        }
+        let exeSHA256: String,dllSHA256: String,parent: InputControlReference.Parent,worldAddress: UInt32
+        let actorAddresses: [UInt32],objectAddresses: [UInt32],cases: [Section],blobs: [String:InputControlReference.Blob]
+    }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
-    public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true) throws -> Result {
+    public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
+                               gameplayControl: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
+        let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        if let control {
+            guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
+                  control.parent.sha256 == MatchPreparationReference.digest(launch),control.worldAddress == c.worldAddress,
+                  control.actorAddresses == c.actorAddresses,control.objectAddresses == c.objectAddresses,
+                  control.cases.map(\.label) == ["control","physics"] else { throw error("Gameplay control parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -42,11 +61,11 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
-            guard let b = c.blobs[key] else { throw error("Missing blob") }
+            guard let b = blobs[key] else { throw error("Missing blob") }
             let raw = try MatchPreparationReference.inflate(b.deflate,count: b.count,maximumCount: 8_000_000)
             guard MatchPreparationReference.digest(Data(raw)) == key else { throw error("Blob SHA") };cache[key] = raw;return raw
         }
@@ -213,8 +232,39 @@ public enum MatchLaunchReference {
                 state:state,context:context,crt:crt,music:music,resources:resources,replayAddresses:replayAddresses,gameplay:true)
             state = entry.state;context = entry.context;records += entry.records;bytes += entry.bytes;events += entry.events;checkpoints += entry.checkpoints
             try snapshot(state,c.cases[7].after,"first gameplay boundary")
+            if let control {
+                // Continue our own first gameplay entry. The source also contains
+                // a later physics section; this comparison claims CONTROL ONLY.
+                let section = control.cases[0]
+                guard section.end.pc == 0x41e634,section.end.sp == 0x1000e9bc,section.readsBeforeWrites.isEmpty else { throw error("Control boundary/provenance") }
+                try snapshot(state,section.before,"own control before")
+                let phase = try state.globals.integer(at: 0x450b90-0x44d000,as: UInt32.self)
+                let mode = try state.globals.integer(at: 0x451160-0x44d000,as: UInt32.self)
+                let pops: [UInt32:UInt32] = [0x413080:8,0x412800:0,0x4128f0:0,0x4129e0:0,0x412ac0:0,0x412ba0:0,0x412c90:0,0x412d80:0,0x412e60:0,0x412f40:4,
+                    0x40e170:8,0x40e2d0:4,0x40e450:4,0x417170:0,0x403270:8,0x4034e0:0]
+                for h in section.helpers {
+                    guard pops[h.entry] == h.pop,h.returnSP == h.entrySP+4+h.pop,h.saved.count == 4 else { throw error("Control helper ABI") }
+                    if h.entry == 0x413080 { guard h.arguments == [phase,mode],actors[h.this] != nil else { throw error("Own control caller arguments") } }
+                    helpers += 1
+                }
+                let expected = section.checkpoints.filter { $0.pc == 0x41e364 }
+                let actorCalls = section.helpers.filter { $0.entry == 0x413080 }
+                guard expected.count == actorCalls.count else { throw error("Control checkpoint count") }
+                var seen = 0
+                let controlWorld = state.world
+                try OriginalWorldControl.apply(state: &state,observe: { _,_ in throw error("Unexpected first control event") },afterActorControl: { slot,actor in
+                    guard seen < expected.count,expected[seen].label == "control-return",expected[seen].slot == slot else { throw error("Control slot order") }
+                    let ownIndex = try controlWorld.integer(at: 0x194+slot*4,as: UInt32.self)
+                    guard actors[actorCalls[seen].this] == ownIndex else { throw error("Control Actor binding") }
+                    var r = try storage(expected[seen].actor)
+                    guard let o = objects[try r.integer(at: 0x368,as: UInt32.self)] else { throw error("Control Object binding") };try r.write(o,at: 0x368)
+                    try check(actor,r,"own control Actor\(slot)");seen += 1
+                })
+                guard seen == expected.count else { throw error("Missing Actor control") };controlSlots = seen
+                try snapshot(state,section.after,"own control after")
+            }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots)
     }
 }

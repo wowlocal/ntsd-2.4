@@ -1,0 +1,31 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Compare only the CONTROL section of both pinned GAMEPLAY_ENTRY captures.\nThe producer is oracle_gameplay_entry.py. It reproduced its entire own parent\nbefore continuing on the same CPU/stack. Physics bytes remain in the lossless\nartifact for provenance, but are explicitly NOT natively compared here.\n",
+  "parent": {
+    "fixture": "original-match-launch-control.json",
+    "sha256": "b7f7fd598116ad21bb5e6874d39409ec19f701aea2221d33580c1a0eb0b7efad"
+  },
+  "corpus": "gameplay-entry-control.json",
+  "sha256": "ad4234b76da16584dda58c691ff842d5095f868cd5d8f8caafbc5520318b9e0f",
+  "bytes": 1196803,
+  "fixture": "original-gameplay-control-control.json",
+  "fixtureSHA256": "84819383c9b90c4b1f842831a479450968f4ce508375ae24aa2c564666ad2c2a",
+  "fixtureBytes": 267787,
+  "nativeCompared": true,
+  "comparedSections": [
+    "control"
+  ],
+  "uncomparedSections": [
+    "physics"
+  ],
+  "end": {
+    "pc": 4318772,
+    "sp": 268495292
+  },
+  "helpers": 20,
+  "actorReturns": 2,
+  "comparedActorCheckpoints": 2,
+  "readsBeforeWrites": [],
+  "sourceEvidence": "gameplay-entry-control.json"
+}

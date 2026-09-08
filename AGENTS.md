@@ -1439,6 +1439,28 @@ draw/scheduler/recovery and full tick. Existing source GAMEPLAY_ENTRY reached
 Do not inject its expected after-state or zero ctorvelocities0.1/frame219.
 Practice/app integration, Windows, clean Mac and full-game goal remain open.
 
+The [whole World control pass](docs/research/WORLD_CONTROL.md) now continues
+both own MATCH_LAUNCH states through41e339..41e634 with shared413080 and full
+403270 teleport plus400/401/500/501 rules.1491 synthetic caller cases match
+all424408 pool bytes/masks and46144 globals plus ordered RNG/sound events;
+45461 original helper returns/949 unique executed instructions. These are
+explicit synthetic Objects/Actor/globals, not natural DAT coverage. Both own
+launch chains also match full pool/resources/CRT/music/replay before/after
+control and the two413080 returns, without expected-state injection. Raw
+GAMEPLAY_ENTRY and its accepted lossless control fixtures retain a following
+physics section: it is explicitly NOT compared by this new control check.
+MatchLaunchReference.compare(gameplayControl:) checks only through41e634.
+No new per-character handlers. World actor-table ordinals support aliasing;
+source IDs and registry ordinals remain separate, including duplicate IDs.
+State must be reloaded after each400/401/500/501 block. Linked slots already
+visited get no second control; later ones use the changed Object in the same
+pass. Whole control pool/globals roll back on unsupported paths; external
+observers must buffer events until the whole tick commits. Read the study
+before extending. Next is all40e490 and its41e634..41eed1 caller, then contacts,
+rendering/scheduling and whole tick return. Preserve own constructor velocities
+0.1 and source first landing frame219. App UI, Windows, clean Mac and the
+full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and
