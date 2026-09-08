@@ -249,6 +249,36 @@ This foundation is not wired to Practice. Windows output/network/latency stay op
 The new corpus retainsWorld+0=1 after row1 through recording; it is NOT a final
 match-tick initial state. S: next dispatcher branch424701..424736 calls423910,
 draws, writesWorld+0=2 at42471d, then4028a0/43e940. Recover that real transition.
+The [presentation study](docs/research/MENU_PRESENTATION.md) now closes that
+bounded gap in NEW corpora: real42873e..428805/ret4 plus the whole4246b0
+World1 branch, including423910/43ef50, overlay/volume/text/present/shutdown
+helpers to explicit COM/GDI/free/PostMessage boundaries. Native comparison:
+1482 returns,66 World1-to-2 transitions,177955008 bytes/masks,5382 events,
+184 actual CRT formats,8 frees,12 quit requests; then50 complete preparation/
+recording chains. Read this study before extending presentation or shutdown.
+World2 now comes from the native dispatcher branch before preparation, not
+from a new supplied selector. The earlier main-menu fixture still endsWorld1.
+Shared tail clamps cursor only above775/535 (y+2 wraps), presents, then writes
+44d060=457580 even after failed PostMessage. Network errors skip the tail.
+World1 releases only4511ac, draws45118c, writesWorld2, overlays/presents and
+returns; it does NOT execute the cursor/latch tail. Real prologue/epilogue,
+SEH/cookie and nonvolatile registers are checked; earlier screen selection
+and the intervening context to429730 remain supplied, not a whole menu loop.
+Volume:4553f3==64 wins over4553f2==64; wrap add then clamp0..100. Music uses
+34*v-3900 (zero=-10000) after successful query/get, releases queried interface
+on get failure too; five45560c..45561c buffers use ((v-100)*3800)/100 instead.
+Notice3 increments450b6c twice when not blocked, once even with450bfc!=0.
+GetDC failure skips GDI/ReleaseDC but not timers. GDI order is SetBkColor0,
+SetTextColorCOLORREF, lstrlenA, TextOutA(3,531), ReleaseDC. No pixel/audio claim.
+Shutdown releases both sound lists only when44eecc non-null, clears only that
+device pointer, then44f04c/48/44/40, both4588a8/ac slots, then PostMessage10.
+OriginalMenuPresentationMemory is an explicit allocator/ownership adapter;
+opaque menu bitmap/replay-free controls do not invent loaded pixels or real
+recording contents. Parent full replay buffers remain separately verified.
+Core and reference callbacks compose the same native state, not expected
+snapshots. Older fixtures are unchanged. Next recover screen/offset/resources
+and the World2/41bc90 menu path to429730, then R01.2 with full provenance.
+This remains separate from Practice and does not prove full startup or W.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -281,6 +311,10 @@ The main-menu stage passed two targeted Swift tests in230.344s: new menu chain
 116.782s and historical RNG initialization113.562s. Both release comparisons
 passed before acceptance. Existing fixtures are unchanged.
 Release NTSDNative build passed in2.31s for the main-menu stage as well.
+The presentation stage passed two targeted tests in249.281s: new tail/World1
+chain132.072s and historical MainMenu117.209s. Both packed a5/ramp comparisons
+passed before acceptance; older fixtures unchanged. Release NTSDNative passed
+in2.53s. This does not increase verified Practice gameplay or close R01.2/W.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

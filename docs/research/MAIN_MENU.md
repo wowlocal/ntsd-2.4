@@ -146,6 +146,11 @@ Int32 не объявляются достижимыми физическим п
 готовым начальным состоянием такта матча**. Здесь проверено сопряжение
 объявленных функций с явно установленным stack context.
 
+Позднейшее [MENU_PRESENTATION.md](MENU_PRESENTATION.md) исполняет этот tail
+и весь вызов диспетчера World=1 через настоящий ret4. В его **новых** корпусах
+World=2 получается из восстановленных инструкций и передаётся в подготовку.
+Исторические fixtures этого документа не изменяются и сохраняют World=1.
+
 [OriginalMainMenu.swift](../../native/Sources/NTSDCore/OriginalMainMenu.swift)
 воспроизводит решения общими методами и сохраняет CRT state между вызовами.
 [MainMenuReference.swift](../../native/Sources/NTSDReferenceChecks/MainMenuReference.swift)
@@ -185,8 +190,8 @@ swift test --package-path native --filter '(OriginalMainMenuTests|OriginalRandom
 
 ## Дальше по карте
 
-Восстановить общий menu presentation tail `42873e..428805`, включая
-`44d060=457580` в4287d2; сейчас этот latch явно предоставляется на входе.
+Общий menu presentation tail `42873e..428805`, включая `44d060=457580`,
+и переход World=1→2 теперь восстановлены в [следующем этапе](MENU_PRESENTATION.md).
 Разобрать предшествующий выбор экрана/смещение453da4, lifecycle ресурсов
 и переход от World+0=1 к последующим настройкам выбранного матча.
 Далее — R01.2 с подтверждённым состоянием. Полный input latency, bitmap clipping,

@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--menu-presentation" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try MenuPresentationReference.compare(loaded: loaded, corpora: corpora)
+        print("Menu presentation matches original: \(result.steps) returns, \(result.transitions) World1-to-2 transitions, \(result.bytes) bytes/masks, \(result.events) events, \(result.formats) actual CRT formats, \(result.frees) frees, \(result.quits) quit requests; \(result.menu.probes) menu probes, \(result.menu.initialization.match.cases) chained match/recording preparations, \(result.menu.initialization.match.replay.bytes) recording bytes/masks")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--main-menu" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

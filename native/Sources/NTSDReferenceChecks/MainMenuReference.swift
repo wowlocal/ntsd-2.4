@@ -39,7 +39,9 @@ public enum MainMenuReference {
         }
     }
 
-    public static func compare(loaded: Data, corpora: [Data]) throws -> Result {
+    public static func compare(loaded: Data, corpora: [Data],
+                               beforeMenus: (Int, Int, inout OriginalMatchPreparation, inout OriginalCRTRandom) throws -> Void = { _, _, _, _ in },
+                               afterProbe: (Int, Int, Int, inout OriginalMatchPreparation, inout OriginalCRTRandom) throws -> Void = { _, _, _, _, _ in }) throws -> Result {
         let inputs = try corpora.map { try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack($0)) }
         var result = Result()
         result.initialization = try RandomInitializationReference.compare(loaded: loaded, corpora: corpora) { corpusIndex, caseIndex, state, crt in
@@ -75,7 +77,8 @@ public enum MainMenuReference {
                 try check(state.world, world, label+" World")
                 guard crt.state == expected.crtState else { throw error("\(label): CRT state") }
             }
-            for probe in corpus.cases[caseIndex].mainMenu {
+            try beforeMenus(corpusIndex, caseIndex, &state, &crt)
+            for (probeIndex, probe) in corpus.cases[caseIndex].mainMenu.enumerated() {
                 for write in probe.stimulus {
                     let bytes = try hex(write.bytes)
                     guard bytes.count == 4 else { throw error("Input width") }
@@ -119,6 +122,7 @@ public enum MainMenuReference {
                 try snapshot(probe.after, probe.label+" after")
                 result.probes += 1; result.events += events.count; result.tables += probe.tables.count; result.formats += formatted.count
                 if exit == .returnWithoutPresentation { result.networkFailures += 1 }
+                try afterProbe(corpusIndex, caseIndex, probeIndex, &state, &crt)
             }
         }
         return result

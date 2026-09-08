@@ -25,7 +25,10 @@ World/Actor → пролог → подготовка → запись до `42d
 [MATCH_CONTINUATION.md](MATCH_CONTINUATION.md) добавляет дальнейшее меню до ret12.
 [RANDOM_INITIALIZATION.md](RANDOM_INITIALIZATION.md) переносит CRT seed/state
 и генерацию таблицы перед этой цепочкой. [MAIN_MENU.md](MAIN_MENU.md) добавляет
-mouse WndProc, пять пунктов меню и сетевой init. Остальные решения меню,
+mouse WndProc, пять пунктов меню и сетевой init.
+[MENU_PRESENTATION.md](MENU_PRESENTATION.md) добавляет общий tail/ret4,
+следующий dispatcher World=1→2 и volume/overlay/present/shutdown до OS.
+Остальные решения меню,
 промежуточные потребители CRT и полный такт остаются открытыми.
 
 ## Конструкторы: установленные записи
@@ -260,7 +263,7 @@ sizeof(entry) или нормализации чисел в указатели. 
 | --- | --- |
 | `4546f0/453cdc` | UInt32 координат, zero-extended low/high UInt16 lParam сообщения200; меню сравнивает их как Int32 |
 | `457580/4527e4` | Int32 флагов левой/правой кнопки:201/202 и204/205 задают1/0; кнопочные сообщения координаты не меняют |
-| `44d060` | Int32 предыдущего состояния/блокировки подтверждения; требуется ==0. Shared tail4287d2 копирует сюда457580 (пока S) |
+| `44d060` | Int32 предыдущего состояния/блокировки подтверждения; требуется ==0. Shared tail4287d2 копирует сюда457580; D следующего этапа MENU_PRESENTATION |
 | `453da4` | Int32 смещения: base=значение+202 с wrap; происхождение настройки ещё открыто |
 | `4511e0` | Int32, обнуляется при каждом входе в основной блок меню |
 | `44d064`, World+0 | Разные selectors: пункты1/2/3/4 задают44d064=0/1/6/7; пункт1 отдельно пишетWorld+0=1 |
@@ -272,6 +275,23 @@ sizeof(entry) или нормализации чисел в указатели. 
 | `44f58c/44f58e/44f590` | UInt16 family2, UInt16 htons(12345), raw UInt32 выбранного адреса;16 bytes передаются bind, включая старый padding |
 | `44f340`,200 bytes | После успешного init очищается целиком, затем получает NUL-terminated текст выбранного адреса |
 | `44f1ae` | UInt8, обнуляется в конце успешного сетевого init |
+
+Дополнение [завершения меню](MENU_PRESENTATION.md), D против native:
+
+| Globals / поле | Тип и действие |
+| --- | --- |
+| World+0 | Int32 selector; полный вызов4246b0 при1 освобождает menu bitmap, рисует, пишет2 и вызывает overlay/present |
+| `4511ac` | UInt32 menu bitmap pointer;423910 вызывает destructor/free и очищает pointer. S4238b9 подтверждает allocation1f50; loader423840 здесь не исполнен |
+| `451170/45118c` | Непрозрачные bitmap pointers курсора и перехода World1; только draw requests, происхождение ресурсов открыто |
+| `44d000` | Int32 общей громкости; изменение оборачивается, затем clamp0..100; разные формулы музыки и пяти sound buffers |
+| `4553f2/4553f3` | UInt8 control bytes; только64 включает уменьшение/увеличение, второе побеждает при одновременном нажатии |
+| `44f190` | Int32 таймера громкости:100 при изменении, уменьшается при >0 только без recording notice |
+| `450b70/450b6c/450bfc` | Int32 notice/timer/block. Положительный notice при block0 увеличивает timer, >240 очищает оба; notice3 дополнительно увеличивает timer независимо от block |
+| `44f040/44f044/44f048/44f04c` | UInt32 DirectShow interface tokens, shutdown освобождает в обратном адресном порядке и очищает каждый |
+| `44eecc`, `458438/45843c`, `452948/451db0` | Audio-device token, Int32 counts и массивы COM tokens. Shutdown при ненулевом device освобождает оба списка и device, очищая только device pointer |
+| `458348` | UInt32 present mode:1/2 Flip разных surfaces,3 Blt, остальные без device call |
+| `455608/455634/453e0c`, `453ccc` | Surface tokens и16 bytes rect; overlay использует455608 независимо от переданного ему аргумента |
+| `4588a8/4588ac` | Два внешних к ordinary globals UInt32 replay allocation pointers;43d2a0 освобождает и очищает каждый, не сбрасывая notice flags |
 
 ## Снимок: что сохраняется и что пока неизвестно
 
