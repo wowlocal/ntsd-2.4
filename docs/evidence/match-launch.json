@@ -1,0 +1,18 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own Start -> prelude/preparation/enabled music/recording -> complete return\nand next whole outer entry BEFORE41e339 gameplay. Fresh full MATCH_SELECTION\nand all its parents execute on the same CPU/stack/World/catalog/RNG. Only\ndeclared OS time/device/allocator responses and outer caller ABI are supplied.\nNo game-state replacement, disabled music, replay metadata or RNG stimuli.\nResearch capture: native comparison, app integration and Windows output open.\n",
+  "corpus": "match-launch.json",
+  "sha256": "25f5eac724c68c40cd2e7da36a6c98b48f570f98c8026a6baaf0cff7afccc6a2",
+  "bytes": 3810525,
+  "cases": 8,
+  "nativeCompared": true,
+  "nativeComparison": "Match launch matches original: 8 sections, 22597 records /198816950 bytes+masks, 450 events /431 helpers /25 checkpoints. Own Start, enabled music, recording, whole return and next full outer entry BEFORE gameplay41e339. App UI, full match and Windows remain open",
+  "fixture": "original-match-launch.json",
+  "fixtureSHA256": "dc84f98a28b5e96aa691584ccd0389c62217f57dfd64f496a8e1f4d1341a4dda",
+  "fixtureBytes": 694711,
+  "parent": {
+    "fixture": "original-match-selection.json",
+    "sha256": "88a768435ba70d5ba313a8f1da89c6eacf863072197ddb1482ff759a1e65bac0"
+  }
+}

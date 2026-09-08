@@ -16,7 +16,7 @@ public enum MenuCycleReference {
     struct Case: Decodable {
         let label: String,stimulus: [InputControlReference.GlobalWrite],before: Snapshot,earlyBefore: Retained
         let prefix: Prefix,local: MenuStartupReference.Local,inputControl: InputControlReference.Case
-        let replay: MenuStartupReference.Replay,round: MenuStartupReference.Round,music: MenuStartupReference.Music,resources: MenuStartupReference.Resources
+        let replay: MenuStartupReference.Replay,round: MenuStartupReference.Round,music: MenuStartupReference.Music?,resources: MenuStartupReference.Resources?
         let mode: ModeScreenReference.Case?,returned: MenuReturnReference.Case?,after: Snapshot,earlyAfter: Retained,end: Position
     }
     private struct Corpus: Decodable {
@@ -52,7 +52,8 @@ public enum MenuCycleReference {
     /// acquired keyboard bytes before entry, never expected Actor/menu records.
     static func compareCases(actorAddresses: [UInt32],objectAddresses: [UInt32],worldAddress: UInt32,initial: MenuStartupReference.Corpus,
         cases items: [Case],blobs sourceBlobs: [String:InputControlReference.Blob],state own: OriginalMatchPreparation,context initialContext: OriginalInputControlContext,
-        crt: OriginalCRTRandom,music initialMusic: OriginalMusicMemory,resources initialResources: OriginalMenuResourceLoading,parentSequence: Bool = false) throws -> Portion {
+        crt: OriginalCRTRandom,music initialMusic: OriginalMusicMemory,resources initialResources: OriginalMenuResourceLoading,parentSequence: Bool = false,
+        replayAddresses: [UInt32] = [],gameplay: Bool = false) throws -> Portion {
         let c = (actorAddresses: actorAddresses,objectAddresses: objectAddresses,worldAddress: worldAddress,cases: items,blobs: sourceBlobs)
         var state = own,context = initialContext,musicMemory = initialMusic,loader = initialResources
         let actors = Dictionary(uniqueKeysWithValues: c.actorAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
@@ -95,13 +96,17 @@ public enum MenuCycleReference {
         }
         func snapshot(_ state: OriginalMatchPreparation,_ context: OriginalInputControlContext,_ expected: Snapshot,_ label: String) throws {
             let raw = try blob(expected.poolBytes),mask = try blob(expected.poolMask)
-            guard raw.count == 0x7d8+400*0x420,raw.count == mask.count,mask.allSatisfy({ $0 < 2 }),expected.memory.isEmpty else { throw error("Pool/replay extent") }
+            guard raw.count == 0x7d8+400*0x420,raw.count == mask.count,mask.allSatisfy({ $0 < 2 }),expected.memory.count == replayAddresses.count else { throw error("Pool/replay extent") }
             func part(_ at: Int,_ count: Int) throws -> OriginalStateRecord { try .init(bytes: Array(raw[at..<at+count]),defined: mask[at..<at+count].map { $0 != 0 }) }
             try check(state.world,world(part(0,0x7d8)),label+" World")
             for i in 0..<400 { try check(state.actors[i],actor(part(0x7d8+i*0x420,0x420)),label+" Actor\(i)") }
             try check(state.globals,defined(expected.globals),label+" globals")
             try check(context.savedPlayback,defined(expected.saved),label+" saved playback")
             try check(context.memory.replayPointers,defined(expected.pointers),label+" replay pointers")
+            for (address,m) in zip(replayAddresses,expected.memory) {
+                guard let own = context.memory.allocations[address],own.live == m.live else { throw error("Replay ownership") }
+                try check(own.storage,.init(bytes: blob(m.bytes),defined: blob(m.defined).map { $0 != 0 }),label+" replay storage")
+            }
         }
         func pool(_ state: OriginalMatchPreparation,_ expected: MenuStartupReference.Pool,_ label: String) throws {
             guard expected.actors.count == 400 else { throw error("Local pool extent") }
@@ -110,7 +115,7 @@ public enum MenuCycleReference {
         }
         func retained(_ state: OriginalMatchPreparation,_ context: OriginalInputControlContext,_ crt: OriginalCRTRandom,_ expected: Retained,_ label: String) throws {
             try check(state.world,world(storage(expected.world)),label+" early World");try check(state.globals,defined(expected.globals),label+" early globals")
-            guard crt.state == expected.crtState,context.memory.allocations.count == expected.records.count,context.memory.replayPointers.bytes == expected.pointers else { throw error("Early ownership/CRT") }
+            guard crt.state == expected.crtState,context.memory.allocations.count == expected.records.count+replayAddresses.count,context.memory.replayPointers.bytes == expected.pointers else { throw error("Early ownership/CRT") }
             for r in expected.records {
                 guard let a = context.memory.allocations[r.address],a.live == r.live else { throw error("Early bitmap ownership") }
                 try check(a.storage,storage(r.storage),label+" early bitmap")
@@ -132,8 +137,8 @@ public enum MenuCycleReference {
             guard local.parent,local.natural,local.paused == 0,local.dispatch.isEmpty,control.inherited,control.paused == 0,
                   control.stimulus.globals.isEmpty,control.stimulus.actors.isEmpty,control.stimulus.world.isEmpty,control.stimulus.seats.isEmpty,
                   control.stimulus.buffers.isEmpty,control.stimulus.saved == nil,control.stimulus.pointers == nil,control.stimulus.live == nil,control.stimulus.commands == nil,control.stimulus.playback == nil,
-                  replay.inherited,replay.paused == 0,replay.kind == "finish",replay.entry == .recording,replay.calls.isEmpty,
-                  round.inherited,round.paused == 0,round.calls.isEmpty,round.continuation == .menu else { throw error("Own stage continuity") }
+                  replay.inherited,replay.paused == 0,replay.kind == "finish",replay.entry == .recording,replay.calls.count == (gameplay ? 1 : 0),
+                  round.inherited,round.paused == 0,round.calls.isEmpty,round.continuation == (gameplay ? .gameplay : .menu) else { throw error("Own stage continuity") }
             var phaseIndex = 0,controlIndex = 0,replayIndex = 0,roundIndex = 0,asyncIndex = 0,ioctlIndex = 0,prologues = 0
             let order: [OriginalLoadedMatchEntry.Checkpoint] = [.localBeforeDispatch,.local,.control,.received,.replay,.round]
             let outcome = try OriginalLoadedMatchCycle.run(state: &state,context: &context,controlBoundary: { request in
@@ -183,10 +188,18 @@ public enum MenuCycleReference {
             guard local.call.entrySP == sp-16,local.call.returnAddress == 0x41c5e5,local.call.saved.count == 4,local.stackAfter == sp,local.endPC == 0x41c5e5,
                   local.call.arguments == [item.prefix.phase,try state.globals.integer(at: 0x451160-0x44d000,as: UInt32.self),sp+0x434],
                   received.entry == 0x4198f0,received.entrySP == sp-16,received.returnAddress == 0x41d495,received.returnSP == sp,received.saved.count == 4,
-                  received.arguments == [0x44f198,item.prefix.phase,sp+0x434],control.endPC == 0x41d5db,replay.endPC == 0x41d714,round.endPC == 0x4229cc,
+                  received.arguments == [0x44f198,item.prefix.phase,sp+0x434],control.endPC == 0x41d5db,replay.endPC == 0x41d714,round.endPC == (gameplay ? 0x41e339 : 0x4229cc),
                   control.stackBefore == control.stackAfter,control.stackAfter == replay.stackBefore,replay.stackBefore == replay.stackAfter,
                   replay.stackAfter == round.stackBefore,round.stackBefore == round.stackAfter else { throw error("Repeated caller ABI/stack") }
-            let music = item.music
+            if gameplay {
+                let call = replay.calls[0]
+                guard call.entry == 0x43db40,call.entrySP == sp-8,call.returnSP == sp-4,call.returnAddress == 0x41d613,
+                      call.argument == sp+0x434,call.saved.count == 4 else { throw error("Own recording ret4") }
+                guard item.music == nil,item.resources == nil,item.mode == nil,item.returned == nil,item.end.pc == 0x41e339,item.end.sp == sp else { throw error("Own gameplay continuation") }
+                try snapshot(state,context,item.after,item.label+" after");try retained(state,context,crt,item.earlyAfter,item.label+" after");cases += 1
+                continue
+            }
+            guard let music = item.music,let resources = item.resources else { throw error("Menu continuation resources") }
             guard music.kind == "menu",music.inherited,music.stimulus.isEmpty,music.events.isEmpty,music.calls.isEmpty,music.formats.isEmpty,
                   music.endPC == 0x4297ae,music.endSP == 0x1000df08 else { throw error("Retained music entry") }
             try OriginalMusicPlayback.enterMenu(globals: &state.globals,memory: &musicMemory,request: { _ in throw error("Unexpected music request") })
@@ -195,7 +208,6 @@ public enum MenuCycleReference {
             for a in music.allocations {
                 guard let own = musicMemory.allocations[a.address] else { throw error("Music ownership") };try check(own,storage(a.storage),"Music bytes")
             }
-            let resources = item.resources
             guard resources.inherited,resources.stimulus.isEmpty,resources.allocations.isEmpty,resources.inputs.isEmpty,resources.calls.isEmpty,resources.events.isEmpty,
                   resources.endPC == 0x429e5a,resources.endSP == 0x1000df08 else { throw error("Retained resource entry") }
             var pointIndex = 0

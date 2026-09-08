@@ -50,7 +50,7 @@ public enum MenuReturnReference {
     }
     /// Reuses the same checks on a caller's own state; snapshots remain comparisons.
     static func compareCases(actorAddresses: [UInt32],objectAddresses: [UInt32],cases items: [Case],blobs sourceBlobs: [String:Blob],
-        state initial: OriginalMatchPreparation,context initialContext: OriginalInputControlContext,crt: OriginalCRTRandom,
+        state initial: OriginalMatchPreparation,context initialContext: OriginalInputControlContext,crt: OriginalCRTRandom,replayAddresses: [UInt32] = [],
         onFirst: ((OriginalMatchPreparation,OriginalInputControlContext) throws -> Void)? = nil) throws -> Portion {
         let c = (actorAddresses: actorAddresses,objectAddresses: objectAddresses,cases: items,blobs: sourceBlobs)
         var state = initial,context = initialContext
@@ -93,7 +93,7 @@ public enum MenuReturnReference {
         }
         func snapshot(_ state: OriginalMatchPreparation,_ context: OriginalInputControlContext,_ value: Snapshot,_ label: String) throws {
             let raw = try blob(value.poolBytes),mask = try blob(value.poolMask)
-            guard raw.count == 0x7d8+400*0x420,mask.count == raw.count,value.memory.isEmpty else { throw error("Pool/replay extent") }
+            guard raw.count == 0x7d8+400*0x420,mask.count == raw.count,value.memory.count == replayAddresses.count else { throw error("Pool/replay extent") }
             func part(_ at: Int,_ count: Int) throws -> OriginalStateRecord {
                 try .init(bytes: Array(raw[at..<at+count]),defined: mask[at..<at+count].map { $0 != 0 })
             }
@@ -106,11 +106,15 @@ public enum MenuReturnReference {
             try check(state.globals,defined(value.globals),label+" globals")
             try check(context.savedPlayback,defined(value.saved),label+" saved playback")
             try check(context.memory.replayPointers,defined(value.pointers),label+" replay pointers")
+            for (address,m) in zip(replayAddresses,value.memory) {
+                guard let own = context.memory.allocations[address],own.live == m.live else { throw error("Replay ownership") }
+                try check(own.storage,.init(bytes: blob(m.bytes),defined: blob(m.defined).map { $0 != 0 }),label+" replay storage")
+            }
         }
         func retained(_ state: OriginalMatchPreparation,_ context: OriginalInputControlContext,_ crt: OriginalCRTRandom,_ expected: Retained,_ label: String) throws {
             try check(state.world,world(storage(expected.world)),label+" early World")
             try check(state.globals,defined(expected.globals),label+" early globals")
-            guard context.memory.allocations.count == expected.records.count,crt.state == expected.crtState,
+            guard context.memory.allocations.count == expected.records.count+replayAddresses.count,crt.state == expected.crtState,
                   context.memory.replayPointers.bytes == expected.pointers else { throw error("Early ownership/CRT") }
             for r in expected.records {
                 guard let actual = context.memory.allocations[r.address],actual.live == r.live else { throw error(label+" liveness") }

@@ -55,6 +55,13 @@ match the original in2690 standalone cases, including button priority, held
 input, aliased seats and actual background/sound-device release. Connecting
 the whole screen to its own startup state and the app UI remains pending.
 
+The latest [joined match launch](docs/research/MATCH_LAUNCH.md) continues its own
+verified menu selection through preparation, enabled music, recording, complete
+menu return and the next full outer entry before gameplay. Both complete source
+passes match native state, resources and the first replay packet/checksum.
+This core chain retains the original HUD resources and remains separate from
+the app UI. The full gameplay tick and a complete match are still open.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

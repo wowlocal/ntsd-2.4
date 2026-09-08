@@ -16,6 +16,13 @@ public struct OriginalReplayRecording {
 
     public init() {}
 
+    /// Continue the caller's own loaded match without exposing/replacing its
+    /// catalog. Allocator identity is still owned by the surrounding adapter.
+    public mutating func begin(mode: Int32, state: inout OriginalMatchPreparation,
+                               observe: (OriginalReplayAllocationEvent) throws -> Void = { _ in }) throws {
+        try begin(mode: mode,world: state.world,actors: state.actors,catalog: state.catalog,globals: &state.globals,observe: observe)
+    }
+
     public mutating func clear(observe: (OriginalReplayAllocationEvent) throws -> Void = { _ in }) throws {
         if buffer != nil {
             try observe(.release(generation: generation))

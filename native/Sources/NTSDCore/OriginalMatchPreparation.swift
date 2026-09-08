@@ -7,7 +7,8 @@ public enum OriginalMatchPreparationEvent {
 }
 
 /// Common menu-confirmed preparation, EXE 42d1ff..42d6ed. Prelude/replay have
-/// separate implementations; enabled music and the match loop remain open.
+/// separate implementations. The music continuation composes the shared player;
+/// an enabled path requires its caller to provide that continuation.
 /// Actor/Object/World references are non-null ordinals; BG refs are index+1.
 public struct OriginalMatchPreparation {
     public static let globalBase = 0x44d000
@@ -17,6 +18,8 @@ public struct OriginalMatchPreparation {
     /// Supplied global state with explicit initialization provenance. This is
     /// not a recovered default for the entire Windows startup/menu sequence.
     public var globals: OriginalStateRecord
+    /// PAUSE/score/HUD resources constructed by the preceding initial loading.
+    public var interface: OriginalInitialInterfaceLoading
     public internal(set) var backgrounds: [OriginalStateRecord]
     public var bitmaps: [OriginalLoadedBitmap] { backgroundLoader.bitmaps }
     public var releasedBitmaps: Set<Int> { backgroundLoader.releasedBitmaps }
@@ -24,10 +27,12 @@ public struct OriginalMatchPreparation {
     let catalog: OriginalLoadedCatalog
     var backgroundLoader: OriginalBackgroundLoader
 
-    public init(catalog: OriginalLoadedCatalog, bootstrap: OriginalWorldBootstrap, globals: OriginalStateRecord) throws {
+    public init(catalog: OriginalLoadedCatalog, bootstrap: OriginalWorldBootstrap, globals: OriginalStateRecord,
+                interface: OriginalInitialInterfaceLoading = .init()) throws {
         guard globals.bytes.count == Self.globalSize else { throw Self.error("Global storage size") }
         self.catalog = catalog
         world = bootstrap.world; actors = bootstrap.actors; self.globals = globals
+        self.interface = interface
         backgrounds = catalog.backgrounds
         backgroundLoader = OriginalBackgroundLoader()
         backgroundLoader.resources = catalog.resources
@@ -38,14 +43,20 @@ public struct OriginalMatchPreparation {
     /// arena selection and RNG state. Unsupported preparation rolls back storage.
     public mutating func prepare(mode: Int32, bitmapFill: UInt8 = 0xa5,
                                  bitmapSource: (String) throws -> OriginalBitmapInput,
+                                 music: (inout OriginalMatchPreparation) throws -> Void = { state in
+                                     guard try state.globals.integer(at: 0x44d010-OriginalMatchPreparation.globalBase, as: Int32.self) == 0 else {
+                                         throw OriginalLoaderError.outsideVerifiedDomain("Enabled match music caller is not connected")
+                                     }
+                                 },
                                  observe: (OriginalMatchPreparationEvent) throws -> Void = { _ in }) throws {
         var candidate = self
-        try candidate.consume(mode: mode, bitmapFill: bitmapFill, bitmapSource: bitmapSource, observe: observe)
+        try candidate.consume(mode: mode, bitmapFill: bitmapFill, bitmapSource: bitmapSource, music: music, observe: observe)
         self = candidate
     }
 
     private mutating func consume(mode: Int32, bitmapFill: UInt8,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  music: (inout OriginalMatchPreparation) throws -> Void,
                                   observe: (OriginalMatchPreparationEvent) throws -> Void) throws {
         guard world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
               actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }),
@@ -134,11 +145,16 @@ public struct OriginalMatchPreparation {
                 }
             }
         }
+        // Every original417170 draw commits immediately. Publish the accumulated
+        // cursor before the music child observes this state, and retain any
+        // changes made by that child instead of overwriting them at the return.
+        try setGlobal(0x450bcc, Int32(random.index))
+        try setGlobal(0x450c34, Int32(random.counter))
         if mode == 0 {
             try observe(.resumeMusic)
             if try globals.integer(at: 0x44eed0-Self.globalBase, as: UInt8.self) != 0 {
                 try observe(.musicPath)
-                guard try global(0x44d010) == 0 else { throw Self.error("Enabled match music caller is not connected") }
+                try music(&self)
             }
         }
         for slot in 20..<400 where try !active(slot) {
@@ -147,8 +163,6 @@ public struct OriginalMatchPreparation {
         }
         try observe(.resetInput)
         try resetOriginalInput()
-        try setGlobal(0x450bcc, Int32(random.index))
-        try setGlobal(0x450c34, Int32(random.counter))
     }
 
     /// Shared body of original 431c70; menu action 5 uses the same reset.

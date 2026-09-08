@@ -2,6 +2,14 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 13,["--match-launch","--match-launch-partial"].contains(CommandLine.arguments[1]) {
+        let complete = CommandLine.arguments[1] == "--match-launch"
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath:$0)) }
+        let r = try MatchLaunchReference.compare(launch:inputs[0],selection:inputs[1],character:inputs[2],cycle:inputs[3],returning:inputs[4],screen:inputs[5],startup:inputs[6],menu:inputs[7],loading:inputs[8],catalog:inputs[9],sounds:inputs[10],requireComplete:complete)
+        if !complete { print("DIAGNOSTIC launch prefix matches: \(r.cases) sections, \(r.records) records /\(r.bytes) bytes+masks. Not fixture acceptance");exit(0) }
+        print("Match launch matches original: \(r.cases) sections, \(r.records) records /\(r.bytes) bytes+masks, \(r.events) events /\(r.helpers) helpers /\(r.checkpoints) checkpoints. Own Start, enabled music, recording, whole return and next full outer entry BEFORE gameplay41e339. App UI, full match and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 12,["--match-selection","--match-selection-partial"].contains(CommandLine.arguments[1]) {
         let complete = CommandLine.arguments[1] == "--match-selection"
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

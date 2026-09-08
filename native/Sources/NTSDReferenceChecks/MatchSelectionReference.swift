@@ -8,7 +8,8 @@ public enum MatchSelectionReference {
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Match selection reference: "+text) }
     public static func compare(selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
-                               requireComplete: Bool = true) throws -> Result {
+                               requireComplete: Bool = true,
+        onLast: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(CharacterScreenReference.Corpus.self,from: MatchPreparationReference.unpack(selection,maximumCount: 128_000_000))
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         let catalogSource = try JSONDecoder().decode(CharacterScreenReference.Catalog.self,from: MatchPreparationReference.unpack(catalog,maximumCount: 192_000_000))
@@ -31,6 +32,7 @@ public enum MatchSelectionReference {
                       try state.world.integer(at: 0,as: Int32.self) == 2 else { throw error("Match-prelude boundary") }
             }
             portion = result
+            try onLast?(result.state,result.context,crt,result.music,result.resources)
         }
         guard callbacks == 1,let p = portion else { throw error("Own character parent") }
         return .init(parent: parent,cases: p.cases,events: p.events,helpers: p.helpers,records: p.records,bytes: p.bytes,draws: p.draws,checkpoints: p.checkpoints,returns: p.returns)

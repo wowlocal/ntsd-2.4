@@ -278,6 +278,17 @@ character-selection dispatcher, затем участники/арена/мат�
 подготовка с enabled4025b0/402020, запись43d2c0 и следующий полный игровой вход.
 Другие компьютеры/режимы/музыкальные варианты, приложение и Windows открыты.
 
+[Собственный запуск матча](research/MATCH_LAUNCH.md) теперь продолжает этот
+Start через пролог, полную подготовку с включённой музыкой, запись43d2c0,
+весь возврат и следующий целый4246b0 до41e339. Оба прохода совпали с Native:
+16секций/50checkpoints/45194records/397633900bytes+masks. Сохранены собственные
+15слоёв District, десять UI bitmap и полный replay buffer. RNG35/35→39/39→39/0;
+первый вход phase1 записывает пакет/checksum1000 и достигает gameplay с tick1.
+Следом нужен **весь игровой такт после41e339** на этом собственном состоянии:
+управление413080 с окружающим проходом, физика, контакты, создание/связи,
+сортировка/камера/вывод и восстановление ресурсов. Старую Practice-композицию
+нельзя объявлять полным тактом. UI приложения, Windows, чистая macOS и цель открыты.
+
 ## Как читать прогресс
 
 Для каждого блока учитываются отдельно:
@@ -345,6 +356,7 @@ Swift-кода, число кадров или количество совпав
 | Повторный внешний цикл R02.1/R04/R15 | D8 собственных вызовов/6 полных возвратов,110 checkpoints/546 событий,59398312 bytes+masks | [MENU_CYCLE.md](research/MENU_CYCLE.md), [A5](evidence/menu-cycle.json), [control](evidence/menu-cycle-control.json); реальные phase/input/VS и retained resources, последняя остановка429e5a перед character selection; app/UI/W открыты |
 | Собственный выбор персонажей R02.1/R04/R15 | D68 экранов/68 полных возвратов,1816 checkpoints/11382 events,719848 records/965357588 bytes+masks | [CHARACTER_SCREEN.md](research/CHARACTER_SCREEN.md), [A5](evidence/character-screen.json), [control](evidence/character-screen-control.json); собственный input выбирает Naruto/Sasuke и готовность, общий каталог; другие modes/left/up/jump/team controls, computer/arena, app/UI/W открыты |
 | Собственный выбор матча R02.1/R04/R14/R15 | D100 новых внешних входов/98 возвратов/2 Start boundaries,3026 checkpoints/16840 events,1203502 records/1589446344 bytes+masks | [MATCH_SELECTION.md](research/MATCH_SELECTION.md), [A5](evidence/match-selection.json), [control](evidence/match-selection-control.json); собственные countdown/zero CPUs/District, общий RNG/музыка; далее42cf8a→подготовка/replay/первый игровой вход, остальные CPU/modes, app/W открыты |
+| Собственный запуск R02.1/R14/R16 | D16секций/50checkpoints,45194records/397633900bytes+masks,900events/862 launch/music/return helpers; два Start-возврата и два новых внешних входа до41e339 | [MATCH_LAUNCH.md](research/MATCH_LAUNCH.md), [a5](evidence/match-launch.json), [control](evidence/match-launch-control.json); собственные selected state, enabled music, UI/layers, calloc и первый packet/checksum; полный такт, app/UI/W открыты |
 
 349 групп кадров остаются за границей **сохранённой изолированной** проверки загрузчика: 290 — переполнение
 числа, 54 — длинное имя, 5 — неожиданное завершение секции. Числа взяты из

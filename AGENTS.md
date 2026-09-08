@@ -1316,6 +1316,49 @@ whole return and next full outer gameplay entry. Do not disable music or reset
 RNG/selection to bypass missing composition. App UI/first full match/Windows/
 clean macOS and the full-game goal remain open.
 
+The [own match launch](docs/research/MATCH_LAUNCH.md) now continues the same
+Start42cf8a through prelude, full preparation with enabled4025b0/402020,
+43d2c0/43d280, remaining menu, ALL nested returns and next whole4246b0
+BEFORE41e339 gameplay. Both fresh8-section corpora match Native:16sections,
+45194records/397633900bytes+masks,900events/862launch-music-return helpers/
+50checkpoints. The next local/received/recording helper ABI is also checked.
+The two Start returns complete entries already counted in MATCH_SELECTION;
+only the subsequent two4246b0 entries are new, and neither returns yet.
+Full50match/34character/4cycle parents are reproved; source mode/return uses
+FIRST own cases while Native still checks full632/95case parents. No game-state
+stimuli after the prior acquired keyboard. OS time/device/allocator/caller
+inputs stay explicit. Prelude's2sprintf run on the same CPU/DLL; music graph.log
+uses the older separate pinned CRT boundary. Actual Windows binding stays open.
+Shared prepare now exposes its music continuation with own RNG committed before
+that child. Shared4025b0 reads own44eed0 and invokes existing402020. No character
+handler added. Ten initial HUD/score/PAUSE bitmap resources now survive in
+OriginalMatchPreparation.interface from their own loading, and all bytes/masks
+are checked with catalog/new layers. Fifteen District bitmaps load; first2
+Actor reconstruct plus380inactive20..399 and shared431c70. Spawn x442/289,
+y0/0,z504/519,team10/11,HP500/500. RNG35/35->39/39, then recording counter0/index39.
+Own calloc630e18 at72000020 joins context memory; ALL18 Actor arrays include
+inactive random bindings. Native recording gets the same owned catalog through
+its state overload. No replay metadata is supplied.450b8c resets88->0; name
+20260909_123456_VS.lfr comes from declared SYSTEMTIME. Whole return has
+SP1000f42c/restored SEH/registers/held0. Next phase1 records10zero command bytes,
+checksum1000 atbuffer+14b8 andtick1 before41e339/SP1000e9bc,World2/menu0/mode0.
+Both first diagnostics stopped at43d280 because the new instruction guard
+omitted its unconditional null-pointer helper entry. Guard fixed; post-music
+sprintf binding restored for the shared output observer. BOTH fresh retries
+re-executed all parents and full8. No Core rule or expected snapshot changed to
+hide observer failures. Both4-section diagnostic native prefixes, raw a5 full
+and both packed full comparisons passed. Old6release tests87.819s/build97.16s;
+new2tests36.288s/build91.75s;8checks total124.107s. CatalogCheck builds93.36/
+93.88/57.65s,accept0.18s,NTSDNative2.81s. All processes terminal.104oldfixture
+hashes unchanged; two new raw/packed SHA/size/full JSON checked,106pins at
+build/research/match-launch-fixture-pins.json. Read this study before continuing.
+NEXT: retain this OWN41e339 state and full replay/resource ownership into the
+whole active-slot413080 caller41e339..41e62e, then physics/contact/link/draw/
+scheduler/recovery and complete first tick. Do not substitute old Practice's
+bounded composition, phase0 caller, supplied replay RNG or synthetic actor state.
+WinMain sounds, other CPUs/modes, app/UI, full match, Windows/clean macOS and
+R02.1/R01.2/full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

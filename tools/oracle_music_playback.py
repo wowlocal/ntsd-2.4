@@ -48,6 +48,10 @@ class MusicPlayback(MatchRound):
         # Keep the strict whole-instruction guard off the already independently
         # instrumented loading parent. It has no work until this continuation.
         self.uc.hook_add(UC_HOOK_CODE,self.music_code)
+        self.bind_music()
+
+    def bind_music(self):
+        # Rebind device/import boundaries without installing another observer.
         self.music_imports={}
         for i,(iat,name) in enumerate([(0x4472B8,'createInstance'),(0x447094,'createFile'),(0x447090,'convert'),
                                      (0x44708C,'closeHandle'),(0x4471C8,'message'),(0x447174,'format')]):
@@ -90,7 +94,8 @@ class MusicPlayback(MatchRound):
             self.mevent('allocate',[count],pointer=token,raw=raw);self.ret(token);return
         if address in self.music_imports:self.music_api(self.music_imports[address]);return
         assert (0x401C90<=address<=0x401E85 or 0x401F30<=address<=0x4020F6 or 0x4450B2<=address<=0x4450BA
-                or 0x429730<=address<=0x4297AE or 0x4229CC<=address<=0x4229E2),hex(address)
+                or 0x429730<=address<=0x4297AE or 0x4229CC<=address<=0x4229E2
+                or getattr(self,'music_match_caller',False) and (0x4025B0<=address<=0x4025C4 or address==0x42D6B6)),hex(address)
 
     def music_api(self,name):
         sp=self.uc.reg_read(UC_X86_REG_ESP);arg=lambda i:self.u32(sp+4+i*4);c=self.music_input
@@ -146,10 +151,15 @@ class MusicPlayback(MatchRound):
             self.uc.mem_write(address,raw);stimulus.append(dict(address=address,bytes=raw.hex()))
         self.music_input=cfg or platform();self.music_events=[];self.music_calls=[];self.music_formats=[]
         assert not self.music_pending
+        self.music_match_caller=kind=='match'
         if kind=='menu':
             if not inherited:
                 self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,self.world_address)
             start=0x4229CC;self.music_end=0x4297AE
+        elif kind=='match':
+            assert inherited and not writes and self.uc.reg_read(UC_X86_REG_EIP)==0x42D6B6
+            assert path==self.cstr(0x44EED0)
+            start=0x42D6B6;self.music_end=0x42D6BB
         else:
             start=0x402020;self.music_end=STOP
             self.uc.mem_write(self.music_arena+0x1000,path+b'\0')
@@ -163,7 +173,7 @@ class MusicPlayback(MatchRound):
             assert self.music_finished
         except Exception:
             print('MUSIC FAILURE',label,hex(self.uc.reg_read(UC_X86_REG_EIP)),self.music_events[-3:],flush=True);raise
-        finally:self.music_running=False
+        finally:self.music_running=False;self.music_match_caller=False
         assert not self.music_pending
         snapshot=self.control_snapshot()
         for k,v in self.music_initial.items():

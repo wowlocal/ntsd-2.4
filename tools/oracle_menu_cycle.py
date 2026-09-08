@@ -42,7 +42,7 @@ class MenuCycle(MenuReturn):
  def bind_output(self):
   for offset in (0,8,0x1C,0x20,0x2C,0x3C):
    for table in [VTABLE,WAVE_VTABLE,*[self.u32(token) for token in self.music_tokens]]:self.put(table+offset,RETURN_API+offset*4)
- def cycle_step(self,label,pressed=None,selection=False):
+ def cycle_step(self,label,pressed=None,selection=False,gameplay=False):
   assert self.uc.reg_read(UC_X86_REG_EIP)==STOP and self.u32(WORLD)==2
   before=self.control_snapshot();retained=self.early.snapshot();stimulus=[]
   # The first player's attack binding is read from OWN loaded control.txt.
@@ -67,7 +67,12 @@ class MenuCycle(MenuReturn):
   local=self.step(label+' local',parent=True,paused=paused);assert not local['dispatch']
   control=self.control_step(label+' control',paused=paused,inherited=True)
   replay=self.replay_step(label+' replay',paused=paused,inherited=True)
-  outcome=self.round_step(label+' round',paused=paused,inherited=True);assert outcome['continuation']=='menu'
+  outcome=self.round_step(label+' round',paused=paused,inherited=True)
+  if gameplay:
+   assert outcome['endPC']==0x41E339 and not local['dispatch']
+   return dict(label=label,stimulus=stimulus,before=before,earlyBefore=retained,prefix=prefix,local=local,inputControl=control,replay=replay,round=outcome,
+    after=self.control_snapshot(),earlyAfter=self.early.snapshot(),end=self.position(0x41E339))
+  assert outcome['continuation']=='menu'
   self.music_initial=self.control_snapshot()
   music=self.music_step(label+' music',kind='menu',inherited=True,cfg=music_platform(createPointer=self.music_tokens[0],queryPointers=self.music_tokens[1:]))
   self.resource_initial=self.control_snapshot();self.resource_music=[self.record(r) for r in self.music_allocations]

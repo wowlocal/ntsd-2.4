@@ -58,6 +58,13 @@ public enum OriginalMusicPlayback {
         try method(position,0x20,[0,0],request: request)
     }
 
+    /// Entire4025b0. The selected path belongs to the preceding menu; an empty
+    /// first byte skips402020 altogether, including its helper notification.
+    public static func resumeMatch(globals: inout OriginalStateRecord, memory: inout OriginalMusicMemory, request: Request) throws {
+        let path = try string(globals,0x44eed0)
+        if !path.isEmpty { try play(path,globals: &globals,memory: &memory,request: request) }
+    }
+
     /// Whole401d30, shared by track replacement and application shutdown.
     public static func release(globals: inout OriginalStateRecord, request: Request) throws {
         var state = globals

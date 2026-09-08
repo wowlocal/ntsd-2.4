@@ -42,8 +42,9 @@ public enum MenuStartupReference {
         let control: Snapshot, after: Snapshot, controlCommands: [UInt8], menuRegister: UInt32, endPC: UInt32
     }
     struct Replay: Decodable {
+        struct Call: Decodable { let entry: UInt32,entrySP: UInt32,returnAddress: UInt32,argument: UInt32,saved: [UInt32],returnSP: UInt32 }
         let stimulus: NoStimulus, inherited: Bool, paused: Int32, kind: String, entry: OriginalReplayTickEntry
-        let stackBefore: [UInt8], stackAfter: [UInt8], events: [OriginalReplayTickEvent], calls: [Control.Call]
+        let stackBefore: [UInt8], stackAfter: [UInt8], events: [OriginalReplayTickEvent], calls: [Call]
         let menuRegister: UInt32, after: Snapshot, endPC: UInt32
     }
     struct Round: Decodable {
@@ -155,7 +156,7 @@ public enum MenuStartupReference {
         }
         let parent = try MenuLoadingReference.compare(menu: menu,loading: loading,catalog: catalog,sounds: sounds,onLoaded: { loaded,crt,earlyMemory in
             callbacks += 1;guard callbacks == 1,!loaded.paused,loaded.commands.count == 20 else { throw error("Own loaded continuation") }
-            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals)
+            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals,interface: loaded.interface)
             var context = OriginalInputControlContext(savedPlayback: try .init(bytes: c.savedAtFirstMenu,defined: [Bool](repeating: true,count: 0x320)),memory: earlyMemory)
             var commands = Array(loaded.commands.prefix(10));let playback = Array(loaded.commands.suffix(10))
             try retained(state,context.memory,crt,c.retainedBefore)
