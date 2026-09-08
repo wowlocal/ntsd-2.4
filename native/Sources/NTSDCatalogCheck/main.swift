@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--main-menu" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try MainMenuReference.compare(loaded: loaded, corpora: corpora)
+        print("Main menu matches original: \(result.probes) probes, \(result.mouseMessages) mouse messages, \(result.bytes) bytes/masks, \(result.events) events, \(result.tables) menu-generated tables, \(result.formats) actual CRT formats, \(result.networkFailures) network error exits; \(result.initialization.match.cases) chained match/recording preparations, \(result.initialization.match.replay.bytes) recording bytes/masks")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--random-initialization" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

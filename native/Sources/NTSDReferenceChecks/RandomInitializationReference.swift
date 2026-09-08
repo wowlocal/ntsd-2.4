@@ -30,7 +30,8 @@ public enum RandomInitializationReference {
         .invalidStorage("Random initialization reference: \(message)")
     }
 
-    public static func compare(loaded: Data, corpora: [Data]) throws -> Result {
+    public static func compare(loaded: Data, corpora: [Data],
+                               afterInitialization: (Int, Int, inout OriginalMatchPreparation, inout OriginalCRTRandom) throws -> Void = { _, _, _, _ in }) throws -> Result {
         let inputs = try corpora.map { try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack($0)) }
         func blob(_ corpus: Corpus, _ key: String) throws -> [UInt8] {
             guard let value = corpus.blobs[key], value.count == OriginalMatchPreparation.globalSize else { throw error("Global blob") }
@@ -99,6 +100,7 @@ public enum RandomInitializationReference {
             try check(rng.afterGlobals)
             result.tables += 1; result.tableCalls += rng.tableCalls.count
             result.interveningCalls += rng.intervening.count
+            try afterInitialization(corpusIndex, caseIndex, &state, &generators[corpusIndex])
         })
         return result
     }

@@ -187,13 +187,13 @@ class CRT:
                     eof=bool(self.u32(FILE + 12) & 0x10), errno=self.u32(PTD + 8), outputs=outputs)
 
     def format(self, fmt, args):
-        """Real exported sprintf, only the three formats used by match prelude.
+        """Real exported sprintf, the three prelude formats and network %s.
 
         C locale/PTD and lock boundaries are the same as the scanf harness.
         Raw byte string arguments are copied to supplied DLL-VM allocations.
         No general printf format, locale, float or buffer-overflow claim.
         """
-        assert fmt in (b'%d', b'%s.lfr', b'%4d%02d%02d_%02d%02d%02d') and len(args) <= 8
+        assert fmt in (b'%d', b'%s', b'%s.lfr', b'%4d%02d%02d_%02d%02d%02d') and len(args) <= 8
         self.uc.mem_write(FORMAT, fmt+b'\0')
         self.uc.mem_write(OUTPUT-16, b'\x96'*16+b'\xA5'*0x1000+b'\x69'*16)
         self.mask = bytearray(0x1000)

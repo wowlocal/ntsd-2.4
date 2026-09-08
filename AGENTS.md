@@ -217,9 +217,38 @@ before applying the existing prelude; expected table bytes are never inputs.
 Other rand consumers414774/431a42/431a86 remain S; thread them through instead
 of assuming none. Next recover earlier menu decisions/input and complete CRT
 lifetime before42cf8a, then connect toR01.2. This is not full startup or Practice.
-Next S seed: ECX==1 calls422ac0 only after44d060==0/457580==1 checks;
-ECX==2 at427a68 calls422ac0 BEFORE those checks427a90/427a9c. Do not equate
-table rebuild count with confirmed matches. Recover427937..427a9c decisions.
+The [main-menu study](docs/research/MAIN_MENU.md) now executes all five rows
+427915..427ca7 to shared presentation/epilogue entries, including real
+402b60/402ad0/402a60 network setup and WndProc43b3d0 mouse200..205 throughret16.
+Read it before extending menus/input/network. Native OriginalMainMenu receives
+typed OS results and emits ordered boundary requests; it performs no network IO.
+1020probes/450mouse messages,139759680bytes/masks,4150events,250menu-generated
+tables,46actual CRT sprintf calls and14network-error exits match Swift, followed
+by50full preparation/recording chains. Old fixtures remain unchanged.
+Mouse coordinates are unsigned16-bit words, button messages change flags only;
+203 does not change game state, 204/205 set/clear4527e4. DefWindowProc result is
+forwarded. EBX/EBP/ESI/EDI and ret16 stack are verified with explicit OS result.
+Row2 rebuilds RNG BEFORE highlight/confirmation even when not clicked; row1
+only after44d060==0/457580==1. Rows1/2 clear457580 before sound;3/4/5 preserve it.
+Row1 setsWorld+0=1 and450b4c..58=1..4. Row3/4 set44d064=6/7; row5 requests
+Sleep300 then ShellExecute open littlefighter.com (ignored result), not exit.
+Network: startup return ignored, wVersion==0101 required; hostname only-1 fails.
+Address selection rejects raw prefixes10./192.168/169.254/127, first nonrejected,
+otherwise first. Do not use a modern IP classifier. Preserve htons(0) calls,
+source ports5000/12345, sockaddr padding, opaque pointers and socket tokens.
+AsyncSelect nonzero fails without closing; bind/listen only-1 fail, close result
+ignored and global socket not cleared. All failure paths and nonstandard results
+are explicit corpus controls, not Windows network execution. Real IPv4 controls
+use matching address bytes/text; malformed prefix probes are marked non-OS.
+Bitmap43f010 is an explicit request boundary; no renderer/pixel claim. Panel
+423b00 executes only null/first-word0 paths; enabled panel is unsupported.
+Next recover shared presentation tail42873e..428805, especially44d060=457580,
+earlier screen/offset/resource setup, and the World+0=1 transition. Stack contexts
+between4246b0 and429730 remain supplied; the intervening path is not executed.
+This foundation is not wired to Practice. Windows output/network/latency stay open.
+The new corpus retainsWorld+0=1 after row1 through recording; it is NOT a final
+match-tick initial state. S: next dispatcher branch424701..424736 calls423910,
+draws, writesWorld+0=2 at42471d, then4028a0/43e940. Recover that real transition.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -248,6 +277,10 @@ and CRT integer fixture. Both release comparisons passed before acceptance.
 The historical a5 Python prelude reproduced all25cases and ALL blobs exactly
 after the default-boundary/hook refactor. Existing fixtures are unchanged.
 Release NTSDNative build passed in2.31s on this change.
+The main-menu stage passed two targeted Swift tests in230.344s: new menu chain
+116.782s and historical RNG initialization113.562s. Both release comparisons
+passed before acceptance. Existing fixtures are unchanged.
+Release NTSDNative build passed in2.31s for the main-menu stage as well.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

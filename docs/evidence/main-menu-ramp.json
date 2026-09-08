@@ -1,0 +1,6697 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "WndProc43b3d0 mouse200..205 through ret16; main menu427915..427ca7 to shared presentation/epilogue entries; real CRT table and402b60/402ad0/402a60 network children; drawBitmap/OS/COM/empty-panel boundaries; full catalog/prelude/preparation/replay chain; no actual network, browser, Windows output or whole menu loop",
+  "corpus": "main-menu-ramp.json",
+  "corpusSHA256": "2e8ca6761376ab98029e490129797096fb5a5b7335e808f4e7acdc89723a30b2",
+  "nativeComparison": "Main menu matches original: 1020 probes, 450 mouse messages, 139759680 bytes/masks, 4150 events, 250 menu-generated tables, 46 actual CRT formats, 14 network error exits; 50 chained match/recording preparations, 324583600 recording bytes/masks",
+  "cases": 25,
+  "probes": 510,
+  "loadedCatalogSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "readsBeforeWrites": [],
+  "immutableCatalogObjectHeapBytesVerified": true,
+  "tables": 125,
+  "formats": 23,
+  "events": 2075,
+  "mouseMessages": 225,
+  "replayBytes": 162291800,
+  "probeSummary": [
+    {
+      "label": "row-edge-14",
+      "exit": "present",
+      "beforeCRT": 3659371376,
+      "afterCRT": 3659371376,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-40",
+      "exit": "present",
+      "beforeCRT": 3659371376,
+      "afterCRT": 3659371376,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-70",
+      "exit": "present",
+      "beforeCRT": 3659371376,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "8d70fd77b7aa96e0575d73e427bb420a2f961fe4a4514082264ac8015ae03305"
+    },
+    {
+      "label": "row-edge-101",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "row-edge-108",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "row-edge-137",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 2836186472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2836186472,
+      "afterCRT": 4154379360,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "04bd646ced28da0f7107a728a59bc0f7fd97a1a26a1197cbe386e9c4c698b6b6"
+    },
+    {
+      "label": "network-control-0",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 4154379360,
+      "afterCRT": 4205086808,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "message",
+        "message"
+      ],
+      "eventsSHA256": "1883e775e01e28355d3073be5ea0808ea70a08e79f56f35f77bc50c6fd33fd6a"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 4205086808,
+      "afterCRT": 2594363728,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "9d3abfee29280ecbc8acf1ba4bc0f301a72661805f1b0d3758b5b225e48d2921"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 2594363728,
+      "afterCRT": 3142754120,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "26f49d4f3b001f917e93ebe61fd683864b1dab20388ea0a911785c00911034eb"
+    },
+    {
+      "label": "row-edge-15",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f9b87b8970d9a374b0f51a12ca8b58fef3fd017a8161117cebcebc1ca91102f3"
+    },
+    {
+      "label": "row-edge-44",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-71",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-102",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0ef0d74b9f556bdb6b8d34a16a51252c5aa32e58a157b0274b6ea6f6ed413606"
+    },
+    {
+      "label": "row-edge-131",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "786f3dbbb91d95cb8c266de055d7d77a1fcbc63b14984a35364b5f1e7abdd2f3"
+    },
+    {
+      "label": "row-edge-138",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b58a94f70ff6088af6810ef8a4542735f7002ff3ced68e6148ae80a40b8d1010"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3542137408,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 3542137408,
+      "afterCRT": 3534621240,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6322a04c55367bf2bdc9bdc9b6637536c8ee30d41e6ad6037c03fb5467712c73"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 3534621240,
+      "afterCRT": 1548709680,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4d1fa2f15d54d9562cf1175fc30cd03e1d915194e2832b4cb671f3c05955f122"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 1548709680,
+      "afterCRT": 1548709680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 1548709680,
+      "afterCRT": 1548709680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 1548709680,
+      "afterCRT": 1548709680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 1548709680,
+      "afterCRT": 1267583272,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "2b7a8db32d8da6d4263503d4dc7f46b541bbef37f9dfa2f6e0029ce07c8c7c28"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 1267583272,
+      "afterCRT": 2359687200,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b7b7b0a121189bd6572cbee4b32067c3d2051b352841ee0f9033e61142c5e739"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2359687200,
+      "afterCRT": 1141431320,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "92173582ea19b39d5554bab971d37c970779e1942aacd809f07b72ed4c9ab92c"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 1141431320,
+      "afterCRT": 1172002064,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "af167b959d687c1113d41cc0248d4c3f531eae8e5a359bc36e7c2befc3eafb4c"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 1172002064,
+      "afterCRT": 3715515144,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "14f4859af57b0b271990192de4f4aeff57981a26d4022924b3a11b8c4b7e54b2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 3715515144,
+      "afterCRT": 3840312832,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "13d79b0f1e5da6bc63b58510daaee0d1abfe028cc72a8c2ba19add7632044651"
+    },
+    {
+      "label": "network-control-1",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 3840312832,
+      "afterCRT": 745340408,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "message",
+        "message"
+      ],
+      "eventsSHA256": "cd46f115b1a5db6f431fc94ea15e9c0e2e4b3b73af2976e94fdc64147d2bc23a"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 745340408,
+      "afterCRT": 838765296,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "522f9c96d62fdec4a21d19678f1233734c96286577ee1c7452da45f859cef984"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 838765296,
+      "afterCRT": 683937000,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "b44c1341b5e98bbd6c47490e766313cf150d77781ce414cd9db1a4ef02cf5a43"
+    },
+    {
+      "label": "row-edge-16",
+      "exit": "present",
+      "beforeCRT": 1352295392,
+      "afterCRT": 1352295392,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "54789f31027d8bdfffdc20edb1783f5658dfda006f0dc78cc0b97404450a3bb8"
+    },
+    {
+      "label": "row-edge-45",
+      "exit": "present",
+      "beforeCRT": 1352295392,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6f46a7df75203e14101314c4051e7797d769951ed21e8da250d07291c45647d1"
+    },
+    {
+      "label": "row-edge-76",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-103",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-132",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "d3552a550504a068f8dd7749abbd6325bfb32c95ba8187ae5534aaf54d8ebd02"
+    },
+    {
+      "label": "row-edge-161",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c496ee78469d8d7edeac7a6667481992cf6e8dcc51102b657877470dc8297cd7"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2643619800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "2261e7d3f1f45003fcc86435697108c742a717fac40b28cb4418d2e161fc94a3"
+    },
+    {
+      "label": "network-control-2",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 2643619800,
+      "afterCRT": 2943422672,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "message",
+        "message"
+      ],
+      "eventsSHA256": "aef11c6361ab98cdc49ad08fa0c38257e73495b96c323509d40e44666e1f008b"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2943422672,
+      "afterCRT": 422520520,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "50e7dbaabea3fcd0f295ead567be04e6e3b27c13fd8d5d5009b1792d8f411c89"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 422520520,
+      "afterCRT": 4168716736,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "2e1293c38a8d30236410acd754e9a3aed952c179e5b2112f37a6bd993ae1cffc"
+    },
+    {
+      "label": "row-edge-38",
+      "exit": "present",
+      "beforeCRT": 3710988728,
+      "afterCRT": 3710988728,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b14da8c7a76e172e1ad5d99b981a613c1c87b0c7e4ab9d1f0c0bc68ce05122ac"
+    },
+    {
+      "label": "row-edge-46",
+      "exit": "present",
+      "beforeCRT": 3710988728,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "dc6497c3e7b459126ec2b28f0dfb2323447098b0104850977b5efbe28589308e"
+    },
+    {
+      "label": "row-edge-77",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4c59946bcd34cab5bdfd06b64ea03c984f003517fd90396a15036425db609ad7"
+    },
+    {
+      "label": "row-edge-106",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-133",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-162",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "47ecf8d32ea37c60ae3fec36cac881979067ef7a8212cbf01368bc1b6dfd9f50"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 15394480,
+      "afterCRT": 15394480,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "panel"
+      ],
+      "eventsSHA256": "62a1152940a04446e7b1c55dc0361068549686e38daf8316ffb79162de204f68"
+    },
+    {
+      "label": "network-control-3",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 15394480,
+      "afterCRT": 3463418024,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "message",
+        "message"
+      ],
+      "eventsSHA256": "868c2100d7ba22d4c622eb2972bff9660954bd221ef43919a56ab45bd6f09085"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 3463418024,
+      "afterCRT": 3107721120,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "dfb291523f5fa11534aea12f8a88f9c0c6a959db253f49626e87545643d86660"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3107721120,
+      "afterCRT": 1694581656,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "2c69e61812db9780575817a94f71801fa0568b30f4937f3ae18b10acde479e02"
+    },
+    {
+      "label": "row-edge-39",
+      "exit": "present",
+      "beforeCRT": 488901776,
+      "afterCRT": 488901776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1e1ed0874cf8948e5c170e85f879ed239fbdc1560d76b1d73d8d8dc3810baacd"
+    },
+    {
+      "label": "row-edge-69",
+      "exit": "present",
+      "beforeCRT": 488901776,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a6110e97e8b3b8d57c3e577dc8135e247418d21b8ed0fdb40299555531a39d5a"
+    },
+    {
+      "label": "row-edge-78",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "fae26e53cc46eae63dd3ce2ad30c0b57d310eaa60809125d94a43c3de9ef1fb9"
+    },
+    {
+      "label": "row-edge-107",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "64e4c75271b0c3931ec56b49271a3194259c01df0788012b15ac1b7bf4346153"
+    },
+    {
+      "label": "row-edge-136",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "row-edge-163",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2621262472,
+      "afterCRT": 2621262472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "sleep",
+        "shell",
+        "panel"
+      ],
+      "eventsSHA256": "be1c7c01bf0b5ac19ebe5787c25eea79ed0ab58d71e24ddf2abac9434b51186d"
+    },
+    {
+      "label": "network-control-4",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 2621262472,
+      "afterCRT": 597286272,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "message",
+        "message"
+      ],
+      "eventsSHA256": "b97a9acfdc4a977f67249e7a3460f64897c908f35081fab0ff627534484d731d"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 597286272,
+      "afterCRT": 3803882872,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "9f70eae57c1f251353a8f72047cffba5fa8df7a91826b9d041e249f1263468d8"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3803882872,
+      "afterCRT": 2933162608,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "0b2323687e3eb8161e578ad76ad2756a65d766ac1d87da33c9b3ab8bb04fe044"
+    },
+    {
+      "label": "row-edge-14",
+      "exit": "present",
+      "beforeCRT": 173036648,
+      "afterCRT": 173036648,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-40",
+      "exit": "present",
+      "beforeCRT": 173036648,
+      "afterCRT": 173036648,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-70",
+      "exit": "present",
+      "beforeCRT": 173036648,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "8a98228d7a238cfe033e521fdde83462f56fdf546c80fda8e1903fdd1af8931a"
+    },
+    {
+      "label": "row-edge-101",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "row-edge-108",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "row-edge-137",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 2085288800,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2085288800,
+      "afterCRT": 940922712,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "3f2291980224fc282359d5233a7cd1edd5bee45814ca685fd4c7f2e5e0f92474"
+    },
+    {
+      "label": "network-control-5",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 940922712,
+      "afterCRT": 347359312,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "closeSocket"
+      ],
+      "eventsSHA256": "64617b85cc3ec6a719880dee21a1148b7e781fc4a69032d13900b9c265262e96"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 347359312,
+      "afterCRT": 3563105864,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0e8e697979702a52b39c1cc7ec0665abf4e198c05c69308ae8868fa5d0831d00"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3563105864,
+      "afterCRT": 3154602304,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "1e7a04101fc9bc250d4a724dc9e7459d31f93df8bac0e8fc966c5225169d2cde"
+    },
+    {
+      "label": "row-edge-15",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f9b87b8970d9a374b0f51a12ca8b58fef3fd017a8161117cebcebc1ca91102f3"
+    },
+    {
+      "label": "row-edge-44",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-71",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-102",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0ef0d74b9f556bdb6b8d34a16a51252c5aa32e58a157b0274b6ea6f6ed413606"
+    },
+    {
+      "label": "row-edge-131",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "786f3dbbb91d95cb8c266de055d7d77a1fcbc63b14984a35364b5f1e7abdd2f3"
+    },
+    {
+      "label": "row-edge-138",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b58a94f70ff6088af6810ef8a4542735f7002ff3ced68e6148ae80a40b8d1010"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 2060015928,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2060015928,
+      "afterCRT": 1635474992,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b39c90b03f72fbdf3c15295dd67a02827f1c4458fa879f4d596fb1760d1acc59"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 1635474992,
+      "afterCRT": 3928381480,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a04bdfa01bd8edf887880e9b4e99460d1791b9a79d53fbcfd2e3c69cbb560075"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 3928381480,
+      "afterCRT": 3928381480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 3928381480,
+      "afterCRT": 3928381480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 3928381480,
+      "afterCRT": 3928381480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 3928381480,
+      "afterCRT": 2407999264,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c6d2c3ce4f74e1fc8320dbb62f1084f3d4d6fd5d208046a9e966b8d93a9047ae"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2407999264,
+      "afterCRT": 4102990616,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "39e6c4e074627baa9c09592125a195759df0ad644f70ad734e73af3342573b86"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 4102990616,
+      "afterCRT": 1541522448,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c6d865345dd5af654e4a38ae4d2c23e37bcea95db085f79e7ccb49163422a5ee"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 1541522448,
+      "afterCRT": 1868124680,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4b0a4825e3ba3593e3c19384c4ae07ea2a051bd3b13b3cd6907a5c86edcec701"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 1868124680,
+      "afterCRT": 1468151040,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "773d1bbce612e35ff89e1f0b109a29b9693460f66d0cdd736d7642d9373f66f0"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1468151040,
+      "afterCRT": 589122808,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "ec68667b0e2c27483629440036a9fbfd01abb03203ba7823ce43b009c7a417c2"
+    },
+    {
+      "label": "network-control-6",
+      "exit": "returnWithoutPresentation",
+      "beforeCRT": 589122808,
+      "afterCRT": 2124380656,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "message",
+        "closeSocket"
+      ],
+      "eventsSHA256": "1805744c43af6f4789386e21eeb52255ec7146a01a0fff5c10a6f93593a32e70"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2124380656,
+      "afterCRT": 3148979176,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "5c872573b3901916b7e1ee2f7b285f5ab38cd4f5feaf3f2ec7092adb7024d185"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3148979176,
+      "afterCRT": 682660576,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "a35b85fa0686ec862fd0c3f2d3002a4d4d861fe6d313b6f661a7ab5bc5965d0e"
+    },
+    {
+      "label": "row-edge-16",
+      "exit": "present",
+      "beforeCRT": 3089972952,
+      "afterCRT": 3089972952,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "54789f31027d8bdfffdc20edb1783f5658dfda006f0dc78cc0b97404450a3bb8"
+    },
+    {
+      "label": "row-edge-45",
+      "exit": "present",
+      "beforeCRT": 3089972952,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "195695b98d5cfa65f426e0e19c5a39e2eb3987b24a3fada2f4e6e386375e3805"
+    },
+    {
+      "label": "row-edge-76",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-103",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-132",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "d3552a550504a068f8dd7749abbd6325bfb32c95ba8187ae5534aaf54d8ebd02"
+    },
+    {
+      "label": "row-edge-161",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c496ee78469d8d7edeac7a6667481992cf6e8dcc51102b657877470dc8297cd7"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 4167860176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "2261e7d3f1f45003fcc86435697108c742a717fac40b28cb4418d2e161fc94a3"
+    },
+    {
+      "label": "network-control-7",
+      "exit": "present",
+      "beforeCRT": 4167860176,
+      "afterCRT": 1525102024,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "a9211ed7103ef2cd5523b07b3858d5b0dac310c9cd3ced770d7fb083c36c3371"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 1525102024,
+      "afterCRT": 3419029696,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "9e72df7440661bff06129e3067b91f71c87b1509a5685217beb733c511294601"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3419029696,
+      "afterCRT": 2574680248,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "bb73be6fc975d85612b0e24336042c8d3e773736ac77f61941917418878cb619"
+    },
+    {
+      "label": "row-edge-38",
+      "exit": "present",
+      "beforeCRT": 2885735856,
+      "afterCRT": 2885735856,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b14da8c7a76e172e1ad5d99b981a613c1c87b0c7e4ab9d1f0c0bc68ce05122ac"
+    },
+    {
+      "label": "row-edge-46",
+      "exit": "present",
+      "beforeCRT": 2885735856,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "2fb81c54e53c9663b42a6178720bed9746856cf1c25a9c2ffbb7391b9ead5aed"
+    },
+    {
+      "label": "row-edge-77",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4c59946bcd34cab5bdfd06b64ea03c984f003517fd90396a15036425db609ad7"
+    },
+    {
+      "label": "row-edge-106",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-133",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-162",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "47ecf8d32ea37c60ae3fec36cac881979067ef7a8212cbf01368bc1b6dfd9f50"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 213000104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "panel"
+      ],
+      "eventsSHA256": "62a1152940a04446e7b1c55dc0361068549686e38daf8316ffb79162de204f68"
+    },
+    {
+      "label": "network-control-8",
+      "exit": "present",
+      "beforeCRT": 213000104,
+      "afterCRT": 3179757216,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "c97f0ca676f1473d94b8442989878ca8033eafcfd65b04b16b7f3b73ca51eef6"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 3179757216,
+      "afterCRT": 3769701016,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f6d25689d98a5d91525d0b7c72b15354b47ee9f42b06c791c80923a6763309a4"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3769701016,
+      "afterCRT": 806648720,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "8307d6ac011e2b5c2866c1867dd84e194e4845ca354ea90b5e8990efb648067a"
+    },
+    {
+      "label": "row-edge-39",
+      "exit": "present",
+      "beforeCRT": 3301595528,
+      "afterCRT": 3301595528,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1e1ed0874cf8948e5c170e85f879ed239fbdc1560d76b1d73d8d8dc3810baacd"
+    },
+    {
+      "label": "row-edge-69",
+      "exit": "present",
+      "beforeCRT": 3301595528,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "06e6e4789da817ff9fb3175d30426f91a6c196de3e35ef6ce7e03312cfb8853d"
+    },
+    {
+      "label": "row-edge-78",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "fae26e53cc46eae63dd3ce2ad30c0b57d310eaa60809125d94a43c3de9ef1fb9"
+    },
+    {
+      "label": "row-edge-107",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "64e4c75271b0c3931ec56b49271a3194259c01df0788012b15ac1b7bf4346153"
+    },
+    {
+      "label": "row-edge-136",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "row-edge-163",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 782208128,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "sleep",
+        "shell",
+        "panel"
+      ],
+      "eventsSHA256": "be1c7c01bf0b5ac19ebe5787c25eea79ed0ab58d71e24ddf2abac9434b51186d"
+    },
+    {
+      "label": "network-control-9",
+      "exit": "present",
+      "beforeCRT": 782208128,
+      "afterCRT": 3683972216,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "1d5c722bd1b63ec0e46c1af6156a96a8f69146fc827a022b890bbffa86d7a9b0"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 3683972216,
+      "afterCRT": 3479138672,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96811f592114653a2a3348a67ccc1a22dc0dd00aa9a23bd148317fb5542d656c"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3479138672,
+      "afterCRT": 2867323752,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "c622db152beeb6505a11c841116d0ebd239ba167f9d3a356b19337e698344c1a"
+    },
+    {
+      "label": "row-edge-14",
+      "exit": "present",
+      "beforeCRT": 63646304,
+      "afterCRT": 63646304,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-40",
+      "exit": "present",
+      "beforeCRT": 63646304,
+      "afterCRT": 63646304,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-70",
+      "exit": "present",
+      "beforeCRT": 63646304,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "600608d85f73599dd3a5fde6d7fa8f86bd276459d977a10532d153f5d3c89fb6"
+    },
+    {
+      "label": "row-edge-101",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "row-edge-108",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "row-edge-137",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 198846040,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 198846040,
+      "afterCRT": 2291775312,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "8fb6984638949e39213e4f459dac892582207c5be04f7eeea431e6ea46fe9b75"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2291775312,
+      "afterCRT": 448970056,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c24b2e034f7cec06624306b0e8c7d985a94c08b400e9b7cdbcca3852fa21627a"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 448970056,
+      "afterCRT": 3586267200,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "6972cb3f5f3065a78111b5112b1a3ff91ee06d7190fb310615bd0353da74da19"
+    },
+    {
+      "label": "row-edge-15",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f9b87b8970d9a374b0f51a12ca8b58fef3fd017a8161117cebcebc1ca91102f3"
+    },
+    {
+      "label": "row-edge-44",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-71",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-102",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0ef0d74b9f556bdb6b8d34a16a51252c5aa32e58a157b0274b6ea6f6ed413606"
+    },
+    {
+      "label": "row-edge-131",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "786f3dbbb91d95cb8c266de055d7d77a1fcbc63b14984a35364b5f1e7abdd2f3"
+    },
+    {
+      "label": "row-edge-138",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b58a94f70ff6088af6810ef8a4542735f7002ff3ced68e6148ae80a40b8d1010"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 658024504,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 658024504,
+      "afterCRT": 242961712,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "aacc1321d54b0febe059e0ab5940fe14b1b865e6bd1ae409d53452c9eaa6a70e"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 242961712,
+      "afterCRT": 2752702248,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "202055efa01d9c43696d51278b7fb063ccb29f8022ac7d89baab3b258dd2176b"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2752702248,
+      "afterCRT": 2752702248,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2752702248,
+      "afterCRT": 2752702248,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2752702248,
+      "afterCRT": 2752702248,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2752702248,
+      "afterCRT": 4047263264,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "06e4643ea0ff790cd5d8298ac4904ee94b09162e8a8e178568f2e51164fbdc48"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 4047263264,
+      "afterCRT": 392722968,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "5162e2e5a5e702fa7de3032be8eb837a0a429a1a2bc6c7a370dc15a3097aa7d3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 392722968,
+      "afterCRT": 3350999824,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a6965630e3d55028829b23e7d1b64b0dc2815233283f348730404c785016e962"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 3350999824,
+      "afterCRT": 177234184,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "999d69373507401de8d6655f1cfeb7ddc313d16303be490ace32c2168d836bef"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 177234184,
+      "afterCRT": 1458693120,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "15d1cc6049eb7f7e8b31a3ce07a073b997da7c42df0f8d00cbc4e20282f884ef"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1458693120,
+      "afterCRT": 4196506616,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "8880b035a8ca9709ea4cc5dc4e5c56efc3400f9fdde3818804ad52f4e793ec3f"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 4196506616,
+      "afterCRT": 3474221296,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "e6a59ff44488da8bf961bec1aab666f8fc8e59c229bc99d2a832fe95d18d98df"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3474221296,
+      "afterCRT": 1173564136,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "6a6eebcd1b2a449e03fdec00d26900f8beb65a064eccefb23e6832c785771c43"
+    },
+    {
+      "label": "row-edge-16",
+      "exit": "present",
+      "beforeCRT": 3147481568,
+      "afterCRT": 3147481568,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "54789f31027d8bdfffdc20edb1783f5658dfda006f0dc78cc0b97404450a3bb8"
+    },
+    {
+      "label": "row-edge-45",
+      "exit": "present",
+      "beforeCRT": 3147481568,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "33ca37d7186b33b82dde423a635bfc6701f53384672b594d12265d3e274d2e0b"
+    },
+    {
+      "label": "row-edge-76",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-103",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-132",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "d3552a550504a068f8dd7749abbd6325bfb32c95ba8187ae5534aaf54d8ebd02"
+    },
+    {
+      "label": "row-edge-161",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c496ee78469d8d7edeac7a6667481992cf6e8dcc51102b657877470dc8297cd7"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 555486680,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "panel"
+      ],
+      "eventsSHA256": "2531f3f909fa0409bd3ba392db24759b2596acd4def266b315edffc21772909b"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 555486680,
+      "afterCRT": 4080791248,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "e459526a729ae4d4bd6786724308a7e0abe1407d01fc6ffeb0a9a4a83f585ff9"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 4080791248,
+      "afterCRT": 2180203720,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "d2fbb1f82172324b6bbf256066619086bd2ebc617d66b2bbf2580497d944ab13"
+    },
+    {
+      "label": "row-edge-38",
+      "exit": "present",
+      "beforeCRT": 2280583104,
+      "afterCRT": 2280583104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b14da8c7a76e172e1ad5d99b981a613c1c87b0c7e4ab9d1f0c0bc68ce05122ac"
+    },
+    {
+      "label": "row-edge-46",
+      "exit": "present",
+      "beforeCRT": 2280583104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "08edc50b3bdc5da5a41132d7875be5074ccd7fd0524f0229a86c6950d936445a"
+    },
+    {
+      "label": "row-edge-77",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4c59946bcd34cab5bdfd06b64ea03c984f003517fd90396a15036425db609ad7"
+    },
+    {
+      "label": "row-edge-106",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-133",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-162",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "47ecf8d32ea37c60ae3fec36cac881979067ef7a8212cbf01368bc1b6dfd9f50"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 303026104,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "8e8a094816ff28b2dff15c697dd7541755c21ee25590ccdce7e620d7e929ba1a"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 303026104,
+      "afterCRT": 3068839088,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "5dcc1d828ab5ed7f229e16ea71e1126c5fd570c12791ba74c100b788e85d9897"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3068839088,
+      "afterCRT": 508079784,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "906ad62cce4e8d77546f664fc077cb00e7e8df4135a4741f54de74a350ba17fb"
+    },
+    {
+      "label": "row-edge-39",
+      "exit": "present",
+      "beforeCRT": 3634785696,
+      "afterCRT": 3634785696,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1e1ed0874cf8948e5c170e85f879ed239fbdc1560d76b1d73d8d8dc3810baacd"
+    },
+    {
+      "label": "row-edge-69",
+      "exit": "present",
+      "beforeCRT": 3634785696,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "8f38c32144edafc8edfc925dd8c7366125f5bd32023f880e30e59149a45d6a3f"
+    },
+    {
+      "label": "row-edge-78",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "fae26e53cc46eae63dd3ce2ad30c0b57d310eaa60809125d94a43c3de9ef1fb9"
+    },
+    {
+      "label": "row-edge-107",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "64e4c75271b0c3931ec56b49271a3194259c01df0788012b15ac1b7bf4346153"
+    },
+    {
+      "label": "row-edge-136",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "row-edge-163",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 2260001176,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "sleep",
+        "shell",
+        "panel"
+      ],
+      "eventsSHA256": "b85c9d96180d32848178e530d2b5aca8008a6157e66569005d5c7d1b22af8ea7"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2260001176,
+      "afterCRT": 1356393104,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "dc1c6db90df71bfebcc5f831a9329b6034c78f6db62bea48be0ee13ce6e2ae28"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 1356393104,
+      "afterCRT": 2930469000,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "b8fba8cf389c60d2156bda5c0878a6a5fddfb704a00751e2bd8d7a92ab8e13d5"
+    },
+    {
+      "label": "row-edge-14",
+      "exit": "present",
+      "beforeCRT": 2121874304,
+      "afterCRT": 2121874304,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-40",
+      "exit": "present",
+      "beforeCRT": 2121874304,
+      "afterCRT": 2121874304,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-70",
+      "exit": "present",
+      "beforeCRT": 2121874304,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "70ee8ef6d90c315996d12b85f163b445b48023a07a96bf87ab32d070f434b4d2"
+    },
+    {
+      "label": "row-edge-101",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "row-edge-108",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "row-edge-137",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 1824736120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1824736120,
+      "afterCRT": 2881380464,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "fe151b69ddafbe8123f2a8791e35ed06b35f869e1039c3f8bf5a47f06ba1f271"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2881380464,
+      "afterCRT": 4208161384,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "485127727109c8572c43a8f2f8d4e36b009c9442792b1b33b6d8b4a62f6c775f"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 4208161384,
+      "afterCRT": 4263467360,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "059861157ae82defb4c815b5f84d00822776f3ea4f447e6b2531389ca4851542"
+    },
+    {
+      "label": "row-edge-15",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f9b87b8970d9a374b0f51a12ca8b58fef3fd017a8161117cebcebc1ca91102f3"
+    },
+    {
+      "label": "row-edge-44",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-71",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-102",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0ef0d74b9f556bdb6b8d34a16a51252c5aa32e58a157b0274b6ea6f6ed413606"
+    },
+    {
+      "label": "row-edge-131",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "786f3dbbb91d95cb8c266de055d7d77a1fcbc63b14984a35364b5f1e7abdd2f3"
+    },
+    {
+      "label": "row-edge-138",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b58a94f70ff6088af6810ef8a4542735f7002ff3ced68e6148ae80a40b8d1010"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 3857904984,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 3857904984,
+      "afterCRT": 1716725328,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "34e069049fc7e8bed1f3bbd090e71378997b4a4824059ca1dc85c939fb0ba9d7"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 1716725328,
+      "afterCRT": 4269329480,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1019cd23e7428d353fb53a285f75f834f1b4c95979fbdc5f0a1aa06e4c5df0d2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 4269329480,
+      "afterCRT": 4269329480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 4269329480,
+      "afterCRT": 4269329480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 4269329480,
+      "afterCRT": 4269329480,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 4269329480,
+      "afterCRT": 2421212992,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "079cc0a5d1a7d15dadf25f028015ee24fb83e82568fd3ad126d3a86839678001"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2421212992,
+      "afterCRT": 1207695160,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "115bb16c45176e349b2391c313eac1ecd939f39565fd81024efe5e04e4e02c48"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 1207695160,
+      "afterCRT": 3545185328,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "3f04438717bd1a3bbf97f8e78364b9f31264bb8241a57464992d361b44c391b1"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 3545185328,
+      "afterCRT": 3914561064,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1a0bc14f7478e9d3cbd8a2f05cdaf9532d71c338cb63eebc8bc4a75d4b731c1c"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 3914561064,
+      "afterCRT": 566592800,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f67bde40fdaedb9c851decb1a6bbb26949204e907168e46338ae63936060968c"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 566592800,
+      "afterCRT": 479611160,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "7ed8fbb764de9a01eb5e913fe61345b0d39114813cf30173f895ee73ca059b96"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 479611160,
+      "afterCRT": 4184515088,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "83576feac71bc05df0360ed12dee382c8af7b9575241c1960bb0c1bfd0c6b1e5"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 4184515088,
+      "afterCRT": 521891848,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "a1635d9e0829ae8263c2a9998ab637f510d2beff707d6c5daf602a2e1f20df97"
+    },
+    {
+      "label": "row-edge-16",
+      "exit": "present",
+      "beforeCRT": 1396019968,
+      "afterCRT": 1396019968,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "54789f31027d8bdfffdc20edb1783f5658dfda006f0dc78cc0b97404450a3bb8"
+    },
+    {
+      "label": "row-edge-45",
+      "exit": "present",
+      "beforeCRT": 1396019968,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7e0367cf4ef153419e23cc36775e467fd710f2367abd980492afe8d6344eaab8"
+    },
+    {
+      "label": "row-edge-76",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-103",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-132",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "d3552a550504a068f8dd7749abbd6325bfb32c95ba8187ae5534aaf54d8ebd02"
+    },
+    {
+      "label": "row-edge-161",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c496ee78469d8d7edeac7a6667481992cf6e8dcc51102b657877470dc8297cd7"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 561638136,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "2261e7d3f1f45003fcc86435697108c742a717fac40b28cb4418d2e161fc94a3"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 561638136,
+      "afterCRT": 2472368112,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c68af7894bf469f36821aea737d5e51b635137bbe78b76fd6340940d34e3a0f0"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 2472368112,
+      "afterCRT": 931707368,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "f72b78c26d7ddeafa630f8d13eac9ee9dcbaefbda186d937399e9ca225d5f0a5"
+    },
+    {
+      "label": "row-edge-38",
+      "exit": "present",
+      "beforeCRT": 2035871968,
+      "afterCRT": 2035871968,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b14da8c7a76e172e1ad5d99b981a613c1c87b0c7e4ab9d1f0c0bc68ce05122ac"
+    },
+    {
+      "label": "row-edge-46",
+      "exit": "present",
+      "beforeCRT": 2035871968,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "2e74c802cc9e32918c11290e1b75a5099162c6a1d4cc1f61aa2eed28125f68e7"
+    },
+    {
+      "label": "row-edge-77",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4c59946bcd34cab5bdfd06b64ea03c984f003517fd90396a15036425db609ad7"
+    },
+    {
+      "label": "row-edge-106",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-133",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-162",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "47ecf8d32ea37c60ae3fec36cac881979067ef7a8212cbf01368bc1b6dfd9f50"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 1214176472,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "panel"
+      ],
+      "eventsSHA256": "62a1152940a04446e7b1c55dc0361068549686e38daf8316ffb79162de204f68"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 1214176472,
+      "afterCRT": 266296784,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f95838c24e098515503e5a9a6db23487de6f912e34d7a2e1700d1dc61d05bc35"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 266296784,
+      "afterCRT": 4266873800,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "ec681f895a83034be24e983406af31154d80416e0c7569379435b2df50927dcb"
+    },
+    {
+      "label": "row-edge-39",
+      "exit": "present",
+      "beforeCRT": 2632425152,
+      "afterCRT": 2632425152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1e1ed0874cf8948e5c170e85f879ed239fbdc1560d76b1d73d8d8dc3810baacd"
+    },
+    {
+      "label": "row-edge-69",
+      "exit": "present",
+      "beforeCRT": 2632425152,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "2791055434454bd2f445faac526d0aae4d17d5d317bfa7501bb79f6557df6afa"
+    },
+    {
+      "label": "row-edge-78",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "fae26e53cc46eae63dd3ce2ad30c0b57d310eaa60809125d94a43c3de9ef1fb9"
+    },
+    {
+      "label": "row-edge-107",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "64e4c75271b0c3931ec56b49271a3194259c01df0788012b15ac1b7bf4346153"
+    },
+    {
+      "label": "row-edge-136",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "row-edge-163",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 3070041784,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "sleep",
+        "shell",
+        "panel"
+      ],
+      "eventsSHA256": "b85c9d96180d32848178e530d2b5aca8008a6157e66569005d5c7d1b22af8ea7"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 3070041784,
+      "afterCRT": 2443752368,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "924241aa0e3c380e1925d8a6f66a588a6fa1e65ec68f83dfda1b2023d95880cd"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 2443752368,
+      "afterCRT": 1932737960,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "ddea52b0382d2afb977b23b622c04a7f49a7ebc9c624a278707f253d7d50ff8f"
+    },
+    {
+      "label": "row-edge-14",
+      "exit": "present",
+      "beforeCRT": 2056887456,
+      "afterCRT": 2056887456,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-40",
+      "exit": "present",
+      "beforeCRT": 2056887456,
+      "afterCRT": 2056887456,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "row-edge-70",
+      "exit": "present",
+      "beforeCRT": 2056887456,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "ee365e193f00398c906b2580f8b68877bb2623029c5972a05cd62418012889e0"
+    },
+    {
+      "label": "row-edge-101",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "row-edge-108",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "row-edge-137",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 3339497624,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f925cc2adc27d2c09016a5858b3ef1be2b42d17243b117ec86923d82cc4dd2ad"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 3339497624,
+      "afterCRT": 4017183120,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "c2fd73fc4fa3041e5211035f6e43025e98f6f6572de6db3c6b79f51177b2eb04"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 4017183120,
+      "afterCRT": 3386931080,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "99fbc0a599743d9fc5ad381ae36e0bc7ee8a6305cca3e6d119dbb58ef67e387e"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3386931080,
+      "afterCRT": 2200365696,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "01866cba524cf743fe9f22a83d46a085764a4daa88b782192281359a111ab8dc"
+    },
+    {
+      "label": "row-edge-15",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f9b87b8970d9a374b0f51a12ca8b58fef3fd017a8161117cebcebc1ca91102f3"
+    },
+    {
+      "label": "row-edge-44",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-71",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "968f9ccfd4f853ef608484fb5aaf69d92bf4122fe144a61d3229c911f215436c"
+    },
+    {
+      "label": "row-edge-102",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "0ef0d74b9f556bdb6b8d34a16a51252c5aa32e58a157b0274b6ea6f6ed413606"
+    },
+    {
+      "label": "row-edge-131",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "786f3dbbb91d95cb8c266de055d7d77a1fcbc63b14984a35364b5f1e7abdd2f3"
+    },
+    {
+      "label": "row-edge-138",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b58a94f70ff6088af6810ef8a4542735f7002ff3ced68e6148ae80a40b8d1010"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 105222776,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 105222776,
+      "afterCRT": 3018936176,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4e2e298a4c993557a2c84b4cb1b1da53862b676055ae953cd0128407e3cd82e8"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 3018936176,
+      "afterCRT": 1779630440,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "adb7f4a2d2ca0578dd1a6db5235e82b3754495eeac9ad6e27b0fef6b79c37cd5"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 1779630440,
+      "afterCRT": 1779630440,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 1779630440,
+      "afterCRT": 1779630440,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 1779630440,
+      "afterCRT": 1779630440,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 1779630440,
+      "afterCRT": 3678898272,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a067cb2849db5b0cb7ef889bbf07d31a59ac4c510b1fcc079f251a7dbd19a3e5"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 3678898272,
+      "afterCRT": 912245848,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "71969a101c89349d41a7c10a96bdf128e52ca7ea7f3052634e696ff8e710d899"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 912245848,
+      "afterCRT": 501257552,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "e25e258ef410984b9fcc7ab149b195ecf1828457e4f05e695dd6e1bce4de6507"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 501257552,
+      "afterCRT": 4018330440,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a309f7c9f93422a3fd8ff7f4d459449ad5ded42e1ab0440a2c56d774912cf5c5"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 4018330440,
+      "afterCRT": 1538487872,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ddc37ae1de7c3b55f5845742990db76f6c48901fa20487bbb31054fa679facf"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1538487872,
+      "afterCRT": 1293108792,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "soundRequest",
+        "startup",
+        "hostname",
+        "hostLookup",
+        "htons",
+        "addressText",
+        "formatAddress",
+        "htons",
+        "socket",
+        "asyncSelect",
+        "htons",
+        "addressText",
+        "bind",
+        "listen",
+        "panel"
+      ],
+      "eventsSHA256": "834d65746fa0ca494f3804bc2322aec79f8676be613727f16f5ee2d56f0ea551"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 1293108792,
+      "afterCRT": 536292144,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7351486a9b7ff5cf8a5f5a4634b1110e46979dd1d6ff4e9182a7b405707f0e53"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 536292144,
+      "afterCRT": 703071528,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "1043016bbe607c38edf3363ede5abfb3f61e699761680012dea448a149ed2994"
+    },
+    {
+      "label": "row-edge-16",
+      "exit": "present",
+      "beforeCRT": 2434970656,
+      "afterCRT": 2434970656,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "54789f31027d8bdfffdc20edb1783f5658dfda006f0dc78cc0b97404450a3bb8"
+    },
+    {
+      "label": "row-edge-45",
+      "exit": "present",
+      "beforeCRT": 2434970656,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "610b2f1c36ef3d9fb7cbefaaf6c87db9ea33c90f9106e7833a4d5ddb7b40b5b1"
+    },
+    {
+      "label": "row-edge-76",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-103",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6667b3bac94ba5a8a798f9f7576e474660fa598fafa176fef267dc0c6e0f6f17"
+    },
+    {
+      "label": "row-edge-132",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "d3552a550504a068f8dd7749abbd6325bfb32c95ba8187ae5534aaf54d8ebd02"
+    },
+    {
+      "label": "row-edge-161",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c496ee78469d8d7edeac7a6667481992cf6e8dcc51102b657877470dc8297cd7"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "96fc79f391fd9a2a7ee4c190fe4f8d7ed415b705ab5a5541886aaa7b2c9e23e2"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1947736088,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "2261e7d3f1f45003fcc86435697108c742a717fac40b28cb4418d2e161fc94a3"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 1947736088,
+      "afterCRT": 1626149136,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "e9cf24472f16e04879ba1128c9cb754fc1018a3bf1d469de5f785667ad89c552"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 1626149136,
+      "afterCRT": 486178568,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "106ff0486442db0333d9b970c6ef89efed9275535d307571a0f070bf3dc57b1d"
+    },
+    {
+      "label": "row-edge-38",
+      "exit": "present",
+      "beforeCRT": 3159179776,
+      "afterCRT": 3159179776,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b14da8c7a76e172e1ad5d99b981a613c1c87b0c7e4ab9d1f0c0bc68ce05122ac"
+    },
+    {
+      "label": "row-edge-46",
+      "exit": "present",
+      "beforeCRT": 3159179776,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "5cecc8ae5bd3cdc6c2f5d62012475a196b25dcddee211ab76315b891848de1ad"
+    },
+    {
+      "label": "row-edge-77",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "4c59946bcd34cab5bdfd06b64ea03c984f003517fd90396a15036425db609ad7"
+    },
+    {
+      "label": "row-edge-106",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-133",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "138d5652633e5d64c631650d767d99a65e45df9c8f914d06f5228db3b45c4700"
+    },
+    {
+      "label": "row-edge-162",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "47ecf8d32ea37c60ae3fec36cac881979067ef7a8212cbf01368bc1b6dfd9f50"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7ff37094ec925dc0e1aeb065bab0b82d4f2344b66a8390df1d9dfe770a8287b4"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 153500152,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "panel"
+      ],
+      "eventsSHA256": "8e8a094816ff28b2dff15c697dd7541755c21ee25590ccdce7e620d7e929ba1a"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 153500152,
+      "afterCRT": 997869296,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "b0fed0d88a3f81b33b62f2d1b1a907fea7378f3c3baafcb16e410adbe1e60075"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 997869296,
+      "afterCRT": 7489768,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "soundMethod",
+        "soundMethod",
+        "soundMethod",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "8743068f83612feff7c5f33fc47a5bb75bd9e15c590e527e617e79ba12473aff"
+    },
+    {
+      "label": "row-edge-39",
+      "exit": "present",
+      "beforeCRT": 3521847264,
+      "afterCRT": 3521847264,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "1e1ed0874cf8948e5c170e85f879ed239fbdc1560d76b1d73d8d8dc3810baacd"
+    },
+    {
+      "label": "row-edge-69",
+      "exit": "present",
+      "beforeCRT": 3521847264,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "c680a49c492743c27a09b3f0668ac04f122472820b60163a6a5c72c7880364ed"
+    },
+    {
+      "label": "row-edge-78",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "fae26e53cc46eae63dd3ce2ad30c0b57d310eaa60809125d94a43c3de9ef1fb9"
+    },
+    {
+      "label": "row-edge-107",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "64e4c75271b0c3931ec56b49271a3194259c01df0788012b15ac1b7bf4346153"
+    },
+    {
+      "label": "row-edge-136",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "row-edge-163",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "a4c0c22dd8e121e7fc53f01bbfe88bc794ae1adf46f24393912815de36cb259c"
+    },
+    {
+      "label": "x-edge-275",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-276",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-520",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "x-edge-521",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge--2147483648",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "x-edge-2147483647",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "7efe41512c65c165dea0a40334acafac21c5d430ff5354851894d382c459313a"
+    },
+    {
+      "label": "flags-0-0",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-2",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0--1",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-1-1",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags--1-1",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "f7e6812b7cad6b7a57bf08182d7ad2bbff0c4632f90544ca050cf2f1fff401a3"
+    },
+    {
+      "label": "flags-0-1",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 2650123224,
+      "events": [
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "sleep",
+        "shell",
+        "panel"
+      ],
+      "eventsSHA256": "be1c7c01bf0b5ac19ebe5787c25eea79ed0ab58d71e24ddf2abac9434b51186d"
+    },
+    {
+      "label": "mouse-message-sequence",
+      "exit": "present",
+      "beforeCRT": 2650123224,
+      "afterCRT": 3193359568,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "randomTable",
+        "bitmap",
+        "panel"
+      ],
+      "eventsSHA256": "6fd9fe6a2421290f6b708f14ffeb877235e5244a9046198f2de4ccf689ce201a"
+    },
+    {
+      "label": "enter-local-play",
+      "exit": "present",
+      "beforeCRT": 3193359568,
+      "afterCRT": 1074225864,
+      "events": [
+        "windowDefault",
+        "windowDefault",
+        "bitmap",
+        "bitmap",
+        "soundRequest",
+        "randomTable",
+        "panel"
+      ],
+      "eventsSHA256": "7f3a5286d743ed9ea5061a4c0a8e09463fdf1245c8df8fa0dfe8fbd597b0bdd9"
+    }
+  ],
+  "fixture": "original-main-menu-ramp.json",
+  "fixtureSHA256": "edd3c1b37d93ad14581b4fbdee6cbd93ad109b131f2c6515c5ef0731c12cc750",
+  "fixtureBytes": 14563852,
+  "validation": {
+    "swiftCommand": "swift test --package-path native --filter '(OriginalMainMenuTests|OriginalRandomInitializationTests)'",
+    "swiftTests": 2,
+    "swiftFailures": 0,
+    "swiftSeconds": 230.344,
+    "newChainSeconds": 116.782,
+    "previousRandomInitializationSeconds": 113.562,
+    "worldSelectorScope": "World+0 remains1 through recording; dispatcher424701..424736 transition to2 is not executed, so this is not a match-tick entry snapshot"
+  }
+}
