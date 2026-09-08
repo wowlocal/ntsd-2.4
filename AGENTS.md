@@ -1016,6 +1016,36 @@ per-character handlers or remove original exceptions for architectural neatness.
 Do not lift a prototype restriction before its newly reachable mechanisms have
 been recovered and checked. Source characters are test cases for shared rules.
 
+The [repeated early-menu calls](docs/research/FRONT_MENU_LOOP.md) now compose
+the own fresh first ret4 with subsequent whole4246b0 entries. Both119-case
+corpora match native:238calls/1094phases,228ret4,8selector/FILE boundaries,
+2actual41bc90 entries,3945helpers/24951events,30000rand,40058records/
+376899720bytes+masks. Each inner phase resumes the actual predecessor PC with
+the same CPU/stack/registers. Only the outer caller ABI and declared global/
+mouse/worker/timer/device/FILE inputs are supplied. Native OriginalFrontMenuLoop
+chooses its own callback order from World/globals; expected phase arrays do not
+drive execution. World1 uses the common completion, World2 stops before41bc90;
+held457580 is not cleared until the original loading call returns at424746.
+The new prefix initializer adopts its own previous background storage/surface;
+all raw ownership records survive calls. Explicitly clearing4511ac allocates a
+new MENU_BACK13 without releasing old MENU_BACK1; World1 releases only the new
+current background. Preserve both live/dead records. Phase4511f8 uses wrapped
+DWORD1-old, not Bool. Original shared settings/body/alternate/menu rules are
+unchanged. Full body scratch is a declared before-body input, checked after
+native writes; skipped-body/main/overlay scratch is outside this native domain.
+Null-FILE stops before423260; the next probe supplies a new outer caller and
+retains partial globals, not a claim of Windows SEH recovery. Worker body and
+status2 panel children in repeated calls are not covered by this new corpus.
+Both raw and packed new corpora passed before acceptance. All80old fixture
+hashes remain unchanged; SHA/full unpack of both new fixtures checked,82 pins
+at build/research/front-menu-loop-fixture-pins.json. Next join this early World2
+and retained resources into the real41bc90 loading/catalog/input chain. Other
+selectors, app integration/device output and Windows remain open. Do not close
+R02.1/R01.2 or the full-game goal for this composition.
+Six targeted XCTest passed in17.337s: new loop7.122s, historical completion
+7.552s, historical prefix2.663s. Release NTSDNative passed in2.48s. SwiftPM
+commands were sequential; all processes were terminal before the milestone.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

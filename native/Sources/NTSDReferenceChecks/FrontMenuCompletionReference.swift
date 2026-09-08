@@ -20,7 +20,7 @@ public enum FrontMenuCompletionReference {
     }
     private struct Corpus: Decodable { let exeSHA256: String, dllSHA256: String, initialGlobals: String, initialCRT: UInt32, initialPointers: [UInt8], cases: [Case], blobs: [String:Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front menu completion reference: "+text) }
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data,onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32],OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",!c.cases.isEmpty,c.initialCRT == 1,c.initialPointers == [UInt8](repeating: 0,count: 8) else { throw error("Source identity/fresh PTD/BSS") }
@@ -49,9 +49,11 @@ public enum FrontMenuCompletionReference {
         guard let document = try JSONSerialization.jsonObject(with: raw) as? [String:Any],var parent = document["parent"] as? [String:Any] else { throw error("Parent document") }
         parent["blobs"] = document["blobs"]
         var ownWorld: OriginalStateRecord?,ownGlobals: OriginalStateRecord?,ownLocal: OriginalStateRecord?
+        var early: [UInt32:OriginalLoadedBitmap] = [:],tokens: [UInt32:UInt32] = [:]
         var memory = OriginalMenuPresentationMemory(replayPointers: try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 8),defined: [Bool](repeating: true,count: 8)))
         result.parent = try FrontScreenAlternateReference.compare(JSONSerialization.data(withJSONObject: parent)) { world,state,local,bitmaps,surfaces in
             try check(state,globals(c.initialGlobals),"Own native alternate parent");ownWorld = world;ownGlobals = state;ownLocal = local
+            early = bitmaps;tokens = surfaces
             for (address,bitmap) in bitmaps {
                 guard let surface = surfaces[address] else { throw error("Declared parent surface") }
                 var record = bitmap.storage;try record.write(surface,at: 0)
@@ -154,7 +156,9 @@ public enum FrontMenuCompletionReference {
                 let pop: UInt32 = h.entry == 0x43f010 ? 24 : h.entry == 0x401a30 ? 4 : 0
                 guard h.pop == pop,h.saved.count == 4,h.returnSP == h.entrySP+4+pop,helperReturns[h.entry]?.contains(h.returnPC) == true else { throw error("Helper ABI") };result.helpers += 1
             }
-            try snapshot(item.after,item.label+" return");result.cases += 1
+            try snapshot(item.after,item.label+" return")
+            if caseIndex == 0 { try onNatural?(world,state,crt,early,tokens,memory) }
+            result.cases += 1
         }
         return result
     }

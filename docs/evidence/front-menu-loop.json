@@ -1,0 +1,27 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Repeated actual4246b0 early-menu calls after the fresh first return.\nEach phase resumes the same CPU/stack/registers at its actual predecessor's PC;\nno later body/menu entry registers are supplied. Reuse the verified original\nresource/prefix/update/body/alternate/completion observers and real children.\nMouse/worker/timer/device/FILE and scratch backing are declared inputs. Stop at\nother selectors or first41bc90 entry; no Windows/device pixels/full-match claim.\n",
+  "corpus": "front-menu-loop.json",
+  "sha256": "ff36f9cb1a7d45a112e9e38b51b7a2481d8606d6c499146490157b6b67b04b45",
+  "cases": 119,
+  "phases": {
+    "alternate": 117,
+    "body": 41,
+    "completion": 114,
+    "initialize": 117,
+    "prefix": 117,
+    "update": 41
+  },
+  "continuations": {
+    "alternateBoundary": 1,
+    "loading": 1,
+    "otherSelector": 3,
+    "returned": 114
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Front menu loop matches original: 119 calls /547 phases /114 returns /4 boundaries /1 loading entries; 41 bodies /37 main menus /113 tails /1 World1 transitions; 1857 helper returns /11667 events, 565 draws /3471 reads /565 clips /543 blits /305 fills; 1 constructors /1 frees /5 RNG tables /15000 actual DLL draws; 5 settings calls /4 returns /262 writer events /216 fprintf /33 writes /1 failed or short; 20029 records /188449860 bytes/masks, own first return 1. Loading body, other selectors, app UI and Windows remain open",
+  "fixture": "original-front-menu-loop.json",
+  "fixtureSHA256": "5ec4fc0b85ca2776cd0db5761fa6c2cf9487cfcdbe54bd6dbf1b0578f3ed9da1",
+  "fixtureBytes": 6471320
+}

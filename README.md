@@ -37,6 +37,13 @@ Replay playback/file IO, full gameplay, Windows startup and visual/audio
 output remain open. Practice still uses its prior import; the new state is not yet a complete
 match or wired into the wider tick reference.
 
+The [repeated early-menu calls](docs/research/FRONT_MENU_LOOP.md) now continue
+their own fresh first return through complete subsequent menu entries. Both
+reference corpora match native phase selection, settings/waiting sequences,
+retained graphics resources and CRT state, ending at the actual first loading
+call. This composition remains separate from the app UI; joining that early
+state to the loading body and full character-selection flow is still pending.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

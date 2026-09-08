@@ -39,6 +39,15 @@ public struct OriginalFrontScreenPrelude {
     public private(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
     public private(set) var surfaces: [UInt32:UInt32] = [:]
     public init() {}
+    ///Transfer already owned background wrappers, preserving constructor bytes
+    ///and the explicitly bound raw surface tokens across caller compositions.
+    public init(bitmaps: [UInt32:OriginalLoadedBitmap],surfaces: [UInt32:UInt32]) throws {
+        guard Set(bitmaps.keys) == Set(surfaces.keys),!bitmaps.keys.contains(0) else { throw OriginalStateError.invalidStorage("Background ownership inputs") }
+        for (address,bitmap) in bitmaps {
+            guard bitmap.storage.bytes.count == 0x1f50,try bitmap.storage.integer(at: 0,as: UInt32.self) == (surfaces[address] == 0 ? 0 : 1) else { throw OriginalStateError.invalidStorage("Background surface binding") }
+        }
+        self.bitmaps = bitmaps;self.surfaces = surfaces
+    }
 
     public mutating func advance(globals: inout OriginalStateRecord,input: OriginalFrontScreenInput,fillBacking: [UInt8],
         allocate: () throws -> OriginalInterfaceAllocation,
