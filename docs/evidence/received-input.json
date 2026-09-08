@@ -1,0 +1,31 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real4198f0/4197a0 and41d469 input caller after reproduced initial loading\nand natural local input. Primary first continuation also executes41c5e5's phase1\njump. Phase0 network/hotkeys, playback checksum and recording remain outside.\nDirect probes supply packets, pause, globals and Actor/seat inputs explicitly.\n",
+  "corpus": "received-input.json",
+  "sha256": "90bbb0620d9301f44938adbc895bf3a9a727833904e94cd98c9360aff00fde51",
+  "cases": 726,
+  "remoteCalls": 379,
+  "playbackCalls": 355,
+  "nativeComparison": "Received input matches original: 726 cases, 379 remote ret12 /355 playback ret8, 586920 records, 687005920 bytes/masks, 1 continuous phase1 caller; linked 303 local-input cases and complete first loading. Network transport, playback checksum/recording and Practice remain open",
+  "fixture": "original-received-input.json",
+  "fixtureSHA256": "45936dc1c564360c0326aabce9a3f2542a8847e36f56d2f0f0b200d14feca2b6",
+  "fixtureBytes": 6089052,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading.json",
+      "sha256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog.json",
+      "sha256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds.json",
+      "sha256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb"
+    },
+    "local-input": {
+      "fixture": "original-local-input.json",
+      "sha256": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a"
+    }
+  }
+}

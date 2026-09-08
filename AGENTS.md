@@ -419,6 +419,40 @@ stimulus metadata by value; after fixing its JSON/aliasing checks both source
 runs were repeated completely. No expected after-state was repaired. All six
 inherited loading fixture hashes verified; old fixtures unchanged. Release
 NTSDNative passed in2.58s. No Practice/Windows input or whole-match claim.
+The [received-input study](docs/research/RECEIVED_INPUT.md) now executes whole
+4198f0/4197a0 and caller41d469 after reproduced first loading/natural local input.
+Read it before extending input/replay/network. Two fresh726-case passes match
+Swift:757 remote ret12/710 playback ret8,1173438 records/1373541288 bytes/masks.
+The primary first phase1 caller continues41c5e5 on the same CPU/stack. The first
+phase0 control explicitly STARTS41d469; network/hotkeys are not executed there.
+Native receives its own verified state via LocalInputReference.onNatural; the
+entire old local corpus still compares after that callback. All8 parent fixture
+hashes remain pinned/unchanged. Both packed release comparisons passed before
+new fixture acceptance. New JSON envelopes96.3/97.1 MB need an explicit128 MB
+ReceivedInputReference unpack limit; old readers retain default64 MB and each
+received-input blob remains capped2 MB. No expected snapshots were changed.
+4198f0 visits ONLY status==-1;4197a0 visits all8 regardless status/activity.
+Both copy raw cd..d3 to c6..cc in every phase; only phase0 clears/decodes current.
+Remote recording!=0 REPLACES the whole command byte, including bit0, unlike
+local-input OR. Bytes8/9 remain unchanged. The functions themselves do not check
+playback flag; caller does remote FIRST, then playback if450b84!=0, so previous
+can be overwritten twice. Any nonzero local pause skips both. Phase is an argument.
+All256 byte values, phases/statuses/negative flags and real Actor-table aliases
+are covered; resolve seats in order, because later seats see earlier writes.
+Native API uses separate packet/output value arrays, not arbitrary source/output
+address aliasing. New receiveInput returns explicit playbackChecksum/recording
+continuation; it does NOT execute those stages. No Practice/AI/W claim.
+Next: phase0 network/hotkeys41c5e5..41d469, playback source43dc50 (buffer+2b38+
+10*tick), checksum41d4b7 and recording43db40/counter through41d714, then pause/
+menu->429730. On ticks divisible by150, checksum sums Actor+2fc of first20
+seats only when activity==1; error exit needs43df00 saved strings beyond globals.
+S: even network flag0 makes four Winsock calls before41c64f; do not skip them.
+The shared416cd0 hotkey also needs43df00 playback lifecycle. Read the study's
+explicit boundaries; full playback prefix, file IO and Windows transport remain open.
+The received-input stage passed both new XCTest in199.401s with no failures;
+they also replay both entire old local-input and full-loading native comparisons.
+Release NTSDNative passed in2.70s. All eight inherited fixture hashes verified;
+no old fixtures or baseline assets changed. No new Practice/Windows/full-match proof.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.

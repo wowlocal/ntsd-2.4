@@ -34,7 +34,8 @@ public enum LocalInputReference {
         }
         return try stride(from: 0,to: utf8.count,by: 2).map { try value(utf8[$0])*16+value(utf8[$0+1]) }
     }
-    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(input: Data, loading: Data, catalog: Data, sounds: Data,
+                               onNatural: (OriginalMatchPreparation, [UInt8], Bool) throws -> Void = { _, _, _ in }) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(input))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -147,6 +148,7 @@ public enum LocalInputReference {
                 } else {
                     guard item.parent, item.paused != 0, item.beforeDispatch == nil, beforeCount == 0, item.stackAfter == c.bodySP else { throw error("Paused caller skip") }
                 }
+                if item.natural { try onNatural(state,commands,item.paused != 0) }
             }
         })
         return .init(initial: initial,cases: c.cases.count,bytes: bytes,records: records,calls: calls,characterAI: characterAI,objectInput: objectInput)

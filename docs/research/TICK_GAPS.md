@@ -12,7 +12,10 @@
 Новая общая основа теперь отдельно проверяет [первую загрузку](INITIAL_LOADING.md)
 и [локальный ввод419a60](LOCAL_INPUT.md) на полном каталоге/пуле, включая фазы,
 keyboard/joystick bytes и упаковку. Она ещё не подключена к оконному Practice.
-AI bodies, OS acquisition, remote input и дальнейшая сеть/пауза остаются
+Новый [received-input участок](RECEIVED_INPUT.md) также сравнивает4198f0/4197a0
+и их caller: status−1 remote, все восемь playback, сырые previous/phase0 current,
+полный байт записи и порядок повторных Actor-ссылок. AI bodies, OS acquisition,
+сетевой транспорт/hotkeys, playback checksum/recording и дальнейшая пауза остаются
 открытыми; прежняя таблица ниже описывает ограничения существующего прототипа.
 
 | Стадия оригинала | Python / Swift сейчас | Следствие и очередь |

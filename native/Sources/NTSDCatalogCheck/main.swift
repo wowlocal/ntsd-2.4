@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 7, CommandLine.arguments[1] == "--received-input" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try ReceivedInputReference.compare(received: values[0],local: values[1],loading: values[2],catalog: values[3],sounds: values[4])
+        print("Received input matches original: \(r.cases) cases, \(r.remoteCalls) remote ret12 /\(r.playbackCalls) playback ret8, \(r.records) records, \(r.bytes) bytes/masks, \(r.continuous) continuous phase1 caller; linked \(r.local.cases) local-input cases and complete first loading. Network transport, playback checksum/recording and Practice remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 6, CommandLine.arguments[1] == "--local-input" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try LocalInputReference.compare(input: values[0],loading: values[1],catalog: values[2],sounds: values[3])

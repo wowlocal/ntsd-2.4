@@ -52,11 +52,11 @@ public enum MatchPreparationReference {
         bytes.removeLast(); return bytes
     }
 
-    static func unpack(_ input: Data) throws -> Data {
+    static func unpack(_ input: Data, maximumCount: Int = 64_000_000) throws -> Data {
         guard let packed = try? JSONDecoder().decode(Packed.self, from: input) else { return input }
         // Larger chained menu corpora contain many small complete records.
         // Individual blobs retain their tighter bound above.
-        let data = Data(try inflate(packed.deflate, count: packed.count, maximumCount: 64_000_000))
+        let data = Data(try inflate(packed.deflate, count: packed.count, maximumCount: maximumCount))
         guard digest(data) == packed.sha256 else { throw error("Envelope digest") }
         return data
     }
