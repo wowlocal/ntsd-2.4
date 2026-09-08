@@ -67,18 +67,31 @@ extension OriginalMatchPreparation {
         return input.defaultResult
     }
 
-    /// Main-menu body 427915..427ca7, network children through their returns,
-    /// stopping at shared presentation/epilogue entries. Input/front-end setup
-    /// and the shared presentation tail are separate, still unrecovered paths.
+    /// Main-menu body with the same shared storage runner used by early startup.
     public mutating func runMainMenu(crt: inout OriginalCRTRandom, input: OriginalMainMenuInput,
                                     observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
-        var candidate = self, random = crt
-        let result = try candidate.consumeMainMenu(crt: &random, input: input, observe: observe)
-        self = candidate; crt = random
-        return result
+        try OriginalMainMenu.run(world: &world,globals: &globals,crt: &crt,input: input,observe: observe)
     }
+}
 
-    private mutating func consumeMainMenu(crt: inout OriginalCRTRandom, input: OriginalMainMenuInput,
+///427915..427ca7 needs World/globals and CRT state; it does not depend on a
+///loaded match catalog. The existing preparation API delegates to this runner.
+public enum OriginalMainMenu {
+    public static func run(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
+        crt: inout OriginalCRTRandom,input: OriginalMainMenuInput,
+        observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
+        guard world.bytes.count == OriginalStateRecord.worldPrefixSize,globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
+        var execution = Execution(world: world,globals: globals),random = crt
+        let result = try execution.consumeMainMenu(crt: &random,input: input,observe: observe)
+        world = execution.world;globals = execution.globals;crt = random;return result
+    }
+    private struct Execution {
+        var world: OriginalStateRecord,globals: OriginalStateRecord
+        static let globalBase = OriginalMatchPreparation.globalBase
+        static func error(_ text: String) -> OriginalStateError { .invalidStorage("Main menu: "+text) }
+        func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
+        mutating func setGlobal(_ address: Int,_ value: Int32) throws { try globals.write(value,at: address-Self.globalBase) }
+    mutating func consumeMainMenu(crt: inout OriginalCRTRandom, input: OriginalMainMenuInput,
                                          observe: (OriginalMainMenuEvent) throws -> Void) throws -> OriginalMainMenuExit {
         func event(_ kind: OriginalMainMenuEvent.Kind, _ words: [UInt32] = [], _ strings: [[UInt8]] = []) throws {
             try observe(.init(kind, words, strings))
@@ -228,4 +241,5 @@ extension OriginalMatchPreparation {
         try globals.write(UInt8(0), at: 0x44f1ae-Self.globalBase)
         return true
     }
+}
 }

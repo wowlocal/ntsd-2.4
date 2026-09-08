@@ -677,3 +677,19 @@ printf count. Полный FILE/CRT lifetime остаётся открытым. 
 Общий worker gate4237e0/43c450 теперь используется prefix и enable dialog;
 реальный worker остаётся границей. Fill DDBLTFX сохраняет92 untouched bytes/masks,
 переданные до каждого child call. Эти правила пока не подключены к app UI.
+
+Дополнение [возврата раннего меню](FRONT_MENU_COMPLETION.md), S/D:
+
+| Поле | Проверенная композиция |
+| --- | --- |
+| `451170/45117c/4511a0/45118c` | Главное меню, подсветка, cursor и MENU_WAIT теперь вызывают43f010 на настоящих ранних wrappers |
+| Bitmap+`0c` у cursor/wait | Untouched count. Frame−1 рисует whole image, затем отдельное frame<count может дать второй проход; A5/ramp различаются |
+| `44d060` | Tail записывает текущий457580 после shutdown guard; network error direct epilogue не делает эту запись |
+| PTD+`14` | От actual initptd=1 к39 последовательным table rebuilds на корпус; каждый actual rand result/before/after проверен, между menu cases seed не сбрасывается |
+| World+`0`, `4511ac` | Выбор первого пункта→1, следующий полный4246b0 освобождает живой фон и пишет World2. Global4511ac=0; dead bitmap bytes/masks сохраняются |
+| `4588a8/4588ac` | В этой свежей цепочке подтверждены нулевые BSS pointers; выделение/free replay этим корпусом не расширено |
+| Caller stack | Настоящий ret4, SP1000f42c, четыре исходных nonvolatile registers и SEH12345678. Полный scratch main-menu/overlay здесь не объявляется native storage |
+
+Ранний main-menu runner теперь требует только World/globals/CRT. Подготовка
+матча использует тот же код через свой прежний API. Ожидаемые after records
+не подставляются в native; raw surface tokens берутся из declared parent inputs.

@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-menu-completion" {
+        let r = try FrontMenuCompletionReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Front menu completion matches original: \(r.cases) returns /\(r.main) main menus /\(r.tails) tails /\(r.worldOne) World1 transitions /\(r.errors) network exits, \(r.helpers) helper returns /\(r.events) events, \(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits, \(r.tables) RNG tables /\(r.random) actual DLL draws, \(r.formats) formats /\(r.frees) frees /\(r.posts) quit requests; \(r.records) records /\(r.bytes) bytes/masks, own fresh alternate parent \(r.parent.cases). Screen loop, app UI and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-screen-alternate" {
         let r = try FrontScreenAlternateReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Front screen alternates match original: \(r.cases) cases, \(r.helpers) helper returns, \(r.events) parent /\(r.settingsEvents) writer events, \(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits /\(r.fills) fills, \(r.sounds) sounds /\(r.timers) timers /\(r.workers) worker requests; \(r.settings) settings calls /\(r.settingsReturns) returns /\(r.prints) fprintf /\(r.fileWrites) writes /\(r.failedWrites) failed or short; \(r.boundaries) boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh screen body \(r.parent.cases). Full screen loop, device output and Windows open")

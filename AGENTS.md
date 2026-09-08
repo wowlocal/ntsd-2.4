@@ -913,6 +913,42 @@ Six targeted XCTest passed in20.817s (new alternates12.441s, historical body
 comparison exposed a reference-only read of the deliberately undefined stack+20
 mask; the fix reads declared raw bytes without altering that mask. No expected
 fixture was changed to accommodate native output.
+The [front-menu completion](docs/research/FRONT_MENU_COMPLETION.md) now joins
+fresh World/resources/settings/prefix/body/alternate EAX0 to427915/main menu and
+42873e through actual ret4. Both403-case corpora match native:806returns,
+6996helper returns,21948events,234000actual DLL rand/78tables,148sprintf,
+42986records/395787072bytes+masks. Actual graphics children use all25real early
+bitmap records; overlay/network/CRT/present/shutdown run on the same CPU/stack.
+First caller/prologue is natural; later main/tail entries are explicitly supplied
+after a real fresh SEH/cookie prologue, not full screen iterations. Final choose-
+match plus whole4246b0 World1 releases the actual background through423910/
+43ef50/free, preserves its dead record, clears4511ac and writesWorld2. No World2
+41bc90 execution is claimed yet. Raw bitmap ownership tokens are converted only
+at the drawing API's canonical+binding boundary; don't normalize arbitrary words.
+Cursor/MENU_WAIT count+0c is untouched: frame-1 whole-image then frame<count can
+produce a second draw. A5 has961clips/657Blt, ramp1357clips/925Blt; keep this
+backing-dependent source behavior, don't initialize count to make it prettier.
+Fresh PTD starts1 from the parent's actual_initptd; full process srand/CRT lifetime
+remains open. OriginalMainMenu.run now accepts World/globals without a loaded
+match catalog; existing OriginalMatchPreparation.runMainMenu delegates to it.
+Old menu/network logic is shared, not duplicated. FrontScreenAlternateReference
+onNatural exposes its own validated state/resources for composition. The source
+reuses old network/GDI boundary observers while executing actual rand/sprintf
+on the current VM rather than another helper VM. No OS/network/browser IO.
+Both raw and packed new corpora passed before acceptance; all78old fixture hashes
+are unchanged and both new packed SHA/full unpack checked (80-fixture pins at
+build/research/front-menu-completion-fixture-pins.json). Initial native comparison
+found a reference-only raw/canonical surface adapter mismatch; expected corpora
+were not changed to accommodate it. Caller ABI/World/globals/bitmap storage are
+checked; full main/overlay stack scratch is outside this new native domain.
+Next compose repeated early dispatch/prefix/body/alternates through this return,
+then continue World2 with the real loading chain. Enabled optional panel, other
+selectors, app UI/device pixels/audio, Windows and full-game equivalence stay open.
+Five targeted XCTest passed in139.941s: new completion7.656s, historical
+alternates13.327s, MainMenu118.958s. The old MainMenu test rebuilds1020probes/
+450mouse messages and50full preparation/recording chains through the factored
+runner. Release NTSDNative build passed in2.49s. All commands/processes were terminal
+before the milestone commit; no full-match/Windows completion is implied.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
