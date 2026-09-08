@@ -792,6 +792,34 @@ Now join content43c780/bitmap43cc60/both writers into whole4236d0 through actual
 Both packed release comparisons passed before acceptance;29 old fixture SHA
 unchanged, new raw/packed SHA and full unpack verified. Two new XCTest passed
 in4.738s; release NTSDNative passed in2.30s. Existing shared helpers unchanged.
+The [joined panel update](docs/research/MENU_PANEL_UPDATE.md) now executes whole
+4236d0 through actual caller427127 and return42712c after fresh World/resources/
+settings/screen prefix on the same CPU/stack.266 cases match native, composing
+the existing content/bitmap/default/cache helpers:332/118/130/250 calls,
+828 completed returns,94 constructors/92 destructors,3852 parent/34760 child
+events,43156 records/734441674 bytes/masks. First natural status0 only enters/
+leaves the lock; later caller registers/worker globals are explicit stimuli.
+Compare signed versions BEFORE clearing458424. Toggle is signed remainder
+(Int32(1) &- index)%2. Copy date458350 to4527b0 through NUL only on no-new-version
+or first successful pair; second successful pair keeps the OLD date. Double
+failure calls defaults THEN cache even after file errors. A failed bitmap can
+destroy the previous image and retain an empty wrapper; writers do not undo it.
+Keep all panel allocation generations plus World and25 early bitmap records.
+The real content local base is child entryESP-454; its observed before-call
+1104-byte backing is an explicit input. Both final controlled empty-file cases
+stop BEFORE43c817 with partial state/status already cleared and no Leave, not
+a false loader return or automatic lock cleanup. Next instructions are open.
+Panel arena2c000000 is separate from early allocations; original MENU_BACK1 DIB
+is an explicit device response at the requested ad path, never a new game asset.
+Original ad0/ad1 remain absent. FILE/CRT/IO/COM/worker boundaries remain declared.
+Native takes its own fresh parent via optional FrontScreenPreludeReference
+onNatural, never expected after-snapshots. Next body42712c and alternatives4275cb,
+then join earlier/later menu and loading paths; app UI/pixels/Windows remain open.
+Both packed release comparisons passed before acceptance;31 old fixture SHA
+unchanged, both new raw/packed SHA and full unpack checked. Both historical
+content and both bitmap source corpora reproduced ALL cases/blobs unchanged
+after the optional local/heap/device address hooks. Four targeted XCTest passed
+in14.137s; release NTSDNative passed in2.39s. R02.1/full match still open.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

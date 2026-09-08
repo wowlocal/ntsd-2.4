@@ -23,6 +23,7 @@ PRINTF,GETS,SCAN=0x7817775D,0x7817A00D,0x78177DC4
 REGISTERS=[UC_X86_REG_EBX,UC_X86_REG_EBP,UC_X86_REG_ESI,UC_X86_REG_EDI]
 
 class MenuContent(CRT):
+ local_base=LOCAL
  def __init__(self,control=False):
   self.active=False;super().__init__();self.control=control;self.blobs={}
   raw=(DEFAULT_SOURCE/'NTSD 2.4.exe').read_bytes();assert digest(raw)==EXE_SHA256
@@ -42,15 +43,15 @@ class MenuContent(CRT):
   out=bytearray()
   while self.uc.mem_read(p,1)!=b'\0':out.extend(self.uc.mem_read(p,1));p+=1;assert len(out)<10000
   return bytes(out)
- def scratch(self):return dict(bytes=self.blob(self.uc.mem_read(LOCAL,LOCAL_SIZE)),defined=self.blob(self.local_mask))
+ def scratch(self):return dict(bytes=self.blob(self.uc.mem_read(self.local_base,LOCAL_SIZE)),defined=self.blob(self.local_mask))
  def changed(self,uc,access,address,size,value,data):
   if not self.active:return
-  if LOCAL<=address and address+size<=LOCAL+LOCAL_SIZE:self.local_mask[address-LOCAL:address-LOCAL+size]=b'\1'*size
+  if self.local_base<=address and address+size<=self.local_base+LOCAL_SIZE:self.local_mask[address-self.local_base:address-self.local_base+size]=b'\1'*size
   else:
    assert GLOBAL<=address and address+size<=GLOBAL+SIZE
    if 0x43C780<=uc.reg_read(UC_X86_REG_EIP)<0x43CC54:self.events.append(dict(kind='write',arguments=[address,size,value&((1<<(8*size))-1)]))
  def target(self,p):
-  if LOCAL<=p<LOCAL+LOCAL_SIZE:return [1,p-LOCAL]
+  if self.local_base<=p<self.local_base+LOCAL_SIZE:return [1,p-self.local_base]
   assert GLOBAL<=p<GLOBAL+SIZE,hex(p);return [0,p]
  def code(self,uc,pc,size,data):
   if not self.active:return
@@ -68,8 +69,8 @@ class MenuContent(CRT):
   if pc==CLOSE:
    assert arg(0)==FILE and not self.closed;self.closed=True;self.events.append(dict(kind='close',arguments=[FILE,self.close_result&0xFFFFFFFF]));self.ret(self.close_result);return
   if pc in (0x43C817,0x43C8CB,0x43C9D8,0x43CAB4,0x43CB4E,0x43CBF9):
-   ptr=self.u32(sp);assert LOCAL<=ptr<LOCAL+LOCAL_SIZE
-   if 0 not in uc.mem_read(ptr,LOCAL+LOCAL_SIZE-ptr):self.end='unterminatedInput';uc.emu_stop();return
+   ptr=self.u32(sp);assert self.local_base<=ptr<self.local_base+LOCAL_SIZE
+   if 0 not in uc.mem_read(ptr,self.local_base+LOCAL_SIZE-ptr):self.end='unterminatedInput';uc.emu_stop();return
   if pc in (PRINTF,GETS,SCAN):
    assert self.pending is None
    e=dict(kind={PRINTF:'format',GETS:'gets',SCAN:'scan'}[pc],returnPC=self.u32(sp),entrySP=sp,saved=[uc.reg_read(r) for r in REGISTERS])
@@ -81,7 +82,7 @@ class MenuContent(CRT):
      assert fmt in ('data\\ad%d.txt','sprite\\sys\\ad%d.bmp');e.update(arguments=[arg(0),arg(2)])
     else:
      count=fmt.count('%');assert count<=7 and fmt in ('%d ','%s %d %d %d %d %s %s','%s %d %d %d %s %s','%s %d %s %s','%s %d %d %s','%s')
-     e.update(arguments=[arg(0)-LOCAL]+[v for i in range(count) for v in self.target(arg(2+i))])
+     e.update(arguments=[arg(0)-self.local_base]+[v for i in range(count) for v in self.target(arg(2+i))])
    self.pending=e
  def step(self,label,content,index=0,chunk=4096,close=0):
   backing=bytes(i%256 for i in range(LOCAL_SIZE)) if self.control else b'\xa5'*LOCAL_SIZE

@@ -100,7 +100,15 @@ branches и все поколения повторно выданных адре
 [Запись настроек панели](MENU_INFO_WRITING.md) теперь сравнивает43c690/43c710
 с actual VC80 output в534 случаях. Сохранены defaults после failed open и
 partial-write buffer tails; FILE flags102/descriptor IO/text translation имеют
-явные границы. Далее весь4236d0 с этими четырьмя helper через настоящий427127.
+явные границы.
+
+[Обновление панели](MENU_PANEL_UPDATE.md) теперь соединяет весь4236d0 с четырьмя
+реальными children через настоящий427127 после свежего early-screen parent.
+266 случаев совпали с native, включая fallback/date asymmetry, двойную запись
+defaults/cache, все поколения bitmap и две остановки до scanf без Leave.
+Первый status0 получен из собственного parent; последующие caller/worker/file
+inputs предоставлены явно. Далее тело42712c/альтернативы4275cb и соединение
+с прежним menu/loading. Границы CRT/device/worker и проверка Windows остаются.
 
 ## Как устранять пропуски
 

@@ -21,6 +21,8 @@ SOURCE,VTABLE,API=AREA+0x3000,AREA+0x3C00,STOP+0x100
 REGISTERS=[UC_X86_REG_EBX,UC_X86_REG_EBP,UC_X86_REG_ESI,UC_X86_REG_EDI]
 
 class MenuPanelBitmap(Constructors):
+ heap_base=HEAP
+ device=SOURCE
  def __init__(self,control=False):
   self.active=False;self.regions=[];super().__init__();self.control=control;self.blobs={};self.sources={};self.next_address=0
   self.uc.mem_map(0,0x1000);self.uc.mem_map(HEAP,0x200000)
@@ -74,7 +76,7 @@ class MenuPanelBitmap(Constructors):
     if self.reuse and self.regions:address=self.regions[-1]['address'];assert not self.regions[-1]['live']
     else:
      physical=128-self.next_address if self.control else self.next_address+8
-     assert 1<=physical<256;self.next_address+=1;address=HEAP+physical*0x2000+0x20
+     assert 1<=physical<256;self.next_address+=1;address=self.heap_base+physical*0x2000+0x20
     raw=bytes(i%256 for i in range(SIZE)) if self.control else b'\xa5'*SIZE;backing=self.blob(raw)
     self.uc.mem_write(address-16,b'\x96'*16+raw+b'\x69'*16);self.regions.append(dict(address=address,mask=bytearray(SIZE),live=True))
    self.allocation=dict(address=address,backing=backing);self.event('allocate',[SIZE]);self.ret(address);return
@@ -87,8 +89,8 @@ class MenuPanelBitmap(Constructors):
    self.pending=dict(entry=pc,address=address,entrySP=sp,returnPC=self.u32(sp),pop=pop,saved=[uc.reg_read(r) for r in REGISTERS])
   if pc==0x43ED10:
    assert self.pending['entry']==0x43EE50 and self.cstr(uc.reg_read(UC_X86_REG_EDI)).decode()==self.path
-   assert [arg(i) for i in range(3)]==[SOURCE,0x40,0]
-   self.event('load',[SOURCE,0x40,0],[self.path.encode()])
+   assert [arg(i) for i in range(3)]==[self.device,0x40,0]
+   self.event('load',[self.device,0x40,0],[self.path.encode()])
    if self.surface:
     self.write_host(arg(3),self.resource['width']);self.write_host(arg(4),self.resource['height'])
    self.ret(self.surface);return

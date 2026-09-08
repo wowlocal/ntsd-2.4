@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--menu-panel-update" {
+        let r = try MenuPanelUpdateReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Menu panel update matches original: \(r.cases) cases, \(r.content) content /\(r.bitmaps) bitmap /\(r.defaults) default /\(r.caches) cache calls, \(r.returns) child returns /\(r.constructors) constructors /\(r.destructors) destructors, \(r.events) parent /\(r.childEvents) child events, \(r.boundaries) pending-content boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh prefix parent \(r.parent.cases). Remaining screen, worker, file/device output and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-info-writing" {
         let r = try MenuInfoWritingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Menu info writing matches original: \(r.cases) cases /\(r.defaults) defaults /\(r.caches) caches, \(r.formats) sprintf /\(r.prints) fprintf /\(r.closes) fclose, \(r.fileWrites) low-level writes /\(r.failedWrites) failed or short, \(r.events) events /\(r.parentWrites) parent writes, \(r.records) records /\(r.bytes) bytes/masks. Declared user-buffered FILE; Windows translation, real file IO and parent4236d0 remain open")

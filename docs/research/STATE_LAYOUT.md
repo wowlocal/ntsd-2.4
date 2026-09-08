@@ -605,3 +605,21 @@ Fclose после flush сбрасывает ptr=base/count0, затем выз�
 при failed fopen; defaults оставляет EAX последнего sprintf. Логические LF bytes
 проверены до Windows text translation. Общий new byte-output helper не моделирует
 другие stream modes, EILSEQ42 или Windows fopen/allocator provenance.
+
+Дополнение [общего обновления панели](MENU_PANEL_UPDATE.md), S/D всего4236d0
+через caller427127 после свежего early-screen parent:
+
+| Поле | Правило |
+| --- | --- |
+| `4554a4` | Enter до чтения статуса, Leave после полного пути; при явной остановке до unsupported scanf Leave ещё не исполнен |
+| `458424` | Только значение2 запускает обновление; очистка в0 после сравнения версий и до children |
+| `44d77c/44d778` | Signed32 incoming/current version; результат сравнения сохраняется до последующих записей content loader |
+| `44d784` | Каждая попытка начинает с `(Int32(1) &- oldIndex) % 2`, signed remainder; произвольный старый индекс не обязан восстановиться после двух переключений |
+| `458350 → 4527b0` | Byte-copy через NUL при incoming<=current или первом успешном content+bitmap; второй успех не копирует дату |
+| `458420` | Поколения принадлежат shared bitmap loader; defaults/cache не возвращают уничтоженный bitmap и не освобождают новую пустую оболочку |
+
+Двойная ошибка выполняет defaults и затем cache, включая повторную файловую
+запись.1104-byte scratch берётся из настоящего child entryESP−454 как явный
+before-input. Все25 ранних bitmap и World сохраняются после каждого случая;
+статус и частичные записи сохраняются при двух контрольных остановках до43c817.
+Это не установление worker/Windows startup provenance или полный ранний экран.

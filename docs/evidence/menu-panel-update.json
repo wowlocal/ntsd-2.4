@@ -1,0 +1,21 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh World/resources/settings/screen prefix -> actual427127/whole4236d0.\nAll four content/bitmap/default/cache children execute on the same CPU/stack,\nusing existing child observers and actual VC80 file functions. Later caller,\nworker globals, translated files, DIB/allocator/device, scratch and user-buffered\nFILE inputs are explicit. First natural path continues without state restoration.\nStops at42712c or BEFORE unsupported unterminated sscanf. No worker/pixels/W claim.\n",
+  "corpus": "menu-panel-update.json",
+  "sha256": "9f4fb657156cadd509f580e8247198ac2ea9bd7239e500bbf0f6127bd16f6cdf",
+  "cases": 133,
+  "children": {
+    "content": 166,
+    "bitmap": 59,
+    "defaults": 65,
+    "cache": 125
+  },
+  "events": 1926,
+  "childEvents": 17380,
+  "nativeCompared": true,
+  "nativeComparison": "Menu panel update matches original: 133 cases, 166 content /59 bitmap /65 default /125 cache calls, 414 child returns /47 constructors /46 destructors, 1926 parent /17380 child events, 1 pending-content boundaries, 21578 records /367220837 bytes/masks; own fresh prefix parent 1. Remaining screen, worker, file/device output and Windows open",
+  "fixture": "original-menu-panel-update.json",
+  "fixtureSHA256": "e74b46ed9460f7aa53b2a8d9bce46a5f543aa0563ff7ecc51df0954903fa1ea4",
+  "fixtureBytes": 7378408
+}
