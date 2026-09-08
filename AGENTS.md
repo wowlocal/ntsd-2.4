@@ -730,6 +730,26 @@ settings source corpora were freshly reproduced and ALL blobs matched after
 the default-noop device hook. Five targeted tests (new prefix, old settings and
 bitmap drawing) passed in14.095s; new prefix tests2.474s. Release NTSDNative
 passed in2.25s; no window/device-output claim.
+The [menu-content parser](docs/research/MENU_CONTENT.md) now executes whole43c780
+with actual VC80 sprintf/fgets/sscanf on the same CPU/stack. Two352-case corpora
+match native:1408 formats,16998 gets/16992 scans,116462 events/79666 parent
+writes,72204 records/1705747296 bytes/masks.64 successful/634 failed returns
+and6 unterminated-input boundaries; source ret/stack/nonvolatile registers checked.
+This is an independent helper on persistent globals, not yet joined to4236d0.
+Original ad0/ad1 txt/bmp are absent; adinfo is now0 4. Present-file controls come
+from the EXE format and never become game assets.24 ba/8 ta/un/y/end rows retain
+all partial state. BA resets only its first scanf number; TA resets all3; Y
+resets both to0 in reverse scanf order. String initialization writes ONLYUInt16
+"-\0", unbounded%s may overlap adjacent fields, failed fgets retains old bytes.
+Keep shared1104-byte scratch (markers0/52,buffers104/604), not isolated strings.
+Missing NUL stops BEFORE the original scanf call, retaining earlier operations;
+no stack corruption/Windows backing provenance is claimed. Native uses the
+existing OriginalFrameScanner unchanged. File open/close, translated_read and
+CRT thread/locks remain explicit boundaries. Next43cc60 bitmap lifecycle and
+43c690/43c710 cache/default writers, then whole4236d0 through actual427127.
+Both packed release comparisons passed before acceptance;25 old fixture SHA
+unchanged, new raw/packed SHA and complete unpack verified. Both new XCTest
+passed in28.684s; release NTSDNative passed in2.33s. No app UI/Windows claim.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

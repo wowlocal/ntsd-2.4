@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-content" {
+        let r = try MenuContentReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Menu content matches original: \(r.cases) cases, \(r.formats) actual formats /\(r.gets) fgets /\(r.scans) sscanf, \(r.events) events /\(r.writes) parent writes, \(r.success) successful /\(r.failure) failed returns /\(r.boundaries) unterminated-input boundaries, \(r.records) records /\(r.bytes) bytes/masks. Independent helper; full menu-information lifecycle, Windows and network remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--front-screen-prelude" {
         let r = try FrontScreenPreludeReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Front screen prelude matches original: \(r.cases) cases /\(r.sources) backgrounds, \(r.helpers) real helper returns, \(r.events) events, \(r.fills) fills /\(r.draws) draws /\(r.blits) Blt requests, \(r.reads) bitmap reads /\(r.undefinedReads) undefined, \(r.clips) clips, \(r.constructors) constructors /\(r.formats) actual CRT formats /\(r.threads) thread requests, \(r.boundaries) invalid-access boundaries, \(r.records) records /\(r.bytes) bytes/masks; settings parent \(r.parent.cases). Next screen bodies, worker, pixels and Windows remain open")

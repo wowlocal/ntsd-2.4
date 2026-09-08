@@ -1,0 +1,25 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole43c780 menu-information parser with actual VC80 sprintf/fgets/sscanf.\nIndependent helper calls on persistent globals; raw scratch backing, translated\n_read bytes and fopen/fclose are explicit boundaries. Original ad0/ad1 files\nare absent; present-file controls come from the recovered format, not replacement\nassets. No Windows/network/whole-screen claim. Native acceptance is separate.\n",
+  "corpus": "menu-content.json",
+  "sha256": "ecf9f61eee2977f0792833328828e499e4dfc62bd1e0dd3fa84b246638f9af2b",
+  "cases": 352,
+  "events": {
+    "format": 704,
+    "open": 352,
+    "gets": 8499,
+    "scan": 8493,
+    "write": 39833,
+    "close": 344
+  },
+  "continuations": {
+    "returned": 346,
+    "unterminatedInput": 6
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Menu content matches original: 352 cases, 704 actual formats /8499 fgets /8493 sscanf, 58225 events /39833 parent writes, 32 successful /314 failed returns /6 unterminated-input boundaries, 36096 records /852731904 bytes/masks. Independent helper; full menu-information lifecycle, Windows and network remain open",
+  "fixture": "original-menu-content.json",
+  "fixtureSHA256": "3731b20c38ee13c18014fead1779901e7b1d6f842935287553a981f9ba8178a0",
+  "fixtureBytes": 9308544
+}
