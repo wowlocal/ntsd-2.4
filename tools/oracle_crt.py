@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["unicorn==2.1.4", "olefile==0.47"]
 # ///
-"""Execute the repository's Microsoft VC80 scanf instructions, not host atoi.
+"""Execute the repository's Microsoft VC80 scanf and bounded sprintf paths.
 
 Development tooling only. The DLL is extracted from the hash-pinned original
 redistributable; neither it nor Unicorn belongs in the native application's runtime.
@@ -164,6 +164,34 @@ class CRT:
             outputs.append(raw[i*512:i*512+size].hex())
         return dict(result=result, position=self.u32(FILE) - INPUT if string_file else self.read_position - self.u32(FILE + 4),
                     eof=bool(self.u32(FILE + 12) & 0x10), errno=self.u32(PTD + 8), outputs=outputs)
+
+    def format(self, fmt, args):
+        """Real exported sprintf, only the three formats used by match prelude.
+
+        C locale/PTD and lock boundaries are the same as the scanf harness.
+        Raw byte string arguments are copied to supplied DLL-VM allocations.
+        No general printf format, locale, float or buffer-overflow claim.
+        """
+        assert fmt in (b'%d', b'%s.lfr', b'%4d%02d%02d_%02d%02d%02d') and len(args) <= 8
+        self.uc.mem_write(FORMAT, fmt+b'\0')
+        self.uc.mem_write(OUTPUT-16, b'\x96'*16+b'\xA5'*0x1000+b'\x69'*16)
+        self.mask = bytearray(0x1000)
+        values = []
+        for index, value in enumerate(args):
+            if isinstance(value, bytes):
+                assert len(value) < 0xFF0 and b'\0' not in value
+                address = INPUT+index*0x1000
+                self.uc.mem_write(address, value+b'\0')
+                values.append(address)
+            else:
+                values.append(value & 0xFFFFFFFF)
+        result = self.call(0x7817775D, [OUTPUT, FORMAT, *values])
+        assert 0 <= result < 0x1000
+        raw = bytes(self.uc.mem_read(OUTPUT, 0x1000))
+        assert self.mask == b'\1'*(result+1)+b'\0'*(0x1000-result-1)
+        assert raw[result] == 0 and raw[result+1:] == b'\xA5'*(0x1000-result-1)
+        assert self.uc.mem_read(OUTPUT-16, 16) == b'\x96'*16 and self.uc.mem_read(OUTPUT+0x1000, 16) == b'\x69'*16
+        return dict(result=result, bytes=raw[:result+1].hex(), boundaries=sorted(self.visited))
 
 
 def integer_suite():

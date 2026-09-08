@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--match-prelude" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try MatchPreludeReference.compare(loaded: loaded, corpora: corpora)
+        print("Match prelude matches original: \(result.cases) cases, \(result.bytes) global bytes/masks, \(result.formatCalls) real CRT calls, \(result.soundCalls) sound methods, \(result.fills) fills; chained preparation: \(result.replay.preparation.records) records, \(result.replay.preparation.bytes) bytes/masks; recording: \(result.replay.buffers) buffers, \(result.replay.bytes) bytes/masks, \(result.replay.allocations) allocations / \(result.replay.releases) releases")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--replay-initialization" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

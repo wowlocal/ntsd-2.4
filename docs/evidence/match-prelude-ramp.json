@@ -1,0 +1,2223 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Full catalog/bootstrap; prelude42cf8a..42d1ff with real VC80 sprintf and sound/fill helpers; common preparation and replay init through42d704; supplied time/menu/RNG/metadata/device/allocator boundaries; no whole startup or Windows output",
+  "corpus": "match-prelude-ramp.json",
+  "corpusSHA256": "8f54e23b749021bf06d58ac969123070bd46bca82cae6467f2a3d623143c0659",
+  "cases": 25,
+  "nativeComparison": "Match prelude matches original: 50 cases, 4614400 global bytes/masks, 130 real CRT calls, 60 sound methods, 10 fills; chained preparation: 77300 records, 115871104 bytes/masks; recording: 50 buffers, 324583600 bytes/masks, 50 allocations / 50 releases",
+  "loadedCatalogSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "readsBeforeWrites": [],
+  "immutableCatalogObjectHeapBytesVerified": true,
+  "replayBytes": 162291800,
+  "casesSummary": [
+    {
+      "label": "naruto-sasuke-district",
+      "mode": 0,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": 0,
+      "background": 0,
+      "beforeGlobals": "e824b70567536ae6b165fb4375e8664ec14ed0cdbb15f3ca0a2d7e8ac9f4abc6",
+      "afterGlobals": "24c94667e34ac43a48db0ccd904d24aab1c427b666e0d0448d18fea89df27dd2",
+      "fileName": "20260908_030405_VS.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "fill-rectangle",
+          "resource": 603979776,
+          "x": 0,
+          "y": 0,
+          "width": 794,
+          "height": 550,
+          "color": 0
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f5653"
+          ],
+          "result": 22,
+          "bytes": "32303236303930385f3033303430355f56532e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "restart-district",
+      "mode": 0,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": 0,
+      "background": 0,
+      "beforeGlobals": "b23222eeb4610235eb7feba2ed898b31551884237be0ead34447fdc304aa38f8",
+      "afterGlobals": "4c0f936fcfdfc3e1f189ea25b6654789b5c11b6f100778e871595715163a943b",
+      "fileName": "   70102_030405_VS.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f3033303430355f5653"
+          ],
+          "result": 22,
+          "bytes": "20202037303130325f3033303430355f56532e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-0",
+      "mode": 1,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": 0,
+      "background": 1,
+      "beforeGlobals": "5ca60ae673ab9f4c606e1e807da67f26430a4dc448738e3c9ae660e02fee09fe",
+      "afterGlobals": "b0042fc4fa8b5083518fca85215a33f857ebdff060aea9b91b016d192d1bae2e",
+      "fileName": "   00000_000000_Stage_1.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            1
+          ],
+          "result": 1,
+          "bytes": "3100",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f3030303030305f53746167655f31"
+          ],
+          "result": 27,
+          "bytes": "20202030303030305f3030303030305f53746167655f312e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-10",
+      "mode": 1,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": 10,
+      "background": 2,
+      "beforeGlobals": "095ab55af18e77ab12901300a9cab3bea738fde0571d2f901bfc3e71e91a2e2f",
+      "afterGlobals": "1bd0145b6e3b9bb1dcb481610eb249275b71ccd5aec85ced5d5f5ad37559b68c",
+      "fileName": "655356553565535_655356553565535_Stage_2.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            2
+          ],
+          "result": 1,
+          "bytes": "3200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f32"
+          ],
+          "result": 43,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f322e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-20",
+      "mode": 1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": 20,
+      "background": 3,
+      "beforeGlobals": "77a372d03f9ec1fc229ee2c92860f753f39128247ea15847d860a20130183f51",
+      "afterGlobals": "b6d7f74d6c38c7c640e0f203e0f1bf3a7fb079ead64cf2b15b089a154392a6e1",
+      "fileName": "20260908_030405_Stage_3.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            3
+          ],
+          "result": 1,
+          "bytes": "3300",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f53746167655f33"
+          ],
+          "result": 27,
+          "bytes": "32303236303930385f3033303430355f53746167655f332e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-30",
+      "mode": 1,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": 30,
+      "background": 4,
+      "beforeGlobals": "e5b4664fbe40d1d4fc9cb22e05b551f118e172f6bb31f886627d7c7a5eb796d9",
+      "afterGlobals": "628795e9677cfabaa5aded3d546649f1527cdf555e25c9932eee34abb47b9c45",
+      "fileName": "   70102_030405_Stage_4.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "fill-rectangle",
+          "resource": 603979776,
+          "x": 0,
+          "y": 0,
+          "width": 794,
+          "height": 550,
+          "color": 0
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            4
+          ],
+          "result": 1,
+          "bytes": "3400",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f3033303430355f53746167655f34"
+          ],
+          "result": 27,
+          "bytes": "20202037303130325f3033303430355f53746167655f342e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-40",
+      "mode": 1,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": 40,
+      "background": 5,
+      "beforeGlobals": "914727323d82f5b46493e48994ecbddbdf4fe8bf0f1524149d40a902461d0716",
+      "afterGlobals": "83e85ab9a150a84d2bcbfcd6e6622694afd62a70f6bc9dd854a18e7b66a83f71",
+      "fileName": "   00000_000000_Stage_5.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            5
+          ],
+          "result": 1,
+          "bytes": "3500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f3030303030305f53746167655f35"
+          ],
+          "result": 27,
+          "bytes": "20202030303030305f3030303030305f53746167655f352e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-50",
+      "mode": 1,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": 50,
+      "background": 6,
+      "beforeGlobals": "5e0d81735313fcd4e75ff700cdd75330916858c3214b977ff6d5abb2addf53e2",
+      "afterGlobals": "68aff3875da639a16783454972b06fff06ba505bb4358db57a160d8ae9c21fb3",
+      "fileName": "655356553565535_655356553565535_Survival.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f3635353335363535333536353533355f537572766976616c"
+          ],
+          "result": 44,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533355f537572766976616c2e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage--2147483648",
+      "mode": 1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": -2147483648,
+      "background": 8,
+      "beforeGlobals": "8a442e9dccb9e636e2543f8fb3576803910ad8ff606e99175d5ffbbfe3c9cdc1",
+      "afterGlobals": "6bcb5a6033d77b05284c4ce713c7484dd597b2da7cdc3786a0e669996500148f",
+      "fileName": "20260908_030405_Stage_-214748363.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            4080218933
+          ],
+          "result": 10,
+          "bytes": "2d32313437343833363300",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f53746167655f2d323134373438333633"
+          ],
+          "result": 36,
+          "bytes": "32303236303930385f3033303430355f53746167655f2d3231343734383336332e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage--11",
+      "mode": 1,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": -11,
+      "background": 9,
+      "beforeGlobals": "2a6a2413f02d5ee751c834bf2bdf2df0f4f38839a7cc0d0df35b0aa35e1b73da",
+      "afterGlobals": "561b179dd255b71387c4beb8a624a9dea27366429aec119e1479c5b2f002c536",
+      "fileName": "   70102_030405_Stage_0.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            0
+          ],
+          "result": 1,
+          "bytes": "3000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f3033303430355f53746167655f30"
+          ],
+          "result": 27,
+          "bytes": "20202037303130325f3033303430355f53746167655f302e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage--10",
+      "mode": 1,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": -10,
+      "background": 10,
+      "beforeGlobals": "99335f1dc33f178bcedce758774e9db73f4c641c40bd43992856a915ae3626e3",
+      "afterGlobals": "1f3bd6a49ab35f814112867872b0a5eeed85b123d75a7622d1214766d9dd90e9",
+      "fileName": "   00000_000000_Stage_0.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "fill-rectangle",
+          "resource": 603979776,
+          "x": 0,
+          "y": 0,
+          "width": 794,
+          "height": 550,
+          "color": 0
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            0
+          ],
+          "result": 1,
+          "bytes": "3000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f3030303030305f53746167655f30"
+          ],
+          "result": 27,
+          "bytes": "20202030303030305f3030303030305f53746167655f302e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage--9",
+      "mode": 1,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": -9,
+      "background": 11,
+      "beforeGlobals": "980bb19857907ea33de39364bd865cd81ceec8994ffb0d915cb59ae9adb02d76",
+      "afterGlobals": "6f3f7080e777227bf8a2297df45bd72149efc234ff02afb37130a7435d55de32",
+      "fileName": "655356553565535_655356553565535_Stage_1.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            1
+          ],
+          "result": 1,
+          "bytes": "3100",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f31"
+          ],
+          "result": 43,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f312e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage--1",
+      "mode": 1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": -1,
+      "background": 12,
+      "beforeGlobals": "1798031bcb16df510f0282431f87af2273ef4152668de02546deae60ce4280d7",
+      "afterGlobals": "f5f1c4b78a312e06d68fb72eb8e75e1857a7811136e6dddc770d64c70e2f0700",
+      "fileName": "20260908_030405_Stage_1.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            1
+          ],
+          "result": 1,
+          "bytes": "3100",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f53746167655f31"
+          ],
+          "result": 27,
+          "bytes": "32303236303930385f3033303430355f53746167655f312e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-1",
+      "mode": 1,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": 1,
+      "background": 13,
+      "beforeGlobals": "8e1e585ce526c52570f7f79610bbe2a55945b1ab9833c46ae7804606bfaf99f0",
+      "afterGlobals": "9577ad5ba189a644ce76d6852188582c66f8f3a0adebe6a5442b1e7a92a3f967",
+      "fileName": "   70102_030405_Stage_1.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            1
+          ],
+          "result": 1,
+          "bytes": "3100",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f3033303430355f53746167655f31"
+          ],
+          "result": 27,
+          "bytes": "20202037303130325f3033303430355f53746167655f312e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-9",
+      "mode": 1,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": 9,
+      "background": 14,
+      "beforeGlobals": "83adff1df6b5cb9e407ea9777475b90a542b93b27b778d38868db7231f5fca77",
+      "afterGlobals": "8afa80fd09dcbdf4493f2533e19ddf76a1082d7357ab84038791a0a1b566bcb8",
+      "fileName": "   00000_000000_Stage_1.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            1
+          ],
+          "result": 1,
+          "bytes": "3100",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f3030303030305f53746167655f31"
+          ],
+          "result": 27,
+          "bytes": "20202030303030305f3030303030305f53746167655f312e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-19",
+      "mode": 1,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": 19,
+      "background": 15,
+      "beforeGlobals": "c950fdd6e2d1462252f786dcfa64a83e346e98cb9d99ab0dabf908e657b72b99",
+      "afterGlobals": "6015434e6bc943e7323ffe2cdb37262826b5b62d35258b0c7b7e2bc3e66495ed",
+      "fileName": "655356553565535_655356553565535_Stage_2.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "fill-rectangle",
+          "resource": 603979776,
+          "x": 0,
+          "y": 0,
+          "width": 794,
+          "height": 550,
+          "color": 0
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            2
+          ],
+          "result": 1,
+          "bytes": "3200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f32"
+          ],
+          "result": 43,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533355f53746167655f322e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-49",
+      "mode": 1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": 49,
+      "background": 16,
+      "beforeGlobals": "73e599d85ec6efc1aaa25a5b40fbb6d010e3a920905d1ad62dd532d782f9a1a5",
+      "afterGlobals": "e51d27cdd615c538c866a2e0bc12c99e9c54b6ad106337225dc3bb9909046683",
+      "fileName": "20260908_030405_Stage_5.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            5
+          ],
+          "result": 1,
+          "bytes": "3500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f53746167655f35"
+          ],
+          "result": 27,
+          "bytes": "32303236303930385f3033303430355f53746167655f352e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-51",
+      "mode": 1,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": 51,
+      "background": 0,
+      "beforeGlobals": "a6fcaca8cdf7e61d5e5945f0bbed04d3a21ec73d42f2e26e7b8ad6776ced01ba",
+      "afterGlobals": "c57456c581589c1fc68cb6480ee1f61e1876b085d6a8502df4dde3d9f05ffdc3",
+      "fileName": "   70102_030405_Survival.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f3033303430355f537572766976616c"
+          ],
+          "result": 28,
+          "bytes": "20202037303130325f3033303430355f537572766976616c2e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-2147483647",
+      "mode": 1,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": 2147483647,
+      "background": 1,
+      "beforeGlobals": "fce7b981e4485e7a9db15867c448606cace25246837ae1f0932eebc4e49733cc",
+      "afterGlobals": "cf925cf0acc5fca59afd711cc4aa1940ebe13b9f0b3cd9f2545e6d9192d3c461",
+      "fileName": "   00000_000000_Survival.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f3030303030305f537572766976616c"
+          ],
+          "result": 28,
+          "bytes": "20202030303030305f3030303030305f537572766976616c2e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-2-stage-10",
+      "mode": 2,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": 10,
+      "background": 2,
+      "beforeGlobals": "320d0ad8b9ac29809e3de155af3aae5877c18a766563c39285393608d8e9ed37",
+      "afterGlobals": "30373022a4b37b0084dc3581a3699c228c8b6a137a4ed65d4bdbc0c3cd08c0db",
+      "fileName": "655356553565535_655356553565535.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f363535333536353533353635353335"
+          ],
+          "result": 35,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533352e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode--1-stage-10",
+      "mode": -1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": 10,
+      "background": 3,
+      "beforeGlobals": "b3d700832de04586a2bd0d131b0e08d7d37d5edac1ca2a9219507a4025436b13",
+      "afterGlobals": "523457f4e1c1bfe29714879f692335c3fd8269d67eaa136c25c52983a86af70b",
+      "fileName": "20260908_030405.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "fill-rectangle",
+          "resource": 603979776,
+          "x": 0,
+          "y": 0,
+          "width": 794,
+          "height": 550,
+          "color": 0
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f303330343035"
+          ],
+          "result": 19,
+          "bytes": "32303236303930385f3033303430352e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode--2147483648-stage-10",
+      "mode": -2147483648,
+      "localTime": {
+        "year": 7,
+        "month": 1,
+        "dayOfWeek": 6,
+        "day": 2,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 1
+      },
+      "deviceResult": 2147500037,
+      "stage": 10,
+      "background": 4,
+      "beforeGlobals": "7fb6cbc9d7f7be942c3fadef14da1b222627cdc49af6f3cebefbcc02a9156014",
+      "afterGlobals": "1e62245cc53df0f5a786cb4f362465c5c3933d1dd41cae01613d5021059c0a3e",
+      "fileName": "   70102_030405.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            7,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "20202037303130325f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202037303130325f303330343035"
+          ],
+          "result": 19,
+          "bytes": "20202037303130325f3033303430352e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-2147483647-stage-10",
+      "mode": 2147483647,
+      "localTime": {
+        "year": 0,
+        "month": 0,
+        "dayOfWeek": 65535,
+        "day": 0,
+        "hour": 0,
+        "minute": 0,
+        "second": 0,
+        "milliseconds": 65535
+      },
+      "deviceResult": 0,
+      "stage": 10,
+      "background": 5,
+      "beforeGlobals": "c23705e50f3f8fc91be2abc7baf09636b2308d924eae6c626ea207ae42d68f13",
+      "afterGlobals": "4fc729d8c2351c6c2c7007c2dc4b971850b7c965aab1d5a91698f17a200a429e",
+      "fileName": "   00000_000000.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "result": 15,
+          "bytes": "20202030303030305f30303030303000",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "20202030303030305f303030303030"
+          ],
+          "result": 19,
+          "bytes": "20202030303030305f3030303030302e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-0-stage-10",
+      "mode": 0,
+      "localTime": {
+        "year": 65535,
+        "month": 65535,
+        "dayOfWeek": 65535,
+        "day": 65535,
+        "hour": 65535,
+        "minute": 65535,
+        "second": 65535,
+        "milliseconds": 65535
+      },
+      "deviceResult": 2147500037,
+      "stage": 10,
+      "background": 6,
+      "beforeGlobals": "c7c2700b9dab6f91e4dba0fafc4c46f42b511ca4e59b77565a27e96d90f24f4f",
+      "afterGlobals": "4839ab39b35fcf16f14ae854bc57ccb09fb54b0e1a5b5c7b68e44a5584de5d22",
+      "fileName": "655356553565535_655356553565535_VS.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 72,
+          "arguments": []
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 52,
+          "arguments": [
+            0
+          ]
+        },
+        {
+          "kind": "sound-method",
+          "resource": 620757024,
+          "vtableOffset": 48,
+          "arguments": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            65535,
+            65535,
+            65535,
+            65535,
+            65535,
+            65535
+          ],
+          "result": 31,
+          "bytes": "3635353335363535333536353533355f36353533353635353335363535333500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "3635353335363535333536353533355f3635353335363535333536353533355f5653"
+          ],
+          "result": 38,
+          "bytes": "3635353335363535333536353533355f3635353335363535333536353533355f56532e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "mode-1-stage-10",
+      "mode": 1,
+      "localTime": {
+        "year": 2026,
+        "month": 9,
+        "dayOfWeek": 2,
+        "day": 8,
+        "hour": 3,
+        "minute": 4,
+        "second": 5,
+        "milliseconds": 999
+      },
+      "deviceResult": 0,
+      "stage": 10,
+      "background": 2,
+      "beforeGlobals": "ce94c8f7f5bce729a74fa8512f8bcf63698d5ebedf2c7adc8a5f9a38ce29b6fd",
+      "afterGlobals": "9e38f4e2dc0f990a2c0a8bfc2a0917ca09b355b437dbc143e327495b172868a2",
+      "fileName": "20260908_030405_Stage_2.lfr",
+      "events": [
+        {
+          "kind": "local-time"
+        },
+        {
+          "kind": "sound-request",
+          "loop": false
+        }
+      ],
+      "formats": [
+        {
+          "caller": "0x42d0a7",
+          "format": "%4d%02d%02d_%02d%02d%02d",
+          "arguments": [
+            2026,
+            9,
+            8,
+            3,
+            4,
+            5
+          ],
+          "result": 15,
+          "bytes": "32303236303930385f30333034303500",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d0e6",
+          "format": "%d",
+          "arguments": [
+            2
+          ],
+          "result": 1,
+          "bytes": "3200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        },
+        {
+          "caller": "0x42d1b5",
+          "format": "%s.lfr",
+          "arguments": [
+            "32303236303930385f3033303430355f53746167655f32"
+          ],
+          "result": 27,
+          "bytes": "32303236303930385f3033303430355f53746167655f322e6c667200",
+          "boundaries": [
+            "GetModuleHandleA",
+            "InterlockedIncrement",
+            "_getptd",
+            "_lock",
+            "_unlock"
+          ]
+        }
+      ]
+    }
+  ],
+  "fixture": "original-match-prelude-ramp.json",
+  "fixtureSHA256": "974d79c4543fe0365b1ad7b5708a839f7c804051a5330f8c5e6bf25fe70a2818",
+  "fixtureBytes": 1758608
+}

@@ -245,6 +245,10 @@ class MatchPreparation(LoadedCatalog):
         self.host_writes.append(dict(address=address, bytes=raw.hex()))
         self.write_host(address, raw)
 
+    def before_preparation(self, mode):
+        """Optional real caller prelude; historical corpora start at 42d1ff."""
+        return None
+
     def scenario(self, label, mode, background, selections, random_index=None, random_counter=None, extras=False):
         self.host_writes, self.calls, self.actor_constructors, self.events = [], [], [], []
         self.global_accesses = set()
@@ -270,14 +274,16 @@ class MatchPreparation(LoadedCatalog):
             word(self.actor_addresses[8]+0x368, self.object_addresses[-1])  # type != 0
             word(self.actor_addresses[9]+0x368, self.object_addresses[0])
             word(self.actor_addresses[9]+0x364, 0)
-        before = self.snapshot()
-        start_bitmap = len(self.bitmaps)
         sp = STACK+0xF000
         self.put(sp+0x14, WORLD)
-        self.put(sp+0x1C, STACK+0x200)
-        self.put(STACK+0x200, mode)
+        mode_address = getattr(self, 'mode_address', STACK+0x200)
+        self.put(sp+0x1C, mode_address)
+        self.put(mode_address, mode)
         self.uc.reg_write(UC_X86_REG_ESP, sp)
         self.uc.reg_write(UC_X86_REG_EBX, 0)
+        prelude = self.before_preparation(mode)
+        before = self.snapshot()
+        start_bitmap = len(self.bitmaps)
         self.execute(0x42D1FF, 0x42D6ED)
         assert self.uc.reg_read(UC_X86_REG_ESP) == sp
         after = self.snapshot()
@@ -286,10 +292,13 @@ class MatchPreparation(LoadedCatalog):
         assert self.calls[-1]['kind'] == 'reset-input'
         print(f"{label}: BG {self.u32(0x44D024)}, {len(self.actor_constructors)} constructors, "
               f"{sum(c['kind']=='rng' for c in self.calls)} RNG calls, {len(bitmaps)} new layers", flush=True)
-        return dict(label=label, mode=mode, selections=selections, stimulus=self.host_writes,
+        item = dict(label=label, mode=mode, selections=selections, stimulus=self.host_writes,
                     before=before, after=after, constructors=self.actor_constructors,
                     calls=self.calls, bitmaps=bitmaps, events=self.events,
                     globalAccesses=[dict(mode=m, address=a, size=n, instruction=hex(pc)) for m, a, n, pc in sorted(self.global_accesses)])
+        if prelude is not None:
+            item['prelude'] = prelude
+        return item
 
     def verify_immutable(self):
         for r, raw, mask in self.immutable:

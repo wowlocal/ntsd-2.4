@@ -60,12 +60,15 @@ public enum MatchPreparationReference {
     }
 
     public static func compare(loaded: Data, corpora: [Data],
+                               beforePreparation: (Int, Int, inout OriginalMatchPreparation) throws -> Void = { _, _, _ in },
                                afterPreparation: (Int, Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _, _ in }) throws -> Result {
         guard !corpora.isEmpty else { throw error("Missing preparation corpus") }
         var result = Result()
         _ = try LoadedCatalogReference.compare(loaded) { catalog in
             for (index, data) in corpora.enumerated() {
-                try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result) { caseIndex, state in
+                try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result, beforePreparation: { caseIndex, state in
+                    try beforePreparation(index, caseIndex, &state)
+                }) { caseIndex, state in
                     try afterPreparation(index, caseIndex, catalog, &state)
                 }
             }
@@ -74,6 +77,7 @@ public enum MatchPreparationReference {
     }
 
     private static func compare(_ input: Data, loadedSHA256: String, catalog: OriginalLoadedCatalog, result: inout Result,
+                                 beforePreparation: (Int, inout OriginalMatchPreparation) throws -> Void,
                                  afterPreparation: (Int, inout OriginalMatchPreparation) throws -> Void) throws {
         let data = try unpack(input)
         let corpus = try JSONDecoder().decode(Corpus.self, from: data)
@@ -180,6 +184,7 @@ public enum MatchPreparationReference {
                     }
                 }
             }
+            try beforePreparation(caseIndex, &state)
             try snapshot(item.before, item.label+" before")
             var calls: [Call] = [], constructors: [Int] = [], requests: [String] = []
             try state.prepare(mode: item.mode, bitmapSource: { path in

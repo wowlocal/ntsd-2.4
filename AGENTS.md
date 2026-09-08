@@ -160,8 +160,27 @@ recording ownership maps an optional native buffer/generation to 4588a8 only.
 The neighbor 4588ac remains 0 in this corpus; playback/file IO/tick recording and
 network remain open. Original calloc/free and metadata are supplied boundaries.
 The old preparation fixtures retain their earlier stop and are not rewritten.
-Next recover menu/RNG input provenance, prelude 42cf8a..42d1ff and continuation
-after 42d704, then connect to R01.2. Enabled music 402020 uses DirectShow and remains
+The [confirmed-menu prelude](docs/research/MATCH_PRELUDE.md) now executes
+42cf8a..42d1ff before common preparation and recording in 50 chained cases.
+Native OriginalMatchPrelude matches 4614400 global bytes/masks, filenames and
+event order; actual pinned VC80 sprintf executes 130 times, sound methods 60,
+fill methods 10. Linked preparation compares 77300 records / 115871104 bytes/masks,
+recording 50 full buffers / 324583600 bytes/masks and 50 allocations/frees.
+Actual caller 4229d0/4229d5 binds mode 451160 and menu-state 44d020; World+0 is
+separate. Stage changes arena only for exact 0/10/20/30/40/50, and its name uses
+signed stage/10 toward zero. Year uses SPACE-padded %4d; widths are minimums.
+Native device handles are explicit opaque supplied values, never host pointers.
+Real 401a30/415160 helpers execute up to COM boundaries; all three sound calls
+continue even on failing HRESULT. Disabled/null sound and clear branches match;
+device output, resource loading provenance and enabled music remain open.
+44eecc is an audio-device pointer (S: 401970/4019b0), not a Boolean preference;
+the prelude only checks nullness. Sound 455610 is statically loaded from
+data/m_ok.wav at 43d0c4..43d0ce; that loader is not executed in this corpus.
+Read that study before extending startup. Existing preparation/replay fixtures
+are unchanged. The new optional beforePreparation callback applies native prelude
+after supplied stimuli, never copying an expected state into the native model.
+Next recover menu/RNG input provenance and continuation after 42d704, then
+connect to R01.2. Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
 The native preparation is not wired into practice. Do not restore synthetic
@@ -173,7 +192,12 @@ The preparation stage additionally passed all 31 Swift tests in 398.752s,
 including the new two-corpus comparison in 75.717s; both release comparisons
 passed before fixture acceptance. The recording initialization stage then passed
 all 32 Swift tests in 514.610s (new two-corpus test 113.006s), plus the release
-comparison of both packed corpora before accepting them. Reference checks
+comparison of both packed corpora before accepting them. The prelude stage passed
+all 33 Swift tests in 634.646s (new comparison 114.310s), plus both release
+comparisons before accepting fixtures. Re-executing the two earlier a5 Python
+oracles reproduced all 25+25 historical cases exactly after the optional hook
+refactor, including state/mask hashes, calls and instruction access inventories.
+Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.
 R01.2 follows R02.1/R03.1 with a wider execution oracle.

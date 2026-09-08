@@ -39,12 +39,13 @@ public enum ReplayInitializationReference {
         return [0, 4].map { start in (0..<4).reduce(UInt32(0)) { $0 | UInt32(bytes[start+$1]) << ($1*8) } }
     }
 
-    public static func compare(loaded: Data, corpora: [Data]) throws -> Result {
+    public static func compare(loaded: Data, corpora: [Data],
+                               beforePreparation: (Int, Int, inout OriginalMatchPreparation) throws -> Void = { _, _, _ in }) throws -> Result {
         let inputs = try corpora.map { try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack($0)) }
         guard inputs.allSatisfy({ $0.replayPointersAddress == 0x4588a8 && $0.globalAddress == OriginalMatchPreparation.globalBase && $0.cases.count == 25 }) else { throw error("Corpus domain") }
         var recorders = [OriginalReplayRecording](repeating: .init(), count: inputs.count)
         var result = Result()
-        result.preparation = try MatchPreparationReference.compare(loaded: loaded, corpora: corpora) { corpusIndex, caseIndex, catalog, state in
+        result.preparation = try MatchPreparationReference.compare(loaded: loaded, corpora: corpora, beforePreparation: beforePreparation) { corpusIndex, caseIndex, catalog, state in
             let corpus = inputs[corpusIndex], item = corpus.cases[caseIndex]
             func blob(_ key: String) throws -> [UInt8] {
                 guard let value = corpus.blobs[key] else { throw error("Missing blob") }
