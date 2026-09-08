@@ -23,7 +23,8 @@ public enum SettingsLoadingReference {
         let scratchAddress: UInt32, scratchBacking: String, source: Source, cases: [Case], blobs: [String:Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Settings loading reference: "+text) }
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data,
+        onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalFrontMenuResources) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000)
         let c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -71,11 +72,11 @@ public enum SettingsLoadingReference {
         var frontDocument: [String:Any] = [:]
         for key in ["exeSHA256","control","worldBacking","initialWorld","sources","blobs"] { frontDocument[key] = document[key] }
         frontDocument["initialGlobals"] = document["frontInitialGlobals"];frontDocument["cases"] = [frontCase]
-        var current: OriginalStateRecord?
-        result.front = try FrontMenuResourcesReference.compare(JSONSerialization.data(withJSONObject: frontDocument)) { world,state,_ in
+        var current: OriginalStateRecord?, parentWorld: OriginalStateRecord?, parentResources: OriginalFrontMenuResources?
+        result.front = try FrontMenuResourcesReference.compare(JSONSerialization.data(withJSONObject: frontDocument)) { world,state,resources in
             try check(world,storage(c.settingsWorld),"Parent World")
             try check(state,globals(c.settingsInitialGlobals),"Parent globals")
-            current = state
+            current = state;parentWorld = world;parentResources = resources
         }
         guard var state = current else { throw error("Missing native parent") }
         var scratch = try OriginalStateRecord(bytes: blob(c.scratchBacking),defined: [Bool](repeating: false,count: 0x1f4))
@@ -127,6 +128,7 @@ public enum SettingsLoadingReference {
             }
             try check(state,globals(item.globals),item.label+" final globals")
             try check(scratch,storage(item.scratch),item.label+" final scratch")
+            if caseIndex == 0, let world = parentWorld, let resources = parentResources { try onNatural?(world,state,resources) }
             result.cases += 1
         }
         return result

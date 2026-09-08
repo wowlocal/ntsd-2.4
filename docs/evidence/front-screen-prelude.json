@@ -1,0 +1,43 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh World/front resources/settings ->42709b through first real screen draw.\nWhole4237e0/43c450,415160,423840/43ee50,43f010/43ef70; actual VC80 sprintf.\nFirst caller stays on the same CPU/stack. Later caller entries, timer/thread/\nallocator/device responses and fill-stack backing are declared inputs. Stops\nbefore4236d0/alternate screen or invalid dereference; no Windows/pixel claim.\n",
+  "corpus": "front-screen-prelude.json",
+  "sha256": "09b0cd7c473ff0e839e4c4255effac941ba05124fc0b0ef2e61f52628676fe33",
+  "cases": 178,
+  "sources": 13,
+  "events": {
+    "allocate": 33,
+    "blit": 156,
+    "clip": 176,
+    "colorKey": 27,
+    "construct": 32,
+    "createThread": 13,
+    "debug": 7,
+    "draw": 177,
+    "enter": 49,
+    "fill": 177,
+    "format": 33,
+    "lastError": 6,
+    "leave": 49,
+    "load": 32,
+    "message": 7,
+    "read": 859,
+    "release": 2,
+    "timer": 33,
+    "write": 104
+  },
+  "helpers": 707,
+  "continuations": {
+    "alternate": 35,
+    "critical": 140,
+    "nullBitmap": 1,
+    "nullDrawTarget": 1,
+    "nullFillTarget": 1
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Front screen prelude matches original: 178 cases /13 backgrounds, 707 real helper returns, 1972 events, 177 fills /177 draws /156 Blt requests, 859 bitmap reads /361 undefined, 176 clips, 32 constructors /33 actual CRT formats /13 thread requests, 3 invalid-access boundaries, 7491 records /65803344 bytes/masks; settings parent 1. Next screen bodies, worker, pixels and Windows remain open",
+  "fixture": "original-front-screen-prelude.json",
+  "fixtureSHA256": "db51b68ac170b896fd7775106525f9ef9496af31c4de2069bce6e055976307f6",
+  "fixtureBytes": 5567251
+}

@@ -703,6 +703,33 @@ Both release comparisons passed before accepting fixtures. Four targeted tests
 (new settings and old front resources) passed in11.970s;21 old fixture hashes
 unchanged, both new raw/packed SHA and complete unpack verified. Release
 NTSDNative passed in2.31s. No window/device-output claim.
+The [front-screen prelude](docs/research/FRONT_SCREEN_PRELUDE.md) now continues
+fresh World/resources/settings on the SAME CPU/stack through42709b and the real
+first bitmap caller42710f to427127/4275cb.356 cases match native, including
+whole4237e0/43c450,415160,423840/43ee50,43f010/43ef70 and actual VC80 sprintf.
+Native uses its own settings parent through optional onNatural; old corpora
+remain unchanged. All13 MENU_BACK DIBs,64 new constructors/66 formats,354 fills,
+354 draws/474 Blt,527 clips,2580 reads/1422 undefined,26 thread requests and
+6 invalid-access boundaries;14982 records/131606688 bytes/masks plus parents.
+Timer selection is UInt32 timeGetTime%13+1, not gameplay RNG. Keep the14-byte
+MENU_BACK0000 buffer's unused suffix after sprintf. Background count/rectangles
+remain untouched; replacing globals never releases old wrappers. Fill415160
+initializes ONLY8/100 FX bytes (size+0,color+50), preserving declared stack
+backing/masks; bitmap mirror effects are different. Do not silently zero either
+bitmap count/rectangles or fill padding. Actual first draw now demonstrates
+additional draws from ramp backing; this is not real Windows heap provenance.
+Thread gate compares raw bytes;43c450 locks, reads458424, unlocks, then requests
+43c240 only for status0. Worker/concurrency and WinMain/device binding remain
+boundaries. Later42709b callers supply EBX0/ESI-1/EDI target/stack explicitly.
+Null fill/bitmap/draw target stops before the original dereference and keeps
+partial state. Next actual4236d0/427127 body,4275cb alternatives and joining
+the earlier/later menu paths. No full screen, app UI, pixels or Windows claim.
+Both release comparisons passed before acceptance. All23 old fixture hashes
+unchanged; new raw/packed SHA and complete unpack verified. Both old94-case
+settings source corpora were freshly reproduced and ALL blobs matched after
+the default-noop device hook. Five targeted tests (new prefix, old settings and
+bitmap drawing) passed in14.095s; new prefix tests2.474s. Release NTSDNative
+passed in2.25s; no window/device-output claim.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

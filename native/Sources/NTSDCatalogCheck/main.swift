@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--front-screen-prelude" {
+        let r = try FrontScreenPreludeReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Front screen prelude matches original: \(r.cases) cases /\(r.sources) backgrounds, \(r.helpers) real helper returns, \(r.events) events, \(r.fills) fills /\(r.draws) draws /\(r.blits) Blt requests, \(r.reads) bitmap reads /\(r.undefinedReads) undefined, \(r.clips) clips, \(r.constructors) constructors /\(r.formats) actual CRT formats /\(r.threads) thread requests, \(r.boundaries) invalid-access boundaries, \(r.records) records /\(r.bytes) bytes/masks; settings parent \(r.parent.cases). Next screen bodies, worker, pixels and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--settings-loading" {
         let r = try SettingsLoadingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Settings loading matches original: \(r.cases) cases, \(r.scans) actual VC80 scans /\(r.gets) gets /\(r.eof) EOF checks, \(r.returns) settings returns /\(r.nullFiles) null-file boundaries, \(r.events) events /\(r.writes) ordered parent writes, \(r.records) records /\(r.bytes) bytes/masks; native parent \(r.front.constructors) constructors. File opening/translation, full menu and Windows remain open")

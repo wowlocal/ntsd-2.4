@@ -36,6 +36,7 @@ class SettingsLoading(FrontMenuResources):
     def __init__(self,control=False):
         self.settings_active=False
         super().__init__(control)
+        self.before_front_resources()
         # This is freshly executed evidence, not a stored after-state fed back in.
         self.front=self.step('first-front-resources')
         assert self.front['continuation']=='settings' and self.uc.reg_read(UC_X86_REG_EIP)==0x427089
@@ -47,6 +48,10 @@ class SettingsLoading(FrontMenuResources):
         self.attach_crt()
         self.uc.hook_add(UC_HOOK_MEM_WRITE,self.settings_write,begin=GLOBAL,end=GLOBAL+GLOBAL_SIZE-1)
         self.uc.hook_add(UC_HOOK_MEM_WRITE,self.settings_write,begin=SCRATCH,end=SCRATCH+SCRATCH_SIZE-1)
+
+    def before_front_resources(self):
+        """Optional declared device bindings before the fresh first parent."""
+        return None
 
     def attach_crt(self):
         # Actual _initptd in its established standalone harness supplies one PTD.

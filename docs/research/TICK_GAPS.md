@@ -80,6 +80,12 @@ World constructor/4246b0 до423480 и совпадает с Swift в290 слу�
 не исправляются. Настоящий ранний экран и его связь с поздним loading/menu ещё
 открыты; fopen/fclose/text translation и Windows остаются границами.
 
+[Первый рисунок раннего экрана](FRONT_SCREEN_PRELUDE.md) уже продолжает свежие
+World/resources/settings через настоящие gate/fill/background/draw helpers
+до427127/4275cb.356 случаев и полные retained records совпали с native.
+Далее4236d0 и тело экрана; старые tick/menu fixtures не получают подставленных
+ранних ресурсов. Пиксели, worker execution, full tick и Windows остаются открытыми.
+
 ## Как устранять пропуски
 
 1. **R02.1:** словарь состояния полного пути и всех пропущенных полей, точная

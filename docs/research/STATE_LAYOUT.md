@@ -536,3 +536,21 @@ swift test --package-path native
 
 Scratch сохраняется при failed fgets и между supplied повторными caller inputs.
 Сведения о границах500-byte scratch/глобальной области и CRT находятся в study.
+
+Дополнение [первого рисунка раннего экрана](FRONT_SCREEN_PRELUDE.md), D после
+собственного World/resources/settings parent:
+
+| Поле | Правило42709b/ранних helpers |
+| --- | --- |
+| `44d064/450be8` | Selector-2: setting-1→selector-3, иначе selector0; только setting1 вызывает4237e0 |
+| `44d788`, строки`4527b0/451d48` | Gate sentinel-99, fixed prefix now\0, затем unsigned-byte lexical comparison |
+| `458424` | Читается между Enter/LeaveCriticalSection4554a4; любое ненулевое значение подавляет CreateThread |
+| `455608` | Непрозрачный target415160; отдельная привязка от внешнего bitmap targetEDI |
+| `4511ac` | Null вызывает423840, ненулевой сохраняется; новый wrapper заменяет global без release прежнего |
+| Background+`0c/rectangles` | Остаются с исходным backing/mask после43ee50; caller передаётframe-1 и может прочитать их через fallthrough |
+| `453da4` | Int32 y первого фона только при selector0, иначе y0 |
+| `44d78c/44d790` | Signed viewport общей bitmap обрезки, не размер fixed fill794×550 |
+
+TimeGetTime UInt32%13+1 выбирает MENU_BACK1…13 без игрового RNG. В100-byte fill FX
+записаны только size+0 и color+50; остальные92 байта сохраняют явно заданный
+stack backing. Модель не делает эти bytes initialized и не обнуляет их.
