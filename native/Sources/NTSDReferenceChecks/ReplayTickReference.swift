@@ -34,7 +34,8 @@ public enum ReplayTickReference {
         return try stride(from: 0,to: text.count,by: 2).map { try digit(text[$0])*16+digit(text[$0+1]) }
     }
 
-    public static func compare(replay: Data, control: Data, local: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(replay: Data, control: Data, local: Data, loading: Data, catalog: Data, sounds: Data,
+                               onNatural: ((OriginalMatchPreparation, OriginalInputControlContext, Bool) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(replay,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.worldAddress == 0x68000020, c.bodySP == 0x1000e9fc, c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -257,6 +258,7 @@ public enum ReplayTickReference {
                 guard eventIndex == item.events.count, callIndex == item.calls.count, scratch == item.scratchAfter, stack() == item.stackAfter,
                       item.endPC == (item.kind == "prefix" ? 0x41be8b : 0x41d714), item.menuRegister == (try state.globals.integer(at: 0x44d020-OriginalMatchPreparation.globalBase,as: UInt32.self)) else { throw error(item.label+" final witness") }
                 try snapshot(state,context,item.after,item.label+" final")
+                if caseIndex == 0 { try onNatural?(state,context,item.paused != 0) }
             }
         })
         guard callbacks == 1 else { throw error("Missing native control parent") }

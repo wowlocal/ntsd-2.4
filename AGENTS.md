@@ -538,6 +538,46 @@ ReplayTickReference now caches validated mask values per blob; every snapshot
 still compares full bytes/masks. No runtime code or fixture changed for this.
 Both final release comparisons passed again after that change; all12 fixture
 SHA and both raw corpora stayed unchanged. Release NTSDNative passed in2.56s.
+The [round-control study](docs/research/MATCH_ROUND.md) now continues41d714
+through the complete nonpaused round-control/restoration path to41e339,
+4229cc or422a95; paused stops BEFORE rendering at41d73b. Read it before
+extending match outcomes, restoration, paused rendering or the menu continuation.
+Two fresh2074-case passes match Swift, including90 real4061d0 constructors,
+3491 team/480 stage scans,914 input resets,22 playback restores and6775 events.
+Each compares842450 records/27918510800 bytes/masks; all twelve old parent
+fixtures stay pinned. Native receives its own state via ReplayTickReference's
+onNatural, then still checks the entire1134 replay/2993 control/303 local
+cases and loading per pass. The natural primary exits to menu10/mode0;
+the control is paused. These are supplied startup-context consequences, not
+selected-player match defaults. Do not replace menu10 by0 to reach gameplay.
+All400 World seats are inspected live. A living team needs activity!=0, HP>0,
+Object type0 and signed team1..39 except5. Mode1 scans only if cached menu0;
+mode4 completion also requires451b7c EXACT1. Preserve highest-team/stale-winner
+rules, timer80 effects, exact145->144 freeze, and350 restoration BEFORE menu.
+Acknowledgement uses exact1 atd1/d2 for ALL first8 seats regardless activity;
+it sets350 but still exits to gameplay, so restoration waits until next entry.
+Restoration324 looks up the FIRST source ID and clears only on success; then
+the proven ID50/458428==0 exception searches6 and skips the split branch.
+Nonnegative328 selects the32c target seat and330/334 source IDs. Real constructor
+and live rereads matter when target aliases source; signed HP halves are written
+to target BEFORE source, preserving repeated division. Keep original frame112,
+MP0, coordinate/velocity/facing/team writes, allocation masks and400-seat order.
+The first diagnostic corpus had zero constructors because Object[0] isID50.
+It was not accepted as sufficient coverage; BOTH fresh captures were repeated
+with actual split/constructor cases, mode4 gate and numeric controls. The final
+corpora execute45 constructors per pass. Two275-call sequences retain persistent
+state from timer75 through350; caller stack/registers are supplied between calls.
+Real402100 stop/seek and shared401a30/431c70/43df00 execute through returns;
+COM HRESULTs remain supplied/ignored. Sound slot/COM handles and playback data
+are explicit boundaries, not startup/device provenance. No paused drawing,
+gameplay pass, menu body, full41bc90 return, Practice, Windows or clean-macOS
+claim follows. Next real paused render helpers41d73b and4229cc->429730,
+then connect41e339 gameplay; earlier playback/camera/file and startup gaps remain.
+Both new round XCTest passed in282.407s (141.384+141.023), including all six
+native parents. Both release comparisons passed before accepting the new
+fixtures. All14 fixture hashes and both raw corpora verified; old fixtures
+and baseline assets unchanged. No runtime integration or Windows claim.
+Release NTSDNative built in2.65s; app-window and clean-macOS checks stay open.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.

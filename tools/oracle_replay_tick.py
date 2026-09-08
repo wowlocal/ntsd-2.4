@@ -119,7 +119,7 @@ class ReplayTick(InputControl):
                     messageResult=self.control_platform['messageResult'],menuRegister=self.uc.reg_read(UC_X86_REG_ESI),after=self.control_snapshot(),
                     endPC=self.uc.reg_read(UC_X86_REG_EIP))
 
-    def capture_replay(self):
+    def capture_parent_replay(self):
         parents,initial,natural=self.capture_parent_control();suffix='-control' if self.control else ''
         r=json.loads((ROOT/'docs/evidence'/f'input-control{suffix}.json').read_bytes());raw=(ROOT/'build/original'/r['corpus']).read_bytes()
         assert digest(raw)==r['sha256'];old=json.loads(raw)
@@ -127,8 +127,12 @@ class ReplayTick(InputControl):
         assert transport(dict(initialContext=initial,case=natural),self.blobs)==transport(dict(initialContext=old['initialContext'],case=old['cases'][0]),old['blobs'])
         parents['input-control']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256'])
         initial=self.control_snapshot();del old,raw
-        cases=[self.replay_step('natural-first-replay-tail',paused=int(self.control),inherited=True)]
+        natural=self.replay_step('natural-first-replay-tail',paused=int(self.control),inherited=True)
         print('Pinned first input-control case reproduced; natural replay tail reached41d714',flush=True)
+        return parents,initial,natural
+
+    def capture_replay(self):
+        parents,initial,natural=self.capture_parent_replay();cases=[natural]
 
         def inputs(tick=0,record=1,playback=1,menu=0,restore=1,phase=0,fault=False,activity=None,seats=None,weights=None,alias=False,packet=None):
             vals={0x450B8C:tick,0x450B80:record,0x450B84:playback,0x450B88:restore,0x44D020:menu,0x451160:0,

@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 9, CommandLine.arguments[1] == "--match-round" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MatchRoundReference.compare(round: values[0],replay: values[1],control: values[2],local: values[3],loading: values[4],catalog: values[5],sounds: values[6])
+        let exits = r.continuations.keys.sorted().map { "\($0)=\(r.continuations[$0]!)" }.joined(separator: ", ")
+        print("Match round matches original: \(r.cases) cases, \(r.constructors) constructors, \(r.teams) team /\(r.stages) stage scans, \(r.events) events, \(r.records) records /\(r.bytes) bytes/masks; \(exits); linked \(r.parent.cases) replay cases and complete input/loading. Paused rendering, gameplay, Windows and full match remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 8, CommandLine.arguments[1] == "--replay-tick" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try ReplayTickReference.compare(replay: values[0],control: values[1],local: values[2],loading: values[3],catalog: values[4],sounds: values[5])
