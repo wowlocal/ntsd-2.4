@@ -70,23 +70,14 @@ public struct OriginalFrontScreenPrelude {
         guard fill.target != 0 else { return finish(.nullFillTarget) }
         var filled = OriginalFrontScreenEvent("fill");filled.fill = fill;try observe(filled)
         if try word(0x4511ac) == 0 {
-            try observe(.init("timer",[input.milliseconds]))
-            let number = input.milliseconds%13+1, path = "MENU_BACK\(number)"
-            var formatted = Array("MENU_BACK0000\0".utf8)
-            for (i,b) in (Array(path.utf8)+[0]).enumerated() { formatted[i] = b }
-            try observe(.init("format",[number,UInt32(path.utf8.count)],[Array("MENU_BACK%d".utf8),formatted]))
-            try observe(.init("allocate",[0x1f50]))
-            let allocation = try allocate()
-            if allocation.address != 0 {
-                guard candidate.bitmaps[allocation.address] == nil else { throw OriginalStateError.invalidStorage("Front background reused live allocation") }
-                try observe(.init("construct",[allocation.address,0x40,0],[Array(path.utf8)]))
-                let (resource,surface,key) = try source(path)
-                guard resource.path == path else { throw OriginalStateError.invalidStorage("Front background resource binding") }
-                candidate.bitmaps[allocation.address] = try OriginalBitmapConstructor.construct(resource,optional: false,backing: allocation.backing,
-                    device: word(0x457578),flags: 0x40,surface: surface,colorKeyResult: key) { e in try observe(.init(e.kind.rawValue,e.arguments,e.strings)) }
-                candidate.surfaces[allocation.address] = surface != 0 && key >= 0 ? surface : 0
+            let result = try OriginalMenuBackground.load(globals: &state,milliseconds: input.milliseconds,allocate: {
+                let allocation = try allocate()
+                guard allocation.address == 0 || candidate.bitmaps[allocation.address] == nil else { throw OriginalStateError.invalidStorage("Front background reused live allocation") }
+                return allocation
+            },source: source,observe: observe)
+            if let bitmap = result.bitmap {
+                candidate.bitmaps[result.address] = bitmap;candidate.surfaces[result.address] = result.surface
             }
-            try write(0x4511ac,allocation.address)
         }
         let token = try word(0x4511ac)
         let y = try word(0x44d064) == 0 ? Int32(bitPattern: word(0x453da4)) : 0

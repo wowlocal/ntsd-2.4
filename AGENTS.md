@@ -1162,6 +1162,35 @@ terminal before the milestone commit. This does not extend Practice gameplay.
 All92old fixture hashes unchanged; SHA/size/full unpack of both new files
 checked,94pins at build/research/mode-selection-fixture-pins.json.
 
+The [own mode screen](docs/research/MODE_SCREEN.md) now continues the same
+startup429e5a through ordinary431d10/ret16. Both632-case corpora match native:
+1264cases/1256returns/8playback boundaries,113028events/27570helpers,
+1153328records/2323175616bytes+masks after their full verified parents.
+OriginalModeScreen composes existing bitmap/text/input/release helpers;
+OriginalKeyName covers all422b00..422f59. OriginalMenuBackground factors423840
+for both early and mode menus. Retain all own World/400Actors/globals/early
+wrappers/context/CRT; raw surface binding and704local bytes/masks are checked.
+Only FIRST mode entry is natural; later429e5a callers are explicit probes.
+They need EDX1/ECX2 from4297db/de or429e4e/57, not previous helper clobbers.
+The inherited early SetColorKey token overlaps old catalog imports; mode
+observers yield that inactive domain and rebind Sleep. Both fresh source
+passes reproved ALL pinned startup/loading documents/blobs after fixes.
+Enabled423b00, worker/status2 children and playback before43249c remain open.
+Initial455610 is0: real sound helper calls in this new corpus do not reach
+buffer COM; earlier standalone MODE_SELECTION covers declared enabled buffers.
+WinMain m_ok loading/device output is NOT proved by this composition.
+Next own429eb7→42e0d2/ret12 to4229e2 (actual CALL is4229dd), menu output/
+41bc90 ret4→424746 held clear/early epilogue, then full next outer entry and
+menu3/1 character selection. See MODE_SCREEN's S-only selection seeds; don't
+skip these returns or replace own state with standalone selection inputs.
+Application UI, selected match, Windows and full-game goal remain open.
+Both new XCTest passed508.404s (control252.595/A5 255.809); six old prefix/
+loop/mode-selection checks passed18.008s. Release CatalogCheck51.41s, accept
+build0.18s, debug2.87s, NTSDNative3.03s. All processes terminal before commit.
+All94old fixture hashes unchanged; two new SHA/size/full-unpack checks passed,
+96pins at build/research/mode-screen-fixture-pins.json. No Core rule or expected
+snapshot was changed to accommodate the diagnostic ABI/observer failures.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

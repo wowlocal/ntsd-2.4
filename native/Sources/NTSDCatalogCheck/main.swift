@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 8,CommandLine.arguments[1] == "--mode-screen" {
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try ModeScreenReference.compare(screen: inputs[0],startup: inputs[1],menu: inputs[2],loading: inputs[3],catalog: inputs[4],sounds: inputs[5])
+        print("Mode screen matches original: own startup -> \(r.cases) screens /\(r.playback) playback boundaries, \(r.draws) draws /\(r.keys) key names /\(r.backgrounds) backgrounds, \(r.events) events /\(r.helpers) helpers /\(r.records) records /\(r.bytes) bytes+masks. Whole ordinary screen ret16; worker/panel/playback file boundaries, app UI, selected match and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--mode-selection" {
         let r = try ModeSelectionReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Mode selection matches original: \(r.cases) cases /\(r.input) input /\(r.selections) selection /\(r.playback) playback boundaries, \(r.events) events /\(r.helpers) helpers /\(r.records) records /\(r.bytes) bytes+masks. Supplied caller probes; whole screen, startup integration, playback files, app UI and Windows open")

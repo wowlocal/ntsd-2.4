@@ -83,7 +83,7 @@ class FrontScreenPrelude(SettingsLoading):
         if address in HELPERS:
             self.calls_pending.append(dict(entry=address,entrySP=sp,returnPC=self.u32(sp),pop=HELPERS[address],saved=[uc.reg_read(r) for r in REGISTERS]))
         if address==0x415160:
-            assert [arg(i) for i in range(5)]==[0,0,794,550,0x10206C]
+            assert [arg(i) for i in range(5)]==[0,0,794,550,self.input.get('fillColor',0x10206C)]
             self.fill_effects=sp-100;self.fill_backing=self.blob(uc.mem_read(self.fill_effects,100));self.fill_mask=[False]*100
         if address==0x43F010:
             self.current_bitmap=uc.reg_read(UC_X86_REG_ECX)
@@ -142,7 +142,7 @@ class FrontScreenPrelude(SettingsLoading):
             elif address==API+32:self.emit('message',[arg(0),arg(3)],[self.cstr(arg(1)),self.cstr(arg(2))]);self.ret(7,16)
             else:self.emit('debug',strings=[self.cstr(arg(0))]);self.ret(0x87654321,4)
             return
-        assert (0x42709B<=address<=0x427121 or 0x4237E0<=address<=0x423909 or 0x43C450<=address<=0x43C495 or
+        assert (address==getattr(self,'prefix_return',None) or 0x42709B<=address<=0x427121 or 0x4237E0<=address<=0x423909 or 0x43C450<=address<=0x43C495 or
                 0x415160<=address<=0x4151C2 or 0x43EE50<=address<=0x43F2FE or 0x4450B2<=address<=0x4450BA or
                 0x78130000<=address<0x78230000 or STOP+0x6000<=address<STOP+0x8000),hex(address)
     def prefix_step(self,label,writes=(),milliseconds=0,missing=False,key=0,null=False,draw_target=SOURCE,thread=0x12345678,thread_id=0xABCD,error=5,fill_result=0,draw_results=(0,)):

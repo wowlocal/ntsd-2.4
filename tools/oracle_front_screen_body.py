@@ -107,7 +107,7 @@ class FrontScreenBody(MenuPanelUpdate):
   elif pc in (PAPI+32,PAPI+48):
    assert arg(0)==0x4554A4;self.body_event('enter' if pc==PAPI+32 else 'leave',[arg(0)]);self.ret(0,4);return
   elif pc==PAPI:
-   assert arg(0)==self.u32(BODY_SP+0x20) and arg(5)==0 # Unmirrored calls have no DDBLTFX.
+   assert arg(0)==getattr(self,'body_target',self.u32(BODY_SP+0x20)) and arg(5)==0 # Unmirrored calls have no DDBLTFX.
    self.body_event('blit',blit=dict(sourceSurface=arg(2),targetSurface=arg(0),source=list(struct.unpack('<4i',uc.mem_read(arg(3),16))),
     destination=list(struct.unpack('<4i',uc.mem_read(arg(1),16))),flags=arg(4),effects=list(uc.mem_read(arg(5),100)) if arg(5) else None))
    result=self.body_input['drawResults'][self.body_blits%len(self.body_input['drawResults'])];self.body_blits+=1;self.ret(result,24);return

@@ -1,0 +1,22 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own fresh startup429e5a -> actual mode screen431d10 through ret16.\nReal fill/background/bitmap/clip/text/key-name/input/sound/release helpers.\nFirst screen continues the same CPU, World and stack; later outer callers and\nmouse/controller/device inputs are declared probes. No restored game state.\nWorker children, enabled optional panel and replay files remain explicit open\nboundaries. No Windows raster/audio, application UI or complete-match claim.\n",
+  "corpus": "mode-screen.json",
+  "sha256": "2da09733444aa781700ae2af5bc10758917e7b86a69e588b74a57cd97ea9b3ba",
+  "bytes": 34961895,
+  "cases": 632,
+  "nativeCompared": true,
+  "nativeComparison": "Mode screen matches original: own startup -> 632 screens /4 playback boundaries, 3773 draws /476 key names /28 backgrounds, 52340 events /13155 helpers /576664 records /1161587808 bytes+masks. Whole ordinary screen ret16; worker/panel/playback file boundaries, app UI, selected match and Windows open",
+  "fixture": "original-mode-screen.json",
+  "fixtureSHA256": "777de33f74cf486d3f92d94dd4ae71f2df52af312e327b7a1be965b5b78e85bc",
+  "fixtureBytes": 13495660,
+  "parent": {
+    "fixture": "original-menu-startup.json",
+    "sha256": "73ea816b774cd0cef9bfffac44811b3c0106052347dc4d412ac3397d05551194"
+  },
+  "events": 52340,
+  "helpers": 13155,
+  "backgrounds": 28,
+  "playback": 4
+}

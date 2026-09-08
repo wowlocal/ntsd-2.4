@@ -76,7 +76,8 @@ public enum MenuStartupReference {
         let sources: [Source], after: Snapshot, retainedBefore: Retained, retainedAfter: Retained, blobs: [String:Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu startup reference: "+text) }
-    public static func compare(startup: Data, menu: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(startup: Data, menu: Data, loading: Data, catalog: Data, sounds: Data,
+        onReady: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -270,6 +271,7 @@ public enum MenuStartupReference {
             }
             try bitmaps(resources.records,loader.bitmaps);try check(state.globals,defined(resources.globals),"Final menu globals")
             try snapshot(state,context,c.after,"Final own match state");try retained(state,context.memory,crt,c.retainedAfter)
+            try onReady?(state,context,crt,musicMemory,loader)
         })
         guard callbacks == 1 else { throw error("Missing own parent") }
         return .init(parent: parent,checkpoints: checkpoints,records: records,bytes: bytes,events: events,

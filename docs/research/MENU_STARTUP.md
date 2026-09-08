@@ -127,8 +127,11 @@ SwiftPM выполняется последовательно. Старые fixt
 
 Следующее естественное продолжение — dispatch429e5a/431d10: сначала выбор
 режима, затем выбор персонажей и подготовка выбранного матча. Общий ввод и
-keyboard transitions отдельно перенесены в [MODE_SELECTION.md](MODE_SELECTION.md);
-они ещё не соединены с этим собственным startup. Новый natural corpus не расширяет проверку
+keyboard transitions отдельно перенесены в [MODE_SELECTION.md](MODE_SELECTION.md).
+Новое [MODE_SCREEN.md](MODE_SCREEN.md) соединяет обычный431d10/ret16 с этим
+собственным startup, сохраняя ранние ресурсы и состояние. Внешний возврат,
+enabled panel/worker/playback files и следующий выбор участников ещё открыты.
+Новый natural corpus не расширяет проверку
 phase0/paused/AI ветвей: они сохраняют область своих отдельных исследований.
 Полный возврат41bc90/очистка held424746, animated loading, остальные ранние
 selectors, интерфейс приложения, законченный матч и Windows W ещё открыты.
