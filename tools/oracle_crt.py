@@ -193,7 +193,7 @@ class CRT:
         Raw byte string arguments are copied to supplied DLL-VM allocations.
         No general printf format, locale, float or buffer-overflow claim.
         """
-        assert fmt in (b'%d', b'%s', b'%s.lfr', b'%4d%02d%02d_%02d%02d%02d', b'Volume: %d',
+        assert fmt in (b'%d', b'%s', b'%s.lfr', b'%s\\graph.log', b'%4d%02d%02d_%02d%02d%02d', b'Volume: %d',
                        b"Start recording '%s'...", b"Recording file '%s' saved!", b'Recording canceled!') and len(args) <= 8
         self.uc.mem_write(FORMAT, fmt+b'\0')
         self.uc.mem_write(OUTPUT-16, b'\x96'*16+b'\xA5'*0x1000+b'\x69'*16)

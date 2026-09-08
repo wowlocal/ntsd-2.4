@@ -1,0 +1,51 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole402020/401d30/401c90/401da0/401f30 after reproduced first round.\nPrimary continues real4229cc->429730 with music still enabled, stopping4297ae\nbefore menu bitmap initialization. Paused control supplies this menu entry;\nit does not pretend to have rendered the pause branch. COM/Win32/allocator\noutputs are explicit inputs, sprintf executes the pinned VC80 DLL. No output\ndevices or actual Windows file/codec execution, and no baseline file writes.\n",
+  "corpus": "music-playback.json",
+  "sha256": "bac3cdff123abc431f5b8c27ddd7c7c93990c68d85528a4e375d7dbf611e603b",
+  "cases": 374,
+  "events": {
+    "helper": 1225,
+    "method": 2306,
+    "queryInterface": 878,
+    "allocate": 219,
+    "message": 12,
+    "format": 219,
+    "convert": 219
+  },
+  "nativeComparison": "Music playback matches original: 374 cases, 1225 real helper returns, 5956 events, 219 allocations, 12 messages, 219 CRT formats, 32575 records /18155382 bytes/masks; linked 2074 round cases and complete replay/input/loading. Device output, menu remainder and Windows remain open",
+  "fixture": "original-music-playback.json",
+  "fixtureSHA256": "b88c897f57a38e5b4a9a607d06f05d062b4ab301d00e1c6f577d6dc0b5ab6585",
+  "fixtureBytes": 1321828,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading.json",
+      "sha256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog.json",
+      "sha256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds.json",
+      "sha256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb"
+    },
+    "local-input": {
+      "fixture": "original-local-input.json",
+      "sha256": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a"
+    },
+    "input-control": {
+      "fixture": "original-input-control.json",
+      "sha256": "2c061671f590ff20a840d8702d48e61af1fd2a773bd2690cfb2f3966cec69228"
+    },
+    "replay-tick": {
+      "fixture": "original-replay-tick.json",
+      "sha256": "e2cf3289867093e3b98742c9291e785e54d336e7a5af626dafc61e1b51d0701d"
+    },
+    "match-round": {
+      "fixture": "original-match-round.json",
+      "sha256": "f4e2778934d5202ae5c77354b19dd763d800520c1231289d4b320ba1331e67af"
+    }
+  }
+}

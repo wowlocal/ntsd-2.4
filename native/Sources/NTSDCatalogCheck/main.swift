@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 10, CommandLine.arguments[1] == "--music-playback" {
+        let v = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MusicPlaybackReference.compare(music: v[0],round: v[1],replay: v[2],control: v[3],local: v[4],loading: v[5],catalog: v[6],sounds: v[7])
+        print("Music playback matches original: \(r.cases) cases, \(r.calls) real helper returns, \(r.events) events, \(r.allocations) allocations, \(r.messages) messages, \(r.formats) CRT formats, \(r.records) records /\(r.bytes) bytes/masks; linked \(r.parent.cases) round cases and complete replay/input/loading. Device output, menu remainder and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 9, CommandLine.arguments[1] == "--match-round" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MatchRoundReference.compare(round: values[0],replay: values[1],control: values[2],local: values[3],loading: values[4],catalog: values[5],sounds: values[6])

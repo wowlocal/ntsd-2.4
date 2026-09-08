@@ -7,8 +7,8 @@ public enum InputControlReference {
         public let cases: Int, records: Int, bytes: Int, events: Int, actions: Int, sends: Int, receives: Int, messages: Int, restores: Int, resets: Int
     }
     struct Blob: Decodable { let count: Int, deflate: String }
-    struct Memory: Decodable { let bytes: String, defined: String, live: Bool }
-    struct Snapshot: Decodable {
+    struct Memory: Decodable, Equatable { let bytes: String, defined: String, live: Bool }
+    struct Snapshot: Decodable, Equatable {
         let poolBytes: String, poolMask: String, globals: String, saved: String, pointers: String, memory: [Memory]
     }
     struct GlobalWrite: Decodable { let address: UInt32, bytes: String }

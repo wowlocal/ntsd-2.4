@@ -62,9 +62,9 @@ public enum OriginalMenuPresentation {
             }
             try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
         }
-        for address in [0x44f04c,0x44f048,0x44f044,0x44f040] {
-            let pointer = try word(address)
-            if pointer != 0 { try method(pointer); try state.write(UInt32(0),at: address-OriginalMatchPreparation.globalBase) }
+        try OriginalMusicPlayback.release(globals: &state) { event in
+            try observe(.init(.method,event.arguments,event.strings))
+            return .init()
         }
         for offset in [0,4] {
             let pointer = try owned.replayPointers.integer(at: offset,as: UInt32.self)
@@ -149,17 +149,16 @@ public enum OriginalMenuPresentation {
         /// 401f30: query IBasicAudio, read volume, set it only after a successful
         /// read, release the queried interface on both read/set outcomes.
         func musicVolume(_ volume: Int32, _ observe: Observer) throws {
-            let graph = try word(0x44f040)
-            if graph == 0 { return }
-            try observe(.init(.queryInterface, [graph], [[0xb3,0x68,0xa8,0x56,0xd4,0x0a,0xce,0x11,0xb0,0x3a,0x00,0x20,0xaf,0x0b,0xa7,0x70]]))
-            if input.queryResult < 0 { return }
-            guard input.queriedAudio != 0 else { throw error("Null successful audio query") }
-            try observe(.init(.audioVolumeRead, [input.queriedAudio]))
-            if input.audioGetResult >= 0 {
-                let level: Int32 = volume == 0 ? -10000 : (volume &* 34) &- 3900
-                try method(input.queriedAudio, 0x1c, [bits(level)], observe)
+            try OriginalMusicPlayback.setVolume(volume,globals: globals) { event in
+                guard let kind = OriginalMenuPresentationEvent.Kind(rawValue: event.kind.rawValue) else { throw error("Music volume event") }
+                try observe(.init(kind,event.arguments,event.strings))
+                switch event.kind {
+                case .queryInterface: return .init(result: input.queryResult,pointer: input.queriedAudio)
+                case .audioVolumeRead: return .init(result: input.audioGetResult)
+                case .method: return .init(result: event.arguments[1] == 0x1c ? input.audioSetResult : input.methodResult)
+                default: throw error("Music volume response")
+                }
             }
-            try method(input.queriedAudio, 8, [], observe)
         }
         mutating func changeVolume(_ direction: Int32, _ observe: Observer) throws {
             let volume = max(0, min(100, try signed(0x44d000) &+ direction))

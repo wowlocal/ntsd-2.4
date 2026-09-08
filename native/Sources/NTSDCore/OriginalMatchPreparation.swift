@@ -138,7 +138,7 @@ public struct OriginalMatchPreparation {
             try observe(.resumeMusic)
             if try globals.integer(at: 0x44eed0-Self.globalBase, as: UInt8.self) != 0 {
                 try observe(.musicPath)
-                guard try global(0x44d010) == 0 else { throw Self.error("Enabled DirectShow music is not recovered") }
+                guard try global(0x44d010) == 0 else { throw Self.error("Enabled match music caller is not connected") }
             }
         }
         for slot in 20..<400 where try !active(slot) {

@@ -578,9 +578,34 @@ native parents. Both release comparisons passed before accepting the new
 fixtures. All14 fixture hashes and both raw corpora verified; old fixtures
 and baseline assets unchanged. No runtime integration or Windows claim.
 Release NTSDNative built in2.65s; app-window and clean-macOS checks stay open.
-Enabled music 402020 uses DirectShow and remains
-unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
-music disabled; this is not sound output or Windows startup.
+The [enabled music study](docs/research/MUSIC_PLAYBACK.md) now executes whole
+402020/401d30/401c90/401da0/401f30 after freshly reproduced loading/input/replay/
+round parents. Both374-case passes match Swift before accepting new fixtures:
+2450 real helper returns,11912 events,438 allocation requests,24 messages and
+438 actual VC80 sprintf calls; each32575 records/18155382 bytes/masks.
+Primary continues actual4229cc->429730 with music44d010 STILL1, menu10 and
+previous0. Control remains paused; its4229cc entry is explicitly supplied.
+Stop4297ae is BEFORE previous4512cc assignment and11 menu bitmap allocations.
+Read the study before extending music or this menu. Do not disable music to
+bypass the natural caller. Shared release/volume also serve MenuPresentation.
+Same path only resumes; new path releases position/event/control/graph in order.
+Create/render errors still continue toward volume and conditional Run/cache.
+Query HRESULTs and output words are separate inputs; mandatory null interfaces
+remain invalid continuations. Keep signed HRESULTs and wrapping volume*34-3900,
+special zero=-10000. Long cached paths overlap directory44ef38; do not impose
+an invented52-byte field length.401da0 never frees its wide allocation on this
+path; retain backing/masks, even absent/partial conversion or failed rendering.
+COM/Win32/new outputs remain boundaries; no Windows codec/file/music output is
+claimed. Old match music selection4025b0/4025d0 is not connected yet. All14 older
+fixture pins remain unchanged. Full2074 round/1134 replay/2993 control/303 local
+and loading native parents still run after the callback. Next menu resources
+4297ae..429e5a and431d10, paused rendering and gameplay. Practice/W/clean macOS
+are open. The earlier replay chain's disabled4025b0/402020 keeps its old scope.
+Both music XCTest passed in290.588s (145.694+144.894), including all seven
+native parents per pass. Shared historical MenuPresentation passed in138.633s.
+Both release comparisons passed before accepting the two new fixtures; all16
+fixture hashes and both raw corpora verified. No expected after-state was fixed.
+Final release NTSDNative passed in19.69s. No app-window/device-output claim.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

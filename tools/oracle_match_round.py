@@ -105,7 +105,7 @@ class MatchRound(ReplayTick):
                     stackBefore=before,stackAfter=list(self.uc.mem_read(self.body_sp+0x430,28)),
                     stageDefeated=None if paused else self.u32(self.body_sp+0x64),continuation=ENDS[self.round_end],endPC=self.round_end,after=self.control_snapshot())
 
-    def capture_round(self):
+    def capture_parent_round(self):
         parents,initial,natural=self.capture_parent_replay();suffix='-control' if self.control else ''
         r=json.loads((ROOT/'docs/evidence'/f'replay-tick{suffix}.json').read_bytes());raw=(ROOT/'build/original'/r['corpus']).read_bytes()
         assert digest(raw)==r['sha256'];old=json.loads(raw);assert parents==old['parents']
@@ -113,8 +113,12 @@ class MatchRound(ReplayTick):
         parents['replay-tick']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256']);del old,raw
         for offset,count in [(0x24,1),(0x20,3)]:
             a=API+0x100+offset*4;self.put(VTABLE+offset,a);self.control_imports[a]=(offset,count)
-        initial=self.control_snapshot();cases=[self.round_step('natural-first-round',paused=int(self.control),inherited=True)]
-        print('Pinned replay parent reproduced; natural round continuation',cases[0]['continuation'],flush=True)
+        initial=self.control_snapshot();natural=self.round_step('natural-first-round',paused=int(self.control),inherited=True)
+        print('Pinned replay parent reproduced; natural round continuation',natural['continuation'],flush=True)
+        return parents,initial,natural
+
+    def capture_round(self):
+        parents,initial,natural=self.capture_parent_round();cases=[natural]
 
         def word(s,address,value):s['globals'].append(dict(address=address,bytes=struct.pack('<I',value&0xFFFFFFFF).hex()))
         def actor(s,slot,offset,value,byte=False):s['actors'].append(dict(slot=slot,offset=offset,bytes=struct.pack('<B' if byte else '<I',value&(255 if byte else 0xFFFFFFFF)).hex()))

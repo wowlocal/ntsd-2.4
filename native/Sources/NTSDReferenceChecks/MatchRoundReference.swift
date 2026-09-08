@@ -36,7 +36,8 @@ public enum MatchRoundReference {
         return try stride(from: 0,to: text.count,by: 2).map { try digit(text[$0])*16+digit(text[$0+1]) }
     }
 
-    public static func compare(round: Data, replay: Data, control: Data, local: Data, loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(round: Data, replay: Data, control: Data, local: Data, loading: Data, catalog: Data, sounds: Data,
+                               onNatural: ((OriginalMatchPreparation, OriginalInputControlContext, OriginalMatchRoundContinuation) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(round,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.worldAddress == 0x68000020, c.bodySP == 0x1000e9fc, c.objectAddresses.count == 137, Set(c.objectAddresses).count == 137,
@@ -192,6 +193,7 @@ public enum MatchRoundReference {
                       eventIndex == item.events.count, callIndex == item.calls.count else { throw error(item.label+" continuation/local result") }
                 continuations[result.continuation.rawValue,default: 0] += 1
                 try snapshot(state,context,item.after,item.label+" final")
+                if caseIndex == 0 { try onNatural?(state,context,result.continuation) }
             }
         })
         guard callbacks == 1 else { throw error("Missing native replay parent") }
