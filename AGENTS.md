@@ -1359,6 +1359,47 @@ bounded composition, phase0 caller, supplied replay RNG or synthetic actor state
 WinMain sounds, other CPUs/modes, app/UI, full match, Windows/clean macOS and
 R02.1/R01.2/full-game goal remain open.
 
+The [generic Actor input](docs/research/ACTOR_INPUT.md) now implements
+413080..4132ef and real40e170/40e2d0/40e450/412800..413077 rules on full raw
+Actor/Frame storage.14,624 synthetic source probes match Native,30,885,888
+Actor bytes/masks:112edges,4608invalidation,384transfers,7484combos,500DAT
+priorities,1536continuous prefixes. These are declared synthetic frames, NOT
+all original DAT transitions or whole gameplay. No character/technique allowlist.
+Public OriginalActorInput.apply takes the actual loaded Object; unconnected
+OriginalFighter Practice retains its old bounded logic until whole control joins.
+Read the study before extending input. PositiveSIGNED bytes decay; exact0->1
+edges shift five32-bit history words408..418 with R/L/U/D/Df/J/A codes6/4/8/2/9/0/5.
+All9recognizers are sequential and later ones read the new current frame/buffers.
+StrictSIGNED hit_a/d/j priorities allow0 above two negatives; ties skip. Transfers
+check target presence, abs/999 and original cost, with wrapping statistics.
+Negative target turns ONLY on successful resource-enabled branch. Directional
+combo facing/progress resets also follow failed attempts. Original ID6/hit_ja300/
+HP>177/458428==0 preserves progress3; keep this documented source exception.
+Initial Swift build fixed try placement; first differential comparison passed
+5.493s/build94.47s. Fresh acceptance reproduced identical raw SHA and passed
+5.470s/build33.93s after preserving MP-before-HP read order. Packed fixture+
+rollback passed5.336s; releaseNTSDNative34.14s. All jobs terminal.106oldfixtures
+unchanged; raw/packed SHA/size/full JSON equality verified;107pins retained at
+build/research/actor-input-fixture-pins.json. This does not complete R04.1:
+original-file transition sequences, remaining control and full match stay open.
+The new source-only oracle_gameplay_entry.py separately re-executes ALL own
+MATCH_LAUNCH/selection/character parents on the same CPU/stack/World/resources,
+then whole413080 caller41e339..41e634 and physics caller through41eed1. Both
+fresh passes succeeded first try:each20control/2physics helpers,12checkpoints,
+387/270unique instructions, no tracked catalog reads-before-writes. First empty
+control preserves ALL state; ctorvelocities0.1 then produce x/z442.1/504.1 and
+289.1/519.1, integer positions unchanged, y/velocities0 and frame219 BOTH actors.
+HP500/MP200,RNG39/0,phase1,tick1/replay/resources retained. EndSP1000e9bc BEFORE
+initial Z/contact passes; same unreturned outer entry, no new outer call counted.
+Both source reports are docs/evidence/gameplay-entry{,-control}.json with
+nativeCompared=false; raw captures remain build/original. No expected state
+injection/native whole-pass claim. Source-only continuation does not supersede
+MATCH_LAUNCH's accepted Native boundary41e339. NEXT native:use generic input
+component and recover whole4132ef..4143cb, control caller400/401/500/501, then
+physics/contact/link/draw/scheduler/recovery and full first tick, preserving own
+launch state. Do not zero constructor velocities or substitute Practice RNG.
+App/UI, Windows, clean Mac and full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

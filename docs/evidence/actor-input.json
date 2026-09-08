@@ -1,0 +1,20 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Generic actor input rules, original413080..4132ef and real helper children.\nDeclared synthetic Actor/Frame/global probes, not game DAT or natural gameplay.\nAll Actor bytes/masks, guards and whole-helper ABIs are checked. No game-code\nstubs; only the separately checked constructor's memset is a host boundary.\n",
+  "corpus": "actor-input.json",
+  "sha256": "c526b30ae76f4f8d05aaf8203998d2aa841e8b7072f83c2749caf27b65067a31",
+  "bytes": 66104342,
+  "cases": 14624,
+  "operations": {
+    "edges": 112,
+    "invalidates": 4608,
+    "transfer": 384,
+    "combos": 7484,
+    "actions": 500,
+    "prefix": 1536
+  },
+  "nativeCompared": true,
+  "fixture": "original-actor-input.json",
+  "fixtureSHA256": "f1fcd6b045bf1dfac76f335ff881d7b7961927e4883e0e2ceee3401ddca21f7f",
+  "fixtureBytes": 649048
+}

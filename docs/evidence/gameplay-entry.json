@@ -1,0 +1,68 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue the own MATCH_LAUNCH state through complete control and physics\ncallers on the same CPU/stack/World/catalog/resources/replay. No gameplay\nstimuli or synthetic calls. Research capture; native comparison is still open.\nThis is the beginning of the first tick, not a complete tick or match.\n",
+  "corpus": "gameplay-entry.json",
+  "sha256": "85a8630d7afb12c1498e4dd0bb6731ba7399cb60f072361bcea9ffd42c70efac",
+  "bytes": 1184444,
+  "parent": {
+    "fixture": "original-match-launch.json",
+    "sha256": "dc84f98a28b5e96aa691584ccd0389c62217f57dfd64f496a8e1f4d1341a4dda"
+  },
+  "cases": 2,
+  "nativeCompared": false,
+  "sections": [
+    {
+      "label": "control",
+      "end": {
+        "pc": 4318772,
+        "sp": 268495292
+      },
+      "helpers": 20,
+      "checkpoints": 10,
+      "instructions": 387,
+      "readsBeforeWrites": [],
+      "actorCalls": [
+        {
+          "entry": 4272256,
+          "this": 1879048224,
+          "arguments": [
+            1,
+            0
+          ]
+        },
+        {
+          "entry": 4272256,
+          "this": 1879049504,
+          "arguments": [
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "label": "physics",
+      "end": {
+        "pc": 4320977,
+        "sp": 268495292
+      },
+      "helpers": 2,
+      "checkpoints": 2,
+      "instructions": 270,
+      "readsBeforeWrites": [],
+      "actorCalls": [
+        {
+          "entry": 4252816,
+          "this": 1879048224,
+          "arguments": []
+        },
+        {
+          "entry": 4252816,
+          "this": 1879049504,
+          "arguments": []
+        }
+      ]
+    }
+  ]
+}

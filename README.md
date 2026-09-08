@@ -62,6 +62,14 @@ passes match native state, resources and the first replay packet/checksum.
 This core chain retains the original HUD resources and remains separate from
 the app UI. The full gameplay tick and a complete match are still open.
 
+The [generic Actor input component](docs/research/ACTOR_INPUT.md) now reproduces
+edge history, all nine combo recognizers and DAT frame transfers with resource
+costs in14,624 original-instruction probes, comparing every Actor byte and mask.
+It has no per-technique allowlist. Two fresh source runs also continue the own
+launch through the complete control and physics callers, revealing the original
+first landing frame219 from constructor velocities0.1. Native comparison of
+those whole passes and their remaining tick stages is still pending.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other
