@@ -6,8 +6,8 @@ public enum OriginalMatchPreparationEvent {
     case releaseLayers(Int), loadLayers(Int), resetInput, resumeMusic, musicPath
 }
 
-/// Common menu-confirmed preparation, EXE 42d1ff..42d6ed. The menu prelude,
-/// enabled DirectShow music, replay creation and the match loop are still open.
+/// Common menu-confirmed preparation, EXE 42d1ff..42d6ed. Prelude/replay have
+/// separate implementations; enabled music and the match loop remain open.
 /// Actor/Object/World references are non-null ordinals; BG refs are index+1.
 public struct OriginalMatchPreparation {
     public static let globalBase = 0x44d000
@@ -17,12 +17,12 @@ public struct OriginalMatchPreparation {
     /// Supplied global state with explicit initialization provenance. This is
     /// not a recovered default for the entire Windows startup/menu sequence.
     public var globals: OriginalStateRecord
-    public private(set) var backgrounds: [OriginalStateRecord]
+    public internal(set) var backgrounds: [OriginalStateRecord]
     public var bitmaps: [OriginalLoadedBitmap] { backgroundLoader.bitmaps }
     public var releasedBitmaps: Set<Int> { backgroundLoader.releasedBitmaps }
-    public private(set) var releasedBitmapOrder: [Int] = []
-    private let catalog: OriginalLoadedCatalog
-    private var backgroundLoader: OriginalBackgroundLoader
+    public internal(set) var releasedBitmapOrder: [Int] = []
+    let catalog: OriginalLoadedCatalog
+    var backgroundLoader: OriginalBackgroundLoader
 
     public init(catalog: OriginalLoadedCatalog, bootstrap: OriginalWorldBootstrap, globals: OriginalStateRecord) throws {
         guard globals.bytes.count == Self.globalSize else { throw Self.error("Global storage size") }
@@ -146,18 +146,23 @@ public struct OriginalMatchPreparation {
             try actors[slot].reconstructActor()
         }
         try observe(.resetInput)
+        try resetOriginalInput()
+        try setGlobal(0x450bcc, Int32(random.index))
+        try setGlobal(0x450c34, Int32(random.counter))
+    }
+
+    /// Shared body of original 431c70; menu action 5 uses the same reset.
+    mutating func resetOriginalInput() throws {
         for address in stride(from: 0x4513a4, through: 0x4513bc, by: 4) { try setGlobal(address, 0) }
         for slot in 0..<8 {
             try setGlobal(0x451320+slot*4, 0)
             for offset in [0xd3, 0xd2, 0xd1, 0xcf, 0xd0, 0xce, 0xcd] { try actors[slot].write(UInt8(0), at: offset) }
         }
         for address in 0x455378..<(0x455378+300) { try globals.write(UInt8(0x75), at: address-Self.globalBase) }
-        try setGlobal(0x450bcc, Int32(random.index))
-        try setGlobal(0x450c34, Int32(random.counter))
     }
 
-    private func active(_ slot: Int) throws -> Bool { try world.integer(at: 4+slot, as: UInt8.self) != 0 }
-    private func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase, as: Int32.self) }
-    private mutating func setGlobal(_ address: Int, _ value: Int32) throws { try globals.write(value, at: address-Self.globalBase) }
-    private static func error(_ text: String) -> OriginalLoaderError { .outsideVerifiedDomain("Match preparation: \(text)") }
+    func active(_ slot: Int) throws -> Bool { try world.integer(at: 4+slot, as: UInt8.self) != 0 }
+    func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase, as: Int32.self) }
+    mutating func setGlobal(_ address: Int, _ value: Int32) throws { try globals.write(value, at: address-Self.globalBase) }
+    static func error(_ text: String) -> OriginalLoaderError { .outsideVerifiedDomain("Match preparation: \(text)") }
 }

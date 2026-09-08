@@ -2,6 +2,17 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 5, CommandLine.arguments[1] == "--match-continuation", CommandLine.arguments.count % 2 == 1 {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        var parents: [Data] = [], corpora: [Data] = []
+        for i in stride(from: 3, to: CommandLine.arguments.count, by: 2) {
+            parents.append(try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[i])))
+            corpora.append(try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[i+1])))
+        }
+        let result = try MatchContinuationReference.compare(loaded: loaded, parents: parents, corpora: corpora)
+        print("Match continuation matches original: \(result.cases) returns, \(result.records) records, \(result.bytes) bytes/masks, \(result.randomCalls) RNG calls, \(result.constructors) constructors, \(result.bitmaps) bitmaps; parent: \(result.parent.cases) complete prelude/preparation/recording chains")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--match-prelude" {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }

@@ -37,11 +37,12 @@ public enum MatchPreludeReference {
     private struct Corpus: Decodable { let dllSHA256: String, cases: [Case], blobs: [String: Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Match prelude reference: \(text)") }
 
-    public static func compare(loaded: Data, corpora: [Data]) throws -> Result {
+    public static func compare(loaded: Data, corpora: [Data],
+                               onFinished: (Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _ in }) throws -> Result {
         let inputs = try corpora.map { try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack($0)) }
         guard inputs.allSatisfy({ $0.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d" }) else { throw error("Unknown CRT") }
         var result = Result()
-        result.replay = try ReplayInitializationReference.compare(loaded: loaded, corpora: corpora) { corpusIndex, caseIndex, state in
+        result.replay = try ReplayInitializationReference.compare(loaded: loaded, corpora: corpora, onFinished: onFinished) { corpusIndex, caseIndex, state in
             let corpus = inputs[corpusIndex], item = corpus.cases[caseIndex], prelude = item.prelude
             func check(_ key: String) throws {
                 guard let value = corpus.blobs[key], value.count == OriginalMatchPreparation.globalSize else { throw error("Global blob") }

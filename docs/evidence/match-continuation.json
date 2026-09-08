@@ -1,0 +1,3220 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real42d704..42e0f9/ret12 after pinned full catalog/bootstrap/prelude/preparation/recording chain; menu commands, random roster and full450c2c==1; supplied input/RNG/ABI/device and disabled music, no whole UI or Windows output",
+  "corpus": "match-continuation.json",
+  "corpusSHA256": "95ed92ecaee600505006fba14dae2fa8893599a7e768c36f7229bc101e5e2b96",
+  "cases": 111,
+  "nativeComparison": "Match continuation matches original: 222 returns, 225298 records, 327834160 bytes/masks, 1998 RNG calls, 544 constructors, 960 bitmaps; parent: 50 complete prelude/preparation/recording chains",
+  "parentFixtureSHA256": "ad80b003089d253a486fd3be0711f88e90ba0404bdeb3e1eba5feeb561bebe7a",
+  "readsBeforeWrites": [],
+  "abiReturnsVerified": true,
+  "immutableCatalogObjectHeapBytesVerified": true,
+  "casesSummary": [
+    {
+      "label": "unconfirmed-action-1",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "unconfirmed-action-2",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "unconfirmed-action-3",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "unconfirmed-action-4",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "unconfirmed-action-5",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "non-one-demo-flag--1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "non-one-demo-flag-2",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0--1-0",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0--1-1",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0--1--1",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-0-0",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-0-1",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-0--1",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-1-0",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-1-1",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-0-1--1",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1--1-0",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1--1-1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1--1--1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-0-0",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-0-1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-0--1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-1-0",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-1-1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish-1-1--1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1--1-0",
+      "confirmation": -1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1--1-1",
+      "confirmation": -1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1--1--1",
+      "confirmation": -1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-0-0",
+      "confirmation": -1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-0-1",
+      "confirmation": -1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-0--1",
+      "confirmation": -1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-1-0",
+      "confirmation": -1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-1-1",
+      "confirmation": -1,
+      "deviceResult": 0,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "finish--1-1--1",
+      "confirmation": -1,
+      "deviceResult": 2147500037,
+      "callKinds": {},
+      "callsSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0--2147483648",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0--2",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0--1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0-0",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0-1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0-2",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-0-2147483647",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1--2147483648",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1--2",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1--1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1-0",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1-1",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1-2",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty-1-2147483647",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1--2147483648",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1--2",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1--1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1-0",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1-1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1-2",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "difficulty--1-2147483647",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage--2147483648",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage--10",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-0",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-40",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-50",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-51",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-60",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-stage-2147483647",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena--2147483648",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena--1",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-0",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-15",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-16",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-17",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-99",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-100",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "next-arena-2147483647",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "clear-selections",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-request": 1
+      },
+      "callsSHA256": "b45f9827ae1c39ecd97004229f3ab1f5ba1c6d80385c7560dbabff449911e091",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "reset-input",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "reset-input": 1,
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "766d18a36611e48a91fe6ac19e03ad2e235c2b7581462b142b075ebe9f7e7d5c",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "random-selections-74",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "c700c5de65da0d3d077029bae4bbcec7c8286d2d3f6c72b9803db21f5f8b531b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "random-selections-75",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 5,
+        "rng": 5,
+        "sound-request": 1
+      },
+      "callsSHA256": "89e634785e555f17ea97621b3e29a87af0c94f777a0b900dc652c758bf928f1e",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "random-selections-76",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "rng": 8,
+        "sound-request": 1
+      },
+      "callsSHA256": "ef4c8ee3c844a143a84164e0248b53fb876780690f99490150ed53978087c08b",
+      "teamPattern": null,
+      "constructors": [],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-0",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "a7c00fcc9381e873d847256e6a16990ac106cf88c92f21e7fd67191b8231b427",
+      "teamPattern": 0,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-1",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "8f73ef76124789449d613efa51570544d837bf7b348060564bf0694ede349afa",
+      "teamPattern": 1,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-2",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "0be0dccd1464bccc2df4a8bc46cb8c6aa741a5e8f6a488e4d9022a341295808c",
+      "teamPattern": 2,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-3",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "dc991c96181d2cad35302c1b110750752a40dc926c5b848e697b29e6b39c839f",
+      "teamPattern": 3,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-4",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "70590cc65c7b7eb018b63124d2c63f4d0ee0bba2921cc2ac25eeb72309bba9db",
+      "teamPattern": 4,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-5",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "5be5d18b2dc07df8f1094ffa0ce94bfd8d0bfc45ba555dee48a2f123f3283c16",
+      "teamPattern": 5,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-6",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 33
+      },
+      "callsSHA256": "c0a314261b38a567ce7df7ed424fdccfb370086db62d9b16cb50da2f4424d15f",
+      "teamPattern": 6,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-7",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "3338f986c9c9adaa0bf6d50bf75165fd27343436d44f2b62dd0fa2c61b1debe7",
+      "teamPattern": 7,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-8",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "ae2f9e26aca103d1bf645f14e915bc56f7e5ee4026421a7743cb05a7aab71e54",
+      "teamPattern": 8,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-9",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "e38754fc1e973ecadb97c6fb784f4f58ba24341024cefcaa729245be4a92b92c",
+      "teamPattern": 9,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-10",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "a64d8b2a6dbf62d63f5969b86b7660c344f07e9f241a821f8b4acc11e459b72b",
+      "teamPattern": 10,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-11",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "215b47dfa93e556a5bb18c5ac14d559db60dd1cd86f62912e7db51c18842564b",
+      "teamPattern": 11,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-12",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "880b0fde7a1f7c1740d35c51cc132e5b581669c46ab0a2c96f0c19c3c1362b9d",
+      "teamPattern": 12,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-13",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "92369bd6c1d1722b835127a8beda40083717f1f5404965ab6df862b77812d11c",
+      "teamPattern": 13,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-14",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "7d2cec2b8c26bfcd7c5e2dcb6b7c955ab43a4aaf2eefb87300fd0c360216a371",
+      "teamPattern": 14,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-15",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "fa3c27ff60a744fe00debf87dfaa26287c313c0415939734bf9d07fc4c86d7e9",
+      "teamPattern": 15,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-16",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "feffad6b9c34b6409e18ea9042c1dd569704d981945fa936d8676323fb00268d",
+      "teamPattern": 16,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-17",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28
+      },
+      "callsSHA256": "783b0150ad843eb9ab3a23aabc41676aa99feedf85924dd2eb3736f98da3c0e2",
+      "teamPattern": 17,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-18",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "0dce8f7f912836e1302b8bf4b4f451b6b1fd3b2555bae009c279b589cb8a6962",
+      "teamPattern": 18,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-19",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "031d7c012c7934d48f00e9576fedd5cbcd472347bd145653b1ce3e4f96bfdb7c",
+      "teamPattern": 19,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-20",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "f94050bb9b582c2bcd1e603218e0c02bab75d16d28259ff66cc8cb839c3d2f48",
+      "teamPattern": 20,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-21",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "7d06ff0c9f3202d7f404216e5b1b1dddb50c260eed57ae8f1f799d6e10b319fe",
+      "teamPattern": 21,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-22",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "7796ae1dff4c5965a807762c043bb598df757dcbe71abadd59bedb6664ae9908",
+      "teamPattern": 22,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-23",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "57a4e4146f4d1f0e67ab0766836bac6fba6df553b34ef629dccf242ced4ba099",
+      "teamPattern": 23,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-24",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "9862abe47999a91db9da71abcc4f85cba471f3cae29aa52c6ddd435bf6fbcc05",
+      "teamPattern": 24,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-25",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "0ced26243455b387cf3eeb3f0daf58eb078af348f4de7e6bb101ff79f269e235",
+      "teamPattern": 25,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-26",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "9d5e05c2dbd69d3570289cc3ed806612cc8ead31e7d0160920ed87eeca22b731",
+      "teamPattern": 26,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-27",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "45f06131b0f26f323be0fffdc033def52a01625b2cc8e93ff8560d3a88b174fe",
+      "teamPattern": 27,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-28",
+      "confirmation": 0,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "1cd5566f1922e0ae56310ac2ba7da9b79bda7d9f8796314caf4d45e68f51c73a",
+      "teamPattern": 28,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-team-pattern-29",
+      "confirmation": 0,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27
+      },
+      "callsSHA256": "4d3d6e2b464f3d89d9a8ac009e2720193ade71a7388b35c3ca8ee1d70b744987",
+      "teamPattern": 29,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-then-reset-selections",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 28,
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "dba880b1d6e3b6aebc4e45d98b840d1fc1a99c438e8143806ebbb2729fcdaed9",
+      "teamPattern": 12,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-then-random-selections",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 16,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 35,
+        "sound-request": 1
+      },
+      "callsSHA256": "29caf8eb15bfa0dd1d349cd65b7cb56b46d9cf35e942f63ead5e9a92fa3bf8c3",
+      "teamPattern": 20,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "demo-then-arena",
+      "confirmation": 1,
+      "deviceResult": 2147500037,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "rng": 27,
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "3c4dd4ef4fd39be6427186522f324b5185bf712dae024f9250fd5447b8dd12da",
+      "teamPattern": 29,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [],
+      "bitmaps": 0,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    },
+    {
+      "label": "input-reset-then-demo",
+      "confirmation": 1,
+      "deviceResult": 0,
+      "callKinds": {
+        "candidates": 8,
+        "fill-rectangle": 1,
+        "load-layers": 1,
+        "music-selection": 1,
+        "reconstruct": 8,
+        "release-layers": 17,
+        "reset-input": 1,
+        "rng": 33,
+        "sound-method": 3,
+        "sound-request": 1
+      },
+      "callsSHA256": "3f2974fb0029a6961a382e5a5a664da02d1c9e3f9ded3313a63f1f074d585604",
+      "teamPattern": 0,
+      "constructors": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "loadedArenas": [
+        0
+      ],
+      "bitmaps": 15,
+      "abi": {
+        "returnAddress": 805306368,
+        "stackAfter": 268499636,
+        "savedRegisters": [
+          286331153,
+          572662306,
+          858993459,
+          1145324612
+        ],
+        "restoredSEH": 0
+      }
+    }
+  ],
+  "fixture": "original-match-continuation.json",
+  "fixtureSHA256": "5565d067248a4c1ed4ee557c8837e34c92b8366154fbbb2bc610eecaec19becf",
+  "fixtureBytes": 3541448
+}

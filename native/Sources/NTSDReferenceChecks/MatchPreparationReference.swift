@@ -40,8 +40,8 @@ public enum MatchPreparationReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match preparation reference: \(message)") }
     static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
-    static func inflate(_ text: String, count: Int) throws -> [UInt8] {
-        guard (0...20_000_000).contains(count), let source = Data(base64Encoded: text) else { throw error("Invalid compressed block") }
+    static func inflate(_ text: String, count: Int, maximumCount: Int = 20_000_000) throws -> [UInt8] {
+        guard (0...maximumCount).contains(count), let source = Data(base64Encoded: text) else { throw error("Invalid compressed block") }
         var bytes = [UInt8](repeating: 0, count: count+1)
         let actual = bytes.withUnsafeMutableBufferPointer { output in
             source.withUnsafeBytes { input in
@@ -54,19 +54,24 @@ public enum MatchPreparationReference {
 
     static func unpack(_ input: Data) throws -> Data {
         guard let packed = try? JSONDecoder().decode(Packed.self, from: input) else { return input }
-        let data = Data(try inflate(packed.deflate, count: packed.count))
+        // Larger chained menu corpora contain many small complete records.
+        // Individual blobs retain their tighter bound above.
+        let data = Data(try inflate(packed.deflate, count: packed.count, maximumCount: 64_000_000))
         guard digest(data) == packed.sha256 else { throw error("Envelope digest") }
         return data
     }
 
     public static func compare(loaded: Data, corpora: [Data],
+                               onFinished: (Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _ in },
                                beforePreparation: (Int, Int, inout OriginalMatchPreparation) throws -> Void = { _, _, _ in },
                                afterPreparation: (Int, Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _, _ in }) throws -> Result {
         guard !corpora.isEmpty else { throw error("Missing preparation corpus") }
         var result = Result()
         _ = try LoadedCatalogReference.compare(loaded) { catalog in
             for (index, data) in corpora.enumerated() {
-                try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result, beforePreparation: { caseIndex, state in
+                try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result, onFinished: { state in
+                    try onFinished(index, catalog, &state)
+                }, beforePreparation: { caseIndex, state in
                     try beforePreparation(index, caseIndex, &state)
                 }) { caseIndex, state in
                     try afterPreparation(index, caseIndex, catalog, &state)
@@ -77,6 +82,7 @@ public enum MatchPreparationReference {
     }
 
     private static func compare(_ input: Data, loadedSHA256: String, catalog: OriginalLoadedCatalog, result: inout Result,
+                                 onFinished: (inout OriginalMatchPreparation) throws -> Void,
                                  beforePreparation: (Int, inout OriginalMatchPreparation) throws -> Void,
                                  afterPreparation: (Int, inout OriginalMatchPreparation) throws -> Void) throws {
         let data = try unpack(input)
@@ -225,5 +231,6 @@ public enum MatchPreparationReference {
             result.cases += 1; result.constructors += constructors.count; result.bitmaps += item.bitmaps.count
             result.releases += released.count; result.randomCalls += calls.filter { $0.kind == "rng" }.count
         }
+        try onFinished(&state)
     }
 }

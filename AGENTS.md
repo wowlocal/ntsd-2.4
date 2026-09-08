@@ -179,8 +179,29 @@ data/m_ok.wav at 43d0c4..43d0ce; that loader is not executed in this corpus.
 Read that study before extending startup. Existing preparation/replay fixtures
 are unchanged. The new optional beforePreparation callback applies native prelude
 after supplied stimuli, never copying an expected state into the native model.
-Next recover menu/RNG input provenance and continuation after 42d704, then
-connect to R01.2. Enabled music 402020 uses DirectShow and remains
+The [menu continuation](docs/research/MATCH_CONTINUATION.md) now executes
+42d704..42e0f9 through real ret12/SEH/cookie after reproducing the pinned parent
+chain. Native continueMenu matches 222 returns, 225298 records / 327834160 bytes
+and masks, 1998 RNG calls, 544 constructors, 960 new bitmaps. Both a5/ramp corpora
+include all 30 team-pattern results, commands 1..5, no-confirmation controls,
+integer boundaries, nullable sound devices/buffers and success/failing HRESULTs.
+The shared candidate rule scans ordinals 1..<count, type 0, signed source ID<30,
+excluding all eight selected ordinals, rebuilt after each seat. Command 1 clears
+selection only for flag==1; command 2 rerolls for any nonzero flag. Empty candidate
+lists require prior stack-scratch provenance and remain outside native domain.
+450c2c==1 runs even without confirmation, clears all 400 activity bytes, selects
+BG/roster and reconstructs only 10..17. It does not reconstruct inactive 20..399,
+copy base teams, create a replay or reset the RNG counter. Read the study before
+extending this path. Sound confirmation and 431c70 input reset are shared with
+earlier native paths. New bitmap addresses use a separate supplied arena 26000020;
+The loaded source resources and new continuation resource bytes/guards remain
+verified. The parent replay
+cleanup is a research operation, not an inserted startup action. No Windows output.
+Next recover earlier menu/RNG input provenance before 42cf8a, then connect to R01.2.
+Static next seed: 422ac0 fills 3000 bytes with CRT rand()%255+1 and sets 450b48=0;
+callers 427a2c/427a71; 43cf55/43cf5a seed CRT with timeGetTime. Other rand consumers
+must be threaded through, not assumed absent. This seed is not yet executed here.
+Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
 The native preparation is not wired into practice. Do not restore synthetic
@@ -197,6 +218,11 @@ all 33 Swift tests in 634.646s (new comparison 114.310s), plus both release
 comparisons before accepting fixtures. Re-executing the two earlier a5 Python
 oracles reproduced all 25+25 historical cases exactly after the optional hook
 refactor, including state/mask hashes, calls and instruction access inventories.
+The continuation stage passed all 34 Swift tests in 811.498s, with its new
+parent-plus-continuation comparison in 172.950s. Both release comparisons passed
+before fixture acceptance; earlier fixtures remained unchanged. The readable
+reports retain inventories and canonical call digests; full ordered calls and
+candidate lists remain in the accepted packed fixtures.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

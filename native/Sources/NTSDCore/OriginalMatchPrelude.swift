@@ -72,20 +72,23 @@ public enum OriginalMatchPrelude {
             try observe(.fillRectangle(resource: resource, x: 0, y: 0, width: 794, height: 550, color: 0))
             try write(0x450b98, 0)
         } else {
-            try observe(.soundRequest(loop: false))
-            if try read(0x44eecc) != 0 {
-                let resource = try state.integer(at: 0x455610-OriginalMatchPreparation.globalBase, as: UInt32.self)
-                if resource != 0 {
-                    // Original 401a30 invokes all three methods even if an
-                    // earlier HRESULT reports failure. Device execution is external.
-                    try observe(.soundMethod(resource: resource, vtableOffset: 0x48, arguments: []))
-                    try observe(.soundMethod(resource: resource, vtableOffset: 0x34, arguments: [0]))
-                    try observe(.soundMethod(resource: resource, vtableOffset: 0x30, arguments: [0, 0, 0]))
-                }
-            }
+            try confirmationSound(in: state, observe: observe)
         }
         globals = state
         return name
+    }
+
+    /// Shared original 401a30 path for the loop=0 requests made by this menu.
+    static func confirmationSound(in state: OriginalStateRecord,
+                                  observe: (OriginalMatchPreludeEvent) throws -> Void) throws {
+        try observe(.soundRequest(loop: false))
+        if try state.integer(at: 0x44eecc-OriginalMatchPreparation.globalBase, as: UInt32.self) == 0 { return }
+        let resource = try state.integer(at: 0x455610-OriginalMatchPreparation.globalBase, as: UInt32.self)
+        if resource == 0 { return }
+        // All three methods execute even when an earlier HRESULT fails.
+        try observe(.soundMethod(resource: resource, vtableOffset: 0x48, arguments: []))
+        try observe(.soundMethod(resource: resource, vtableOffset: 0x34, arguments: [0]))
+        try observe(.soundMethod(resource: resource, vtableOffset: 0x30, arguments: [0, 0, 0]))
     }
 
     private static func error(_ text: String) -> OriginalLoaderError { .outsideVerifiedDomain("Match prelude: \(text)") }
