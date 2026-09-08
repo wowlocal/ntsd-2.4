@@ -77,12 +77,13 @@ public struct OriginalObjectLoader {
                               frameBacking: [UInt8]? = nil,
                               frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
                               bitmapSource: (String) throws -> OriginalBitmapInput,
+                              onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
                               onFrame: (OriginalFrameRecord) -> Void = { _ in },
                               onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in }) throws -> OriginalLoadedObject {
         var candidate = self
         let result = try candidate.consume(decoded: decoded, id: id, type: type, headerBacking: headerBacking,
                                            tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation,
-                                           bitmapSource: bitmapSource, onFrame: onFrame, onFrameStorage: onFrameStorage)
+                                           bitmapSource: bitmapSource, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
         self = candidate
         return result
     }
@@ -90,6 +91,7 @@ public struct OriginalObjectLoader {
     private mutating func consume(decoded: String, id: Int32, type: Int32, headerBacking: [UInt8], tailBacking: [UInt8],
                                   bitmapFill: UInt8, frameBacking: [UInt8]?, frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32?,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  onNewSound: (OriginalSoundRegistration) throws -> Void,
                                   onFrame: (OriginalFrameRecord) -> Void, onFrameStorage: (Int, OriginalStateRecord) -> Void) throws -> OriginalLoadedObject {
         guard headerBacking.count == 0x7a4, tailBacking.count == 0x3c else { throw Self.error("Object storage size") }
         guard frameBacking == nil || frameBacking?.count == 400*0x178 else { throw Self.error("Frame backing size") }
@@ -146,8 +148,8 @@ public struct OriginalObjectLoader {
                         weaponPaths[ordinal] = path
                         try header.write(UInt32(ordinal + 1), at: 0x98 + ordinal*4)
                         let previous = try header.integer(at: indexOffset, as: Int32.self)
-                        let index = try frames.sounds.register(path, previous: previous)
-                        try header.write(index, at: indexOffset)
+                        _ = try frames.sounds.register(path, previous: previous, kind: .weapon,
+                            assignIndex: { try header.write($0, at: indexOffset) }, onNewSound: onNewSound)
                     }
                     token = try input.token()
                 }
@@ -171,7 +173,7 @@ public struct OriginalObjectLoader {
                 }
             }
             if token == "<frame>" {
-                let record = try frames.consumeFrameBody(&input, allocate: frameAllocation)
+                let record = try frames.consumeFrameBody(&input, allocate: frameAllocation, onNewSound: onNewSound)
                 onFrame(record)
                 onFrameStorage(record.number, try frames.storage(at: record.number))
                 token = "<frame_end>"

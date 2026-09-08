@@ -332,6 +332,31 @@ and outer frame are supplied, not a complete loading path. Next connect enabled
 Object sound registry410a48/410a65 to the WAV helper, then join18 common sounds,
 full catalog,bootstrap and UI in41bc90 before input/menu/429730 andR01.2.
 Historical fixtures are unchanged. Practice and full Windows/macOS checks remain open.
+The [catalog sound study](docs/research/CATALOG_SOUNDS.md) now joins enabled
+Frame/weapon sound registration with real4014e0 in the same full4122f0 CPU and
+caller stack. Read it before extending the audio registry or first loading.
+Full source:137 Objects/15388 occurrences,400 WAV loads from365 source files
+(386 frame,14 weapon),66210142 audio bytes/masks plus112063739 catalog bytes/
+masks,6426 audio events/80 Restore. Interleaved/repeated Pein:29 loads from28
+files,4157380 audio plus82089953 catalog bytes/masks,466 events/6 Restore.
+Native callbacks flow through existing Frame/Object/LoadedCatalog parsers;
+OriginalRegisteredSoundLoading owns results indexed by the same byte cache.
+Assignment occurs before WAV/SetVolume; path copy/count increment occur after.
+Hits do not reload or reset volume. Weapon no-hit with previous index!=-1 keeps
+that index and skips registration; do not turn it into unconditional new audio.
+Both callers SetVolume(+3c,-10000) and ignore HRESULT; the corpus supplies-1.
+The20-byte cache stride is not a string size limit:21-byte SNDDATA paths overlap
+the next slot. Preserve400 buffers, not365 deduplicated paths. Before-cache,
+source/kind/Object path, all WAV bytes/masks/events, real ret4/ABI and final
+buffer tokens are compared while the full catalog is rebuilt/checked natively.
+The WAV adapter now optionally attaches to an existing VM with disjoint stubs
+and temporary hooks. Its historical431 cases/3 startup passes/ALL blobs were
+re-executed identically; old fixtures remain unchanged. MMIO/COM/allocator/file
+boundaries persist; no mixer/Windows output claim. S: null output is dereferenced
+by caller410a5a/40be2a even after return0. Native rejects that invalid continuation;
+full caller fault traces remain open. Next join18 common sounds, this enabled
+catalog,400-slot bootstrap and10 UI bitmaps in the real initial41bc90, then
+input/pause/menu429730 andR01.2. Practice and full Windows/macOS checks stay open.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -377,6 +402,16 @@ The initial-interface stage passed six targeted tests in137.528s: new corpus
 131.930s. These cover the shared bitmap storage refactor in Object/BG and all
 source catalogs. Release comparison passed before new fixture acceptance;
 old fixtures unchanged. Release NTSDNative passed in2.24s. No new Practice/W proof.
+The enabled-catalog sound stage passed eight targeted tests in250.754s:
+new full/control audio96.688s, historical match preparation75.488s, four
+Object/raw-Frame tests56.560s and old WAV corpus22.018s. Both new release
+comparisons passed before fixture acceptance; all old fixtures unchanged.
+The historical WAV Python oracle also reproduced every case/startup/blob after
+the optional-attachment refactor. Release NTSDNative passed in16.80s.
+After correcting the last partial cache-slot extent guard, both new catalog
+audio tests passed again in96.614s. The source corpus uses400 registrations;
+it does not exercise filling the cache to its allocation boundary.
+Final release NTSDNative build passed in14.34s.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

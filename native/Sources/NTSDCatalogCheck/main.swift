@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 4, CommandLine.arguments[1] == "--catalog-sounds" {
+        let r = try CatalogSoundsReference.compare(catalog: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])), sounds: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3])))
+        print("Catalog sounds match original: \(r.catalog.objects) Objects, \(r.catalog.frames) Frames, \(r.calls) real WAV loads (\(r.weaponCalls) weapon / \(r.frameCalls) frame), \(r.sources) source files, \(r.bytes) audio bytes/masks + \(r.catalog.bytes) catalog bytes/masks, \(r.events) audio events, \(r.restores) restores, checksum \(r.catalog.checksum)")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--initial-interface" {
         let r = try InitialInterfaceReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Initial interface matches original: \(r.cases) passes, \(r.sources) embedded DIBs, \(r.constructors) bitmap / \(r.poolConstructors) Actor constructors, \(r.records) records, \(r.bytes) bytes/masks, \(r.events) events, \(r.nullAllocations) null allocations, \(r.messages) messages, \(r.releases) surface releases")

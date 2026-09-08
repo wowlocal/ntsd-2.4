@@ -131,9 +131,10 @@ swift test --package-path native --filter '(OriginalInitialInterfaceTests|Origin
 ## Следующий участок и границы
 
 Соединить [18 общих звуков](WAVE_LOADING.md), полный каталог, этот пул и UI
-в исходном первом проходе41bc90. Для включённого звука каталог должен вызывать
-общий WAV loader из Object sound registry:410a48, затем SetVolume(-10000)
-в410a65. Текущий полный catalog corpus использует disabled audio boundary.
+в исходном первом проходе41bc90. [Enabled catalog sounds](CATALOG_SOUNDS.md)
+теперь выполняет общий WAV loader из Frame/weapon registry и SetVolume(-10000)
+в одном полном каталоге. Прежний disabled corpus остаётся отдельным;
+непрерывный первый41bc90 ещё не проверен.
 
 Здесь catalog[0]/Object+90 и внешний frame предоставлены как входы; настоящая
 загрузка каталога не подменяется, а остаётся перед границей данного корпуса.

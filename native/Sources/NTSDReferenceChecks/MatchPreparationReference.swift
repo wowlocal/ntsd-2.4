@@ -67,7 +67,7 @@ public enum MatchPreparationReference {
                                afterPreparation: (Int, Int, OriginalLoadedCatalog, inout OriginalMatchPreparation) throws -> Void = { _, _, _, _ in }) throws -> Result {
         guard !corpora.isEmpty else { throw error("Missing preparation corpus") }
         var result = Result()
-        _ = try LoadedCatalogReference.compare(loaded) { catalog in
+        _ = try LoadedCatalogReference.compare(loaded, onLoaded: { catalog in
             for (index, data) in corpora.enumerated() {
                 try compare(data, loadedSHA256: digest(loaded), catalog: catalog, result: &result, onFinished: { state in
                     try onFinished(index, catalog, &state)
@@ -77,7 +77,7 @@ public enum MatchPreparationReference {
                     try afterPreparation(index, caseIndex, catalog, &state)
                 }
             }
-        }
+        })
         return result
     }
 

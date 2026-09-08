@@ -1,0 +1,16 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "catalog": "loaded-catalog-audio-interleaved.json",
+  "catalogSHA256": "7a3043c9e742235e7c30ef284fb80f1ab6a7d6bac5d237764e49325dd50bcdca",
+  "sounds": "catalog-sounds-interleaved.json",
+  "soundsSHA256": "111d1865432492df764c1026b2bf681a03b5690a3b8aebba2efdaeb52b08316f",
+  "calls": 29,
+  "sources": 28,
+  "nativeComparison": "Catalog sounds match original: 3 Objects, 720 Frames, 29 real WAV loads (0 weapon / 29 frame), 28 source files, 4157380 audio bytes/masks + 82089953 catalog bytes/masks, 466 audio events, 6 restores, checksum 1496213",
+  "catalogFixture": "original-loaded-catalog-audio-interleaved.json",
+  "catalogFixtureSHA256": "e41ae02f53925416f1d0facdc00ba54748cdfa30468ca8b83131fc58cf6498cc",
+  "catalogFixtureBytes": 222574,
+  "soundsFixture": "original-catalog-sounds-interleaved.json",
+  "soundsFixtureSHA256": "534dd905f295ed7681d38bf233603ac50853dd6e32e8920856f19cd70ecef4a0",
+  "soundsFixtureBytes": 2462783
+}

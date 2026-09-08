@@ -30,6 +30,7 @@ public struct OriginalLoadedCatalog {
                 stageBacking: [OriginalStateRecord],
                 fileSource: (String) throws -> [UInt8], bitmapSource: (String) throws -> OriginalBitmapInput,
                 frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
+                onNewSound: (String, OriginalSoundRegistration) throws -> Void = { _, _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
         guard fileName.unicodeScalars.allSatisfy({ $0.value <= 255 }), backgroundBacking.count == 101,
@@ -63,6 +64,7 @@ public struct OriginalLoadedCatalog {
                                                headerBacking: Array(repeating: fill, count: 0x7a4), tailBacking: Array(repeating: fill, count: 0x3c),
                                                bitmapFill: fill, frameBacking: Array(repeating: fill, count: 400*0x178),
                                                frameAllocation: frameAllocation, bitmapSource: bitmapSource,
+                                               onNewSound: { try onNewSound(path, $0) },
                                                onFrame: { _ in occurrences += 1 }))
                 resources = loader.resources
             case .background:

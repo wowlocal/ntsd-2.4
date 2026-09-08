@@ -61,25 +61,31 @@ def platform(raw,index,**changes):
 
 
 class WaveLoader(Constructors):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, uc=None):
+        # An attached loader shares the parent's real CPU/stack and uses a
+        # disjoint import range. The parent enables instruction/mask hooks only
+        # during a wave call, and routes its existing allocator hooks here.
+        if uc is None:super().__init__()
+        else:self.uc=uc
+        self.stub_base=STOP+(0x100 if uc is None else 0x800)
         self.blobs={};self.running=False;self.prefix=False;self.events=[];self.regions={}
-        self.uc.mem_map(0x24000000,0x10000)
+        if uc is None:self.uc.mem_map(0x24000000,0x10000)
         for address in (ALLOC,FIRST,SECOND):self.uc.mem_map(address & ~4095,0x200000)
         self.uc.mem_write(DEVICE,struct.pack('<I',VTABLE))
         self.imports={}
         for index,(iat,name) in enumerate([(0x447254,'open'),(0x447258,'descend'),(0x44725C,'close'),
                 (0x44723C,'read'),(0x447238,'ascend'),(0x4471C8,'message')]):
-            address=STOP+0x100+index*16;self.put(iat,address);self.imports[address]=name
+            address=self.stub_base+index*16;self.put(iat,address);self.imports[address]=name
         for offset,name in [(0xC,'create'),(0x2C,'lock'),(0x50,'restore'),(0x4C,'unlock')]:
-            address=STOP+0x200+offset;self.put(VTABLE+offset,address);self.imports[address]=name
+            address=self.stub_base+0x100+offset;self.put(VTABLE+offset,address);self.imports[address]=name
         self.put(SURFACE,SURFACE_VTABLE)
         for offset,name in [(0x14,'blit'),(0x2C,'flip')]:
-            address=STOP+0x300+offset;self.put(SURFACE_VTABLE+offset,address);self.imports[address]=name
-        self.uc.hook_add(UC_HOOK_CODE,self.imported,begin=STOP+0x100,end=STOP+0x3FF)
-        for address in (0x4450AC,0x4450A6,0x4450C2):self.uc.hook_add(UC_HOOK_CODE,self.crt,begin=address,end=address)
-        self.uc.hook_add(UC_HOOK_MEM_WRITE,self.stack_written,begin=STACK,end=STACK+0xFFFF)
-        self.uc.hook_add(UC_HOOK_CODE,self.allowed)
+            address=self.stub_base+0x200+offset;self.put(SURFACE_VTABLE+offset,address);self.imports[address]=name
+        self.uc.hook_add(UC_HOOK_CODE,self.imported,begin=self.stub_base,end=self.stub_base+0x2FF)
+        if uc is None:
+            for address in (0x4450AC,0x4450A6,0x4450C2):self.uc.hook_add(UC_HOOK_CODE,self.crt,begin=address,end=address)
+            self.uc.hook_add(UC_HOOK_MEM_WRITE,self.stack_written,begin=STACK,end=STACK+0xFFFF)
+            self.uc.hook_add(UC_HOOK_CODE,self.allowed)
 
     def put(self,address,value):self.uc.mem_write(address,struct.pack('<I',value & 0xFFFFFFFF))
     def ret(self,value=0,pop=0):
@@ -136,7 +142,7 @@ class WaveLoader(Constructors):
         if address==0x40187A and self.p['createResult']!=0:
             uc.emu_stop();return
         assert (0x4014E0<=address<=0x40195E or 0x4450B2<=address<=0x4450BA
-                or address in (0x4450AC,0x4450A6,0x4450C2) or STOP+0x100<=address<=STOP+0x3FF),hex(address)
+                or address in (0x4450AC,0x4450A6,0x4450C2) or self.stub_base<=address<=self.stub_base+0x2FF),hex(address)
     def stack_written(self,uc,access,address,size,value,data):
         if self.running:self.stack_mask[address-STACK:address-STACK+size]=b'\1'*size
     def host_write(self,address,raw):

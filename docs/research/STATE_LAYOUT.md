@@ -305,6 +305,15 @@ sizeof(entry) или нормализации чисел в указатели. 
 | DSBUFFERDESC,36 bytes | size36, flagsE0, payload size, stack format pointer; остальные поля0. Только проверенный целый pointer+16 нормализуется; прочие байты сохраняются |
 | Temporary PCM allocation | Размер data.cksize; при коротком/неуспешном чтении остаётся live с фактической маской записей. Успех освобождает после Unlock; create failure освобождает и достигает отдельной неподдержанной границы продолжения |
 
+Дополнение [enabled catalog sounds](CATALOG_SOUNDS.md), D полного каталога:
+
+| Globals / поле | Тип и действие |
+| --- | --- |
+| `458438`, `455638+20*i` | Count и raw path cache. Новая запись загружает WAV и выставляет громкость до копирования полного пути/NUL и увеличения count. Перекрытия дают400 записей для365 разных WAV |
+| `452948+4*i` | UInt32 sound-buffer tokens. Оба caller передают адрес slot в4014e0, затем запрашивают SetVolume(-10000); игнорируют его HRESULT и не освобождают buffer |
+| Frame+`174` | Int32 index; перед lookup=-1, затем match/new index назначается до device calls. Source pointer+170 записан раньше |
+| Object+`a4/a8/ac` | Int32 weapon sound indices; cache hit заменяет index, no-hit при старом!=-1 сохраняет его и не создаёт запись; path pointer уже заменён caller |
+
 Дополнение [первых UI bitmap](INITIAL_INTERFACE.md), D после реального пула:
 
 | Globals / запись | Тип и действие |

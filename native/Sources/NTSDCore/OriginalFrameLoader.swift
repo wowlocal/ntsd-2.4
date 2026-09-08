@@ -125,7 +125,8 @@ public struct OriginalFrameLoader {
     /// Shared parser used by both isolated sections and the continuous Object
     /// stream. The caller has consumed <frame>; no artificial section EOF here.
     mutating func consumeFrameBody(_ input: inout OriginalFrameScanner,
-                                  allocate: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil }) throws -> OriginalFrameRecord {
+                                  allocate: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
+                                  onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in }) throws -> OriginalFrameRecord {
         guard let index = try input.integer(), (0..<400).contains(index) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Expected a frame index in 0...399")
         }
@@ -188,7 +189,8 @@ public struct OriginalFrameLoader {
                 let pointer = try heap.allocate(bytes.count, kind: .sound, address: allocate(.sound, bytes.count))
                 try record.write(pointer, at: 0x170)
                 for (offset, byte) in bytes.enumerated() { try heap.write(byte, at: pointer, offset: offset) }
-                try record.write(try updatedSounds.register(sound), at: 0x174)
+                try record.write(Int32(-1), at: 0x174) // 41097b, before lookup/loading
+                _ = try updatedSounds.register(sound, assignIndex: { try record.write($0, at: 0x174) }, onNewSound: onNewSound)
             }
             // Original %s loop ignores unknown tokens; it does not strip comments.
         }
@@ -216,6 +218,12 @@ public struct OriginalFrameLoader {
     }
 }
 
+/// A newly assigned index, before WAV loading and before the cache is committed.
+public struct OriginalSoundRegistration: Sendable {
+    public enum Kind: String, Codable, Sendable { case frame, weapon }
+    public let kind: Kind, index: Int, path: String, cacheBefore: [UInt8]
+}
+
 /// The original cache advances by 20 bytes but copies the complete path. A
 /// 21-byte path overlaps the following entry; a later write can change lookup.
 /// Preserve those bytes within a bounded Swift array, without unsafe writes.
@@ -223,7 +231,9 @@ public struct OriginalFrameLoader {
 struct OriginalSoundRegistry {
     private(set) var bytes = [UInt8](repeating: 0, count: 0x2e00)
     private(set) var count = 0
-    mutating func register(_ path: String, previous: Int32 = -1) throws -> Int32 {
+    mutating func register(_ path: String, previous: Int32 = -1, kind: OriginalSoundRegistration.Kind = .frame,
+                           assignIndex: (Int32) throws -> Void = { _ in },
+                           onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in }) throws -> Int32 {
         let incoming = path.unicodeScalars.map { UInt8($0.value) } + [0]
         guard incoming.count <= 256 else {
             throw OriginalLoaderError.outsideVerifiedDomain("Original sound scratch buffer")
@@ -231,6 +241,7 @@ struct OriginalSoundRegistry {
         for index in 0..<count {
             let start = index*20
             if start+incoming.count <= bytes.count && bytes[start..<start+incoming.count].elementsEqual(incoming) {
+                try assignIndex(Int32(index))
                 return Int32(index)
             }
         }
@@ -241,6 +252,10 @@ struct OriginalSoundRegistry {
         guard start+incoming.count <= bytes.count else {
             throw OriginalLoaderError.outsideVerifiedDomain("Sound cache would overwrite the original count/global storage")
         }
+        // Both source callers load/SetVolume BEFORE copying the cache path and
+        // incrementing458438. Cache hits and retained weapon indices skip this.
+        try assignIndex(Int32(count))
+        try onNewSound(.init(kind: kind, index: count, path: path, cacheBefore: bytes))
         bytes.replaceSubrange(start..<start+incoming.count, with: incoming)
         defer { count += 1 }
         return Int32(count)

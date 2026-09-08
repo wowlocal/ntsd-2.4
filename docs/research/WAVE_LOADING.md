@@ -198,8 +198,8 @@ swift test --package-path native --filter '(OriginalWaveLoaderTests|OriginalMenu
 Следующий отдельный этап уже восстановил [10 интерфейсных bitmap](INITIAL_INTERFACE.md)
 после реального пула: первый malloc в41c2f5, последний constructor в41c55e,
 сброс флага в41c577. Далее соединить prefix/каталог/пул/bitmap в исходном
-загрузочном пути. Перед этим связать звуки Object registry при включённом
-устройстве с общим WAV loader: текущий полный catalog corpus использует
-disabled audio boundary.
+загрузочном пути. [Enabled catalog sounds](CATALOG_SOUNDS.md) теперь связывает
+Frame/weapon registry с этим же WAV loader в полном каталоге; старый disabled
+catalog corpus не изменён. Непрерывная первая загрузка ещё открыта.
 Фазы ввода/меню41bc90, реальный микшер/устройства, Windows execution и проверка
 готового приложения на чистой macOS остаются открытыми.
