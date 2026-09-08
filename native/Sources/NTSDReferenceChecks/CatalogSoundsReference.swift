@@ -18,12 +18,14 @@ public enum CatalogSoundsReference {
     }
     private struct Corpus: Decodable { let exeSHA256: String, calls: [Call], sources: [Source], blobs: [String: Blob], finalBuffers: String }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Catalog sounds reference: \(text)") }
-    public static func compare(catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(catalog: Data, sounds: Data, initialSoundBytes: [UInt8]? = nil,
+                               onProgress: (OriginalLoadingProgress.Request) throws -> Void = { _ in },
+                               onLoaded: (OriginalLoadedCatalog, OriginalRegisteredSoundLoading) throws -> Void = { _, _ in }) throws -> Result {
         let corpus = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(sounds))
         guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               !corpus.calls.isEmpty, Set(corpus.sources.map(\.path)).count == corpus.sources.count else { throw error("Source identity") }
         var blobs: [String: [UInt8]] = [:], calls = 0, bytes = 0, events = 0, restores = 0, weapons = 0
-        var loader = OriginalRegisteredSoundLoading()
+        var loader = OriginalRegisteredSoundLoading(), loadedCatalog: OriginalLoadedCatalog?
         func blob(_ key: String) throws -> [UInt8] {
             if let cached = blobs[key] { return cached }
             guard let b = corpus.blobs[key], (0...2_000_000).contains(b.count) else { throw error("Blob extent") }
@@ -45,7 +47,7 @@ public enum CatalogSoundsReference {
             }
             bytes += raw.count
         }
-        let compared = try LoadedCatalogReference.compare(catalog, onNewSound: { objectPath, request in
+        let compared = try LoadedCatalogReference.compare(catalog, initialSoundBytes: initialSoundBytes, onProgress: onProgress, onNewSound: { objectPath, request in
             guard calls < corpus.calls.count else { throw error("Extra native sound registration") }
             let item = corpus.calls[calls]
             guard item.index == calls, request.index == item.index, request.kind == item.kind,
@@ -84,6 +86,7 @@ public enum CatalogSoundsReference {
             if item.kind == .weapon { weapons += 1 }
             calls += 1
         }, onLoaded: { loaded in
+            loadedCatalog = loaded
             guard loaded.soundCount == calls, calls == corpus.calls.count, loader.buffers.count == calls else { throw error("Final registry/buffer inventory") }
         })
         let final = try blob(corpus.finalBuffers)
@@ -93,6 +96,8 @@ public enum CatalogSoundsReference {
             guard loader.buffers[index]?.output == expected else { throw error("Final buffer slot") }
         }
         bytes += final.count
+        guard let loadedCatalog else { throw error("Missing native catalog") }
+        try onLoaded(loadedCatalog, loader)
         return .init(catalog: compared, calls: calls, sources: sources.count, weaponCalls: weapons, frameCalls: calls-weapons,
                      bytes: bytes, events: events, restores: restores)
     }

@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 5, CommandLine.arguments[1] == "--initial-loading" {
+        let r = try InitialLoadingReference.compare(loading: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])), catalog: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3])), sounds: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[4])))
+        print("Initial loading matches original: \(r.commonLoads) common +\(r.catalog.calls) registry WAVs, \(r.catalog.catalog.objects) Objects, \(r.poolConstructors) Actor /\(r.interfaceConstructors) UI constructors, \(r.bytes) loading +\(r.catalog.bytes) audio +\(r.catalog.catalog.bytes) catalog bytes/masks, \(r.records) loading records, \(r.events) loading events, checksum \(r.catalog.catalog.checksum)")
+        exit(0)
+    }
     if CommandLine.arguments.count == 4, CommandLine.arguments[1] == "--catalog-sounds" {
         let r = try CatalogSoundsReference.compare(catalog: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])), sounds: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3])))
         print("Catalog sounds match original: \(r.catalog.objects) Objects, \(r.catalog.frames) Frames, \(r.calls) real WAV loads (\(r.weaponCalls) weapon / \(r.frameCalls) frame), \(r.sources) source files, \(r.bytes) audio bytes/masks + \(r.catalog.bytes) catalog bytes/masks, \(r.events) audio events, \(r.restores) restores, checksum \(r.catalog.checksum)")

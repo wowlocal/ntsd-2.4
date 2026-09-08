@@ -1,0 +1,61 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Continuous real41bc90..41c581: non-playback prologue,18 WAVs,full catalog,\n400-slot pool and10 UI constructors. No CPU/stack or loaded-state replacement\nbetween stages. OS/CRT/device/allocator inputs remain explicit boundaries.\n",
+  "nativeComparison": "Initial loading matches original: 18 common +400 registry WAVs, 137 Objects, 408 Actor /10 UI constructors, 3106120 loading +66210142 audio +112063739 catalog bytes/masks, 929 loading records, 13027 loading events, checksum 31475378",
+  "initial-loading": {
+    "corpus": "initial-loading.json",
+    "sha256": "4e3f31bc130b29eaaaab56db6c913981193e1d39289553925b82fc1655265b9b",
+    "bytes": 2177996,
+    "fixture": "original-initial-loading.json",
+    "fixtureSHA256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e",
+    "fixtureBytes": 1051199
+  },
+  "initial-loading-catalog": {
+    "corpus": "initial-loading-catalog.json",
+    "sha256": "d4ca1ef618fc80acaa10312cfa0844ce534775b8b39af0251b1f914e5942bac1",
+    "bytes": 95291091,
+    "fixture": "original-initial-loading-catalog.json",
+    "fixtureSHA256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb",
+    "fixtureBytes": 4794711
+  },
+  "initial-loading-sounds": {
+    "corpus": "initial-loading-sounds.json",
+    "sha256": "846b2821faab82d53a890f142b217f98574f1b4f8a19b2ce259dddcc0c6fdcb6",
+    "bytes": 47381600,
+    "fixture": "original-initial-loading-sounds.json",
+    "fixtureSHA256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb",
+    "fixtureBytes": 46495428
+  },
+  "verification": {
+    "selectedTests": 10,
+    "failures": 0,
+    "seconds": 314.981,
+    "newInitialLoadingTestsSeconds": 158.857,
+    "oldCatalogSoundsSeconds": 98.056,
+    "oldObjectTestsSeconds": 56.3,
+    "oldBootstrapTestsSeconds": 1.768,
+    "releaseAppBuildSeconds": 2.47,
+    "historicalPython": "Interleaved SoundCatalog exactly reproduced, including every blob; no old fixture changes"
+  },
+  "inventory": {
+    "commonWAV": 18,
+    "registeredWAV": 400,
+    "objects": 137,
+    "frames": 15388,
+    "backgrounds": 17,
+    "stages": 25,
+    "stagePhases": 138,
+    "actorConstructors": 408,
+    "interfaceConstructors": 10,
+    "loadingRecords": 929,
+    "loadingBytesMasks": 3106120,
+    "audioBytesMasks": 66210142,
+    "catalogBytesMasks": 112063739,
+    "loadingEvents": 13027,
+    "registryAudioEvents": 6426,
+    "progressCalls": 4231,
+    "timeGetTimeCalls": 8464,
+    "sleep5Calls": 4231,
+    "checksum": 31475378
+  }
+}

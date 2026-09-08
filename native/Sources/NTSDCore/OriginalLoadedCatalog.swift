@@ -25,12 +25,13 @@ public struct OriginalLoadedCatalog {
     /// Raw Frame addresses may be supplied by a reference allocator; the native
     /// default uses a logical 32-bit arena, never host pointers.
     public init(source: [UInt8], fileName: String, translation: OriginalFileTranslation,
-                initialChecksum: UInt32 = 0, fill: UInt8 = 0xa5,
+                initialChecksum: UInt32 = 0, initialSoundBytes: [UInt8]? = nil, fill: UInt8 = 0xa5,
                 parentBacking: [Int: OriginalStateRecord], backgroundBacking: [OriginalStateRecord],
                 stageBacking: [OriginalStateRecord],
                 fileSource: (String) throws -> [UInt8], bitmapSource: (String) throws -> OriginalBitmapInput,
                 frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
                 onNewSound: (String, OriginalSoundRegistration) throws -> Void = { _, _ in },
+                onProgress: (OriginalLoadingProgress.Request) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
         guard fileName.unicodeScalars.allSatisfy({ $0.value <= 255 }), backgroundBacking.count == 101,
@@ -40,10 +41,11 @@ public struct OriginalLoadedCatalog {
         }
         var resources = OriginalLoaderResources()
         resources.checksum = initialChecksum
+        if let initialSoundBytes { resources.sounds = try OriginalSoundRegistry(bytes: initialSoundBytes) }
         var objects: [OriginalLoadedObject] = [], backgrounds = backgroundBacking
         var stageLoader = try OriginalStageLoader(backing: stageBacking)
         let registry = try OriginalCatalogRegistry(source: source, fileName: fileName.unicodeScalars.map { UInt8($0.value) },
-                                                   initialChecksum: initialChecksum, backing: parentBacking) { request, checksum in
+                                                   initialChecksum: initialChecksum, backing: parentBacking, beforeRead: { try onProgress(.catalogOpen) }) { request, checksum in
             resources.checksum = checksum
             var decoded: String?, occurrences = 0
             switch request.kind {
@@ -54,7 +56,7 @@ public struct OriginalLoadedCatalog {
                 }
                 resources.bitmaps.append(try OriginalLoadedBitmap.construct(input, optional: false, fill: fill))
             case .progress:
-                break // frozen-clock loading progress has no catalog-data effect
+                try onProgress(.update) // Caller owns timer/global/device progress state.
             case .object:
                 let path = request.path!
                 decoded = try OriginalDATDecoder.decode(fileSource(path), fileName: path, translation: translation)
@@ -64,6 +66,7 @@ public struct OriginalLoadedCatalog {
                                                headerBacking: Array(repeating: fill, count: 0x7a4), tailBacking: Array(repeating: fill, count: 0x3c),
                                                bitmapFill: fill, frameBacking: Array(repeating: fill, count: 400*0x178),
                                                frameAllocation: frameAllocation, bitmapSource: bitmapSource,
+                                               onProgress: { try onProgress(.update) },
                                                onNewSound: { try onNewSound(path, $0) },
                                                onFrame: { _ in occurrences += 1 }))
                 resources = loader.resources

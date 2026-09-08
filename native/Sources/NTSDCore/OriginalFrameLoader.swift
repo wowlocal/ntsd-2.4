@@ -231,6 +231,11 @@ public struct OriginalSoundRegistration: Sendable {
 struct OriginalSoundRegistry {
     private(set) var bytes = [UInt8](repeating: 0, count: 0x2e00)
     private(set) var count = 0
+    init() {}
+    init(bytes: [UInt8]) throws {
+        guard bytes.count == 0x2e00 else { throw OriginalStateError.invalidStorage("Sound registry global backing") }
+        self.bytes = bytes
+    }
     mutating func register(_ path: String, previous: Int32 = -1, kind: OriginalSoundRegistration.Kind = .frame,
                            assignIndex: (Int32) throws -> Void = { _ in },
                            onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in }) throws -> Int32 {

@@ -357,6 +357,35 @@ by caller410a5a/40be2a even after return0. Native rejects that invalid continuat
 full caller fault traces remain open. Next join18 common sounds, this enabled
 catalog,400-slot bootstrap and10 UI bitmaps in the real initial41bc90, then
 input/pause/menu429730 andR01.2. Practice and full Windows/macOS checks stay open.
+The [continuous first loading](docs/research/INITIAL_LOADING.md) now executes
+real41bc90..41c581 without replacing CPU/stack/state between common WAVs,
+enabled full catalog,400 Actors and10 UI constructors. Read it before extending
+first loading or the next input/menu path. Two full-source passes (a5 and ramp/
+reversed Actor allocation with phase0/pause/present3) match362760002 bytes/masks,
+36 common/800 registry WAVs,816 Actor/20 UI constructors. Actual41c577 clears
+44d05c; local pause is restored into EDI. World selector2/device/clock remain
+supplied boundaries, not whole startup. Sound cache455638..458438 includes
+other globals457578/458348: preserve its existing bytes. OriginalLoadedCatalog
+now accepts initialSoundBytes; do not restore a zero-only cache in first loading.
+OriginalWorldBootstrap can continue an already constructed World. Its first
+word90 comes from actual native catalog.objects[0], never a synthetic header.
+Loading progress occurs before EACH BMP field read, plus three times per sheet;
+40fd23 returns to40f1d8. Shared Object callbacks preserve these positions. The
+parent discards one timeGetTime before fopen. Each source pass has4231 progress
+calls,8464 timer reads and4231 Sleep5 with clock100. Only elapsed<=33/no-draw
+helper is native; animated loading is explicitly unsupported. Non-playback
+prologue alone is covered; full41bc90 ret4/input/pause/menu/AI is still open.
+Native owns common/registered buffers, catalog, pool and UI; full state/PCM/
+mask/ABI comparisons rebuild children and do not use expected after-state inputs.
+Historical interleaved catalog was re-executed exactly, including all blobs,
+after extracting capture_catalog for the actual parent. Old fixtures unchanged.
+Next continue41c581/419a60 and the path to429730 from this loaded state, recover
+animated4242e0 and remaining device/menu provenance. Practice/W/clean macOS
+are still open. Do not manually change44d05c or replace loaded Object headers.
+The continuous-loading stage passed10 targeted XCTest in314.981s: new full
+passes158.857s, old catalog audio98.056s, Object/raw Frame56.300s, bootstrap
+1.768s. Both packed release comparisons passed before accepting new fixtures;
+old fixtures unchanged. Release NTSDNative passed in2.47s.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.

@@ -36,6 +36,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
     /// pointers -> bitmap request index. Ordinal zero is a valid bound reference.
     public init(source: [UInt8], fileName: [UInt8], initialChecksum: UInt32,
                 backing: [Int: OriginalStateRecord],
+                beforeRead: () throws -> Void = {},
                 onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
         guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.bytes.count == $0.value }) else {
             throw OriginalStateError.invalidStorage("Catalog parent region sizes differ")
@@ -74,6 +75,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         try write(Int32(0), region: 0x4d82380, at: 0)
         try write(Int32(0), region: 0x4d82380, at: 4)
 
+        try beforeRead() //412549: timeGetTime result is discarded before fopen
         var token: [UInt8]?, objectCount = 0, backgroundCount = 0
         while !scanner.eof {
             // At outer EOF fscanf leaves the existing token unchanged. Inner

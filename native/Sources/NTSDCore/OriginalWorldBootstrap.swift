@@ -11,11 +11,17 @@ public struct OriginalWorldBootstrap: Equatable, Sendable {
     /// Actor +0x368 -> object entry 0. All allocations are present/non-null.
     /// No other dword, including opaque address-looking data, is normalized.
     public init(worldBacking: [UInt8], actorBacking: [[UInt8]], selector: Int32) throws {
-        guard actorBacking.count == Self.slotCount else {
-            throw OriginalStateError.invalidStorage("Bootstrap requires all 400 Actor backing allocations")
-        }
-        world = try .worldPrefix(over: worldBacking)
+        var world = try OriginalStateRecord.worldPrefix(over: worldBacking)
         try world.write(selector, at: 0)
+        try self.init(world: world, actorBacking: actorBacking)
+    }
+
+    /// Continue an already constructed World, retaining all earlier bytes/masks.
+    public init(world initialWorld: OriginalStateRecord, actorBacking: [[UInt8]]) throws {
+        guard actorBacking.count == Self.slotCount, initialWorld.bytes.count == OriginalStateRecord.worldPrefixSize else {
+            throw OriginalStateError.invalidStorage("Bootstrap requires World and400 Actor backing allocations")
+        }
+        self.world = initialWorld
         try world.write(UInt32(0), at: 0x7d4) // bound catalog, not null
         actors = []
         actors.reserveCapacity(Self.slotCount)

@@ -77,13 +77,14 @@ public struct OriginalObjectLoader {
                               frameBacking: [UInt8]? = nil,
                               frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
                               bitmapSource: (String) throws -> OriginalBitmapInput,
+                              onProgress: () throws -> Void = {},
                               onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
                               onFrame: (OriginalFrameRecord) -> Void = { _ in },
                               onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in }) throws -> OriginalLoadedObject {
         var candidate = self
         let result = try candidate.consume(decoded: decoded, id: id, type: type, headerBacking: headerBacking,
                                            tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation,
-                                           bitmapSource: bitmapSource, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
+                                           bitmapSource: bitmapSource, onProgress: onProgress, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
         self = candidate
         return result
     }
@@ -91,6 +92,7 @@ public struct OriginalObjectLoader {
     private mutating func consume(decoded: String, id: Int32, type: Int32, headerBacking: [UInt8], tailBacking: [UInt8],
                                   bitmapFill: UInt8, frameBacking: [UInt8]?, frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32?,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  onProgress: () throws -> Void,
                                   onNewSound: (OriginalSoundRegistration) throws -> Void,
                                   onFrame: (OriginalFrameRecord) -> Void, onFrameStorage: (Int, OriginalStateRecord) -> Void) throws -> OriginalLoadedObject {
         guard headerBacking.count == 0x7a4, tailBacking.count == 0x3c else { throw Self.error("Object storage size") }
@@ -118,12 +120,13 @@ public struct OriginalObjectLoader {
                 checksum &+= UInt32(bitPattern: Int32(Int8(bitPattern: UInt8(scalar.value)))) &* UInt32(index)
             }
             if token == "<bmp_begin>" {
+                try onProgress() //40f1d8, before each BMP field read
                 token = try input.token()
                 while token != "<bmp_end>" {
                     let tag = token!
                     if tag.hasPrefix("file") {
                         var count = try header.integer(at: 0x498, as: Int32.self)
-                        if count > 0 { try finishSheet(Int(count), header: &header, bitmapFill: bitmapFill, source: bitmapSource) }
+                        if count > 0 { try finishSheet(Int(count), header: &header, bitmapFill: bitmapFill, source: bitmapSource, onProgress: onProgress) }
                         count += 1
                         guard (1...10).contains(count) else { throw Self.error("Sprite sheet arrays outside verified storage") }
                         try header.write(count, at: 0x498)
@@ -151,11 +154,12 @@ public struct OriginalObjectLoader {
                         _ = try frames.sounds.register(path, previous: previous, kind: .weapon,
                             assignIndex: { try header.write($0, at: indexOffset) }, onNewSound: onNewSound)
                     }
+                    try onProgress() //40fd23 returns to40f1d8
                     token = try input.token()
                 }
                 let index = Int(try header.integer(at: 0x498, as: Int32.self))
                 guard index > 0 else { throw Self.error("Header without initialized sprite sheet") }
-                try finishSheet(index, header: &header, bitmapFill: bitmapFill, source: bitmapSource)
+                try finishSheet(index, header: &header, bitmapFill: bitmapFill, source: bitmapSource, onProgress: onProgress)
             }
             if token == "<weapon_strength_list>" {
                 var index: Int32 = 0
@@ -198,7 +202,7 @@ public struct OriginalObjectLoader {
     }
 
     private mutating func finishSheet(_ slot: Int, header: inout OriginalStateRecord, bitmapFill: UInt8,
-                                      source: (String) throws -> OriginalBitmapInput) throws {
+                                      source: (String) throws -> OriginalBitmapInput, onProgress: () throws -> Void) throws {
         var first: Int32 = 0
         for previous in 1..<slot {
             first &+= (try header.integer(at: 0x6a0 + previous*4, as: Int32.self)) &* (try header.integer(at: 0x6c8 + previous*4, as: Int32.self))
@@ -207,9 +211,12 @@ public struct OriginalObjectLoader {
         let path = try Self.readString(header, at: 0x474 + slot*40)
         let normal = try appendBitmap(path, optional: false, fill: bitmapFill, source: source)
         try header.write(UInt32(normal + 1), at: 0x750 + slot*4)
+        try onProgress() //40f314/40fdde
         guard path.unicodeScalars.count >= 4 else { throw Self.error("Bitmap filename shorter than mirror suffix replacement") }
         let mirrorPath = String(path.dropLast(4)) + "_mirror.bmp"
         var mirror = try appendBitmap(mirrorPath, optional: true, fill: bitmapFill, source: source)
+        try header.write(UInt32(mirror + 1), at: 0x778 + slot*4)
+        try onProgress() //40f3d5/40fe9b, before testing the surface
         if !bitmaps[mirror].input.present {
             // Original leaks the failed wrapper, allocates a fresh normal image,
             // then asks DirectDraw to mirror it. Pixels remain a device boundary.
@@ -217,6 +224,7 @@ public struct OriginalObjectLoader {
             bitmaps[mirror].mirroredFrom = normal
         }
         try header.write(UInt32(mirror + 1), at: 0x778 + slot*4)
+        try onProgress() //40f500/40ffc3, also with an existing mirror
         let w = try header.integer(at: 0x650 + slot*4, as: Int32.self)
         let h = try header.integer(at: 0x678 + slot*4, as: Int32.self)
         let row = try header.integer(at: 0x6a0 + slot*4, as: Int32.self)

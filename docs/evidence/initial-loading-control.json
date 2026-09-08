@@ -1,0 +1,61 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Continuous real41bc90..41c581: non-playback prologue,18 WAVs,full catalog,\n400-slot pool and10 UI constructors. No CPU/stack or loaded-state replacement\nbetween stages. OS/CRT/device/allocator inputs remain explicit boundaries.\n",
+  "nativeComparison": "Initial loading matches original: 18 common +400 registry WAVs, 137 Objects, 408 Actor /10 UI constructors, 3106120 loading +66210142 audio +112063739 catalog bytes/masks, 929 loading records, 13027 loading events, checksum 31475378",
+  "initial-loading": {
+    "corpus": "initial-loading-control.json",
+    "sha256": "c80cecb648ee14e7d86b65f322343d3c701a7c299de63bf3163b43ea149273a3",
+    "bytes": 2180309,
+    "fixture": "original-initial-loading-control.json",
+    "fixtureSHA256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a",
+    "fixtureBytes": 1052727
+  },
+  "initial-loading-catalog": {
+    "corpus": "initial-loading-catalog-control.json",
+    "sha256": "685f09b8ed03f58c4a14c0ce865cc2bf8a6d6cc184a18432150b163b0203d907",
+    "bytes": 95291147,
+    "fixture": "original-initial-loading-catalog-control.json",
+    "fixtureSHA256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455",
+    "fixtureBytes": 4794379
+  },
+  "initial-loading-sounds": {
+    "corpus": "initial-loading-sounds-control.json",
+    "sha256": "17004f02c972f9fbc2737ba7e226a65b4d87c0723e66a095f19ffd452965ac4e",
+    "bytes": 47387328,
+    "fixture": "original-initial-loading-sounds-control.json",
+    "fixtureSHA256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265",
+    "fixtureBytes": 46510372
+  },
+  "verification": {
+    "selectedTests": 10,
+    "failures": 0,
+    "seconds": 314.981,
+    "newInitialLoadingTestsSeconds": 158.857,
+    "oldCatalogSoundsSeconds": 98.056,
+    "oldObjectTestsSeconds": 56.3,
+    "oldBootstrapTestsSeconds": 1.768,
+    "releaseAppBuildSeconds": 2.47,
+    "historicalPython": "Interleaved SoundCatalog exactly reproduced, including every blob; no old fixture changes"
+  },
+  "inventory": {
+    "commonWAV": 18,
+    "registeredWAV": 400,
+    "objects": 137,
+    "frames": 15388,
+    "backgrounds": 17,
+    "stages": 25,
+    "stagePhases": 138,
+    "actorConstructors": 408,
+    "interfaceConstructors": 10,
+    "loadingRecords": 929,
+    "loadingBytesMasks": 3106120,
+    "audioBytesMasks": 66210142,
+    "catalogBytesMasks": 112063739,
+    "loadingEvents": 13027,
+    "registryAudioEvents": 6426,
+    "progressCalls": 4231,
+    "timeGetTimeCalls": 8464,
+    "sleep5Calls": 4231,
+    "checksum": 31475378
+  }
+}

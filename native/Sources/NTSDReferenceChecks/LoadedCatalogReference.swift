@@ -32,7 +32,8 @@ public enum LoadedCatalogReference {
         let assets: [OriginalBitmapInput], events: [Event], blobs: [String: Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Loaded catalog reference: \(text)") }
-    public static func compare(_ data: Data,
+    public static func compare(_ data: Data, initialSoundBytes: [UInt8]? = nil,
+                               onProgress: (OriginalLoadingProgress.Request) throws -> Void = { _ in },
                                onNewSound: (String, OriginalSoundRegistration) throws -> Void = { _, _ in },
                                onLoaded: (OriginalLoadedCatalog) throws -> Void = { _ in }) throws -> Result {
         struct Packed: Decodable { let deflate: String?, count: Int?, sha256: String? }
@@ -108,7 +109,7 @@ public enum LoadedCatalogReference {
         var childIndex = 0, fileIndex = 0, allocationIndex = 0, occurrences = 0
         var stageIDs: [Int] = [], phaseIDs: [[Int]] = []
         let catalog = try OriginalLoadedCatalog(source: blob(corpus.source), fileName: corpus.fileName, translation: corpus.translation,
-                                                initialChecksum: corpus.initialChecksum, fill: corpus.bitmapFill,
+                                                initialChecksum: corpus.initialChecksum, initialSoundBytes: initialSoundBytes, fill: corpus.bitmapFill,
                                                 parentBacking: parent, backgroundBacking: backgrounds, stageBacking: stageBacking,
                                                 fileSource: { path in
             guard fileIndex < corpus.children.count, corpus.children[fileIndex].path == path else { throw error("File request order: \(path)") }
@@ -123,7 +124,7 @@ public enum LoadedCatalogReference {
             guard frameKinds[expected.caller] == kind, expected.kind == "malloc", expected.size == size else { throw error("Frame allocation order/size") }
             allocationIndex += 1
             return expected.address
-        }, onNewSound: onNewSound, onChild: { observation in
+        }, onNewSound: onNewSound, onProgress: onProgress, onChild: { observation in
             guard childIndex < corpus.children.count else { throw error("Extra child") }
             let item = corpus.children[childIndex], request = observation.request
             guard request.kind == item.kind, request.index == item.index, request.id == item.id, request.objectType == item.objectType,

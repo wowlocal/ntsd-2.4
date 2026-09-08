@@ -199,6 +199,14 @@ class LoadedCatalog(Objects):
             self.uc.emu_start(pc, STOP, count=2_000_000)
             pc = self.uc.reg_read(UC_X86_REG_EIP)
         assert self.uc.reg_read(UC_X86_REG_ESP) == sp + 12 and self.uc.reg_read(UC_X86_REG_EAX) == CATALOG
+        return self.capture_catalog(name, initial_checksum)
+
+    def capture_catalog(self, name=b'data\\data.txt', initial_checksum=0):
+        """Snapshot after real4122f0 has returned, including from its real parent.
+
+        CPU entry/return checks belong to the invoking caller. This method does
+        not restore a catalog or run a substitute constructor.
+        """
         assert self.pending is None and all(h['closed'] for h in self.handles.values())
         assert not self.reads_before_writes, sorted(self.reads_before_writes)[:20]
         assert self.u32(CATALOG + 0x4D82380) == len(self.object_addresses)
