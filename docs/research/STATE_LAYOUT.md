@@ -28,6 +28,11 @@ World/Actor → пролог → подготовка → запись до `42d
 mouse WndProc, пять пунктов меню и сетевой init.
 [MENU_PRESENTATION.md](MENU_PRESENTATION.md) добавляет общий tail/ret4,
 следующий dispatcher World=1→2 и volume/overlay/present/shutdown до OS.
+[INITIAL_LOADING.md](INITIAL_LOADING.md) соединяет первый41bc90..41c581,
+а [LOCAL_INPUT.md](LOCAL_INPUT.md) продолжает его до41c5e5 и419a60/ret12:
+полные globals/World/400 Actor, current+cd..d3/previous+c6..cc, два вида
+упаковки команд и отдельный dispatch хвоста. Это ещё не OS polling, AI bodies
+или полный игровой такт. Старые корпуса сохраняют исходные границы.
 Остальные решения меню,
 промежуточные потребители CRT и полный такт остаются открытыми.
 

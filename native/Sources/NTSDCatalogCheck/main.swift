@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 6, CommandLine.arguments[1] == "--local-input" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try LocalInputReference.compare(input: values[0],loading: values[1],catalog: values[2],sounds: values[3])
+        print("Local input matches original: \(r.cases) cases, \(r.calls) real ret12, \(r.records) records, \(r.bytes) bytes/masks, \(r.characterAI) character AI /\(r.objectInput) object requests at explicit child boundaries; full first loading \(r.initial.commonLoads)+\(r.initial.catalog.calls) WAVs /\(r.initial.catalog.catalog.objects) Objects")
+        exit(0)
+    }
     if CommandLine.arguments.count == 5, CommandLine.arguments[1] == "--initial-loading" {
         let r = try InitialLoadingReference.compare(loading: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])), catalog: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3])), sounds: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[4])))
         print("Initial loading matches original: \(r.commonLoads) common +\(r.catalog.calls) registry WAVs, \(r.catalog.catalog.objects) Objects, \(r.poolConstructors) Actor /\(r.interfaceConstructors) UI constructors, \(r.bytes) loading +\(r.catalog.bytes) audio +\(r.catalog.catalog.bytes) catalog bytes/masks, \(r.records) loading records, \(r.events) loading events, checksum \(r.catalog.catalog.checksum)")

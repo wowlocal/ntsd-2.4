@@ -386,6 +386,39 @@ The continuous-loading stage passed10 targeted XCTest in314.981s: new full
 passes158.857s, old catalog audio98.056s, Object/raw Frame56.300s, bootstrap
 1.768s. Both packed release comparisons passed before accepting new fixtures;
 old fixtures unchanged. Release NTSDNative passed in2.47s.
+The [local input study](docs/research/LOCAL_INPUT.md) now continues the real
+first loading to41c5e5 and executes419a60 through ret12. Read it before extending
+input/network/AI. Both old full-loading raw transports were reproduced byte for
+byte before continuing in the same CPU/stack; native rebuilds them through an
+onLoaded callback. New606 cases/601 returns compare485214 records/567956264
+bytes/masks, then retain the earlier full-loading comparisons. All128 keyboard
+and128 joystick combinations per pass, phase/status/network/byte-value controls,
+paused caller and all137 source Object bindings are covered. Old fixtures remain
+unchanged. Twenty01 bytes plus00 are copied to44d040 even while paused. Positive
+status copies Actor+cd..d3 to+c6..cc in BOTH phases, ignoring activity0..7; only
+phase0 clears current/read/pack. Config=44fb20+80*status only for1..4. Keyboard
+requires exact100; joystick any nonzero, directions0/1/3/2 and mapped buttons.
+Negative device selectors skip new reads. Recording450b80!=0 ORs local commands;
+network requires SIGNED byte44f1af>0 and ORs packet bytes. Preserve bit0 and old
+bits;419a60 does not clear output buffers. Phase/mode are function arguments.
+Tail10..399 runs in both phases and during playback; any nonzero activity,
+type0 ->4094b0(slot,mode), other type only hit_Fa>0 ->406ba0(slot). Slots8/9
+are skipped.1512 AI/618 object requests match at EXPLICIT no-effect child
+boundaries; their bodies are not implemented/proved here. Default native throws
+without a child handler. The natural first continuation has no active tail.
+Read live state after every child, not a precomputed request list. Partial storage
+rolls back on unsupported continuation, while external callback effects remain
+caller-owned. OS polling/mapping/latency, remote/replay input, phase0 network/
+hotkeys, remaining pause/menu->429730 and AI bodies remain open. Practice/W/full
+match/clean macOS are still open. Next connect4198f0/4197a0 and the41c5e5..41d469
+network/control path using this same loaded state, then continue to429730.
+The local-input stage passed3 selected XCTest in249.612s: new two full-parent
+input corpora172.239s and old match preparation77.373s. Both fresh EXE corpora
+passed release comparison before fixture acceptance. The oracle now snapshots
+stimulus metadata by value; after fixing its JSON/aliasing checks both source
+runs were repeated completely. No expected after-state was repaired. All six
+inherited loading fixture hashes verified; old fixtures unchanged. Release
+NTSDNative passed in2.58s. No Practice/Windows input or whole-match claim.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.

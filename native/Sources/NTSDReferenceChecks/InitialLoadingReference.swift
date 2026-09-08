@@ -34,7 +34,8 @@ public enum InitialLoadingReference {
     private struct CatalogIdentity: Decodable { let catalogAddress: UInt32, objectAddresses: [UInt32], initialChecksum: UInt32 }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Initial loading reference: \(message)") }
 
-    public static func compare(loading: Data, catalog: Data, sounds: Data) throws -> Result {
+    public static func compare(loading: Data, catalog: Data, sounds: Data,
+                               onLoaded: (OriginalInitialLoading) throws -> Void = { _ in }) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(loading))
         let identity = try JSONDecoder().decode(CatalogIdentity.self, from: MatchPreparationReference.unpack(catalog))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -164,6 +165,7 @@ public enum InitialLoadingReference {
             try check(actual.storage,expected,"Interface bitmap\(i)")
         }
         guard let comparison else { throw error("Missing catalog comparison") }
+        try onLoaded(native)
         return .init(catalog: comparison,bytes: bytes,records: records,commonLoads: native.commonSounds.count,
                      interfaceConstructors: c.interface.calls.count,poolConstructors: c.staged.constructorSlots.count,
                      events: commonEvents.count+progressEvents.count+interfaceEvents.count)

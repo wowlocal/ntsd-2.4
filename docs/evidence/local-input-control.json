@@ -1,0 +1,47 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real41c581..41c5e5 directly after verified first loading, then real419a60\nthrough ret12 under keyboard/joystick/packing/dispatch stimuli. AI4094b0 and\nnon-character406ba0 are explicit no-effect call boundaries in dispatch probes;\nthe natural first-loading continuation has no such active tail slots.\n",
+  "corpus": "local-input-control.json",
+  "sha256": "b089507491756a03d94d78da71969017d6c6f9c4a7e0c12348176063f84b1c54",
+  "cases": 303,
+  "nativeComparison": "Local input matches original: 303 cases, 300 real ret12, 242406 records, 283742856 bytes/masks, 756 character AI /309 object requests at explicit child boundaries; full first loading 18+400 WAVs /137 Objects",
+  "fixture": "original-local-input-control.json",
+  "fixtureSHA256": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c",
+  "fixtureBytes": 2799176,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading-control.json",
+      "sha256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog-control.json",
+      "sha256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds-control.json",
+      "sha256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265"
+    }
+  },
+  "inventory": {
+    "cases": 303,
+    "realReturns": 300,
+    "records": 242406,
+    "bytesMasks": 283742856,
+    "characterAIRequests": 756,
+    "objectInputRequests": 309,
+    "keyboardCombinations": 128,
+    "joystickCombinations": 128,
+    "sourceObjectBindings": 137
+  },
+  "verification": {
+    "selectedTests": 3,
+    "failures": 0,
+    "seconds": 249.612,
+    "newInputTestsSeconds": 172.239,
+    "oldMatchPreparationSeconds": 77.373,
+    "releaseAppBuildSeconds": 2.58,
+    "parentRawReproduction": "All three raw initial-loading captures reproduced byte for byte in each VM before natural input continuation",
+    "oldFixtures": "All six inherited SHA256 verified, no changes",
+    "scope": "AI/object bodies and OS polling are explicit open boundaries; no full game or Windows input/latency proof"
+  }
+}

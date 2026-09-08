@@ -48,6 +48,11 @@ constructors в двух полных исходных проходах. Сов�
 phase/pause, существующий sound-cache backing,4231 progress calls на проход
 и настоящий44d05c=0 получены без подстановки загруженного состояния. Далее
 41c581/419a60→429730, animated loading и остальные platform/menu inputs.
+[Локальный ввод](research/LOCAL_INPUT.md) продолжает настоящую первую загрузку
+до41c5e5:606 случаев/601 ret12,567956264 bytes/masks. Проверены keyboard/
+joystick, phase/status/packing и запросы хвоста по всем137 исходным Object;
+тела AI/object children остаются явными границами. Далее phase0 network/hotkeys,
+remote/replay и пауза/меню к429730. OS polling и окно Practice ещё не соединены.
 R01.1 завершена как исследование обычного пути: [порядок стадий](research/TICK_PIPELINE.md),
 [пропуски переноса](research/TICK_GAPS.md). Это не завершение переноса R01.
 Далее: R03.1 → R01.2 (широкий эталон), R04.1 → R06.1. Условия перехода ниже.
@@ -133,6 +138,7 @@ Swift-кода, число кадров или количество совпав
 | Первые UI bitmap R02.1/R13/R15 | D против Swift:13 проходов,10 embedded DIBs,114 bitmap/5304 Actor constructors,5470 записей/13029720 байт/масок,519 событий | [INITIAL_INTERFACE.md](research/INITIAL_INTERFACE.md), [initial-interface.json](evidence/initial-interface.json); настоящий пул→10 bitmap→44d05c=0, allocation/device/key failures и whole storage/ABI; catalog[0]/frame/43ed10/COM supplied, не полный startup/пиксели/W |
 | Каталог с включённым звуком R02.1/R03.1/R14 | D против Swift:400 source +29 control WAV calls через реальные Frame/weapon callers;70367522 audio и194153692 catalog bytes/masks,6892 audio events | [CATALOG_SOUNDS.md](research/CATALOG_SOUNDS.md), [полный](evidence/catalog-sounds.json), [контроль](evidence/catalog-sounds-interleaved.json); same CPU/stack, cache/index/SetVolume/full PCM и весь каталог; MMIO/COM boundaries, не первый41bc90/микшер/W |
 | Непрерывная первая загрузка R02.1/R03.1/R14 | D против Swift:2 full-source41bc90..41c581,36+800 WAVs,816 Actor/20 UI constructors,362760002 bytes/masks | [INITIAL_LOADING.md](research/INITIAL_LOADING.md), [основной](evidence/initial-loading.json), [контроль](evidence/initial-loading-control.json); real prologue/phase/pause/44d05c=0, full catalog/pool/UI, frozen progress; не полный tick/W |
+| Локальный ввод R02.1/R04/R17 | D против Swift:606 cases/601 ret12,485214 records/567956264 bytes/masks,1512 AI/618 object requests | [LOCAL_INPUT.md](research/LOCAL_INPUT.md), [основной](evidence/local-input.json), [контроль](evidence/local-input-control.json); оба full-loading parent повторены; typed input/packing/dispatch, AI bodies и OS polling открыты |
 
 349 групп кадров остаются за границей **сохранённой изолированной** проверки загрузчика: 290 — переполнение
 числа, 54 — длинное имя, 5 — неожиданное завершение секции. Числа взяты из
@@ -228,7 +234,7 @@ flowchart TD
 | Очередь | Задача | Зависимость | Конкретный результат |
 | --- | --- | --- | --- |
 | 1 | **R01.1 — границы такта: исследование завершено** | Существующий эталон и дизассемблирование | [Стадии](research/TICK_PIPELINE.md), [пропуски](research/TICK_GAPS.md), воспроизводимая трасса; [карточка](research/R01.1.md) |
-| 2 | **R02.1 — состояние такта: в работе** | Карта R01.1 | [Карточка](research/R02.1.md), [словарь](research/STATE_LAYOUT.md), [CRT/table](research/RANDOM_INITIALIZATION.md), [меню/mouse](research/MAIN_MENU.md), [tail/World1→2](research/MENU_PRESENTATION.md), [WAV](research/WAVE_LOADING.md), [initial UI](research/INITIAL_INTERFACE.md), [enabled catalog sounds](research/CATALOG_SOUNDS.md), [пролог](research/MATCH_PRELUDE.md), [подготовка](research/MATCH_PREPARATION.md), [replay init](research/REPLAY_INITIALIZATION.md), [продолжение](research/MATCH_CONTINUATION.md): [первый41bc90](research/INITIAL_LOADING.md): далее41c581/input→429730, animated loading, остальные экраны/CRT lifetime, словарь и полный снимок |
+| 2 | **R02.1 — состояние такта: в работе** | Карта R01.1 | [Карточка](research/R02.1.md), [словарь](research/STATE_LAYOUT.md), [CRT/table](research/RANDOM_INITIALIZATION.md), [меню/mouse](research/MAIN_MENU.md), [tail/World1→2](research/MENU_PRESENTATION.md), [WAV](research/WAVE_LOADING.md), [initial UI](research/INITIAL_INTERFACE.md), [enabled catalog sounds](research/CATALOG_SOUNDS.md), [пролог](research/MATCH_PRELUDE.md), [подготовка](research/MATCH_PREPARATION.md), [replay init](research/REPLAY_INITIALIZATION.md), [продолжение](research/MATCH_CONTINUATION.md): [первый41bc90](research/INITIAL_LOADING.md): [локальный ввод](research/LOCAL_INPUT.md): далее41c5e5/network/remote input→429730, animated loading, остальные экраны/CRT lifetime, словарь и полный снимок |
 | 3 | **R03.1 — внешний загрузчик: в работе** | Объявленная готовая часть R02.1 | [Карточка](research/R03.1.md): весь исходный каталог, реальные parent/children/scanf и общие ресурсы совпали; общие CRT/file I/O, Windows startup и владение/перезагрузка ресурсов открыты |
 | 4 | **R04.1 — общий переход в кадр** | R02.1 и проверенные записи R03.1 | Общий обработчик `0x40e2d0`, включая проверенные отрицательные/999/отсутствующие переходы и ветви стоимости; проверки на разных исходных файлах, без допуска по имени Sasuke |
 | 5 | **R06.1 — общий реестр и создание** | R02.1/R03.1; сохранённый порядок R01.1 | Данные реестра вместо списка 224/440; создание по поддержанным правилам, reuse/owner/team, явное отклонение неподдержанного механизма, сохранение прежних сравнений |

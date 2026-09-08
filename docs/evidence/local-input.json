@@ -1,0 +1,47 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real41c581..41c5e5 directly after verified first loading, then real419a60\nthrough ret12 under keyboard/joystick/packing/dispatch stimuli. AI4094b0 and\nnon-character406ba0 are explicit no-effect call boundaries in dispatch probes;\nthe natural first-loading continuation has no such active tail slots.\n",
+  "corpus": "local-input.json",
+  "sha256": "c7c1e231a3b9e92fcf73c55e5c3664acc2a59db7413829ed7fe6b623560ad139",
+  "cases": 303,
+  "nativeComparison": "Local input matches original: 303 cases, 301 real ret12, 242808 records, 284213408 bytes/masks, 756 character AI /309 object requests at explicit child boundaries; full first loading 18+400 WAVs /137 Objects",
+  "fixture": "original-local-input.json",
+  "fixtureSHA256": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a",
+  "fixtureBytes": 2675764,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading.json",
+      "sha256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog.json",
+      "sha256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds.json",
+      "sha256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb"
+    }
+  },
+  "inventory": {
+    "cases": 303,
+    "realReturns": 301,
+    "records": 242808,
+    "bytesMasks": 284213408,
+    "characterAIRequests": 756,
+    "objectInputRequests": 309,
+    "keyboardCombinations": 128,
+    "joystickCombinations": 128,
+    "sourceObjectBindings": 137
+  },
+  "verification": {
+    "selectedTests": 3,
+    "failures": 0,
+    "seconds": 249.612,
+    "newInputTestsSeconds": 172.239,
+    "oldMatchPreparationSeconds": 77.373,
+    "releaseAppBuildSeconds": 2.58,
+    "parentRawReproduction": "All three raw initial-loading captures reproduced byte for byte in each VM before natural input continuation",
+    "oldFixtures": "All six inherited SHA256 verified, no changes",
+    "scope": "AI/object bodies and OS polling are explicit open boundaries; no full game or Windows input/latency proof"
+  }
+}
