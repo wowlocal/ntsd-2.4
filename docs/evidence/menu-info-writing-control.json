@@ -1,0 +1,22 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole43c690/43c710 with actual VC80 sprintf/fprintf/fclose.\nIndependent helpers on persistent globals. Fopen supplies a declared user-buffered\nFILE (flags102); _write/_close/_isatty and same-thread PTD are boundaries. Capture\nlogical bytes before Windows text translation, partial writes, FILE/buffer state\nand actual returns. No real filesystem, full4236d0/startup or Windows claim.\n",
+  "corpus": "menu-info-writing-control.json",
+  "sha256": "ad3f5ba47bd2ee2b74f010b05274679496d767a5f92ebeaec6c5083e14c94e7e",
+  "cases": 267,
+  "events": {
+    "close": 259,
+    "closeFile": 259,
+    "format": 534,
+    "open": 267,
+    "print": 259,
+    "write": 219,
+    "writeFile": 1309
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Menu info writing matches original: 267 cases /73 defaults /194 caches, 534 sprintf /259 fprintf /259 fclose, 1309 low-level writes /74 failed or short, 3106 events /219 parent writes, 9462 records /147664942 bytes/masks. Declared user-buffered FILE; Windows translation, real file IO and parent4236d0 remain open",
+  "fixture": "original-menu-info-writing-control.json",
+  "fixtureSHA256": "7b045cb927ac309d3f693317c1a33fc4af029917c0cc078c9a39c67931d9d121",
+  "fixtureBytes": 245795
+}

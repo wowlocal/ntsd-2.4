@@ -589,3 +589,19 @@ Missing/key-failure wrappers сохраняются до следующего в
 нетронутыми count/rectangles. Malloc может повторно выдать освобождённый адрес;
 каждое поколение имеет свои bytes/masks и live flag. Freed snapshots не становятся
 новым backing. Provenance Windows allocator и родитель4236d0 пока открыты.
+
+Дополнение [записи настроек панели](MENU_INFO_WRITING.md), S/D43c690/43c710:
+
+| Поле | Правило |
+| --- | --- |
+| `4527b0/44d784/44d788` | Defaults после file IO: только UInt32 now\0, затем0, затем4, даже при failed open; cache не меняет |
+| `453c68/453d40` | Два sprintf ad%d; defaults после file IO/reset, cache перед fopen |
+| Declared FILE+`0/4/8/0c/10/14/18/1c` | ptr/count/base/flags/fd/char buffer/size/temp filename; все32 байта сравниваются |
+| Output buffer | Маска записи и старые bytes сохраняются; failed full-block flush всё равно пишет следующий byte в base[0] |
+
+FILE начинается с flags102 и пользовательского буфера; это явный fopen response.
+Fclose после flush сбрасывает ptr=base/count0, затем вызывает descriptor close
+и очищает flags, оставляя base/size/bytes. Cache возвращает fclose result либо0
+при failed fopen; defaults оставляет EAX последнего sprintf. Логические LF bytes
+проверены до Windows text translation. Общий new byte-output helper не моделирует
+другие stream modes, EILSEQ42 или Windows fopen/allocator provenance.

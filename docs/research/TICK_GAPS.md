@@ -97,6 +97,11 @@ constructor/destructor в118 случаях: fixed atlas, free-before-malloc, nu
 branches и все поколения повторно выданных адресов. Следом43c690/43c710 и весь
 4236d0; путь/DIB/allocator/COM этого отдельного корпуса ещё являются входами.
 
+[Запись настроек панели](MENU_INFO_WRITING.md) теперь сравнивает43c690/43c710
+с actual VC80 output в534 случаях. Сохранены defaults после failed open и
+partial-write buffer tails; FILE flags102/descriptor IO/text translation имеют
+явные границы. Далее весь4236d0 с этими четырьмя helper через настоящий427127.
+
 ## Как устранять пропуски
 
 1. **R02.1:** словарь состояния полного пути и всех пропущенных полей, точная

@@ -770,6 +770,28 @@ with existing43c780 and fresh early screen parent. Constructor core unchanged.
 Both packed release comparisons passed before acceptance;27 old fixture SHA
 unchanged, new raw/packed SHA and full unpack checked. Two new XCTest passed
 in0.474s; release NTSDNative passed in2.36s. App UI/pixels/full match/W open.
+The [menu-info writers](docs/research/MENU_INFO_WRITING.md) now execute whole
+43c690/43c710 with real VC80 sprintf/fprintf/fclose.534 independent helper cases
+match native:1068 formats/518 prints/518 closes,2618 low-level writes/148 failed
+or short,6212 events/438 parent writes,18924 records/295329884 bytes/masks.
+Defaults always writes now\0/index0/period4 AFTER file IO, even on failed open,
+then formats both paths; EAX is the last sprintf length. Cache formats paths
+BEFORE fopen, then prints raw date bytes and signed32 index/period; EAX is0 on
+failed fopen or the fclose result. A failed fprintf may still lead to fclose0.
+The new shared OriginalBufferedTextOutput covers the declared flags102 FILE
+with user buffer1/7/64/4096, not general Windows fopen/stream initialization.
+_flsbuf updates ptr/count BEFORE _write, then stores the next byte even after
+failed/short flush. Fclose attempts that tail, resets ptr/count, calls_close
+and clears flags while keeping user-buffer bytes/base/size. Do not retry the
+whole block or silently discard the saved byte. Low-level _write/_close/_isatty
+and same PTD (_getptd plus_getptd_noexit) are declared boundaries; errno28 on
+negative IO, no EILSEQ42 replacement/append/wide stream. Bytes are logical LF,
+BEFORE Windows text translation; baseline adinfo remains unchanged CRLF.
+Now join content43c780/bitmap43cc60/both writers into whole4236d0 through actual
+427127 after fresh early-screen parents. No new app UI/real file/Windows claim.
+Both packed release comparisons passed before acceptance;29 old fixture SHA
+unchanged, new raw/packed SHA and full unpack verified. Two new XCTest passed
+in4.738s; release NTSDNative passed in2.30s. Existing shared helpers unchanged.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

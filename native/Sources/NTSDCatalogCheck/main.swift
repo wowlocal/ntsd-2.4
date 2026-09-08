@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-info-writing" {
+        let r = try MenuInfoWritingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Menu info writing matches original: \(r.cases) cases /\(r.defaults) defaults /\(r.caches) caches, \(r.formats) sprintf /\(r.prints) fprintf /\(r.closes) fclose, \(r.fileWrites) low-level writes /\(r.failedWrites) failed or short, \(r.events) events /\(r.parentWrites) parent writes, \(r.records) records /\(r.bytes) bytes/masks. Declared user-buffered FILE; Windows translation, real file IO and parent4236d0 remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-panel-bitmap" {
         let r = try MenuPanelBitmapReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Menu panel bitmap matches original: \(r.cases) cases /\(r.sources) DIBs, \(r.helpers) helper returns /\(r.constructors) constructors /\(r.destructors) destructors, \(r.allocations) malloc /\(r.nullAllocations) null /\(r.reused) reused addresses, \(r.events) events /\(r.writes) parent writes /\(r.releases) releases /\(r.frees) frees, \(r.success) successful /\(r.failure) failed returns, \(r.records) records /\(r.bytes) bytes/masks. Independent helper; parent4236d0, pixels and Windows remain open")
