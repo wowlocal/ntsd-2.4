@@ -10,17 +10,17 @@ public enum MenuStartupReference {
         public let checkpoints: Int, records: Int, bytes: Int, events: Int
         public let localCalls: Int, receivedCalls: Int, musicCalls: Int, constructors: Int
     }
-    private typealias Snapshot = InputControlReference.Snapshot
-    private typealias Blob = InputControlReference.Blob
-    private struct Storage: Decodable { let bytes: String, defined: String }
-    private struct Position: Decodable { let pc: UInt32, sp: UInt32 }
-    private struct Pool: Decodable { let world: Storage, actors: [Storage], globals: String }
-    private struct Retained: Decodable {
+    typealias Snapshot = InputControlReference.Snapshot
+    typealias Blob = InputControlReference.Blob
+    struct Storage: Decodable { let bytes: String, defined: String }
+    struct Position: Decodable { let pc: UInt32, sp: UInt32 }
+    struct Pool: Decodable { let world: Storage, actors: [Storage], globals: String }
+    struct Retained: Decodable {
         struct Record: Decodable { let address: UInt32, live: Bool, storage: Storage }
         let globals: String, world: Storage, crtState: UInt32, pointers: [UInt8], records: [Record]
     }
-    private struct NoStimulus: Decodable {
-        private struct Key: CodingKey { let stringValue: String;var intValue: Int? { nil };init?(stringValue: String) { self.stringValue=stringValue };init?(intValue: Int) { return nil } }
+    struct NoStimulus: Decodable {
+        struct Key: CodingKey { let stringValue: String;var intValue: Int? { nil };init?(stringValue: String) { self.stringValue=stringValue };init?(intValue: Int) { return nil } }
         init(from decoder: Decoder) throws {
             let c = try decoder.container(keyedBy: Key.self)
             for key in c.allKeys where try !c.decodeNil(forKey: key) {
@@ -29,37 +29,37 @@ public enum MenuStartupReference {
             }
         }
     }
-    private struct Local: Decodable {
+    struct Local: Decodable {
         struct Call: Decodable { let entrySP: UInt32, returnAddress: UInt32, arguments: [UInt32], saved: [UInt32] }
         let stimulus: NoStimulus, parent: Bool, natural: Bool, paused: Int32
         let commandsBefore: [UInt8], commandsAfter: [UInt8], call: Call, beforeDispatch: Pool, after: Pool
         let dispatch: [OriginalLocalInputDispatch], stackAfter: UInt32, endPC: UInt32
     }
-    private struct Control: Decodable {
+    struct Control: Decodable {
         struct Call: Decodable { let entry: UInt32, entrySP: UInt32, returnAddress: UInt32, arguments: [UInt32], saved: [UInt32], returnSP: UInt32 }
         let stimulus: NoStimulus, inherited: Bool, paused: Int32, stackBefore: [UInt8], stackAfter: [UInt8]
         let events: [OriginalInputControlRequest], helperCalls: [Call], receiveCalls: [Call]
         let control: Snapshot, after: Snapshot, controlCommands: [UInt8], menuRegister: UInt32, endPC: UInt32
     }
-    private struct Replay: Decodable {
+    struct Replay: Decodable {
         let stimulus: NoStimulus, inherited: Bool, paused: Int32, kind: String, entry: OriginalReplayTickEntry
         let stackBefore: [UInt8], stackAfter: [UInt8], events: [OriginalReplayTickEvent], calls: [Control.Call]
         let menuRegister: UInt32, after: Snapshot, endPC: UInt32
     }
-    private struct Round: Decodable {
+    struct Round: Decodable {
         let stimulus: NoStimulus, inherited: Bool, paused: Int32, stackBefore: [UInt8], stackAfter: [UInt8]
         let events: [OriginalMatchRoundEvent], calls: [Control.Call], stageDefeated: UInt32?
         let continuation: OriginalMatchRoundContinuation, endPC: UInt32, after: Snapshot
     }
-    private struct Allocation: Decodable { let address: UInt32, storage: Storage }
-    private struct Music: Decodable {
+    struct Allocation: Decodable { let address: UInt32, storage: Storage }
+    struct Music: Decodable {
         struct Event: Decodable { let kind: OriginalMusicEvent.Kind, arguments: [UInt32], strings: [[UInt8]], response: OriginalMusicResponse }
         struct Call: Decodable { let entry: UInt32, entrySP: UInt32, returnAddress: UInt32, saved: [UInt32], returnSP: UInt32 }
         struct Format: Decodable { let result: Int32, bytes: String }
         let kind: String, inherited: Bool, stimulus: [InputControlReference.GlobalWrite]
         let events: [Event], calls: [Call], formats: [Format], allocations: [Allocation], afterGlobals: String, endPC: UInt32, endSP: UInt32
     }
-    private struct Resources: Decodable {
+    struct Resources: Decodable {
         struct Input: Decodable { let index: Int, resource: OriginalBitmapInput, surface: UInt32, colorKeyResult: Int32 }
         struct Allocate: Decodable { let address: UInt32, backing: String }
         struct Call: Decodable { let index: Int, address: UInt32, entrySP: UInt32, returnAddress: UInt32, saved: [UInt32], returnSP: UInt32 }
@@ -68,8 +68,8 @@ public enum MenuStartupReference {
         let events: [OriginalInterfaceEvent], checkpoints: [Checkpoint], records: [Allocation]
         let continuation: OriginalMenuResourceResult.Continuation, selectionAtEntry: UInt32, endPC: UInt32, endSP: UInt32, globals: String
     }
-    private struct Source: Decodable { let path: String, width: Int32, height: Int32, dib: String }
-    private struct Corpus: Decodable {
+    struct Source: Decodable { let path: String, width: Int32, height: Int32, dib: String }
+    struct Corpus: Decodable {
         let exeSHA256: String, dllSHA256: String, parents: [String:InputControlReference.Parent], entry: Position, end: Position
         let worldAddress: UInt32, objectAddresses: [UInt32], actorAddresses: [UInt32], savedAtFirstMenu: [UInt8]
         let initialContext: Snapshot, local: Local, inputControl: Control, replay: Replay, round: Round, music: Music, resources: Resources

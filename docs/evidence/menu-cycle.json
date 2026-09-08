@@ -1,0 +1,18 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Research in progress: repeat whole4246b0 from the own first menu return.\nFresh early/loading/startup/first mode and return are reproved on one CPU.\nOnly outer caller ABI and acquired keyboard bytes are supplied afterwards.\nNo Actor/phase/menu/loaded-state replacement. Stop before character selection.\nNative comparison, window input acquisition and Windows validation remain open.\n",
+  "corpus": "menu-cycle.json",
+  "sha256": "07ea9f7c97888daf0b62106ea256d11d4360d780737c895c3187c9e82a66ecd5",
+  "bytes": 889555,
+  "cases": 4,
+  "nativeCompared": true,
+  "nativeComparison": "Menu cycle matches original: own first return -> repeated full outer caller/input/menu; 4 cases /3 full returns /55 checkpoints /252 events /20038 records /29699156 bytes+masks. Character selection, app UI and Windows open",
+  "fixture": "original-menu-cycle.json",
+  "fixtureSHA256": "eec5226d5a0c104e8f14718c6665f4d0e2081f4f52b998a73665736228688f4b",
+  "fixtureBytes": 194638,
+  "parent": {
+    "fixture": "original-menu-return.json",
+    "sha256": "8b91b58361fc7da90270c64fd8b71d2387a0a8d8c9d3def47a0fcb3f09881672"
+  }
+}

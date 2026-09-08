@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 10,CommandLine.arguments[1] == "--menu-cycle" {
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MenuCycleReference.compare(cycle: inputs[0],returning: inputs[1],screen: inputs[2],startup: inputs[3],menu: inputs[4],loading: inputs[5],catalog: inputs[6],sounds: inputs[7])
+        print("Menu cycle matches original: own first return -> repeated full outer caller/input/menu; \(r.cases) cases /\(r.returns) full returns /\(r.checkpoints) checkpoints /\(r.events) events /\(r.records) records /\(r.bytes) bytes+masks. Character selection, app UI and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 9,CommandLine.arguments[1] == "--menu-return" {
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MenuReturnReference.compare(returning: inputs[0],screen: inputs[1],startup: inputs[2],menu: inputs[3],loading: inputs[4],catalog: inputs[5],sounds: inputs[6])

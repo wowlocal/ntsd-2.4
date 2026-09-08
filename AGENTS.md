@@ -1215,6 +1215,33 @@ Release CatalogCheck83.08s, acceptance0.19s, NTSDNative2.79s. All processes
 terminal. All96old fixture hashes unchanged; both new SHA/size/full unpack
 verified,98pins at build/research/menu-return-fixture-pins.json.
 
+The [own repeated menu cycle](docs/research/MENU_CYCLE.md) now continues the
+own first return through new4246b0/World2->41bc90 calls. Both4-case corpora match
+native:8outer entries/6whole ret4,110checkpoints/546events,40076records/
+59398312bytes+masks. Last entry per corpus stops429e5a with own menu3; it does
+NOT execute the character-selection dispatcher/body yet. Phase0/1/0/1 comes
+from real prologues. Only acquired keyboard J100/117 is supplied, resolved
+from OWN control.txt; no Actor/menu/phase/loaded-state stimuli. Four asyncSelect
+and four ioctl calls per corpus remain even with network0. Press during phase1
+is applied only next phase0; release during final phase1 leaves Actor+d1=1.
+Do not clear that current attack before next selection. Six whole returns keep
+the actual nested frames/cookies/SEH and restore outer nonvolatile registers.
+OriginalLoadedMatchCycle composes existing prologue/command/entry rules; menus
+still use shared music/resources/mode/return. Reference compareCases extracts
+old checks unchanged and passes own state onward; full95return/632mode parents
+still compare after onFirst. Source repeats all loading/startup documents/blobs
+and FIRST mode/return cases, not every old standalone probe. A cached translated
+block crossed local-input until41c5e5 in the first diagnostic; explicit code
+stop fixed the observer. Both complete fresh source passes then succeeded;
+Core rules and expected after-state were not changed to hide that failure.
+Two old release tests25.443s and two new24.291s passed. Release CatalogCheck
+57.91s, acceptance0.19s, NTSDNative34.24s; all processes terminal. All98old fixture
+hashes unchanged, new SHA/size/full unpack checked,100pins at
+build/research/menu-cycle-fixture-pins.json. Next own429e5a->429f09/menu3->menu1
+and character selection using retained menu bitmap; then selected arena/match.
+New S-only left/up/attack/jump/latch and roster seeds are in MENU_CYCLE.md.
+Application UI/full match/Windows/full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

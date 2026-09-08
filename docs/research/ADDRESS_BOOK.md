@@ -206,6 +206,8 @@ probes не означают выполнение всего внешнего ц
 | `4229e2..422ab8` | Network notice, volume/present, menu0 timer,41bc90 ret4 | D190 output cases, только два первых исполняют эпилог; остальные188 останавливаются до422a95 |
 | `424746..424750`, `4287de..428805` | held457580=0 и ранний ret4 после41bc90 | D двух собственных первых возвратов: ESP/SEH/nonvolatile восстановлены; cursor/44d060/второй present здесь отсутствуют |
 | `429f09..42a1ea` | Начало menu3/1 character selection, teams и CHARMENU | S; ещё не новое native/D покрытие |
+| `4246b0` → `41bc90` → `429e5a` | Повторный собственный World2, phase/input/round/menu | D8 вызовов [MENU_CYCLE](MENU_CYCLE.md):6 полных ret4,2 остановки перед character-selection dispatch; acquired key без подстановки Actor/menu/phase |
+| `41bcd0..41bd24`, `41bdce..41be92` | Повторный non-playback пролог и оба command buffers после завершённой загрузки | D фаз0/1/0/1, собственного подтверждения VS и отложенного отпускания; playback prefix остаётся отдельной границей |
 | `42a69e..42a6c6` | Right-navigation gate для signed sourceID/10 групп3 и5 | S: доступ только458428==1; общий фильтр каталога, остальные navigation ветви открыты |
 
 ## Известные структуры: опоры для R02.1
