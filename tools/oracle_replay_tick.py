@@ -24,8 +24,8 @@ from unicorn.x86_const import UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX, UC
 
 
 class ReplayTick(InputControl):
-    def __init__(self,control=False):
-        super().__init__(control);self.replay_running=False;self.replay_part=None
+    def __init__(self,control=False,**loading_options):
+        super().__init__(control,**loading_options);self.replay_running=False;self.replay_part=None
         for pc in (0x41BE8B,0x41C5E5,0x41D714):self.uc.hook_add(UC_HOOK_CODE,self.control_boundary,begin=pc,end=pc)
         for pc in (0x43DC50,0x43DB40,0x43DD56,0x43DC47,0x41D54E,0x41D6AC):
             self.uc.hook_add(UC_HOOK_CODE,self.replay_hook,begin=pc,end=pc)
@@ -49,7 +49,7 @@ class ReplayTick(InputControl):
     def input_checkpoint(self,uc,address,size,data):
         if not self.replay_running:return super().input_checkpoint(uc,address,size,data)
         if address==0x419A60:
-            sp=uc.reg_read(UC_X86_REG_ESP);assert self.local_call is None and uc.reg_read(UC_X86_REG_ECX)==WORLD
+            sp=uc.reg_read(UC_X86_REG_ESP);assert self.local_call is None and uc.reg_read(UC_X86_REG_ECX)==self.world_address
             self.local_call=dict(entrySP=sp,returnAddress=self.u32(sp),arguments=[self.u32(sp+i) for i in (4,8,12)],saved=[uc.reg_read(r) for r in REGISTERS])
         elif address!=0x419DC5:raise AssertionError('Replay chain reached an unimplemented AI/object body')
 
@@ -75,15 +75,15 @@ class ReplayTick(InputControl):
         s=json.loads(json.dumps(s or dict(globals=[],actors=[],world=[],seats=[],saved=None,pointers=None,buffers=[],live=None,commands=None,playback=None)))
         for v in s['globals']:self.uc.mem_write(v['address'],bytes.fromhex(v['bytes']))
         for v in s['actors']:self.write_host(self.pool[v['slot']]['address']+v['offset'],bytes.fromhex(v['bytes']))
-        for v in s['world']:self.write_host(WORLD+v['offset'],bytes.fromhex(v['bytes']))
-        for seat,slot in enumerate(s['seats']):self.write_host(WORLD+0x194+seat*4,struct.pack('<I',self.pool[slot]['address']))
+        for v in s['world']:self.write_host(self.world_address+v['offset'],bytes.fromhex(v['bytes']))
+        for seat,slot in enumerate(s['seats']):self.write_host(self.world_address+0x194+seat*4,struct.pack('<I',self.pool[slot]['address']))
         if s['saved'] is not None:self.uc.mem_write(0x458588,bytes(s['saved']))
         if s['pointers'] is not None:self.uc.mem_write(0x4588A8,struct.pack('<II',*s['pointers']))
         if s['live'] is not None:
             for m,live in zip(self.replay_memory,s['live']):m['live']=live
         for v in s['buffers']:self.uc.mem_write(BUFFERS[v['index']]+v['offset'],bytes.fromhex(v['bytes']))
         if not inherited:
-            for reg,value in [(UC_X86_REG_ESP,self.body_sp),(UC_X86_REG_EBX,WORLD),(UC_X86_REG_EDI,paused&0xFFFFFFFF),(UC_X86_REG_ESI,self.u32(0x44D020))]:self.uc.reg_write(reg,value)
+            for reg,value in [(UC_X86_REG_ESP,self.body_sp),(UC_X86_REG_EBX,self.world_address),(UC_X86_REG_EDI,paused&0xFFFFFFFF),(UC_X86_REG_ESI,self.u32(0x44D020))]:self.uc.reg_write(reg,value)
             self.put(self.body_sp+0x38,paused);self.put(self.body_sp+0x44,0x99887766)
             self.uc.mem_write(self.body_sp+0x430,bytes([0xA5]*28))
             self.uc.mem_write(self.commands_address,bytes(s['commands']));self.uc.mem_write(self.body_sp+0x440,bytes(s['playback']))
@@ -210,7 +210,7 @@ class ReplayTick(InputControl):
                 s.update(globals=[dict(address=0x450B90,bytes=struct.pack('<i',i%2).hex())],actors=[],world=[],seats=[],saved=None,pointers=None,buffers=[],live=None)
             cases.append(self.replay_step(f'consecutive-input-replay-{i}',s,kind='chain'))
         print('Error exits, address overlap and full input/replay chains captured',flush=True)
-        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=WORLD,objectAddresses=self.object_addresses,
+        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=self.world_address,objectAddresses=self.object_addresses,
                  actorAddresses=[r['address'] for r in self.pool],bodySP=self.body_sp,bufferAddresses=BUFFERS,initialContext=initial,cases=cases,messages=self.messages)
         return transport(doc,self.blobs)
 

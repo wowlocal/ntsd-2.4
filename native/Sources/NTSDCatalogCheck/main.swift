@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 7,CommandLine.arguments[1] == "--menu-startup" {
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MenuStartupReference.compare(startup: inputs[0],menu: inputs[1],loading: inputs[2],catalog: inputs[3],sounds: inputs[4])
+        print("Menu startup matches original: own \(r.parent.menu.cases) early calls/loading -> \(r.localCalls) local /\(r.receivedCalls) received calls -> round/menu -> \(r.musicCalls) music helpers /\(r.constructors) character-menu constructors; \(r.checkpoints) checkpoints /\(r.events) events /\(r.records) records /\(r.bytes) bytes+masks. Actual continuation reaches429e5a on the same World; selection dispatch, full match, app UI and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 6,CommandLine.arguments[1] == "--menu-loading" {
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MenuLoadingReference.compare(menu: inputs[0],loading: inputs[1],catalog: inputs[2],sounds: inputs[3])

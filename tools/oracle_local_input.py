@@ -21,20 +21,20 @@ from unicorn.x86_const import UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_EBP, UC
 
 
 class LocalInput(InitialLoading):
-    def __init__(self,control=False):
-        super().__init__(control)
+    def __init__(self,control=False,**loading_options):
+        super().__init__(control,**loading_options)
         self.input_running=False
         for pc in (0x419A60,0x419DC5,0x4094B0,0x406BA0):self.uc.hook_add(UC_HOOK_CODE,self.input_checkpoint,begin=pc,end=pc)
     def input_checkpoint(self,uc,address,size,data):
         if not self.input_running:return
         sp=uc.reg_read(UC_X86_REG_ESP)
         if address==0x419A60:
-            assert self.input_call is None and uc.reg_read(UC_X86_REG_ECX)==WORLD
+            assert self.input_call is None and uc.reg_read(UC_X86_REG_ECX)==self.world_address
             self.input_call=dict(entrySP=sp,returnAddress=self.u32(sp),arguments=[self.u32(sp+i) for i in (4,8,12)],saved=[uc.reg_read(r) for r in REGISTERS])
         elif address==0x419DC5:
             self.before_dispatch=self.snapshot()
         else:
-            slot=self.u32(sp+4);assert 10<=slot<400 and uc.reg_read(UC_X86_REG_ECX)==WORLD
+            slot=self.u32(sp+4);assert 10<=slot<400 and uc.reg_read(UC_X86_REG_ECX)==self.world_address
             kind='characterAI' if address==0x4094B0 else 'objectInput'
             arguments=[slot,self.u32(sp+8)] if kind=='characterAI' else [slot]
             self.dispatch.append(dict(kind=kind,arguments=arguments,world=uc.reg_read(UC_X86_REG_ECX),caller=self.u32(sp)))
@@ -45,7 +45,7 @@ class LocalInput(InitialLoading):
     def step(self,label,stimulus=None,parent=False,paused=0,phase=0,mode=0,commands=None):
         stimulus=json.loads(json.dumps(stimulus or dict(globals=[],actors=[],world=[],bindings=[])))
         for item in stimulus['globals']:self.uc.mem_write(item['address'],bytes.fromhex(item['bytes']))
-        for item in stimulus['world']:self.write_host(WORLD+item['offset'],bytes.fromhex(item['bytes']))
+        for item in stimulus['world']:self.write_host(self.world_address+item['offset'],bytes.fromhex(item['bytes']))
         for item in stimulus['actors']:self.write_host(self.pool[item['slot']]['address']+item['offset'],bytes.fromhex(item['bytes']))
         for item in stimulus['bindings']:
             target=self.pool[item['slot']]['address'];self.write_host(target+0x368,struct.pack('<I',self.object_addresses[item['object']]))
@@ -56,13 +56,13 @@ class LocalInput(InitialLoading):
         before_commands=list(self.uc.mem_read(self.commands_address,10))
         if parent:
             if not natural:
-                self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,WORLD)
+                self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,self.world_address)
                 self.uc.reg_write(UC_X86_REG_EDI,paused)
             start,stop=0x41C581,0x41C5E5
         else:
             sp=STACK+0xD000;self.uc.mem_write(sp,struct.pack('<IIII',STOP,phase&0xFFFFFFFF,mode&0xFFFFFFFF,self.commands_address))
             for reg,value in zip(REGISTERS,(0x11111111,0x22222222,0x33333333,0x44444444)):self.uc.reg_write(reg,value)
-            self.uc.reg_write(UC_X86_REG_ESP,sp);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
+            self.uc.reg_write(UC_X86_REG_ESP,sp);self.uc.reg_write(UC_X86_REG_ECX,self.world_address)
             start,stop=0x419A60,STOP
         self.input_running=True;self.phase='input'
         try:self.execute(start,stop)
@@ -142,7 +142,7 @@ class LocalInput(InitialLoading):
             for phase,playback in ((0,0),(1,0),(1,1)):
                 s['globals']=[v for v in s['globals'] if v['address']!=0x450B84]+[dict(address=0x450B84,bytes=struct.pack('<I',playback).hex())]
                 cases.append(self.step(f'dispatch-{positive}-{phase}-{playback}',s,phase=phase,mode=-17,commands=[0]*10))
-        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,parents=parents,worldAddress=WORLD,objectAddresses=self.object_addresses,
+        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,parents=parents,worldAddress=self.world_address,objectAddresses=self.object_addresses,
                  actorAddresses=[r['address'] for r in self.pool],template=list(self.uc.mem_read(0x4493C8,21)),commandsAddress=self.commands_address,
                  bodySP=self.body_sp,cases=cases)
         return transport(doc,self.blobs)

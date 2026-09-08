@@ -728,3 +728,20 @@ null FILE сохранено; следующий probe — новый внешн
 Загрузчик Native получает World/globals от своего проверенного раннего
 dispatcher. Raw after snapshots только проверяются. Frozen timer/file/scanner/
 COM boundaries сохранены; полный41bc90 ret и Windows lifecycle остаются открытыми.
+
+Дополнение [собственное startup продолжение](MENU_STARTUP.md), S/D:
+
+- World22000020 и400 Actor после меню/loading продолжаются через input и round
+  без новых игровых записей стенда. Оба natural варианта имеют phase1/pause0;
+  control означает ramp/reverse addresses, а не паузу старого standalone caller.
+- Command buffer лежит по bodySP+434; соседний playback buffer+440 сохранён.
+ 419a60 возвращается в41c5e5,4198f0 вызван41d490 и возвращается41d495.
+- Настоящий429730 создаёт собственный menu frame1000df08 из body1000e9bc.
+  Старый1000df48 был связан с другим внешним loading caller и не подставляется.
+- Replay pointers всё ещё0; новых replay allocations нет. Saved-playback
+  bytes458588..4588a7 — отдельный PE input до первого меню, сохранённый в context.
+- Music allocations31000000 и menu bitmaps32000000 не пересекают живые ранние
+  wrappers/панель/PCM. Старые26 records/liveness и CRT сравниваются до/после.
+- Native теперь соединяет local/control/received/replay/round в
+  OriginalLoadedMatchEntry. Music и character-menu resources используют его
+  собственный menu результат; selection dispatch431d10 пока открыт.

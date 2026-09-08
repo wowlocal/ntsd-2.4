@@ -38,10 +38,11 @@ def platform(**changes):
 
 
 class MusicPlayback(MatchRound):
-    def __init__(self,control=False):
-        super().__init__(control);self.music_running=False;self.music_allocations=[];self.music_pending=[]
-        self.uc.mem_map(ARENA,0x400000);self.uc.mem_map(API,0x1000)
-        self.uc.hook_add(UC_HOOK_MEM_WRITE,self.track_write,begin=ARENA+0x10000,end=ARENA+0x3FFFFF)
+    def __init__(self,control=False,music_arena=ARENA,music_api_address=API,**loading_options):
+        self.music_api_address=music_api_address;self.music_arena=music_arena;self.music_tokens=[music_arena+0x2000+i*0x100 for i in range(5)]
+        super().__init__(control,**loading_options);self.music_running=False;self.music_allocations=[];self.music_pending=[]
+        self.uc.mem_map(self.music_arena,0x400000);self.uc.mem_map(self.music_api_address,0x1000)
+        self.uc.hook_add(UC_HOOK_MEM_WRITE,self.track_write,begin=self.music_arena+0x10000,end=self.music_arena+0x3FFFFF)
 
     def install_music(self):
         # Keep the strict whole-instruction guard off the already independently
@@ -50,14 +51,14 @@ class MusicPlayback(MatchRound):
         self.music_imports={}
         for i,(iat,name) in enumerate([(0x4472B8,'createInstance'),(0x447094,'createFile'),(0x447090,'convert'),
                                      (0x44708C,'closeHandle'),(0x4471C8,'message'),(0x447174,'format')]):
-            a=API+i*16;self.put(iat,a);self.music_imports[a]=name
-        for token in TOKENS:
+            a=self.music_api_address+i*16;self.put(iat,a);self.music_imports[a]=name
+        for token in self.music_tokens:
             self.put(token,token+0x40)
             for offset in (0,8,0x1C,0x20,0x34,0x38,0x3C):
-                a=API+0x100+offset*4;self.put(token+0x40+offset,a);self.music_imports[a]=offset
+                a=self.music_api_address+0x100+offset*4;self.put(token+0x40+offset,a);self.music_imports[a]=offset
 
     def write_host(self,address,raw):
-        if ARENA+0x10000<=address<ARENA+0x400000:
+        if self.music_arena+0x10000<=address<self.music_arena+0x400000:
             self.track_write(self.uc,0,address,len(raw),0,None);self.uc.mem_write(address,raw)
         else:super().write_host(address,raw)
 
@@ -82,7 +83,7 @@ class MusicPlayback(MatchRound):
             count=self.u32(sp+4);assert count<=0x10000
             token=0
             if not self.music_input['nullAllocation']:
-                token=ARENA+0x10020+len(self.music_allocations)*0x1000
+                token=self.music_arena+0x10020+len(self.music_allocations)*0x1000
                 r=self.add_backing(token,count,'music-wide');self.music_allocations.append(r)
                 raw=r['initial']
             else:raw=None
@@ -94,7 +95,7 @@ class MusicPlayback(MatchRound):
     def music_api(self,name):
         sp=self.uc.reg_read(UC_X86_REG_ESP);arg=lambda i:self.u32(sp+4+i*4);c=self.music_input
         if isinstance(name,int):
-            token=arg(0);assert token in TOKENS
+            token=arg(0);assert token in self.music_tokens
             if name==0:
                 iid=bytes(self.uc.mem_read(arg(1),16));index={0xB1:0,0xB6:1,0xB2:2,0xB3:3}[iid[0]]
                 pointer=c['queryPointers'][index];result=c['queryResults'][index]
@@ -105,12 +106,12 @@ class MusicPlayback(MatchRound):
                 self.mevent('audioVolumeRead',[token],result=c['getResult'],pointer=0xFFFFFB2E)
                 self.put(arg(1),0xFFFFFB2E);self.ret(c['getResult'],8)
             else:
-                count={8:1,0x1C:1 if token==TOKENS[1] else 2,0x34:3 if token==TOKENS[0] else 4,0x38:2,0x3C:2}[name]
+                count={8:1,0x1C:1 if token==self.music_tokens[1] else 2,0x34:3 if token==self.music_tokens[0] else 4,0x38:2,0x3C:2}[name]
                 args=[token,name]+[arg(i) for i in range(1,count)];strings=[];result=c['methodResult']
-                if name==0x34 and token==TOKENS[0]:
+                if name==0x34 and token==self.music_tokens[0]:
                     result=c['renderResult']
                     if arg(1):strings=[bytes(self.uc.mem_read(arg(1),self.region(arg(1),1)['size']))]
-                elif name==0x1C and token==TOKENS[4]:result=c['setResult']
+                elif name==0x1C and token==self.music_tokens[4]:result=c['setResult']
                 self.mevent('method',args,strings,result);self.ret(result,count*4)
         elif name=='createInstance':
             args=[arg(i) for i in range(5)];assert args==[0x44A2A4,0,1,0x44A254,0x44F040]
@@ -147,12 +148,12 @@ class MusicPlayback(MatchRound):
         assert not self.music_pending
         if kind=='menu':
             if not inherited:
-                self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,WORLD)
+                self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,self.world_address)
             start=0x4229CC;self.music_end=0x4297AE
         else:
             start=0x402020;self.music_end=STOP
-            self.uc.mem_write(ARENA+0x1000,path+b'\0')
-            self.uc.reg_write(UC_X86_REG_ESP,STACK+0xF004);self.put(STACK+0xF004,STOP);self.put(STACK+0xF008,ARENA+0x1000)
+            self.uc.mem_write(self.music_arena+0x1000,path+b'\0')
+            self.uc.reg_write(UC_X86_REG_ESP,STACK+0xF004);self.put(STACK+0xF004,STOP);self.put(STACK+0xF008,self.music_arena+0x1000)
         self.music_running=True;self.music_finished=False;self.phase='music'
         try:
             pc=start
@@ -193,7 +194,7 @@ class MusicPlayback(MatchRound):
     def music_probes(self,cases):
         def writes(enabled=1,cached=b'old.wma',mask=15,volume=75,directory=b'C:\\NTSD'):
             return [(0x44D010,enabled),(0x44D000,volume),(0x44EF04,cached+b'\0'),(0x44EF38,directory+b'\0')]+[
-                (address,TOKENS[i] if mask&(1<<i) else 0) for i,address in enumerate((0x44F040,0x44F044,0x44F048,0x44F04C))]
+                (address,self.music_tokens[i] if mask&(1<<i) else 0) for i,address in enumerate((0x44F040,0x44F044,0x44F048,0x44F04C))]
         for enabled in (0,1,-1,-2147483648,2147483647):
             for mask in range(16):
                 for cached in (b'old.wma',b'bgm\\main.wma'):
@@ -206,7 +207,7 @@ class MusicPlayback(MatchRound):
                 cases.append(self.music_step(f'volume-{volume}-{result}',writes=writes(volume=volume),cfg=platform(getResult=result,setResult=result)))
         for result in (-2147483648,-1,0,1,2147483647):
             for key in ('createResult','renderResult'):
-                for pointer in (0,TOKENS[0]) if key=='createResult' and result<0 else (TOKENS[0],):
+                for pointer in (0,self.music_tokens[0]) if key=='createResult' and result<0 else (self.music_tokens[0],):
                     cfg=platform(**{key:result});cfg['createPointer']=pointer
                     cases.append(self.music_step(f'{key}-{result}-{pointer}',writes=writes(),cfg=cfg))
             for index in range(4):

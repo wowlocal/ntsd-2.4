@@ -23,7 +23,8 @@ public enum MenuLoadingReference {
         let calls: [Call]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu loading reference: "+text) }
-    public static func compare(menu: Data,loading: Data,catalog: Data,sounds: Data) throws -> Result {
+    public static func compare(menu: Data,loading: Data,catalog: Data,sounds: Data,
+                               onLoaded: (OriginalInitialLoading,OriginalCRTRandom,OriginalMenuPresentationMemory) throws -> Void = { _,_,_ in }) throws -> Result {
         let raw = try MatchPreparationReference.unpack(menu,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         let identity = try JSONDecoder().decode(LoadingIdentity.self,from: MatchPreparationReference.unpack(loading))
         let catalogIdentity = try JSONDecoder().decode(CatalogIdentity.self,from: MatchPreparationReference.unpack(catalog))
@@ -108,6 +109,7 @@ public enum MenuLoadingReference {
                 guard let bitmap = own.memory.allocations[r.address],bitmap.live == r.live else { throw error("Retained early allocation") }
                 try check(bitmap.storage,storage(r.storage),"Retained early bitmap")
             }
+            try onLoaded(native,own.crt,own.memory)
         })
         guard drawIndex == c.loadingDraws.count,drawIndex == 1 else { throw error("Initial MENU_WAIT inventory") }
         return .init(menu: menuResult,loading: loaded,draws: drawIndex,reads: reads,clips: clips,blits: blits,helpers: helpers,records: recordCount,bytes: byteCount)

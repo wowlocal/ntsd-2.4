@@ -158,6 +158,14 @@ wrapper, прежние26 bitmap и CRT сохраняются. Теперь п�
 состояние после41c581 через прежние input/round/menu механизмы. Animated4242e0,
 полный41bc90 return, app integration и Windows по-прежнему открыты.
 
+[Собственное startup продолжение](MENU_STARTUP.md) теперь доводит этот же
+World/Actor/globals через input, received commands, replay bookkeeping и round
+до настоящего4229cc/429730, затем через музыку и11 menu constructors до429e5a.
+Оба natural phase1/pause0 пути совпали:6824 records/11897268 bytes+masks и136
+events. Нет новых игровых stimuli, paused-entry jump или искусственных replay
+buffers. Ранние bitmap уже доступны следующему431d10; его полный dispatch/body,
+остальные phase/pause/gameplay пути и app/W всё ещё открыты.
+
 ## Как устранять пропуски
 
 1. **R02.1:** словарь состояния полного пути и всех пропущенных полей, точная

@@ -43,7 +43,7 @@ class FrontMenuResources(Constructors):
         self.uc.mem_map(0,0x1000);self.uc.mem_map(HEAP,0x4000000)
         self.uc.hook_add(UC_HOOK_MEM_WRITE,self.written,begin=HEAP,end=HEAP+0x3FFFFFF)
         self.uc.hook_add(UC_HOOK_MEM_WRITE,self.written,begin=GLOBAL,end=GLOBAL+GLOBAL_SIZE-1)
-        self.uc.hook_add(UC_HOOK_CODE,self.code)
+        self.front_code_hook=self.uc.hook_add(UC_HOOK_CODE,self.code)
         self.pe=PE((DEFAULT_SOURCE/'NTSD 2.4.exe').read_bytes());self.resources={r['path'][1]:r for r in self.pe.resources() if r['path'][0]==2}
         for index in range(24):self.put(SOURCE+16*index,VTABLE)
         for at,to in [(VTABLE+0x74,API),(VTABLE+8,API+16),(0x4471C8,API+32),(0x447080,API+48)]:self.put(at,to)

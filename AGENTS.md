@@ -1087,6 +1087,47 @@ transport filtering;90fixture pins at build/research/menu-loading-fixture-pins.j
 Release NTSDNative passed in0.17s. No SwiftPM or source-capture process remained
 active before the milestone commit.
 
+The [own startup continuation](docs/research/MENU_STARTUP.md) now joins the
+early-menu/loading World through41c581/input/received/replay/round to the real
+4229cc/429730, enabled music and11 menu bitmap constructors ending429e5a.
+Both fresh natural phase1/pause0 passes match native raw and packed before
+acceptance:44checkpoints/136events,6824records/11897268bytes+masks after their
+checked menu-loading parents;2local/2received ret12,10music helpers/22constructors.
+All26early bitmap records/liveness and CRT survive. No game-state stimuli or
+paused-entry jump occur after loading. The control suffix now means ramp and
+reverse allocation, not the old standalone paused phase0 initial caller.
+Read the study before extending the continuation. Source observers forward
+existing UC/World/loading options through their constructors, use world_address,
+and accept separate music/resource arenas and import pages. Defaults retain
+the historical corpus. New music31000000/resources32000000 and imports
+33000000/33001000/33002000 avoid early bitmap/panel/PCM regions. No artificial
+replay buffers are mapped: own4588a8/ac remain0. Saved-playback458588..4588a7
+is a declared PE input captured BEFORE the first early menu, retained natively
+and compared afterwards. Removing the old early front_code_hook after
+continuing_loading only eliminates an inactive observer; early memory hooks
+and the explicit real MENU_WAIT child remain. The control pass reproduced all
+four pinned menu-loading documents/blobs after this change. The final source
+observers also reproduced the whole historical menu-resources corpus, all its
+parent captures and every blob exactly.
+Native OriginalLoadedMatchEntry composes shared local/control/received/replay/
+round rules and returns the actual continuation; no per-character logic added.
+MenuLoadingReference.onLoaded exposes its own loaded result/CRT/early memory.
+New MenuStartupReference preserves that state, then runs existing music/menu
+resource loaders.4198f0 is called41d490 and returns41d495; a mistaken reference
+ABI assertion was corrected from disassembly, without editing Core or expected
+snapshots. Actual menu frame1000df08 comes from loading body1000e9bc, not the
+old supplied1000df48. Next continue this own state/resources into dispatch
+429e5a/431d10 and selection. Phase0/paused/AI retain their older bounded proof;
+animated loading, full41bc90 ret/held clear, other selectors, app/UI/full match
+and Windows remain open. R02.1/R01.2/full-game goal are not complete.
+Old MenuLoading XCTest passed2checks/174.457s; release NTSDCatalogCheck builds
+75.70s/46.90s after the ABI fix, accept0.18s, release NTSDNative2.88s.
+Both new startup XCTest passed in172.401s;4old/new checks total346.858s.
+All90old fixture hashes are unchanged; both new raw/packed SHA/length/full
+unpack checks passed,92pins at build/research/menu-startup-fixture-pins.json.
+Primary raw/packed546495/346002bytes, control564383/335670bytes. No SwiftPM
+or source-capture process remained active before the milestone commit.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

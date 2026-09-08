@@ -29,8 +29,8 @@ HELPERS={0x402100:('stopMusic',0x40212B,0),0x401A30:('soundRequest',0x401A6F,1),
 
 
 class MatchRound(ReplayTick):
-    def __init__(self,control=False):
-        super().__init__(control);self.round_running=False;self.round_pending=None
+    def __init__(self,control=False,**loading_options):
+        super().__init__(control,**loading_options);self.round_running=False;self.round_pending=None
         for pc in [*ENDS,*HELPERS,*[h[1] for h in HELPERS.values()],0x41DB13,0x41DD02]:
             self.uc.hook_add(UC_HOOK_CODE,self.round_hook,begin=pc,end=pc)
 
@@ -66,7 +66,7 @@ class MatchRound(ReplayTick):
             args=[self.u32(sp+4+i*4) for i in range(count)]
             self.round_pending=dict(entry=address,entrySP=sp,returnAddress=self.u32(sp),this=this,arguments=args,saved=[uc.reg_read(r) for r in REGISTERS])
             observed=[next(i for i,r in enumerate(self.pool) if r['address']==this)] if kind=='reconstruct' else [this,*args] if kind=='soundRequest' else []
-            if kind=='inputReset':assert this==WORLD
+            if kind=='inputReset':assert this==self.world_address
             self.round_event(kind,observed)
         elif address==0x41DB13:self.round_event('teams',[self.u32(self.body_sp+0x74+i*4) for i in range(40)])
         elif address==0x41DD02:self.round_event('stageScan',[uc.reg_read(UC_X86_REG_EDI)])
@@ -79,14 +79,14 @@ class MatchRound(ReplayTick):
         s=json.loads(json.dumps(s or dict(globals=[],actors=[],world=[],seats=[],bindings=[],saved=None,pointers=None,buffers=[],live=None,commands=None,playback=None)))
         for w in s['globals']:self.uc.mem_write(w['address'],bytes.fromhex(w['bytes']))
         for w in s['actors']:self.write_host(self.pool[w['slot']]['address']+w['offset'],bytes.fromhex(w['bytes']))
-        for w in s['world']:self.write_host(WORLD+w['offset'],bytes.fromhex(w['bytes']))
-        for i,slot in enumerate(s['seats']):self.write_host(WORLD+0x194+i*4,struct.pack('<I',self.pool[slot]['address']))
+        for w in s['world']:self.write_host(self.world_address+w['offset'],bytes.fromhex(w['bytes']))
+        for i,slot in enumerate(s['seats']):self.write_host(self.world_address+0x194+i*4,struct.pack('<I',self.pool[slot]['address']))
         for i,ordinal in enumerate(s['bindings']):self.write_host(self.pool[i]['address']+0x368,struct.pack('<I',self.object_addresses[ordinal]))
         if s['saved'] is not None:self.uc.mem_write(0x458588,bytes(s['saved']))
         if s['pointers'] is not None:self.uc.mem_write(0x4588A8,struct.pack('<II',*s['pointers']))
         for w in s['buffers']:self.uc.mem_write(BUFFERS[w['index']]+w['offset'],bytes.fromhex(w['bytes']))
         if not inherited:
-            for r,v in [(UC_X86_REG_ESP,self.body_sp),(UC_X86_REG_EBX,WORLD),(UC_X86_REG_ESI,self.u32(0x44D020))]:self.uc.reg_write(r,v)
+            for r,v in [(UC_X86_REG_ESP,self.body_sp),(UC_X86_REG_EBX,self.world_address),(UC_X86_REG_ESI,self.u32(0x44D020))]:self.uc.reg_write(r,v)
             self.put(self.body_sp+0x38,paused);self.put(self.body_sp+0x64,0x99887766)
             self.uc.mem_write(self.body_sp+0x430,bytes([0xA5])*28)
         before=list(self.uc.mem_read(self.body_sp+0x430,28));self.round_events=[];self.round_calls=[];self.round_end=None
@@ -112,7 +112,7 @@ class MatchRound(ReplayTick):
         assert transport(dict(initialContext=initial,case=natural),self.blobs)==transport(dict(initialContext=old['initialContext'],case=old['cases'][0]),old['blobs'])
         parents['replay-tick']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256']);del old,raw
         for offset,count in [(0x24,1),(0x20,3)]:
-            a=API+0x100+offset*4;self.put(VTABLE+offset,a);self.control_imports[a]=(offset,count)
+            a=self.control_api+0x100+offset*4;self.put(VTABLE+offset,a);self.control_imports[a]=(offset,count)
         initial=self.control_snapshot();natural=self.round_step('natural-first-round',paused=int(self.control),inherited=True)
         print('Pinned replay parent reproduced; natural round continuation',natural['continuation'],flush=True)
         return parents,initial,natural
@@ -222,7 +222,7 @@ class MatchRound(ReplayTick):
             s=inputs(timer=75,teams=1,music=True) if i==0 else None
             cases.append(self.round_step(f'consecutive-round-{i}',s))
         print('Round acknowledgement, restoration and consecutive outcome captured',flush=True)
-        return transport(dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=WORLD,
+        return transport(dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=self.world_address,
             objectAddresses=self.object_addresses,actorAddresses=[r['address'] for r in self.pool],bodySP=self.body_sp,bufferAddresses=BUFFERS,
             initialContext=initial,cases=cases),self.blobs)
 

@@ -39,8 +39,9 @@ def platform():return dict(asyncResults=[-1,1],ioctlResults=[-1,0],ioctlBytes=[0
 
 
 class InputControl(LocalInput):
-    def __init__(self,control=False):
-        super().__init__(control);self.control_running=False
+    def __init__(self,control=False,control_api=API,**loading_options):
+        self.control_api=control_api
+        super().__init__(control,**loading_options);self.control_running=False
         self.control_stop=None
         # These PCs are also traversed in other calls. A translated block
         # cached by a previous continuation can cross a later emu_start's
@@ -68,16 +69,16 @@ class InputControl(LocalInput):
             self.write_host(args[0],bytes([args[1]])*args[2]);self.ret(args[0])
         else:super().memset(uc,address,size,data)
 
-    def install_boundaries(self):
-        self.uc.mem_map(API,0x1000);self.control_imports={}
+    def install_boundaries(self,replay_buffers=True):
+        self.uc.mem_map(self.control_api,0x1000);self.control_imports={}
         for i,(iat,name) in enumerate([(0x447274,'asyncSelect'),(0x44728C,'ioctl'),(0x447294,'send'),(0x447298,'receive'),
                                        (0x4471C8,'message'),(0x4471EC,'postMessage'),(0x44717C,'free')]):
-            a=API+i*16;self.put(iat,a);self.control_imports[a]=name
+            a=self.control_api+i*16;self.put(iat,a);self.control_imports[a]=name
         for offset,count in [(8,1),(0x48,1),(0x34,2),(0x30,4)]:
-            a=API+0x100+offset*4;self.put(VTABLE+offset,a);self.control_imports[a]=(offset,count)
-        self.uc.hook_add(UC_HOOK_CODE,self.control_imported,begin=API,end=API+0xFFF)
+            a=self.control_api+0x100+offset*4;self.put(VTABLE+offset,a);self.control_imports[a]=(offset,count)
+        self.uc.hook_add(UC_HOOK_CODE,self.control_imported,begin=self.control_api,end=self.control_api+0xFFF)
         self.replay_memory=[]
-        for address in BUFFERS:
+        for address in (BUFFERS if replay_buffers else []):
             self.uc.mem_map(address & ~4095,0x640000)
             r=self.add_region(address,SIZE,'control-replay')
             # Supplied allocation backing, not claimed to originate at43d2c0.
@@ -134,10 +135,10 @@ class InputControl(LocalInput):
             call['returnSP']=sp+4;self.helper_calls.append(call);self.helper_pending=None
         elif address==0x401A30:self.observation('soundRequest',[uc.reg_read(UC_X86_REG_ECX),self.u32(sp+4)])
         elif address==0x431C70:
-            assert uc.reg_read(UC_X86_REG_ECX)==WORLD;self.observation('inputReset')
+            assert uc.reg_read(UC_X86_REG_ECX)==self.world_address;self.observation('inputReset')
         elif address==0x43DF00:self.observation('restorePlayback')
         elif address in (0x4198F0,0x4197A0):
-            assert self.receive_pending is None and uc.reg_read(UC_X86_REG_ECX)==WORLD
+            assert self.receive_pending is None and uc.reg_read(UC_X86_REG_ECX)==self.world_address
             count=3 if address==0x4198F0 else 2
             self.receive_pending=dict(entry=address,entrySP=sp,returnAddress=self.u32(sp),arguments=[self.u32(sp+4+i*4) for i in range(count)],saved=[uc.reg_read(r) for r in REGISTERS])
         elif address in (0x419A50,0x4198E9):
@@ -165,15 +166,15 @@ class InputControl(LocalInput):
         p=json.loads(json.dumps(p or platform()))
         for v in s['globals']:self.uc.mem_write(v['address'],bytes.fromhex(v['bytes']))
         for v in s['actors']:self.write_host(self.pool[v['slot']]['address']+v['offset'],bytes.fromhex(v['bytes']))
-        for v in s['world']:self.write_host(WORLD+v['offset'],bytes.fromhex(v['bytes']))
-        for seat,slot in enumerate(s['seats']):self.write_host(WORLD+0x194+seat*4,struct.pack('<I',self.pool[slot]['address']))
+        for v in s['world']:self.write_host(self.world_address+v['offset'],bytes.fromhex(v['bytes']))
+        for seat,slot in enumerate(s['seats']):self.write_host(self.world_address+0x194+seat*4,struct.pack('<I',self.pool[slot]['address']))
         if s['saved'] is not None:self.uc.mem_write(0x458588,bytes(s['saved']))
         if s['pointers'] is not None:self.uc.mem_write(0x4588A8,struct.pack('<II',*s['pointers']))
         if s['live'] is not None:
             for m,live in zip(self.replay_memory,s['live']):m['live']=live
         for v in s['buffers']:self.uc.mem_write(BUFFERS[v['index']]+v['offset'],bytes.fromhex(v['bytes']))
         if not inherited:
-            self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,WORLD);self.put(self.body_sp+0x38,paused)
+            self.uc.reg_write(UC_X86_REG_ESP,self.body_sp);self.uc.reg_write(UC_X86_REG_EBX,self.world_address);self.put(self.body_sp+0x38,paused)
             self.uc.mem_write(self.body_sp+0x430,bytes([0xA5]*28))
             self.uc.mem_write(self.commands_address,bytes(s['commands']));self.uc.mem_write(self.body_sp+0x440,bytes(s['playback']))
             self.put(self.body_sp+0x44,0x99887766)
@@ -319,7 +320,7 @@ class InputControl(LocalInput):
                 s,p=inputs(1<<bit,words={address:value});cases.append(self.control_step(f'toggle-wrap-{bit}-{value}',s,p))
         for bit,address in [(7,0x450C18),(8,0x450C1C),(9,0x450C20),(10,0x450C24)]:
             s,p=inputs(1<<bit,words={address:2147483647});cases.append(self.control_step(f'counter-wrap-{bit}',s,p))
-        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=WORLD,objectAddresses=self.object_addresses,
+        doc=dict(exeSHA256=EXE_SHA256,scope=__doc__,control=self.control,parents=parents,worldAddress=self.world_address,objectAddresses=self.object_addresses,
                  actorAddresses=[r['address'] for r in self.pool],bodySP=self.body_sp,bufferAddresses=BUFFERS,initialContext=context,messages=self.messages,cases=cases)
         return transport(doc,self.blobs)
 

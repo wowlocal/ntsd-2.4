@@ -41,13 +41,17 @@ class EarlyMenus(FrontMenuLoop):
   return pc==self.loading_draw_return or super().body_code_allowed(pc)
 
 class MenuLoading(InitialLoading):
- def __init__(self,early):
+ def __init__(self,early,**loading_options):
   self.early=early;self.draw_calls=[]
   early.continuing_loading=True
+  # This observer now only returns; do not cross into Python for every catalog
+  # instruction. The loading observer owns code checks; early memory masks and
+  # the explicit real drawing callback remain active.
+  early.uc.hook_del(early.front_code_hook)
   uc=early.uc;registers=[*REGISTERS,UC_X86_REG_EIP,UC_X86_REG_ESP,UC_X86_REG_ECX,UC_X86_REG_EAX,UC_X86_REG_EDX,UC_X86_REG_EFLAGS]
   before=early.snapshot();stack=bytes(uc.mem_read(STACK,0x10000));saved=[uc.reg_read(r) for r in registers]
   world=dict(address=WORLD,size=WORLD_PREFIX,kind='world',initial=early.world_initial,mask=early.world_mask)
-  super().__init__(early.control,uc=uc,existing_world=world,second_pointer=0x2D000020)
+  super().__init__(early.control,uc=uc,existing_world=world,second_pointer=0x2D000020,**loading_options)
   assert self.uc is uc and early.snapshot()==before and bytes(uc.mem_read(STACK,0x10000))==stack and [uc.reg_read(r) for r in registers]==saved
   # Same declared COM objects; bind their methods to the attached adapters.
   wave=self.wave;wave.p={};wave.prefix_draw=self.prefix_draw

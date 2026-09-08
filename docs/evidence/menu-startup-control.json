@@ -1,0 +1,31 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own fresh early menus/loading -> local/control/replay/round -> music/resources.\nSame CPU/World/stack throughout the natural first phase1 path to429e5a.\nNo post-loading game-state stimuli, replay buffers, paused-entry jump or new\nWorld. Platform/CRT/allocator boundaries remain explicit; no Windows/UI claim.\n",
+  "corpus": "menu-startup-control.json",
+  "sha256": "3c7d435aa48b04cc8a2c25352465c9e9910d200c0d8ae7e030cfeefea5990174",
+  "bytes": 564383,
+  "parents": {
+    "menu-loading": {
+      "fixture": "original-menu-loading-control.json",
+      "sha256": "54334dd243f5c24ee52e47d386e07a214bc76dff209c30c1d954276ead7b6efd"
+    },
+    "menu-loading-state": {
+      "fixture": "original-menu-loading-state-control.json",
+      "sha256": "ec76d7eaa3ae05231c8b03660bb219bfe7f81b6ece7ac35f8ba105c4fdf3e47e"
+    },
+    "menu-loading-catalog": {
+      "fixture": "original-menu-loading-catalog-control.json",
+      "sha256": "24d3d4ba6c5d238c18880a494b4b68e1a8968a47b01dd18e953c3bd505c1627a"
+    },
+    "menu-loading-sounds": {
+      "fixture": "original-menu-loading-sounds-control.json",
+      "sha256": "37ea6643bab721478160b4ee7d413a7512a27efd863260a5aa86c490daffe0ee"
+    }
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Menu startup matches original: own 119 early calls/loading -> 1 local /1 received calls -> round/menu -> 5 music helpers /11 character-menu constructors; 22 checkpoints /68 events /3412 records /5948634 bytes+masks. Actual continuation reaches429e5a on the same World; selection dispatch, full match, app UI and Windows open",
+  "fixture": "original-menu-startup-control.json",
+  "fixtureSHA256": "e5a8b368e5f0c4f2f087969966c72333ce6534bae105f9140e16c2a22b58bb75",
+  "fixtureBytes": 335670
+}

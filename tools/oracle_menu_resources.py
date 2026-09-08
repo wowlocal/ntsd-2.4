@@ -32,18 +32,19 @@ RETURNS=[0x429812,0x429851,0x429890,0x4298CF,0x42990E,0x42994D,0x42998C,0x4299CB
 
 
 class MenuResources(MusicPlayback):
-    def __init__(self,control=False):
-        super().__init__(control);self.resources_running=False;self.menu_bitmaps=[];self.resource_sources={}
-        self.uc.mem_map(ARENA,0x1000000);self.uc.mem_map(API,0x1000)
-        self.uc.hook_add(UC_HOOK_MEM_WRITE,self.track_write,begin=ARENA+0x10000,end=ARENA+0xFFFFFF)
+    def __init__(self,control=False,resource_arena=ARENA,resource_api=API,**loading_options):
+        self.resource_api=resource_api;self.resource_arena=resource_arena;self.menu_sp=MENU_SP
+        super().__init__(control,**loading_options);self.resources_running=False;self.menu_bitmaps=[];self.resource_sources={}
+        self.uc.mem_map(self.resource_arena,0x1000000);self.uc.mem_map(self.resource_api,0x1000)
+        self.uc.hook_add(UC_HOOK_MEM_WRITE,self.track_write,begin=self.resource_arena+0x10000,end=self.resource_arena+0xFFFFFF)
 
     def install_resources(self):
         self.uc.hook_add(UC_HOOK_CODE,self.resource_code)
-        for at,to in [(0x4471C8,API),(0x447080,API+0x10),(ARENA+0x3000+0x74,API+0x20),(ARENA+0x3000+8,API+0x30)]:self.put(at,to)
-        for index in range(11):self.put(ARENA+0x2000+index*16,ARENA+0x3000)
+        for at,to in [(0x4471C8,self.resource_api),(0x447080,self.resource_api+0x10),(self.resource_arena+0x3000+0x74,self.resource_api+0x20),(self.resource_arena+0x3000+8,self.resource_api+0x30)]:self.put(at,to)
+        for index in range(11):self.put(self.resource_arena+0x2000+index*16,self.resource_arena+0x3000)
 
     def write_host(self,address,raw):
-        if ARENA+0x10000<=address<ARENA+0x1000000:
+        if self.resource_arena+0x10000<=address<self.resource_arena+0x1000000:
             self.track_write(self.uc,0,address,len(raw),0,None);self.uc.mem_write(address,raw)
         else:super().write_host(address,raw)
 
@@ -58,8 +59,8 @@ class MenuResources(MusicPlayback):
             index=len(self.resource_allocations);assert index<11
             token=0;r=None
             if not self.resource_nulls&(1<<index):
-                token=ARENA+0x10020+len(self.menu_bitmaps)*0x2000
-                assert token+SIZE<ARENA+0x1000000
+                token=self.resource_arena+0x10020+len(self.menu_bitmaps)*0x2000
+                assert token+SIZE<self.resource_arena+0x1000000
                 r=self.add_backing(token,SIZE,'menu-bitmap');self.menu_bitmaps.append(r)
             self.resource_allocations.append(dict(address=token,backing=None if r is None else self.blob(r['initial'])))
             self.revent('allocate',[SIZE]);self.ret(token)
@@ -68,7 +69,7 @@ class MenuResources(MusicPlayback):
             index=self.resource_pending['index'];path=self.cstr(uc.reg_read(UC_X86_REG_EDI));assert path.decode()==PATHS[index]
             assert [self.u32(sp+i) for i in (4,8,12)]==[self.u32(0x457578),0x40,0]
             desc=self.resources[path.decode().lower()];raw=self.pe.data[desc['fileOffset']:desc['fileOffset']+desc['size']]
-            width,height=struct.unpack_from('<ii',raw,4);surface=0 if self.resource_missing&(1<<index) else ARENA+0x2000+index*16
+            width,height=struct.unpack_from('<ii',raw,4);surface=0 if self.resource_missing&(1<<index) else self.resource_arena+0x2000+index*16
             self.resource_sources[path.decode()]=dict(path=path.decode(),resourcePath=desc['path'],width=width,height=height,dib=self.blob(raw))
             resource=dict(path=path.decode(),present=surface!=0,width=width if surface else None,height=height if surface else None)
             self.resource_inputs.append(dict(index=index,resource=resource,surface=surface,colorKeyResult=self.resource_keys[index]))
@@ -106,11 +107,11 @@ class MenuResources(MusicPlayback):
                 self.resource_end='nullSpark';uc.emu_stop();return
         elif address==0x429C56:self.rcheckpoint('flag')
         elif address==0x429E5A:self.rcheckpoint('complete');self.resource_end='ready';uc.emu_stop();return
-        elif API<=address<=API+0x30:
+        elif self.resource_api<=address<=self.resource_api+0x30:
             arg=lambda i:self.u32(sp+4+i*4)
-            if address==API:self.revent('message',[arg(0),arg(3)],[self.cstr(arg(1)),self.cstr(arg(2))]);self.ret(7,16)
-            elif address==API+0x10:self.revent('debug',strings=[self.cstr(arg(0))]);self.ret(0x87654321,4)
-            elif address==API+0x20:
+            if address==self.resource_api:self.revent('message',[arg(0),arg(3)],[self.cstr(arg(1)),self.cstr(arg(2))]);self.ret(7,16)
+            elif address==self.resource_api+0x10:self.revent('debug',strings=[self.cstr(arg(0))]);self.ret(0x87654321,4)
+            elif address==self.resource_api+0x20:
                 item=self.resource_inputs[-1];assert arg(0)==item['surface'] and arg(1)==8 and bytes(uc.mem_read(arg(2),8))==bytes(8)
                 self.revent('colorKey',[arg(0),arg(1)],[bytes(8)]);self.ret(item['colorKeyResult'],12)
             else:self.revent('release',[arg(0)]);self.ret(17,4)
@@ -124,9 +125,9 @@ class MenuResources(MusicPlayback):
             raw=struct.pack('<I',value&0xFFFFFFFF) if isinstance(value,int) else value
             self.uc.mem_write(address,raw);stimulus.append(dict(address=address,bytes=raw.hex()))
         if not inherited:
-            for reg,value in [(UC_X86_REG_ESP,MENU_SP),(UC_X86_REG_EBP,0x44D020),(UC_X86_REG_EDI,WORLD)]:self.uc.reg_write(reg,value)
-            for offset,value in [(0x14,WORLD),(0x1C,0x451160),(0x24,self.u32(self.body_sp+0x68)),(0x40,0x44D020),
-                                 (0x20,0x11223344),(0x28,0x11223344),(0x34,0x11223344),(0x38,0x11223344),(0x3C,0x11223344)]:self.put(MENU_SP+offset,value)
+            for reg,value in [(UC_X86_REG_ESP,self.menu_sp),(UC_X86_REG_EBP,0x44D020),(UC_X86_REG_EDI,self.world_address)]:self.uc.reg_write(reg,value)
+            for offset,value in [(0x14,self.world_address),(0x1C,0x451160),(0x24,self.u32(self.body_sp+0x68)),(0x40,0x44D020),
+                                 (0x20,0x11223344),(0x28,0x11223344),(0x34,0x11223344),(0x38,0x11223344),(0x3C,0x11223344)]:self.put(self.menu_sp+offset,value)
         self.resource_nulls=nulls;self.resource_missing=missing;self.resource_keys=keys or [0]*11
         self.resource_allocations=[];self.resource_inputs=[];self.resource_events=[];self.resource_calls=[];self.resource_checkpoints=[];self.resource_pending=None;self.resource_end=None
         self.resources_running=True;self.phase='menu-resources'
@@ -139,9 +140,9 @@ class MenuResources(MusicPlayback):
         except Exception:
             print('RESOURCE FAILURE',label,hex(self.uc.reg_read(UC_X86_REG_EIP)),self.resource_events[-3:],flush=True);raise
         finally:self.resources_running=False
-        assert self.uc.reg_read(UC_X86_REG_ESP)==MENU_SP
-        assert [self.u32(MENU_SP+i) for i in (0x20,0x28,0x34,0x38)]==[0]*4
-        assert [self.uc.reg_read(r) for r in (UC_X86_REG_EBX,UC_X86_REG_ESI,UC_X86_REG_EBP,UC_X86_REG_EDI)]==[0xFFFFFFFF,0,0x44D020,WORLD]
+        assert self.uc.reg_read(UC_X86_REG_ESP)==self.menu_sp
+        assert [self.u32(self.menu_sp+i) for i in (0x20,0x28,0x34,0x38)]==[0]*4
+        assert [self.uc.reg_read(r) for r in (UC_X86_REG_EBX,UC_X86_REG_ESI,UC_X86_REG_EBP,UC_X86_REG_EDI)]==[0xFFFFFFFF,0,0x44D020,self.world_address]
         if self.resource_end=='ready':assert [self.uc.reg_read(r) for r in (UC_X86_REG_ECX,UC_X86_REG_EDX)]==[2,1]
         state=self.control_snapshot()
         for k,v in self.resource_initial.items():
@@ -149,7 +150,7 @@ class MenuResources(MusicPlayback):
         assert [self.record(r) for r in self.music_allocations]==self.resource_music
         return dict(label=label,stimulus=stimulus,inherited=inherited,allocations=self.resource_allocations,inputs=self.resource_inputs,
                     events=self.resource_events,calls=self.resource_calls,checkpoints=self.resource_checkpoints,
-                    continuation=self.resource_end,selectionAtEntry=self.u32(MENU_SP+0x3C),endPC=self.uc.reg_read(UC_X86_REG_EIP),endSP=MENU_SP,
+                    continuation=self.resource_end,selectionAtEntry=self.u32(self.menu_sp+0x3C),endPC=self.uc.reg_read(UC_X86_REG_EIP),endSP=self.menu_sp,
                     globals=state['globals'],records=[dict(address=r['address'],storage=self.record(r)) for r in self.menu_bitmaps])
 
     def resource_probes(self,cases):
@@ -181,7 +182,7 @@ class MenuResources(MusicPlayback):
         assert digest(raw)==r['sha256'];old=json.loads(raw);assert parents==old['parents']
         assert transport(dict(initialContext=initial,case=natural),self.blobs)==transport(dict(initialContext=old['initialContext'],case=old['cases'][0]),old['blobs'])
         parents['music-playback']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256']);del old,raw
-        assert self.u32(0x44D07C)==1 and self.uc.reg_read(UC_X86_REG_ESP)==MENU_SP
+        assert self.u32(0x44D07C)==1 and self.uc.reg_read(UC_X86_REG_ESP)==self.menu_sp
         self.resource_initial=self.control_snapshot();self.resource_music=[self.record(r) for r in self.music_allocations];self.install_resources()
         cases=[self.resource_step('first-menu-resources',inherited=True)]
         print('Pinned natural music reproduced; resource continuation',cases[0]['continuation'],flush=True)

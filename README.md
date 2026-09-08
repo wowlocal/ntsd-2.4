@@ -45,8 +45,10 @@ call. The [menu-to-loading composition](docs/research/MENU_LOADING.md) now
 continues that same state through the full initial loading body: common sounds,
 all source catalog entries, the400-slot pool and initial interface resources.
 It retains the earlier graphics resources and executes their loading-screen
-draw. This composition remains separate from the app UI; continuing its loaded
-state through input and the full character-selection flow is still pending.
+draw. The [startup continuation](docs/research/MENU_STARTUP.md) now carries that
+same state through input, round control, enabled menu music and all11 character-menu
+resource constructors. This composition remains separate from the app UI;
+character-selection dispatch and the full selection flow are still pending.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
