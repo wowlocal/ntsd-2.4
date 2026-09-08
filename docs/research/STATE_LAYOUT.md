@@ -574,3 +574,18 @@ stack backing. Модель не делает эти bytes initialized и не �
 между вызовами; поздние строки не очищаются заранее. Неудачный fgets оставляет
 старый буфер, который исходник всё равно сканирует. Исходные ad0/ad1 отсутствуют;
 проверены missing paths и явные present-file controls, не полный parent/startup.
+
+Дополнение [bitmap информационной панели](MENU_PANEL_BITMAP.md), S/D всего43cc60:
+
+| Поле | Правило |
+| --- | --- |
+| `458420` | Old wrapper проходит destructor/free, затем global0; новый malloc/constructor снова записывается сюда, включая null |
+| `453d40/457578` | Путь и opaque graphics device общего43ee50; helper путь не меняет |
+| Bitmap+`0` | Destructor Release для ненулевой surface, затем0; null surface не освобождается повторно |
+| Bitmap+`10/7e0/fb0/1780 +4i`, i=0..10 | 11 фиксированных x/y/width/height, исходный порядок полей; не зависят от размеров DIB |
+| Bitmap+`0c` | Count11 только после всех44 metadata writes, только при ненулевой surface |
+
+Missing/key-failure wrappers сохраняются до следующего вызова, с исходными
+нетронутыми count/rectangles. Malloc может повторно выдать освобождённый адрес;
+каждое поколение имеет свои bytes/masks и live flag. Freed snapshots не становятся
+новым backing. Provenance Windows allocator и родитель4236d0 пока открыты.

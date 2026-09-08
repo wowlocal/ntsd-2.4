@@ -1,0 +1,27 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole43cc60 information-panel bitmap replacement with real43ee50/43ef50.\nIndependent helper calls with supplied path/device/allocator boundaries. Original\nad0/ad1 bitmaps are absent; successful controls use identified original PE DIBs.\nTrack ordered writes, real helper ABI, all live/dead allocation generations and\ntheir full bytes/masks. No4236d0 caller, pixels, heap provenance or Windows claim.\n",
+  "corpus": "menu-panel-bitmap-control.json",
+  "sha256": "1b6ce5cdbc4a40a044a871b6933e5174cccba808daf75bba7a72824bf9f81fcf",
+  "cases": 59,
+  "sources": 3,
+  "helpers": 101,
+  "events": {
+    "allocate": 59,
+    "colorKey": 37,
+    "construct": 51,
+    "debug": 31,
+    "destroy": 50,
+    "free": 50,
+    "load": 51,
+    "message": 31,
+    "release": 37,
+    "write": 1009
+  },
+  "success": 20,
+  "nativeCompared": true,
+  "nativeComparison": "Menu panel bitmap matches original: 59 cases /3 DIBs, 101 helper returns /51 constructors /50 destructors, 59 malloc /8 null /22 reused addresses, 1406 events /1009 parent writes /37 releases /50 frees, 20 successful /39 failed returns, 1437 records /13768544 bytes/masks. Independent helper; parent4236d0, pixels and Windows remain open",
+  "fixture": "original-menu-panel-bitmap-control.json",
+  "fixtureSHA256": "525b2bbdfe1644321b6a17e6cf49b0df939467e6e16df8b92ea800831e5992a0",
+  "fixtureBytes": 728195
+}

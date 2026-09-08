@@ -92,6 +92,11 @@ World/resources/settings через настоящие gate/fill/background/draw
 43cc60/43c690/43c710 и соединение всего4236d0 с настоящим427127 caller.
 Отдельный helper не продолжает tick/menu fixtures и не доказывает весь экран.
 
+[Bitmap панели](MENU_PANEL_BITMAP.md) теперь сравнивает весь43cc60 и настоящие
+constructor/destructor в118 случаях: fixed atlas, free-before-malloc, null/error
+branches и все поколения повторно выданных адресов. Следом43c690/43c710 и весь
+4236d0; путь/DIB/allocator/COM этого отдельного корпуса ещё являются входами.
+
 ## Как устранять пропуски
 
 1. **R02.1:** словарь состояния полного пути и всех пропущенных полей, точная

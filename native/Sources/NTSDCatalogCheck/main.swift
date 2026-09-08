@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-panel-bitmap" {
+        let r = try MenuPanelBitmapReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Menu panel bitmap matches original: \(r.cases) cases /\(r.sources) DIBs, \(r.helpers) helper returns /\(r.constructors) constructors /\(r.destructors) destructors, \(r.allocations) malloc /\(r.nullAllocations) null /\(r.reused) reused addresses, \(r.events) events /\(r.writes) parent writes /\(r.releases) releases /\(r.frees) frees, \(r.success) successful /\(r.failure) failed returns, \(r.records) records /\(r.bytes) bytes/masks. Independent helper; parent4236d0, pixels and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--menu-content" {
         let r = try MenuContentReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Menu content matches original: \(r.cases) cases, \(r.formats) actual formats /\(r.gets) fgets /\(r.scans) sscanf, \(r.events) events /\(r.writes) parent writes, \(r.success) successful /\(r.failure) failed returns /\(r.boundaries) unterminated-input boundaries, \(r.records) records /\(r.bytes) bytes/masks. Independent helper; full menu-information lifecycle, Windows and network remain open")

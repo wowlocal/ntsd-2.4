@@ -750,6 +750,26 @@ CRT thread/locks remain explicit boundaries. Next43cc60 bitmap lifecycle and
 Both packed release comparisons passed before acceptance;25 old fixture SHA
 unchanged, new raw/packed SHA and complete unpack verified. Both new XCTest
 passed in28.684s; release NTSDNative passed in2.33s. No app UI/Windows claim.
+The [panel bitmap lifecycle](docs/research/MENU_PANEL_BITMAP.md) now executes
+whole43cc60 with real43ee50/43ef50 in118 independent helper calls. Native matches
+202 child returns (102 constructors/100 destructors),2812 events/2018 parent
+writes,74 releases/100 frees,2874 full records/27537088 bytes/masks.118 malloc
+requests include16 null and44 repeated addresses; each pass retains51 allocation
+generations on29 addresses. Freeze dead bytes/masks BEFORE the same physical
+address is reused; native next backing comes from allocator input, never from
+expected freed snapshots. Old bitmap always goes through destructor/free before
+malloc; missing/key-failure wrappers remain live with untouched count/rectangles.
+Only successful surface gets44 literal x/y/width/height writes, then count11.
+These rectangles are independent of DIB dimensions; do not clamp them to fit.
+Known surface+0 alone is canonical1/0; retain raw token per generation for release.
+Both original ad0/ad1 bmp are absent; successful controls explicitly bind three
+original PE DIB names (MENU_CLIP/MENU_BACK1/SPARK), never replacement ad assets.
+This does not execute4236d0 or prove a natural Windows startup calls43cc60 after
+missing text. Next43c690/43c710 default/cache writers, then whole4236d0 at427127
+with existing43c780 and fresh early screen parent. Constructor core unchanged.
+Both packed release comparisons passed before acceptance;27 old fixture SHA
+unchanged, new raw/packed SHA and full unpack checked. Two new XCTest passed
+in0.474s; release NTSDNative passed in2.36s. App UI/pixels/full match/W open.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
