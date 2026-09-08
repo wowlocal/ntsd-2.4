@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--settings-loading" {
+        let r = try SettingsLoadingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Settings loading matches original: \(r.cases) cases, \(r.scans) actual VC80 scans /\(r.gets) gets /\(r.eof) EOF checks, \(r.returns) settings returns /\(r.nullFiles) null-file boundaries, \(r.events) events /\(r.writes) ordered parent writes, \(r.records) records /\(r.bytes) bytes/masks; native parent \(r.front.constructors) constructors. File opening/translation, full menu and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--front-menu-resources" {
         let r = try FrontMenuResourcesReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Front menu resources match original: \(r.cases) cases, \(r.sources) source DIBs, \(r.allocations) allocations /\(r.nullAllocations) null, \(r.constructors) real constructors, \(r.events) events /\(r.writes) ordered writes, \(r.settings) settings boundaries /\(r.skipped) skips /\(r.nullBitmaps) null-bitmap boundaries, \(r.records) records /\(r.bytes) bytes/masks. Settings423480, full menu, pixels and Windows remain open")

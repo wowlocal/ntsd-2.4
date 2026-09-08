@@ -678,6 +678,31 @@ Next423480 settings/CRT, then427092/42709b and full early-screen integration.
 Both new XCTest passed in4.207s; release NTSDNative in2.33s.19 old fixture SHA
 unchanged; both raw/packed SHA and complete unpack verified, generator --check
 passed. No shared constructor changed; full UI/pixels/Practice/Windows open.
+The [settings-loading study](docs/research/SETTINGS_LOADING.md) now continues
+each fresh World/front-resource parent on the SAME CPU/stack through actual
+423480, VC80 fscanf/fgets/feof, ret42708e and store427092 to42709b. Native uses
+its own World/resources via optional FrontMenuResourcesReference.onNatural.
+Two94-case corpora match:8742 actual scans/696 gets/510 feof,186 helper returns,
+15128 events/4620 parent writes,20648 records/481555672 bytes/masks plus parents.
+44 integer fields use the shared scanner unchanged; four unbounded %s may overlap
+11-byte names, then backticks become spaces. Trailing format whitespace consumes
+blank lines. Profile trim removes only space/CR/LF, never TAB. Failed fgets keeps
+old scratch; EOF after a final newline duplicates that last info line. Preserve
+all copied bytes, NULs and dword/byte append order, including adjacent globals.
+427092 writes caller EBX, natural0, not a literal0. The supplied retry after a
+null-FILE interruption exposed this: core caller input fixed; fresh source
+capture preserved every old event/snapshot/blob. Null FILE stops BEFORE4234db
+call and does not clear the flag. It does not model CRT invalid-parameter exit.
+First helper is continuous after real resources; subsequent427089 entries are
+explicit caller probes, not full menu iterations. File open/close, translated
+_read bytes, thread binding,500-byte scratch backing and controlled caller EBX
+are declared inputs. Actual Windows file/CRT startup and stack lifetime remain
+open; no native app UI integration follows. Next42709b screen selection,
+4237e0/415160/423840/4236d0 and real42710f bitmap caller, then earlier/later menus.
+Both release comparisons passed before accepting fixtures. Four targeted tests
+(new settings and old front resources) passed in11.970s;21 old fixture hashes
+unchanged, both new raw/packed SHA and complete unpack verified. Release
+NTSDNative passed in2.31s. No window/device-output claim.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

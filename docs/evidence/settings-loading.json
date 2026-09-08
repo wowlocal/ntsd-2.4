@@ -1,0 +1,26 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Real front resources ->427089/423480/427092 through42709b.\nActual VC80 fscanf/fgets/feof execute in the SAME CPU/stack as the EXE.\nFopen/fclose, translated _read bytes, single-thread services and scratch backing\nremain supplied boundaries. The first entry continues freshly executed World /\nfront resources; later entries are explicit calls on persistent state, not full\nmenu iterations. Caller EBX is the final flag-store value (natural zero).\nIndependent native comparison is required for fixture acceptance. Windows file\nopening/translation, pixels and the full menu remain outside this capture.\n",
+  "corpus": "settings-loading.json",
+  "sha256": "d4aed2abf47f8b9a4e95fe3a5a66366506b5ff5cbb8e844f02422dea1f971979",
+  "cases": 94,
+  "events": {
+    "open": 94,
+    "scan": 4371,
+    "gets": 348,
+    "eof": 255,
+    "close": 93,
+    "settingsReturn": 93,
+    "write": 2310
+  },
+  "continuations": {
+    "ready": 93,
+    "nullFile": 1
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Settings loading matches original: 94 cases, 4371 actual VC80 scans /348 gets /255 EOF checks, 93 settings returns /1 null-file boundaries, 7564 events /2310 ordered parent writes, 10324 records /240777836 bytes/masks; native parent 24 constructors. File opening/translation, full menu and Windows remain open",
+  "fixture": "original-settings-loading.json",
+  "fixtureSHA256": "b0c95deb903f0ec03b6cd15a8dad8186433ece4616e75912ecee49d09c852517",
+  "fixtureBytes": 2222379
+}

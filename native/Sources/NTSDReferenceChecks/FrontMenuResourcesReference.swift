@@ -29,7 +29,8 @@ public enum FrontMenuResourcesReference {
         func digit(_ x: UInt8) throws -> UInt8 { switch x { case 48...57:return x-48;case 97...102:return x-87;default:throw error("Hex digit") } }
         return try stride(from: 0,to: bytes.count,by: 2).map { try digit(bytes[$0])*16+digit(bytes[$0+1]) }
     }
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data,
+        onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalFrontMenuResources) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 256_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c", !c.cases.isEmpty,
               Set(c.sources.map(\.path)) == Set(OriginalFrontMenuResources.paths), c.sources.count == 23 else { throw error("Source identity") }
@@ -132,6 +133,7 @@ public enum FrontMenuResourcesReference {
                 guard surfaces[key] == 0 || surfaces[key] == input.surface else { throw error("Surface normalization") }
                 try check(actual.storage,expected,item.label+" bitmap")
             }
+            if caseIndex == 0 { try onNatural?(world,state,loader) }
             result.cases += 1
         }
         return result
