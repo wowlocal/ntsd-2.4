@@ -1191,6 +1191,30 @@ All94old fixture hashes unchanged; two new SHA/size/full-unpack checks passed,
 96pins at build/research/mode-screen-fixture-pins.json. No Core rule or expected
 snapshot was changed to accommodate the diagnostic ABI/observer failures.
 
+The [own menu return](docs/research/MENU_RETURN.md) now continues the first
+431d10/ret16 through429730/ret12,41bc90/ret4 and4246b0/ret4 on the same CPU,
+stack and owned World. Both95-case corpora match native:190cases/386checkpoints,
+1142events/586helpers,164926records/297470304bytes+masks after checked parents.
+Only the FIRST case per corpus executes all nested epilogues. Later4229e2
+output probes stop BEFORE422a95; do not claim reconstructed outer frames/SEH.
+Source freshly reproduces ALL loading/startup documents/blobs and the FIRST
+pinned mode case/blobs; native still compares the whole632-case mode parent.
+OriginalMenuReturn uses shared fill/bitmap/text/overlay/present helpers.
+Network notice requires signed44d058>0 and Int8(44f1af)>0, decrements after text.
+Menu0 alone writes451158=0 then timer451154. Held457580 clears only424746 after
+the real41bc90 return; no cursor/44d060/second present is inserted there.
+Five volume-control slots45560c..1c explicitly use own first common WAV buffers;
+initial WinMain assignment is still open. GDI observer now uses the same VM's
+cached cstr reader for original rdata; source was freshly rerun after that fix.
+Next run WHOLE4246b0/World2->41bc90 using this own first return. Preserve actual
+phase switching/pause/input/control, including phase0 Winsock calls with
+network0. Confirm VS through real input, then reach menu3/1 character selection;
+do not skip to standalone selection inputs. App UI/full tick/Windows stay open.
+Both new release XCTest passed25.434s, two old completion debug tests8.532s.
+Release CatalogCheck83.08s, acceptance0.19s, NTSDNative2.79s. All processes
+terminal. All96old fixture hashes unchanged; both new SHA/size/full unpack
+verified,98pins at build/research/menu-return-fixture-pins.json.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

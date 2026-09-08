@@ -1,0 +1,21 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own first431d10 ret16 ->429730 ret12 ->41bc90 ret4 ->4246b0 ret4.\nFresh full early-menu/loading/startup and the pinned FIRST mode screen execute\non one CPU/stack/World. Later4229e2 caller probes retain own game state but stop\nbefore the match epilogue422a95. Actual notice/volume/overlay/present children;\nOS/COM/clock/allocator inputs remain explicit. No Windows pixels/audio/full match.\n",
+  "corpus": "menu-return.json",
+  "sha256": "c18c0dc308eef69f5c0c31d996ee366e7de3b16396391e437fadd7f3d846a967",
+  "bytes": 2626640,
+  "cases": 95,
+  "nativeCompared": true,
+  "nativeComparison": "Menu return matches original: own first mode screen -> menu ret12 /match ret4 /early ret4; 95 cases /193 checkpoints /571 events /293 helpers /82463 records /148735152 bytes+masks. Later output caller probes; next full outer entry, character selection, app UI and Windows open",
+  "fixture": "original-menu-return.json",
+  "fixtureSHA256": "8b91b58361fc7da90270c64fd8b71d2387a0a8d8c9d3def47a0fcb3f09881672",
+  "fixtureBytes": 1106695,
+  "parent": {
+    "fixture": "original-mode-screen.json",
+    "sha256": "777de33f74cf486d3f92d94dd4ae71f2df52af312e327b7a1be965b5b78e85bc"
+  },
+  "events": 571,
+  "helpers": 293,
+  "checkpoints": 193
+}

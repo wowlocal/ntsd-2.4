@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 9,CommandLine.arguments[1] == "--menu-return" {
+        let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MenuReturnReference.compare(returning: inputs[0],screen: inputs[1],startup: inputs[2],menu: inputs[3],loading: inputs[4],catalog: inputs[5],sounds: inputs[6])
+        print("Menu return matches original: own first mode screen -> menu ret12 /match ret4 /early ret4; \(r.cases) cases /\(r.checkpoints) checkpoints /\(r.events) events /\(r.helpers) helpers /\(r.records) records /\(r.bytes) bytes+masks. Later output caller probes; next full outer entry, character selection, app UI and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 8,CommandLine.arguments[1] == "--mode-screen" {
         let inputs = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try ModeScreenReference.compare(screen: inputs[0],startup: inputs[1],menu: inputs[2],loading: inputs[3],catalog: inputs[4],sounds: inputs[5])

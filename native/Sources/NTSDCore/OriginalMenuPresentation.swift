@@ -38,7 +38,7 @@ public struct OriginalMenuPresentationMemory {
 }
 
 public enum OriginalMenuPresentationEntry: String, Codable, Sendable {
-    case tail, epilogue, worldOne
+    case tail, epilogue, worldOne, overlay
 }
 
 /// Shared 4246b0 presentation/return, and its exact World+0==1 branch.
@@ -249,6 +249,7 @@ public enum OriginalMenuPresentation {
                   memory.replayPointers.bytes.count == 8 else { throw error("Storage sizes") }
             switch entry {
             case .epilogue: return
+            case .overlay: try overlay(observe)
             case .worldOne:
                 guard try world.integer(at: 0, as: Int32.self) == 1 else { throw error("Dispatcher requires World=1") }
                 try releaseMenuBitmap(observe)

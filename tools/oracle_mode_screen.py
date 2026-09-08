@@ -137,7 +137,7 @@ class ModeScreen(MenuStartup):
    fills=self.fills,backgrounds=self.backgrounds,events=self.mode_events,helpers=self.mode_helpers,pending=self.mode_pending,
    continuation=self.mode_end,endPC=self.uc.reg_read(UC_X86_REG_EIP),endSP=self.uc.reg_read(UC_X86_REG_ESP),saved=self.mode_saved,
    before=before,after=after,earlyBefore=early_before,earlyAfter=e.snapshot())
- def capture_screen(self,parent):
+ def capture_screen(self,parent,after_first=None):
   suffix='-control' if self.control else '';r=json.loads((ROOT/'docs/evidence'/f'menu-startup{suffix}.json').read_bytes());raw=(ROOT/'build/original'/r['corpus']).read_bytes()
   assert digest(raw)==r['sha256'] and json.loads(raw)==json.loads(json.dumps(parent))
   print('Entire pinned startup reproduced; continuing actual mode screen',flush=True)
@@ -149,6 +149,7 @@ class ModeScreen(MenuStartup):
   # A development checkpoint permits native diagnosis of the first own frame
   # while the larger probe corpus continues. Acceptance only uses the full file.
   (ROOT/'build/research'/f'mode-screen-first{suffix}.json').write_text(json.dumps(document(),separators=(',',':'))+'\n')
+  if after_first is not None:return after_first(self,document())
   unchanged_menu=[self.record(r) for r in self.menu_bitmaps];unchanged_music=[self.record(r) for r in self.music_allocations]
   def defaults(mode=0,x=0,y=0,held=0,help=0):
    return [(0x44D020,10),(0x451160,mode),(0x4513C0,help),(0x4546F0,x),(0x453CDC,y),(0x457580,held),(0x4513C4,0),

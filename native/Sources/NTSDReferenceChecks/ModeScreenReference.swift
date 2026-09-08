@@ -35,7 +35,8 @@ public enum ModeScreenReference {
     }
     private struct Startup: Decodable { let objectAddresses: [UInt32], actorAddresses: [UInt32] }
     private static func error(_ s: String) -> OriginalStateError { .invalidStorage("Mode screen reference: "+s) }
-    public static func compare(screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data) throws -> Result {
+    public static func compare(screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
+        onFirst: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(screen,maximumCount: 128_000_000))
         let metadata = try JSONDecoder().decode(Startup.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -111,7 +112,7 @@ public enum ModeScreenReference {
                 try check(actual.storage,storage(r.storage),label+" retained bitmap")
             }
         }
-        let parent = try MenuStartupReference.compare(startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,_,_ in
+        let parent = try MenuStartupReference.compare(startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,music,resources in
             callbacks += 1;var state = own,context = context
             for (i,item) in c.cases.enumerated() {
                 guard i != 0 || (item.inherited && item.stimulus.isEmpty) else { throw error("Own first screen entry") }
@@ -189,6 +190,7 @@ public enum ModeScreenReference {
                 helpers += item.helpers.count
                 try check(local,storage(item.local),item.label+" locals")
                 try snapshot(state,context,item.after,item.label+" after");try retained(state,context,crt,item.earlyAfter,item.label+" after")
+                if i == 0 { try onFirst?(state,context,crt,music,resources) }
                 cases += 1
             }
         }

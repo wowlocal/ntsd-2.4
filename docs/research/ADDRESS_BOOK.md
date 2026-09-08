@@ -202,8 +202,9 @@ probes не означают выполнение всего внешнего ц
 | `429eb2` → `431d10`, return`429eb7` | Mode screen, this=World, target/menu/mode/selection, ret16 | D1264 случаев из собственного startup и явных повторных callers |
 | `422b00..422f59` | Исходное имя key code и поправка x | D всех256 byte codes и четырёх Int32 controls в связанном help |
 | `423840` | Общий случайный фон меню | D56 constructors в новом корпусе; прежний ранний caller использует тот же native helper |
-| `42e0d2..42e0f9` | Эпилог429730/ret12 | Следующее собственное продолжение; caller`4229dd`, return`4229e2` |
-| `4229e2..422ab8` | Network notice, volume/present, menu0 timer,41bc90 ret4 | S следующего продолжения; после return caller`424746` очищает held |
+| `42e0d2..42e0f9` | Эпилог429730/ret12 | D двух собственных первых возвратов [MENU_RETURN](MENU_RETURN.md); caller`4229dd`, return`4229e2` |
+| `4229e2..422ab8` | Network notice, volume/present, menu0 timer,41bc90 ret4 | D190 output cases, только два первых исполняют эпилог; остальные188 останавливаются до422a95 |
+| `424746..424750`, `4287de..428805` | held457580=0 и ранний ret4 после41bc90 | D двух собственных первых возвратов: ESP/SEH/nonvolatile восстановлены; cursor/44d060/второй present здесь отсутствуют |
 | `429f09..42a1ea` | Начало menu3/1 character selection, teams и CHARMENU | S; ещё не новое native/D покрытие |
 | `42a69e..42a6c6` | Right-navigation gate для signed sourceID/10 групп3 и5 | S: доступ только458428==1; общий фильтр каталога, остальные navigation ветви открыты |
 
