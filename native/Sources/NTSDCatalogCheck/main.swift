@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--front-menu-resources" {
+        let r = try FrontMenuResourcesReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Front menu resources match original: \(r.cases) cases, \(r.sources) source DIBs, \(r.allocations) allocations /\(r.nullAllocations) null, \(r.constructors) real constructors, \(r.events) events /\(r.writes) ordered writes, \(r.settings) settings boundaries /\(r.skipped) skips /\(r.nullBitmaps) null-bitmap boundaries, \(r.records) records /\(r.bytes) bytes/masks. Settings423480, full menu, pixels and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--bitmap-drawing" {
         let r = try BitmapDrawingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Bitmap drawing matches original: \(r.cases) cases, \(r.setups) setups /\(r.sources) source DIBs /\(r.constructors) real constructors, \(r.reads) reads /\(r.undefinedReads) from untouched backing, \(r.clips) real clip returns, \(r.blits) Blt requests /\(r.dualBlits) double-draw cases, \(r.boundaries) explicit invalid-access boundaries, \(r.records) full records /\(r.bytes) bytes/masks. Device raster, startup provenance and Windows remain open")

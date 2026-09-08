@@ -1,0 +1,27 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real World constructor and4246b0 startup branch through24 bitmap resources,\n151 literal menu rectangles and6 interleaved256-glyph tables. Stop BEFORE\n423480 settings loading;44d068 is not manually cleared. Flag0 skips to42709b.\n43ee50 executes through actual ret12; allocator/DIB/COM responses and each\nouter caller frame remain declared boundaries. No whole menu/Windows claim.\n",
+  "corpus": "front-menu-resources.json",
+  "sha256": "3694b463d4bd0735aaf838c0a58a181d994e4a53278d27e9a166f498f7f1f334",
+  "cases": 145,
+  "sources": 23,
+  "events": {
+    "allocate": 2151,
+    "construct": 2045,
+    "load": 2045,
+    "colorKey": 1973,
+    "message": 162,
+    "debug": 162,
+    "release": 90,
+    "write": 497585
+  },
+  "continuations": {
+    "settings": 72,
+    "ready": 44,
+    "nullBitmap": 29
+  },
+  "nativeComparison": "Front menu resources match original: 145 cases, 23 source DIBs, 2151 allocations /106 null, 2045 real constructors, 506213 events /497585 ordered writes, 72 settings boundaries /44 skips /29 null-bitmap boundaries, 122263 records /984711600 bytes/masks. Settings423480, full menu, pixels and Windows remain open",
+  "fixture": "original-front-menu-resources.json",
+  "fixtureSHA256": "5f5a0ae2f70bd2de2e1416daf722fc04a4843baabff15219d16a3bb0cef1de4b",
+  "fixtureBytes": 5975544
+}

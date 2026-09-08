@@ -661,6 +661,23 @@ before full431d10; do not forge successful bitmap pointers to reach its return.
 The new bitmap drawing XCTest passed in4.510s; release NTSDNative in2.28s.
 All18 inherited fixture hashes remain unchanged; new raw/packed SHA verified.
 No shared constructor or strict state-read implementation was changed.
+The [front-menu resources study](docs/research/FRONT_MENU_RESOURCES.md) now
+executes World419e40 and4246b0's early startup branch to427089, BEFORE423480.
+Two145-case corpora match native:4090 real43ee50,995170 ordered parent writes,
+244526 full records/1969423200 bytes/masks.24 wrappers use23 original PE DIBs;
+151 literal rectangles/9 sheets are statically recovered from checked EXE bytes;
+six256-glyph tables retain their interleaved writes. Eight names write ONLY
+UInt16 at44fcc0+11*i. Preserve old wrappers and all untouched bytes/masks.
+Any nonzero44d068 reloads; flag0 skips to42709b.4511f8 always wraps1-old.
+The settings boundary does NOT clear44d068; real clear427092 follows423480.
+Null metadata writes stop explicitly with partial state before source access.
+This isolated early startup is not yet joined with prior loading/menu corpora;
+outer caller frame and allocator/device responses are declared inputs. Do not
+inject successful early bitmap pointers into historical natural-menu snapshots.
+Next423480 settings/CRT, then427092/42709b and full early-screen integration.
+Both new XCTest passed in4.207s; release NTSDNative in2.33s.19 old fixture SHA
+unchanged; both raw/packed SHA and complete unpack verified, generator --check
+passed. No shared constructor changed; full UI/pixels/Practice/Windows open.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
