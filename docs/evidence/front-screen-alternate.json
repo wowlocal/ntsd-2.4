@@ -1,0 +1,41 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh World/resources/settings/screen body ->4275cb..42790f.\nActual bitmap/clip/sound/fill/worker-gate and423230/VC80 writer children share\nthe original CPU/stack. First EAX/caller is natural; subsequent selector,\nmouse/timer/worker/device/FILE inputs are explicit controls. Stops before\nmain menu427915, other selectors427ca7, presentation42873e or invalid access.\nNo pixels, worker execution, actual file writes, whole screen loop or Windows.\n",
+  "corpus": "front-screen-alternate.json",
+  "sha256": "6246400c493523ad9e595b9cc0a6bbe1bebbc0e01686bb0e301e81b084c93e27",
+  "cases": 533,
+  "helpers": 3421,
+  "settings": 82,
+  "events": {
+    "blit": 1200,
+    "call": 82,
+    "clip": 1247,
+    "createThread": 13,
+    "draw": 1250,
+    "enter": 37,
+    "fill": 674,
+    "fillRequest": 675,
+    "lastError": 4,
+    "leave": 37,
+    "read": 8682,
+    "return": 74,
+    "soundMethod": 231,
+    "soundRequest": 85,
+    "timer": 512,
+    "write": 1152
+  },
+  "continuations": {
+    "mainMenu": 3,
+    "nullBitmap": 3,
+    "nullFillTarget": 1,
+    "nullSettingsFile": 8,
+    "otherSelector": 7,
+    "presentation": 511
+  },
+  "nativeCompared": true,
+  "nativeComparison": "Front screen alternates match original: 533 cases, 3421 helper returns, 15955 parent /5552 writer events, 1250 draws /8682 reads /1247 clips /1200 blits /674 fills, 85 sounds /512 timers /13 worker requests; 82 settings calls /74 returns /3996 fprintf /1326 writes /18 failed or short; 12 boundaries, 31828 records /394472552 bytes/masks; own fresh screen body 1. Full screen loop, device output and Windows open",
+  "fixture": "original-front-screen-alternate.json",
+  "fixtureSHA256": "066002ffb91f2631caeafcf867b3d890fcb35dbe5705024f9d7790bb0937bd2b",
+  "fixtureBytes": 6760152
+}

@@ -52,35 +52,10 @@ public struct OriginalFrontScreenPrelude {
             try state.write(value,at: address-base);try observe(.init("write",[UInt32(address),4,value]))
         }
         func finish(_ end: Continuation) -> Continuation { globals = state;self = candidate;return end }
-        func string(_ address: Int) throws -> [UInt8] {
-            let start = address-base
-            guard start >= 0, start < state.bytes.count, let end = state.bytes[start...].firstIndex(of: 0) else { throw OriginalStateError.invalidStorage("Front gate string extent") }
-            return Array(state.bytes[start..<end])
-        }
-        func requestWorker() throws {
-            var call = try word(0x44d788) == UInt32(bitPattern: -99)
-            if !call {
-                let index = 0x4527b0-base
-                call = Array(state.bytes[index..<index+4]) == Array("now\0".utf8)
-                if !call {
-                    let left = try string(0x4527b0), right = try string(0x451d48)
-                    call = left == right || left.lexicographicallyPrecedes(right)
-                }
-            }
-            if call {
-                try observe(.init("enter",[0x4554a4]))
-                let status = try word(0x458424)
-                try observe(.init("leave",[0x4554a4]))
-                if status == 0 {
-                    try observe(.init("createThread",[0,0,0x43c240,0,0,input.threadHandle,input.threadID]))
-                    if input.threadHandle == 0 { try observe(.init("lastError",[input.lastError])) }
-                }
-            }
-        }
         if try word(0x44d064) == UInt32(bitPattern: -2) {
             let setting = try word(0x450be8)
             if setting == UInt32.max { try write(0x44d064,UInt32(bitPattern: -3)) }
-            else { try write(0x44d064,0);if setting == 1 { try requestWorker() } }
+            else { try write(0x44d064,0);if setting == 1 { try OriginalMenuWorkerRequest.run(globals: state,threadHandle: input.threadHandle,threadID: input.threadID,lastError: input.lastError,observe: observe) } }
         }
         let fill = try OriginalSurfaceFilling.request(target: word(0x455608),x: 0,y: 0,width: 794,height: 550,color: 0x10206c,backing: fillBacking)
         guard fill.target != 0 else { return finish(.nullFillTarget) }

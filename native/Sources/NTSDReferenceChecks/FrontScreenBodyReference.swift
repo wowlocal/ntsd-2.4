@@ -21,7 +21,7 @@ public enum FrontScreenBodyReference {
         let literals: [Literal], links: [Literal], cases: [Case], blobs: [String:Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front screen body reference: "+text) }
-    public static func compare(_ data: Data) throws -> Result {
+    public static func compare(_ data: Data, onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32]) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000), c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",c.localAddress == 0x1000f000,!c.cases.isEmpty else { throw error("Source identity") }
@@ -138,6 +138,7 @@ public enum FrontScreenBodyReference {
                 var expected = try storage(record.storage);guard try expected.integer(at: 0,as: UInt32.self) == surface else { throw error("Retained surface") }
                 try expected.write(UInt32(surface == 0 ? 0 : 1),at: 0);try check(actual.storage,expected,item.label+" bitmap")
             }
+            if i == 0 { try onNatural?(world,state,local,bitmaps,surfaces) }
             result.cases += 1
         }
         return result

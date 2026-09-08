@@ -124,6 +124,15 @@ inputs предоставлены явно. Далее тело42712c/альте
 Shared printf исправлен по обнаруженному failed-sign/continued-digits пути;
 прежние writer/panel corpora остаются проверками своего исходного объёма.
 
+[Альтернативы раннего экрана](FRONT_SCREEN_ALTERNATE.md) теперь продолжают
+4275cb..42790f в1066 совпавших случаях с6842 actual helper returns. Writer
+исполняется из обоих427688/427704 callers; bitmap/clip/sound/fill/gate тоже
+исполняются на общем CPU/стеке. Первый selector0 получен от свежего body,
+последующие caller/OS/FILE inputs заданы явно. Signed animation/remainder,
+unsigned timer delta и порядок действий сохранены. До42873e/427915/427ca7
+дошли1042 случая; ещё24 остановились до null FILE/bitmap/fill разыменований. Полная связь с прежним
+main-menu/tail ещё не выполнена; app UI/pixels/audio/worker/Windows открыты.
+
 ## Как устранять пропуски
 
 1. **R02.1:** словарь состояния полного пути и всех пропущенных полей, точная

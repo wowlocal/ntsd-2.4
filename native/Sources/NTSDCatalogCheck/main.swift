@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-screen-alternate" {
+        let r = try FrontScreenAlternateReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Front screen alternates match original: \(r.cases) cases, \(r.helpers) helper returns, \(r.events) parent /\(r.settingsEvents) writer events, \(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits /\(r.fills) fills, \(r.sounds) sounds /\(r.timers) timers /\(r.workers) worker requests; \(r.settings) settings calls /\(r.settingsReturns) returns /\(r.prints) fprintf /\(r.fileWrites) writes /\(r.failedWrites) failed or short; \(r.boundaries) boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh screen body \(r.parent.cases). Full screen loop, device output and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--settings-writing" {
         let r = try SettingsWritingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Settings writing matches original: \(r.cases) cases /\(r.returns) returns /\(r.nullFiles) null FILE /\(r.stringBoundaries) string boundaries, \(r.prints) fprintf /\(r.closes) fclose, \(r.fileWrites) writes /\(r.failedWrites) failed or short, \(r.events) events /\(r.parentWrites) parent writes, \(r.records) records /\(r.bytes) bytes/masks; original control bytes roundtrip. Menu caller, full FILE/Windows IO remain open")

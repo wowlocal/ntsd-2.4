@@ -27,6 +27,11 @@ HELPERS={0x401290:0,0x401A30:4,0x43F010:24,0x43EF70:0}
 LITERALS=[(0x4498D8,28),(0x4498B8,31),(0x449204,29)]
 
 class FrontScreenBody(MenuPanelUpdate):
+ body_range=(0x42712C,0x4275CB)
+ body_stops={0x4275CB:"alternateDispatch"}
+ body_helpers=HELPERS
+ body_sound_slots={0x455610}
+ def body_code_allowed(self,pc):return self.body_range[0]<=pc<self.body_range[1] or 0x401290<=pc<=0x4012FE or 0x401A30<=pc<=0x401A6F or 0x43EF70<=pc<=0x43F2FE
  def __init__(self,control=False):
   self.body_active=False;super().__init__(control)
   first=self.update_step('first-natural-update');assert first['continuation']=='ready'
@@ -51,7 +56,7 @@ class FrontScreenBody(MenuPanelUpdate):
  def local_record(self):return dict(bytes=self.blob(self.uc.mem_read(BODY_SP,LOCAL_SIZE)),defined=self.blob(self.local_mask))
  def body_write(self,uc,access,p,size,value,data):
   if not self.body_active:return
-  pc=uc.reg_read(UC_X86_REG_EIP);assert 0x42712C<=pc<0x4275CB,hex(pc)
+  pc=uc.reg_read(UC_X86_REG_EIP);assert self.body_range[0]<=pc<self.body_range[1],hex(pc)
   if BODY_SP<=p and p+size<=BODY_SP+LOCAL_SIZE:
    self.local_mask[p-BODY_SP:p-BODY_SP+size]=b'\1'*size;self.body_event('writeLocal',[p-BODY_SP,size,value&((1<<(8*size))-1)])
   else:
@@ -73,18 +78,18 @@ class FrontScreenBody(MenuPanelUpdate):
    self.body_event('clip',clip=dict(beforeSource=c['source'],beforeDestination=c['destination'],source=[signed(self.u32(p)) for p in c['sourcePointers']],
     destination=[signed(self.u32(p)) for p in c['destinationPointers']],visible=uc.reg_read(UC_X86_REG_EAX)==1))
    assert uc.reg_read(UC_X86_REG_EAX) in (0,1)
-  if pc==0x4275CB:
-   assert sp==BODY_SP and not self.body_pending and self.body_clip is None;self.body_end='alternateDispatch';uc.emu_stop();return
+  if pc in self.body_stops:
+   assert sp==BODY_SP and not self.body_pending and self.body_clip is None;self.body_end=self.body_stops[pc];uc.emu_stop();return
   if pc in (0x401295,0x43F04B,0x43F12B,0x43F2E6):
    register=UC_X86_REG_ESI if pc in (0x401295,0x43F04B) else UC_X86_REG_EAX
    if uc.reg_read(register)==0:
     self.body_end={0x401295:'nullTextTarget',0x43F04B:'nullBitmap',0x43F12B:'nullDrawTarget',0x43F2E6:'nullDrawTarget'}[pc];uc.emu_stop();return
-  if pc in HELPERS:
-   self.body_pending.append(dict(entry=pc,entrySP=sp,returnPC=self.u32(sp),pop=HELPERS[pc],saved=[uc.reg_read(r) for r in REGISTERS]))
+  if pc in self.body_helpers:
+   self.body_pending.append(dict(entry=pc,entrySP=sp,returnPC=self.u32(sp),pop=self.body_helpers[pc],saved=[uc.reg_read(r) for r in REGISTERS]))
   if pc==0x401290:
    self.body_event('text',[arg(0),arg(2),arg(3),arg(4),arg(5)],[self.cstr(arg(1))])
   elif pc==0x401A30:
-   assert uc.reg_read(UC_X86_REG_ECX)==0x455610 and arg(0)==0;self.body_event('soundRequest',[0])
+   assert uc.reg_read(UC_X86_REG_ECX) in self.body_sound_slots and arg(0)==0;self.body_event('soundRequest',[0])
   elif pc==0x43F010:
    self.body_bitmap=uc.reg_read(UC_X86_REG_ECX);self.body_event('draw',[self.body_bitmap,*[arg(i) for i in range(6)]])
   elif pc==0x43EF70:
@@ -106,7 +111,7 @@ class FrontScreenBody(MenuPanelUpdate):
    self.body_event('blit',blit=dict(sourceSurface=arg(2),targetSurface=arg(0),source=list(struct.unpack('<4i',uc.mem_read(arg(3),16))),
     destination=list(struct.unpack('<4i',uc.mem_read(arg(1),16))),flags=arg(4),effects=list(uc.mem_read(arg(5),100)) if arg(5) else None))
    result=self.body_input['drawResults'][self.body_blits%len(self.body_input['drawResults'])];self.body_blits+=1;self.ret(result,24);return
-  assert (0x42712C<=pc<0x4275CB or 0x401290<=pc<=0x4012FE or 0x401A30<=pc<=0x401A6F or 0x43EF70<=pc<=0x43F2FE),hex(pc)
+  assert self.body_code_allowed(pc),hex(pc)
  def body_step(self,label,writes=(),dc_result=0,method_result=0,draw_results=(0,),shell_result=33):
   stimulus=[]
   for p,v in writes:

@@ -639,7 +639,8 @@ before-input. Все25 ранних bitmap и World сохраняются по�
 Все25 ранних bitmap сохраняются без изменения. Текст берёт global455608,
 bitmap — caller local+20. GetDC HRESULT возвращается неизменным; его ошибка
 не отменяет родительскую обработку клика. Прежний notice overlay использует
-тот же общий native401290. Actual GDI raster/Windows и альтернативы4275cb открыты.
+тот же общий native401290. Actual GDI raster/Windows открыты; альтернативы4275cb
+продолжены отдельным исследованием ниже.
 
 Дополнение [сохранения настроек](SETTINGS_WRITING.md), S/D423230:
 
@@ -657,4 +658,22 @@ Shared printf output count — отдельная величина от FILE cou
 ставит output count−1, следующий segment всё равно начинает запись и может
 увеличить count до0. Prefix и value разделены. FILE flags/error и пользовательский
 buffer сохраняют прежние правила `_flsbuf`; их нельзя обнулить при восстановлении
-printf count. Полный FILE/CRT lifetime и настоящий menu caller остаются открытыми.
+printf count. Полный FILE/CRT lifetime остаётся открытым. Настоящие menu callers
+продолжены ниже.
+
+Дополнение [альтернатив раннего экрана](FRONT_SCREEN_ALTERNATE.md), S/D4275cb..42790f:
+
+| Поле | Правило |
+| --- | --- |
+| Caller EAX / `44d064` | Входной EAX выбирает−3/−1/0/other; глобальный selector может отличаться. После выбора enable/disable/cancel глобальный selector0, но текущая ветвь продолжается до42873e |
+| `4511f4` | Int32 анимация панели.0 оставляет global0 и local y96; иначе wrapped y+high32(signed−715827883*(y+90))+signCorrection. Раскрытие−17; выбор enable/disable обнуляет global, сохраняя прежний local y |
+| `450be8`, `457580` | Enable/disable пишут1/0 и очищают held **до**423230; null FILE оставляет эти изменения, selector/y ещё не сброшены |
+| `4511f0` | Test low byte bit0; при0 DWORD OR1 и первый вызов таймера |
+| `4511ec` | UInt32 отметка timeGetTime. Разность unsigned с переполнением; шаг только при>150. После шага новый отдельный вызов таймера |
+| `4511e8` | Int32 число fill элементов; при шаге wrapped(count+1) signed remainder14. Положительный count без clamp определяет число415160 |
+| `4511e4` | DWORD счётчик проходов waiting screen, add1 с переполнением даже при отмене |
+| `44d060/457580` | Click только0/1. В waiting cancel sound455614 предшествует обеим global writes; previous здесь не обновляется |
+
+Общий worker gate4237e0/43c450 теперь используется prefix и enable dialog;
+реальный worker остаётся границей. Fill DDBLTFX сохраняет92 untouched bytes/masks,
+переданные до каждого child call. Эти правила пока не подключены к app UI.

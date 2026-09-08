@@ -871,12 +871,48 @@ flsbuf/close are unchanged; width/precision/other conversions/wide/EILSEQ42 open
 Eight null-FILE cases stop BEFORE423260; two no-NUL cases stop BEFORE423297
 outside declared globals, after44 integers/four line breaks, without close.
 No safe false-return or Windows invalid-parameter behavior is implied. Original
-source file stays unchanged. Next compose writer with selector-3 at4275cb, then
-selector-1 at4277f3 and main-menu/tail; app UI/Windows remain open.
+source file stays unchanged. The caller composition is described below;
+app UI/Windows remain open.
 Both new packed corpora compared before acceptance; all35 previous pinned
 fixture hashes unchanged, both new raw/packed SHA/full unpack verified. Six
 targeted XCTest passed in84.404s (settings67.138s, old info4.925s, joined panel
 12.341s); release NTSDNative passed in2.69s. No old Python helper was changed.
+The [alternate early screens](docs/research/FRONT_SCREEN_ALTERNATE.md) now
+continue the fresh body through4275cb..42790f with actual bitmap/clip/sound/fill/
+worker-gate and423230/VC80 writer children on the same CPU/stack. Read that study
+before extending early UI. Native matches1066cases/6842helper returns,
+31910parent/11104writer events,164settings calls/148returns/7992fprintf,
+2652descriptor writes/36failed-short,63656records/788945104bytes/masks.
+First natural EAX0 goes to427915; later caller/OS/FILE inputs are explicit,
+not complete screen iterations. EAX selects the branch, not a new44d064 read.
+4511f4=0 leaves global0 and local y96; nonzero uses signed multiply high32 and
+sign correction after wrapped y+90. Enable/disable clear held/set450be8 BEFORE
+actual423230; only after return clear selector/y, then sound. Enable alone
+calls4237e0. Preserve local y even after global clear. Expand hitbox starts203,
+draw x202. Waiting low-bit test is byte but OR1 writes DWORD4511f0; unsigned
+timer delta must be>150, count is wrapped signed remainder14, timestamp uses
+another timer call. Do not clamp positive count to13. Cancel sound precedes
+held/selector writes, and4511e4 always increments. Both callers share the factored
+OriginalMenuWorkerRequest; worker body remains outside. Retain declared fill
+stack backing (only8/100bytes defined), caller local token without defining it,
+World and all25early bitmap records.16null-FILE/6null-bitmap/2null-fill probes
+stop before invalid access; no successful-return behavior is inserted.
+FrontScreenBodyReference.onNatural passes its own validated native state/local/
+resources/raw surface tokens; expected snapshots never seed the continuation.
+The Python body observer now has default-preserving hooks for its child/PC/stop/
+sound domains. Both historical body corpora reproduced every571cases/676blobs
+exactly after this refactor. Next join these live early resources through427915
+and42873e to the full screen return; main-menu/tail previous isolated coverage
+is not yet composition. Practice UI, device pixels/audio, full loop and Windows
+remain open. Do not mark R02.1/R01.2 or the full-game goal complete for this stage.
+Both new raw and packed corpora passed before acceptance; all76 previous fixture
+hashes are unchanged, both new packed SHA/full unpack verified. The78-fixture
+pin inventory is build/research/front-screen-alternate-fixture-pins.json.
+Six targeted XCTest passed in20.817s (new alternates12.441s, historical body
+5.935s, historical prefix2.441s). Release NTSDNative build passed in2.44s. Initial
+comparison exposed a reference-only read of the deliberately undefined stack+20
+mask; the fix reads declared raw bytes without altering that mask. No expected
+fixture was changed to accommodate native output.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
