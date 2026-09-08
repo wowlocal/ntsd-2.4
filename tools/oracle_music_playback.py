@@ -172,7 +172,7 @@ class MusicPlayback(MatchRound):
                     allocations=[dict(address=r['address'],storage=self.record(r)) for r in self.music_allocations],
                     endPC=self.music_end,endSP=self.uc.reg_read(UC_X86_REG_ESP))
 
-    def capture_music(self):
+    def capture_parent_music(self):
         parents,initial,natural=self.capture_parent_round();suffix='-control' if self.control else ''
         r=json.loads((ROOT/'docs/evidence'/f'match-round{suffix}.json').read_bytes());raw=(ROOT/'build/original'/r['corpus']).read_bytes()
         assert digest(raw)==r['sha256'];old=json.loads(raw);assert parents==old['parents']
@@ -180,11 +180,15 @@ class MusicPlayback(MatchRound):
         parents['match-round']=dict(fixture=r['fixture'],sha256=r['fixtureSHA256']);del old,raw
         assert self.u32(0x44D010)==1 and self.u32(0x44D020)==10 and self.u32(0x4512CC)==0
         self.music_initial=self.control_snapshot();self.install_music()
-        cases=[self.music_step('first-menu-music',kind='menu',inherited=not self.control)]
+        natural=self.music_step('first-menu-music',kind='menu',inherited=not self.control)
         print('Real menu prefix and enabled402020 returned; no loaded state replaced',flush=True)
+        return parents,self.music_initial,natural
+
+    def capture_music(self):
+        parents,initial,natural=self.capture_parent_music();cases=[natural]
         self.music_probes(cases)
         return transport(dict(exeSHA256=EXE_SHA256,dllSHA256=DLL_SHA256,scope=__doc__,control=self.control,parents=parents,
-                              initialContext=self.music_initial,cases=cases),self.blobs)
+                              initialContext=initial,cases=cases),self.blobs)
 
     def music_probes(self,cases):
         def writes(enabled=1,cached=b'old.wma',mask=15,volume=75,directory=b'C:\\NTSD'):

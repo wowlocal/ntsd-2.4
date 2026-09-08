@@ -1,0 +1,56 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real4297ae..429e5a after freshly reproduced loading/input/round/music.\nEleven actual43ee50 constructors, ordered global stores, seat arrays and partial\nSPARK rectangles.43ed10/COM/malloc responses remain supplied boundaries. The\nprimary music/menu entry is continuous; control inherited an explicit4229cc\nentry after paused round. Stop before429b21 if its SPARK pointer is null:\nthe harness maps page0 for SEH and must not fabricate a successful NULL write.\nNo menu dispatch, pixels, paused rendering or Windows device claim.\n",
+  "corpus": "menu-resources-control.json",
+  "sha256": "370cb5242454017b6d8173d53a514cebc71e787dfd1c5d0d82171fbf98ca3188",
+  "cases": 187,
+  "events": {
+    "allocate": 1122,
+    "construct": 1049,
+    "load": 1049,
+    "colorKey": 1003,
+    "message": 97,
+    "debug": 97,
+    "release": 51
+  },
+  "checkpoints": 1688,
+  "nullSpark": 6,
+  "nativeComparison": "Menu resources match original: 187 cases, 1049 real constructors, 1122 allocations /73 null, 1688 checkpoints, 4468 events, 97 messages /51 surface releases, 6 null-SPARK boundaries, 82363 records /731749936 bytes/masks; linked 374 music cases and complete round/input/loading. Menu dispatch, pixels and Windows remain open",
+  "fixture": "original-menu-resources-control.json",
+  "fixtureSHA256": "340e8e4188a97dfa03cecdd88bef8d3ed19ce757cdc4d36c940cc103d980f24e",
+  "fixtureBytes": 7134720,
+  "parents": {
+    "initial-loading": {
+      "fixture": "original-initial-loading-control.json",
+      "sha256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a"
+    },
+    "initial-loading-catalog": {
+      "fixture": "original-initial-loading-catalog-control.json",
+      "sha256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455"
+    },
+    "initial-loading-sounds": {
+      "fixture": "original-initial-loading-sounds-control.json",
+      "sha256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265"
+    },
+    "local-input": {
+      "fixture": "original-local-input-control.json",
+      "sha256": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c"
+    },
+    "input-control": {
+      "fixture": "original-input-control-control.json",
+      "sha256": "eed910a682485e2c7f495221639c9c30fdcbd0e70ba43a778d7705f3d4d6e9aa"
+    },
+    "replay-tick": {
+      "fixture": "original-replay-tick-control.json",
+      "sha256": "12486a1b17ca1797608473196df1be699435c54cc99247a03ac232b143d32281"
+    },
+    "match-round": {
+      "fixture": "original-match-round-control.json",
+      "sha256": "d066bcbd650019cb454027011bd8120c698293321b63b958121a5b0d48230550"
+    },
+    "music-playback": {
+      "fixture": "original-music-playback-control.json",
+      "sha256": "aa241a67ed30d51c1b5e14b3b515268b0d4acd7920d1fa51a2d3728504c73598"
+    }
+  }
+}

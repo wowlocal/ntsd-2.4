@@ -2,6 +2,12 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 11, CommandLine.arguments[1] == "--menu-resources" {
+        let v = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try MenuResourcesReference.compare(resources: v[0],music: v[1],round: v[2],replay: v[3],control: v[4],local: v[5],loading: v[6],catalog: v[7],sounds: v[8])
+        print("Menu resources match original: \(r.cases) cases, \(r.constructors) real constructors, \(r.allocations) allocations /\(r.nullAllocations) null, \(r.checkpoints) checkpoints, \(r.events) events, \(r.messages) messages /\(r.releases) surface releases, \(r.nullSpark) null-SPARK boundaries, \(r.records) records /\(r.bytes) bytes/masks; linked \(r.parent.cases) music cases and complete round/input/loading. Menu dispatch, pixels and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 10, CommandLine.arguments[1] == "--music-playback" {
         let v = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MusicPlaybackReference.compare(music: v[0],round: v[1],replay: v[2],control: v[3],local: v[4],loading: v[5],catalog: v[6],sounds: v[7])

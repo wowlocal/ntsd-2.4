@@ -34,7 +34,8 @@ public enum MusicPlaybackReference {
         return try stride(from: 0,to: b.count,by: 2).map { try digit(b[$0])*16+digit(b[$0+1]) }
     }
     public static func compare(music: Data, round: Data, replay: Data, control: Data, local: Data,
-                               loading: Data, catalog: Data, sounds: Data) throws -> Result {
+                               loading: Data, catalog: Data, sounds: Data,
+                               onNatural: ((OriginalStateRecord, OriginalMusicMemory) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(music,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d", !c.cases.isEmpty else { throw error("Original identity") }
@@ -110,6 +111,7 @@ public enum MusicPlaybackReference {
                     guard let actual = memory.allocations[allocation.address] else { throw error("Missing retained allocation") }
                     try check(actual,blob(allocation.storage.bytes),blob(allocation.storage.defined),item.label+" wide path")
                 }
+                if index == 0 { try onNatural?(globals,memory) }
             }
         })
         guard callbacks == 1 else { throw error("Missing parent callback") }

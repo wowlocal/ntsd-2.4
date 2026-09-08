@@ -606,6 +606,36 @@ native parents per pass. Shared historical MenuPresentation passed in138.633s.
 Both release comparisons passed before accepting the two new fixtures; all16
 fixture hashes and both raw corpora verified. No expected after-state was fixed.
 Final release NTSDNative passed in19.69s. No app-window/device-output claim.
+The [menu-resource study](docs/research/MENU_RESOURCES.md) now continues both
+fresh natural4297ae entries through429e5a, after validating full loading/input/
+round/music parents. Both187-case passes match Swift before accepting fixtures:
+2098 real43ee50 returns,2244 allocations/146 null,3376 checkpoints,8936 events,
+194 messages/102 surface releases and12 null-SPARK boundaries. Each compares
+82363 full records/731749936 bytes/masks; all16 old fixture pins stay unchanged.
+Read this study before extending menu bitmap initialization or dispatch431d10.
+Previous4512cc is ALWAYS updated from current44d020; old4512c8 is saved before
+constructors. Any nonzero44d07c loads11 PE DIBs via shared bitmap constructor;
+null allocation skips its ctor, but device failure returns a wrapper. Old global
+pointers are replaced without release. Preserve all retained wrappers/masks.
+Three8-word arrays451288/451268/451248 are cleared0/0/-1 in per-seat order.
+SPARK+0c gets20, but only16 rectangle indices are written. Preserve0/5/10/15
+and all other untouched storage.44d07c clears BEFORE height[13], not at end.
+Null SPARK returns explicit partial-state boundary BEFORE429b21; page0 in the
+reference VM is SEH backing, never evidence of a safe NULL write or Windows AV.
+Missing SPARK surface still allows metadata writes if the wrapper exists.
+Native receives its own parent globals through MusicPlaybackReference.onNatural;
+all374 old music/2074 round/1134 replay/2993 control/303 local and loading cases
+still compare after the callback. Full retained records are compared at case
+ends; current records and full globals at each checkpoint. Only surface+0
+normalizes1/0, never wrapper tokens or opaque/partially written words.
+Control inherits its earlier supplied4229cc after pause; resource entry itself
+continues on the same CPU/stack. No menu dispatch, pixels, Practice, Windows or
+clean-macOS claim. Next actual429e5a dispatch and431d10 screen, paused41d73b
+and gameplay41e339, with earlier playback/camera/file/loading gaps still open.
+Both menu-resource XCTest passed in294.964s (146.542+148.422), including all
+eight native parents per pass. Release comparisons passed before acceptance;
+all18 old/new fixture SHA and both new raw corpora verified. The EXE stays pinned.
+Release NTSDNative passed in2.93s. No app-window or device-output claim.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new
