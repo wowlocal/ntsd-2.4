@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--bitmap-drawing" {
+        let r = try BitmapDrawingReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Bitmap drawing matches original: \(r.cases) cases, \(r.setups) setups /\(r.sources) source DIBs /\(r.constructors) real constructors, \(r.reads) reads /\(r.undefinedReads) from untouched backing, \(r.clips) real clip returns, \(r.blits) Blt requests /\(r.dualBlits) double-draw cases, \(r.boundaries) explicit invalid-access boundaries, \(r.records) full records /\(r.bytes) bytes/masks. Device raster, startup provenance and Windows remain open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 11, CommandLine.arguments[1] == "--menu-resources" {
         let v = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try MenuResourcesReference.compare(resources: v[0],music: v[1],round: v[2],replay: v[3],control: v[4],local: v[5],loading: v[6],catalog: v[7],sounds: v[8])

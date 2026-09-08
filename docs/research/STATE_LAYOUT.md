@@ -430,6 +430,23 @@ COM/file/codec/new и реальные Win32-строковые преобраз
 Не подменять её безопасным продолжением. Surface+0 нормализуется1/0; остальные
 слова wrapper, включая неинициализированные координаты, не нормализуются.
 
+Дополнение [общей отрисовки bitmap](BITMAP_DRAWING.md), S и D против Swift:
+
+| Поле / представление | Чтение в43f010/43ef70 |
+| --- | --- |
+| `44d78c/44d790` | Signed Int32 viewportWidth/Height; strict сравнения, без предварительного clamp |
+| Bitmap+`0c` | Signed count:0 включает целое изображение; после него поле читается вновь для signed frame<count |
+| Bitmap+`4/8` | Width/height целой картинки; суммы с x/y имеют32-bit wrap |
+| Bitmap+`10/fb0/7e0/1780` | Кадровые x/width/y/height читаются в этом порядке по смещению4*frame с32-bit wrap |
+| Bitmap+`0` | Известный surface token хранится в loaders как1/0, но draw восстанавливает raw token перед чтением/арифметикой: frame=-4 может использовать его как x |
+| DDBLTFX100 bytes | При любом mirror!=0 size100,flags2, остальные92 байта0; при mirror0 null effects pointer |
+
+Сохраняются отрицательные и wrapped aliases **внутри** предоставленного wrapper.
+Выход за wrapper — явная остановка перед исходной инструкцией, не clamp индекса.
+Нетронутый backing читается с сохранением defined=false и отмечается observer;
+общий строгий typed read остаётся прежним. Это не доказательство происхождения
+реальных Windows heap bytes или подключения draw к нативному оконному выводу.
+
 ## Снимок: что сохраняется и что пока неизвестно
 
 [oracle_state_trace.py](../../tools/oracle_state_trace.py) повторяет шесть случаев

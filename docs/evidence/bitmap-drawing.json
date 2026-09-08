@@ -1,0 +1,23 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole43f010/43ef70 and real43ee50 for34 original embedded resources.\nSupplied bitmap backing/control metadata, viewport and COM responses. Compare\nall reads/provenance, clipping, Blt rectangles/flags/100-byte effects, actual\nreturns and unchanged bitmap/globals. No DirectDraw raster, full menu or Windows\nallocator provenance claim. Stop BEFORE invalid bitmap/target dereferences.\n",
+  "corpus": "bitmap-drawing.json",
+  "sha256": "70e25c99688f8eeb60e19947079706f2641bad825ed41c95c8128aaa8b6ae341",
+  "cases": 3971,
+  "setups": 96,
+  "sources": 34,
+  "constructors": 76,
+  "reads": 21475,
+  "undefinedReads": 9055,
+  "clips": 3330,
+  "blits": 2297,
+  "dualBlits": 198,
+  "boundaries": {
+    "outsideBitmap": 18,
+    "nullTarget": 2
+  },
+  "nativeComparison": "Bitmap drawing matches original: 3971 cases, 96 setups /34 source DIBs /76 real constructors, 21475 reads /9055 from untouched backing, 3330 real clip returns, 2297 Blt requests /198 double-draw cases, 20 explicit invalid-access boundaries, 8038 full records /215838896 bytes/masks. Device raster, startup provenance and Windows remain open",
+  "fixture": "original-bitmap-drawing.json",
+  "fixtureSHA256": "beba7d262d06f88ae5f4cc89582d2d507f4f31739adf7c9efca38cb6f0f49942",
+  "fixtureBytes": 4015139
+}

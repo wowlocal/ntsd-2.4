@@ -636,6 +636,31 @@ Both menu-resource XCTest passed in294.964s (146.542+148.422), including all
 eight native parents per pass. Release comparisons passed before acceptance;
 all18 old/new fixture SHA and both new raw corpora verified. The EXE stays pinned.
 Release NTSDNative passed in2.93s. No app-window or device-output claim.
+The [bitmap drawing study](docs/research/BITMAP_DRAWING.md) now executes whole
+43f010/43ef70 through Blt(+14)/ret24 in3971 ISOLATED cases. Read it before
+extending bitmap drawing, clipping or connecting actual menu/gameplay callers.
+34 original embedded DIBs and76 real43ee50 constructions,3330 real clip returns,
+2297 Blt requests/198 double draws,21475 reads/9055 from untouched backing match
+Swift;8038 full records/215838896 bytes/masks. This is not a new continuous
+loading/menu chain. Supplied backing/metadata/viewport/COM responses remain inputs.
+Whole-image branch runs for count0 OR negative frame, then FALLS THROUGH to
+signed frame<count. Preserve negative/wrapped4*frame aliases, strict clipping
+comparisons, zero/inverted rectangles, both mirror formulas and ignored HRESULTs.
+Effects are exact100 bytes: size100/flags2/rest zero. No Blt retry/release here.
+Only the known surface word+0 is canonical1/0 in loaders. Drawing rebinds it to
+the declared raw token BEFORE arithmetic, since frame=-4 can read it as x.
+The first native mismatch found this alias; core binding was fixed, source
+corpus/expected snapshots unchanged. Do not normalize opaque neighboring words.
+Draw observes raw backing reads and masks explicitly without promoting them to
+initialized defaults; OriginalStateRecord.integer remains strict. Actual Windows
+heap provenance is open.18 outside-wrapper and2 null-target cases stop BEFORE
+the original load and throw explicitly natively, retaining prior request order.
+DirectDraw raster/pixels, runtime caller integration and Windows remain open.
+Natural menu state still has4511a0/451178 null, so recover early startup resources
+before full431d10; do not forge successful bitmap pointers to reach its return.
+The new bitmap drawing XCTest passed in4.510s; release NTSDNative in2.28s.
+All18 inherited fixture hashes remain unchanged; new raw/packed SHA verified.
+No shared constructor or strict state-read implementation was changed.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

@@ -35,6 +35,11 @@ release/volume и сохранение выделенных wide-path buffers. �
 SPARK-разметка совпали с native после свежих родителей. Сохранены предыдущие
 wrappers и нетронутые bytes/masks;12 null-SPARK проб заканчиваются перед
 разыменованием. Сам dispatch429e5a/431d10 и пиксели ещё не перенесены.
+[Общий bitmap draw](BITMAP_DRAWING.md) теперь исполняет всё тело43f010/43ef70
+до COM Blt:3971 изолированный случай совпал с native, включая clipping,
+mirror,198 двойных рисований и20 invalid-access boundaries. Это заменяет
+границу целого draw helper для нового корпуса; старые caller fixtures не
+переписаны. Native ещё не соединён с устройством/Practice или полным menu loop.
 AI bodies, OS acquisition, реальный сетевой транспорт, ранний playback prefix,
 startup/file IO, паузный вывод и дальнейшие тела стадий остаются открытыми; прежняя таблица ниже
 описывает ограничения существующего оконного прототипа.
