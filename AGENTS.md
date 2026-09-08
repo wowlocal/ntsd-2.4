@@ -820,6 +820,32 @@ unchanged, both new raw/packed SHA and full unpack checked. Both historical
 content and both bitmap source corpora reproduced ALL cases/blobs unchanged
 after the optional local/heap/device address hooks. Four targeted XCTest passed
 in14.137s; release NTSDNative passed in2.39s. R02.1/full match still open.
+The [front screen body](docs/research/FRONT_SCREEN_BODY.md) now executes
+42712c..4275cb after the fresh panel parent, with real401290/401a30/43f010/
+43ef70 children.1142 cases match native:8650 helper returns,180886 ordered
+events,3742 text requests/3740 completed401290,2392 draws/clips/2304 Blt,
+126 sounds/38 links,31978 records/284157936 bytes/masks. Keep raw28/31/29-byte
+literal copies, byte subtract index&3 with repeated strlen and all192 local
+bytes/masks. First backing comes from actual caller; later native locals persist.
+Three text rows use x591 and base45757c+491/y+20/y+40 with raw COLORREF602010/
+d07750. Website hover's upper-y check is bypassed when45757c==0. Author highlights
+copy entire suffix through NUL THEN write a separate terminator at local+ae/b0;
+keep the remaining tail. Click requires previous0/held1, clears held before
+sound/Sleep300/ShellExecute. No external link is opened in reference execution.
+Status1/2 button uses frame11; setting0 uses6/7, nonzero8/9. Hover x>=725/y<18
+has no lower bounds; accepted click selects-3. Final logo y=453da4+96.
+OriginalSurfaceText generalizes the EXISTING menu notice text helper; both callers
+share GetDC/GDI/ReleaseDC rules. Negative GetDC skips GDI only; positive original
+HRESULT is returned even if GDI/release fails. Two null-text cases stop before
+401295 after preserving earlier local writes. GDI/COM/Shell/Sleep and control
+sound handles are boundaries. All25 loaded bitmaps and World remain unchanged.
+Both packed corpora compared before acceptance; all33 previous pinned fixtures
+unchanged and both new raw/packed SHA/full unpack checked. Next4275cb selector-3
+and its settings writer423230, then selector-1 at4277f3, join main-menu/tail.
+Five targeted XCTest passed in150.890s: new body6.062s, old panel12.507s and
+historical full menu-presentation chain132.322s, covering the shared text refactor.
+Release NTSDNative passed in2.37s. No app UI/pixels/Windows or full-match claim;
+R02.1 remains open.
 The native preparation is not wired into practice. Do not restore synthetic
 Object headers or treat constructor/PE zeros as final match defaults.
 Verification: the existing 27 Swift tests passed (198.991s), then the three new

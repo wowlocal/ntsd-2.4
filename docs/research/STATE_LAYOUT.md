@@ -623,3 +623,20 @@ Fclose после flush сбрасывает ptr=base/count0, затем выз�
 before-input. Все25 ранних bitmap и World сохраняются после каждого случая;
 статус и частичные записи сохраняются при двух контрольных остановках до43c817.
 Это не установление worker/Windows startup provenance или полный ранний экран.
+
+Дополнение [тела раннего экрана](FRONT_SCREEN_BODY.md), S/D42712c..4275cb:
+
+| Поле | Правило |
+| --- | --- |
+| Caller local+`48/84/64` |28/31/29-byte исходные константы; затем byte subtract index&3 с повторным strlen |
+| Caller local+`14/20` | Wrapped ybase45757c+491; target surface из прежнего caller frame, не обязательно global455608 |
+| Caller local+`a4/ae/b0` | Общая копия suffix авторской строки через NUL; отдельные truncation bytes сохраняют прежний хвост |
+| `4546f0/453cdc/45757c` | Signed mouse x/y и vertical shift; website upper-y guard отключён при shift0 |
+| `44d060/457580` | Previous/held: клик только0/1, held очищается перед звуком; previous здесь не обновляется |
+| `458424/450be8` | Status1/2 → frame11; иначе setting0 → frames6/7, любой другой →8/9 |
+| `44d064` | Только принятый клик кнопки записывает−3, перед sound helper |
+
+Все25 ранних bitmap сохраняются без изменения. Текст берёт global455608,
+bitmap — caller local+20. GetDC HRESULT возвращается неизменным; его ошибка
+не отменяет родительскую обработку клика. Прежний notice overlay использует
+тот же общий native401290. Actual GDI raster/Windows и альтернативы4275cb открыты.

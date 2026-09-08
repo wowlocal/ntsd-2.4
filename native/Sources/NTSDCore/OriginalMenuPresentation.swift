@@ -173,15 +173,8 @@ public enum OriginalMenuPresentation {
         /// GetDC skips GDI and release. Colors are raw COLORREF, not RGB guesses.
         func text(_ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
             guard bytes.count < 512 else { throw error("Overlay stack string extent") }
-            let surface = try word(0x455608)
-            guard surface != 0 else { throw error("Null text surface") }
-            try observe(.init(.getDC, [surface]))
-            if input.dcResult < 0 { return }
-            try observe(.init(.setBackgroundColor, [input.dc, 0]))
-            try observe(.init(.setTextColor, [input.dc, color]))
-            try observe(.init(.stringLength, [], [bytes]))
-            try observe(.init(.textOut, [input.dc, 3, 531, UInt32(bytes.count)], [bytes]))
-            try observe(.init(.releaseDC, [surface, input.dc]))
+            try OriginalSurfaceText.draw(bytes,target: word(0x455608),background: 0,color: color,
+                                         x: 3,y: 531,dcResult: input.dcResult,dc: input.dc,observe: observe)
         }
         func formatted(_ format: String, _ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
             // Recording strings start at local+18 and the cookie is at+20c:

@@ -1,0 +1,15 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh early resources/settings/prefix/panel update ->42712c..4275cb.\nActual401290 GDI request helper,401a30 sound and43f010/43ef70 bitmap children\nrun on the same CPU/stack. First entry has no restored state. Later caller and\nmouse/worker/device inputs are declared controls, not whole screen iterations.\nGDI/COM/Sleep/ShellExecute are observed boundaries without external IO. No\npixel/worker/alternate-screen/Windows claim; native comparison still required.\n",
+  "corpus": "front-screen-body.json",
+  "sha256": "abc1f266d6b165de1a9ad49d653a1baf4cfa454655de260cc16b4ec2154c40c7",
+  "cases": 571,
+  "events": 90443,
+  "helpers": 4325,
+  "nativeCompared": true,
+  "nativeComparison": "Front screen body matches original: 571 cases, 4325 child returns, 90443 events, 1871 texts /1196 draws /8328 reads /1196 clips /1152 blits, 63 sounds /19 links, 1 boundaries, 15989 records /142078968 bytes/masks; own fresh panel parent 1. Alternate screens, platform output and Windows open",
+  "fixture": "original-front-screen-body.json",
+  "fixtureSHA256": "025a61c6364dc43dbab196d6d3bb8a61f11b34d808655b56e8c607b8f20aff8c",
+  "fixtureBytes": 6256596
+}

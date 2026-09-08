@@ -2,6 +2,11 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--front-screen-body" {
+        let r = try FrontScreenBodyReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
+        print("Front screen body matches original: \(r.cases) cases, \(r.helpers) child returns, \(r.events) events, \(r.texts) texts /\(r.draws) draws /\(r.reads) reads /\(r.clips) clips /\(r.blits) blits, \(r.sounds) sounds /\(r.shells) links, \(r.boundaries) boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh panel parent \(r.parent.cases). Alternate screens, platform output and Windows open")
+        exit(0)
+    }
     if CommandLine.arguments.count == 3,CommandLine.arguments[1] == "--menu-panel-update" {
         let r = try MenuPanelUpdateReference.compare(Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2])))
         print("Menu panel update matches original: \(r.cases) cases, \(r.content) content /\(r.bitmaps) bitmap /\(r.defaults) default /\(r.caches) cache calls, \(r.returns) child returns /\(r.constructors) constructors /\(r.destructors) destructors, \(r.events) parent /\(r.childEvents) child events, \(r.boundaries) pending-content boundaries, \(r.records) records /\(r.bytes) bytes/masks; own fresh prefix parent \(r.parent.cases). Remaining screen, worker, file/device output and Windows open")
