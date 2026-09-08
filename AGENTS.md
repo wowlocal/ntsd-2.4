@@ -1400,6 +1400,45 @@ physics/contact/link/draw/scheduler/recovery and full first tick, preserving own
 launch state. Do not zero constructor velocities or substitute Practice RNG.
 App/UI, Windows, clean Mac and full-game goal remain open.
 
+The [whole Actor control](docs/research/ACTOR_CONTROL.md) now implements
+413080..4143cb/ret8 in OriginalActorControl, reusing OriginalActorInput and
+OriginalRandom. It includes ordinary/heavy walking/running, air attacks,
+crouch dash, recovery rolls, dash turns/attacks and DAT velocity assignments.
+No per-character/technique allowlist. Actor+98 is carried-kind, not source ID.
+Two original caller args are accepted but unused by this EXE's control body.
+The frame/global ownership is explicit; public apply takes loaded Object and
+inout raw Actor/globals. withoutActuallyEscaping confines internal callbacks.
+OriginalGameplaySound.queueBuiltin implements actual417090 accumulation before
+later device output, with signed wrapping coordinates/counters and flag-based
+reset. Index7 is the new D domain; no audio-device output is claimed.
+The complete function matches25,795 synthetic cases,1999unique instructions,
+900RNG/2772sound requests. ALL42 original type0 Objects additionally match
+5376frame0/128-input cases,1343instructions/1487RNG/no sound requests. Source
+restores unmodified pinned LOADED_CATALOG Object bytes/masks and checks source
+DAT hashes; Native rebuilds/checks ALL137Objects then uses its own loaded data.
+Both probe callers remain synthetic; this is not a natural selected match.
+Full Actor bytes/masks total65,833,152 plus SHA of all1,438,354,624global bytes
+and ordered events. All calls use real input/RNG/sound helpers and actual ret8;
+no Actor/Object undefined reads in the original-file corpus. Other source types,
+all frames/sequences, nonfinite/x87 rounding domains remain open.
+First Native comparisons passed10.336s/build89.69s and7.866s/build5.11s. After
+factoring source Object access, a fresh synthetic execution reproduced exactly
+the same118,111,274-byte raw SHA. Both packed corpora, rollback AFTER RNG and
+old ActorInput passed5tests/22.845s. NTSDNative built33.48s. All jobs terminal.
+All107old fixtures unchanged; both new SHA/size/full raw-packed JSON verified,
+109pins at build/research/actor-control-fixture-pins.json.
+Preserve distinct cost branches: standing/air attacks use WHOLE mp with zero
+clamp/no statistic on exhaustion; run/dash require funds; superPunch70 skips
+that cost. Later jump/defend may replace an already paid attack. Crouch215 uses
+vx>0.001 or vx<-0.001; dash attack requires STRICT vx sign, not zero. Retain
+sequential two-direction dash/sound accumulation and original roll thresholds.
+NEXT: join this function with OWN MATCH_LAUNCH state through400-slot caller
+41e339..41e634 including403270 and400/401/500/501, then physics/contact/link/
+draw/scheduler/recovery and full tick. Existing source GAMEPLAY_ENTRY reached
+41eed1, but Native still stops41e339 at the accepted whole-parent boundary.
+Do not inject its expected after-state or zero ctorvelocities0.1/frame219.
+Practice/app integration, Windows, clean Mac and full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

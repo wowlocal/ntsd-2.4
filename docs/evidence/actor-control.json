@@ -1,0 +1,21 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole413080 with real input, RNG417170 and sound accumulator417090.\nSynthetic declared Actor/Object/Frame/globals, not natural match/DAT coverage.\nCompare full Actor bytes/masks and the hash of ALL globals, with ordered events.\nNo gameplay/sound/RNG helper is stubbed. Native acceptance is separate.\n",
+  "corpus": "actor-control.json",
+  "sha256": "7ab17ae4fe928bc918732d60b08672275cac745c452a3e13fd00ac73e5f56b97",
+  "bytes": 118111274,
+  "cases": 25795,
+  "groups": {
+    "matrix": 23040,
+    "phase": 700,
+    "air": 840,
+    "cost": 288,
+    "dv": 756,
+    "sound": 126,
+    "random": 45
+  },
+  "nativeCompared": true,
+  "fixture": "original-actor-control.json",
+  "fixtureSHA256": "e379f53a23f5620794dbc494a88362baffe520930c549710c59a3dc44e443187",
+  "fixtureBytes": 1327093
+}

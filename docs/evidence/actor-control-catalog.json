@@ -1,0 +1,17 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole413080 on ALL42 original type0 Objects, frame0 and128 held-input sets.\nObjects restored from the pinned complete original catalog capture, unmodified.\nActor/input/global probes are explicit synthetic callers, not a natural match.\nNative rebuilds and verifies the full catalog before using its own loaded data.\n",
+  "corpus": "actor-control-catalog.json",
+  "sha256": "ead3f44e5ec32b012e69e636b5e75aa296aa509322c105a4a65c73ef94b7d8ab",
+  "bytes": 24431423,
+  "cases": 5376,
+  "objects": 42,
+  "parent": {
+    "fixture": "original-loaded-catalog.json",
+    "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e"
+  },
+  "nativeCompared": true,
+  "fixture": "original-actor-control-catalog.json",
+  "fixtureSHA256": "45b3e9e66155974f898c3adf374b8b032706c019a5bf1c4e8c236fa77eada3e3",
+  "fixtureBytes": 362176
+}

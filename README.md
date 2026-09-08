@@ -70,6 +70,12 @@ launch through the complete control and physics callers, revealing the original
 first landing frame219 from constructor velocities0.1. Native comparison of
 those whole passes and their remaining tick stages is still pending.
 
+The [whole Actor control function](docs/research/ACTOR_CONTROL.md) now builds on
+that input component: walking/running, airborne actions, rolls, DAT velocities,
+RNG and deferred stereo contributions.25,795 synthetic cases and5,376 cases
+using all42 original type0 Objects match Swift. Connecting this function to
+the own World caller, physics and the rest of the complete tick remains open.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

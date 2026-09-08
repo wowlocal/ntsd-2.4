@@ -108,6 +108,12 @@ swift test --package-path native -c release --filter OriginalActorInputTests
 
 ## Следующее продолжение
 
+Позднейший [ACTOR_CONTROL](ACTOR_CONTROL.md) теперь переносит остаток413080
+и соединяет его с этим компонентом до настоящего ret8:25 795 синтетических
+и5376 случаев на всех42 исходных type0 Object совпали с Native. Прежний
+корпус14 624 остаётся отдельным доказательством префикса. Подключение целого
+управления к собственному World/caller и весь игровой такт ещё открыты.
+
 [oracle_gameplay_entry.py](../../tools/oracle_gameplay_entry.py) отдельно
 продолжает собственный [MATCH_LAUNCH](MATCH_LAUNCH.md) на том же CPU/стеке,
 World/400 Actor, каталоге, ресурсах, музыке и буфере записи. Перед продолжением
