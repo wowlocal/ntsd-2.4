@@ -2,6 +2,13 @@ import Foundation
 import NTSDReferenceChecks
 
 do {
+    if CommandLine.arguments.count >= 4, CommandLine.arguments[1] == "--random-initialization" {
+        let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
+        let corpora = try CommandLine.arguments.dropFirst(3).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let result = try RandomInitializationReference.compare(loaded: loaded, corpora: corpora)
+        print("Random initialization matches original: \(result.tables) tables, \(result.seedCalls) seeds, \(result.tableCalls) table / \(result.interveningCalls) intervening real CRT draws, \(result.bytes) global bytes/masks; chained preparation: \(result.match.replay.preparation.records) records, \(result.match.replay.preparation.bytes) bytes/masks, \(result.match.replay.preparation.randomCalls) game RNG calls; recording: \(result.match.replay.buffers) buffers, \(result.match.replay.bytes) bytes/masks")
+        exit(0)
+    }
     if CommandLine.arguments.count >= 5, CommandLine.arguments[1] == "--match-continuation", CommandLine.arguments.count % 2 == 1 {
         let loaded = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[2]))
         var parents: [Data] = [], corpora: [Data] = []

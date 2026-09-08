@@ -1,7 +1,7 @@
 import Foundation
 
-/// Original 0x417170. Initial bytes/index come from the supplied Windows replay;
-/// no macOS RNG, guessed CRT generator, or emulator runs in the application.
+/// Original 0x417170. Table bytes come from original initialization or replay;
+/// its index/counter are separate from OriginalCRTRandom's per-thread state.
 public struct OriginalRandom: Codable, Equatable, Sendable {
     public let table: [UInt8]
     public private(set) var index: Int

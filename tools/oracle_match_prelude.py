@@ -97,6 +97,10 @@ class MatchPrelude(ReplayInitialization):
         else:
             super().imported(uc, address, size, data)
 
+    def before_prelude(self):
+        """Optional earlier original paths after recorded menu/device inputs."""
+        return None
+
     def before_preparation(self, mode):
         index = len(self.replay_regions)
         self.prelude_events, self.format_calls = [], []
@@ -117,6 +121,7 @@ class MatchPrelude(ReplayInitialization):
         word(0x455610, SOUND if index % 3 else 0)
         word(0x455608, DEVICE)
         self.stimulus(0x44FD98, b'\xE9'*127+b'\0')
+        self.before_prelude()
         before = self.snapshot()
         self.put(STACK+0xF040, 0x44D020)
         self.uc.reg_write(UC_X86_REG_EDI, 0)  # established at 42cf67

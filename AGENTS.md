@@ -197,10 +197,29 @@ earlier native paths. New bitmap addresses use a separate supplied arena 2600002
 The loaded source resources and new continuation resource bytes/guards remain
 verified. The parent replay
 cleanup is a research operation, not an inserted startup action. No Windows output.
-Next recover earlier menu/RNG input provenance before 42cf8a, then connect to R01.2.
-Static next seed: 422ac0 fills 3000 bytes with CRT rand()%255+1 and sets 450b48=0;
-callers 427a2c/427a71; 43cf55/43cf5a seed CRT with timeGetTime. Other rand consumers
-must be threaded through, not assumed absent. This seed is not yet executed here.
+The [RNG initialization](docs/research/RANDOM_INITIALIZATION.md) now executes
+actual VC80 _initptd/srand/rand, bounded startup43cf40..43cf63 and both real
+menu call sites427a2c/427a71 through the complete422ac0 return. Native
+OriginalCRTRandom retains a separate UInt32 PTD state (initial1); table rebuild
+draws3000, writes rand()%255+1 and tail450b48=0, preserving450bcc/450c34.
+Seed prefix also writes458420=0. Read the study before extending RNG/startup.
+Two25-case chains start from PE/BSS, never replay_random; native-generated tables
+feed the verified prelude/preparation/replay path. 50tables,40seeds,150000table
+and26178intervening actual DLL draws match results/state,4614400globalbytes/masks;
+linked preparation77124records/114460288bytes/masks,242gameRNGcalls, recording
+50fullbuffers/324583600bytes/masks. Timer/thread/menu/metadata/device inputs
+remain supplied. Additional CRT draws are explicit controls, not a recovered
+trace of intervening gameplay. Same-thread state must survive these consumers.
+The default Python initialization boundary and optional before_prelude hook
+preserve historical corpora; --check-parent reproduces the old prelude without
+rewriting it. Native reference beforePrelude runs after recorded stimuli and
+before applying the existing prelude; expected table bytes are never inputs.
+Other rand consumers414774/431a42/431a86 remain S; thread them through instead
+of assuming none. Next recover earlier menu decisions/input and complete CRT
+lifetime before42cf8a, then connect toR01.2. This is not full startup or Practice.
+Next S seed: ECX==1 calls422ac0 only after44d060==0/457580==1 checks;
+ECX==2 at427a68 calls422ac0 BEFORE those checks427a90/427a9c. Do not equate
+table rebuild count with confirmed matches. Recover427937..427a9c decisions.
 Enabled music 402020 uses DirectShow and remains
 unsupported. The new replay chain also executes nonempty-path 4025b0/402020 with
 music disabled; this is not sound output or Windows startup.
@@ -223,6 +242,12 @@ parent-plus-continuation comparison in 172.950s. Both release comparisons passed
 before fixture acceptance; earlier fixtures remained unchanged. The readable
 reports retain inventories and canonical call digests; full ordered calls and
 candidate lists remain in the accepted packed fixtures.
+The RNG initialization stage passed three targeted Swift tests in287.065s:
+new two-corpus chain114.852s, historical continuation plus parents172.116s,
+and CRT integer fixture. Both release comparisons passed before acceptance.
+The historical a5 Python prelude reproduced all25cases and ALL blobs exactly
+after the default-boundary/hook refactor. Existing fixtures are unchanged.
+Release NTSDNative build passed in2.31s on this change.
 Reference checks
 are a development-only Swift target, not an app dependency. Run SwiftPM commands
 sequentially since they share native/.build.

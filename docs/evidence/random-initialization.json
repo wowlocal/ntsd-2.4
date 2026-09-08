@@ -1,0 +1,716 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "packageSHA256": "8648c5fc29c44b9112fe52f9a33f80e7fc42d10f3b5b42b2121542a13e44adfd",
+  "policySHA256": "e446fc3432a5d83eb96142ce40f4cc8ed417872539893ace445f7236ff4dd187",
+  "scope": "Real _initptd/srand/rand; bounded startup43cf40..43cf63 and actual menu calls427a2c/427a71 through422ac0 return; generated table consumed by full catalog/prelude/preparation/recording; supplied thread/timer/intervening-draw/menu/metadata/device/allocator boundaries, no Windows output",
+  "corpus": "random-initialization.json",
+  "corpusSHA256": "0f54f4aeaced3b569d694f6253f0bac5b64bc8779b627b7e3c7ee13a81e56faf",
+  "nativeComparison": "Random initialization matches original: 50 tables, 40 seeds, 150000 table / 26178 intervening real CRT draws, 4614400 global bytes/masks; chained preparation: 77124 records, 114460288 bytes/masks, 242 game RNG calls; recording: 50 buffers, 324583600 bytes/masks",
+  "loadedCatalogSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "readsBeforeWrites": [],
+  "immutableCatalogObjectHeapBytesVerified": true,
+  "crtPTDBytesCheckedPerCall": 512,
+  "crtInitialState": 1,
+  "cases": 25,
+  "replayBytes": 162291800,
+  "tableCalls": 75000,
+  "interveningCalls": 13089,
+  "seedCalls": 20,
+  "casesSummary": [
+    {
+      "label": "0-continue-crt-state",
+      "milliseconds": null,
+      "interveningDrawCount": 0,
+      "beforeState": 1,
+      "afterState": 2114286937,
+      "seed": null,
+      "caller": "0x427a2c",
+      "beforeGlobals": "3c249e48ad8d03eb8eea507cfaf841232d2a8fc3d0dc8d514261acba85ef2f96",
+      "afterGlobals": "a7dabba58c4983bc7192a9cc7d4be35e2bf6c3eda3030ca3f2c41050d54780a3",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 0,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "0e015546804e31ced77fe4af5b0dfdd092b0383aafba0bd2858a92f11bb3c564",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3001,
+      "writeInventorySHA256": "191044322e8efc4fa8f261008f78b688c7d149f4b856d2ab258a9c5b62366bab"
+    },
+    {
+      "label": "1-timer-0",
+      "milliseconds": 0,
+      "interveningDrawCount": 0,
+      "beforeState": 2114286937,
+      "afterState": 3374725112,
+      "seed": {
+        "before": 2114286937,
+        "after": 0,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "59f3945b31b8c937474ecdfad46d2ec6264ce9242966574f385afe1c9a4d0d74",
+      "afterGlobals": "aa1eb9051a0813ad7dd090fffe24931d25b23f953c8cce79c85000a61d204d01",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "3f2c799b2a78da37c2099f8e34f7561f75fa8320acc1372873906db4c99e518b",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "2-continue-crt-state",
+      "milliseconds": null,
+      "interveningDrawCount": 9,
+      "beforeState": 3374725112,
+      "afterState": 1010704795,
+      "seed": null,
+      "caller": "0x427a2c",
+      "beforeGlobals": "ba95e37351edcdcb4556187edd5359fd8785dfb99dcdb78f0e77df16f4b32eca",
+      "afterGlobals": "4ca082b71f72dead6103745ed139ccb964e2f16bddef3c83b0ba9a2afc3ba9f9",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 0,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "94a7ae01dc9f9e7581a7ace1e8fb07841b957c3c6508ee01a5caa5a4945fb192",
+      "interveningSHA256": "7ea1346d9bf520372092d41d778d2a194cdcf88f808261e78b016de1347b7c9a",
+      "writeCount": 3001,
+      "writeInventorySHA256": "191044322e8efc4fa8f261008f78b688c7d149f4b856d2ab258a9c5b62366bab"
+    },
+    {
+      "label": "3-timer-1",
+      "milliseconds": 1,
+      "interveningDrawCount": 0,
+      "beforeState": 1010704795,
+      "afterState": 2114286937,
+      "seed": {
+        "before": 1010704795,
+        "after": 1,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "9f334c66164cf7903beebae54a618d083c110c7e22a73288794d794f0db37883",
+      "afterGlobals": "0d31a0b1aed0eda2cb5b34c1d5a9f5b2ac7dbe1bf4e19fe832d1ffa619985a37",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "0e015546804e31ced77fe4af5b0dfdd092b0383aafba0bd2858a92f11bb3c564",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "4-continue-crt-state",
+      "milliseconds": null,
+      "interveningDrawCount": 4096,
+      "beforeState": 2114286937,
+      "afterState": 1194898353,
+      "seed": null,
+      "caller": "0x427a2c",
+      "beforeGlobals": "c8922a540a3b4f2287a73851546b77ee9cff1de56302aa9c995fd9ba475c0892",
+      "afterGlobals": "8b3565c57921efd1a37be5f5005330b4279b9ec8c70152ff73a4b758232d639a",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 0,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "b9863ba5a2698a5e67e8d375f5eea6163796e3c0eaa57ef2bec46fb330502f3e",
+      "interveningSHA256": "e87cc7db5b3c19aad0c1ee8af0be345655a60de52f49d73d144fa0e80f145545",
+      "writeCount": 3001,
+      "writeInventorySHA256": "191044322e8efc4fa8f261008f78b688c7d149f4b856d2ab258a9c5b62366bab"
+    },
+    {
+      "label": "5-timer-2147483647",
+      "milliseconds": 2147483647,
+      "interveningDrawCount": 1,
+      "beforeState": 1194898353,
+      "afterState": 229034750,
+      "seed": {
+        "before": 1194898353,
+        "after": 2147483647,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "f4f6ecb95cf59b783ffe661f654302fa45baca761cf89cbdc55f28ab29d061a5",
+      "afterGlobals": "feba753d391f9012b24be9359020fd7a4d23592f6d983a47eb627a8baa8b3531",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "3bc2f0a908604bc7a6bb5ad857852aed1c7845a7515d33b70cbdbb94d6d34834",
+      "interveningSHA256": "2156dbe5da60a4b65257c65bfc0c557fbf4d5b7f244f8b6c061a4ffb61d300e7",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "6-timer-2147483648",
+      "milliseconds": 2147483648,
+      "interveningDrawCount": 2,
+      "beforeState": 229034750,
+      "afterState": 123487794,
+      "seed": {
+        "before": 229034750,
+        "after": 2147483648,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "50d6cb7fc6e8157afd2268cf8b1b1fe0631ea6a9acb21768de92baac1a3f688c",
+      "afterGlobals": "9b5876c96be9e5b10abcf0d731e96c05bef5a6b0d3385bde8a53e956e88c73ff",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "06b090769404f87f7a918a08e663e86acf027fda00e0bedaca0f8f632258f822",
+      "interveningSHA256": "6f4cffe3b492a246c5a649d012194c17f976c81b17a46f34721ffc9f8c4aa5ef",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "7-timer-4294967295",
+      "milliseconds": 4294967295,
+      "interveningDrawCount": 255,
+      "beforeState": 123487794,
+      "afterState": 3261262436,
+      "seed": {
+        "before": 123487794,
+        "after": 4294967295,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "498b93c7947cd56f5f213c3f5bd31f71c2599ac4497d9fe73b5a59ecbd5a1ca1",
+      "afterGlobals": "7828fe31fa69757a7b35cb81007468d4fad9a2141d987ddc199d00b93fd9d63f",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "3ff39b6f936b72bb0fdd55c88d99012c6a542b9fe5b5cba1bb67016da9639cd0",
+      "interveningSHA256": "a4bda25e5f900fafc21e3e37f2e01be33de1fe09ae9653a00556c059f81a4574",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "8-timer-4294967294",
+      "milliseconds": 4294967294,
+      "interveningDrawCount": 0,
+      "beforeState": 3261262436,
+      "afterState": 1600634166,
+      "seed": {
+        "before": 3261262436,
+        "after": 4294967294,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "eec2820ecb4d0ffa454999a284c4cecd64df0ce97ed6feed136b7e2b38a171ae",
+      "afterGlobals": "84a1053fb649c54fe419619273476ad7c0ced3e4edcb1a5f2403ecb76c81338a",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "ce22f011923b63a821a77975931872a9b0569edbe410936b3cdd3f0123a5ca96",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "9-timer-4294901760",
+      "milliseconds": 4294901760,
+      "interveningDrawCount": 0,
+      "beforeState": 1600634166,
+      "afterState": 2344957944,
+      "seed": {
+        "before": 1600634166,
+        "after": 4294901760,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "af1e82496f12e5fb217b665f447cbd109c189bea7266c574f86fb272ad4c7efa",
+      "afterGlobals": "63c4be89e12374794eed95d270ad13d181ccdebf78126cd7b2778db66e54979a",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "9bc7d332b06fce9765eff49a89ed47d315ef9a671c4b9f42ffe612485ada9bde",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "10-timer-65535",
+      "milliseconds": 65535,
+      "interveningDrawCount": 9,
+      "beforeState": 2344957944,
+      "afterState": 2391930502,
+      "seed": {
+        "before": 2344957944,
+        "after": 65535,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "b7079c91be1c1b5ce3d8798415367df9ead11b6b82d6879bc1bfa60bb6a992a6",
+      "afterGlobals": "39078d90828e9f5ed6b95ce6b5ac83d3e1a54e076f2b60c58f65e0491a2d329a",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "6f2b1e3668374671d2c9b2727269a498a52a761294c93a891f1f267a9a4c59d1",
+      "interveningSHA256": "13528a796986dbce531351ba507cb207a41ce2d44cbfe4b55ddc4f810319bafc",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "11-timer-305419896",
+      "milliseconds": 305419896,
+      "interveningDrawCount": 0,
+      "beforeState": 2391930502,
+      "afterState": 3659371376,
+      "seed": {
+        "before": 2391930502,
+        "after": 305419896,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "c07be3a4b7fc7c00c5b488fa8c3e77422d2d69e95154c7aac2b2be13b7ce23c3",
+      "afterGlobals": "52299bb223255a60a87f2507b305d66dacdc281708a4da5d9a5d0ea4588a776e",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "f5b09cb1a17d55ec1c59b29afcc2487a53feb6da498df46ef0f7c3c10815d096",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "12-timer-2271560481",
+      "milliseconds": 2271560481,
+      "interveningDrawCount": 4096,
+      "beforeState": 3659371376,
+      "afterState": 2880459897,
+      "seed": {
+        "before": 3659371376,
+        "after": 2271560481,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "e132508844a9ed0be9cfa7efd0298c99e88e172f3323a08a704f98b0af1ad341",
+      "afterGlobals": "58509d0a7620a3492068872d32ddff600614726f61f73040a8275eca4d2dab01",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "879417752b4ddda642d8abc17eabcabf357b99c2b6b05d852e0387aad166742f",
+      "interveningSHA256": "a7cf29eae33749110563c905f9b1f81daeffe9f765b09d5ab8f8b94b66eafce8",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "13-timer-1431655765",
+      "milliseconds": 1431655765,
+      "interveningDrawCount": 1,
+      "beforeState": 2880459897,
+      "afterState": 652093500,
+      "seed": {
+        "before": 2880459897,
+        "after": 1431655765,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "729bbd34e99f21fd9f57a5e5fe0658f5d030063e5e0f70a9d6da800aeac8bc33",
+      "afterGlobals": "5d8b1d7d5283c61d5304046a95603f0768f6f8defdd1bbf87e9e5d94b9fea046",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "ef870fbfea1d95de116571ce0f1250662f536e9eb2acf2a0c82e54ba110f93d0",
+      "interveningSHA256": "1f7cc730944c94429e6496511808eaef6f7d2d72ec0151edc8cf062bc8242a13",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "14-timer-2863311530",
+      "milliseconds": 2863311530,
+      "interveningDrawCount": 2,
+      "beforeState": 652093500,
+      "afterState": 2256791020,
+      "seed": {
+        "before": 652093500,
+        "after": 2863311530,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "0b6085e34d44da1de36adaa0fc4b4eb6b03e6b7ef09dfdbd11baf085f9942bd3",
+      "afterGlobals": "7b8aeb8f7670090c827166be0399f4730cd8c3c4d99764dffccfee54b1004203",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "56e79467cf6c8b40f6874886a0102435bce54b31d0261913a5ba7456f6a1cb92",
+      "interveningSHA256": "97bf68d17f488a8dfa94d41eeecb9939d4a9cfa8f46327f8497458328259fafa",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "15-timer-0",
+      "milliseconds": 0,
+      "interveningDrawCount": 255,
+      "beforeState": 2256791020,
+      "afterState": 4068696217,
+      "seed": {
+        "before": 2256791020,
+        "after": 0,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "c21d6d27fa1f4279a1c1b915a72bf4870b0ae3d9cf0df90df969869428b174ef",
+      "afterGlobals": "2139a38db5116e179b8a7570d8054b719bd5316c3be96cfa5fa3eb9378776d16",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "7390562dfff0ce0691c0d08ac31cad31a9330479b8f21ef9a184201118192518",
+      "interveningSHA256": "0f9c76072bf868b081ec8d1c04213acd9c0ea0866c510cdebedf44688dc47cf7",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "16-timer-1",
+      "milliseconds": 1,
+      "interveningDrawCount": 0,
+      "beforeState": 4068696217,
+      "afterState": 2114286937,
+      "seed": {
+        "before": 4068696217,
+        "after": 1,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "9e0b997fba1832a646c5266bba671d78de9ed1e7936b7fceac3fb8ae2dcc5227",
+      "afterGlobals": "6780013e7698d059f505075bfa1643498a748f496777bd500ee8d9a654de0bed",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "0e015546804e31ced77fe4af5b0dfdd092b0383aafba0bd2858a92f11bb3c564",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "17-timer-2",
+      "milliseconds": 2,
+      "interveningDrawCount": 0,
+      "beforeState": 2114286937,
+      "afterState": 853848762,
+      "seed": {
+        "before": 2114286937,
+        "after": 2,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "aac8ab1403f9233c7ca3adbb27d88d08a1a340823ec820ddf04ebeb0ca43155a",
+      "afterGlobals": "f934ead873ce3b40c6fdebfce1fd0850ecf0b4ccadf723ba540cd6361fa3c658",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "309aad3edeb45aece1d9c9d1baf4e7cbba5c5d0fdeef63418e50222978b0e055",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "18-timer-32767",
+      "milliseconds": 32767,
+      "interveningDrawCount": 9,
+      "beforeState": 853848762,
+      "afterState": 4178802310,
+      "seed": {
+        "before": 853848762,
+        "after": 32767,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "f0fd44e92a146dbda391e7cb941f3e849a0dbbb42d8f875c8cdedd28227bd295",
+      "afterGlobals": "c69d3a58d2e43274d2426e791ca7020d30bd37566a5ebda00c1b6fdf22c73f1e",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "fd24d8b6344df9584badf9cb41dca2a54d184dea199b470a38649fd983cb437f",
+      "interveningSHA256": "7fc0159e12bb5b4830a236a55a0eba2c8dfb1c567775fd9d874cec5825a22534",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "19-timer-32768",
+      "milliseconds": 32768,
+      "interveningDrawCount": 0,
+      "beforeState": 4178802310,
+      "afterState": 1742125048,
+      "seed": {
+        "before": 4178802310,
+        "after": 32768,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "73129b54ab371a2b30de987aa9da6f5dab3a3f9b446d8e264edb2c8f00a12d55",
+      "afterGlobals": "0f3709ed64b95783644715a5bb8cd5a59ab6741d34cb0587396e30657e4dd216",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "b84b9cc59e7f34210aa4ab21c0308fdb29188f48c8fc09b39100f9896d64fcf0",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "20-timer-65536",
+      "milliseconds": 65536,
+      "interveningDrawCount": 4096,
+      "beforeState": 1742125048,
+      "afterState": 243648504,
+      "seed": {
+        "before": 1742125048,
+        "after": 65536,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "06e4e424563da91bf5a8f86790200257c3d26bea86529520c3b8289dccf421ba",
+      "afterGlobals": "55cd5fba1a99df57f73d6c0d5358b2a9b84869a1dbbe91d51acef63b42df4804",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "a0561cf3bed5094809154ef052f1883882b735e21c968fcb89ea35017f9525f6",
+      "interveningSHA256": "d6685db94959b407675a1d555d533a6cc21a9f4a94d73186212a8df746a1787b",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "21-timer-214013",
+      "milliseconds": 214013,
+      "interveningDrawCount": 1,
+      "beforeState": 243648504,
+      "afterState": 4106118980,
+      "seed": {
+        "before": 243648504,
+        "after": 214013,
+        "result": null
+      },
+      "caller": "0x427a71",
+      "beforeGlobals": "d931bc06a007cd06ca045bd8b0f909f8f0b6944f4717e46084db65b56f8241e6",
+      "afterGlobals": "d3c6f79e13efcafce4ed610af3135efc9a99551c209f913c03d6735c309a14d5",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "eca9c0da5f3991aab4529c828042b43cf49d6c47c745d6ff9b1aa2359c5bf378",
+      "interveningSHA256": "9c994664910abf47fdd36f928444d4685bd87a082752abaa9d21c180457a9e99",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "22-timer-2531011",
+      "milliseconds": 2531011,
+      "interveningDrawCount": 2,
+      "beforeState": 4106118980,
+      "afterState": 3209499693,
+      "seed": {
+        "before": 4106118980,
+        "after": 2531011,
+        "result": null
+      },
+      "caller": "0x427a2c",
+      "beforeGlobals": "bb8e97170a36423a1b3e4eb8adc30c99183c36047b06301d99bc117a92851268",
+      "afterGlobals": "50a091454afa91e0599dd3d068413a9735c6f57fbfc5892320ce8a4973f737f8",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 1,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "a96dc45e160e243e5d96ce125ef217616d9a34b8e78dec318efe39a25cc023d2",
+      "interveningSHA256": "0c04c75af98379bb9be9ce6e12851ad840e3a4e4714bdea2d40c09ec87d39f6e",
+      "writeCount": 3002,
+      "writeInventorySHA256": "257dc504d7ace37c7d0d31b8b4f223f1ee75f18253c4a02b8c1c345ec6cdf308"
+    },
+    {
+      "label": "23-continue-crt-state",
+      "milliseconds": null,
+      "interveningDrawCount": 255,
+      "beforeState": 3209499693,
+      "afterState": 174410730,
+      "seed": null,
+      "caller": "0x427a71",
+      "beforeGlobals": "01b7d7018e01f5fa3c66110dfb26d431f912666f1f59a4a33e2124413bdc3d04",
+      "afterGlobals": "ad8962fac54f177425eeab54d7e59ca6ccc3d58db13df6069afc3f68ef9ce891",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 0,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "a5ab3a0850ab180d7a9e3e64bd3c15c187d3f70fee4acf2d0c2a1b3726bf2bf4",
+      "interveningSHA256": "891864e151641dc56f2a2fab8302aa686325334b2f045217c067a0ab64a8e940",
+      "writeCount": 3001,
+      "writeInventorySHA256": "191044322e8efc4fa8f261008f78b688c7d149f4b856d2ab258a9c5b62366bab"
+    },
+    {
+      "label": "24-continue-crt-state",
+      "milliseconds": null,
+      "interveningDrawCount": 0,
+      "beforeState": 174410730,
+      "afterState": 2239020450,
+      "seed": null,
+      "caller": "0x427a2c",
+      "beforeGlobals": "60d94431444f8bffcda8103fd695695445ee199682a9c3dee8b55b723cedf8a5",
+      "afterGlobals": "92a41b1c00686a2203f55057c0fd0e3d172da5ab563f6e63173b981669d4572c",
+      "preservedRegisters": [
+        286331153,
+        572662306,
+        858993459,
+        1145324612
+      ],
+      "stackAfter": 268496896,
+      "timerCalls": 0,
+      "tableCalls": 3000,
+      "tableCallsSHA256": "652cf0c2c77d4588b4390351dfee342423d412980c58b7a5047889f47635f764",
+      "interveningSHA256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "writeCount": 3001,
+      "writeInventorySHA256": "191044322e8efc4fa8f261008f78b688c7d149f4b856d2ab258a9c5b62366bab"
+    }
+  ],
+  "fixture": "original-random-initialization.json",
+  "fixtureSHA256": "2f12f123555194012af8cb4a89f1688a37f77b2e2f7ce93e03719d5eb076e0a4",
+  "fixtureBytes": 3529656,
+  "validation": {
+    "swiftCommand": "swift test --package-path native --filter '(OriginalRandomInitializationTests|OriginalMatchContinuationTests|OriginalCRTTests)'",
+    "swiftTests": 3,
+    "swiftFailures": 0,
+    "swiftSeconds": 287.065,
+    "newChainSeconds": 114.852,
+    "historicalContinuationSeconds": 172.116,
+    "historicalPythonPreludeCases": 25,
+    "historicalPythonPreludePattern": "a5",
+    "historicalPythonPreludeAllCasesAndBlobsIdentical": true
+  }
+}

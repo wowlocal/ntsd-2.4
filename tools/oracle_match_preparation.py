@@ -64,12 +64,16 @@ class MatchPreparation(LoadedCatalog):
         self.put(0x44717C, STUB+0x330)
         self.put(0x44D010, 0)  # explicit disabled DirectShow boundary
         self.uc.mem_write(0x44EED0, b'\0')  # no supplied current music path
+        self.initialize_random_boundary()
+        self.global_initial = bytes(self.uc.mem_read(GLOBAL, GLOBAL_SIZE))
+        self.active = True
+
+    def initialize_random_boundary(self):
+        """Historical corpus input. New startup corpora can retain PE/BSS here."""
         self.random_source = replay_random(DEFAULT_SOURCE, read_bytes(DEFAULT_SOURCE/'NTSD 2.4.exe'))
         self.uc.mem_write(0x44FF90, bytes(self.random_source['table']))
         self.put(0x450BCC, self.random_source['index'])
         self.put(0x450C34, self.random_source['counter'])
-        self.global_initial = bytes(self.uc.mem_read(GLOBAL, GLOBAL_SIZE))
-        self.active = True
 
     def restore(self, capture):
         cache = {}

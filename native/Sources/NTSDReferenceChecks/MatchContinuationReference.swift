@@ -41,7 +41,7 @@ public enum MatchContinuationReference {
         guard parents.count == corpora.count, !parents.isEmpty else { throw error("Missing paired parent") }
         let inputs = try corpora.map { try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack($0)) }
         var result = Result()
-        result.parent = try MatchPreludeReference.compare(loaded: loaded, corpora: parents) { index, catalog, state in
+        result.parent = try MatchPreludeReference.compare(loaded: loaded, corpora: parents, onFinished: { index, catalog, state in
             let corpus = inputs[index]
             guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
                   corpus.parentFixtureSHA256 == MatchPreparationReference.digest(parents[index]),
@@ -167,7 +167,7 @@ public enum MatchContinuationReference {
                 result.randomCalls += calls.filter { $0.kind == "rng" }.count
                 result.constructors += calls.filter { $0.kind == "reconstruct" }.count
             }
-        }
+        })
         return result
     }
 }

@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["unicorn==2.1.4", "olefile==0.47"]
 # ///
-"""Execute the repository's Microsoft VC80 scanf and bounded sprintf paths.
+"""Execute the repository's Microsoft VC80 scanf, sprintf and RNG paths.
 
 Development tooling only. The DLL is extracted from the hash-pinned original
 redistributable; neither it nor Unicorn belongs in the native application's runtime.
@@ -138,6 +138,27 @@ class CRT:
             raise ValueError('CRT call did not return')
         assert self.uc.reg_read(UC_X86_REG_ESP) == sp + 4
         return struct.unpack('<i', struct.pack('<I', self.uc.reg_read(UC_X86_REG_EAX)))[0]
+
+    @property
+    def random_state(self):
+        """PTD+14, initialized to 1 by real _initptd at 78132d1a."""
+        return self.u32(PTD+0x14)
+
+    def random_call(self, seed=None):
+        """Execute exported rand/srand, preserving the same supplied thread PTD.
+
+        Check its entire 0x200-byte backing: only the RNG word may change.
+        srand's EAX is not a C return value and is intentionally not exposed.
+        """
+        before = bytes(self.uc.mem_read(PTD, 0x200))
+        result = self.call(0x7816D5F0 if seed is None else 0x7816D5E3,
+                           [] if seed is None else [seed & 0xFFFFFFFF])
+        after = bytes(self.uc.mem_read(PTD, 0x200))
+        assert before[:0x14] == after[:0x14] and before[0x18:] == after[0x18:]
+        if seed is None:
+            assert 0 <= result <= 0x7FFF
+        return dict(before=int.from_bytes(before[0x14:0x18], 'little'),
+                    after=self.random_state, result=result if seed is None else None)
 
     def scan(self, data, fmt=b'%d', string_file=False, chunk=4096):
         assert len(fmt) < 0xFF0 and b'\0' not in fmt and chunk > 0
