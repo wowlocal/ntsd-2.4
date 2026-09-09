@@ -754,6 +754,9 @@ local uInt longest_match(s, cur_match)
     register Byte scan_end   = scan[best_len];
 #endif
 
+    /* NTSD alteration: observe invocation; no matching rule is changed. */
+    ntsd114_longest_match_observed();
+
     /* The code is optimized for HASH_BITS >= 8 and MAX_MATCH-2 multiple of 16.
      * It is easy to get rid of this optimization if necessary.
      */

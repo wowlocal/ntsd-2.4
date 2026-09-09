@@ -1,0 +1,918 @@
+{
+  "scope": "Audit actual rootSP+64 accesses on an unchanged initialized gameplay chain.\n\nRetain the complete pinned GAMEPLAY_NOTICES result. No stack word is supplied\nor rewritten. This proves only the selected own path, not all caller branches.\n",
+  "control": false,
+  "parent": "original-gameplay-notices.json",
+  "parentSHA256": "13a20c9a69a13f17683a754de9d0b01ef26ebf619f0ffca502689ecc916e17b0",
+  "completeParentReproduced": true,
+  "bodySP": 268495292,
+  "address": 268495392,
+  "allAccesses": [
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    },
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    }
+  ],
+  "fromLastRoundInitialization": [
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    }
+  ],
+  "finalWord": 0,
+  "end": {
+    "pc": 4332764,
+    "sp": 268495292
+  }
+}

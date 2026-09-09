@@ -12,7 +12,8 @@
     },
     "deflate.c": {
       "originalSHA256": "24de2ffce0907d7692fc6eb5abcc200e9781a8eca24d8db9289f709fcdf5e3be",
-      "vendoredSHA256": "24de2ffce0907d7692fc6eb5abcc200e9781a8eca24d8db9289f709fcdf5e3be"
+      "vendoredSHA256": "467086ea2408b518df84a17b26250f0ae17116ca6bb0de170ed6b505c5b29da7",
+      "alteration": "One marked invocation observer in longest_match; algorithm and tables unchanged."
     },
     "deflate.h": {
       "originalSHA256": "094cdbd9e851140334099f46a2047b9ee722dcc3f2cf3c0b32e4b56dd5cab823",

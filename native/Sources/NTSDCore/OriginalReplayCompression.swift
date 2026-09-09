@@ -17,6 +17,9 @@ public enum OriginalReplayCompression {
         /// Recorded before reclaiming private host storage after a failed call.
         /// This does not reconstruct the original Windows heap's leaked bytes.
         public let unreleasedAllocations: Int
+        /// Actual native longest_match invocations, used by the original
+        /// writer's lazy processor-selector lifetime. No host CPUID is run.
+        public let longestMatchCalls: UInt32
     }
     private static let lock = NSLock()
 
@@ -31,19 +34,35 @@ public enum OriginalReplayCompression {
         guard source.count <= Int(UInt32.max), destination.bytes.count <= Int(UInt32.max) else {
             throw OriginalStateError.invalidStorage("Replay compression: original 32-bit length extent")
         }
-        let capacity = destination.bytes.count
-        var input = source+[0], output = destination.bytes+[UInt8](repeating: 0x69, count: 16)
+        var output: OriginalStateRecord? = destination
+        let result = try compress(source, sourceCount: UInt32(source.count), destination: &output,
+                                  capacity: UInt32(destination.bytes.count), level: level, failureOrdinal: failureOrdinal)
+        destination = output!
+        return result
+    }
+
+    /// Preserve NULL pointer with a nonzero declared length.43dd60 can still
+    /// continue after the resulting stream error; NULL is not an empty buffer.
+    static func compress(_ source: [UInt8]?, sourceCount: UInt32,
+                         destination: inout OriginalStateRecord?, capacity: UInt32,
+                         level: Int32 = -1, failureOrdinal: UInt32 = 0) throws -> Result {
+        guard source == nil || source!.count == Int(sourceCount),
+              destination == nil || destination!.bytes.count == Int(capacity) else {
+            throw OriginalStateError.invalidStorage("Replay compression: backing/declared extent")
+        }
+        var input = (source ?? [])+[0], output = (destination?.bytes ?? [])+[UInt8](repeating: 0x69, count: 16)
         var result = NTSDReplayCodecResult()
         // zlib1.1.4 lazily initializes shared tables. Serialize native calls.
         lock.lock()
         input.withUnsafeMutableBufferPointer { inputBuffer in
             output.withUnsafeMutableBufferPointer { outputBuffer in
-                ntsd_replay_codec_compress(outputBuffer.baseAddress!, UInt32(capacity), inputBuffer.baseAddress!,
-                    UInt32(source.count), level, failureOrdinal, &result)
+                ntsd_replay_codec_compress(destination == nil ? nil : outputBuffer.baseAddress!, capacity,
+                    source == nil ? nil : inputBuffer.baseAddress!, sourceCount, level, failureOrdinal, &result)
             }
         }
         lock.unlock()
         guard result.contractViolation == 0, result.written <= capacity, result.eventCount <= 16,
+              destination != nil || result.written == 0,
               output.suffix(16).allSatisfy({ $0 == 0x69 }) else {
             throw OriginalStateError.invalidStorage("Replay compression: native codec storage contract")
         }
@@ -55,10 +74,13 @@ public enum OriginalReplayCompression {
                 }
             }
         }
-        var defined = destination.defined
-        for i in 0..<Int(result.written) { defined[i] = true }
-        destination = try .init(bytes: Array(output.prefix(capacity)), defined: defined)
+        if let before = destination {
+            var defined = before.defined
+            for i in 0..<Int(result.written) { defined[i] = true }
+            destination = try .init(bytes: Array(output.prefix(Int(capacity))), defined: defined)
+        }
         return .init(status: result.status, length: Int(result.length), written: Int(result.written),
-                     allocationEvents: events, unreleasedAllocations: Int(result.unreleasedCount))
+                     allocationEvents: events, unreleasedAllocations: Int(result.unreleasedCount),
+                     longestMatchCalls: result.longestMatchCalls)
     }
 }

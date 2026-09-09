@@ -142,8 +142,15 @@ CRT/GDI diagnostic text. Four acceptance tests passed. A new
 [FPU audit](docs/research/FPU_PRECISION.md) found a required numerical correction:
 the EXE startup selects 53-bit precision, while historical arithmetic tests
 declared 64-bit precision and own captures inherited CW0. Original instructions
-produce 32 differing stores on targeted inputs. Correcting precision and
-revalidating initialized chains now takes priority over further tick expansion.
+produce 32 differing stores on targeted inputs. The correction and subsequent
+initialized-chain checks are tracked in the research map; the current complete
+own chain reaches421cdc in [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md).
+
+The [whole replay writer](docs/research/REPLAY_WRITER.md) now preserves original
+compression, live key/name processing, file buffering and ownership cleanup.
+Twenty-one whole calls match native at declared file/allocator boundaries;
+five source failures are explicitly rejected rather than counted as successful
+matches. The enclosing result caller and complete tick return remain next.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

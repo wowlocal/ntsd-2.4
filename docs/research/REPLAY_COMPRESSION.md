@@ -21,9 +21,11 @@ The wrappers and1.1.4 literal match the compression interface in the official
 is `9e3e973174f9910fd51539ef9ce94c86a3943d4f897fab8e9adf4b19e6a8291e`.
 The natively compiled C subset retains the original license and source notices.
 [upstream.json](../../native/Sources/NTSDReplayCodec/upstream.json) pins each
-original and vendored file. Only two marked configuration includes change
-headers: private symbol names, Darwin's Byte typedef, allocator observations
-and copy observations. The compression algorithm and tables are unchanged.
+original and vendored file. The compression milestone changed two headers with
+marked configuration includes: private symbol names, Darwin's Byte typedef,
+allocator observations and copy observations. The subsequent
+[whole writer](REPLAY_WRITER.md) also adds one marked longest_match invocation
+observer to deflate.c. The compression algorithm and tables remain unchanged.
 
 This source library is an implementation candidate, not a second behavioral
 reference. Output acceptance depends on executing the NTSD EXE. An early349-case
@@ -123,8 +125,8 @@ release build before fixture publication.
 coverage. The raw corpus is35880366 bytes; its lossless fixture is32660900 bytes.
 Independent verification confirms complete inflated bytes plus the transport's
 omitted final newline, full JSON, both hashes and
-lengths, all531 transport blobs, all10 upstream file hashes and exactly two
-marked changed headers. All172 old fixtures remain unchanged among173 pins in
+lengths, all531 transport blobs, all10 upstream file hashes and, at that milestone,
+exactly two marked changed headers. All172 old fixtures remain unchanged among173 pins in
 build/research/replay-compression-fixture-pins.json. Artifact evidence is
 build/research/replay-compression-artifact-verification.json.
 

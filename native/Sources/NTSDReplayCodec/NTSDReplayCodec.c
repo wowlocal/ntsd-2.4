@@ -16,6 +16,10 @@ typedef struct {
 
 static _Thread_local CodecContext *current;
 
+void ntsd114_longest_match_observed(void) {
+    if (current) ++current->result->longestMatchCalls;
+}
+
 static void event(uint32_t kind, uint32_t ordinal, uint32_t count, uint32_t size) {
     NTSDReplayCodecResult *result = current->result;
     if (result->eventCount >= 16) { result->contractViolation = 1; return; }

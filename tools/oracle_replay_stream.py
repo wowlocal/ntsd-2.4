@@ -105,7 +105,7 @@ class ReplayStream(CRT):
         self.put(0x781c4820,FD_TABLE)
         descriptor=bytearray(64);struct.pack_into('<I',descriptor,0,0x13572468);descriptor[4]=1
         self.uc.mem_write(FD_TABLE+3*64,bytes(descriptor))
-        self.uc.hook_add(UC_HOOK_BLOCK,self.block)
+        self.block_hook=self.uc.hook_add(UC_HOOK_BLOCK,self.block)
         for begin,end in ((0x78130000,0x7822ffff),(pe.base,pe.base+0xfffff)):
             self.uc.hook_add(UC_HOOK_CODE,self.instruction,begin=begin,end=end)
         self.decoder = Cs(CS_ARCH_X86,CS_MODE_32)

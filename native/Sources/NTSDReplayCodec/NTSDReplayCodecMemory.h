@@ -3,5 +3,6 @@
  */
 #include <stddef.h>
 void *ntsd114_allocator_memcpy(void *destination, const void *source, size_t count);
+void ntsd114_longest_match_observed(void);
 #undef zmemcpy
 #define zmemcpy ntsd114_allocator_memcpy

@@ -4,9 +4,63 @@ The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 **Current priority: whole result recording421cdc..422218, then remaining tail
-through422ab8/ret4.** Read [REPLAY_STREAM](docs/research/REPLAY_STREAM.md),
+through422ab8/ret4.** Read [REPLAY_WRITER](docs/research/REPLAY_WRITER.md),
+[REPLAY_STREAM](docs/research/REPLAY_STREAM.md),
 [REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
-and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md). The codec
+and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md).
+
+Whole43dd60 is now implemented in OriginalReplayWriter.21 whole returns match
+full buffers/masks/globals,4588a8 ownership and24350 descriptor writes/58522686
+bytes. Five more source faults are explicit native rejections with rollback:
+NULL key-adjustment read, NULL payload CRT invalid-parameter/Watson, two path
+cookie overflows, and a6500-byte key overwriting the compiled-version pointer.
+Do not call these26 successful matches. The compiler-version pointer44dce8 is
+read by440434/44043c before codec allocation; alternate backing remains open.
+The original ignores compression and IO numeric errors, still closes, frees
+temporary, re-reads/frees4588a8, clears4588a8, then destroys the stream.
+
+Keep live key/name globals and lazy44dd50 selector: native C counts actual match
+invocations, and only selector2 with a nonzero count requests the supplied
+original processor signature. The original detector produced306c4 on this
+controlled CPU.4353858 native/source match counts agree, including4074271 for
+the fullrandom capacity failure. This is not a host/Windows CPU measurement.
+Source365 codec/117 stream helper returns,882 complete REPs,116/117 writer starts
+(43de0c alignment missing) and3292 DLL code-hook PCs. Decoded helper-block starts
+are NOT per-instruction execution proof. All26 source calls request27522 writes/
+71508038bytes, including cookie-failure IO NOT compared natively; use the smaller
+successful-call counts above for native claims. Private C++ ABI/heap pressure,
+actual Windows files/exception handling and own initialized result join remain
+open. Native source storage must have recovered provenance; version-pointer
+alternatives and corrupted descriptor backing are not a completed native domain.
+
+The whole raw comparison passed0.774s/build145.03s before publication. Early
+checks passed the prior815 codec/66 stream corpus,6 whole writer returns plus
+one rejected pointer fault, then15 returns plus3 source faults. A late-observer
+trial fails at destruction after staged frees/clear and verifies rollback.
+Both retained own notices passed40.301s alongside the initial whole-writer case.
+The source suite's research string limit was corrected before the long-key
+case, then actual unmapped/Watson boundaries were recorded. Completed cases
+were preserved in atomic hash-verified checkpoints only after each previous
+source process was terminal; no live process was restarted for silence.
+All174 old fixture pins remain unchanged,175 current. Independent fullraw/
+packedbytes/JSON/SHA/1882 zlib-framed blobs and10 vendor hashes verified.
+Raw44801203/packed36098192bytes. Native compression still uses private C1.1.4;
+transport zlib framing does not replace game output or run a DLL in the app.
+Final packaged5 release tests passed44.296s/build145.99s: whole writer, retained815 codec,
+66 streams and both own notices. NTSDNative linked; this is not app-window or
+Windows execution. All source/SwiftPM jobs, including the primary stack audit,
+are terminal. The own initialized gameplay boundary remains421cdc/SP1000e9bc.
+Python compilation,534 local Markdown links and owned-file diff checks pass.
+
+The new original-stack audit tools/oracle_result_stack.py reproduces the entire
+primary GAMEPLAY_NOTICES corpus unchanged.89 accesses total to rootSP64; after
+the final41d7d7 round initialization only that one write0 occurs, with final0
+at421cdc/SP1000e9bc. No stack value was injected. This proves the selected own
+path, NOT the control variant or every branch. Preserve the already computed
+OriginalMatchRoundResult.stageDefeated through MenuCycleReference (currently
+discarded); do not import expected stack bytes for the next result consumer.
+
+The preceding codec
 dependency is now implemented:815 whole43f4b0/43f400 calls match the public
 OriginalReplayCompression Swift API/private native C1.1.4 subset.31390143 output
 bytes/masks,11388 helper returns,5116 complete REP copies; all51+11 wrapper starts,
@@ -25,8 +79,9 @@ counts, DF0, ECX0/ESI/EDI advancement and full copied bytes verify the correct
 mask; raw hook masks remain separate. Do not replace source bytes or present
 those masks as complete. Simple isolated REP controls did not reproduce the
 broader issue. Full815 native C and public Swift comparisons pass; host zlib1.2.12
-differs on53 successful outputs. Only two marked vendor header includes change;
-the C algorithms/tables and license are retained, hashes inupstream.json.
+differs on53 successful outputs. That milestone changed two marked header
+includes. Whole-writer work adds one marked longest_match invocation observer
+in deflate.c; the C algorithms/tables and license remain, hashes inupstream.json.
 Raw Swift815 passed0.509s/build140.32s; prior5-sample build140.69s passed.
 Initial native integration needed Byte/prototypes and zmemcpy observation after
 fortified platform headers, not changed compression rules.172oldpins remain
@@ -37,8 +92,8 @@ linked; codec symbols are privately prefixed, no system-zlib dependency.
 All source/SwiftPM jobs terminal. This is no app-window or Windows evidence.
 Python/654 local Markdown links and owned-file diff checks pass. Vendored
 whitespace is unchanged upstream content; do not reformat the pinned sources.
-NEXT whole43dd60 key/name/stream writer and ownership, then full421cdc caller;
-the codec alone does not execute the writer, an own continuation or a Windows file.
+Whole43dd60 is now compared above; NEXT full421cdc result caller.
+The codec alone does not execute the writer, an own continuation or a Windows file.
 
 The stream dependency is now implemented in OriginalReplayFileOutput:66 full
 construct/write/write/close/destroy sequences match Native at the declared open/
@@ -61,8 +116,8 @@ passed: stream2.427s,codec0.608s,both ownnotices39.736s. NTSDNative linked;
 no app-window claim.173oldpins unchanged,174current; fullraw+transportnewline/
 packedbytes/JSON/SHA verified,29709098/20460176bytes. Python/664local links/diff
 checks pass; all source/SwiftPM jobs terminal.
-Whole43dd60, key/name ownership, source exceptions and actualWindowsfiles remain
-open. The accepted initialized gameplay boundary is still421cdc/SP1000e9bc.
+Whole43dd60 and bounded source failures are now compared above; actualWindowsfiles
+remain open. The accepted initialized gameplay boundary is still421cdc/SP1000e9bc.
 
 The preceding [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md) milestone:
 BOTH fresh initialized HUD chains now continue the whole notice caller through

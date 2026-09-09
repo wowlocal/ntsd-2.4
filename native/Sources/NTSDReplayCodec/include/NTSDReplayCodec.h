@@ -16,6 +16,7 @@ typedef struct {
     uint32_t eventCount;
     uint32_t unreleasedCount;
     uint32_t contractViolation;
+    uint32_t longestMatchCalls;
     NTSDReplayCodecEvent events[16];
 } NTSDReplayCodecResult;
 
