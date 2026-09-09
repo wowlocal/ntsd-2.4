@@ -139,8 +139,10 @@ in0.712s after a125.61s release build. NTSDNative compiled and linked; this is
 not a window/device test. Local research links, Python compilation and diff
 checks passed. All source and SwiftPM jobs were terminal before committing.
 
-Next recover `41fb0b..4214c6`, including post-schedule death/ground corrections,
-opoint, weapon destruction, other creation and deletion, then advance EDI in
+The next [POSTDRAW_OPOINT](POSTDRAW_OPOINT.md) study now implements the entire
+41fb0b..4203b4 body and early frame lifetime paths, preserving its three distinct
+continuations. Next recover the alternative4203b4..420e93 weapon/creation block
+and common420e93..4213a9 late creation/deletion, then advance EDI in
 the original live-slot order through4214cf. A later slot created earlier in
 the pass can be processed during that same pass. Do not split the scheduler
 into an all-Actor phase or skip surrounding blocks absent from one test match.

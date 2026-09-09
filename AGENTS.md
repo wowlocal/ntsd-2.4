@@ -4,7 +4,33 @@ The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 **Current priority: the ENTIRE interleaved400-slot41f550..4214cf loop.
-Read [POSTDRAW_SLOT_PREFIX](docs/research/POSTDRAW_SLOT_PREFIX.md).**
+Read [POSTDRAW_OPOINT](docs/research/POSTDRAW_OPOINT.md).**
+OriginalPostDrawOpoint now implements whole41fb0b..4203b4 and its EARLY lifetime
+paths4213a9..4214c6.1991 controlled original calls atCW027f match full400Actor/
+World bytes+masks/globalsSHA,2291 constructors and exact continuation. An
+opoint attempt goes420e93 even on pool/catalog miss; no-opoint goes4203b4;
+early lifetime goes4214c6. These must not be flattened into one continuation.
+Preserved: cachedFrameSP+38 versus currentparent center, ctor aliases, firstfree/
+firstID, requested-count extended spread vs actual-count delays, vrest/hold links,
+sourceIDs211/223/224/5/52, activityEXACTLY1 ownership lifetime and frame reset.
+Native keeps x87 spread intermediate across vz store;53-bit arithmetic and
+both4450d0 paths checked. GroundNaN comparison supported, nonfiniteZ arithmetic
+explicitlyunsupported. Entirepool rollback after secondconstructor observer
+and lateunavailabledepth tested. Caller must buffer events until wholetickcommit.
+Static accepted-catalog survey verifies137DAT hashes and2454 opoints, allactions
+0..<400 andcounts1..10/35. Allmultiplicities exercised by CONTROLLED cases, not
+natural DAT execution.588body/lifetime+151ctor+47conversion PCs; four unexecuted
+body PCs are negative-created-count arm/alignment. Full branch/Windows notclaimed.
+Acceptance6release tests2.274s/build127.35s passed before1losslessfixture;
+158oldfixtures unchanged,159pins in build/research/postdraw-opoint-fixture-pins.json.
+Finalpackaged3tests1.573s/build127.12s passed. CompleteJSON/SHA/lengths verified:
+raw2452941/packed111787bytes. NTSDNative linked; source/allSwiftPM jobs terminal.
+NEXT4203b4..420e93 weapon destruction/creation ALTERNATIVE, then420e93..4213a9
+common latecreation/deletion and originalEDI advance. Early deletion above does
+not establish other incomingregistercontexts at4213a9. Join entirelive-slot loop
+before extending own initialized chain, which STILL ends41f550/SP1000e9bc.
+
+The preceding [POSTDRAW_SLOT_PREFIX](docs/research/POSTDRAW_SLOT_PREFIX.md):
 OriginalPostDrawSlotPrefix now implements ONE complete41f550..41fb0b slot
 prefix (inactive exit4214c6), including transforms9995/8000..<9000,
 state9996 particle constructors/RNG, HP/MP and whole40d960/416fb0 below.
@@ -22,8 +48,9 @@ all157old fixtures unchanged,158pins in
 build/research/postdraw-slot-prefix-fixture-pins.json. CompleteJSON/SHA/length
 verified independently: raw918456/packed59242bytes. Final packaged3tests passed
 in0.712s/build125.61s; NTSDNative linked. All source/SwiftPM jobs terminal.
-NEXT implement41fb0b..4214c6 post-schedule/opoint/othercreation/deletion, then
-advanceEDI through4214cf in original LIVE slot order. Do not turn this prefix
+The next study above implements post-schedule/opoint/earlylifetime. Remaining
+weapon/latecreation/deletion must precede EDI advance in original LIVE order.
+Do not turn this prefix
 into an allActor scheduling pass. Own initialized chain STILL ends41f550,
 SP1000e9bc, first unreturned tick; this new prefix is not yet connected to it.
 Fulltick/app/fullmatch/Windows/device/cleanMac remain open.

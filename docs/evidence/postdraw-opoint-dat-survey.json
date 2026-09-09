@@ -1,0 +1,28 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "parentSHA256": "1c96ed1127ffe9409fcfb4d1f6812be818bffda9e10e4fb3a44d8f0faed896d9",
+  "parentFixtureSHA256": "3f8243b8049d8d2436cad9494276ff04e8005ab37b2711e1c7f8712fb02c590d",
+  "objects": 137,
+  "scope": "Static inventory of present Frames in the accepted original-loaded catalog; no opoint execution, native or Windows claim.",
+  "entries": 2454,
+  "unknown": [],
+  "counts": {
+    "1": 2257,
+    "3": 62,
+    "2": 32,
+    "5": 75,
+    "4": 16,
+    "8": 1,
+    "7": 3,
+    "6": 3,
+    "35": 2,
+    "9": 1,
+    "10": 2
+  },
+  "invalidActions": [],
+  "corpus": "postdraw-opoint-dat-survey.json",
+  "bytes": 211714,
+  "sha256": "5deb9f8b4a6e9b7531b06eb1dbb619458ffb69b70d88d76e6ccf1c0a7199eb51",
+  "nativeCompared": false,
+  "windowsVerified": false
+}

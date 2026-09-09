@@ -1,0 +1,79 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole post-scheduler corrections/opoint41fb0b..4203b4 plus early exits.\n\nReal Actor constructors and4450d0 conversions; stops at4203b4 (no opoint),\n420e93 (opoint path) or4214c6 (early frame lifetime handling). Declared400-slot\npool/four Objects, explicit53-bit precision and legacy/SSE2 controls. Full\npool/masks/globals and ordered constructor events. Not the entire slot loop.\n",
+  "fpcw": 639,
+  "corpus": "postdraw-opoint.json",
+  "sha256": "b2f0a2252bb209b767c4491c73bfa0899b83c15e80d5e9899eb1b8bf61ea6ab7",
+  "bytes": 2452941,
+  "cases": 1991,
+  "groups": {
+    "lifetime": 150,
+    "ground": 162,
+    "lifetime-owned": 96,
+    "gates": 240,
+    "facing-count": 156,
+    "child-rules": 640,
+    "pool-alias": 240,
+    "vrest-links": 24,
+    "depth-conversion": 26,
+    "coordinate-wrap": 128,
+    "selected-slot": 18,
+    "spread-count": 110,
+    "all-owned-slots": 1
+  },
+  "helpers": 9164,
+  "events": 2291,
+  "instructions": 786,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "instructionCoverage": {
+    "0x41fb0b": {
+      "instructions": 522,
+      "executed": 519,
+      "missing": [
+        4326154,
+        4326155,
+        4326158
+      ]
+    },
+    "0x4213a9": {
+      "instructions": 70,
+      "executed": 69,
+      "missing": [
+        4330445
+      ]
+    },
+    "0x4061d0": {
+      "instructions": 151,
+      "executed": 151,
+      "missing": []
+    },
+    "0x4450d0": {
+      "instructions": 55,
+      "executed": 47,
+      "missing": [
+        4477164,
+        4477171,
+        4477173,
+        4477176,
+        4477179,
+        4477180,
+        4477184,
+        4477188
+      ]
+    }
+  },
+  "poolBytesPerCase": 424408,
+  "globalsBytesPerCase": 46144,
+  "exits": {
+    "0x4214c6": 163,
+    "0x4203b4": 468,
+    "0x420e93": 1360
+  },
+  "datSurveySHA256": "5deb9f8b4a6e9b7531b06eb1dbb619458ffb69b70d88d76e6ccf1c0a7199eb51",
+  "wholeLoopCompared": false,
+  "initializedOwnChainExtended": false,
+  "fixture": "original-postdraw-opoint.json",
+  "fixtureSHA256": "61cba980c61f5e1a14c1765b08297a4a4f8509fbe3db5015c6013db3194dcac2",
+  "fixtureBytes": 111787
+}
