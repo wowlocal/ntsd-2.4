@@ -49,12 +49,31 @@ false positives will not occur.
 ## Current research status
 
 **Current priority: finish BOTH initialized result-layout continuations, then
-original output/sound order and actual422ab8/ret4.** Read
+join their own output/sound state and actual422ab8/ret4.** Read
+[GAMEPLAY_OUTPUT](docs/research/GAMEPLAY_OUTPUT.md),
 [RESULT_LAYOUT](docs/research/RESULT_LAYOUT.md),
 [RESULT_RECORDING](docs/research/RESULT_RECORDING.md),
 [GAMEPLAY_RESULT_RECORDING](docs/research/GAMEPLAY_RESULT_RECORDING.md),
 [RESULT_LAYOUT_PLAN](docs/research/RESULT_LAYOUT_PLAN.md) and
 [TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
+
+Controlled OriginalGameplayOutput now matches170 whole original output/returns:
+119700ordered events,10968Blts,109VC80formats,4505COMmethods,816queue writes and
+780play calls. Source executes real41bc90 prologue, then declared422994 context,
+all15caller+12epilogue starts and actual422ab8/ret4;903EXE+414CRT PCs exclude
+the separately recorded19prologue starts. Both saved-register/SEH restoration
+and340normal cookie checks are verified. No intervening own gameplay body is
+claimed. Mode label -> notices/volume -> present -> enabled sound order preserves
+the same-call volume change. A late eighth sound method rolls back all native
+output state. Source globals/write masks reconstruct independently; native
+compares complete globals/defined masks and ordered events, not private stack
+or a separate overlay store trace. All183prior pins unchanged;184at publication;
+fullraw17815852/packed1823384bytes,JSON/SHA/all292blobs verified. Raw release
+test0.454s/build169.37s; packaged0.420s/build0.28s; NTSDNative linked, no app/device
+or Windows check. Own output jobs are terminal; separate existing initialized
+layout source PIDs73470/73471 were confirmed live and left undisturbed. Read
+build/research/gameplay-output-work.json. Commit9784426 preserves this controlled
+milestone; own initialized return/fullmatch/app/cleanMac and full goal stay open.
 
 OriginalResultLayout now implements whole422218/422944..422994.599 whole original
 returns match full records/masks/globals, caller formatting and ordered output.
