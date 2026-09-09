@@ -15,9 +15,11 @@ executed quiet-NaN companions, as explained below. They are NOT included in the
 819 direct matches. No original result is replaced to obtain a green comparison.
 
 This is the controlled implementation of step1 in
-[TICK_TAIL_PLAN](TICK_TAIL_PLAN.md). Both initialized chains still end421a2d in
-[GAMEPLAY_HUD](GAMEPLAY_HUD.md); their fresh continuation and public native
-composition are the next task. This milestone does not extend the app or prove
+[TICK_TAIL_PLAN](TICK_TAIL_PLAN.md). Both initialized chains from
+[GAMEPLAY_HUD](GAMEPLAY_HUD.md) now continue through421cdc in
+[GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md), with public native composition and no
+source-local import. That own disabled-notice path does not replace the enabled
+controlled branches verified here. This milestone does not extend the app or prove
 a complete tick, match, Windows output or hardware floating-point exceptions.
 
 ## Caller behavior and storage
@@ -202,10 +204,10 @@ checks are retained inposthud-notices-artifact-verification.json and
 posthud-notices-link-verification.json. Python compilation and diff checks
 passed. Source, C-probe and SwiftPM processes were terminal before commit.
 
-Next: reproduce both complete pinned GAMEPLAY_HUD parents on their original
-CPUs/stacks, execute this whole prefix and compare a public native continuation
-from its own reconstructed state. Keep unknown caller backing/FPU differences
-explicit. Then continue result ownership/43dd60, result layout, bitmap labels,
+Both complete pinned GAMEPLAY_HUD parents have now been freshly reproduced on
+their original CPUs/stacks and joined to the public native continuation in
+[GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). Unknown caller backing/FPU differences
+remain explicit. Next continue [result ownership/43dd60](RESULT_RECORDING_PLAN.md), result layout, bitmap labels,
 presentation, enabled queued sound and actual422ab8/ret4. App integration,
 continuous original-DAT sequences, the first completed Naruto/Sasuke District
 match and the full-game goal remain open.

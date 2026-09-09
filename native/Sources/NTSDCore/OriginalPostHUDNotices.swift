@@ -18,6 +18,20 @@ public enum OriginalPostHUDNotices {
             performFill: performFill, performBlit: performBlit, observe: observe)
     }
 
+    /// A retained caller may not yet own this stack backing. Keep nil while
+    /// the original does not access it; require provenance at the first write.
+    /// Never import an expected snapshot or manufacture a backing fill pattern.
+    public static func apply(state: OriginalMatchPreparation, local: inout OriginalStateRecord?,
+        dcResult: Int32, dc: UInt32, fillBacking: () throws -> [UInt8],
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performFill: (OriginalSurfaceFillRequest) throws -> Int32,
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        try advance(world: state.world, actors: state.actors, globals: state.globals, local: &local,
+            dcResult: dcResult, dc: dc, fillBacking: fillBacking, resourceBitmap: resourceBitmap,
+            performFill: performFill, performBlit: performBlit, observe: observe)
+    }
+
     static func draw(world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord,
         local: inout OriginalStateRecord, dcResult: Int32, dc: UInt32, fillBacking: () throws -> [UInt8],
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
@@ -25,7 +39,21 @@ public enum OriginalPostHUDNotices {
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         observeFormatStorage: (OriginalStateRecord) throws -> Void = { _ in }) throws {
-        guard local.bytes.count == localSize, globals.bytes.count == OriginalMatchPreparation.globalSize else {
+        var candidate: OriginalStateRecord? = local
+        try advance(world: world, actors: actors, globals: globals, local: &candidate,
+            dcResult: dcResult, dc: dc, fillBacking: fillBacking, resourceBitmap: resourceBitmap,
+            performFill: performFill, performBlit: performBlit, observe: observe, observeFormatStorage: observeFormatStorage)
+        guard let candidate else { throw error("Lost caller storage") }; local = candidate
+    }
+
+    private static func advance(world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord,
+        local: inout OriginalStateRecord?, dcResult: Int32, dc: UInt32, fillBacking: () throws -> [UInt8],
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performFill: (OriginalSurfaceFillRequest) throws -> Int32,
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        observeFormatStorage: (OriginalStateRecord) throws -> Void = { _ in }) throws {
+        guard (local == nil || local?.bytes.count == localSize), globals.bytes.count == OriginalMatchPreparation.globalSize else {
             throw error("Caller storage extent")
         }
         var scratch = local
@@ -38,12 +66,14 @@ public enum OriginalPostHUDNotices {
             // NOT a recovered C-array capacity. Oversized original sprintf
             // really corrupts that cookie; do not silently truncate its output.
             guard offset >= 0, offset+bytes.count <= localSize else { throw error("String overwrites caller security cookie") }
-            for (i, b) in bytes.enumerated() { try scratch.write(b, at: offset+i) }
+            guard var record = scratch else { throw error("Caller string backing unavailable") }
+            for (i, b) in bytes.enumerated() { try record.write(b, at: offset+i) }
+            scratch = record
         }
         func format(_ index: Int, _ bytes: [UInt8]) throws -> [UInt8] {
             try store(bytes+[0], at: 0x20)
             try observe(.init("format", [UInt32(bytes.count)], [Array(formats[index].utf8), bytes]))
-            try observeFormatStorage(scratch)
+            if let scratch { try observeFormatStorage(scratch) }
             return Array(bytes.prefix { $0 != 0 })
         }
         func text(_ bytes: [UInt8], x: Int32 = 0, y: Int32, color: UInt32 = 0xffffff) throws {
@@ -77,15 +107,20 @@ public enum OriginalPostHUDNotices {
             // Both source strlen loops are live; preserve termination after
             // each byte change, not an assumed Unicode character count.
             var index = 0
+            func byteAt(_ offset: Int) throws -> UInt8 {
+                guard let record = scratch else { throw error("Caller string backing unavailable") }
+                return try record.integer(at: offset, as: UInt8.self)
+            }
             func length() throws -> Int {
-                for i in 0..<localSize { if try scratch.integer(at: i, as: UInt8.self) == 0 { return i } }
+                for i in 0..<localSize { if try byteAt(i) == 0 { return i } }
                 throw error("URL terminator")
             }
             while try index < length() {
-                let value = try scratch.integer(at: index, as: UInt8.self)
-                try scratch.write(value &- UInt8(index%4), at: index); index += 1
+                let value = try byteAt(index)
+                try store([value &- UInt8(index%4)], at: index); index += 1
             }
-            try text(Array(scratch.bytes.prefix(try length())), x: 5, y: 110, color: 0xc8c8c8)
+            let decoded = try (0..<length()).map { try byteAt($0) }
+            try text(decoded, x: 5, y: 110, color: 0xc8c8c8)
             let bitmap = try token(0x44f8f8), target = try token(0x455608)
             try observe(.init("draw", [bitmap, 360, 288, UInt32.max, 1, 0, target]))
             guard bitmap != 0 else { throw error("Null exit bitmap") }

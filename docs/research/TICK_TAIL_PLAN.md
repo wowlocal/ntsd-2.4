@@ -3,8 +3,9 @@
 This is a static caller research plan; completed dependencies are explicitly
 linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
-The static inventories themselves add no dynamic or native equivalence claim. Completed dependencies are linked separately. The accepted own chain ends
-before421a2d, as documented in [GAMEPLAY_HUD](GAMEPLAY_HUD.md).
+The static inventories themselves add no dynamic or native equivalence claim.
+Completed dependencies are linked separately. The accepted own chain ends
+before421cdc, as documented in [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md).
 
 The old shorthand421a2d..422994 does not reach the match return. At422994 the
 original still calls mode-label rendering, notices/volume, surface presentation
@@ -36,7 +37,10 @@ The controlled whole caller is now implemented in
 [POSTHUD_NOTICES](POSTHUD_NOTICES.md):819 direct comparisons,8 explicit
 signaling-NaN/Unicorn discrepancies with separately executed quiet-NaN
 companions, and4 source cookie-overwrite controls rejected natively. Both
-fresh initialized continuations from GAMEPLAY_HUD are still the next task.
+fresh initialized continuations from GAMEPLAY_HUD now match in
+[GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). Each481245records/806849858bytes+masks,
+61state/1604FPU checkpoints; no new event or caller-local access. Unknown native
+backing remains nil, never imported from the source's unused stack contents.
 
 421a2d comparesglobal450bec to the retained EDI0, then loads actualsprintf
 from447174 intoESI even on the disabled branch. The enabled branch formats
@@ -60,6 +64,13 @@ Mode451160==1 changes the notice fill and position. Observe real GDI requests
 and bitmap clipping, retaining any earlier proven fill-stack provenance.
 
 ### Result ownership and records
+
+[RESULT_RECORDING_PLAN](RESULT_RECORDING_PLAN.md) details the static next
+dependency: whole43dd60, its1.1.4 compression wrappers and retainedSP64.
+The latter has a recovered own producer, OriginalMatchRoundResult.stageDefeated,
+currently discarded in MenuCycleReference. Its intervening stack-aware lifetime
+still needs verification; apparent[esp+64] operands can alias other root locals
+after pending RNG arguments.
 
 421cdc increments450bbc when signed450bdc<100. Unsigned(450bdc-101)>248 skips
 the result block. At450bdc==101, result recording additionally requires450be4

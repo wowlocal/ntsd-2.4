@@ -6,16 +6,25 @@
 [ADDRESS_BOOK.md](research/ADDRESS_BOOK.md).
 
 **Следующая задача: [R02.1 — состояние полного такта](research/R02.1.md).**
-**Ближайший шаг: продолжить оба GAMEPLAY_HUD через
-[диагностику и сообщения](research/POSTHUD_NOTICES.md) `421a2d..421cdc`,
-затем остальной [хвост такта](research/TICK_TAIL_PLAN.md) до `422ab8/ret4`.**
+**Ближайший шаг: [запись результатов](research/RESULT_RECORDING_PLAN.md)
+`421cdc..422218`, затем остальной [хвост такта](research/TICK_TAIL_PLAN.md)
+до `422ab8/ret4`.**
+[Оба собственных продолжения после HUD](research/GAMEPLAY_NOTICES.md)
+теперь совпали с Native до421cdc/SP1000e9bc: каждый481245 записей,
+806849858 байт с масками,61 снимок и1604 FPU-наблюдения;536/544 helper-вызова.
+Первый такт естественно проходит без сообщений и доступа к локальным строкам.
+Неизвестный нативный буфер остаётся неизвестным; его байты не скопированы
+из эталона. Все170 прежних fixtures сохранены, добавлены два новых.
+Полный такт, приложение, законченный матч и Windows ещё не проверены.
+
+[Диагностика и сообщения](research/POSTHUD_NOTICES.md):
 Контролируемый caller теперь перенесён целиком:819 прямых совпадений и8
 отдельно отмеченных расхождений Unicorn на signaling NaN с проверкой
 по независимо исполненным quiet-NaN парам. Ещё4 исходных переполнения
 портят cookie; Native явно отклоняет их с откатом. Это не827 прямых совпадений.
 Проверяются полный пул/globals,340 байт локального стека с масками и19802
-события;195/198 инструкций caller выполнены. Оба собственных запуска ещё
-нужно продолжить: их проверенная граница остаётся421a2d. Windows/FPU/вывод открыты.
+события;195/198 инструкций caller выполнены. Оба собственных запуска продолжены
+выше; включённые диагностические ветви проверены отдельно. Windows/FPU/вывод открыты.
 
 [Полный HUD](research/WORLD_HUD.md) реализует caller421a15..421a2d и
 целую41ae60..41b12d/ret4: восемь ячеек, общий выбор портретов, HP/MP,
@@ -33,7 +42,7 @@ bitmap backing дают124/180 событий, оба варианта точн�
 17-значного промежуточного представления и строк `%2.3f`/`%2.4f`.
 Это отдельный CRT CPU; весь caller и его стек/вывод теперь проверены
 в POSTHUD_NOTICES выше с явной оговоркой о signaling NaN. Продолжение
-двух собственных цепочек ещё открыто. Граница матча остаётся421a2d.
+двух собственных цепочек проверено в GAMEPLAY_NOTICES до421cdc.
 
 Предыдущие [команды и восстановление](research/POSTDRAW_COMMANDS.md)
 переносят4214d5..421a15:3898 исходных случаев/3252 события,318/327 инструкций
@@ -66,7 +75,7 @@ bitmap backing дают124/180 событий, оба варианта точн�
 globals, сохранённый индекс каталога и2334 события. Все329 инструкций
 префикса выполнены. Действия после планировщика/opoint теперь описаны выше;
 создание и удаление в полном обходе предшествуют следующему живому слоту.
-Соединённый первый такт теперь дошёл до421a2d. Префикс нельзя выносить
+Соединённый первый такт теперь дошёл до421cdc. Префикс нельзя выносить
 в отдельный проход по всем Actor.
 
 [Общий планировщик кадров](research/ACTOR_SCHEDULER.md) уже перенесён целиком:
@@ -583,6 +592,9 @@ Swift-кода, число кадров или количество совпав
 | Полный HUD R02/R13 | D1753 целых caller421a15..421a2d/41ae60..41b12d,223/223 HUD PCs,276106 events/39462 Blts | [WORLD_HUD.md](research/WORLD_HUD.md), [эталон](evidence/world-hud.json); полный пул/маски/globals, портреты/HP/MP/team без ID handlers; real bitmap/clip/rectangle, pixels открыты |
 | Диагностические числа R02/R13/R15 | D74424 целых VC80 sprintf `%2.3f`/`%2.4f`, каждый output и17-значный intermediate; все binary64 exponents/signs | [DIAGNOSTIC_NUMBERS.md](research/DIAGNOSTIC_NUMBERS.md), [эталон](evidence/diagnostic-numbers.json); свои integer scaling/rounding/table, отдельный CRT CPU, весь caller и Windows ещё открыты |
 | Собственный initialized проход через HUD R02/R13 | Dоба свежих пути до421a2d/SP1000e9bc: каждый449269 records/771514704 bytes+masks/59state/1603FPU;536/544helpers | [GAMEPLAY_HUD.md](research/GAMEPLAY_HUD.md), [основной](evidence/gameplay-hud.json), [контрольный](evidence/gameplay-hud-control.json);124/180events, undefined backing сохранён; первый такт ещё не вернулся |
+| Диагностика и сообщения после HUD R02/R15 | D819 прямых совпадений,8 отдельно отмеченных sNaN/Unicorn расхождений с QNaN-парами,4 cookie-overwrite отклонены Native;195/198callerPC,19802events | [POSTHUD_NOTICES.md](research/POSTHUD_NOTICES.md), [эталон](evidence/posthud-notices.json); полный caller/globals/pool/local bytes+masks, actual CRT/GDI/bitmap; Windows/FPU статус отдельно |
+| Собственный initialized проход после HUD R02/R15 | Dоба свежих пути до421cdc/SP1000e9bc: каждый481245records/806849858bytes+masks/61state/1604FPU;536/544helpers | [GAMEPLAY_NOTICES.md](research/GAMEPLAY_NOTICES.md), [основной](evidence/gameplay-notices.json), [контрольный](evidence/gameplay-notices-control.json);10 actualPC+stop, исходные flags0/no local access; nil backing не импортирован. Полный такт ещё открыт |
+| Следующий result writer R02/R15/R16 | S296caller/117writer/11+51compression-wrapper starts; whole replay,1.1.4 interface, prefix key, stream/cleanup и собственный producer stageDefeated | [RESULT_RECORDING_PLAN.md](research/RESULT_RECORDING_PLAN.md); это статический план, без dynamic/native сравнения |
 | Общая подготовка матча R02.1 | D против Swift: загруженный каталог → bootstrap → 50 последовательных подготовок; 52102 записи, 79596336 байт/масок, 720 RNG calls, 796 bitmap / 766 releases | [MATCH_PREPARATION.md](research/MATCH_PREPARATION.md), [a5](evidence/match-preparation.json), [ramp](evidence/match-preparation-ramp.json); menu/RNG inputs supplied, music disabled, остановка до replay init; не весь запуск/такт/W |
 | Создание буфера повтора R02.1/R16 | D против Swift: 50 полных буферов / 324583600 байт/масок, 50 alloc/free; связанная подготовка — 77252 записи / 115486336 байт/масок | [REPLAY_INITIALIZATION.md](research/REPLAY_INITIALIZATION.md), [a5](evidence/replay-initialization.json), [ramp](evidence/replay-initialization-ramp.json); реальный caller и весь 43d2c0, RNG reset; metadata/allocator inputs supplied, не запись тактов/playback/W |
 | Пролог запуска R02.1 | D против Swift: 50 цепочек пролог → подготовка → запись; 4614400 global bytes/масок пролога, 130 actual CRT calls, 60 sound methods, 10 fills | [MATCH_PRELUDE.md](research/MATCH_PRELUDE.md), [a5](evidence/match-prelude.json), [ramp](evidence/match-prelude-ramp.json); реальные 42cf8a..42d1ff/401a30/415160 и sprintf; supplied time/menu/device, не полный UI/звук/пиксели/W |
@@ -626,10 +638,10 @@ Swift-кода, число кадров или количество совпав
 | --- | --- | --- | --- | --- |
 | R00 — эталон, импорт и инструменты | Идентичность описана; декодирование ограничено четырьмя файлами | Импорт и упаковка работают | S, D для декодера | Сохранять воспроизводимость, хеши и неизменность эталона при каждом расширении |
 | R01 — диспетчер, время, полный такт | R01.1: обычный путь и границы установлены, стадии описаны | Собран ограниченный конвейер; широкого соответствия нет | S адресного индекса; D синтетической трассы полного обработчика и прежних функций | R01.2 после R02/R03: обоснованная загрузка/снимок и широкий эталон с нативным сравнением |
-| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск, весь post-draw loop/commands/recovery и startup precision53 | Собственная инициализированная цепочка через post-draw/recovery/HUD до421a2d при53 битах; Practice отдельно | D полных записей/масок/вызовов; повторные53-bit проверки, исходные DAT,5432 lifecycle/3898 commands calls и1753 HUD calls, оба [initialized consumer](research/GAMEPLAY_HUD.md) | Диагностика/результаты и возврат полного такта; Windows/device/матч и остальные режимы |
+| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск, весь post-draw loop/commands/recovery и startup precision53 | Собственная инициализированная цепочка через post-draw/recovery/HUD/notices до421cdc при53 битах; Practice отдельно | D полных записей/масок/вызовов; повторные53-bit проверки, исходные DAT,5432 lifecycle/3898 commands calls и1753 HUD calls, оба [initialized consumer](research/GAMEPLAY_NOTICES.md) | Результаты и возврат полного такта; прежнее время жизни строк, Windows/device/матч и остальные режимы |
 | R03 — загрузка DAT целиком | Режимы декодера, все исходные Object/BG/Stage, Frame/аллокации, совместный parent/children; scanf MSVCR80 .6195 | Общие loaders соединены в OriginalLoadedCatalog, shared checksum/sound/bitmap; практика ещё использует импорт | D полного исходного каталога при text/a5 и raw/00, чередования, Frame/heap, integer CRT | Полные CRT/file I/O, Windows startup, владение ресурсами и подключение к матчу |
 | R04 — ввод, комбо и переходы | Local/remote/playback input/control, hotkeys; весь Actor413080 и caller400/401/500/501 | Общий raw input,9 комбо, DAT-переходы, движение/атаки и стоимость; собственный World далее через физику до41eed1, Practice ещё не заменена | D606 local/1452 received/5986 control cases;14 624 префикса и31 171 [целого управления](research/ACTOR_CONTROL.md);1491 [World](research/WORLD_CONTROL.md) и оба собственных запуска | Оставшиеся стадии полного такта; расширять непрерывные игровые последовательности |
-| R05 — состояния, движение, планировщик | Целые413080/40e490/40d960, physics caller и полный post-draw41f550..4214cf | Общие управление/физика/планировщик и live-slot lifecycle; ресурсный проход/HUD и собственный World до421a2d | D55 433 [Actor physics](research/ACTOR_PHYSICS.md),515 World physics,6084 [scheduler](research/ACTOR_SCHEDULER.md),5432 [lifecycle](research/POSTDRAW_LIFECYCLE.md) calls и оба initialized consumer | Остаток такта с421a2d, непрерывные DAT-последовательности, Windows и числовые границы |
+| R05 — состояния, движение, планировщик | Целые413080/40e490/40d960, physics caller и полный post-draw41f550..4214cf | Общие управление/физика/планировщик и live-slot lifecycle; ресурсный проход/HUD и собственный World до421cdc | D55 433 [Actor physics](research/ACTOR_PHYSICS.md),515 World physics,6084 [scheduler](research/ACTOR_SCHEDULER.md),5432 [lifecycle](research/POSTDRAW_LIFECYCLE.md) calls и оба initialized consumer | Остаток такта с421cdc, непрерывные DAT-последовательности, Windows и числовые границы |
 | R06 — реестр объектов, создание и удаление | Общий каталог/400-slot pool, constructor, opoint, physics/item spawn и весь post-draw lifecycle и requested items | Общие DAT создания, opoint со spread/hold/vrest/alias, оружейные фрагменты, команды и поздние эффекты в живом порядке слотов | D loaders/preparation, [World physics](research/WORLD_PHYSICS.md),150 [hit/item](research/WORLD_HITS.md),1991 [opoint](research/POSTDRAW_OPOINT.md),5432 [lifecycle](research/POSTDRAW_LIFECYCLE.md) calls,3898 [commands](research/POSTDRAW_COMMANDS.md) и оба initialized consumer | Происхождение caller scratch при фактическом чтении (в первом own loop не используется) и дальнейшие естественные DAT-последовательности |
 | R07 — сбор контактов | Весь419380 и417200/417400/4171c0; caller44d05c и fusion tail4064d0 | Общие raw ITR/BDY, кадры70/78/7c, команды/владельцы, приоритеты, signed arest/vrest, nearest/multiple buffers | D7925 [controlled cases](research/WORLD_CONTACTS.md) и обе собственные цепочки до41eefb; полный pool/маски/globals/RNG; последующие hits/items описаны в R08 | Все естественные DAT-последовательности, весь такт и Windows; доля достигнутых инструкций не доказывает эти области |
 | R08 — урон, реакции, эффекты | Вся42e100..431b64 и caller41eefb..41f2ac; raw/copied ITR, guard, damage/fall, типы/ID, отражение и искры | Общий DAT hit dispatch: kinds0/1/2/3/4/5/6/7/8/9/10/11/14/15/16, исходные no-op значения, live heap и отдельные CRT/game RNG | D7845 [controlled cases](research/WORLD_HITS.md), включая150 whole caller cases, и обе собственные цепочки до41f2ac; первый own проход без попаданий | Непрерывные DAT-последовательности и весь матч, остальные стадии такта, Windows numeric/output; full-pool caller scratch и fault-domain отдельно |

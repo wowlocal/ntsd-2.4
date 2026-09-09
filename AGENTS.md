@@ -3,8 +3,36 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: BOTH fresh GAMEPLAY_HUD continuations through the whole
-post-HUD notices421a2d..421cdc, then remaining tail through422ab8/ret4.**
+**Current priority: whole result recording421cdc..422218, then remaining tail
+through422ab8/ret4.** Read [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md)
+and the static [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md).
+BOTH fresh initialized HUD chains now continue the whole notice caller through
+421cdc/SP1000e9bc. Each481245records/806849858bytes+masks/61state/1604FPU;
+536/544helpers unchanged. Both complete before/after states reproduce the whole
+parent. Own flags are0 without injection;10 actual instructions plus unexecuted
+stop, no new helper/event/undefined read. ESIactualsprintf7817775d/EDI0;
+CW023f/FPSW4000/tagffff entry and exit, all1603 parent FPU checkpoints preserved.
+No access to344bytes of caller-local/cookie backing; Native retains nil and
+never imports those source bytes. The public API shares the controlled caller;
+a separate native locked-writer trial rejects unavailable backing explicitly.
+This does NOT recover that backing's earlier lifetime or make enabled own
+string paths complete. Raw2release tests passed40.138s/build141.27s after
+retained4tests41.975s/build141.41s. All170oldpins unchanged,172current; independent
+fullraw/packedJSON/bytes/SHA and2756/2757blobs verified. Packaged2release tests
+passed39.808s/build139.74s without rawoverride. NTSDNative linked; noUIclaim.
+Python/653localMarkdownlinks/diff checks passed; both source captures and
+allSwiftPM jobs terminal.
+
+Next43dd60 consumes the WHOLE630e18 replay, compresses through43f4b0/43f400
+and actual1.1.4 children, modifies only the key-length prefix, writes length
+and payload, then frees BOTH buffers and clears4588a8. Do not stub success or
+substitute fixture transport deflation. RetainedSP64 has an own semantic producer
+OriginalMatchRoundResult.stageDefeated, currently discarded by MenuCycleReference;
+audit its intervening stack lifetime and preserve own output. Apparent[esp+64]
+at41f12f and421039 are root4c/root5c after pending RNG arguments, NOT this word.
+All these next-step findings are STATIC, not a new native/source comparison.
+
+The preceding controlled notice milestone:
 Read [POSTHUD_NOTICES](docs/research/POSTHUD_NOTICES.md) first. The controlled
 whole caller is implemented in OriginalPostHUDNotices.819 direct source/native
 matches,8 explicitly DIFFERING signaling-NaN source cases compared to separately
@@ -46,7 +74,7 @@ Independent fullraw/packedbyte/JSON/SHA checks:7304998/233963bytes. Packaged
 verification3release tests passed1.422s/build138.96s. Python compilation,
 625local links/diff checks passed. Allsource/SwiftPM jobs terminal beforecommit.
 NTSDNative linked; noUIclaim.
-Own initialized boundary is STILL421a2d/SP1000e9bc. Join both whole parents next;
+Its former own boundary421a2d is superseded by GAMEPLAY_NOTICES above;
 do not inject source local bytes simply to make native unknown backing agree.
 
 The preceding numerical dependency and HUD evidence:
@@ -68,9 +96,8 @@ at+2 without borrow,17-digit rounding THEN fixed rounding, signedzero and
 original special text(1.#IO/1.#QNB). Darwin snprintf differs on34,693 finite
 and34nonfinite inputs of this corpus. No host printf/CRT DLL in native runtime.
 Known rawvarargs signalingNaN behavior is distinct from caller x87quieting;
-compound bufferextent is now studied above; native game continuation remains open. The accepted
-own gameplay boundary is STILL421a2d. Continue both own initialized chains through the whole notice mechanism above,
-then the remaining TICK_TAIL_PLAN consumers.
+compound bufferextent is now studied above. The accepted own gameplay boundary
+is421cdc in GAMEPLAY_NOTICES; remaining TICK_TAIL_PLAN consumers stay open.
 
 Diagnostic-number verification: releaseNTSDNative52.26s. First test compile
 needed@testable import for existing internal fixture unpack; only that import
@@ -123,8 +150,8 @@ including own39.731s and controlled6.391s. NTSDNative linked; no app window
 was tested. Allsource/SwiftPM jobs terminal; Python compilation,1,200local
 Markdown links and diff checks passed. No old fixture was rewritten.
 
-Controlled diagnostic/key-notice prefix421a2d..421cdc is implemented above.
-After both own continuations, result recording/layout and indicators through422994. That address is
+Controlled diagnostic/key-notice prefix421a2d..421cdc and both own continuations
+are implemented above. Next result recording/layout and indicators through422994. That address is
 NOT an epilogue:41b130/423a70/423940 bitmap-font mode label,4028a0 notice,
 43e940present and enabled419e60 queued sound still precede422a95/422ab8ret4.
 43dd60 recording writer is also an open dependency. Do not disable sound or
