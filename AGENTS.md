@@ -3,10 +3,56 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: remaining full tick from421a2d through422ab8/ret4.
+**Current priority: BOTH fresh GAMEPLAY_HUD continuations through the whole
+post-HUD notices421a2d..421cdc, then remaining tail through422ab8/ret4.**
+Read [POSTHUD_NOTICES](docs/research/POSTHUD_NOTICES.md) first. The controlled
+whole caller is implemented in OriginalPostHUDNotices.819 direct source/native
+matches,8 explicitly DIFFERING signaling-NaN source cases compared to separately
+executed quiet-NaN companions,4 actual cookie-overwrite cases rejected natively.
+DO NOT call this827 direct matches. Source and actualVC80 run on the same
+controlledCPU; not an initialized own chain or Windows.195/198caller starts,
+all46text/all28fill,45/57clip,171/214bitmap;485EXE+1705DLL=2190 original PCs
+across831 calls including4overflows. Boundaries/_getptd/stopped421cdc excluded.
+
+All827 compare424408World/Actorbytes+masks,46144globals,340callerlocalbytes+masks
+and19802events under the distinct direct/NaN-companion contracts.2061formats,
+2375text/GetDC,2167eachfiveGDI/release events,69fills,157draws,1400reads,
+290clips,240Blts;4952helperreturns.192undefinedbitmap reads. EDI0 entry;
+nonzero450bec reads slot0 eveninactive,14signed then60/48FLDQ/FSTPQ. Eight
+signedbytes44d040..47; `%c` lowbyte4553e8 canNUL before remaining sprintf output.
+Exit450c2c==1 overrides450c28, decodes28-byte URL with29-byte copy. ExitESI28,
+EDIrootSP+489; otherbranchESIactualsprintf/EDI0. Preserve later register consumers.
+Allformats useSP48c; URLSP46c; known340-byte local region ends atcookieSP5c0.
+This is NOT a recovered C-array size. Real oversized strings overwritecookie;
+native explicitly throws and rolls back, never truncates.92fill-effectbytes are
+actualhelperentry backing, a declared input after preceding CRT stack writes.
+Latebitmapresolver after2texts verifies localrollback; buffer external events.
+
+Unicorn2.1.4 does NOT quiet sNaN on FLDQ/FSTPQ and misses IE/DE status. Preserve
+that discrepancy, never change original expected output or native to match it.
+IntelSDM Vol1 4.8.3.5/Table4-7 +Vol2A FLD, corroborated by24 x87load/store probes
+through explicitly identified Rosetta, support native quiet-bit conversion.
+Eight sourceQNaN companions prove remainder composition; Windows/hardware FPU
+status is still open. Native here models operand bytes, not processwide flags.
+Probe source tools/probe_x87_load_store.c is research-only. Evidence embeds the
+24 local observations and8 exact discrepancies, with source/manual hashes.
+
+Rawacceptance3release tests passed1.453s/build137.25s including74424 numeric
+comparisons. Earlier compile needed an innertry; first executable test exposed
+ambiguous duplicate midpoint labels. Producer labels were clarified and4identical
+inputs deduplicated before fresh capture; no oldfixture/expectedresult wasedited.
+All169priorfixtures unchanged;170pins inposthud-notices-fixture-pins.json.
+Independent fullraw/packedbyte/JSON/SHA checks:7304998/233963bytes. Packaged
+verification3release tests passed1.422s/build138.96s. Python compilation,
+625local links/diff checks passed. Allsource/SwiftPM jobs terminal beforecommit.
+NTSDNative linked; noUIclaim.
+Own initialized boundary is STILL421a2d/SP1000e9bc. Join both whole parents next;
+do not inject source local bytes simply to make native unknown backing agree.
+
+The preceding numerical dependency and HUD evidence:
 Read [WORLD_HUD](docs/research/WORLD_HUD.md),
 [GAMEPLAY_HUD](docs/research/GAMEPLAY_HUD.md) and the static
-[TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).**
+[TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
 
 The first dependency of421a2d..421cdc is now implemented in
 [DIAGNOSTIC_NUMBERS](docs/research/DIAGNOSTIC_NUMBERS.md).
@@ -22,9 +68,9 @@ at+2 without borrow,17-digit rounding THEN fixed rounding, signedzero and
 original special text(1.#IO/1.#QNB). Darwin snprintf differs on34,693 finite
 and34nonfinite inputs of this corpus. No host printf/CRT DLL in native runtime.
 Known rawvarargs signalingNaN behavior is distinct from caller x87quieting;
-compound bufferextent and native game continuation remain open. The accepted
-own gameplay boundary is STILL421a2d. Continue whole diagnostic/key notice
-prefix using this mechanism, then the remaining TICK_TAIL_PLAN consumers.
+compound bufferextent is now studied above; native game continuation remains open. The accepted
+own gameplay boundary is STILL421a2d. Continue both own initialized chains through the whole notice mechanism above,
+then the remaining TICK_TAIL_PLAN consumers.
 
 Diagnostic-number verification: releaseNTSDNative52.26s. First test compile
 needed@testable import for existing internal fixture unpack; only that import
@@ -77,8 +123,8 @@ including own39.731s and controlled6.391s. NTSDNative linked; no app window
 was tested. Allsource/SwiftPM jobs terminal; Python compilation,1,200local
 Markdown links and diff checks passed. No old fixture was rewritten.
 
-Next whole diagnostic/key-notice prefix421a2d..421cdc has198static starts.
-Then result recording/layout and indicators through422994. That address is
+Controlled diagnostic/key-notice prefix421a2d..421cdc is implemented above.
+After both own continuations, result recording/layout and indicators through422994. That address is
 NOT an epilogue:41b130/423a70/423940 bitmap-font mode label,4028a0 notice,
 43e940present and enabled419e60 queued sound still precede422a95/422ab8ret4.
 43dd60 recording writer is also an open dependency. Do not disable sound or

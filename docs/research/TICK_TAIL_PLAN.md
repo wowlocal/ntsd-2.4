@@ -3,7 +3,7 @@
 This is a static caller research plan; completed dependencies are explicitly
 linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
-It adds no dynamic or native equivalence claim. The accepted own chain ends
+The static inventories themselves add no dynamic or native equivalence claim. Completed dependencies are linked separately. The accepted own chain ends
 before421a2d, as documented in [GAMEPLAY_HUD](GAMEPLAY_HUD.md).
 
 The old shorthand421a2d..422994 does not reach the match return. At422994 the
@@ -32,6 +32,12 @@ prove the gameplay caller or close the new epilogue comparison.
 
 ### Diagnostics and command-key notices
 
+The controlled whole caller is now implemented in
+[POSTHUD_NOTICES](POSTHUD_NOTICES.md):819 direct comparisons,8 explicit
+signaling-NaN/Unicorn discrepancies with separately executed quiet-NaN
+companions, and4 source cookie-overwrite controls rejected natively. Both
+fresh initialized continuations from GAMEPLAY_HUD are still the next task.
+
 421a2d comparesglobal450bec to the retained EDI0, then loads actualsprintf
 from447174 intoESI even on the disabled branch. The enabled branch formats
 Actor slot0 values from+48/+60/+14 with `%2.3f %2.4f %d`, eight signed bytes
@@ -41,9 +47,9 @@ contract and signedness; platform-default formatting is not evidence.
 The numeric dependency is now implemented and checked in
 [DIAGNOSTIC_NUMBERS](DIAGNOSTIC_NUMBERS.md):74,424 actual VC80 sprintf outputs
 and17-digit intermediates match native `%2.3f`/`%2.4f` conversions. The source
-uses a separate CRT CPU. This does not execute the compound caller, establish
-its stack-buffer capacity or account for x87 signaling-NaN loads/stores. Reuse
-the native numeric mechanism while proving those caller behaviors separately.
+uses a separate CRT CPU. That isolated numeric study does not execute the compound caller. The new
+POSTHUD_NOTICES study establishes its known stack extent and documents the
+architectural signaling-NaN load conversion separately from Unicorn behavior.
 
 450c2c==1 displays the original exit text, locally decodes the literal449204
 by subtractingindex%4, displays the resulting original URL string, then draws

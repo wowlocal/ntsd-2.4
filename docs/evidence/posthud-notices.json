@@ -1,0 +1,376 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole421a2d..421cdc: actual EXE, VC80 sprintf, text/fill/bitmap children.\nControlled constructed400-Actor pool and bitmap backing; CRT and EXE run on\none CPU atCW023f. COM/GDI/PTD are declared boundaries. Preserve caller strings\nthrough the security-cookie boundary, full pool/masks/globals and ordered output.\nSeparate oversized probes record actual cookie writes, not safe native success.\nNo initialized gameplay continuation, hardware FPU, pixel or Windows claim.\n",
+  "corpus": "posthud-notices.json",
+  "sha256": "288797367aa4b53d8f543c26c6c82e3b835701d6afaad2795d6f955cbcdf3a6e",
+  "bytes": 7304998,
+  "cases": 827,
+  "overflows": 4,
+  "groups": {
+    "gates": 180,
+    "signed-bytes": 256,
+    "coordinates": 108,
+    "slot-binding": 9,
+    "key-counts": 80,
+    "device-results": 120,
+    "bitmap-clip": 72,
+    "long-in-backing": 2
+  },
+  "instructions": 2190,
+  "helpers": 4952,
+  "events": 19802,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "directlyMatchedCases": 819,
+  "signalingNaNOracleDifferences": [
+    {
+      "label": "coordinates-7ff0000000000001-72-0",
+      "inputBits": "7ff0000000000001",
+      "companion": "coordinates-7ff8000000000001-72-0",
+      "observedBytes": "312e23534f20302e30303030203231343734383336343700",
+      "architecturalLoadCompanionBytes": "312e23514f20302e30303030203231343734383336343700"
+    },
+    {
+      "label": "coordinates-7ff0000000000001-96-0",
+      "inputBits": "7ff0000000000001",
+      "companion": "coordinates-7ff8000000000001-96-0",
+      "observedBytes": "302e31303020312e23534e42203231343734383336343700",
+      "architecturalLoadCompanionBytes": "302e31303020312e23514e42203231343734383336343700"
+    },
+    {
+      "label": "coordinates-fff0000000000001-72-1",
+      "inputBits": "fff0000000000001",
+      "companion": "coordinates-fff8000000000001-72-1",
+      "observedBytes": "2d312e23534f20302e30303030202d3231343734383336343800",
+      "architecturalLoadCompanionBytes": "2d312e23514f20302e30303030202d3231343734383336343800"
+    },
+    {
+      "label": "coordinates-fff0000000000001-96-1",
+      "inputBits": "fff0000000000001",
+      "companion": "coordinates-fff8000000000001-96-1",
+      "observedBytes": "302e313030202d312e23534e42202d3231343734383336343800",
+      "architecturalLoadCompanionBytes": "302e313030202d312e23514e42202d3231343734383336343800"
+    },
+    {
+      "label": "coordinates-7ff7ffffffffffff-72-0",
+      "inputBits": "7ff7ffffffffffff",
+      "companion": "coordinates-7fffffffffffffff-72-0",
+      "observedBytes": "312e23534f20302e30303030203231343734383336343700",
+      "architecturalLoadCompanionBytes": "312e23514f20302e30303030203231343734383336343700"
+    },
+    {
+      "label": "coordinates-7ff7ffffffffffff-96-0",
+      "inputBits": "7ff7ffffffffffff",
+      "companion": "coordinates-7fffffffffffffff-96-0",
+      "observedBytes": "302e31303020312e23534e42203231343734383336343700",
+      "architecturalLoadCompanionBytes": "302e31303020312e23514e42203231343734383336343700"
+    },
+    {
+      "label": "coordinates-fff7ffffffffffff-72-1",
+      "inputBits": "fff7ffffffffffff",
+      "companion": "coordinates-ffffffffffffffff-72-1",
+      "observedBytes": "2d312e23534f20302e30303030202d3231343734383336343800",
+      "architecturalLoadCompanionBytes": "2d312e23514f20302e30303030202d3231343734383336343800"
+    },
+    {
+      "label": "coordinates-fff7ffffffffffff-96-1",
+      "inputBits": "fff7ffffffffffff",
+      "companion": "coordinates-ffffffffffffffff-96-1",
+      "observedBytes": "302e313030202d312e23534e42202d3231343734383336343800",
+      "architecturalLoadCompanionBytes": "302e313030202d312e23514e42202d3231343734383336343800"
+    }
+  ],
+  "signalingNaNCompanionComparisons": 8,
+  "nativeRejectsCookieOverwriteCases": 4,
+  "instructionCoverage": {
+    "0x421a2d": {
+      "instructions": 198,
+      "executed": 195,
+      "missing": [
+        4332442,
+        4332443,
+        4332446
+      ]
+    },
+    "0x401290": {
+      "instructions": 46,
+      "executed": 46,
+      "missing": []
+    },
+    "0x415160": {
+      "instructions": 28,
+      "executed": 28,
+      "missing": []
+    },
+    "0x43ef70": {
+      "instructions": 57,
+      "executed": 45,
+      "missing": [
+        4452219,
+        4452223,
+        4452240,
+        4452244,
+        4452248,
+        4452250,
+        4452274,
+        4452278,
+        4452280,
+        4452292,
+        4452296,
+        4452298
+      ]
+    },
+    "0x43f010": {
+      "instructions": 214,
+      "executed": 171,
+      "missing": [
+        4452395,
+        4452397,
+        4452401,
+        4452402,
+        4452403,
+        4452408,
+        4452411,
+        4452419,
+        4452659,
+        4452663,
+        4452664,
+        4452666,
+        4452668,
+        4452670,
+        4452676,
+        4452682,
+        4452967,
+        4452971,
+        4452978,
+        4452982,
+        4452984,
+        4452986,
+        4452993,
+        4452996,
+        4453000,
+        4453004,
+        4453006,
+        4453008,
+        4453010,
+        4453012,
+        4453014,
+        4453018,
+        4453019,
+        4453025,
+        4453031,
+        4453035,
+        4453039,
+        4453043,
+        4453044,
+        4453045,
+        4453047,
+        4453051,
+        4453055
+      ]
+    }
+  },
+  "instructionInventoryIncludesOverflowProbes": true,
+  "executedEXEPCs": 485,
+  "executedDLLPCs": 1705,
+  "excludedBoundaries": [
+    "COM/GDI",
+    "_getptd78132e29",
+    "unexecuted421cdc"
+  ],
+  "eventKinds": {
+    "format": 2061,
+    "text": 2375,
+    "getDC": 2375,
+    "setBackgroundColor": 2167,
+    "setTextColor": 2167,
+    "stringLength": 2167,
+    "textOut": 2167,
+    "releaseDC": 2167,
+    "fill": 69,
+    "draw": 157,
+    "read": 1400,
+    "clip": 290,
+    "blit": 240
+  },
+  "undefinedBitmapReads": 192,
+  "poolBytesPerCase": 424408,
+  "globalsBytesPerCase": 46144,
+  "callerLocalBytesPerCase": 340,
+  "localBytesAndMasksCompared": true,
+  "formatIntermediateStorageCompared": true,
+  "sameControlledCPUForEXEAndCRT": true,
+  "fillBackingIsDeclaredHelperEntryInput": true,
+  "hardwareFPUStatusCompared": false,
+  "x87LoadStoreWitness": {
+    "source": "tools/probe_x87_load_store.c",
+    "sourceSHA256": "90df4e3caea0f742c18588a617a85a7649f8f4775efc0f169e6e340e13f0acee",
+    "sha256": "4f7eca60b7021a64cc1b5a3877af8a21fe4c45b2c465673e2a6afe5686b42a62",
+    "translated": true,
+    "cases": [
+      {
+        "input": "0000000000000000",
+        "output": "0000000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "8000000000000000",
+        "output": "8000000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "0000000000000001",
+        "output": "0000000000000001",
+        "cw": 575,
+        "sw": 2
+      },
+      {
+        "input": "8000000000000001",
+        "output": "8000000000000001",
+        "cw": 575,
+        "sw": 2
+      },
+      {
+        "input": "000fffffffffffff",
+        "output": "000fffffffffffff",
+        "cw": 575,
+        "sw": 2
+      },
+      {
+        "input": "800fffffffffffff",
+        "output": "800fffffffffffff",
+        "cw": 575,
+        "sw": 2
+      },
+      {
+        "input": "0010000000000000",
+        "output": "0010000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "8010000000000000",
+        "output": "8010000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "3fb999999999999a",
+        "output": "3fb999999999999a",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "bfb999999999999a",
+        "output": "bfb999999999999a",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "7fefffffffffffff",
+        "output": "7fefffffffffffff",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "ffefffffffffffff",
+        "output": "ffefffffffffffff",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "7ff0000000000000",
+        "output": "7ff0000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "fff0000000000000",
+        "output": "fff0000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "7ff0000000000001",
+        "output": "7ff8000000000001",
+        "cw": 575,
+        "sw": 1
+      },
+      {
+        "input": "fff0000000000001",
+        "output": "fff8000000000001",
+        "cw": 575,
+        "sw": 1
+      },
+      {
+        "input": "7ff7ffffffffffff",
+        "output": "7fffffffffffffff",
+        "cw": 575,
+        "sw": 1
+      },
+      {
+        "input": "fff7ffffffffffff",
+        "output": "ffffffffffffffff",
+        "cw": 575,
+        "sw": 1
+      },
+      {
+        "input": "7ff8000000000000",
+        "output": "7ff8000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "fff8000000000000",
+        "output": "fff8000000000000",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "7ff8000000000001",
+        "output": "7ff8000000000001",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "fff8000000000001",
+        "output": "fff8000000000001",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "7fffffffffffffff",
+        "output": "7fffffffffffffff",
+        "cw": 575,
+        "sw": 0
+      },
+      {
+        "input": "ffffffffffffffff",
+        "output": "ffffffffffffffff",
+        "cw": 575,
+        "sw": 0
+      }
+    ]
+  },
+  "intelReference": {
+    "url": "https://cdrdv2-public.intel.com/843820/325462-sdm-vol-1-2abcd-3abcd-4-1.pdf",
+    "sections": [
+      "Vol.1 4.8.3.5/Table4-7",
+      "Vol.2A FLD/3-412"
+    ],
+    "pages": [
+      104,
+      1004
+    ],
+    "sha256": "6f6286056edad4ffdca8716e9039e9598e9e71ab029284facde6a786e1b65f73"
+  },
+  "initializedOwnChainExtended": false,
+  "pixelsCompared": false,
+  "fullMatchCompared": false,
+  "fixture": "original-posthud-notices.json",
+  "fixtureSHA256": "8a20bc4020fff98c08ba686bbbfa7e72e30f4345cbc0f31d1d7ac4ce4f7543df",
+  "fixtureBytes": 233963
+}
