@@ -6,13 +6,15 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
     struct State: Decodable {
+        struct Heap: Decodable { let address: UInt32,kind: OriginalFrameAllocationKind,storage: Storage }
         let state: InputControlReference.Snapshot,early: MenuStartupReference.Retained
         let backgrounds: [Storage],bitmaps: [Allocation],music: [Allocation],released: [UInt32]
+        let frameHeap: [Heap]?
     }
     struct Event: Decodable {
         let kind: String
@@ -44,11 +46,12 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let contacts = try gameplayContacts.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        let hits = try gameplayHits.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -68,7 +71,13 @@ public enum MatchLaunchReference {
                   contacts.actorAddresses == c.actorAddresses,contacts.objectAddresses == c.objectAddresses,
                   contacts.cases.map(\.label) == ["contacts"] else { throw error("Gameplay contacts parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }
+        if let hits {
+            guard let gameplayContacts,contacts != nil,hits.exeSHA256 == c.exeSHA256,hits.dllSHA256 == c.dllSHA256,
+                  hits.parent.sha256 == MatchPreparationReference.digest(gameplayContacts),hits.worldAddress == c.worldAddress,
+                  hits.actorAddresses == c.actorAddresses,hits.objectAddresses == c.objectAddresses,
+                  hits.cases.map(\.label) == ["hits-items"] else { throw error("Gameplay hits parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -76,7 +85,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -112,6 +121,7 @@ public enum MatchLaunchReference {
         let parent = try MatchSelectionReference.compare(selection: selection,character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,initialContext,crt,initialMusic,resources in
             callbacks += 1
             var state = own,context = initialContext,music = initialMusic,replayAddresses: [UInt32] = []
+            var crt = crt
             func snapshot(_ value: OriginalMatchPreparation,_ expected: State,_ label: String) throws {
                 let s = expected.state,raw = try blob(s.poolBytes),mask = try blob(s.poolMask)
                 guard raw.count == 0x7d8+400*0x420,mask.count == raw.count,mask.allSatisfy({ $0 < 2 }) else { throw error("Pool extent") }
@@ -123,6 +133,13 @@ public enum MatchLaunchReference {
                     try check(value.actors[i],r,label+" Actor\(i)")
                 }
                 try check(value.globals,defined(s.globals),label+" globals")
+                if let heap = expected.frameHeap {
+                    guard value.frameAllocations.count == heap.count else { throw error("Gameplay Frame heap inventory") }
+                    for (actual,expected) in zip(value.frameAllocations,heap) {
+                        guard actual.address == expected.address,actual.kind == expected.kind else { throw error("Gameplay Frame heap identity") }
+                        try check(actual.storage,storage(expected.storage),label+" Frame heap \(actual.address)")
+                    }
+                }
                 try check(context.savedPlayback,defined(s.saved),label+" saved settings");try check(context.memory.replayPointers,defined(s.pointers),label+" replay pointers")
                 guard s.memory.count == replayAddresses.count else { throw error("Replay inventory") }
                 for (address,m) in zip(replayAddresses,s.memory) {
@@ -330,12 +347,53 @@ public enum MatchLaunchReference {
                             try snapshot(state,section.before,"own contacts before")
                             try OriginalWorldContacts.apply(state: &state,observe: { _ in throw error("Unexpected own first contact event") })
                             try snapshot(state,section.after,"own contacts after");contactPasses += 1
+                            if let hits {
+                                let section = hits.cases[0]
+                                guard section.end.pc == 0x41f2ac,section.end.sp == 0x1000e9bc,section.readsBeforeWrites.isEmpty,
+                                      section.before.frameHeap != nil,section.after.frameHeap != nil,
+                                      section.helpers.map(\.entry) == [0x42e100,0x42e100,0x417170],
+                                      section.helpers.map(\.returnPC) == [0x41ef47,0x41ef47,0x41ef71],
+                                      section.helpers.map(\.arguments) == [[0],[1],[146,200]],section.checkpoints.count == 2 else { throw error("Own hit caller boundary and helper order") }
+                                for h in section.helpers {
+                                    let pop: UInt32 = h.entry == 0x42e100 ? 4 : 0
+                                    guard h.pop == pop,h.returnSP == h.entrySP+4+pop,h.saved.count == 4 else { throw error("Hit helper ABI") }
+                                    if h.entry == 0x42e100 { guard h.this == c.worldAddress else { throw error("Hit World receiver") } };helpers += 1
+                                }
+                                let rng = section.helpers[2]
+                                var seen = 0,randomSeen = 0
+                                try snapshot(state,section.before,"own hits before")
+                                // Exercise public atomicity after both hit returns
+                                // and the actual item RNG update, on this own state.
+                                var trial = state,trialCRT = crt,stopped = false
+                                do {
+                                    try OriginalWorldHits.apply(state: &trial,crt: &trialCRT,observe: { event in
+                                        guard case .random = event else { throw error("Unexpected rollback event") }
+                                        stopped = true;throw error("Injected stop after item RNG")
+                                    })
+                                } catch { if !stopped { throw error } }
+                                guard stopped,trialCRT == crt else { throw error("Hit rollback CRT/stop") }
+                                try snapshot(trial,section.before,"own hits rollback after RNG")
+                                try OriginalWorldHits.apply(state: &state,crt: &crt,observe: { event in
+                                    guard case let .random(stream,range,result) = event,randomSeen == 0,stream == 146,range == 200,
+                                          UInt32(bitPattern: result) == rng.result else { throw error("Own first item RNG") }
+                                    randomSeen += 1;events += 1
+                                },afterHit: { slot,actor in
+                                    guard seen < section.checkpoints.count else { throw error("Extra own hit return") }
+                                    let expected = section.checkpoints[seen]
+                                    guard expected.slot == slot,expected.pc == 0x41ef47,expected.label == "hit-return" else { throw error("Own hit slot order") }
+                                    var r = try storage(expected.actor)
+                                    guard let o = objects[try r.integer(at: 0x368,as: UInt32.self)] else { throw error("Hit Object binding") };try r.write(o,at: 0x368)
+                                    try check(actor,r,"own hit Actor\(slot)");seen += 1
+                                })
+                                guard seen == 2,randomSeen == 1 else { throw error("Missing own hit return/RNG") };hitSlots = seen
+                                try snapshot(state,section.after,"own hits after")
+                            }
                         }
                     }
                 }
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots)
     }
 }

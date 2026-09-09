@@ -1605,6 +1605,55 @@ HP500/MP200,RNG39/0. NEXT own41eefb: type-separated42e100 with itemspawn between
 remainingcpoint/link helpers/second417f80/draw/camera/scheduler/recovery/fulltick.
 Practice/UI, natural DAT sequences, Windows/cleanMac, fullmatch/goal remainopen.
 
+The [whole hit resolution and item passes](docs/research/WORLD_HITS.md) now
+implement all42e100..431b64 and caller41eefb..41f2ac. First active type0 hits
+and live item count1/2/4/6, then conditional RNG146..154/candidates/constructor,
+then all active signed-positive types, without a second contact collection.
+7845 controlled cases include150 whole callers; full400-slot pool/masks/globals,
+262144-byte mutable Frame heap, CRT state and16750 ordered events match Native,
+19211actual helpers/3745unique instructions. 3204/3216 instructions of42e100
+reached; remaining12 are behind contradictory type gates under readonly Object
+storage, not proof of all branches/natural DAT sequences. FiniteCW037f only.
+Generic DAT kinds, guards/falls/ID defenses, weapon strength, reflection3005/3006,
+catch/pickup/force/obstruction and sparks follow source, no new character list.
+Contact count is live; signed Int8 ITR indices and source early gates retain
+lazy Frame reads. Frozen collision Frames and live current Frames are distinct.
+A held kind5 can keep its raw ITR pointer; type2 halves dvx/dvy IN PLACE, and
+repeated calls observe those writes. OriginalMatchPreparation.frameAllocations
+now owns this live DAT heap; contacts read it, catalog remains loading evidence.
+Allocation order/masks/interior offsets remain explicit, never host pointers.
+Legacy4450d0 now accepts finite extended intermediates directly; SSE2 stores
+binary64 first. Exact x87 nearest/zero/indefinite shortcut precedes truncation
+correction. Full-pool item creation does NOT skip: original retains caller+4c,
+native requires its provenance; synthetic full-pool supplies77. Actual outer
+scratch lifetime/empty-candidate division fault domain still need evidence.
+Both fresh own startup/menu/loading/selection/launch/control/physics/links/
+contacts parents reproduced on the same CPU/stack and continued to41f2ac.
+Each new stage has3helpers/2hit returns/98instructions, no undefinedcatalog reads.
+Native compares all14586 retained Frame allocations before/after. First own
+contacts are zero, RNG146/200->64 creates no item; index/counter39/0->40/1.
+Frame219,HP500/MP200,postphysics positions, CRT,854bitmaps/101BG/earlyresources/
+music/fullreplay630e18 survive. Same unreturned4246b0,SP1000e9bc,phase1/tick1.
+Both launch/gameplay continuations report163328records/732256514bytes+masks,
+926helpers/72checkpoints including a public rollback trial after actualitemRNG.
+Earlier startup/menu/selection parents are revalidated by nested runners;
+their counters are NOT included in these totals. World/pool/globals/heap/CRT
+publish only on successful whole pass; observers buffer until wholetick commit.
+Batch raw acceptance passed3release XCTest/44.422s/build111.55s before publishing
+3fixtures. Final packed regression passed22XCTest/262.730s/build111.11s across
+Actor/World physics, links, contacts, hits, GameplayControl/Physics/Links/Contacts/
+Hits and MatchLaunch; NTSDNative also compiled/linked. All processes terminal.
+123oldfixtures unchanged;3new raw/packedSHA/size/fullJSON/blob/parent identities
+verified,126pins build/research/gameplay-hits-fixture-pins.json. Python compilation
+and diff check passed. Historical parent scopes/stops remain unchanged.
+Read WORLD_HITS before extending. NEXT same own41f2ac: whole418c30..419373,
+4187b0..418c2f, held-owner cleanup and second417f80 through41f484. First helper
+reads entrySP-4 into ESI; invalid reciprocal links can retain a prior slot into
+throw paths. Preserve that provenance/slot-loop lifetime, collision7c vs current70,
+and ECX retained between the two calls. Then camera/draw/scheduler/recovery and
+whole tick return. Practice/app integration, natural DAT sequences, Windows,
+clean Mac, first full Naruto/Sasuke District match and full-game goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

@@ -12,7 +12,7 @@ public enum OriginalWorldContacts {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Contact catalog binding") }
-        let memory = OriginalContactFrameMemory(catalog.frameAllocations)
+        let memory = OriginalContactFrameMemory(state.frameAllocations)
         try apply(world: &state.world,actors: &state.actors,globals: &state.globals,
             objectCount: try registry.integer(at: 0,as: Int32.self),header: { n in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Contact Object binding") }
@@ -35,14 +35,25 @@ public enum OriginalWorldContacts {
 /// Resolves original32-bit data references into native, mask-checked allocations.
 /// No pointer normalization, kind-based filtering or host-pointer dereference.
 struct OriginalContactFrameMemory {
-    private let allocations: [OriginalFrameAllocation]
-    init(_ allocations: [OriginalFrameAllocation]) { self.allocations = allocations.sorted { $0.address < $1.address } }
-    func word(_ address: UInt32) throws -> Int32 {
-        var low = 0,high = allocations.count
-        while low < high { let mid = (low+high)/2;if allocations[mid].address <= address { low = mid+1 } else { high = mid } }
+    private(set) var allocations: [OriginalFrameAllocation]
+    private let ordered: [Int]
+    init(_ allocations: [OriginalFrameAllocation]) {
+        self.allocations = allocations
+        ordered = allocations.indices.sorted { allocations[$0].address < allocations[$1].address }
+    }
+    private func allocation(_ address: UInt32) throws -> Int {
+        var low = 0,high = ordered.count
+        while low < high { let mid = (low+high)/2;if allocations[ordered[mid]].address <= address { low = mid+1 } else { high = mid } }
         guard low > 0 else { throw OriginalStateError.invalidStorage("Unknown contact box reference") }
-        let allocation = allocations[low-1]
+        return ordered[low-1]
+    }
+    func word(_ address: UInt32) throws -> Int32 {
+        let allocation = allocations[try allocation(address)]
         return try allocation.storage.integer(at: Int(address-allocation.address),as: Int32.self)
+    }
+    mutating func write(_ value: Int32,at address: UInt32) throws {
+        let index = try allocation(address)
+        try allocations[index].storage.write(value,at: Int(address-allocations[index].address))
     }
 }
 

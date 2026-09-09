@@ -98,8 +98,16 @@ The [whole contact collection](docs/research/WORLD_CONTACTS.md) now matches
 7,925 controlled cases, including raw ITR/BDY geometry and filters, ordered
 candidate lists, signed rest timers and the original fusion/unfusion tail.
 Both own launch chains match through41eefb with all retained resources/music/
-replay. The following hit-resolution/item passes, full tick, app integration
-and Windows comparison remain open.
+replay. Hit resolution and the item passes continue below.
+
+The [whole hit resolution and item passes](docs/research/WORLD_HITS.md) now match
+7,845 controlled cases and both own launch chains through41f2ac. Generic DAT
+damage, guard, catches, pickups, reflection, forces and hit sparks preserve the
+original rules, including mutable raw weapon ITR data and separate game/CRT RNG.
+The first own pass has no contacts and draws item RNG146/200→64; complex hit
+reactions are checked by the controlled corpus. The new Core remains outside
+Practice. Remaining links, full tick, app integration and Windows comparison
+are still open.
 
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,

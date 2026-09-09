@@ -94,6 +94,32 @@ struct OriginalExtended: Comparable {
         let less = lhs.exponent == rhs.exponent ? lhs.significand < rhs.significand : lhs.exponent < rhs.exponent
         return lhs.negative ? !less : less
     }
+    ///445106's nearest Int64 conversion followed by truncation correction.
+    /// The low-zero/high-zero-or-indefinite shortcut must precede correction.
+    /// This consumes the extended intermediate without a binary64 store.
+    var legacyInteger: Int32 {
+        if significand == 0 { return 0 }
+        var rounded: UInt64
+        if exponent >= 0 {
+            guard exponent == 0,negative,significand == 1 << 63 else { return 0 }
+            rounded = significand
+        } else {
+            let shift = -exponent
+            rounded = shift >= 64 ? 0 : significand >> shift
+            if shift <= 64 {
+                let remainder = shift == 64 ? significand : significand & ((UInt64(1) << shift)-1)
+                let half = UInt64(1) << (shift-1)
+                if remainder > half || (remainder == half && rounded & 1 != 0) { rounded &+= 1 }
+            }
+            guard rounded < 1 << 63 || (negative && rounded == 1 << 63) else { return 0 }
+        }
+        if rounded == 0 || rounded == 1 << 63 { return 0 }
+        let nearest = Self(negative: negative,mantissa: rounded,exponent: 0)
+        var result = Int32(truncatingIfNeeded: negative ? 0 &- rounded : rounded)
+        if negative && self > nearest { result &+= 1 }
+        else if !negative && self < nearest { result &-= 1 }
+        return result
+    }
     var double: Double {
         let sign: UInt64 = negative ? 1 << 63 : 0
         if significand == 0 { return Double(bitPattern: sign) }

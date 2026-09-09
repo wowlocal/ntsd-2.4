@@ -20,6 +20,9 @@ public struct OriginalMatchPreparation {
     public var globals: OriginalStateRecord
     /// PAUSE/score/HUD resources constructed by the preceding initial loading.
     public var interface: OriginalInitialInterfaceLoading
+    /// Live DAT allocations. Original hit processing can write a held weapon's
+    /// raw ITR; those writes survive subsequent contacts and ticks.
+    public internal(set) var frameAllocations: [OriginalFrameAllocation]
     public internal(set) var backgrounds: [OriginalStateRecord]
     public var bitmaps: [OriginalLoadedBitmap] { backgroundLoader.bitmaps }
     public var releasedBitmaps: Set<Int> { backgroundLoader.releasedBitmaps }
@@ -31,6 +34,7 @@ public struct OriginalMatchPreparation {
                 interface: OriginalInitialInterfaceLoading = .init()) throws {
         guard globals.bytes.count == Self.globalSize else { throw Self.error("Global storage size") }
         self.catalog = catalog
+        frameAllocations = catalog.frameAllocations
         world = bootstrap.world; actors = bootstrap.actors; self.globals = globals
         self.interface = interface
         backgrounds = catalog.backgrounds

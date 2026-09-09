@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue own41eefb through both complete42e100 passes and item spawn.\nFresh original menu/loading/launch/control/physics/links/contacts on the SAME\nCPU/stack, with no new gameplay stimuli. Stops41f2ac before link helpers.\nNative comparison accepted for this bounded continuation; full tick and Windows remain open.\n",
+  "corpus": "gameplay-hits-control.json",
+  "sha256": "0e29721be6be9561eeded4950298566df9682447e2d93f5f58a90b1e94cbc460",
+  "bytes": 9177921,
+  "parent": {
+    "fixture": "original-gameplay-contacts-control.json",
+    "sha256": "c57fb48ab17a72403a20704c8d5ea60cb8c9043a44fba9e08a75dd2c62509730"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4321964,
+    "sp": 268495292
+  },
+  "helpers": 3,
+  "checkpoints": 2,
+  "instructions": 98,
+  "readsBeforeWrites": [],
+  "fixture": "original-gameplay-hits-control.json",
+  "fixtureSHA256": "a8c195ce46689b8023f7b2d4d0cdade16a646ee0f0c907965c9fa2ff64c3d3ff",
+  "fixtureBytes": 1295715
+}
