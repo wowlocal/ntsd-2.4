@@ -28,6 +28,15 @@ values only over the lifetimes demonstrated by source access. The native
 production composition must be independent of expected fixtures and source
 instruction addresses used only by comparison observers.
 
+[GAMEPLAY_BODY](GAMEPLAY_BODY.md) now supplies the unpaused gameplay body under
+one native transaction. Both accepted initialized paths match all19 semantic
+checkpoints and1012/1068 ordered events, including a late whole-body rollback.
+It starts after the native round result; the complete loaded call must also
+own its preceding input/round transaction and route paused/menu/epilogue
+continuations. See [LOADED_TICK_PLAN](LOADED_TICK_PLAN.md) for resource and
+caller-storage requirements. This body comparison does not execute the16-call
+source continuation described above.
+
 For each call compare complete state and masks, RNG and replay bytes, resource
 liveness, ordered input/update/render/sound events, and the original caller's
 normal stack/register/SEH restoration. Compare all inherited FPU checkpoints

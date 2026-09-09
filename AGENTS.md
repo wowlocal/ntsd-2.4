@@ -48,6 +48,27 @@ false positives will not occur.
 
 ## Current research status
 
+OriginalGameplayBody now composes the unpaused native body from the own round
+gameplay continuation through output and dispatcher clear under one transaction.
+Read [GAMEPLAY_BODY](docs/research/GAMEPLAY_BODY.md) and
+[LOADED_TICK_PLAN](docs/research/LOADED_TICK_PLAN.md). Both accepted initialized
+paths match19 complete semantic checkpoints and1012/1068 ordered events;
+the full old parent chain and1614FPU checkpoints still compare. A final output
+observer failure rolls back the earlier simulation and globals. Replay/CRT
+storage is unchanged on this path; do not claim exercised mutations of each
+owned subsystem. Packaged2tests passed44.737s/build175.44s; core build61.57s.
+Final source-stage/event-order checks passed2tests45.395s/build70.81s. Retained
+default return API2tests passed42.617s with all prior counts unchanged.
+No original fixture changed:188 pins retained, no fresh source/instruction claim.
+The body preserves actual recorder continuation and own stageDefeated. Unknown
+caller words stay unknown; shared formatter support does not complete the enabled
+own formatter domain. Mode1/4 post-draw children and paused/menu/epilogue remain
+explicit alternatives or rejections, never silent successful gameplay returns.
+Input/round entry still needs the enclosing native transaction and dispatcher;
+16 successive source calls, runtime integration and the full game remain open.
+All body build/test jobs are terminal. Separate16-call captures remain live;
+preserve those jobs and tools. See build/research/loaded-gameplay-composition-work.json.
+
 **Current priority: sixteen successive initialized gameplay calls, then full-match/app integration.** Read
 [GAMEPLAY_RETURN](docs/research/GAMEPLAY_RETURN.md),
 [CONTINUOUS_GAMEPLAY_PLAN](docs/research/CONTINUOUS_GAMEPLAY_PLAN.md),

@@ -22,7 +22,7 @@ public enum InitializedGameplayReference {
     private struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,control: Bool,fpu: Audit }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Initialized gameplay reference: "+text) }
 
-    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil,hud: Data? = nil,notices: Data? = nil,resultRecording: Data? = nil,resultLayout: Data? = nil,returned: Data? = nil) throws -> Result {
+    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil,hud: Data? = nil,notices: Data? = nil,resultRecording: Data? = nil,resultLayout: Data? = nil,returned: Data? = nil,compareGameplayBody: Bool = false) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 128_000_000))
         let a = c.fpu,i = a.initialization
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -136,7 +136,7 @@ public enum InitializedGameplayReference {
             menu: source("menu-loading"),loading: source("menu-loading-state"),catalog: source("menu-loading-catalog"),sounds: source("menu-loading-sounds"),
             arithmeticPrecision: .bits53,gameplayControl: source("gameplay-physics"),gameplayPhysics: true,gameplayLinks: source("gameplay-links"),
             gameplayContacts: source("gameplay-contacts"),gameplayHits: source("gameplay-hits"),gameplayCPoints: source("gameplay-cpoints"),
-            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands,gameplayHUD: hud,gameplayNotices: notices,gameplayResultRecording: resultRecording,gameplayResultLayout: resultLayout,gameplayReturn: returned)
+            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands,gameplayHUD: hud,gameplayNotices: notices,gameplayResultRecording: resultRecording,gameplayResultLayout: resultLayout,gameplayReturn: returned,compareGameplayBody: compareGameplayBody)
         return .init(gameplay: result,fpuCheckpoints: finalAudit.checkpoints.count,fpuTransitions: finalAudit.transitions.count)
     }
 }

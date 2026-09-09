@@ -1,11 +1,12 @@
 # Joining loaded ticks to the native runtime
 
-This is a source/API audit and an acceptance plan, not a new execution result.
-The accepted initialized parent at commit `582a2de` reaches422994/SP1000e9bc in
-both runs; see [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md). The separate
-[GAMEPLAY_OUTPUT](GAMEPLAY_OUTPUT.md) corpus covers170 controlled output calls
-and normal returns. The fresh initialized return captures must pass their own
-comparison before serving as the parent of a repeated gameplay experiment.
+This is a source/API audit and an acceptance plan. The initialized return is
+now accepted in [GAMEPLAY_RETURN](GAMEPLAY_RETURN.md), commit `696e2a6`, after
+the parent [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md). Both runs reach
+the actual match and dispatcher returns. [GAMEPLAY_BODY](GAMEPLAY_BODY.md) now
+implements the reusable native unpaused body and verifies its complete state,
+ordered events and enclosing rollback against those two accepted paths.
+Repeated complete loaded calls remain the next comparison.
 
 ## Current runtime boundary
 
@@ -25,9 +26,11 @@ at `.gameplay`, `.pausedRendering`, `.menu` or `.epilogue`. It does not return a
 complete tick. The initialized reference checks currently compose subsequent
 stages while checking each source boundary in
 [MatchLaunchReference](../../native/Sources/NTSDReferenceChecks/MatchLaunchReference.swift).
-This composition must become an ordinary native operation before replacing
-Practice's update path. Expected snapshots and reference resource addresses
-cannot become runtime inputs.
+The gameplay body is now an ordinary native operation in
+[OriginalGameplayBody](../../native/Sources/NTSDCore/OriginalGameplayBody.swift).
+The whole loaded call and its alternative continuations still need composition
+before replacing Practice's update path. Expected snapshots and reference
+resource addresses cannot become runtime inputs.
 
 ## Order to preserve
 
