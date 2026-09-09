@@ -24,12 +24,13 @@ public enum OriginalActorControl {
     static func apply(actor: inout OriginalStateRecord, header: OriginalStateRecord,
                       globals: inout OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,
+                      bundledLibrary: Bool = false,
                       observe: (OriginalActorControlEvent) throws -> Void = { _ in }) throws {
         var candidate = actor, owned = globals
         try OriginalActorInput.apply(actor: &candidate, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: owned, frame: frame)
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
-                var body = Body(actor: candidate, globals: owned, header: header, precision: precision, frame: frames, observe: observer)
+                var body = Body(actor: candidate, globals: owned, header: header, precision: precision, bundledLibrary: bundledLibrary, frame: frames, observe: observer)
                 try body.run()
                 candidate = body.actor; owned = body.globals
             }
@@ -41,6 +42,7 @@ public enum OriginalActorControl {
         var actor: OriginalStateRecord, globals: OriginalStateRecord
         let header: OriginalStateRecord
         let precision: OriginalArithmeticPrecision
+        let bundledLibrary: Bool
         let frame: (Int32) throws -> OriginalStateRecord
         let observe: (OriginalActorControlEvent) throws -> Void
         func i(_ offset: Int) throws -> Int32 { try actor.integer(at: offset, as: Int32.self) }
@@ -225,7 +227,22 @@ public enum OriginalActorControl {
                 if vx > -1 && vx < 1 { try velocity(0x40,facing == 1 ? speed : -speed) }
                 else { try velocity(0x40,vx > 0 ? speed : -speed) }
             }
-            if try state() == 5 {
+            let finalState = try state()
+            if bundledLibrary && (finalState == 85 || finalState == 86) {
+                //10001178 runs twice, direction0 then1. EDI is cleared by the
+                //whole original caller before the hook; frame0 skips FCOM.
+                //Preserve the byte comparisons even for nonboolean held bytes.
+                let advance: Int32 = finalState == 85 ? 1 : 0
+                for direction: UInt8 in [0,1] {
+                    if right != direction && left == direction { try face(direction) }
+                    if try b(0x80) == direction && i(0x70) != 0 {
+                        let vx = try v(0x40)
+                        if direction == 0 ? vx > 0 : vx < 0 {
+                            try set(0x70,i(0x70) &+ advance)
+                        }
+                    }
+                }
+            } else if finalState == 5 {
                 if rightOnly { try face(0) }
                 if try b(0x80) == 0 {
                     if try i(0x70) != 217 && v(0x40) < 0 { try set(0x70,214) }

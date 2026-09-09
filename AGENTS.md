@@ -118,8 +118,33 @@ corrected after native tests passed, before any fixture publication; no expected
 source result changed. Isolated514committed native files plus9overlays exclude
 concurrent actor-control work. Python/137local Markdownlinks/owned diff pass.
 
+[LIB_ACTOR_CONTROL](docs/research/LIB_ACTOR_CONTROL.md) now compares whole
+413080..4143cb/ret8 with the actual41408b->10001125 hook:7168calls,7569408Actor
+bytes and masks,330760192global hash bytes,384RNG/416sound events. Source
+111460Actor/2784global stores independently reconstruct;98720helper returns/
+26880FPU checkpoints.1458EXE+43DLL actual starts; all43hook starts, not every
+branch outcome. Whole accepted preferred-base installer reproduces before
+controlled Actor setup; no expected snapshot or native DLL runtime. EDI0 and
+ST0=1/ST1=0 come from original instructions. Direction0 then1 compares raw
+held bytes, preserves frame0 gate, adds1 for85 and0 for86, then rereads the
+selected frame for velocities.1015changed/1015unchanged frame stores;1792
+earlier same-call frame transitions. Native missing-frame42 trial rolls back
+staged facing/frame changes. Pristine25795 calls and RNG rollback still pass.
+Raw4release tests15.865s/build174.66s; final packaged10tests24.813s/build172.66s
+also retain4330library commands/70preparation-consumer cases and command errors.
+Final523-file native exportfe20733+three control files excludes unfinished
+transforms.203oldpins unchanged/204published; full111033202raw/5591517packed
+bytes,JSON/SHA and10vendor hashes verified. All owned source/SwiftPM jobs
+terminal0; NTSDNative linked, no app/window/device claim. Source FPU history
+is separate from native FPSW/tag equivalence; finite vx only in this corpus.
+Read-only original catalog census verifies137DATs/54800defined state words/
+15363present frames: NO85/86. The branch inputs remain synthetic; later runtime
+mutation/reachability is not disproven. Prioritize remaining installed hooks
+and initialized joins over expanding this matrix. Exact jobs/pins/results:
+build/research/lib-actor-control-work.json. Full game goal remains open.
+
 Remaining hooks include430c8c movement,4176ac/4177b9 hits,42fcb1damage,
-41f5fc transforms,41408b physics and424352loading, plus transparent-text routing.
+41f5fc transforms and424352loading, plus transparent-text/control routing.
 Recover Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
 Old pristine-EXE fixture bytes remain immutable and valid in their declared
 unloaded-library controls; they do NOT establish the DLL-enabled application.

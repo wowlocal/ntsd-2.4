@@ -17,7 +17,10 @@ text routine, including six retained-state calls. Native preserves transparent
 background mode, the retained DC and the original HRESULT behavior.
 [LIB_STAGE_COMMANDS](LIB_STAGE_COMMANDS.md) now compares the command hook and
 three whole-preparation hooks, connecting their own requested-ID output to the
-whole consumer. Seven remaining jump destinations, the two-byte loading-label
+whole consumer. [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md) additionally compares
+7168 whole control calls through41408b, retaining the inserted state85/86 rules
+and their live EDI/x87 provenance. Those states are absent from the original
+loaded DAT tables; their new branches are controlled cases. Six remaining jump destinations, the two-byte loading-label
 patch, enclosing library-enabled callers and a fresh initialized application
 join remain open.
 
@@ -99,7 +102,7 @@ branch analyses.
 |4176ac|10001807|Additional hit-kind and Object-category conditions; continuations4176cb/417f59.|
 |42fcb1|10001322|Extended state/frame/HP handling after hit damage; continuations42fcbb/42fd1d.|
 |41f5fc|1000109d|Transform-state routing adds4000-range behavior before41f675; retain8000-range continuation41f60a.|
-|41408b|10001125|Additional state85/86 paths around the Actor physics/frame consumer; live integer and x87 values matter.|
+|41408b|10001125|Whole Actor control compared in [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md):7168 calls, live zero EDI and x87 operands, state85/86 frame/facing order.|
 |4177b9|100011b9|Additional state20/team hit filtering; three original continuations remain distinct.|
 |401290|10001298|Whole replacement text routine; native276-call comparison completed below.|
 |424352|10001236|Loading-label selection/text/color changes before4243b1.|

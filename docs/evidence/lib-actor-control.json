@@ -1,0 +1,68 @@
+{
+  "actualDLLPCs": 43,
+  "actualEXEPCs": 1458,
+  "bytes": 111033202,
+  "cases": 7168,
+  "corpus": "lib-actor-control.json",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "groups": {
+    "later-frame-velocity": 384,
+    "new-states": 4096,
+    "routing": 384,
+    "same-call-transitions": 2304
+  },
+  "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "nativeCompared": true,
+  "scope": "Whole NTSD413080 control with the actual bundled41408b library hook.\n\nThe pinned EXE/lib.dll run their whole accepted entry/installer on Unicorn2.1.4.\nThe retained CPU then executes7168 whole controlled Actor control calls with\ndeclared Actor/Object/Frame/global inputs, CW023f or037f, actual input/RNG/sound\nhelpers and normal returns. Installer OS responses and constructor memset are\ndeclared research boundaries. Observe full Actor bytes/masks/stores, complete\nObject/global hashes, ordered events, helper ABIs and live hook/FPU provenance.\nNo expected game snapshot, code/helper success stub, control-pointer corruption\nor protection bypass is used. This is not full CRT/game initialization, natural\nreachability of every synthetic input, Windows/device or a native comparison.\n",
+  "sha256": "e9401c809b578fbd4b47ac9ae47a57d2f060f39ef4bb74fb74b72173488c9fe1",
+  "windowsVerified": false,
+  "sourceVerification": {
+    "cases": 7168,
+    "rawBytes": 111033202,
+    "rawSHA256": "e9401c809b578fbd4b47ac9ae47a57d2f060f39ef4bb74fb74b72173488c9fe1",
+    "completeInstallationReproduced": true,
+    "completeActorBytesMasksFromStores": true,
+    "completeGlobalsFromStores": true,
+    "completeObjectHashesFromInputs": true,
+    "actorStores": 111460,
+    "globalStores": 2784,
+    "helperReturns": 98720,
+    "checkpoints": 26880,
+    "events": {
+      "random": 384,
+      "sound": 416
+    },
+    "statesAtHook": {
+      "85": 3136,
+      "86": 3136,
+      "3": 96,
+      "5": 96,
+      "84": 96,
+      "87": 96,
+      "0": 8,
+      "1": 40,
+      "2": 16,
+      "4": 128,
+      "6": 64,
+      "12": 256
+    },
+    "framesChangedBeforeHook": 1792,
+    "libraryFrameStores": {
+      "0x100011b3": 2030
+    },
+    "actualEXEPCs": 1458,
+    "actualDLLPCs": 43,
+    "allStaticHookStartsObserved": true,
+    "sourceEDIAndLiveFPUProvenanceVerified": true,
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "priorFixturePinsUnchanged": 203,
+  "bundledLibInstalled": true,
+  "nativeComparison": "Public OriginalLibActorControl matches7168 complete controlled source returns on full Actor bytes/masks, full globals hashes and800 ordered RNG/sound events; source input frames are independently constructed natively. Missing selected frame42 rolls back staged facing/frame changes and all owned state. Pristine25795 calls and prior RNG rollback also pass. Native does not execute or load DLL code.",
+  "sourceFPUStatusComparedToNative": false,
+  "wholeApplicationCompared": false,
+  "fixture": "original-lib-actor-control.json",
+  "fixtureSHA256": "c490cdc1c1b745837047fdb889e892eaa37285243c356d2ac98f5ff6a6fe8016",
+  "fixtureBytes": 5591517
+}
