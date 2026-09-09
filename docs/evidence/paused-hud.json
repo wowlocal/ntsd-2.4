@@ -1,0 +1,203 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Original HUD callee with the paused caller's preserved command flags.\n\nExecute pinned NTSD2.4 EXE41ae60..41b12d/ret4 on Unicorn2.1.4 at CW027f,\nwith declared400-slot World/Actor/Object/bitmap inputs and COM responses.\nRead/write/register observations distinguish the callee from421a15's command\nresets and prove its ignored argument. Paused caller EDI1 and ESI=argument\nare retained; EBP remains a controlled saved-register sentinel.\nFull pool/masks/globals and ordered bitmap/clip/rectangle requests compare to\nthe native shared HUD. No whole paused caller, initialized pause, device,\npixels, source DLL or Windows execution claim.\n",
+  "corpus": "paused-hud.json",
+  "sha256": "294a479874f18a89cc6dd61dda7787640b231da15336995b63814e1df504b3a6",
+  "bytes": 35383336,
+  "cases": 1789,
+  "groups": {
+    "selection": 512,
+    "all-slots": 10,
+    "ignored-slot": 5,
+    "bar-width": 180,
+    "unused-maximum": 4,
+    "healing": 720,
+    "team": 108,
+    "viewport": 40,
+    "bitmap-count": 32,
+    "bitmap-size": 24,
+    "bitmap-provenance": 24,
+    "resource-alias": 56,
+    "caller": 32,
+    "null-source": 4,
+    "hidden-null-target": 1,
+    "empty": 1,
+    "preserved-commands": 36
+  },
+  "helpers": 61173,
+  "instructions": 477,
+  "events": 283090,
+  "blits": 40542,
+  "calleeOnly": true,
+  "fpcw": 639,
+  "callerEDI": 1,
+  "callerESIEqualsArgument": true,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "instructionCoverage": {
+    "0x41ae60": {
+      "instructions": 223,
+      "executed": 223,
+      "missing": []
+    },
+    "0x43ef70": {
+      "instructions": 57,
+      "executed": 45,
+      "missing": [
+        4452219,
+        4452223,
+        4452240,
+        4452244,
+        4452248,
+        4452250,
+        4452274,
+        4452278,
+        4452280,
+        4452292,
+        4452296,
+        4452298
+      ]
+    },
+    "0x43f010": {
+      "instructions": 214,
+      "executed": 171,
+      "missing": [
+        4452395,
+        4452397,
+        4452401,
+        4452402,
+        4452403,
+        4452408,
+        4452411,
+        4452419,
+        4452659,
+        4452663,
+        4452664,
+        4452666,
+        4452668,
+        4452670,
+        4452676,
+        4452682,
+        4452967,
+        4452971,
+        4452978,
+        4452982,
+        4452984,
+        4452986,
+        4452993,
+        4452996,
+        4453000,
+        4453004,
+        4453006,
+        4453008,
+        4453010,
+        4453012,
+        4453014,
+        4453018,
+        4453019,
+        4453025,
+        4453031,
+        4453035,
+        4453039,
+        4453043,
+        4453044,
+        4453045,
+        4453047,
+        4453051,
+        4453055
+      ]
+    },
+    "0x43f310": {
+      "instructions": 38,
+      "executed": 38,
+      "missing": []
+    }
+  },
+  "eventKinds": {
+    "draw": 18344,
+    "read": 183164,
+    "clip": 34648,
+    "blit": 40542,
+    "rectangle": 6392
+  },
+  "undefinedBitmapReadEvents": 70,
+  "poolBytesPerCase": 424408,
+  "globalsBytesPerCase": 46144,
+  "retainedHUDCasesReproduced": 1753,
+  "entryGlobalsUnchanged": true,
+  "commandFlagPairs": 36,
+  "hudStackArgumentRead": false,
+  "callerResetsFlagsBeforeHUD": false,
+  "wholePausedCallerCompared": false,
+  "initializedOwnPauseCompared": false,
+  "pixelsCompared": false,
+  "fixture": "original-paused-hud.json",
+  "fixtureSHA256": "33d8aa22dd19c4ccf782c6503ab387eb3e79ada72f573180d67a0f0265c14f75",
+  "fixtureBytes": 737624,
+  "nativePackageBaseCommit": "f98c5ab",
+  "nativePackageFilesVerifiedBeforeOverlay": 486,
+  "concurrentLoadedCallChangesExcludedFromIsolatedPackage": true,
+  "retainedFixturePinsUnchanged": 190,
+  "currentFixturePins": 191,
+  "sourceFileSHA256": {
+    "native/Sources/NTSDCore/OriginalWorldHUD.swift": "e984bf4879bfa2f000c4b60c38bff4eda3ebfa638cc78c1988aafc5773d530ac",
+    "native/Tests/NTSDCoreTests/OriginalWorldHUDTests.swift": "22dc0940e75f2b03b3f14fcb4e2edf6c16d2138f8dde026b3232c1e960c85c43",
+    "tools/oracle_paused_hud.py": "49be500c8f1e3ef8610f30998cdf2e319cf84361990ad5d0e139124ec8c2fe3e",
+    "tools/accept_paused_hud.py": "2be1762235406835e54f800e93543bb7d1838bd2e61b92db0e295bacc539b3b2",
+    "tools/verify_paused_hud_artifacts.py": "bdc62cb50d9e36a4ec19e4fb4241e06060b3cf1fd6508e0ef5d3dd31213fa018",
+    "docs/evidence/paused-gameplay-static.json": "3805b9c9ec859a6cee9fe657e506f9bb149cac78b23895db0b3921cb4d5b6c7c"
+  },
+  "rawValidation": {
+    "tests": 6,
+    "seconds": 58.484,
+    "buildSeconds": 172.2,
+    "exitCode": 0
+  },
+  "sourceInitialFailure": "Terminal harness expected a stopped-address code hook and omitted direct-entry ECX. Corrected before fresh complete capture; log preserved. Subsequent ESI=argument refinement reproduces all1789 complete records/events and PC inventory.",
+  "sourceProcessRestartedWhileLive": false,
+  "referenceSavedRegisters": {
+    "EBX": "World",
+    "EBP": "controlled22334455",
+    "ESI": "passed argument",
+    "EDI": 1
+  },
+  "actualPausedCallerRegisterFrameCompared": false,
+  "packagedValidation": {
+    "tests": 6,
+    "seconds": 58.119,
+    "buildSeconds": 169.18,
+    "exitCode": 0,
+    "rawOverride": false
+  },
+  "logs": {
+    "paused-hud-source-initial-failure.log": {
+      "bytes": 925,
+      "sha256": "9ef3cc272b4314f2ee46a5ee28dab4bb0063ffbae259468f700f87e860aff041"
+    },
+    "paused-hud-source-prior.log": {
+      "bytes": 1529,
+      "sha256": "4c6c9c5a168b064469d836f198011918b06f200790c5d7efce92f230ee52c339"
+    },
+    "paused-hud-source.log": {
+      "bytes": 1633,
+      "sha256": "e32336e71e05d00d58f4d411666af67decb90df0878a585bb8a6406d7a9e7b65"
+    },
+    "paused-hud-acceptance.log": {
+      "bytes": 2742,
+      "sha256": "f18be8f21662ac9b56c8ae5fa92aba212210f7a1e413ddd2f3c53560aa8b20a9"
+    },
+    "paused-hud-isolated-acceptance-prior.log": {
+      "bytes": 1073,
+      "sha256": "64ad6bb58873df5d5d2d9bf6fee9a72f62553a823ed6e17556939b81d5385a2f"
+    },
+    "paused-hud-stable-acceptance.log": {
+      "bytes": 4714,
+      "sha256": "624283209eaa597a4befed1fd244aa41872a542456472a9b8d9d10f6e6d65814"
+    },
+    "paused-hud-packaged-verification.log": {
+      "bytes": 4464,
+      "sha256": "dbca5d0d854fc4527f96a55e8196a0a319404757df63f00e63e20e64efbdc91d"
+    }
+  },
+  "allOwnedJobsTerminal": true
+}

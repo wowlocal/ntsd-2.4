@@ -1,0 +1,201 @@
+{
+  "scope": "Static original paused-gameplay caller instructions; no dynamic execution claim",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "instructions": [
+    {
+      "address": 4314900,
+      "bytes": "b802000000",
+      "instruction": "mov\teax, 0x2"
+    },
+    {
+      "address": 4314905,
+      "bytes": "3905fc0b4500",
+      "instruction": "cmp\tdword ptr [0x450bfc], eax"
+    },
+    {
+      "address": 4314911,
+      "bytes": "c705000c450000000000",
+      "instruction": "mov\tdword ptr [0x450c00], 0x0"
+    },
+    {
+      "address": 4314921,
+      "bytes": "8d78ff",
+      "instruction": "lea\tedi, [eax - 0x1]"
+    },
+    {
+      "address": 4314924,
+      "bytes": "7506",
+      "instruction": "jne\t0x41d734 <.text+0x1c734>"
+    },
+    {
+      "address": 4314926,
+      "bytes": "893d000c4500",
+      "instruction": "mov\tdword ptr [0x450c00], edi"
+    },
+    {
+      "address": 4314932,
+      "bytes": "837c243800",
+      "instruction": "cmp\tdword ptr [esp + 0x38], 0x0"
+    },
+    {
+      "address": 4314937,
+      "bytes": "7463",
+      "instruction": "je\t0x41d79e <.text+0x1c79e>"
+    },
+    {
+      "address": 4314939,
+      "bytes": "8b742468",
+      "instruction": "mov\tesi, dword ptr [esp + 0x68]"
+    },
+    {
+      "address": 4314943,
+      "bytes": "56",
+      "instruction": "push\tesi"
+    },
+    {
+      "address": 4314944,
+      "bytes": "8bcb",
+      "instruction": "mov\tecx, ebx"
+    },
+    {
+      "address": 4314946,
+      "bytes": "893d2cd04400",
+      "instruction": "mov\tdword ptr [0x44d02c], edi"
+    },
+    {
+      "address": 4314952,
+      "bytes": "e803cbffff",
+      "instruction": "call\t0x41a250 <.text+0x19250>"
+    },
+    {
+      "address": 4314957,
+      "bytes": "8b1560114500",
+      "instruction": "mov\tedx, dword ptr [0x451160]"
+    },
+    {
+      "address": 4314963,
+      "bytes": "a1d80b4500",
+      "instruction": "mov\teax, dword ptr [0x450bd8]"
+    },
+    {
+      "address": 4314968,
+      "bytes": "52",
+      "instruction": "push\tedx"
+    },
+    {
+      "address": 4314969,
+      "bytes": "50",
+      "instruction": "push\teax"
+    },
+    {
+      "address": 4314970,
+      "bytes": "56",
+      "instruction": "push\tesi"
+    },
+    {
+      "address": 4314971,
+      "bytes": "8bcb",
+      "instruction": "mov\tecx, ebx"
+    },
+    {
+      "address": 4314973,
+      "bytes": "e83eceffff",
+      "instruction": "call\t0x41a5a0 <.text+0x195a0>"
+    },
+    {
+      "address": 4314978,
+      "bytes": "56",
+      "instruction": "push\tesi"
+    },
+    {
+      "address": 4314979,
+      "bytes": "8bcb",
+      "instruction": "mov\tecx, ebx"
+    },
+    {
+      "address": 4314981,
+      "bytes": "e8f6d6ffff",
+      "instruction": "call\t0x41ae60 <.text+0x19e60>"
+    },
+    {
+      "address": 4314986,
+      "bytes": "8b0d08564500",
+      "instruction": "mov\tecx, dword ptr [0x455608]"
+    },
+    {
+      "address": 4314992,
+      "bytes": "51",
+      "instruction": "push\tecx"
+    },
+    {
+      "address": 4314993,
+      "bytes": "8b0d8cff4400",
+      "instruction": "mov\tecx, dword ptr [0x44ff8c]"
+    },
+    {
+      "address": 4314999,
+      "bytes": "6a00",
+      "instruction": "push\t0x0"
+    },
+    {
+      "address": 4315001,
+      "bytes": "57",
+      "instruction": "push\tedi"
+    },
+    {
+      "address": 4315002,
+      "bytes": "6aff",
+      "instruction": "push\t-0x1"
+    },
+    {
+      "address": 4315004,
+      "bytes": "6820010000",
+      "instruction": "push\t0x120"
+    },
+    {
+      "address": 4315009,
+      "bytes": "6868010000",
+      "instruction": "push\t0x168"
+    },
+    {
+      "address": 4315014,
+      "bytes": "e885180200",
+      "instruction": "call\t0x43f010 <.text+0x3e010>"
+    },
+    {
+      "address": 4315019,
+      "bytes": "833d840b450000",
+      "instruction": "cmp\tdword ptr [0x450b84], 0x0"
+    },
+    {
+      "address": 4315026,
+      "bytes": "0f84fc510000",
+      "instruction": "je\t0x422994 <.text+0x21994>"
+    },
+    {
+      "address": 4315032,
+      "bytes": "56",
+      "instruction": "push\tesi"
+    },
+    {
+      "address": 4315033,
+      "bytes": "e9b4510000",
+      "instruction": "jmp\t0x422952 <.text+0x21952>"
+    },
+    {
+      "address": 4315038,
+      "bytes": "3905fc0b4500",
+      "instruction": "cmp\tdword ptr [0x450bfc], eax"
+    },
+    {
+      "address": 4315044,
+      "bytes": "7506",
+      "instruction": "jne\t0x41d7ac <.text+0x1c7ac>"
+    },
+    {
+      "address": 4315046,
+      "bytes": "893dfc0b4500",
+      "instruction": "mov\tdword ptr [0x450bfc], edi"
+    }
+  ]
+}

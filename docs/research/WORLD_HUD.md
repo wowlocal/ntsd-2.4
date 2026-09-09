@@ -7,6 +7,10 @@ bytes and masks, globals and276,106 ordered renderer events. The223 instruction
 starts of the HUD function are all exercised; this is not every branch outcome,
 Windows rasterization, or a complete game tick.
 
+[PAUSED_HUD](PAUSED_HUD.md) separately compares the whole callee with EDI1
+and preserved command flags. `drawPreservingCommands` omits only the two
+unpaused caller stores; it does not yet compose the complete paused caller.
+
 The [initialized match comparison](GAMEPLAY_HUD.md) separately connects this
 public API to independently reconstructed startup, catalog, menu and gameplay
 state. No character-specific implementation is introduced.

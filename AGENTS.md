@@ -48,6 +48,29 @@ false positives will not occur.
 
 ## Current research status
 
+The paused HUD dependency is now implemented in
+[PAUSED_HUD](docs/research/PAUSED_HUD.md). OriginalWorldHUD.drawPreservingCommands
+matches1789 whole41ae60..41b12d/ret4 calls with command flags preserved, full
+World/400Actor bytes+masks/globals and283090 events. The1753 earlier HUD inputs
+reproduce every pool/mask/event/helper result;36 more flag pairs remain unchanged.
+Source ECXWorld/EDI1/ESIargument, controlled EBP, CW027f/FPSW0/tagffff; argument
+and rootSP68 remain unread. All223HUD starts execute;477 total original PCs,
+61173 helper returns,40542Blts/70undefined reads. Six unpaused caller PCs and
+the stopped sentinel are excluded. This is not every branch, the whole paused
+caller or an initialized own pause. Preserve direct background draw (no camera
+bounds pass), command flags, PAUSE bitmap and the422952 indicator join when
+composing that remaining caller. Static39paused instructions are byte-verified,
+not dynamic whole-pause evidence. Original apply still clears both flags.
+Raw6release tests pass58.484s/build172.20s; final packaged6pass58.119s/build169.18s,
+including retained1753HUD/two late failures and both initialized bodies with
+19checkpoints/1012+1068events. All190 prior fixtures unchanged,191current;
+raw35383336/packed737624bytes, fullJSON/SHA/lengths and10vendor hashes verified.
+The source harness failure, tightened ESI binding and isolated-build preparation
+are documented; no accepted expected bytes changed. All owned jobs terminal.
+NTSDNative linked; no app-window/device/Windows claim. Full pause/resume,
+active inputs, outer clock, app integration/full match/full goal remain open.
+See build/research/paused-hud-work.json for exact process and package provenance.
+
 Both fresh own chains now match16 successive loaded gameplay calls through
 both actual returns. Read [CONTINUOUS_GAMEPLAY_CAPTURE](docs/research/CONTINUOUS_GAMEPLAY_CAPTURE.md).
 OriginalLoadedGameplayCall joins input/round and OriginalGameplayBody under one

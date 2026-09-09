@@ -7,9 +7,29 @@ public enum OriginalWorldHUD {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        try draw(state: &state, clearingCommands: true, surface: surface, resourceBitmap: resourceBitmap,
+            performBlit: performBlit, observe: observe)
+    }
+
+    /// Whole41ae60 callee. The paused41d765 caller does not execute421a1c/
+    /// 421a22's command resets. Its stack argument is still unused by the HUD.
+    public static func drawPreservingCommands(state: inout OriginalMatchPreparation,
+        surface: (Int) throws -> UInt32,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        try draw(state: &state, clearingCommands: false, surface: surface, resourceBitmap: resourceBitmap,
+            performBlit: performBlit, observe: observe)
+    }
+
+    private static func draw(state: inout OriginalMatchPreparation, clearingCommands: Bool,
+        surface: (Int) throws -> UInt32,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        observe: (OriginalFrontScreenEvent) throws -> Void) throws {
         let catalog = state.catalog, bitmaps = state.bitmaps, released = state.releasedBitmaps
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0 else { throw error("Catalog binding") }
-        try draw(world: state.world, actors: state.actors, globals: &state.globals,
+        try draw(world: state.world, actors: state.actors, globals: &state.globals, clearingCommands: clearingCommands,
             header: { n in
                 guard catalog.objects.indices.contains(n) else { throw error("Object binding") }
                 return catalog.objects[n].header
@@ -21,6 +41,7 @@ public enum OriginalWorldHUD {
     private static func error(_ detail: String) -> OriginalStateError { .invalidStorage("World HUD: "+detail) }
 
     static func draw(world: OriginalStateRecord, actors: [OriginalStateRecord], globals: inout OriginalStateRecord,
+        clearingCommands: Bool = true,
         header: (Int) throws -> OriginalStateRecord,
         catalogBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
@@ -29,8 +50,10 @@ public enum OriginalWorldHUD {
         var next = globals
         // Original EDI is0 at this caller after the resource loop. Keep these
         // writes before all HUD resource resolution and drawing callbacks.
-        try next.write(Int32(0), at: 0x450bc0-0x44d000)
-        try next.write(Int32(0), at: 0x450bb8-0x44d000)
+        if clearingCommands {
+            try next.write(Int32(0), at: 0x450bc0-0x44d000)
+            try next.write(Int32(0), at: 0x450bb8-0x44d000)
+        }
         func g(_ address: Int) throws -> Int32 { try next.integer(at: address-0x44d000, as: Int32.self) }
         func token(_ address: Int) throws -> UInt32 { UInt32(bitPattern: try g(address)) }
         func active(_ slot: Int) throws -> Bool { try world.integer(at: 4+slot, as: UInt8.self) != 0 }

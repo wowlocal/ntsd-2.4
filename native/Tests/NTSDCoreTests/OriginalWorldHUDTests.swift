@@ -26,6 +26,8 @@ final class OriginalWorldHUDTests: XCTestCase {
     private struct Corpus: Decodable {
         let exeSHA256: String, header: [Patch], headerPatches: [Header], ids: [Int32], cases: [Case], fpcw: Int, instructions: [UInt32]
         let bitmapBase: UInt32, drawTarget: UInt32, fillTarget: UInt32, methodResults: [Int32]
+        let calleeOnly: Bool?, entry: UInt32?, returnPC: UInt32?, callerEDI: Int?
+        let callerESIEqualsArgument: Bool?
     }
     private func bytes(_ hex: String) throws -> [UInt8] {
         let chars = Array(hex.utf8);XCTAssertEqual(chars.count%2,0)
@@ -36,12 +38,25 @@ final class OriginalWorldHUDTests: XCTestCase {
     }
     private func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
     func testEntireHUDCallerWithOriginalBitmapChildren() throws {
+        try compareCorpus(calleeOnly: false)
+    }
+    func testHUDCalleePreservesPausedCommands() throws {
+        try compareCorpus(calleeOnly: true)
+    }
+    private func compareCorpus(calleeOnly: Bool) throws {
         let url: URL
-        if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_HUD_CORPUS"] { url = URL(fileURLWithPath: path) }
-        else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-hud", withExtension: "json", subdirectory: "Fixtures")) }
+        if let path = ProcessInfo.processInfo.environment[calleeOnly ? "NTSD_PAUSED_HUD_CORPUS" : "NTSD_WORLD_HUD_CORPUS"] { url = URL(fileURLWithPath: path) }
+        else { url = try XCTUnwrap(Bundle.module.url(forResource: calleeOnly ? "original-paused-hud" : "original-world-hud", withExtension: "json", subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(Data(contentsOf: url), maximumCount: 128_000_000))
         XCTAssertEqual(c.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
-        XCTAssertEqual(c.fpcw, 0x27f); XCTAssertEqual(c.cases.count, 1753); XCTAssertEqual(c.instructions.count, 483)
+        XCTAssertEqual(c.fpcw, 0x27f); XCTAssertEqual(c.cases.count, calleeOnly ? 1789 : 1753)
+        XCTAssertEqual(c.instructions.count, calleeOnly ? 477 : 483)
+        if calleeOnly {
+            XCTAssertEqual(c.calleeOnly, true); XCTAssertEqual(c.entry, 0x41ae60)
+            XCTAssertEqual(c.returnPC, 0x30000000); XCTAssertEqual(c.callerEDI, 1)
+            XCTAssertEqual(c.callerESIEqualsArgument, true)
+            XCTAssertFalse(c.instructions.contains(0x421a15)); XCTAssertFalse(c.instructions.contains(0x30000000))
+        }
         var headers: [OriginalStateRecord] = []
         for (n, id) in c.ids.enumerated() {
             var h = try defined(0x7a4)
@@ -97,9 +112,10 @@ final class OriginalWorldHUDTests: XCTestCase {
                 return (bitmaps[n], surfaces[n])
             }
             let results = item.methodResults ?? c.methodResults
+            let commandBefore = try [0x450bb8, 0x450bc0].map { try globals.integer(at: $0-0x44d000, as: Int32.self) }
             var blits = 0
             do {
-                try OriginalWorldHUD.draw(world: world, actors: actors, globals: &globals, header: { ownHeaders[$0] },
+                try OriginalWorldHUD.draw(world: world, actors: actors, globals: &globals, clearingCommands: !calleeOnly, header: { ownHeaders[$0] },
                     catalogBitmap: { try binding(Int($0)-1) }, resourceBitmap: { token in
                         guard token >= c.bitmapBase, (token-c.bitmapBase)%0x2000 == 0 else { throw OriginalStateError.invalidStorage("Test resource token") }
                         return try binding(Int((token-c.bitmapBase)/0x2000))
@@ -117,13 +133,19 @@ final class OriginalWorldHUDTests: XCTestCase {
                 return
             }
             XCTAssertTrue(globals.defined.allSatisfy { $0 }); XCTAssertEqual(blits, item.blits, item.label)
-            XCTAssertEqual(item.endPC, 0x421a2d)
-            XCTAssertEqual(item.argumentAccesses, [.init(pc: 0x421a15, offset: 0x68, size: 4, write: false),
+            XCTAssertEqual(item.endPC, calleeOnly ? 0x30000000 : 0x421a2d)
+            if calleeOnly {
+                XCTAssertTrue(item.argumentAccesses.isEmpty)
+                XCTAssertEqual(try [0x450bb8, 0x450bc0].map { try globals.integer(at: $0-0x44d000, as: Int32.self) }, commandBefore)
+            } else {
+                XCTAssertEqual(item.argumentAccesses, [.init(pc: 0x421a15, offset: 0x68, size: 4, write: false),
                                                   .init(pc: 0x421a19, offset: -4, size: 4, write: true)])
+            }
             totalEvents += events.count; totalBlits += blits
         }
-        XCTAssertEqual(totalEvents, 276106); XCTAssertEqual(totalBlits, 39462)
-        print("WORLD HUD", c.cases.count, "complete pools,", totalEvents, "events and", totalBlits, "blits compared")
+        XCTAssertEqual(totalEvents, calleeOnly ? 283090 : 276106)
+        XCTAssertEqual(totalBlits, calleeOnly ? 40542 : 39462)
+        print(calleeOnly ? "PAUSED HUD CALLEE" : "WORLD HUD", c.cases.count, "complete pools,", totalEvents, "events and", totalBlits, "blits compared")
     }
 
     private func prepared() throws -> (OriginalStateRecord, [OriginalStateRecord], OriginalStateRecord, OriginalStateRecord, OriginalStateRecord) {

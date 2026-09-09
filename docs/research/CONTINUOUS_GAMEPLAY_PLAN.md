@@ -39,6 +39,11 @@ continuations. See [LOADED_TICK_PLAN](LOADED_TICK_PLAN.md) for resource and
 caller-storage requirements. This body comparison does not execute the16-call
 source continuation described above.
 
+The paused alternative also has a separate [HUD callee comparison](PAUSED_HUD.md).
+Whole pause composition still needs direct background drawing, world drawing,
+the HUD without command resets, the PAUSE bitmap and exact indicator/output
+join. The static paused caller does not run the unpaused camera-bounds pass.
+
 For each call compare complete state and masks, RNG and replay bytes, resource
 liveness, ordered input/update/render/sound events, and the original caller's
 normal stack/register/SEH restoration. Compare all inherited FPU checkpoints
