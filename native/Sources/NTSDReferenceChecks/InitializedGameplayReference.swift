@@ -9,20 +9,20 @@ public enum InitializedGameplayReference {
         public let gameplay: MatchLaunchReference.Result
         public let fpuCheckpoints: Int,fpuTransitions: Int
     }
-    private struct Audit: Decodable {
-        struct Initialization: Decodable {
+    private struct Audit: Decodable, Equatable {
+        struct Initialization: Decodable, Equatable {
             let entry: UInt32,entrySP: UInt32,returnPC: UInt32,returnSP: UInt32
             let before: UInt16,after: UInt16,result: Int32,instructions: [UInt32]
         }
-        struct Checkpoint: Decodable { let pc: UInt32,sp: UInt32,fpcw: UInt16,fpsw: UInt16 }
-        struct Transition: Decodable { let pc: UInt32,operation: String,before: UInt16,after: UInt16,fpswBefore: UInt16,fpswAfter: UInt16 }
-        struct Watched: Decodable { let pc: UInt32,bytes: String,operation: String }
+        struct Checkpoint: Decodable, Equatable { let pc: UInt32,sp: UInt32,fpcw: UInt16,fpsw: UInt16 }
+        struct Transition: Decodable, Equatable { let pc: UInt32,operation: String,before: UInt16,after: UInt16,fpswBefore: UInt16,fpswAfter: UInt16 }
+        struct Watched: Decodable, Equatable { let pc: UInt32,bytes: String,operation: String }
         let initialization: Initialization,checkpoints: [Checkpoint],transitions: [Transition],watchedInstructions: [Watched]
     }
     private struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,control: Bool,fpu: Audit }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Initialized gameplay reference: "+text) }
 
-    public static func compare(_ data: Data,fixture: (String) throws -> Data) throws -> Result {
+    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 128_000_000))
         let a = c.fpu,i = a.initialization
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -41,6 +41,23 @@ public enum InitializedGameplayReference {
             current = t.after
         }
         guard current == i.after else { throw error("Final initialized context") }
+        var finalAudit = a
+        if let postDraw {
+            let next = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(postDraw,maximumCount: 128_000_000))
+            let expectedPCs: [UInt32] = (0..<400).flatMap { slot in
+                slot < 2 ? [0x41f550,0x40d960,0x41fb0b] : [0x41f550]
+            }
+            let extra = Array(next.fpu.checkpoints.dropFirst(a.checkpoints.count))
+            guard next.exeSHA256 == c.exeSHA256,next.dllSHA256 == c.dllSHA256,next.control == c.control,
+                  next.fpu.initialization == a.initialization,next.fpu.transitions == a.transitions,
+                  next.fpu.watchedInstructions == a.watchedInstructions,next.fpu.checkpoints.starts(with: a.checkpoints),
+                  extra.map(\.pc) == expectedPCs,next.fpu.checkpoints.allSatisfy({ $0.fpcw == 0x23f }),
+                  extra.allSatisfy({ $0.sp == ($0.pc == 0x40d960 ? 0x1000e9b0 : 0x1000e9bc) }) else { throw error("Extended initialized context") }
+            // The terminal FPU hook is ordered after the gameplay stop hook.
+            // Source explicitly reads/asserts the equal entry/exit control word
+            // separately; GameplayLifecycleReference checks that boundary.
+            finalAudit = next.fpu
+        }
         let suffix = c.control ? "-control" : ""
         func source(_ name: String) throws -> Data { try fixture("original-"+name+suffix+".json") }
         let result = try MatchLaunchReference.compare(launch: source("match-launch"),selection: source("match-selection"),character: source("character-screen"),
@@ -48,7 +65,7 @@ public enum InitializedGameplayReference {
             menu: source("menu-loading"),loading: source("menu-loading-state"),catalog: source("menu-loading-catalog"),sounds: source("menu-loading-sounds"),
             arithmeticPrecision: .bits53,gameplayControl: source("gameplay-physics"),gameplayPhysics: true,gameplayLinks: source("gameplay-links"),
             gameplayContacts: source("gameplay-contacts"),gameplayHits: source("gameplay-hits"),gameplayCPoints: source("gameplay-cpoints"),
-            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data)
-        return .init(gameplay: result,fpuCheckpoints: a.checkpoints.count,fpuTransitions: a.transitions.count)
+            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw)
+        return .init(gameplay: result,fpuCheckpoints: finalAudit.checkpoints.count,fpuTransitions: finalAudit.transitions.count)
     }
 }

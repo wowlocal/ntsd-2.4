@@ -165,7 +165,9 @@ The following [CONTROL_PRECISION](CONTROL_PRECISION.md) now corrects ActorContro
 and World context transfer, with whole53-bit and24/53/64-bit comparisons. Its
 remaining inventory includes direct conversion, camera and CRT numeric parsing.
 The initialized chain's explicit037f/actualCRT setup avoids the newly observed
-ambiguity of an unwritten harness FPCW0. Native application wiring and the
-complete post-draw loop `41f550..4214cf` remain unfinished. Actual Windows
+ambiguity of an unwritten harness FPCW0. The later
+[GAMEPLAY_LIFECYCLE](GAMEPLAY_LIFECYCLE.md) now reproduces both complete parents
+and continues their own states through the full post-draw loop to4214d5.
+Native application wiring and full tick return remain unfinished. Actual Windows
 startup/thread/device behavior, continuous DAT gameplay, a finished first
 match, all game modes and clean macOS verification remain open.

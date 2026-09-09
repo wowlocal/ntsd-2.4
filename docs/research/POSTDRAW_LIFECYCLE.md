@@ -174,11 +174,15 @@ NTSDNative linked; no app window was tested. Python compilation, 570 local
 documentation links and diff checks passed. Source and SwiftPM processes
 were terminal before the milestone commit.
 
-Next connect this entire pass to the two initialized own chains ending at
-41f550/SP1000e9bc, preserving their own stack words, pool, loaded DAT and
-53-bit context. Then continue from 4214d5 toward the first complete tick
-return. That parent connection, complete tick, app integration, natural
-Naruto/Sasuke District match and broader game coverage are still open.
+The following [initialized consumer](GAMEPLAY_LIFECYCLE.md) now connects this
+entire pass to both own chains and compares their independently rebuilt native
+states through4214d5/SP1000e9bc. Neither first pass accesses these retained
+scratch words, so native keeps them unknown. The controlled corpus above
+remains separate evidence for construction, aliases and lookup misses.
+Next continue from4214d5 through requested items, resource commands, healing,
+cleanup, HUD and the remaining result/epilogue paths. Complete tick return,
+app integration, a natural Naruto/Sasuke District match and broader game
+coverage are still open.
 
 General nonfinite effect arithmetic, invalid Frame/catalog references and
 pathological caller-stack overflow are not claimed as native-equivalent.

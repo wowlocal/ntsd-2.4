@@ -1,0 +1,35 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue the initialized own first tick through the complete post-draw loop.\n\nFresh original startup/menu/loading/selection/launch/gameplay on one CPU and\nstack. No new gameplay inputs or state replacement. Actual41f550..4214cf and\nhelpers; stops before4214d5. Supplied outer/platform boundaries remain explicit.\n",
+  "corpus": "gameplay-lifecycle.json",
+  "sha256": "dd1ac52a3aeae5676247ff9e65ff41ddf48f22f42c3a7027d2fa147a9b395ced",
+  "bytes": 9245469,
+  "parent": {
+    "fixture": "original-initialized-gameplay.json",
+    "sha256": "4bb7d30ed264080448ea3bfc4caf23ea19b034b6072a4e7ff635ccd0059f2021"
+  },
+  "helpers": 4,
+  "instructions": 303,
+  "events": 2,
+  "end": {
+    "pc": 4330709,
+    "sp": 268495292
+  },
+  "readsBeforeWrites": [],
+  "scratchAccesses": [],
+  "fpcw": 575,
+  "fpuCheckpoints": 1192,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "nativeScratchInputs": "unknown; source does not access these words",
+  "observedPCsIncludeTerminalBoundary": true,
+  "executedInstructions": 302,
+  "fpuExit": "Explicit equal-entry/exit CW assertion; terminal hook follows the stop hook",
+  "firstTickReturned": false,
+  "parentSHA256": "e0d5de9fa9af58b435996452e8ed2a202e2de898c7ea37bd13956d1da57a68d8",
+  "fixture": "original-gameplay-lifecycle.json",
+  "fixtureSHA256": "4fbc875297342a98a4f08aa85d5f885c45131c5877447bcc3161d7cd5f595d36",
+  "fixtureBytes": 1292643
+}

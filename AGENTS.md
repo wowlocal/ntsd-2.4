@@ -3,9 +3,38 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: connect the COMPLETE post-draw loop to the initialized
-own parent at41f550/SP1000e9bc, then continue from4214d5 toward tick return.
-Read [POSTDRAW_LIFECYCLE](docs/research/POSTDRAW_LIFECYCLE.md).**
+**Current priority: continue the initialized own tick from4214d5/SP1000e9bc.
+Read [GAMEPLAY_LIFECYCLE](docs/research/GAMEPLAY_LIFECYCLE.md).**
+Both fresh original startup/menu/loading/selection/launch/gameplay chains now
+continue the ENTIRE post-draw loop and match independently rebuilt native state.
+Each385317records/700844396bytes+masks/503helpers/55state checkpoints;1192FPU
+checkpoints keep023f. Same first unreturned4246b0,phase1/tick1/mode0,District,
+Naruto/Sasuke17/21. Newstage4helpers/2catalog sounds: slot0/X442/index6 and
+slot1/X289/index6. Frame219 andHP500/MP200 remain; previousFrame219/wait1;
+RNG40/1 unchanged. All14586Frameallocations/854bitmaps/101BG/music/recording
+survive. NO source access to six retained scratch words; native leaves them
+unknown instead of importing arbitrary caller-stack bytes. Preserve that limit.
+Exact404newFPU checkpoints are400loopheads+2scheduler entry/returnpairs. The
+terminal hook follows emu_stop and does not fire; source separately reads and
+asserts equalentry/exitCW. First native reference expected that nonexistent
+checkpoint; corrected its observer contract, not source data/game rules.
+Newstage302executed PCs=157loop+90scheduler+55sound;303observed includes the
+unexecuted4214d5 boundary. Standalone controlled coverage below stays separate.
+Acceptance7release tests86.894s/build132.28s passed before2losslessfixtures;
+oldinitialized2tests and5432-case lifecycle3tests remain unchanged.160oldpins
+preserved;162current in build/research/gameplay-lifecycle-fixture-pins.json.
+Final packaged2tests39.509s/build132.96s passed without rawoverride. Complete
+JSON/length/SHA and2758/2759blobs verified; raw/packed9245469/1292643 and
+9261999/1304535bytes. NTSDNative linked; Python/591local links/diffchecks passed.
+Source and allSwiftPM processes terminal before milestonecommit.
+NEXT whole4214d5..421a15 requesteditems/resource commands/healing/cleanup,
+then HUD41ae60..41b12d/ret4 and421a2d..422994 diagnostics/results/epilogue.
+Static notes: build/research/postdraw-tail-notes.md and*-static-plan.json.
+Do not skip command/result branches just because first own flags are zero.
+Fulltick/app/fullmatch/Windows/device/cleanMac remain open.
+
+The preceding controlled lifecycle milestone:
+Read [POSTDRAW_LIFECYCLE](docs/research/POSTDRAW_LIFECYCLE.md).
 OriginalPostDrawLifecycle composes prefix/scheduler/opoint/early lifetime with
 weapon fragments, team commands, death/fire effects and live slot advance.
 5432 controlled original calls atCW027f match full400Actor/World bytes+masks,
@@ -24,13 +53,14 @@ New source observer labels nested scheduler sounds by its SAVED callerEDI;
 old unpublished metadata-only failure; full source rerun verifies correction.
 Atomic World/Actors/globals/scratch rollback tested after earlier slot updates
 and second constructor; callers buffer effects until whole tick commit.
-Initialized own chain is STILL41f550; no app/fulltick/fullmatch/Windows claim.
+The own chain now continues through this loop in the study above; no
+app/fulltick/fullmatch/Windows claim.
 Acceptance9release tests10.454s/build127.58s passed before1lossless fixture;
 159old fixtures unchanged,160pins in build/research/postdraw-lifecycle-fixture-pins.json.
 Final packaged3tests8.156s/build129.66s passed. IndependentfullJSON/SHA/length
 checks verify raw12872805/packed410044bytes. NTSDNative linked; allsource/
-SwiftPM jobs terminal beforecommit. NEXT connect original own state, not the
-controlled inputs. Read the study for scratch/numeric/Windows limitations.
+SwiftPM jobs terminal beforecommit. The original own state is now connected
+above. Read the study for scratch/numeric/Windows limitations.
 
 The preceding opoint milestone:
 Read [POSTDRAW_OPOINT](docs/research/POSTDRAW_OPOINT.md).
