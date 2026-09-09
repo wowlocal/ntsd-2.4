@@ -6,7 +6,18 @@
 [ADDRESS_BOOK.md](research/ADDRESS_BOOK.md).
 
 **Следующая задача: [R02.1 — состояние полного такта](research/R02.1.md).**
-**Ближайший приоритет изменён: [точность FPU](research/FPU_PRECISION.md).**
+**Ближайший шаг: полный40d960 и последовательный обход41f550..4214cf.**
+[Проверка числового чтения DAT](research/CATALOG_PRECISION.md) завершила текущий
+аудит точности: весь исходный каталог при явных53 битах повторил прежний полный
+снимок, а нативный загрузчик совпал по112 063 739 байтам и маскам. Все863 реальных
+чтения%lf совпали по битам, позиции и EOF. Старые154 эталона сохранены; два
+новых добавлены после сравнения. Граница отдельного CRT CPU остаётся явной.
+Далее — полный планировщик кадров с настоящим звуковым helper, восстановление,
+создание и удаление в исходном порядке слотов; затем возврат первого полного
+такта и подключение общей основы к приложению. Полный матч ещё не получен.
+
+Ниже сохранена последовательность коррекции [точности FPU](research/FPU_PRECISION.md);
+промежуточные «следующие шаги» уточняются результатами последующих этапов.
 Оригинальный startup445a31 задаёт53-битную точность, прежние арифметические
 корпусы объявляли CW037f/64 бита, а собственная цепочка наследовала CW0.
 Получено32 различающихся результата на16 прицельных входах. Сначала восстановить
@@ -491,6 +502,7 @@ Swift-кода, число кадров или количество совпав
 | Весь исходный Object-реестр R03.1 | Исполнение EXE + VC80: 137 объектов, 15388 определений, 808 bitmap, 400 звуков | [object-registry-research.json](evidence/object-registry-research.json); **без нативного сравнения**: 38 кадров с непрозрачными указателями, десятый лист; родитель/BG/Stage ещё отдельно |
 | Сырой Frame и нативный Object-реестр R02.1/R03.1 | D всех 137 исходных Object и двух контролей; 71006 полных Frame, 14598 аллокаций, 37036545 байт/масок | [RAW_FRAME_STORAGE.md](research/RAW_FRAME_STORAGE.md), [object-loader-raw.json](evidence/object-loader-raw.json); supplied malloc addresses, header refs normalized separately; родитель/BG/Stage не соединены, W открыт |
 | Совместный каталог R02.1/R03.1 | D против Swift: два полных исходных реестра и контроль; 277 Object / 36 BG / 75 Stage, 306217431 байт/масок | [LOADED_CATALOG.md](research/LOADED_CATALOG.md), [loaded-catalog.json](evidence/loaded-catalog.json); настоящий parent/children/scanf, общие checksum/sounds и ресурсы; supplied allocator/file/device boundaries, не выбранный матч или W |
+| Числовое чтение DAT при53 битах R02.1/R03.1 | D нового полного каталога112063739 байт/масок и863 реальных%lf; исходные919912 сканов повторили прежний полный capture | [CATALOG_PRECISION.md](research/CATALOG_PRECISION.md), [каталог](evidence/loaded-catalog53.json), [числа](evidence/dat-numeric53.json); отдельные EXE/CRT CPU с явнымCW027f, полный исходный DAT; общие CRT/Windows/thread ограничения сохраняются |
 | Общая подготовка матча R02.1 | D против Swift: загруженный каталог → bootstrap → 50 последовательных подготовок; 52102 записи, 79596336 байт/масок, 720 RNG calls, 796 bitmap / 766 releases | [MATCH_PREPARATION.md](research/MATCH_PREPARATION.md), [a5](evidence/match-preparation.json), [ramp](evidence/match-preparation-ramp.json); menu/RNG inputs supplied, music disabled, остановка до replay init; не весь запуск/такт/W |
 | Создание буфера повтора R02.1/R16 | D против Swift: 50 полных буферов / 324583600 байт/масок, 50 alloc/free; связанная подготовка — 77252 записи / 115486336 байт/масок | [REPLAY_INITIALIZATION.md](research/REPLAY_INITIALIZATION.md), [a5](evidence/replay-initialization.json), [ramp](evidence/replay-initialization-ramp.json); реальный caller и весь 43d2c0, RNG reset; metadata/allocator inputs supplied, не запись тактов/playback/W |
 | Пролог запуска R02.1 | D против Swift: 50 цепочек пролог → подготовка → запись; 4614400 global bytes/масок пролога, 130 actual CRT calls, 60 sound methods, 10 fills | [MATCH_PRELUDE.md](research/MATCH_PRELUDE.md), [a5](evidence/match-prelude.json), [ramp](evidence/match-prelude-ramp.json); реальные 42cf8a..42d1ff/401a30/415160 и sprintf; supplied time/menu/device, не полный UI/звук/пиксели/W |
@@ -534,7 +546,7 @@ Swift-кода, число кадров или количество совпав
 | --- | --- | --- | --- | --- |
 | R00 — эталон, импорт и инструменты | Идентичность описана; декодирование ограничено четырьмя файлами | Импорт и упаковка работают | S, D для декодера | Сохранять воспроизводимость, хеши и неизменность эталона при каждом расширении |
 | R01 — диспетчер, время, полный такт | R01.1: обычный путь и границы установлены, стадии описаны | Собран ограниченный конвейер; широкого соответствия нет | S адресного индекса; D синтетической трассы полного обработчика и прежних функций | R01.2 после R02/R03: обоснованная загрузка/снимок и широкий эталон с нативным сравнением |
-| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск и post-draw impulses; найден startup FPU precision53 | Собственная цепочка до41f550; native арифметика пока CW037f/64-bit, Practice отдельно | D полных записей/масок/вызовов,1030 impulse cases; FPU audit подтверждает32 несовпадающих53/64-bit stores | Сначала [FPU context и численная коррекция](research/FPU_PRECISION.md), затем полный40d960/post-draw loop/возврат; Windows/device/матч и остальные режимы |
+| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск, post-draw impulses и startup precision53 | Собственная инициализированная цепочка до41f550 при53 битах; численная модель исправлена, Practice отдельно | D полных записей/масок/вызовов; повторные53-bit physics/control/hits/links/camera/conversion и исходные DAT | Полный40d960/post-draw loop/возврат; [границы численной проверки](research/CATALOG_PRECISION.md), Windows/device/матч и остальные режимы |
 | R03 — загрузка DAT целиком | Режимы декодера, все исходные Object/BG/Stage, Frame/аллокации, совместный parent/children; scanf MSVCR80 .6195 | Общие loaders соединены в OriginalLoadedCatalog, shared checksum/sound/bitmap; практика ещё использует импорт | D полного исходного каталога при text/a5 и raw/00, чередования, Frame/heap, integer CRT | Полные CRT/file I/O, Windows startup, владение ресурсами и подключение к матчу |
 | R04 — ввод, комбо и переходы | Local/remote/playback input/control, hotkeys; весь Actor413080 и caller400/401/500/501 | Общий raw input,9 комбо, DAT-переходы, движение/атаки и стоимость; собственный World далее через физику до41eed1, Practice ещё не заменена | D606 local/1452 received/5986 control cases;14 624 префикса и31 171 [целого управления](research/ACTOR_CONTROL.md);1491 [World](research/WORLD_CONTROL.md) и оба собственных запуска | Оставшиеся стадии полного такта; расширять непрерывные игровые последовательности |
 | R05 — состояния, движение, планировщик | Целые413080/40e490 и physics caller41e634..41eed1; полный планировщик ещё открыт | Общие управление/физика, исходная конечная x87 арифметика; собственный World после физики | D55 433 [Actor physics](research/ACTOR_PHYSICS.md), включая все15363 кадра137Object;515 [World physics](research/WORLD_PHYSICS.md) и оба собственных запуска | Контакты/связи/вывод, полный40d960 и такт; непрерывные игровые последовательности, Windows CW/числовые границы |

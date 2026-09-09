@@ -107,9 +107,11 @@ result. The initialized own chains still prove their complete game records
 under the supplied scanner boundary. They do not establish53-bit numeric
 parsing merely because the main EXE/attached-settings CPU has CW023f.
 
-NEXT: execute the catalog's original DAT numeric scans at explicit53 bits and
-compare their output bytes/consumption and the resulting independently loaded
-native data. Retain the historical scanner results and distinguish this supplied
+The next [CATALOG_PRECISION](CATALOG_PRECISION.md) study now executes the
+catalog's original DAT numeric scans at explicit53 bits. The whole historical
+capture reproduces, and independent native loading plus all863 actual%lf calls
+match exact bytes/consumption. Resume whole40d960/postdraw41f550..4214cf.
+Retain the historical scanner results and distinguish this supplied
 boundary from a future whole same-thread CRT integration. General `%lf`
 lexing/rounding and Windows/thread/locale/file behavior remain open. Then resume
 whole40d960 and the interleaved post-draw41f550..4214cf loop. The first tick,

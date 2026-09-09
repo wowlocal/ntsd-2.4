@@ -1,0 +1,49 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Whole original text catalog with explicit53-bit game/scanner CPUs.\n\nAll137 Objects,17 backgrounds and25 stages use real loader/CRT instructions.\nThe established standalone scanf boundary remains separate from the EXE CPU;\nboth now explicitly select CW027f. Every original %lf call also executes in\nfresh persistent unwritten and explicit64-bit scanner controls. File/allocator/\ndevice/thread boundaries remain supplied. No Windows or whole-match claim.\n",
+  "corpus": "dat-numeric53.json",
+  "sha256": "c9539e1cde22f629646fcd064b6aeb36dd0c718af8538877a49175dadf30ffc0",
+  "bytes": 842956,
+  "precision": {
+    "gameControlWord": 639,
+    "scannerControlWord": 639,
+    "scannerSharesGameCPU": false,
+    "formats": {
+      "%s": 510027,
+      "%d %s %d %s %s": 137,
+      "%d": 408268,
+      "%lf": 863,
+      "%d %d": 523,
+      "%d %s": 60,
+      "%d %s %s": 17,
+      "%s %s %d %d": 17
+    },
+    "numericCases": 863,
+    "historical": {
+      "corpus": "loaded-catalog.json",
+      "corpusSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+      "fixture": "original-loaded-catalog.json",
+      "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e"
+    },
+    "changedHistoricalFields": [],
+    "fullCorpus": "loaded-catalog53-full.json",
+    "fullSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+    "fullBytes": 95289959
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "cases": 863,
+  "sourceFiles": 43,
+  "kinds": {
+    "object": 672,
+    "stages": 191
+  },
+  "changedFromUnwritten": 0,
+  "changedFrom64": 0,
+  "verifiedBlobs": 43,
+  "callers": 17,
+  "fixture": "original-dat-numeric53.json",
+  "fixtureSHA256": "c2adfbe4af3faf2311dd10db5e282441174510df32b63ccddaad734cb7a0edee",
+  "fixtureBytes": 417654
+}

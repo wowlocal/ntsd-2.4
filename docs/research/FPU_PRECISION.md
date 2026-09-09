@@ -87,9 +87,12 @@ The subsequent [COORDINATE_PRECISION](COORDINATE_PRECISION.md) validates whole
 legacy/SSE2 conversion and camera53, and exposes a separate catalog-scanner
 CPU inside the initialized chain. The game/attached-settings CPU is023f;
 catalog fscanf still uses another CRT VM reporting unwritten0. Initializing
-one does not establish the other's precision. Explicit53-bit original DAT
-scanning is the next numerical check; the retained own game states remain
-evidence under their supplied scanner boundary.
+one does not establish the other's precision. [CATALOG_PRECISION](CATALOG_PRECISION.md)
+now checks explicit53-bit original DAT scanning: the whole919,912-scan catalog
+reproduces the historical capture, and independent native loading plus all863
+%lf calls match. The retained own game states keep their supplied scanner
+boundary. Resume whole40d960/postdraw41f550..4214cf; generalCRT and Windows
+context remain open.
 
 ## Own-capture limitation
 

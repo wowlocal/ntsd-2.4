@@ -47,8 +47,12 @@ that MenuLoading's EXE shares this CPU, but its non-decoder catalog fscanf
 adapter uses a separately created CRT VM with an unwritten reported FPCW0.
 That is distinct from the settings CRT attached to the game CPU above. The
 main-thread checkpoints do not observe or establish that scanner's effective
-precision. Full game records here retain this supplied scanning boundary;
-explicit53-bit DAT scanning still requires its own comparison.
+precision. Full game records here retain this supplied scanning boundary.
+[CATALOG_PRECISION](CATALOG_PRECISION.md) subsequently executes the whole catalog
+with explicit53-bit EXE/scanner CPUs: its complete historical raw capture is
+unchanged, and native independently matches the loaded bytes and all863 actual
+%lf inputs/consumption. This establishes those DAT results, not same-thread CRT
+integration or Windows binding. The next gameplay boundary remains41f550.
 
 ## Retained own execution and native state
 

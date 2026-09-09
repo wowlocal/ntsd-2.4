@@ -3,7 +3,33 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Immediate priority: read [FPU_PRECISION](docs/research/FPU_PRECISION.md).**
+**Current priority: whole40d960 scheduler, then the interleaved400-slot
+41f550..4214cf loop. Read [CATALOG_PRECISION](docs/research/CATALOG_PRECISION.md).**
+The numerical correction below now reaches original DAT parsing. A fresh whole
+catalog with explicitCW027f on BOTH EXE and separate scanner CPUs reproduces the
+entire95,289,959-byte historical raw capture byte-for-byte, including919,912
+actualCRT scans. All863 actual%lf calls (43files/17callers) agree in53-bit,
+unwritten and explicit64-bit controls on bytes/return/consumption/EOF/errno.
+Native independently rebuilds all137Objects/17BG/25stages/15388Frameoccurrences,
+829bitmaps/14586Frameallocations:112,063,739 bytes with masks, checksum31475378.
+Native also compares all863full-file suffix scans; no runtime formula changed.
+Acceptance2release tests11.501s/build122.80s passed before2losslessfixtures;
+all154old hashes unchanged,156currentpins in
+build/research/catalog-precision-fixture-pins.json. The scanner is STILL a
+separate VM: this resolves its actualDAT outputs under explicit53, not full
+same-threadCRT/Windows binding/generaldecimal parsing. Initialized own chain
+still stops41f550/SP1000e9bc in its first unreturnedtick. Preserve explicit53
+match precision, historical fixture contracts and raw byte/mask provenance.
+Next implement the ENTIRE40d960, including actual416fb0 sound child, then
+interleave scheduling with recovery/spawn/deletion per original slot order.
+Final packaged6release tests23.811s/build125.47s passed, including all3retained
+catalog variants and originalintegerCRT. New envelopes/fullJSON/all3409blobs
+independently verified. Source and bothSwiftPM jobs terminal, NTSDNative linked;
+no UI/device/Windows claim. Appintegration/completeNaruto-SasukeDistrictmatch/
+AI/allmodes/Windows/device/cleanMac and the full goal remain open.
+
+Numerical correction history (its intermediate NEXT entries are superseded by
+the current priority above): [FPU_PRECISION](docs/research/FPU_PRECISION.md).
 New original-instruction evidence: EXE startup445a31 calls actual MSVCR80
 _controlfp_s(NULL,10000,30000), selecting53-bit precision. Historical arithmetic
 corpora explicitly used CW037f/64-bit; own menu/loading chains inherit CW0.

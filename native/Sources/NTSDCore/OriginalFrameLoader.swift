@@ -314,8 +314,9 @@ struct OriginalFrameScanner {
         return Int32(bitPattern: negative ? 0 &- value : value)
     }
 
-    /// Declared finite-decimal CRT boundary. This does not establish MSVCR80
-    /// rounding; the reference harness supplies Python binary64 at the same boundary.
+    /// Finite-decimal subset checked against actual MSVCR80 instructions for
+    /// the original catalog. General decimal lexing/rounding is still open;
+    /// see docs/research/CRT_SCANNER.md and CATALOG_PRECISION.md.
     mutating func binary64() throws -> Double? {
         skipSpace()
         let suffix = String(String.UnicodeScalarView(bytes[position...].map { UnicodeScalar($0) }))
