@@ -6,21 +6,33 @@
 [ADDRESS_BOOK.md](research/ADDRESS_BOOK.md).
 
 **Следующая задача: [R02.1 — состояние полного такта](research/R02.1.md).**
-**Ближайший шаг: полный последовательный обход41f550..4214cf.**
+**Ближайший шаг: соединить полный post-draw обход с собственным тактом.**
+[Полный жизненный цикл слотов](research/POSTDRAW_LIFECYCLE.md) теперь
+реализует весь `41f550..4214cf`: создание и удаление завершаются перед
+следующим слотом, вновь созданные поздние слоты обрабатываются в том же проходе.
+5 432 исходных случая, включая 921 полный обход, совпали по пулу/маскам,
+глобальным данным, шести сохранённым словам и 25 638 событиям. Выполнены
+1 885 из 1 892 инструкций тела; остальные — выравнивание и недостижимая
+ветка отрицательного количества. Это не проверка всех исходов ветвлений.
+Далее подключить оба инициализированных пути в `41f550/SP1000e9bc`, сохраняя
+происхождение стека и данных, затем продолжать с `4214d5` до возврата такта.
+Собственный такт ещё не продолжен; приложение и полный матч остаются открытыми.
+
+Предыдущий этап:
 [Общий opoint и реакции после планировщика](research/POSTDRAW_OPOINT.md)
 теперь переносят41fb0b..4203b4 и ранние ветки времени жизни.1991 исходный
 вызов совпал по полному пулу/маскам/globals,2291 конструктору и точному выходу:
 4203b4 без opoint,420e93 после попытки opoint,4214c6 после раннего lifetime.
 Проверены исходные количества1..10 и35, дробный разброс и повторные Actor-ссылки.
-Далее — альтернативный4203b4..420e93 и общий420e93..4213a9, затем продвижение
-слота. Собственный такт всё ещё в41f550; полный обход ещё не соединён.
+Альтернативный4203b4..420e93, общий420e93..4213a9 и продвижение слота
+теперь перенесены в полном обходе выше. Соединение с собственным тактом открыто.
 
 [Префикс одного слота](research/POSTDRAW_SLOT_PREFIX.md) теперь переносит
 41f550..41fb0b: цепочки трансформаций, создание частиц9996, HP/MP и весь
 планировщик. В897 исходных вызовах совпали полные400Actor/World, маски,
 globals, сохранённый индекс каталога и2334 события. Все329 инструкций
 префикса выполнены. Действия после планировщика/opoint теперь описаны выше;
-оставшиеся создание и удаление должны предшествовать следующему живому слоту.
+создание и удаление в полном обходе предшествуют следующему живому слоту.
 Первый собственный такт всё ещё останавливается в41f550; соединение остаётся
 открытым. Префикс нельзя выносить в отдельный проход по всем Actor.
 
@@ -29,7 +41,7 @@ globals, сохранённый индекс каталога и2334 событ�
 маскам и globals. Все316 инструкций планировщика и58 звукового helper выполнены;
 проверены откаты после поздних ошибок. Новый API принимает исходный Object,
 индивидуальной поддержки персонажей не добавлено. Окружающий префикс
-теперь проверен выше; оставшееся создание и удаление сохраняет исходный
+теперь проверен выше; создание и удаление сохраняют исходный
 порядок слотов. Первый собственный такт ещё не соединён с этим обходом.
 
 [Проверка числового чтения DAT](research/CATALOG_PRECISION.md) завершила текущий
@@ -528,9 +540,10 @@ Swift-кода, число кадров или количество совпав
 | Сырой Frame и нативный Object-реестр R02.1/R03.1 | D всех 137 исходных Object и двух контролей; 71006 полных Frame, 14598 аллокаций, 37036545 байт/масок | [RAW_FRAME_STORAGE.md](research/RAW_FRAME_STORAGE.md), [object-loader-raw.json](evidence/object-loader-raw.json); supplied malloc addresses, header refs normalized separately; родитель/BG/Stage не соединены, W открыт |
 | Совместный каталог R02.1/R03.1 | D против Swift: два полных исходных реестра и контроль; 277 Object / 36 BG / 75 Stage, 306217431 байт/масок | [LOADED_CATALOG.md](research/LOADED_CATALOG.md), [loaded-catalog.json](evidence/loaded-catalog.json); настоящий parent/children/scanf, общие checksum/sounds и ресурсы; supplied allocator/file/device boundaries, не выбранный матч или W |
 | Числовое чтение DAT при53 битах R02.1/R03.1 | D нового полного каталога112063739 байт/масок и863 реальных%lf; исходные919912 сканов повторили прежний полный capture | [CATALOG_PRECISION.md](research/CATALOG_PRECISION.md), [каталог](evidence/loaded-catalog53.json), [числа](evidence/dat-numeric53.json); отдельные EXE/CRT CPU с явнымCW027f, полный исходный DAT; общие CRT/Windows/thread ограничения сохраняются |
-| Целый планировщик Actor R05 | D6084 вызовов40d960/actual416fb0 при53 битах,6424704 Actor bytes/masks,globalsSHA/756 sounds;316/316+58/58 инструкций | [ACTOR_SCHEDULER.md](research/ACTOR_SCHEDULER.md), [эталон](evidence/actor-scheduler.json); синтетические Frame/Actor inputs, общий Object API и полный откат; естественные DAT-последовательности и окружающий400-slot caller открыты |
-| Префикс post-draw слота R02/R05/R06/R10 | D897 вызовов41f550..41fb0b,329/329 инструкций,273 constructors/1878 RNG/183 sounds; fullpool/masks/globals и retained SP+70 | [POSTDRAW_SLOT_PREFIX.md](research/POSTDRAW_SLOT_PREFIX.md), [эталон](evidence/postdraw-slot-prefix.json); исходный порядок transforms/частиц/HP/MP/scheduler, aliases и откат; post-schedule/opoint/deletion и полный обход ещё открыты |
-| Общий opoint и ранний lifetime R05/R06/R10 | D1991 вызова41fb0b..4203b4 с ранними4213a9/4213b6,588 body/lifetime PCs,2291 constructors/6873 conversions; fullpool/masks/globals и3 точных выхода | [POSTDRAW_OPOINT.md](research/POSTDRAW_OPOINT.md), [эталон](evidence/postdraw-opoint.json); cached/current Frame, aliases, spread/hold/vrest и все исходные количества1..10/35; остальной lifecycle/полный такт/Windows открыты |
+| Целый планировщик Actor R05 | D6084 вызовов40d960/actual416fb0 при53 битах,6424704 Actor bytes/masks,globalsSHA/756 sounds;316/316+58/58 инструкций | [ACTOR_SCHEDULER.md](research/ACTOR_SCHEDULER.md), [эталон](evidence/actor-scheduler.json); синтетические Frame/Actor inputs, общий Object API и полный откат; естественные DAT-последовательности и окружающий400-slot caller теперь проверен в lifecycle ниже |
+| Префикс post-draw слота R02/R05/R06/R10 | D897 вызовов41f550..41fb0b,329/329 инструкций,273 constructors/1878 RNG/183 sounds; fullpool/masks/globals и retained SP+70 | [POSTDRAW_SLOT_PREFIX.md](research/POSTDRAW_SLOT_PREFIX.md), [эталон](evidence/postdraw-slot-prefix.json); исходный порядок transforms/частиц/HP/MP/scheduler, aliases и откат; полный обход теперь проверен в lifecycle ниже; own chain открыта |
+| Общий opoint и ранний lifetime R05/R06/R10 | D1991 вызова41fb0b..4203b4 с ранними4213a9/4213b6,588 body/lifetime PCs,2291 constructors/6873 conversions; fullpool/masks/globals и3 точных выхода | [POSTDRAW_OPOINT.md](research/POSTDRAW_OPOINT.md), [эталон](evidence/postdraw-opoint.json); cached/current Frame, aliases, spread/hold/vrest и все исходные количества1..10/35; lifecycle теперь проверен ниже; полный такт/Windows открыты |
+| Полный post-draw lifecycle R02/R05/R06/R10 | D5432 исходных случая,921 полный live-slot loop,1885/1892 body PCs,6360 constructors и25638 events; fullpool/masks/globals/6 retained words | [POSTDRAW_LIFECYCLE.md](research/POSTDRAW_LIFECYCLE.md), [эталон](evidence/postdraw-lifecycle.json); weapon/commands/death/fire и исходный порядок новых слотов; подключение к initialized own chain/полный такт/Windows открыты |
 | Общая подготовка матча R02.1 | D против Swift: загруженный каталог → bootstrap → 50 последовательных подготовок; 52102 записи, 79596336 байт/масок, 720 RNG calls, 796 bitmap / 766 releases | [MATCH_PREPARATION.md](research/MATCH_PREPARATION.md), [a5](evidence/match-preparation.json), [ramp](evidence/match-preparation-ramp.json); menu/RNG inputs supplied, music disabled, остановка до replay init; не весь запуск/такт/W |
 | Создание буфера повтора R02.1/R16 | D против Swift: 50 полных буферов / 324583600 байт/масок, 50 alloc/free; связанная подготовка — 77252 записи / 115486336 байт/масок | [REPLAY_INITIALIZATION.md](research/REPLAY_INITIALIZATION.md), [a5](evidence/replay-initialization.json), [ramp](evidence/replay-initialization-ramp.json); реальный caller и весь 43d2c0, RNG reset; metadata/allocator inputs supplied, не запись тактов/playback/W |
 | Пролог запуска R02.1 | D против Swift: 50 цепочек пролог → подготовка → запись; 4614400 global bytes/масок пролога, 130 actual CRT calls, 60 sound methods, 10 fills | [MATCH_PRELUDE.md](research/MATCH_PRELUDE.md), [a5](evidence/match-prelude.json), [ramp](evidence/match-prelude-ramp.json); реальные 42cf8a..42d1ff/401a30/415160 и sprintf; supplied time/menu/device, не полный UI/звук/пиксели/W |
@@ -574,11 +587,11 @@ Swift-кода, число кадров или количество совпав
 | --- | --- | --- | --- | --- |
 | R00 — эталон, импорт и инструменты | Идентичность описана; декодирование ограничено четырьмя файлами | Импорт и упаковка работают | S, D для декодера | Сохранять воспроизводимость, хеши и неизменность эталона при каждом расширении |
 | R01 — диспетчер, время, полный такт | R01.1: обычный путь и границы установлены, стадии описаны | Собран ограниченный конвейер; широкого соответствия нет | S адресного индекса; D синтетической трассы полного обработчика и прежних функций | R01.2 после R02/R03: обоснованная загрузка/снимок и широкий эталон с нативным сравнением |
-| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск, post-draw impulses и startup precision53 | Собственная инициализированная цепочка до41f550 при53 битах; численная модель исправлена, Practice отдельно | D полных записей/масок/вызовов; повторные53-bit physics/control/hits/links/camera/conversion и исходные DAT | Полный post-draw loop/возврат с новым40d960; [границы численной проверки](research/CATALOG_PRECISION.md), Windows/device/матч и остальные режимы |
+| R02 — структуры, глобальное состояние, RNG | Конструкторы, каталог, CRT/table, меню, запуск, весь post-draw loop и startup precision53 | Собственная инициализированная цепочка до41f550 при53 битах; отдельно реализован полный post-draw loop, Practice отдельно | D полных записей/масок/вызовов; повторные53-bit physics/control/hits/links/camera/conversion, исходные DAT и5432 lifecycle calls | Подключение post-draw loop и возврат полного такта; [границы численной проверки](research/CATALOG_PRECISION.md), Windows/device/матч и остальные режимы |
 | R03 — загрузка DAT целиком | Режимы декодера, все исходные Object/BG/Stage, Frame/аллокации, совместный parent/children; scanf MSVCR80 .6195 | Общие loaders соединены в OriginalLoadedCatalog, shared checksum/sound/bitmap; практика ещё использует импорт | D полного исходного каталога при text/a5 и raw/00, чередования, Frame/heap, integer CRT | Полные CRT/file I/O, Windows startup, владение ресурсами и подключение к матчу |
 | R04 — ввод, комбо и переходы | Local/remote/playback input/control, hotkeys; весь Actor413080 и caller400/401/500/501 | Общий raw input,9 комбо, DAT-переходы, движение/атаки и стоимость; собственный World далее через физику до41eed1, Practice ещё не заменена | D606 local/1452 received/5986 control cases;14 624 префикса и31 171 [целого управления](research/ACTOR_CONTROL.md);1491 [World](research/WORLD_CONTROL.md) и оба собственных запуска | Оставшиеся стадии полного такта; расширять непрерывные игровые последовательности |
-| R05 — состояния, движение, планировщик | Целые413080/40e490/40d960, physics caller и post-draw префикс41f550..41fb0b | Общие управление/физика/планировщик и префикс одного слота; собственный World ещё до41f550 | D55 433 [Actor physics](research/ACTOR_PHYSICS.md),515 World physics,6084 [scheduler](research/ACTOR_SCHEDULER.md) и897 [post-draw](research/POSTDRAW_SLOT_PREFIX.md) calls | Остальной post-draw caller/полный такт, непрерывные DAT-последовательности, Windows и оставшиеся числовые границы |
-| R06 — реестр объектов, создание и удаление | Общий каталог/400-slot pool, constructor, общий opoint; physics spawn998, item caller и частицы9996 | Реестр из DAT, physics lifecycle/998, item RNG146..154, частицы217/218 и общий opoint со spread/hold/vrest/alias | D loaders, preparation, [World physics](research/WORLD_PHYSICS.md),150 [hit/item](research/WORLD_HITS.md),897 [префиксов](research/POSTDRAW_SLOT_PREFIX.md) и1991 [opoint/lifetime](research/POSTDRAW_OPOINT.md) вызовов | Weapon/late creation и прочие входы удаления, происхождение caller scratch, соединение всего live-slot обхода с собственным полным тактом |
+| R05 — состояния, движение, планировщик | Целые413080/40e490/40d960, physics caller и полный post-draw41f550..4214cf | Общие управление/физика/планировщик и live-slot lifecycle; собственный World ещё до41f550 | D55 433 [Actor physics](research/ACTOR_PHYSICS.md),515 World physics,6084 [scheduler](research/ACTOR_SCHEDULER.md) и5432 [lifecycle](research/POSTDRAW_LIFECYCLE.md) calls | Подключение полного обхода, остаток такта с4214d5, непрерывные DAT-последовательности, Windows и числовые границы |
+| R06 — реестр объектов, создание и удаление | Общий каталог/400-slot pool, constructor, opoint, physics/item spawn и весь post-draw lifecycle | Общие DAT создания, opoint со spread/hold/vrest/alias, оружейные фрагменты, команды и поздние эффекты в живом порядке слотов | D loaders/preparation, [World physics](research/WORLD_PHYSICS.md),150 [hit/item](research/WORLD_HITS.md),1991 [opoint](research/POSTDRAW_OPOINT.md) и5432 [lifecycle](research/POSTDRAW_LIFECYCLE.md) calls, в том числе921 полный loop | Происхождение caller scratch и подключение live-slot обхода к собственному такту; последующие стадии с4214d5 и естественные DAT-последовательности |
 | R07 — сбор контактов | Весь419380 и417200/417400/4171c0; caller44d05c и fusion tail4064d0 | Общие raw ITR/BDY, кадры70/78/7c, команды/владельцы, приоритеты, signed arest/vrest, nearest/multiple buffers | D7925 [controlled cases](research/WORLD_CONTACTS.md) и обе собственные цепочки до41eefb; полный pool/маски/globals/RNG; последующие hits/items описаны в R08 | Все естественные DAT-последовательности, весь такт и Windows; доля достигнутых инструкций не доказывает эти области |
 | R08 — урон, реакции, эффекты | Вся42e100..431b64 и caller41eefb..41f2ac; raw/copied ITR, guard, damage/fall, типы/ID, отражение и искры | Общий DAT hit dispatch: kinds0/1/2/3/4/5/6/7/8/9/10/11/14/15/16, исходные no-op значения, live heap и отдельные CRT/game RNG | D7845 [controlled cases](research/WORLD_HITS.md), включая150 whole caller cases, и обе собственные цепочки до41f2ac; первый own проход без попаданий | Непрерывные DAT-последовательности и весь матч, остальные стадии такта, Windows numeric/output; full-pool caller scratch и fault-domain отдельно |
 | R09 — захваты, оружие, связанные объекты | Целая417f80, hit-side catch/pickup/force42e100, целые418c30/4187b0 и caller41f2ac..41f484 | Общие DAT wpoint/cpoint: действия в захвате, урон/подмена/бросок, размещение, cleanup и второй417f80; собственная цепочка до41f484 | D3018 [WorldLinks](research/WORLD_LINKS.md),7845 [WorldHits](research/WORLD_HITS.md),2681 [WorldCPoints](research/WORLD_CPOINTS.md) и обе собственные цепочки; DAT surveys отдельно | Непрерывные DAT-связки,41 out-of-array weaponact и sourceID419/frame49 undefined throwvz/достижимость, caller scratch provenance, оставшийся полный такт и W |

@@ -156,12 +156,12 @@ or device comparison is implied. Python compilation, local research links and
 diff checks passed. Source and all SwiftPM processes were terminal before the
 milestone commit.
 
-Next implement the alternative4203b4..420e93 weapon destruction/creation path,
-then the common420e93..4213a9 late creation/deletion path. Preserve each returned
-continuation and complete all actions for this slot before advancing EDI. Then
-join the entire41f550..4214cf loop to its initialized parent and continue the
-first actual full tick. Early lifetime handling in this study does not recover
-all other incoming register contexts at4213a9.
+The following [complete lifecycle study](POSTDRAW_LIFECYCLE.md) implements
+the alternative4203b4..420e93, common420e93..4213a9 and live slot advance.
+It continues all1,991 declared opoint inputs through their remaining consumer,
+and all897 prefix inputs through the whole loop, using no expected after-state.
+Next join the entire41f550..4214cf loop to its initialized parent and continue
+from4214d5 toward the first actual full tick return.
 
 The own initialized chain remains at41f550/SP1000e9bc, before its first tick
 returns. The new core is still separate from Practice. Full match/application

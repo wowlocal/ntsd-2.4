@@ -3,8 +3,37 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: the ENTIRE interleaved400-slot41f550..4214cf loop.
-Read [POSTDRAW_OPOINT](docs/research/POSTDRAW_OPOINT.md).**
+**Current priority: connect the COMPLETE post-draw loop to the initialized
+own parent at41f550/SP1000e9bc, then continue from4214d5 toward tick return.
+Read [POSTDRAW_LIFECYCLE](docs/research/POSTDRAW_LIFECYCLE.md).**
+OriginalPostDrawLifecycle composes prefix/scheduler/opoint/early lifetime with
+weapon fragments, team commands, death/fire effects and live slot advance.
+5432 controlled original calls atCW027f match full400Actor/World bytes+masks,
+globalsSHA, six retained caller words and25638 ordered events.921 are entire
+live-slot loops;4511 start after scheduling. All897 prefix/1991 opoint declared
+inputs are freshly continued; old expected after-state is never injected.
+6360 constructors/18116 RNG/974 catalog sounds/188 builtin sounds;71283 helper
+returns.1885/1892 loop PCs execute: missing3 negative-count adjustment and4
+alignment instructions. Helper coverage is separate; allbranches notclaimed.
+Weapon/fire lookup misses consume retainedObject+6c/+50; optional nil errors
+only at dereference. Fullpool retains values. Death/command lookup miss skips.
+Scratch also retains fireSlot+44/deathSlot+5c/weaponSlot+60/particleObject+70;
+these are stage-boundary values, not a complete caller-stack model.
+New source observer labels nested scheduler sounds by its SAVED callerEDI;
+40d960 itself reuses EDI. Pool/masks/globals/scratch already matched at the
+old unpublished metadata-only failure; full source rerun verifies correction.
+Atomic World/Actors/globals/scratch rollback tested after earlier slot updates
+and second constructor; callers buffer effects until whole tick commit.
+Initialized own chain is STILL41f550; no app/fulltick/fullmatch/Windows claim.
+Acceptance9release tests10.454s/build127.58s passed before1lossless fixture;
+159old fixtures unchanged,160pins in build/research/postdraw-lifecycle-fixture-pins.json.
+Final packaged3tests8.156s/build129.66s passed. IndependentfullJSON/SHA/length
+checks verify raw12872805/packed410044bytes. NTSDNative linked; allsource/
+SwiftPM jobs terminal beforecommit. NEXT connect original own state, not the
+controlled inputs. Read the study for scratch/numeric/Windows limitations.
+
+The preceding opoint milestone:
+Read [POSTDRAW_OPOINT](docs/research/POSTDRAW_OPOINT.md).
 OriginalPostDrawOpoint now implements whole41fb0b..4203b4 and its EARLY lifetime
 paths4213a9..4214c6.1991 controlled original calls atCW027f match full400Actor/
 World bytes+masks/globalsSHA,2291 constructors and exact continuation. An
@@ -25,7 +54,8 @@ Acceptance6release tests2.274s/build127.35s passed before1losslessfixture;
 158oldfixtures unchanged,159pins in build/research/postdraw-opoint-fixture-pins.json.
 Finalpackaged3tests1.573s/build127.12s passed. CompleteJSON/SHA/lengths verified:
 raw2452941/packed111787bytes. NTSDNative linked; source/allSwiftPM jobs terminal.
-NEXT4203b4..420e93 weapon destruction/creation ALTERNATIVE, then420e93..4213a9
+The following milestone above implements4203b4..420e93 weapon creation, then420e93..4213a9.
+Historical next step:4203b4..420e93 weapon destruction/creation ALTERNATIVE, then420e93..4213a9
 common latecreation/deletion and originalEDI advance. Early deletion above does
 not establish other incomingregistercontexts at4213a9. Join entirelive-slot loop
 before extending own initialized chain, which STILL ends41f550/SP1000e9bc.
