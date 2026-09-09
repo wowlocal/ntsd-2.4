@@ -13,8 +13,9 @@ enum GameplayResultRecordingReference {
         let fpcw: UInt16, fpswBefore: UInt16, fpswAfter: UInt16, fptagBefore: UInt16, fptagAfter: UInt16
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Gameplay result recording: "+text) }
+    @discardableResult
     static func compare(_ section: MatchLaunchReference.Control.Section, state: inout OriginalMatchPreparation,
-                        context: inout OriginalInputControlContext, round: OriginalMatchRoundResult) throws {
+                        context: inout OriginalInputControlContext, round: OriginalMatchRoundResult) throws -> OriginalResultRecording.Continuation {
         guard let input = section.resultRecording, section.label == "result-recording",
               section.end.pc == 0x422944, section.end.sp == 0x1000e9bc,
               section.helpers.isEmpty, section.checkpoints.isEmpty, section.readsBeforeWrites.isEmpty,
@@ -36,5 +37,6 @@ enum GameplayResultRecordingReference {
             open: { _ in throw error("Unexpected own recording open") }, write: { _ in throw error("Unexpected own recording write") },
             close: { throw error("Unexpected own recording close") }, observe: { _ in throw error("Unexpected own recording event") })
         guard result.continuation.rawValue == section.end.pc, result.writer == nil else { throw error("Own continuation") }
+        return result.continuation
     }
 }

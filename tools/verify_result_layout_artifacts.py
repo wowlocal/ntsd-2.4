@@ -10,10 +10,14 @@ from verify_result_tail_artifacts import ROOT, FIXTURES, digest
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--controlled-only',action='store_true');args=parser.parse_args()
     names=['result-layout'] if args.controlled_only else ['result-layout','gameplay-result-layout','gameplay-result-layout-control']
-    old=json.loads((ROOT/'build/research/queued-sound-fixture-pins.json').read_bytes())
+    # Controlled output was independently published while the two initialized
+    # layout sources ran. Its accepted184-pin baseline must survive this join.
+    baseline='queued-sound-fixture-pins.json' if args.controlled_only else 'gameplay-output-fixture-pins.json'
+    old=json.loads((ROOT/'build/research'/baseline).read_bytes())
     current=json.loads((ROOT/'build/research'/('result-layout-fixture-pins.json' if args.controlled_only else 'gameplay-result-layout-fixture-pins.json')).read_bytes())
     actual={p.name:digest(p.read_bytes()) for p in FIXTURES.glob('*.json')}
-    assert len(old)==182 and len(current)==182+len(names)
+    assert len(old)==(182 if args.controlled_only else 184)
+    assert len(current)==(183 if args.controlled_only else 186)
     assert all(actual[k]==v for k,v in current.items()) and all(actual[k]==v for k,v in old.items())
     checks=[]
     for name in names:
@@ -38,7 +42,7 @@ def main():
         completeArtifactChecks=checks,windowsVerified=False)
     path=ROOT/'build/research'/('result-layout-controlled-artifact-verification.json' if args.controlled_only else 'result-layout-artifact-verification.json')
     path.write_text(json.dumps(report,indent=2)+'\n')
-    print('All182 old and',len(current),'milestone pins verified;10 vendor hashes unchanged',flush=True)
+    print('All',len(old),'old and',len(current),'milestone pins verified;10 vendor hashes unchanged',flush=True)
 
 
 if __name__=='__main__':main()

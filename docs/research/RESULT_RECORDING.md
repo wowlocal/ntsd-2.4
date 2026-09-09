@@ -111,7 +111,8 @@ Evidence is [result-recording.json](../evidence/result-recording.json).
 
 Whole result layout422218..422944 and its indicator caller are now compared in
 [RESULT_LAYOUT](RESULT_LAYOUT.md):599 normal matches and one explicit source-fault
-rejection. Its own continuations are still in progress. The static audit in
+rejection. Both own continuations now match through422994 in
+[GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md). The static audit in
 [RESULT_LAYOUT_PLAN](RESULT_LAYOUT_PLAN.md) corrects4222ce to
 rootSP4c;422673 still consumes the retained round result. The bitmap-font,
 mode-label, playback-info and queued-sound helpers now have their own comparisons,

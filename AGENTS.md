@@ -48,14 +48,36 @@ false positives will not occur.
 
 ## Current research status
 
-**Current priority: finish BOTH initialized result-layout continuations, then
-join their own output/sound state and actual422ab8/ret4.** Read
+**Current priority: BOTH initialized output/sound continuations and actual422ab8/ret4.** Read
+[GAMEPLAY_RESULT_LAYOUT](docs/research/GAMEPLAY_RESULT_LAYOUT.md),
 [GAMEPLAY_OUTPUT](docs/research/GAMEPLAY_OUTPUT.md),
 [RESULT_LAYOUT](docs/research/RESULT_LAYOUT.md),
 [RESULT_RECORDING](docs/research/RESULT_RECORDING.md),
 [GAMEPLAY_RESULT_RECORDING](docs/research/GAMEPLAY_RESULT_RECORDING.md),
 [RESULT_LAYOUT_PLAN](docs/research/RESULT_LAYOUT_PLAN.md) and
 [TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
+
+BOTH fresh initialized chains now match through422994/SP1000e9bc. Each compares
+545197records/877520166bytes+masks,536/544helpers,65state/1606FPU checkpoints.
+The whole GAMEPLAY_RESULT_RECORDING parent reproduces; complete before/after
+state is identical. Only422944/42294b execute, followed by the unexecuted422994
+stop. No new helper/event/undefined read, no access to root34..6b or44c..5c3.
+CW023f/FPSW4000/tagffff and all1605parent FPU checkpoints survive. Native uses
+the actual recorder continuation and own retained round result. Formatter
+backing and indicator target remain nil; no expected stack word is imported.
+Source70983/12479 are terminal exit0; neither restarted. Raw native2tests pass
+42.459s/build162.43s. A stale183-count publication assertion first stopped after
+source verification because concurrent accepted output had added fixture184;
+all183prior pins were unchanged. Acceptance now preserves the184-pin baseline.
+Two own fixtures bring184old unchanged pins to186current. Independent fullraw/
+packedbytes/JSON/SHA/all6084 controlled+own blobs and10vendor hashes verify.
+Own raw9250044/9266358,packed1278715/1289563bytes. NTSDNative linked; no app window,
+Windows or device evidence. The real output/return join remains open;422994 is
+not a tick return. Track verification in build/research/result-layout-work.json.
+Final packaged4release tests pass44.987s/build0.25s without raw overrides: both
+own joins42.452s,599-match/1-rejection layout2.115s and170controlled output0.419s.
+All layout source/SwiftPM jobs are terminal. The concurrent own-output/return
+work is separate and must retain its live processes and uncommitted files.
 
 Controlled OriginalGameplayOutput now matches170 whole original output/returns:
 119700ordered events,10968Blts,109VC80formats,4505COMmethods,816queue writes and
@@ -70,8 +92,8 @@ compares complete globals/defined masks and ordered events, not private stack
 or a separate overlay store trace. All183prior pins unchanged;184at publication;
 fullraw17815852/packed1823384bytes,JSON/SHA/all292blobs verified. Raw release
 test0.454s/build169.37s; packaged0.420s/build0.28s; NTSDNative linked, no app/device
-or Windows check. Own output jobs are terminal; separate existing initialized
-layout source PIDs73470/73471 were confirmed live and left undisturbed. Read
+or Windows check. Controlled output jobs are terminal; separate initialized
+layout source PIDs73470/73471 were left undisturbed and have since completed above. Read
 build/research/gameplay-output-work.json. Commit9784426 preserves this controlled
 milestone; own initialized return/fullmatch/app/cleanMac and full goal stay open.
 
@@ -97,11 +119,9 @@ both retained own result chains42.624s. Their full prior records/FPU reproduce.
 Source setup first collided with the base harness arena and was moved. The first
 full source stopped at the malformed author pointer guard; after terminal status,
 580 atomic cases were retained unchanged and the actual unmapped read recorded.
-No live source was restarted. Both new own source captures70983/12479 are still
-running; do not call them accepted or restart them. Own reference join is added
-but not yet compared. Accepted own boundary remains422944/SP1000e9bc. See
-build/research/result-layout-work.json for current jobs. Separate concurrent
-gameplay-output WIP files are outside this layout milestone's owned changes.
+No live source was restarted. Both own captures and their joins are now accepted
+above; the own boundary is422994/SP1000e9bc. Controlled output was independently
+committed9784426/872964f during this work and remains preserved.
 
 The preceding accepted result-recording/output-helper milestone:
 

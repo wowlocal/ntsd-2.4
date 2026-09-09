@@ -5,7 +5,7 @@ linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The static inventories themselves add no dynamic or native equivalence claim.
 Completed dependencies are linked separately. The accepted own chain ends
-before422944, as documented in [GAMEPLAY_RESULT_RECORDING](GAMEPLAY_RESULT_RECORDING.md).
+before422994, as documented in [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md).
 
 The old shorthand421a2d..422994 does not reach the match return. At422994 the
 original still calls mode-label rendering, notices/volume, surface presentation
@@ -90,8 +90,10 @@ after pending arguments:4222ce writes root4c and422673 still reads root64.
 audit, table/indicator rules and the mutable-string bitmap-font dependency.
 [RESULT_LAYOUT](RESULT_LAYOUT.md) now implements both caller entries with599
 whole native matches and one explicit corrupted-author bitmap fault rejection.
-All537 table/indicator instruction starts execute. Its two fresh own joins are
-still being captured; the accepted initialized boundary remains422944.
+All537 table/indicator instruction starts execute. Its two fresh own joins now
+match in [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md): complete before/after
+states remain identical, the native recorder's own continuation is preserved,
+and formatter/target backing stays nil. The accepted initialized boundary is422994.
 
 421cdc increments450bbc when signed450bdc<100. Unsigned(450bdc-101)>248 skips
 the result block. At450bdc==101, result recording additionally requires450be4

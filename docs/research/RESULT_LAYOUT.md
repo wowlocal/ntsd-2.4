@@ -106,7 +106,8 @@ Acceptance passes2.239s/build155.60s before publication. The packed fixture has
 with183 current. [verify_result_layout_artifacts.py](../../tools/verify_result_layout_artifacts.py)
 independently verifies full raw/packed byte identity, complete JSON, every SHA and
 length, all571 blobs and ten unchanged vendor hashes. Both fresh initialized
-continuations are still running and are not yet accepted.
+continuations are now accepted in [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md),
+bringing the pin set to186 including the independently accepted output fixture.
 Packaged regression after adding the optional own-reference continuation passes
 all3release tests in44.722s/build157.73s, without raw overrides: this controlled
 corpus2.098s and both retained initialized result-recording chains42.624s.

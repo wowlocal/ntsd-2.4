@@ -65,8 +65,9 @@ Reports are [primary](../evidence/gameplay-result-recording.json) and
 and their raw acceptance SwiftPM processes are terminal.
 
 The complete controlled [result-layout/indicator consumer](RESULT_LAYOUT.md) is
-now compared. Its own continuations are in progress; join without inventing the
-retained SP68 surface when its branch is enabled. Then compose the proven mode,
+now compared. Both [own continuations](GAMEPLAY_RESULT_LAYOUT.md) now match
+through422994, preserving nil SP68/formatter backing on the unused path. Enabled
+branches still require their own backing provenance. Next compose the proven mode,
 notice/presentation and enabled sound helpers in original order through the true
 function return. Native app/full tick/full match, Windows/device/clean-Mac checks
 and the full game goal remain open.

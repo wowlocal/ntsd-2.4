@@ -1,0 +1,37 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh initialized result-recording parent -> whole result-layout continuation.\n\nThe original recorder chose422944. Continue from that own state without flags,\nstack words or recording injection. Trace actual access to the retained target\nand formatting region; unavailable native backing must remain unavailable when\nunused. Pinned EXE/VC80 research on one emulated CPU, not a returned tick, real\nplatform drawing, device output or Windows execution.\n",
+  "corpus": "gameplay-result-layout.json",
+  "sha256": "6a463e2ad49b9161106b85b3d3d46a1c6c75e0f3f63ea6cb56f8de0337714a13",
+  "bytes": 9250044,
+  "parent": {
+    "fixture": "original-gameplay-result-recording.json",
+    "sha256": "4eb6c300d097caa0976672fea3421669d70a47fcf7e94929da7b0ce3dacf6f9e"
+  },
+  "helpers": 0,
+  "instructions": 3,
+  "end": {
+    "pc": 4336020,
+    "sp": 268495292
+  },
+  "readsBeforeWrites": [],
+  "localAccesses": [],
+  "fpuCheckpoints": 1606,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "parentSHA256": "c7073549179bb96a876ae1938d1b68f3a40b63f09ffb0d03328aec381d06e726",
+  "executedOriginalInstructions": 2,
+  "observedUnexecutedTerminal": 4336020,
+  "completeBeforeAfterStateIdentical": true,
+  "nativeUsesOwnRecorderContinuation": true,
+  "nativeCallerFormatBackingUnavailable": true,
+  "nativeIndicatorTargetUnavailable": true,
+  "sourceStackBytesImportedToNative": false,
+  "firstTickReturned": false,
+  "pixelsCompared": false,
+  "fixture": "original-gameplay-result-layout.json",
+  "fixtureSHA256": "46dadb7f012dc872cfba1154fba96ade055679753f0e89fc5c11d5116b21bf59",
+  "fixtureBytes": 1278715
+}
