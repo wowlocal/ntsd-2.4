@@ -13,6 +13,17 @@ the full tick. Preserve historical declared contracts; do not rewrite expected
 fixtures or use tolerances to hide differences. Precision53 still has x87's
 extended exponent range, so replacing OriginalExtended with Double is not enough.
 
+The first [arithmetic correction](docs/research/ARITHMETIC_PRECISION.md) now adds
+explicit24/53/64-bit precision and compares54,201 original arithmetic sequences,
+55,433 whole Actor-physics calls at53 bits and3,090 whole impulse pools at three
+precisions. All match exactly;53-bit results differ from historical64 in168
+physics controls and22 impulse pools. Context is carried by match state to
+physics/hits/links/impulses, but hits/links have only their old64-bit regression
+here. Historical defaults remain64; own source chains still inheritCW0. NEXT:
+initialize a NEW own chain with actual445a31/CRT and revalidate its independent
+native state, then audit remaining direct arithmetic/conversions and whole
+consumers. No full startup, Windows, app integration or full tick claim.
+
 ## Authoritative reference
 
 - Use **only the original Windows NTSD distribution** as the behavioral reference.

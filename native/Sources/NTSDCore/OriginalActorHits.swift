@@ -26,7 +26,7 @@ public enum OriginalActorHits {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Hit Frame binding") }
                 return catalog.objects[n].frameStorage[Int(f)]
-            },sse2: sse2)
+            },sse2: sse2,precision: state.arithmeticPrecision)
     }
     static func publish(_ pass: OriginalHitPass,state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom) {
         state.world = pass.world;state.actors = pass.actors;state.globals = pass.globals
@@ -44,6 +44,7 @@ struct OriginalHitPass {
     let header: (Int) throws -> OriginalStateRecord
     let frame: (Int,Int32) throws -> OriginalStateRecord
     let sse2: Bool
+    var precision: OriginalArithmeticPrecision = .bits64
     var itrWords: [Int32] = []
     var itrPointer: UInt32?
 
@@ -54,7 +55,7 @@ struct OriginalHitPass {
     }
     func i(_ a: Int,_ o: Int) throws -> Int32 { try actors[a].integer(at: o,as: Int32.self) }
     func b(_ a: Int,_ o: Int) throws -> UInt8 { try actors[a].integer(at: o,as: UInt8.self) }
-    func v(_ a: Int,_ o: Int) throws -> OriginalExtended { try OriginalExtended(actors[a].binary64(at: o)) }
+    func v(_ a: Int,_ o: Int) throws -> OriginalExtended { try OriginalExtended(actors[a].binary64(at: o),precision: precision) }
     func object(_ a: Int) throws -> Int { Int(try actors[a].integer(at: 0x368,as: UInt32.self)) }
     func h(_ a: Int,_ o: Int) throws -> Int32 { try header(object(a)).integer(at: o,as: Int32.self) }
     func f(_ a: Int,_ o: Int,_ at: Int = 0x70) throws -> Int32 { try frame(object(a),i(a,at)).integer(at: o,as: Int32.self) }
@@ -72,7 +73,7 @@ struct OriginalHitPass {
     mutating func store(_ a: Int,_ o: Int,_ value: OriginalExtended) throws { try actors[a].writeBinary64(value.double,at: o) }
     mutating func number(_ a: Int,_ o: Int,_ value: Double) throws { try actors[a].writeBinary64(value,at: o) }
     mutating func add(_ a: Int,_ o: Int,_ value: Int32) throws { try put(a,o,i(a,o) &+ value) }
-    func constant(_ value: Double) throws -> OriginalExtended { try OriginalExtended(value) }
+    func constant(_ value: Double) throws -> OriginalExtended { try OriginalExtended(value,precision: precision) }
     func find(_ id: Int32) throws -> Int? {
         if objectCount > 0 { for n in 0..<Int(objectCount) where try header(n).integer(at: 0x6f4,as: Int32.self) == id { return n } };return nil
     }

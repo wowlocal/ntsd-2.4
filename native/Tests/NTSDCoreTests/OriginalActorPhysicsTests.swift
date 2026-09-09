@@ -47,6 +47,25 @@ final class OriginalActorPhysicsTests: XCTestCase {
         let result = try LoadedCatalogReference.compare(data,onLoaded: { catalog in try self.compare(c,objects: catalog.objects) })
         XCTAssertEqual(result.objects,137)
     }
+    func testWholePhysicsAtStartupPrecision() throws {
+        let data = try precisionFixture("actor-physics53")
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 256_000_000))
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x27f);XCTAssertEqual(c.cases.count,9344)
+        try compare(c)
+    }
+    func testCompleteCatalogAtStartupPrecision() throws {
+        let data = try precisionFixture("actor-physics53-catalog")
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 256_000_000))
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x27f);XCTAssertEqual(c.cases.count,46089)
+        let parent = try XCTUnwrap(c.parent),url = try XCTUnwrap(Bundle.module.url(forResource: parent.fixture,withExtension: nil,subdirectory: "Fixtures"))
+        let source = try Data(contentsOf: url);XCTAssertEqual(MatchPreparationReference.digest(source),parent.sha256)
+        let result = try LoadedCatalogReference.compare(source,onLoaded: { catalog in try self.compare(c,objects: catalog.objects) })
+        XCTAssertEqual(result.objects,137)
+    }
+    private func precisionFixture(_ name: String) throws -> Data {
+        if let directory = ProcessInfo.processInfo.environment["NTSD_PRECISION_DIRECTORY"] { return try Data(contentsOf: URL(fileURLWithPath: directory).appendingPathComponent(name+".json")) }
+        return try Data(contentsOf: XCTUnwrap(Bundle.module.url(forResource: "original-"+name,withExtension: "json",subdirectory: "Fixtures")))
+    }
     private func compare(_ c: Corpus,objects: [OriginalLoadedObject]? = nil) throws {
         func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
         var headerBase = try defined(0x7a4)
@@ -75,9 +94,9 @@ final class OriginalActorPhysicsTests: XCTestCase {
             }
             if let index = item.objectIndex {
                 let loaded = try XCTUnwrap(objects);XCTAssertTrue(item.header?.isEmpty != false && item.frames?.isEmpty != false)
-                try OriginalActorPhysics.apply(actor: &actor,object: loaded[index],globals: &globals,sse2Conversion: item.sse2 == 1,observe: observe)
+                try OriginalActorPhysics.apply(actor: &actor,object: loaded[index],globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),observe: observe)
             } else {
-                try OriginalActorPhysics.apply(actor: &actor,header: header,globals: &globals,sse2Conversion: item.sse2 == 1,frame: { ownFrames[Int($0)] },observe: observe)
+                try OriginalActorPhysics.apply(actor: &actor,header: header,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),frame: { ownFrames[Int($0)] },observe: observe)
             }
             let expected = try hex(item.after),mask = try hex(item.defined).map { $0 != 0 }
             if actor.bytes != expected || actor.defined != mask {

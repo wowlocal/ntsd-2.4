@@ -58,11 +58,16 @@ For pending binary64 bits3ffc111680d7849f and count789644137:
 | Actual EXE startup helper /53-bit | 3e3315113574ea8d |
 | Historical CW037f /64-bit | 3e3315113574ea8c |
 
-The existing `OriginalExtended` reproduces the third value in its declared
-domain. It does not yet implement the startup-selected53-bit contract. These
+At the time of this audit, `OriginalExtended` reproduced the third value in its
+declared domain and did not implement the startup-selected53-bit contract. These
 differences cannot be repaired with a comparison tolerance or by changing
 expected fixtures. x87 still has its extended exponent range at53-bit precision;
 replacing every operation with host `Double` would introduce premature overflow.
+
+The follow-up [ARITHMETIC_PRECISION](ARITHMETIC_PRECISION.md) now implements
+explicit24/53/64-bit native arithmetic and compares53-bit whole Actor physics
+and impulses. Its new evidence is separate from this historical audit. The
+initialized own chain and Windows/thread/device provenance remain open.
 
 ## Own-capture limitation
 
@@ -94,5 +99,6 @@ Reproduce with `uv run --script tools/oracle_fpu_precision.py` after generating
 and accepting the World-impulse corpus. The [report](../evidence/fpu-precision.json)
 retains raw hash, original initializer pointers, control transitions, counts and
 the pinned native64-bit reference. `native53Compared` and `windowsVerified` are
-explicitly false. This is a verified discrepancy and research priority, not a
-completed numerical correction or proof of hardware exception behavior.
+explicitly false in this historical report. The new arithmetic acceptance is
+recorded separately; full numerical correction and hardware exception behavior
+are still not established.

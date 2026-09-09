@@ -4,15 +4,15 @@ public struct OriginalWorldImpulseWrite: Equatable {
 }
 
 /// Whole4196f0..419798. No Object, frame, type, ID or RNG dependency.
-/// Arithmetic reproduces CW037f values; process-wide x87 exception flags are
+/// Arithmetic has explicit precision (historical default CW037f); process-wide x87 exception flags are
 /// not native game state. Observers must be buffered by the enclosing tick.
 public enum OriginalWorldImpulses {
     public static func apply(state: inout OriginalMatchPreparation,
                              observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
-        try apply(world: state.world,actors: &state.actors,observe: observe)
+        try apply(world: state.world,actors: &state.actors,precision: state.arithmeticPrecision,observe: observe)
     }
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],
-                      observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
+                      precision: OriginalArithmeticPrecision = .bits64,observe: (OriginalWorldImpulseWrite) throws -> Void = { _ in }) throws {
         var pool = actors
         func index(_ slot: Int) throws -> Int {
             let value = Int(try world.integer(at: 0x194+4*slot,as: UInt32.self))
@@ -32,7 +32,7 @@ public enum OriginalWorldImpulses {
                 for offset in [0x28,0x30,0x38] {
                     let a = try index(slot),count = try pool[a].integer(at: 0x20,as: Int32.self)
                     let bits = try pool[a].integer(at: offset,as: UInt64.self)
-                    try put(slot,offset+0x18,scaled(bits,divisor: count &+ 1))
+                    try put(slot,offset+0x18,scaled(bits,divisor: count &+ 1,precision: precision))
                 }
                 try put(slot,0x20,0,4)
             }
@@ -40,7 +40,7 @@ public enum OriginalWorldImpulses {
         }
         actors = pool
     }
-    private static func scaled(_ bits: UInt64,divisor: Int32) throws -> UInt64 {
+    private static func scaled(_ bits: UInt64,divisor: Int32,precision: OriginalArithmeticPrecision) throws -> UInt64 {
         let magnitude = bits & 0x7fffffffffffffff
         // FLD quiets signaling NaNs; their sign/payload survives positive2 and
         // integer division, including a negative or zero divisor.
@@ -50,6 +50,6 @@ public enum OriginalWorldImpulses {
         }
         if magnitude == 0x7ff0000000000000 { return divisor < 0 ? bits ^ 0x8000000000000000 : bits }
         // Do not round/overflow the multiply in binary64 before dividing.
-        return try ((OriginalExtended(Double(bitPattern: bits))*OriginalExtended(2))/OriginalExtended(Double(divisor))).double.bitPattern
+        return try ((OriginalExtended(Double(bitPattern: bits),precision: precision)*OriginalExtended(2,precision: precision))/OriginalExtended(Double(divisor),precision: precision)).double.bitPattern
     }
 }

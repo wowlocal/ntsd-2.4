@@ -1,0 +1,23 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole4196f0 under explicit CW007f/027f/037f on all1030 declared controls.\nOriginal instructions and full pools/masks/writes. The64-bit slice reproduces\nthe accepted historical corpus exactly; other slices change only CPU precision.\n",
+  "corpus": "impulse-precision.json",
+  "sha256": "52774e39d6b4fcbb3ede15879263966ede5b4108b42ad576f9f323d685dbc441",
+  "bytes": 3774338,
+  "cases": 3090,
+  "writes": 28155,
+  "changedPoolsFrom64": {
+    "127": 518,
+    "639": 22,
+    "895": 0
+  },
+  "historical": {
+    "fixture": "original-world-impulses.json",
+    "sha256": "5383fd5a596e3be47229b8229fd82b2ef731da7560556618c23a6654cecd211b"
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-impulse-precision.json",
+  "fixtureSHA256": "ba7faa8b233df3c0b9b56882656caf817972474f9a844648893df1475979e419",
+  "fixtureBytes": 301487
+}

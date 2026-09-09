@@ -12,7 +12,7 @@ public enum OriginalWorldPhysics {
                              afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
-        try apply(world: &state.world,actors: &state.actors,globals: &state.globals,objectCount: registry.integer(at: 0,as: Int32.self),header: { index in
+        try apply(world: &state.world,actors: &state.actors,globals: &state.globals,precision: state.arithmeticPrecision,objectCount: registry.integer(at: 0,as: Int32.self),header: { index in
             guard catalog.objects.indices.contains(index) else { throw error("Object binding") };return catalog.objects[index].header
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
@@ -21,7 +21,7 @@ public enum OriginalWorldPhysics {
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World physics: "+text) }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
-                      objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
+                      precision: OriginalArithmeticPrecision = .bits64,objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
                       afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         var ownedWorld = world,pool = actors,owned = globals
@@ -48,7 +48,7 @@ public enum OriginalWorldPhysics {
         for slot in 0..<400 where try active(slot) != 0 {
             let a = try index(slot),o = try object(a)
             var actor = pool[a]
-            try OriginalActorPhysics.apply(actor: &actor,header: header(o),globals: &owned,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) })
+            try OriginalActorPhysics.apply(actor: &actor,header: header(o),globals: &owned,precision: precision,frame: { try frame(o,$0) },observe: { try observe(.sound(slot: slot,event: $0)) })
             pool[a] = actor;try afterActorPhysics(slot,actor)
             if try state(a) == 9998 { try ownedWorld.write(UInt8(0),at: 4+slot) }
             if try state(a) == 14 && i(a,0x2fc) <= 0 && (i(a,0x2f4) >= 0 || i(a,0x364) == 5 || slot >= 20) && i(a,8) > 0 && i(a,8) < 5 {

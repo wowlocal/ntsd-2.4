@@ -10,7 +10,7 @@ public enum OriginalWorldLinks {
                              afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         let catalog = state.catalog,backgrounds = state.backgrounds
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0 else { throw error("Catalog binding") }
-        try apply(world: state.world,actors: &state.actors,globals: &state.globals,sse2Conversion: sse2Conversion,
+        try apply(world: state.world,actors: &state.actors,globals: &state.globals,sse2Conversion: sse2Conversion,precision: state.arithmeticPrecision,
             header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") };return catalog.objects[index].header
             },frame: { index,number in
@@ -22,7 +22,7 @@ public enum OriginalWorldLinks {
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World links: "+text) }
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
-                      sse2Conversion: Bool = false,header: (Int) throws -> OriginalStateRecord,
+                      sse2Conversion: Bool = false,precision: OriginalArithmeticPrecision = .bits64,header: (Int) throws -> OriginalStateRecord,
                       frame: (Int,Int32) throws -> OriginalStateRecord,background: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                       afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
@@ -39,6 +39,7 @@ public enum OriginalWorldLinks {
         func current(_ a: Int) throws -> OriginalStateRecord { try frame(object(a),i(a,0x70)) }
         func f(_ a: Int,_ offset: Int) throws -> Int32 { try current(a).integer(at: offset,as: Int32.self) }
         func put(_ a: Int,_ offset: Int,_ value: Int32) throws { try pool[a].write(value,at: offset) }
+        func constant(_ value: Double) throws -> OriginalExtended { try OriginalExtended(value,precision: precision) }
         func v(_ a: Int,_ offset: Int) throws -> Double { try pool[a].binary64(at: offset) }
         func store(_ a: Int,_ offset: Int,_ value: Double) throws { try pool[a].writeBinary64(value,at: offset) }
         func draw(_ slot: Int,_ stream: Int32,_ range: Int32) throws -> Int32 {
@@ -111,9 +112,9 @@ public enum OriginalWorldLinks {
             if try [12,10].contains(f(holder,8)) {
                 try put(holder,0x98,0);try put(a,0x98,0);try put(a,0x70,draw(slot,138,16))
                 if try i(holder,0x20) == 1 {
-                    try store(a,0x48,v(holder,0x30));try store(a,0x40,(OriginalExtended(v(holder,0x28))/OriginalExtended(3)).double)
+                    try store(a,0x48,v(holder,0x30));try store(a,0x40,(constant(v(holder,0x28))/constant(3)).double)
                 } else {
-                    try store(a,0x48,v(holder,0x48));try store(a,0x40,(OriginalExtended(v(holder,0x40))/OriginalExtended(3)).double)
+                    try store(a,0x48,v(holder,0x48));try store(a,0x40,(constant(v(holder,0x40))/constant(3)).double)
                 }
                 if try v(a,0x60) > -2 { try store(a,0x60,-2) }
             }
@@ -134,7 +135,7 @@ public enum OriginalWorldLinks {
             if try wp(0) == 3 {
                 try put(a,0x98,0);try put(holder,0x98,0);try put(a,0x70,draw(slot,140,6))
                 try store(a,0x40,Double(draw(slot,141,7) &- 3));try store(a,0x48,Double(0 &- draw(slot,142,4)))
-                try store(a,0x50,(OriginalExtended(Double(draw(slot,143,5) &- 2))/OriginalExtended(5)).double)
+                try store(a,0x50,(constant(Double(draw(slot,143,5) &- 2))/constant(5)).double)
             }
         }
         actors = pool;globals = owned

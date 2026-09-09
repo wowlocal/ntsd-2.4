@@ -13,6 +13,9 @@ public enum OriginalMatchPreparationEvent {
 public struct OriginalMatchPreparation {
     public static let globalBase = 0x44d000
     public static let globalSize = 0x458440 - globalBase
+    /// Explicit arithmetic context; historical fixtures default to CW037f precision.
+    /// Original startup selects53 bits; threading/Windows provenance is separate.
+    public var arithmeticPrecision: OriginalArithmeticPrecision
     public var world: OriginalStateRecord
     public var actors: [OriginalStateRecord]
     /// Supplied global state with explicit initialization provenance. This is
@@ -31,8 +34,9 @@ public struct OriginalMatchPreparation {
     var backgroundLoader: OriginalBackgroundLoader
 
     public init(catalog: OriginalLoadedCatalog, bootstrap: OriginalWorldBootstrap, globals: OriginalStateRecord,
-                interface: OriginalInitialInterfaceLoading = .init()) throws {
+                interface: OriginalInitialInterfaceLoading = .init(),arithmeticPrecision: OriginalArithmeticPrecision = .bits64) throws {
         guard globals.bytes.count == Self.globalSize else { throw Self.error("Global storage size") }
+        self.arithmeticPrecision = arithmeticPrecision
         self.catalog = catalog
         frameAllocations = catalog.frameAllocations
         world = bootstrap.world; actors = bootstrap.actors; self.globals = globals

@@ -14,6 +14,7 @@ final class OriginalWorldImpulsesTests: XCTestCase {
     }
     private struct Write: Decodable,Equatable { let slot: Int,actor: Int,offset: Int,bytes: String }
     private struct Case: Decodable {
+        let fpcw: UInt16?
         let label: String,fill: String,poolSHA256: String,maskSHA256: String,globalsSHA256: String
         let actors: [Actor]?,active: [[Int]]?,aliases: [[Int]]?,events: [Write]
     }
@@ -21,7 +22,7 @@ final class OriginalWorldImpulsesTests: XCTestCase {
         struct Case: Decodable { let inputs: [UInt8],bytes: [UInt8],result: Int }
         let dllSHA256: String,format: [UInt8],cases: [Case]
     }
-    private struct Corpus: Decodable { let exeSHA256: String,cases: [Case],fpcw: Int,instructions: [UInt32],formats: Formats }
+    private struct Corpus: Decodable { let exeSHA256: String,cases: [Case],fpcw: Int?,instructions: [UInt32],formats: Formats? }
     private func patch(_ record: inout OriginalStateRecord,_ p: Patch) throws {
         let bytes = Array(p.bytes.utf8)
         for i in stride(from: 0,to: bytes.count,by: 2) { try record.write(XCTUnwrap(UInt8(String(decoding: bytes[i..<i+2],as: UTF8.self),radix: 16)),at: p.offset+i/2) }
@@ -33,6 +34,17 @@ final class OriginalWorldImpulsesTests: XCTestCase {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 16_000_000))
         XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(c.fpcw,0x37f);XCTAssertEqual(c.cases.count,1030);XCTAssertEqual(c.instructions.count,58)
+        try compare(c)
+    }
+    func testAllThreeImpulsePrecisions() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_PRECISION_DIRECTORY"] { url = URL(fileURLWithPath: directory).appendingPathComponent("impulse-precision.json") }
+        else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-impulse-precision",withExtension: "json",subdirectory: "Fixtures")) }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 16_000_000))
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.cases.count,3090)
+        try compare(c)
+    }
+    private func compare(_ c: Corpus) throws {
         var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0xb440),defined: [Bool](repeating: true,count: 0xb440))
         try globals.write(Int32(1),at: 0x44d034-0x44d000)
         for i in 0..<3000 { try globals.write(UInt8(1+i%255),at: 0x44ff90-0x44d000+i) }
@@ -49,7 +61,7 @@ final class OriginalWorldImpulsesTests: XCTestCase {
             };try world.write(UInt32(0),at: 0x7d4)
             for a in item.actors ?? [] { for p in a.patches { try patch(&actors[a.index],p) } }
             var seen: [Write] = []
-            try OriginalWorldImpulses.apply(world: world,actors: &actors,observe: { w in
+            try OriginalWorldImpulses.apply(world: world,actors: &actors,precision: OriginalArithmeticPrecision(controlWord: item.fpcw ?? UInt16(c.fpcw ?? 0x37f)),observe: { w in
                 let bytes = (0..<w.size).map { String(format: "%02x",UInt8(truncatingIfNeeded: w.value >> (8*$0))) }.joined()
                 seen.append(.init(slot: w.slot,actor: w.actor,offset: w.offset,bytes: bytes))
             })
@@ -59,17 +71,19 @@ final class OriginalWorldImpulsesTests: XCTestCase {
             XCTAssertEqual(MatchPreparationReference.digest(Data(records.flatMap { $0.defined.map { $0 ? UInt8(1) : UInt8(0) } })),item.maskSHA256,item.label+" masks")
             XCTAssertEqual(globalsSHA,item.globalsSHA256,item.label+" globals")
         }
-        XCTAssertEqual(c.formats.dllSHA256,"c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
-        XCTAssertEqual(c.formats.format,OriginalPostDrawImpulses.format);XCTAssertEqual(c.formats.cases.count,256)
+        if let formats = c.formats {
+        XCTAssertEqual(formats.dllSHA256,"c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
+        XCTAssertEqual(formats.format,OriginalPostDrawImpulses.format);XCTAssertEqual(formats.cases.count,256)
         var world = try OriginalStateRecord.worldPrefix(over: [UInt8](repeating: 0xa5,count: 0x7d8))
         try world.write(UInt32(399),at: 0x1bc) // Inactive, aliased diagnostic slot10.
         var actors = [OriginalStateRecord](repeating: try .actor(over: [UInt8](repeating: 0xa5,count: 0x420)),count: 400)
-        for item in c.formats.cases {
+        for item in formats.cases {
             for (offset,value) in zip([0xc4,0xc5,0xc3,0xc2,0xbe,0xc0],item.inputs) { try actors[399].write(value,at: offset) }
             let text = try OriginalPostDrawImpulses.inputText(world: world,actors: actors)
             XCTAssertEqual(text,item.bytes);XCTAssertEqual(text.count,item.result)
         }
-        print("WORLD IMPULSES",c.cases.count,"whole pools",writes,"ordered writes",c.formats.cases.count,"CRT formats")
+        }
+        print("WORLD IMPULSES",c.cases.count,"whole pools",writes,"ordered writes")
     }
     func testFailureAfterVelocityWritesRollsBackPool() throws {
         let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)

@@ -1,0 +1,32 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Original x87 load/arithmetic/store instructions under24/53/64 precision.\nDeclared registers, operand records and phase boundaries; no synthetic opcodes\nor changed EXE constants. Sequences retain intermediates between operations.\nThis is arithmetic evidence, not whole gameplay or Windows FPU provenance.\n",
+  "corpus": "arithmetic-precision.json",
+  "sha256": "5c8bc2a582fed01142fa6152317c6327243add45f126316e36e9084c00c65ce7",
+  "bytes": 8886186,
+  "cases": 54201,
+  "groups": {
+    "add": 9072,
+    "subtract": 9072,
+    "multiply": 9072,
+    "divide": 8880,
+    "load": 96,
+    "multiply/add": 6000,
+    "add/subtract": 6000,
+    "multiply/divide": 6009
+  },
+  "instructions": [
+    4228133,
+    4252957,
+    4252960,
+    4252963,
+    4253014,
+    4298641,
+    4392894
+  ],
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-arithmetic-precision.json",
+  "fixtureSHA256": "898d20dc05c78298f4cf9df06042e6f9587ad9c3830280a9636d7c61766f20b7",
+  "fixtureBytes": 591159
+}

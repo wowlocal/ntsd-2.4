@@ -1,0 +1,36 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole40e490 under explicit CW027f, the precision selected by EXE startup.\nFresh declared controls or all original loaded Frames; no historical fixture\nrewrites. This is53-bit arithmetic revalidation, not a complete initialized\nWindows/thread/device or natural match capture.\n",
+  "corpus": "actor-physics53.json",
+  "sha256": "4f04e607734b3cc8d37e174358125fd20932865f07350a01be93a3c2db5f65cb",
+  "bytes": 43604708,
+  "fpcw": 639,
+  "cases": 9344,
+  "groups": {
+    "type-state": 4200,
+    "gravity": 150,
+    "friction": 60,
+    "blocking": 288,
+    "gates": 112,
+    "air-frames": 280,
+    "damage": 840,
+    "weapon": 288,
+    "landing": 96,
+    "conversion": 20,
+    "type3-depth": 8,
+    "changed-frame": 2,
+    "numeric": 3000
+  },
+  "instructions": 914,
+  "events": 804,
+  "changedFrom64": 168,
+  "historical": {
+    "fixture": "original-actor-physics.json",
+    "sha256": "1b9be74a53a5ece8f20763810eb49a9dee5ee90fbc3b22be8ca2cd217dcc50d2"
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-actor-physics53.json",
+  "fixtureSHA256": "8cdbcd707b044a4810137c9151f53da3371f67cc1b4fcecaeead5ac3337d69cf",
+  "fixtureBytes": 632284
+}

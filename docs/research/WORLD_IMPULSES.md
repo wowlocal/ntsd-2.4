@@ -168,8 +168,10 @@ NTSDNative compiled and linked; no app/device/Windows validation is implied.
 **The follow-up [FPU precision audit](FPU_PRECISION.md) changes the immediate
 priority:** original startup445a31 requests53-bit precision, and its actual
 DLL execution changes32 midpoint stores compared with the accepted64-bit
-arithmetic contract. Native53-bit arithmetic and initialized own chains need
-correction/revalidation before continuing to expand gameplay. Keep this corpus
+arithmetic contract. The separate [arithmetic correction](ARITHMETIC_PRECISION.md)
+now validates native24/53/64-bit arithmetic and all1030 impulse controls at each
+precision. Initialized own chains still need revalidation before expanding
+gameplay. Keep this corpus
 as an explicitly declared CW037f control, not a Windows-equivalence claim.
 
 The next source body is the complete400-slot loop `41f550..4214cf`, with
