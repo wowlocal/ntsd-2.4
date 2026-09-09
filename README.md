@@ -88,6 +88,12 @@ respawn, object creation and reversion:515 controlled cases and both own launch
 chains match through41eed1, preserving all resources/music/replay. Contacts,
 remaining tick stages, Windows comparison and application UI integration remain open.
 
+The [whole depth and held-object function](docs/research/WORLD_LINKS.md) now
+matches3,018 controlled cases and both own launch chains through41eed8.
+Generic wpoint placement, item consumption, throws and ordered RNG run on the
+shared400-slot pool. Source-ID exceptions and pointer aliases follow the EXE.
+Contact collection, further links and the rest of the full tick are next.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

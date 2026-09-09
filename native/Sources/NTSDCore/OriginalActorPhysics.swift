@@ -86,11 +86,7 @@ public enum OriginalActorPhysics {
                 else { try objectLanding(type: type,id: id,y: y) }
             }
             for (from,to) in [(0x58,0x10),(0x60,0x14),(0x68,0x18)] {
-                let value = try actor.binary64(at: from).rounded(.towardZero)
-                let result: Int32
-                if sse2Conversion { result = value >= -2147483648 && value < 2147483648 ? Int32(value) : .min }
-                else { result = value >= -9223372036854775808 && value < 9223372036854775808 ? Int32(truncatingIfNeeded: Int64(value)) : 0 }
-                try put(to,result)
+                try put(to,OriginalCoordinateConversion.integer(actor.binary64(at: from),sse2: sse2Conversion))
             }
             if try f(8) != 12 { try put(0x320,0) }
         }

@@ -1,0 +1,25 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole417f80..4187a3: depth clamping and held-object placement/use/throw.\nSynthetic400-slot pool, four declarative Objects/Frames and BG boundaries.\nReal function, RNG and ftol2; constructors retain their declared memset boundary.\nFull pool bytes/masks, globals hashes, ordered RNG events, CW037f.\n",
+  "corpus": "world-links.json",
+  "sha256": "545b872fa86eca4e0cb0d5b8335e3cc45f21b18230004c162478051147568398",
+  "bytes": 2266551,
+  "cases": 3018,
+  "groups": {
+    "depth": 616,
+    "link-gates": 252,
+    "placement": 576,
+    "throw": 1200,
+    "consumption": 324,
+    "alias-order": 48,
+    "all-slots": 1,
+    "empty": 1
+  },
+  "helpers": 6922,
+  "instructions": 588,
+  "events": 3878,
+  "nativeCompared": true,
+  "fixture": "original-world-links.json",
+  "fixtureSHA256": "ab8288d96c9a60188db8e88ed855c507384dc6966b21791e2f86a5bd8658302e",
+  "fixtureBytes": 142263
+}

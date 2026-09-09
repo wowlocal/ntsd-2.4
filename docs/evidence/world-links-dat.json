@@ -1,0 +1,1133 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Inventory original loaded wpoint fields; not execution or reachability proof.\nPreserves out-of-array weaponact values for future continuous gameplay checks.\n",
+  "nativeCompared": false,
+  "parent": {
+    "fixture": "original-loaded-catalog.json",
+    "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e",
+    "corpusSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+  },
+  "objectTypes": {
+    "0": 42,
+    "4": 6,
+    "1": 17,
+    "6": 2,
+    "2": 4,
+    "5": 3,
+    "3": 63
+  },
+  "holders": [
+    {
+      "index": 0,
+      "id": 50,
+      "path": "chars\\pein.dat",
+      "source": "4192dbbf6fdce60335f4d278656284822d5bda87d90c0fe4cdbb26072f1fc4c1"
+    },
+    {
+      "index": 1,
+      "id": 52,
+      "path": "chars\\kyubi.dat",
+      "source": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef"
+    },
+    {
+      "index": 2,
+      "id": 38,
+      "path": "chars\\sasuke_cs2.dat",
+      "source": "4c310e0fdb1b879b4b1a336bcb0502c1804745a9c439a2805d9d96b242f3c1df"
+    },
+    {
+      "index": 3,
+      "id": 58,
+      "path": "chars\\deidara_bird.dat",
+      "source": "b29191bd88e6fa39750ce2e5822f85a2a856a331f6ba0d2db8cbbc842a72af3c"
+    },
+    {
+      "index": 4,
+      "id": 51,
+      "path": "chars\\sasori.dat",
+      "source": "bc933986a8022793131a3c97ee25a4a6c2e8a7caefba878357e7712aa267bf8a"
+    },
+    {
+      "index": 5,
+      "id": 56,
+      "path": "chars\\reaper.dat",
+      "source": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10"
+    },
+    {
+      "index": 6,
+      "id": 57,
+      "path": "chars\\nckakuzu.dat",
+      "source": "b8f4616295ff0f820ae9244234cf2964173fb9d6ef74e06972ad00a0f36cf842"
+    },
+    {
+      "index": 7,
+      "id": 39,
+      "path": "chars\\sand_creature.dat",
+      "source": "5e6458281cbf434a7975421aac0389c88ff2f79d5cd678d658ca4eda9285ef66"
+    },
+    {
+      "index": 8,
+      "id": 37,
+      "path": "chars\\jiroubou.dat",
+      "source": "8030a942417302dcfb0db0879ecc1fa96df50146bbcccd5807da50ab1cef8a9d"
+    },
+    {
+      "index": 9,
+      "id": 36,
+      "path": "chars\\tayuya.dat",
+      "source": "870cb210ff453aef7b249210f5565f922fabad2bf4afcda584b531363d936c5f"
+    },
+    {
+      "index": 10,
+      "id": 35,
+      "path": "chars\\sakon.dat",
+      "source": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a"
+    },
+    {
+      "index": 11,
+      "id": 34,
+      "path": "chars\\kidomaru.dat",
+      "source": "c59e6d0f33d4696bc8e5d605c888492eeb890eff1973cb57f4301eb89130dce5"
+    },
+    {
+      "index": 12,
+      "id": 33,
+      "path": "chars\\naruto_clone.dat",
+      "source": "1470619899d2388c65f50f0d94ffc7ee279adecbc5fc53a32e6db365a3b797b3"
+    },
+    {
+      "index": 13,
+      "id": 55,
+      "path": "chars\\puppet_sasori.dat",
+      "source": "7cd59d20a62ed6a683cf06698f5bfebd957803c3e195855b04a3bab987429bb0"
+    },
+    {
+      "index": 14,
+      "id": 32,
+      "path": "chars\\hunter.dat",
+      "source": "8f5b26419c753a28ded96bf32eb39349ff027066dd8f64251b59eef6e85ec9a4"
+    },
+    {
+      "index": 15,
+      "id": 31,
+      "path": "chars\\sound_nin2.dat",
+      "source": "b6e74da0044363f9f973ef8e000452c15898db08da1dfc09609410e6865b91ff"
+    },
+    {
+      "index": 16,
+      "id": 30,
+      "path": "chars\\sound_nin.dat",
+      "source": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5"
+    },
+    {
+      "index": 17,
+      "id": 2,
+      "path": "chars\\naruto.dat",
+      "source": "761f2c149a05cb568dcffe16a032a7faee0113911b9171d11c8b6d7d10a779f3"
+    },
+    {
+      "index": 18,
+      "id": 1,
+      "path": "chars\\sakura.dat",
+      "source": "fa1569312654a4570e234f8f4d25a3df1a31dce960ba6192be725c5f5414a42e"
+    },
+    {
+      "index": 19,
+      "id": 3,
+      "path": "chars\\kakashi.dat",
+      "source": "08192ef387bb21ba94963c223e91190248f8bd70934411a94316085f8affed99"
+    },
+    {
+      "index": 20,
+      "id": 4,
+      "path": "chars\\sai.dat",
+      "source": "e3a63628a41a8ba209d0e16217f71afb95270298f2db7c3193e02fe3331b20e3"
+    },
+    {
+      "index": 21,
+      "id": 11,
+      "path": "chars\\sasuke.dat",
+      "source": "80613180d8cbc2c4b036894d8f996c7e66be28d8d29a2a6ab43c5d2d2a14040f"
+    },
+    {
+      "index": 22,
+      "id": 13,
+      "path": "chars\\yamato.dat",
+      "source": "070bdfa1682599e1ceac697da23e788ac520da37cc219b9a5fd9e0fab6208853"
+    },
+    {
+      "index": 23,
+      "id": 16,
+      "path": "chars\\gaara.dat",
+      "source": "b5ee72e5f25eabe7735d70a590e167459d11ec4e02d5b9cf62f38ae9945f148a"
+    },
+    {
+      "index": 24,
+      "id": 7,
+      "path": "chars\\rock_lee.dat",
+      "source": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731"
+    },
+    {
+      "index": 25,
+      "id": 18,
+      "path": "chars\\neji.dat",
+      "source": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49"
+    },
+    {
+      "index": 26,
+      "id": 22,
+      "path": "chars\\shikamaru.dat",
+      "source": "bd6561325e5dd5388327a168628031db19cc2260db6db862e895bde107b47fe9"
+    },
+    {
+      "index": 27,
+      "id": 19,
+      "path": "chars\\tenten.dat",
+      "source": "1b40d755eb1d08a623c4f814699ada227f644e98eae5ff6d3e0301d9f30e87e6"
+    },
+    {
+      "index": 28,
+      "id": 12,
+      "path": "chars\\kiba.dat",
+      "source": "3d23d01037c46f7d53ea76a4045744d495258d1ff9f6c4faf3477556b0afda4d"
+    },
+    {
+      "index": 29,
+      "id": 5,
+      "path": "chars\\shino.dat",
+      "source": "b226a325daaa578adcc4321eefc2fc1b2f2d4e73c8ae3dc76ed128645e252476"
+    },
+    {
+      "index": 30,
+      "id": 8,
+      "path": "chars\\chiyo.dat",
+      "source": "956de8fb7e8e1f39dc8c9771012c1bc166686d6271bdc74abcaf408fa0bf81af"
+    },
+    {
+      "index": 31,
+      "id": 14,
+      "path": "chars\\kankuro.dat",
+      "source": "16634a43ed70df769f407195f9b03205338e636967aec06213cb6aa3419893a7"
+    },
+    {
+      "index": 32,
+      "id": 15,
+      "path": "chars\\temari.dat",
+      "source": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557"
+    },
+    {
+      "index": 33,
+      "id": 6,
+      "path": "chars\\Hsasori.dat",
+      "source": "e85b9c2393f521ddf12b026726653e5ee162a1e2f409dba813ba71e79264c817"
+    },
+    {
+      "index": 34,
+      "id": 17,
+      "path": "chars\\kisame.dat",
+      "source": "47feb9379aaa042ecc16662990a9349971ac0e2cdd4b91e42267ba9a466b4619"
+    },
+    {
+      "index": 35,
+      "id": 9,
+      "path": "chars\\itachi.dat",
+      "source": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2"
+    },
+    {
+      "index": 36,
+      "id": 10,
+      "path": "chars\\deidara.dat",
+      "source": "26f608b7c573194e3a630c7244de6fdf3c8f72cd9493d02dade70ac64696f326"
+    },
+    {
+      "index": 37,
+      "id": 24,
+      "path": "chars\\hidan.dat",
+      "source": "6b961d45b7c6b70e4af009cea1367cede0dd40e8b1eb948e4ffd174738e1a1cd"
+    },
+    {
+      "index": 38,
+      "id": 25,
+      "path": "chars\\kakuzu.dat",
+      "source": "6da3e6483c83a3b954509b0b7f7f7a87c6fc22adaef30b77a5dd11c446719dcc"
+    },
+    {
+      "index": 39,
+      "id": 23,
+      "path": "chars\\kabuto.dat",
+      "source": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a"
+    },
+    {
+      "index": 40,
+      "id": 20,
+      "path": "chars\\orochimaru.dat",
+      "source": "1f619fc95be2b2524d938477e6692d0b6648701fac8c23f12dbddb55fbd17937"
+    },
+    {
+      "index": 41,
+      "id": 21,
+      "path": "chars\\jiraiya.dat",
+      "source": "823ec4eda42c2fa57b047d9e6c5a4d1350e913b8f3a9e6873c87c59061426a23"
+    }
+  ],
+  "holderFrames": 10041,
+  "uniqueWpoints": 688,
+  "states": {
+    "0": 183,
+    "1": 344,
+    "2": 195,
+    "15": 3313,
+    "3": 2020,
+    "7": 146,
+    "6": 350,
+    "8": 120,
+    "10": 668,
+    "12": 482,
+    "18": 215,
+    "4": 207,
+    "5": 160,
+    "11": 265,
+    "16": 160,
+    "14": 234,
+    "400": 21,
+    "9": 712,
+    "17": 129,
+    "1700": 12,
+    "4038": 4,
+    "100": 29,
+    "13": 1,
+    "4010": 1,
+    "8051": 1,
+    "4024": 1,
+    "8030": 4,
+    "4016": 1,
+    "4003": 1,
+    "3005": 42,
+    "26": 6,
+    "8055": 1,
+    "8032": 1,
+    "4223": 2,
+    "401": 1,
+    "4052": 1,
+    "4017": 1,
+    "9996": 1,
+    "4051": 1,
+    "9997": 1,
+    "8009": 1,
+    "4058": 1,
+    "4056": 1,
+    "4057": 1
+  },
+  "weaponActs": [
+    -888,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    40,
+    75,
+    76,
+    80,
+    81,
+    85,
+    86,
+    87,
+    88,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    105,
+    121,
+    398,
+    399,
+    1000,
+    9998
+  ],
+  "kinds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "outsideFrameArray": [
+    {
+      "object": 0,
+      "sourceID": 50,
+      "path": "chars\\pein.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 1,
+      "sourceID": 52,
+      "path": "chars\\kyubi.dat",
+      "frame": 0,
+      "state": 0,
+      "wpoint": [
+        3,
+        39,
+        79,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 1,
+      "sourceID": 52,
+      "path": "chars\\kyubi.dat",
+      "frame": 1,
+      "state": 1700,
+      "wpoint": [
+        3,
+        39,
+        79,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 1,
+      "sourceID": 52,
+      "path": "chars\\kyubi.dat",
+      "frame": 5,
+      "state": 1,
+      "wpoint": [
+        3,
+        39,
+        79,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 1,
+      "sourceID": 52,
+      "path": "chars\\kyubi.dat",
+      "frame": 6,
+      "state": 1,
+      "wpoint": [
+        3,
+        39,
+        79,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 1,
+      "sourceID": 52,
+      "path": "chars\\kyubi.dat",
+      "frame": 115,
+      "state": 15,
+      "wpoint": [
+        1,
+        38,
+        76,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 2,
+      "sourceID": 38,
+      "path": "chars\\sasuke_cs2.dat",
+      "frame": 277,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 4,
+      "sourceID": 51,
+      "path": "chars\\sasori.dat",
+      "frame": 118,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        -999,
+        1000,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 4,
+      "sourceID": 51,
+      "path": "chars\\sasori.dat",
+      "frame": 350,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        1000,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 5,
+      "sourceID": 56,
+      "path": "chars\\reaper.dat",
+      "frame": 294,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 6,
+      "sourceID": 57,
+      "path": "chars\\nckakuzu.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        29,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 6,
+      "sourceID": 57,
+      "path": "chars\\nckakuzu.dat",
+      "frame": 357,
+      "state": 15,
+      "wpoint": [
+        1,
+        -999,
+        -999,
+        1000,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 6,
+      "sourceID": 57,
+      "path": "chars\\nckakuzu.dat",
+      "frame": 361,
+      "state": 15,
+      "wpoint": [
+        1,
+        26,
+        70,
+        9998,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 8,
+      "sourceID": 37,
+      "path": "chars\\jiroubou.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 8,
+      "sourceID": 37,
+      "path": "chars\\jiroubou.dat",
+      "frame": 321,
+      "state": 3,
+      "wpoint": [
+        1,
+        95,
+        52,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 9,
+      "sourceID": 36,
+      "path": "chars\\tayuya.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 235,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 236,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 237,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 238,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 239,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 247,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 248,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        49,
+        -888,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 10,
+      "sourceID": 35,
+      "path": "chars\\sakon.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 11,
+      "sourceID": 34,
+      "path": "chars\\kidomaru.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 13,
+      "sourceID": 55,
+      "path": "chars\\puppet_sasori.dat",
+      "frame": 115,
+      "state": 3,
+      "wpoint": [
+        1,
+        38,
+        999,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 13,
+      "sourceID": 55,
+      "path": "chars\\puppet_sasori.dat",
+      "frame": 116,
+      "state": 3,
+      "wpoint": [
+        1,
+        38,
+        999,
+        1000,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "object": 19,
+      "sourceID": 3,
+      "path": "chars\\kakashi.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 21,
+      "sourceID": 11,
+      "path": "chars\\sasuke.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 22,
+      "sourceID": 13,
+      "path": "chars\\yamato.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 24,
+      "sourceID": 7,
+      "path": "chars\\rock_lee.dat",
+      "frame": 254,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 26,
+      "sourceID": 22,
+      "path": "chars\\shikamaru.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 27,
+      "sourceID": 19,
+      "path": "chars\\tenten.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 29,
+      "sourceID": 5,
+      "path": "chars\\shino.dat",
+      "frame": 259,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 31,
+      "sourceID": 14,
+      "path": "chars\\kankuro.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 32,
+      "sourceID": 15,
+      "path": "chars\\temari.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 36,
+      "sourceID": 10,
+      "path": "chars\\deidara.dat",
+      "frame": 274,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 37,
+      "sourceID": 24,
+      "path": "chars\\hidan.dat",
+      "frame": 294,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 38,
+      "sourceID": 25,
+      "path": "chars\\kakuzu.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 39,
+      "sourceID": 23,
+      "path": "chars\\kabuto.dat",
+      "frame": 279,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        30,
+        1000,
+        0,
+        1,
+        100,
+        -1,
+        0
+      ]
+    },
+    {
+      "object": 39,
+      "sourceID": 23,
+      "path": "chars\\kabuto.dat",
+      "frame": 300,
+      "state": 15,
+      "wpoint": [
+        1,
+        39,
+        -999,
+        1000,
+        0,
+        1,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

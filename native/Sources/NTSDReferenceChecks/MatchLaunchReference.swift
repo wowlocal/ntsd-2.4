@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -44,9 +44,10 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -54,7 +55,13 @@ public enum MatchLaunchReference {
                   control.actorAddresses == c.actorAddresses,control.objectAddresses == c.objectAddresses,
                   control.cases.map(\.label) == ["control","physics"] else { throw error("Gameplay control parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }
+        if let links {
+            guard gameplayPhysics,let gameplayControl,links.exeSHA256 == c.exeSHA256,links.dllSHA256 == c.dllSHA256,
+                  links.parent.sha256 == MatchPreparationReference.digest(gameplayControl),links.worldAddress == c.worldAddress,
+                  links.actorAddresses == c.actorAddresses,links.objectAddresses == c.objectAddresses,
+                  links.cases.map(\.label) == ["depth-attachments"] else { throw error("Gameplay links parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -62,7 +69,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -283,10 +290,30 @@ public enum MatchLaunchReference {
                     })
                     guard seen == returns.count else { throw error("Missing Actor physics") };physicsSlots = seen
                     try snapshot(state,section.after,"own physics after")
+                    if let links {
+                        let section = links.cases[0]
+                        guard section.end.pc == 0x41eed8,section.end.sp == 0x1000e9bc,section.readsBeforeWrites.isEmpty,
+                              section.helpers.map(\.entry) == [0x4450d0,0x4450d0,0x417f80],section.helpers.last?.this == c.worldAddress else { throw error("Depth/links boundary and helpers") }
+                        for h in section.helpers {
+                            guard h.pop == 0,h.returnSP == h.entrySP+4,h.arguments.isEmpty,h.saved.count == 4 else { throw error("Depth/links helper ABI") };helpers += 1
+                        }
+                        try snapshot(state,section.before,"own depth/links before")
+                        let checkpoints = section.checkpoints
+                        guard checkpoints.count == 2 else { throw error("Own depth checkpoint count") }
+                        var seen = 0
+                        try OriginalWorldLinks.apply(state: &state,observe: { _ in throw error("Unexpected own first attachment event") },afterDepth: { slot,actor in
+                            guard seen < checkpoints.count,checkpoints[seen].pc == 0x41800e,checkpoints[seen].label == "depth-return",checkpoints[seen].slot == slot else { throw error("Depth slot order") }
+                            var r = try storage(checkpoints[seen].actor)
+                            guard let o = objects[try r.integer(at: 0x368,as: UInt32.self)] else { throw error("Depth Object binding") };try r.write(o,at: 0x368)
+                            try check(actor,r,"own depth Actor\(slot)");seen += 1
+                        })
+                        guard seen == checkpoints.count else { throw error("Missing depth Actor") };depthSlots = seen
+                        try snapshot(state,section.after,"own depth/links after")
+                    }
                 }
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots)
     }
 }

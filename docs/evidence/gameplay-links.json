@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue both own gameplay control/physics stages through whole417f80.\nThe same CPU/stack/World/catalog/resources/replay comes from freshly reproduced\nMATCH_LAUNCH and GAMEPLAY_ENTRY parents. No new gameplay stimuli or synthetic\ncalls. Stops41eed8 before contact collection; not a complete tick or match.\n",
+  "corpus": "gameplay-links.json",
+  "sha256": "fef20c028c77729c505bf208dac907fe802915101498747ec6eb84628aba08de",
+  "bytes": 659906,
+  "parent": {
+    "fixture": "original-gameplay-physics.json",
+    "sha256": "e4f40b4a2006af544e264771e68717fd36d9ab285a56f3f445ee0c2cf80ddc34"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4320984,
+    "sp": 268495292
+  },
+  "helpers": 3,
+  "checkpoints": 2,
+  "instructions": 100,
+  "readsBeforeWrites": [],
+  "fixture": "original-gameplay-links.json",
+  "fixtureSHA256": "a1f9c4bcaee2a7f8aa45a98244cd497028c455f36e9fd189ee008b069af753f1",
+  "fixtureBytes": 179982
+}

@@ -1511,6 +1511,52 @@ item passes, linked objects, draw/camera/scheduler/recovery and full tick return
 Practice/UI, other CPUs/modes, first full match, Windows/clean Mac and entire
 goal remain open.
 
+The [whole depth/held-object function](docs/research/WORLD_LINKS.md) now
+implements all417f80..4187a3, not just the old Z slice. Two400-slot passes:
+active!=0/type0 clamps BG+4 then+8 and converts integerz; active!=0/Actor98<0
+validates unsignedA0<=399, active owner and owner9c==current slot, then places,
+consumes or throws held objects. Failure clears ONLY98. Keeps exact World
+aliases/ascending order. Owner wpoint references its old Frame while later
+centers use CURRENT Frames after weaponact, including aliases. Cover0 gives
+z+1/y-1, other cover z-1/y+1. State12/10 drop still continues explicit throw/
+kind3; binaryy<=-2 update does NOT refresh integery. Up/down use nonzero bytes,
+both/neither preservevz. Ordinary throws clear98 but leave9c/A0. Generic DAT
+mechanism, no character allowlist. Source ID122/123 consuming exceptions are
+proved EXE branches:122 decrements HP1, signed%5/%6 restore ownerHP/MP;123
+subtractsHP2/addsownerMP3, then tests ITEM owner2f4>-1 and ITEM MP>150 before
+assigning OWNER MP150, not min/clamp. Exhaustion zeros both98/owner9c/itemA0,
+itemframe0/vy-8, RNG136/137 forvx; ownerframe0/item31c0. State12/10 RNG138,
+type2 RNG139, finalkind3 RNG140..143 preserve order even when overwriting.
+Divisions reuse finite OriginalExtended; shared OriginalCoordinateConversion
+factors the previously proved legacy/SSE2 ftol2 without changing its rule.
+3018 synthetic full-pool cases match FIRST Native comparison:6922helpers/
+588unique instructions/3878RNG, entire424408pool bytes+masks/46144globals.
+Rollback after depth/placement/RNG passes. Declared synthetic DAT/Actors/BG,
+CW037f and31c20, not all natural weapon/technique sequences. Separate pinned
+DAT survey checks42type0 Objects/10041present Frames/688wpoint values;41frames
+have weaponact-888/1000/9998 outside400-frame array. Source paths/IDs/frames
+are recorded in world-links-dat.json. No repair/coercion; actual reachability
+and backing-memory behavior stay open. It is a data inventory, not execution.
+Both fresh own source runs reproduced entire MATCH_LAUNCH/GAMEPLAY_ENTRY on
+same CPU/stack and continued through41eed3/417f80 to41eed8,3helpers/2depth
+checkpoints/100instructions each,0catalog reads-before-writes. Both own Native
+chains match, retaining pool/globals/CRT/early resources/101BG/854bitmaps/music/
+fullreplay630e18. Own first417f80 has no held item and preserves postphysics
+state,frame219,HP500/MP200,RNG39/0,phase1/tick1. New source cases have no game
+stimuli/expected-state injection. Whole4246b0 still unreturned,SP1000e9bc.
+Native own checks36.621s/build102.31s,61898records/569493556bytes+masks,
+912helpers/62checkpoints including parents; newstage6helpers/4Actorchecks.
+New packed fixtures and prior Actor/World physics, GAMEPLAY_CONTROL/PHYSICS/
+MATCH_LAUNCH plus both rollback checks passed14release XCTest/178.394s,
+build103.59s also compiled/linked NTSDNative. All source/Swift jobs terminal.
+117oldfixtures unchanged;3new raw/packed SHA/size/full JSON verified,120pins
+at build/research/gameplay-links-fixture-pins.json. Historical physics/control
+stops/scopes remain unchanged. Read WORLD_LINKS before extending. NEXT own
+41eed8:44d05c==2 caller/full419380 contact collection, type-separated42e100
+with item-spawn between, remainingcpoint/link helpers/second417f80/draw/camera/
+scheduler/recovery and full tick return. Practice/UI, Windows/cleanMac,
+continuous gameplay, first full match and complete goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and
