@@ -126,6 +126,16 @@ nine layer counters, with8 bitmap Blts and unchanged fighters/resources/replay.
 Device pixels, whole actor drawing, the complete tick and app integration
 remain open; the Practice window below still uses its earlier implementation.
 
+The [whole World/Actor drawing pass](docs/research/WORLD_DRAWING.md) now matches
+2,679 controlled cases and both own launch chains through41f4ac. Stable depth
+order, original sheet selection/mirrored width, shadows, labels, lives and spark
+advancement use generic data-driven rules and actual bitmap/rectangle children.
+The own first tick draws only player labels because the original appearance
+timer is75. All11 retained character-menu resources are now checked explicitly,
+including SPARK, and a failure after the first spark preserves the original state.
+Thirty regression tests and three acceptance tests passed. Full tick return,
+app integration and Windows/device output remain open.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

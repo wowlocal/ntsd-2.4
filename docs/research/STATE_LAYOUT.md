@@ -1010,3 +1010,26 @@ respawn записывает только binary x/z. Созданный998 по
 увеличиваются0→1. Bitmap+0c остаётся undefined после конструктора, и renderer
 сохраняет маску при чтении. Новая функция атомарно публикует состояние, но
 реальное выполнение device requests должен откладывать внешний игровой такт.
+
+[WORLD_DRAWING](WORLD_DRAWING.md) восстанавливает весь41a5a0 с Actor/Object
+children. Рисование предшествует планировщику и само изменяет spark storage:
+
+| Поле / область | Использование в41a5a0/40de30/40be70/40bf30 |
+| --- | --- |
+| `Actor+18`, signed Int32 | Стабильная глубина сортировки всех активных слотов; ties сохраняют slot order и aliases |
+| `Actor+8`, signed Int32 | Wrapped abs/remainder4; разные gates −70 для тени и−25 для спрайта/имени |
+| `Actor+b4`, `450bd8` | Отрицательное b4 добавляет phase*6−3 к x спрайта/point |
+| `Actor+318`, signed Int32 | Смещение Frame.pic при выборе рисунка; width lookup его не использует |
+| `Object+498/62c/6a4/6cc` | Signed count/first/columns/rows; first matching wrapped picture range |
+| `Object+754/+77c`, index+1 | Обычный/зеркальный bitmap; в обоих случаях helper получает mirrored0 |
+| `Bitmap+fb0+4*(pic−first)` | Ширина обычного листа для facing1; backing и маска не исправляются |
+| `Actor+30c`, signed Int32 | Lives label при>1, только две последние десятичные цифры при>9 |
+| `44fcc0+11*slot` | Сырые NUL-строки, не ограниченные stride; signed Int8 glyphs |
+| `Actor+36c/370/398/3c0` | Live count и x/y/frame sparks; frame++ после draw, удаляется только последний invalid элемент |
+| `Frame+80/+84`, signed Int32 | При lowHP/positive80 задают anchor для1×3 source rectangle0,20; state9997 пропускает эту ветвь |
+| `BG+14/+18/+98c` | Размер и bitmap тени; деление signed размеров пополам к нулю |
+
+Глобальные bitmap-указатели остаются opaque tokens и могут ссылаться на ранние
+меню-ресурсы, initial interface или каталог. Они не превращаются автоматически
+в ordinal. Публичный World draw сохраняет всю подготовку матча при ошибке;
+вывод на device должен публиковаться после успеха внешнего такта.

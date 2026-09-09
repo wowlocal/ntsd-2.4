@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue own41f496 through entire World/Actor drawing to41f4ac.\nFresh original menu/loading/launch/control/physics/contacts/hits/cpoints on the\nsame CPU/stack with no gameplay stimuli. Actual Object sheet/width and bitmap/clip/rectangle children run;\nCOM Blt is an explicit output boundary. Native comparison accepted for this bounded continuation; full tick and Windows remain open.\n",
+  "corpus": "gameplay-drawing-control.json",
+  "sha256": "3b39f749d278f445b301c0ab65cf5b600c3c2002a0c25bb68e7545a28a9689d6",
+  "bytes": 9192124,
+  "parent": {
+    "fixture": "original-gameplay-camera-control.json",
+    "sha256": "53648008dddc6aa95d4c7c731491b33b97bb83f0d501f6ccd903b7f8a7bc4d00"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4322476,
+    "sp": 268495292
+  },
+  "helpers": 6,
+  "instructions": 354,
+  "readsBeforeWrites": [],
+  "events": 20,
+  "fixture": "original-gameplay-drawing-control.json",
+  "fixtureSHA256": "af26827730b0d2d5ead105904aa6b8c05f0b71302cd9a15bf997f482ccf699de",
+  "fixtureBytes": 1289755
+}

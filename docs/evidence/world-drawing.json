@@ -1,0 +1,31 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Entire41a5a0/40de30/40be70/40bf30/43f310 with real43f010/43ef70.\nDeclared400-slot pool, constructed Actor/World bytes and synthetic Object,\nFrame/BG/bitmap/font metadata. Full pool/masks, unchanged globals/BG/resources,\nordered metadata reads and COM Blts. No pixels, own launch or Windows claim.\n",
+  "corpus": "world-drawing.json",
+  "sha256": "6f4cd3e0aa28dc164edec55f9af698864f3dd38fac1a5a0403250c292a196934",
+  "bytes": 24973496,
+  "cases": 2679,
+  "groups": {
+    "empty": 1,
+    "shadow": 576,
+    "sprite": 214,
+    "point": 67,
+    "sheet": 406,
+    "range": 320,
+    "label": 266,
+    "name": 138,
+    "lives": 165,
+    "sparks": 472,
+    "order": 24,
+    "provenance": 3,
+    "shadow-size": 21,
+    "caller": 6
+  },
+  "helpers": 55874,
+  "instructions": 1268,
+  "events": 202262,
+  "nativeCompared": true,
+  "fixture": "original-world-drawing.json",
+  "fixtureSHA256": "e205a81d69eeba885f7d200d04035a0a1ca1f6067dfee8967d1253f79850af79",
+  "fixtureBytes": 640832
+}

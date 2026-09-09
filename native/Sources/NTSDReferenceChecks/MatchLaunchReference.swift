@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -15,6 +15,7 @@ public enum MatchLaunchReference {
         let state: InputControlReference.Snapshot,early: MenuStartupReference.Retained
         let backgrounds: [Storage],bitmaps: [Allocation],music: [Allocation],released: [UInt32]
         let frameHeap: [Heap]?
+        let menuBitmaps: [Allocation]?
     }
     struct Event: Decodable {
         let kind: String
@@ -40,6 +41,7 @@ public enum MatchLaunchReference {
         struct Drawing: Decodable {
             let target: UInt32,mode: Int32,surfaces: [UInt32],drawResults: [Int32],fillResult: Int32
             let events: [OriginalFrontScreenEvent],fillInputs: [String]
+            let phase: Int32?,resourceSurfaces: [String:UInt32]?
         }
         struct Section: Decodable {
             let drawing: Drawing?
@@ -51,7 +53,7 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
@@ -59,6 +61,7 @@ public enum MatchLaunchReference {
         let hits = try gameplayHits.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let cpoints = try gameplayCPoints.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let camera = try gameplayCamera.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        let drawing = try gameplayDrawing.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -96,7 +99,13 @@ public enum MatchLaunchReference {
                   camera.actorAddresses == c.actorAddresses,camera.objectAddresses == c.objectAddresses,
                   camera.cases.map(\.label) == ["camera-background"] else { throw error("Gameplay camera parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }
+        if let drawing {
+            guard let gameplayCamera,camera != nil,drawing.exeSHA256 == c.exeSHA256,drawing.dllSHA256 == c.dllSHA256,
+                  drawing.parent.sha256 == MatchPreparationReference.digest(gameplayCamera),drawing.worldAddress == c.worldAddress,
+                  drawing.actorAddresses == c.actorAddresses,drawing.objectAddresses == c.objectAddresses,
+                  drawing.cases.map(\.label) == ["world-drawing"] else { throw error("Gameplay drawing parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -104,7 +113,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -139,6 +148,7 @@ public enum MatchLaunchReference {
         }
         let parent = try MatchSelectionReference.compare(selection: selection,character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,initialContext,crt,initialMusic,resources in
             callbacks += 1
+            let menuSurfaces = Dictionary(uniqueKeysWithValues: initial.resources.inputs.map { (initial.resources.allocations[$0.index].address,$0.surface) })
             var state = own,context = initialContext,music = initialMusic,replayAddresses: [UInt32] = []
             var crt = crt
             func snapshot(_ value: OriginalMatchPreparation,_ expected: State,_ label: String) throws {
@@ -194,6 +204,15 @@ public enum MatchLaunchReference {
                 let released = try Set(expected.released.map { p -> Int in guard let i = bitmapMap[p] else { throw error("Released bitmap identity") };return i })
                 guard value.releasedBitmaps == released,music.allocations.count == expected.music.count else { throw error("Resource lifetime") }
                 for r in expected.music { guard let a = music.allocations[r.address] else { throw error("Music allocation") };try check(a,storage(r.storage),label+" music") }
+                if let menu = expected.menuBitmaps {
+                    guard menu.count == resources.bitmaps.count else { throw error("Menu bitmap inventory") }
+                    for b in menu {
+                        guard let actual = resources.bitmaps[b.address],let surface = menuSurfaces[b.address] else { throw error("Retained menu bitmap") }
+                        var expected = try storage(b.storage)
+                        guard try expected.integer(at: 0,as: UInt32.self) == surface else { throw error("Menu bitmap surface") }
+                        try expected.write(UInt32(surface == 0 ? 0 : 1),at: 0);try check(actual.storage,expected,label+" menu bitmap")
+                    }
+                }
                 checkpoints += 1
             }
             func section(_ index: Int,_ stop: UInt32) throws -> Case {
@@ -457,6 +476,17 @@ public enum MatchLaunchReference {
                                     if let camera {
                                         let result = try GameplayCameraReference.compare(camera.cases[0],state: &state,snapshot: snapshot)
                                         helpers += result.helpers;events += result.events;cameraPasses += 1
+                                        if let drawing {
+                                            let result = try GameplayDrawingReference.compare(drawing.cases[0],state: &state,resourceBitmap: { token in
+                                                if let bitmap = resources.bitmaps[token],let surface = menuSurfaces[token] { return (bitmap.storage,surface) }
+                                                guard let a = context.memory.allocations[token],a.live else { throw error("Drawing resource ownership \(token)") }
+                                                var record = a.storage
+                                                let surface = try record.integer(at: 0,as: UInt32.self)
+                                                try record.write(UInt32(surface == 0 ? 0 : 1),at: 0)
+                                                return (record,surface)
+                                            },snapshot: snapshot)
+                                            helpers += result.helpers;events += result.events;drawingPasses += 1
+                                        }
                                     }
                                 }
 
@@ -467,6 +497,6 @@ public enum MatchLaunchReference {
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses)
     }
 }

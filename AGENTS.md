@@ -1780,6 +1780,52 @@ Then remaining mode/scheduler/recovery/spawn/deletion/fulltick return. Practice/
 continuous DAT sequences, first complete match, Windows/device/cleanMac and
 full goal remain open. Read WORLD_CAMERA before extending.
 
+The [whole World/Actor draw](docs/research/WORLD_DRAWING.md) now implements
+41a5a0..41ae50,40de30..40e160,40be70..40bf1f,40bf30..40bfa8,43f310..43f37a,
+with actual43f010/43ef70 children and cookie/ret12 in source.2679 controlled
+cases match full400-slot pool/World/masks/globals/101BG and202262 ordered events;
+55874 helpers,1268 PCs. Actor251/251,sheet61/61,width43/43,rectangle38/38 and
+World648/663 instructions reached. World misses11 alignment, one unreachable
+jump and3 negative-remainder corrections excluded by priorActor8>-70; not
+allbranches/naturalDAT/Windows. Source synthetic constructors/metadata/COM.
+Generic stable signed-z sort, aliases, sheet ranges with wrapped arithmetic,
+normal/mirror wrappers, width from NORMAL unoffsetpic vs drawpic+Actor318;
+state9997 clamp0then714; lowHP/bpoint rectangle usesglobal44fd7c/global455608.
+Shadow IDs223/224 and alternateCom IDs30..<50 except38 are EXE rules, no new
+character allowlist. Lives retain last2decimaldigits; names are rawNUL with
+11byte stride/signedInt8 glyphs. Bracketedname>17 crosses20byte stack/cookie:
+explicitunsupported, no truncation. Sparks mutate duringdraw, before scheduler:
+f<5,10..<15,20..<29,30..<39 advanceAFTER draw; only lastinvalid reduces36c.
+No compaction; aliases advance repeatedly. Public pass stages allMatch state;
+externaldevice events must wait for enclosingtick commit.
+Original DAT survey137Objects/15363presentFrames/362sheets, all10sheets supported;
+8positivebpoints Itachi0/1/2/3/5/6/7/8, no ID rule inferred.1579basepics without
+sheet atActor318=0 (1116pic999), no replacement; dynamicreachability/W open.
+Both fresh own GAMEPLAY_CAMERA parents reproduced bytewise on sameCPU/stack,
+then continue41f496..41f4ac/SP1000e9bc,phase1/tick1,target28002020,mode0.
+Actor8 remains75: firstown hasONLY glyph1/2 at437,507 and284,522,20events/2Blts,
+6helpers/354PCs/zero undefinedreads. Pool/CRT/RNG40/1/101BG/854bitmaps/early/
+music/replay630e18/14586Frameallocations unchanged; Actor sprites tested by
+controlledcorpus, not attributed to ownfirstdraw. ALL11 character-menu wrappers
+now additionally captured/compared before/after: SPARK is owned by retained
+OriginalMenuResourceLoading, distinct from early/context/interface/catalog.
+Its resolver uses original menu devicebindings. Failedinitialintegration was
+corrected and both sources freshly rerun; allv1data/events unchanged, onlymenu
+snapshots/blobs added. Neither v1waspublished. NewNative publictrial adds2sparks
+only totrialstate, fails secondBlt afterfirstincrement, verifiesfullrollback.
+Both Native launch/gameplay610754records/1225013022bytes with masks,992helpers/
+100checkpoints; earliernestedparents revalidated but notin these counts.
+30retained/newrelease regression370.989s/build0.19s passed; pairedacceptance
+3tests49.052s/build124.79s published3losslessfixtures.132oldfixtureSHAsunchanged;
+allnewraw/packedSHA/size/fullJSON/blobs/parents verified,135pins at
+build/research/gameplay-drawing-fixture-pins.json. NTSDNative compiled/linked,
+Python compilation/diffcheck pass; all source/Swift jobs terminal. NoUI/W claim.
+NEXT same41f4ac: mode1/4 children437860/43a860, realCRT sprintf/GDI401290 caller,
+4196f0 accumulatedimpulses, fullpost-draw400slot loop41f550 onward, scheduler/
+recovery/creation/deletion and wholetickreturn. Read WORLD_DRAWING before
+extending. Practice/appintegration, continuousDAT, firstfullmatch, Windows/
+device/cleanMac and entiregoal remainopen.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and
