@@ -1,0 +1,106 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole4214d5..421a15 item/resource commands, healing and slot cleanup.\n\nControlled400-slot pool/four Objects/declared BGs, actual constructors/RNG/\nconversion/402000. Only constructor memset and COM response are boundaries.\nFull pool bytes/masks, globals and retainedSP34. ExplicitCW027f, not Windows.\n",
+  "corpus": "postdraw-commands.json",
+  "sha256": "e313be4820c3a4305a2181dde63e55e553288a7e121dbba69f4dfa53481eff67",
+  "bytes": 2776979,
+  "fpcw": 639,
+  "cases": 3898,
+  "groups": {
+    "items": 840,
+    "pool": 72,
+    "coordinates": 180,
+    "destroy": 576,
+    "refill": 720,
+    "healing": 1320,
+    "healing-alias": 30,
+    "state1700": 9,
+    "joined": 144,
+    "all-slots": 5,
+    "empty": 1,
+    "null-music": 1
+  },
+  "helpers": 4951,
+  "events": 3252,
+  "instructions": 545,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "instructionCoverage": {
+    "0x4214d5": {
+      "instructions": 173,
+      "executed": 172,
+      "missing": [
+        4330746
+      ]
+    },
+    "0x42179b": {
+      "instructions": 154,
+      "executed": 146,
+      "missing": [
+        4331431,
+        4331438,
+        4331735,
+        4331736,
+        4331739,
+        4331875,
+        4331876,
+        4331879
+      ]
+    },
+    "0x4061d0": {
+      "instructions": 151,
+      "executed": 151,
+      "missing": []
+    },
+    "0x417170": {
+      "instructions": 29,
+      "executed": 26,
+      "missing": [
+        4288889,
+        4288891,
+        4288892
+      ]
+    },
+    "0x4450d0": {
+      "instructions": 55,
+      "executed": 42,
+      "missing": [
+        4477164,
+        4477171,
+        4477173,
+        4477176,
+        4477179,
+        4477180,
+        4477184,
+        4477188,
+        4477285,
+        4477289,
+        4477295,
+        4477297,
+        4477301
+      ]
+    },
+    "0x402000": {
+      "instructions": 8,
+      "executed": 8,
+      "missing": []
+    }
+  },
+  "poolBytesPerCase": 424408,
+  "globalsBytesPerCase": 46144,
+  "eventKinds": {
+    "random": 2436,
+    "reconstruct": 566,
+    "resumeMusic": 250
+  },
+  "retainedSlotOffset": 52,
+  "retainedSlotChangedCases": 330,
+  "wholeLoopCompared": true,
+  "initializedOwnChainExtended": false,
+  "exits": {
+    "0x421a15": 3898
+  },
+  "fixture": "original-postdraw-commands.json",
+  "fixtureSHA256": "4632604bd0bf8afbc2d054b9728271cfb3a66552b0e0fc742e6086bb4c334de1",
+  "fixtureBytes": 201611
+}

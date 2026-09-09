@@ -125,3 +125,10 @@ those of the parent. Catalog numeric scanning still has its separately audited
 CRT CPU. This does not establish full Windows startup/thread or actual device
 behavior. Natural techniques, a complete Naruto/Sasuke District match, app
 integration, all game content and clean-macOS delivery remain open.
+
+The following [commands/recovery consumer](GAMEPLAY_COMMANDS.md) now continues
+both own chains through421a15. It reproduces this full parent and compares
+all native state independently; the first command-free pass is idempotent and
+never accesses SP34. The wider [controlled study](POSTDRAW_COMMANDS.md) covers
+requested items, both resource commands, healing and cleanup. HUD and the
+remaining tick return are next.

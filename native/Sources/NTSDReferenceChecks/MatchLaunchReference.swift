@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int,impulsePasses: Int,lifecyclePasses: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int,impulsePasses: Int,lifecyclePasses: Int,commandPasses: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -47,6 +47,7 @@ public enum MatchLaunchReference {
             let drawing: Drawing?
             let impulses: GameplayImpulsesReference.Input?
             let lifecycle: GameplayLifecycleReference.Input?
+            let commands: GameplayCommandsReference.Input?
             let label: String,before: State,after: State,helpers: [Helper],checkpoints: [Checkpoint]
             let readsBeforeWrites: [CharacterScreenReference.UndefinedRead],end: MenuStartupReference.Position
         }
@@ -55,7 +56,7 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil,gameplayCommands: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
@@ -66,6 +67,7 @@ public enum MatchLaunchReference {
         let drawing = try gameplayDrawing.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let impulses = try gameplayImpulses.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let lifecycle = try gameplayLifecycle.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        let commands = try gameplayCommands.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -122,7 +124,14 @@ public enum MatchLaunchReference {
                   lifecycle.actorAddresses == c.actorAddresses,lifecycle.objectAddresses == c.objectAddresses,
                   lifecycle.cases.map(\.label) == ["post-draw-lifecycle"] else { throw error("Gameplay lifecycle parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }
+        if let commands {
+            guard let gameplayLifecycle,lifecycle != nil,arithmeticPrecision == .bits53,
+                  commands.exeSHA256 == c.exeSHA256,commands.dllSHA256 == c.dllSHA256,
+                  commands.parent.sha256 == MatchPreparationReference.digest(gameplayLifecycle),commands.worldAddress == c.worldAddress,
+                  commands.actorAddresses == c.actorAddresses,commands.objectAddresses == c.objectAddresses,
+                  commands.cases.map(\.label) == ["post-draw-commands"] else { throw error("Gameplay commands parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }.merging(commands?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -130,7 +139,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0,impulsePasses = 0,lifecyclePasses = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0,impulsePasses = 0,lifecyclePasses = 0,commandPasses = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -511,6 +520,10 @@ public enum MatchLaunchReference {
                                                     let result = try GameplayLifecycleReference.compare(lifecycle.cases[0],state: &state,
                                                         actorAddresses: c.actorAddresses,snapshot: snapshot)
                                                     helpers += result.helpers;events += result.events;lifecyclePasses += 1
+                                                    if let commands {
+                                                        let result = try GameplayCommandsReference.compare(commands.cases[0],state: &state,snapshot: snapshot)
+                                                        helpers += result.helpers;events += result.events;commandPasses += 1
+                                                    }
                                                 }
                                             }
                                         }
@@ -524,6 +537,6 @@ public enum MatchLaunchReference {
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses,commandPasses:commandPasses)
     }
 }

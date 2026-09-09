@@ -3,8 +3,52 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: continue the initialized own tick from4214d5/SP1000e9bc.
-Read [GAMEPLAY_LIFECYCLE](docs/research/GAMEPLAY_LIFECYCLE.md).**
+**Current priority: HUD caller421a15 and whole41ae60..41b12d/ret4.
+Read [GAMEPLAY_COMMANDS](docs/research/GAMEPLAY_COMMANDS.md) and
+[POSTDRAW_COMMANDS](docs/research/POSTDRAW_COMMANDS.md).**
+
+OriginalPostDrawCommands implements whole4214d5..421a15. All3,898 controlled
+calls match full400-Actor/World bytes and masks, globalsSHA, retainedSP34 and
+3,252 events (2,436 RNG,566 constructors,250 resumeMusic). Source checks4,951
+helper returns;318/327 caller PCs execute,545 total with helpers. The missing
+caller PCs are3 alignment and6 unreachable negative-remainder instructions.
+Preserve full-pool retainedSP34 with FOUR coordinate draws before dereference,
+source ID122/300 rules, live aliases, distinctE0/E4 overflow and clamping,
+state1700 even when dead, and byteEB-only cleanup. Flags450bb8/450bc0 remain
+set until421a1c/421a22.402000 resumes via+1c; its HRESULT is ignored.
+Atomic failure tests cover the second constructor, second music observer and
+missing retained slot. Buffer events until the whole tick commits.
+Controlled acceptance:4 tests/3.041s/build88.38s; final packaged:4 tests/
+3.051s/build139.21s. Initial test compilation failed on a non-Equatable error
+comparison; only its pattern matching changed to fix that test.
+
+BOTH own initialized matches now continue through421a15/SP1000e9bc. Each
+compares417,293 records/736,179,550 bytes and masks/503 helpers/57 state and
+1,593 FPU checkpoints. The complete parent reproduces. This stage executes49
+PCs; its50th observed PC is the unexecuted stop. Both command flags and timers
+are0, with cleanup already set: the ENTIRE before/after state is identical.
+Naruto/Sasuke17/21 retain frame219/previous219/wait1,HP500/MP200,RNG40/1,
+District,mode0/tick1. RawSP34=3724541916 stays unread and untouched; native
+keeps nil rather than importing it. The401 new FPU checkpoints are4214d5
+plus400 heads4217b0, allCW023f. ExitCW is separately asserted.
+Own acceptance:2 tests/39.539s/build134.80s; retained lifecycle:2 tests/
+40.448s/build0.10s. Final packaged:2 tests/39.598s/build135.22s passed.
+All162 old fixtures are unchanged;165 current pins are in
+build/research/gameplay-commands-fixture-pins.json. Independent verification
+checks all3 new raw/packed byte sequences, SHA, complete JSON and2,756/2,757
+own blobs. Controlled raw/packed:2,776,979/201,611 bytes; own:
+9,249,671/1,278,615 and9,265,981/1,289,911 bytes. NTSDNative linked.
+All source and SwiftPM jobs are terminal; no app window was tested.
+
+Next HUD static plan: build/research/hud-static-plan.md. Its223 instructions
+NEVER READ the stack argument; ret4 only pops it. Actual target isglobal455608.
+Eight cells prefer slots0..<8 then10..<18; widths use wrapped31*HP/125.
+These are STATIC seeds only. Then421a2d..422994 diagnostics/results/epilogue.
+Full tick, app, full match, Windows/device/clean-Mac checks and the remaining
+full-game goal stay open.
+
+The preceding initialized lifecycle milestone (boundary superseded above):
+Read [GAMEPLAY_LIFECYCLE](docs/research/GAMEPLAY_LIFECYCLE.md).
 Both fresh original startup/menu/loading/selection/launch/gameplay chains now
 continue the ENTIRE post-draw loop and match independently rebuilt native state.
 Each385317records/700844396bytes+masks/503helpers/55state checkpoints;1192FPU

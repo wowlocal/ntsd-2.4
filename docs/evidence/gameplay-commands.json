@@ -1,0 +1,35 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue both own initialized matches through4214d5..421a15 on the same CPU.\n\nFresh startup/menu/loading/selection/launch and complete previous gameplay.\nNo command inputs, expected state injection or new platform responses. The\ncontrolled command corpus covers branches not taken by this natural first tick.\nStops before the HUD caller; full tick and Windows execution remain open.\n",
+  "corpus": "gameplay-commands.json",
+  "sha256": "88c64ecba48576c14f493ee6f92433a9bc95aa22fac907465181015ddaaf2458",
+  "bytes": 9249671,
+  "parent": {
+    "fixture": "original-gameplay-lifecycle.json",
+    "sha256": "4fbc875297342a98a4f08aa85d5f885c45131c5877447bcc3161d7cd5f595d36"
+  },
+  "helpers": 0,
+  "instructions": 50,
+  "events": 0,
+  "end": {
+    "pc": 4332053,
+    "sp": 268495292
+  },
+  "readsBeforeWrites": [],
+  "scratchAccesses": [],
+  "fpcw": 575,
+  "fpuCheckpoints": 1593,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "nativeScratchInput": "unknown; source does not access SP34",
+  "observedPCsIncludeTerminalBoundary": true,
+  "executedInstructions": 49,
+  "fpuExit": "Explicit equal-entry/exit CW assertion",
+  "firstTickReturned": false,
+  "parentSHA256": "dd1ac52a3aeae5676247ff9e65ff41ddf48f22f42c3a7027d2fa147a9b395ced",
+  "fixture": "original-gameplay-commands.json",
+  "fixtureSHA256": "7e7d2dfb65ad8098b134a8e7d4122ea4cefde855b66a2be8c6b47eacb5e5a5bc",
+  "fixtureBytes": 1278615
+}
