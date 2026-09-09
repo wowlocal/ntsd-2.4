@@ -1,0 +1,139 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh initialized own result layout -> output -> match and dispatcher ret4.\n\nPinned EXE/VC80, one Unicorn CPU and the entire original startup/menu/catalog/\nselection/first gameplay chain. Reproduce every accepted parent before continuing\n422994 with its own globals, font resources, live sound queues and retained frame.\nMemory/register/FPU tracing recovers output order, queue ownership and the actual\n422ab8 and428805 returns. Newly bound COM method responses use already created\nbuffer objects; no game globals, saved stack words or flags are injected. No\ncontrol pointer/cookie damage, Windows/device/pixel or full-match claim.\n",
+  "corpus": "gameplay-return.json",
+  "sha256": "f95f9c591a83f1dd4388a71308435bb77f1186036b178e0fbd1275f2a0c91a7b",
+  "bytes": 9395792,
+  "parent": {
+    "fixture": "original-gameplay-result-layout.json",
+    "sha256": "46dadb7f012dc872cfba1154fba96ade055679753f0e89fc5c11d5116b21bf59"
+  },
+  "helpers": 167,
+  "instructions": 871,
+  "events": {
+    "stage": 4,
+    "labelWrite": 6,
+    "fontPass": 4,
+    "draw": 76,
+    "read": 532,
+    "clip": 76,
+    "blit": 76,
+    "stringWrite": 4,
+    "format": 1,
+    "getDC": 1,
+    "setBackgroundColor": 1,
+    "setTextColor": 1,
+    "stringLength": 1,
+    "textOut": 1,
+    "releaseDC": 1,
+    "method": 6,
+    "queueWrite": 1,
+    "play": 1,
+    "dispatcherWrite": 1
+  },
+  "end": {
+    "pc": 805306368,
+    "sp": 268497964
+  },
+  "readsBeforeWrites": [],
+  "fpuCheckpoints": 1614,
+  "returnObservations": [
+    {
+      "pc": 4336277,
+      "sp": 268495292,
+      "saved": [
+        570425376,
+        268496884,
+        2014803805,
+        0
+      ],
+      "seh": 268496820
+    },
+    {
+      "pc": 4343622,
+      "sp": 268496896,
+      "saved": [
+        287454020,
+        573785173,
+        570425376,
+        671096864
+      ],
+      "seh": 268497944
+    },
+    {
+      "pc": 4360158,
+      "sp": 268496896,
+      "saved": [
+        287454020,
+        573785173,
+        570425376,
+        671096864
+      ],
+      "seh": 268497944
+    },
+    {
+      "pc": 805306368,
+      "sp": 268497964,
+      "saved": [
+        287454020,
+        573785173,
+        860116326,
+        1146447479
+      ],
+      "seh": 305419896
+    }
+  ],
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "parentSHA256": "6a463e2ad49b9161106b85b3d3d46a1c6c75e0f3f63ea6cb56f8de0337714a13",
+  "blobs": 2757,
+  "unchangedStorageExceptGlobals": true,
+  "sourceGlobalsReconstructedFromStores": true,
+  "sourceWrittenByteCount": 32,
+  "changedGlobalBytes": 21,
+  "sourceGlobalStorePCs": {
+    "0x41b149": 1,
+    "0x41b14e": 1,
+    "0x41b154": 1,
+    "0x41b1fc": 1,
+    "0x41b204": 1,
+    "0x41b207": 1,
+    "0x423a49": 4,
+    "0x402967": 1,
+    "0x419e9f": 1,
+    "0x424746": 1
+  },
+  "bitmapReadBytesAndMasksVerified": true,
+  "undefinedBitmapReadEvents": 0,
+  "ownedSoundBuffers": 418,
+  "helperReturns": {
+    "0x401290": 1,
+    "0x401a30": 1,
+    "0x4028a0": 1,
+    "0x419e60": 1,
+    "0x41b130": 1,
+    "0x423940": 4,
+    "0x423a70": 1,
+    "0x43e940": 1,
+    "0x43ef70": 76,
+    "0x43f010": 76,
+    "0x4450b2": 3,
+    "0x7817775d": 1
+  },
+  "exeInstructions": 568,
+  "crtInstructions": 303,
+  "innerAndOuterSavedFramesRestored": true,
+  "originalNormalCookieChecks": 3,
+  "sourceStackBytesImportedToNative": false,
+  "firstInitializedTickReturned": true,
+  "continuousTicksCompared": false,
+  "fullMatchCompared": false,
+  "pixelsCompared": false,
+  "audioDeviceCompared": false,
+  "nativeComparison": "Full own reconstructed state and masks before/after, exact ordered output/sound/dispatcher events, owned loaded resources, complete inherited FPU history. Late dispatcher observer verifies atomic native output rollback. Original machine frames establish source restoration only; no stack snapshot is imported.",
+  "fixture": "original-gameplay-return.json",
+  "fixtureSHA256": "14d6e0a1422becb638fbf0998d6ca14f1fb0cf71f2b1cf8c8409c6c0bfab8f1b",
+  "fixtureBytes": 1302527
+}

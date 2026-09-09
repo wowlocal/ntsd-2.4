@@ -2,6 +2,24 @@
 /// Native storage commits only after all four helpers succeed. Device observers
 /// must buffer external effects until their enclosing whole tick commits.
 public enum OriginalGameplayOutput {
+    /// Include424746's held-button clear after the match returns, followed by
+    /// the outer dispatcher's normal return. The enclosing tick still buffers
+    /// device effects; no machine stack or expected source bytes are imported.
+    public static func returnFromDispatcher(world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
+        memory: inout OriginalMenuPresentationMemory, input: OriginalMenuPresentationInput,
+        resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
+        performBlit: (OriginalBitmapBlit) throws -> Int32,
+        soundRequest: OriginalQueuedSound.Request,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
+        try apply(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
+            input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
+            soundRequest: soundRequest, observe: observe)
+        try stagedGlobals.write(UInt32(0), at: 0x457580-0x44d000)
+        try observe(.init("dispatcherWrite", [0x457580, 0]))
+        world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
+    }
+
     public static func apply(world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
         memory: inout OriginalMenuPresentationMemory, input: OriginalMenuPresentationInput,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),

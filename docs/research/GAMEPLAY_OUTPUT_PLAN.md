@@ -1,7 +1,8 @@
 # Gameplay output and return acceptance plan
 
 The controlled criteria below are accepted in [GAMEPLAY_OUTPUT](GAMEPLAY_OUTPUT.md).
-The initialized join remains open, independent of the concurrent result-layout publication.
+The initialized join is accepted in [GAMEPLAY_RETURN](GAMEPLAY_RETURN.md).
+Next is [CONTINUOUS_GAMEPLAY_PLAN](CONTINUOUS_GAMEPLAY_PLAN.md).
 Recover the complete `422994..4229cc` gameplay output sequence and the normal
 `422a95..422ab8/ret4` return from the pinned game EXE, SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
@@ -36,6 +37,24 @@ Finite controlled acceptance criteria:
    output events must be buffered until the enclosing tick commits.
 5. Verify raw and packaged fixtures without changing previously accepted pins.
 
-Then join both initialized result-layout parents through their retained actual
-return. That join, the application window, Windows runs, audio/pixel/latency
-measurements, continuous ticks, full match and clean-Mac delivery remain open.
+Both initialized result-layout parents now match through their retained actual
+match and dispatcher returns. The application engine join, Windows runs,
+audio/pixel/latency measurements, continuous ticks, full match and clean-Mac
+delivery remain open.
+
+## Initialized acceptance
+
+`oracle_gameplay_return.py` continues each fresh accepted result-layout parent
+on the same original CPU. It retains the actual41bc90 and4246b0 caller frames,
+executes422ab8/ret4,424746's held-button clear and428805/ret4. The supplied COM
+method adapters bind already created buffers; no queue flag, sound buffer word,
+Actor, result backing or saved machine frame is injected. Record those adapter
+bindings separately from game state and preserve enabled sound.
+
+Acceptance requires both complete source parents unchanged, full native
+before/after state from its own reconstruction, exact label/GDI/present/sound
+order, loaded resource ownership, global writes and unchanged heap masks. Trace
+the actual entries and both returns to prove stack/saved-register/SEH restoration;
+check every prior FPU checkpoint and the new output/return checkpoints. Verify
+raw and packaged artifacts and all prior pins. Even a fully returned first tick
+does not establish continuous ticks, a complete match, app integration or Windows.

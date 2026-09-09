@@ -88,9 +88,9 @@ The new fixture preserves183 existing pins and brings its publication set to184.
 Raw17815852bytes; packed1823384bytes; raw SHA256
 `5fb54908f5c366948acb1adfb1bc96c4b7a70ee679f0b87712f36c5e68a15418`.
 
-Both initialized result-layout captures belong to the concurrent preceding
-stage. This study does not change or consume their unknown caller stack words.
-Next join their own mode, resources, sound queues and retained caller through
-the actual return. Continuous ticks, the application window, a full Naruto/Sasuke
-District match, all original game content, Windows/device comparisons and a
-clean-Mac delivery remain open under the full project goal.
+Both initialized result-layout parents now feed their own mode, resources,
+sound queues and retained caller through both actual returns in
+[GAMEPLAY_RETURN](GAMEPLAY_RETURN.md). That separate whole own comparison
+preserves this controlled corpus and never imports unknown caller stack words.
+Continuous ticks, the new engine's app integration, a complete match, Windows,
+audio/pixel/latency measurements and clean-Mac delivery remain open.

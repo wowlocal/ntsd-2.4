@@ -48,7 +48,9 @@ false positives will not occur.
 
 ## Current research status
 
-**Current priority: BOTH initialized output/sound continuations and actual422ab8/ret4.** Read
+**Current priority: sixteen successive initialized gameplay calls, then full-match/app integration.** Read
+[GAMEPLAY_RETURN](docs/research/GAMEPLAY_RETURN.md),
+[CONTINUOUS_GAMEPLAY_PLAN](docs/research/CONTINUOUS_GAMEPLAY_PLAN.md),
 [GAMEPLAY_RESULT_LAYOUT](docs/research/GAMEPLAY_RESULT_LAYOUT.md),
 [GAMEPLAY_OUTPUT](docs/research/GAMEPLAY_OUTPUT.md),
 [RESULT_LAYOUT](docs/research/RESULT_LAYOUT.md),
@@ -56,6 +58,37 @@ false positives will not occur.
 [GAMEPLAY_RESULT_RECORDING](docs/research/GAMEPLAY_RESULT_RECORDING.md),
 [RESULT_LAYOUT_PLAN](docs/research/RESULT_LAYOUT_PLAN.md) and
 [TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
+
+BOTH fresh own chains now match through actual422ab8/ret4,424746 held clear and
+428805/ret4 toSTOP30000000/SP1000f42c. Each577173records/912855320bytes+masks,
+703/711helpers,67state/1614FPU checkpoints. Complete layout parents reproduce.
+New output each794events/76Blts/532defined reads/167helpers/1VC80format/1play;
+13stores touch32globalbytes,21change; all other storage and ownership survives.
+VS mode (Difficult), actual recording notice450b6c1->2, present primaryFlip1 /
+controlBlt3, then enabled queued sound. Clear4575a0 before pan-525/volume0 and
+Stop/Position0/Play0 on own24001060;418distinct loaded sound buffers. COM adapter
+bindings are separate declared responses, not Windows/device initialization.
+All15caller+12inner+12outerepilogue starts execute; source568/576EXE+303CRT PCs,
+3normal cookie checks. Both actual entry/saved4/SEH/return frames verified;
+no source stack word seeds Native. All1606parent FPU checkpoints plus8new keep
+CW023f/FPSW4000/tagffff. Native output also rolls back on the final dispatcher
+observer after preceding label/notice/queue mutations. Buffer device effects.
+Raw3release tests pass44.480s/build177.49s: own44.059s,controlled170calls0.422s.
+Both source sessions11350/20649 terminal exit0, never restarted. First native
+build had only a comparison-variable shadowing collision; renamed corpus fixed
+it, test-support build110.84s. No source expected byte or game rule changed.
+Two new fixtures preserve186oldpins,188current. Independent fullraw/packedbytes/
+JSON/SHA/all5515blobs and10vendor hashes verify. Ownraw9395792/9412226bytes;
+packed1302527/1313871bytes. Final packaged3release tests pass43.474s/build167.94s
+without raw overrides: own43.050s,controlled0.424s. All owned source/SwiftPM jobs
+terminal;539local Markdown links/Python compilation/diff checks pass.
+Work:build/research/gameplay-return-work.json.
+A separate launched window/image check used the existing OriginalMelee prototype;
+it is not this new engine's app integration or input/audio/latency evidence.
+The first match/mode-dispatcher call has returned; continuouscalls,43e9a0/outer
+app loop,fullmatch,Windows/devices/cleanMac and the entire game remain open.
+
+The preceding milestones retain their narrower historical boundaries:
 
 BOTH fresh initialized chains now match through422994/SP1000e9bc. Each compares
 545197records/877520166bytes+masks,536/544helpers,65state/1606FPU checkpoints.
@@ -72,7 +105,7 @@ all183prior pins were unchanged. Acceptance now preserves the184-pin baseline.
 Two own fixtures bring184old unchanged pins to186current. Independent fullraw/
 packedbytes/JSON/SHA/all6084 controlled+own blobs and10vendor hashes verify.
 Own raw9250044/9266358,packed1278715/1289563bytes. NTSDNative linked; no app window,
-Windows or device evidence. The real output/return join remains open;422994 is
+Windows or device evidence. The output/return join is accepted above;422994 alone is
 not a tick return. Track verification in build/research/result-layout-work.json.
 Final packaged4release tests pass44.987s/build0.25s without raw overrides: both
 own joins42.452s,599-match/1-rejection layout2.115s and170controlled output0.419s.
@@ -95,7 +128,7 @@ test0.454s/build169.37s; packaged0.420s/build0.28s; NTSDNative linked, no app/de
 or Windows check. Controlled output jobs are terminal; separate initialized
 layout source PIDs73470/73471 were left undisturbed and have since completed above. Read
 build/research/gameplay-output-work.json. Commit9784426 preserves this controlled
-milestone; own initialized return/fullmatch/app/cleanMac and full goal stay open.
+milestone; own initialized return is accepted above;fullmatch/app/cleanMac and full goal stay open.
 
 OriginalResultLayout now implements whole422218/422944..422994.599 whole original
 returns match full records/masks/globals, caller formatting and ordered output.

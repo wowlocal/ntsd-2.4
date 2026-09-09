@@ -4,8 +4,9 @@ This is a static caller research plan; completed dependencies are explicitly
 linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The static inventories themselves add no dynamic or native equivalence claim.
-Completed dependencies are linked separately. The accepted own chain ends
-before422994, as documented in [GAMEPLAY_RESULT_LAYOUT](GAMEPLAY_RESULT_LAYOUT.md).
+Completed dependencies are linked separately. Both own chains now return
+through422ab8 and428805, as documented in [GAMEPLAY_RETURN](GAMEPLAY_RETURN.md).
+Their next bounded continuation is [CONTINUOUS_GAMEPLAY_PLAN](CONTINUOUS_GAMEPLAY_PLAN.md).
 
 The old shorthand421a2d..422994 does not reach the match return. At422994 the
 original still calls mode-label rendering, notices/volume, surface presentation
@@ -137,7 +138,8 @@ computes pan/volume, clears pending flags and calls401a30.
 [QUEUED_SOUND_PLAN](QUEUED_SOUND_PLAN.md) records its145+30 decoded starts,
 400/80-slot arrays and wrapped arithmetic. [QUEUED_SOUND](QUEUED_SOUND.md) now
 implements and matches968 whole helper calls, including enabled sound.
-Its initialized own join remains open. Only its disabled
+Its enabled queued-sound own join is accepted in
+[GAMEPLAY_RETURN](GAMEPLAY_RETURN.md). The earlier disabled
 fast return was part of the old broad tick trace. Sound remains enabled in the
 initialized own chain; prove the whole consumer and device boundaries rather
 than disabling audio to reach the return.
@@ -149,7 +151,8 @@ The controlled steps5/6 are now composed and compared in
 normal422ab8/ret4 match native globals and119700 ordered output events. The
 original prologue establishes the controlled saved frame; the intervening
 initialized gameplay body is still a separate join. Both own result-layout
-continuations must feed their own resources/queues/caller into this output.
+continuations now feed their own resources/queues/caller into this output in
+[GAMEPLAY_RETURN](GAMEPLAY_RETURN.md), including both retained original returns.
 
 Each new stage needs controlled full-state/side-effect comparisons and both
 fresh initialized continuations that reproduce the entire pinned parent.

@@ -69,7 +69,8 @@ an audio device or the own gameplay return.
 
 The next original operations at422994 are mode-label rendering, notice/volume,
 presentation and enabled queued sound, followed by the real422ab8/ret4. Their
-[controlled output comparison](GAMEPLAY_OUTPUT.md) is accepted, but their own
-initialized composition and retained original return still require evidence.
+[controlled output comparison](GAMEPLAY_OUTPUT.md) is accepted. Both own
+initialized compositions and retained match/dispatcher returns are now also
+accepted separately in [GAMEPLAY_RETURN](GAMEPLAY_RETURN.md).
 An app window, actual Windows/device output, continuous ticks, a complete match
 and clean-Mac delivery remain outside this source continuation.

@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int,impulsePasses: Int,lifecyclePasses: Int,commandPasses: Int,hudPasses: Int,noticePasses: Int,resultRecordingPasses: Int,resultLayoutPasses: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int,impulsePasses: Int,lifecyclePasses: Int,commandPasses: Int,hudPasses: Int,noticePasses: Int,resultRecordingPasses: Int,resultLayoutPasses: Int,gameplayReturns: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -52,6 +52,7 @@ public enum MatchLaunchReference {
             let notices: GameplayNoticesReference.Input?
             let resultRecording: GameplayResultRecordingReference.Input?
             let resultLayout: GameplayResultLayoutReference.Input?
+            let gameplayReturn: GameplayReturnReference.Input?
             let label: String,before: State,after: State,helpers: [Helper],checkpoints: [Checkpoint]
             let readsBeforeWrites: [CharacterScreenReference.UndefinedRead],end: MenuStartupReference.Position
         }
@@ -60,7 +61,7 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil,gameplayCommands: Data? = nil,gameplayHUD: Data? = nil,gameplayNotices: Data? = nil,gameplayResultRecording: Data? = nil,gameplayResultLayout: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil,gameplayCommands: Data? = nil,gameplayHUD: Data? = nil,gameplayNotices: Data? = nil,gameplayResultRecording: Data? = nil,gameplayResultLayout: Data? = nil,gameplayReturn: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
@@ -76,6 +77,7 @@ public enum MatchLaunchReference {
         let notices = try gameplayNotices.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let resultRecording = try gameplayResultRecording.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let resultLayout = try gameplayResultLayout.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        let completedGameplay = try gameplayReturn.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -167,7 +169,14 @@ public enum MatchLaunchReference {
                   resultLayout.actorAddresses == c.actorAddresses,resultLayout.objectAddresses == c.objectAddresses,
                   resultLayout.cases.map(\.label) == ["result-layout"] else { throw error("Gameplay result layout parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }.merging(commands?.blobs ?? [:]) { _,new in new }.merging(hud?.blobs ?? [:]) { _,new in new }.merging(notices?.blobs ?? [:]) { _,new in new }.merging(resultRecording?.blobs ?? [:]) { _,new in new }.merging(resultLayout?.blobs ?? [:]) { _,new in new }
+        if let completedGameplay {
+            guard let gameplayResultLayout,resultLayout != nil,arithmeticPrecision == .bits53,
+                  completedGameplay.exeSHA256 == c.exeSHA256,completedGameplay.dllSHA256 == c.dllSHA256,
+                  completedGameplay.parent.sha256 == MatchPreparationReference.digest(gameplayResultLayout),completedGameplay.worldAddress == c.worldAddress,
+                  completedGameplay.actorAddresses == c.actorAddresses,completedGameplay.objectAddresses == c.objectAddresses,
+                  completedGameplay.cases.map(\.label) == ["gameplay-return"] else { throw error("Gameplay return parent identity") }
+        }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }.merging(commands?.blobs ?? [:]) { _,new in new }.merging(hud?.blobs ?? [:]) { _,new in new }.merging(notices?.blobs ?? [:]) { _,new in new }.merging(resultRecording?.blobs ?? [:]) { _,new in new }.merging(resultLayout?.blobs ?? [:]) { _,new in new }.merging(completedGameplay?.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -175,7 +184,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0,impulsePasses = 0,lifecyclePasses = 0,commandPasses = 0,hudPasses = 0,noticePasses = 0,resultRecordingPasses = 0,resultLayoutPasses = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0,impulsePasses = 0,lifecyclePasses = 0,commandPasses = 0,hudPasses = 0,noticePasses = 0,resultRecordingPasses = 0,resultLayoutPasses = 0,gameplayReturns = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -585,6 +594,21 @@ public enum MatchLaunchReference {
                                                                         try GameplayResultLayoutReference.compare(section,state: &state,context: context,round: ownRound,continuation: continuation)
                                                                         try snapshot(state,section.after,"own result layout after")
                                                                         resultLayoutPasses += 1
+                                                                        if let completedGameplay {
+                                                                            let section = completedGameplay.cases[0]
+                                                                            try snapshot(state,section.before,"own output before")
+                                                                            let ownedOutputAllocations = context.memory.allocations
+                                                                            let result = try GameplayReturnReference.compare(section,state: &state,context: &context,resourceBitmap: { token in
+                                                                                if let bitmap = resources.bitmaps[token],let surface = menuSurfaces[token] { return (bitmap.storage,surface) }
+                                                                                guard let a = ownedOutputAllocations[token],a.live else { throw error("Output resource ownership \(token)") }
+                                                                                var record = a.storage
+                                                                                let surface = try record.integer(at: 0,as: UInt32.self)
+                                                                                try record.write(UInt32(surface == 0 ? 0 : 1),at: 0)
+                                                                                return (record,surface)
+                                                                            })
+                                                                            try snapshot(state,section.after,"own output and dispatcher return")
+                                                                            helpers += result.helpers;events += result.events;gameplayReturns += 1
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -603,6 +627,6 @@ public enum MatchLaunchReference {
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses,commandPasses:commandPasses,hudPasses:hudPasses,noticePasses:noticePasses,resultRecordingPasses:resultRecordingPasses,resultLayoutPasses:resultLayoutPasses)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses,commandPasses:commandPasses,hudPasses:hudPasses,noticePasses:noticePasses,resultRecordingPasses:resultRecordingPasses,resultLayoutPasses:resultLayoutPasses,gameplayReturns:gameplayReturns)
     }
 }
