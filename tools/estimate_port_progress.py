@@ -42,6 +42,21 @@ SUPPLEMENTS = [
     ('MODE_SCREEN', 'OriginalModeScreen', '429e5a..429eb2 431dcb..432137 432137..4322ad 43290a..4329a8 4329a8..432aaa'),
     ('MUSIC_PLAYBACK', 'OriginalMusicPlayback', '42976b..4297ae 402020..40207f 401d30..401d90 401c90..401d26 401da0..401e85 402080..4020bd 401f30..401fff 4020cf..4020f6'),
     ('MENU_RETURN', 'OriginalMenuReturn', '42e0d2..42e0f9 4229e2..422a95 422a95..422ab8 4287de..428805'),
+    # 2026-09-09 review: only scopes belonging to the named native study.
+    # In particular, do not count the next drawing passes in WORLD_CAMERA,
+    # cpoint follow-ups in WORLD_HITS or unconnected CPU selection bodies.
+    ('ACTOR_INPUT', 'OriginalActorInput', '40e450..40e48a 40e170..40e2c8 40e2d0..40e445'),
+    ('ACTOR_CONTROL', 'OriginalActorControl', '413080..4143cb 417090..417162 417170..4171bc'),
+    ('ACTOR_PHYSICS', 'OriginalActorPhysics', '40e490..40ef6a 416fb0..417082'),
+    ('CHARACTER_SCREEN', 'OriginalCharacterScreen', '429f09..42a0ae'),
+    ('MATCH_SELECTION', 'OriginalMatchSelection', '42b296..42b959'),
+    ('WORLD_CONTROL', 'OriginalWorldControl', '41e339..41e634 403270..4034d3 4034e0..4034ea'),
+    ('WORLD_PHYSICS', 'OriginalWorldPhysics', '41e634..41eed1'),
+    ('WORLD_LINKS', 'OriginalWorldLinks', '417f80..4187a3'),
+    ('WORLD_CONTACTS', 'OriginalWorldContacts', '419380..4195ff 4195ff..4196d3 4196d3..4196df 417200..4173fa 4171c0..4171fc 417400..417f7b'),
+    ('WORLD_HITS', 'OriginalActorHits', '42e100..431b64'),
+    ('WORLD_CPOINTS', 'OriginalWorldCPoints', '418c30..419373 4187b0..418c2f'),
+    ('WORLD_CAMERA', 'OriginalWorldCamera', '41b5d0..41bc87 41a250..41a590 41a050..41a24d 415160..4151c2 41f484..41f496'),
 ]
 
 # Studies specify whole functions but sometimes only print the entry address.
@@ -199,7 +214,7 @@ def main():
                             bytesPerHour=rate, remainingLinearHours=remaining/rate))
     scenarios = []
     for label, rate, assumption in [
-        ('historical-mean', speed, 'Observed 25.9h envelope-growth rate continues'),
+        ('historical-mean', speed, f'Observed {hours:.1f}h envelope-growth rate continues'),
         ('recent-rate', rolling[0]['bytesPerHour'], 'Observed approximately 6h envelope-growth rate continues'),
         ('recent-half-speed', rolling[0]['bytesPerHour']/2, 'Unmeasured risk assumption: further 2x slowdown relative to recent rate'),
     ]:
