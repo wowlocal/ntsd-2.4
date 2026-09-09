@@ -1,0 +1,993 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Inventory original loaded cpoint fields; not execution or reachability proof.\nKeeps raw signed actions and vaction addresses without repairing original data.\n",
+  "nativeCompared": false,
+  "parent": {
+    "fixture": "original-loaded-catalog.json",
+    "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e",
+    "corpusSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+  },
+  "objectTypes": {
+    "0": 42,
+    "4": 6,
+    "1": 17,
+    "6": 2,
+    "2": 4,
+    "5": 3,
+    "3": 63
+  },
+  "holders": [
+    {
+      "index": 0,
+      "id": 50,
+      "path": "chars\\pein.dat",
+      "source": "4192dbbf6fdce60335f4d278656284822d5bda87d90c0fe4cdbb26072f1fc4c1"
+    },
+    {
+      "index": 1,
+      "id": 52,
+      "path": "chars\\kyubi.dat",
+      "source": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef"
+    },
+    {
+      "index": 2,
+      "id": 38,
+      "path": "chars\\sasuke_cs2.dat",
+      "source": "4c310e0fdb1b879b4b1a336bcb0502c1804745a9c439a2805d9d96b242f3c1df"
+    },
+    {
+      "index": 3,
+      "id": 58,
+      "path": "chars\\deidara_bird.dat",
+      "source": "b29191bd88e6fa39750ce2e5822f85a2a856a331f6ba0d2db8cbbc842a72af3c"
+    },
+    {
+      "index": 4,
+      "id": 51,
+      "path": "chars\\sasori.dat",
+      "source": "bc933986a8022793131a3c97ee25a4a6c2e8a7caefba878357e7712aa267bf8a"
+    },
+    {
+      "index": 5,
+      "id": 56,
+      "path": "chars\\reaper.dat",
+      "source": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10"
+    },
+    {
+      "index": 6,
+      "id": 57,
+      "path": "chars\\nckakuzu.dat",
+      "source": "b8f4616295ff0f820ae9244234cf2964173fb9d6ef74e06972ad00a0f36cf842"
+    },
+    {
+      "index": 7,
+      "id": 39,
+      "path": "chars\\sand_creature.dat",
+      "source": "5e6458281cbf434a7975421aac0389c88ff2f79d5cd678d658ca4eda9285ef66"
+    },
+    {
+      "index": 8,
+      "id": 37,
+      "path": "chars\\jiroubou.dat",
+      "source": "8030a942417302dcfb0db0879ecc1fa96df50146bbcccd5807da50ab1cef8a9d"
+    },
+    {
+      "index": 9,
+      "id": 36,
+      "path": "chars\\tayuya.dat",
+      "source": "870cb210ff453aef7b249210f5565f922fabad2bf4afcda584b531363d936c5f"
+    },
+    {
+      "index": 10,
+      "id": 35,
+      "path": "chars\\sakon.dat",
+      "source": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a"
+    },
+    {
+      "index": 11,
+      "id": 34,
+      "path": "chars\\kidomaru.dat",
+      "source": "c59e6d0f33d4696bc8e5d605c888492eeb890eff1973cb57f4301eb89130dce5"
+    },
+    {
+      "index": 12,
+      "id": 33,
+      "path": "chars\\naruto_clone.dat",
+      "source": "1470619899d2388c65f50f0d94ffc7ee279adecbc5fc53a32e6db365a3b797b3"
+    },
+    {
+      "index": 13,
+      "id": 55,
+      "path": "chars\\puppet_sasori.dat",
+      "source": "7cd59d20a62ed6a683cf06698f5bfebd957803c3e195855b04a3bab987429bb0"
+    },
+    {
+      "index": 14,
+      "id": 32,
+      "path": "chars\\hunter.dat",
+      "source": "8f5b26419c753a28ded96bf32eb39349ff027066dd8f64251b59eef6e85ec9a4"
+    },
+    {
+      "index": 15,
+      "id": 31,
+      "path": "chars\\sound_nin2.dat",
+      "source": "b6e74da0044363f9f973ef8e000452c15898db08da1dfc09609410e6865b91ff"
+    },
+    {
+      "index": 16,
+      "id": 30,
+      "path": "chars\\sound_nin.dat",
+      "source": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5"
+    },
+    {
+      "index": 17,
+      "id": 2,
+      "path": "chars\\naruto.dat",
+      "source": "761f2c149a05cb568dcffe16a032a7faee0113911b9171d11c8b6d7d10a779f3"
+    },
+    {
+      "index": 18,
+      "id": 1,
+      "path": "chars\\sakura.dat",
+      "source": "fa1569312654a4570e234f8f4d25a3df1a31dce960ba6192be725c5f5414a42e"
+    },
+    {
+      "index": 19,
+      "id": 3,
+      "path": "chars\\kakashi.dat",
+      "source": "08192ef387bb21ba94963c223e91190248f8bd70934411a94316085f8affed99"
+    },
+    {
+      "index": 20,
+      "id": 4,
+      "path": "chars\\sai.dat",
+      "source": "e3a63628a41a8ba209d0e16217f71afb95270298f2db7c3193e02fe3331b20e3"
+    },
+    {
+      "index": 21,
+      "id": 11,
+      "path": "chars\\sasuke.dat",
+      "source": "80613180d8cbc2c4b036894d8f996c7e66be28d8d29a2a6ab43c5d2d2a14040f"
+    },
+    {
+      "index": 22,
+      "id": 13,
+      "path": "chars\\yamato.dat",
+      "source": "070bdfa1682599e1ceac697da23e788ac520da37cc219b9a5fd9e0fab6208853"
+    },
+    {
+      "index": 23,
+      "id": 16,
+      "path": "chars\\gaara.dat",
+      "source": "b5ee72e5f25eabe7735d70a590e167459d11ec4e02d5b9cf62f38ae9945f148a"
+    },
+    {
+      "index": 24,
+      "id": 7,
+      "path": "chars\\rock_lee.dat",
+      "source": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731"
+    },
+    {
+      "index": 25,
+      "id": 18,
+      "path": "chars\\neji.dat",
+      "source": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49"
+    },
+    {
+      "index": 26,
+      "id": 22,
+      "path": "chars\\shikamaru.dat",
+      "source": "bd6561325e5dd5388327a168628031db19cc2260db6db862e895bde107b47fe9"
+    },
+    {
+      "index": 27,
+      "id": 19,
+      "path": "chars\\tenten.dat",
+      "source": "1b40d755eb1d08a623c4f814699ada227f644e98eae5ff6d3e0301d9f30e87e6"
+    },
+    {
+      "index": 28,
+      "id": 12,
+      "path": "chars\\kiba.dat",
+      "source": "3d23d01037c46f7d53ea76a4045744d495258d1ff9f6c4faf3477556b0afda4d"
+    },
+    {
+      "index": 29,
+      "id": 5,
+      "path": "chars\\shino.dat",
+      "source": "b226a325daaa578adcc4321eefc2fc1b2f2d4e73c8ae3dc76ed128645e252476"
+    },
+    {
+      "index": 30,
+      "id": 8,
+      "path": "chars\\chiyo.dat",
+      "source": "956de8fb7e8e1f39dc8c9771012c1bc166686d6271bdc74abcaf408fa0bf81af"
+    },
+    {
+      "index": 31,
+      "id": 14,
+      "path": "chars\\kankuro.dat",
+      "source": "16634a43ed70df769f407195f9b03205338e636967aec06213cb6aa3419893a7"
+    },
+    {
+      "index": 32,
+      "id": 15,
+      "path": "chars\\temari.dat",
+      "source": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557"
+    },
+    {
+      "index": 33,
+      "id": 6,
+      "path": "chars\\Hsasori.dat",
+      "source": "e85b9c2393f521ddf12b026726653e5ee162a1e2f409dba813ba71e79264c817"
+    },
+    {
+      "index": 34,
+      "id": 17,
+      "path": "chars\\kisame.dat",
+      "source": "47feb9379aaa042ecc16662990a9349971ac0e2cdd4b91e42267ba9a466b4619"
+    },
+    {
+      "index": 35,
+      "id": 9,
+      "path": "chars\\itachi.dat",
+      "source": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2"
+    },
+    {
+      "index": 36,
+      "id": 10,
+      "path": "chars\\deidara.dat",
+      "source": "26f608b7c573194e3a630c7244de6fdf3c8f72cd9493d02dade70ac64696f326"
+    },
+    {
+      "index": 37,
+      "id": 24,
+      "path": "chars\\hidan.dat",
+      "source": "6b961d45b7c6b70e4af009cea1367cede0dd40e8b1eb948e4ffd174738e1a1cd"
+    },
+    {
+      "index": 38,
+      "id": 25,
+      "path": "chars\\kakuzu.dat",
+      "source": "6da3e6483c83a3b954509b0b7f7f7a87c6fc22adaef30b77a5dd11c446719dcc"
+    },
+    {
+      "index": 39,
+      "id": 23,
+      "path": "chars\\kabuto.dat",
+      "source": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a"
+    },
+    {
+      "index": 40,
+      "id": 20,
+      "path": "chars\\orochimaru.dat",
+      "source": "1f619fc95be2b2524d938477e6692d0b6648701fac8c23f12dbddb55fbd17937"
+    },
+    {
+      "index": 41,
+      "id": 21,
+      "path": "chars\\jiraiya.dat",
+      "source": "823ec4eda42c2fa57b047d9e6c5a4d1350e913b8f3a9e6873c87c59061426a23"
+    },
+    {
+      "index": 42,
+      "id": 100,
+      "path": "chars\\weapon6.dat",
+      "source": "521e56ff1718bb45bda067b972a89db774fe6bfe2732dc1b1fd7193620f2c0b4"
+    },
+    {
+      "index": 43,
+      "id": 101,
+      "path": "chars\\weapon2.dat",
+      "source": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046"
+    },
+    {
+      "index": 44,
+      "id": 120,
+      "path": "chars\\weapon4.dat",
+      "source": "e0815548a7e741c313a7fedd010b233bd6a8ce27284e33274ebe0d3c51a7f140"
+    },
+    {
+      "index": 45,
+      "id": 121,
+      "path": "chars\\weapon5.dat",
+      "source": "c8805221f39cb0d26676754bba11a576703925999cf500cac55cd1f0d48a717e"
+    },
+    {
+      "index": 46,
+      "id": 122,
+      "path": "chars\\weapon3.dat",
+      "source": "7597c0e9f1fbd583cc44abd4685e8796d7de3f5dce1d1353be8cbea9390c8685"
+    },
+    {
+      "index": 47,
+      "id": 150,
+      "path": "chars\\weapon1.dat",
+      "source": "56bb3ea4ad1b239371a651ee449054d70f960b9e19459ca8e9759b7ce1cc2164"
+    },
+    {
+      "index": 48,
+      "id": 151,
+      "path": "chars\\log.dat",
+      "source": "fd116e749c9fa733880d9d5b858f309864789b366273f6bcd5f77fa2e463ab3f"
+    },
+    {
+      "index": 49,
+      "id": 123,
+      "path": "chars\\weapon8.dat",
+      "source": "d2ce51e8df936b01ba58b310395b3bf74614657fe73aaf1f93fcb76b75213331"
+    },
+    {
+      "index": 50,
+      "id": 124,
+      "path": "chars\\weapon9.dat",
+      "source": "04bd565739df46ae5acbe158eeff98d39364fb4b21bff63697566bf7b0905e75"
+    },
+    {
+      "index": 51,
+      "id": 217,
+      "path": "chars\\weapon10.dat",
+      "source": "3fa797aff07a9b6308b8a771184a83e25ffe18a7b24edc8fe0b1bd0be207d345"
+    },
+    {
+      "index": 52,
+      "id": 218,
+      "path": "chars\\weapon11.dat",
+      "source": "6b57bacabd0078f68abb244b5da2a859404468c8c72452fcc7cb578b2d7e5e54"
+    },
+    {
+      "index": 53,
+      "id": 300,
+      "path": "chars\\criminal.dat",
+      "source": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91"
+    },
+    {
+      "index": 54,
+      "id": 230,
+      "path": "chars\\karasu.dat",
+      "source": "cabf25c41558594a08fa43c38809ef9e6f1ec95fa0b43de54f4e5dae3ddfbdbe"
+    },
+    {
+      "index": 55,
+      "id": 500,
+      "path": "chars\\heart.dat",
+      "source": "7d24cbda651bec7aa63ee81135bdd53d23e189a9a4787e16aa5b1f00730ce330"
+    },
+    {
+      "index": 56,
+      "id": 501,
+      "path": "chars\\heart2.dat",
+      "source": "0facf1d1c91553da96f3e2eed42554bd9704e16f9f22b1f9ac68607050e88505"
+    },
+    {
+      "index": 57,
+      "id": 502,
+      "path": "chars\\heart3.dat",
+      "source": "06abb76ab4281e70da80086fb4f13894e3fe825a3c01daaf4205fd392ffc71d8"
+    },
+    {
+      "index": 58,
+      "id": 503,
+      "path": "chars\\blood.dat",
+      "source": "72030f03a6013212cd800df7e24b769e24002087353b0b4a22b2f2c0d4eb7c12"
+    },
+    {
+      "index": 59,
+      "id": 504,
+      "path": "chars\\blood2.dat",
+      "source": "e12335f3589265a85d2c99d875c995f9e191fe9ac5eab78e46902964d55830af"
+    },
+    {
+      "index": 60,
+      "id": 505,
+      "path": "chars\\blood3.dat",
+      "source": "9c80add3fe62a3992d66ac91f9c56afc39af7fd3b598d3ba876216be2917d9d3"
+    },
+    {
+      "index": 61,
+      "id": 506,
+      "path": "chars\\heart0.dat",
+      "source": "00d2ef4999f6ff335dcf325a5002acfa8719b7626dfd5834207b95ace0ce5c2a"
+    },
+    {
+      "index": 62,
+      "id": 200,
+      "path": "chars\\sakura_ball.dat",
+      "source": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827"
+    },
+    {
+      "index": 63,
+      "id": 201,
+      "path": "chars\\death.dat",
+      "source": "8e23e7c655a484aca739efdf9b93096605c5a70919f5aba0e77a02184384e388"
+    },
+    {
+      "index": 64,
+      "id": 203,
+      "path": "chars\\charge.dat",
+      "source": "b6be1f21449f7d4aed6022196720fff25dba017302276cd6438189ad10d42bd6"
+    },
+    {
+      "index": 65,
+      "id": 204,
+      "path": "chars\\wind.dat",
+      "source": "50503c2b05070cb81c9f3f853e84fa14ddbabe280fbf6e249a971cb2b036077b"
+    },
+    {
+      "index": 66,
+      "id": 205,
+      "path": "chars\\poison.dat",
+      "source": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197"
+    },
+    {
+      "index": 67,
+      "id": 206,
+      "path": "chars\\clay_bird2.dat",
+      "source": "343639bcb32932f822463a8f7a7733f04439ef1b9c87071d2a04d8ee35eb7c2f"
+    },
+    {
+      "index": 68,
+      "id": 207,
+      "path": "chars\\ink.dat",
+      "source": "55faf0385e2c23f451b3b404e7ca6ace4cfef56d9965953314f7db54e8a2f2c9"
+    },
+    {
+      "index": 69,
+      "id": 208,
+      "path": "chars\\sword.dat",
+      "source": "34fbcd2e295224acc77370c99b28dc746c0aca722f7eaf8b678f5ffe155de48d"
+    },
+    {
+      "index": 70,
+      "id": 209,
+      "path": "chars\\area.dat",
+      "source": "d776eab75e88e19882cc2f96e6f05a381de1fe7e4b314976f1a709d68bd2939d"
+    },
+    {
+      "index": 71,
+      "id": 210,
+      "path": "chars\\katon_ball.dat",
+      "source": "7bf434e1a4cee48dd7c2276414c3d01d9120ff787dd1e1e69bac258046d91bef"
+    },
+    {
+      "index": 72,
+      "id": 211,
+      "path": "chars\\firen_flame.dat",
+      "source": "b69e3e602df3d7dc9068f0d50c90b8430b028173cb2b2134e232ae0fe7bc4c50"
+    },
+    {
+      "index": 73,
+      "id": 212,
+      "path": "chars\\freeze_column.dat",
+      "source": "2967479a59d8172eaddb39632b2c135320194c2a38e4f262a8d97ec41b9ab948"
+    },
+    {
+      "index": 74,
+      "id": 213,
+      "path": "chars\\puppet.dat",
+      "source": "c44ed63ce4f7a8a762856acc960c16fe96c8a504e6541065935016c42e402368"
+    },
+    {
+      "index": 75,
+      "id": 214,
+      "path": "chars\\flash.dat",
+      "source": "f675e58bd845f5d9bd4bd38a5f0735b006fde1be6decfa33d39cd77fb55ad8aa"
+    },
+    {
+      "index": 76,
+      "id": 215,
+      "path": "chars\\frog.dat",
+      "source": "21113d5c0ad7d1a6ee7c7b0d9754071ed745ae2259732717fc5d49c949ea946a"
+    },
+    {
+      "index": 77,
+      "id": 216,
+      "path": "chars\\doggy.dat",
+      "source": "62f91e8abadcf0ea6af713a9c9beaad879050e9bd27bd634cabc92ae608b771f"
+    },
+    {
+      "index": 78,
+      "id": 219,
+      "path": "chars\\jan_chaseh.dat",
+      "source": "1a5902e00fa745018ce3558e8a9c8f9d33d83d644ac43a597818fac39dbdc739"
+    },
+    {
+      "index": 79,
+      "id": 220,
+      "path": "chars\\crow_2.dat",
+      "source": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96"
+    },
+    {
+      "index": 80,
+      "id": 221,
+      "path": "chars\\big_boom.dat",
+      "source": "676c88cfe75473e76aa80bbe3f1fd94a033596ceb8b0a02835cf13e043017ff8"
+    },
+    {
+      "index": 81,
+      "id": 222,
+      "path": "chars\\ironsand.dat",
+      "source": "082c169931ffde5ecce2a75d8f304787616354b0965d00cffff0912f3f1da59b"
+    },
+    {
+      "index": 82,
+      "id": 223,
+      "path": "chars\\mega_ex.dat",
+      "source": "a904764f6c851e51af13d80cd38242e0ee43ba291ca8ecbdcb151fd20f39862c"
+    },
+    {
+      "index": 83,
+      "id": 224,
+      "path": "chars\\snake.dat",
+      "source": "26b724bb9b3f6d3c69ef0594fbc673d94d18981539f1a2390c192a130fd66a44"
+    },
+    {
+      "index": 84,
+      "id": 225,
+      "path": "chars\\clay_bird.dat",
+      "source": "c7bbaf13ad7ada0a86c0eea843c654a802a47c98c5c213732cdccf7f3df2b881"
+    },
+    {
+      "index": 85,
+      "id": 226,
+      "path": "chars\\coffin.dat",
+      "source": "6ed07df431ad6cae973e633a691d1b38c16b35539536920398e512122eefab14"
+    },
+    {
+      "index": 86,
+      "id": 228,
+      "path": "chars\\bugs.dat",
+      "source": "f4f0f3f774ecaaeac3d6af4fb657bb7169126ebed81cd512012deaff0c6f877c"
+    },
+    {
+      "index": 87,
+      "id": 229,
+      "path": "chars\\rasenshuriken.dat",
+      "source": "b7656f7825ac079b4af1fbad477290afe7a91fbae7782072b7873c41618edd3a"
+    },
+    {
+      "index": 88,
+      "id": 231,
+      "path": "chars\\sanshouo.dat",
+      "source": "c1b9a3e99f044d741ac9abe7ae20ac5de38f213f22260f60b97792646de8401b"
+    },
+    {
+      "index": 89,
+      "id": 235,
+      "path": "chars\\criminal2.dat",
+      "source": "fa8e2f96c0a653122a16fd14eb8932cc4b0471f7f1794395138442e200b0f635"
+    },
+    {
+      "index": 90,
+      "id": 401,
+      "path": "chars\\summon.dat",
+      "source": "faa3933380a47f5aff09fde38d1bf42a8c3ffb6f866bda70347d8c4f15e81eb3"
+    },
+    {
+      "index": 91,
+      "id": 400,
+      "path": "chars\\dragon.dat",
+      "source": "65cccbdce2f7a84e1ccd5d74901e3358d37e1de07878181de96849dbeef25643"
+    },
+    {
+      "index": 92,
+      "id": 417,
+      "path": "chars\\tree.dat",
+      "source": "6f7f4aaa31b18b250071a8df6eae31941d65774327b8804732e1bff7c22299bc"
+    },
+    {
+      "index": 93,
+      "id": 407,
+      "path": "chars\\clay_worm.dat",
+      "source": "b0c08a10171ef8624c9aacfbbfcc535f010eced334f18e607cd91dbdf96ffaba"
+    },
+    {
+      "index": 94,
+      "id": 408,
+      "path": "chars\\katon_big.dat",
+      "source": "8a72a0ef5deee46bb756cdbaae4c3fcbfc266ea2eb6b8e33cddd2821efee880d"
+    },
+    {
+      "index": 95,
+      "id": 410,
+      "path": "chars\\sand_shield.dat",
+      "source": "40b3654ff4547d196b2773718202cd4398d6afdade444a063ac810468356e0e1"
+    },
+    {
+      "index": 96,
+      "id": 411,
+      "path": "chars\\sand.dat",
+      "source": "0c18e25699e561d2804a9ec1710b47f24ed7410987075722f228bfd74d0d58af"
+    },
+    {
+      "index": 97,
+      "id": 412,
+      "path": "chars\\sand_2.dat",
+      "source": "ea71b71b20e2fcbcbfa69ff941338f6ab198f3b869f1b9a200fabd6878ff08db"
+    },
+    {
+      "index": 98,
+      "id": 413,
+      "path": "chars\\sand_blast.dat",
+      "source": "333afd7be3879c55703714a9a604d36f99cac9707d73abdbfca3d3025c99c485"
+    },
+    {
+      "index": 99,
+      "id": 416,
+      "path": "chars\\water.dat",
+      "source": "fd1780fba0e7c17d347b9ece73afe741738df763922514a535f5e6687b79087d"
+    },
+    {
+      "index": 100,
+      "id": 418,
+      "path": "chars\\mother_puppet.dat",
+      "source": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599"
+    },
+    {
+      "index": 101,
+      "id": 419,
+      "path": "chars\\chiyo_kunais.dat",
+      "source": "b6eb201aa94c3c50eb618b17d60589fee52faf25c58085fa1e18da5d0a94f83e"
+    },
+    {
+      "index": 102,
+      "id": 420,
+      "path": "chars\\father_puppet.dat",
+      "source": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b"
+    },
+    {
+      "index": 103,
+      "id": 421,
+      "path": "chars\\bugs2.dat",
+      "source": "878eb42525ae7088e51e9d347aca2c80568ed2b82b8dbe7b87068999b18a99ee"
+    },
+    {
+      "index": 104,
+      "id": 422,
+      "path": "chars\\ex_ball.dat",
+      "source": "06040d90e0f3cd79b6b5452180fcfa779bfb53dde4d954031c48cff4245a3432"
+    },
+    {
+      "index": 105,
+      "id": 433,
+      "path": "chars\\itachi_kunai.dat",
+      "source": "4ebbe93bae39da2ebac911ebf0fd3e706c242953a44184159544b582d534623e"
+    },
+    {
+      "index": 106,
+      "id": 434,
+      "path": "chars\\rasengan_ball.dat",
+      "source": "df14a7e2029a2b3d459736a2dcb1aa98501a8286a9c4923a39daaf99d9adf374"
+    },
+    {
+      "index": 107,
+      "id": 435,
+      "path": "chars\\drunken.dat",
+      "source": "57e56044cf2cf59385ecaf6c4811f39beeb88a2ca75d8cd03b60dcec0b005bb7"
+    },
+    {
+      "index": 108,
+      "id": 436,
+      "path": "chars\\wave.dat",
+      "source": "8f2d8490045c9ef82b972edb3d00f7f109eed5ce86b3a038d80e5bfcd75a10d3"
+    },
+    {
+      "index": 109,
+      "id": 437,
+      "path": "chars\\chakra.dat",
+      "source": "9b65992b9ec27ce05a0020af5be4fcad96a3a3f37b68f3c1819790d6528524e8"
+    },
+    {
+      "index": 110,
+      "id": 438,
+      "path": "chars\\spider.dat",
+      "source": "27d7cba55c010d4ba8a4d09075218c7d132599ebce2b5e08d5cb7a34adef073b"
+    },
+    {
+      "index": 111,
+      "id": 439,
+      "path": "chars\\monster.dat",
+      "source": "721e78cea5d9de4ea3b8d2e7b57cd7856ec5d35a3d3f2402ffd914a27b1f0506"
+    },
+    {
+      "index": 112,
+      "id": 440,
+      "path": "chars\\chidori.dat",
+      "source": "788da98dcf23d50d401b19ae272b82c7c16a859bdde0610779723e3ccc447ee8"
+    },
+    {
+      "index": 113,
+      "id": 441,
+      "path": "chars\\wood.dat",
+      "source": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75"
+    },
+    {
+      "index": 114,
+      "id": 442,
+      "path": "chars\\gate.dat",
+      "source": "014b3601718f85f4dc094a4aa432e95190540e3f4df29847d968b8aaf2e54fb4"
+    },
+    {
+      "index": 115,
+      "id": 444,
+      "path": "chars\\byakugan.dat",
+      "source": "ee7adc85b79b8f2e71966ce14bb872642c9ca9559e0995fd18b57252296841f0"
+    },
+    {
+      "index": 116,
+      "id": 445,
+      "path": "chars\\shield.dat",
+      "source": "5430de7439800e63b13c61256840269fa9a8a317dca5c7d8d5aca17531cf52c9"
+    },
+    {
+      "index": 117,
+      "id": 446,
+      "path": "chars\\4TK_ball.dat",
+      "source": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae"
+    },
+    {
+      "index": 118,
+      "id": 447,
+      "path": "chars\\die.dat",
+      "source": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6"
+    },
+    {
+      "index": 119,
+      "id": 448,
+      "path": "chars\\flash_weap.dat",
+      "source": "501b6613bd66eb4afdac60d55461833b17b809943b9a59dd1c6f18d89f909522"
+    },
+    {
+      "index": 120,
+      "id": 449,
+      "path": "chars\\jiroubou_rock.dat",
+      "source": "31ebf35a2c36f40ea706851910a2f686826334fe7c8cd6a7295458fd07bc8e4b"
+    },
+    {
+      "index": 121,
+      "id": 450,
+      "path": "chars\\air_creature.dat",
+      "source": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c"
+    },
+    {
+      "index": 122,
+      "id": 507,
+      "path": "chars\\air_creature_die.dat",
+      "source": "0bb4a8e347fe2ed93e43c45b2b54b6c629333ecef52fe031b2d853bc9e8b4af5"
+    },
+    {
+      "index": 123,
+      "id": 451,
+      "path": "chars\\thunder_creature.dat",
+      "source": "a03b5edb7d358c660b9e3e6a947431982555f0fbde10ff9fd1a0295d13fb157e"
+    },
+    {
+      "index": 124,
+      "id": 452,
+      "path": "chars\\fire_creature.dat",
+      "source": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b"
+    },
+    {
+      "index": 125,
+      "id": 453,
+      "path": "chars\\earth_creature.dat",
+      "source": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85"
+    },
+    {
+      "index": 126,
+      "id": 462,
+      "path": "chars\\shadow.dat",
+      "source": "451f10b8a02016e57d46bb2014ff5261ae2c6eb9cdbbce82ed61813e541699ab"
+    },
+    {
+      "index": 127,
+      "id": 499,
+      "path": "chars\\nckakuzuarm.dat",
+      "source": "f89878c1a9cc7c7f21ed0e0c9989b584ba70a69eff6c1214dd58f494aeef149a"
+    },
+    {
+      "index": 128,
+      "id": 510,
+      "path": "chars\\100_puppets.dat",
+      "source": "3d62ff20de76489ac27d3cf08513bdc71665d808cbd4ab87437409c7f5f874c0"
+    },
+    {
+      "index": 129,
+      "id": 511,
+      "path": "chars\\100_puppets_b.dat",
+      "source": "fa7fcc42b05157801d67001233c1b80dd77ab308a7d8966bc470a5a58d0f4b88"
+    },
+    {
+      "index": 130,
+      "id": 512,
+      "path": "chars\\100_puppets_c.dat",
+      "source": "8cdcdc6bfb33e8c0579181fcaa6e85dfaa3e2677ef6609d11a569d185cadb35c"
+    },
+    {
+      "index": 131,
+      "id": 513,
+      "path": "chars\\lee_counter.dat",
+      "source": "8882d9a5223c243442c91cc4d4d6d125f9276597df4024cb92e15af2cdded32c"
+    },
+    {
+      "index": 132,
+      "id": 514,
+      "path": "chars\\katon_kakuzu.dat",
+      "source": "0bd3e2d209b65ef2903824289490bc871c3be9c1bc4dc95580e0e6996a968e7b"
+    },
+    {
+      "index": 133,
+      "id": 515,
+      "path": "chars\\needle.dat",
+      "source": "365dde58be922f39be8c95f18d573ef35b52d7e25124535aab5bc05869e0b171"
+    },
+    {
+      "index": 134,
+      "id": 516,
+      "path": "chars\\mirror.dat",
+      "source": "9d3a089c9a2545a1271b71909e091934fcff76ec23789578da5196f7aaa3e163"
+    },
+    {
+      "index": 135,
+      "id": 998,
+      "path": "data\\etc.dat",
+      "source": "6eae99d2803363f2d461405fb938a9af420f6b3e4548b9092a8d9974f024de0d"
+    },
+    {
+      "index": 136,
+      "id": 999,
+      "path": "data\\broken_weapon.dat",
+      "source": "6e55bb72a0ee164bf747fd32caa0febfc28faa034e780a8cdf63dfbfadde5284"
+    }
+  ],
+  "holderFrames": 15363,
+  "uniqueCpoints": 239,
+  "states": {
+    "0": 285,
+    "1": 344,
+    "2": 195,
+    "15": 3520,
+    "3": 2029,
+    "7": 155,
+    "6": 350,
+    "8": 120,
+    "10": 668,
+    "12": 482,
+    "18": 528,
+    "4": 207,
+    "5": 161,
+    "11": 265,
+    "16": 160,
+    "14": 234,
+    "400": 52,
+    "9": 845,
+    "17": 129,
+    "1700": 12,
+    "4038": 4,
+    "100": 29,
+    "13": 8,
+    "4010": 1,
+    "8051": 1,
+    "4024": 1,
+    "8030": 4,
+    "4016": 1,
+    "4003": 2,
+    "3005": 1660,
+    "26": 6,
+    "8055": 1,
+    "8032": 1,
+    "4223": 2,
+    "401": 1,
+    "4052": 1,
+    "4017": 1,
+    "9996": 1,
+    "4051": 1,
+    "9997": 99,
+    "8009": 1,
+    "4058": 1,
+    "4056": 1,
+    "4057": 1,
+    "1000": 348,
+    "1001": 336,
+    "1002": 234,
+    "1003": 83,
+    "1004": 18,
+    "2000": 38,
+    "2001": 5,
+    "2004": 13,
+    "4002": 1,
+    "4001": 1,
+    "3006": 442,
+    "301": 13,
+    "3003": 477,
+    "3002": 225,
+    "4501": 1,
+    "4502": 2,
+    "4506": 2,
+    "3000": 351,
+    "3001": 102,
+    "4030": 3,
+    "30005": 1,
+    "9998": 3,
+    "4507": 1,
+    "4450": 1,
+    "9999": 92
+  },
+  "vactions": [
+    0,
+    17,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    141,
+    143,
+    180,
+    181,
+    230,
+    390,
+    396
+  ],
+  "cpointKinds": {
+    "0": 13938,
+    "1": 775,
+    "2": 650
+  },
+  "undefinedFields": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 14588,
+    "16": 14590
+  },
+  "kinds": [
+    0,
+    1,
+    2
+  ],
+  "outsideFrameArray": [],
+  "conditionalUndefinedReads": [
+    {
+      "object": 101,
+      "sourceID": 419,
+      "path": "chars\\chiyo_kunais.dat",
+      "frame": 49,
+      "state": 9,
+      "cpoint": [
+        1,
+        40,
+        34,
+        100,
+        11,
+        181,
+        0,
+        0,
+        0,
+        13,
+        -5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        null
+      ]
+    }
+  ]
+}

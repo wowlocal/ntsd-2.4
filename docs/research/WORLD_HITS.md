@@ -234,5 +234,9 @@ The following cleanup clears only owner `+98` when a positive held link has an
 invalid signed slot, inactive target or nonreciprocal target `+a0`. These are
 source observations, not an accepted native cpoint implementation.
 
+The following [WORLD_CPOINTS study](WORLD_CPOINTS.md) now implements and compares
+this complete next caller through `41f484`. The hit study's own comparison
+boundary remains `41f2ac`.
+
 The first complete Naruto/Sasuke District match, application UI, Windows runs,
 clean-Mac validation and the full-game goal remain open.

@@ -109,6 +109,14 @@ reactions are checked by the controlled corpus. The new Core remains outside
 Practice. Remaining links, full tick, app integration and Windows comparison
 are still open.
 
+The [whole cpoint and second attachment passes](docs/research/WORLD_CPOINTS.md)
+now match2,681 controlled cases and both own launch chains through41f484.
+Generic catch actions, injury, throws, Object replacement, placement and held-link
+cleanup preserve frame/slot order and aliases. All four first-tick stages retain
+the own state; active grabs are exercised separately by the controlled corpus.
+Camera/drawing, scheduling/recovery, the full tick and application integration
+remain open.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

@@ -1654,6 +1654,57 @@ and ECX retained between the two calls. Then camera/draw/scheduler/recovery and
 whole tick return. Practice/app integration, natural DAT sequences, Windows,
 clean Mac, first full Naruto/Sasuke District match and full-game goal remain open.
 
+The [whole cpoint and second attachment passes](docs/research/WORLD_CPOINTS.md)
+now implement entire418c30..419373/4187b0..418c2f and caller41f2ac..41f484.
+Generic DAT cpoint actions/exhaustion/throw/Object substitution, placement/injury,
+positive held-owner cleanup and shared second417f80; no new character-ID list.
+2681 controlled cases match full400-slot pool/World/masks/globals,978nested helper
+returns/176ordered RNG events/1274unique instructions. All446instructions of
+418c30,266/267of4187b0 (onlyalignment4187c9 skipped) and118caller instructions
+reached; not all branch outcomes, arbitrary backing or natural DAT sequences.
+418c30 starts from collision7c and retains originalcpoint across action changes;
+4187b0 requires CURRENT70kind1/state9 and current partnerkind2. Partneractivity/
+type gates are absent. ESI partner survives400slots and can remain from entrySP-4
+or an earlier reciprocal comparison on broken-link throw paths. Native optional
+retainedPartnerSlot must be supplied when dereferenced; no substitutedActor8c.
+Full outertick scratch provenance remains open. Positive decrease subtracts94;
+negative adds and has a separate exhaustion branch with pendingX±4/Y-3/frame181.
+Attack, directionalattack, jump run sequentially; negativeframe flips facing and
+wrap-negates, partnerframe uses NEW captorframe vaction. Frozen cpoint remains.
+Nonzero throwvx still runs after broken links. throwinjury-1 saves324/33c IDs,
+rebinds own368, then all active2f4==slot Objects using LIVE partnerObject reads.
+Placement uses live centers but caught cpoint from raw signed vaction, evenafter
+currentframe abs. Controlled-1..-5 address Objectheader; known extent/masks are
+preserved, unknown backing throws. Cover uses signed quotient/remainder10,
+facing changes AFTER geometry; binaryz/x/y refreshed in sourceorder. No cpoint
+normalization or proposed gameplay correction. Cleanup clearsONLYowner98.
+DAT survey checksall137Objects/15363presentFrames,239cpoint values,775kind1/
+650kind2. All observedvactions0..<400; undefinedc4/c8 words remain null. ID419
+chars/chiyo_kunais.dat frame49/state9 has throwvx13 and undefinedthrowvz; exclusive
+up/down can read it. Actualreachability/Windows backing remains open, nozero fix.
+Both fresh ownGAMEPLAY_HITS parents reproduced entirely on sameCPU/stack, then
+four sections to41f484,5helpers/2depthchecks perchain,0undefinedcatalog reads.
+First owncpoint/heldlinks absent; allbefore/after states identical, including
+14586Frame allocations,CRT/854bitmaps/101BG/earlyresources/music/fullreplay630e18.
+Native chains report418964records/1013531154bytes+masks/936helpers/88checkpoints
+in launch/gameplay; earlier startup/menu/selection revalidated separately by
+nested runners, counters NOT included in those totals. First raw3tests40.063s/
+build111.04s passed. Public trial clears an invalidpositiveheldlink, thenthrows;
+originalActor/globalstate preserved. Entire public4-stage pass publishesonly
+on success; observers buffer until wholetickcommit. Batchacceptance3tests40.005s/
+build115.00s precedes3losslessfixtures.126oldfixtureSHAsunchanged;3newraw/packed
+SHA/size/fullJSON/blobs/parents independentlyverified,129pins saved at
+build/research/gameplay-cpoints-fixture-pins.json. Final packed regression
+passed25release XCTest/303.164s/build113.91s across Actor/World physics, World
+links/contacts/hits/cpoints, GameplayControl/Physics/Links/Contacts/Hits/CPoints
+and MatchLaunch. NTSDNative also compiled/linked; no app-window/device claim.
+Python compilation and staged diff check passed; all source/Swift jobs terminal.
+Read WORLD_CPOINTS beforeextending. Same unreturned4246b0/SP1000e9bc,phase1/tick1,
+frame219,HP500/MP200,RNG40/1. NEXT own41f484: full41b5d0 including actual41a250
+background child (oldcamera slice stops41bc74), then whole41a5a0 actor drawing,
+modebranches/scheduler/recovery/creation/deletion/fulltickreturn. Appintegration,
+continuous DAT, Windows/device output, cleanMac and fullmatch/fullgame stayopen.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

@@ -232,6 +232,28 @@ D [WORLD_HITS](WORLD_HITS.md): вся42e100 и caller41eefb..41f2ac,
 14586 записей, не только активные боксы. Первоначальные таблицы выше описывают
 более ранний исследовательский срез, а не отсутствие этих полей в новом Core.
 
+### Cpoint actions и placement
+
+D [WORLD_CPOINTS](WORLD_CPOINTS.md): целые418c30/4187b0, caller cleanup и
+повтор417f80 до41f484.2681 управляемый случай и две собственные цепочки совпали.
+
+| Поле Actor | Использование в этих проходах |
+| --- | --- |
+| `+8c/+90` | Слот захваченного партнёра / слот захватившего; точное reciprocal сравнение без activity/type gate партнёра |
+| `+88` | Локальная стадия действия:0 допускает injury,1 фиксирует его применение,2 разрешает dircontrol |
+| `+94` | Счётчик захвата; positive decrease вычитается, negative decrease прибавляется с отдельным exhaustion path |
+| `+70/+7c` | Current/collision Frames:418c30 начинает с collision,4187b0 использует current после всех действий |
+| `+324/+33c/+368` | Сохранённый sourceID, ID партнёра и новая Object binding при throwinjury−1; зависимые active Actor2f4 тоже получают новую binding |
+| `+20/+28/+30` | Exhaustion ставит pending impulse flag1, партнёру X±4/Y−3; это не vx/vy40/48 |
+| `+98/+9c/+a0` | Cleanup положительного held-type проверяет signed slot, target activity и backlink; invalid очищает только98 |
+
+Raw cpoint vaction может адресовать предшествующий Frame массиву Object header
+после отдельного abs текущего кадра. Объявленные -1..-5 проверены с сохранением
+header bytes/masks; неизвестный backing не обнуляется. В загруженных исходных
+137 Object все наблюдённые vaction находятся в0..<400. Throwvz у sourceID419,
+frame49 не инициализирован загрузчиком и может читаться при directional throw;
+естественная достижимость и Windows backing ещё не подтверждены.
+
 ## Object, каталог и globals
 
 Object выделяется по `0x25360` байт в `0x412660..0x412695`, затем вызывается

@@ -1,0 +1,62 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue own41f2ac through cpoint actions, placement, link cleanup and417f80.\nFresh original menu/loading/launch/control/physics/links/contacts on the SAME\nCPU/stack, with no new gameplay stimuli. Stops41f484 before camera/drawing.\nNative comparison accepted for this bounded continuation; full tick and Windows remain open.\n",
+  "corpus": "gameplay-cpoints.json",
+  "sha256": "09bf43cc9d5f4bee3acadd1b3580bb6d3f886b5432aa266f835883d7fa0070a0",
+  "bytes": 35225105,
+  "parent": {
+    "fixture": "original-gameplay-hits.json",
+    "sha256": "5457f8de24023e45609f54d0979ebf38c749acd24f5173a321fd5f278252fb64"
+  },
+  "nativeCompared": true,
+  "sections": [
+    {
+      "label": "cpoint-actions",
+      "end": {
+        "pc": 4321971,
+        "sp": 268495292
+      },
+      "helpers": 1,
+      "checkpoints": 0,
+      "instructions": 47,
+      "readsBeforeWrites": []
+    },
+    {
+      "label": "cpoint-placement",
+      "end": {
+        "pc": 4321976,
+        "sp": 268495292
+      },
+      "helpers": 1,
+      "checkpoints": 0,
+      "instructions": 34,
+      "readsBeforeWrites": []
+    },
+    {
+      "label": "cpoint-cleanup",
+      "end": {
+        "pc": 4322429,
+        "sp": 268495292
+      },
+      "helpers": 0,
+      "checkpoints": 0,
+      "instructions": 41,
+      "readsBeforeWrites": []
+    },
+    {
+      "label": "cpoint-attachments",
+      "end": {
+        "pc": 4322436,
+        "sp": 268495292
+      },
+      "helpers": 3,
+      "checkpoints": 2,
+      "instructions": 100,
+      "readsBeforeWrites": []
+    }
+  ],
+  "fixture": "original-gameplay-cpoints.json",
+  "fixtureSHA256": "61e8ffa9e4e70961604f369fe7d8ec9f8e43a0e1b05862a4254e99b973bfdf5c",
+  "fixtureBytes": 4188736
+}
