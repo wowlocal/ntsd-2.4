@@ -1,0 +1,102 @@
+# Remaining match tail after HUD
+
+This is a static research plan for EXE SHA256
+`3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
+It adds no dynamic or native equivalence claim. The accepted own chain ends
+before421a2d, as documented in [GAMEPLAY_HUD](GAMEPLAY_HUD.md).
+
+The old shorthand421a2d..422994 does not reach the match return. At422994 the
+original still calls mode-label rendering, notices/volume, surface presentation
+and queued sound playback. The common epilogue starts422a95;ret4 is422ab8.
+Follow these in order and preserve the actual outer caller through its return.
+
+## Sequence and dependencies
+
+Ranges below are half-open except the explicit final ret. Instruction counts
+refer to static starts, include alignment instructions inside a range, and do
+not represent executed PCs or covered branch outcomes.
+
+| Step | Caller range | Static starts | Work |
+| --- | --- | ---: | --- |
+|1|421a2d..421cdc|198|Diagnostics and command-key/exit notices; real CRT format,401290 text,415160 fill and43f010 bitmap children|
+|2|421cdc..422218|296|Elapsed-tick counter and conditional result recording, including43df00 and whole43dd60|
+|3|422218..422944|515|Result-table layout, generic participant fields/portraits, team/outcome marks and time strings|
+|4|422944..422994|22|Recording indicator and optional41b390 author/info/time overlay|
+|5|422994..4229cc|15|Whole41b130 mode/difficulty label,4028a0 notices/volume,43e940 present,419e60 queued sound|
+|6|422a95..422ab8 inclusive|12|SEH/cookie restoration, saved registers and actualret4 into the retained caller|
+
+4229cc..422a95 is the alternative menu branch, not the successor of gameplay
+at4229c7. Its existing [menu return](MENU_RETURN.md) evidence does not by itself
+prove the gameplay caller or close the new epilogue comparison.
+
+### Diagnostics and command-key notices
+
+421a2d comparesglobal450bec to the retained EDI0, then loads actualsprintf
+from447174 intoESI even on the disabled branch. The enabled branch formats
+Actor slot0 values from+48/+60/+14 with `%2.3f %2.4f %d`, eight signed bytes
+44d040..47, and signed byte4553e8 plusword450bfc. Preserve the double formatting
+contract and signedness; platform-default formatting is not evidence.
+
+450c2c==1 displays the original exit text, locally decodes the literal449204
+by subtractingindex%4, displays the resulting original URL string, then draws
+global44f8f8. This branch changes callerESI/EDI; the native composition must
+track any later consumption instead of assuming their421a2d values survive.
+Other branches use450c28==1 for function-key counts or==2 for locked status.
+Mode451160==1 changes the notice fill and position. Observe real GDI requests
+and bitmap clipping, retaining any earlier proven fill-stack provenance.
+
+### Result ownership and records
+
+421cdc increments450bbc when signed450bdc<100. Unsigned(450bdc-101)>248 skips
+the result block. At450bdc==101, result recording additionally requires450be4
+and450b80 nonzero and450b84zero. Eight primary/fallback participant cells feed
+the recording allocation at4588a8, including ID, active kind, team, combat
+statistics and outcome. Mode1 also consumes retainedSP+64; recover its earlier
+writer before importing any value. Result layout later reusesSP+34/44/50/54/58/
+60; these slots have multiple lifetimes and are not interchangeable with the
+preceding spawn scratch.
+
+The recorder consumes full existing allocation ownership.43df00 is the known
+playback settings restoration, with the caller subsequently copying sound flags.
+43dd60 is still a whole-function dependency: it compresses the recording through
+43f4b0, modifies leading bytes with a key, writes the file via imported stream
+methods, frees temporary/original buffers and clears4588a8. Do not stub it as a
+successful save or mutate the original distribution during research. File/API
+responses must be explicit; encoded bytes and ownership changes need comparison.
+
+### Labels, presentation and sound
+
+41b130..41b384 builds450c38 from mode/difficulty, including Survival Stage when
+signed450b94/10==5. It calls423a70, whose four423940 calls render offset text.
+The complete423940/423a70 bitmap-font path still needs a source comparison and
+native implementation; existing401290 GDI text is a different renderer.
+Unknown mode/difficulty values can retain prior string content and must be
+investigated before applying a convenient default.
+
+41b390..41b5cc conditionally formats author/info and elapsed/total time, using
+wrapped arithmetic and the same bitmap-font helper. It is conditional in step4,
+whereas41b130 is unconditional in step5. Do not report that the ordinary first
+tick has no rendering after HUD merely because diagnostics/results are inactive.
+
+The existing `OriginalMenuPresentation` implements4028a0 notices/volume and
+43e940 requests in other proven callers. Reuse those mechanisms, preserving
+new caller order and state.419e60..41a043 consumes catalog/builtin sound queues,
+computes pan/volume, clears pending flags and calls401a30. Only its disabled
+fast return was part of the old broad tick trace. Sound remains enabled in the
+initialized own chain; prove the whole consumer and device boundaries rather
+than disabling audio to reach the return.
+
+## Required evidence
+
+Each new stage needs controlled full-state/side-effect comparisons and both
+fresh initialized continuations that reproduce the entire pinned parent.
+Preserve CW023f and the same source stack/CPU, ownership, immutable resources,
+undefined masks and declared platform responses. Native must continue from its
+own reconstructed state. Stop hooks and COM/import response addresses are not
+executed original instructions. Reaching a firstret4 is a milestone, not proof
+of multiple ticks, natural techniques, a finished match or Windows output.
+
+After the first return, compare continuous original DAT-driven input sequences,
+connect the complete owned pipeline to the native application and work toward
+the full Naruto/Sasuke District match. Other modes, AI, replay/network/file
+behavior, pixels/audio/latency and clean-macOS delivery remain in the full goal.

@@ -22,7 +22,7 @@ public enum InitializedGameplayReference {
     private struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,control: Bool,fpu: Audit }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Initialized gameplay reference: "+text) }
 
-    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil) throws -> Result {
+    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil,hud: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 128_000_000))
         let a = c.fpu,i = a.initialization
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -70,6 +70,19 @@ public enum InitializedGameplayReference {
                   extra.allSatisfy({ $0.sp == 0x1000e9bc }) else { throw error("Commands initialized context") }
             finalAudit = next.fpu
         }
+        if let hud {
+            guard commands != nil else { throw error("HUD needs own command continuation") }
+            let next = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(hud,maximumCount: 128_000_000))
+            let extra = Array(next.fpu.checkpoints.dropFirst(finalAudit.checkpoints.count))
+            let expectedPCs: [UInt32] = [0x421a15,0x41ae60] + Array(repeating: 0x41ae70,count: 8)
+            let stacks: [UInt32:UInt32] = [0x421a15:0x1000e9bc,0x41ae60:0x1000e9b4,0x41ae70:0x1000e99c]
+            guard next.exeSHA256 == c.exeSHA256,next.dllSHA256 == c.dllSHA256,next.control == c.control,
+                  next.fpu.initialization == finalAudit.initialization,next.fpu.transitions == finalAudit.transitions,
+                  next.fpu.watchedInstructions == finalAudit.watchedInstructions,next.fpu.checkpoints.starts(with: finalAudit.checkpoints),
+                  extra.map(\.pc) == expectedPCs,next.fpu.checkpoints.allSatisfy({ $0.fpcw == 0x23f }),
+                  extra.allSatisfy({ stacks[$0.pc] == $0.sp }) else { throw error("HUD initialized context") }
+            finalAudit = next.fpu
+        }
         let suffix = c.control ? "-control" : ""
         func source(_ name: String) throws -> Data { try fixture("original-"+name+suffix+".json") }
         let result = try MatchLaunchReference.compare(launch: source("match-launch"),selection: source("match-selection"),character: source("character-screen"),
@@ -77,7 +90,7 @@ public enum InitializedGameplayReference {
             menu: source("menu-loading"),loading: source("menu-loading-state"),catalog: source("menu-loading-catalog"),sounds: source("menu-loading-sounds"),
             arithmeticPrecision: .bits53,gameplayControl: source("gameplay-physics"),gameplayPhysics: true,gameplayLinks: source("gameplay-links"),
             gameplayContacts: source("gameplay-contacts"),gameplayHits: source("gameplay-hits"),gameplayCPoints: source("gameplay-cpoints"),
-            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands)
+            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands,gameplayHUD: hud)
         return .init(gameplay: result,fpuCheckpoints: finalAudit.checkpoints.count,fpuTransitions: finalAudit.transitions.count)
     }
 }

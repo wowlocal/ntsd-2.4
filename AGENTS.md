@@ -3,9 +3,63 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: HUD caller421a15 and whole41ae60..41b12d/ret4.
+**Current priority: remaining full tick from421a2d through422ab8/ret4.
+Read [WORLD_HUD](docs/research/WORLD_HUD.md),
+[GAMEPLAY_HUD](docs/research/GAMEPLAY_HUD.md) and the static
+[TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).**
+
+OriginalWorldHUD implements whole421a15..421a2d caller and41ae60..41b12d/ret4.
+All1,753 controlled passes match full400Actor/World bytes+masks,globals and
+276,106 events (17,912draw/178,772read/33,856clip/39,462Blt/6,104rectangle).
+All223 HUD instruction starts execute; caller6/6,clip45/57,bitmap171/214,
+rectangle38/38. This is not every branch outcome or Windows pixel evidence.
+The caller clears450bc0/450bb8 BEFORE HUD. Its retainedSP68 word is pushed but
+NEVER read by41ae60; actual destination isglobal455608. Eight cells prefer
+slots0..<8 then10..<18; shared Object+728 portraits, signed wrapped31*value/125
+bars, heal(E0/1000==1||E4>0)&&tick%2==0, and team1..4/default marks. No ID cases.
+Preserve real negative-picture43f010 fallthrough and undefined bitmap backing;
+HRESULT failure does not stop HUD. Late resolver/observer errors roll back
+flags; callers must buffer external events until the whole tick commits.
+
+BOTH own initialized matches continue through421a2d/SP1000e9bc. Each compares
+449,269 records/771,514,704 bytes+masks/59 state and1,603 FPU checkpoints;
+536/544 helpers and124/180 newHUD events. Source original PCs419/424 exclude
+COM30009000 and stopped421a2d. Parent state/FPU is fully reproduced. Both own
+before/after states are identical; arbitrarySP68=28002020 is retained but not
+imported as a native target. Resource ownership supplies original globals.
+Primary wrapper counta5a5a5a5 vs control0f0e0d0c changes negative-picture
+fallthrough:20/28Blts and20/52undefined read events. Full bytes/masks agree;
+this is supplied research backing, not actual Windows allocation provenance.
+Ten newFPU checkpoints(421a15,41ae60,8*41ae70) retainCW023f/FPSW4000/tagffff.
+
+All165 prior fixture hashes are unchanged;168 pins are retained in
+build/research/gameplay-hud-fixture-pins.json. Independent
+build/research/hud-artifact-verification.json checks3full raw/packed byte
+sequences/JSON/SHA plus2,756/2,757 own blobs. Controlled raw/packed:
+34,689,334/727,640bytes; own9,283,133/1,282,079 and9,309,179/1,293,927.
+The controlled source report initially omittedCW metadata; the producer was
+fixed and recaptured, leaving the raw corpus SHA unchanged. Earlier test
+compilation needed only an enumerated Zip2Sequence mismatch diagnostic;
+no HUD game rule or expected state was changed to make comparisons pass.
+
+Verification: initial own raw2tests39.921s/build0.21s; controlled acceptance
+5tests45.951s/build137.16s includes both retained command chains; own acceptance
+2tests39.692s/build0.21s. Final packaged5tests46.123s/build137.47s passed,
+including own39.731s and controlled6.391s. NTSDNative linked; no app window
+was tested. Allsource/SwiftPM jobs terminal; Python compilation,1,200local
+Markdown links and diff checks passed. No old fixture was rewritten.
+
+Next whole diagnostic/key-notice prefix421a2d..421cdc has198static starts.
+Then result recording/layout and indicators through422994. That address is
+NOT an epilogue:41b130/423a70/423940 bitmap-font mode label,4028a0 notice,
+43e940present and enabled419e60 queued sound still precede422a95/422ab8ret4.
+43dd60 recording writer is also an open dependency. Do not disable sound or
+skip an unknown result/label consumer to obtain a convenient full return.
+Native app/fulltick/fullmatch/Windows/device/cleanMac and the full goal stay open.
+
+The preceding command milestone (boundary superseded above):
 Read [GAMEPLAY_COMMANDS](docs/research/GAMEPLAY_COMMANDS.md) and
-[POSTDRAW_COMMANDS](docs/research/POSTDRAW_COMMANDS.md).**
+[POSTDRAW_COMMANDS](docs/research/POSTDRAW_COMMANDS.md).
 
 OriginalPostDrawCommands implements whole4214d5..421a15. All3,898 controlled
 calls match full400-Actor/World bytes and masks, globalsSHA, retainedSP34 and
@@ -40,10 +94,8 @@ own blobs. Controlled raw/packed:2,776,979/201,611 bytes; own:
 9,249,671/1,278,615 and9,265,981/1,289,911 bytes. NTSDNative linked.
 All source and SwiftPM jobs are terminal; no app window was tested.
 
-Next HUD static plan: build/research/hud-static-plan.md. Its223 instructions
-NEVER READ the stack argument; ret4 only pops it. Actual target isglobal455608.
-Eight cells prefer slots0..<8 then10..<18; widths use wrapped31*HP/125.
-These are STATIC seeds only. Then421a2d..422994 diagnostics/results/epilogue.
+The earlier HUD static plan is superseded by WORLD_HUD/GAMEPLAY_HUD above.
+The remaining output/sound/actualret4 boundaries are in TICK_TAIL_PLAN.
 Full tick, app, full match, Windows/device/clean-Mac checks and the remaining
 full-game goal stay open.
 
