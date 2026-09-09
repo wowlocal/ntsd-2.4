@@ -1,0 +1,52 @@
+{
+  "scope": "Recover the original application pacing decision, whole43d157..43d1ef.\n\nExecute the pinned game EXE under Unicorn2.1.4. Declared clock responses,\ndispatcher43e9a0 result, surface recovery43e890 and Sleep are external call\nboundaries; their bodies are NOT executed by this study. Actual instructions\nrecover repeated time reads, unsigned33/3/100 thresholds, baseline wrapping,\nnegative-dispatch recovery order and signed/capped sleep. Compare ordered\nrequests and baseline to Native; this is not an own match, Windows/device\ntiming, message handling or the whole outer loop. No memory-fault probes.\n",
+  "corpus": "application-timer.json",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sha256": "d4b47030d966c93c38eb7681a6b7d0313db7fecc17961e2e9b2b716a19c0dd4f",
+  "bytes": 1337395,
+  "cases": 2025,
+  "instructions": 59,
+  "events": 8163,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "allStaticTimerInstructionsExecuted": true,
+  "eventCounts": {
+    "time": 6129,
+    "sleep": 414,
+    "dispatch": 1215,
+    "recoverSurface": 405
+  },
+  "clockReadCounts": {
+    "2": 810,
+    "3": 351,
+    "4": 864
+  },
+  "sleepDurations": {
+    "3": 9,
+    "2": 27,
+    "1": 36,
+    "5": 342
+  },
+  "dispatcherBodyExecuted": false,
+  "recoveryBodyExecuted": false,
+  "ownGameJoin": false,
+  "messageLoopCompared": false,
+  "nativeComparison": "All2025 whole timer decisions match baseline and8163 ordered time/dispatch/recovery/sleep events. Late Sleep observer rejection retains the native timer baseline. Enclosing game-state/device rollback is not established by this timer-only comparison.",
+  "nativeRawLogSHA256": "40331ac9a1db2015acb708589c1ca962fd363c4336ac7fbeecaa102bfc4f53b9",
+  "nativeIsolatedBase": "5a0916a",
+  "nativeRawBuildSeconds": [
+    "173.41s"
+  ],
+  "nativeRawTests": 2,
+  "nativeRawTestSeconds": 0.026,
+  "fixture": "original-application-timer.json",
+  "fixtureSHA256": "ee66e26e9a6b7bb7cae675e0d138827260642c2ac1431222bef0133610580b74",
+  "fixtureBytes": 49043,
+  "sourceToolSHA256": "964869bfc604a03cd3641ad0317fa98c7953e44c0ec6a258378c8e36e6b3174f",
+  "nativePackagedTests": 2,
+  "nativePackagedTestSeconds": 0.027,
+  "nativePackagedBuildSeconds": [
+    "0.29s"
+  ],
+  "nativePackagedLogSHA256": "20e2b63b1b03caa6f8777dda98a82de396ceaac7b09739b2972baeb8892c0f1a"
+}
