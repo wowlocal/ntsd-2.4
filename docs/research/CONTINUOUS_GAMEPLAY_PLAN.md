@@ -39,10 +39,13 @@ continuations. See [LOADED_TICK_PLAN](LOADED_TICK_PLAN.md) for resource and
 caller-storage requirements. This body comparison does not execute the16-call
 source continuation described above.
 
-The paused alternative also has a separate [HUD callee comparison](PAUSED_HUD.md).
-Whole pause composition still needs direct background drawing, world drawing,
-the HUD without command resets, the PAUSE bitmap and exact indicator/output
-join. The static paused caller does not run the unpaused camera-bounds pass.
+The paused alternative now continues both own chains through14 more returns in
+[PAUSED_GAMEPLAY](PAUSED_GAMEPLAY.md): F1 pause, F2 single-step and F1 resume.
+It composes direct background drawing, World drawing, the HUD without command
+resets, the PAUSE bitmap and indicator/output join under the same loaded-call
+transaction. The [HUD callee comparison](PAUSED_HUD.md) remains separate.
+The initialized own non-playback path is compared; enabled playback and every
+paused branch outcome remain open.
 
 For each call compare complete state and masks, RNG and replay bytes, resource
 liveness, ordered input/update/render/sound events, and the original caller's

@@ -1,7 +1,7 @@
-/// An already loaded, unpaused match call from its own input/round entry through
+/// An already loaded match call from its own input/round entry through
 /// the gameplay body and the enclosing dispatcher's return effect. The caller
 /// supplies platform responses and owned resource resolvers, never expected
-/// state. Menu, paused-rendering and early-epilogue continuations remain explicit
+/// state. Menu and early-epilogue continuations remain explicit
 /// unsupported boundaries of this entry, with the complete call rolled back.
 public enum OriginalLoadedGameplayCall {
     public static func run(state: inout OriginalMatchPreparation,
@@ -27,21 +27,30 @@ public enum OriginalLoadedGameplayCall {
         inputCheckpoint: (OriginalLoadedMatchEntry.Checkpoint, OriginalMatchPreparation, OriginalInputControlContext, [UInt8]) throws -> Void = { _,_,_,_ in },
         bodyEntry: (OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom, OriginalMatchRoundResult) throws -> Void = { _,_,_,_ in },
         observe: (OriginalGameplayBody.Event) throws -> Void = { _ in },
-        checkpoint: (OriginalGameplayBody.Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in }) throws -> OriginalMatchRoundResult {
+        checkpoint: (OriginalGameplayBody.Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in },
+        pausedObserve: (OriginalPausedGameplay.Stage, OriginalFrontScreenEvent) throws -> Void = { _,_ in },
+        pausedCheckpoint: (OriginalPausedGameplay.Stage, OriginalMatchPreparation, OriginalInputControlContext) throws -> Void = { _,_,_ in }) throws -> OriginalMatchRoundResult {
         var next = state, owned = context, random = crt, local = caller
         let round = try OriginalLoadedMatchCycle.run(state: &next, context: &owned,
             controlBoundary: controlBoundary, dispatch: dispatch, replayEvent: replayEvent,
             roundEvent: roundEvent, prologue: prologue, checkpoint: inputCheckpoint)
-        guard round.continuation == .gameplay else {
+        guard round.continuation == .gameplay || round.continuation == .pausedRendering else {
             throw OriginalStateError.invalidStorage("Loaded gameplay call has unsupported continuation: "+round.continuation.rawValue)
         }
         try bodyEntry(next, owned, random, round)
-        try OriginalGameplayBody.apply(state: &next, context: &owned, crt: &random,
+        if round.continuation == .pausedRendering {
+            try OriginalPausedGameplay.apply(state: &next, context: &owned, round: round, caller: &local,
+                target: target, presentation: presentation, surface: surface, resourceBitmap: resourceBitmap,
+                fillBacking: fillBacking, performFill: performFill, performBlit: performBlit,
+                soundRequest: soundRequest, observe: pausedObserve, checkpoint: pausedCheckpoint)
+        } else {
+            try OriginalGameplayBody.apply(state: &next, context: &owned, crt: &random,
             round: round, caller: &local, target: target, presentation: presentation, sse2: sse2,
             surface: surface, resourceBitmap: resourceBitmap, fillBacking: fillBacking,
             performFill: performFill, performBlit: performBlit, allocate: allocate,
             processorSignature: processorSignature, open: open, write: write, close: close,
             soundRequest: soundRequest, observe: observe, checkpoint: checkpoint)
+        }
         // Input, replay-command writes, round changes, simulation and output
         // commit together. Observers buffer external effects until this returns.
         // Caller storage is justified for this invocation; callers must not

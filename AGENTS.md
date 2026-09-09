@@ -48,7 +48,31 @@ false positives will not occur.
 
 ## Current research status
 
-The paused HUD dependency is now implemented in
+Both fresh own chains now match pause, single-step and resume through both
+actual returns. Read [PAUSED_GAMEPLAY](docs/research/PAUSED_GAMEPLAY.md).
+OriginalLoadedGameplayCall routes own pausedRendering into OriginalPausedGameplay:
+direct background (no camera bounds), World drawing, preserving HUD, PAUSE bitmap,
+indicator join and whole output/dispatcher transaction.14 new calls each after
+all16 neutral parents:8paused/6unpaused, F1/F2/F1 from acquired key bytes only.
+Replay/elapsed counters17->19, hold,21, hold,23. No pause flag or stack injection.
+Each native comparison reports3000280records/9685070146bytes+masks/651states,
+including parents and rollback; new14337/15121events and3490/3602helper returns.
+All20368FPU checkpoints keep023f;15102parent unchanged,843/unpaused and26/paused.
+Paused local input has no helper/pre-dispatch checkpoint; preserve that skip.
+Source921actual paused-body/helper PCs exclude stopped422994/COM;12811stack
+accesses each. Own stageDefeated/formatter remain nil on pause; target has own
+caller provenance. Preserve320/576 undefined bitmap reads and live sound drain.
+Late whole-call observer rollback passes for unpaused and paused calls. Raw2
+release tests pass72.131s/build173.90s; packaged2pass72.523s/build167.30s.
+All192prepublication pins unchanged,194current; fullraw/packedJSON/SHA/lengths,
+2861/2862blobs,107components each and10vendor hashes verified. Both source jobs
+terminal0; all owned SwiftPM jobs terminal,NTSDNative linked,435links/Python/diff
+checks pass. Initial acquisition-name and decode-contract failures are preserved;
+no accepted source bytes or native game rules changed to force agreement.
+This is own non-playback pause, not all paused branches/playback prologue, outer
+loop/app/device/Windows/complete-match evidence. Full game goal remains open.
+
+The preceding paused HUD dependency is implemented in
 [PAUSED_HUD](docs/research/PAUSED_HUD.md). OriginalWorldHUD.drawPreservingCommands
 matches1789 whole41ae60..41b12d/ret4 calls with command flags preserved, full
 World/400Actor bytes+masks/globals and283090 events. The1753 earlier HUD inputs

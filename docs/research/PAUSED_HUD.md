@@ -6,8 +6,10 @@ original calls match full World/400-Actor bytes and masks, whole globals and
 283,090 ordered drawing events. The existing `apply` API still executes the
 421a15..421a2d caller, which clears450bc0 and450bb8 before drawing.
 
-This is a dependency for paused gameplay. It does not execute the whole paused
-caller, an initialized own pause or its return. The unpaused body and subsequent
+This is the controlled HUD dependency for paused gameplay. The whole
+initialized own pause, single-step and resume join is now compared separately
+in [PAUSED_GAMEPLAY](PAUSED_GAMEPLAY.md); the callee study here does not itself
+execute that caller or its return. The unpaused body and subsequent
 loaded calls have separate evidence in [GAMEPLAY_BODY](GAMEPLAY_BODY.md) and
 [CONTINUOUS_GAMEPLAY_PLAN](CONTINUOUS_GAMEPLAY_PLAN.md).
 
@@ -82,8 +84,9 @@ the retained target and joins the recording indicator at422952, after the
 unpaused indicator caller's push. The optional recording-information consumer
 still follows. Whole paused composition must retain that exact stack/target
 provenance, background/object/HUD/bitmap order, output and actual return. A
-fresh original whole caller and initialized input-driven pause/resume are still
-required; the static inspection is not dynamic paused-caller evidence.
+fresh initialized input-driven pause/resume sequence is now compared in
+[PAUSED_GAMEPLAY](PAUSED_GAMEPLAY.md). Enabled playback joins and all paused
+branches remain separate; the static inspection itself is not dynamic evidence.
 
 Implementation: [OriginalWorldHUD.swift](../../native/Sources/NTSDCore/OriginalWorldHUD.swift).
 Source producer: [oracle_paused_hud.py](../../tools/oracle_paused_hud.py).
