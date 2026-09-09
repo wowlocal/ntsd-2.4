@@ -87,6 +87,10 @@ class WorldControl(Constructors):
   for i,source_id in enumerate(self.source_ids):
    raw=bytearray(ActorControl.object_bytes(self,{}))
    struct.pack_into('<i',raw,0x6f4,source_id);struct.pack_into('<i',raw,0x6f8,3 if i==3 else 0)
+   # Optional declared header inputs for later caller studies. Historical
+   # controls do not supply these and retain exactly their previous bytes.
+   for obj,offset,h in [*getattr(self,'header_patches',[]),*item.get('headers',[])]:
+    if obj==i:raw[offset:offset+len(bytes.fromhex(h))]=bytes.fromhex(h)
    for n in range(400):struct.pack_into('<i',raw,0x7ac+n*0x178,self.frame_states.get(n,3))
    for obj,n,offset,h in item.get('frames',[]):
     if obj==i:raw[0x7a4+n*0x178+offset:0x7a4+n*0x178+offset+len(bytes.fromhex(h))]=bytes.fromhex(h)

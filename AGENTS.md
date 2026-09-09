@@ -4,7 +4,31 @@ The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 **Current priority: the ENTIRE interleaved400-slot41f550..4214cf loop.
-Read [ACTOR_SCHEDULER](docs/research/ACTOR_SCHEDULER.md).**
+Read [POSTDRAW_SLOT_PREFIX](docs/research/POSTDRAW_SLOT_PREFIX.md).**
+OriginalPostDrawSlotPrefix now implements ONE complete41f550..41fb0b slot
+prefix (inactive exit4214c6), including transforms9995/8000..<9000,
+state9996 particle constructors/RNG, HP/MP and whole40d960/416fb0 below.
+897 controlled original calls atCW027f match full400Actor+World bytes/masks,
+wholeglobalsSHA, retainedcallerSP+70 and2334 ordered events. All329 prefix
+instructions and151 constructor instructions execute; helper coverage is
+separate. Lookup217/218 misses consume retainedSP+70, not a default or skip.
+Native carries optional retainedObjectIndex and errors only if unresolved
+when actually dereferenced; fullpool skips that read. Aliasedparent/free
+construction and lateRNG observer rollback preserve allstate+retainedvalue.
+All1491 oldWorldControl/515 oldWorldPhysics original cases/inventories reproduce
+after the optional header-input extension. Read the study for source boundaries.
+Acceptance6release tests3.160s/build125.38s passed before1lossless fixture;
+all157old fixtures unchanged,158pins in
+build/research/postdraw-slot-prefix-fixture-pins.json. CompleteJSON/SHA/length
+verified independently: raw918456/packed59242bytes. Final packaged3tests passed
+in0.712s/build125.61s; NTSDNative linked. All source/SwiftPM jobs terminal.
+NEXT implement41fb0b..4214c6 post-schedule/opoint/othercreation/deletion, then
+advanceEDI through4214cf in original LIVE slot order. Do not turn this prefix
+into an allActor scheduling pass. Own initialized chain STILL ends41f550,
+SP1000e9bc, first unreturned tick; this new prefix is not yet connected to it.
+Fulltick/app/fullmatch/Windows/device/cleanMac remain open.
+
+The preceding [ACTOR_SCHEDULER](docs/research/ACTOR_SCHEDULER.md) study:
 Whole40d960..40de20 is now implemented generically in OriginalActorScheduler,
 including actual416fb0 catalog sound behavior.6084 controlled original calls
 atCW027f match allActor bytes/masks, whole globalsSHA and756 ordered sounds.
@@ -22,7 +46,7 @@ Acceptance3release tests2.481s/build123.29s passed before1losslessfixture;
 Final packaged3tests2.460s/build124.29s passed. Raw30,408,268/packed338,300 bytes
 and completeJSON/SHA independently verified; source/allSwiftPM jobs terminal.
 NTSDNative linked; no UI/device/Windows claim. Read the study before integration.
-Next recover the enclosing prefix (state9995/8000..<9000/9996 and HP/MP), then
+The enclosing prefix has since been recovered above; next finish
 post-schedule/opoint/deletion in ORIGINAL live-slot order. Do not split scheduler
 into an allActor pass or skip unsupported surrounding branches. First own
 initialized tick still ends41f550/SP1000e9bc; app/fullmatch/Windows remain open.

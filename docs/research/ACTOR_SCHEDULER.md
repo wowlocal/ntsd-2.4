@@ -149,9 +149,12 @@ the complete JSON, lengths and SHA. All156 old fixture hashes remain unchanged;
 local research links and diff checks pass. Source and all SwiftPM processes are
 terminal before the milestone commit.
 
-Next recover the enclosing41f550..4214cf loop. Its prefix includes original
+The subsequent [POSTDRAW_SLOT_PREFIX](POSTDRAW_SLOT_PREFIX.md) now implements
+the enclosing41f550..41fb0b for one slot, comparing897 complete original calls.
+It includes original
 state9995→sourceID50, state8000..<9000→sourceID(state−8000), state9996 particle
-creation and HP/MP recovery41f994..41faf8. Subsequent scheduling/opoint/deletion
+creation and HP/MP recovery41f994..41faf8, followed by this whole scheduler.
+Next recover41fb0b..4214c6 and the live-slot advancement. Opoint/deletion
 must retain live slot aliases, allocation reuse, resource/RNG order and the
 original caller scratch provenance. Do not bypass those blocks merely because
 the first Naruto/Sasuke call does not enter them.
