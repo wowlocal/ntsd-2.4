@@ -1,0 +1,74 @@
+{
+  "scope": "Sixteen successive initialized loaded calls per variant; no complete match, timed outer loop, app engine, Windows/device or clean-Mac claim",
+  "baseCommit": "f98c5ab",
+  "sourceToolSHA256": "ddfb11fc666f35ef81d7d77681b4afe91b8a4e2fcf95a8176a8db2f18c8576db",
+  "isolatedSources": {
+    "baseCommit": "f98c5ab",
+    "files": {
+      "native/Sources/NTSDCore/OriginalLoadedGameplayCall.swift": "57bf5b02268e549a1fa7892b220e0d60358ec4eaa05a2925b95c71a5c9045ad3",
+      "native/Sources/NTSDReferenceChecks/ContinuousGameplayReference.swift": "90a2b24efcb9d974783603ae5c7609dfc6f449fe3addff5fb4358946a89b24fa",
+      "native/Sources/NTSDReferenceChecks/InitializedGameplayReference.swift": "14fb8246596bdd717fded972143a244110b2dc6ac4f78d3d139622f5b08b565b",
+      "native/Sources/NTSDReferenceChecks/MatchLaunchReference.swift": "77e0eadd5b879dfc345081cf75886fe5a35139f25557388f9afc9275a9ad5e9f",
+      "native/Tests/NTSDCoreTests/OriginalContinuousGameplayTests.swift": "dcb1b5bc0183b9b2a7d2d398be967b16f076079d7e8d3b16738999c75b781f1c",
+      "native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json": "2e4184b1617ab41d31a502f407a5fa296a57664e8f8e60e0ebef6ec58efe4471",
+      "native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json": "24a1fe4f91da3491df12076c827e01214a4329a8aa65d7aaf8b7dfd28ca50f2c"
+    },
+    "concurrentPausedHUDExcluded": true,
+    "method": "git archive of native package only, plus scoped verified changes; no raw fixture overrides"
+  },
+  "rawTests": {
+    "count": 2,
+    "seconds": 61.109,
+    "buildSeconds": 163.45,
+    "logSHA256": "cd67f241d3c3e09e9f2baaa475aa8b670773d3ac88056b16dbdff2df6676844b"
+  },
+  "packagedTests": {
+    "count": 2,
+    "seconds": 61.572,
+    "buildSeconds": 173.9,
+    "logSHA256": "523a7993dee71a70d19aebe8cf5e867163fe9646e146b0bef3b9c8f85c949646",
+    "rawOverrides": false
+  },
+  "sourceSessions": [
+    23453,
+    58546
+  ],
+  "sourcePIDs": [
+    86511,
+    86510
+  ],
+  "sourceExitCodes": [
+    0,
+    0
+  ],
+  "sourceRestarted": false,
+  "allOwnedJobsTerminal": true,
+  "referenceRecordsEach": 2050892,
+  "referenceBytesEach": 6526992869,
+  "stateCheckpointsEach": 442,
+  "fpuCheckpointsEach": 15102,
+  "callsEach": 16,
+  "oldFixturePinsUnchanged": 188,
+  "milestoneFixturePins": 190,
+  "blobCount": 5911,
+  "componentCount": 410,
+  "vendorHashesVerified": 10,
+  "fixtures": [
+    {
+      "fixture": "original-continuous-gameplay.json",
+      "fixtureSHA256": "2e4184b1617ab41d31a502f407a5fa296a57664e8f8e60e0ebef6ec58efe4471",
+      "fixtureBytes": 3072348,
+      "sha256": "f114ee07dad5e2e999ba488244e31543907299429742f69585193cd7e4d77f83",
+      "bytes": 19682761
+    },
+    {
+      "fixture": "original-continuous-gameplay-control.json",
+      "fixtureSHA256": "24a1fe4f91da3491df12076c827e01214a4329a8aa65d7aaf8b7dfd28ca50f2c",
+      "fixtureBytes": 2759528,
+      "sha256": "fe22efde7e5c52166b74a6356297c9557f32a688d51cabe73e28d6d5b702c34a",
+      "bytes": 19871067
+    }
+  ],
+  "knownAnalysisCorrection": "Original progress label tick read recording flag450b80; actual450b8c and450bbc advance2..17. Original capture script/logs and raw expected bytes remain unchanged.",
+  "createdUTC": "2026-09-09T20:06:28.038083+00:00"
+}

@@ -22,7 +22,7 @@ public enum InitializedGameplayReference {
     private struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,control: Bool,fpu: Audit }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Initialized gameplay reference: "+text) }
 
-    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil,hud: Data? = nil,notices: Data? = nil,resultRecording: Data? = nil,resultLayout: Data? = nil,returned: Data? = nil,compareGameplayBody: Bool = false) throws -> Result {
+    public static func compare(_ data: Data,fixture: (String) throws -> Data,postDraw: Data? = nil,commands: Data? = nil,hud: Data? = nil,notices: Data? = nil,resultRecording: Data? = nil,resultLayout: Data? = nil,returned: Data? = nil,compareGameplayBody: Bool = false,continuous: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(data,maximumCount: 128_000_000))
         let a = c.fpu,i = a.initialization
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -129,6 +129,16 @@ public enum InitializedGameplayReference {
                   next.fpu.checkpoints.allSatisfy({ $0.fpcw == 0x23f }),extra.allSatisfy({ $0.fpsw == 0x4000 }) else { throw error("Returned initialized context") }
             finalAudit = next.fpu
         }
+        if let continuous {
+            guard returned != nil else { throw error("Continuous calls need the own returned parent") }
+            let next = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(continuous,maximumCount:256_000_000))
+            guard next.exeSHA256 == c.exeSHA256,next.dllSHA256 == c.dllSHA256,next.control == c.control,
+                  next.fpu.initialization == finalAudit.initialization,next.fpu.transitions == finalAudit.transitions,
+                  next.fpu.watchedInstructions == finalAudit.watchedInstructions,next.fpu.checkpoints.starts(with:finalAudit.checkpoints),
+                  next.fpu.checkpoints.count > finalAudit.checkpoints.count,
+                  next.fpu.checkpoints.allSatisfy({ $0.fpcw == 0x23f }) else { throw error("Continuous initialized context") }
+            finalAudit = next.fpu
+        }
         let suffix = c.control ? "-control" : ""
         func source(_ name: String) throws -> Data { try fixture("original-"+name+suffix+".json") }
         let result = try MatchLaunchReference.compare(launch: source("match-launch"),selection: source("match-selection"),character: source("character-screen"),
@@ -136,7 +146,7 @@ public enum InitializedGameplayReference {
             menu: source("menu-loading"),loading: source("menu-loading-state"),catalog: source("menu-loading-catalog"),sounds: source("menu-loading-sounds"),
             arithmeticPrecision: .bits53,gameplayControl: source("gameplay-physics"),gameplayPhysics: true,gameplayLinks: source("gameplay-links"),
             gameplayContacts: source("gameplay-contacts"),gameplayHits: source("gameplay-hits"),gameplayCPoints: source("gameplay-cpoints"),
-            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands,gameplayHUD: hud,gameplayNotices: notices,gameplayResultRecording: resultRecording,gameplayResultLayout: resultLayout,gameplayReturn: returned,compareGameplayBody: compareGameplayBody)
+            gameplayCamera: source("gameplay-camera"),gameplayDrawing: source("gameplay-drawing"),gameplayImpulses: data,gameplayLifecycle: postDraw,gameplayCommands: commands,gameplayHUD: hud,gameplayNotices: notices,gameplayResultRecording: resultRecording,gameplayResultLayout: resultLayout,gameplayReturn: returned,compareGameplayBody: compareGameplayBody,continuousGameplay:continuous)
         return .init(gameplay: result,fpuCheckpoints: finalAudit.checkpoints.count,fpuTransitions: finalAudit.transitions.count)
     }
 }

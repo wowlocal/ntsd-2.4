@@ -1,9 +1,11 @@
 # Continue the initialized match after its first return
 
-This is the next acceptance plan, not completed evidence. The current output
-join is tracked in [GAMEPLAY_OUTPUT_PLAN](GAMEPLAY_OUTPUT_PLAN.md). A returned
-first41bc90/4246b0 call is an intermediate compatibility boundary; the full
-match, outer application loop, native device output and clean-Mac goal remain.
+The finite neutral sequence below now matches both initialized native paths:
+see [CONTINUOUS_GAMEPLAY_CAPTURE](CONTINUOUS_GAMEPLAY_CAPTURE.md). Raw acceptance
+and final isolated packaged verification passed. The original
+replay tick and elapsed counter advance2..17; normal input/round/body and both
+returns compose under one native transaction. The full match, timed outer
+application loop, native device output and clean-Mac goal remain open.
 
 Use the pinned original NTSD2.4 EXE and VC80 dependency on one controlled
 Unicorn CPU, retaining the complete startup/menu/catalog/selection/launch state.
@@ -13,9 +15,9 @@ successive calls. COM/GDI, keyboard acquisition and clock responses remain
 declared platform boundaries. Preserve their distinction from Windows, macOS
 device behavior and actual user-perceived latency.
 
-The next finite comparison is sixteen successive4246b0 calls after the accepted
-first gameplay return, using neutral keyboard responses at the original input
-acquisition boundary. Execute every original phase and each actual return;
+The accepted finite comparison is sixteen successive4246b0 calls after the accepted
+first gameplay return, keeping the neutral keyboard bytes from the actual
+original launch reset without a new device-acquisition claim. Execute every original phase and each actual return;
 do not force phase1, bypass input/network gates, reset RNG, replenish sound
 queues or import source stack storage to keep the path running. Reproduce the
 complete accepted parent before the first new call. Stop and document an

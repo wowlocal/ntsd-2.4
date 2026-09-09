@@ -48,6 +48,40 @@ false positives will not occur.
 
 ## Current research status
 
+Both fresh own chains now match16 successive loaded gameplay calls through
+both actual returns. Read [CONTINUOUS_GAMEPLAY_CAPTURE](docs/research/CONTINUOUS_GAMEPLAY_CAPTURE.md).
+OriginalLoadedGameplayCall joins input/round and OriginalGameplayBody under one
+transaction; a late dispatcher observer verifies whole-call rollback. Each full
+comparison checks2050892records/6526992869bytes+masks/442state checkpoints,
+15102FPU checkpoints; new16400/17296events and4400/4528body/output helpers.
+All1614parent FPU checkpoints reproduce; new843percall keepCW023f. Source
+33960stack accesses per variant retain own stageDefeated and unknown caller
+storage; normal saved frames/SEH/cookies restore. No source stack import.
+Actual450b8c and450bbc advance2..17;450b80 stays1 because it is recording-enabled.
+The unchanged source log mistakenly labels450b80 "tick"; derived verification
+was corrected without touching source/expected bytes. Final frames3/2,wait2,
+HP500/MP205.16neutral replay packets leave existing buffer bytes unchanged;
+do not claim rollback after changed replay payloads on this path. Enabled sound
+drains16times without newly queued sounds, separately from the parent's play.
+Full allocated Frame heap is compared at every returned call, not every middle
+boundary. Packed Object/Frame table baselines remain the accepted catalog's;
+this study adds no whole packed-table snapshot at every return. Observed broad
+original-address inventories3983/3991 include inherited hook boundaries and
+must not be called per-instruction coverage. Output instruction evidence stays
+separate. Raw2release tests passed61.109s/build163.45s.188oldpins are unchanged;
+190milestone pins include2newfixtures,5911verifiedblobs/410components/10vendor
+hashes. Final isolated packaged2tests passed61.572s/build173.90s. All owned
+continuous source/build/test jobs are terminal. NTSDNative linked; no new app
+window/device/Windows run. Source sessions23453/
+58546 and PIDs86511/86510 are terminal0; never restart for silence. Native final
+verification exports only the pinned native package to exclude concurrent HUD
+edits. An initial full checkout was cancelled while fetching unrelated LFS
+archives, before any build began; this was not a source/build restart. See
+build/research/continuous-gameplay-work.json. Next bounded active input and
+paused/menu/epilogue joins, actual timed outer43e9a0, app engine integration,
+fullmatch/Windows/device/clean-Mac and the full goal remain open.
+
+The preceding body-only milestone (its input/16-call boundary is superseded):
 OriginalGameplayBody now composes the unpaused native body from the own round
 gameplay continuation through output and dispatcher clear under one transaction.
 Read [GAMEPLAY_BODY](docs/research/GAMEPLAY_BODY.md) and
@@ -69,7 +103,7 @@ Input/round entry still needs the enclosing native transaction and dispatcher;
 All body build/test jobs are terminal. Separate16-call captures remain live;
 preserve those jobs and tools. See build/research/loaded-gameplay-composition-work.json.
 
-**Current priority: sixteen successive initialized gameplay calls, then full-match/app integration.** Read
+**Current priority: bounded active input and loaded continuations, then timed outer-loop/full-match/app integration.** Read
 [GAMEPLAY_RETURN](docs/research/GAMEPLAY_RETURN.md),
 [CONTINUOUS_GAMEPLAY_PLAN](docs/research/CONTINUOUS_GAMEPLAY_PLAN.md),
 [GAMEPLAY_RESULT_LAYOUT](docs/research/GAMEPLAY_RESULT_LAYOUT.md),
