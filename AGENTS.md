@@ -48,6 +48,33 @@ false positives will not occur.
 
 ## Current research status
 
+Additional dispatcher prerequisites now compare in
+[APPLICATION_DISPATCH](docs/research/APPLICATION_DISPATCH.md). Shared
+OriginalApplicationKeyScan matches4348 further prefix exits/9847ordered stores
+and217782624 complete global bytes, including signed invalid states and seeded
+keyboard bytes. OriginalSurfaceClearing matches420 whole401250 returns:
+100effect bytes/masks, null rectangles/source, flags1000400 and unchanged
+HRESULT. Preserve92 supplied local bytes; own outer stack provenance is open.
+Actual57key/17clear/14initializer-constructor PCs exclude stops/adapters.
+The existing World constructor matches explicit446300 over recovered PE
+zero-fill at458b00; pointer446300 at4472d0,2008zero bytes,404constructor writes.
+The400-byte memset is a declared adapter, not executed CRT instructions.
+This is NOT CRT initializer order or an own whole43e9a0 join. Earlier controlled
+World22000020 must not be silently aliased/copied into static458b00. Full236
+outer instructions are byte-checked STATIC inventory; preserve live mode
+rereads after callbacks, global455608 target, enabled loader/editor branches
+and normal return1. Raw3release tests4.258s/build176.63s; all195priorpins
+unchanged/196current, raw16337221/packed10247264, completebytes/JSON/SHA,
+4853blobs and10vendor hashes verified. The initial terminal build failed only
+from a concurrent API replacement; the corrected harness reuses a11f571's
+KeyScan without changing source expected bytes or algorithm. Final packaged
+5release tests4.452s/build173.02s pass, including retained3964scanner cases,
+chains and rollback. Source and final SwiftPM jobs terminal0; initial compile
+failure terminal. NTSDNative linked; job details in
+build/research/application-dispatch-work.json.
+Full initialized dispatcher, app/window/device/Windows and full-game goal remain
+open. Active48 captures are independent; do not restart their live jobs.
+
 Two independent outer-application dependencies now compare; neither is the
 whole initialized43e9a0 join. Read [APPLICATION_TIMER](docs/research/APPLICATION_TIMER.md)
 and [APPLICATION_SERVICE_KEYS](docs/research/APPLICATION_SERVICE_KEYS.md).
