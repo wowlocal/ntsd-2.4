@@ -64,7 +64,8 @@ Reports are [primary](../evidence/gameplay-result-recording.json) and
 [control](../evidence/gameplay-result-recording-control.json). Both source captures
 and their raw acceptance SwiftPM processes are terminal.
 
-Next join the complete result-layout/indicator consumer without inventing the
+The complete controlled [result-layout/indicator consumer](RESULT_LAYOUT.md) is
+now compared. Its own continuations are in progress; join without inventing the
 retained SP68 surface when its branch is enabled. Then compose the proven mode,
 notice/presentation and enabled sound helpers in original order through the true
 function return. Native app/full tick/full match, Windows/device/clean-Mac checks

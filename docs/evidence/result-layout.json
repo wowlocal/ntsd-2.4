@@ -1,0 +1,102 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Recover whole422218/422944..422994 result table and replay indicator.\n\nPinned game EXE and actual VC80 sprintf execute on one controlled Unicorn CPU\nat CW023f with the original bitmap, clip, GDI-text and playback-info children.\nFull World/400Actor/fourObject, bitmap and caller backing are declared inputs.\nMemory/register hooks establish label/format writes, retained round/target reads\nand helper order for the native macOS port. COM/GDI/PTD responses are boundaries;\nno source instruction is replaced. Not initialized gameplay, pixels or Windows.\n",
+  "corpus": "result-layout.json",
+  "sha256": "46b4e7cd5466fc38a2035de4a19a3905981e0efd20ce1370d774c702f028d863",
+  "bytes": 57182095,
+  "cases": 600,
+  "helpers": 66708,
+  "events": {
+    "localWrite": 34861,
+    "draw": 20178,
+    "read": 157763,
+    "clip": 26091,
+    "blit": 25663,
+    "formatWrite": 42140,
+    "format": 9877,
+    "text": 9589,
+    "getDC": 9589,
+    "setBackgroundColor": 9389,
+    "setTextColor": 9389,
+    "stringLength": 9389,
+    "textOut": 9389,
+    "releaseDC": 9389,
+    "infoWrite": 2614,
+    "infoText": 166,
+    "fontPass": 664,
+    "stringWrite": 664
+  },
+  "blits": 25663,
+  "instructions": 1527,
+  "normalReturns": 599,
+  "sourceFaults": 1,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "blobs": 571,
+  "eventCounts": {
+    "localWrite": 34861,
+    "draw": 20178,
+    "read": 157763,
+    "clip": 26091,
+    "blit": 25663,
+    "formatWrite": 42140,
+    "format": 9877,
+    "text": 9589,
+    "getDC": 9589,
+    "setBackgroundColor": 9389,
+    "setTextColor": 9389,
+    "stringLength": 9389,
+    "textOut": 9389,
+    "releaseDC": 9389,
+    "infoWrite": 2614,
+    "infoText": 166,
+    "fontPass": 664,
+    "stringWrite": 664
+  },
+  "undefinedBitmapReads": 420,
+  "helperReturns": 66708,
+  "stores": {
+    "low": 34861,
+    "local": 42140,
+    "globals": 3278
+  },
+  "storedBytes": {
+    "low": 107884,
+    "local": 42140,
+    "globals": 4208
+  },
+  "retainedReads": {
+    "0x42294d": 156,
+    "0x422673": 155
+  },
+  "completeREPCopies": 288,
+  "formatCalls": {
+    "%d": 9018,
+    "%02d : %02d": 561,
+    "%02d:%02d": 144,
+    " / %02d:%02d": 144,
+    "%02d : %02d : %02d": 10
+  },
+  "callerInstructions": 537,
+  "callerStaticInstructions": 537,
+  "missingCallerInstructions": [],
+  "exeInstructions": 1103,
+  "crtInstructions": 424,
+  "sourceNormalReturnsVerified": true,
+  "sourceFaultBoundaries": [
+    {
+      "pc": 4452427,
+      "access": 19,
+      "address": 1094795597,
+      "size": 4,
+      "bitmap": 1094795585
+    }
+  ],
+  "initializedWholeTick": false,
+  "pixelsCompared": false,
+  "nativeComparison": "Full controlled World/400Actor/fourObject bytes and masks; globals and writes; caller formatting bytes/masks and normalized low-local writes; all formats, text/GDI/bitmap/font/clip/Blt events; late global/local rollback. Own initialized layout and target/string backing provenance remain separate.",
+  "fixture": "original-result-layout.json",
+  "fixtureSHA256": "8888f7e24f0ad052ac7fea6d8ef5e6ebae4b90af52b7b6d91f4763e7932c1c32",
+  "fixtureBytes": 7989824
+}

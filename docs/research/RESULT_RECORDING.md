@@ -109,8 +109,10 @@ wrong subdirectory; the corrected path verifies unchanged files. Transport
 compression packages research data and never substitutes for game replay output.
 Evidence is [result-recording.json](../evidence/result-recording.json).
 
-Whole result layout422218..422944 and its indicator caller remain next in
-[RESULT_LAYOUT_PLAN](RESULT_LAYOUT_PLAN.md). That static audit corrects4222ce to
+Whole result layout422218..422944 and its indicator caller are now compared in
+[RESULT_LAYOUT](RESULT_LAYOUT.md):599 normal matches and one explicit source-fault
+rejection. Its own continuations are still in progress. The static audit in
+[RESULT_LAYOUT_PLAN](RESULT_LAYOUT_PLAN.md) corrects4222ce to
 rootSP4c;422673 still consumes the retained round result. The bitmap-font,
 mode-label, playback-info and queued-sound helpers now have their own comparisons,
 but their whole initialized composition and actual422ab8/ret4 are still open.

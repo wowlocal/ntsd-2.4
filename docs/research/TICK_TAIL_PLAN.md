@@ -88,6 +88,10 @@ intervening lifetime. Apparent[esp+64] operands can alias other root locals
 after pending arguments:4222ce writes root4c and422673 still reads root64.
 [RESULT_LAYOUT_PLAN](RESULT_LAYOUT_PLAN.md) records the subsequent static stack
 audit, table/indicator rules and the mutable-string bitmap-font dependency.
+[RESULT_LAYOUT](RESULT_LAYOUT.md) now implements both caller entries with599
+whole native matches and one explicit corrupted-author bitmap fault rejection.
+All537 table/indicator instruction starts execute. Its two fresh own joins are
+still being captured; the accepted initialized boundary remains422944.
 
 421cdc increments450bbc when signed450bdc<100. Unsigned(450bdc-101)>248 skips
 the result block. At450bdc==101, result recording additionally requires450be4
@@ -120,7 +124,7 @@ investigated before applying a convenient default.
 41b390..41b5cc conditionally formats author/info and elapsed/total time, using
 wrapped arithmetic and the same bitmap-font helper.
 [PLAYBACK_INFORMATION](PLAYBACK_INFORMATION.md) now matches120 whole calls;
-its enclosing result indicator is still unimplemented. It is conditional in step4,
+its enclosing result indicator is now compared in RESULT_LAYOUT. It is conditional in step4,
 whereas41b130 is unconditional in step5. Do not report that the ordinary first
 tick has no rendering after HUD merely because diagnostics/results are inactive.
 

@@ -1,8 +1,10 @@
 # Result layout and indicator dependencies
 
-Static follow-up to [RESULT_RECORDING](RESULT_RECORDING.md), whose full controlled
-comparison and both own continuations are now accepted. This plan does not implement or dynamically verify
-the layout. It uses the pinned NTSD EXE, SHA256
+Historical static follow-up to [RESULT_RECORDING](RESULT_RECORDING.md).
+[RESULT_LAYOUT](RESULT_LAYOUT.md) now implements the whole table/indicator caller
+and compares599 normal returns plus one explicit source-fault rejection. The
+static stack audit below remains distinct from that dynamic evidence. It uses
+the pinned NTSD EXE, SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The remaining whole-tick queue is [TICK_TAIL_PLAN](TICK_TAIL_PLAN.md).
 

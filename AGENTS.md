@@ -48,12 +48,43 @@ false positives will not occur.
 
 ## Current research status
 
-**Current priority: whole result layout422218..422944 and indicators422944..422994,
-then original output/sound order and actual422ab8/ret4.** Read
+**Current priority: finish BOTH initialized result-layout continuations, then
+original output/sound order and actual422ab8/ret4.** Read
+[RESULT_LAYOUT](docs/research/RESULT_LAYOUT.md),
 [RESULT_RECORDING](docs/research/RESULT_RECORDING.md),
 [GAMEPLAY_RESULT_RECORDING](docs/research/GAMEPLAY_RESULT_RECORDING.md),
 [RESULT_LAYOUT_PLAN](docs/research/RESULT_LAYOUT_PLAN.md) and
 [TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
+
+OriginalResultLayout now implements whole422218/422944..422994.599 whole original
+returns match full records/masks/globals, caller formatting and ordered output.
+One additional127-byte author input overwrites44fd8c with41414141 and faults at
+43f04b reading4141414d. Native rejects its unavailable bitmap backing and rolls
+back after the same observed prefix. This is599matches+1source-fault rejection,
+NOT600matches. All537caller starts execute;600-input inventory1103EXE+424CRT PCs.
+Normal599:386781events/25661Blts/66705helper returns/9877formats/9589GDI text calls.
+Source288complete REPs/420undefined bitmap reads;155root64/156root68 reads.
+Native uses the recorder's actual continuation. Preserve optional root44c string
+backing and root68 indicator target, live playback ownership, exact-one stage
+result, primary/fallback seats and actual negative-picture fallthrough. Root50
+pointer adjustment alone is normalized to the logical World+4 displacement10.
+Four rollback trials include a late overlay failure after the table and22formats.
+Raw acceptance passes2.239s/build155.60s; initial full comparison2.195s/build34.31s.
+Initial149.02s build linked but relative test path failed; corrected absolute path
+passed. All182 old fixture hashes unchanged;183 current, fullraw57182095/
+packed7989824bytes,completeJSON/SHA/571blobs/10vendor hashes independently verified.
+Packaged3release tests pass44.722s/build157.73s without raw overrides: layout2.098s,
+both retained own result chains42.624s. Their full prior records/FPU reproduce.
+Source setup first collided with the base harness arena and was moved. The first
+full source stopped at the malformed author pointer guard; after terminal status,
+580 atomic cases were retained unchanged and the actual unmapped read recorded.
+No live source was restarted. Both new own source captures70983/12479 are still
+running; do not call them accepted or restart them. Own reference join is added
+but not yet compared. Accepted own boundary remains422944/SP1000e9bc. See
+build/research/result-layout-work.json for current jobs. Separate concurrent
+gameplay-output WIP files are outside this layout milestone's owned changes.
+
+The preceding accepted result-recording/output-helper milestone:
 
 OriginalResultRecording now matches95 whole controlled returns:82 actual writers,
 12playback restores,18322 descriptor requests/33219692bytes.13gates have no writer;
