@@ -17,7 +17,7 @@ public enum OriginalWorldControl {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },observe: observe,afterActorControl: afterActorControl)
+        },precision: state.arithmeticPrecision,observe: observe,afterActorControl: afterActorControl)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World control: "+text) }
@@ -25,6 +25,7 @@ public enum OriginalWorldControl {
     static func apply(world: OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       objectCount: Int32,header: (Int) throws -> OriginalStateRecord,
                       frame: (Int,Int32) throws -> OriginalStateRecord,
+                      precision: OriginalArithmeticPrecision = .bits64,
                       observe: (Int,OriginalActorControlEvent) throws -> Void = { _,_ in },
                       afterActorControl: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         var pool = actors,owned = globals
@@ -43,7 +44,7 @@ public enum OriginalWorldControl {
             // surrounding World rules inspect or mutate any aliased allocation.
             var actor = pool[i]
             try OriginalActorControl.apply(actor: &actor,header: header(o),globals: &owned,
-                frame: { try frame(o,$0) },observe: { try observe(slot,$0) })
+                frame: { try frame(o,$0) },precision: precision,observe: { try observe(slot,$0) })
             pool[i] = actor;try afterActorControl(slot,actor)
             if try state(i) == 400,try owned.integer(at: 0x450bd8-0x44d000,as: Int32.self) == 0 {
                 try teleport(world: world,actors: &pool,slot: slot,kind: 1,header: header)

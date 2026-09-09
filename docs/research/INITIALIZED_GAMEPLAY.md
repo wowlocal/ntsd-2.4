@@ -149,9 +149,11 @@ environment override in 48.507s. Python compilation and staged diff checks
 passed; all source and SwiftPM processes were terminal before the milestone
 commit. This does not add Windows/device or app-window verification.
 
-Direct arithmetic in ActorControl and other consumers still needs a systematic
-audit, including the interaction of intermediate precision, extended exponent
-range, stores and legacy/SSE2 conversion. Native application wiring and the
+The following [CONTROL_PRECISION](CONTROL_PRECISION.md) now corrects ActorControl
+and World context transfer, with whole53-bit and24/53/64-bit comparisons. Its
+remaining inventory includes direct conversion, camera and CRT numeric parsing.
+The initialized chain's explicit037f/actualCRT setup avoids the newly observed
+ambiguity of an unwritten harness FPCW0. Native application wiring and the
 complete post-draw loop `41f550..4214cf` remain unfinished. Actual Windows
 startup/thread/device behavior, continuous DAT gameplay, a finished first
 match, all game modes and clean macOS verification remain open.

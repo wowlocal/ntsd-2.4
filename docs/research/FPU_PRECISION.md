@@ -75,6 +75,14 @@ own chains through41f550 with CW023f. It also revalidates whole World physics,
 links and hits at53 bits. Declared initial CW/outer ABI/PTD/device boundaries,
 remaining arithmetic consumers and real Windows provenance are still open.
 
+The later [CONTROL_PRECISION](CONTROL_PRECISION.md) corrects Actor control and
+adds an important harness qualification: a fresh UNWRITTEN Unicorn FPCW0 does
+not behave like explicitly writing0. This audit's source mode named
+`inherited-zero` explicitly writes0 before execution, so its retained results
+prove that explicit control only. They do not establish the effective numerical
+mode of historical unwritten own chains. Initialized chains explicitly write037f
+and execute actualCRT, avoiding that ambiguity. Do not rewrite old captures.
+
 ## Own-capture limitation
 
 Fresh own early-menu/loading/launch captures inherit FPCW0 because that harness

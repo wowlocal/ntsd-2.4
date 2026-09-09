@@ -37,6 +37,30 @@ is unverified, and the first tick has not returned. NEXT audit direct arithmetic
 and conversions (especially ActorControl), then resume40d960 and the interleaved
 41f550..4214cf loop under the declared initialized context. Preserve old fixtures.
 
+The [control arithmetic audit](docs/research/CONTROL_PRECISION.md) now carries
+match precision through World/Actor control. All13 arithmetic PCs use explicit
+rounding and separate binary64 stores; finite arithmetic can overflow on store
+and the same-call frame dvy addition must preserve that signed infinity.
+32,662 historical Actor/catalog/World cases reproduce in fresh original runs
+and match at explicit53 bits. New27,708 Actor/36 aliased World cases compare
+24/53/64-bit arithmetic, including24 Actor/12 World changes at53 vs64. NoID list.
+New harness finding: an UNWRITTEN Unicorn FPCW reports0 but differs from explicitly
+writing0 on ordinary run division. Do not infer24-bit semantics from the reported
+word alone. Old fpu audit's `inherited-zero` actually explicitly writes0; retain
+its numbers under that exact contract. Initialized own chains write037f and run
+actualCRT to023f, so are unaffected by this ambiguity. Historical fixtures stay
+unchanged. NEXT dedicated legacy/SSE2 conversion and remaining-consumer audit
+(camera/CRT parsing), then whole40d960/postdraw41f550..4214cf. See the study's
+inventory; exact33-bit integer-derived sums at53/64 are not whole-game24-bit
+support. Native app integration/fulltick/Windows/device/cleanMac remain open.
+Acceptance5release tests30.785s/build122.61s passed before5lossless fixtures;
+all147 old hashes unchanged,152 current pins in
+build/research/control-precision-fixture-pins.json. Final packed12tests89.060s/
+build123.96s passed, including retained controls/rollback and both initialized
+own chains (each353341records/665509242bytes+masks/499helpers/53state/788FPU
+checkpoints, same41f550). All source/Swift jobs terminal; NTSDNative linked,
+no app-window/Windows/device claim. Read CONTROL_PRECISION before extending.
+
 ## Authoritative reference
 
 - Use **only the original Windows NTSD distribution** as the behavioral reference.

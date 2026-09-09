@@ -40,9 +40,9 @@ final class OriginalWorldControlTests: XCTestCase {
     private struct Event: Decodable,Equatable { let slot: Int,kind: String,arguments: [UInt32] }
     private struct Case: Decodable {
         let label: String,fill: String,poolSHA256: String,maskSHA256: String,globalsSHA256: String
-        let actors: [Actor]?,active: [[Int]]?,aliases: [[Int]]?,frames: [Frame]?,globals: [Patch]?,count: Int32?,events: [Event]
+        let actors: [Actor]?,active: [[Int]]?,aliases: [[Int]]?,frames: [Frame]?,globals: [Patch]?,count: Int32?,events: [Event],fpcw: UInt16?
     }
-    private struct Corpus: Decodable { let exeSHA256: String,header: [Patch],states: [String:Int32],ids: [Int32],cases: [Case] }
+    private struct Corpus: Decodable { let exeSHA256: String,header: [Patch],states: [String:Int32],ids: [Int32],cases: [Case],fpcw: UInt16? }
     private func patch(_ record: inout OriginalStateRecord,_ offset: Int,_ hex: String) throws {
         let bytes = Array(hex.utf8);XCTAssertEqual(bytes.count%2,0)
         for i in stride(from: 0,to: bytes.count,by: 2) {
@@ -54,8 +54,38 @@ final class OriginalWorldControlTests: XCTestCase {
         if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_CONTROL_CORPUS"] { url = URL(fileURLWithPath: path) }
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-control",withExtension: "json",subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 32_000_000))
+        XCTAssertNil(c.fpcw);XCTAssertEqual(c.cases.count,1491)
+        try compare(c)
+    }
+
+    func testEntireControlCallerAtStartupPrecision() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_CONTROL_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-control53.json")
+        } else {
+            url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-control53",withExtension: "json",subdirectory: "Fixtures"))
+        }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 32_000_000))
+        XCTAssertEqual(c.fpcw,0x27f);XCTAssertEqual(c.cases.count,1491)
+        try compare(c)
+    }
+
+    func testLiveAliasedArithmeticAtThreePrecisions() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_CONTROL_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-control-precision.json")
+        } else {
+            url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-control-precision",withExtension: "json",subdirectory: "Fixtures"))
+        }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 32_000_000))
+        XCTAssertNil(c.fpcw);XCTAssertEqual(c.cases.count,36)
+        for word: UInt16 in [0x7f,0x27f,0x37f] { XCTAssertEqual(c.cases.filter { $0.fpcw == word }.count,12) }
+        try compare(c)
+    }
+
+    private func compare(_ c: Corpus) throws {
         XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
-        XCTAssertEqual(c.ids,[10,20,20,30]);XCTAssertEqual(c.cases.count,1491)
+        XCTAssertEqual(c.ids,[10,20,20,30])
         func defined(_ count: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: count),defined: [Bool](repeating: true,count: count)) }
         var headers: [OriginalStateRecord] = [],frames: [[OriginalStateRecord]] = []
         for (i,id) in c.ids.enumerated() {
@@ -86,7 +116,8 @@ final class OriginalWorldControlTests: XCTestCase {
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             try OriginalWorldControl.apply(world: world,actors: &actors,globals: &globals,objectCount: item.count ?? 4,
-                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },observe: { slot,event in
+                header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },
+                precision: try (item.fpcw ?? c.fpcw).map { try OriginalArithmeticPrecision(controlWord: $0) } ?? .bits64,observe: { slot,event in
                     switch event {
                     case let .random(stream,range,result):events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
                     case let .sound(x,index):events.append(.init(slot: slot,kind: "sound",arguments: [x,index].map(UInt32.init(bitPattern:))))

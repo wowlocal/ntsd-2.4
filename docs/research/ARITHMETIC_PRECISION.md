@@ -11,6 +11,12 @@ own chain and controlled53-bit World physics/links/hits. The scope below records
 this earlier arithmetic milestone; remaining direct arithmetic and Windows
 startup/thread/device evidence are still open.
 
+The next [CONTROL_PRECISION](CONTROL_PRECISION.md) now corrects direct Actor
+control arithmetic, forwards the match context through World control, and adds
+whole original53-bit and24/53/64-bit comparisons. Its inventory and unwritten
+FPCW qualification refine the remaining work below without rewriting this
+historical milestone's evidence.
+
 Baseline EXE SHA-256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 

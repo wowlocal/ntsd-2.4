@@ -1,0 +1,32 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole Actor/World control with explicit original arithmetic precision.\n\nHistorical callers are reproduced without rewriting their expectations. New\nfinite arithmetic controls run whole413080 at CW007f/027f/037f, preserving\noriginal helpers, constants, stores, Actor masks, globals and event order.\nNo Windows/thread/device, natural sequence or complete tick claim.\n",
+  "corpus": "actor-control53.json",
+  "sha256": "2837ef04b6579990c0f23b9049b5f9d48c79e9afe246853309ee5a3a1bc2e4a3",
+  "bytes": 118111565,
+  "cases": 25795,
+  "groups": {
+    "matrix": 23040,
+    "phase": 700,
+    "air": 840,
+    "cost": 288,
+    "dv": 756,
+    "sound": 126,
+    "random": 45
+  },
+  "instructions": 1999,
+  "events": 3672,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fpcw": 639,
+  "historical": {
+    "fixture": "original-actor-control.json",
+    "sha256": "e379f53a23f5620794dbc494a88362baffe520930c549710c59a3dc44e443187"
+  },
+  "historicalReexecuted": true,
+  "historicalReportedFPCW": 0,
+  "changedFromHistorical": 0,
+  "fixture": "original-actor-control53.json",
+  "fixtureSHA256": "3d3e741f7c2ca229374c71db82aebda37af4e5cf0d16c73e751f836b5a882397",
+  "fixtureBytes": 1327381
+}

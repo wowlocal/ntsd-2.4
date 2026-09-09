@@ -11,23 +11,25 @@ public enum OriginalActorControlEvent: Equatable {
 public enum OriginalActorControl {
     public static func apply(actor: inout OriginalStateRecord, object: OriginalLoadedObject,
                              globals: inout OriginalStateRecord, phase _: Int32, mode _: Int32,
+                             precision: OriginalArithmeticPrecision = .bits64,
                              observe: (OriginalActorControlEvent) throws -> Void = { _ in }) throws {
         try apply(actor: &actor, header: object.header, globals: &globals, frame: { index in
             guard object.frameStorage.indices.contains(Int(index)) else {
                 throw OriginalStateError.invalidStorage("Actor control frame outside Object: \(index)")
             }
             return object.frameStorage[Int(index)]
-        }, observe: observe)
+        }, precision: precision, observe: observe)
     }
 
     static func apply(actor: inout OriginalStateRecord, header: OriginalStateRecord,
                       globals: inout OriginalStateRecord, frame: (Int32) throws -> OriginalStateRecord,
+                      precision: OriginalArithmeticPrecision = .bits64,
                       observe: (OriginalActorControlEvent) throws -> Void = { _ in }) throws {
         var candidate = actor, owned = globals
         try OriginalActorInput.apply(actor: &candidate, sourceID: header.integer(at: 0x6f4, as: Int32.self), globals: owned, frame: frame)
         try withoutActuallyEscaping(frame) { frames in
             try withoutActuallyEscaping(observe) { observer in
-                var body = Body(actor: candidate, globals: owned, header: header, frame: frames, observe: observer)
+                var body = Body(actor: candidate, globals: owned, header: header, precision: precision, frame: frames, observe: observer)
                 try body.run()
                 candidate = body.actor; owned = body.globals
             }
@@ -38,6 +40,7 @@ public enum OriginalActorControl {
     private struct Body {
         var actor: OriginalStateRecord, globals: OriginalStateRecord
         let header: OriginalStateRecord
+        let precision: OriginalArithmeticPrecision
         let frame: (Int32) throws -> OriginalStateRecord
         let observe: (OriginalActorControlEvent) throws -> Void
         func i(_ offset: Int) throws -> Int32 { try actor.integer(at: offset, as: Int32.self) }
@@ -45,6 +48,7 @@ public enum OriginalActorControl {
         func signed(_ offset: Int) throws -> Int8 { try actor.integer(at: offset, as: Int8.self) }
         func v(_ offset: Int) throws -> Double { try actor.binary64(at: offset) }
         func h(_ offset: Int) throws -> Double { try header.binary64(at: offset) }
+        func extended(_ value: Double) throws -> OriginalExtended { try .init(value, precision: precision) }
         func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-OriginalMatchPreparation.globalBase, as: Int32.self) }
         func state() throws -> Int32 { try frame(i(0x70)).integer(at: 8, as: Int32.self) }
         mutating func set(_ offset: Int,_ value: Int32) throws { try actor.write(value, at: offset) }
@@ -136,7 +140,7 @@ public enum OriginalActorControl {
                     if (left == 0) == (right == 0) { try walkPhase(heavy: heavy) }
                     let speed = try h(heavy ? 0x38 : 0x10)
                     try velocity(0x50,upOnly ? -speed : speed)
-                    try velocity(0x40,v(0x40)/1.4)
+                    try velocity(0x40,(extended(v(0x40))/extended(1.4)).double)
                 }
                 if try attackHeld == 1 && signed(0xbe) > 0 {
                     try set(4,0); try set(0x88,0)
@@ -178,7 +182,8 @@ public enum OriginalActorControl {
                 }
                 if (upOnly || downOnly) && grounded {
                     let speed = try h(heavy ? 0x48 : 0x28)
-                    try velocity(0x50,upOnly ? -speed : speed); try velocity(0x40,v(0x40)/1.2)
+                    try velocity(0x50,upOnly ? -speed : speed)
+                    try velocity(0x40,(extended(v(0x40))/extended(1.2)).double)
                 }
                 if try attackHeld == 1 && signed(0xbe) > 0 {
                     if heavy { try set(0x70,50) }
@@ -191,7 +196,8 @@ public enum OriginalActorControl {
                     if try defend == 1 && signed(0xc0) > 0 { try set(0x70,102) }
                     if try jump == 1 && signed(0xbf) > 0 {
                         try dashSound(); try set(4,0); try set(0x70,213)
-                        try velocity(0x40,Double(1 &- (Int32(signed(0x80)) &* 2))*h(0x70)); try velocity(0x48,h(0x68))
+                        try velocity(0x40,(extended(Double(1 &- (Int32(signed(0x80)) &* 2)))*extended(h(0x70))).double)
+                        try velocity(0x48,h(0x68))
                         if up != 0 && down == 0 { try velocity(0x50,-h(0x78)) }
                         if down != 0 && up == 0 { try velocity(0x50,h(0x78)) }
                     }
@@ -234,7 +240,7 @@ public enum OriginalActorControl {
                     if kind == 0 { try attack(90,requireFunds: true) }
                     else if kind%100 == 1 || ((kind == 4 || kind == 6) && (left != 0 || right != 0 || up != 0 || down != 0)) {
                         try set(0x70,(kind == 4 || kind == 6) ? 52 : 40)
-                        try set(0x88,0); try velocity(0x48,v(0x48)-1)
+                        try set(0x88,0); try velocity(0x48,(extended(v(0x48))-extended(1)).double)
                     }
                 }
             }
@@ -252,7 +258,14 @@ public enum OriginalActorControl {
                 if try b(0x80) == 1 && -v(0x40) > Double(x) { try velocity(0x40,-Double(x)) }
             }
             let y = try current.integer(at: 0x18, as: Int32.self)
-            if y != 0 { try velocity(0x48,y > 500 ? Double(y &- 550) : v(0x48)+Double(y)) }
+            if y > 500 { try velocity(0x48,Double(y &- 550)) }
+            else if y != 0 {
+                let before = try v(0x48)
+                //414353 can reload an infinity produced by41423e's binary64
+                //store after finite arithmetic. Adding a finite Int32 keeps
+                //that signed infinity; do not reject this same-call continuation.
+                try velocity(0x48,before.isInfinite ? before : (extended(Double(y))+extended(before)).double)
+            }
             let z = try current.integer(at: 0x1c, as: Int32.self)
             if z > 500 { try velocity(0x50,Double(z &- 550)) }
             else if z != 0 {

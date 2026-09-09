@@ -23,12 +23,14 @@ final class OriginalActorControlTests: XCTestCase {
         let label: String, fill: String, after: String, defined: String, globalsSHA256: String
         let actor: [Patch], header: [Patch]?, frames: [FramePatch]?, globals: [Patch]?, events: [Event]
         let objectIndex: Int?
+        let fpcw: UInt16?
     }
     private struct Parent: Decodable { let fixture: String, sha256: String }
     private struct Binding: Decodable { let index: Int, id: Int32 }
     private struct Corpus: Decodable {
         let exeSHA256: String, header: [Patch], states: [String:Int32], cases: [Case]
         let parent: Parent?, bindings: [Binding]?
+        let fpcw: UInt16?
     }
     private func hex(_ text: String) throws -> [UInt8] {
         let bytes = Array(text.utf8)
@@ -49,7 +51,39 @@ final class OriginalActorControlTests: XCTestCase {
         let corpus = try JSONDecoder().decode(Corpus.self, from: raw)
         XCTAssertEqual(corpus.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(corpus.cases.count,25795)
+        XCTAssertNil(corpus.fpcw)
         try compare(corpus)
+    }
+
+    private func precisionCorpus(_ name: String) throws -> Corpus {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_CONTROL_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent(name+".json")
+        } else {
+            url = try XCTUnwrap(Bundle.module.url(forResource: "original-"+name,withExtension: "json",subdirectory: "Fixtures"))
+        }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 256_000_000))
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
+        return c
+    }
+
+    func testWholeControlAtStartupPrecision() throws {
+        let c = try precisionCorpus("actor-control53")
+        XCTAssertEqual(c.cases.count,25795);XCTAssertEqual(c.fpcw,0x27f)
+        try compare(c)
+    }
+
+    func testArithmeticAtThreeExplicitPrecisions() throws {
+        let c = try precisionCorpus("actor-control-precision")
+        XCTAssertEqual(c.cases.count,27708);XCTAssertNil(c.fpcw)
+        for word: UInt16 in [0x7f,0x27f,0x37f] { XCTAssertEqual(c.cases.filter { $0.fpcw == word }.count,9236) }
+        try compare(c)
+    }
+
+    func testCatalogControlAtStartupPrecision() throws {
+        let c = try precisionCorpus("actor-control-catalog53")
+        XCTAssertEqual(c.fpcw,0x27f)
+        try compareCatalog(c)
     }
 
     func testControlWithAllOriginalTypeZeroObjects() throws {
@@ -58,6 +92,11 @@ final class OriginalActorControlTests: XCTestCase {
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-actor-control-catalog", withExtension: "json", subdirectory: "Fixtures")) }
         let corpus = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 128_000_000))
         XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
+        XCTAssertNil(corpus.fpcw)
+        try compareCatalog(corpus)
+    }
+
+    private func compareCatalog(_ corpus: Corpus) throws {
         XCTAssertEqual(corpus.cases.count,5376)
         let parent = try XCTUnwrap(corpus.parent), bindings = try XCTUnwrap(corpus.bindings)
         XCTAssertEqual(bindings.count,42)
@@ -130,7 +169,7 @@ final class OriginalActorControlTests: XCTestCase {
                     guard (0..<400).contains(index) else { throw OriginalStateError.invalidStorage("Probe frame index \(index)") }
                     if let object { return object.frameStorage[Int(index)] }
                     return frames[index] ?? emptyFrame
-                },observe: { event in
+                },precision: try (item.fpcw ?? corpus.fpcw).map { try OriginalArithmeticPrecision(controlWord: $0) } ?? .bits64,observe: { event in
                     switch event {
                     case let .random(stream,range,result): events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
                     case let .sound(x,index): events.append(.init(kind: "sound",arguments: [x,index].map(UInt32.init(bitPattern:))))
