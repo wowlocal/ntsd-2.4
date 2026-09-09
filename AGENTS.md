@@ -3,11 +3,81 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
+## Purpose and scope of low-level compatibility checks
+
+Reverse engineering in this repository supports game compatibility and
+preservation. The pinned original Windows distribution is the behavioral
+reference for the native implementation. Research targets are the declared game
+artifacts, their runtime dependencies, and controlled test environments. Existing
+fidelity requirements and the research sequence below remain in force.
+
+- Disassembly and execution hooks recover the game's control flow, update order,
+  and helper behavior. Instruction addresses identify reproducible evidence.
+- Memory, stack, register, and allocation traces establish data provenance,
+  ownership, aliasing, and lifetimes needed to compose native game routines.
+  Synthetic mappings and hooks belong to the reference harness; distinguish
+  emulated observations from actual Windows, host, or device behavior.
+- FPU, CRT, compression, and file-stream comparisons recover numeric results,
+  replay bytes, and observable error/cleanup behavior across platforms.
+- Malformed inputs, allocation/IO failures, and original crash cases test the
+  limits of compatibility and native rollback. Their purpose is to document
+  behavior and explicit unsupported boundaries. Reproducing a fault does not
+  require developing an exploit or defeating a protection mechanism.
+
+For each new or extended study, state the game behavior being recovered, the
+reference artifacts and test environment, why the low-level operation is needed,
+and the observable comparison or failure boundary. Keep this context in the
+study and relevant tool description. Describe actual operations accurately,
+including memory faults and protection checks; do not hide relevant evidence or
+rename operations to obtain a different safety decision.
+
+Keep immutable reference bytes, expected results, masks, and declared boundaries.
+An explicitly rejected source fault is not a successful native match. Unknown
+storage remains unknown until its provenance is recovered. Reference EXE/DLL
+execution and emulation remain development tooling, separate from the native
+shipping runtime. These checks do not authorize actions against unrelated systems.
+
+If a safety refusal such as `cyber_policy` occurs, preserve the error, timestamp,
+session/turn identifiers, and relevant operation for review. Stop automatic
+retries of that blocked operation; do not attempt to bypass the safeguard.
+Keep the affected dependency open and continue independent permitted work without
+claiming it resolves the blocked path. Revalidate existing process handles before
+acting: a model refusal does not establish that a source capture or build stopped.
+This project context does not override platform safeguards or guarantee that
+false positives will not occur.
+
+## Current research status
+
 **Current priority: whole result recording421cdc..422218, then remaining tail
 through422ab8/ret4.** Read [REPLAY_WRITER](docs/research/REPLAY_WRITER.md),
 [REPLAY_STREAM](docs/research/REPLAY_STREAM.md),
 [REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
 and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md).
+
+Work in progress: [RESULT_RECORDING](docs/research/RESULT_RECORDING.md).
+OriginalResultRecording and the own join compile;53 completed controlled calls
+match natively, including40 whole writers/120 writes/406441 bytes in5.606s.
+Both playback restores, allocation aliasing and late destruction rollback pass.
+Both fresh own initialized continuations now match RAW through422944/SP1000e9bc:
+each513221records/842185012bytes+masks/536or544helpers/63state/1605FPU.
+Both full parents reproduce; only elapsed450bbc changes0->1. Both rootSP64
+audits retain the actual round-produced0 without injection. Raw2tests40.632s.
+The95-case controlled source suite is still LIVE at session44597; revalidate
+build/research/result-recording-work.json before continuing. Both own source
+jobs and all SwiftPM jobs are terminal. No result fixture is published or
+accepted until the controlled suite finishes. MenuCycleReference now retains
+its own roundResults; both retained GAMEPLAY_NOTICES chains still pass unchanged.
+Further static correction:4222ce has six pending pushes, so its[esp+64] store
+writes root4c, NOT root64;422673 still reads the retained round result.
+tools/audit_result_tail_stack.py checks833 decoded caller instructions/92 ESP
+operands through422994 with matching normal-return stack joins. This is STATIC
+CFG evidence, not execution. RESULT_LAYOUT_PLAN records the next consumers;
+423940 mutates/truncates its input string before423a70's later rendering passes.
+[BITMAP_FONT](docs/research/BITMAP_FONT.md) now matches2450 RAW controlled calls:
+143462events/6125NULwrites/10971Blts/555undefined bitmap reads,35720returns.
+394actualEXEPCs include103/104single(alignment absent),63/63wrapper,171bitmap,57clip.
+Native0.674s; both source/native jobs terminal. No font fixture is published;
+whole41b130/41b390 callers/layout/own continuation remain subsequent work.
 
 Whole43dd60 is now implemented in OriginalReplayWriter.21 whole returns match
 full buffers/masks/globals,4588a8 ownership and24350 descriptor writes/58522686

@@ -2,7 +2,9 @@
 
 Static follow-up to [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). The codec, stream and
 [whole writer](REPLAY_WRITER.md) are now independently implemented and compared;
-the enclosing421cdc..422218 caller remains unimplemented.
+the enclosing421cdc..422218 caller is implemented in OriginalResultRecording
+and its full controlled/own comparisons are in progress. See
+[RESULT_RECORDING](RESULT_RECORDING.md) for the current unaccepted work.
 This records the concrete dependencies
 of421cdc..422218 before extending the whole tick. EXE SHA256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
@@ -32,9 +34,9 @@ quotients/remainders and wrapping decimal accumulation at422147..4221f0.
 
 The mode1 participant outcome also consumes **rootSP+64** at421eb1. Its
 semantic producer already exists as `OriginalMatchRoundResult.stageDefeated`,
-returned by `OriginalLoadedMatchEntry.run`. `MenuCycleReference` currently
-checks this result against its source round snapshot and then discards it;
-the next native composition must retain the own result instead of importing
+returned by `OriginalLoadedMatchEntry.run`. `MenuCycleReference` now retains
+these own outputs in `Portion.roundResults` after checking the source snapshot;
+the new native composition consumes that own result instead of importing
 a word from the result-stage source snapshot.
 
 Static candidate lifetime sites:
@@ -47,7 +49,13 @@ Static candidate lifetime sites:
 |41f12f|Apparent `[esp+64]` read is at root+4c after24 bytes of pending RNG arguments; it is an item slot|
 |421039/42103d|Apparent `[esp+64]` store/read is at root+5c after8 bytes of pending RNG arguments; it is a numeric temporary|
 |421eb1|Result caller consumes root+64|
-|4222ce|Later result layout assigns a new local lifetime|
+|4222ce|Six pending pushes make `[esp+64]` a store to root+4c, NOT root+64|
+|422673|Later mode1 result layout still consumes root+64|
+
+The new [result-layout stack audit](RESULT_LAYOUT_PLAN.md) independently
+propagates ESP across all833 decoded caller instructions through422994 and
+checks normal-return cleanup. It confirms the two fixed-offset root64 reads;
+indexed operands remain explicit. This is static CFG evidence, not execution.
 
 The two misleading operands illustrate why textual searches for `esp+64`
 are not lifetime proof. The whole intervening caller still needs a stack-aware

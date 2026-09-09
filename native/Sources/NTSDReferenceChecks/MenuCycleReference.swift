@@ -46,6 +46,9 @@ public enum MenuCycleReference {
     }
     struct Portion {
         let state: OriginalMatchPreparation,context: OriginalInputControlContext,music: OriginalMusicMemory,resources: OriginalMenuResourceLoading
+        /// Own round outputs survive the intervening gameplay stages. The
+        /// result recorder must consume these, never source stack snapshots.
+        let roundResults: [OriginalMatchRoundResult]
         let cases: Int,records: Int,bytes: Int,events: Int,checkpoints: Int,returns: Int
     }
     /// Same whole-call comparisons on retained state; new callers supply their
@@ -56,6 +59,7 @@ public enum MenuCycleReference {
         replayAddresses: [UInt32] = [],gameplay: Bool = false) throws -> Portion {
         let c = (actorAddresses: actorAddresses,objectAddresses: objectAddresses,worldAddress: worldAddress,cases: items,blobs: sourceBlobs)
         var state = own,context = initialContext,musicMemory = initialMusic,loader = initialResources
+        var roundResults: [OriginalMatchRoundResult] = []
         let actors = Dictionary(uniqueKeysWithValues: c.actorAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
         let objects = Dictionary(uniqueKeysWithValues: c.objectAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
         let surfaces = Dictionary(uniqueKeysWithValues: initial.resources.allocations.enumerated().map { ($0.element.address,initial.resources.inputs[$0.offset].surface) })
@@ -184,6 +188,7 @@ public enum MenuCycleReference {
             guard prologues == 1,phaseIndex == order.count,controlIndex == control.events.count,replayIndex == replay.events.count,roundIndex == round.events.count,
                   outcome.continuation == round.continuation,outcome.stageDefeated == round.stageDefeated,
                   control.events.count == (item.prefix.phase == 0 ? 4 : 0),control.helperCalls.isEmpty,control.receiveCalls.count == 1 else { throw error("Cycle stage completion") }
+            roundResults.append(outcome)
             let sp: UInt32 = 0x1000e9bc,received = control.receiveCalls[0]
             guard local.call.entrySP == sp-16,local.call.returnAddress == 0x41c5e5,local.call.saved.count == 4,local.stackAfter == sp,local.endPC == 0x41c5e5,
                   local.call.arguments == [item.prefix.phase,try state.globals.integer(at: 0x451160-0x44d000,as: UInt32.self),sp+0x434],
@@ -240,6 +245,6 @@ public enum MenuCycleReference {
             }
             try snapshot(state,context,item.after,item.label+" after");try retained(state,context,crt,item.earlyAfter,item.label+" after");cases += 1
         }
-        return .init(state: state,context: context,music: musicMemory,resources: loader,cases: cases,records: records,bytes: bytes,events: events,checkpoints: checkpoints,returns: returns)
+        return .init(state: state,context: context,music: musicMemory,resources: loader,roundResults: roundResults,cases: cases,records: records,bytes: bytes,events: events,checkpoints: checkpoints,returns: returns)
     }
 }
