@@ -1,0 +1,343 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Execute whole original43f4b0/43f400 compression and their actual children.\n\nThe EXE executes compression, including its inlined REP memory copies. VC80\nresolves memory imports if reached. Only calloc/free are declared allocator\nboundaries, with ordered requests, failure ordinal and zero backing.\nControlled inputs/capacities; no host compression result feeds the source CPU.\nThis is not43dd60/file IO, an own match continuation or Windows execution.\n",
+  "corpus": "replay-compression.json",
+  "sha256": "058b41329980fec522cfad5651156a69723be38996342b992dec1b490d212f70",
+  "bytes": 35880366,
+  "cases": 815,
+  "instructions": 3208,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "helpers": 11388,
+  "completedREPCopies": 5116,
+  "outputBytesCompared": 31390143,
+  "statuses": {
+    "-5": 397,
+    "0": 321,
+    "-2": 72,
+    "-4": 25
+  },
+  "sourceMemoryHookDiscrepancies": {
+    "cases": [
+      "random-262144",
+      "random-524288",
+      "full-random-recording-writer-capacity",
+      "full-random-recording-larger-capacity"
+    ],
+    "missingBytes": 11570063
+  },
+  "provenance": "Original REP counts/register advances and actual copied bytes; raw hook masks retained separately",
+  "wrapperCoverage": [
+    {
+      "start": 4453376,
+      "end": 4453535,
+      "static": 51,
+      "executed": 51,
+      "missing": []
+    },
+    {
+      "start": 4453552,
+      "end": 4453582,
+      "static": 11,
+      "executed": 11,
+      "missing": []
+    }
+  ],
+  "executedEXEInstructions": 3208,
+  "executedDLLInstructions": 0,
+  "hostCompressionComparison": {
+    "version": "1.2.12",
+    "differences": [
+      {
+        "label": "empty-level0-capacity128",
+        "originalBytes": 11,
+        "hostBytes": 11
+      },
+      {
+        "label": "empty-level2-capacity8",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "empty-level2-capacity128",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "empty-level5-capacity8",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "empty-level5-capacity128",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "byte-level0-capacity129",
+        "originalBytes": 12,
+        "hostBytes": 12
+      },
+      {
+        "label": "byte-level2-capacity129",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "byte-level5-capacity129",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "text-level0-capacity624",
+        "originalBytes": 507,
+        "hostBytes": 507
+      },
+      {
+        "label": "text-level2-capacity248",
+        "originalBytes": 30,
+        "hostBytes": 30
+      },
+      {
+        "label": "text-level2-capacity496",
+        "originalBytes": 30,
+        "hostBytes": 30
+      },
+      {
+        "label": "text-level2-capacity624",
+        "originalBytes": 30,
+        "hostBytes": 30
+      },
+      {
+        "label": "text-level5-capacity248",
+        "originalBytes": 29,
+        "hostBytes": 29
+      },
+      {
+        "label": "text-level5-capacity496",
+        "originalBytes": 29,
+        "hostBytes": 29
+      },
+      {
+        "label": "text-level5-capacity624",
+        "originalBytes": 29,
+        "hostBytes": 29
+      },
+      {
+        "label": "all-bytes-level0-capacity1152",
+        "originalBytes": 1035,
+        "hostBytes": 1035
+      },
+      {
+        "label": "all-bytes-level2-capacity512",
+        "originalBytes": 287,
+        "hostBytes": 287
+      },
+      {
+        "label": "all-bytes-level2-capacity1024",
+        "originalBytes": 287,
+        "hostBytes": 287
+      },
+      {
+        "label": "all-bytes-level2-capacity1152",
+        "originalBytes": 287,
+        "hostBytes": 287
+      },
+      {
+        "label": "all-bytes-level5-capacity512",
+        "originalBytes": 286,
+        "hostBytes": 286
+      },
+      {
+        "label": "all-bytes-level5-capacity1024",
+        "originalBytes": 286,
+        "hostBytes": 286
+      },
+      {
+        "label": "all-bytes-level5-capacity1152",
+        "originalBytes": 286,
+        "hostBytes": 286
+      },
+      {
+        "label": "varied-level0-capacity8320",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level2-capacity8320",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level5-capacity8320",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "empty-level0-capacity128-exact11",
+        "originalBytes": 11,
+        "hostBytes": 11
+      },
+      {
+        "label": "empty-level0-capacity128-exact12",
+        "originalBytes": 11,
+        "hostBytes": 11
+      },
+      {
+        "label": "empty-level2-capacity128-exact9",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "empty-level5-capacity128-exact9",
+        "originalBytes": 8,
+        "hostBytes": 8
+      },
+      {
+        "label": "byte-level0-capacity129-exact12",
+        "originalBytes": 12,
+        "hostBytes": 12
+      },
+      {
+        "label": "byte-level0-capacity129-exact13",
+        "originalBytes": 12,
+        "hostBytes": 12
+      },
+      {
+        "label": "byte-level2-capacity129-exact9",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "byte-level2-capacity129-exact10",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "byte-level5-capacity129-exact9",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "byte-level5-capacity129-exact10",
+        "originalBytes": 9,
+        "hostBytes": 9
+      },
+      {
+        "label": "text-level0-capacity624-exact507",
+        "originalBytes": 507,
+        "hostBytes": 507
+      },
+      {
+        "label": "text-level0-capacity624-exact508",
+        "originalBytes": 507,
+        "hostBytes": 507
+      },
+      {
+        "label": "text-level2-capacity624-exact30",
+        "originalBytes": 30,
+        "hostBytes": 30
+      },
+      {
+        "label": "text-level2-capacity624-exact31",
+        "originalBytes": 30,
+        "hostBytes": 30
+      },
+      {
+        "label": "text-level5-capacity624-exact29",
+        "originalBytes": 29,
+        "hostBytes": 29
+      },
+      {
+        "label": "text-level5-capacity624-exact30",
+        "originalBytes": 29,
+        "hostBytes": 29
+      },
+      {
+        "label": "all-bytes-level0-capacity1152-exact1035",
+        "originalBytes": 1035,
+        "hostBytes": 1035
+      },
+      {
+        "label": "all-bytes-level0-capacity1152-exact1036",
+        "originalBytes": 1035,
+        "hostBytes": 1035
+      },
+      {
+        "label": "all-bytes-level2-capacity1152-exact287",
+        "originalBytes": 287,
+        "hostBytes": 287
+      },
+      {
+        "label": "all-bytes-level2-capacity1152-exact288",
+        "originalBytes": 287,
+        "hostBytes": 287
+      },
+      {
+        "label": "all-bytes-level5-capacity1152-exact286",
+        "originalBytes": 286,
+        "hostBytes": 286
+      },
+      {
+        "label": "all-bytes-level5-capacity1152-exact287",
+        "originalBytes": 286,
+        "hostBytes": 286
+      },
+      {
+        "label": "varied-level0-capacity8320-exact8203",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level0-capacity8320-exact8204",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level2-capacity8320-exact8203",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level2-capacity8320-exact8204",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level5-capacity8320-exact8203",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      },
+      {
+        "label": "varied-level5-capacity8320-exact8204",
+        "originalBytes": 8203,
+        "hostBytes": 8203
+      }
+    ]
+  },
+  "internalABI": {
+    "originalStateBytes": 5816,
+    "nativeLP64StateBytes": 5920,
+    "privateHostCleanupAfterObservation": true
+  },
+  "recordingInputs": [
+    {
+      "fixture": "original-gameplay-notices.json",
+      "fixtureSHA256": "13a20c9a69a13f17683a754de9d0b01ef26ebf619f0ffca502689ecc916e17b0",
+      "recordingSHA256": "6f9314cdc7bdea0e3c1dc0da1833dd2f8da30bb89acff0c01a4771e302869848"
+    },
+    {
+      "fixture": "original-gameplay-notices-control.json",
+      "fixtureSHA256": "34bbdd39bde852d12c03ae9898cd8b27001719a40c792f434def7c77aaf79024",
+      "recordingSHA256": "6f9314cdc7bdea0e3c1dc0da1833dd2f8da30bb89acff0c01a4771e302869848"
+    }
+  ],
+  "wholeWriterCompared": false,
+  "ownInitializedContinuation": false,
+  "filesWritten": false,
+  "firstTickReturned": false,
+  "fixture": "original-replay-compression.json",
+  "fixtureSHA256": "602cf39bde4d93765546439aa256983b9e51c9b7321192de4893db3409c78de5",
+  "fixtureBytes": 32660900
+}

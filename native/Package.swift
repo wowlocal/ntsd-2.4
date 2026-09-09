@@ -15,7 +15,9 @@ let package = Package(
                .executable(name: "NTSDBGCheck", targets: ["NTSDBGCheck"]),
                .executable(name: "NTSDStageCheck", targets: ["NTSDStageCheck"])],
     targets: [
-        .target(name: "NTSDCore"),
+        .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
+                publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
+        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"]),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),

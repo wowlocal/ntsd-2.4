@@ -1,7 +1,8 @@
 # Next whole result-recording caller
 
-Static follow-up to [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md), not a dynamic
-comparison or native implementation. This records the concrete dependencies
+Static follow-up to [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). The independently
+implemented codec is linked below; the whole writer/caller remains unimplemented.
+This records the concrete dependencies
 of421cdc..422218 before extending the whole tick. EXE SHA256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The broader queue remains [TICK_TAIL_PLAN](TICK_TAIL_PLAN.md).
@@ -69,10 +70,13 @@ replace it with transport-fixture deflation or compress only used input events.
 uses literal **`1.1.4` at44a2b4**, calls440640 to initialize,43f610 with flush4,
 and43f8a0 to end. It only publishes the actual output count on the stream-end
 path. These signatures and the version literal identify a zlib-style interface;
-matching the compressed bytes still requires executing the original implementation.
-No compatibility claim for the macOS compression library follows from this
-static observation. The whole wrappers and their actual children are the first
-bounded dependency to capture and compare.
+matching compressed bytes requires executing the original implementation.
+[REPLAY_COMPRESSION](REPLAY_COMPRESSION.md) now implements this dependency with
+a private native C1.1.4 subset:815 whole original calls match the public Swift
+consumer. All51+11 wrapper starts and3208 EXE instructions execute. The corpus
+retains partial output, allocation failures, distinct internal ABIs and the
+REP-derived write-mask evidence. This is not the whole writer or Windows IO.
+Modern host zlib1.2.12 differs on53 successful outputs in that corpus.
 
 After compression,43dde4..43de4f adjusts only the leading
 min(strlen(44d7a0),compressedLength) bytes by `byte + keyByte - 0x30`, modulo256.
@@ -92,8 +96,7 @@ when the result timer is still101,450b84.
 
 ## Required comparison
 
-Capture compression independently with exact buffer lengths, bytes, statuses,
-allocation ownership and real helper returns. Then compose the whole writer
+Compression is now independently compared as documented above. Compose the whole writer
 with the original recording buffer, key/name globals, declared stream responses
 and complete cleanup. Finally compare the entire296-instruction result caller,
 including mode1/4 branches and both fresh own initialized continuations.
@@ -102,5 +105,6 @@ stream exceptions must be investigated rather than assigned convenient success.
 Result table rendering from422218 remains a subsequent consumer.
 
 Static artifacts are build/research/result-writer-static.asm,
-result-recording-static.asm andresult-writer-static-plan.json. No original
-instructions were dynamically executed by this plan, and it creates no fixture.
+result-recording-static.asm andresult-writer-static-plan.json. The plan itself
+does not execute instructions or create a fixture; the linked codec study has
+its own dynamic evidence and explicit scope.

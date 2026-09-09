@@ -1,0 +1,46 @@
+{
+  "url": "https://zlib.net/fossils/zlib-1.1.4.tar.gz",
+  "archiveSHA256": "9e3e973174f9910fd51539ef9ce94c86a3943d4f897fab8e9adf4b19e6a8291e",
+  "files": {
+    "adler32.c": {
+      "originalSHA256": "7a921ef4c444aa3f49c312b39499e17bf12b25856ca5a904ea768037016ab337",
+      "vendoredSHA256": "7a921ef4c444aa3f49c312b39499e17bf12b25856ca5a904ea768037016ab337"
+    },
+    "compress.c": {
+      "originalSHA256": "33dc3e2ae63b27e605a741eff245a9f01358a77593bae6c46502ccbff2f968a3",
+      "vendoredSHA256": "33dc3e2ae63b27e605a741eff245a9f01358a77593bae6c46502ccbff2f968a3"
+    },
+    "deflate.c": {
+      "originalSHA256": "24de2ffce0907d7692fc6eb5abcc200e9781a8eca24d8db9289f709fcdf5e3be",
+      "vendoredSHA256": "24de2ffce0907d7692fc6eb5abcc200e9781a8eca24d8db9289f709fcdf5e3be"
+    },
+    "deflate.h": {
+      "originalSHA256": "094cdbd9e851140334099f46a2047b9ee722dcc3f2cf3c0b32e4b56dd5cab823",
+      "vendoredSHA256": "094cdbd9e851140334099f46a2047b9ee722dcc3f2cf3c0b32e4b56dd5cab823"
+    },
+    "trees.c": {
+      "originalSHA256": "41ea406e6be0b4f9d92c1877e89093868f5f25a723688880cd05cda1b5107f1f",
+      "vendoredSHA256": "41ea406e6be0b4f9d92c1877e89093868f5f25a723688880cd05cda1b5107f1f"
+    },
+    "trees.h": {
+      "originalSHA256": "81579041310716219bbbf7c98849d91f5aeabdd7eadb1f8e9d7e2aa57724b58b",
+      "vendoredSHA256": "81579041310716219bbbf7c98849d91f5aeabdd7eadb1f8e9d7e2aa57724b58b"
+    },
+    "zutil.c": {
+      "originalSHA256": "9ef7ed0e467652c1116864dd9b20a2a0602cd68d92312c55f4d6899ffca8ed18",
+      "vendoredSHA256": "9ef7ed0e467652c1116864dd9b20a2a0602cd68d92312c55f4d6899ffca8ed18"
+    },
+    "zutil.h": {
+      "originalSHA256": "07a2a41547262b9894db1ad591e724e61f1aa44075bb00538a621a09ef4633ff",
+      "vendoredSHA256": "33275eebf64d5cc3ca3d14d81796e7f3b6fbf6d1e4e1b716ba11c6c80466101c"
+    },
+    "zconf.h": {
+      "originalSHA256": "7f991f3b845b18fe68520af54f800c2e2756c26be419b42b46e59b57c492e56a",
+      "vendoredSHA256": "bbf6c122e81fef1e0deef3a759eb872675c1c646ded99a0d91ba70742a636ef1"
+    },
+    "zlib.h": {
+      "originalSHA256": "7388aeb8cc550dcbc158fd43dc90ee900f5fc6a3d055ceaf4c83aa441e6d387f",
+      "vendoredSHA256": "7388aeb8cc550dcbc158fd43dc90ee900f5fc6a3d055ceaf4c83aa441e6d387f"
+    }
+  }
+}

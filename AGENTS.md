@@ -4,8 +4,42 @@ The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 **Current priority: whole result recording421cdc..422218, then remaining tail
-through422ab8/ret4.** Read [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md)
-and the static [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md).
+through422ab8/ret4.** Read [REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
+and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md). The codec
+dependency is now implemented:815 whole43f4b0/43f400 calls match the public
+OriginalReplayCompression Swift API/private native C1.1.4 subset.31390143 output
+bytes/masks,11388 helper returns,5116 complete REP copies; all51+11 wrapper starts,
+3208 EXE/0 DLL PCs.321success/397capacity-5/72level-2/25allocation-4 statuses.
+Output length remains unchanged on failure; partial bytes must survive because
+43dd60 ignores the status. The full6491672-byte own recording compresses10047;
+zero control6326; fullrandom needs6493663 bytes, so original6492672capacity fails.
+Both own parent recordings are identical inputs, NOT two own codec continuations.
+
+Original allocator failure2..5 leaves4 allocations live: deflateEnd sees an
+uninitialized status and returns-2; init returns-4. Native reports that algorithm
+lifecycle before reclaiming private host storage. State ABI5816x86/5920LP64 is
+explicitly distinguished; no Windows heap-exhaustion/leaked-byte equivalence.
+Raw Unicorn write hooks miss11570063 bytes in4cases. Actual43f5c3/43f5ca REP
+counts, DF0, ECX0/ESI/EDI advancement and full copied bytes verify the correct
+mask; raw hook masks remain separate. Do not replace source bytes or present
+those masks as complete. Simple isolated REP controls did not reproduce the
+broader issue. Full815 native C and public Swift comparisons pass; host zlib1.2.12
+differs on53 successful outputs. Only two marked vendor header includes change;
+the C algorithms/tables and license are retained, hashes inupstream.json.
+Raw Swift815 passed0.509s/build140.32s; prior5-sample build140.69s passed.
+Initial native integration needed Byte/prototypes and zmemcpy observation after
+fortified platform headers, not changed compression rules.172oldpins remain
+unchanged,173current; fullraw/packedbytes/JSON/SHA/531blobs and10vendor files
+verified. Raw35880366/packed32660900bytes. Final packaged3release tests passed
+40.353s/build140.28s: compression0.595s and both own notices39.757s. NTSDNative
+linked; codec symbols are privately prefixed, no system-zlib dependency.
+All source/SwiftPM jobs terminal. This is no app-window or Windows evidence.
+Python/654 local Markdown links and owned-file diff checks pass. Vendored
+whitespace is unchanged upstream content; do not reformat the pinned sources.
+NEXT whole43dd60 key/name/stream writer and ownership, then full421cdc caller;
+the codec alone does not execute the writer, an own continuation or a Windows file.
+
+The preceding [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md) milestone:
 BOTH fresh initialized HUD chains now continue the whole notice caller through
 421cdc/SP1000e9bc. Each481245records/806849858bytes+masks/61state/1604FPU;
 536/544helpers unchanged. Both complete before/after states reproduce the whole
@@ -30,7 +64,8 @@ substitute fixture transport deflation. RetainedSP64 has an own semantic produce
 OriginalMatchRoundResult.stageDefeated, currently discarded by MenuCycleReference;
 audit its intervening stack lifetime and preserve own output. Apparent[esp+64]
 at41f12f and421039 are root4c/root5c after pending RNG arguments, NOT this word.
-All these next-step findings are STATIC, not a new native/source comparison.
+The writer/SP-lifetime findings remain STATIC; codec comparison is described
+above and does not prove the whole result caller.
 
 The preceding controlled notice milestone:
 Read [POSTHUD_NOTICES](docs/research/POSTHUD_NOTICES.md) first. The controlled

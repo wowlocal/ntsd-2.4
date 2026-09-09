@@ -67,7 +67,13 @@ and bitmap clipping, retaining any earlier proven fill-stack provenance.
 
 [RESULT_RECORDING_PLAN](RESULT_RECORDING_PLAN.md) details the static next
 dependency: whole43dd60, its1.1.4 compression wrappers and retainedSP64.
-The latter has a recovered own producer, OriginalMatchRoundResult.stageDefeated,
+[REPLAY_COMPRESSION](REPLAY_COMPRESSION.md) now implements the codec dependency:
+815 whole calls match the native C/Swift consumer, including capacity and
+allocation errors. Correct REP-derived masks and incomplete raw hook masks,
+private5816/5920-byte ABIs and native host cleanup are explicitly distinguished.
+The writer and result caller remain open; do not turn a compressor error into
+an invented early exit, because43dd60 ignores that status.
+RetainedSP64 has a recovered own producer, OriginalMatchRoundResult.stageDefeated,
 currently discarded in MenuCycleReference. Its intervening stack-aware lifetime
 still needs verification; apparent[esp+64] operands can alias other root locals
 after pending RNG arguments.
