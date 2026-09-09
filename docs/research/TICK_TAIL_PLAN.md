@@ -142,6 +142,13 @@ than disabling audio to reach the return.
 
 ## Required evidence
 
+The controlled steps5/6 are now composed and compared in
+[GAMEPLAY_OUTPUT](GAMEPLAY_OUTPUT.md):170 original calls through the actual
+normal422ab8/ret4 match native globals and119700 ordered output events. The
+original prologue establishes the controlled saved frame; the intervening
+initialized gameplay body is still a separate join. Both own result-layout
+continuations must feed their own resources/queues/caller into this output.
+
 Each new stage needs controlled full-state/side-effect comparisons and both
 fresh initialized continuations that reproduce the entire pinned parent.
 Preserve CW023f and the same source stack/CPU, ownership, immutable resources,
