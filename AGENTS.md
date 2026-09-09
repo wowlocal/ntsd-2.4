@@ -143,8 +143,45 @@ mutation/reachability is not disproven. Prioritize remaining installed hooks
 and initialized joins over expanding this matrix. Exact jobs/pins/results:
 build/research/lib-actor-control-work.json. Full game goal remains open.
 
-Remaining hooks include430c8c movement,4176ac/4177b9 hits,42fcb1damage,
-41f5fc transforms and424352loading, plus transparent-text/control routing.
+[LIB_WORLD_CONTACTS](docs/research/LIB_WORLD_CONTACTS.md) now compares both
+installed4176ac/4177b9 filters inside10661 whole controlled calls. All7925
+pristine whole outcomes remain identical. Full400Actors/World4524613688bytes
+and equal masks,491941184global bytes,3917ordered events/193615helper returns.
+142/142static DLL hook starts execute with1571EXE starts; not all branch outcomes.
+32279hook entries verify actual417400 stack/slot/Actor provenance, preservedEDX
+and unchangedCW037f/FPSW/tag; all whole returns keepSP1000e000/empty FPU stack.
+Whole actual104-PC installer and76HIGHLOW relocations reproduce13copies/62bytes;
+Windows API responses remain declared. Native has no DLL/patching runtime.
+
+Kinds8/36/80..85/824 requiretype0;86..89/800/801/808/825 requiretype3;
+810..816 accept1/2/4/6;817..823 require1.802..807/809 READ category but their
+comparison has no conditional branch. Keep old invulnerability8/14 exceptions.
+State20 uses ATTACKER current70, reverses team equality and resumes41780b
+inside effect21/22 gate. Preserve defender state10/13 and sourceID212 bypasses.
+CurrentSP44/48 are actual pair arguments after0x30locals/four pushes; do not
+import expected stack words. Public native wrapper shares the pristine pass
+with explicit library selection. Undefined category802 and late kind80 tieRNG
+observer errors verify full rollback. Buffer events until whole tick commits.
+
+Raw6release tests14.567s/build175.45s passed, including10661library/7925pristine
+and rollback. Immutable raw48983626/packed3074744bytes, completeJSON/SHA/all1924
+blobs and10vendor files verified;204oldpins unchanged/205at publication.
+Raw525-file export0a7c7a6+three owned files excludes unfinished transforms.
+Read-only137DAT census:54800defined state words/4384ITR records; NOnewkinds or
+state20, only402oldkind8. New-rule cases are synthetic; later mutation remains
+open. First source attempt returned then failed an undeclared initial FPU-tag
+assertion; terminal log/source retained. Fresh complete capture explicitly sets
+FPSW0/tagffff. A verifier field-access fix changed no expected/source bytes.
+No source memory fault or safety refusal. Final packaged8release tests passed
+51.661s/build175.11s, including both retained pristine initialized chains37.172s,
+library8.375s/pristine6.114s. Same three native files in526-file0a7c7a6 export
+plus new fixture, no raw overrides or unfinished transforms. All owned source/
+SwiftPM jobs terminal; NTSDNative linked. Exact jobs/pins/failed harness history:
+build/research/lib-world-contacts-work.json. Full library-enabled own join,
+damage, app/window/device/Windows/full match and full-game goal stay open.
+
+Remaining hooks include430c8c movement,42fcb1damage,
+41f5fc transforms and424352loading, plus transparent-text/control/contact routing.
 Recover Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
 Old pristine-EXE fixture bytes remain immutable and valid in their declared
 unloaded-library controls; they do NOT establish the DLL-enabled application.

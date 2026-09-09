@@ -1,0 +1,5882 @@
+{
+  "scope": "Census installed contact-kind/state20 inputs in original loaded game DATs.\n\nRead-only pinned137-DAT hashes and accepted full Object/Frame-allocation\nbytes/masks. Resolve original ITR data references within accepted allocations,\nwithout executing calls or supplying source after-state to Native. This proves\nstatic data presence, not runtime reachability or a contact/damage outcome.\n",
+  "catalogFixture": "original-loaded-catalog53.json",
+  "catalogFixtureSHA256": "3f8243b8049d8d2436cad9494276ff04e8005ab37b2711e1c7f8712fb02c590d",
+  "catalogRawSHA256": "1c96ed1127ffe9409fcfb4d1f6812be818bffda9e10e4fb3a44d8f0faed896d9",
+  "originalDATsVerified": 137,
+  "frameSlots": 54800,
+  "presentFrames": 15363,
+  "currentFrameInteractionRecords": 4384,
+  "allKinds": {
+    "0": 2322,
+    "1": 4,
+    "2": 117,
+    "3": 248,
+    "4": 488,
+    "5": 353,
+    "6": 275,
+    "8": 402,
+    "10": 15,
+    "11": 5,
+    "14": 114,
+    "15": 40,
+    "16": 1
+  },
+  "affectedKindsPresent": {
+    "8": 402
+  },
+  "affectedKindsAbsent": [
+    36,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    800,
+    801,
+    802,
+    803,
+    804,
+    805,
+    806,
+    807,
+    808,
+    809,
+    810,
+    811,
+    812,
+    813,
+    814,
+    815,
+    816,
+    817,
+    818,
+    819,
+    820,
+    821,
+    822,
+    823,
+    824,
+    825
+  ],
+  "state20Frames": 0,
+  "rows": [
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 20,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 21,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 22,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 23,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 24,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 25,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 26,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 27,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 307,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 308,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 309,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 310,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 356,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 358,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 380,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 381,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 382,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 384,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 1,
+      "id": 52,
+      "type": 0,
+      "path": "chars\\kyubi.dat",
+      "sourceSHA256": "bd5321cdbbc83e2ac7d2ba15ae0caec8786762013ea45d13c5a796551fa2a3ef",
+      "frame": 386,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 2,
+      "id": 38,
+      "type": 0,
+      "path": "chars\\sasuke_cs2.dat",
+      "sourceSHA256": "4c310e0fdb1b879b4b1a336bcb0502c1804745a9c439a2805d9d96b242f3c1df",
+      "frame": 305,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 4,
+      "id": 51,
+      "type": 0,
+      "path": "chars\\sasori.dat",
+      "sourceSHA256": "bc933986a8022793131a3c97ee25a4a6c2e8a7caefba878357e7712aa267bf8a",
+      "frame": 280,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 0,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 1,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 2,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 3,
+      "present": true,
+      "state": 1700,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 5,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 6,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 5,
+      "id": 56,
+      "type": 0,
+      "path": "chars\\reaper.dat",
+      "sourceSHA256": "21121d8ca504361534dacb2f034024a2a0a4bb2c66a7a720c0686fdfdd5e2f10",
+      "frame": 218,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 6,
+      "id": 57,
+      "type": 0,
+      "path": "chars\\nckakuzu.dat",
+      "sourceSHA256": "b8f4616295ff0f820ae9244234cf2964173fb9d6ef74e06972ad00a0f36cf842",
+      "frame": 354,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 8,
+      "id": 37,
+      "type": 0,
+      "path": "chars\\jiroubou.dat",
+      "sourceSHA256": "8030a942417302dcfb0db0879ecc1fa96df50146bbcccd5807da50ab1cef8a9d",
+      "frame": 321,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 8,
+      "id": 37,
+      "type": 0,
+      "path": "chars\\jiroubou.dat",
+      "sourceSHA256": "8030a942417302dcfb0db0879ecc1fa96df50146bbcccd5807da50ab1cef8a9d",
+      "frame": 327,
+      "present": true,
+      "state": 17,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 10,
+      "id": 35,
+      "type": 0,
+      "path": "chars\\sakon.dat",
+      "sourceSHA256": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a",
+      "frame": 251,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 10,
+      "id": 35,
+      "type": 0,
+      "path": "chars\\sakon.dat",
+      "sourceSHA256": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a",
+      "frame": 252,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 10,
+      "id": 35,
+      "type": 0,
+      "path": "chars\\sakon.dat",
+      "sourceSHA256": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a",
+      "frame": 255,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 10,
+      "id": 35,
+      "type": 0,
+      "path": "chars\\sakon.dat",
+      "sourceSHA256": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a",
+      "frame": 256,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 10,
+      "id": 35,
+      "type": 0,
+      "path": "chars\\sakon.dat",
+      "sourceSHA256": "d4bfbd6c0241bf52e0a07a9a9702c137cf9833ab8681a813d0c659c1002d2c0a",
+      "frame": 257,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 16,
+      "id": 30,
+      "type": 0,
+      "path": "chars\\sound_nin.dat",
+      "sourceSHA256": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5",
+      "frame": 246,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 16,
+      "id": 30,
+      "type": 0,
+      "path": "chars\\sound_nin.dat",
+      "sourceSHA256": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5",
+      "frame": 361,
+      "present": true,
+      "state": 14,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 16,
+      "id": 30,
+      "type": 0,
+      "path": "chars\\sound_nin.dat",
+      "sourceSHA256": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5",
+      "frame": 380,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 16,
+      "id": 30,
+      "type": 0,
+      "path": "chars\\sound_nin.dat",
+      "sourceSHA256": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5",
+      "frame": 384,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 16,
+      "id": 30,
+      "type": 0,
+      "path": "chars\\sound_nin.dat",
+      "sourceSHA256": "2874b86a745b24898608cb8d24e23cf9c963c96ef2707143b78d54690e7bc1f5",
+      "frame": 387,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 27,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 28,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 29,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 31,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 32,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 149,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 150,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 151,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 152,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 153,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 154,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 331,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 340,
+      "present": true,
+      "state": 400,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 346,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 349,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 350,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 351,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 370,
+      "present": true,
+      "state": 7,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 371,
+      "present": true,
+      "state": 7,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 372,
+      "present": true,
+      "state": 7,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 373,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 24,
+      "id": 7,
+      "type": 0,
+      "path": "chars\\rock_lee.dat",
+      "sourceSHA256": "97618030456249d083c07b67fa82d74458bfdbfb4c63b8615946eba44b416731",
+      "frame": 374,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 0,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 1,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 2,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 3,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 5,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 6,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 7,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 8,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 9,
+      "present": true,
+      "state": 2,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 10,
+      "present": true,
+      "state": 2,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 11,
+      "present": true,
+      "state": 2,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 270,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 380,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 381,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 382,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 383,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 384,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 385,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 386,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 387,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 25,
+      "id": 18,
+      "type": 0,
+      "path": "chars\\neji.dat",
+      "sourceSHA256": "d307d6489e216f155429729284a4f56a593e74373a6d25a60d97b3c637deca49",
+      "frame": 388,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 30,
+      "id": 8,
+      "type": 0,
+      "path": "chars\\chiyo.dat",
+      "sourceSHA256": "956de8fb7e8e1f39dc8c9771012c1bc166686d6271bdc74abcaf408fa0bf81af",
+      "frame": 335,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 31,
+      "id": 14,
+      "type": 0,
+      "path": "chars\\kankuro.dat",
+      "sourceSHA256": "16634a43ed70df769f407195f9b03205338e636967aec06213cb6aa3419893a7",
+      "frame": 248,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 31,
+      "id": 14,
+      "type": 0,
+      "path": "chars\\kankuro.dat",
+      "sourceSHA256": "16634a43ed70df769f407195f9b03205338e636967aec06213cb6aa3419893a7",
+      "frame": 355,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 354,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 355,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 356,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 360,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 361,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 362,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 363,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 364,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 365,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 366,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 367,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 368,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 369,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 370,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 371,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 372,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 373,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 374,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 375,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 376,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 377,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 378,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 379,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 380,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 381,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 382,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 383,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 32,
+      "id": 15,
+      "type": 0,
+      "path": "chars\\temari.dat",
+      "sourceSHA256": "51dbb22b5d2a2a7ed57b8ff5c9414746bf5dceddabd9e71295e87dde4ce7a557",
+      "frame": 384,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 0,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 1,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 5,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 6,
+      "present": true,
+      "state": 1,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 9,
+      "present": true,
+      "state": 2,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 26,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 27,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 102,
+      "present": true,
+      "state": 6,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 110,
+      "present": true,
+      "state": 7,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 151,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 152,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 153,
+      "present": true,
+      "state": 14,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 210,
+      "present": true,
+      "state": 4,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 305,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 307,
+      "present": true,
+      "state": 17,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 35,
+      "id": 9,
+      "type": 0,
+      "path": "chars\\itachi.dat",
+      "sourceSHA256": "f6804360d16c85b1ce3dcde7cf7c06a57726d662bd546bdec42d5c017f99dbd2",
+      "frame": 389,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 0,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 20,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 25,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 30,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 35,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 40,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 45,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 52,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 53,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 215,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 218,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 219,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 240,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 241,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 330,
+      "present": true,
+      "state": 7,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 39,
+      "id": 23,
+      "type": 0,
+      "path": "chars\\kabuto.dat",
+      "sourceSHA256": "b8a0d3fa5890b73f8535bf43b9a9a8e1f0f635f1b7b0f129559cca0429520e6a",
+      "frame": 335,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 40,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 41,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 42,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 43,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 44,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 45,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 46,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 47,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 48,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 49,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 50,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 51,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 52,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 53,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 54,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 43,
+      "id": 101,
+      "type": 4,
+      "path": "chars\\weapon2.dat",
+      "sourceSHA256": "693f3c8156b37c00ceb926f8588bed1739b459bdaa311c7177d9699ba773c046",
+      "frame": 55,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 70,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 80,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 90,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 95,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 96,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 97,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 98,
+      "present": true,
+      "state": 0,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 321,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 322,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 323,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 350,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 353,
+      "present": true,
+      "state": 3,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 372,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 374,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 375,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 379,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 387,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 53,
+      "id": 300,
+      "type": 5,
+      "path": "chars\\criminal.dat",
+      "sourceSHA256": "5cc31238254c8943188e028d6e733b1ce8a71ec7e14c1fd0c5d23ca646820c91",
+      "frame": 389,
+      "present": true,
+      "state": 301,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 54,
+      "id": 230,
+      "type": 3,
+      "path": "chars\\karasu.dat",
+      "sourceSHA256": "cabf25c41558594a08fa43c38809ef9e6f1ec95fa0b43de54f4e5dae3ddfbdbe",
+      "frame": 39,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 0,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 1,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 2,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 70,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 71,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 72,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 73,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 62,
+      "id": 200,
+      "type": 3,
+      "path": "chars\\sakura_ball.dat",
+      "sourceSHA256": "75534c9dfcbb2eff5c8c1bf94f4399881b052b0b7c3752ba05dda9d6b60aa827",
+      "frame": 74,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 66,
+      "id": 205,
+      "type": 3,
+      "path": "chars\\poison.dat",
+      "sourceSHA256": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197",
+      "frame": 84,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 66,
+      "id": 205,
+      "type": 3,
+      "path": "chars\\poison.dat",
+      "sourceSHA256": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197",
+      "frame": 85,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 66,
+      "id": 205,
+      "type": 3,
+      "path": "chars\\poison.dat",
+      "sourceSHA256": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197",
+      "frame": 86,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 66,
+      "id": 205,
+      "type": 3,
+      "path": "chars\\poison.dat",
+      "sourceSHA256": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197",
+      "frame": 87,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 66,
+      "id": 205,
+      "type": 3,
+      "path": "chars\\poison.dat",
+      "sourceSHA256": "b20714a0f842e52b6cf0bb609f83794a7513538482827224a276e74d325cf197",
+      "frame": 88,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 75,
+      "id": 214,
+      "type": 3,
+      "path": "chars\\flash.dat",
+      "sourceSHA256": "f675e58bd845f5d9bd4bd38a5f0735b006fde1be6decfa33d39cd77fb55ad8aa",
+      "frame": 65,
+      "present": true,
+      "state": 9997,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 75,
+      "id": 214,
+      "type": 3,
+      "path": "chars\\flash.dat",
+      "sourceSHA256": "f675e58bd845f5d9bd4bd38a5f0735b006fde1be6decfa33d39cd77fb55ad8aa",
+      "frame": 75,
+      "present": true,
+      "state": 9997,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 75,
+      "id": 214,
+      "type": 3,
+      "path": "chars\\flash.dat",
+      "sourceSHA256": "f675e58bd845f5d9bd4bd38a5f0735b006fde1be6decfa33d39cd77fb55ad8aa",
+      "frame": 76,
+      "present": true,
+      "state": 9997,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 81,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 82,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 273,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 274,
+      "present": true,
+      "state": 9,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 280,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 281,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 282,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 283,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 284,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 285,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 286,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 287,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 288,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 289,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 290,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 291,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 295,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 296,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 297,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 298,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 299,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 300,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 301,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 302,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 303,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 304,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 305,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 306,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 310,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 311,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 312,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 313,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 314,
+      "present": true,
+      "state": 9997,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 320,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 321,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 322,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 323,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 324,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 79,
+      "id": 220,
+      "type": 3,
+      "path": "chars\\crow_2.dat",
+      "sourceSHA256": "3ed403e380c66fe14ca66a6190b112de9cbc1fec92338bc03711065ca5fd1b96",
+      "frame": 325,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 81,
+      "id": 222,
+      "type": 3,
+      "path": "chars\\ironsand.dat",
+      "sourceSHA256": "082c169931ffde5ecce2a75d8f304787616354b0965d00cffff0912f3f1da59b",
+      "frame": 211,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 81,
+      "id": 222,
+      "type": 3,
+      "path": "chars\\ironsand.dat",
+      "sourceSHA256": "082c169931ffde5ecce2a75d8f304787616354b0965d00cffff0912f3f1da59b",
+      "frame": 215,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 84,
+      "id": 225,
+      "type": 3,
+      "path": "chars\\clay_bird.dat",
+      "sourceSHA256": "c7bbaf13ad7ada0a86c0eea843c654a802a47c98c5c213732cdccf7f3df2b881",
+      "frame": 75,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 84,
+      "id": 225,
+      "type": 3,
+      "path": "chars\\clay_bird.dat",
+      "sourceSHA256": "c7bbaf13ad7ada0a86c0eea843c654a802a47c98c5c213732cdccf7f3df2b881",
+      "frame": 76,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 89,
+      "id": 235,
+      "type": 3,
+      "path": "chars\\criminal2.dat",
+      "sourceSHA256": "fa8e2f96c0a653122a16fd14eb8932cc4b0471f7f1794395138442e200b0f635",
+      "frame": 1,
+      "present": true,
+      "state": 9997,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 101,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 102,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 103,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 104,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 105,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 106,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 108,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 109,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 110,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 111,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 113,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 114,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 115,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 100,
+      "id": 418,
+      "type": 3,
+      "path": "chars\\mother_puppet.dat",
+      "sourceSHA256": "603ab454b12ee0d103c984d9660f068e21769c08eaa587aee15436f703aa5599",
+      "frame": 116,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 101,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 102,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 103,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 104,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 105,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 106,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        },
+        {
+          "index": 2,
+          "kind": 8
+        },
+        {
+          "index": 3,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 108,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 109,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 110,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 111,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 113,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 114,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 115,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 116,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        },
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 117,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 118,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 119,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 120,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 123,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 127,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 128,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 129,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 130,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 102,
+      "id": 420,
+      "type": 3,
+      "path": "chars\\father_puppet.dat",
+      "sourceSHA256": "fd29fe4ec456b2c18e6d1a879208a5acba54a0865ff57cb1e6a591986974a64b",
+      "frame": 133,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 103,
+      "id": 421,
+      "type": 3,
+      "path": "chars\\bugs2.dat",
+      "sourceSHA256": "878eb42525ae7088e51e9d347aca2c80568ed2b82b8dbe7b87068999b18a99ee",
+      "frame": 94,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 103,
+      "id": 421,
+      "type": 3,
+      "path": "chars\\bugs2.dat",
+      "sourceSHA256": "878eb42525ae7088e51e9d347aca2c80568ed2b82b8dbe7b87068999b18a99ee",
+      "frame": 95,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 103,
+      "id": 421,
+      "type": 3,
+      "path": "chars\\bugs2.dat",
+      "sourceSHA256": "878eb42525ae7088e51e9d347aca2c80568ed2b82b8dbe7b87068999b18a99ee",
+      "frame": 96,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 105,
+      "id": 433,
+      "type": 3,
+      "path": "chars\\itachi_kunai.dat",
+      "sourceSHA256": "4ebbe93bae39da2ebac911ebf0fd3e706c242953a44184159544b582d534623e",
+      "frame": 102,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 107,
+      "id": 435,
+      "type": 3,
+      "path": "chars\\drunken.dat",
+      "sourceSHA256": "57e56044cf2cf59385ecaf6c4811f39beeb88a2ca75d8cd03b60dcec0b005bb7",
+      "frame": 110,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 108,
+      "id": 436,
+      "type": 3,
+      "path": "chars\\wave.dat",
+      "sourceSHA256": "8f2d8490045c9ef82b972edb3d00f7f109eed5ce86b3a038d80e5bfcd75a10d3",
+      "frame": 134,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 110,
+      "id": 438,
+      "type": 3,
+      "path": "chars\\spider.dat",
+      "sourceSHA256": "27d7cba55c010d4ba8a4d09075218c7d132599ebce2b5e08d5cb7a34adef073b",
+      "frame": 60,
+      "present": true,
+      "state": 3002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 111,
+      "id": 439,
+      "type": 3,
+      "path": "chars\\monster.dat",
+      "sourceSHA256": "721e78cea5d9de4ea3b8d2e7b57cd7856ec5d35a3d3f2402ffd914a27b1f0506",
+      "frame": 65,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 112,
+      "id": 440,
+      "type": 3,
+      "path": "chars\\chidori.dat",
+      "sourceSHA256": "788da98dcf23d50d401b19ae272b82c7c16a859bdde0610779723e3ccc447ee8",
+      "frame": 67,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 104,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 105,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 106,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 107,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 108,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 109,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 110,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 111,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 112,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 113,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 113,
+      "id": 441,
+      "type": 3,
+      "path": "chars\\wood.dat",
+      "sourceSHA256": "745871a58f7b9a2253c1b6ac9c99a6a8175d933ac0d9db332402856f0051ad75",
+      "frame": 114,
+      "present": true,
+      "state": 3006,
+      "interactions": [
+        {
+          "index": 2,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 206,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 215,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 216,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 218,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 220,
+      "present": true,
+      "state": 3003,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 117,
+      "id": 446,
+      "type": 3,
+      "path": "chars\\4TK_ball.dat",
+      "sourceSHA256": "3173f9e6580a5bfc29479298ef8f4795d1f2eca9b2d286124e607b445edd03ae",
+      "frame": 233,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 40,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 41,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 42,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 43,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 44,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 45,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 46,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 47,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 48,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 49,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 50,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 51,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 52,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 53,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 54,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 118,
+      "id": 447,
+      "type": 1,
+      "path": "chars\\die.dat",
+      "sourceSHA256": "175ac756d718eee5c12c9cf617da5f141f7ef3f665799f7d6133cf4cecd258d6",
+      "frame": 55,
+      "present": true,
+      "state": 1002,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 0,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 1,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 2,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 15,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 16,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 17,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 18,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 19,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 121,
+      "id": 450,
+      "type": 3,
+      "path": "chars\\air_creature.dat",
+      "sourceSHA256": "58a10600b3765997a7fbca6615e51a4f2c3d22eb0b62fd60e3234eafd5b0ab1c",
+      "frame": 30,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 123,
+      "id": 451,
+      "type": 3,
+      "path": "chars\\thunder_creature.dat",
+      "sourceSHA256": "a03b5edb7d358c660b9e3e6a947431982555f0fbde10ff9fd1a0295d13fb157e",
+      "frame": 30,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 123,
+      "id": 451,
+      "type": 3,
+      "path": "chars\\thunder_creature.dat",
+      "sourceSHA256": "a03b5edb7d358c660b9e3e6a947431982555f0fbde10ff9fd1a0295d13fb157e",
+      "frame": 65,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 123,
+      "id": 451,
+      "type": 3,
+      "path": "chars\\thunder_creature.dat",
+      "sourceSHA256": "a03b5edb7d358c660b9e3e6a947431982555f0fbde10ff9fd1a0295d13fb157e",
+      "frame": 66,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 123,
+      "id": 451,
+      "type": 3,
+      "path": "chars\\thunder_creature.dat",
+      "sourceSHA256": "a03b5edb7d358c660b9e3e6a947431982555f0fbde10ff9fd1a0295d13fb157e",
+      "frame": 67,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 1,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 30,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 65,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 66,
+      "present": true,
+      "state": 15,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 67,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 68,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 124,
+      "id": 452,
+      "type": 3,
+      "path": "chars\\fire_creature.dat",
+      "sourceSHA256": "d0b6485cc18592555f6ac1cbd0606dbe8766b8acbf56cae0f8768be9864b0e3b",
+      "frame": 69,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 125,
+      "id": 453,
+      "type": 3,
+      "path": "chars\\earth_creature.dat",
+      "sourceSHA256": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85",
+      "frame": 30,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 125,
+      "id": 453,
+      "type": 3,
+      "path": "chars\\earth_creature.dat",
+      "sourceSHA256": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85",
+      "frame": 65,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 125,
+      "id": 453,
+      "type": 3,
+      "path": "chars\\earth_creature.dat",
+      "sourceSHA256": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85",
+      "frame": 66,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 125,
+      "id": 453,
+      "type": 3,
+      "path": "chars\\earth_creature.dat",
+      "sourceSHA256": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85",
+      "frame": 67,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 125,
+      "id": 453,
+      "type": 3,
+      "path": "chars\\earth_creature.dat",
+      "sourceSHA256": "4c0e513577a63074443372ccd732f738b66fd550958075b2373fa40f3f65cf85",
+      "frame": 68,
+      "present": true,
+      "state": 3000,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 126,
+      "id": 462,
+      "type": 3,
+      "path": "chars\\shadow.dat",
+      "sourceSHA256": "451f10b8a02016e57d46bb2014ff5261ae2c6eb9cdbbce82ed61813e541699ab",
+      "frame": 151,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 126,
+      "id": 462,
+      "type": 3,
+      "path": "chars\\shadow.dat",
+      "sourceSHA256": "451f10b8a02016e57d46bb2014ff5261ae2c6eb9cdbbce82ed61813e541699ab",
+      "frame": 200,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 126,
+      "id": 462,
+      "type": 3,
+      "path": "chars\\shadow.dat",
+      "sourceSHA256": "451f10b8a02016e57d46bb2014ff5261ae2c6eb9cdbbce82ed61813e541699ab",
+      "frame": 290,
+      "present": true,
+      "state": 3005,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    },
+    {
+      "object": 127,
+      "id": 499,
+      "type": 3,
+      "path": "chars\\nckakuzuarm.dat",
+      "sourceSHA256": "f89878c1a9cc7c7f21ed0e0c9989b584ba70a69eff6c1214dd58f494aeef149a",
+      "frame": 124,
+      "present": true,
+      "state": 18,
+      "interactions": [
+        {
+          "index": 0,
+          "kind": 8
+        }
+      ]
+    }
+  ],
+  "blobsVerified": 1363,
+  "nativeCompared": false,
+  "staticDataOnly": true,
+  "windowsVerified": false
+}

@@ -20,9 +20,12 @@ three whole-preparation hooks, connecting their own requested-ID output to the
 whole consumer. [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md) additionally compares
 7168 whole control calls through41408b, retaining the inserted state85/86 rules
 and their live EDI/x87 provenance. Those states are absent from the original
-loaded DAT tables; their new branches are controlled cases. Six remaining jump destinations, the two-byte loading-label
-patch, enclosing library-enabled callers and a fresh initialized application
-join remain open.
+loaded DAT tables; their new branches are controlled cases.
+[LIB_WORLD_CONTACTS](LIB_WORLD_CONTACTS.md) now compares both contact hooks
+inside10661 whole calls, preserving all7925 pristine outcomes and late rollback.
+New contact kinds/state20 are likewise absent from the original loaded catalog.
+Four remaining jump destinations, the two-byte loading-label patch, enclosing
+library-enabled callers and a fresh initialized application join remain open.
 
 ## Pinned artifacts and actual entry path
 
@@ -92,18 +95,18 @@ entries and follows control flow, keeping embedded pointer data separate.
 ## Installed hooks and remaining work
 
 These destinations are established by actual copy requests and verified jump
-bytes. Text and preparation/commands now have separate native studies. The
-remaining behavior notes are static findings, not native comparisons or complete
-branch analyses.
+bytes. Text, preparation/commands, Actor control and contacts have separate
+native studies linked below. The remaining behavior notes are static findings,
+not native comparisons or complete branch analyses.
 
 | EXE patch | DLL destination | Recovered role / required work |
 | --- | --- | --- |
 |430c8c|100013d0|Extended movement/interaction kinds and coordinate changes; continuations430ceb/43187a. Recover all branches and allocated-state use.|
-|4176ac|10001807|Additional hit-kind and Object-category conditions; continuations4176cb/417f59.|
+|4176ac|10001807|Whole contact collection compared in [LIB_WORLD_CONTACTS](LIB_WORLD_CONTACTS.md):10661 calls, category groups and unchanged invulnerability gates; continuations4176cb/417f59.|
 |42fcb1|10001322|Extended state/frame/HP handling after hit damage; continuations42fcbb/42fd1d.|
 |41f5fc|1000109d|Transform-state routing adds4000-range behavior before41f675; retain8000-range continuation41f60a.|
 |41408b|10001125|Whole Actor control compared in [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md):7168 calls, live zero EDI and x87 operands, state85/86 frame/facing order.|
-|4177b9|100011b9|Additional state20/team hit filtering; three original continuations remain distinct.|
+|4177b9|100011b9|Whole contacts compared: attacker current-frame state20 reverses the team gate and enters the effect check at41780b; three continuations and live stack provenance retained.|
 |401290|10001298|Whole replacement text routine; native276-call comparison completed below.|
 |424352|10001236|Loading-label selection/text/color changes before4243b1.|
 |424357|two bytes `90 90`|Accompanies the preceding loading-label jump; preserve as part of that source path.|

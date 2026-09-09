@@ -9,6 +9,10 @@ public enum OriginalWorldContactsEvent: Equatable {
 public enum OriginalWorldContacts {
     public static func apply(state: inout OriginalMatchPreparation,
                              observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
+        try apply(state: &state,bundledLibrary: false,observe: observe)
+    }
+    static func apply(state: inout OriginalMatchPreparation,bundledLibrary: Bool,
+                      observe: (OriginalWorldContactsEvent) throws -> Void) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw OriginalStateError.invalidStorage("Contact catalog binding") }
@@ -20,13 +24,14 @@ public enum OriginalWorldContacts {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Contact Frame binding") }
                 return catalog.objects[n].frameStorage[Int(f)]
-            },heapWord: { try memory.word($0) },observe: observe)
+            },heapWord: { try memory.word($0) },bundledLibrary: bundledLibrary,observe: observe)
     }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       objectCount: Int32,header: @escaping (Int) throws -> OriginalStateRecord,
                       frame: @escaping (Int,Int32) throws -> OriginalStateRecord,heapWord: @escaping (UInt32) throws -> Int32,
+                      bundledLibrary: Bool = false,
                       observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
-        var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord)
+        var pass = OriginalContactPass(world: world,actors: actors,globals: globals,objectCount: objectCount,header: header,frame: frame,heapWord: heapWord,bundledLibrary: bundledLibrary)
         try pass.advance(observe: observe)
         world = pass.world;actors = pass.actors;globals = pass.globals
     }
@@ -65,6 +70,18 @@ struct OriginalContactPass {
     let header: (Int) throws -> OriginalStateRecord
     let frame: (Int,Int32) throws -> OriginalStateRecord
     let heapWord: (UInt32) throws -> Int32
+    var bundledLibrary = false
+
+    // Installed4176ac: category checks precede the unchanged invulnerability
+    // gate.802...807/809 still read the category, but their CMP has no branch.
+    func libraryKindAllows(_ kind: Int32,_ defender: Int) throws -> Bool {
+        if [8,36,80,81,82,83,84,85,824].contains(kind) { return try h(defender,0x6f8) == 0 }
+        if [86,87,88,89,800,801,808,825].contains(kind) { return try h(defender,0x6f8) == 3 }
+        if (802...807).contains(kind) || kind == 809 { _ = try h(defender,0x6f8);return true }
+        if (810...816).contains(kind) { return try [1,2,4,6].contains(h(defender,0x6f8)) }
+        if (817...823).contains(kind) { return try h(defender,0x6f8) == 1 }
+        return true
+    }
 
     mutating func advance(observe: (OriginalWorldContactsEvent) throws -> Void = { _ in }) throws {
         if try globals.integer(at: 0x44d05c-0x44d000,as: Int32.self) == 2 { try globals.write(Int32(0),at: 0x44d05c-0x44d000) }
@@ -141,16 +158,25 @@ struct OriginalContactPass {
                     if try effect == 30 && (200...202).contains(i(d,0x70)) { continue interaction }
                     if try effect == 2 && f(a,8,0x78) == 19 && f(d,8,0x78) == 18 { continue interaction }
                 }
-                if try kind == 8 && h(d,0x6f8) != 0 { continue interaction }
+                if bundledLibrary {
+                    if try !libraryKindAllows(kind,d) { continue interaction }
+                } else if try kind == 8 && h(d,0x6f8) != 0 { continue interaction }
                 if try i(d,8) != 0 && kind != 8 && kind != 14 { continue interaction }
                 if try kind < 4 || kind == 6 || (kind == 9 && h(d,0x6f8) == 0) || [10,11,15,16].contains(kind) {
                     let defenderState = try f(d,8)
                     if defenderState != 13 && defenderState != 10 {
                         let special = try h(d,0x6f4) == 212 && (attackID != 212 || (i(d,0x70)%10 == 5 && i(a,0x70)%10 == 0))
-                        if try !special && i(a,0x364) == i(d,0x364) && i(a,0x364) != 0 && kind != 8 {
-                            let fire = try f(a,8) == 18 && ![21,22].contains(it(0x2c))
-                            let projectile = try h(a,0x6f8) == 0 && h(d,0x6f8) == 3 && b(a,0x80) != b(d,0x80)
-                            if try !fire && !projectile && ![1,2,4,6].contains(h(d,0x6f8)) { continue interaction }
+                        if !special {
+                            // Installed4177b9 uses the attacker's CURRENT frame.
+                            // State20 reverses equality and resumes at41780b,
+                            // inside the old effect gate, bypassing state18.
+                            let state20 = try bundledLibrary && f(a,8) == 20
+                            let sameTeam = try i(a,0x364) == i(d,0x364)
+                            if try (state20 ? !sameTeam : sameTeam) && i(a,0x364) != 0 && kind != 8 {
+                                let fire = try (state20 || f(a,8) == 18) && ![21,22].contains(it(0x2c))
+                                let projectile = try h(a,0x6f8) == 0 && h(d,0x6f8) == 3 && b(a,0x80) != b(d,0x80)
+                                if try !fire && !projectile && ![1,2,4,6].contains(h(d,0x6f8)) { continue interaction }
+                            }
                         }
                     }
                 }
