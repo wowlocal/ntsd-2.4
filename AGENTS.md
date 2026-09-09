@@ -1705,6 +1705,52 @@ background child (oldcamera slice stops41bc74), then whole41a5a0 actor drawing,
 modebranches/scheduler/recovery/creation/deletion/fulltickreturn. Appintegration,
 continuous DAT, Windows/device output, cleanMac and fullmatch/fullgame stayopen.
 
+The [whole camera/background call](docs/research/WORLD_CAMERA.md) now implements
+41b5d0..41bc87 and caller41f484..41f496 with actual41a250/41a050/43f010/43ef70/
+415160 children. OriginalWorldCamera owns World/pool/globals/live BG counters
+atomically; device requests must be buffered by the enclosing tick. All400 active
+slots receive depth/x conversion even after deactivation. Type0 slots<20 use
+minimum0 (or−300 forActor364==5), slots>=20 use−100..width+100. Non-type0/non-type3
+ID122/123 alone receive10..width−10 whenActor344>0 or mode1/Stage quotient5;
+the mode branch is ALSO behind the ID gate. No new per-character list.
+Camera prioritizes8 living positive-input seats without type gate, falls back
+all400 livingtype0, retains signed facing/wrapped sums and original /14,/7 smoothing.
+Clamps are minimum0 THEN maximumwidth−794; negative limits are real original
+content (Ramen Place width750). Nonzero450bb0 and positive450bb4 differ.
+BG loop/nonloop arithmetic preserves division BEFORE/AFTER animation respectively,
+inclusive gates, signed period remainder and counters for skipped layers.
+Built-in99, four exact palette remaps and actual fill/bitmap children execute.
+Fills useglobal455608; bitmaps usecaller target.415160's92 untouched DDBLTFX bytes
+have explicit entry stack backing. Bitmap+0c reads retain undefined provenance.
+4742 controlled cases compare fullpool/masks/globals/101BG/masks and6898 ordered
+draw/read/clip/Blt/fill events;25950 helper returns. Camera491/491 instructions,
+BG209/211 and built-in144/146; four skippedalignment addresses, NOT allbranches
+or naturalDAT/fullgame/Windows.1133observed PCs include one declared COM boundary.
+FiniteCW037f, legacy/SSE2 coordinate contracts; faults/nonfinite/out-of-record
+and nonterminating loops remain outside accepted success corpus. DAT survey
+checks302layers/17arenas/175positiveperiods against pinned whole BG loader;
+all surveyed fields defined, all302bitmaplayers, nonzero stepspositive.
+Both fresh own startup/menu/loading/selection/launch/control/physics/contacts/
+hits/cpoints parents reproduced byte-for-byte, then continue on SAME CPU/stack
+through41f496/SP1000e9bc. Target28002020 from originalcalleresp+68, mode0.
+Each:22helpers,64events/8Blts, camera/velocity0→1 and9Districtcounters0→1;
+pool(frame219,HP500/MP200,positions),RNG40/1,CRT/854bitmaps/earlyresources/music/
+replay630e18/14586Frameallocations retained.16undefinedbitmap+0c reads each.
+Native independent own state matches; public rollback throws at last bitmapBlt.
+Both launch/gameplay counters514826records/1119007560bytes with masks,980helpers/
+94checkpoints; earlier nested parents also validated but NOT in these counters.
+Paired acceptance3release tests43.507s/build118.45s published3losslessfixtures.
+129oldfixture hashes unchanged;3newraw/packedSHA/size/fullJSON/2746blobs perown/
+parent hashes verified.132pins build/research/gameplay-camera-fixture-pins.json.
+Final29release regression tests347.048s/build117.82s passed with retained
+Actor/World/bitmap/own gameplay/MatchLaunch suites; NTSDNative compiled/linked.
+All source/Swift jobs terminal. Python tools compile; no UI/Windows claim.
+NEXT entire41a5a0..41ae50 and40de30..40e160; retain actual40be70 sheet selection,
+40bf30 original pic-width lookup and43f310 rectangleBlt, not just43f010 stubs.
+Then remaining mode/scheduler/recovery/spawn/deletion/fulltick return. Practice/UI,
+continuous DAT sequences, first complete match, Windows/device/cleanMac and
+full goal remain open. Read WORLD_CAMERA before extending.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

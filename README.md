@@ -117,6 +117,15 @@ the own state; active grabs are exercised separately by the controlled corpus.
 Camera/drawing, scheduling/recovery, the full tick and application integration
 remain open.
 
+The [whole camera and background call](docs/research/WORLD_CAMERA.md) now
+matches4,742 controlled cases and both own launch chains through41f496.
+All400-slot bounds/deactivation, camera selection/smoothing, DAT parallax,
+animation counters and built-in arena99 compose real native bitmap clipping
+and fill requests. Each own District pass advances camera/velocity0→1 and
+nine layer counters, with8 bitmap Blts and unchanged fighters/resources/replay.
+Device pixels, whole actor drawing, the complete tick and app integration
+remain open; the Practice window below still uses its earlier implementation.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

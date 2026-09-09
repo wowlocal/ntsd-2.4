@@ -141,6 +141,7 @@ D означает проверку ограниченного поведени�
 | R01/R07 | `0x4219d6..0x4219f5`, фрагмент | Очистка части контактного состояния | Наблюдённые записи воспроизводятся стендом; окружающий цикл открыт |
 | R02/R16 | `0x417170`, функция | Игровой RNG | D 6 500 вызовов; начальная таблица из исходного повтора |
 | R16 | `0x43e766..0x43e7d3`, `0x43e3c5..0x43e3f8`, фрагменты | Префикс повтора, восстановление RNG | D: [original_replay.py](../../tools/original_replay.py); распаковка — явная граница Python zlib |
+| R13 | `0x41b5d0..0x41bc87`, `0x41a250..0x41a590`, `0x41a050..0x41a24d`, целые тела; caller `0x41f484..0x41f496` | Все400 bounds/deactivation, camera target/smoothing/replay, DAT background/parallax/counters, built-in99 и реальные bitmap/fill children | D [WORLD_CAMERA](WORLD_CAMERA.md):4742 controlled cases и обе own chains до41f496, full pool/masks/globals/101BG/events; raster/Windows отдельно |
 | R13 | `0x41b5d0..0x41bc74`, фрагмент | Границы арены и камера до рисования | D District и двух вариантов локального игрока |
 | R13 | `0x41a250`, функция | Вывод фоновых слоёв | D 120 списков District; не пиксели DirectDraw |
 | R13 | `0x40dffc..0x40e0b5`, фрагмент | Позиция спрайта и отражение | S, визуальная проверка macOS; позы D отдельно |

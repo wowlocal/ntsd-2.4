@@ -1,0 +1,33 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Entire41b5d0/41a250/41a050 with real43f010/43ef70/415160 children.\nSynthetic400-slot pool, Object/Frame/BG/bitmap metadata, stack backing and COM\nresponses are explicit inputs. Full pool/masks/globals/BG, ordered bitmap reads,\nclips and device requests; finiteCW037f. No raster, own launch or Windows claim.\n",
+  "corpus": "world-camera.json",
+  "sha256": "dc2d7b91d22852b0ea4b7e9335f9879e09b9883d98a81a2e52f882227c0f6c42",
+  "bytes": 4749012,
+  "cases": 4742,
+  "groups": {
+    "bounds": 896,
+    "depth": 264,
+    "fighter": 432,
+    "items": 1440,
+    "target": 192,
+    "smooth": 675,
+    "replay": 135,
+    "sum": 40,
+    "parallax": 180,
+    "animation": 450,
+    "fill": 12,
+    "builtin": 8,
+    "layers": 4,
+    "bitmap": 4,
+    "whole-background": 5,
+    "provenance": 5
+  },
+  "helpers": 25950,
+  "instructions": 1133,
+  "events": 6898,
+  "nativeCompared": true,
+  "fixture": "original-world-camera.json",
+  "fixtureSHA256": "1f78038f08441c08634f459e047b366f57276c4440a89ca943be1502bbc35d1f",
+  "fixtureBytes": 290599
+}

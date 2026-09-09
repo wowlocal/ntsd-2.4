@@ -1,0 +1,37 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue own41f484 through the entire camera/background call to41f496.\nFresh original menu/loading/launch/control/physics/contacts/hits/cpoints on the\nsame CPU/stack with no gameplay stimuli. Actual bitmap/clip/fill children run;\nCOM Blt is an explicit output boundary. Native comparison accepted for this bounded continuation; full tick and Windows remain open.\n",
+  "corpus": "gameplay-camera.json",
+  "sha256": "d6d877668a62c76faf8de7ffa8e9d6b99fedb62340c853f2b73978a2bd1c0ec8",
+  "bytes": 9188821,
+  "parent": {
+    "fixture": "original-gameplay-cpoints.json",
+    "sha256": "61e8ffa9e4e70961604f369fe7d8ec9f8e43a0e1b05862a4254e99b973bfdf5c"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4322454,
+    "sp": 268495292
+  },
+  "helpers": 22,
+  "instructions": 510,
+  "readsBeforeWrites": [
+    [
+      "bitmap",
+      12,
+      4,
+      4452427
+    ],
+    [
+      "bitmap",
+      12,
+      4,
+      4452739
+    ]
+  ],
+  "events": 64,
+  "fixture": "original-gameplay-camera.json",
+  "fixtureSHA256": "37644de333eca58bb194173ac06de4cf7a4cd987c01777a97f60b3b5502e60a2",
+  "fixtureBytes": 1288335
+}
