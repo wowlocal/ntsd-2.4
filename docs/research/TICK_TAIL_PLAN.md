@@ -1,6 +1,7 @@
 # Remaining match tail after HUD
 
-This is a static research plan for EXE SHA256
+This is a static caller research plan; completed dependencies are explicitly
+linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 It adds no dynamic or native equivalence claim. The accepted own chain ends
 before421a2d, as documented in [GAMEPLAY_HUD](GAMEPLAY_HUD.md).
@@ -36,6 +37,13 @@ from447174 intoESI even on the disabled branch. The enabled branch formats
 Actor slot0 values from+48/+60/+14 with `%2.3f %2.4f %d`, eight signed bytes
 44d040..47, and signed byte4553e8 plusword450bfc. Preserve the double formatting
 contract and signedness; platform-default formatting is not evidence.
+
+The numeric dependency is now implemented and checked in
+[DIAGNOSTIC_NUMBERS](DIAGNOSTIC_NUMBERS.md):74,424 actual VC80 sprintf outputs
+and17-digit intermediates match native `%2.3f`/`%2.4f` conversions. The source
+uses a separate CRT CPU. This does not execute the compound caller, establish
+its stack-buffer capacity or account for x87 signaling-NaN loads/stores. Reuse
+the native numeric mechanism while proving those caller behaviors separately.
 
 450c2c==1 displays the original exit text, locally decodes the literal449204
 by subtractingindex%4, displays the resulting original URL string, then draws

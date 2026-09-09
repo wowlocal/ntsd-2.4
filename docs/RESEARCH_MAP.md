@@ -19,6 +19,12 @@ HUD выполнены. Аргумент стека не читается; targe
 bitmap backing дают124/180 событий, оба варианта точно совпали с Native.
 Полный такт, интеграция в приложение, законченный матч и Windows остаются открытыми.
 
+Новая зависимость следующего участка — [форматирование дробных координат](research/DIAGNOSTIC_NUMBERS.md) —
+теперь перенесена:74424 настоящих VC80 sprintf дали точное совпадение
+17-значного промежуточного представления и строк `%2.3f`/`%2.4f`.
+Это отдельный CRT CPU; весь caller421a2d..421cdc, его стек/вывод и
+продолжение двух собственных цепочек ещё открыты. Граница матча остаётся421a2d.
+
 Предыдущие [команды и восстановление](research/POSTDRAW_COMMANDS.md)
 переносят4214d5..421a15:3898 исходных случаев/3252 события,318/327 инструкций
 тела. [Оба command consumer](research/GAMEPLAY_COMMANDS.md) сохранили
@@ -565,6 +571,7 @@ Swift-кода, число кадров или количество совпав
 | Команды предметов/ресурсов, лечение и очистка R02/R06/R10 | D3898 полных исходных проходов,318/327 body PCs,545 PCs с helpers; fullpool/маски/globals/retainedSP34 и3252 события | [POSTDRAW_COMMANDS.md](research/POSTDRAW_COMMANDS.md), [эталон](evidence/postdraw-commands.json); generic catalog/aliases/fullpool, два разных таймера и byteEB; Windows/полный матч открыты |
 | Собственный initialized проход до HUD R02/R06/R10 | D оба свежих пути до421a15/SP1000e9bc: каждый417293 records/736179550 bytes+masks/503helpers/57state/1593FPU checkpoints | [GAMEPLAY_COMMANDS.md](research/GAMEPLAY_COMMANDS.md), [основной](evidence/gameplay-commands.json), [контрольный](evidence/gameplay-commands-control.json); parent воспроизведён,49 executed PCs+1stop, исходное состояние неизменно, SP34 не читается; первый такт ещё не вернулся |
 | Полный HUD R02/R13 | D1753 целых caller421a15..421a2d/41ae60..41b12d,223/223 HUD PCs,276106 events/39462 Blts | [WORLD_HUD.md](research/WORLD_HUD.md), [эталон](evidence/world-hud.json); полный пул/маски/globals, портреты/HP/MP/team без ID handlers; real bitmap/clip/rectangle, pixels открыты |
+| Диагностические числа R02/R13/R15 | D74424 целых VC80 sprintf `%2.3f`/`%2.4f`, каждый output и17-значный intermediate; все binary64 exponents/signs | [DIAGNOSTIC_NUMBERS.md](research/DIAGNOSTIC_NUMBERS.md), [эталон](evidence/diagnostic-numbers.json); свои integer scaling/rounding/table, отдельный CRT CPU, весь caller и Windows ещё открыты |
 | Собственный initialized проход через HUD R02/R13 | Dоба свежих пути до421a2d/SP1000e9bc: каждый449269 records/771514704 bytes+masks/59state/1603FPU;536/544helpers | [GAMEPLAY_HUD.md](research/GAMEPLAY_HUD.md), [основной](evidence/gameplay-hud.json), [контрольный](evidence/gameplay-hud-control.json);124/180events, undefined backing сохранён; первый такт ещё не вернулся |
 | Общая подготовка матча R02.1 | D против Swift: загруженный каталог → bootstrap → 50 последовательных подготовок; 52102 записи, 79596336 байт/масок, 720 RNG calls, 796 bitmap / 766 releases | [MATCH_PREPARATION.md](research/MATCH_PREPARATION.md), [a5](evidence/match-preparation.json), [ramp](evidence/match-preparation-ramp.json); menu/RNG inputs supplied, music disabled, остановка до replay init; не весь запуск/такт/W |
 | Создание буфера повтора R02.1/R16 | D против Swift: 50 полных буферов / 324583600 байт/масок, 50 alloc/free; связанная подготовка — 77252 записи / 115486336 байт/масок | [REPLAY_INITIALIZATION.md](research/REPLAY_INITIALIZATION.md), [a5](evidence/replay-initialization.json), [ramp](evidence/replay-initialization-ramp.json); реальный caller и весь 43d2c0, RNG reset; metadata/allocator inputs supplied, не запись тактов/playback/W |

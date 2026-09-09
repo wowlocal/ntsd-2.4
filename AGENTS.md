@@ -8,6 +8,34 @@ Read [WORLD_HUD](docs/research/WORLD_HUD.md),
 [GAMEPLAY_HUD](docs/research/GAMEPLAY_HUD.md) and the static
 [TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).**
 
+The first dependency of421a2d..421cdc is now implemented in
+[DIAGNOSTIC_NUMBERS](docs/research/DIAGNOSTIC_NUMBERS.md).
+OriginalDiagnosticNumber matches74,424 actual VC80 sprintf %2.3f/%2.4f calls,
+including the17-digit I10_OUTPUT intermediate/sign/position/finite flag.
+Everybinary64 exponent/bothsigns/sevenmantissaboundaries plus decimalmidpoint/
+power neighbors and seeded64-bit samples. SourceCW023f/FPSW0/tagffff; separate
+CRT CPU and declared C locale/PTD. Its1,568 observedPCs include_getptd78132e29
+as a hook;1,567 are original instructions. Do not claim everybinary64 value,
+all I10/printf branches, the421a2d caller or an actual Windows run.
+Keep upper-convolution80-bit decimal significands, source table adjustment
+at+2 without borrow,17-digit rounding THEN fixed rounding, signedzero and
+original special text(1.#IO/1.#QNB). Darwin snprintf differs on34,693 finite
+and34nonfinite inputs of this corpus. No host printf/CRT DLL in native runtime.
+Known rawvarargs signalingNaN behavior is distinct from caller x87quieting;
+compound bufferextent and native game continuation remain open. The accepted
+own gameplay boundary is STILL421a2d. Continue whole diagnostic/key notice
+prefix using this mechanism, then the remaining TICK_TAIL_PLAN consumers.
+
+Diagnostic-number verification: releaseNTSDNative52.26s. First test compile
+needed@testable import for existing internal fixture unpack; only that import
+changed. Raw74,424 outputs/intermediates passed0.361s/build27.97s; packaged
+passed0.331s/build137.36s. Numeric implementation and source cases needed no
+correction. All168 oldfixture hashes remain unchanged,169 current pins in
+build/research/diagnostic-numbers-fixture-pins.json. Independent raw20,331,263/
+packed884,564bytes/JSON/SHA/length checks passed. Source/SwiftPM jobs terminal;
+Python compilation,1,211local links/diff checks passed. NTSDNative linked;
+no app window/device/Windows evidence follows from this numeric dependency.
+
 OriginalWorldHUD implements whole421a15..421a2d caller and41ae60..41b12d/ret4.
 All1,753 controlled passes match full400Actor/World bytes+masks,globals and
 276,106 events (17,912draw/178,772read/33,856clip/39,462Blt/6,104rectangle).
