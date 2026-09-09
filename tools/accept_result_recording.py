@@ -9,17 +9,13 @@ from collections import Counter
 from accept_initialized_gameplay import ROOT, FIXTURES, digest, publish
 
 
-def main():
-    pins={p.name:digest(p.read_bytes()) for p in FIXTURES.glob('*.json')}
-    previous=json.loads((ROOT/'build/research/replay-writer-fixture-pins.json').read_bytes())
-    assert len(previous)==175 and all(pins[n]==sha for n,sha in previous.items())
+def validate():
     raw=(ROOT/'build/original/result-recording.json').read_bytes();doc=json.loads(raw)
     assert raw.endswith(b'\n') and doc['blobEncoding']=='zlib'
     assert doc['exeSHA256']=='3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c'
     assert doc['crtSHA256']=='c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d'
     assert doc['cppSHA256']=='372af797353f9335915cd06d4076bab8410775dcaf2dac0593197d7c41bbffb2'
-    # Import only the spec generator, through its pinned uv environment when
-    # generating captures. This verifier does not require Unicorn installed.
+    # The completed corpus is validated without importing the emulation tools.
     cases=doc['cases'];assert len(cases)==95 and len({c['label'] for c in cases})==len(cases)
     blobs={}
     for key,b in doc['blobs'].items():
@@ -62,7 +58,7 @@ def main():
                 assert len(blobs[e['bytes']])==e['count'];writes+=1;requested+=e['count']
         caller.update(c['callerPCs']);writer.update(c['writerPCs']);restore.update(c['restorePCs']);library.update(c['libraryPCs'])
     lines=(ROOT/'build/research/result-recording-static.asm').read_text().splitlines()
-    static={int(line[:6],16) for line in lines};assert len(static)==296 and caller<=static
+    static={int(line[:6],16) for line in lines};assert len(static)==296 and caller==static
     report=dict(corpus='result-recording.json',bytes=len(raw),sha256=digest(raw),exeSHA256=doc['exeSHA256'],
         crtSHA256=doc['crtSHA256'],cppSHA256=doc['cppSHA256'],packageSHA256=doc['packageSHA256'],scope=doc['scope'],
         cases=len(cases),writerCalls=writer_calls,restoreCalls=restores,statuses=dict(Counter(str(c['codecStatus']) for c in cases)),
@@ -73,6 +69,14 @@ def main():
         longestMatchCalls=sum(c['longestMatchCalls'] for c in cases),blobs=len(blobs),recordingInput=provenance,
         nativeComparison='Full controlled World/400 Actors/Object headers unchanged, complete globals/recording/playback/saved-settings/pointers and masks, actual compressed/adjusted buffers, ownership, descriptor requests, stream states, codec allocation lifecycle, lazy detector and caller continuation. No source stack bytes are imported for own gameplay.',
         nativePrivateABICompared=False,ownInitializedContinuation=False,windowsVerified=False)
+    return report,raw
+
+
+def main():
+    pins={p.name:digest(p.read_bytes()) for p in FIXTURES.glob('*.json')}
+    previous=json.loads((ROOT/'build/research/replay-writer-fixture-pins.json').read_bytes())
+    assert len(previous)==175 and all(pins[n]==sha for n,sha in previous.items())
+    report,raw=validate()
     (ROOT/'build/research/result-recording.json').write_text(json.dumps(report,indent=2)+'\n')
     subprocess.run(['swift','test','--package-path',str(ROOT/'native'),'-c','release','--filter','OriginalResultRecordingTests'],
         env=dict(os.environ,NTSD_RESULT_RECORDING_CORPUS=str(ROOT/'build/original/result-recording.json')),check=True)

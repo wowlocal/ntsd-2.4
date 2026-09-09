@@ -1,0 +1,54 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Execute the original game's whole419e60 and401a30 sound consumers.\n\nControlled global queues and COM buffer words; numeric COM HRESULTs are supplied.\nInstruction/global-write tracing recovers pending-flag ownership, signed wrapped\npan/volume and enabled playback order for the native macOS port. No audio device,\nWindows, initialized own tick or arbitrary COM reentrancy is claimed.\n",
+  "corpus": "queued-sound.json",
+  "bytes": 9456172,
+  "sha256": "83cf3d51097cc45e0c0254d3b6815a2b4c39b490aaa33f77065e942674c7aeb8",
+  "cases": 968,
+  "instructions": 173,
+  "events": {
+    "queueWrite": 1410,
+    "method": 5776,
+    "play": 1128
+  },
+  "helpers": 2080,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "blobs": 2344,
+  "eventCounts": {
+    "queueWrite": 1410,
+    "method": 5776,
+    "play": 1128
+  },
+  "methodCounts": {
+    "0x40": 1214,
+    "0x3c": 1214,
+    "0x48": 1116,
+    "0x34": 1116,
+    "0x30": 1116
+  },
+  "helperReturns": 2080,
+  "globalStores": 1410,
+  "globalStoredBytes": 5640,
+  "resourceReads": 11552,
+  "queueInstructions": 143,
+  "queueStaticInstructions": 145,
+  "missingQueueInstructions": [
+    4300408,
+    4300415
+  ],
+  "playInstructions": 30,
+  "entries": {
+    "0x419e60": 952,
+    "0x401a30": 16
+  },
+  "nativeComparison": "Full declared globals and write masks/order; all480 queue positions; signed wrapped weight/pan/volume arithmetic; exact COM request order and buffer identity; whole401a30 loop/device/null guards; late queue rollback.",
+  "sourceNormalReturnsVerified": true,
+  "sourcePrivateCallerStackComparedNatively": false,
+  "arbitraryCOMReentrancy": false,
+  "initializedOwnTick": false,
+  "hostAudioDeviceVerified": false,
+  "fixture": "original-queued-sound.json",
+  "fixtureSHA256": "f2bb47b65af0e2ebbf4bee47c8d0efefa92b0d3a6cd0b5f8612b5b8476c705de",
+  "fixtureBytes": 3916467
+}

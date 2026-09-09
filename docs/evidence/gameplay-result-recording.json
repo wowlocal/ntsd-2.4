@@ -1,0 +1,54 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh initialized GAMEPLAY_NOTICES -> whole result-recording caller.\n\nNo result flags, recording bytes or stack values are injected. Audit rootSP64\nfrom its actual round initialization on both paths. Enabled controlled writer\nbranches have separate whole-caller evidence; this capture follows own flags.\nNo returned tick, app-window, Windows or device claim.\n",
+  "corpus": "gameplay-result-recording.json",
+  "sha256": "c7073549179bb96a876ae1938d1b68f3a40b63f09ffb0d03328aec381d06e726",
+  "bytes": 9271943,
+  "parent": {
+    "fixture": "original-gameplay-notices.json",
+    "sha256": "13a20c9a69a13f17683a754de9d0b01ef26ebf619f0ffca502689ecc916e17b0"
+  },
+  "helpers": 0,
+  "instructions": 8,
+  "end": {
+    "pc": 4335940,
+    "sp": 268495292
+  },
+  "readsBeforeWrites": [],
+  "stackAccesses": [
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    }
+  ],
+  "fpuCheckpoints": 1605,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "parentSHA256": "319a6252218870cc83b701f6b7a5551fb00cd4a1f64fd97b54545c638f4ff385",
+  "executedOriginalInstructions": 7,
+  "observedUnexecutedTerminal": 4335940,
+  "sourceOnlyStateChange": {
+    "address": 4524988,
+    "before": 0,
+    "after": 1
+  },
+  "nativeRoundResultRetained": true,
+  "sourceStackBytesImportedToNative": false,
+  "stackAuditAccesses": 89,
+  "stackAuditAccessesSinceRoundInitialization": 1,
+  "writerCalled": false,
+  "recordingRemainsOwned": true,
+  "firstTickReturned": false,
+  "pixelsCompared": false,
+  "fixture": "original-gameplay-result-recording.json",
+  "fixtureSHA256": "4eb6c300d097caa0976672fea3421669d70a47fcf7e94929da7b0ce3dacf6f9e",
+  "fixtureBytes": 1289971
+}

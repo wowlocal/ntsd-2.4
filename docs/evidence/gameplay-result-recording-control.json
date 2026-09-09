@@ -1,0 +1,54 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Fresh initialized GAMEPLAY_NOTICES -> whole result-recording caller.\n\nNo result flags, recording bytes or stack values are injected. Audit rootSP64\nfrom its actual round initialization on both paths. Enabled controlled writer\nbranches have separate whole-caller evidence; this capture follows own flags.\nNo returned tick, app-window, Windows or device claim.\n",
+  "corpus": "gameplay-result-recording-control.json",
+  "sha256": "c7ab6abe4bfea469921195c3c6cfa6b3d7903f415b5dcb527f3de0c88fb4b5c3",
+  "bytes": 9288253,
+  "parent": {
+    "fixture": "original-gameplay-notices-control.json",
+    "sha256": "34bbdd39bde852d12c03ae9898cd8b27001719a40c792f434def7c77aaf79024"
+  },
+  "helpers": 0,
+  "instructions": 8,
+  "end": {
+    "pc": 4335940,
+    "sp": 268495292
+  },
+  "readsBeforeWrites": [],
+  "stackAccesses": [
+    {
+      "pc": 4315095,
+      "sp": 268495292,
+      "address": 268495392,
+      "size": 4,
+      "write": true,
+      "beforeWord": 0,
+      "reportedValue": 0,
+      "phase": "match-round"
+    }
+  ],
+  "fpuCheckpoints": 1605,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "initializedParentReproduced": true,
+  "parentSHA256": "55096fcf1250620108c7cbfbe07048925e24fbce551b89c40eda425e6cd7ca72",
+  "executedOriginalInstructions": 7,
+  "observedUnexecutedTerminal": 4335940,
+  "sourceOnlyStateChange": {
+    "address": 4524988,
+    "before": 0,
+    "after": 1
+  },
+  "nativeRoundResultRetained": true,
+  "sourceStackBytesImportedToNative": false,
+  "stackAuditAccesses": 89,
+  "stackAuditAccessesSinceRoundInitialization": 1,
+  "writerCalled": false,
+  "recordingRemainsOwned": true,
+  "firstTickReturned": false,
+  "pixelsCompared": false,
+  "fixture": "original-gameplay-result-recording-control.json",
+  "fixtureSHA256": "b73b3a39266cb8830496ace238748ecc3f0bdc8be08f2ecbda5866b933be0db2",
+  "fixtureBytes": 1301431
+}

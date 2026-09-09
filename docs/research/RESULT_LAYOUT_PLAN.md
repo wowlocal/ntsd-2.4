@@ -1,7 +1,7 @@
 # Result layout and indicator dependencies
 
 Static follow-up to [RESULT_RECORDING](RESULT_RECORDING.md), whose full controlled
-comparison is still running. This plan does not implement or dynamically verify
+comparison and both own continuations are now accepted. This plan does not implement or dynamically verify
 the layout. It uses the pinned NTSD EXE, SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The remaining whole-tick queue is [TICK_TAIL_PLAN](TICK_TAIL_PLAN.md).
@@ -70,8 +70,11 @@ to the retained SP68 destination. Nonzero44d030 then reads elapsed time from
 the playback allocation+144 and calls whole41b390(mode,recordedTime,currentTime).
 The conditional overlay and the later unconditional41b130 mode label both depend
 on423a70/423940. [BITMAP_FONT](BITMAP_FONT.md) now implements those helpers and
-matches2450 controlled raw calls; publication awaits the priority result caller.
-The whole overlay and mode-label callers remain unimplemented and unverified.
+matches2450 controlled calls, published after the accepted result caller.
+[MODE_LABEL](MODE_LABEL.md) now matches148 whole41b130 calls. The whole
+41b390 overlay also matches120 calls in
+[PLAYBACK_INFORMATION](PLAYBACK_INFORMATION.md). These helper comparisons do
+not join the whole result layout or its actual indicator caller.
 
 Static inspection shows that423940 **writes a terminating NUL into its input
 string** at the consumed position. It is not a read-only text renderer. The
@@ -88,7 +91,6 @@ observe any truncation performed by the first. A native implementation must
 preserve that mutation and original call/event order, including numeric device
 failures; a copied immutable string per pass would change the behavior.
 
-Next recover and compare the whole label/info callers with actual string
-mutations, global/bitmap backing, clipping and device requests. Then join
-the complete layout/indicator branch and both own continuations.422994 still
+Next join and compare the complete layout/indicator branch and both own
+continuations using these real helpers and original event order.422994 still
 precedes labels, notices, present, enabled queued sound and the actual ret4.

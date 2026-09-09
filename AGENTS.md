@@ -48,36 +48,78 @@ false positives will not occur.
 
 ## Current research status
 
-**Current priority: whole result recording421cdc..422218, then remaining tail
-through422ab8/ret4.** Read [REPLAY_WRITER](docs/research/REPLAY_WRITER.md),
-[REPLAY_STREAM](docs/research/REPLAY_STREAM.md),
-[REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
-and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md).
+**Current priority: whole result layout422218..422944 and indicators422944..422994,
+then original output/sound order and actual422ab8/ret4.** Read
+[RESULT_RECORDING](docs/research/RESULT_RECORDING.md),
+[GAMEPLAY_RESULT_RECORDING](docs/research/GAMEPLAY_RESULT_RECORDING.md),
+[RESULT_LAYOUT_PLAN](docs/research/RESULT_LAYOUT_PLAN.md) and
+[TICK_TAIL_PLAN](docs/research/TICK_TAIL_PLAN.md).
 
-Work in progress: [RESULT_RECORDING](docs/research/RESULT_RECORDING.md).
-OriginalResultRecording and the own join compile;53 completed controlled calls
-match natively, including40 whole writers/120 writes/406441 bytes in5.606s.
-Both playback restores, allocation aliasing and late destruction rollback pass.
-Both fresh own initialized continuations now match RAW through422944/SP1000e9bc:
-each513221records/842185012bytes+masks/536or544helpers/63state/1605FPU.
-Both full parents reproduce; only elapsed450bbc changes0->1. Both rootSP64
-audits retain the actual round-produced0 without injection. Raw2tests40.632s.
-The95-case controlled source suite is still LIVE at session44597; revalidate
-build/research/result-recording-work.json before continuing. Both own source
-jobs and all SwiftPM jobs are terminal. No result fixture is published or
-accepted until the controlled suite finishes. MenuCycleReference now retains
-its own roundResults; both retained GAMEPLAY_NOTICES chains still pass unchanged.
-Further static correction:4222ce has six pending pushes, so its[esp+64] store
-writes root4c, NOT root64;422673 still reads the retained round result.
-tools/audit_result_tail_stack.py checks833 decoded caller instructions/92 ESP
-operands through422994 with matching normal-return stack joins. This is STATIC
-CFG evidence, not execution. RESULT_LAYOUT_PLAN records the next consumers;
-423940 mutates/truncates its input string before423a70's later rendering passes.
-[BITMAP_FONT](docs/research/BITMAP_FONT.md) now matches2450 RAW controlled calls:
-143462events/6125NULwrites/10971Blts/555undefined bitmap reads,35720returns.
-394actualEXEPCs include103/104single(alignment absent),63/63wrapper,171bitmap,57clip.
-Native0.674s; both source/native jobs terminal. No font fixture is published;
-whole41b130/41b390 callers/layout/own continuation remain subsequent work.
+OriginalResultRecording now matches95 whole controlled returns:82 actual writers,
+12playback restores,18322 descriptor requests/33219692bytes.13gates have no writer;
+76codec successes,5allocation-4 and1no-temporary-2 returns retain original cleanup.
+All296 caller starts,116writer/40restore starts,3212DLL PCs;1277codec/410stream
+helper returns,608complete REPs,1936406longest_match invocations. This is not all
+branch outcomes, a host/Windows CPU measurement or private C++ ABI equivalence.
+Retain live playback/recording aliases, restore-before-key-count order, both buffers'
+free/clear/destroy order, and ignore numeric IO/codec failures as the original does.
+Missing stage-result and late destruction observers verify whole native rollback.
+Writer's prior21returns+5explicit source faults remain their separate contract.
+
+BOTH fresh own chains now match through422944/SP1000e9bc: each513221records/
+842185012bytes+masks,536/544helpers,63state/1605FPU checkpoints. Full pinned parents
+reproduce. Only450bbc changes0->1; recording remains live and no own writer runs.
+Seven actual caller instructions plus unexecuted stop. Each89-access rootSP64
+audit has only the actual41d7d7 write0 since last round initialization. Native
+MenuCycleReference retains its own roundResults; no source stack word is imported.
+CW023f/FPSW4000/tagffff and all1604parent FPU checkpoints survive. This is still
+an unreturned first tick, not a full tick/match/app/Windows/device claim.
+
+Stack correction:4222ce has six pending pushes, so its[esp+64] writes root4c,
+NOT root64;422673 still reads the retained round result. The833-instruction/92
+ESP-operand audit through422994 is STATIC, not dynamic coverage. RetainedSP68
+is actually used by the indicator when450b84 is nonzero; require real own target
+provenance then. Choose result-table or indicator entry from the recorder's actual
+continuation. Unknown caller string backing stays unknown until recovered.
+
+Accepted output dependencies:
+- [BITMAP_FONT](docs/research/BITMAP_FONT.md):2450 whole423940/423a70 calls,
+  143462events/6125NULwrites/10971Blts/555undefined bitmap reads,35720returns.
+  394EXEPCs:103/104single(alignment absent),63wrapper,171bitmap,57clip. Mutable
+  shared string sees each preceding pass's truncation; preserve signed glyphs.
+- [MODE_LABEL](docs/research/MODE_LABEL.md):148 whole41b130 calls,181730events/
+  10156Blts;156/157caller starts(alignment absent),523EXE/0DLL. Unknown modes
+  retain existing text; signedstage/10==5 selects Survival, X uses pre-truncation
+  length. Complete global writes/order and late rollback match.
+- [PLAYBACK_INFORMATION](docs/research/PLAYBACK_INFORMATION.md):120 whole41b390
+  calls,157795events/240formats/14766Blts/240REPcopies/468undefined bitmap reads;
+  200/200caller starts,562EXE+418CRT,32470returns. Exact10-byte sentinels, live
+  author/info truncation, signed wrapped tick formatting and late rollback.
+- [QUEUED_SOUND](docs/research/QUEUED_SOUND.md):952whole419e60 drains+16direct
+  401a30 calls;8314events/5776COMrequests/1410flagstores/2080returns.143/145queue
+  starts(skipped alignment)+30/30play.400catalog slots precede80builtin slots;
+  clear positive flags before sum checks, read right weight first, preserve pan/
+  volume wrap and ignoredHRESULTs. Initialized own audio/device join remains open.
+
+All source and SwiftPM jobs are terminal, including the long95-case source44597.
+Never restart it: its completed raw corpus is hash verified. Intermediate cases
+were atomically retained; no live process restarted for silence. Raw acceptance10
+release tests passed58.577s/build149.00s, including own40.441s and result10.977s,
+plus all four output helpers and retained writer/815codec/66stream corpora.
+Final packaged10tests passed58.142s/build0.23s without raw overrides; own40.355s,
+result11.120s. NTSDNative linked; no app window or device was exercised.
+Seven immutable new fixtures bring175old unchanged pins to182current. Independent
+fullraw/packedbytes/JSON/SHA/all9040blobs and10vendor hashes verified; intermediate
+176/178/179/180/181/182 pin sets agree. Source/raw files retain every original
+expected byte. Native codec remains private C1.1.4; transport deflation only packs
+research fixtures. Initial build-only playback-info invocation lacked testing
+support; normal swift test passed without game/expected changes. Final artifact
+verifier's first vendor path omitted the vendor subdirectory; corrected path
+checks unchanged files. Read build/research/result-recording-work.json for jobs
+and final evidence. Whole layout/indicator/initialized output composition and
+actualret4 remain next; full-game/app/Windows/device/clean-Mac goal stays open.
+
+The preceding whole-writer milestone (own boundary superseded above):
 
 Whole43dd60 is now implemented in OriginalReplayWriter.21 whole returns match
 full buffers/masks/globals,4588a8 ownership and24350 descriptor writes/58522686

@@ -1,10 +1,10 @@
-# Mutable bitmap-font helpers — raw comparison complete
+# Mutable bitmap-font helpers
 
 `OriginalBitmapFont` implements whole423940 and its four-pass423a70 caller.
 All2450 controlled original calls match the native raw comparison. The corpus
-is not yet published: the priority result-recording and own continuation
-acceptance must finish first. This helper does not execute the whole41b130
-mode label,41b390 playback information, result layout or a returned tick.
+is published after the accepted result-recording and own continuations.
+The subsequent [mode label](MODE_LABEL.md) and [playback information](PLAYBACK_INFORMATION.md)
+also have whole-call comparisons; result layout and a returned tick remain open.
 
 ## Recovered behavior
 
@@ -61,7 +61,15 @@ The final raw file has24631768 bytes and SHA256
 the full JSON and all SHA-addressed zlib-framed transport blobs, source writes,
 four-pass composition, bitmap-read provenance and coverage. `--verify-only`
 passes; details remain in build/research/bitmap-font-verification.json.
-The publishing path requires the preceding178 result/own fixture pins, which
-are not yet accepted. These checks introduce no EXE, DLL or transport codec into
+Publication follows the preceding178 result/own fixture pins and adds the179th.
+The shared raw acceptance set passes this test in0.670s and independently verifies
+all93 inner blobs. The packed fixture is886516 bytes; evidence is
+[bitmap-font.json](../evidence/bitmap-font.json). These checks introduce no EXE,
+DLL or transport codec into
 the native runtime. See [RESULT_LAYOUT_PLAN](RESULT_LAYOUT_PLAN.md) for the
 remaining actual callers and retained-stack constraints.
+
+Final packaged verification: the ten-test release set passes58.142s after a0.23s
+resource-copy build, without raw-corpus overrides. This study takes0.607s. All
+source and SwiftPM jobs are terminal; full artifact/pin/vendor checks pass. This
+does not establish an app-window, Windows or actual device result.

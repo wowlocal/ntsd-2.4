@@ -1,0 +1,47 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole423940/423a70 with actual43f010/43ef70 and mutable input strings.\n\nControlled independent string/global/three-bitmap storage, masks, viewport and\nCOM Blt responses. No text/bitmap/clip helper is replaced. No real device pixels,\ninitialized label caller, original allocator provenance or Windows claim.\n",
+  "corpus": "bitmap-font.json",
+  "sha256": "a4402582f4cacb1e421534ebe9856e036a62a4223a8bede407a32d77c3a3aef7",
+  "bytes": 24631768,
+  "cases": 2450,
+  "helpers": 35720,
+  "events": 143462,
+  "blits": 10971,
+  "instructions": 394,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "entries": {
+    "0x423940": 1225,
+    "0x423a70": 1225
+  },
+  "eventCounts": {
+    "fontPass": 6125,
+    "stringWrite": 6125,
+    "draw": 14215,
+    "read": 91871,
+    "clip": 14155,
+    "blit": 10971
+  },
+  "undefinedBitmapReads": 555,
+  "stringStorageBytesAndMasks": 1254400,
+  "blobs": 93,
+  "helperReturns": 35720,
+  "singleInstructions": 103,
+  "singleStaticInstructions": 104,
+  "missingSingleInstructions": [
+    4340061
+  ],
+  "wrapperInstructions": 63,
+  "bitmapInstructions": 171,
+  "clipInstructions": 57,
+  "nativeComparison": "Full input-string bytes/masks and actual NUL stores; all ordered pass/draw/read/clip/Blt events; unchanged globals and bitmap backing; four-pass mutation composition; late third-pass observer rollback.",
+  "sourceNormalReturnsVerified": true,
+  "sourcePrivateCallerStackComparedNatively": false,
+  "arbitraryTextResourceAliasesCompared": false,
+  "ownInitializedLabelCaller": false,
+  "pixelsCompared": false,
+  "fixture": "original-bitmap-font.json",
+  "fixtureSHA256": "a572aded554faacaf26673ee349f00e0c8876c17ef68e4f27487df2033927195",
+  "fixtureBytes": 886516
+}

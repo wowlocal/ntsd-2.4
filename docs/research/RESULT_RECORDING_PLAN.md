@@ -3,8 +3,8 @@
 Static follow-up to [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). The codec, stream and
 [whole writer](REPLAY_WRITER.md) are now independently implemented and compared;
 the enclosing421cdc..422218 caller is implemented in OriginalResultRecording
-and its full controlled/own comparisons are in progress. See
-[RESULT_RECORDING](RESULT_RECORDING.md) for the current unaccepted work.
+and its95 controlled calls and both own continuations are now compared. See
+[RESULT_RECORDING](RESULT_RECORDING.md) for acceptance and the remaining boundary.
 This records the concrete dependencies
 of421cdc..422218 before extending the whole tick. EXE SHA256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
@@ -68,9 +68,10 @@ accepted full result. tools/oracle_result_stack.py observes89 total accesses
 over startup/menu/match entry. From the last41d7d7 initialization through421cdc
 there is exactly one access: that four-byte write0 at rootSP64. Final value0
 agrees with the existing own round producer. No source stack word is injected.
-This establishes preservation for this own path; the control variant and other
-branches remain open. Native must still retain its own returned stageDefeated
-when composing the result consumer.
+This establishes preservation for the primary path. The subsequent
+[GAMEPLAY_RESULT_RECORDING](GAMEPLAY_RESULT_RECORDING.md) audit now proves the
+same lifetime for both own paths and composes their retained native stageDefeated.
+Other branches remain open.
 
 ## Whole43dd60 writer and compression dependency
 
@@ -125,8 +126,8 @@ Compression and output-stream behavior are independently compared above.
 explicit source-fault rejections. It retains live key/name/selector globals,
 NULL and codec errors, exact stream IO and ownership cleanup. This is a supplied
 recording buffer, not an initialized result continuation or Windows file proof.
-Next compare the entire296-instruction result caller,
-including mode1/4 branches and both fresh own initialized continuations.
+The entire296-instruction result caller now matches95 controlled returns,
+including mode1/4 branches; both fresh own continuations also match through422944.
 Allocation failures, insufficient compression capacity, path extents and source
 stream exceptions must be investigated rather than assigned convenient success.
 Result table rendering from422218 remains a subsequent consumer.

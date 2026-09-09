@@ -1,0 +1,49 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole41b130/ret8 with actual mutable423a70/423940 and bitmap children.\n\nDeclared global label/bitmap backing, explicit viewport and COM Blt responses.\nUnknown modes retain their initial global label, including signed byte text.\nNo initialized whole-tick, pixel, Windows or private caller-stack comparison.\n",
+  "corpus": "mode-label.json",
+  "sha256": "19eecbde7c3b93a5ed51be4014a10eb009b4dba621373832df9d73c0730ea2b6",
+  "bytes": 127779990,
+  "cases": 148,
+  "helpers": 40928,
+  "events": {
+    "labelWrite": 602,
+    "fontPass": 592,
+    "draw": 20200,
+    "read": 129748,
+    "clip": 19840,
+    "blit": 10156,
+    "stringWrite": 592
+  },
+  "blits": 10156,
+  "instructions": 523,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "blobs": 188,
+  "eventCounts": {
+    "labelWrite": 602,
+    "fontPass": 592,
+    "draw": 20200,
+    "read": 129748,
+    "clip": 19840,
+    "blit": 10156,
+    "stringWrite": 592
+  },
+  "undefinedBitmapReads": 720,
+  "helperReturns": 40928,
+  "globalStores": 1194,
+  "globalStoredBytes": 2617,
+  "callerInstructions": 156,
+  "callerStaticInstructions": 157,
+  "missingCallerInstructions": [
+    4305743
+  ],
+  "nativeComparison": "Full globals and actual store masks/order; complete ordered font/draw/read/clip/Blt events; retained unknown-mode label, signed stage test, four-pass mutation, late global rollback.",
+  "sourceNormalReturnsVerified": true,
+  "sourcePrivateCallerStackComparedNatively": false,
+  "initializedWholeTick": false,
+  "pixelsCompared": false,
+  "fixture": "original-mode-label.json",
+  "fixtureSHA256": "94772fcb2f085ac8700270ca241536e652297e09bbfe041892638aa30b372b92",
+  "fixtureBytes": 2436985
+}

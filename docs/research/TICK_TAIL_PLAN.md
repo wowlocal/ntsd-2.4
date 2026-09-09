@@ -5,7 +5,7 @@ linked below. EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 The static inventories themselves add no dynamic or native equivalence claim.
 Completed dependencies are linked separately. The accepted own chain ends
-before421cdc, as documented in [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md).
+before422944, as documented in [GAMEPLAY_RESULT_RECORDING](GAMEPLAY_RESULT_RECORDING.md).
 
 The old shorthand421a2d..422994 does not reach the match return. At422994 the
 original still calls mode-label rendering, notices/volume, surface presentation
@@ -65,21 +65,23 @@ and bitmap clipping, retaining any earlier proven fill-stack provenance.
 
 ### Result ownership and records
 
-[RESULT_RECORDING_PLAN](RESULT_RECORDING_PLAN.md) details the static next
-dependency: whole43dd60, its1.1.4 compression wrappers and retainedSP64.
+[RESULT_RECORDING_PLAN](RESULT_RECORDING_PLAN.md) records the recovered
+43dd60/compression/retainedSP64 dependencies, now composed in
+[RESULT_RECORDING](RESULT_RECORDING.md).
 [REPLAY_COMPRESSION](REPLAY_COMPRESSION.md) now implements the codec dependency:
 815 whole calls match the native C/Swift consumer, including capacity and
 allocation errors. Correct REP-derived masks and incomplete raw hook masks,
 private5816/5920-byte ABIs and native host cleanup are explicitly distinguished.
 The [whole writer](REPLAY_WRITER.md) now has21 whole-return matches and five
 explicit source-fault rejections. The [result caller](RESULT_RECORDING.md) and
-both own joins are under comparison; no result fixture is accepted yet. Do not
+both own joins are now accepted:95controlled returns and two fresh initialized
+continuations through422944. Do not
 turn a compressor error into an early exit, because43dd60 ignores that status.
 [REPLAY_STREAM](REPLAY_STREAM.md) adds66 whole C++ sequences with actual CRT
 buffering:1772 descriptor writes/6664690bytes and330 ios states match Native.
 Failed flush retains its triggering byte;4096-byte allocator failure switches
 to unbuffered single-byte writes. Open/descriptor/private heap/thread responses
-are explicit, not actual Windows IO or the whole43dd60 composition.
+are explicit; actual Windows IO remains outside the whole-writer comparison.
 RetainedSP64 has a recovered own producer, OriginalMatchRoundResult.stageDefeated,
 now retained by MenuCycleReference. Both fresh own result captures audit its
 intervening lifetime. Apparent[esp+64] operands can alias other root locals
@@ -91,8 +93,8 @@ audit, table/indicator rules and the mutable-string bitmap-font dependency.
 the result block. At450bdc==101, result recording additionally requires450be4
 and450b80 nonzero and450b84zero. Eight primary/fallback participant cells feed
 the recording allocation at4588a8, including ID, active kind, team, combat
-statistics and outcome. Mode1 also consumes retainedSP+64; recover its earlier
-writer before importing any value. Result layout later reusesSP+34/44/50/54/58/
+statistics and outcome. Mode1 also consumes retainedSP+64; use its recovered own
+round producer and never import an expected source word. Result layout later reusesSP+34/44/50/54/58/
 60; these slots have multiple lifetimes and are not interchangeable with the
 preceding spawn scratch.
 
@@ -108,20 +110,28 @@ responses must be explicit; encoded bytes and ownership changes need comparison.
 
 41b130..41b384 builds450c38 from mode/difficulty, including Survival Stage when
 signed450b94/10==5. It calls423a70, whose four423940 calls render offset text.
-The complete423940/423a70 bitmap-font path still needs a source comparison and
-native implementation; existing401290 GDI text is a different renderer.
+[BITMAP_FONT](BITMAP_FONT.md) now matches2450 controlled raw calls for the
+complete423940/423a70 path; it is now published after result acceptance.
+[MODE_LABEL](MODE_LABEL.md) also now implements and matches148 raw whole caller
+comparisons. Both are accepted; existing401290 GDI text is a different renderer.
 Unknown mode/difficulty values can retain prior string content and must be
 investigated before applying a convenient default.
 
 41b390..41b5cc conditionally formats author/info and elapsed/total time, using
-wrapped arithmetic and the same bitmap-font helper. It is conditional in step4,
+wrapped arithmetic and the same bitmap-font helper.
+[PLAYBACK_INFORMATION](PLAYBACK_INFORMATION.md) now matches120 whole calls;
+its enclosing result indicator is still unimplemented. It is conditional in step4,
 whereas41b130 is unconditional in step5. Do not report that the ordinary first
 tick has no rendering after HUD merely because diagnostics/results are inactive.
 
 The existing `OriginalMenuPresentation` implements4028a0 notices/volume and
 43e940 requests in other proven callers. Reuse those mechanisms, preserving
 new caller order and state.419e60..41a043 consumes catalog/builtin sound queues,
-computes pan/volume, clears pending flags and calls401a30. Only its disabled
+computes pan/volume, clears pending flags and calls401a30.
+[QUEUED_SOUND_PLAN](QUEUED_SOUND_PLAN.md) records its145+30 decoded starts,
+400/80-slot arrays and wrapped arithmetic. [QUEUED_SOUND](QUEUED_SOUND.md) now
+implements and matches968 whole helper calls, including enabled sound.
+Its initialized own join remains open. Only its disabled
 fast return was part of the old broad tick trace. Sound remains enabled in the
 initialized own chain; prove the whole consumer and device boundaries rather
 than disabling audio to reach the return.
