@@ -17,6 +17,8 @@ precedes any full-match/application equivalence claim. The installation and
 first native text dependency are recorded in [LIB_RUNTIME](LIB_RUNTIME.md).
 Native must implement
 the recovered behavior without loading the DLL at runtime.
+The read-only [patch-overlap audit](ACTIVE_LIB_IMPACT.md) finds five installed
+sites in these pristine active-call inventories; it does not compare DLL outcomes.
 
 The reference is the pinned original NTSD2.4 distribution, EXE SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`

@@ -119,6 +119,13 @@ remain in build/research/active-gameplay-work.json. NTSDNative linked; no window
 or device tested. App still uses Practice; bundled-library hooks/initialized
 join, fullmatch/content, Windows/device/clean-Mac and the full goal remain open.
 
+The read-only [ACTIVE_LIB_IMPACT](docs/research/ACTIVE_LIB_IMPACT.md) audit finds
+5of13installed patch sites in both active48 instruction inventories: control,
+lifecycle,commands,text all48;contacts11. These are inventory intersections,
+not DLL execution/outcomes or dynamic instruction counts. Full byte intervals
+preserve partial-instruction patches; absent loading/preparation/other hooks
+remain required. No original byte or native acceptance fixture changes.
+
 Additional dispatcher prerequisites now compare in
 [APPLICATION_DISPATCH](docs/research/APPLICATION_DISPATCH.md). Shared
 OriginalApplicationKeyScan matches4348 further prefix exits/9847ordered stores

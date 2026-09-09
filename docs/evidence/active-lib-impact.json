@@ -1,0 +1,6494 @@
+{
+  "scope": "Locate bundled game-library patches in immutable pristine active controls.\n\nThe preserved NTSD2.4 EXE, bundled lib.dll installation fixture and both\n48-call Unicorn2.1.4 active fixtures are the references. Decode pristine EXE\ninstruction bytes with local llvm-objdump and intersect their complete byte\nintervals with the actual installer's13 copy ranges. This identifies affected\ngame stages for the next native fidelity studies, including patches inside\nmulti-byte instructions. It does not execute EXE/DLL code, modify any source\nartifact, infer DLL outcomes or count dynamic instruction invocations. Stage\nstops are excluded from the stage inventory; the broad address inventory\nremains explicitly distinct. Missing overlap does not establish irrelevance.\n",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "installationIdentity": {
+    "fixture": "original-lib-initialization.json",
+    "fixtureSHA256": "3697e7d6c40c78fd1ae026f658c28654a4ed825bde24c087df7ad51242f0584c",
+    "rawSHA256": "3970a1cfbfa11c58ef0eba6008e56e3feeb957fd85aa10245b40d9adc7c271a7",
+    "rawBytes": 70920
+  },
+  "installationAttachControls": 4,
+  "decoderCommand": [
+    "xcrun",
+    "llvm-objdump",
+    "--disassemble",
+    "--x86-asm-syntax=intel",
+    "<pinned NTSD 2.4.exe>"
+  ],
+  "disassemblySHA256": "e9890552f568beab53cfd53dfe4d8e6eb442b83ac04a0760cf9716a733b6ab6a",
+  "controls": [
+    {
+      "name": "active-gameplay",
+      "identity": {
+        "fixture": "original-active-gameplay.json",
+        "fixtureSHA256": "3b074ff960538fde6e13b1b65bda4f833b22bbc9cafcef990de12f71aaed511c",
+        "rawSHA256": "316e4bf9380afb878998ea87264eec5fb9b1ea02defb3af76e86c7145d506d67",
+        "rawBytes": 51835713
+      },
+      "completeCalls": 48,
+      "overlappingPatchSites": 5,
+      "patches": [
+        {
+          "patchAddress": 4394124,
+          "patchBytes": 5,
+          "originalBytes": "83fa08755a",
+          "installedBytes": "e93f07bd0f",
+          "dllDestination": 268440528,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4394124,
+              "end": 4394127,
+              "bytes": "83fa08",
+              "instruction": "cmp\tedx, 0x8"
+            },
+            {
+              "address": 4394127,
+              "end": 4394129,
+              "bytes": "755a",
+              "instruction": "jne\t0x430ceb <.text+0x2fceb>"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4290220,
+          "patchBytes": 5,
+          "originalBytes": "83fa08751e",
+          "installedBytes": "e956a1be0f",
+          "dllDestination": 268441607,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4290220,
+              "end": 4290223,
+              "bytes": "83fa08",
+              "instruction": "cmp\tedx, 0x8"
+            },
+            {
+              "address": 4290223,
+              "end": 4290225,
+              "bytes": "751e",
+              "instruction": "jne\t0x4176cf <.text+0x166cf>"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4290220,
+            4290223
+          ],
+          "broadInventoryCaseCount": 11,
+          "broadInventoryCases": [
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "contacts": [
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4390065,
+          "patchBytes": 5,
+          "originalBytes": "83f8037405",
+          "installedBytes": "e96c16bd0f",
+          "dllDestination": 268440354,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4390065,
+              "end": 4390068,
+              "bytes": "83f803",
+              "instruction": "cmp\teax, 0x3"
+            },
+            {
+              "address": 4390068,
+              "end": 4390070,
+              "bytes": "7405",
+              "instruction": "je\t0x42fcbb <.text+0x2ecbb>"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4322812,
+          "patchBytes": 5,
+          "originalBytes": "3d401f0000",
+          "installedBytes": "e99c1abe0f",
+          "dllDestination": 268439709,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4322812,
+              "end": 4322817,
+              "bytes": "3d401f0000",
+              "instruction": "cmp\teax, 0x1f40"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4322812
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-lifecycle": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4276363,
+          "patchBytes": 5,
+          "originalBytes": "83bc0aac07",
+          "installedBytes": "e995d0be0f",
+          "dllDestination": 268439845,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4276363,
+              "end": 4276371,
+              "bytes": "83bc0aac07000005",
+              "instruction": "cmp\tdword ptr [edx + ecx + 0x7ac], 0x5"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4276363
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "control": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4290489,
+          "patchBytes": 5,
+          "originalBytes": "8b4424448b",
+          "installedBytes": "e9fb99be0f",
+          "dllDestination": 268439993,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4290489,
+              "end": 4290493,
+              "bytes": "8b442444",
+              "instruction": "mov\teax, dword ptr [esp + 0x44]"
+            },
+            {
+              "address": 4290493,
+              "end": 4290500,
+              "bytes": "8bac8694010000",
+              "instruction": "mov\tebp, dword ptr [esi + 4*eax + 0x194]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4199056,
+          "patchBytes": 5,
+          "originalBytes": "568b742408",
+          "installedBytes": "e90300c00f",
+          "dllDestination": 268440216,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4199056,
+              "end": 4199057,
+              "bytes": "56",
+              "instruction": "push\tesi"
+            },
+            {
+              "address": 4199057,
+              "end": 4199061,
+              "bytes": "8b742408",
+              "instruction": "mov\tesi, dword ptr [esp + 0x8]"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4199056,
+            4199057
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-impulses": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              }
+            ],
+            "gameplay-return": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4342610,
+          "patchBytes": 5,
+          "originalBytes": "6a3c686002",
+          "installedBytes": "e9dfcebd0f",
+          "dllDestination": 268440118,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4342610,
+              "end": 4342612,
+              "bytes": "6a3c",
+              "instruction": "push\t0x3c"
+            },
+            {
+              "address": 4342612,
+              "end": 4342617,
+              "bytes": "6860020000",
+              "instruction": "push\t0x260"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4342615,
+          "patchBytes": 2,
+          "originalBytes": "0000",
+          "installedBytes": "9090",
+          "dllDestination": null,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4342612,
+              "end": 4342617,
+              "bytes": "6860020000",
+              "instruction": "push\t0x260"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4330711,
+          "patchBytes": 5,
+          "originalBytes": "833db80b45",
+          "installedBytes": "e9be05be0f",
+          "dllDestination": 268442266,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4330711,
+              "end": 4330718,
+              "bytes": "833db80b450001",
+              "instruction": "cmp\tdword ptr [0x450bb8], 0x1"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4330711
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-commands": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4380110,
+          "patchBytes": 5,
+          "originalBytes": "892d1c0c45",
+          "installedBytes": "e94845bd0f",
+          "dllDestination": 268442395,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4380110,
+              "end": 4380116,
+              "bytes": "892d1c0c4500",
+              "instruction": "mov\tdword ptr [0x450c1c], ebp"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4379403,
+          "patchBytes": 5,
+          "originalBytes": "8b8438b05d",
+          "installedBytes": "e91e48bd0f",
+          "dllDestination": 268442414,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4379403,
+              "end": 4379410,
+              "bytes": "8b8438b05dd404",
+              "instruction": "mov\teax, dword ptr [eax + edi + 0x4d45db0]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4379763,
+          "patchBytes": 5,
+          "originalBytes": "8b843ab05d",
+          "installedBytes": "e9d046bd0f",
+          "dllDestination": 268442440,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4379763,
+              "end": 4379770,
+              "bytes": "8b843ab05dd404",
+              "instruction": "mov\teax, dword ptr [edx + edi + 0x4d45db0]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        }
+      ]
+    },
+    {
+      "name": "active-gameplay-control",
+      "identity": {
+        "fixture": "original-active-gameplay-control.json",
+        "fixtureSHA256": "d3abb578f36ac74716fa6e71eb12091c6f0eed5adb02f1b59a550275c73fc0b3",
+        "rawSHA256": "e7eb88127ac989323ee40622c347dde8c1920871fd767f33c3a80167ce198e7a",
+        "rawBytes": 52421599
+      },
+      "completeCalls": 48,
+      "overlappingPatchSites": 5,
+      "patches": [
+        {
+          "patchAddress": 4394124,
+          "patchBytes": 5,
+          "originalBytes": "83fa08755a",
+          "installedBytes": "e93f07bd0f",
+          "dllDestination": 268440528,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4394124,
+              "end": 4394127,
+              "bytes": "83fa08",
+              "instruction": "cmp\tedx, 0x8"
+            },
+            {
+              "address": 4394127,
+              "end": 4394129,
+              "bytes": "755a",
+              "instruction": "jne\t0x430ceb <.text+0x2fceb>"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4290220,
+          "patchBytes": 5,
+          "originalBytes": "83fa08751e",
+          "installedBytes": "e956a1be0f",
+          "dllDestination": 268441607,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4290220,
+              "end": 4290223,
+              "bytes": "83fa08",
+              "instruction": "cmp\tedx, 0x8"
+            },
+            {
+              "address": 4290223,
+              "end": 4290225,
+              "bytes": "751e",
+              "instruction": "jne\t0x4176cf <.text+0x166cf>"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4290220,
+            4290223
+          ],
+          "broadInventoryCaseCount": 11,
+          "broadInventoryCases": [
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4290220,
+                4290223
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "contacts": [
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4290220,
+                  4290223
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4390065,
+          "patchBytes": 5,
+          "originalBytes": "83f8037405",
+          "installedBytes": "e96c16bd0f",
+          "dllDestination": 268440354,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4390065,
+              "end": 4390068,
+              "bytes": "83f803",
+              "instruction": "cmp\teax, 0x3"
+            },
+            {
+              "address": 4390068,
+              "end": 4390070,
+              "bytes": "7405",
+              "instruction": "je\t0x42fcbb <.text+0x2ecbb>"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4322812,
+          "patchBytes": 5,
+          "originalBytes": "3d401f0000",
+          "installedBytes": "e99c1abe0f",
+          "dllDestination": 268439709,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4322812,
+              "end": 4322817,
+              "bytes": "3d401f0000",
+              "instruction": "cmp\teax, 0x1f40"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4322812
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4322812
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-lifecycle": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4322812
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4276363,
+          "patchBytes": 5,
+          "originalBytes": "83bc0aac07",
+          "installedBytes": "e995d0be0f",
+          "dllDestination": 268439845,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4276363,
+              "end": 4276371,
+              "bytes": "83bc0aac07000005",
+              "instruction": "cmp\tdword ptr [edx + ecx + 0x7ac], 0x5"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4276363
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4276363
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "control": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4276363
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4290489,
+          "patchBytes": 5,
+          "originalBytes": "8b4424448b",
+          "installedBytes": "e9fb99be0f",
+          "dllDestination": 268439993,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4290489,
+              "end": 4290493,
+              "bytes": "8b442444",
+              "instruction": "mov\teax, dword ptr [esp + 0x44]"
+            },
+            {
+              "address": 4290493,
+              "end": 4290500,
+              "bytes": "8bac8694010000",
+              "instruction": "mov\tebp, dword ptr [esi + 4*eax + 0x194]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4199056,
+          "patchBytes": 5,
+          "originalBytes": "568b742408",
+          "installedBytes": "e90300c00f",
+          "dllDestination": 268440216,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4199056,
+              "end": 4199057,
+              "bytes": "56",
+              "instruction": "push\tesi"
+            },
+            {
+              "address": 4199057,
+              "end": 4199061,
+              "bytes": "8b742408",
+              "instruction": "mov\tesi, dword ptr [esp + 0x8]"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4199056,
+            4199057
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4199056,
+                4199057
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-impulses": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              }
+            ],
+            "gameplay-return": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4199056,
+                  4199057
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4342610,
+          "patchBytes": 5,
+          "originalBytes": "6a3c686002",
+          "installedBytes": "e9dfcebd0f",
+          "dllDestination": 268440118,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4342610,
+              "end": 4342612,
+              "bytes": "6a3c",
+              "instruction": "push\t0x3c"
+            },
+            {
+              "address": 4342612,
+              "end": 4342617,
+              "bytes": "6860020000",
+              "instruction": "push\t0x260"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4342615,
+          "patchBytes": 2,
+          "originalBytes": "0000",
+          "installedBytes": "9090",
+          "dllDestination": null,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4342612,
+              "end": 4342617,
+              "bytes": "6860020000",
+              "instruction": "push\t0x260"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4330711,
+          "patchBytes": 5,
+          "originalBytes": "833db80b45",
+          "installedBytes": "e9be05be0f",
+          "dllDestination": 268442266,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4330711,
+              "end": 4330718,
+              "bytes": "833db80b450001",
+              "instruction": "cmp\tdword ptr [0x450bb8], 0x1"
+            }
+          ],
+          "observedPristineInstructionHeads": [
+            4330711
+          ],
+          "broadInventoryCaseCount": 48,
+          "broadInventoryCases": [
+            {
+              "index": 1,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 2,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 3,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 4,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 5,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 6,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 7,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 8,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 9,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 10,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 11,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 12,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 13,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 14,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 15,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 16,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 17,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 18,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 19,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 20,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 21,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 22,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 23,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 24,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 25,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 26,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 27,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 28,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 29,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 30,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 31,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 32,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 33,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 34,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 35,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 36,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 37,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 38,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 39,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 40,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 41,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 42,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 43,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 44,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 45,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 46,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 47,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            },
+            {
+              "index": 48,
+              "pristineInstructionHeads": [
+                4330711
+              ]
+            }
+          ],
+          "stageInventoryCases": {
+            "post-draw-commands": [
+              {
+                "index": 1,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 2,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 3,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 4,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 5,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 6,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 7,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 8,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 9,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 10,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 11,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 12,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 13,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 14,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 15,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 16,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 17,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 18,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 19,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 20,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 21,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 22,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 23,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 24,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 25,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 26,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 27,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 28,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 29,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 30,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 31,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 32,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 33,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 34,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 35,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 36,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 37,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 38,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 39,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 40,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 41,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 42,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 43,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 44,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 45,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 46,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 47,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              },
+              {
+                "index": 48,
+                "pristineInstructionHeads": [
+                  4330711
+                ]
+              }
+            ]
+          },
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4380110,
+          "patchBytes": 5,
+          "originalBytes": "892d1c0c45",
+          "installedBytes": "e94845bd0f",
+          "dllDestination": 268442395,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4380110,
+              "end": 4380116,
+              "bytes": "892d1c0c4500",
+              "instruction": "mov\tdword ptr [0x450c1c], ebp"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4379403,
+          "patchBytes": 5,
+          "originalBytes": "8b8438b05d",
+          "installedBytes": "e91e48bd0f",
+          "dllDestination": 268442414,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4379403,
+              "end": 4379410,
+              "bytes": "8b8438b05dd404",
+              "instruction": "mov\teax, dword ptr [eax + edi + 0x4d45db0]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        },
+        {
+          "patchAddress": 4379763,
+          "patchBytes": 5,
+          "originalBytes": "8b843ab05d",
+          "installedBytes": "e9d046bd0f",
+          "dllDestination": 268442440,
+          "overlappingPristineInstructions": [
+            {
+              "address": 4379763,
+              "end": 4379770,
+              "bytes": "8b843ab05dd404",
+              "instruction": "mov\teax, dword ptr [edx + edi + 0x4d45db0]"
+            }
+          ],
+          "observedPristineInstructionHeads": [],
+          "broadInventoryCaseCount": 0,
+          "broadInventoryCases": [],
+          "stageInventoryCases": {},
+          "excludedStageStops": []
+        }
+      ]
+    }
+  ],
+  "sourceArtifactsModified": false,
+  "newGameExecution": false,
+  "dllGameplayCompared": false,
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "limitation": "Intersections concern instruction bytes in pristine control inventories, not execution counts or DLL branch outcomes. No overlap does not make a hook irrelevant to other inputs or prior initialization."
+}
