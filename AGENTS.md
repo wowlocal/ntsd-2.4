@@ -24,6 +24,19 @@ initialize a NEW own chain with actual445a31/CRT and revalidate its independent
 native state, then audit remaining direct arithmetic/conversions and whole
 consumers. No full startup, Windows, app integration or full tick claim.
 
+The new [initialized own chain](docs/research/INITIALIZED_GAMEPLAY.md) now
+executes actual445a31/CRT BEFORE World construction, retaining one CPU through
+41f550. Both backing variants reproduce all historical game-state parents;
+170 initializer PCs, CW037f->023f at7814b118,788 FPU checkpoints each and no
+further watched FPU-control instruction. New native comparisons start match state with explicit
+53-bit precision. Separate whole World physics515/links3018/hits7845 cases also
+match at53 bits; three existing hit controls change the branch at42f1e7 and
+Actor pendingY, not merely low mantissa bits. See the new study for boundaries:
+initial CW/outer ABI/PTD/device responses remain supplied, full Windows startup
+is unverified, and the first tick has not returned. NEXT audit direct arithmetic
+and conversions (especially ActorControl), then resume40d960 and the interleaved
+41f550..4214cf loop under the declared initialized context. Preserve old fixtures.
+
 ## Authoritative reference
 
 - Use **only the original Windows NTSD distribution** as the behavioral reference.

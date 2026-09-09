@@ -1,0 +1,113 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Source-only branch witnesses for the three accepted-control inputs that differ at53 bits. Whole42e100 executes under both declared control words; full output cases reproduce their pinned corpora. The separately accepted native tests compare complete pool hashes; this trace adds original conversion-return and overwrite PCs.",
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "corpora": [
+    {
+      "fpcw": 895,
+      "corpus": "world-hits.json",
+      "sha256": "8e0fbc32f446f4f73b22e7b321a6d3d2bb1821267616c55cc26a54e8e45785a8"
+    },
+    {
+      "fpcw": 639,
+      "corpus": "world-hits53.json",
+      "sha256": "2f48f94740ed54ed2de667364b67ccfb06639cc07af66747adcd09676e2b6d04"
+    }
+  ],
+  "cases": [
+    {
+      "label": "extended--9.223372036854776e+18-2147483647-0",
+      "modes": [
+        {
+          "fpcw": 895,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483647
+            },
+            {
+              "pc": 4387318,
+              "eax": 2147483647
+            }
+          ],
+          "pendingY": "0000000000002840",
+          "poolSHA256": "0407da842933634f7535f07b2dc94d55f00abab1e580f968a4e35754039b6774"
+        },
+        {
+          "fpcw": 639,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483648
+            }
+          ],
+          "pendingY": "000000000000e0c3",
+          "poolSHA256": "a95d2fcdc0f019582a8bb5b2e029f9d2ebe9f83d47303cc9940b90925fd71e57"
+        }
+      ]
+    },
+    {
+      "label": "extended--1e-09-2147483647-0",
+      "modes": [
+        {
+          "fpcw": 895,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483647
+            },
+            {
+              "pc": 4387318,
+              "eax": 2147483647
+            }
+          ],
+          "pendingY": "0000000000002840",
+          "poolSHA256": "0407da842933634f7535f07b2dc94d55f00abab1e580f968a4e35754039b6774"
+        },
+        {
+          "fpcw": 639,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483648
+            }
+          ],
+          "pendingY": "a18f76ffffffef3f",
+          "poolSHA256": "94d7dd5c36240cf37862f4ebd231894ba44c70df396fdc957b2047a4d42376db"
+        }
+      ]
+    },
+    {
+      "label": "extended--3e-10-2147483647-0",
+      "modes": [
+        {
+          "fpcw": 895,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483647
+            },
+            {
+              "pc": 4387318,
+              "eax": 2147483647
+            }
+          ],
+          "pendingY": "0000000000002840",
+          "poolSHA256": "0407da842933634f7535f07b2dc94d55f00abab1e580f968a4e35754039b6774"
+        },
+        {
+          "fpcw": 639,
+          "observations": [
+            {
+              "pc": 4387301,
+              "eax": 2147483648
+            }
+          ],
+          "pendingY": "b0c4d6ffffffef3f",
+          "poolSHA256": "c6453cc04c9fbcaa263d7b18cd89b5c10a74e2584468d2a2c85a1ee2c67380c3"
+        }
+      ]
+    }
+  ]
+}

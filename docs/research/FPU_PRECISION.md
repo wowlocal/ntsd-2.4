@@ -69,6 +69,12 @@ explicit24/53/64-bit native arithmetic and compares53-bit whole Actor physics
 and impulses. Its new evidence is separate from this historical audit. The
 initialized own chain and Windows/thread/device provenance remain open.
 
+The subsequent [INITIALIZED_GAMEPLAY](INITIALIZED_GAMEPLAY.md) now executes
+this initializer on the same CPU before World construction and reproduces both
+own chains through41f550 with CW023f. It also revalidates whole World physics,
+links and hits at53 bits. Declared initial CW/outer ABI/PTD/device boundaries,
+remaining arithmetic consumers and real Windows provenance are still open.
+
 ## Own-capture limitation
 
 Fresh own early-menu/loading/launch captures inherit FPCW0 because that harness

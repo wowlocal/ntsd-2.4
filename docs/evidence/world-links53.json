@@ -1,0 +1,32 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Re-execute complete World physics, links or hits with explicit CW027f.\n\nEvery historical declared input is reproduced; only CPU precision changes.\nOriginal helpers, full pool/masks/globals, mutable heap and ordered requests\nretain the source study's boundaries. This is controlled precision evidence,\nnot natural DAT reachability, full startup or Windows thread behavior.\n",
+  "corpus": "world-links53.json",
+  "sha256": "ea99e84b87673bf1867fe59da4a286d60be9a32d593427b9db572627bf83ea79",
+  "bytes": 2266776,
+  "cases": 3018,
+  "fpcw": 639,
+  "groups": {
+    "depth": 616,
+    "link-gates": 252,
+    "placement": 576,
+    "throw": 1200,
+    "consumption": 324,
+    "alias-order": 48,
+    "all-slots": 1,
+    "empty": 1
+  },
+  "instructions": 588,
+  "events": 3878,
+  "helpers": 6922,
+  "changedFrom64": 0,
+  "historical": {
+    "fixture": "original-world-links.json",
+    "sha256": "ab8288d96c9a60188db8e88ed855c507384dc6966b21791e2f86a5bd8658302e"
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-world-links53.json",
+  "fixtureSHA256": "4bf76275cb084ce88ce3115e400294943666fa9f47fe808413689d2d590100d3",
+  "fixtureBytes": 142583
+}

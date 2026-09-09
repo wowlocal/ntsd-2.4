@@ -57,8 +57,8 @@ class MenuStartup(MenuLoading,MenuResources):
    round=outcome,music=music,resources=resources,sources=list(self.resource_sources.values()),messages=self.messages,
    after=self.control_snapshot(),retainedBefore=retained,retainedAfter=self.early.snapshot()),{**self.early.blobs,**self.blobs})
 
-def capture(control=False,vm_type=MenuStartup,after=None):
- early=EarlyMenus(control);saved_initial=list(early.uc.mem_read(0x458588,0x320));parent=early.capture_loop()
+def capture(control=False,vm_type=MenuStartup,after=None,early_type=EarlyMenus):
+ early=early_type(control);saved_initial=list(early.uc.mem_read(0x458588,0x320));parent=early.capture_loop()
  entry=dict(pc=early.uc.reg_read(UC_X86_REG_EIP),sp=early.uc.reg_read(UC_X86_REG_ESP),returnPC=early.u32(BODY_SP-8),target=early.u32(BODY_SP-4))
  assert entry['pc']==0x41BC90 and early.u32(WORLD)==2
  vm=vm_type(early,music_arena=0x31000000,resource_arena=0x32000000,control_api=0x33000000,music_api_address=0x33001000,resource_api=0x33002000)

@@ -26,7 +26,7 @@ public enum MenuReturnReference {
         let actorAddresses: [UInt32], objectAddresses: [UInt32], cases: [Case], blobs: [String:Blob]
     }
     private static func error(_ s: String) -> OriginalStateError { .invalidStorage("Menu return reference: "+s) }
-    public static func compare(returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
+    public static func compare(returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
         onFirst: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(returning,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -34,7 +34,7 @@ public enum MenuReturnReference {
               c.parent.sha256 == MatchPreparationReference.digest(screen),c.worldAddress == 0x22000020,
               c.actorAddresses.count == 400,c.objectAddresses.count == 137,!c.cases.isEmpty else { throw error("Source/parent identity") }
         var result: Portion?,callbacks = 0
-        let parent = try ModeScreenReference.compare(screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,initialContext,crt,music,resources in
+        let parent = try ModeScreenReference.compare(screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,initialContext,crt,music,resources in
             callbacks += 1
             result = try compareCases(actorAddresses: c.actorAddresses,objectAddresses: c.objectAddresses,cases: c.cases,blobs: c.blobs,state: own,context: initialContext,crt: crt) { state,context in
                 try onFirst?(state,context,crt,music,resources)

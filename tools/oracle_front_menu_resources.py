@@ -48,11 +48,16 @@ class FrontMenuResources(Constructors):
         for index in range(24):self.put(SOURCE+16*index,VTABLE)
         for at,to in [(VTABLE+0x74,API),(VTABLE+8,API+16),(0x4471C8,API+32),(0x447080,API+48)]:self.put(at,to)
         self.put(0x457578,SOURCE)
+        self.before_world_constructor()
         self.world_initial=self.backing(WORLD_PREFIX);self.uc.mem_write(WORLD,self.world_initial)
         self.uc.reg_write(UC_X86_REG_ECX,WORLD);self.uc.reg_write(UC_X86_REG_ESP,ENTRY_SP);self.put(ENTRY_SP,STOP)
         self.uc.emu_start(0x419E40,STOP,count=10000)
         assert self.uc.reg_read(UC_X86_REG_EIP)==STOP and self.u32(WORLD)==0
         self.initial_globals=self.blob(self.uc.mem_read(GLOBAL,GLOBAL_SIZE));self.initial_world=self.world_record()
+
+    def before_world_constructor(self):
+        """Optional explicit startup continuation; historical captures do nothing."""
+        return None
 
     def backing(self,size):return bytes(i%256 for i in range(size)) if self.control else b'\xa5'*size
     def put(self,address,value):self.uc.mem_write(address,struct.pack('<I',value&0xFFFFFFFF))

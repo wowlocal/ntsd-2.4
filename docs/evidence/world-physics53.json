@@ -1,0 +1,32 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Re-execute complete World physics, links or hits with explicit CW027f.\n\nEvery historical declared input is reproduced; only CPU precision changes.\nOriginal helpers, full pool/masks/globals, mutable heap and ordered requests\nretain the source study's boundaries. This is controlled precision evidence,\nnot natural DAT reachability, full startup or Windows thread behavior.\n",
+  "corpus": "world-physics53.json",
+  "sha256": "c31dd079967964338bfca4ec9e2fdedb0205c21e6480d38941b7ac4d8816657d",
+  "bytes": 485391,
+  "cases": 515,
+  "fpcw": 639,
+  "groups": {
+    "death-gates": 240,
+    "restore-spawn": 32,
+    "respawn": 64,
+    "revert": 168,
+    "deactivate-revert": 4,
+    "revert-count": 5,
+    "all-slots": 1,
+    "empty": 1
+  },
+  "instructions": 916,
+  "events": 136,
+  "helpers": 8329,
+  "changedFrom64": 0,
+  "historical": {
+    "fixture": "original-world-physics.json",
+    "sha256": "054f0f8ed89fb729c5c7b5358a115feea591413735d5144a77e057523b4b1c7c"
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-world-physics53.json",
+  "fixtureSHA256": "0ff146c59670fadf208f0085ae4b5e7833e455417ba1b92f7302dffe3fd585de",
+  "fixtureBytes": 45910
+}

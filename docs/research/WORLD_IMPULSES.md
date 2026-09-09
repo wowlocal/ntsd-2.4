@@ -174,6 +174,11 @@ precision. Initialized own chains still need revalidation before expanding
 gameplay. Keep this corpus
 as an explicitly declared CW037f control, not a Windows-equivalence claim.
 
+[INITIALIZED_GAMEPLAY](INITIALIZED_GAMEPLAY.md) now independently repeats both
+own paths with actual445a31/CRT before World, retaining CW023f through this pass.
+Their game records reproduce while FPU metadata is recorded separately. This
+historical own CW0 corpus remains unchanged.
+
 The next source body is the complete400-slot loop `41f550..4214cf`, with
 interleaved substitutions, spawning, scheduler, recovery and deletion. Its
 first branches include state9995→sourceID50 and state8000..<9000→state−8000;

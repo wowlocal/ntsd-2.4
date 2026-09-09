@@ -35,7 +35,20 @@ final class OriginalWorldLinksTests: XCTestCase {
         if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_LINKS_CORPUS"] { url = URL(fileURLWithPath: path) }
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-links",withExtension: "json",subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 32_000_000))
-        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x37f)
+        XCTAssertEqual(c.fpcw,0x37f)
+        try compare(c)
+    }
+    func testWholePassAtStartupPrecision() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-links53.json")
+        } else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-links53",withExtension: "json",subdirectory: "Fixtures")) }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 64_000_000))
+        XCTAssertEqual(c.fpcw,0x27f)
+        try compare(c)
+    }
+    private func compare(_ c: Corpus) throws {
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(c.ids,[2,122,123,10]);XCTAssertEqual(c.cases.count,3018)
         func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
         var headers: [OriginalStateRecord] = [],frames: [[OriginalStateRecord]] = []
@@ -67,7 +80,7 @@ final class OriginalWorldLinksTests: XCTestCase {
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
             for p in item.headers ?? [] { try patch(&ownHeaders[p.object],p.offset,p.bytes) }
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
-            try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,sse2Conversion: item.sse2 == 1,
+            try OriginalWorldLinks.apply(world: world,actors: &actors,globals: &globals,sse2Conversion: item.sse2 == 1,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)),
                 header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },background: { _ in bg },observe: { event in
                     if case let .random(slot,stream,range,result) = event { events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:)))) }
                 })

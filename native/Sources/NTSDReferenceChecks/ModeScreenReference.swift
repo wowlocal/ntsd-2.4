@@ -35,7 +35,7 @@ public enum ModeScreenReference {
     }
     struct Startup: Decodable { let objectAddresses: [UInt32], actorAddresses: [UInt32] }
     private static func error(_ s: String) -> OriginalStateError { .invalidStorage("Mode screen reference: "+s) }
-    public static func compare(screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
+    public static func compare(screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
         onFirst: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(screen,maximumCount: 128_000_000))
         let metadata = try JSONDecoder().decode(Startup.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
@@ -44,7 +44,7 @@ public enum ModeScreenReference {
               c.parent.sha256 == MatchPreparationReference.digest(startup),c.worldAddress == 0x22000020,c.localAddress == 0x1000d7ec,
               c.actorAddresses == metadata.actorAddresses,c.actorAddresses.count == 400,!c.cases.isEmpty else { throw error("Source/parent identity") }
         var result: Portion?,callbacks = 0
-        let parent = try MenuStartupReference.compare(startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,music,resources in
+        let parent = try MenuStartupReference.compare(startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,context,crt,music,resources in
             callbacks += 1
             result = try compareCases(objectAddresses: metadata.objectAddresses,actorAddresses: c.actorAddresses,worldAddress: c.worldAddress,sources: c.sources,cases: c.cases,blobs: c.blobs,state: own,context: context,crt: crt) { state,context in
                 try onFirst?(state,context,crt,music,resources)

@@ -53,7 +53,7 @@ public enum MatchLaunchReference {
         let actorAddresses: [UInt32],objectAddresses: [UInt32],cases: [Section],blobs: [String:InputControlReference.Blob]
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
-    public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
+    public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
                                gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
@@ -154,12 +154,13 @@ public enum MatchLaunchReference {
                 guard let a = actors[try value.integer(at: 0x194+i*4,as: UInt32.self)] else { throw error("World Actor") };try value.write(a,at: 0x194+i*4)
             };return value
         }
-        let parent = try MatchSelectionReference.compare(selection: selection,character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,initialContext,crt,initialMusic,resources in
+        let parent = try MatchSelectionReference.compare(selection: selection,character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,initialContext,crt,initialMusic,resources in
             callbacks += 1
             let menuSurfaces = Dictionary(uniqueKeysWithValues: initial.resources.inputs.map { (initial.resources.allocations[$0.index].address,$0.surface) })
             var state = own,context = initialContext,music = initialMusic,replayAddresses: [UInt32] = []
             var crt = crt
             func snapshot(_ value: OriginalMatchPreparation,_ expected: State,_ label: String) throws {
+                guard value.arithmeticPrecision == arithmeticPrecision else { throw error("Lost arithmetic context") }
                 let s = expected.state,raw = try blob(s.poolBytes),mask = try blob(s.poolMask)
                 guard raw.count == 0x7d8+400*0x420,mask.count == raw.count,mask.allSatisfy({ $0 < 2 }) else { throw error("Pool extent") }
                 func part(_ at: Int,_ n: Int) throws -> OriginalStateRecord { try .init(bytes: Array(raw[at..<at+n]),defined: mask[at..<at+n].map { $0 != 0 }) }

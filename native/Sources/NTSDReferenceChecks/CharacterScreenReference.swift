@@ -44,7 +44,7 @@ public enum CharacterScreenReference {
         let surfaceAddress: UInt32,bitmaps: [Bitmap]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Character screen reference: "+text) }
-    public static func compare(character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
+    public static func compare(character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
         onLast: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(character,maximumCount: 128_000_000))
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
@@ -55,7 +55,7 @@ public enum CharacterScreenReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,
               requireComplete ? c.cases.count == 34 : (1...34).contains(c.cases.count) else { throw error("Source/parent identity") }
         var portion: Portion?,callbacks = 0
-        let parent = try MenuCycleReference.compare(cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,music,resources in
+        let parent = try MenuCycleReference.compare(cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,context,crt,music,resources in
             callbacks += 1
             let result = try compareCases(actorAddresses: c.actorAddresses,objectAddresses: c.objectAddresses,worldAddress: c.worldAddress,initial: initial,catalogSource: catalogSource,
                 cases: c.cases,blobs: c.blobs,state: own,context: context,crt: crt,music: music,resources: resources,requireComplete: requireComplete)

@@ -1,0 +1,33 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Execute original445a31/CRT before the own World/menu/loading/gameplay chain.\n\nOne retained CPU executes the real initializer and subsequent game instructions.\nInitial CW037f, outer caller ABI, CRT PTD and device/thread/FILE boundaries are\ndeclared. This is not the full PE startup or an actual Windows thread capture.\nAll historical whole-state comparisons remain active and must reproduce before\naccepting the new initialized continuation. No old expected state seeds gameplay.\n",
+  "corpus": "initialized-gameplay-control.json",
+  "sha256": "79e85df1c7eef23c4299a8cefcc89a8a18d2a4ba68a4075358e60eb5c7a0ca4b",
+  "bytes": 9232822,
+  "parent": {
+    "fixture": "original-gameplay-drawing-control.json",
+    "sha256": "af26827730b0d2d5ead105904aa6b8c05f0b71302cd9a15bf997f482ccf699de"
+  },
+  "fpcw": 575,
+  "initializationInstructions": 170,
+  "checkpoints": 788,
+  "transitions": 1,
+  "transitionKinds": {
+    "7814b118:037f->023f": 1
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "end": {
+    "pc": 4322640,
+    "sp": 268495292
+  },
+  "historical": {
+    "fixture": "original-gameplay-impulses-control.json",
+    "sha256": "2701607a611892c6e431d31dc570fdd7b041a015c66873e11861c22ed9f8ba55"
+  },
+  "historicalGameRecordsReproduced": true,
+  "fixture": "original-initialized-gameplay-control.json",
+  "fixtureSHA256": "12a76740835532182976f6b04acca7b2481c36299f15cf35d346486b359b7b6a",
+  "fixtureBytes": 1294775
+}

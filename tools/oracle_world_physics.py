@@ -18,6 +18,7 @@ CALLS={0x40e490:(0,0),0x4061d0:(0,0),0x417170:(2,0),0x416fb0:(2,0),0x417090:(2,0
 IDS=[30,31,998,999]
 STATES={300:14,301:9998}
 class WorldPhysics(WorldControl):
+ arithmetic_control_word=0x37f # Historical default; precision revalidation supplies its own context.
  source_ids=IDS
  frame_states=STATES
  mutates_world=True
@@ -29,9 +30,9 @@ class WorldPhysics(WorldControl):
    self.world_mask[address-WORLD:address-WORLD+size]=b'\1'*size;return
   super().access(uc,access,address,size,value,data)
  def execute(self):
-  self.uc.reg_write(UC_X86_REG_FPCW,0x37f);self.uc.mem_write(0x45971c,b'\0'*4);self.physics_slot=None
+  self.uc.reg_write(UC_X86_REG_FPCW,self.arithmetic_control_word);self.uc.mem_write(0x45971c,b'\0'*4);self.physics_slot=None
   self.uc.emu_start(0x41e634,0,count=2_000_000)
-  assert self.uc.reg_read(UC_X86_REG_EDI)==400 and self.uc.reg_read(UC_X86_REG_FPCW)==0x37f
+  assert self.uc.reg_read(UC_X86_REG_EDI)==400 and self.uc.reg_read(UC_X86_REG_FPCW)==self.arithmetic_control_word
  def code(self,uc,pc,size,data):
   if not self.running:return
   if pc==0x4450a0:return # only the established constructor memset boundary

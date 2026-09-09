@@ -40,7 +40,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         let label: String,fill: String,poolSHA256: String,maskSHA256: String,globalsSHA256: String
         let actors: [Actor]?,active: [[Int]]?,aliases: [[Int]]?,frames: [Frame]?,globals: [Patch]?,count: Int32?,events: [Event]
     }
-    private struct Corpus: Decodable { let exeSHA256: String,header: [Patch],states: [String:Int32],ids: [Int32],cases: [Case] }
+    private struct Corpus: Decodable { let exeSHA256: String,header: [Patch],states: [String:Int32],ids: [Int32],cases: [Case],fpcw: Int? }
     private func patch(_ record: inout OriginalStateRecord,_ offset: Int,_ hex: String) throws {
         let bytes = Array(hex.utf8);XCTAssertEqual(bytes.count%2,0)
         for i in stride(from: 0,to: bytes.count,by: 2) {
@@ -52,6 +52,19 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_PHYSICS_CORPUS"] { url = URL(fileURLWithPath: path) }
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-physics",withExtension: "json",subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 32_000_000))
+        XCTAssertNil(c.fpcw)
+        try compare(c)
+    }
+    func testWholePassAtStartupPrecision() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-physics53.json")
+        } else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-physics53",withExtension: "json",subdirectory: "Fixtures")) }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 64_000_000))
+        XCTAssertEqual(c.fpcw,0x27f)
+        try compare(c)
+    }
+    private func compare(_ c: Corpus) throws {
         XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(c.ids,[30,31,998,999]);XCTAssertEqual(c.cases.count,515)
         func defined(_ count: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: count),defined: [Bool](repeating: true,count: count)) }
@@ -83,7 +96,7 @@ final class OriginalWorldPhysicsTests: XCTestCase {
             var ownFrames = frames,globals = globalsBase,events: [Event] = []
             for p in item.frames ?? [] { try patch(&ownFrames[p.object][p.index],p.offset,p.bytes) }
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
-            try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: item.count ?? 4,
+            try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,precision: OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw ?? 0x37f)),objectCount: item.count ?? 4,
                 header: { headers[$0] },frame: { ownFrames[$0][Int($1)] },observe: { event in
                     switch event {
                     case let .random(slot,stream,range,result):events.append(.init(slot: slot,kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))

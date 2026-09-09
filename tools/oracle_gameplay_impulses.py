@@ -67,7 +67,7 @@ class GameplayImpulses(GameplayDrawing):
   assert self.uc.reg_read(UC_X86_REG_FPCW)==fpcw and (boundary['fpswAfter']>>11)&7==0
   # Preserve the inherited VM control word. This own pass has no division;
   # only the standalone controlled corpus establishes CW037f arithmetic.
-  assert fpcw==0 and not any(0x41971b<=pc<=0x419770 for pc in section['instructions'])
+  assert fpcw==getattr(self.early,'expected_fpcw',0) and not any(0x41971b<=pc<=0x419770 for pc in section['instructions'])
   section['impulses']=boundary
   return transport(dict(exeSHA256=EXE_SHA256,dllSHA256=DLL_SHA256,scope=__doc__,control=self.control,parent=dict(fixture=report['fixture'],sha256=report['fixtureSHA256']),worldAddress=WORLD,actorAddresses=[r['address'] for r in self.pool],objectAddresses=self.object_addresses,cases=[section]),{**self.early.blobs,**self.blobs})
 

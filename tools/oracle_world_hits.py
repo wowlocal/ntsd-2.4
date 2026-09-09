@@ -23,6 +23,7 @@ CRT_RAND=STOP+0x800
 CALLS={0x42e100:(1,4),0x417170:(2,0),0x416fb0:(2,0),0x417090:(2,0),0x4450d0:(0,0),0x4061d0:(0,0)}
 def signed(x):return (x+2**31)%2**32-2**31
 class WorldHits(WorldContacts):
+ arithmetic_control_word=0x37f # Historical default; precision revalidation supplies its own context.
  def __init__(self):
   super().__init__();self.crt=CRT()
  def access(self,uc,access,address,size,value,data):
@@ -104,13 +105,13 @@ class WorldHits(WorldContacts):
   self.uc.reg_write(UC_X86_REG_ESP,self.entry_sp);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
   saved=[WORLD if self.caller else 0x11223344,0x22334455,0x33445566,0x44556677]
   for r,v in zip(REGS,saved):self.uc.reg_write(r,v)
-  self.crt.random_call(item.get('crtSeed',1));self.uc.reg_write(UC_X86_REG_FPCW,0x37f);self.running=True
+  self.crt.random_call(item.get('crtSeed',1));self.uc.reg_write(UC_X86_REG_FPCW,self.arithmetic_control_word);self.running=True
   try:self.uc.emu_start(entry,0,count=10_000_000)
   except Exception:print('WORLD HITS FAILURE',item['label'],hex(self.uc.reg_read(UC_X86_REG_EIP)),flush=True);raise
   finally:self.running=False
   assert self.finished and not self.pending and self.uc.reg_read(UC_X86_REG_ESP)==BODY_SP and (self.caller or [self.uc.reg_read(r) for r in REGS]==saved), (item['label'],self.finished,self.pending,hex(self.uc.reg_read(UC_X86_REG_EIP)),hex(self.uc.reg_read(UC_X86_REG_ESP)))
   if self.caller:assert self.uc.reg_read(REGS[0])==WORLD and bytes(self.uc.mem_read(CATALOG+0x4d45db0,len(bg)))==bg
-  assert self.uc.reg_read(UC_X86_REG_FPCW)==0x37f and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
+  assert self.uc.reg_read(UC_X86_REG_FPCW)==self.arithmetic_control_word and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
   if entry==0x417200:item['result']=self.uc.reg_read(UC_X86_REG_EAX)
   world=bytearray(self.uc.mem_read(WORLD,WORLD_PREFIX))
   item['heapSHA256']=digest(bytes(self.uc.mem_read(HEAP,len(heap))))

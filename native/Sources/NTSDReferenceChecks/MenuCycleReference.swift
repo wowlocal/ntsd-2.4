@@ -24,7 +24,7 @@ public enum MenuCycleReference {
         let actorAddresses: [UInt32],objectAddresses: [UInt32],cases: [Case],blobs: [String:InputControlReference.Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu cycle reference: "+text) }
-    public static func compare(cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
+    public static func compare(cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
         onLast: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(cycle,maximumCount: 128_000_000))
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
@@ -34,7 +34,7 @@ public enum MenuCycleReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,
               c.actorAddresses.count == 400,c.objectAddresses.count == 137,c.cases.count == 4 else { throw error("Source/parent identity") }
         var portion: Portion?,callbacks = 0
-        let parent = try MenuReturnReference.compare(returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,music,resources in
+        let parent = try MenuReturnReference.compare(returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,context,crt,music,resources in
             callbacks += 1
             let result = try compareCases(actorAddresses: c.actorAddresses,objectAddresses: c.objectAddresses,worldAddress: c.worldAddress,initial: initial,cases: c.cases,blobs: c.blobs,
                 state: own,context: context,crt: crt,music: music,resources: resources,parentSequence: true)

@@ -77,7 +77,7 @@ public enum MenuStartupReference {
         let sources: [Source], after: Snapshot, retainedBefore: Retained, retainedAfter: Retained, blobs: [String:Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu startup reference: "+text) }
-    public static func compare(startup: Data, menu: Data, loading: Data, catalog: Data, sounds: Data,
+    public static func compare(startup: Data, menu: Data, loading: Data, catalog: Data, sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
         onReady: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -156,7 +156,7 @@ public enum MenuStartupReference {
         }
         let parent = try MenuLoadingReference.compare(menu: menu,loading: loading,catalog: catalog,sounds: sounds,onLoaded: { loaded,crt,earlyMemory in
             callbacks += 1;guard callbacks == 1,!loaded.paused,loaded.commands.count == 20 else { throw error("Own loaded continuation") }
-            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals,interface: loaded.interface)
+            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals,interface: loaded.interface,arithmeticPrecision: arithmeticPrecision)
             var context = OriginalInputControlContext(savedPlayback: try .init(bytes: c.savedAtFirstMenu,defined: [Bool](repeating: true,count: 0x320)),memory: earlyMemory)
             var commands = Array(loaded.commands.prefix(10));let playback = Array(loaded.commands.suffix(10))
             try retained(state,context.memory,crt,c.retainedBefore)

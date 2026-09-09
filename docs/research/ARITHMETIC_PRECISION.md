@@ -6,6 +6,11 @@ supports 24/53/64 bits, with the original extended exponent range retained acros
 intermediate operations. Historical fixtures remain unchanged. This study does
 not yet provide an initialized own menu/loading/match chain or Windows evidence.
 
+Follow-up: [INITIALIZED_GAMEPLAY](INITIALIZED_GAMEPLAY.md) now adds the initialized
+own chain and controlled53-bit World physics/links/hits. The scope below records
+this earlier arithmetic milestone; remaining direct arithmetic and Windows
+startup/thread/device evidence are still open.
+
 Baseline EXE SHA-256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 

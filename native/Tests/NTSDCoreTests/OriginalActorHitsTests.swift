@@ -41,7 +41,20 @@ final class OriginalActorHitsTests: XCTestCase {
         if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_HITS_CORPUS"] { url = URL(fileURLWithPath: path) }
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-hits",withExtension: "json",subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 64_000_000))
-        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x37f)
+        XCTAssertEqual(c.fpcw,0x37f)
+        try compare(c)
+    }
+    func testWholePassAtStartupPrecision() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-hits53.json")
+        } else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-hits53",withExtension: "json",subdirectory: "Fixtures")) }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 64_000_000))
+        XCTAssertEqual(c.fpcw,0x27f)
+        try compare(c)
+    }
+    private func compare(_ c: Corpus) throws {
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(c.ids,[2,7,8,51]);XCTAssertEqual(c.cases.count,7845)
         XCTAssertEqual(c.cases.filter { $0.caller == true }.count,150)
         func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
@@ -92,7 +105,7 @@ final class OriginalActorHitsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             var pass = OriginalHitPass(world: world,actors: actors,globals: globals,memory: OriginalContactFrameMemory(allocations),
                 crt: OriginalCRTRandom(state: item.crtSeed ?? 1),objectCount: item.count ?? 4,
-                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },sse2: (item.sse2 ?? 0) != 0)
+                header: { ownHeaders[$0] },frame: { ownFrames[$0][Int($1)] },sse2: (item.sse2 ?? 0) != 0,precision: try OriginalArithmeticPrecision(controlWord: UInt16(c.fpcw)))
             func observe(_ event: OriginalHitEvent) throws {
                 switch event {
                 case let .random(stream,range,result): events.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))

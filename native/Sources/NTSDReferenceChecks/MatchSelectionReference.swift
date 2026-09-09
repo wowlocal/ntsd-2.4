@@ -7,7 +7,7 @@ public enum MatchSelectionReference {
         public let cases: Int,events: Int,helpers: Int,records: Int,bytes: Int,draws: Int,checkpoints: Int,returns: Int
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Match selection reference: "+text) }
-    public static func compare(selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,
+    public static func compare(selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
                                requireComplete: Bool = true,
         onLast: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(CharacterScreenReference.Corpus.self,from: MatchPreparationReference.unpack(selection,maximumCount: 128_000_000))
@@ -19,7 +19,7 @@ public enum MatchSelectionReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,
               requireComplete ? c.cases.count == 50 : (1...50).contains(c.cases.count) else { throw error("Source/parent identity") }
         var portion: CharacterScreenReference.Portion?,callbacks = 0
-        let parent = try CharacterScreenReference.compare(character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds) { own,context,crt,music,resources in
+        let parent = try CharacterScreenReference.compare(character: character,cycle: cycle,returning: returning,screen: screen,startup: startup,menu: menu,loading: loading,catalog: catalog,sounds: sounds,arithmeticPrecision: arithmeticPrecision) { own,context,crt,music,resources in
             callbacks += 1
             let result = try CharacterScreenReference.compareCases(actorAddresses: c.actorAddresses,objectAddresses: c.objectAddresses,worldAddress: c.worldAddress,initial: initial,catalogSource: catalogSource,
                 cases: c.cases,blobs: c.blobs,state: own,context: context,crt: crt,music: music,resources: resources,matchSelection: true)

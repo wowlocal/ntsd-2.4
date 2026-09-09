@@ -11,12 +11,13 @@ enum GameplayImpulsesReference {
                         snapshot: (OriginalMatchPreparation,MatchLaunchReference.State,String) throws -> Void) throws -> Result {
         guard let input = section.impulses,section.end.pc == 0x41f550,section.end.sp == 0x1000e9bc,
               section.before.frameHeap != nil,section.after.frameHeap != nil,section.before.menuBitmaps != nil,section.after.menuBitmaps != nil,
-              section.checkpoints.isEmpty,section.readsBeforeWrites.isEmpty,input.mode == 0,input.fpcw == 0,
+              section.checkpoints.isEmpty,section.readsBeforeWrites.isEmpty,input.mode == 0,
+              (input.fpcw == 0 || (input.fpcw == 0x23f && state.arithmeticPrecision == .bits53)),
               input.fpswAfter >> 11 & 7 == 0,input.mode == (try state.globals.integer(at: 0x451160-0x44d000,as: Int32.self)),
               input.target == (try state.globals.integer(at: 0x455608-0x44d000,as: UInt32.self)),
               section.helpers.map(\.entry) == [0x7817775d,0x401290,0x4196f0] else { throw error("Own source boundary") }
-        // The inherited source VM has CW0, not the controlled helper's CW037f.
-        // This own pass only clears pending vectors: no multiply/divide executes.
+        // Historical source inherits CW0; the initialized chain executes445a31
+        // and retains CW023f. Both own passes only clear pending vectors.
         for slot in 0..<400 where try state.world.integer(at: 4+slot,as: UInt8.self) != 0 {
             let actor = Int(try state.world.integer(at: 0x194+4*slot,as: UInt32.self))
             guard state.actors.indices.contains(actor) else { throw error("Own Actor binding") }

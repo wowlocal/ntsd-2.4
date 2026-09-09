@@ -17,6 +17,7 @@ from import_ntsd import ROOT,EXE_SHA256
 from unicorn.x86_const import UC_X86_REG_EAX,UC_X86_REG_ECX,UC_X86_REG_EIP,UC_X86_REG_ESP,UC_X86_REG_FPCW,UC_X86_REG_FPSW
 IDS=[2,122,123,10];STATES={300:17,301:12,302:10,303:18};BG=0x4d45db0
 class WorldLinks(WorldControl):
+ arithmetic_control_word=0x37f # Historical default; precision revalidation supplies its own context.
  def code(self,uc,pc,size,data):
   if not self.running:return
   sp=uc.reg_read(UC_X86_REG_ESP)
@@ -60,12 +61,12 @@ class WorldLinks(WorldControl):
   self.uc.mem_write(GLOBAL_BASE,bytes(glob));self.uc.mem_write(0x45971c,struct.pack('<I',item.get('sse2',0)))
   self.uc.mem_write(BODY_SP-4,struct.pack('<I',STOP));self.uc.reg_write(UC_X86_REG_ESP,BODY_SP-4);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
   for r,v in zip(REGS,[0x11223344,0x22334455,0x33445566,0x44556677]):self.uc.reg_write(r,v)
-  self.uc.reg_write(UC_X86_REG_FPCW,0x37f);self.running=True
+  self.uc.reg_write(UC_X86_REG_FPCW,self.arithmetic_control_word);self.running=True
   try:self.uc.emu_start(0x417f80,STOP,count=2_000_000)
   except Exception:print('WORLD LINKS FAILURE',item['label'],hex(self.uc.reg_read(UC_X86_REG_EIP)),flush=True);raise
   finally:self.running=False
   assert not self.pending and self.uc.reg_read(UC_X86_REG_ESP)==BODY_SP and [self.uc.reg_read(r) for r in REGS]==[0x11223344,0x22334455,0x33445566,0x44556677]
-  assert self.uc.reg_read(UC_X86_REG_FPCW)==0x37f and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
+  assert self.uc.reg_read(UC_X86_REG_FPCW)==self.arithmetic_control_word and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
   assert bytes(self.uc.mem_read(WORLD,WORLD_PREFIX))==bytes(world) and bytes(self.uc.mem_read(CATALOG+BG,len(bg)))==bytes(bg)
   for i,raw in enumerate(objects):assert bytes(self.uc.mem_read(OBJECT+i*0x40000,len(raw)))==raw
   for i in range(400):struct.pack_into('<I',world,0x194+i*4,bindings.get(i,i))
