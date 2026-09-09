@@ -9,6 +9,7 @@ public enum MatchLaunchReference {
         public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int,depthSlots: Int,contactPasses: Int,hitSlots: Int,cpointStages: Int,cameraPasses: Int,drawingPasses: Int,impulsePasses: Int,lifecyclePasses: Int,commandPasses: Int,hudPasses: Int,noticePasses: Int,resultRecordingPasses: Int,resultLayoutPasses: Int,gameplayReturns: Int
         public let bodyPasses: Int,bodyCheckpoints: Int,bodyEvents: Int
         public let continuousCalls: Int,continuousEvents: Int,continuousHelpers: Int
+        public let activeCalls: Int,activeEvents: Int,activeHelpers: Int
         public let pauseSequenceCalls: Int,pausedRenderingCalls: Int,pausedEvents: Int,pausedHelpers: Int
     }
     typealias Storage = MenuStartupReference.Storage
@@ -19,6 +20,7 @@ public enum MatchLaunchReference {
         let backgrounds: [Storage],bitmaps: [Allocation],music: [Allocation],released: [UInt32]
         let frameHeap: [Heap]?
         let menuBitmaps: [Allocation]?
+        let objects: [Allocation]?,objectStrings: [Allocation]?
     }
     struct Event: Decodable {
         let kind: String
@@ -64,7 +66,8 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
-                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil,gameplayCommands: Data? = nil,gameplayHUD: Data? = nil,gameplayNotices: Data? = nil,gameplayResultRecording: Data? = nil,gameplayResultLayout: Data? = nil,gameplayReturn: Data? = nil,compareGameplayBody: Bool = false,continuousGameplay: Data? = nil,pausedGameplay: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false,gameplayLinks: Data? = nil,gameplayContacts: Data? = nil,gameplayHits: Data? = nil,gameplayCPoints: Data? = nil,gameplayCamera: Data? = nil,gameplayDrawing: Data? = nil,gameplayImpulses: Data? = nil,gameplayLifecycle: Data? = nil,gameplayCommands: Data? = nil,gameplayHUD: Data? = nil,gameplayNotices: Data? = nil,gameplayResultRecording: Data? = nil,gameplayResultLayout: Data? = nil,gameplayReturn: Data? = nil,compareGameplayBody: Bool = false,continuousGameplay: Data? = nil,activeGameplay: Data? = nil,pausedGameplay: Data? = nil) throws -> Result {
+        guard activeGameplay == nil || pausedGameplay == nil else { throw error("Active and paused continuations need separate retained neutral parents") }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let links = try gameplayLinks.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
@@ -83,6 +86,7 @@ public enum MatchLaunchReference {
         let completedGameplay = try gameplayReturn.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
         let continuous = try continuousGameplay.map { try ContinuousGameplayReference.Document($0) }
         let paused = try pausedGameplay.map { try PausedGameplayReference.Document($0) }
+        let active = try activeGameplay.map { try ContinuousGameplayReference.Document($0) }
         guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
@@ -188,6 +192,13 @@ public enum MatchLaunchReference {
                   next.parent.sha256 == MatchPreparationReference.digest(gameplayReturn),next.worldAddress == c.worldAddress,
                   next.actorAddresses == c.actorAddresses,next.objectAddresses == c.objectAddresses else { throw error("Continuous gameplay parent identity") }
         }
+        if let active {
+            let next = active.corpus
+            guard let continuousGameplay,continuous != nil,next.format == "active-gameplay-components-v1",
+                  next.exeSHA256 == c.exeSHA256,next.dllSHA256 == c.dllSHA256,
+                  next.parent.sha256 == MatchPreparationReference.digest(continuousGameplay),next.worldAddress == c.worldAddress,
+                  next.actorAddresses == c.actorAddresses,next.objectAddresses == c.objectAddresses else { throw error("Active gameplay parent identity") }
+        }
         if let paused {
             let next = paused.corpus
             guard let continuousGameplay,continuous != nil,arithmeticPrecision == .bits53,
@@ -195,7 +206,7 @@ public enum MatchLaunchReference {
                   next.parent.sha256 == MatchPreparationReference.digest(continuousGameplay),next.worldAddress == c.worldAddress,
                   next.actorAddresses == c.actorAddresses,next.objectAddresses == c.objectAddresses else { throw error("Paused gameplay parent identity") }
         }
-        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }.merging(commands?.blobs ?? [:]) { _,new in new }.merging(hud?.blobs ?? [:]) { _,new in new }.merging(notices?.blobs ?? [:]) { _,new in new }.merging(resultRecording?.blobs ?? [:]) { _,new in new }.merging(resultLayout?.blobs ?? [:]) { _,new in new }.merging(completedGameplay?.blobs ?? [:]) { _,new in new }.merging(continuous?.corpus.blobs ?? [:]) { _,new in new }.merging(paused?.corpus.blobs ?? [:]) { _,new in new }
+        let blobs = c.blobs.merging(control?.blobs ?? [:]) { _,new in new }.merging(links?.blobs ?? [:]) { _,new in new }.merging(contacts?.blobs ?? [:]) { _,new in new }.merging(hits?.blobs ?? [:]) { _,new in new }.merging(cpoints?.blobs ?? [:]) { _,new in new }.merging(camera?.blobs ?? [:]) { _,new in new }.merging(drawing?.blobs ?? [:]) { _,new in new }.merging(impulses?.blobs ?? [:]) { _,new in new }.merging(lifecycle?.blobs ?? [:]) { _,new in new }.merging(commands?.blobs ?? [:]) { _,new in new }.merging(hud?.blobs ?? [:]) { _,new in new }.merging(notices?.blobs ?? [:]) { _,new in new }.merging(resultRecording?.blobs ?? [:]) { _,new in new }.merging(resultLayout?.blobs ?? [:]) { _,new in new }.merging(completedGameplay?.blobs ?? [:]) { _,new in new }.merging(continuous?.corpus.blobs ?? [:]) { _,new in new }.merging(active?.corpus.blobs ?? [:]) { _,new in new }.merging(paused?.corpus.blobs ?? [:]) { _,new in new }
         let initial = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
@@ -205,6 +216,7 @@ public enum MatchLaunchReference {
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
         var bodyPasses = 0,bodyCheckpoints = 0,bodyEvents = 0
         var continuousCalls = 0,continuousEvents = 0,continuousHelpers = 0
+        var activeCalls = 0,activeEvents = 0,activeHelpers = 0
         var pauseSequenceCalls = 0,pausedRenderingCalls = 0,pausedEvents = 0,pausedHelpers = 0
         var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0,depthSlots = 0,contactPasses = 0,hitSlots = 0,cpointStages = 0,cameraPasses = 0,drawingPasses = 0,impulsePasses = 0,lifecyclePasses = 0,commandPasses = 0,hudPasses = 0,noticePasses = 0,resultRecordingPasses = 0,resultLayoutPasses = 0,gameplayReturns = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
@@ -295,6 +307,43 @@ public enum MatchLaunchReference {
                     guard try record.integer(at: 0,as: UInt32.self) == (actual.input.present ? 0x24000000 : 0) else { throw error("Bitmap surface") }
                     try record.write(UInt32(actual.input.present ? 1 : 0),at: 0);try check(actual.storage,record,label+" bitmap")
                 }
+                if let sourceObjects = expected.objects {
+                    guard sourceObjects.map(\.address) == c.objectAddresses,
+                          sourceObjects.count == value.loadedObjects.count,let strings = expected.objectStrings else { throw error("Active Object inventory") }
+                    let stringMap = Dictionary(uniqueKeysWithValues:strings.map { ($0.address,$0.storage) })
+                    var usedStrings = Set<UInt32>()
+                    for (n,item) in sourceObjects.enumerated() {
+                        let object = value.loadedObjects[n]
+                        var record = try storage(item.storage)
+                        func bitmap(_ offset: Int) throws {
+                            guard record.defined[offset..<offset+4].allSatisfy({ $0 }) else { return }
+                            let pointer = try record.integer(at:offset,as:UInt32.self)
+                            if pointer != 0 {
+                                guard let index = bitmapMap[pointer] else { throw error("Active Object bitmap identity") }
+                                try record.write(UInt32(index+1),at:offset)
+                            }
+                        }
+                        for offset in [0x6fc,0x728] { try bitmap(offset) }
+                        let sheets = Int(try record.integer(at:0x498,as:Int32.self))
+                        guard (1...10).contains(sheets) else { throw error("Active Object sheet count") }
+                        for sheet in 1...sheets { try bitmap(0x750+sheet*4);try bitmap(0x778+sheet*4) }
+                        for ordinal in 0..<3 {
+                            let pointer = try record.integer(at:0x98+ordinal*4,as:UInt32.self)
+                            if pointer == 0 {
+                                guard object.weaponSoundPaths[ordinal] == nil else { throw error("Active weapon string nullability") }
+                            } else {
+                                guard let source = stringMap[pointer],let path = object.weaponSoundPaths[ordinal],
+                                      path.unicodeScalars.allSatisfy({ $0.value < 256 }) else { throw error("Active weapon string owner") }
+                                let bytes = path.unicodeScalars.map { UInt8($0.value) }+[0]
+                                try check(.init(bytes:bytes,defined:Array(repeating:true,count:bytes.count)),storage(source),label+" weapon string")
+                                usedStrings.insert(pointer);try record.write(UInt32(ordinal+1),at:0x98+ordinal*4)
+                            }
+                        }
+                        let records = [object.header]+object.frameStorage+[object.nameTail]
+                        try check(.init(bytes:records.flatMap(\.bytes),defined:records.flatMap(\.defined)),record,label+" Object\(n)")
+                    }
+                    guard usedStrings == Set(stringMap.keys) else { throw error("Active weapon allocation inventory") }
+                } else if expected.objectStrings != nil { throw error("Strings without own Objects") }
                 let released = try Set(expected.released.map { p -> Int in guard let i = bitmapMap[p] else { throw error("Released bitmap identity") };return i })
                 guard value.releasedBitmaps == released,music.allocations.count == expected.music.count else { throw error("Resource lifetime") }
                 for r in expected.music { guard let a = music.allocations[r.address] else { throw error("Music allocation") };try check(a,storage(r.storage),label+" music") }
@@ -680,6 +729,17 @@ public enum MatchLaunchReference {
                                                                                     pauseSequenceCalls += sequence.calls;pausedRenderingCalls += sequence.pausedCalls
                                                                                     pausedEvents += sequence.events;pausedHelpers += sequence.helpers
                                                                                 }
+                                                                                if let active {
+                                                                                    let nextCalls = try ContinuousGameplayReference.compare(active,state:&state,context:&context,crt:&crt,resourceBitmap:{ token in
+                                                                                        if let bitmap = resources.bitmaps[token],let surface = menuSurfaces[token] { return (bitmap.storage,surface) }
+                                                                                        guard let allocation = allocations[token],allocation.live else { throw error("Active resource ownership \(token)") }
+                                                                                        var record = allocation.storage
+                                                                                        let surface = try record.integer(at:0,as:UInt32.self)
+                                                                                        try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
+                                                                                        return (record,surface)
+                                                                                    },replayAddresses:replayAddresses,blob:blob,snapshot:fullSnapshot)
+                                                                                    activeCalls += nextCalls.calls;activeEvents += nextCalls.events;activeHelpers += nextCalls.helpers
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -700,6 +760,6 @@ public enum MatchLaunchReference {
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses,commandPasses:commandPasses,hudPasses:hudPasses,noticePasses:noticePasses,resultRecordingPasses:resultRecordingPasses,resultLayoutPasses:resultLayoutPasses,gameplayReturns:gameplayReturns,bodyPasses:bodyPasses,bodyCheckpoints:bodyCheckpoints,bodyEvents:bodyEvents,continuousCalls:continuousCalls,continuousEvents:continuousEvents,continuousHelpers:continuousHelpers,pauseSequenceCalls:pauseSequenceCalls,pausedRenderingCalls:pausedRenderingCalls,pausedEvents:pausedEvents,pausedHelpers:pausedHelpers)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots,depthSlots:depthSlots,contactPasses:contactPasses,hitSlots:hitSlots,cpointStages:cpointStages,cameraPasses:cameraPasses,drawingPasses:drawingPasses,impulsePasses:impulsePasses,lifecyclePasses:lifecyclePasses,commandPasses:commandPasses,hudPasses:hudPasses,noticePasses:noticePasses,resultRecordingPasses:resultRecordingPasses,resultLayoutPasses:resultLayoutPasses,gameplayReturns:gameplayReturns,bodyPasses:bodyPasses,bodyCheckpoints:bodyCheckpoints,bodyEvents:bodyEvents,continuousCalls:continuousCalls,continuousEvents:continuousEvents,continuousHelpers:continuousHelpers,activeCalls:activeCalls,activeEvents:activeEvents,activeHelpers:activeHelpers,pauseSequenceCalls:pauseSequenceCalls,pausedRenderingCalls:pausedRenderingCalls,pausedEvents:pausedEvents,pausedHelpers:pausedHelpers)
     }
 }

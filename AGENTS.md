@@ -86,6 +86,39 @@ handles and work metadata before acting; never restart or relabel them as
 DLL-enabled. Full initialized application, full match/content, app/window,
 Windows/device/clean-Mac and the full native-game goal remain open.
 
+Both pristine EXE/VC80 active48 controls now compare completely. Read
+[ACTIVE_GAMEPLAY_CAPTURE](docs/research/ACTIVE_GAMEPLAY_CAPTURE.md) and its
+[finite plan/history](docs/research/ACTIVE_GAMEPLAY_PLAN.md). Each keeps the
+whole neutral16 parent, then48 acquired movement/attack/guard/jump/depth/release
+calls:6484388records/27160941109bytes+masks/1549states;49308/51996active events
+and13366/13750body/output helpers. Source55568FPU checkpoints retain023f;
+all28590 retained active16 checkpoints reproduce. This is source FPU history,
+not native process FPSW/tag or hardware equivalence.102259stack accesses/59PCs
+each; broad5355/5363address inventories include hooks/stops, not actual coverage.
+No source Actor/phase/RNG/stack words drive Native. Twenty actual key transitions
+and20changed replay returns; counters450b8c/450bbc18..65, recording flag1/live.
+Call17 creates slot50, processes/removes it in the same pass and drains two
+catalog plays in order. Across48:51primitive RNG,1constructor,7catalog/queued
+plays. The400-byte memset adapter runs once, bytes already zero, not CRT code.
+Only slots0/1 remain at every return; HP500 throughout, final MP221/frame0/212,
+Naruto354/0/497 and Sasuke364/-78/525. No damaging-hit/round-result/fullmatch claim.
+Full137Objects/130weapon strings at returns/acquisition,14586Frame allocations;
+95undefined portrait words remain unknown,1824/3360undefined bitmap reads remain
+declared research backing. Late dispatcher observer rolls back whole-call owned
+state after changed replay/movement while preserving acquired input.
+Raw2release tests159.390s/build169.00s; packaged2tests153.680s/build166.35s.
+Both48source jobs and all owned SwiftPM jobs terminal; never restart completed
+capture.196priorpins unchanged/198at publication; subsequent lib milestone adds
+two separate fixtures to200. Fullraw/packedJSON/bytes/SHA,7811blobs/1314manifests
+and10vendor hashes verify. Final isolated package4298b7e+six active files excludes
+then-concurrent lib changes; earlier integrated6timer/neutral/pause tests also
+passed160.603s/build175.89s with those exact files. No DLL-enabled join follows.
+Exact capture producer archived before comment-only scope annotation; raw bytes
+unchanged. Three terminal preparation failures and intermediate16/17 proofs
+remain in build/research/active-gameplay-work.json. NTSDNative linked; no window
+or device tested. App still uses Practice; bundled-library hooks/initialized
+join, fullmatch/content, Windows/device/clean-Mac and the full goal remain open.
+
 Additional dispatcher prerequisites now compare in
 [APPLICATION_DISPATCH](docs/research/APPLICATION_DISPATCH.md). Shared
 OriginalApplicationKeyScan matches4348 further prefix exits/9847ordered stores
@@ -111,7 +144,7 @@ chains and rollback. Source and final SwiftPM jobs terminal0; initial compile
 failure terminal. NTSDNative linked; job details in
 build/research/application-dispatch-work.json.
 Full initialized dispatcher, app/window/device/Windows and full-game goal remain
-open. Active48 captures are independent; do not restart their live jobs.
+open. Active48 captures are independent terminal controls, described above.
 
 Two independent outer-application dependencies now compare; neither is the
 whole initialized43e9a0 join. Read [APPLICATION_TIMER](docs/research/APPLICATION_TIMER.md)
@@ -139,7 +172,7 @@ verified. Raw2release tests0.086s/build174.13s; final packaged2tests0.065s/
 build180.90s after naming the independent API KeyScan to avoid concurrent
 dispatcher API collision. All owned prefix/timer jobs terminal0; NTSDNative
 linked, no window/device/Windows evidence. Active48 captures remain separate;
-see build/research/active-gameplay-work.json before touching their live jobs.
+both completed and must not be restarted. See build/research/active-gameplay-work.json.
 
 Both fresh own chains now match pause, single-step and resume through both
 actual returns. Read [PAUSED_GAMEPLAY](docs/research/PAUSED_GAMEPLAY.md).

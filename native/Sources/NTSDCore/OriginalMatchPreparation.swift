@@ -26,6 +26,9 @@ public struct OriginalMatchPreparation {
     /// Live DAT allocations. Original hit processing can write a held weapon's
     /// raw ITR; those writes survive subsequent contacts and ticks.
     public internal(set) var frameAllocations: [OriginalFrameAllocation]
+    /// Own loaded Object records, including inline Frame storage. Heap-backed
+    /// Frame mutations are exposed separately by frameAllocations.
+    public var loadedObjects: [OriginalLoadedObject] { catalog.objects }
     public internal(set) var backgrounds: [OriginalStateRecord]
     public var bitmaps: [OriginalLoadedBitmap] { backgroundLoader.bitmaps }
     public var releasedBitmaps: Set<Int> { backgroundLoader.releasedBitmaps }

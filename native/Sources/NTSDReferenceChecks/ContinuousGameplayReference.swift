@@ -17,6 +17,7 @@ enum ContinuousGameplayReference {
         let label: String, before: Refs, after: Refs
         let helpers: [MatchLaunchReference.Control.Helper]
         let events: EventGroups
+        let effects: [ActiveGameplayReference.Effect]?
         let end: MenuStartupReference.Position
     }
     struct Output: Decodable {
@@ -26,6 +27,7 @@ enum ContinuousGameplayReference {
     }
     struct Case: Decodable {
         let index: Int, before: Refs, after: Refs
+        let acquired: Refs?, acquisition: ActiveGameplayReference.Acquisition?
         let cycle: MenuCycleReference.Case, stages: [Section], output: Output
         let keyboardBefore: [UInt8], keyboardAfter: [UInt8], fpuStart: Int, fpuEnd: Int
         let end: MenuStartupReference.Position
@@ -38,6 +40,7 @@ enum ContinuousGameplayReference {
         let format: String, exeSHA256: String, dllSHA256: String, control: Bool
         let parent: InputControlReference.Parent, worldAddress: UInt32
         let actorAddresses: [UInt32], objectAddresses: [UInt32], initial: Refs
+        let schedule: [ActiveGameplayReference.Plan]?
         let platform: Platform, cases: [Case], blobs: [String:InputControlReference.Blob]
     }
     final class Document {
@@ -49,7 +52,8 @@ enum ContinuousGameplayReference {
             corpus = try JSONDecoder().decode(Corpus.self, from: raw)
             guard let root = try JSONSerialization.jsonObject(with: raw) as? [String:Any],
                   let values = root["components"] as? [String:Any],
-                  corpus.format == "continuous-gameplay-components-v1", corpus.cases.count == 16 else { throw error("Manifest format") }
+                  (corpus.format == "continuous-gameplay-components-v1" && corpus.cases.count == 16 && corpus.schedule == nil ||
+                   corpus.format == "active-gameplay-components-v1" && corpus.cases.count == 48 && corpus.schedule == ActiveGameplayReference.schedule) else { throw error("Manifest format") }
             for (key,value) in values {
                 let bytes = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys,.fragmentsAllowed,.withoutEscapingSlashes])
                 guard MatchPreparationReference.digest(bytes) == key else { throw error("Component hash") }
@@ -77,6 +81,7 @@ enum ContinuousGameplayReference {
         blob: (String) throws -> [UInt8],
         snapshot: (OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,MatchLaunchReference.State,String) throws -> Void) throws -> Result {
         let c = document.corpus, p = c.platform.input
+        let active = c.format == "active-gameplay-components-v1"
         let initial = try document.snapshot(c.initial)
         guard state.arithmeticPrecision == .bits53, c.platform.drawResults == [0,1],
               p.targetSurface == (try state.globals.integer(at: 0x455608-0x44d000, as: UInt32.self)),
@@ -140,18 +145,28 @@ enum ContinuousGameplayReference {
                 try check(allocation.storage,record(r.bytes,r.defined),"recording")
             }
         }
-        var events = 0, helpers = 0, previous = c.initial, previousFPU = 1614
+        var events = 0, helpers = 0, previous = c.initial, previousFPU = active ? 15102 : 1614
+        var held = Set<UInt32>()
         for (index,item) in c.cases.enumerated() {
             guard item.index == index+1, item.before == previous, item.fpuStart == previousFPU,
                   item.fpuEnd > item.fpuStart, item.stages.map(\.label) == labels,
-                  item.keyboardBefore == Array(repeating: 117,count: 300), item.keyboardAfter == item.keyboardBefore,
+                  (active || item.keyboardBefore == Array(repeating: 117,count: 300)), item.keyboardAfter == item.keyboardBefore,
                   item.cycle.stimulus.isEmpty, item.cycle.local.dispatch.isEmpty,
                   item.cycle.prefix.phase == UInt32(index%2), item.end.pc == 0x30000000, item.end.sp == 0x1000f42c else { throw error("Successive caller identity") }
-            let before = try document.snapshot(item.before), after = try document.snapshot(item.after)
-            try snapshot(state,context,crt,before,"call\(item.index) before")
+            let prior = try document.snapshot(item.before), after = try document.snapshot(item.after)
+            try snapshot(state,context,crt,prior,"call\(item.index) before acquisition")
+            let before: MatchLaunchReference.State
+            if active {
+                guard let acquisition = item.acquisition,let acquired = item.acquired else { throw error("Missing active acquisition") }
+                try ActiveGameplayReference.acquire(acquisition,index:index,state:&state,held:&held)
+                before = try document.snapshot(acquired)
+                try snapshot(state,context,crt,before,"call\(item.index) acquired input")
+            } else {
+                guard item.acquisition == nil,item.acquired == nil else { throw error("Unexpected neutral stimulus") };before = prior
+            }
             let sections = Dictionary(uniqueKeysWithValues: zip(Array(order.dropLast()),item.stages))
             let output = item.output, cycle = item.cycle, control = cycle.inputControl
-            guard output.before == item.stages.last!.after, output.after == item.after.filter({ $0.key != "frameHeap" }) else { throw error("Body/output continuity") }
+            guard output.before == item.stages.last!.after, output.after == item.after.filter({ !["frameHeap","objects","objectStrings"].contains($0.key) }) else { throw error("Body/output continuity") }
             let ownAtEntry = state
             func surface(_ n: Int) throws -> UInt32 {
                 guard ownAtEntry.bitmaps.indices.contains(n), !ownAtEntry.releasedBitmaps.contains(n) else { throw error("Surface ownership") }
@@ -166,7 +181,7 @@ enum ContinuousGameplayReference {
             for stage in [Stage.camera,.drawing,.hud,.notices] {
                 expectedDraws[stage] = stage == .camera ? sections[stage]!.events.camera ?? [] : sections[stage]!.events.drawing ?? []
             }
-            let expectedRandom = sections[.hits]!.helpers.filter { $0.entry == 0x417170 }.map {
+            let expectedRandom = sections[.hits]!.helpers.filter { !active && $0.entry == 0x417170 }.map {
                 OriginalHitEvent.random(stream: Int32(bitPattern:$0.arguments[0]),range:Int32(bitPattern:$0.arguments[1]),result:Int32(bitPattern:$0.result))
             }
             // The first trial reaches the final output observer after the
@@ -177,6 +192,7 @@ enum ContinuousGameplayReference {
                 var stageIndex = 0, controlIndex = 0, replayIndex = 0, roundIndex = 0, asyncIndex = 0, ioctlIndex = 0
                 var inputIndex = 0, prologues = 0, entries = 0, seenEvents = 0, rejected = false
                 var drawingCounts: [Stage:Int] = [:], blitCounts: [Stage:Int] = [:], activeDrawing: Stage?
+                let effects = active ? ActiveGameplayReference.Effects(sections) : nil
                 var hitEvents: [OriginalHitEvent] = [], impulses: [OriginalMenuPresentationEvent] = []
                 var lifecycle: [GameplayLifecycleReference.Input.Event] = [], commands: [GameplayCommandsReference.Input.Event] = []
                 let inputOrder: [OriginalLoadedMatchEntry.Checkpoint] = [.localBeforeDispatch,.local,.control,.received,.replay,.round]
@@ -196,7 +212,16 @@ enum ContinuousGameplayReference {
                         guard let expected = expectedDraws[stage],n < expected.count,value == expected[n] else { throw error("call\(item.index) \(stage) event\(n): \(value)") }
                         drawingCounts[stage] = n+1
                         if trial,stage == .output,value.kind == "dispatcherWrite" { throw error("Late whole-call observer") }
-                    case let .hits(value):guard current == .hits else { throw error("Hit stage") };hitEvents.append(value)
+                    case let .control(slot,value):
+                        guard current == .control,let effects else { throw error("Unexpected control effect") };try effects.control(value,slot:slot)
+                    case let .physics(value):
+                        guard current == .physics,let effects else { throw error("Unexpected physics effect") };try effects.physics(value)
+                    case let .contacts(value):
+                        guard current == .contacts,let effects else { throw error("Unexpected contact effect") };try effects.contacts(value)
+                    case .links:throw error("Own link RNG needs recovered caller-slot context")
+                    case let .hits(value):
+                        guard current == .hits else { throw error("Hit stage") }
+                        if let effects { try effects.hits(value) } else { hitEvents.append(value) }
                     case let .impulses(value):guard current == .impulses else { throw error("Impulse stage") };impulses.append(value)
                     case let .lifecycle(value):
                         guard current == .lifecycle else { throw error("Lifecycle stage") }
@@ -280,6 +305,7 @@ enum ContinuousGameplayReference {
                       hitEvents == expectedRandom,impulses == (sections[.impulses]!.events.impulses ?? []),
                       lifecycle == (sections[.lifecycle]!.events.lifecycle ?? []),commands == (sections[.commands]!.events.commands ?? []),
                       caller == OriginalGameplayBody.Caller() else { throw error("Incomplete call events or unknown storage") }
+                try effects?.finish()
                 for (stage,expected) in expectedDraws {
                     guard drawingCounts[stage,default:0] == expected.count,
                           blitCounts[stage,default:0] == expected.filter({ $0.kind == "blit" }).count else { throw error("Incomplete output") }
