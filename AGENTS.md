@@ -1215,6 +1215,35 @@ Release CatalogCheck83.08s, acceptance0.19s, NTSDNative2.79s. All processes
 terminal. All96old fixture hashes unchanged; both new SHA/size/full unpack
 verified,98pins at build/research/menu-return-fixture-pins.json.
 
+## Progress estimates
+
+Use [tools/estimate_port_progress.py](tools/estimate_port_progress.py) when
+estimating remaining work from code volume. It reads pinned Git revisions and
+the original EXE, verifies its hash, unions documented native address ranges
+without double counting, and reports historical growth, instruction/conditional
+counts and planning scenarios. It requires Python 3 and Xcode's llvm-objdump.
+It does not execute the game or change accepted research fixtures.
+
+Read the [method and limitations](docs/estimates/2026-09-08-code-progress.md).
+The [initial JSON](docs/estimates/2026-09-08-code-progress.json) records the
+2026-09-08 c2c2c91 snapshot. Reproduce it with:
+
+```sh
+python3 tools/estimate_port_progress.py --revision c2c2c91
+```
+
+For a new estimate, explicitly pass the target commit with `--revision` and a
+new dated JSON path with `--output`; defaults reproduce the historical snapshot.
+Review the script's SUPPLEMENTS/WHOLE scope lists as new studies appear and
+recompute the entire timeline when selection rules change. Keep old reports.
+Documented range area is NOT branch coverage, semantic analysis coverage,
+native equivalence or percentage of game completion. Unsupported paths can
+remain inside counted ranges; implemented rules can lack range annotations.
+Report measured rates separately from assumed slowdown/integration allowances,
+and distinguish continuous hours from working days. The initial 50% allowance
+and 2x risk slowdown are planning assumptions, not measured costs or a deadline.
+These estimates do not replace RESEARCH_MAP.md or change the research sequence.
+
 The [own repeated menu cycle](docs/research/MENU_CYCLE.md) now continues the
 own first return through new4246b0/World2->41bc90 calls. Both4-case corpora match
 native:8outer entries/6whole ret4,110checkpoints/546events,40076records/
