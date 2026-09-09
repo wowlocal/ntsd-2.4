@@ -1,0 +1,40 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole original41b5d0..41bc87 camera with actual background/draw children at explicit CW027f. Every historical caller input is retained; full pool/masks/globals/backgrounds and ordered device requests are compared. Supplied metadata/stack/device boundaries, not Windows or raster output.",
+  "corpus": "world-camera53.json",
+  "sha256": "b2b320eb82028bd1c366a6ffc6ece7e27eba47c42d109d7c0ca71c4693f194e1",
+  "bytes": 4749135,
+  "cases": 4742,
+  "fpcw": 639,
+  "groups": {
+    "bounds": 896,
+    "depth": 264,
+    "fighter": 432,
+    "items": 1440,
+    "target": 192,
+    "smooth": 675,
+    "replay": 135,
+    "sum": 40,
+    "parallax": 180,
+    "animation": 450,
+    "fill": 12,
+    "builtin": 8,
+    "layers": 4,
+    "bitmap": 4,
+    "whole-background": 5,
+    "provenance": 5
+  },
+  "instructions": 1133,
+  "events": 6898,
+  "helpers": 25950,
+  "changedFrom64": 0,
+  "historical": {
+    "fixture": "original-world-camera.json",
+    "sha256": "1f78038f08441c08634f459e047b366f57276c4440a89ca943be1502bbc35d1f"
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-world-camera53.json",
+  "fixtureSHA256": "42b4e1bf9182130ec76c7cd0532f55e7402a3432ae9dd53b700b17a022340f4f",
+  "fixtureBytes": 290711
+}

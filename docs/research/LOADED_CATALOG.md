@@ -38,6 +38,14 @@ Object, Frame, DAT decoder, bitmap wrapper и sound registration использ�
 [CRT_SCANNER.md](CRT_SCANNER.md). Это распространяет проверку настоящего scanf
 на родительский реестр, все исходные BG и Stage, а не только Object.
 
+Уточнение контекста: [COORDINATE_PRECISION](COORDINATE_PRECISION.md) динамически
+проверил, что этот scanf остаётся в отдельной CRT VM и при присоединении
+загрузчика к инициализированному игровому CPU. Слово023f основного потока не
+передаётся этому scanner автоматически; он сообщает не записанный CW0, что
+не определяет его фактическую точность. Сохранённые результаты остаются
+эталонами данной границы. Чтение исходных чисел DAT при явно заданных53 битах
+требует отдельной проверки; новый ownership probe ещё не выполняет эти сканы.
+
 Native `OriginalLoaderResources` объединяет bitmap-реестр, checksum,
 sound registry и Frame heap. `OriginalCatalogRegistry.onLoad` исполняет
 дочернюю работу непосредственно в точке запроса и получает её новый checksum.

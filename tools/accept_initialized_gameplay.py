@@ -101,7 +101,7 @@ def validated_captures():
     return captures
 
 
-def publish(captures, pins):
+def publish(captures, pins, pin_name='initialized-gameplay-fixture-pins.json'):
     assert all(digest((FIXTURES / name).read_bytes()) == sha for name, sha in pins.items())
     for name, report, raw in captures:
         payload = raw[:-1]
@@ -119,7 +119,7 @@ def publish(captures, pins):
         (ROOT / 'docs/evidence' / (name + '.json')).write_text(json.dumps(report, indent=2) + '\n')
         print(json.dumps(report, indent=2), flush=True)
     pins.update({p.name: digest(p.read_bytes()) for p in FIXTURES.glob('*.json')})
-    (ROOT / 'build/research/initialized-gameplay-fixture-pins.json').write_text(json.dumps(pins, indent=2) + '\n')
+    (ROOT / 'build/research' / pin_name).write_text(json.dumps(pins, indent=2) + '\n')
 
 
 def main():

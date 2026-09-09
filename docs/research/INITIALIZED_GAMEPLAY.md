@@ -42,6 +42,14 @@ loading/catalog calls, later whole outer calls, match prelude/recording and
 gameplay through `41f550`. The post-draw input and output status words are zero.
 This does not establish a real Windows device boundary's effect on FPU state.
 
+Later qualification: [COORDINATE_PRECISION](COORDINATE_PRECISION.md) verifies
+that MenuLoading's EXE shares this CPU, but its non-decoder catalog fscanf
+adapter uses a separately created CRT VM with an unwritten reported FPCW0.
+That is distinct from the settings CRT attached to the game CPU above. The
+main-thread checkpoints do not observe or establish that scanner's effective
+precision. Full game records here retain this supplied scanning boundary;
+explicit53-bit DAT scanning still requires its own comparison.
+
 ## Retained own execution and native state
 
 All pre-existing source comparisons stay active. The initialized run must

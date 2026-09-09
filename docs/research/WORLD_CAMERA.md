@@ -4,6 +4,12 @@ Baseline EXE SHA-256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 Only the original Windows NTSD distribution supplies engine behavior.
 
+Follow-up: [COORDINATE_PRECISION](COORDINATE_PRECISION.md) now repeats all4742
+controlled cases at explicitCW027f and compares Native. Every old case record,
+1133 observed PCs and6898 ordered events reproduces. The direct coordinate
+converter also has dedicated whole legacy/SSE2 tests. HistoricalCW037f evidence
+below is unchanged; no24-bit whole-camera or device-output claim is added.
+
 The native implementation is `OriginalWorldCamera` plus
 `OriginalBackgroundDrawing`, composing the existing `OriginalBitmapDrawing`
 and `OriginalSurfaceFilling`. The public camera call operates on its own

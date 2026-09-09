@@ -58,13 +58,17 @@ def hit_witnesses():
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('kind', choices=['physics', 'links', 'hits'])
+    p.add_argument('kind', choices=['physics', 'links', 'hits', 'camera'])
     p.add_argument('--witnesses', action='store_true', help='Trace the three precision-sensitive hit branches under both words')
     args = p.parse_args()
     if args.witnesses:
         assert args.kind == 'hits'
         return hit_witnesses()
     name = 'world-' + args.kind
+    scope = (__doc__ if args.kind != 'camera' else
+        'Whole original41b5d0..41bc87 camera with actual background/draw children at explicit CW027f. '
+        'Every historical caller input is retained; full pool/masks/globals/backgrounds and ordered '
+        'device requests are compared. Supplied metadata/stack/device boundaries, not Windows or raster output.')
     module = importlib.import_module('oracle_world_' + args.kind)
     report = json.loads((ROOT / 'docs/evidence' / (name + '.json')).read_bytes())
     raw = (ROOT / 'build/original' / report['corpus']).read_bytes()
@@ -79,7 +83,8 @@ def main():
     vm = getattr(module, 'World' + args.kind.title())()
     assert vm.arithmetic_control_word == 0x37f
     vm.arithmetic_control_word = 0x27f
-    outputs = {'poolSHA256', 'maskSHA256', 'globalsSHA256', 'heapSHA256', 'crtAfter', 'events', 'helpers'}
+    outputs = {'poolSHA256', 'maskSHA256', 'globalsSHA256', 'heapSHA256', 'crtAfter', 'events', 'helpers',
+               'backgroundsSHA256', 'backgroundMasksSHA256', 'fillInputs'}
     cases, changed = [], []
     for n, item in enumerate(module.probes()):
         actual = json.loads(json.dumps(vm.probe(item, n)))
@@ -93,11 +98,11 @@ def main():
     assert len(cases) == len(old['cases']) == report['cases']
     doc = {k: v for k, v in old.items() if k not in ('scope', 'cases', 'fpcw', 'instructions')}
     historical = dict(fixture=report['fixture'], sha256=report['fixtureSHA256'])
-    doc.update(scope=__doc__, cases=cases, fpcw=0x27f, instructions=sorted(vm.instructions), historical=historical, changedFrom64=changed)
+    doc.update(scope=scope, cases=cases, fpcw=0x27f, instructions=sorted(vm.instructions), historical=historical, changedFrom64=changed)
     raw = (json.dumps(doc, separators=(',', ':')) + '\n').encode()
     path = ROOT / 'build/original' / (name + '53.json')
     path.write_bytes(raw)
-    report = dict(exeSHA256=EXE_SHA256, scope=__doc__, corpus=path.name, sha256=digest(raw), bytes=len(raw), cases=len(cases),
+    report = dict(exeSHA256=EXE_SHA256, scope=scope, corpus=path.name, sha256=digest(raw), bytes=len(raw), cases=len(cases),
         fpcw=0x27f, groups=dict(Counter(c['group'] for c in cases)), instructions=len(vm.instructions),
         events=sum(len(c['events']) for c in cases), helpers=sum(c['helpers'] for c in cases),
         changedFrom64=len(changed), historical=historical, nativeCompared=False, windowsVerified=False)

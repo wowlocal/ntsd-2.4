@@ -165,3 +165,9 @@ both rollback checks, and both initialized own continuations. Each own chain
 again compared353,341 records /665,509,242 bytes with masks,499 helper returns,
 53 state checkpoints and788 FPU checkpoints, ending at the same unreturned
 41f550. All source-capture and SwiftPM processes were terminal before commit.
+
+Follow-up: [COORDINATE_PRECISION](COORDINATE_PRECISION.md) now validates whole
+conversion and camera53. It also identifies a separate catalog `CRT()` CPU:
+initialized main-thread FPU checkpoints do not establish that scanner's mode.
+Original DAT numeric scans at explicit53 bits are therefore the immediate
+remaining check before expanding the full tick.

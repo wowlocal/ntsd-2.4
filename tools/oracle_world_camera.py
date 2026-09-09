@@ -23,6 +23,7 @@ BITMAP_SIZE=0x1f50
 HELPERS={0x41a250:4,0x41a050:4,0x43f010:24,0x43ef70:0,0x415160:0,0x4450d0:0}
 def signed(v):return (v+0x80000000)%0x100000000-0x80000000
 class WorldCamera(WorldControl):
+ arithmetic_control_word=0x37f
  def __init__(self):
   super().__init__();self.uc.mem_map(BITMAP&~0xfff,0x10000)
   for p,v in [(TARGET,VTABLE),(FILL_TARGET,VTABLE),(VTABLE+0x14,API)]:self.put(p,v)
@@ -137,13 +138,13 @@ class WorldCamera(WorldControl):
   self.uc.reg_write(UC_X86_REG_ESP,BODY_SP);self.uc.reg_write(UC_X86_REG_ECX,WORLD)
   saved=[0x11223344,0x22334455,0x33445566,0x44556677]
   for r,v in zip(REGS,saved):self.uc.reg_write(r,v)
-  self.uc.reg_write(UC_X86_REG_FPCW,0x37f);self.running=True
+  self.uc.reg_write(UC_X86_REG_FPCW,self.arithmetic_control_word);self.running=True
   try:self.uc.emu_start(0x41b5d0 if self.stage=='camera' else 0x41a250,STOP,count=2_000_000)
   except Exception:print('WORLD CAMERA FAILURE',item['label'],hex(self.uc.reg_read(UC_X86_REG_EIP)),flush=True);raise
   finally:self.running=False
   assert self.uc.reg_read(UC_X86_REG_EIP)==STOP and not self.pending and self.clip is None
   assert self.uc.reg_read(UC_X86_REG_ESP)==BODY_SP+(12 if self.stage=='camera' else 8) and [self.uc.reg_read(r) for r in REGS]==saved
-  assert self.uc.reg_read(UC_X86_REG_FPCW)==0x37f and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
+  assert self.uc.reg_read(UC_X86_REG_FPCW)==self.arithmetic_control_word and (self.uc.reg_read(UC_X86_REG_FPSW)>>11)&7==0
   # Only activity bytes may change in World; normalize the LIVE record below.
   now=bytes(self.uc.mem_read(WORLD,WORLD_PREFIX));assert now[:4]==world[:4] and now[404:]==world[404:];world=bytearray(now)
   after_bg=bytearray(self.uc.mem_read(CATALOG+BG,len(bg)))

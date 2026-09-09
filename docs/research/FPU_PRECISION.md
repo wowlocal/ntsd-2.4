@@ -83,6 +83,14 @@ prove that explicit control only. They do not establish the effective numerical
 mode of historical unwritten own chains. Initialized chains explicitly write037f
 and execute actualCRT, avoiding that ambiguity. Do not rewrite old captures.
 
+The subsequent [COORDINATE_PRECISION](COORDINATE_PRECISION.md) validates whole
+legacy/SSE2 conversion and camera53, and exposes a separate catalog-scanner
+CPU inside the initialized chain. The game/attached-settings CPU is023f;
+catalog fscanf still uses another CRT VM reporting unwritten0. Initializing
+one does not establish the other's precision. Explicit53-bit original DAT
+scanning is the next numerical check; the retained own game states remain
+evidence under their supplied scanner boundary.
+
 ## Own-capture limitation
 
 Fresh own early-menu/loading/launch captures inherit FPCW0 because that harness

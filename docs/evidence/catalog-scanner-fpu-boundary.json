@@ -1,0 +1,14 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Observe CPU ownership at initialized early-menu to catalog attachment.\n\nExecutes original initialization and early menus, then attaches MenuLoading.\nDoes not execute the catalog itself or prove any numeric scan result. This\nseparates the attached game-thread CRT from the catalog's standalone scanner.\n",
+  "pc": 4308112,
+  "sp": 268496888,
+  "mainControlWord": 575,
+  "scannerControlWord": 0,
+  "settingsCRTSharesGameCPU": true,
+  "catalogEXESharesGameCPU": true,
+  "catalogScannerSharesGameCPU": false,
+  "nativeCompared": false,
+  "windowsVerified": false
+}

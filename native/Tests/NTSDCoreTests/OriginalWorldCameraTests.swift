@@ -44,6 +44,20 @@ final class OriginalWorldCameraTests: XCTestCase {
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-camera",withExtension: "json",subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 128_000_000))
         XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x37f)
+        try compare(c)
+    }
+    func testEntireCameraAndBackgroundAtStartupPrecision() throws {
+        let url: URL
+        if let directory = ProcessInfo.processInfo.environment["NTSD_COORDINATE_PRECISION_DIRECTORY"] {
+            url = URL(fileURLWithPath: directory).appendingPathComponent("world-camera53.json")
+        } else {
+            url = try XCTUnwrap(Bundle.module.url(forResource: "original-world-camera53",withExtension: "json",subdirectory: "Fixtures"))
+        }
+        let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 128_000_000))
+        XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.fpcw,0x27f)
+        try compare(c)
+    }
+    private func compare(_ c: Corpus) throws {
         XCTAssertEqual(c.ids,[2,122,123,10]);XCTAssertEqual(c.cases.count,4742)
         var headers: [OriginalStateRecord] = [],frames: [[OriginalStateRecord]] = []
         for (i,id) in c.ids.enumerated() {

@@ -61,6 +61,28 @@ own chains (each353341records/665509242bytes+masks/499helpers/53state/788FPU
 checkpoints, same41f550). All source/Swift jobs terminal; NTSDNative linked,
 no app-window/Windows/device claim. Read CONTROL_PRECISION before extending.
 
+The [coordinate audit](docs/research/COORDINATE_PRECISION.md) now compares63,006
+whole4450d0/445106 conversions after original arithmetic at24/53/64 bits, both
+legacy/SSE2. All47 entry-path instructions execute; native already matches, no
+formula changed.41 inputs change legacyEAX at53vs64; directDouble loads and
+retained extended values are checked separately. Whole camera/background4742
+cases also match at explicit53, retaining all old case records/1133PCs/6898events.
+IMPORTANT newly verified boundary: MenuLoading's catalog EXE shares the initialized
+gameCPU, but Objects creates a SEPARATE CRT() for non-decoder fscanf. It reports
+unwrittenCW0; the main/attached-settingsCPU has023f. Fresh original early menus
+plus observer attachment verify these CPU identities at41bc90. The initialized
+own-chain FPU checkpoints do NOT establish the catalog scanner's precision.
+No changed DAT result is claimed by that ownership probe. NEXT verify original
+catalog DAT numeric scans at explicit53 and independently loaded native bytes;
+retain old scanner boundary evidence. Then whole40d960/postdraw41f550..4214cf.
+GeneralCRT lexer/rounding, actual thread/CPUflag45971c, fulltick/app/Windows and
+cleanMac remain open. Read COORDINATE_PRECISION for reproduction and limits.
+Acceptance2release tests5.469s/build122.55s passed before2lossless fixtures;
+all152old hashes unchanged,154current pins in
+build/research/coordinate-precision-fixture-pins.json. Final packaged3tests
+10.523s/build123.30s passed, including retained64-bit camera. Native runtime
+unchanged; all source/probe/Swift jobs terminal; no app/Windows/device claim.
+
 ## Authoritative reference
 
 - Use **only the original Windows NTSD distribution** as the behavioral reference.
