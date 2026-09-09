@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Continue own gameplay through caller41eed8 and whole419380/4064d0.\nFreshly reproduces all menu/loading/launch/control/physics/held-object parents\non the same CPU/stack. No gameplay stimuli or imported expected state.\nStops41eefb before item/hit-resolution passes; not a full tick or match.\n",
+  "corpus": "gameplay-contacts-control.json",
+  "sha256": "75c8585a6f2ac8e89b51ff5980cb6f0ff998f8fd556b4e3a515c79bd99e0d2b8",
+  "bytes": 674582,
+  "parent": {
+    "fixture": "original-gameplay-links-control.json",
+    "sha256": "a4093ee349a2d6e93699991264e6d7c2f74983ea77dbc5fd8ac328d8c7a312b9"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4321019,
+    "sp": 268495292
+  },
+  "helpers": 4,
+  "checkpoints": 0,
+  "instructions": 163,
+  "readsBeforeWrites": [],
+  "fixture": "original-gameplay-contacts-control.json",
+  "fixtureSHA256": "c57fb48ab17a72403a20704c8d5ea60cb8c9043a44fba9e08a75dd2c62509730",
+  "fixtureBytes": 187866
+}

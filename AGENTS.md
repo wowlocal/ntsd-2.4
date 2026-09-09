@@ -1557,6 +1557,54 @@ with item-spawn between, remainingcpoint/link helpers/second417f80/draw/camera/
 scheduler/recovery and full tick return. Practice/UI, Windows/cleanMac,
 continuous gameplay, first full match and complete goal remain open.
 
+The [whole contact collection](docs/research/WORLD_CONTACTS.md) now implements
+caller41eed8..41eefb, all419380/417200/417400/4171c0 and mandatory4064d0 tail.
+Caller44d05c==2 resets0 and skips EVERYTHING including fusion cooldowns.
+Otherwise400-slot prefix copies70->7c; resetsEC foritrCount0 orstate1001 whose
+owner currentwpointE8==0, without417f80 reciprocal/activity validation. Ascending
+active!=0 pairs decrement positive SIGNED Int8 vrest in BOTH directions, then
+broad/pair i->j and j->i with live state/World aliases. Broad counts use current70,
+bounds/centers usecollision7c; effect2/20/21 also readseparate78. Rectangle4171c0
+uses strict signed WRAPPED differences. Full417400 retains entry Frame pointers,
+reads actual raw80-byte ITR/40-byte BDY via mask-checked native Frame allocations,
+never host pointers/projected sanitized boxes. DAT kinds/effects/team/owner/mode
+filters, source-ID exceptions200/203/205/206/207/215/216/209/212 and201/202, depth,
+nearest/multiple buffers2e4/2e8/2ec, signed distances and RNG133/134 follow EXE.
+Negative counts can write earlier bytes WITHIN Actor; unknown/out-of-extent
+storage throws. No new per-character allowlist. This COLLECTS, not resolves hits.
+4064d0 scans20 slots; positive338 decrements eveninactive, fusion activityEXACT1.
+ID7/8->51 uses original HP177/cooldown/state/distance/team gates and firstcatalog
+51, preserves wrapped/clamped resources, zeros OWNvx/OTHERvy, averagesix/z,
+saves IDs/owner/cooldown4500 and continues scanning afterdeactivation. Unfusion
+51/328==1/frame<9or>260/338<=0 scans ALL catalog, first branch330 andelse334,
+reconstructs everyduplicate334 with real4061d0, preserves constructor masks;
+missingIDs/aliases still run sequential HP/redHP halves,frame112/MP0/team/facing.
+7925 synthetic cases match full424408 pool bytes/masks and46144globals,188787
+real helper returns/1578 unique instructions/3737 ordered RNG/constructor events.
+All instructions of four main bodies reached except skippedalignment41960d;
+NOT all branch outcomes, arbitrary storage or natural DAT/gameplay coverage.
+First6640 Native5.164s/build106.98s; directed expansion from source instruction
+inventory adds mirror/gates/held distance/prefix lanes/clamps/caller controls.
+Two fresh own source runs reproduced all GAMEPLAY_LINKS parents on same CPU/stack,
+then continued through419380/4064d0 to41eefb,4helpers/163instructions each,
+0undefinedcatalog reads. Only ownActor7c0->219 forNaruto/Sasuke changes inpool;
+masks/globals/CRT/earlyresources/101BG/854bitmaps/music/replay630e18 unchanged.
+Native own comparison36.749s;67462records/626775884bytes+masks/920helpers/
+66checkpoints WITH parents. Newstage8helpers, no own contact/constructor/RNG
+events. Joined raw5tests42.869s/build105.97s passed, including failure AFTER
+prefix/actualRNG with wholeWorld/pool/global rollback and rawheap masks/offsets.
+Public caller is atomic; observers buffer events until wholetick commits.
+Batch acceptance5tests42.719s/build106.97s then published3 losslessfixtures.
+All120oldfixtures unchanged; allnew raw/packedSHA/size/fullJSON verified;
+Packed new/retained Actor/World physics, links, GameplayControl/Physics/Links/
+Contacts and MatchLaunch passed19release XCTest/220.175s/build107.37s, also
+compiled/linkedNTSDNative. Allsource/Swift processes terminal; noUI/W claim.
+123pins build/research/gameplay-contacts-fixture-pins.json. Read WORLD_CONTACTS
+beforeextending. Same unreturned4246b0/SP1000e9bc,phase1/tick1,frame219,
+HP500/MP200,RNG39/0. NEXT own41eefb: type-separated42e100 with itemspawn between,
+remainingcpoint/link helpers/second417f80/draw/camera/scheduler/recovery/fulltick.
+Practice/UI, natural DAT sequences, Windows/cleanMac, fullmatch/goal remainopen.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

@@ -94,6 +94,13 @@ Generic wpoint placement, item consumption, throws and ordered RNG run on the
 shared400-slot pool. Source-ID exceptions and pointer aliases follow the EXE.
 Contact collection, further links and the rest of the full tick are next.
 
+The [whole contact collection](docs/research/WORLD_CONTACTS.md) now matches
+7,925 controlled cases, including raw ITR/BDY geometry and filters, ordered
+candidate lists, signed rest timers and the original fusion/unfusion tail.
+Both own launch chains match through41eefb with all retained resources/music/
+replay. The following hit-resolution/item passes, full tick, app integration
+and Windows comparison remain open.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other
