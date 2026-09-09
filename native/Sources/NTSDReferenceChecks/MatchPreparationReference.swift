@@ -9,6 +9,7 @@ import NTSDCore
 public enum MatchPreparationReference {
     public struct Result {
         public var cases = 0, records = 0, bytes = 0, constructors = 0, randomCalls = 0, bitmaps = 0, releases = 0
+        public var commandEvents = 0, commandConstructors = 0
     }
     private struct Blob: Decodable { let count: Int, deflate: String }
     private struct Packed: Decodable { let count: Int, deflate: String, sha256: String }
@@ -17,6 +18,7 @@ public enum MatchPreparationReference {
     private struct Snapshot: Decodable {
         let world: Record, actors: [Record], backgrounds: [Record], globals: String
         let random: RandomState, bitmapCount: Int, released: [UInt32]
+        let requestedID: Int32?
     }
     private struct Write: Decodable { let address: UInt32, bytes: String }
     private struct Call: Decodable, Equatable {
@@ -26,12 +28,18 @@ public enum MatchPreparationReference {
     }
     private struct Bitmap: Decodable { let address: UInt32, path: String, optional: UInt32, storage: Record }
     private struct Event: Decodable { let kind: String, address: UInt32? }
+    private struct CommandEvent: Decodable, Equatable { let kind: String, arguments: [UInt32] }
+    private struct Commands: Decodable {
+        let after: Snapshot, events: [CommandEvent], retainedAfter: UInt32?
+    }
     private struct Case: Decodable {
         let label: String, mode: Int32, stimulus: [Write], before: Snapshot, after: Snapshot
         let constructors: [Int], calls: [Call], bitmaps: [Bitmap], events: [Event]
         let continued: Snapshot?
+        let commands: Commands?
     }
     private struct Corpus: Decodable {
+        let initialRequestedID: Int32?, libSHA256: String?
         let exeSHA256: String, loadedFixtureSHA256: String, loadedCatalogSHA256: String
         let catalogAddress: UInt32, worldAddress: UInt32, actorAddresses: [UInt32], objectAddresses: [UInt32]
         let bitmapAddresses: [UInt32], surfaceAddress: UInt32, globalAddress: UInt32, globalInitial: String
@@ -93,6 +101,10 @@ public enum MatchPreparationReference {
               corpus.actorAddresses.count == 400, Set(corpus.actorAddresses).count == 400,
               corpus.objectAddresses.count == catalog.objects.count, Set(corpus.objectAddresses).count == catalog.objects.count,
               corpus.bitmapAddresses.count == catalog.bitmaps.count, corpus.staged.actors.count == 400 else { throw error("Unknown/broken source bindings") }
+        var library = corpus.initialRequestedID.map { OriginalLibStageCommands(requestedObjectID: $0) }
+        if library != nil {
+            guard corpus.libSHA256 == "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba" else { throw error("Unknown library") }
+        }
         var cache: [String: [UInt8]] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -140,6 +152,7 @@ public enum MatchPreparationReference {
         var state = try OriginalMatchPreparation(catalog: catalog, bootstrap: bootstrap,
                                                 globals: .init(bytes: globals, defined: [Bool](repeating: true, count: globals.count)))
         func snapshot(_ item: Snapshot, _ label: String) throws {
+            guard item.requestedID == library?.requestedObjectID else { throw error("\(label): library requested ID") }
             guard item.actors.count == 400, item.backgrounds.count == 101, item.bitmapCount == state.bitmaps.count,
                   Set(try item.released.map { address -> Int in
                       guard let i = bitmapMap[address] else { throw error("Unknown released bitmap") }; return i
@@ -176,6 +189,12 @@ public enum MatchPreparationReference {
                     for (i, byte) in bytes.enumerated() { try state.world.write(byte, at: offset+i) }
                 } else if write.address >= corpus.globalAddress, write.address < corpus.globalAddress+UInt32(OriginalMatchPreparation.globalSize) {
                     for (i, byte) in bytes.enumerated() { try state.globals.write(byte, at: Int(write.address-corpus.globalAddress)+i) }
+                } else if library != nil, write.address >= corpus.catalogAddress+0x4d45db0,
+                          write.address < corpus.catalogAddress+0x4d45db0+101*0x990 {
+                    let offset = Int(write.address-corpus.catalogAddress-0x4d45db0)
+                    guard offset % 0x990 == 0xc, bytes.count == 4 else { throw error("Unsupported library BG stimulus") }
+                    let value = bytes.enumerated().reduce(UInt32(0)) { $0 | UInt32($1.element) << ($1.offset*8) }
+                    try state.setBackgroundPerspectiveInput(Int32(bitPattern: value), background: offset/0x990)
                 } else {
                     guard let (address, slot) = actorMap.first(where: { $0.key <= write.address && write.address < $0.key+UInt32(OriginalStateRecord.actorSize) }) else { throw error("Unknown stimulus allocation") }
                     let offset = Int(write.address-address)
@@ -193,10 +212,11 @@ public enum MatchPreparationReference {
             try beforePreparation(caseIndex, &state)
             try snapshot(item.before, item.label+" before")
             var calls: [Call] = [], constructors: [Int] = [], requests: [String] = []
-            try state.prepare(mode: item.mode, bitmapSource: { path in
+            let bitmapSource: (String) throws -> OriginalBitmapInput = { path in
                 guard let input = assets[path] else { throw error("Missing layer asset \(path)") }
                 requests.append(path); return input
-            }, observe: { event in
+            }
+            let observe: (OriginalMatchPreparationEvent) throws -> Void = { event in
                 switch event {
                 case .reconstruct(let slot): constructors.append(slot)
                 case .random(let stream, let range, let value, let bi, let bc, let i, let c):
@@ -208,7 +228,17 @@ public enum MatchPreparationReference {
                 case .resumeMusic: calls.append(.init(kind: "resume-music"))
                 case .musicPath: calls.append(.init(kind: "music-path"))
                 }
-            })
+            }
+            if var ownLibrary = library {
+                try state.prepareUsingBundledLibrary(mode: item.mode, library: &ownLibrary, uninitializedPerspective: { index in
+                    // This corpus's catalog allocation was independently built
+                    // over a5 backing. The untouched BG99 field stays undefined.
+                    guard index == 99, catalog.backgrounds[99].defined[0xc..<0x10].allSatisfy({ !$0 }),
+                          catalog.backgrounds[99].bytes[0xc..<0x10].allSatisfy({ $0 == 0xa5 }) else { throw error("Unavailable library perspective backing") }
+                    return Int32(bitPattern: 0xa5a5a5a5)
+                }, bitmapSource: bitmapSource, observe: observe)
+                library = ownLibrary
+            } else { try state.prepare(mode: item.mode, bitmapSource: bitmapSource, observe: observe) }
             guard calls == item.calls, constructors == item.constructors, requests == item.bitmaps.map(\.path) else { throw error("\(item.label): call/constructor/layer request order") }
             for bitmap in item.bitmaps {
                 let index = bitmapMap.count
@@ -226,6 +256,21 @@ public enum MatchPreparationReference {
             }
             guard released == state.releasedBitmapOrder else { throw error("Layer release order") }
             try snapshot(item.after, item.label+" after")
+            if let commands = item.commands {
+                guard let ownLibrary = library else { throw error("Command join without library ownership") }
+                var retained: Int32?, events: [CommandEvent] = []
+                try OriginalPostDrawCommands.apply(state: &state, retainedSpawnSlot: &retained, library: ownLibrary) { event in
+                    switch event {
+                    case let .random(stream, range, value): events.append(.init(kind: "random", arguments: [stream, range, value].map(UInt32.init(bitPattern:))))
+                    case let .reconstruct(slot): events.append(.init(kind: "reconstruct", arguments: [UInt32(slot)]))
+                    case let .resumeMusic(slot, control): events.append(.init(kind: "resumeMusic", arguments: [UInt32(slot), control]))
+                    }
+                }
+                guard events == commands.events, retained.map(UInt32.init(bitPattern:)) == commands.retainedAfter else { throw error("\(item.label): own command events/retained slot") }
+                try snapshot(commands.after, item.label+" commands")
+                result.commandEvents += events.count
+                result.commandConstructors += events.filter { $0.kind == "reconstruct" }.count
+            }
             try afterPreparation(caseIndex, &state)
             if let continued = item.continued { try snapshot(continued, item.label+" continued") }
             result.cases += 1; result.constructors += constructors.count; result.bitmaps += item.bitmaps.count

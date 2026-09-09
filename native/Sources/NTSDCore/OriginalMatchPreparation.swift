@@ -49,6 +49,13 @@ public struct OriginalMatchPreparation {
         backgroundLoader.resources = catalog.resources
     }
 
+    /// Declared background input for controlled preparation boundaries.
+    /// Loading and application callers normally retain their loaded DAT value.
+    public mutating func setBackgroundPerspectiveInput(_ value: Int32, background: Int) throws {
+        guard backgrounds.indices.contains(background) else { throw Self.error("Background input binding") }
+        try backgrounds[background].write(value, at: 0xc)
+    }
+
     /// No selected-player defaults are invented here. Before entry, the caller
     /// supplies 451288 status codes, base-slot Object/team/activity and mode,
     /// arena selection and RNG state. Unsupported preparation rolls back storage.
@@ -61,11 +68,30 @@ public struct OriginalMatchPreparation {
                                  },
                                  observe: (OriginalMatchPreparationEvent) throws -> Void = { _ in }) throws {
         var candidate = self
-        try candidate.consume(mode: mode, bitmapFill: bitmapFill, bitmapSource: bitmapSource, music: music, observe: observe)
+        var library: OriginalLibStageCommands?
+        try candidate.consume(mode: mode, library: &library, uninitializedPerspective: nil, bitmapFill: bitmapFill, bitmapSource: bitmapSource, music: music, observe: observe)
         self = candidate
     }
 
-    private mutating func consume(mode: Int32, bitmapFill: UInt8,
+    /// The installed library changes three sites inside this same whole caller.
+    /// Preserve the requested ID and original register clobber; commit both
+    /// native game state and library state only after the operation succeeds.
+    public mutating func prepareUsingBundledLibrary(mode: Int32, library: inout OriginalLibStageCommands,
+        uninitializedPerspective: ((Int32) throws -> Int32)? = nil,
+        bitmapFill: UInt8 = 0xa5, bitmapSource: (String) throws -> OriginalBitmapInput,
+        music: (inout OriginalMatchPreparation) throws -> Void = { state in
+            guard try state.globals.integer(at: 0x44d010-Self.globalBase, as: Int32.self) == 0 else {
+                throw OriginalLoaderError.outsideVerifiedDomain("Enabled match music caller is not connected")
+            }
+        }, observe: (OriginalMatchPreparationEvent) throws -> Void = { _ in }) throws {
+        var candidate = self, nextLibrary: OriginalLibStageCommands? = library
+        try candidate.consume(mode: mode, library: &nextLibrary, uninitializedPerspective: uninitializedPerspective, bitmapFill: bitmapFill,
+            bitmapSource: bitmapSource, music: music, observe: observe)
+        self = candidate; library = nextLibrary!
+    }
+
+    private mutating func consume(mode: Int32, library: inout OriginalLibStageCommands?,
+                                  uninitializedPerspective: ((Int32) throws -> Int32)?, bitmapFill: UInt8,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
                                   music: (inout OriginalMatchPreparation) throws -> Void,
                                   observe: (OriginalMatchPreparationEvent) throws -> Void) throws {
@@ -117,7 +143,24 @@ public struct OriginalMatchPreparation {
             let arena = backgrounds[Int(background)]
             let width = try arena.integer(at: 0, as: Int32.self)
             let lower = try arena.integer(at: 4, as: Int32.self), upper = try arena.integer(at: 8, as: Int32.self)
-            let x = try draw(status > 10 ? 0xdb : 0xdd, width/2) &+ (width/4)
+            func perspective() throws -> Int32 {
+                do { return try arena.integer(at: 0xc, as: Int32.self) }
+                catch OriginalStateError.undefinedBytes {
+                    guard let uninitializedPerspective else { throw OriginalStateError.undefinedBytes(offset: 0xc, count: 4) }
+                    return try uninitializedPerspective(background)
+                }
+            }
+            if status > 10, library != nil {
+                library!.requestedObjectID = try perspective()
+            }
+            var randomX = try draw(status > 10 ? 0xdb : 0xdd, width/2)
+            if status <= 10, library != nil {
+                library!.requestedObjectID = try perspective()
+                //10001b48 overwrites live ECX after the RNG result was saved
+                //there. The original42d483 therefore adds this ID, not randomX.
+                randomX = library!.requestedObjectID
+            }
+            let x = randomX &+ (width/4)
             let z = try draw(status > 10 ? 0xdc : 0xde, upper &- lower) &+ lower
             try actors[slot].write(x, at: 0x10)
             try actors[slot].write(Int32(0), at: 0x14)
@@ -134,6 +177,7 @@ public struct OriginalMatchPreparation {
             }
         }
         for address in stride(from: 0x450c04, through: 0x450c28, by: 4) { try setGlobal(address, 0) }
+        if library != nil { try globals.write(UInt8(3), at: 0x450bb8-Self.globalBase) }
         for index in 0..<Int(backgroundCount) {
             try observe(.releaseLayers(index))
             releasedBitmapOrder += try backgroundLoader.releaseLayers(in: &backgrounds[index])

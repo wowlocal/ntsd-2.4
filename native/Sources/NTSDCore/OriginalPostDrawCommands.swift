@@ -9,12 +9,13 @@ public enum OriginalPostDrawCommandEvent: Equatable {
 /// atomically; observers must buffer device requests until the tick commits.
 public enum OriginalPostDrawCommands {
     public static func apply(state: inout OriginalMatchPreparation, retainedSpawnSlot: inout Int32?,
-                             sse2: Bool = false, observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+                             sse2: Bool = false, library: OriginalLibStageCommands? = nil,
+                             observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog, backgrounds = state.backgrounds
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
         try apply(world: &state.world, actors: &state.actors, globals: &state.globals, retainedSpawnSlot: &retainedSpawnSlot,
-            sse2: sse2, objectCount: registry.integer(at: 0, as: Int32.self), header: { n in
+            sse2: sse2, objectCount: registry.integer(at: 0, as: Int32.self), library: library, header: { n in
                 guard catalog.objects.indices.contains(n) else { throw error("Object binding") }; return catalog.objects[n].header
             }, frame: { n, f in
                 guard catalog.objects.indices.contains(n), catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Frame binding") }
@@ -25,7 +26,7 @@ public enum OriginalPostDrawCommands {
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw commands: "+text) }
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
-                      retainedSpawnSlot: inout Int32?, sse2: Bool, objectCount: Int32,
+                      retainedSpawnSlot: inout Int32?, sse2: Bool, objectCount: Int32, library: OriginalLibStageCommands? = nil,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       background: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
@@ -34,7 +35,7 @@ public enum OriginalPostDrawCommands {
                 try withoutActuallyEscaping(background) { backgrounds in
                     try withoutActuallyEscaping(observe) { observer in
                         var body = Body(world: world, actors: actors, globals: globals, retainedSlot: retainedSpawnSlot,
-                            sse2: sse2, objectCount: objectCount, header: headers, frame: frames, background: backgrounds, observe: observer)
+                            sse2: sse2, objectCount: objectCount, library: library, header: headers, frame: frames, background: backgrounds, observe: observer)
                         try body.run()
                         world = body.world; actors = body.actors; globals = body.globals; retainedSpawnSlot = body.retainedSlot
                     }
@@ -46,6 +47,7 @@ public enum OriginalPostDrawCommands {
         var world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord
         var retainedSlot: Int32?
         let sse2: Bool, objectCount: Int32
+        let library: OriginalLibStageCommands?
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let background: (Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawCommandEvent) throws -> Void
@@ -68,13 +70,20 @@ public enum OriginalPostDrawCommands {
             try globals.write(Int32(random.counter), at: 0x450c34-0x44d000)
             try observe(.random(stream: stream, range: range, result: result)); return result
         }
-        mutating func spawn() throws {
+        mutating func spawn(requestedObjectID: Int32? = nil) throws {
             var candidates: [Int] = []
             if objectCount > 0 {
                 for n in 0..<Int(objectCount) {
                     let id = try header(n).integer(at: 0x6f4, as: Int32.self)
-                    if id < 100 || id >= 200 { continue }
-                    if try id == 122 && draw(208, 2) == 0 { continue }
+                    if let requestedObjectID {
+                        // The DLL reads the first header ID before testing zero,
+                        // accepts every exact match, and performs no208 draw.
+                        if requestedObjectID == 0 { return }
+                        if id != requestedObjectID { continue }
+                    } else {
+                        if id < 100 || id >= 200 { continue }
+                        if try id == 122 && draw(208, 2) == 0 { continue }
+                    }
                     candidates.append(n)
                 }
             }
@@ -146,6 +155,7 @@ public enum OriginalPostDrawCommands {
         }
         mutating func run() throws {
             if try global(0x450bb8) == 1 { try spawn() }
+            else if let library, try global(0x450bb8) == 3 { try spawn(requestedObjectID: library.requestedObjectID) }
             for slot in 0..<400 where try active(slot) != 0 { try recover(slot) }
         }
     }

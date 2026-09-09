@@ -1,0 +1,41 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "scope": "Whole library-enabled preparation, then its own command3 consumer.\n\nRestore the pinned complete loaded catalog and run original World/bootstrap.\nActual relocated DLL installation precedes whole42d1ff..42d6ed preparations.\nEach own resulting state then enters whole4214d5..421a15 at a declared fresh\ncaller ABI. No intervening gameplay tick is skipped under a full-tick claim:\nthis is an explicit controlled producer/consumer join, not an initialized app.\nMenu/RNG/music, optional BG perspective and command-word stimuli are declared.\nThe library's459ff8 word starts from an explicit retained boundary value; later\nconsumers use the actual previous producer output, never expected-state bytes.\n",
+  "corpus": "lib-match-preparation-ramp.json",
+  "sha256": "53331cce32dd7c6beae5305fd29830c9e403b7b89604c0720d46c065a345a257",
+  "bytes": 15629721,
+  "cases": 35,
+  "instructions": 1094,
+  "libraryAccesses": 1565,
+  "commandEvents": {
+    "random": 16,
+    "reconstruct": 4
+  },
+  "commandHelpers": 32,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "relocations": 76,
+  "installerDLLStarts": 104,
+  "installedPatches": 13,
+  "installedBytes": 62,
+  "blobs": 3677,
+  "undefinedPerspectiveReadEvents": 7,
+  "commandHelperReturns": 32,
+  "observedPCs": 1094,
+  "excludedAdapters": [
+    4451600,
+    4477088,
+    4477100
+  ],
+  "actualEXEStarts": 1053,
+  "actualDLLStarts": 38,
+  "rawBytes": 15629721,
+  "rawSHA256": "53331cce32dd7c6beae5305fd29830c9e403b7b89604c0720d46c065a345a257",
+  "fixture": "original-lib-match-preparation-ramp.json",
+  "fixtureSHA256": "5e968890b9acdf2a3b65ab87fbb8761e37d449c6182cdf34fda0ec11c4a9cb8c",
+  "fixtureBytes": 2474804,
+  "wholeInitializedApplicationCompared": false,
+  "wholeLibraryNativeCompared": false,
+  "pristineFixturesRewritten": false
+}

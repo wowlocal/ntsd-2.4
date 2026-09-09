@@ -74,11 +74,53 @@ including retained pristine menu presentation. Source and owned SwiftPM jobs
 terminal0.198priorpins unchanged/200current (includes concurrent active-gameplay
 publication); full raw/packed bytes/JSON/SHA and10vendor hashes verified.
 
+[LIB_STAGE_COMMANDS](docs/research/LIB_STAGE_COMMANDS.md) now implements the
+whole library-enabled42d1ff..42d6ed preparation and4214d5..421a15 consumer.
+OriginalLibStageCommands owns459ff8 with a required initial input. The native
+consumer uses its own producer's output; no source after-state is injected.
+Status1...10 hook42d473 overwrites liveECX AFTER RNG0xdd, so X becomes signed
+BG+0xc+width/4 while still consuming RNG. Status>10 hook42d30b sets459ff8 BEFORE
+RNG0xdb, retaining randomX. Later mode1 positioning remains.42d5ce writes only
+byte450bb8=3; upper bytes survive. Command3 accepts all exact/duplicate signed
+IDs in catalog order, without command1's100..<200 filter or122 selection draw.
+Zero target still reads first header when count>0. Full pool retainsSP34 and
+consumes FOUR coordinate draws before dereference. Flags remain until HUD.
+
+All4330 controlled commands compare full400Actors/World bytes+masks, globals,
+SP34 and6361events/9923helper returns;544EXE+29DLL actual starts. All3898prior
+whole results reproduce unchanged through the installed library. Two35-case
+preparation/consumer chains independently rebuild the whole catalog and compare
+107732records/160959136bytes+masks,26942preparation constructors/756RNG,
+1096bitmaps/1066releases; consumers add32RNG/8constructors/64helper returns.
+Own requested-word3130accesses; each3677storage blobs.1094observed starts minus
+3declared bitmap/memset/allocation adapters=1053EXE+38DLL actual starts.
+Research relocation76HIGHLOW entries precedes actual104-PC DLL installation;
+no native DLL or executable-memory patching. The between-caller command ABI
+is DECLARED: this connection does not run the intervening initialized tick.
+
+BG99+0xc is UNINITIALIZED. Each chain records7actual reads of untouched a5
+catalog backing with zero masks. Native defaults to undefinedBytes rejection
+and rollback; comparisons explicitly resolve that one word from independently
+rebuilt declared a5 backing. Actual application allocator provenance stays open.
+Do not call this an unrestricted native domain or import expected source bytes.
+Four native-only preparation rollback trials cover missing backing and late
+reset-input observers; command tests cover constructors/music/retained slot.
+Buffer external effects until the whole encompassing operation commits.
+
+Final packaged11release tests passed19.391s/build171.40s: new4330commands,
+70preparation/consumer cases, rollback and retained50pristine preparations/
+3898commands.200oldpins unchanged/203at publication; fullraw34991910/packed
+5155811bytes,JSON/SHA/7354storage blobs and10vendor hashes independently verify.
+Source and owned SwiftPM jobs terminal; NTSDNative linked, no app/window/device
+claim. Initial source failures preserved: return-marker mapping, omitted
+command EBX and actual undefined BG99 read. The host-Python transport API was
+corrected after native tests passed, before any fixture publication; no expected
+source result changed. Isolated514committed native files plus9overlays exclude
+concurrent actor-control work. Python/137local Markdownlinks/owned diff pass.
+
 Remaining hooks include430c8c movement,4176ac/4177b9 hits,42fcb1damage,
-41f5fc transforms,41408b physics,424352loading,4214d7commands and preparation
-42d30b/42d473/42d5ce. Preparation writes byte450bb8=3 and459ff8 consumed by
-new command3: connect these together, not the old own zero-flag path. Recover
-Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
+41f5fc transforms,41408b physics and424352loading, plus transparent-text routing.
+Recover Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
 Old pristine-EXE fixture bytes remain immutable and valid in their declared
 unloaded-library controls; they do NOT establish the DLL-enabled application.
 Active captures are separate pristine controls: inspect their current process

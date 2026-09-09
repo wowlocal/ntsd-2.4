@@ -14,9 +14,12 @@ The first native replacement is
 [OriginalLibSurfaceText](../../native/Sources/NTSDCore/OriginalLibSurfaceText.swift).
 It matches276 calls through the actually installed401290 jump and complete DLL
 text routine, including six retained-state calls. Native preserves transparent
-background mode, the retained DC and the original HRESULT behavior. The other
-eleven jump destinations, the two-byte loading-label patch, their enclosing
-callers and a fresh initialized application join remain open.
+background mode, the retained DC and the original HRESULT behavior.
+[LIB_STAGE_COMMANDS](LIB_STAGE_COMMANDS.md) now compares the command hook and
+three whole-preparation hooks, connecting their own requested-ID output to the
+whole consumer. Seven remaining jump destinations, the two-byte loading-label
+patch, enclosing library-enabled callers and a fresh initialized application
+join remain open.
 
 ## Pinned artifacts and actual entry path
 
@@ -86,8 +89,9 @@ entries and follows control flow, keeping embedded pointer data separate.
 ## Installed hooks and remaining work
 
 These destinations are established by actual copy requests and verified jump
-bytes. Behavior notes other than the text row are static findings, not native
-comparisons or complete branch analyses.
+bytes. Text and preparation/commands now have separate native studies. The
+remaining behavior notes are static findings, not native comparisons or complete
+branch analyses.
 
 | EXE patch | DLL destination | Recovered role / required work |
 | --- | --- | --- |
@@ -100,16 +104,17 @@ comparisons or complete branch analyses.
 |401290|10001298|Whole replacement text routine; native276-call comparison completed below.|
 |424352|10001236|Loading-label selection/text/color changes before4243b1.|
 |424357|two bytes `90 90`|Accompanies the preceding loading-label jump; preserve as part of that source path.|
-|4214d7|10001a9a|Post-draw command3 and catalog lookup using459ff8; continuations4214e4/42154e/421552/42179b.|
-|42d5ce|10001b1b|Retains450c1c write and writes byte450bb8=3 before42d5d4.|
-|42d30b|10001b2e|Copies a catalog/stage field into459ff8 before42d312.|
-|42d473|10001b48|The alternate preparation path also sets459ff8 before42d47a.|
+|4214d7|10001a9a|Whole command3/catalog consumer compared in [LIB_STAGE_COMMANDS](LIB_STAGE_COMMANDS.md), retaining distinct continuations.|
+|42d5ce|10001b1b|Whole preparation compared: retains450c1c write and writes only byte450bb8=3.|
+|42d30b|10001b2e|Whole preparation compared: copies BG perspective+0xc into459ff8 before X RNG.|
+|42d473|10001b48|Whole preparation compared: sets459ff8 and overwrites live ECX, changing X despite consuming RNG.|
 
-Preparation's byte450bb8=3 feeds the replacement post-draw command path; these
-must be connected together. Existing own pristine chains with zero command
-flags do not establish this enabled library path. The new459ff8 storage lies
-outside the current loaded-match globals record and needs explicit ownership.
-Do not extend a record with expected source bytes to conceal that gap.
+Preparation's byte450bb8=3 feeds the replacement post-draw command path. Their
+controlled own-state connection is now compared in LIB_STAGE_COMMANDS, with
+explicit semantic ownership of459ff8 and declared backing for uninitialized
+BG99 perspective. The initialized application connection remains open. Existing
+pristine chains with zero command flags do not establish that enabled path.
+No global record is extended with expected source bytes to conceal provenance.
 
 The transform hook also contains a write through Actor+0x7b4 and the damage
 hook contains a0xb2 stride. Their allocation/layout and branch applicability
