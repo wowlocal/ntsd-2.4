@@ -1,0 +1,29 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole40e490 with actual sound416fb0/417090 and conversion4450d0.\nDeclared synthetic Actors/Objects/Frames/globals, original constructors,\nx87 round-to-nearest64-bit significand (CW037f), no game/helper stubs.\nEntire Actor bytes/masks, globals SHA and ordered sound requests are compared.\nThis does not cover the World death/spawn caller or complete match physics.\n",
+  "corpus": "actor-physics.json",
+  "sha256": "9b3b01eee36dc4cb93eda8faf41393f623204d7625665b383755c3b183ef6aa6",
+  "bytes": 43602183,
+  "cases": 9344,
+  "groups": {
+    "type-state": 4200,
+    "gravity": 150,
+    "friction": 60,
+    "blocking": 288,
+    "gates": 112,
+    "air-frames": 280,
+    "damage": 840,
+    "weapon": 288,
+    "landing": 96,
+    "conversion": 20,
+    "type3-depth": 8,
+    "changed-frame": 2,
+    "numeric": 3000
+  },
+  "instructions": 914,
+  "events": 804,
+  "nativeCompared": true,
+  "fixture": "original-actor-physics.json",
+  "fixtureSHA256": "1b9be74a53a5ece8f20763810eb49a9dee5ee90fbc3b22be8ca2cd217dcc50d2",
+  "fixtureBytes": 631432
+}

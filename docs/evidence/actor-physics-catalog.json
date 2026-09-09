@@ -1,0 +1,20 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole40e490 on every present frame of all137 original Objects, three\ndeclared motion conditions per frame. Pinned unmodified LOADED_CATALOG,\noriginal DAT hashes/read masks, CW037f. Actor/global/caller inputs are synthetic;\nthis is data coverage, not continuous gameplay or the World lifecycle caller.\n",
+  "corpus": "actor-physics-catalog.json",
+  "sha256": "1b3b9859c022b002c719c237c4e48a9f826ddd0624bf71c63398e91d80ae1b1a",
+  "bytes": 211437480,
+  "cases": 46089,
+  "objects": 137,
+  "frames": 15363,
+  "instructions": 790,
+  "events": 1707,
+  "parent": {
+    "fixture": "original-loaded-catalog.json",
+    "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e"
+  },
+  "nativeCompared": true,
+  "fixture": "original-actor-physics-catalog.json",
+  "fixtureSHA256": "2dc081cf3a418c622f1c42732fcc88bbef7687d55dccf698ffff6992c94f7bfa",
+  "fixtureBytes": 2057873
+}

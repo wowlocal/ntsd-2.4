@@ -119,3 +119,8 @@ swift test --package-path native -c release --filter 'Original(WorldControl|Game
 всего такта. Начальные скорости0.1 и наблюдённый первый landing frame219
 сохраняются; Practice с обнулёнными скоростями не заменяет этот путь.
 UI приложения, законченный матч, реальный Windows-эталон и чистая macOS открыты.
+
+Продолжение: [ACTOR_PHYSICS](ACTOR_PHYSICS.md) и [WORLD_PHYSICS](WORLD_PHYSICS.md)
+теперь переносят обе эти стадии и нативно сравнивают оба собственных запуска
+до41eed1. Прежний control-only corpus/check сохраняет остановку41e634;
+новые physics fixtures сравнивают обе секции. Далее исходный Z/contact и весь такт.

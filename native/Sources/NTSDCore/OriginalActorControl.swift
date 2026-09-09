@@ -266,6 +266,13 @@ public enum OriginalActorControl {
 ///417090..417162 queues channel contributions; actual device playback is later.
 public enum OriginalGameplaySound {
     public static func queueBuiltin(x: Int32, index: Int32, globals: inout OriginalStateRecord) throws {
+        try queue(x: x,index: index,flagAddress: 0x453e10,leftAddress: 0x4527e8,rightAddress: 0x4554c8,globals: &globals)
+    }
+    ///416fb0..417082 uses the same stereo rule for the catalog sound table.
+    public static func queueCatalog(x: Int32,index: Int32,globals: inout OriginalStateRecord) throws {
+        try queue(x: x,index: index,flagAddress: 0x457588,leftAddress: 0x457bc8,rightAddress: 0x452170,globals: &globals)
+    }
+    private static func queue(x: Int32,index: Int32,flagAddress: UInt32,leftAddress: UInt32,rightAddress: UInt32,globals: inout OriginalStateRecord) throws {
         let base = OriginalMatchPreparation.globalBase
         let position = try x &- globals.integer(at: 0x450bc4-base, as: Int32.self)
         func volume(_ center: Int32) -> Int32 {
@@ -275,7 +282,7 @@ public enum OriginalGameplaySound {
             return 0
         }
         func offset(_ address: UInt32) -> Int { Int(address &+ (UInt32(bitPattern: index) &* 4))-base }
-        let flag = offset(0x453e10),left = offset(0x4527e8),right = offset(0x4554c8)
+        let flag = offset(flagAddress),left = offset(leftAddress),right = offset(rightAddress)
         if try globals.integer(at: flag, as: Int32.self) == 0 {
             try globals.write(Int32(0), at: left); try globals.write(Int32(0), at: right)
         }

@@ -1,0 +1,73 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Original World physics caller: zero eligible teammates divides by zero AFTER the first real RNG call. Source-only fault witness; native rollback is a separate unsupported-path policy.",
+  "nativeCompared": false,
+  "entry": 4318772,
+  "faultPC": 4320152,
+  "error": "Unhandled CPU exception (UC_ERR_EXCEPTION)",
+  "case": {
+    "label": "respawn-with-no-other-active-slot",
+    "active": [
+      [
+        0,
+        1
+      ]
+    ],
+    "actors": [
+      [
+        0,
+        [
+          [
+            112,
+            "2c010000"
+          ],
+          [
+            180,
+            "01000000"
+          ],
+          [
+            764,
+            "00000000"
+          ],
+          [
+            756,
+            "00000000"
+          ],
+          [
+            868,
+            "01000000"
+          ],
+          [
+            8,
+            "01000000"
+          ],
+          [
+            780,
+            "02000000"
+          ],
+          [
+            788,
+            "00000000"
+          ]
+        ]
+      ]
+    ]
+  },
+  "events": [
+    {
+      "slot": 0,
+      "kind": "random",
+      "arguments": [
+        144,
+        51,
+        3
+      ]
+    }
+  ],
+  "after": {
+    "rngIndex": 1,
+    "rngCounter": 1,
+    "lives": 1,
+    "freeze": 0
+  }
+}

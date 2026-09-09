@@ -1461,6 +1461,56 @@ rendering/scheduling and whole tick return. Preserve own constructor velocities
 0.1 and source first landing frame219. App UI, Windows, clean Mac and the
 full-game goal remain open.
 
+The [whole Actor physics](docs/research/ACTOR_PHYSICS.md) now implements all
+40e490..40ef6a on raw Actor/loaded Frame/Object/globals.9344 synthetic probes
+and46089 cases across ALL15363 present frames/137 original Objects match.
+Catalog inputs use three declared motion states per frame, NOT continuous
+techniques. Native rebuilds/checks its complete loaded catalog before physics.
+OriginalExtended provides finite64-bit-significand arithmetic with explicit
+binary64 stores, nearest/ties-even CW037f. No CPU/instruction/EXE emulation in
+runtime. Other CW/nonfinite/80-bit overflow/actual Windows startup FPU stay open.
+4450d0's legacy/SSE2 finite conversion paths are explicit;45971c is OUTSIDE the
+main globals snapshot. Own World captures use legacy0. Type/ID101/120/124/999
+branches come from the EXE, not a character allowlist. Negative friction compares
+its intermediate against POSITIVE epsilon; fallHurt<0 chooses182 only for
+vy STRICTLY<12 and450bd0>=6. Frame212 landing requires storedy>0 andvy==0.
+Catalog416fb0 shares the proved stereo rule with417090, distinct tables; old
+ActorControl/WorldControl source recaptures reproduced identical full raw SHA.
+The [whole World physics](docs/research/WORLD_PHYSICS.md) now implements
+41e634..41eed1: real40e490 plus death/respawn/spawn998/reversion.515 synthetic
+cases compare ALL400-slot pool bytes/masks, globals and ordered events,8329
+helper returns. Active!=0 gets physics; respawn averaging needs EXACT1, type0,
+same team and NOHP filter, excluding current slot, with wrapped integer sums.
+RNG144/51 precedes average division; x subtracts26, then145/31 andz subtracts16.
+No eligible ally faults at41eb98 AFTER first RNG/lives decrement; --fault keeps
+source-only evidence, Native throws with whole-pool/global rollback. Events
+must be buffered until caller/tick commit. Source-ID30..36 revival sets318=140.
+Spawn998 assigns frame6 to CREATED ESI slot, current revival stays219. Initial
+Native mismatch in four nonalias cases corrected this ESI/EDI distinction;
+expected corpus unchanged. Integerz+1/binaryz unchanged, ctor unknown masks,
+exact World aliases and ascending newly activated later slots are preserved.
+Reversion clearsDC before lookup, even missing ID/count; state9998 deactivation
+still continues reversion. Source IDs differ from catalog ordinals.
+Both own MATCH_LAUNCH chains now compare through control AND physics41eed1,
+56330records/512207004bytes+masks,906helpers/58checkpoints including retained
+launch/control sections. New physics contributes4helper returns/4Actor returns.
+Ctorvelocities0.1 naturally produce frame219, x/z442.1/504.1 and289.1/519.1,
+y/velocities0,HP500/MP200,RNG39/0,phase1/tick1. Full854bitmap/101BG/music/CRT/
+replay630e18 ownership survives. No expected-state injection or new outerentry;
+4246b0 remains unreturned atSP1000e9bc BEFORE417f80/Z/contact. Historical
+GAMEPLAY_ENTRY reports stay source-only; old control checks still stop41e634.
+New physics fixtures compare BOTH sections, opt-in gameplayPhysics:true.
+Raw acceptance6tests/64.517s/build97.67s passed. New packed corpora and retained
+ActorInput/Control, WorldControl, GameplayControl and MATCH_LAUNCH passed together:
+17release XCTest/161.849s/build98.21s, including four rollback checks. This build
+also compiled/linked NTSDNative; no new UI/Windows claim. All jobs terminal.
+All112old fixtures unchanged; five new raw/packed SHA/size/full JSON equality
+checked,117pins at build/research/world-physics-fixture-pins.json. Read both
+physics studies before extending. NEXT: same OWN41eed1 through417f80, contact/
+item passes, linked objects, draw/camera/scheduler/recovery and full tick return.
+Practice/UI, other CPUs/modes, first full match, Windows/clean Mac and entire
+goal remain open.
+
 ## Current implementation
 
 `native/` contains Swift/AppKit/SpriteKit Naruto/Sasuke practice with snake and

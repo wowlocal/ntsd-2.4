@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Entire41e634..41eed1 with real40e490, constructors, RNG and sound.\nSynthetic400-slot pool and four declared Objects, CW037f/legacy ftol2.\nFull pool bytes/masks and globals SHA; real nested helper returns. No game\nfunction is replaced; the established constructor memset boundary is retained.\n",
+  "corpus": "world-physics.json",
+  "sha256": "82a15bf62e51373d2e4689af5b7e364b870e620f9c9fcc28eb0de94be2cd9cdf",
+  "bytes": 485148,
+  "cases": 515,
+  "groups": {
+    "death-gates": 240,
+    "restore-spawn": 32,
+    "respawn": 64,
+    "revert": 168,
+    "deactivate-revert": 4,
+    "revert-count": 5,
+    "all-slots": 1,
+    "empty": 1
+  },
+  "helpers": 8329,
+  "instructions": 916,
+  "nativeCompared": true,
+  "fixture": "original-world-physics.json",
+  "fixtureSHA256": "054f0f8ed89fb729c5c7b5358a115feea591413735d5144a77e057523b4b1c7c",
+  "fixtureBytes": 45554
+}

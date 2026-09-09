@@ -6,7 +6,7 @@ import NTSDCore
 public enum MatchLaunchReference {
     public struct Result {
         public let parent: MatchSelectionReference.Result
-        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int
+        public let cases: Int,records: Int,bytes: Int,events: Int,helpers: Int,checkpoints: Int,controlSlots: Int,physicsSlots: Int
     }
     typealias Storage = MenuStartupReference.Storage
     typealias Allocation = MenuStartupReference.Allocation
@@ -44,9 +44,10 @@ public enum MatchLaunchReference {
     }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Match launch reference: "+message) }
     public static func compare(launch: Data,selection: Data,character: Data,cycle: Data,returning: Data,screen: Data,startup: Data,menu: Data,loading: Data,catalog: Data,sounds: Data,requireComplete: Bool = true,
-                               gameplayControl: Data? = nil) throws -> Result {
+                               gameplayControl: Data? = nil,gameplayPhysics: Bool = false) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(launch,maximumCount: 128_000_000))
         let control = try gameplayControl.map { try JSONDecoder().decode(Control.self,from: MatchPreparationReference.unpack($0,maximumCount: 128_000_000)) }
+        guard !gameplayPhysics || control != nil else { throw error("Physics needs own control continuation") }
         if let control {
             guard requireComplete,control.exeSHA256 == c.exeSHA256,control.dllSHA256 == c.dllSHA256,
                   control.parent.sha256 == MatchPreparationReference.digest(launch),control.worldAddress == c.worldAddress,
@@ -61,7 +62,7 @@ public enum MatchLaunchReference {
               c.actorAddresses == initial.actorAddresses,c.objectAddresses == initial.objectAddresses,c.localTime.count == 8,
               (requireComplete ? c.cases.count == 8 : [4,8].contains(c.cases.count)),
               c.cases.map(\.label) == Array(["prelude","preparation","music","preparation-tail","recording","menu-continuation","returned","gameplay-entry"].prefix(c.cases.count)) else { throw error("Source/parent identity") }
-        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0
+        var records = 0,bytes = 0,events = 0,helpers = 0,checkpoints = 0,callbacks = 0,controlSlots = 0,physicsSlots = 0
         var cache: [String:[UInt8]] = [:],recordCache: [String:OriginalStateRecord] = [:]
         func blob(_ key: String) throws -> [UInt8] {
             if let value = cache[key] { return value }
@@ -234,7 +235,7 @@ public enum MatchLaunchReference {
             try snapshot(state,c.cases[7].after,"first gameplay boundary")
             if let control {
                 // Continue our own first gameplay entry. The source also contains
-                // a later physics section; this comparison claims CONTROL ONLY.
+                // a later physics section, compared only when gameplayPhysics is enabled.
                 let section = control.cases[0]
                 guard section.end.pc == 0x41e634,section.end.sp == 0x1000e9bc,section.readsBeforeWrites.isEmpty else { throw error("Control boundary/provenance") }
                 try snapshot(state,section.before,"own control before")
@@ -262,9 +263,30 @@ public enum MatchLaunchReference {
                 })
                 guard seen == expected.count else { throw error("Missing Actor control") };controlSlots = seen
                 try snapshot(state,section.after,"own control after")
+                if gameplayPhysics {
+                    let section = control.cases[1]
+                    guard section.end.pc == 0x41eed1,section.end.sp == 0x1000e9bc,section.readsBeforeWrites.isEmpty else { throw error("Physics boundary/provenance") }
+                    try snapshot(state,section.before,"own physics before")
+                    let returns = section.checkpoints.filter { $0.pc == 0x41e657 }
+                    guard section.helpers.count == 2,returns.count == 2 else { throw error("Own first physics helper count") }
+                    for h in section.helpers {
+                        guard h.entry == 0x40e490,h.pop == 0,h.returnSP == h.entrySP+4,h.saved.count == 4,h.arguments.isEmpty else { throw error("Physics helper ABI") };helpers += 1
+                    }
+                    let physicsWorld = state.world
+                    var seen = 0
+                    try OriginalWorldPhysics.apply(state: &state,observe: { _ in throw error("Unexpected first physics event") },afterActorPhysics: { slot,actor in
+                        guard seen < returns.count,returns[seen].slot == slot,returns[seen].label == "physics-return",
+                              actors[section.helpers[seen].this] == (try physicsWorld.integer(at: 0x194+slot*4,as: UInt32.self)) else { throw error("Physics slot order/binding") }
+                        var r = try storage(returns[seen].actor)
+                        guard let o = objects[try r.integer(at: 0x368,as: UInt32.self)] else { throw error("Physics Object binding") };try r.write(o,at: 0x368)
+                        try check(actor,r,"own physics Actor\(slot)");seen += 1
+                    })
+                    guard seen == returns.count else { throw error("Missing Actor physics") };physicsSlots = seen
+                    try snapshot(state,section.after,"own physics after")
+                }
             }
         }
         guard callbacks == 1 else { throw error("Own selection callback") }
-        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots)
+        return .init(parent:parent,cases:c.cases.count,records:records,bytes:bytes,events:events,helpers:helpers,checkpoints:checkpoints,controlSlots:controlSlots,physicsSlots:physicsSlots)
     }
 }

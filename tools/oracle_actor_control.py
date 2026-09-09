@@ -65,12 +65,14 @@ class ActorControl(ActorInput):
   for offset,hexadecimal in item.get('globals',[]):
    raw=bytes.fromhex(hexadecimal);globals_[offset-GLOBAL_BASE:offset-GLOBAL_BASE+len(raw)]=raw
   self.uc.mem_write(GLOBAL_BASE,bytes(globals_))
-  self.call(0x413080,(item.get('phase',1),item.get('mode',0)),pop=8)
+  self.execute(item)
   assert bytes(self.uc.mem_read(OBJECT,len(obj)))==bytes(obj)
   assert self.uc.mem_read(self.target-16,16)==b'\x96'*16 and self.uc.mem_read(self.target+ACTOR_SIZE,16)==b'\x69'*16
   item.update(after=bytes(self.uc.mem_read(self.target,ACTOR_SIZE)).hex(),defined=bytes(self.mask).hex(),
    globalsSHA256=digest(bytes(self.uc.mem_read(GLOBAL_BASE,GLOBAL_SIZE))),events=self.events)
   return item
+ def execute(self,item):
+  self.call(0x413080,(item.get('phase',1),item.get('mode',0)),pop=8)
 
 def held(mask):return [b(0xcd+i,(mask>>i)&1) for i in range(7)]
 def probes():

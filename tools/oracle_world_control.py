@@ -23,6 +23,9 @@ CALLS={**HELPERS,0x413080:(2,8),0x403270:(2,8),0x4034e0:(1,0)}
 STATES={300:400,301:401,302:500,303:501}
 IDS=[10,20,20,30]
 class WorldControl(Constructors):
+ source_ids=IDS
+ frame_states=STATES
+ mutates_world=False
  def __init__(self):
   super().__init__();self.running=False;self.instructions=set();self.templates={}
   for fill in ('a5','ramp'):
@@ -81,10 +84,10 @@ class WorldControl(Constructors):
    self.uc.mem_write(POOL+i*0x500-16,b'\x96'*16+bytes(raw)+b'\x69'*16);self.masks.append(mask)
   write(world,self.world_mask,*d(0x7d4,CATALOG));self.uc.mem_write(WORLD,bytes(world))
   objects=[]
-  for i,source_id in enumerate(IDS):
+  for i,source_id in enumerate(self.source_ids):
    raw=bytearray(ActorControl.object_bytes(self,{}))
    struct.pack_into('<i',raw,0x6f4,source_id);struct.pack_into('<i',raw,0x6f8,3 if i==3 else 0)
-   for n in range(400):struct.pack_into('<i',raw,0x7ac+n*0x178,STATES.get(n,3))
+   for n in range(400):struct.pack_into('<i',raw,0x7ac+n*0x178,self.frame_states.get(n,3))
    for obj,n,offset,h in item.get('frames',[]):
     if obj==i:raw[0x7a4+n*0x178+offset:0x7a4+n*0x178+offset+len(bytes.fromhex(h))]=bytes.fromhex(h)
    objects.append(bytes(raw));self.uc.mem_write(OBJECT+i*0x40000,bytes(raw));self.uc.mem_write(CATALOG+4*i,struct.pack('<I',OBJECT+i*0x40000))
@@ -94,10 +97,11 @@ class WorldControl(Constructors):
   self.uc.mem_write(GLOBAL_BASE,bytes(glob));self.uc.reg_write(UC_X86_REG_ESP,BODY_SP)
   for r,v in zip(REGS,[WORLD,0x22334455,0x33445566,0x44556677]):self.uc.reg_write(r,v)
   self.running=True
-  try:self.uc.emu_start(0x41e339,0,count=2_000_000)
+  try:self.execute()
   finally:self.running=False
-  assert self.finished and self.uc.reg_read(UC_X86_REG_ESP)==BODY_SP and self.uc.reg_read(UC_X86_REG_EBX)==WORLD and self.u32(BODY_SP+0x3c)==400
-  assert bytes(self.uc.mem_read(WORLD,WORLD_PREFIX))==bytes(world)
+  assert self.finished and self.uc.reg_read(UC_X86_REG_ESP)==BODY_SP and self.uc.reg_read(UC_X86_REG_EBX)==WORLD
+  if self.mutates_world:world=bytearray(self.uc.mem_read(WORLD,WORLD_PREFIX))
+  else:assert bytes(self.uc.mem_read(WORLD,WORLD_PREFIX))==bytes(world)
   for i,raw in enumerate(objects):assert bytes(self.uc.mem_read(OBJECT+i*0x40000,len(raw)))==raw
   for i in range(400):
    struct.pack_into('<I',world,0x194+i*4,bindings.get(i,i))
@@ -109,6 +113,9 @@ class WorldControl(Constructors):
    assert self.uc.mem_read(address-16,16)==b'\x96'*16 and self.uc.mem_read(address+ACTOR_SIZE,16)==b'\x69'*16
   item.update(poolSHA256=digest(pool),maskSHA256=digest(mask),globalsSHA256=digest(bytes(self.uc.mem_read(GLOBAL_BASE,GLOBAL_SIZE))),events=self.events,helpers=self.helpers)
   return item
+ def execute(self):
+  self.uc.emu_start(0x41e339,0,count=2_000_000)
+  assert self.u32(BODY_SP+0x3c)==400
 
 def probes():
  for state,facing,gate in itertools.product((300,301),(0,1,2,255),(0,1,-1)):
