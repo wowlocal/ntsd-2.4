@@ -136,6 +136,15 @@ including SPARK, and a failure after the first spark preserves the original stat
 Thirty regression tests and three acceptance tests passed. Full tick return,
 app integration and Windows/device output remain open.
 
+The [post-draw impulse pass](docs/research/WORLD_IMPULSES.md) now matches 1,030
+controlled pools and both own launch chains through41f550, including original
+CRT/GDI diagnostic text. Four acceptance tests passed. A new
+[FPU audit](docs/research/FPU_PRECISION.md) found a required numerical correction:
+the EXE startup selects 53-bit precision, while historical arithmetic tests
+declared 64-bit precision and own captures inherited CW0. Original instructions
+produce 32 differing stores on targeted inputs. Correcting precision and
+revalidating initialized chains now takes priority over further tick expansion.
+
 **Current status:** native Naruto/Sasuke practice on District, now with Sasuke’s
 snake strong attack and Chidori needles (100 chakra), alongside movement, melee,
 guard, damage and recovery. Tab selects the controlled fighter. AI, other

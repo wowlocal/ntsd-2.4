@@ -1,0 +1,47 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Audit real445a31/_controlfp_s and4196f0 under distinct x87 precisions.\nActual EXE/DLL instructions, declared initial control words and synthetic pool.\nThis exposes the difference from the accepted CW037f native corpus; it is not\nwhole Windows/CRT/device initialization or native53-bit arithmetic acceptance.\n",
+  "corpus": "fpu-precision.json",
+  "sha256": "688cff7c1acb006b21b39a64ef9fc4b698a6ae1fa152c5c8df03cf6fec84df1a",
+  "bytes": 14775,
+  "initializers": [
+    0,
+    4478078,
+    4478750,
+    4478831
+  ],
+  "controls": [
+    {
+      "before": 0,
+      "after": 512,
+      "result": 0
+    },
+    {
+      "before": 895,
+      "after": 575,
+      "result": 0
+    },
+    {
+      "before": 639,
+      "after": 639,
+      "result": 0
+    },
+    {
+      "before": 2943,
+      "after": 2623,
+      "result": 0
+    }
+  ],
+  "initializationInstructions": 191,
+  "cases": 16,
+  "helperExecutions": 64,
+  "differing53And64Stores": 32,
+  "historicalNative": {
+    "fixture": "original-world-impulses.json",
+    "sha256": "5383fd5a596e3be47229b8229fd82b2ef731da7560556618c23a6654cecd211b"
+  },
+  "native53Compared": false,
+  "windowsVerified": false,
+  "next": "Recover startup/thread/device FPU provenance and native53-bit arithmetic before expanding the full tick. Retain historical declared CW037f fixtures."
+}

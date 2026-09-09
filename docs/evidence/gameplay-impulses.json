@@ -1,0 +1,24 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "scope": "Own41f4ac..41f550, mode0: actual VC80 sprintf,401290 and4196f0.\nFresh pinned gameplay-drawing parent on the same CPU/stack, without gameplay\nstimuli. GDI/COM/thread responses are explicit boundaries. Mode1/4 children,\nremaining post-draw loop, full tick and Windows are open. Native comparison accepted for this bounded continuation; full tick and Windows remain open.\n",
+  "corpus": "gameplay-impulses.json",
+  "sha256": "843879fc562a67d4b0272b858f37e243732e08e80d593c71c66022b6572f4af7",
+  "bytes": 9171333,
+  "parent": {
+    "fixture": "original-gameplay-drawing.json",
+    "sha256": "e67f51ba2123a6d83772f2485e5ab66a5704787f5b470955d2c134735cc5d475"
+  },
+  "nativeCompared": true,
+  "end": {
+    "pc": 4322640,
+    "sp": 268495292
+  },
+  "helpers": 3,
+  "instructions": 499,
+  "readsBeforeWrites": [],
+  "events": 7,
+  "fixture": "original-gameplay-impulses.json",
+  "fixtureSHA256": "dfa37eb7cc99ae7700568eae32e2b503b79db37e6bbe6824b765c5cff0531127",
+  "fixtureBytes": 1280323
+}

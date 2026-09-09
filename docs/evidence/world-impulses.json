@@ -1,0 +1,28 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole4196f0..419798 with a constructed400-slot pool and CW037f.\nOriginal constructors, activity/hitstop/count gates, aliases and binary64 bit\npatterns. Full pool/masks/global hashes and ordered writes. Masked x87 status\nis recorded as source evidence, not modeled by the native game. Separate\nactual VC80 sprintf controls exercise all signed-byte diagnostic inputs.\n",
+  "corpus": "world-impulses.json",
+  "sha256": "ea371cd06348f33a7ceb1f78d35355ebeea9c79d9e41590aa0e26554bfcfbfd5",
+  "bytes": 1284770,
+  "cases": 1030,
+  "groups": {
+    "gates": 175,
+    "binary64": 456,
+    "varied": 320,
+    "double-rounding": 16,
+    "aliases": 60,
+    "all-slots": 2,
+    "empty": 1
+  },
+  "instructions": 58,
+  "writes": 9385,
+  "sourceStatusWords": {
+    "0": 981,
+    "4": 49
+  },
+  "formats": 256,
+  "nativeCompared": true,
+  "fixture": "original-world-impulses.json",
+  "fixtureSHA256": "5383fd5a596e3be47229b8229fd82b2ef731da7560556618c23a6654cecd211b",
+  "fixtureBytes": 170899
+}

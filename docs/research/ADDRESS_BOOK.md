@@ -136,7 +136,8 @@ D означает проверку ограниченного поведени�
 | R08 | `0x42e100..0x431b64`, вся функция; caller `0x41eefb..0x41f2ac` | Полное разрешение контактов: урон/guard/падения/отражение, cpoint-подготовка/подбор/силы/искры, live raw ITR и CRT | D [WORLD_HITS](WORLD_HITS.md):7845 synthetic cases и обе own launch цепочки до41f2ac, весь pool/маски/globals/heap/CRT; естественные DAT-последовательности и W отдельно |
 | R08 | `0x42f0a9..0x42f183`, `0x430520..0x430569`, фрагменты | Реакция state 3000 на попадание/блок | D игл; это ветвь по состоянию, а не проверка ID 440 |
 | R08/R14 | `0x42fe19..0x42fe85`, фрагмент | Выбор звука при блоке type 3 | D игл с исходным default -1 |
-| R08 | `0x4196f0`, функция | Применение накопленного импульса | D; выполняется после снятия позы для отрисовки |
+| R08 | `0x4196f0..0x419798`, функция | Применение накопленного импульса | D1030 pools/9385 writes при CW037f; own41f4ac..41f550 с CRT/GDI и очищением count0. [FPU audit](FPU_PRECISION.md): startup выбирает53 бита, native-коррекция открыта |
+| R02 | `0x445a31..0x445a59`, функция; `0x445546`, вызов | Startup `_controlfp_s(NULL,10000,30000)` | S initializer-table path; D whole helper/реальная MSVCR80, четыре CW controls,191 PCs.53-битная точность и32 отличающихся stores; Windows/thread/device provenance открыта |
 | R09 | `0x418c30..0x419373`, `0x4187b0..0x418c2f`, целые функции; caller `0x41f2ac..0x41f484` | Cpoint actions/exhaustion/throw/подмена, current-frame placement/injury, held-owner cleanup и второй417f80 | D [WORLD_CPOINTS](WORLD_CPOINTS.md):2681 controlled cases и две собственные цепочки до41f484; caller scratch, естественные DAT-связки и Windows отдельно |
 | R01/R07 | `0x4219d6..0x4219f5`, фрагмент | Очистка части контактного состояния | Наблюдённые записи воспроизводятся стендом; окружающий цикл открыт |
 | R02/R16 | `0x417170`, функция | Игровой RNG | D 6 500 вызовов; начальная таблица из исходного повтора |

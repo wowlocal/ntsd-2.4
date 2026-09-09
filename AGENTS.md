@@ -3,6 +3,16 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
+**Immediate priority: read [FPU_PRECISION](docs/research/FPU_PRECISION.md).**
+New original-instruction evidence: EXE startup445a31 calls actual MSVCR80
+_controlfp_s(NULL,10000,30000), selecting53-bit precision. Historical arithmetic
+corpora explicitly used CW037f/64-bit; own menu/loading chains inherit CW0.
+Sixteen midpoint inputs produce32 differing stores between startup53 and64.
+Recover FPU provenance and correct/revalidate native arithmetic before expanding
+the full tick. Preserve historical declared contracts; do not rewrite expected
+fixtures or use tolerances to hide differences. Precision53 still has x87's
+extended exponent range, so replacing OriginalExtended with Double is not enough.
+
 ## Authoritative reference
 
 - Use **only the original Windows NTSD distribution** as the behavioral reference.
@@ -1825,6 +1835,40 @@ NEXT same41f4ac: mode1/4 children437860/43a860, realCRT sprintf/GDI401290 caller
 recovery/creation/deletion and wholetickreturn. Read WORLD_DRAWING before
 extending. Practice/appintegration, continuousDAT, firstfullmatch, Windows/
 device/cleanMac and entiregoal remainopen.
+
+The [post-draw impulse pass](docs/research/WORLD_IMPULSES.md) now implements
+whole4196f0..419798 and common41f4ac..41f545 text/caller. Mode1/4 children are
+explicitunsupported, never silently skipped. Generic400-slot scan, allnonzero
+activity, allnonzero b4 skip, wrapped count+1, stagedpool, exactorderedstores.
+Count0 keeps velocities but clears pending+28/+30/+38 topositive0. Aliases
+consume once, later visits clear again. CW037f controlled values include all
+binary64 classes, signed count overflow, extendedexponent and double-rounding;
+processwide FPUstatus/traps/otherCW remain outside nativecontract.
+1030 controlledpools/9385writes/58of58instructions and256 actualCRT signed-byte
+formats match Native. Sixteen newmidpointcontrols preserve all1014 priorcases;
+32stores distinguish53 from64-bitprecision. SourceFPSW only0/4 is a harness
+observation, not hardwareexception proof. Diagnostic usesWorldslot10 eveninactive,
+signedbytesc4/c5/c3/c2/be/c0 andoriginal trailing-space/repeated-d format.
+Real401290 runs toGDI/COM boundaries, then4196f0; publiccall stageswholematch.
+BothfreshsameCPU/stackparents reproduce entireGAMEPLAY_DRAWING, then41f550/
+SP1000e9bc,phase1/tick1,mode0,3helpers/499PCs/7events each. Text18bytes:
+u0 d0 l0 r0 a0 d0, at0,30, target28002020. EachactiveActor0/1 count0/b4=0;
+constructorpending0.1 triples clear to+0, exactly48poolbytes change. Noimpulse
+division runs. OwnFPCW0/FPSW0 retained andexplicitlyguarded, NOT claimedCW037f.
+Otherpool/masks/globals/CRT/RNG40/1/101BG/854bitmaps/11menu/early/music/replay/
+14586Frameallocations retained. OwnNative353341records/665509242bytes+masks,
+499helpers/53checkpoints each; earlierparents validatedseparately. Publicrollback
+trial failslateActorbinding aftertext andearlierwrites, preservesfullstate.
+6release regression78.456s/build19.50s and4paired acceptance39.905s/build57.49s
+passed;3losslessfixtures published,135oldhashes unchanged,138currentpins at
+build/research/gameplay-impulses-fixture-pins.json. Allsource/Swiftjobsterminal;
+NTSDNative compiled/linked. Noapp/Windowsclaim.
+Newtools/oracle_fpu_precision.py executeswhole445a31 +realCRT under4initialCWs
+(191PCs), then64 whole4196f0 calls/16midpoints. Source53/native64 disagreement
+is verified, native53 andWindows areNOT. SeeFPU_PRECISION for startup/table
+addresses and nextaudit; this takespriority over40d960/41f550..4214cf.
+After numericalcorrection, continuecompletepostdrawslotloop/modechildren/
+fullreturn. Appintegration, continuousDAT, firstfullmatch andfullgoalremainopen.
 
 ## Current implementation
 
