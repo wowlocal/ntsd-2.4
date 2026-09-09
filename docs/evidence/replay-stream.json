@@ -1,0 +1,101 @@
+{
+  "scope": "Research the original writer's actual MSVCP80 output-stream dependency.\n\nDevelopment tooling only. Actual pinned C++/CRT instructions run with declared\nprivate allocator, thread/locks, open FILE and descriptor responses. Actual CRT\nstdio performs buffering and flush/close. No Windows file is created.\nThe producer alone does not establish native equivalence or execute43dd60.\n",
+  "corpus": "replay-stream.json",
+  "bytes": 29709098,
+  "sha256": "9b57323c74522ef145c43acda807b9de67166b3eed88c32897df31ef029e9aad",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "cppSHA256": "372af797353f9335915cd06d4076bab8410775dcaf2dac0593197d7c41bbffb2",
+  "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "packageSHA256": "8648c5fc29c44b9112fe52f9a33f80e7fc42d10f3b5b42b2121542a13e44adfd",
+  "cases": 66,
+  "wholeStreamReturns": 330,
+  "instructions": 2950,
+  "cppInstructions": 1626,
+  "crtInstructions": 1324,
+  "descriptorWrites": 1772,
+  "declaredBoundaries": [
+    "??2@YAPAXI@Z",
+    "??3@YAXPAX@Z",
+    "DeleteCriticalSection",
+    "EnterCriticalSection",
+    "InitializeCriticalSection",
+    "InterlockedDecrement",
+    "LeaveCriticalSection",
+    "_calloc_crt",
+    "_close",
+    "_malloc_crt",
+    "_wfsopen",
+    "_write",
+    "free"
+  ],
+  "platformWord": {
+    "address": 2015115200,
+    "value": 2,
+    "producerExecuted": false
+  },
+  "fileBacking": {
+    "address": 654315520,
+    "fields": [
+      0,
+      0,
+      0,
+      2,
+      3,
+      0,
+      0,
+      0
+    ],
+    "openBoundary": true
+  },
+  "descriptorBacking": {
+    "tablePointerAddress": 2015119392,
+    "table": 655228928,
+    "ordinal": 3,
+    "recordBytes": 64,
+    "osHandle": 324478056,
+    "flags": 1,
+    "remainingBytes": 0,
+    "producerExecuted": false
+  },
+  "codecInputs": [
+    {
+      "case": "own-recording",
+      "codecCorpusSHA256": "058b41329980fec522cfad5651156a69723be38996342b992dec1b490d212f70",
+      "outputBlobSHA256": "b39afd2aa2546e70b5ef2e75558858c95e58b81ac2fbbc3076404b67c97fd574",
+      "payloadSHA256": "520536a9e8f7598c77d59573797eeb2884a87a1a99b07a207188c7d000470d98",
+      "bytes": 10047,
+      "keyApplied": false
+    },
+    {
+      "case": "full-random-recording-writer-capacity",
+      "codecCorpusSHA256": "058b41329980fec522cfad5651156a69723be38996342b992dec1b490d212f70",
+      "outputBlobSHA256": "6374c4acb902df493ff7454bc4a3b1d4db2a04f502097d9a6dc278807bfd3132",
+      "payloadSHA256": "6374c4acb902df493ff7454bc4a3b1d4db2a04f502097d9a6dc278807bfd3132",
+      "bytes": 6492672,
+      "keyApplied": false
+    }
+  ],
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "wholeWriterExecuted": false,
+  "ownInitializedContinuation": false,
+  "descriptorBytesCompared": 6664690,
+  "streamStatesCompared": 330,
+  "comparedScope": "Ordered open path/mode/share, descriptor bytes/counts/close, five ios states and buffer attempt/fallback. Private C++/CRT allocations and object/FILE ABI bytes are source evidence only.",
+  "sourceInstructionCounting": "Actual code-hook PCs, excluding declared boundary instructions and unexecuted stop.",
+  "inheritedBoundaries": [
+    "_lock",
+    "_unlock",
+    "_getptd",
+    "EnterCriticalSection",
+    "LeaveCriticalSection",
+    "InterlockedIncrement",
+    "GetModuleHandleA"
+  ],
+  "sourcePrivateABICompared": false,
+  "sourceDLLStartupExecuted": false,
+  "nativeHostHeapPressureCompared": false,
+  "fixture": "original-replay-stream.json",
+  "fixtureSHA256": "b0e11e1f538cecdd40b7a81f30044817ece5d22c590794ee51265b27bc98a8b3",
+  "fixtureBytes": 20460176
+}

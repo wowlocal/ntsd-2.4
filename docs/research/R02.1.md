@@ -6,6 +6,10 @@
 кодам возврата и нормализованному порядку выделений. Все51+11 wrapperPC выполнены;
 полный43dd60 writer, result caller и собственное продолжение ещё открыты.
 Сырые memory hooks, проверенные REP masks и разные private ABI различаются явно.
+[REPLAY_STREAM](REPLAY_STREAM.md) добавляет исходную буферизацию/закрытие:
+66 последовательностей,1772 descriptor writes/6664690 байт и330 ios states
+совпали с Native. FILE/descriptor/thread/allocator ответы заданы; это ещё не
+whole43dd60, собственный result caller или файлы под Windows.
 
 [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md) продолжает оба свежих запуска
 до421cdc/SP1000e9bc. Каждый481245 records/806849858 bytes+masks,

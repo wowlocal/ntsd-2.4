@@ -73,6 +73,11 @@ allocation errors. Correct REP-derived masks and incomplete raw hook masks,
 private5816/5920-byte ABIs and native host cleanup are explicitly distinguished.
 The writer and result caller remain open; do not turn a compressor error into
 an invented early exit, because43dd60 ignores that status.
+[REPLAY_STREAM](REPLAY_STREAM.md) adds66 whole C++ sequences with actual CRT
+buffering:1772 descriptor writes/6664690bytes and330 ios states match Native.
+Failed flush retains its triggering byte;4096-byte allocator failure switches
+to unbuffered single-byte writes. Open/descriptor/private heap/thread responses
+are explicit, not actual Windows IO or the whole43dd60 composition.
 RetainedSP64 has a recovered own producer, OriginalMatchRoundResult.stageDefeated,
 currently discarded in MenuCycleReference. Its intervening stack-aware lifetime
 still needs verification; apparent[esp+64] operands can alias other root locals

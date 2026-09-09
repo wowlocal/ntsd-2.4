@@ -4,7 +4,8 @@ The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
 **Current priority: whole result recording421cdc..422218, then remaining tail
-through422ab8/ret4.** Read [REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
+through422ab8/ret4.** Read [REPLAY_STREAM](docs/research/REPLAY_STREAM.md),
+[REPLAY_COMPRESSION](docs/research/REPLAY_COMPRESSION.md)
 and [RESULT_RECORDING_PLAN](docs/research/RESULT_RECORDING_PLAN.md). The codec
 dependency is now implemented:815 whole43f4b0/43f400 calls match the public
 OriginalReplayCompression Swift API/private native C1.1.4 subset.31390143 output
@@ -38,6 +39,30 @@ Python/654 local Markdown links and owned-file diff checks pass. Vendored
 whitespace is unchanged upstream content; do not reformat the pinned sources.
 NEXT whole43dd60 key/name/stream writer and ownership, then full421cdc caller;
 the codec alone does not execute the writer, an own continuation or a Windows file.
+
+The stream dependency is now implemented in OriginalReplayFileOutput:66 full
+construct/write/write/close/destroy sequences match Native at the declared open/
+descriptor boundary.1772 writes/6664690 requestedbytes,330 ios states/returns;
+2950 actual code-hook PCs,1626MSVCP80+1324CRT. Real C++ and CRT buffering execute,
+not stdio stubs. A4096-byte failed flush still retains the triggering byte for
+close; failed4096malloc uses unbuffered single-byte writes, NOT a two-byte queue.
+Modewb/share40 and C-locale widening/truncation to259 units are original rules.
+Openfail states2/6/6/6/6, payloadfail0/0/4/4/4, closefail0/0/0/2/2; combined6.
+Actual43dd60 ignores these states; never invent earlyexit or retain freed replay.
+Source inputs explicitly bind_osplatform2 and descriptor3's binary/nonappend
+64-byte record via781c4820->270e0000. Initial missingplatform and descriptor
+backing were corrected before fresh66capture; old expected fixtures unchanged.
+PrivateC++/CRT objects/allocations and wholeDLLstartup are NOT native comparisons.
+Host heap pressure remains separate from the internal buffer-failure stimulus.
+Two acceptedcodec buffers10047/6492672 bytes are supplied without key; no ownjoin.
+Initial64Swift0.084s/build133.87s; fresh66acceptance2.293s/build137.55s. Nativeopen
+now exposes path/mode/share explicitly. Final packaged4tests42.771s/build138.78s
+passed: stream2.427s,codec0.608s,both ownnotices39.736s. NTSDNative linked;
+no app-window claim.173oldpins unchanged,174current; fullraw+transportnewline/
+packedbytes/JSON/SHA verified,29709098/20460176bytes. Python/664local links/diff
+checks pass; all source/SwiftPM jobs terminal.
+Whole43dd60, key/name ownership, source exceptions and actualWindowsfiles remain
+open. The accepted initialized gameplay boundary is still421cdc/SP1000e9bc.
 
 The preceding [GAMEPLAY_NOTICES](docs/research/GAMEPLAY_NOTICES.md) milestone:
 BOTH fresh initialized HUD chains now continue the whole notice caller through

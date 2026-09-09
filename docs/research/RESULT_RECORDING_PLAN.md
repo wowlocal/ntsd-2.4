@@ -1,7 +1,8 @@
 # Next whole result-recording caller
 
 Static follow-up to [GAMEPLAY_NOTICES](GAMEPLAY_NOTICES.md). The independently
-implemented codec is linked below; the whole writer/caller remains unimplemented.
+implemented codec and stream dependency are linked below; the whole writer/caller
+remains unimplemented.
 This records the concrete dependencies
 of421cdc..422218 before extending the whole tick. EXE SHA256:
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
@@ -88,7 +89,12 @@ Actual live global ownership, not an assumed immutable key, must supply it.
 Imported MSVCP80 calls construct basic_ofstream with arguments(path,0x20,0x40,1),
 write the four-byte length, write the adjusted payload, close, then destroy the
 stream. The EXE does not branch on those return values. Real file/stream responses
-and the output byte requests need explicit evidence, including failure behavior.
+and the output byte requests now have bounded evidence in
+[REPLAY_STREAM](REPLAY_STREAM.md):66 sequences compare all1772 descriptor writes/
+6664690 bytes and330 ios states to Native. Actual C++ and CRT buffering,259-unit
+C-locale path truncation, retained byte after failed flush and unbuffered fallback
+execute. Open/descriptor/allocator/thread responses remain declared; whole DLL
+startup, private ABI/heap pressure, writer composition and Windows IO are open.
 The function frees the temporary allocation, frees global4588a8, clears4588a8,
 and performs stream destruction before SEH/cookie restoration. It does not leave
 a successfully saved replay buffer alive. The caller then clears450b80 and,
@@ -96,7 +102,7 @@ when the result timer is still101,450b84.
 
 ## Required comparison
 
-Compression is now independently compared as documented above. Compose the whole writer
+Compression and output-stream behavior are independently compared above. Compose the whole writer
 with the original recording buffer, key/name globals, declared stream responses
 and complete cleanup. Finally compare the entire296-instruction result caller,
 including mode1/4 branches and both fresh own initialized continuations.
