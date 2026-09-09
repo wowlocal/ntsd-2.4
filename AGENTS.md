@@ -48,6 +48,44 @@ false positives will not occur.
 
 ## Current research status
 
+**Current fidelity priority: bundled lib.dll hooks before the full application
+join.** Read [LIB_RUNTIME](docs/research/LIB_RUNTIME.md). Actual PE entry445560
+calls4464c4/security-cookie setup then LoadLibraryA(4464ab `lib.dll`) at4464ce,
+before445565/CRT startup. The bundled6144-byte DLL SHA256 is
+28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba.
+Three whole-entry runs and four direct DLL notification controls recover four
+actual installations:12 jumps plus2NOP bytes at13sites/62bytes each; two actual
+VirtualAlloc requests4000/20000 and26VirtualProtect/13RtlMoveMemory requests.
+These Windows API responses are declared, not actual Windows loader evidence.
+Full31760384EXE/20480DLL image bytes reconstruct and hash-verify.151actual
+initialization PCs=47EXE+104DLL;690 recursively decoded DLL starts are STATIC.
+Stop445565 is unexecuted; CW remains037f, CRT initializer order still open.
+
+OriginalLibSurfaceText matches276 calls through the installed401290 jump and
+whole10001298..10001309:1106events/44436DLL data bytes, source166DC stores;52actual
+starts=1patchedEXE+51DLL. SetBkMode(DC,1), not SetBkColor; GetDC-negative skips
+later calls and retains priorDC; later GDI/ReleaseDC numeric failures ignored.
+Six source/native calls retain own DC results. Late native-only ReleaseDC
+observer failure rolls back DC. Buffer external effects until whole commit.
+OriginalSurfaceText and earlier callers remain pristine controls; their native
+library-enabled routing is OPEN. No runtime DLL or executable-memory patching.
+Raw2release tests0.096s/build172.22s; final packaged3tests12.226s/build0.26s,
+including retained pristine menu presentation. Source and owned SwiftPM jobs
+terminal0.198priorpins unchanged/200current (includes concurrent active-gameplay
+publication); full raw/packed bytes/JSON/SHA and10vendor hashes verified.
+
+Remaining hooks include430c8c movement,4176ac/4177b9 hits,42fcb1damage,
+41f5fc transforms,41408b physics,424352loading,4214d7commands and preparation
+42d30b/42d473/42d5ce. Preparation writes byte450bb8=3 and459ff8 consumed by
+new command3: connect these together, not the old own zero-flag path. Recover
+Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
+Old pristine-EXE fixture bytes remain immutable and valid in their declared
+unloaded-library controls; they do NOT establish the DLL-enabled application.
+Active captures are separate pristine controls: inspect their current process
+handles and work metadata before acting; never restart or relabel them as
+DLL-enabled. Full initialized application, full match/content, app/window,
+Windows/device/clean-Mac and the full native-game goal remain open.
+
 Additional dispatcher prerequisites now compare in
 [APPLICATION_DISPATCH](docs/research/APPLICATION_DISPATCH.md). Shared
 OriginalApplicationKeyScan matches4348 further prefix exits/9847ordered stores

@@ -12,7 +12,7 @@ public struct OriginalMenuPresentationInput: Codable, Sendable {
 public struct OriginalMenuPresentationEvent: Codable, Equatable, Sendable {
     public enum Kind: String, Codable, Sendable {
         case bitmap, method, queryInterface, audioVolumeRead, getDC
-        case setTextColor, setBackgroundColor, stringLength, textOut, releaseDC
+        case setTextColor, setBackgroundColor, setBackgroundMode, stringLength, textOut, releaseDC
         case format, free, postMessage
     }
     public let kind: Kind
