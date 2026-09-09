@@ -48,6 +48,34 @@ false positives will not occur.
 
 ## Current research status
 
+Two independent outer-application dependencies now compare; neither is the
+whole initialized43e9a0 join. Read [APPLICATION_TIMER](docs/research/APPLICATION_TIMER.md)
+and [APPLICATION_SERVICE_KEYS](docs/research/APPLICATION_SERVICE_KEYS.md).
+OriginalApplicationTimer matches2025 whole43d157..43d1ef decisions/8163ordered
+requests, all59actual instruction starts. Fresh clock reads, unsigned lateness,
+baseline clamp, signed-negative dispatcher recovery and signed/capped Sleep
+survive. Dispatcher/recovery/OS bodies are declared boundaries; Sleep4ms is
+not exercised. Timer-only late failure rolls back baseline, not external game
+effects.191oldpins unchanged/192milestone; raw2tests0.026s/build173.41s and
+packaged2tests0.027s/build0.29s. The old aggregate OriginalClock stays unchanged.
+
+OriginalApplicationKeyScan matches3964 whole43e9db..43ea95 prefix exits and9278
+ordered stores;997303 key reads,57/57actual starts. Scan0..<250 recognizes100,
+retains/reset A/B/C sequence, stores450bec then4593a4, and checks enabled
+F1/F2/F3 in order, preserving multiple4593a0 stores.28retained calls in3chains
+use native prior results. Complete50088global bytes reconstruct from source
+stores; all300keyboard bytes unchanged. Late third-mode observer failure rolls
+back all native fields. Controlled sequence0..3/diagnostic0..1/mode0..2, not
+own acquisition or full dispatcher;236whole-dispatcher starts are STATIC.
+Do not extend loaded-match globals or import a World snapshot to invent outer
+4593a0/4593a4 ownership or fixed458b00 provenance.194priorpins unchanged,
+195atmilestone; raw6762062/packed485739, fullJSON/bytes/SHA and10vendor hashes
+verified. Raw2release tests0.086s/build174.13s; final packaged2tests0.065s/
+build180.90s after naming the independent API KeyScan to avoid concurrent
+dispatcher API collision. All owned prefix/timer jobs terminal0; NTSDNative
+linked, no window/device/Windows evidence. Active48 captures remain separate;
+see build/research/active-gameplay-work.json before touching their live jobs.
+
 Both fresh own chains now match pause, single-step and resume through both
 actual returns. Read [PAUSED_GAMEPLAY](docs/research/PAUSED_GAMEPLAY.md).
 OriginalLoadedGameplayCall routes own pausedRendering into OriginalPausedGameplay:

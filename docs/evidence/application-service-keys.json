@@ -1,0 +1,33 @@
+{
+  "scope": "Recover original43e9db..43ea95 application service-key scan and store order.\n\nThe pinned NTSD2.4 EXE executes under Unicorn2.1.4 with declared acquired\nkeyboard bytes, sequence0..3, diagnostic0/1 and mode0..2. This prefix has no\nhelper/import calls. Observe actual key reads, stores and normal slice exit,\nand verify all remaining globals/keyboard bytes are unchanged. No pointer,\nsecurity-structure, fault or device stimulus. This is not whole43e9a0, an own\nmatch, Windows, actual input acquisition or a timed/application integration.\n",
+  "corpus": "application-service-keys.json",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "bytes": 6762062,
+  "sha256": "d5b8cd63d5c98dc10fd00dd6aa8923162e1b20d1d43be7859a1fd0aa96bc0961",
+  "cases": 3964,
+  "instructions": 57,
+  "stores": 9278,
+  "reads": 997303,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fullGlobalStoreReconstruction": true,
+  "keyboardBytesUnchanged": true,
+  "allPrefixInstructionStartsExecuted": true,
+  "staticDispatcherInstructions": 236,
+  "wholeDispatcherExecuted": false,
+  "ownGameJoin": false,
+  "storeCounts": {
+    "0x450bec": 3964,
+    "0x4593a4": 3964,
+    "0x4593a0": 1350
+  },
+  "retainedChains": {
+    "held-and-released": 15,
+    "interrupted-scan": 7,
+    "scan-end": 6
+  },
+  "nativeComparison": "All3964 prefix exits and9278 ordered global stores match, including28 retained calls in3 chains. Native state is independent of expected outputs; a late third mode observer failure retains the entire prefix state. Whole application dispatcher/game-state/device rollback remains open.",
+  "fixture": "original-application-service-keys.json",
+  "fixtureSHA256": "99fdf9a2d8079144ed21734631621b9f1820b5e6dc718d8dd5bb6f82023f25ec",
+  "fixtureBytes": 485739
+}
