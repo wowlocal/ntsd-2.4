@@ -1,0 +1,47 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Whole40d960..40de20 and actual catalog sound416fb0..417082 at explicitCW027f.\n\nDeclared synthetic Actor/Object/Frame/global inputs, original Actor constructors.\nNo scheduler or sound helper is stubbed. Full Actor bytes/masks, whole globals\nSHA, ordered sound requests, saved registers, ret8 and empty FPU stack checked.\nThis is not the enclosing interleaved400-slot caller or a natural DAT sequence.\n",
+  "corpus": "actor-scheduler.json",
+  "sha256": "acb3b079fd959ff5e2154d26047d330efa180251c591b29f154120b836013d3f",
+  "bytes": 30408268,
+  "fpcw": 639,
+  "cases": 6084,
+  "groups": {
+    "gates": 320,
+    "counters": 168,
+    "next": 2208,
+    "type3-hp": 48,
+    "weapon": 156,
+    "death": 192,
+    "recover": 448,
+    "jump-input": 256,
+    "jump-bits": 128,
+    "negative-mp": 1728,
+    "tail": 18,
+    "sound-twice": 378,
+    "airborne-standing": 36
+  },
+  "instructions": 374,
+  "events": 756,
+  "writes": 30189,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "instructionCoverage": {
+    "0x40d960": {
+      "instructions": 316,
+      "executed": 316,
+      "missing": []
+    },
+    "0x416fb0": {
+      "instructions": 58,
+      "executed": 58,
+      "missing": []
+    }
+  },
+  "actorBytes": 6424704,
+  "globalsBytesPerCase": 46144,
+  "actorWritesSourceOnly": true,
+  "fixture": "original-actor-scheduler.json",
+  "fixtureSHA256": "8de8bd791bd7128a7578e86092f88b744fc578807ca26a31b7da9258fcce4d37",
+  "fixtureBytes": 338300
+}

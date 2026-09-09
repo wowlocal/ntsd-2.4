@@ -3,8 +3,31 @@
 The user's requirement is a native macOS game without a browser engine,
 CrossOver, or Wine at runtime, preserving the original Windows game's feel.
 
-**Current priority: whole40d960 scheduler, then the interleaved400-slot
-41f550..4214cf loop. Read [CATALOG_PRECISION](docs/research/CATALOG_PRECISION.md).**
+**Current priority: the ENTIRE interleaved400-slot41f550..4214cf loop.
+Read [ACTOR_SCHEDULER](docs/research/ACTOR_SCHEDULER.md).**
+Whole40d960..40de20 is now implemented generically in OriginalActorScheduler,
+including actual416fb0 catalog sound behavior.6084 controlled original calls
+atCW027f match allActor bytes/masks, whole globalsSHA and756 ordered sounds.
+All316scheduler/58sound instructions execute; this does NOT prove allbranches
+or naturalDAT sequences. Preserved: signed counters/byte, type3HP, state0/2000,
+state14death/recovery, wrappednext/facing/999, invalidnext earlyreturn retaining
+oldpreviousFrame, jump load/sign/store, negativeMP and same-call hit_d redirects.
+SourceID30..<40 except38 is the original mode/category exception. Nocharacterlist.
+Public API takes OriginalLoadedObject; atomicActor/globals rollback tested after
+first sound+lateFrame failure and second soundobserver failure. Buffer observers
+until wholetickcommit. NoFPU arithmetic here; finite/Inf/signedzero/subnormal
+stores and quietNaN comparison tested, headerNaNload/store payloads unsupported.
+Acceptance3release tests2.481s/build123.29s passed before1losslessfixture;
+156old hashes unchanged,157currentpins in build/research/actor-scheduler-fixture-pins.json.
+Final packaged3tests2.460s/build124.29s passed. Raw30,408,268/packed338,300 bytes
+and completeJSON/SHA independently verified; source/allSwiftPM jobs terminal.
+NTSDNative linked; no UI/device/Windows claim. Read the study before integration.
+Next recover the enclosing prefix (state9995/8000..<9000/9996 and HP/MP), then
+post-schedule/opoint/deletion in ORIGINAL live-slot order. Do not split scheduler
+into an allActor pass or skip unsupported surrounding branches. First own
+initialized tick still ends41f550/SP1000e9bc; app/fullmatch/Windows remain open.
+
+The preceding [CATALOG_PRECISION](docs/research/CATALOG_PRECISION.md) study:
 The numerical correction below now reaches original DAT parsing. A fresh whole
 catalog with explicitCW027f on BOTH EXE and separate scanner CPUs reproduces the
 entire95,289,959-byte historical raw capture byte-for-byte, including919,912
@@ -20,8 +43,8 @@ separate VM: this resolves its actualDAT outputs under explicit53, not full
 same-threadCRT/Windows binding/generaldecimal parsing. Initialized own chain
 still stops41f550/SP1000e9bc in its first unreturnedtick. Preserve explicit53
 match precision, historical fixture contracts and raw byte/mask provenance.
-Next implement the ENTIRE40d960, including actual416fb0 sound child, then
-interleave scheduling with recovery/spawn/deletion per original slot order.
+The whole40d960 has since been implemented separately; integrate it with
+recovery/spawn/deletion per original slot order, as described above.
 Final packaged6release tests23.811s/build125.47s passed, including all3retained
 catalog variants and originalintegerCRT. New envelopes/fullJSON/all3409blobs
 independently verified. Source and bothSwiftPM jobs terminal, NTSDNative linked;

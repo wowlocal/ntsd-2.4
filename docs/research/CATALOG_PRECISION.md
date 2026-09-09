@@ -117,8 +117,9 @@ of changed DAT values for explicit53 under that boundary; it is not a new
 same-thread CRT integration or a full Windows startup/device capture. General
 CRT decimal parsing and actual Windows DLL binding remain open.
 
-The next gameplay work is the whole `40d960` scheduler and the interleaved
-400-slot loop `41f550..4214cf`, preserving recovery, creation, deletion and
-per-slot ordering. The first initialized tick still ends at41f550 without
+The next [ACTOR_SCHEDULER](ACTOR_SCHEDULER.md) study now implements whole40d960
+with actual sound behavior. Its enclosing interleaved400-slot loop41f550..4214cf
+remains the next task, preserving recovery, creation, deletion and per-slot
+ordering. The first initialized tick still ends at41f550 without
 returning. App integration, a finished Naruto/Sasuke District match, other
 modes/AI, real device output and clean-macOS delivery remain required.
