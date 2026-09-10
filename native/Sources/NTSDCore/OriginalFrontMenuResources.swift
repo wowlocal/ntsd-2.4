@@ -30,6 +30,7 @@ public struct OriginalFrontMenuResources {
                               allocate: (Int) throws -> OriginalInterfaceAllocation,
                               source: (Int,String) throws -> OriginalBitmapInput,
                               deviceResult: (Int) throws -> (surface: UInt32,colorKeyResult: Int32),
+                              constructBitmap: ((Int,OriginalInterfaceAllocation,UInt32,String) throws -> OriginalLoadedBitmap)? = nil,
                               observe: (OriginalFrontMenuEvent) throws -> Void = { _ in }) throws -> OriginalFrontMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Front menu globals extent") }
@@ -59,13 +60,21 @@ public struct OriginalFrontMenuResources {
             else {
                 guard issued.insert(allocation.address).inserted else { throw OriginalStateError.invalidStorage("Front menu reused live allocation") }
                 try observe(.init(.construct,[allocation.address,0x40,0],[Array(path.utf8)]))
-                let input = try source(index,path), output = try deviceResult(index)
-                guard input.path == path else { throw OriginalStateError.invalidStorage("Front menu resource binding") }
-                let bitmap = try OriginalBitmapConstructor.construct(input,optional: false,backing: allocation.backing,
-                    device: device,flags: 0x40,surface: output.surface,colorKeyResult: output.colorKeyResult) { event in
-                        try observe(.init(OriginalFrontMenuEvent.Kind(rawValue: event.kind.rawValue)!,event.arguments,event.strings))
+                if let constructBitmap {
+                    let bitmap = try constructBitmap(index,allocation,device,path)
+                    guard bitmap.input.path == path,bitmap.storage.bytes.count == 0x1f50 else {
+                        throw OriginalStateError.invalidStorage("Front menu constructed bitmap binding")
                     }
-                loaded.append(bitmap)
+                    loaded.append(bitmap)
+                } else {
+                    let input = try source(index,path), output = try deviceResult(index)
+                    guard input.path == path else { throw OriginalStateError.invalidStorage("Front menu resource binding") }
+                    let bitmap = try OriginalBitmapConstructor.construct(input,optional: false,backing: allocation.backing,
+                        device: device,flags: 0x40,surface: output.surface,colorKeyResult: output.colorKeyResult) { event in
+                            try observe(.init(OriginalFrontMenuEvent.Kind(rawValue: event.kind.rawValue)!,event.arguments,event.strings))
+                        }
+                    loaded.append(bitmap)
+                }
             }
             try global(Self.slots[index],allocation.address)
             if index == 0 {

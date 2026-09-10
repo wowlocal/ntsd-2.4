@@ -145,3 +145,9 @@ resource/allocation provenance, then World/menu and remaining dispatcher paths.
 Earlier CRT/NLS, private backing, installed library transforms, worker/application
 integration, real Windows/window/input/audio, full matches/all content and clean
 macOS acceptance remain open. The full game goal is still active.
+
+The newer [bitmap surface loading](BITMAP_SURFACE_LOADING.md) continues the
+actual pending allocation through whole image/copy helpers and the front-resource
+caller. Seven own paths now reach427089/SP1000ea74; one stops before a NULL
+metadata write. This entry corpus remains unchanged, and neither study returns
+the whole application dispatcher or claims Windows pixels.

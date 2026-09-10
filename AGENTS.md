@@ -1054,6 +1054,55 @@ continuation, then World/menu/full dispatcher/worker and earlierCRT/NLS/lib
 transforms/application/Windows/devices/fullmatches/allcontent/cleanMac. Fullgoal
 remains active; this is still the first unreturned application dispatch.
 
+[BITMAP_SURFACE_LOADING](docs/research/BITMAP_SURFACE_LOADING.md) now executes
+whole43ed10/4013d0 and actual CRTmemset, with a native constructor provider for
+front resources.59direct source returns match;2more original returns require
+unknown private fields and are explicitly rejected/rolled back, NOT61matches.
+Eight fresh own WinMain/loop/dispatch chains continue actual4450ac:7settings
+boundaries427089/SP1000ea74 and1before-NULL-metadata stop424ca4. No World or
+application-dispatcher return. Complete174-event parent and entry reproduce.
+
+LoadImage first2010(file+DIB), fallback2000(resource+DIB), module requestedboth
+ways. GetObject result ignored; dimensions write BEFORE CreateSurface. Only
+exactCreateSurface0 continues; anyother result returns0 withoutDeleteObject,
+retaining dimensions. Optionalpixel-format skips sizeword, leavesdescriptor72=0.
+Copy restores, creates/selectsDC, getsbitmap/surfacedesc, and onlyexactGetDC0
+stretches/releases; alwaysDeleteDC and returnsGetDC result. Loader ignorescopy/
+DeleteObject results. Constructor retains dimensions when surfacecreationfails;
+negativecolorkey stillreports/releases/clears. Surface.released/DCbooleans mark
+requests, NOTactualdestruction (Release17/DeleteDC0 controls). NoWindows/device
+or privateheap/ABI claim.4450ac allocator itself remains an explicit boundary.
+
+69source cases=51loader/10copy/8own.1987EXE+33CRTactualstarts;106/106loader,
+88/88copy,75/75constructor; notallbranchcombinations.226memset/230copy/228loader/
+177constructorreturns.82345CPU/1123APIwrites reconstruct3456072globals/635904
+stackbytes+masks.177ownwrappers/1418832bytes+masks from179allocrequests; all7
+settingspaths6795orderedmetadatastores afteracceptedtoggle, NULLpath61. Native
+compares3783API requests/26108ownedstructurebytes;33448privatebytes remain
+unknown, sourcebytes retained. FailedGetObject/failedsurfacedesc+GetDC0 require
+unknownread androllback. Explicitsource dimensions orfailedGetDC canavoidread.
+
+Ownstartupdevice and registry issue28010020then2000steps/A5 backing; noexpected
+World/resources injected.23PEDIBs+1originalfile pinned.44d068remains1, World0.
+Nativewholependingloop rollback retainsstartup/resize/MSG/counter/baseline and
+resourceownership;6latefailures includefinalfontmetadata/settingsobserver.
+11short directreturns omit sentinelcodehook; actualPC30000000/SP1000f004,
+result/nonvolatiles observedafterexecution. Sentinel neverexecuted/countedasPC.
+24completedcandidate1cases/blobs/assets unchanged; addedterminalhookmetadata.
+Observermetadata/methodcollision/terminal-bookkeeping errors andfirsttest-local
+compileerror retained. No originalexpected or game rule changed for comparison.
+
+Raw10tests6.207s/build124.59s; strongerownmetadata10tests6.299s/build57.91s;
+finalpackaged10tests6.257s/build0.27s allpassed, retainingentry/front/interface/
+panelcorpora.239oldpins unchanged/240current; raw19573929/packed5571380bytes,
+fullbytes/JSON/SHA/546blobs/69parts/24assets/10vendorhashes verify.610isolated
+files from607committedbase+ownedadditions exclude6foreign. Allownjobs terminal;
+neverrestart completedcandidate2. NTSDNative linked, composer notwiredtoPractice.
+CUApipe failure again; no window/input/device action. Exact jobs:
+build/research/bitmap-surface-loading-work.json. NEXT actualown423480 settings,
+then earlyscreen/World/dispatcher, earlierCRT/NLS/privatebacking/librarytransforms,
+worker/application/Windows/devices/fullmatches/allcontent/cleanMac. Fullgoalactive.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

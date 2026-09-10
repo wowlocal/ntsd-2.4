@@ -142,3 +142,9 @@ Prologue41bc90, ввод/пауза и дальнейший путь к429730 е
 43ed10, COM/OS outputs, allocator и memset — платформенные границы. Пиксели,
 реальный DirectDraw/Windows, звук, игровой матч и чистая macOS не доказаны.
 В окно Practice этот новый путь пока не подключён.
+
+The newer [bitmap surface loader](BITMAP_SURFACE_LOADING.md) separately implements
+whole43ed10/4013d0 and composes them in the own front-resource path. It preserves
+dimensions written before failed CreateSurface, which the older explicitly
+supplied image-result boundary here did not exercise. This corpus is unchanged;
+its callers do not automatically acquire the newer own loader composition.

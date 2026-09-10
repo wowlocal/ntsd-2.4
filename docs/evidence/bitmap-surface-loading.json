@@ -1,0 +1,926 @@
+{
+  "sourceBytes": 19573929,
+  "sourceSHA256": "1fd0fddd03875cf0a34e15d1dbea786e35cceafc786c7df99522d5d916dbfd6d",
+  "producerSHA256": "512a2e10f48b3ce3ccb126c95e3c2afc38df1c1e4087c07fb08099d486e0d532",
+  "cases": 69,
+  "counts": {
+    "loader": 51,
+    "returned": 61,
+    "terminalCodeHooks": 58,
+    "CPUStores": 82345,
+    "APIOutputs": 1123,
+    "memsetReturns": 226,
+    "copyReturns": 230,
+    "loaderReturns": 228,
+    "fullGlobalBytes": 3456072,
+    "stackBytes": 635904,
+    "wrapperBytes": 1418832,
+    "wrapperRecords": 177,
+    "copy": 10,
+    "own": 8,
+    "settings": 7,
+    "allocationRequests": 179,
+    "constructorReturns": 177,
+    "nullBitmap": 1
+  },
+  "events": {
+    "module": 455,
+    "image": 455,
+    "getObject": 453,
+    "createSurface": 226,
+    "restore": 227,
+    "createDC": 227,
+    "selectObject": 227,
+    "description": 227,
+    "getDC": 227,
+    "stretch": 222,
+    "releaseDC": 222,
+    "deleteDC": 227,
+    "deleteObject": 220,
+    "colorKey": 174,
+    "message": 4,
+    "debug": 4,
+    "release": 1
+  },
+  "platformStructureBytes": {
+    "owned": 26224,
+    "opaque": 33572
+  },
+  "coverage": {
+    "loader": {
+      "static": 106,
+      "executed": 106,
+      "unexecuted": []
+    },
+    "copy": {
+      "static": 88,
+      "executed": 88,
+      "unexecuted": []
+    },
+    "constructor": {
+      "static": 75,
+      "executed": 75,
+      "unexecuted": []
+    }
+  },
+  "actualEXE": 1987,
+  "actualCRT": 33,
+  "blobs": 546,
+  "assets": 24,
+  "atomicParts": 69,
+  "priorCompletedCasesUnchanged": 24,
+  "priorFixturesUnchanged": 239,
+  "vendorFiles": 10,
+  "libPatchSpansDisjoint": 13,
+  "fullOriginalBytesMasksReconstructed": true,
+  "ownParentEntryUnchanged": true,
+  "directDimensionMasks": [
+    {
+      "index": 0,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 1,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 2,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 3,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 4,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 5,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 6,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 7,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 8,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 9,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 10,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 11,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 12,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 13,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 14,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 15,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 16,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 17,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 18,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 19,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 20,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 21,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 22,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 23,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 24,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 25,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 26,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 27,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 28,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 29,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 30,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 31,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 32,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 33,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 34,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 35,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 36,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 37,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 38,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 39,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 40,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 41,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 42,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 43,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 44,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 45,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 46,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 47,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 48,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 49,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 50,
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "index": 51,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 52,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 53,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 54,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 55,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 56,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 57,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 58,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 59,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 60,
+      "mask": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "nativeUnknownReadCases": [
+    44,
+    46
+  ],
+  "nativeDirectMatches": 59,
+  "nativeComparedRequestBytes": {
+    "owned": 26108,
+    "opaque": 33448
+  },
+  "nativeComparedAPIRequests": 3783,
+  "ownOrderedMetadataWrites": [
+    6795,
+    6795,
+    6795,
+    6795,
+    6795,
+    6795,
+    6795,
+    61
+  ],
+  "nativeStagedFullGlobalBytes": 3355896,
+  "ownSettingsBoundaries": 7,
+  "ownNullMetadataStops": 1,
+  "wholeDispatcherReturns": 0,
+  "windowsVerified": false,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeCompared": true,
+  "fixture": "original-bitmap-surface-loading.json",
+  "fixtureBytes": 5571380,
+  "fixtureSHA256": "6e88a23fca997cad390cad50c6b940f7ebbcc77f41bc6d4471e47462d70c8b14",
+  "rawCorpus": "build/research/bitmap-surface-loading-candidate2.json",
+  "nativeScope": "59 whole direct loader/copy matches;2 source returns explicitly rejected for unknown private fields.8 own startup/dispatcher/front prefixes:7 settings boundaries and1 before-null-metadata stop;177 complete constructors, own ordered metadata/records and whole pending-loop rollback. Opaque stack remains unknown; no full dispatcher/World or Windows return.",
+  "acceptanceLog": "build/research/bitmap-surface-loading-raw3.log",
+  "sourceCallbacks": "Declared Win32 image/GDI/DirectDraw and allocator outputs; no Windows/device execution",
+  "rawAcceptance": {
+    "tests": 10,
+    "seconds": 6.299,
+    "buildSeconds": 57.91,
+    "priorRawBuildSeconds": 124.59,
+    "sourceDirectMatches": 59,
+    "sourceUnknownReadRejections": 2,
+    "ownPrefixes": 8,
+    "lateFailures": 6
+  },
+  "packagedAcceptance": {
+    "tests": 10,
+    "seconds": 6.257,
+    "buildSeconds": 0.27,
+    "rawOverride": false
+  },
+  "allocatorBoundary": "4450ac requests receive declared backing or NULL; CRT malloc body is not executed",
+  "sourceOwnershipLabels": "surfaces.released and dcs record Release/DeleteDC requests, not actual destruction; images.deleted records declared DeleteObject result",
+  "nativeOpaqueBytesCompared": false,
+  "fullGoalActive": true
+}
