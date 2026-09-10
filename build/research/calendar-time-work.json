@@ -1,0 +1,330 @@
+{
+  "status": "accepted controlled startup clock/calendar dependency; whole WinMain caller and application open",
+  "previousGoalTurn": "progress:fd5188a",
+  "base": "fd5188a88c1263d164881e2bff616106c7f6248f",
+  "startedUTC": "2026-09-10T10:44:38.020942+00:00",
+  "priorFixtures": 231,
+  "fullGoalActive": true,
+  "sourceJobs": [
+    {
+      "name": "probe1",
+      "status": "terminal",
+      "exitCode": 1,
+      "pidNotCaptured": true,
+      "sessionNotAllocated": true,
+      "UTC": "2026-09-10T10:47:02.168092+00:00",
+      "error": "ctypes.ArgumentError: argument 3: TypeError: wrong type",
+      "operation": "Unicorn mem_write received bytearray from declared name conversion; no game fault or safeguard refusal",
+      "source": "build/research/calendar-time-probe1-source.py",
+      "log": "build/research/calendar-time-probe1.log"
+    },
+    {
+      "name": "probe2",
+      "status": "terminal",
+      "exitCode": 0,
+      "pidNotCaptured": true,
+      "sessionNotAllocated": true,
+      "stepsCompleted": 4,
+      "UTC": "2026-09-10T10:47:19.600457+00:00",
+      "source": "build/research/calendar-time-probe2-source.py",
+      "log": "build/research/calendar-time-probe2.log"
+    },
+    {
+      "name": "probe3",
+      "status": "terminal",
+      "exitCode": 0,
+      "pidNotCaptured": true,
+      "sessionNotAllocated": true,
+      "stepsCompleted": 4,
+      "UTC": "2026-09-10T10:51:15.109546+00:00",
+      "source": "build/research/calendar-time-probe3-source.py",
+      "log": "build/research/calendar-time-probe3.log"
+    },
+    {
+      "name": "candidate1",
+      "pid": 53836,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_calendar_time.py",
+        "--output",
+        "build/research/calendar-time-candidate1.json"
+      ],
+      "start": 1789037475.2633789,
+      "exitCode": 1,
+      "end": 1789037486.2469718,
+      "session": 91250,
+      "casesCompleted": 19,
+      "error": "AssertionError: ('0x30000000', [{'entry': 2014849111, 'kind': 'time', 'sp': 268496896, 'returnPC': 805306368}])",
+      "operation": "First clock control returned to STOP without a code hook callback; state must be observed after emu_start as well. No source fault or safeguard refusal.",
+      "source": "build/research/calendar-time-candidate1-source.py",
+      "log": "build/research/calendar-time-candidate1.log"
+    },
+    {
+      "name": "candidate2",
+      "pid": 54411,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_calendar_time.py",
+        "--output",
+        "build/research/calendar-time-candidate2.json"
+      ],
+      "start": 1789037709.0760682,
+      "exitCode": 0,
+      "end": 1789037720.870383,
+      "session": 55997,
+      "sha256": "1cc101feab1f1128d2780bdf9507ce26bf2efa7b8600894e7ecb61be43d125da"
+    },
+    {
+      "name": "transitions-candidate1",
+      "pid": 57780,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_calendar_transitions.py",
+        "--output",
+        "build/research/calendar-time-transitions-candidate1.json"
+      ],
+      "start": 1789038691.228365,
+      "exitCode": 0,
+      "end": 1789038694.228988,
+      "session": 61826
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "calendar-time-raw1",
+      "pid": 54791,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalCalendarTimeTests|OriginalStartupPanelTests"
+      ],
+      "start": 1789037837.043267,
+      "exitCode": 0,
+      "end": 1789038035.432666,
+      "session": 74099,
+      "tests": 4,
+      "testSeconds": 3.288,
+      "buildSeconds": 193.27
+    },
+    {
+      "name": "calendar-time-packaged",
+      "pid": 55809,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalCalendarTimeTests|OriginalStartupPanelTests"
+      ],
+      "start": 1789038169.36022,
+      "exitCode": 0,
+      "end": 1789038224.945337,
+      "buildSeconds": 51.56,
+      "tests": 4,
+      "testSeconds": 2.819,
+      "session": 60445
+    },
+    {
+      "name": "calendar-time-raw2",
+      "pid": 58012,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalCalendarTimeTests|OriginalStartupPanelTests"
+      ],
+      "start": 1789038776.298271,
+      "exitCode": 0,
+      "end": 1789038832.264906,
+      "session": 14522,
+      "buildSeconds": 51.4,
+      "tests": 5,
+      "testSeconds": 3.386
+    },
+    {
+      "name": "calendar-time-packaged2",
+      "pid": 58400,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalCalendarTimeTests|OriginalStartupPanelTests"
+      ],
+      "start": 1789038903.67541,
+      "exitCode": 0,
+      "end": 1789038907.154031,
+      "buildSeconds": 0.25,
+      "tests": 5,
+      "testSeconds": 2.822,
+      "session": 64093
+    }
+  ],
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "staticInspectionCorrection": "Initial read-only DLL export disassembly used78100000; corrected from PE imagebase78130000 before any new execution.",
+  "rawAcceptancePassed": true,
+  "artifactVerification": {
+    "session": 69560,
+    "exitCode": 0
+  },
+  "sourceSHA256": "1cc101feab1f1128d2780bdf9507ce26bf2efa7b8600894e7ecb61be43d125da",
+  "fixturePublished": true,
+  "currentFixtures": 233,
+  "publication": {
+    "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-calendar-time.json",
+    "sha256": "e8ed60e3ee42be2e91dcdc1903b25d3d3bdfb46c227383459ef0abe8e65b9f82",
+    "bytes": 4473165,
+    "session": 64106,
+    "exitCode": 0
+  },
+  "uiInspection": {
+    "operation": "cua.getState()",
+    "capturedUTC": "2026-09-10T11:02:27.928021+00:00",
+    "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+    "turn": "unavailable",
+    "apps": [],
+    "browsers": [],
+    "errors": [
+      "Native apps: Error: Sky Computer Use native pipe startup failed"
+    ],
+    "scope": "Tool transport failure, not a safety refusal. No app/window/input action executed.",
+    "processRevalidation": [
+      {
+        "pid": 54791,
+        "exitCode": 1,
+        "output": ""
+      },
+      {
+        "pid": 54411,
+        "exitCode": 1,
+        "output": ""
+      }
+    ]
+  },
+  "acceptedMilestone": true,
+  "packagedAcceptancePassed": true,
+  "allOwnedJobsTerminal": true,
+  "nativeWholeReturns": 10844,
+  "nativeSourceStopRejections": 3,
+  "nativeOrderedRequests": 118,
+  "nativeProductionWiringComplete": false,
+  "windowsVerified": false,
+  "appWindowExercised": false,
+  "completedUTC": "2026-09-10T11:17:17.617135+00:00",
+  "terminalPIDRevalidation": [
+    {
+      "pid": 53836,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 54411,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 57780,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 54791,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 55809,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 58012,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 58400,
+      "exitCode": 1,
+      "output": ""
+    }
+  ],
+  "packagedArtifactVerification": {
+    "session": 46205,
+    "exitCode": 0
+  },
+  "preservedIntermediateCases": 19,
+  "intermediateComparison": "All19 completed cases reproduce byte-for-byte with final capture apart from newly explicit false terminal-observation metadata; their immutable files remain.",
+  "isolatedNativeFiles": 588,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeExecutableSHA256": "501f104b03f6b915e1c6e683714acb28ed87bc4f2c5df8419fa4bea19c6009d7",
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/STARTUP_PANEL.md",
+    "docs/research/CALENDAR_TIME_PLAN.md",
+    "docs/research/CALENDAR_TIME.md",
+    "docs/evidence/calendar-time.json",
+    "tools/oracle_calendar_time.py",
+    "tools/verify_calendar_time.py",
+    "tools/accept_calendar_time.py",
+    "native/Sources/NTSDCore/OriginalCalendarTime.swift",
+    "native/Tests/NTSDCoreTests/OriginalCalendarTimeTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-time.json",
+    "tools/oracle_calendar_transitions.py",
+    "docs/evidence/calendar-transitions.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-transitions.json"
+  ],
+  "transitionGapAudit": {
+    "operation": "Read-only inventory of tested2026transition neighboring seconds",
+    "finding": "Half-hour, absolute,500ms and nonzero-standard-bias controls sampled only a subset of exact neighboring seconds. Add an immutable focused corpus; main fixture stays unchanged."
+  },
+  "transitionRawAcceptancePassed": true,
+  "transitionArtifactVerification": {
+    "exitCode": 0,
+    "log": "build/research/calendar-transitions-verification.log"
+  },
+  "transitionPublication": {
+    "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-calendar-transitions.json",
+    "sha256": "38fb74ae3a4dd6eec40384854c20d3f7fb22c7888d61bda25791387f26147c05",
+    "bytes": 1172064,
+    "session": 98219,
+    "exitCode": 0
+  },
+  "transitionPackagedArtifactVerification": {
+    "session": 26303,
+    "exitCode": 0
+  },
+  "transitionPackagedAcceptancePassed": true,
+  "preciseDSTBoundaries": 198,
+  "finalReview": {
+    "session": 13973,
+    "exitCode": 0,
+    "localMarkdownLinks": 631,
+    "UTC": "2026-09-10T11:18:27.939985+00:00"
+  }
+}

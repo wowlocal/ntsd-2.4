@@ -781,6 +781,60 @@ NEXT actual43cfb4..43d078 date/time/music/cursor, earlierwindow/critical-section
 CRT and full WinMain/dispatcher/app composition. Unknown local/WindowsNLS/lib
 transforms, actualinput/audio/latency/fullmatches/content/cleanMac remainopen.
 
+[CALENDAR_TIME](docs/research/CALENDAR_TIME.md) now implements VC80 startup
+_time64/_localtime64 dependencies. Main9755whole returns match:20clocks,9718nonnull
+localtime and17NULL/errno22 returns. Three additional original stops are native
+rejections with rollback, NOT9758matches. Whole43cfb4..43d078 remains next.
+_time64 subtracts unsignedFILETIME epoch with64-bit wrap then divides10000000;
+pre1970 values become large positive quotients. Localtime retains its own36-byte
+tm and fills all-1 before checks; successful calls retain prior errno. Maximum
+32535244799 includes3001-01-01 07:59:59. First259200seconds use separate UTC-first
+normalization; later calls subtract timezone before GMT and DST evaluation.
+
+Actual lazytzset executes from supplied C-locale PTD/environment, never an
+injected initialized flag. Own cache/names/allocations survive repeated calls.
+OS responses cover positive/negative/fractional offsets, north/south/half-hour
+DST, absolute/relative and500ms transitions; failure retains CRT PST fallback.
+ASCII TZ parser preserves suffix first-byte flag(PST8PDT=80) and fallback rules
+change at2007. Native host environment/timezone/name conversion remains open.
+All36tm bytes/masks,128name bytes,three timezone/sixcache words,errno/pointer and
+retained allocation bytes/masks compare. Source55803helper returns/1843CRT PCs
+are source metadata, not native private ABI.0EXE;1141/1292staticcalendar starts,
+all23time/16localtime wrapper starts, not every branch outcome.
+
+Source313439stores/80adapter writes reconstruct data/PTD/owned/output storage;
+44adapter writes are private stack outputs.40cases/7916blobs retained. At upper
+range input and southern-zone adjustment source stops before actual invalid-
+parameter78138a70; no Watson executed. Allocation failure stops before781819ad
+reloads reserved word.78181971 pushECX wrote it: not unwritten physical memory.
+Its78132da8 belongs to controlled priorCRT register state, NOT recovered own
+WinMain provenance; do not import/follow it as a tm pointer. Late conversion and
+own-buffer observer trials roll back all native state; stage external effects.
+
+Raw4tests3.288s/build193.27s and packaged4tests2.819s pass, retaining212startup
+panel matches/8unknown rejections; packaged build51.56s.231oldpins unchanged/232current; raw134473385/
+packed4473165bytes/JSON/SHA/all7916blobs/10vendor hashes verify.587isolated files
+exclude6unchanged foreign transforms. Initial Python bytearray API type failure
+and first broad19case terminal-hook omission retain frozen sources/logs/parts.
+Final capture reads10terminal boundaries after emulation; no expected bytes
+edited. Native rules passed first comparison; all owned jobs terminal, app linked.
+CUA nativepipe inventory failed again; no window/input action. PIDs revalidated
+terminal independently. Jobs/pins: build/research/calendar-time-work.json.
+Final input inventory found downsampled exact neighbors in half-hour/absolute/
+500ms/nonzeroStandardBias controls. A SECOND immutable corpus adds1089 whole
+returns from99 own June baselines and198 boundaries*5 neighboring seconds.
+All11DST configurations/nine years explicitly verify0/0/1/1/1 and1/1/0/0/0.
+Native rules unchanged; main fixture unchanged. Supplemental7310source helper
+returns/1565CRT PCs are a subset of the1843start union; no new PC coverage claim.
+Combined10844whole returns+3rejections/118requests. Raw5tests3.386s/build51.40s;
+final packaged5tests2.822s/build0.25s. Main raw134473385/packed4473165 plus
+supplemental17675299/1172064bytes, fullJSON/SHA/7916+706blobs verified. All231
+priorpins unchanged/233current; intermediate232pins retained. Final588isolated
+native files exclude6foreign transforms; all owned jobs terminal. Full goalopen.
+NEXT whole43cfb4..43d078 ownclock/dateformat/wrappedperiod/music/cursor, then
+earlierCRT/window/WinMain/dispatcher/application. WindowsNLS/transforms/host
+timezone/input/audio/latency/fullmatches/allcontent/cleanMac remain open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

@@ -1,0 +1,63 @@
+{
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/STARTUP_PANEL.md",
+    "docs/research/CALENDAR_TIME_PLAN.md",
+    "docs/research/CALENDAR_TIME.md",
+    "docs/evidence/calendar-time.json",
+    "tools/oracle_calendar_time.py",
+    "tools/verify_calendar_time.py",
+    "tools/accept_calendar_time.py",
+    "native/Sources/NTSDCore/OriginalCalendarTime.swift",
+    "native/Tests/NTSDCoreTests/OriginalCalendarTimeTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-time.json",
+    "tools/oracle_calendar_transitions.py",
+    "docs/evidence/calendar-transitions.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-transitions.json"
+  ],
+  "ownedHashes": {
+    "AGENTS.md": "dc0b4b0213b545c726ca147eff1f0242cba12acecc9ae688783faf5406931a3c",
+    "docs/RESEARCH_MAP.md": "96b0c842b465484dd07b30ff93356b96d9e91d630d993d61b95d3d5c1c1079de",
+    "docs/research/ADDRESS_BOOK.md": "d50f62a559f9b6104fbc07e9514d1cae3f513120462db841f33f917a8c52f90a",
+    "docs/research/STARTUP_PANEL.md": "13d801799d11eb38c8741648d26a36b8b9732cb6e4fef15abcdb92a5ad587153",
+    "docs/research/CALENDAR_TIME_PLAN.md": "56d37e0b0821fa7fc57f93697a5ec205793c807e1acdf84bdf94e55f42db2c1b",
+    "docs/research/CALENDAR_TIME.md": "03ea381afc00ab1dc3acbcdd23dddc5d72686252db221a73719198a154a0e5bb",
+    "docs/evidence/calendar-time.json": "da21f227a0072930c1ed45545a4d951e2f92acefeabcd7ca5d2772ca1607308e",
+    "tools/oracle_calendar_time.py": "18c529d18ba360f550ee559e75238b52467cec47133f8555fd289072623aec35",
+    "tools/verify_calendar_time.py": "8e47605e7f348f22f57c39464de4966a19c3670c01b7f79c44b44a760ac66244",
+    "tools/accept_calendar_time.py": "d5fa95f846135383ba6b1ac7f24254c48a4341068e82aa19b29ab9b1eda1675a",
+    "native/Sources/NTSDCore/OriginalCalendarTime.swift": "81116f3ff11eef0f52d6b10c5531c9b1483fc116d02cca59f9f99b3b19f20e00",
+    "native/Tests/NTSDCoreTests/OriginalCalendarTimeTests.swift": "b6565eddc44e388b6d41f6378016b39d12b2801014f84f01149147ae0fd88db3",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-time.json": "e8ed60e3ee42be2e91dcdc1903b25d3d3bdfb46c227383459ef0abe8e65b9f82",
+    "tools/oracle_calendar_transitions.py": "99817db0801474d1e915d464af941c191fcd9049e980b68f8da72b3a6cabf122",
+    "docs/evidence/calendar-transitions.json": "09a31d5a2d2f8cbfb1c5b67baf35223c3553dd713197c29d16225316b17bda02",
+    "native/Tests/NTSDCoreTests/Fixtures/original-calendar-transitions.json": "38fb74ae3a4dd6eec40384854c20d3f7fb22c7888d61bda25791387f26147c05"
+  },
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "priorPins": 231,
+  "currentPins": 233,
+  "intermediatePins": 232,
+  "vendorFiles": 10,
+  "isolatedFiles": 588,
+  "localMarkdownLinks": 631,
+  "fullRawPackedJSONBytesSHA": true,
+  "atomicParts": [
+    40,
+    11
+  ],
+  "retainedIntermediateParts": 19,
+  "blobs": [
+    7916,
+    706
+  ],
+  "allOwnedJobsTerminal": true
+}

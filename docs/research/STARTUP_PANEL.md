@@ -185,3 +185,8 @@ window/critical-section/CRT initialization, then whole WinMain/dispatcher/app
 composition. Unknown local provenance, Windows NLS, library transforms, actual
 Windows/device/input/audio/latency, full matches/all original content and clean-Mac
 acceptance remain open. This milestone does not complete the full game goal.
+
+The subsequent [CALENDAR_TIME](CALENDAR_TIME.md) now supplies the recovered VC80
+clock/localtime dependency:10844 whole returns and3 separate source-stop/native
+rejection contracts. It retains own timezone/DST/tm state; the complete
+43cfb4..43d078 caller, formatting/music/cursor order and WinMain join remain open.
