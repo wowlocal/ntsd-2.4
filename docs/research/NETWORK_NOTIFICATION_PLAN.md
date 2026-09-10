@@ -52,7 +52,11 @@ Finite acceptance:
    precedes packing; verify full raw/packed bytes/JSON/SHA, original PE bytes,
    parent, CRT hash, all prior fixture/vendor pins and isolated native export.
 
-Actual controlled peer sessions, client-side402d70, menu/listening initialization
+Actual controlled network sessions, exit402d70, menu/listening initialization
 join, Windows nested callbacks, CRT/NLS/WinMain, lib transforms/routing and native
 macOS renderer/audio/input/timing remain required. The app still uses Practice;
 this dependency does not complete a full match, application or the full goal.
+
+Follow-up [NETWORK_CLIENT](NETWORK_CLIENT.md) accepts392 deferred428420 actions
+and a paired FIFO exchange.402d70 was previously mislabeled client connection;
+static inspection identifies exit/sendto/cleanup. Accepted source data is unchanged.

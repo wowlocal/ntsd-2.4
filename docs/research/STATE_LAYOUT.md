@@ -1158,3 +1158,34 @@ native выход за восстановленный local record явно от
 Три send и Sleep3000/500/500 сохраняются при numeric errors. Четыре retained
 уведомления несут собственный результат accept; listener/menu/client/peer и
 настоящая Windows delivery пока не соединены.
+
+## Отложенное подключение клиента
+
+[NETWORK_CLIENT](NETWORK_CLIENT.md) сравнивает392 whole actions428420 и один
+дополнительный парный обмен. Настоящий4246b0 prologue даёт EBP19, World/target
+locals и phase1; UI42709b→428420 не исполнен. RootSP2000e000, native local
+начинается с+14,1024 bytes до cookie+414. Это объявленный action ABI.
+
+| Адрес / root offset | Подтверждённое поведение |
+| --- | --- |
+| `4511b0` |Только exact1; clear до close предыдущего44f46c |
+| `44f46c` |Новый socket записывается даже-1; успешный path использует live socket |
+| World+7d8 / `44f2d4` |Hostname; gethostbyname result, затем fallback inet_addr/gethostbyaddr при NULL. Native требует происхождение первого address только при его чтении |
+| root+14 |Четыре raw bytes inet_addr, аргумент fallback gethostbyaddr |
+| `44f58c..44f59b` |Sockaddr16: family2, low16 htons12345, первый IPv4word; остальные bytes сохраняются |
+| `44f1b4` |Именно listener закрывается при connect-1; новый socket не очищается |
+| root+284 / native+270 |recv100 без clear;14-byte greeting comparison останавливается при первом несовпадении |
+| root+a4 / native+90 |77-byte outgoing packet, literal449788:19dwords+1byte;45 underscores at root+c4 |
+| `44fcc0+11*i` → `44fcec+11*i` |Сначала полный live NUL string в own remote bank, потом повторное чтение в packet; stride11 не ограничивает length |
+| `450b5c..450b68` |1/2/3/4 между REP76 и MOVSB; затем все8 seat words меняются на-1 только для received ASCII1 |
+| `44f1af` |Byte1 до send77; ошибки numeric send/recv игнорируются |
+| root+108 / native+f4 |recv77 без clear; suffix сохраняет прежнее caller backing |
+| `44ff90..450b48` |recv3001 без clear; suffix сохраняет прежние RNG bytes |
+| `44fcc0..44fceb` |44 received name bytes: raw store, затем zero для underscore; own bank44fcec сохраняет исходные underscores |
+| `44d064` |Lookup failure→1/present; connect failure→1/epilogue; handshake→4/present; socket failure сразу epilogue |
+
+Sleep500/recv77/Sleep500/recv3001 следуют после send77. Пакеты двух native peers
+передаются через отдельный FIFO; ожидаемые пакеты только сравниваются. Их полные
+88-byte name banks намеренно различаются: только received underscores декодируются.
+Неизвестные обязательные bytes и поздние provider/store ошибки дают полный
+откат. Реальное приложение, TCP/Windows и lifetime длинных settings names открыты.

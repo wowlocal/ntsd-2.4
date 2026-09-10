@@ -123,7 +123,7 @@ The415 cases cover low16 values0..33, selected high16/error values, accept
 numeric error/output combinations and four binary/overlapping name backings.
 One accepted callback is followed by READ/CONNECT/CLOSE/default calls carrying
 its own native globals. That retained sequence is not the original menu's full
-listen/accept chain, the client402d70 handshake or two real communicating peers.
+listen/accept chain, the client428420 handshake or two real communicating peers.
 
 There are363 accept requests (362 nonnegative results and one-1),364 closes,
 1086 sends,1086 sleeps,362 receives,415 defaults and16 messages. The source
@@ -174,7 +174,13 @@ from the native shipping implementation.
 The immutable input/lifecycle/graph/network instruction union now covers574/576
 WndProc starts. Only the two negative43bdd0 debug starts43b88a/43b88f remain;
 the accepted display helper returns0/1. This is still not all branch outcomes,
-a unified native callback router or actual OS delivery. Client402d70, initialized
+a unified native callback router or actual OS delivery. Exit402d70, initialized
 menu/listening/peer joins, synchronous callback delivery, CRT/NLS/WinMain,
 lib transforms/routing, native renderer/audio/input/timing, complete matches,
 all content/replays/network and Windows/device/clean-Mac acceptance remain open.
+
+Later [NETWORK_CLIENT](NETWORK_CLIENT.md) compares392 whole deferred client
+actions and one paired client/server FIFO exchange using both native peers’ own
+packets. Earlier402d70 handshake labels were static naming errors:402d70 is
+exit/sendto/cleanup, while connection begins428420. This later evidence does not
+execute the complete menu UI or establish actual Windows/TCP delivery.

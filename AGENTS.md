@@ -482,8 +482,56 @@ fullraw41676959/packed3897568bytes,JSON/SHA/684blobs/415atomicrecords,10vendor
 hashes and552isolatednativefiles verify. No file/source/expected byte correction;
 allownedjobs terminal0; NTSDNative linked, noapp/window/device/Windows exercise.
 Foreigntransforms unchanged. Jobs: build/research/network-notification-work.json.
-Client402d70, full initialized menu/listening/peer/callback routing, CRT/NLS/
+Actual client428420 is compared below;402d70 is exit/cleanup (earlier label
+corrected from static disassembly). Full initialized menu/listening/callback routing, CRT/NLS/
 WinMain/lib/macOS runtime join and complete game/clean-Mac goal remain open.
+
+[NETWORK_CLIENT](docs/research/NETWORK_CLIENT.md) matches392 whole deferred
+428420 actions,357 completed handshakes,4116requests/37667semantic stores. One
+additional client and whole server callback exchange4 own packets/3169bytes,
+in source on2independent CPUs and natively via2states/own FIFO outputs. Source
+packet bytes are comparison targets, NEVER substitute native peer output.
+Combined394calls:4137requests/30658sendbytes,38012semantic stores/1185930bytes;
+41980rawstores=40880CPU+1100API,47750recorded data reads,19413344storage bytes.
+360actual CRTmemsets/359complete REPs/386greeting comparisons.386EXE+37CRT PCs;
+client193/195missing only428703/42870a alignment.34prologuePCs counted separately.
+
+Actual4246b0 prologue produces EBP19/EBX0 and own declared World/target locals,
+phase4511f8=1. UI42709b→428420 is a DECLARED GAP; no EBP lifetime through UI or
+whole menu return claimed. Stops42873e presentation/4287de epilogue unexecuted.
+RootSP2000e000, local1024bytes starts+14, before cookie+414; root0..13/414..42b
+unchanged. World2112bytes is declared input, not sizeof recovery; hostname+7d8.
+402d70..402eb6 is actually optional exit/sendto/close/clear/WSACleanup, caller
+427f6b. Earlier client-handshake label was a STATIC naming error, corrected;
+no accepted server source bytes/results changed. Whole402d70 remains open.
+
+Pendingexact1 clears BEFOREcloseold/socket(2,1,6); store result even-1. Lookup
+fallback inet_addr/root14/gethostbyaddr; successful host requires first-address
+provenance only at dereference. Connect-1 closes LISTENER44f1b4, not new44f46c.
+Greetingrecv100 and replyrecv77 NEVER clear; partial RNGrecv3001 retains suffix.
+REPE14 stops first mismatch. Own EBP19 copies76templatebytes, then seats4..7
+get1/2/3/4 BEFOREfinalMOVSB. Four live names copy first to44fcec then reread into
+packet, no11-byte cap;44packet NULs→underscore. Byte44f1af1 BEFOREsend77, then
+Sleep500/recv77/Sleep500/recv3001, numericerrorsignored. All8ASCII1→seat-1; no
+first4defaults. Remote44raw bytes→44fcc0, secondzero forunderscore, thenmenu4.
+Ownnames retain underscores; peers' whole88-byte banks intentionally differ.
+Verifier first wrongly required equality; preservedattempt1 corrected verifier
+only to derive each bank from owninputs/peerpackets. No source/native rule fix.
+
+Required unknown hostname/name/local/host output and oversized3002recv fail
+with whole rollback; late finalrecv/menu-store also rollback. First-byte greeting
+mismatch needs no unknownsuffix. Broader settingsname/alias lifetime stays open;
+no source control/cookie fault manufactured. Buffer external effects. Paired FIFO
+is controlled transport, NOT actual TCP/Windows/reentrancy/latency evidence.
+Raw10release tests15.351s/build181.47s; packaged10tests14.426s/build0.28s,
+new5tests3.311s; retainedserver4+menu1020probes/450mouse/4150events/14errors pass.
+215oldfixtures unchanged/216current; fullraw54323566/packed4724320bytes/JSON/SHA,
+824main+7client+6serverblobs,392atomiccases,6probe/fullpeerprobe,10vendor hashes
+and555isolatednativefiles verify. Source/raw/packagedjobs terminal0; neverrestart
+completedsource. Foreigntransforms unchanged; NTSDNative linked, noappwindow or
+device/Windowsrun. Jobs: build/research/network-client-work.json. Exit402d70,
+complete client/host UI and initialized menu/listen/accept/output joins, actual
+network/CRT/NLS/WinMain/lib/macOS runtime/fullgame/clean-Mac and goal stay open.
 
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
