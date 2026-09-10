@@ -249,3 +249,12 @@ dispatcher returns. Forty-seven first due iterations commit at43d110/SP1000effc;
 one pre-NULL cursor stop remains explicitly rejected with rollback. Full parents,
 resources/library and private-stack evidence remain separate and unchanged.
 Subsequent input/worker/CRT/NLS/Windows/device/app/full-match work stays open.
+
+## Subsequent own input and loading entry
+
+[APPLICATION_MENU_INPUT](APPLICATION_MENU_INPUT.md) preserves all47 completed
+own parents, delivers actual mouse callbacks and continues repeated menu calls.
+Fifty chains compare62 completed iterations plus three actual41bc90 loading
+entries after single-player selection/3000rand/confirmation sound and background
+release/World2. Source CPU/stack/resources and native own state are retained;
+no mouse/World/expected-state injection. Whole loading remains the next dependency.

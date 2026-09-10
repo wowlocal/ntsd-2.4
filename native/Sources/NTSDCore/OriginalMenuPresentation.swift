@@ -46,7 +46,7 @@ public enum OriginalMenuPresentationEntry: String, Codable, Sendable {
 public enum OriginalMenuPresentation {
     /// Entire423910/43ef50. Reused by the early menu and mode confirmation.
     public static func releaseBackground(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
-                                         observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+                                         store: OriginalWindowInput.Store = { _,_ in },observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
         var state = globals, owned = memory
         let offset = 0x4511ac-OriginalMatchPreparation.globalBase
         let pointer = try state.integer(at: offset, as: UInt32.self)
@@ -62,7 +62,7 @@ public enum OriginalMenuPresentation {
         }
         try observe(.init(.free, [pointer]))
         allocation.live = false; owned.allocations[pointer] = allocation
-        try state.write(UInt32(0), at: offset)
+        try state.write(UInt32(0), at: offset);try store(0x4511ac,[0,0,0,0])
         globals = state; memory = owned
     }
     /// Entire4019b0, also called alone by the mode screen. Other shutdown
@@ -149,8 +149,9 @@ public enum OriginalMenuPresentation {
         world: inout OriginalStateRecord,globals: inout OriginalStateRecord,memory: inout OriginalMenuPresentationMemory,
         libraryText: inout OriginalLibSurfaceText,
         store: @escaping OriginalWindowInput.Store = { _,_ in },
+        worldStored: @escaping (Int,UInt32) throws -> Void = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        var execution = Execution(world: world,globals: globals,memory: memory,input: input,libraryText: libraryText,store:store)
+        var execution = Execution(world: world,globals: globals,memory: memory,input: input,libraryText: libraryText,store:store,worldStored:worldStored)
         try execution.run(entry,observe)
         world = execution.world;globals = execution.globals;memory = execution.memory;libraryText = execution.libraryText!
     }
@@ -172,6 +173,7 @@ public enum OriginalMenuPresentation {
         let input: OriginalMenuPresentationInput
         var libraryText: OriginalLibSurfaceText? = nil
         var store: OriginalWindowInput.Store = { _,_ in }
+        var worldStored: (Int,UInt32) throws -> Void = { _,_ in }
         typealias Observer = (OriginalMenuPresentationEvent) throws -> Void
         func bits(_ x: Int32) -> UInt32 { UInt32(bitPattern: x) }
         func word(_ address: Int) throws -> UInt32 {
@@ -201,7 +203,7 @@ public enum OriginalMenuPresentation {
             allocation.live = false; memory.allocations[address] = allocation
         }
         mutating func releaseMenuBitmap(_ observe: Observer) throws {
-            try OriginalMenuPresentation.releaseBackground(globals: &globals, memory: &memory, observe: observe)
+            try OriginalMenuPresentation.releaseBackground(globals: &globals, memory: &memory, store:store,observe: observe)
         }
         /// 401f30: query IBasicAudio, read volume, set it only after a successful
         /// read, release the queried interface on both read/set outcomes.
@@ -299,7 +301,7 @@ public enum OriginalMenuPresentation {
                 guard try world.integer(at: 0, as: Int32.self) == 1 else { throw error("Dispatcher requires World=1") }
                 try releaseMenuBitmap(observe)
                 try observe(.init(.bitmap, [word(0x45118c), 0, 0, UInt32.max, 0, 0, input.targetSurface]))
-                try world.write(Int32(2), at: 0)
+                try world.write(Int32(2), at: 0);try worldStored(0,2)
                 try overlay(observe); try present(observe)
             case .tail:
                 let x = min(775, try signed(0x4546f0)), y = min(535, try signed(0x453cdc) &+ 2)

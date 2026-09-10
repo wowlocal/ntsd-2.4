@@ -48,6 +48,43 @@ false positives will not occur.
 
 ## Current research status
 
+**Latest own input join: [APPLICATION_MENU_INPUT](docs/research/APPLICATION_MENU_INPUT.md).**
+Fifty own chains preserve all47 completed APPLICATION_MENU_RETURN parents:
+47idle repeats and3delivered WM_MOUSEMOVE/down/up activation chains. Actual
+WndProc callbacks and subsequent dispatcher/World calls share the same original
+CPU/stack/resources. No direct mouse/held/World/worker writes are injected.
+62iterations complete;3pending World2 calls stop at actual41bc90/SP1000ea6c,
+returnPC424746,target31003000. Native preserves counter7/baseline123456888 at
+that loading dependency; never invent the child's return or following held clear.
+
+Main click runs actual401a30/3COM requests and422ac0/3000VC80 rand per chain,
+changesWorld0->1; nextWorld1 releases/clears/frees its background and becomes2.
+Negative presentation/sound/release HRESULTs keep the source order. Native uses
+own startup RNG/CreateSurface/WAV tokens and allocator registry; no expected
+wrapper/after-state/private stack import. Earlier constructor records are
+historical; live/dead bitmap state comes from the transferred own registry.
+
+18835events/10140helper returns,968EXE/51DLL/9CRT PCs;869full states reconstructed
+from62842CPU+174API stores/212735bytes.21725record comparisons/174147600bytes
+plusmasks,218normalSEH stores/106actualABI returns/9whole callbacks/9000rand.
+131347local reads retain originalprovenance; nativebody96owned/96unknownbytes.
+9752opaque fill bytes stay0/false;210undefinedbitmap reads remain declared.
+Eightlate failures preserve earlier completed input/menu iterations and fully
+roll back the pending one, including partial RNG-table and post-free output.
+
+Raw8release tests passed71.656s/build66.13s, including retained own menu return
+and controlled loop/main/presentation. Read the linked study and
+`build/research/application-menu-input-work.json` for final acceptance/jobs.
+Final packaged8tests passed72.072s/build0.28s without raw overrides;all
+source/SwiftPM jobs terminal.244old fixtures unchanged;245current. Full raw
+132657719/packed37774137bytes/JSON/SHA,7567blobs/50atomicparts/36assets/10vendor
+hashes verified;620isolated files. Never restart completed candidate1 source.
+Next compose whole41bc90 from this own World2/target/RNG/resources/library/MSG.
+Earlier CRT/NLS, workers, other modes, actual Windows/window/devices/full match/
+all content/network/replay/cleanMac remain open. CUA inventory again failed to
+start its native pipe; six foreign files remain untouched.
+
+
 **Latest own application join: [APPLICATION_MENU_RETURN](docs/research/APPLICATION_MENU_RETURN.md).**
 Forty-seven fresh own early-menu/World/dispatcher chains finish the first due
 iteration at43d110/SP1000effc; one ordinary allocation-failure parent stops before

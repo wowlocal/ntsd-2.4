@@ -19,13 +19,14 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
     }
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
-        let c: Corpus,indices: [Int]
+        let c: Corpus,indices: [Int],rawCases: [[String:Any]]
         var cache: [String:[UInt8]] = [:]
         init(_ body: Body.Resources,_ front: F.Resources) throws {
             let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_MENU_RETURN"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-menu-return",withExtension:"json",subdirectory:"Fixtures"))
             let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
             c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,48)
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
+            rawCases = try XCTUnwrap(raw["cases"] as? [[String:Any]])
             let bp = try XCTUnwrap(raw["bodyParents"] as? [String:[String:Any]]),fp = try XCTUnwrap(raw["frontParents"] as? [String:[String:Any]])
             XCTAssertEqual(bp.count,43);XCTAssertEqual(fp.count,40)
             indices = try c.cases.map { c in
@@ -60,7 +61,7 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
             try observe(.init("write",[UInt32(address),UInt32(bytes.count),v]))
         }
     }
-    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil) throws {
+    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,continuation: ((OriginalApplicationMessageLoop,B.OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index];var adapter: Adapter?,reached = false,committed = false
         func full(_ owned: B.OwnContext,_ counter: UInt32? = nil) -> [UInt8] {
             if let counter { return owned.base.globals.bytes+owned.base.outerBytes(counter:counter)+owned.outerAndWorldBytes.dropFirst(0x854) }
@@ -86,7 +87,7 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
         },counter:{ try XCTUnwrap(adapter).observe(.init("write",[0x458580,4,$0])) },beforeCommit:{ loop,owned in
             try finished(loop,owned)
             if fail == "commit" { throw B.Stop.late }
-        },completed:{ loop,owned in try finished(loop,owned);committed = true })
+        },completed:{ loop,owned in try finished(loop,owned);committed = true;try continuation?(loop,owned) })
         let continueMenu: (inout B.OwnContext) throws -> Void = { owned in
             reached = true
             var globals = owned.base.globals,random = owned.random,library = owned.libraryText,memory = owned.base.memory

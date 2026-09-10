@@ -27,13 +27,16 @@ public struct OriginalCRTRandom: Codable, Equatable, Sendable {
 
     /// Entire EXE 422ac0, called by 427a2c/427a71. Exactly 3000 CRT draws,
     /// followed by a zero terminator; gameplay RNG index/counter are untouched.
-    public mutating func rebuildGameTable(globals: inout OriginalStateRecord) throws {
+    public mutating func rebuildGameTable(globals: inout OriginalStateRecord,store: OriginalWindowInput.Store = { _,_ in }) throws {
         try Self.check(globals)
         let start = 0x44ff90-OriginalMatchPreparation.globalBase
+        var random = self,state = globals
         for index in 0..<3000 {
-            try globals.write(UInt8(next() % 255 + 1), at: start+index)
+            let byte = UInt8(random.next() % 255 + 1)
+            try state.write(byte, at: start+index);try store(0x44ff90+index,[byte])
         }
-        try globals.write(UInt8(0), at: start+3000)
+        try state.write(UInt8(0), at: start+3000);try store(0x44ff90+3000,[0])
+        self = random;globals = state
     }
 
     private static func check(_ globals: OriginalStateRecord) throws {

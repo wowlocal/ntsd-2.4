@@ -137,3 +137,12 @@ Sasuke District match, all content/modes/network/replays and clean-Mac acceptanc
 remain part of the full active goal. CUA inventory returned no apps/browsers and
 `Native apps: Error: Sky Computer Use native pipe startup failed`; no window or
 device was exercised. Do not retry the separately recorded blocked Microsoft URL.
+
+## Subsequent own input and loading entry
+
+[APPLICATION_MENU_INPUT](APPLICATION_MENU_INPUT.md) preserves all47 completed
+own parents, delivers actual mouse callbacks and continues repeated menu calls.
+Fifty chains compare62 completed iterations plus three actual41bc90 loading
+entries after single-player selection/3000rand/confirmation sound and background
+release/World2. Source CPU/stack/resources and native own state are retained;
+no mouse/World/expected-state injection. Whole loading remains the next dependency.

@@ -70,15 +70,17 @@ public enum OriginalMainMenu {
     public static func run(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
         crt: inout OriginalCRTRandom,input: OriginalMainMenuInput,
         store: @escaping OriginalWindowInput.Store = { _,_ in },
+        worldStored: @escaping (Int,UInt32) throws -> Void = { _,_ in },
         observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
         guard world.bytes.count == OriginalStateRecord.worldPrefixSize,globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
-        var execution = Execution(world: world,globals: globals,store:store),random = crt
+        var execution = Execution(world: world,globals: globals,store:store,worldStored:worldStored),random = crt
         let result = try execution.consumeMainMenu(crt: &random,input: input,observe: observe)
         world = execution.world;globals = execution.globals;crt = random;return result
     }
     private struct Execution {
         var world: OriginalStateRecord,globals: OriginalStateRecord
         let store: OriginalWindowInput.Store
+        let worldStored: (Int,UInt32) throws -> Void
         static let globalBase = OriginalMatchPreparation.globalBase
         static func error(_ text: String) -> OriginalStateError { .invalidStorage("Main menu: "+text) }
         func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
@@ -111,7 +113,7 @@ public enum OriginalMainMenu {
         }
         func rebuild() throws {
             let before = crt.state
-            try crt.rebuildGameTable(globals: &globals)
+            try crt.rebuildGameTable(globals: &globals,store:store)
             try event(.randomTable, [before, crt.state])
         }
 
@@ -141,9 +143,9 @@ public enum OriginalMainMenu {
             try sound()
             switch row {
             case 1:
-                try globals.write(UInt8(0x75), at: 0x4553bf-Self.globalBase)
+                try globals.write(UInt8(0x75), at: 0x4553bf-Self.globalBase);try store(0x4553bf,[0x75])
                 try setGlobal(0x44d064, 0)
-                try world.write(Int32(1), at: 0)
+                try world.write(Int32(1), at: 0);try worldStored(0,1)
                 try rebuild()
                 for i in 0..<4 { try setGlobal(0x450b4c+i*4, Int32(i+1)) }
             case 2:
