@@ -1,0 +1,97 @@
+{
+  "sourceBytes": 4331171,
+  "sourceSHA256": "f6ce8dff0efb9561521aa06a864cf0042fcc09e0fddb3ef64ee01fc6856e6cf9",
+  "producerSHA256": "ce6263ebcabcda9f3ae719c1cfbb19ada9ef14e1cc2a2a1ae33889bca2e37a4a",
+  "cases": 64,
+  "parentCount": 1,
+  "fullParentReproduced": true,
+  "parentProducerSHA256": "1f3a8862eddc2573f97609f9e6c0ae59ac6801064ae2ba85bb3eb757de7b1f55",
+  "counts": {
+    "quitIterations": 63,
+    "iterations": 216,
+    "originalStackStores": 4016,
+    "adapterStackWrites": 509,
+    "globalStores": 76,
+    "outerStores": 165,
+    "callbacks": 131,
+    "returned": 63,
+    "continuedIterations": 152,
+    "requiredIterations": 1,
+    "requiredDispatcher": 1
+  },
+  "events": {
+    "peek": 216,
+    "get": 194,
+    "translate": 131,
+    "dispatchMessage": 131,
+    "windowDefault": 106,
+    "invalidate": 11,
+    "time": 80,
+    "sleep": 2,
+    "gameDispatch": 19,
+    "recoverSurface": 6
+  },
+  "callbackMessages": {
+    "0x100": 3,
+    "0x101": 3,
+    "0x200": 2,
+    "0x201": 2,
+    "0x202": 2,
+    "0x5": 23,
+    "0x3a0": 2,
+    "0x777": 83,
+    "0x203": 1,
+    "0x204": 1,
+    "0x205": 1,
+    "0x20": 1,
+    "0x112": 2,
+    "0x3a1": 1,
+    "0x3b5": 1,
+    "0x3b6": 1,
+    "0x3b7": 1,
+    "0x3b8": 1
+  },
+  "sleepArguments": [
+    4,
+    5
+  ],
+  "requiredDispatcherStops": [
+    {
+      "case": "own-required-dispatch",
+      "pc": 4450720,
+      "baselineBefore": 123456789,
+      "baselineAtStop": 123456822,
+      "counter": 1,
+      "request": {
+        "kind": "gameDispatch",
+        "arguments": [
+          1
+        ],
+        "message": null,
+        "defined": null
+      }
+    }
+  ],
+  "blobs": 305,
+  "actualEXE": 357,
+  "actualCRT": 0,
+  "loopStarts": 100,
+  "executedLoopStarts": 100,
+  "unexecutedLoop": [],
+  "fullGlobalsOuterMSGReconstruction": true,
+  "oldFixturesUnchanged": 235,
+  "vendorFiles": 10,
+  "libPatchSitesDisjoint": 13,
+  "nativeCompared": true,
+  "nativeLoopReturns": 63,
+  "nativeRequiredDispatchStops": 1,
+  "nativeCompletedIterations": 215,
+  "nativeCallbacks": 131,
+  "nativeEvents": 896,
+  "fixture": "original-application-message-loop.json",
+  "fixtureBytes": 2536603,
+  "fixtureSHA256": "b88ca033aaf17df68694d61d2c570890f7b8b620a96ceb22f43ef9a8d0133ebd",
+  "windowsVerified": false,
+  "fullGoalComplete": false,
+  "scope": "Whole43d100..43d21f loop/ret16 decisions and selected actual WndProc callbacks from own startup.63 returns at declared OS/dispatcher/recovery boundaries,1 own stop at required43e9a0; earlier CRT/NLS/full dispatcher/application/device remain open."
+}

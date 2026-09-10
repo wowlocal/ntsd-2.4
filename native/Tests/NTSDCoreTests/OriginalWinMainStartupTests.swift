@@ -4,73 +4,73 @@ import NTSDCore
 @testable import NTSDReferenceChecks
 
 final class OriginalWinMainStartupTests: XCTestCase {
-    private struct Blob: Decodable { let count: Int,deflate: String }
-    private struct Storage: Decodable { let bytes: String,defined: String }
-    private struct Allocation: Decodable { let address: UInt32,backing: String?,bytes: String?,mask: String? }
-    private struct Snapshot: Decodable {
+    struct Blob: Decodable { let count: Int,deflate: String }
+    struct Storage: Decodable { let bytes: String,defined: String }
+    struct Allocation: Decodable { let address: UInt32,backing: String?,bytes: String?,mask: String? }
+    struct Snapshot: Decodable {
         let ptd: String,allocations: [Allocation],timezone: [UInt32],cache: [UInt32],names: String
         let initialized: UInt32,osZone: UInt32,errno: Int32,tmPointer: UInt32
     }
-    private struct Store: Decodable { let address: Int,bytes: String,eventIndex: Int? }
-    private struct Stage: Decodable { let name: String,globals: String,eventCount: Int,crt: Snapshot }
-    private struct Local: Decodable { let globals: String,local: String,localMask: String }
-    private struct PanelEvent: Decodable {
+    struct Store: Decodable { let address: Int,bytes: String,eventIndex: Int? }
+    struct Stage: Decodable { let name: String,globals: String,eventCount: Int,crt: Snapshot }
+    struct Local: Decodable { let globals: String,local: String,localMask: String }
+    struct PanelEvent: Decodable {
         let kind: String,arguments: [UInt32]?,strings: [[UInt8]]?,format: String?,result: UInt32?
         let before: Int?,position: Int?,eof: Bool?,state: Local?,globals: String?,scratch: Storage?,file: String?,buffer: Storage?
     }
-    private struct Record: Decodable { let address: UInt32,live: Bool,storage: Storage }
-    private struct PanelChild: Decodable {
+    struct Record: Decodable { let address: UInt32,live: Bool,storage: Storage }
+    struct PanelChild: Decodable {
         let kind: String,beforeGlobals: String,globals: String,allocation: Allocation?,resource: OriginalBitmapInput?
         let surface: UInt32?,colorKeyResult: Int32?,localState: Local?,scratch: Storage?,file: String?,buffer: Storage?
     }
-    private struct OwnBoundary: Decodable { let offset: Int,count: Int,rootEventCount: Int,globalStoreCount: Int,rootGlobals: String }
-    private struct Panel: Decodable { let children: [PanelChild],records: [Record],ownBoundary: OwnBoundary? }
-    private struct PanelSpec: Decodable {
+    struct OwnBoundary: Decodable { let offset: Int,count: Int,rootEventCount: Int,globalStoreCount: Int,rootGlobals: String }
+    struct Panel: Decodable { let children: [PanelChild],records: [Record],ownBoundary: OwnBoundary? }
+    struct PanelSpec: Decodable {
         let info: [UInt8]?,content: [UInt8]?,chunk: Int,infoReadFailAt: Int,infoClose: Int32,contentClose: Int32
         let capacity: Int,writeOpen: Bool,writeMode: String,writeFailAt: Int,writeClose: Int32
     }
-    private struct InputSpec: Decodable { let device: OriginalMenuSoundStartup.Platform }
-    private struct Spec: Decodable {
+    struct InputSpec: Decodable { let device: OriginalMenuSoundStartup.Platform }
+    struct Spec: Decodable {
         let label: String,milliseconds: UInt32,filetime: UInt64,zone: OriginalCalendarTime.Zone,criticalSection: [UInt8]
         let panel: PanelSpec,input: InputSpec,instance: UInt32?,show: Int32?,tz: String?,zoneResult: UInt32?
     }
-    private struct MusicEvent: Decodable { let kind: OriginalMusicEvent.Kind,arguments: [UInt32],strings: [[UInt8]],response: OriginalMusicResponse }
-    private struct ChildEvent: Decodable {
+    struct MusicEvent: Decodable { let kind: OriginalMusicEvent.Kind,arguments: [UInt32],strings: [[UInt8]],response: OriginalMusicResponse }
+    struct ChildEvent: Decodable {
         let request: OriginalWindowInitialization.Request?,response: OriginalWindowInitialization.Response?
         let kind: String?,arguments: [UInt32]?,event: OriginalMenuSoundStartup.Event?,globals: String?
         let stackStoreCount: Int?,globalStoreCount: Int?
     }
-    private struct Event: Decodable {
+    struct Event: Decodable {
         let kind: String,event: ChildEvent?,music: MusicEvent?,arguments: [UInt32]?,result: UInt32?,value: UInt64?
         let address: UInt32?,count: Int?,capacity: Int?,bytes: [UInt8]?,values: [Int32]?
     }
-    private struct Joy: Decodable { let request: OriginalInputStartup.Request,response: OriginalInputStartup.Response,globals: String }
-    private struct Caps: Decodable { let id: Int,bytes: String,defined: String }
-    private struct Load: Decodable {
+    struct Joy: Decodable { let request: OriginalInputStartup.Request,response: OriginalInputStartup.Response,globals: String }
+    struct Caps: Decodable { let id: Int,bytes: String,defined: String }
+    struct Load: Decodable {
         let path: [UInt8],file: String,input: OriginalWavePlatform,afterGlobals: String,outputAfter: UInt32,returned: UInt32?,temporaryLive: Bool
         let first: Storage,second: Storage?,temporary: Storage?,format: Storage?,descriptor: Storage?
     }
-    private struct Input: Decodable { let loads: [Load],joyRequests: [Joy],capsStates: [Caps],ownBoundary: OwnBoundary?,joystickReturn: JoyReturn? }
-    private struct JoyReturn: Decodable { let eax: UInt32 }
-    private struct Music: Decodable { let allocations: [Allocation] }
-    private struct CalendarReturn: Decodable { let pointer: UInt32,bytes: [UInt8]? }
-    private struct Case: Decodable {
+    struct Input: Decodable { let loads: [Load],joyRequests: [Joy],capsStates: [Caps],ownBoundary: OwnBoundary?,joystickReturn: JoyReturn? }
+    struct JoyReturn: Decodable { let eax: UInt32 }
+    struct Music: Decodable { let allocations: [Allocation] }
+    struct CalendarReturn: Decodable { let pointer: UInt32,bytes: [UInt8]? }
+    struct Case: Decodable {
         let spec: Spec,initialGlobals: String,beforeGlobals: String,globals: String,globalMask: String,stimulus: [Store]
         let before: Snapshot,after: Snapshot,events: [Event],globalStores: [Store],stackStores: [Store],stages: [Stage]
         let panel: Panel,music: Music,input: Input?,end: String,boundaryPC: UInt32?,endPC: UInt32,endSP: UInt32,controlWord: UInt32
         let localInputs: [Int64],calendarResults: [CalendarReturn]
     }
-    private struct Source: Decodable { let path: String,sha256: String,count: Int }
-    private struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,cases: [Case],sources: [Source],blobs: [String:Blob] }
-    private enum Trial: Error { case late }
-    private static func hex(_ s: String) -> [UInt8] { stride(from:0,to:s.count,by:2).map { UInt8(s.dropFirst($0).prefix(2),radix:16)! } }
+    struct Source: Decodable { let path: String,sha256: String,count: Int }
+    struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,cases: [Case],sources: [Source],blobs: [String:Blob] }
+    enum Trial: Error { case late }
+    static func hex(_ s: String) -> [UInt8] { stride(from:0,to:s.count,by:2).map { UInt8(s.dropFirst($0).prefix(2),radix:16)! } }
     private func read() throws -> (Corpus,[[String:Any]]) {
         let url = try ProcessInfo.processInfo.environment["NTSD_WINMAIN_STARTUP"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-winmain-startup",withExtension:"json",subdirectory:"Fixtures"))
         let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
         let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
         return (try JSONDecoder().decode(Corpus.self,from:data),try XCTUnwrap(raw["cases"] as? [[String:Any]]))
     }
-    private final class Adapter: OriginalWinMainStartupPlatform {
+    final class Adapter: OriginalWinMainStartupPlatform {
         let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String],fail: String?
         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]

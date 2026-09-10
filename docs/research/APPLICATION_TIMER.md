@@ -60,9 +60,11 @@ model an exception from Windows Sleep. An enclosing game operation must stage
 its own state and buffer external effects. This timer test does not prove that
 an already submitted draw or completed game callback can be undone.
 
-The full43e9a0 dispatcher,43e890 surface recovery, message processing,458580
-counter, baseline initialization and their initialized game/device join remain
-in [APPLICATION_TIMER_PLAN](APPLICATION_TIMER_PLAN.md). The native application
+[APPLICATION_MESSAGE_LOOP](APPLICATION_MESSAGE_LOOP.md) now compares message
+processing,458580 counter and baseline from its own continuous startup, sharing
+this timer. Dispatcher/recovery bodies remain declared there; a due own call
+stops at actual43e9a0. The full43e9a0/43e890 and initialized game/device join
+remain in [APPLICATION_TIMER_PLAN](APPLICATION_TIMER_PLAN.md). The native application
 still uses its earlier Practice path. Linking NTSDNative in this build is not
 an application-window, Windows, latency, full-match or clean-Mac check.
 

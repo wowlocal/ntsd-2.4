@@ -919,6 +919,47 @@ no window/input action. Jobs:build/research/winmain-startup-work.json. Earlier
 CRT/NLS, privatebacking, synchronouscallbacks, worker/message-loop/dispatcher/app,
 libtransforms, devices/input/audio/latency/fullmatches/allcontent/cleanMac open.
 
+[APPLICATION_MESSAGE_LOOP](docs/research/APPLICATION_MESSAGE_LOOP.md) now
+continues the entire own startup through43d100..43d21f/ret16 loop decisions.
+63loop returns at declared OS/dispatcher/recovery boundaries plus1own required-
+dispatch stop, NOT64fullapp matches. Every64source chain and native comparison
+rebuilds the complete unchanged174-event WinMain parent. Loop-only357actualEXE/
+0CRT PCs include100/100caller starts and selected actual43b3d0 callbacks.13lib
+patch spans disjoint; actual platform delivery/reentrancy and whole43e9a0 open.
+
+PeekMessage uses removeFlag0; anynonzero callsGetMessage; only exactGet0 exits.
+NegativeGet still Translate/Dispatch with its own precedingPeek MSG output.
+No timer on message iterations; quit readsMSG.wParam and skipscounter.28-byte
+MSG at1000f01c has zero parentwrites, native initiallyunknown, APIoutputs own.
+Allprovided retrieval writes arewholeMSG; missingoutput native-only trial
+rejects unreadablewParam8/4. Counter458580 is separately PE-backed, increments
+wrapped32 THEN signed>60reset. Bothstores preserve61->0 and Intmax->Intmin.
+Actualret16 leavesSP1000f04c and restorescallerESI33445566, distinct from the
+last active timer baseline; keepboth observations, never replace sourcebytes.
+
+215completed iterations/131wholecallbacks/896events compare plus1requiredprefix.
+64cases contain216Peek/194Get/131Translate+Dispatch/80time/19gameDispatch/
+6recovery/2Sleep. Only18dispatcher responses are declared timercontrols; own
+19th stops atactual43e9a0/SP1000eff4 withtarget1/ESI123456822/counter1. No injected
+success. Native rolls backthatiteration and retains preceding ownresize.4ms
+Sleep uses explicitbackward-clock control, notmonotonicWindowsmeasurement;
+retained2025timer corpus keeps1/2/3/5. Five latecontext failures plus actual
+ownkeypress->failedkeyup verify MSG/counter/baseline/global rollback.
+
+Raw8tests3.800s/build57.05s after199.55sfirstcompile/63testassertion failures;
+onlycomparison conflated activebaseline withrestoredESI. Source/native rules
+unchanged. Firstpackaged8tests3.748s/build0.26s; extraactualrollback1test0.072s/
+build55.37s; finalpackaged9tests3.774s/build0.24s passed, retainingtimer/WinMain/
+input.235oldpins unchanged/236current; raw4331171/packed2536603bytes, fullbytes/
+JSON/SHA/305blobs/64parts/10vendorhashes verified.597isolatedfiles exclude6foreign
+transforms; sharedstartuptest changesvisibilityonly. Source generator/clock-
+stimulus errors and52completedparts retained; final560EAXmetadata additions
+leaveallpreviousexpected unchanged. Allownjobs terminal; NTSDNative linked,
+notwiredtoPractice. CUApipefailure,no window/input action; Windowsdownloadnot
+retried. Jobs:build/research/application-message-loop-work.json. NEXTrequired
+whole43e9a0/staticWorld/worker and43e890 recovery, earlierCRT/NLS/privatebacking,
+WndProc/application/lib routing/transforms, devices/fullmatches/allcontent/cleanMac.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

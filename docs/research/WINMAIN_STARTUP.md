@@ -187,8 +187,14 @@ was not retried. Source/build process states are checked independently.
 [tests](../../native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift).
 Jobs and final evidence are in `build/research/winmain-startup-work.json`.
 
+[APPLICATION_MESSAGE_LOOP](APPLICATION_MESSAGE_LOOP.md) now continues this own
+startup through message-loop decisions and selected actual WndProc callbacks.
+Its63 loop returns keep declared dispatcher/recovery boundaries, and one due
+own dispatch stops at actual43e9a0 without a fabricated return. It is not a full
+initialized gameplay/application claim.
+
 Earlier CRT/NLS/loader initialization, unknown fullscreen/private backing,
-synchronous window callbacks, worker/message-loop/dispatcher/application join,
+synchronous window callbacks, worker/whole-dispatcher/application join,
 library transforms, actual window/input/audio/latency, full matches/all original
 content and clean-Mac acceptance remain open. The Practice app still uses its
 existing engine. This startup milestone does not complete the full game goal.
