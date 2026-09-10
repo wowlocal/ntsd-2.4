@@ -190,3 +190,8 @@ The subsequent [CALENDAR_TIME](CALENDAR_TIME.md) now supplies the recovered VC80
 clock/localtime dependency:10844 whole returns and3 separate source-stop/native
 rejection contracts. It retains own timezone/DST/tm state; the complete
 43cfb4..43d078 caller, formatting/music/cursor order and WinMain join remain open.
+
+[STARTUP_OUTPUT](STARTUP_OUTPUT.md) now compares the subsequent complete
+43cfb4..43d078 date/music/cursor caller:49 whole native matches and9 explicit
+source-stop/native rejections. Its earlier entry is controlled; this panel and
+that caller are not yet one continuous initialized WinMain execution.

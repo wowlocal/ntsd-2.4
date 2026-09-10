@@ -49,13 +49,14 @@ public struct OriginalCalendarTime: Equatable {
     /// Allocator/name-conversion callbacks provide declared platform bytes.
     /// All owned state commits together; callers stage external callback effects.
     public mutating func local(_ seconds: Int64,environmentTZ: [UInt8]? = nil,
+        allocationFailureReturn: UInt32? = nil,
         timezoneSource: () throws -> (result: UInt32,zone: Zone?),
         allocate: (Int) throws -> OriginalInterfaceAllocation,
         convertName: (String,Int) throws -> [UInt8],
         observe: (OriginalCalendarEvent) throws -> Void = { _ in },
         after: (OriginalCalendarTime) throws -> Void = { _ in }) throws -> [Int32]? {
         var candidate = self
-        let result = try candidate.convert(seconds,environmentTZ:environmentTZ,timezoneSource:timezoneSource,allocate:allocate,convertName:convertName,observe:observe)
+        let result = try candidate.convert(seconds,environmentTZ:environmentTZ,allocationFailureReturn:allocationFailureReturn,timezoneSource:timezoneSource,allocate:allocate,convertName:convertName,observe:observe)
         try after(candidate);self = candidate;return result
     }
     private mutating func alloc(_ count: Int,_ allocate: (Int) throws -> OriginalInterfaceAllocation,_ observe: (OriginalCalendarEvent) throws -> Void) throws -> UInt32 {
@@ -168,10 +169,17 @@ public struct OriginalCalendarTime: Equatable {
         let millis = ((tm[2] &* 60 &+ tm[1]) &* 60 &+ tm[0]) &* 1000
         return day == start ? millis >= cache[2] : millis < cache[5]
     }
-    private mutating func convert(_ seconds: Int64,environmentTZ: [UInt8]?,timezoneSource: () throws -> (result: UInt32,zone: Zone?),allocate: (Int) throws -> OriginalInterfaceAllocation,convertName: (String,Int) throws -> [UInt8],observe: (OriginalCalendarEvent) throws -> Void) throws -> [Int32]? {
+    private mutating func convert(_ seconds: Int64,environmentTZ: [UInt8]?,allocationFailureReturn: UInt32?,timezoneSource: () throws -> (result: UInt32,zone: Zone?),allocate: (Int) throws -> OriginalInterfaceAllocation,convertName: (String,Int) throws -> [UInt8],observe: (OriginalCalendarEvent) throws -> Void) throws -> [Int32]? {
         if tmPointer == 0 {
             tmPointer = try alloc(36,allocate,observe)
-            if tmPointer == 0 { errno = 12;throw Boundary.unknownAllocatorReturn }
+            if tmPointer == 0 {
+                errno = 12
+                // tmBuffer reserves its failure return with push ecx. The
+                // startup caller owns ECX0 after _time64(0); an isolated call
+                // does not establish this provenance. Nonzero stays unknown.
+                if allocationFailureReturn == 0 { return nil }
+                throw Boundary.unknownAllocatorReturn
+            }
         }
         try setTM([Int32](repeating:-1,count:9))
         if seconds < 0 { errno = 22;return nil }

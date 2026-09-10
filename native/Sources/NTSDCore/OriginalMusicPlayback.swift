@@ -148,7 +148,8 @@ public enum OriginalMusicPlayback {
     /// Whole402020 with401d30/401c90/401da0/401f30. Device and file APIs remain
     /// requests; no DirectShow or Windows implementation is shipped in the core.
     public static func play(_ path: [UInt8], globals: inout OriginalStateRecord,
-                             memory: inout OriginalMusicMemory, request: Request) throws {
+                             memory: inout OriginalMusicMemory, request: Request,
+                             store: OriginalWindowInput.Store = { _,_ in }) throws {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize, !path.contains(0) else { throw error("Globals/path extent") }
         var state = globals, owned = memory
         _ = try request(.init(.helper,[0x402020],[path]))
@@ -159,9 +160,11 @@ public enum OriginalMusicPlayback {
             return
         }
         _ = try request(.init(.helper,[0x401d30]))
-        try release(globals: &state,request: request)
+        try release(globals: &state,request: request,wrote: { address,value in
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
+        })
         _ = try request(.init(.helper,[0x401c90]))
-        if try initializeGraph(globals: &state,request: request) < 0 {
+        if try initializeGraph(globals: &state,request: request,store: store) < 0 {
             _ = try request(.init(.message,[0,0],[Array("Could not initialize DirectShow!".utf8),Array("ERROR".utf8)]))
         } else {
             _ = try request(.init(.helper,[0x401da0],[path]))
@@ -198,6 +201,7 @@ public enum OriginalMusicPlayback {
             let offset = 0x44ef04-base
             guard path.count < state.bytes.count-offset else { throw error("Cached path extent") }
             for (index,byte) in (path+[0]).enumerated() { try state.write(byte,at: offset+index) }
+            try store(0x44ef04,path+[0])
             try method(control,0x1c,request: request)
         }
         globals = state; memory = owned

@@ -11,7 +11,7 @@ defined in [CALENDAR_TIME_PLAN](CALENDAR_TIME_PLAN.md).
 The native implementation owns its calendar results, timezone state, names,
 transition caches and retained allocations. It does not call a host calendar,
 load a CRT/DLL, or import a source after-state. The whole WinMain date-format,
-music and cursor caller remains the next composition.
+music and cursor caller is now compared in [STARTUP_OUTPUT](STARTUP_OUTPUT.md).
 
 ## Reference and boundaries
 
@@ -140,7 +140,10 @@ entry78181971, `push ecx` reserves that word; this is not evidence of unwritten
 physical memory. The volatile register's value belongs to this controlled CRT
 context and has no recovered native WinMain producer. It is not imported or
 followed as a successful tm pointer. The source stops before loading it; a later
-memory fault is not claimed. Actual WinMain register provenance stays open.
+memory fault is not claimed. [STARTUP_OUTPUT](STARTUP_OUTPUT.md) separately
+recovers the actual caller: _time64(0) supplies ECX0, the helper reserves that
+zero, and its allocation failure returns NULL. This standalone corpus and its
+unknown-return rejection remain unchanged.
 
 Two native late-observer trials verify rollback during initial name conversion
 and after a subsequent calendar conversion using an already owned tm buffer.
@@ -213,8 +216,8 @@ terminal independently. This is a transport failure, not a safety refusal.
 [tests](../../native/Tests/NTSDCoreTests/OriginalCalendarTimeTests.swift),
 [evidence](../evidence/calendar-time.json).
 
-Next is whole43cfb4..43d078: own clock/calendar results, both real formatted
-date strings, wrapping period arithmetic, existing music402020 and cursor
-requests. Earlier WinMain/CRT/NLS/environment initialization, actual Windows/
+The subsequent [STARTUP_OUTPUT](STARTUP_OUTPUT.md) compares whole43cfb4..43d078
+with own clock/calendar results, both actual date formats, wrapping period,
+whole music402020 and cursor requests. Earlier WinMain/CRT/NLS/environment initialization, actual Windows/
 host timezone acquisition, library transforms, application input/audio/latency,
 full matches/all original content and clean-Mac acceptance remain open.

@@ -835,6 +835,49 @@ NEXT whole43cfb4..43d078 ownclock/dateformat/wrappedperiod/music/cursor, then
 earlierCRT/window/WinMain/dispatcher/application. WindowsNLS/transforms/host
 timezone/input/audio/latency/fullmatches/allcontent/cleanMac remain open.
 
+[STARTUP_OUTPUT](docs/research/STARTUP_OUTPUT.md) now compares whole43cfb4..43d078
+on one sourceCPU/stack:49 whole native callers+9 explicit stopped-boundary
+rejections, NOT58matches. Both actual date sprintf calls and music graph.log
+sprintf execute the same realCRT. Retain first64bit time; expiry adds sign-
+extended wrapping32(period*86400), not64bit multiplication. Both tm/date buffers
+are own native results, followed by whole402020 and LoadCursor0/7f00->SetCursor.
+Enabled music is the main path; all original HRESULT handling/order survives.
+
+Actual _time64(0) leavesECX0;78181971 pushECX writes root1000efe4. Allocation
+failure781819ad reloads that own0, helper/localtime returnNULL/errno12; stop BEFORE
+43cfd3 NULL read. Native now supplies proven0 for this first caller only. Old
+standalone calendar unknown-return corpus stays unchanged/rejected; never import
+its78132da8 as a tm pointer. Six NULL-read stops include four wrapped negative
+expiries and epoch/-1; three invalid-parameter stops include expiry beyondmax,
+firstinput beyondmax and preepoch unsigned clock wrap. No Watson/fault executed.
+
+Own repeated calls carry tm/cache/interface globals and wide buffers; thirdplay
+releases/replaces its own graph while retaining both buffers. Native rollback
+trials after each date, after music and after both cursor requests preserve all
+state. Buffer external effects until complete startup commit. Every native
+observation also compares full globals reconstructed from preceding source
+stores, preserving write order at all1414event boundaries and final masks.
+
+All64caller starts,371EXE/2021CRT actualPCs,790calendar/216music helper returns;
+145real formats(104date+41log),1414events including963music/98cursor.2658original
++165adapter global stores,4041CRT+288adapter writes;101126stack+231adapter stores
+are source metadata, not native privateABI.13lib patches disjoint. EntrySP1000f004
+becomes1000effc with EBX/EBP still saved; CW037f, ESI/EDI survive. This boundary is
+not WinMainret. PEperiod-99/volume100/enabled1; period4/directory/window are
+explicit controlled entry inputs, not the preceding whole panel/host output.
+
+Raw9tests40.683s/build191.05s; event-order2tests0.163s/build52.52s; finalpackaged
+9tests40.055s/build0.26s pass including both music chains, calendar and panel.
+233oldpins unchanged/234current; raw8576099/packed1543267 bytes, fullJSON/SHA/
+all122blobs/51atomicparts/10vendor hashes verify.591isolated native files exclude
+6unchanged foreign transforms. First native compile needed only explicit Swift
+byte-array/read types; original bytes/rules unchanged. All owned jobs terminal;
+NTSDNative linked, no production wiring. CUA nativepipe inventory failed; no
+window/input action. Transport failure is not safety refusal. Jobs/pins:
+build/research/startup-output-work.json. NEXT complete earlierCRT/window/panel,
+followinginput and wholeWinMain/dispatcher/application join. WindowsNLS/lib
+transforms/hosttimezone/input/audio/latency/fullmatches/allcontent/cleanMac open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.
