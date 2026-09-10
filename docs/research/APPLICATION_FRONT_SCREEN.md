@@ -162,7 +162,13 @@ This own composition is still separate from the Practice app. CUA again reports
 input action occurred. Actual Windows files/devices, pixels/audio/input latency
 and worker execution remain open.
 
-Next continue actual4236d0 and the427127 screen body, or4275cb alternate branch,
+The later [APPLICATION_SCREEN_BODY](APPLICATION_SCREEN_BODY.md) now continues
+all39 own critical parents through installed DLL text and the whole body to
+4275cb, retaining produced local strings, selector and library DC. Its43 calls
+include four ordinary output-failure controls. The setting-1 alternate remains
+separate.
+
+Next continue4275cb with the own body result, or the setting-1 alternate branch,
 with the own resources, target, cached Sleep and retained stack/CRT. Full World/
 dispatcher/WinMain returns, earlier CRT/NLS/library/private-backing dependencies,
 worker/application integration, complete Naruto/Sasuke District match, every

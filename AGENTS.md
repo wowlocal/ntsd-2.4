@@ -1178,6 +1178,40 @@ resources/stack/CRT. WholeWorld/dispatcher/WinMain, earlierCRT/NLS/library/priva
 backing, worker/app/Windows/devices/fullmatch/allcontent/network/cleanMac remain
 open. Fullgamegoal stays active.
 
+[APPLICATION_SCREEN_BODY](docs/research/APPLICATION_SCREEN_BODY.md) now continues
+all39 own critical screen parents plus4 output-failure controls through actual
+4236d0/427127..4275cb, SP1000ea74. Actual relocatedDLL attach precedes separately
+enteredWinMain:76HIGHLOW/104installerPCs/13copies62bytes reproduce accepted
+LIB_LOADING exactly. All39 wholefront/18settings/7bitmap parentrecords unchanged;
+fullDLL and4000/20000allocatedbytes survive parents. EarlierCRT/NLS/actualloader
+remainopen; native executes noDLL/patching. Own458424=0 performs realEnter/Leave,
+not status2 or worker delivery.129 installedtext calls request SetBkMode1;
+GetDCnegative skips latercalls/DCchange; numericGDI/Blt failures remainignored.
+
+6650events/344helperreturns,303EXE+51DLL actualstarts; caller170/326,panel7/67,
+notallbranches.602defined bitmapreads/86clips/86Blts;1074retainedrecords/
+8609184bytes+masks. Native keeps own CreateSurface bindings through constructors,
+not expectedrecord surfacewords. Target's onlypriorwrite4246fd/rootSP20 is audited
+43times;86retainedreads.114896otherlocalreads/115025bytes arecurrentbody-produced.
+Native owns96/192localbytes percase;4128privatebytes stay0/false.12757CPU+
+129APIstores/40235bytes reconstructglobals/stack/library;126DLLDCstores only.
+FullCRT/PTD/calendar/CW037f survive. Finalactual4275bc loadsselector intoEAX,
+4275c1/4275c5 reloadtarget/Sleep. Selector0 is instruction-derived fromfullglobals,
+NOT a separately capturedEAXfield. Native retains ownselector/local/DC/typedSleep.
+
+Raw13tests38.704s/build205.91s passed before finalselector review.43outerrollbacks
+and7latefailures preserve committedstartup/callback/MSG/counter/baseline/resources/
+DC/locals. Final raw13tests39.290s/build195.20s and packaged13tests38.813s/build0.28s pass
+without rawoverride.616isolatedfiles from614base exclude foreign6; alljobs terminal.
+NTSDNative linked. Jobs:build/research/application-screen-body-work.json.
+242oldpins unchanged/243current; raw64242750/packed13339072bytes,fullJSON/SHA/
+1345blobs/43parts/36assets/10vendorhashes verify. Neverrestart completedcandidate1.
+Reference composer remainsseparatefromPractice; CUApipe unavailable,noUIaction.
+NEXT actual4275cb/ownselector0->427915 mainmenu; separate setting-1 alternate
+stillopen. WholeWorld/dispatcher/WinMain, worker/reentrancy, earlierCRT/NLS/private
+backing, app/Windows/devices/fullmatch/allcontent/network/cleanMac remainopen.
+Fullgamegoal staysactive.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

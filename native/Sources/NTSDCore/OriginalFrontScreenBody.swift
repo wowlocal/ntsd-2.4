@@ -12,6 +12,25 @@ public struct OriginalFrontScreenBodyInput: Codable, Sendable {
 /// The alternate selector dispatch at4275cb and actual platform output are next.
 public enum OriginalFrontScreenBody {
     public enum Continuation: String, Codable, Sendable { case alternateDispatch, nullTextTarget, nullBitmap, nullDrawTarget }
+    public struct StartupResult: Equatable {
+        public let continuation: Continuation
+        public let local: OriginalStateRecord
+        ///4275bc loads the live selector into EAX for4275cb's next dispatch.
+        /// An earlier stopped drawing boundary has not produced this value.
+        public let retainedSelector: Int32?
+    }
+    /// The own caller retains GameEntry's target at +20. All strings and the
+    /// vertical coordinate are produced by this body; other private caller bytes
+    /// remain unknown. The library DC and globals commit only after completion.
+    public static func advanceOwnStartup(globals: inout OriginalStateRecord,target: UInt32,
+        libraryText: inout OriginalLibSurfaceText,input: OriginalFrontScreenBodyInput,
+        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> StartupResult {
+        var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0xc0),defined:[Bool](repeating:false,count:0xc0))
+        try local.write(target,at:0x20)
+        let end = try advanceWithLibrary(globals:&globals,local:&local,libraryText:&libraryText,input:input,draw:draw,observe:observe)
+        let selector: Int32? = end == .alternateDispatch ? try globals.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self) : nil
+        return .init(continuation:end,local:local,retainedSelector:selector)
+    }
     private struct Stop: Error { let end: Continuation }
     public static let literals: [(address: UInt32, bytes: [UInt8])] = [
         (0x4498d8,Array("bz\"Pasvl Xqqg-\"Vtbtvkz\"Zooi\0".utf8)),

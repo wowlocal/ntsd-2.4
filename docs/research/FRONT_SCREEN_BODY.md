@@ -138,3 +138,8 @@ COM/GDI/lstrlen/Sleep/ShellExecute — объявленные границы. So
 Следующая задача — `4275cb`: selector−3 с анимацией/настройкой панели и
 зависимостью settings writer`423230`, затем selector−1`4277f3`, их переходы
 к main-menu`427915` и общему tail`42873e`. R02.1 и полный матч не завершены.
+
+[APPLICATION_SCREEN_BODY](APPLICATION_SCREEN_BODY.md) позднее продолжает43
+собственные startup/loop цепочки через установленный DLL text до4275cb. Строки
+и target имеют собственных производителей;96 приватных байт каждого native
+caller record остаются0/false. Этот корпус остаётся неизменным pristine-контролем.

@@ -232,3 +232,11 @@ initialization; see [CRT_STARTUP_PLAN](CRT_STARTUP_PLAN.md).
 whole controlled43bec0 display/window request chain after the unchanged installer.
 Its Win32/COM and opaque helper-entry boundaries do not resolve actual Windows
 callbacks, devices, CRT/NLS or the initialized library application join.
+
+[APPLICATION_SCREEN_BODY](APPLICATION_SCREEN_BODY.md) now connects the installed
+text helper to43 own startup/loop/resources/settings/background continuations.
+All39 critical parent records reproduce exactly after the declared relocated DLL
+attach;129 text calls and their retained DC compose through4275cb. Native uses
+its own target and produced local strings, leaving private bytes unknown. This
+closes that particular early-screen text connection; other enclosing callers,
+worker delivery, complete CRT/application startup and device output remain open.
