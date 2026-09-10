@@ -1,0 +1,227 @@
+{
+  "status": "accepted controlled input/sound and own joystick callback composition; full application open",
+  "previousGoalTurn": "progress:95d6d6f",
+  "base": "95d6d6fc700f14354cd37614fcb4d8790c8eed76",
+  "startedUTC": "2026-09-10T09:09:03.770921+00:00",
+  "priorFixtures": 226,
+  "fullGoalActive": true,
+  "sourceStatus": "terminal",
+  "nativeJobs": [
+    {
+      "key": "input-startup-raw-native",
+      "status": "terminal",
+      "pid": 33608,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInputStartupTests|OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalWindowInputTests"
+      ],
+      "packaged": false,
+      "start": 1789031861.409823,
+      "exitCode": 1,
+      "end": 1789032002.9754481,
+      "session": 6741
+    },
+    {
+      "key": "input-startup-raw-native2",
+      "status": "terminal",
+      "pid": 34194,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInputStartupTests|OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalWindowInputTests"
+      ],
+      "packaged": false,
+      "start": 1789032043.112816,
+      "exitCode": 0,
+      "end": 1789032107.931185,
+      "session": 25974,
+      "tests": 8,
+      "testSeconds": 10.991,
+      "buildSeconds": 52.6
+    },
+    {
+      "key": "input-startup-final-raw-native",
+      "status": "terminal",
+      "pid": 34997,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInputStartupTests|OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalWindowInputTests"
+      ],
+      "packaged": false,
+      "start": 1789032303.858351,
+      "exitCode": 0,
+      "end": 1789032367.762521,
+      "session": 49771,
+      "tests": 8,
+      "testSeconds": 11.332,
+      "buildSeconds": 51.48
+    },
+    {
+      "key": "input-startup-packaged-native",
+      "status": "terminal",
+      "pid": 35762,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInputStartupTests|OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalWindowInputTests"
+      ],
+      "packaged": true,
+      "start": 1789032523.810839,
+      "exitCode": 0,
+      "end": 1789032535.9968178,
+      "session": 24466,
+      "tests": 8,
+      "testSeconds": 10.981,
+      "buildSeconds": 0.25
+    }
+  ],
+  "ownedNativeFiles": [
+    "native/Sources/NTSDCore/OriginalInputStartup.swift",
+    "native/Tests/NTSDCoreTests/OriginalInputStartupTests.swift"
+  ],
+  "probe": {
+    "session": 93395,
+    "exitCode": 0,
+    "cases": 3,
+    "sha256": "20443c48684a53cfd1caf6f5e9fc768823f873be5cf6cfb8c5109114e4126196"
+  },
+  "sourcePID": 33209,
+  "sourceCommand": [
+    "uv",
+    "run",
+    "tools/oracle_input_startup.py",
+    "--output",
+    "build/research/input-startup-candidate1.json"
+  ],
+  "sourceStart": 1789031716.917876,
+  "sourceExitCode": 0,
+  "sourceEnd": 1789031721.947366,
+  "sourceSession": 41560,
+  "isolatedPackage": "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-isolated/native",
+  "baseExportFiles": 573,
+  "successSourceStatus": "terminal",
+  "successSourceExitCode": 0,
+  "successSourceSession": 67937,
+  "successSourceSHA256": "3644aa784754f52b2def63a8dcd23e1833f8088d3147c8f3e1ca4e4bd07c3576",
+  "sourceSHA256": "4c40ce87d9825655208d4982e7b5aa0d050018decc3f24d8e6923129276bfec6",
+  "fixturePublished": true,
+  "currentFixtures": 228,
+  "publications": [
+    {
+      "source": "build/research/input-startup-candidate1.json",
+      "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-input-startup.json",
+      "evidence": "docs/evidence/input-startup.json",
+      "sourceSHA256": "4c40ce87d9825655208d4982e7b5aa0d050018decc3f24d8e6923129276bfec6",
+      "fixtureSHA256": "67030d52a38db099690655d095c67a9c62f621b237aea68bc2711bac9a7cb220",
+      "rawBytes": 14379356,
+      "packedBytes": 4654908
+    },
+    {
+      "source": "build/research/input-startup-success-candidate1.json",
+      "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-input-startup-success.json",
+      "evidence": "docs/evidence/input-startup-success.json",
+      "sourceSHA256": "3644aa784754f52b2def63a8dcd23e1833f8088d3147c8f3e1ca4e4bd07c3576",
+      "fixtureSHA256": "77d69af7334cd8d8aea8e2e21b943a4d416a9b6d5a430002dbb59929e9196e1a",
+      "rawBytes": 3051536,
+      "packedBytes": 2018943
+    }
+  ],
+  "newFixtureFiles": [
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup-success.json"
+  ],
+  "nativeRawCompared": true,
+  "acceptedMilestone": true,
+  "nativePackagedCompared": true,
+  "allOwnedJobsTerminal": true,
+  "completedUTC": "2026-09-10T09:34:30.208319+00:00",
+  "isolatedNativeFiles": 577,
+  "nativeWholeSegments": 56,
+  "nativeExplicitUnknownRejections": 4,
+  "nativeOwnCallbacks": 1900,
+  "nativeProductionWiringComplete": false,
+  "windowsVerified": false,
+  "corrections": [
+    {
+      "kind": "native test compile",
+      "session": 6741,
+      "exitCode": 1,
+      "reason": "Existing OriginalMenuPresentationMemory requires replayPointers. Explicit unknown8-byte replay storage supplied; joystick callbacks leave it unread. Native input code/source expectations unchanged."
+    },
+    {
+      "kind": "artifact verifier",
+      "exitCode": 1,
+      "reason": "Static byte parser omitted final opcode byte when objdump used a tab immediately after a long instruction. Parse spaces and tabs; source/expected/native bytes unchanged.",
+      "correctedSession": 16933,
+      "correctedExitCode": 0
+    }
+  ],
+  "successfulControlsAddition": "First58-case matrix returned failed threshold/capture values. Preserve it unchanged; two fresh controls provide successful API results and228 own callbacks before final acceptance.",
+  "appWindow": {
+    "status": "terminal",
+    "pid": 35196,
+    "command": [
+      "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-isolated/native/.build/release/NTSDNative",
+      "--data",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json",
+      "--assets",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets",
+      "--capture-state",
+      "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-app-state.json"
+    ],
+    "start": 1789032346.834997,
+    "executableSHA256": "c60b850f241e93e104f1c918d9d87df7f10d9be9b7be5e299df46b9968625d7c",
+    "scope": "Current Practice app window/input inspection; new startup models are not wired into runtime.",
+    "uiToolFailure": {
+      "error": "Sky Computer Use native pipe startup failed",
+      "operation": "cua.getApp(\"NTSDNative\")",
+      "UTC": "2026-09-10T09:26:21.824254+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "turn": "unavailable",
+      "source": "mcp__cua_repl.js",
+      "scope": "Tool transport startup failure, not a source fault or safety refusal; no UI actions executed."
+    },
+    "validatedBeforeTermination": "35196 /Users/michael/Developer/ntsd-2.4/build/research/input-startup-isolated/native/.build/release/NTSDNative --data /Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json --assets /Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets --capture-state /Users/michael/Developer/ntsd-2.4/build/research/input-startup-app-state.json",
+    "exitCode": -15,
+    "end": 1789032381.829136,
+    "session": 39666
+  },
+  "appRender": {
+    "status": "terminal",
+    "pid": 35483,
+    "command": [
+      "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-isolated/native/.build/release/NTSDNative",
+      "--data",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json",
+      "--assets",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets",
+      "--capture-state",
+      "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-app-state.json",
+      "--screenshot",
+      "/Users/michael/Developer/ntsd-2.4/build/research/input-startup-app-render.png"
+    ],
+    "start": 1789032422.836799,
+    "scope": "Separate built-in AppKit/SpriteKit render after CUA transport failure; no UI actions or new input model wiring.",
+    "exitCode": 0,
+    "end": 1789032424.622356,
+    "session": 77249,
+    "imageSHA256": "ec5530507fcbbf7bda0535fc0f8dbc9381c05229fb6c0fbd68212c2bfdcd8e22",
+    "visualInspection": "1588x1200 current Practice render: District, Naruto, Sasuke and HUD; no new startup wiring, UI action, audio or latency evidence."
+  },
+  "independentArtifactVerification": true,
+  "localMarkdownLinks": 634
+}

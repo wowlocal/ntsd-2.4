@@ -1,5 +1,10 @@
 # Original keyboard, mouse and joystick callbacks
 
+[INPUT_STARTUP](INPUT_STARTUP.md) now supplies an independently executed
+calibration producer and1900 own joystick callbacks through this shared native
+implementation. Its four unknown-capability rejections remain separate; the
+existing controlled callback fixtures and device/Windows limitations are unchanged.
+
 [OriginalWindowInput](../../native/Sources/NTSDCore/OriginalWindowInput.swift)
 matches **4369 whole input-message calls** of43b3d0 through its actual ret16,
 plus **three separate text constructors**. Comparisons cover203184416 declared

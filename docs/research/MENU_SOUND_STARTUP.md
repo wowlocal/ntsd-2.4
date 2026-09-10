@@ -20,6 +20,11 @@ The new producer is not yet joined to those initialized menu chains or the
 application. The original HWND, prior global bytes and API responses remain
 declared inputs; this is not a resumed CRT or complete WinMain startup.
 
+[INPUT_STARTUP](INPUT_STARTUP.md) now extends a separate controlled caller to
+43d078, executing the memset argument pushes and whole joystick initialization
+before these shared sound helpers. Its callbacks use the resulting own bounds;
+this earlier corpus remains unchanged with its original43d08e entry contract.
+
 ## Reference and boundaries
 
 The reference is the pinned31715328-byte original EXE, SHA256

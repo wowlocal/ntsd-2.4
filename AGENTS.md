@@ -661,6 +661,44 @@ restricted to actual returns. No source expected bytes changed. Current Practice
 rendered District/Naruto/Sasuke/HUD and exited0; new audio/menu not wired, no
 input/latency/audio/Windows evidence. Full application/match/clean-Mac goal open.
 
+[INPUT_STARTUP](docs/research/INPUT_STARTUP.md) now extends upward through whole
+43d078..43d100/43bf10 and1900 actual joystick WndProc consumers.56 complete
+native input/sound segments match280WAV returns/4758startup events. Four other
+source returns read16unknown caps words and are native rejections with rollback;
+only their22prefix events compare, not336later source events. No stack fields
+are imported to make these four pass. Do not call this60 whole native matches.
+
+Preserve exactly256 keys117, four48-byte joystick records, copied retained left
+direction into right/down/up, and active/XY/buttons/trailing-word clear order.
+Nonzero joyGetNumDevs probes exactly0/1; only position result167 skips. Threshold,
+capture and caps numeric results ignored. JOYINFOEX52 is cleared once; JOYCAPSA404 starts
+unknown and its own first API output survives failed second query. Source full
+bytes remain immutable; native compares masks/defined bytes, not unknown backing.
+Signed wrapped midpoint/store order and helper EAX match. New caller executes
+all three original memset pushes itself; entry/endSP1000f00c, still not WinMainret.
+
+All32caller/127joystick starts execute;645actual EXE PCs total include185WndProc,
+278WAV,19device,3cookie,1thunk.1116static starts are not dynamic fullWndProc/WAV
+coverage. SourceCW037f remains, no native processFPU/device/Windows equivalence.
+Both helper bodies/consumer ranges are disjoint from all13 DLL patches; this
+controlled source does not run the installer. Own callback bounds are never
+injected. Late caps/fifth-wave/callback failures roll back; buffer externaleffects.
+
+Main58source cases unchanged; two fresh successful threshold/capture/cooperative
+controls add228of1900callbacks. Total56matches+4rejections;4780native startup
+events include rejected prefixes. Raw8tests11.332s/build51.48s; packaged8tests
+10.981s/build0.25s passed, retaining WAV/menu-sound/4369WndProc corpus.226oldpins
+unchanged/228current; mainraw14379356/packed4654908, successraw3051536/packed2018943
+bytes/JSON/SHA/all1914+309blobs verified (shared hashes not distinctbuffers).
+577isolated native files exclude all6 untouched foreign transforms. All owned
+jobs terminal; see build/research/input-startup-work.json. First test compile
+needed explicit unknown replayPointers storage; verifier corrected tab-separated
+last opcode byte parsing. No source expected bytes or native rules changed.
+Practice window launched; CUA native pipe startup failed before input. Its PID
+was verified before SIGTERM. Separate built-in render shows District/Naruto/
+Sasuke/HUD and exits0. New input/sound not wired, real input/latency/audio/Windows,
+full WinMain/match/content/clean-Mac remain open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

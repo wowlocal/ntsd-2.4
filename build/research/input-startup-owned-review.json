@@ -1,0 +1,63 @@
+{
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/MENU_SOUND_STARTUP.md",
+    "docs/research/WINDOW_INPUT.md",
+    "docs/research/INPUT_STARTUP_PLAN.md",
+    "docs/research/INPUT_STARTUP.md",
+    "docs/evidence/input-startup.json",
+    "docs/evidence/input-startup-success.json",
+    "tools/oracle_input_startup.py",
+    "tools/oracle_input_startup_success.py",
+    "tools/verify_input_startup.py",
+    "tools/accept_input_startup.py",
+    "native/Sources/NTSDCore/OriginalInputStartup.swift",
+    "native/Tests/NTSDCoreTests/OriginalInputStartupTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup-success.json"
+  ],
+  "ownedHashes": {
+    "AGENTS.md": "819fd59f00c22cd3fb3f4dc7148756d9a61cec2973ca8ce8177a77a92450ef08",
+    "docs/RESEARCH_MAP.md": "9f674455c5e1d91ed664acdb01359d2b03ec40b98506ba37d61a5b955e2e45c6",
+    "docs/research/ADDRESS_BOOK.md": "3013ea6435b8e735d26bd35d780d263c8c358e96e2de4a84258e6568039c7f1a",
+    "docs/research/MENU_SOUND_STARTUP.md": "042f4455e3c62c0f8126b18af91c8169632dc79ad258dbef7bb484c6c5d6b780",
+    "docs/research/WINDOW_INPUT.md": "de13d4f7b585dbd22ce08df787436dbf695332dfada87433fb69b38dec124f9b",
+    "docs/research/INPUT_STARTUP_PLAN.md": "0b0621ed399e0d5675e0c52deddaa3860c846425a17951c3a1caaaafebd9b641",
+    "docs/research/INPUT_STARTUP.md": "51544c793a1f207d31ff09dd2e1dae8fafcee9a54396e542c86a53441afe1701",
+    "docs/evidence/input-startup.json": "e383dcff723afbd680df9b2566a2f75e277639d128e207b64aca16cc5d9cfc7a",
+    "docs/evidence/input-startup-success.json": "66c55d6cbc7ef527a61e35616ab605ce10f9b404105b4f6712b72c1df9b848b8",
+    "tools/oracle_input_startup.py": "f8e88c8cd8666f590ed9d746913f24e501ec6a0e5cc258bc0509066c9b3e0676",
+    "tools/oracle_input_startup_success.py": "2239b50db26aecb68bd8a3e482fd9f11a551cf521a6b1cfd405372d0ffdd31ee",
+    "tools/verify_input_startup.py": "6549470062aac9519212ec87eaec9eb6a7fd0f25a0883ce932d40042080ed378",
+    "tools/accept_input_startup.py": "77e89cd72997b8300520900cd374ff2234c68caf8010d50559c7438b94b7b4bb",
+    "native/Sources/NTSDCore/OriginalInputStartup.swift": "2d8e02fdca5cdf4a1c912631b1333cd87a67bbfe2c5b4da658ee73ccb86ed829",
+    "native/Tests/NTSDCoreTests/OriginalInputStartupTests.swift": "f793c7e113828129e5e4070810926a04f496c738eeae3f8e316d332212c287eb",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup.json": "67030d52a38db099690655d095c67a9c62f621b237aea68bc2711bac9a7cb220",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-startup-success.json": "77d69af7334cd8d8aea8e2e21b943a4d416a9b6d5a430002dbb59929e9196e1a"
+  },
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "priorPins": 226,
+  "currentPins": 228,
+  "vendorFiles": 10,
+  "isolatedFiles": 577,
+  "localMarkdownLinks": 634,
+  "fullRawPackedJSONBytesSHA": true,
+  "atomicParts": [
+    58,
+    2
+  ],
+  "blobs": [
+    1914,
+    309
+  ],
+  "allOwnedJobsTerminal": true
+}
