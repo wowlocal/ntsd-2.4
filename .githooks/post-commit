@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Retain the Git LFS hook installed for this repository.
+command -v git-lfs >/dev/null 2>&1 || {
+  printf >&2 "\n%s\n\n" "This repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting the 'post-commit' file in the hooks directory (set by 'core.hookspath'; usually '.git/hooks')."
+  exit 2
+}
+git lfs post-commit "$@" || exit $?
+
+# Push the checked-out branch using its configured upstream after every commit.
+branch=$(git branch --show-current)
+if [ -z "$branch" ]; then
+  printf >&2 'post-commit: detached HEAD; skipping automatic push.\n'
+  exit 0
+fi
+
+printf 'post-commit: pushing %s...\n' "$branch"
+git push
