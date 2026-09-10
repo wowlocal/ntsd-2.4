@@ -108,7 +108,9 @@ The byte-checked236-instruction inventory preserves the following order:
 
 1. Service-key scan, followed by44dce4==1 calling43e8e0. That helper queries
    global455634 through vtable+0x54, clears455608 and emits an original debug
-   string selected by the clear result. Its whole execution remains open.
+   string selected by the clear result. Its whole execution is now compared in
+   [APPLICATION_ART_SETUP](APPLICATION_ART_SETUP.md); initialized stack provenance
+   and this enclosing dispatcher remain open.
    The enclosing branch then writes458440=1,44dce4=2 and4593a0=0.
 2. Clear the live global455608. Ordinary color is0; mode1 outside that special
    branch uses0x2945. Reread mode after the clear callback.

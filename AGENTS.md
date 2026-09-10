@@ -960,6 +960,30 @@ retried. Jobs:build/research/application-message-loop-work.json. NEXTrequired
 whole43e9a0/staticWorld/worker and43e890 recovery, earlierCRT/NLS/privatebacking,
 WndProc/application/lib routing/transforms, devices/fullmatches/allcontent/cleanMac.
 
+[APPLICATION_ART_SETUP](docs/research/APPLICATION_ART_SETUP.md) now implements
+whole43e8e0..43e934 with actual401250 semantics.231 controlled returns match
+693requests,11570328globalbytes,7392query/23100clear bytes+masks;225 independent
+calls plus6 own retained calls. All26helper+17clear starts execute;4158source
+stackstores+465declared adapterstores reconstruct all snapshots.32-byte query
+writes size32 then calls455634/vtable54; queryHRESULT/output fields are never
+read. Reread455608 AFTER query callback; clear black via shared401250. Negative
+clear yields original failure string/0, otherwise success string/1; debugresult
+ignored. Despite LoadGameArt text, helper loads no resources. No EXE global
+stores: callback changes are explicitly declared valid surface-reference writes.
+Query28/clear92 retained bytes remain supplied boundaries, not own WinMain
+stack provenance. Six calls retain native own local output; four late query/
+clear/debug/final errors roll back value context. Buffer external effects.
+
+Raw5release tests4.912s/build212.31s; finalpackaged5tests4.695s/build0.32s passed,
+including retained4348keys/420clears/staticWorld. No source/native correction.
+236oldpins unchanged/237current; raw1424097/packed66603bytes, fullraw/packed
+JSON/SHA/38blobs/231atomicparts/10vendorhashes verified. Isolated597committed
+basefiles+3overlays exclude6foreign transforms. All own source/SwiftPM jobs
+terminal0; NTSDNative linked, no window/device/Windows claim. Exact jobs/pins:
+build/research/application-art-setup-work.json. NEXT whole43e9a0/43e890,
+required own staticWorld/worker/stack composition, earlierCRT/NLS/lib routing/
+transforms and full app/device/match/content/clean-Mac goal remain open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.
