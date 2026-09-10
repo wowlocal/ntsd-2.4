@@ -90,3 +90,7 @@ all untouched bytes/provenance and roll back on a late constructor observer.
 
 The independent constructor sub-study is now accepted in
 [STARTUP_STORAGE](STARTUP_STORAGE.md); the enclosing CRT/NLS chain remains open.
+
+[WINDOW_INITIALIZATION](WINDOW_INITIALIZATION.md) now accepts another independent
+controlled dependency: whole43bec0 and its window/DirectDraw children. It does
+not continue this stopped CRT process or supply its missing NLS response.

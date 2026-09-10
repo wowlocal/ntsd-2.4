@@ -289,6 +289,44 @@ source/SwiftPM jobs terminal. NTSDNative linked, no app/window/device/Windows.
 Jobs: build/research/startup-storage-work.json and crt-startup-work.json.
 Full CRT/NLS, library-enabled app join and full original-content goal stay open.
 
+[WINDOW_INITIALIZATION](docs/research/WINDOW_INITIALIZATION.md) now implements
+whole43bec0/43bdd0 and all window/DD/surface/clipper/clear children at declared
+Win32/COM and helper-entry backing boundaries.280whole calls match12920320global
+bytes+masks,4574requests,1182structures94588bytes/23788written fields and resource
+output/release records.874CPU/823API global stores reconstruct.501actualEXE/0DLL
+PCs,2115SOURCE helper returns; complete accepted installer case0 unchanged.
+539decoded starts include30unreachable40137f..4013c5 and8at43bed2..43beed:
+43e8e0 and43bdd0 return0/1, never negative. No forced branch or Windows claim.
+
+Windowed metrics7/8/8/4 remain separate calls and use wrapped global dimensions;
+class/menu Marti,title Little Fighter2,styles10cb0000/80000000 and exStyle0/8.
+Fullscreen metrics1then0;232class cursor words stay unwritten in supplied backing.
+UpdateWindow precedes4546f4 assignment. Source show argument stays unread;
+ShowWindow always5,315requests. Actual Windows callbacks/placement remain OPEN.
+Preserve shared primary/back DDSURFACEDESC, swap2->swap1->plain fallback, earlier
+surfaces retained across failed retries, and clipper Release without clearing
+457584.453e0c stays untouched and selects windowed mode3/1; fullscreen mode2.
+Eight failed CreateWindow requests still ShowWindow(0,5)/return1;28fullConfigure
+zero results still select2.14pixel-query failures continue clearing;2SetClipper
+failures still release/show. Do not invent numeric-failure cleanup or early exits.
+
+1057helper-entry backings are DECLARED, not initialized WinMain stack provenance;
+structure masks identify current-helper field writes, not the whole stack lifetime.
+Three native-only late/missing-backing/output errors roll back globals. Buffer
+external effects. Current NTSDApp still uses the prior practice engine; no app
+window/device/Windows run follows from this request model. CRT/NLS stays open.
+Source driver's duplicate-context TypeError retained last50complete calls; later
+unsaved calls are explicitly unretained. Terminal restart resumes those50exact
+records, then atomically checkpoints each new case; final280checkpoint equalsraw.
+No original memory fault/safety refusal; never restart this completed corpus.
+Raw5release tests22.959s/build178.13s and packaged5tests20.203s/build0.28s pass,
+including retained startup storage. Isolated539files6570660+two native files,
+final540adds fixture, excludes concurrent transforms.210oldpins unchanged/211;
+fullraw83756823/packed2905776bytes/JSON/SHA and10vendor files verify. All owned
+source/SwiftPM jobs terminal; NTSDNative linked. Jobs: build/research/
+window-initialization-work.json. Full initialized library app/match/content,
+Windows/device and clean-Mac goal remain open.
+
 Remaining hook is41f5fc transforms, plus all enclosing
 library-enabled routing and full CRT initialization. Recover Actor+7b4 and
 actual unknown0xb2 backing/reachability without silently fixing source bugs.

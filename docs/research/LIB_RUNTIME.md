@@ -227,3 +227,8 @@ game constructor callbacks after an unchanged whole installer. Its separate
 actual MSVCR80 process-attach chain stops at the first unresolved Windows NLS
 query before EXE entry. Neither result closes full CRT/library application
 initialization; see [CRT_STARTUP_PLAN](CRT_STARTUP_PLAN.md).
+
+[WINDOW_INITIALIZATION](WINDOW_INITIALIZATION.md) subsequently compares the
+whole controlled43bec0 display/window request chain after the unchanged installer.
+Its Win32/COM and opaque helper-entry boundaries do not resolve actual Windows
+callbacks, devices, CRT/NLS or the initialized library application join.

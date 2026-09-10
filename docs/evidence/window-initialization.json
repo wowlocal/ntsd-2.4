@@ -1,0 +1,297 @@
+{
+  "corpus": "window-initialization.json",
+  "sha256": "bcb6bd80f3e1edea4a9386921cae6b9a502d3243da16fbd8808e45de098a3173",
+  "bytes": 83756823,
+  "cases": 280,
+  "events": 4574,
+  "helpers": 2115,
+  "instructions": 501,
+  "sourceSHA256": "88118a54983d4fbfcba6ca004b48752b107e26ff9468cc0e30f65c9cec96d1ff",
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-window-initialization.json",
+  "fixtureSHA256": "99f3950befc6829f9b0f09bab33d722e19d549090ec629ed2f62e5033cbc4b52",
+  "fixtureBytes": 2905776,
+  "nativeRawTests": 5,
+  "nativeRawTestSeconds": 22.959,
+  "nativeRawBuildSeconds": 178.13,
+  "sourceVerification": {
+    "rawSHA256": "bcb6bd80f3e1edea4a9386921cae6b9a502d3243da16fbd8808e45de098a3173",
+    "rawBytes": 83756823,
+    "cases": 280,
+    "globalBytes": 12920320,
+    "events": {
+      "metric": 656,
+      "icon": 280,
+      "cursor": 48,
+      "registerClass": 280,
+      "createWindow": 280,
+      "updateWindow": 47,
+      "directDrawCreate": 272,
+      "cooperativeLevel": 256,
+      "debug": 696,
+      "createSurface": 568,
+      "createClipper": 39,
+      "clipperWindow": 37,
+      "setClipper": 35,
+      "release": 35,
+      "showWindow": 315,
+      "displayMode": 197,
+      "attachedSurface": 199,
+      "pixelFormat": 167,
+      "blt": 167
+    },
+    "eventCount": 4574,
+    "helpers": {
+      "windowed": 48,
+      "directDraw": 272,
+      "plainSurfaces": 135,
+      "clipperSetup": 43,
+      "display": 280,
+      "wrapper": 280,
+      "fullscreen": 232,
+      "swapSurfaces": 308,
+      "clear": 167,
+      "clearSetup": 167,
+      "fullConfigure": 183
+    },
+    "helperCount": 2115,
+    "structures": {
+      "registerClass": 280,
+      "createSurface": 568,
+      "pixelFormat": 167,
+      "blt": 167
+    },
+    "structureCount": 1182,
+    "writes": {
+      "CPU": 874,
+      "API": 823
+    },
+    "actualEXEPCs": 501,
+    "actualDLLPCs": 0,
+    "staticStarts": 539,
+    "unexecutedStatic": [
+      {
+        "address": 4199295,
+        "bytes": "8b06",
+        "instruction": "mov eax, dword ptr [esi]"
+      },
+      {
+        "address": 4199297,
+        "bytes": "8b08",
+        "instruction": "mov ecx, dword ptr [eax]"
+      },
+      {
+        "address": 4199299,
+        "bytes": "8b5108",
+        "instruction": "mov edx, dword ptr [ecx + 8]"
+      },
+      {
+        "address": 4199302,
+        "bytes": "50",
+        "instruction": "push eax"
+      },
+      {
+        "address": 4199303,
+        "bytes": "ffd2",
+        "instruction": "call edx"
+      },
+      {
+        "address": 4199305,
+        "bytes": "6a01",
+        "instruction": "push 1"
+      },
+      {
+        "address": 4199307,
+        "bytes": "57",
+        "instruction": "push edi"
+      },
+      {
+        "address": 4199308,
+        "bytes": "56",
+        "instruction": "push esi"
+      },
+      {
+        "address": 4199309,
+        "bytes": "53",
+        "instruction": "push ebx"
+      },
+      {
+        "address": 4199310,
+        "bytes": "e8fdfcffff",
+        "instruction": "call 0x401090"
+      },
+      {
+        "address": 4199315,
+        "bytes": "83c410",
+        "instruction": "add esp, 0x10"
+      },
+      {
+        "address": 4199318,
+        "bytes": "85c0",
+        "instruction": "test eax, eax"
+      },
+      {
+        "address": 4199320,
+        "bytes": "7d11",
+        "instruction": "jge 0x4013ab"
+      },
+      {
+        "address": 4199322,
+        "bytes": "6838744400",
+        "instruction": "push 0x447438"
+      },
+      {
+        "address": 4199327,
+        "bytes": "ff1580704400",
+        "instruction": "call dword ptr [0x447080]"
+      },
+      {
+        "address": 4199333,
+        "bytes": "5f",
+        "instruction": "pop edi"
+      },
+      {
+        "address": 4199334,
+        "bytes": "5e",
+        "instruction": "pop esi"
+      },
+      {
+        "address": 4199335,
+        "bytes": "33c0",
+        "instruction": "xor eax, eax"
+      },
+      {
+        "address": 4199337,
+        "bytes": "5b",
+        "instruction": "pop ebx"
+      },
+      {
+        "address": 4199338,
+        "bytes": "c3",
+        "instruction": "ret "
+      },
+      {
+        "address": 4199339,
+        "bytes": "68fc734400",
+        "instruction": "push 0x4473fc"
+      },
+      {
+        "address": 4199344,
+        "bytes": "ff1580704400",
+        "instruction": "call dword ptr [0x447080]"
+      },
+      {
+        "address": 4199350,
+        "bytes": "6a00",
+        "instruction": "push 0"
+      },
+      {
+        "address": 4199352,
+        "bytes": "6a40",
+        "instruction": "push 0x40"
+      },
+      {
+        "address": 4199354,
+        "bytes": "e821d50300",
+        "instruction": "call 0x43e8e0"
+      },
+      {
+        "address": 4199359,
+        "bytes": "83c408",
+        "instruction": "add esp, 8"
+      },
+      {
+        "address": 4199362,
+        "bytes": "5f",
+        "instruction": "pop edi"
+      },
+      {
+        "address": 4199363,
+        "bytes": "5e",
+        "instruction": "pop esi"
+      },
+      {
+        "address": 4199364,
+        "bytes": "5b",
+        "instruction": "pop ebx"
+      },
+      {
+        "address": 4199365,
+        "bytes": "c3",
+        "instruction": "ret "
+      },
+      {
+        "address": 4439762,
+        "bytes": "6a00",
+        "instruction": "push 0"
+      },
+      {
+        "address": 4439764,
+        "bytes": "68a0764400",
+        "instruction": "push 0x4476a0"
+      },
+      {
+        "address": 4439769,
+        "bytes": "68309f4400",
+        "instruction": "push 0x449f30"
+      },
+      {
+        "address": 4439774,
+        "bytes": "6a00",
+        "instruction": "push 0"
+      },
+      {
+        "address": 4439776,
+        "bytes": "ff15c8714400",
+        "instruction": "call dword ptr [0x4471c8]"
+      },
+      {
+        "address": 4439782,
+        "bytes": "e8f55bfcff",
+        "instruction": "call 0x401ae0"
+      },
+      {
+        "address": 4439787,
+        "bytes": "33c0",
+        "instruction": "xor eax, eax"
+      },
+      {
+        "address": 4439789,
+        "bytes": "c3",
+        "instruction": "ret "
+      }
+    ],
+    "windowFailureStillReturnsOne": 8,
+    "fullConfigureZeroStillSelectsModeTwo": 28,
+    "ignoredPixelErrors": 14,
+    "ignoredSetClipperErrors": 2,
+    "retained50Unchanged": true,
+    "final280CheckpointEqual": true,
+    "wholeInstallerEqual": true,
+    "windowsVerified": false,
+    "fullCRTStartupCompared": false,
+    "structureBytes": 94588,
+    "structureWrittenFieldBytes": 23788,
+    "fullscreenUnknownCursorCalls": 232
+  },
+  "fullCRTStartupCompared": false,
+  "nativePackagedTests": 5,
+  "nativePackagedTestSeconds": 20.203,
+  "nativePackagedBuildSeconds": 0.28,
+  "artifactVerification": {
+    "rawBytes": 83756823,
+    "packedBytes": 2905776,
+    "rawSHA256": "bcb6bd80f3e1edea4a9386921cae6b9a502d3243da16fbd8808e45de098a3173",
+    "packedSHA256": "99f3950befc6829f9b0f09bab33d722e19d549090ec629ed2f62e5033cbc4b52",
+    "fullJSONEqual": true,
+    "retained50Unchanged": true,
+    "final280CheckpointEqual": true,
+    "priorUnchanged": 210,
+    "currentFixtures": 211,
+    "vendorFiles": 10,
+    "exportFiles": 540,
+    "windowsVerified": false,
+    "fullCRTStartupCompared": false
+  }
+}
