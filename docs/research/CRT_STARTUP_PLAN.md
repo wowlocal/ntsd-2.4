@@ -91,6 +91,10 @@ all untouched bytes/provenance and roll back on a late constructor observer.
 The independent constructor sub-study is now accepted in
 [STARTUP_STORAGE](STARTUP_STORAGE.md); the enclosing CRT/NLS chain remains open.
 
+[WINDOWS_REFERENCE_PLAN](WINDOWS_REFERENCE_PLAN.md) prepares an actual Windows
+capture of this first NLS dependency. Its independent collector and synthetic
+self-tests do not provide a Windows response or resume the stopped CRT.
+
 [WINDOW_INITIALIZATION](WINDOW_INITIALIZATION.md) now accepts another independent
 controlled dependency: whole43bec0 and its window/DirectDraw children. It does
 not continue this stopped CRT process or supply its missing NLS response.

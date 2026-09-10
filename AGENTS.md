@@ -327,6 +327,24 @@ source/SwiftPM jobs terminal; NTSDNative linked. Jobs: build/research/
 window-initialization-work.json. Full initialized library app/match/content,
 Windows/device and clean-Mac goal remain open.
 
+[WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
+prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
+The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.
+Eighteen collector-only Unicorn self-tests use explicitly artificial API values
+for serialization, dependencies and ordinary IO failures; NEVER import them into
+the original CRT or call them Windows/game/native comparisons. No new fixture,
+Swift code, app run, Windows guest or VM installation follows from this stage.
+
+The web tool rejected download redirect2276103 as unsafe/non-retryable. Exact
+error/time/thread and unavailable turn-ID field are in build/research/
+windows-reference/download-refusal-20260910.json. This is not cyber_policy or
+automatic approval-review output. Do not retry this download via another tool.
+An independently available authorized Windows ISO/endpoint remains requested;
+continue independent permitted work. Read the bounded
+[WINDOWS_REFERENCE_PLAN](docs/research/WINDOWS_REFERENCE_PLAN.md) before capture.
+Build/pack hashes and terminal jobs: build/research/windows-reference-work.json.
+Windows NLS must be a new explicit OS profile, never relabel synthetic XP5.1.
+
 Remaining hook is41f5fc transforms, plus all enclosing
 library-enabled routing and full CRT initialization. Recover Actor+7b4 and
 actual unknown0xb2 backing/reachability without silently fixing source bugs.
