@@ -503,7 +503,7 @@ RootSP2000e000, local1024bytes starts+14, before cookie+414; root0..13/414..42b
 unchanged. World2112bytes is declared input, not sizeof recovery; hostname+7d8.
 402d70..402eb6 is actually optional exit/sendto/close/clear/WSACleanup, caller
 427f6b. Earlier client-handshake label was a STATIC naming error, corrected;
-no accepted server source bytes/results changed. Whole402d70 remains open.
+no accepted server source bytes/results changed. Whole402d70 is compared below.
 
 Pendingexact1 clears BEFOREcloseold/socket(2,1,6); store result even-1. Lookup
 fallback inet_addr/root14/gethostbyaddr; successful host requires first-address
@@ -532,6 +532,41 @@ completedsource. Foreigntransforms unchanged; NTSDNative linked, noappwindow or
 device/Windowsrun. Jobs: build/research/network-client-work.json. Exit402d70,
 complete client/host UI and initialized menu/listen/accept/output joins, actual
 network/CRT/NLS/WinMain/lib/macOS runtime/fullgame/clean-Mac and goal stay open.
+
+[NETWORK_EXIT](docs/research/NETWORK_EXIT.md) matches56 whole402d70 returns plus
+one own client producer on the same sourceCPU/native ownstate.6earlysend-error
+returns/50normal; all79/79exit starts,86EXE+35CRT exit-only PCs.48actualmemsets,
+56cookiechecks/112helperreturns,160exitrequests/1058sendbytes,628semanticstores/
+13888writtenbytes/1453recorded reads. Includingclient:281EXE(includes34prologue)+
+39CRT,171requests/1135sendbytes,733semanticstores/17224bytes,3768rawstores=
+3765CPU+3API,1584reads,2647680storagebytes+masks. Not everybranch/Windowsclaim.
+
+Listener44f1b4 nonzero THEN44f1b0 nonzero gates notice. Clear256localbytes at
+SP2000eefc before cookie; copy20-byte `Client want to EXIT.` then overwriteNUL
+with4rawaddressbytes44f208..b in order0/2/1/3. Actualstrlen sends20+nonzeroaddress
+prefix,20..24bytes, not fixed24/textIP; all4addressbytes stillread. sockaddr16
+44f58c is unchanged. Sendtoexact-1 MessageBox thenreread/closelistener andearly
+402e7b, NOglobalclear/WSACleanup. Otherstatuses reread/close, clear44f1b4 THEN
+44f1b0,WSACleanup,402eb6. Gatebypass stillclose0/cleanup. EAXlastclose/cleanup;
+callerignores. Connected44f46c/networkflags/names/RNG are notcleared here.
+
+Ownfailure→retry→repeat retainsbothgates afterfailure, sendsagain, thenclose0.
+Ownclient→exit→repeat uses independently executed nativeClient output; never
+imports expectedafterstate. This is a declared inter-call ABI, not an enclosing
+cancelmenu execution. Unknownrequiredgate/address/sockaddr andlatecleanup/error
+close/finalstore reject withwhole rollback; unknownlocal clear onlyonsendgate,
+bypass preservesunknowns. Bufferexternaleffects; actualreentrancy/TCP open.
+
+Raw14release tests5.613s/build182.98s, new5tests0.099s; finalpackaged14tests5.678s/
+build0.32s,new5tests0.091s. Retainedclient5/server4 pass.216oldpins unchanged/
+217current;fullraw4584610/packed295535bytes/JSON/SHA/88blobs/56atomiccases/3probe
+cases/10vendorhashes/558isolatednativefiles verify. No sourcefault/refusal/restart
+or source/native/verifier correction. Allownedjobs terminal0; completedsource
+mustnotrestart. Foreign6transforms unchanged; NTSDNative linked, noappwindow/
+device/Windowsrun. Jobs: build/research/network-exit-work.json. NEXTwholemenu1/2/3
+427ca7..42873e:background/address/links/waitinganimation/hostname/key422f60,
+actualcaller/presentation/epilogue and initializedlistener/peer joins. Actual
+Windows/CRT/lib/macOS/fullgame/clean-Mac and fullgoal remain open.
 
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.

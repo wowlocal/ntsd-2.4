@@ -58,3 +58,6 @@ Finite acceptance:
 actual controlled network sessions/Windows delivery, CRT/NLS/WinMain, lib
 transforms and native window/renderer/audio/input loop remain required. Full
 match/content/replay/network and clean-Mac acceptance are not complete.
+
+Follow-up [NETWORK_EXIT](NETWORK_EXIT.md) accepts whole402d70 and a retained
+client→exit sequence. The enclosing menu/input/presentation join remains open.

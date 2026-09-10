@@ -1189,3 +1189,26 @@ Sleep500/recv77/Sleep500/recv3001 следуют после send77. Пакеты
 88-byte name banks намеренно различаются: только received underscores декодируются.
 Неизвестные обязательные bytes и поздние provider/store ошибки дают полный
 откат. Реальное приложение, TCP/Windows и lifetime длинных settings names открыты.
+
+## Выход из сетевого сеанса
+
+[NETWORK_EXIT](NETWORK_EXIT.md):56 whole402d70 returns и собственный client→exit.
+Frame2000eefc содержит256 data bytes до cookie; его содержимое до clear задано,
+не импортируется как будто оно было инициализировано настоящим приложением.
+
+| Адрес / frame offset | Подтверждённое поведение |
+| --- | --- |
+| `44f1b4` |Первый gate; zero пропускает чтение44f1b0, но close вызывается даже с0 |
+| `44f1b0` |Второй nonzero gate; после normal close очищается после44f1b4 |
+| Frame0..ff |Только enabled send сначала memset0/256; bypass сохраняет прежние bytes/маски |
+| Frame0..13 |20-byte literal `Client want to EXIT.`, DWORD stores0/8/c, byte14=0, DWORDs4/10 |
+| `44f208..44f20b` → Frame14..17 |Четыре raw bytes, store order0/2/1/3, перезаписывают прежний NUL; strlen ограничивает передаваемый nonzero prefix |
+| `44f58c..44f59b` |Sockaddr16 передаётся отдельно от20..24-byte payload, flags0 |
+| `44f46c`, network flags, names/RNG |Не очищаются и не закрываются этим helper; source/global comparison сохраняет их |
+
+Sendtoexact-1 показывает ошибку, перечитывает/закрываетlistener и возвращается
+через402e7b без очистки двухglobals/WSACleanup. Иначе normal402eb6 идёт после
+close→clear44f1b4→clear44f1b0→cleanup. Числовые ошибки close/cleanup не меняют
+путь. EAX сохраняет last close/cleanup result, ignored caller. Повтор после
+успешной очистки всё равно вызывает close(0)/cleanup. UI caller427f6b пока не
+соединён; Windows/TCP/reentrancy и внешний lifetime остаются открытыми.

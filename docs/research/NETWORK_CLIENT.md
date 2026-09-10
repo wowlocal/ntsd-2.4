@@ -24,7 +24,7 @@ shows402d70..402eb6 instead sends the optional `Client want to EXIT.` notice
 through sendto, then closes/clears sockets and invokes WSACleanup. Its only
 direct caller is427f6b. Actual deferred client connection is428420..42873e with
 error continuation4287de. This corrects a static address label; no accepted
-server reference bytes or results changed. Whole402d70 remains unimplemented.
+server reference bytes or results changed. Whole402d70 is now compared in [NETWORK_EXIT](NETWORK_EXIT.md).
 
 The real4246b0 prologue executes34 instruction starts through the unexecuted
 42709b boundary. It produces EBX0, ESIffffffff, EBP19 at424771, phase4511f8=1
@@ -168,7 +168,8 @@ Packed4724320 bytes SHA256:
 Evidence: [network-client.json](../evidence/network-client.json). Jobs and the
 preserved verifier correction: `build/research/network-client-work.json`.
 
-Whole402d70 exit, the host/client input screens, initialized menu/listen/accept
+The exit helper is now compared in [NETWORK_EXIT](NETWORK_EXIT.md).
+The host/client input screens, initialized menu/listen/accept
 and presentation/epilogue joins, actual controlled network sessions and Windows
 delivery remain required. CRT/NLS/WinMain, lib transforms/routing, the macOS
 renderer/audio/input/timing loop, full matches/content/replays/network and
