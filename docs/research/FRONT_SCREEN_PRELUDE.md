@@ -142,3 +142,9 @@ SwiftPM выполняется последовательно. Следом — 
 после `427127`, альтернативы `4275cb` и дальнейшее соединение с ранее проверенными
 main-menu/tail/loading ветвями. Worker lifecycle, пиксели DirectDraw, оконный UI,
 практика/законченный матч, Windows и чистая macOS остаются открытыми.
+
+[APPLICATION_FRONT_SCREEN](APPLICATION_FRONT_SCREEN.md) now continues the own
+WinMain/loop/settings parents through this prefix, executing the whole background
+image loader/copy and keeping92 private fill bytes unknown in Native. It reaches
+427127/4275cb and preserves cached Sleep; this earlier supplied-boundary corpus
+remains unchanged. Full World/dispatcher and Windows/device checks stay open.

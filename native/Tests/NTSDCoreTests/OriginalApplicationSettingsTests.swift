@@ -17,12 +17,17 @@ final class OriginalApplicationSettingsTests: XCTestCase {
     final class Resources {
         let c: Corpus,rawParents: [String:[String:Any]]
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_SETTINGS"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-settings",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:80_000_000)
+        init(supplied: Data? = nil) throws {
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_SETTINGS"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-settings",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:80_000_000)
+            }
             c = try JSONDecoder().decode(Corpus.self,from:data)
             rawParents = try XCTUnwrap((JSONSerialization.jsonObject(with:data) as? [String:Any])?["parents"] as? [String:[String:Any]])
-            XCTAssertEqual(c.cases.count,18);XCTAssertEqual(c.scratchAddress,0x1000e878);XCTAssertEqual(c.scratchCount,500)
+            if supplied == nil { XCTAssertEqual(c.cases.count,18) }
+            XCTAssertEqual(c.scratchAddress,0x1000e878);XCTAssertEqual(c.scratchCount,500)
         }
         func blob(_ key: String) throws -> [UInt8] {
             if let b = cache[key] { return b }
@@ -38,8 +43,10 @@ final class OriginalApplicationSettingsTests: XCTestCase {
             XCTAssertEqual(expected.cw,0x37f)
         }
     }
-    func compare(_ index: Int,_ r: Resources,_ br: Bitmap.Resources,_ er: Entry.Resources,fail: String? = nil) throws {
-        let c = r.c.cases[index],parentIndex = index < 7 ? 61+index : 61
+    func compare(_ index: Int,_ r: Resources,_ br: Bitmap.Resources,_ er: Entry.Resources,fail: String? = nil,
+                 continuation: ((inout Bitmap.OwnContext) throws -> Void)? = nil) throws {
+        let c = r.c.cases[index],rawParent = try XCTUnwrap(r.rawParents[c.parent]) as NSDictionary
+        let parentIndex = try XCTUnwrap(br.rawCases.firstIndex { ($0 as NSDictionary) == rawParent })
         XCTAssertEqual(try XCTUnwrap(r.rawParents[c.parent]) as NSDictionary,br.rawCases[parentIndex] as NSDictionary,"Fresh full source parent must reproduce")
         var eventIndex = 0,counts: [String:Int] = [:],reached = false
         try Bitmap().own(parentIndex,br,er,fail:fail == nil ? nil : "applicationSettings",continuation:{ owned in
@@ -76,6 +83,7 @@ final class OriginalApplicationSettingsTests: XCTestCase {
                 if fail != "screenBoundary" { XCTAssertEqual(owned.base.globals,prior,"Whole settings failure rollback") }
                 throw error
             }
+            try continuation?(&owned)
         })
         XCTAssertTrue(reached)
         if fail == nil { XCTAssertEqual(eventIndex,c.events.count) }

@@ -1139,6 +1139,45 @@ unavailable, no window/input/device action. NEXT actual42709b screen consumer,
 then wholeWorld/dispatcher, earlierCRT/NLS/library/privatebacking, worker/app,
 Windows/device/fullmatch/allcontent/network/cleanMac. Fullgoal stays active.
 
+[APPLICATION_FRONT_SCREEN](docs/research/APPLICATION_FRONT_SCREEN.md) now
+continues own42709b through selector/fill/fullbackgroundloader/draw:39 boundaries
+at427127+1alternate4275cb, allSP1000ea74, and1 separate pre-NULL bitmap stop43f04b.
+41fresh chains,17exactsettingsparents+2actualsetting1/-1parents and7bitmapparents.
+SameCPU/stack/PTD/resources, no selector/register/oldallocation/CRT reinjection.
+
+Whole43ee50/43ed10/4013d0 and actualsprintf/memset create40backgroundwrappers,
+all13 MENU_BACK DIBs.1023fullold/newrecords/8200368bytes+masks; oldresources stay.
+40clips/40Blts/200bitmapreads include82undefined reads of declaredA5 backing,
+not Windowsallocatorprovenance. Native uses own GameEntry/settings target and
+full ownWorld/outer bytes. Fill compares328ownedbytes;3772private0/false remain
+unknown. ImageAPI fields4508owned/5524unknown retain original stack evidence.
+No wholeprivateFX/Windows pixel equality is claimed. Error results stay ignored
+as recovered, including positiveCreateSurface1 and failedcopy/colorKey cleanup.
+
+42711b caches Sleep IAT447098 intoESI30009040. Native retains typed.sleep, never
+imports that executable address. NULLstop precedes it. Two workerrequests include
+CreateThread0/GetLastError5; declaredthreadIDabcd even on failure. Workerbody,
+concurrent delivery and realWindows thread semantics are not established.
+1266events/363helperreturns;540EXE+413CRT actualstarts. All39caller/28fill/55BG/
+23thread starts; otherstaticgaps explicit.13libpatchspansdisjoint.20791CPU+
+189APIstores/83545bytes reconstruct fullglobals/stack/wrappers. FullCRT/PTD/
+calendar andCW037f unchanged.19settingsparents add1087statechecks/1322events.
+
+Raw9tests25.373s/build205.06s passed. Review retained the native own suffix for
+its comparison shadow (initial source-before suffix never fed a game routine)
+and typedSleep; stronger raw9tests25.582s/build195.33s passed. Original raw/expected
+bytes unchanged.41outerrollbacks+9latefailures preserve committedstartup/callback/
+MSG/counter/baseline/settings/graphics/backgroundownership.241oldpins unchanged,
+242current;1316blobs/41parts/36assets/10vendorhashes verify. Finalpackaged9tests
+24.655s/build0.28s passed with no rawoverride; allownjobs terminal. Exact final
+acceptance/jobs/hashes: build/research/application-front-screen-work.json.
+Neverrestart completedcandidate1. NTSDNative linked; composer still separate
+fromPractice app. CUApipe unavailable; no window/input/device action.
+NEXT actual4236d0/427127 body or4275cb alternative, preserving own target/Sleep/
+resources/stack/CRT. WholeWorld/dispatcher/WinMain, earlierCRT/NLS/library/private
+backing, worker/app/Windows/devices/fullmatch/allcontent/network/cleanMac remain
+open. Fullgamegoal stays active.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

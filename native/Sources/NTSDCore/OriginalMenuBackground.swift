@@ -9,6 +9,7 @@ public enum OriginalMenuBackground {
     public static func load(globals: inout OriginalStateRecord, milliseconds: UInt32,
         allocate: () throws -> OriginalInterfaceAllocation,
         source: (String) throws -> (OriginalBitmapInput,UInt32,Int32),
+        constructBitmap: ((OriginalInterfaceAllocation,UInt32,String) throws -> (OriginalLoadedBitmap,UInt32))? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Result {
         var state = globals
         let base = OriginalMatchPreparation.globalBase
@@ -22,13 +23,23 @@ public enum OriginalMenuBackground {
         var bitmap: OriginalLoadedBitmap?, retainedSurface: UInt32 = 0
         if allocation.address != 0 {
             try observe(.init("construct",[allocation.address,0x40,0],[Array(path.utf8)]))
-            let (resource,surface,key) = try source(path)
-            guard resource.path == path else { throw OriginalStateError.invalidStorage("Menu background resource binding") }
-            bitmap = try OriginalBitmapConstructor.construct(resource,optional: false,backing: allocation.backing,
-                device: state.integer(at: 0x457578-base,as: UInt32.self),flags: 0x40,surface: surface,colorKeyResult: key) {
-                    try observe(.init($0.kind.rawValue,$0.arguments,$0.strings))
+            let device = try state.integer(at: 0x457578-base,as: UInt32.self)
+            if let constructBitmap {
+                let (loaded,surface) = try constructBitmap(allocation,device,path)
+                guard loaded.input.path == path, loaded.storage.bytes.count == 0x1f50,
+                      try loaded.storage.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else {
+                    throw OriginalStateError.invalidStorage("Menu background constructed surface binding")
                 }
-            retainedSurface = surface != 0 && key >= 0 ? surface : 0
+                bitmap = loaded;retainedSurface = surface
+            } else {
+                let (resource,surface,key) = try source(path)
+                guard resource.path == path else { throw OriginalStateError.invalidStorage("Menu background resource binding") }
+                bitmap = try OriginalBitmapConstructor.construct(resource,optional: false,backing: allocation.backing,
+                    device: device,flags: 0x40,surface: surface,colorKeyResult: key) {
+                        try observe(.init($0.kind.rawValue,$0.arguments,$0.strings))
+                    }
+                retainedSurface = surface != 0 && key >= 0 ? surface : 0
+            }
         }
         try state.write(allocation.address,at: 0x4511ac-base)
         try observe(.init("write",[0x4511ac,4,allocation.address]))

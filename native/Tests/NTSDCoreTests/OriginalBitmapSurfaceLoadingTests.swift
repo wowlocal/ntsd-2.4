@@ -157,6 +157,8 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
     struct OwnContext {
         var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics()
         var settings: OriginalSettingsLoading.StartupResult? = nil, gameEntry: OriginalApplicationDispatchEntry.GameEntry? = nil
+        var earlyScreen = OriginalFrontScreenPrelude()
+        var outerAndWorldBytes: [UInt8] = []
     }
     func own(_ index: Int,_ r: Resources,_ er: Entry.Resources,fail: String? = nil,
              continuation: ((inout OwnContext) throws -> Void)? = nil) throws {
@@ -183,6 +185,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                     let ec = er.c.cases[c.spec.windowParam == 1 ? 1 : 0],entry = Entry.Stage(ec,er,bytes,fail:nil)
                     let game = try OriginalApplicationDispatchEntry.advance(incomingTarget:request.arguments[0],globals:&full,perform:entry.surface,store:entry.store)
                     owned.gameEntry = game
+                    owned.outerAndWorldBytes = Array(full.bytes.dropFirst(0xb440))
                     let wo = Int(game.worldAddress)-0x44d000,world = try OriginalStateRecord(bytes:Array(full.bytes[wo..<wo+0x7d8]),defined:[Bool](repeating:true,count:0x7d8))
                     var fg = try OriginalStateRecord(bytes:Array(full.bytes[..<0xb440]),defined:Array(full.defined[..<0xb440])),front = owned.front,g = owned.graphics
                     var a: Adapter?,first = true
@@ -220,6 +223,9 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                 XCTAssertEqual(state.base.memory.replayPointers,before.base.memory.replayPointers);XCTAssertEqual(state.base.memory.allocations,before.base.memory.allocations)
                 XCTAssertEqual(state.front.bitmaps,before.front.bitmaps);XCTAssertEqual(state.graphics,before.graphics)
                 XCTAssertEqual(state.settings,before.settings);XCTAssertEqual(state.gameEntry,before.gameEntry)
+                XCTAssertEqual(state.earlyScreen.bitmaps,before.earlyScreen.bitmaps);XCTAssertEqual(state.earlyScreen.surfaces,before.earlyScreen.surfaces)
+                XCTAssertEqual(state.earlyScreen.retainedOperation,before.earlyScreen.retainedOperation)
+                XCTAssertEqual(state.outerAndWorldBytes,before.outerAndWorldBytes)
                 XCTAssertEqual(loop.message,previous.message);XCTAssertEqual(loop.timer.baseline,previous.timer.baseline);XCTAssertEqual(loop.counter,previous.counter)
             }
         }

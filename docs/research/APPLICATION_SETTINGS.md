@@ -143,3 +143,8 @@ own target and stack/CRT/resources, then the whole World/dispatcher return.
 Library routes, worker/runtime integration, complete Naruto/Sasuke District
 match, all original content/network/replays and clean-Mac acceptance remain
 requirements of the active full-game goal.
+
+Continuation: [APPLICATION_FRONT_SCREEN](APPLICATION_FRONT_SCREEN.md) now
+executes the own selector/fill/background/draw to427127/4275cb, with one separate
+NULL bitmap stop. The settings corpus above remains unchanged; whole World and
+dispatcher returns remain open.

@@ -36,6 +36,10 @@ public struct OriginalFrontScreenInput: Codable, Sendable {
 /// screen body are separate. No source EXE or expected snapshots are used here.
 public struct OriginalFrontScreenPrelude {
     public enum Continuation: String, Codable, Sendable { case critical, alternate, nullFillTarget, nullBitmap, nullDrawTarget }
+    public enum RetainedOperation: Equatable, Sendable { case sleep }
+    ///42711b caches the platform Sleep import in ESI for the next screen branch.
+    ///Native retains its meaning, not the research adapter's executable address.
+    public private(set) var retainedOperation: RetainedOperation?
     public private(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
     public private(set) var surfaces: [UInt32:UInt32] = [:]
     public init() {}
@@ -52,10 +56,12 @@ public struct OriginalFrontScreenPrelude {
     public mutating func advance(globals: inout OriginalStateRecord,input: OriginalFrontScreenInput,fillBacking: [UInt8],
         allocate: () throws -> OriginalInterfaceAllocation,
         source: (String) throws -> (OriginalBitmapInput,UInt32,Int32),
+        constructBitmap: ((OriginalInterfaceAllocation,UInt32,String) throws -> (OriginalLoadedBitmap,UInt32))? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
         let base = OriginalMatchPreparation.globalBase
         guard globals.bytes.count == OriginalMatchPreparation.globalSize, !input.drawResults.isEmpty else { throw OriginalStateError.invalidStorage("Front screen inputs") }
         var state = globals, candidate = self
+        candidate.retainedOperation = nil
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-base,as: UInt32.self) }
         func write(_ address: Int,_ value: UInt32) throws {
             try state.write(value,at: address-base);try observe(.init("write",[UInt32(address),4,value]))
@@ -74,7 +80,7 @@ public struct OriginalFrontScreenPrelude {
                 let allocation = try allocate()
                 guard allocation.address == 0 || candidate.bitmaps[allocation.address] == nil else { throw OriginalStateError.invalidStorage("Front background reused live allocation") }
                 return allocation
-            },source: source,observe: observe)
+            },source: source,constructBitmap:constructBitmap,observe: observe)
             if let bitmap = result.bitmap {
                 candidate.bitmaps[result.address] = bitmap;candidate.surfaces[result.address] = result.surface
             }
@@ -97,6 +103,7 @@ public struct OriginalFrontScreenPrelude {
                 let result = input.drawResults[blits%input.drawResults.count];blits += 1;return result
             })
         } catch OriginalStateError.invalidStorage(let detail) where detail == "Null bitmap target surface" { return finish(.nullDrawTarget) }
+        candidate.retainedOperation = .sleep
         return try finish(word(0x44d064) == 0 ? .critical : .alternate)
     }
 }
