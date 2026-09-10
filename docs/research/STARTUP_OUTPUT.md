@@ -156,7 +156,10 @@ revalidated independently. This is a transport failure, not a safety refusal.
 [evidence](../evidence/startup-output.json),
 [tests](../../native/Tests/NTSDCoreTests/OriginalStartupOutputTests.swift).
 
-The preceding complete panel/CRT/window connection, following input caller,
-whole WinMain/dispatcher/application join, Windows NLS, actual host timezone,
-library transforms, window/input/audio/latency, full matches/all original content
-and clean-Mac acceptance remain open. The app still uses its practice engine.
+The continuous window/panel/output/input connection is now compared in
+[WINMAIN_STARTUP](WINMAIN_STARTUP.md), with its own settings and resource tokens.
+That study starts at declared WinMain entry and preserves unknown fullscreen/
+private backing as explicit rejections. Earlier full CRT/NLS, whole WinMain/
+message-loop/dispatcher/application join, actual host timezone, library
+transforms, window/input/audio/latency, full matches/all original content and
+clean-Mac acceptance remain open. The app still uses its practice engine.

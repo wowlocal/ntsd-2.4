@@ -878,6 +878,47 @@ build/research/startup-output-work.json. NEXT complete earlierCRT/window/panel,
 followinginput and wholeWinMain/dispatcher/application join. WindowsNLS/lib
 transforms/hosttimezone/input/audio/latency/fullmatches/allcontent/cleanMac open.
 
+[WINMAIN_STARTUP](docs/research/WINMAIN_STARTUP.md) now connects actual43cf40
+through43d100 on one CPU/stack.23 whole native chains match;5 original stops and
+7 unknown-provenance native rejections remain separate, NOT35matches. Source
+reaches boundary30times;3fullscreen/2panel/2caps paths are rejected natively.
+Native owns timeGetTime->srand/PTD14, critical-section platform bytes, whole
+window/DirectDraw/panel/settings/calendar/music/cursor/input/all5WAVs. HWND and
+DirectDraw tokens flow from their own producers. Original adinfo exists, ad0
+content does not:1/0/18 child returns produce period4 without injection.44ef38
+stays PEempty, so actual sameCRT sprintf yields `\graph.log`; earlier controlled
+C:\NTSD backing is not this own chain. CRT/NLS before WinMain remains declared.
+
+Full startup23chains compare5361events;12 rejected prefixes add964, total6325.
+119 whole native WAV results=115inwhole+4beforefifthWAVstop. Six late errors
+roll back whole own state afterwindow/panel/date/output/fifthWAV/final callback.
+Source35cases retain7266events/156WAVcalls/154WAVreturns and4046actualPCs:
+1906EXE+2140CRT.128/132caller starts execute; missing4 earlyreturn instructions
+follow a zero43bec0 result, but the controlled whole helper always returns1.
+All13lib patch spans disjoint from executed instructions. No wholeWinMainret.
+
+Fullscreen RegisterClass hCursor at1000efd8 has falsemask and zero preceding
+writes since declared entry; don't import a5 or fabricate0. Capability failures
+read retained CRT cookie/savedframe/return-address/privateFILEpointer bytes as
+numbers. Actual last stores78141727/78141712/781777b0/781777a1 are preserved;
+these are not native-owned calibration. No corruption/exploit/protection bypass
+was performed. Keep both undefined-read rejections and Windows/private-backing
+dependency open. Missinginfo/emptycontent remain separate unknown panel reads.
+NULL calendar43cfd3/43d028, invalidparameter78138a70 and invalid WAV creation
+40187a(first/fifth) are explicit source stops/native rollback, never matches.
+
+Raw11tests24.939s/build197.81s; finalpackaged11tests24.347s/build0.29s passed,
+including retainedwindow/panel/output/input.234oldpins unchanged/235current;
+raw35021596/packed7434880bytes, fullbytes/JSON/SHA/all1029blobs/35parts/10vendor
+hashes verified.594isolated native files exclude6unchanged foreign transforms.
+Final source adds metadata only; all candidate1expected/stores/PCs/blobs intact.
+Earlier source observer/label errors and two verifier assertion corrections are
+retained; no native rule or expected byte changed. All own source/build jobs
+terminal; NTSDNative linked, composer not wired to Practice app. CUA pipe failed,
+no window/input action. Jobs:build/research/winmain-startup-work.json. Earlier
+CRT/NLS, privatebacking, synchronouscallbacks, worker/message-loop/dispatcher/app,
+libtransforms, devices/input/audio/latency/fullmatches/allcontent/cleanMac open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

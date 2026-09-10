@@ -1,0 +1,295 @@
+{
+  "sourceBytes": 35021596,
+  "sourceSHA256": "0b8e2c61cac383b147a619ea0edd1e2f2f1ba85965f230e39f5cf9cf3c76ef4d",
+  "producerSHA256": "1f3a8862eddc2573f97609f9e6c0ae59ac6801064ae2ba85bb3eb757de7b1f55",
+  "cases": 35,
+  "counts": {
+    "calendarAllocations": 34,
+    "originalCRTStores": 3530,
+    "CRTAdapterWrites": 230,
+    "originalGlobalStores": 10722,
+    "globalAdapterWrites": 351,
+    "originalStackStores": 400835,
+    "stackAdapterWrites": 1738,
+    "waveCalls": 156,
+    "waveReturns": 154,
+    "formats": 96,
+    "musicAllocations": 30,
+    "startupBoundary": 30,
+    "nullCalendarRead": 2,
+    "invalidCreateContinuation": 2,
+    "invalidParameter": 1
+  },
+  "events": {
+    "timeGetTime": 35,
+    "initializeCriticalSection": 35,
+    "coInitialize": 35,
+    "window": 697,
+    "panelCaller": 212,
+    "panel-info": 239,
+    "panel-content": 1716,
+    "panel-defaults": 330,
+    "filetime": 35,
+    "allocate": 35,
+    "timezone": 33,
+    "nameConversion": 66,
+    "dateFormat": 65,
+    "music": 720,
+    "loadCursor": 32,
+    "setCursor": 32,
+    "input": 2691,
+    "panel-bitmap": 258
+  },
+  "helperReturns": {
+    "input": 186,
+    "time": 35,
+    "tmBuffer": 68,
+    "tzSet": 33,
+    "tzInit": 65,
+    "gmt": 65,
+    "local_s": 66,
+    "local": 67,
+    "music": 159,
+    "window": 214,
+    "panel": 106
+  },
+  "stages": {
+    "seed-return": 35,
+    "window-entry": 35,
+    "window-return": 35,
+    "panel-entry": 35,
+    "panel-return": 35,
+    "output-return": 32,
+    "input-entry": 32,
+    "input-return": 30
+  },
+  "sourceStops": [
+    {
+      "case": "period-24856",
+      "end": "nullCalendarRead",
+      "pc": 4444200
+    },
+    {
+      "case": "failed-buffer-0",
+      "end": "invalidCreateContinuation",
+      "pc": 4200570
+    },
+    {
+      "case": "failed-buffer-4",
+      "end": "invalidCreateContinuation",
+      "pc": 4200570
+    },
+    {
+      "case": "tm-allocation",
+      "end": "nullCalendarRead",
+      "pc": 4444115
+    },
+    {
+      "case": "clock-before-epoch",
+      "end": "invalidParameter",
+      "pc": 2014546544
+    }
+  ],
+  "unknownProvenance": [
+    {
+      "case": "window-1-{}",
+      "kind": "fullscreenCursor",
+      "rootEvents": 4,
+      "address": 268496856,
+      "precedingWrites": 0
+    },
+    {
+      "case": "window-1-{\"createSurface#1\": -1}",
+      "kind": "fullscreenCursor",
+      "rootEvents": 4,
+      "address": 268496856,
+      "precedingWrites": 0
+    },
+    {
+      "case": "window-1-{\"createSurface#1\": -1, \"createSurface#2\": -1}",
+      "kind": "fullscreenCursor",
+      "rootEvents": 4,
+      "address": 268496856,
+      "precedingWrites": 0
+    },
+    {
+      "case": "missing-info",
+      "kind": "panel",
+      "offset": 28,
+      "count": 1,
+      "rootEvents": 26
+    },
+    {
+      "case": "empty-content",
+      "kind": "panel",
+      "offset": 604,
+      "count": 1,
+      "rootEvents": 39
+    },
+    {
+      "case": "unknown-first-caps-False",
+      "kind": "input",
+      "offset": 36,
+      "count": 4,
+      "rootEvents": 88
+    },
+    {
+      "case": "unknown-second-only-False",
+      "kind": "input",
+      "offset": 36,
+      "count": 4,
+      "rootEvents": 89
+    }
+  ],
+  "blobs": 1029,
+  "actualCRT": 2140,
+  "actualEXE": 1906,
+  "callerStarts": 132,
+  "executedCallerStarts": 128,
+  "unexecutedCaller": [
+    {
+      "address": "0x43cf8c",
+      "bytes": "5f",
+      "assembly": "pop\tedi"
+    },
+    {
+      "address": "0x43cf8d",
+      "bytes": "5e",
+      "assembly": "pop\tesi"
+    },
+    {
+      "address": "0x43cf8e",
+      "bytes": "83c42c",
+      "assembly": "add\tesp, 0x2c"
+    },
+    {
+      "address": "0x43cf91",
+      "bytes": "c21000",
+      "assembly": "ret\t0x10"
+    }
+  ],
+  "fullGlobalCRTPTDReconstruction": true,
+  "declaredPanelStackWindowReconstruction": true,
+  "calendarMusicAllocationReconstruction": true,
+  "privateCapabilityReads": [
+    {
+      "case": "unknown-first-caps-False",
+      "reader": 4440027,
+      "offset": 36,
+      "bytes": "ca0a40ab",
+      "lastStore": {
+        "pc": 2014582567,
+        "address": 268496504,
+        "bytes": "ca0a40ab"
+      },
+      "provenance": "CRT security-cookie store",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-first-caps-False",
+      "reader": 4440031,
+      "offset": 40,
+      "bytes": "bcee0010",
+      "lastStore": {
+        "pc": 2014582546,
+        "address": 268496508,
+        "bytes": "bcee0010"
+      },
+      "provenance": "saved CRT frame",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-first-caps-False",
+      "reader": 4440035,
+      "offset": 44,
+      "bytes": "b5771778",
+      "lastStore": {
+        "pc": 2014803888,
+        "address": 268496512,
+        "bytes": "b5771778"
+      },
+      "provenance": "CRT return address",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-first-caps-False",
+      "reader": 4440039,
+      "offset": 48,
+      "bytes": "9cee0010",
+      "lastStore": {
+        "pc": 2014803873,
+        "address": 268496516,
+        "bytes": "9cee0010"
+      },
+      "provenance": "private CRT FILE pointer",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-second-only-False",
+      "reader": 4440162,
+      "offset": 36,
+      "bytes": "ca0a40ab",
+      "lastStore": {
+        "pc": 2014582567,
+        "address": 268496504,
+        "bytes": "ca0a40ab"
+      },
+      "provenance": "CRT security-cookie store",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-second-only-False",
+      "reader": 4440166,
+      "offset": 40,
+      "bytes": "bcee0010",
+      "lastStore": {
+        "pc": 2014582546,
+        "address": 268496508,
+        "bytes": "bcee0010"
+      },
+      "provenance": "saved CRT frame",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-second-only-False",
+      "reader": 4440170,
+      "offset": 44,
+      "bytes": "b5771778",
+      "lastStore": {
+        "pc": 2014803888,
+        "address": 268496512,
+        "bytes": "b5771778"
+      },
+      "provenance": "CRT return address",
+      "nativeOwned": false
+    },
+    {
+      "case": "unknown-second-only-False",
+      "reader": 4440174,
+      "offset": 48,
+      "bytes": "9cee0010",
+      "lastStore": {
+        "pc": 2014803873,
+        "address": 268496516,
+        "bytes": "9cee0010"
+      },
+      "provenance": "private CRT FILE pointer",
+      "nativeOwned": false
+    }
+  ],
+  "oldFixturesUnchanged": 234,
+  "vendorFiles": 10,
+  "libPatchSitesDisjoint": 13,
+  "nativeCompared": true,
+  "nativeWholeChains": 23,
+  "nativeSourceStopRejections": 5,
+  "nativeUnknownProvenanceRejections": 7,
+  "nativeComparedEvents": 6325,
+  "nativeComparedWholeWAVs": 119,
+  "fixture": "original-winmain-startup.json",
+  "fixtureBytes": 7434880,
+  "fixtureSHA256": "e7801d29a96235ddbc0488b784b8c5764841d3c9414f62ebef85162f66708182",
+  "windowsVerified": false,
+  "fullGoalComplete": false,
+  "scope": "Continuous43cf40..43d100:23 whole native chains,5 original-stop and7 unknown-provenance native rejections with rollback. Own RNG, window/panel, calendar/music, input and WAV state; masked opaque platform fields. Earlier CRT/NLS, full WinMain/message-loop/application, actual window/device and private-stack provenance remain open."
+}
