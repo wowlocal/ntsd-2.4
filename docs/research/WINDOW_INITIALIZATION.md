@@ -12,6 +12,10 @@ window/device test. Current NTSDApp still uses the older practice engine. The
 independent [CRT startup](CRT_STARTUP_PLAN.md) remains stopped at Windows NLS.
 The verified native request model is a dependency for the application connection.
 
+[WINDOW_LIFECYCLE](WINDOW_LIFECYCLE.md) now compares whole43bdd0 as the
+recreation child, reusing `configure` without this43bec0 wrapper's extra instance
+store and ShowWindow. The280 original initialization fixtures remain unchanged.
+
 ## Original behavior and ordering
 
 The controlled source first reproduces the complete accepted EXE-entry/lib.dll

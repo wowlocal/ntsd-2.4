@@ -352,7 +352,7 @@ posts to INCOMING HWND, unlike menu's global4546f4. Numeric failures ignored;
 shared native release children preserve the old menu/music contracts. Declared
 COM/free ownership is not actual Windows heap/device lifetime. Late post, second
 missing replay owner, NUL-store observer and undefined index verify whole rollback;
-buffer external effects until commit. Other WndProc messages, fullscreen/palette,
+buffer external effects until commit. Lifecycle messages are compared below;
 DirectShow400 and Winsock401 remain explicit unimplemented dependencies.
 
 All owned jobs terminal. First build176.09s linkedNTSDNative and passed6retained
@@ -366,6 +366,46 @@ restart completed source. Exact jobs: build/research/window-input-work.json.
 NTSDApp still practice; native-window/device/Windows/full match/content/cleanMac
 and the full native-game goal stay open. Read remaining WINDOW_INPUT_PLAN and
 WINDOW_INITIALIZATION before joining platform callbacks to the general engine.
+
+[WINDOW_LIFECYCLE](docs/research/WINDOW_LIFECYCLE.md) now matches318 whole
+lifecycle callbacks plus2 separate43bec0 initializations. Two declared own window
+chains retain18callbacks through move/minimize/restore/palette/two toggles/destroy.
+Full14770944storage bytes+masks,3624requests/1757stores/7444bytes, replay lifetime
+and interface release records agree.567window/display structures45868bytes/
+11652written fields from479DECLARED helper-entry backings;56rectangle/point
+requests672bytes separate.1235CPU/522API stores reconstruct all after bytes/masks.
+809EXE/185WndProc/0DLL actual starts,1616SOURCE helper returns; complete installer
+parent unchanged. CW023f supplied/retained, callbackSP2000f014/initializerf004.
+This is not Windows, CRT/WinMain, device allocation or callback reentrancy evidence.
+
+SYSKEYUP Enter logs before44d794 gate;458434=1 precedes normalized458430 toggle,
+actual401a80 release/clear back→primary→draw then401ae0 DestroyWindow. Zero draw
+skips both surfaces; HWND/palette/clipper remain retained. Whole43bdd0 now exposed
+as OriginalWindowInitialization.configure, without43bec0's extra instance store/
+ShowWindow.19zero recreation returns still ShowWindow and clear458434; negative
+error branch unforced/unreachable. WM_MOVE samples height then width in fullscreen;
+windowed ClientRect→ScreenPoint(first)→ScreenPoint(second) sees live outputs.
+Numeric failures ignored; no API output is invented. Size wParam1 invalidates,
+sets451dac0; others1, allreturn0. Cursor alwaysreturn0. Syscommand exactf100 only.
+
+Destroy2 always sound/music/both replay cleanup; PostQuit only458434==0. Four
+native-only late/missing-backing/ownership trials roll back whole state. External
+palette311 lacks source primary-null guard; source dereferences only valid owned
+primary tokens here. Ordinary null-notification reachability remains OPEN, not
+an executed/matched fault. Buffer external effects. No original memory fault,
+control/security mutation, safety refusal, restart or native-rule correction.
+
+Together with unchanged WINDOW_INPUT,567/576STATIC WndProc starts execute. Nine
+remaining:6Winsock402ec0 call instructions,1DirectShow401e90,2negative43bdd0 debug.
+Next actual400/401 consumers, then initialized delivery/reentrancy/WinMain join;
+never treat them as default messages. Source and all owned SwiftPM jobs terminal0.
+Raw9tests23.532s/build177.11s; packaged9tests23.195s/build0.28s, new0.333s, no raw
+path override. Retained280window/4369input+3constructors remain unchanged.212old
+fixtures preserved/213current; independent fullraw11531205/packed733592bytes,
+JSON/SHA/117blobs/320atomic records/10vendor hashes/546isolated nativefiles verify.
+NTSDNative linked; app stillpractice, no window/device/Windows run. Foreign
+transforms excluded. Exact jobs: build/research/window-lifecycle-work.json.
+Full native application/match/content/network/clean-Mac and goal remain open.
 
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.

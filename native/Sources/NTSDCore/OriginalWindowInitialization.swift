@@ -27,17 +27,33 @@ public enum OriginalWindowInitialization {
     public static func initialize(instance: UInt32, show: Int32,
         globals: inout OriginalStateRecord,
         backing: (String, Int) throws -> [UInt8],
-        perform: (Request) throws -> Response) throws -> Result {
+        perform: (Request) throws -> Response,
+        store: OriginalWindowInput.Store = { _,_ in }) throws -> Result {
+        try run(wrapperInstance: instance,globals: &globals,backing: backing,perform: perform,store: store)
+    }
+    /// Whole43bdd0 without43bec0's instance store and extra ShowWindow. The
+    /// lifecycle caller supplies its own previously initialized instance global.
+    public static func configure(globals: inout OriginalStateRecord,
+        backing: (String, Int) throws -> [UInt8],
+        perform: (Request) throws -> Response,
+        store: OriginalWindowInput.Store = { _,_ in }) throws -> Result {
+        try run(wrapperInstance: nil,globals: &globals,backing: backing,perform: perform,store: store)
+    }
+    private static func run(wrapperInstance: UInt32?,globals: inout OriginalStateRecord,
+        backing: (String, Int) throws -> [UInt8],perform: (Request) throws -> Response,
+        store: OriginalWindowInput.Store) throws -> Result {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
             throw OriginalStateError.invalidStorage("Window initialization globals extent")
         }
         var state = globals, written = [Bool](repeating: false, count: globals.bytes.count)
+        let instance = try wrapperInstance ?? state.integer(at: 0x4554c0-0x44d000,as: UInt32.self)
         func word(_ address: Int) throws -> UInt32 {
             try state.integer(at: address-0x44d000, as: UInt32.self)
         }
         func put(_ address: Int, _ value: UInt32) throws {
             try state.write(value, at: address-0x44d000)
             for offset in (address-0x44d000)..<(address-0x44d000+4) { written[offset] = true }
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded: value >> ($0*8)) })
         }
         func frame(_ kind: String, _ count: Int) throws -> OriginalStateRecord {
             let bytes = try backing(kind,count)
@@ -193,12 +209,12 @@ public enum OriginalWindowInitialization {
             }
             return 1
         }
-        try put(0x4554c0,instance)
-        _ = try display()
+        if wrapperInstance != nil { try put(0x4554c0,instance) }
+        let displayed = try display()
         //43bdd0 returns0/1. The outer negative-only error branch never handles0,
         //and ignores nCmdShow; it always calls ShowWindow, even for a null HWND.
-        _ = try numeric("showWindow",[word(0x4546f4),5])
+        if wrapperInstance != nil { _ = try numeric("showWindow",[word(0x4546f4),5]) }
         globals = state
-        return .init(returnCode: 1,written: written)
+        return .init(returnCode: wrapperInstance == nil ? displayed : 1,written: written)
     }
 }

@@ -1078,3 +1078,27 @@ Local458440/0x140 включает312-byte editor и два sequence words. Эт
 Счётчики и backing остаются известными только в объявленном домене; поздняя
 ошибка observer/неизвестное index/отсутствующий replay owner откатывает весь
 callback. Внешние эффекты нужно буферизовать до commit.
+
+
+## Жизненный цикл окна и режима вывода
+
+[WINDOW_LIFECYCLE](WINDOW_LIFECYCLE.md) сравнивает318 callbacks и две
+инициализации. Windows API outputs и доставка сообщений остаются объявленными
+контрольными входами; фактическая reentrancy/WinMain provenance не установлена.
+
+| Адрес | Подтверждённое поведение |
+| --- | --- |
+| `458434` | SYSKEYUP Enter пишет1 перед сменой режима/уничтожением, затем0 после ShowWindow. Destroy2 читает после sound/music/replay cleanup; только0 вызывает PostQuitMessage |
+| `458430` | При включённом44d794 заменяется на(old==0 ? 1 : 0). Move и cursor проверяют nonzero, не только1 |
+| `44d794` | Gate смены режима; debug Alt enter precedes read. Caller не проверяет Alt-bit в lParam |
+| `455608`, `455634`, `457578` |401a80 при draw!=0 освобождает/очищает back, primary, draw по порядку. При draw0 оба surface words остаются прежними |
+| `4546f4` |401ae0 вызывает DestroyWindow(nonzero), но не очищает HWND. Последующий43bdd0 записывает новый результат, в том числе0 |
+| `4554c4`, `457584` | Палитра и retained clipper не освобождаются/очищаются401a80. Source external311 не проверяет primary-null; достижимость такой доставки остаётся открытой |
+| `453ccc..453cdb` | Client rectangle16bytes: GetClientRect, затем два live ClientToScreen at+0/+8; fullscreen SetRect(0,0,metric0,metric1), с metric1 раньше0 |
+| `451dac` | Size5 exactwParam1: InvalidateRect→store0; остальные значения store1; оба return0 |
+| `4554c0` | Instance для внутреннего43bdd0; native configure использует retained input, wrapper43bec0 отдельно пишет его |
+
+Сохранённые18 callbacks используют выход собственных двух инициализаций.
+479helper-entry backings сохраняют неизвестные поля567 оконных/display-структур;
+маски описывают только поля, записанные helper. Порядок API/CPU stores проверен
+целиком, но реальные Windows stack/device bytes ими не устанавливаются.

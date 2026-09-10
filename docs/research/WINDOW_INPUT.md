@@ -191,9 +191,14 @@ C1.1.4 implementation. EXE/lib/Unicorn never enter the shipping runtime.
 
 ## Remaining application dependencies
 
+Lifecycle callbacks are now compared separately in
+[WINDOW_LIFECYCLE](WINDOW_LIFECYCLE.md); the input API retains its declared
+keyboard/mouse/joystick scope.
+
 WM_MOVE/SIZE/DESTROY/ACTIVATEAPP/SETCURSOR, system-key/fullscreen recreation,
 palette messages, DirectShow400 and Winsock401 are still separate WndProc
-consumers. The native API explicitly rejects unimplemented message kinds. This
+consumers of that broader composition. The input API explicitly rejects message
+kinds outside its contract. This
 is whole return coverage for the declared input set, not the entire procedure
 for all messages. Resource ownership, synchronous Windows callbacks, macOS input
 translation, renderer/audio/loop and bundled-library gameplay composition remain
