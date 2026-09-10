@@ -24,6 +24,12 @@ socket и names/RNG там объявлены на входе; полного me
 включая собственный client→exit и повторную очистку. Его cancel-caller427f6b
 ещё требует полного соединения с экраном, звуком и освобождением фона.
 
+[MENU_CHARACTER](MENU_CHARACTER.md) добавляет10492 целых вызова422f60: AL и
+порядок Shift/GetKeyState совпали. Caller428371 sign-extends AL; API-dependent
+high EAX не является native контрактом. Полный300-key hostname scan, его
+собственная строка и menu1/2/3 остаются в [NETWORK_MENU_PLAN](NETWORK_MENU_PLAN.md).
+Существующий World prefix0x7d8 не доказывает инициализацию hostname за ним.
+
 | Участок оригинала | Исполнение и граница |
 | --- | --- |
 | WndProc `43b3d0`, сообщения `200..205` | Настоящие dispatch/jump table, записи globals, вызов DefWindowProcA и `ret16`; результат ОС задан явно |

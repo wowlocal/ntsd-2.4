@@ -1212,3 +1212,18 @@ close→clear44f1b4→clear44f1b0→cleanup. Числовые ошибки close
 путь. EAX сохраняет last close/cleanup result, ignored caller. Повтор после
 успешной очистки всё равно вызывает close(0)/cleanup. UI caller427f6b пока не
 соединён; Windows/TCP/reentrancy и внешний lifetime остаются открытыми.
+
+## Символ ввода адреса
+
+[MENU_CHARACTER](MENU_CHARACTER.md) сохраняет все46144 global bytes в10492
+вызовах. Decoder422f60 читает только byte455388 (Shift), непосредственно перед
+исходными ветками; точное100 отличается от99/101 и любых других байтов.
+GetKeyState(20) использует signed low16; повторные ответы не объединяются.
+Caller428371 sign-extends AL. Native возвращает UInt8 и не моделирует высокие
+байты EAX, хотя source verifier независимо проверяет полный регистр.
+
+World+7d8 hostname и4511dc index относятся к следующему whole-menu исследованию.
+Прежний World prefix заканчивается перед строкой. Menu1→3 должен произвести
+её первый NUL/index0, дальнейшие bytes — собственный key scan; неизвестные
+allocator bytes не становятся native input из expected snapshot. Append limit50
+означает51 необходимый byte с NUL, но не восстановленный sizeof всего World.

@@ -1,0 +1,303 @@
+{
+  "scope": "Independently verify whole NTSD menu-character source compatibility evidence.\n\nRebuild PE/installer/Shift input globals, zero writes, exact ordered reads and\nGetKeyState requests, AL and retained source EAX, actual PC bytes/returns. Native\ncompares caller-consumed AL; no Windows keyboard/layout/private ABI claim.\n",
+  "rawSHA256": "13796c4146302ec7de612b3b52f5f884144d3d82a1aefa7dec250b590740761b",
+  "rawBytes": 26069138,
+  "wholeCalls": 10492,
+  "blobs": 257,
+  "caseKinds": {
+    "caller-domain": 9000,
+    "successive-caps": 936,
+    "every-shift-byte": 512,
+    "unsigned-range": 40,
+    "api-high-word": 4
+  },
+  "events": {
+    "shift": 11048,
+    "keyState": 2890
+  },
+  "eventCount": 13938,
+  "keyboardCallCounts": {
+    "0": 8516,
+    "1": 1062,
+    "2": 914
+  },
+  "resultBytes": 96,
+  "globalBytesCompared": 484142848,
+  "globalWrites": 0,
+  "originalEXEPCs": 305,
+  "DLLPCs": 0,
+  "staticStarts": 318,
+  "missing": [
+    {
+      "address": 4337654,
+      "bytes": "803d8853450064",
+      "instruction": "cmp byte ptr [0x455388], 0x64"
+    },
+    {
+      "address": 4337661,
+      "bytes": "8b35e8714400",
+      "instruction": "mov esi, dword ptr [0x4471e8]"
+    },
+    {
+      "address": 4337667,
+      "bytes": "7509",
+      "instruction": "jne 0x42300e"
+    },
+    {
+      "address": 4337669,
+      "bytes": "6a14",
+      "instruction": "push 0x14"
+    },
+    {
+      "address": 4337671,
+      "bytes": "ffd6",
+      "instruction": "call esi"
+    },
+    {
+      "address": 4337673,
+      "bytes": "6685c0",
+      "instruction": "test ax, ax"
+    },
+    {
+      "address": 4337676,
+      "bytes": "7499",
+      "instruction": "je 0x422fa7"
+    },
+    {
+      "address": 4337678,
+      "bytes": "6a14",
+      "instruction": "push 0x14"
+    },
+    {
+      "address": 4337680,
+      "bytes": "ffd6",
+      "instruction": "call esi"
+    },
+    {
+      "address": 4337682,
+      "bytes": "6685c0",
+      "instruction": "test ax, ax"
+    },
+    {
+      "address": 4337685,
+      "bytes": "7e09",
+      "instruction": "jle 0x423020"
+    },
+    {
+      "address": 4337687,
+      "bytes": "803d8853450064",
+      "instruction": "cmp byte ptr [0x455388], 0x64"
+    },
+    {
+      "address": 4337694,
+      "bytes": "7587",
+      "instruction": "jne 0x422fa7"
+    }
+  ],
+  "first3ProbeCasesUnchanged": true,
+  "fullInstallerEqual": true,
+  "declaredBeforeReconstructed": true,
+  "fullSourceEAXVerified": true,
+  "nativeCompared": true,
+  "nativeALOnly": true,
+  "windowsVerified": false,
+  "originalMemoryFaults": 0,
+  "fixture": "original-menu-character.json",
+  "fixtureSHA256": "104f8df9ddb4eb84995c621067dc91fdbd4917bd2b12d8cb4bec16199f8ef353",
+  "fixtureBytes": 1308644,
+  "nativeRawTests": 17,
+  "nativeRawTestSeconds": 5.872,
+  "nativeRawBuildSeconds": 189.58,
+  "nativeAppExercised": true,
+  "actualNetworkSessionCompared": false,
+  "fullCRTStartupCompared": false,
+  "actualCallbackReentrancyCompared": false,
+  "fullMenuReturnCompared": false,
+  "interveningClientUIExecuted": false,
+  "sourceTool": "tools/oracle_menu_character.py",
+  "nativeImplementation": "native/Sources/NTSDCore/OriginalMenuCharacter.swift",
+  "nativePackagedTests": 17,
+  "nativePackagedTestSeconds": 5.912,
+  "nativePackagedBuildSeconds": 0.3,
+  "artifactVerification": {
+    "scope": "Independently verify whole NTSD menu-character source compatibility evidence.\n\nRebuild PE/installer/Shift input globals, zero writes, exact ordered reads and\nGetKeyState requests, AL and retained source EAX, actual PC bytes/returns. Native\ncompares caller-consumed AL; no Windows keyboard/layout/private ABI claim.\n",
+    "rawSHA256": "13796c4146302ec7de612b3b52f5f884144d3d82a1aefa7dec250b590740761b",
+    "rawBytes": 26069138,
+    "wholeCalls": 10492,
+    "blobs": 257,
+    "caseKinds": {
+      "caller-domain": 9000,
+      "successive-caps": 936,
+      "every-shift-byte": 512,
+      "unsigned-range": 40,
+      "api-high-word": 4
+    },
+    "events": {
+      "shift": 11048,
+      "keyState": 2890
+    },
+    "eventCount": 13938,
+    "keyboardCallCounts": {
+      "0": 8516,
+      "1": 1062,
+      "2": 914
+    },
+    "resultBytes": 96,
+    "globalBytesCompared": 484142848,
+    "globalWrites": 0,
+    "originalEXEPCs": 305,
+    "DLLPCs": 0,
+    "staticStarts": 318,
+    "missing": [
+      {
+        "address": 4337654,
+        "bytes": "803d8853450064",
+        "instruction": "cmp byte ptr [0x455388], 0x64"
+      },
+      {
+        "address": 4337661,
+        "bytes": "8b35e8714400",
+        "instruction": "mov esi, dword ptr [0x4471e8]"
+      },
+      {
+        "address": 4337667,
+        "bytes": "7509",
+        "instruction": "jne 0x42300e"
+      },
+      {
+        "address": 4337669,
+        "bytes": "6a14",
+        "instruction": "push 0x14"
+      },
+      {
+        "address": 4337671,
+        "bytes": "ffd6",
+        "instruction": "call esi"
+      },
+      {
+        "address": 4337673,
+        "bytes": "6685c0",
+        "instruction": "test ax, ax"
+      },
+      {
+        "address": 4337676,
+        "bytes": "7499",
+        "instruction": "je 0x422fa7"
+      },
+      {
+        "address": 4337678,
+        "bytes": "6a14",
+        "instruction": "push 0x14"
+      },
+      {
+        "address": 4337680,
+        "bytes": "ffd6",
+        "instruction": "call esi"
+      },
+      {
+        "address": 4337682,
+        "bytes": "6685c0",
+        "instruction": "test ax, ax"
+      },
+      {
+        "address": 4337685,
+        "bytes": "7e09",
+        "instruction": "jle 0x423020"
+      },
+      {
+        "address": 4337687,
+        "bytes": "803d8853450064",
+        "instruction": "cmp byte ptr [0x455388], 0x64"
+      },
+      {
+        "address": 4337694,
+        "bytes": "7587",
+        "instruction": "jne 0x422fa7"
+      }
+    ],
+    "first3ProbeCasesUnchanged": true,
+    "fullInstallerEqual": true,
+    "declaredBeforeReconstructed": true,
+    "fullSourceEAXVerified": true,
+    "nativeCompared": false,
+    "nativeALOnly": true,
+    "windowsVerified": false,
+    "originalMemoryFaults": 0,
+    "packedBytes": 1308644,
+    "packedSHA256": "104f8df9ddb4eb84995c621067dc91fdbd4917bd2b12d8cb4bec16199f8ef353",
+    "priorFixtures": 217,
+    "currentFixtures": 218,
+    "vendorFiles": 10,
+    "isolatedFiles": 561,
+    "fullJSONEqual": true
+  },
+  "appBaseline": {
+    "scope": "Current Practice only; decoder/network menu not wired",
+    "liveProcess": {
+      "scope": "Current isolated NTSDApp Practice baseline only; menu-character decoder and network menu are not wired into this app.",
+      "command": [
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-character-isolated/native/.build/release/NTSDNative",
+        "--data",
+        "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json",
+        "--assets",
+        "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets",
+        "--capture-state",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-character-app-current.json"
+      ],
+      "start": 1789023144.4513159,
+      "executableSHA256": "8d8a2bc4b3d6ce9ef03914e167116f94fe1832399bab7ded55e0a0447e987bb4",
+      "dataSHA256": "b8bb574f4e8f01c3d7828fa0c1d9b1cf9fab9c2f46103684d33bbfa77461f835",
+      "pid": 8354,
+      "status": "terminal",
+      "exitCode": -15,
+      "end": 1789023200.810109
+    },
+    "renderProcess": {
+      "scope": "Built-in AppKit/SpriteKit render capture of current Practice app only. No UI interaction or input latency/audio/Windows comparison.",
+      "command": [
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-character-isolated/native/.build/release/NTSDNative",
+        "--data",
+        "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json",
+        "--assets",
+        "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets",
+        "--capture-state",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-character-app-render-state.json",
+        "--screenshot",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-character-app-render.png"
+      ],
+      "start": 1789023200.893419,
+      "executableSHA256": "8d8a2bc4b3d6ce9ef03914e167116f94fe1832399bab7ded55e0a0447e987bb4",
+      "dataSHA256": "b8bb574f4e8f01c3d7828fa0c1d9b1cf9fab9c2f46103684d33bbfa77461f835",
+      "status": "terminal",
+      "pid": 8555,
+      "exitCode": 0,
+      "end": 1789023202.63811
+    },
+    "uiToolFailure": {
+      "error": "Sky Computer Use native pipe startup failed",
+      "operation": "cua.getApp(\"NTSDNative\")",
+      "utc": "2026-09-10T06:53:20.804387+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "turn": "unavailable",
+      "session": "CUA persistent session",
+      "safetyRefusal": false,
+      "uiActionsPerformed": false,
+      "validatedProcess": "8354 /Users/michael/Developer/ntsd-2.4/build/research/menu-character-isolated/native/.build/release/NTSDNative --data /Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json --assets /Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets --capture-state /Users/michael/Developer/ntsd-2.4/build/research/menu-character-app-current.json",
+      "cleanup": "SIGTERM to this validated owned application PID; not a clean UI close"
+    },
+    "renderSHA256": "ec5530507fcbbf7bda0535fc0f8dbc9381c05229fb6c0fbd68212c2bfdcd8e22",
+    "liveStateSHA256": "a76bb939bb880a4b65d605da0c3ae159ff966d0011f3ce6838394abbeeb8f06a",
+    "renderStateSHA256": "c93711aff411c7f700ddcb3b2a1416bf7d74c796ab23a186c2d6109dc086532e",
+    "imageDimensions": [
+      1588,
+      1200
+    ],
+    "visualInspection": "District, Naruto, Sasuke and HUD rendered in built-in AppKit/SpriteKit capture",
+    "actualUIActions": false,
+    "inputLatencyMeasured": false,
+    "animationTimingCompared": false,
+    "audioAudited": false,
+    "windowsCompared": false
+  },
+  "allOwnedJobsTerminal": true
+}

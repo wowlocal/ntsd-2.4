@@ -568,6 +568,33 @@ device/Windowsrun. Jobs: build/research/network-exit-work.json. NEXTwholemenu1/2
 actualcaller/presentation/epilogue and initializedlistener/peer joins. Actual
 Windows/CRT/lib/macOS/fullgame/clean-Mac and fullgoal remain open.
 
+[MENU_CHARACTER](docs/research/MENU_CHARACTER.md) now matches10492 whole
+422f60..423222 calls by caller-consumed AL and exact read/request order.11048
+liveShift reads/2890GetKeyState requests/13938events,484142848globalbytes and
+zero writes;305/318EXE starts,0DLL.13missing starts are a statically unreachable
+duplicate letter block, not dynamic coverage. Source fullEAX/savedregisters/
+SP2000f004/CW023f independently verify; native modelsAL only, consumed by428371.
+Shift means exactbyte100; signedCaps low16 and two successive API responses
+are distinct. Navigation keys produce keypad digits. Unknown required Shift/
+response throws; helper has no mutation, enclosing menu must stage its changes.
+
+Raw17release tests5.872s/build189.58s; packaged17tests5.912s/build0.30s include
+new3 and retained14client/server/exit tests.217oldpins unchanged/218current;
+fullraw26069138/packed1308644bytes/JSON/SHA/257blobs/10492atomiccases/3probe/
+10vendor/561isolatednativefiles verify. All source/raw/packaged jobs terminal0;
+no source/native/verifier failure, result correction or source restart.
+Jobs: build/research/menu-character-work.json. Foreign6transforms untouched.
+
+Current Practice app launched and emitted live state; built-in AppKit/SpriteKit
+capture1588x1200 shows District/Naruto/Sasuke/HUD and exits0. CUA failed with
+`Sky Computer Use native pipe startup failed`; no UI actions/input/latency/audio
+claim. Initial owned app PID was revalidated then stopped SIGTERM/exit-15.
+This is technical UI unavailability, not safety refusal. Neither decoder nor
+network UI is wired into current Practice. NEXT[NETWORK_MENU_PLAN](docs/research/NETWORK_MENU_PLAN.md):
+wholemenus1/2/3, ownhostname provenance, librarytext routing and actualoutput/
+return/listener joins. All218pins stay immutable; unknownhostname storage stays
+unknown. ActualWindows/CRT/lib/fullapp/fullmatch/content/clean-Mac goal stays open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.
