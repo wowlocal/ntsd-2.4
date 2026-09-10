@@ -68,7 +68,8 @@ public enum OriginalMenuPresentation {
     /// Entire4019b0, also called alone by the mode screen. Other shutdown
     /// children belong to their callers. Keep stale buffer slots/counts.
     public static func releaseSoundDevice(globals: inout OriginalStateRecord,
-                                          observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
+                                          observe: (OriginalMenuPresentationEvent) throws -> Void,
+                                          wrote: (Int, UInt32) throws -> Void = { _,_ in }) throws {
         var state = globals
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-OriginalMatchPreparation.globalBase,as: UInt32.self) }
         func method(_ resource: UInt32) throws {
@@ -82,6 +83,7 @@ public enum OriginalMenuPresentation {
                 if count > 0 { for index in 0..<Int(count) { try method(word(arrayAddress+index*4)) } }
             }
             try method(word(0x44eecc)); try state.write(UInt32(0),at: 0x44eecc-OriginalMatchPreparation.globalBase)
+            try wrote(0x44eecc,0)
         }
         globals = state
     }
@@ -90,20 +92,30 @@ public enum OriginalMenuPresentation {
     public static func shutdown(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
                                 observe: (OriginalMenuPresentationEvent) throws -> Void) throws {
         var state = globals, owned = memory
-        try releaseSoundDevice(globals: &state, observe: observe)
-        try OriginalMusicPlayback.release(globals: &state) { event in
+        try releaseResources(globals: &state,memory: &owned,observe: observe)
+        try observe(.init(.postMessage,[state.integer(at: 0x4546f4-OriginalMatchPreparation.globalBase,as: UInt32.self),0x10,0,0]))
+        globals = state; memory = owned
+    }
+    /// Actual shared release children, before the enclosing caller chooses its
+    /// HWND/post behavior. WndProc uses its incoming HWND; menu callers use4546f4.
+    public static func releaseResources(globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
+        observe: (OriginalMenuPresentationEvent) throws -> Void,
+        wrote: (Int, UInt32) throws -> Void = { _,_ in }) throws {
+        var state = globals, owned = memory
+        try releaseSoundDevice(globals: &state, observe: observe, wrote: wrote)
+        try OriginalMusicPlayback.release(globals: &state, request: { event in
             try observe(.init(.method,event.arguments,event.strings))
             return .init()
-        }
+        }, wrote: wrote)
         for offset in [0,4] {
             let pointer = try owned.replayPointers.integer(at: offset,as: UInt32.self)
             if pointer != 0 {
                 guard var allocation = owned.allocations[pointer], allocation.live else { throw OriginalStateError.invalidStorage("Unknown/dead shutdown allocation") }
                 try observe(.init(.free,[pointer])); allocation.live = false; owned.allocations[pointer] = allocation
                 try owned.replayPointers.write(UInt32(0),at: offset)
+                try wrote(0x4588a8+offset,0)
             }
         }
-        try observe(.init(.postMessage,[state.integer(at: 0x4546f4-OriginalMatchPreparation.globalBase,as: UInt32.self),0x10,0,0]))
         globals = state; memory = owned
     }
     /// 43e940 is shared by startup, menus and the match display path.

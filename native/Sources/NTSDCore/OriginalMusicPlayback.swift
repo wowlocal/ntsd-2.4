@@ -66,13 +66,15 @@ public enum OriginalMusicPlayback {
     }
 
     /// Whole401d30, shared by track replacement and application shutdown.
-    public static func release(globals: inout OriginalStateRecord, request: Request) throws {
+    public static func release(globals: inout OriginalStateRecord, request: Request,
+                               wrote: (Int, UInt32) throws -> Void = { _,_ in }) throws {
         var state = globals
         for address in [0x44f04c,0x44f048,0x44f044,0x44f040] {
             let pointer = try word(state,address)
             if pointer != 0 {
                 try method(pointer,8,request: request)
                 try state.write(UInt32(0),at: address-base)
+                try wrote(address,0)
             }
         }
         globals = state

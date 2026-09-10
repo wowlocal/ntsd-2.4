@@ -327,6 +327,46 @@ source/SwiftPM jobs terminal; NTSDNative linked. Jobs: build/research/
 window-initialization-work.json. Full initialized library app/match/content,
 Windows/device and clean-Mac goal remain open.
 
+[WINDOW_INPUT](docs/research/WINDOW_INPUT.md) now matches4369 whole43b3d0 input
+callbacks plus3 separate text constructors, not4372 WndProc calls.385 controlled
+retained calls use prior native output. Full203184416storage bytes+masks,
+5908requests/23835stores/50118written bytes agree;5822source helper returns.
+561actualEXE starts include424WndProc/0DLL after the separate full lib installer
+parent, which reproduces unchanged.576STATIC WndProc starts include152unexecuted;
+corrected inventory includes all3ret16 bytes; earlier truncated inventory retained.
+CW023f supplied/unchanged, SP2000f014 and saved registers preserved. No Windows,
+CRT startup, private native ABI, initialized app or device equivalence follows.
+
+Keydown editor precedes byte100 and first/second recognizers; keyup writes117.
+B..Y/digits/space/dot only; index299's NUL overwrites its own low byte→256.
+360ordinary retainedB inputs cross this twice, end272/360;2backspaces→270/360,
+Enter clears active. Activation/initial sequence zeros are explicit inputs;
+constructor only clears0/130/134, no text/sequence initialization. LF2.NET and
+HEROFIGHTER.COM retain last state and write keyboard sentinel249/248. Mouse XY
+is unsigned16; buttons preserve coordinates. Joystick quarters use wrapped
+signed arithmetic/truncation and exact byte-store order. No original memory fault,
+control-pointer/security mutation or safety refusal. Arbitrary VK/index excluded.
+
+ESC answer6 runs actual catalog→builtin→device/music/both replay cleanup, then
+posts to INCOMING HWND, unlike menu's global4546f4. Numeric failures ignored;
+shared native release children preserve the old menu/music contracts. Declared
+COM/free ownership is not actual Windows heap/device lifetime. Late post, second
+missing replay owner, NUL-store observer and undefined index verify whole rollback;
+buffer external effects until commit. Other WndProc messages, fullscreen/palette,
+DirectShow400 and Winsock401 remain explicit unimplemented dependencies.
+
+All owned jobs terminal. First build176.09s linkedNTSDNative and passed6retained
+tests;3new tests failed BEFORE comparison on framed-zlib/raw-DEFLATE transport.
+Only new test reader corrected; original raw/game rules unchanged. First log/code/
+export retained. Raw3 passed2.751s/build44.05s; final packaged9 passed59.951s/
+build0.24s, input2.748s, no rawoverride.211oldpins unchanged/212current; independent
+fullraw29400709/packed8260684bytes,JSON/SHA/4228blobs,4372atomic records,10vendor
+hashes and543isolated nativefiles verified. Foreign transforms excluded. Never
+restart completed source. Exact jobs: build/research/window-input-work.json.
+NTSDApp still practice; native-window/device/Windows/full match/content/cleanMac
+and the full native-game goal stay open. Read remaining WINDOW_INPUT_PLAN and
+WINDOW_INITIALIZATION before joining platform callbacks to the general engine.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

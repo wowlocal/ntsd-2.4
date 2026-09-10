@@ -51,17 +51,7 @@ extension OriginalMatchPreparation {
     public mutating func receiveMenuMouse(_ input: OriginalMenuMouseInput,
                                          observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> Int32 {
         var candidate = self
-        switch input.message {
-        case 0x200:
-            try candidate.setGlobal(0x4546f0, Int32(input.lParam & 0xffff))
-            try candidate.setGlobal(0x453cdc, Int32(input.lParam >> 16))
-        case 0x201: try candidate.setGlobal(0x457580, 1)
-        case 0x202: try candidate.setGlobal(0x457580, 0)
-        case 0x203: break
-        case 0x204: try candidate.setGlobal(0x4527e4, 1)
-        case 0x205: try candidate.setGlobal(0x4527e4, 0)
-        default: throw Self.error("Unrecovered window message")
-        }
+        try OriginalWindowInput.mouse(input.message,input.lParam,globals: &candidate.globals)
         try observe(.init(.windowDefault, [input.window, input.message, input.wParam, input.lParam]))
         self = candidate
         return input.defaultResult

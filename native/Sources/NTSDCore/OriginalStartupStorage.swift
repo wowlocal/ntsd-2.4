@@ -21,7 +21,7 @@ public enum OriginalStartupStorage {
         }
         var staged = storage
         //4031b0 clears only three words; the text buffer itself stays untouched.
-        for offset in [0, 0x130, 0x134] { try staged.write(UInt32(0), at: offset) }
+        try OriginalWindowInput.initializeText(&staged)
         try completed(.textInput)
         //414440 returns its input pointer without reading or writing the object.
         try completed(.inputTranslation)
