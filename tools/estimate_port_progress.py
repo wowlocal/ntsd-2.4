@@ -19,7 +19,10 @@ import tarfile
 ROOT = Path(__file__).resolve().parents[1]
 EXE = ROOT / 'downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe'
 EXE_SHA = '3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c'
-RANGE = re.compile(r'(?i)(?<![0-9a-f])(?:0x)?(4[0-4][0-9a-f]{4})\s*(?:\.\.|[–—])\s*(?:0x)?(4[0-4][0-9a-f]{4})(?![0-9a-f])')
+# Compact annotations such as "Whole421cdc..422218" have a prose prefix.
+# Require a non-hex letter in that prefix so embedded longer hex values remain
+# excluded; collection still considers only native comments/reviewed scopes.
+RANGE = re.compile(r'(?i)(?<![0-9a-z])(?:[a-z]*[g-z][a-z]*)?(?:0x)?(4[0-4][0-9a-f]{4})\s*(?:\.\.|[–—])\s*(?:0x)?(4[0-4][0-9a-f]{4})(?![0-9a-f])')
 
 # Manually reviewed positive scope descriptions, not all addresses in a study.
 # The range must actually occur in that revision's study AND the native module
@@ -132,6 +135,13 @@ def mask_of(entries, start, end):
     return mask
 
 
+def linear_remaining_hours(remaining, rate):
+    """No finite forward projection exists when the measured rate is nonpositive."""
+    if remaining == 0:
+        return 0.0
+    return remaining/rate if rate > 0 else None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--revision', default='c2c2c91')
@@ -211,25 +221,25 @@ def main():
         elapsed = (dt.datetime.fromisoformat(last['timestamp'])-dt.datetime.fromisoformat(first['timestamp'])).total_seconds()/3600
         rate = (last['documentedEnvelopeBytes']-first['documentedEnvelopeBytes'])/elapsed
         rolling.append(dict(targetHours=target_hours, actualHours=elapsed, startCommit=first['commit'],
-                            bytesPerHour=rate, remainingLinearHours=remaining/rate))
+                            bytesPerHour=rate, remainingLinearHours=linear_remaining_hours(remaining, rate)))
     scenarios = []
     for label, rate, assumption in [
         ('historical-mean', speed, f'Observed {hours:.1f}h envelope-growth rate continues'),
         ('recent-rate', rolling[0]['bytesPerHour'], 'Observed approximately 6h envelope-growth rate continues'),
         ('recent-half-speed', rolling[0]['bytesPerHour']/2, 'Unmeasured risk assumption: further 2x slowdown relative to recent rate'),
     ]:
-        remaining_hours = remaining/rate
+        remaining_hours = linear_remaining_hours(remaining, rate)
         # A deliberate planning allowance, not a measured estimate of macOS/W.
         scenarios.append(dict(name=label, assumption=assumption, codeHours=remaining_hours,
-                              withAssumed50PercentIntegrationAllowanceHours=remaining_hours*1.5,
-                              continuousDays=remaining_hours*1.5/24,
-                              eightHourDays=remaining_hours*1.5/8))
+                              withAssumed50PercentIntegrationAllowanceHours=remaining_hours*1.5 if remaining_hours is not None else None,
+                              continuousDays=remaining_hours*1.5/24 if remaining_hours is not None else None,
+                              eightHourDays=remaining_hours*1.5/8 if remaining_hours is not None else None))
     projections = {}
     for key, total in [('documentedEnvelopeBytes', size), ('sourceCommentBytes', size), ('insideEnvelopeInstructions', len(decoded)),
                        ('insideEnvelopeConditionalInstructions', sum(map(is_conditional, decoded)))]:
         delta = last[key]-base_row[key]
         projections[key] = dict(total=total, start=base_row[key], current=last[key],
-                                growthPerHour=delta/hours, remainingLinearHours=(total-last[key])/(delta/hours))
+                                growthPerHour=delta/hours, remainingLinearHours=linear_remaining_hours(total-last[key], delta/hours))
     # Describe gaps as contiguous address intervals, never as inferred functions.
     spans = []
     pos = 0
@@ -243,6 +253,7 @@ def main():
         schema=1, classification='Planning inference; documented native envelopes, NOT execution/branch coverage',
         revision=revision, exeSHA256=EXE_SHA,
         method='Inclusive documented address markers; union removes overlaps; all .text retained as denominator; native // ranges plus reviewed positive study ranges and eight statically bounded whole bodies; other single-address functions omitted',
+        rangeAnnotationSyntax='Standalone addresses or attached alphabetic prose prefixes containing a non-hex letter; longer hex values are excluded',
         limitations=[
             'An envelope can include unsupported branches and excludes undocumented implemented code; it is neither a lower nor an upper bound on completed behavior.',
             'Date of documentation is not necessarily date of implementation. Changes in annotation granularity change the metric.',
@@ -263,9 +274,12 @@ def main():
         calibration=dict(startCommit=base_row['commit'], endCommit=revision, elapsedHours=hours,
                          startEnvelopeBytes=base_row['documentedEnvelopeBytes'], growthBytes=growth,
                          envelopeBytesPerHour=speed, outsideEnvelopeBytes=remaining,
-                         literalLinearRemainingHours=remaining/speed),
+                         literalLinearRemainingHours=linear_remaining_hours(remaining, speed)),
         projections=projections, rollingWindows=rolling, scenarios=scenarios, timeline=timeline, spans=spans,
         rangeEvidence=[{**e, 'start':hex(e['start']), 'stop':hex(e['stop'])} for e in final_entries])
+    if any(window['remainingLinearHours'] is None for window in rolling):
+        report['limitations'].append(
+            'A null time projection means the measured growth rate is nonpositive; no finite forward ETA is inferred from that window.')
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
     print(json.dumps({k:report[k] for k in ['revision','textSection','current','calibration','projections','scenarios']}, ensure_ascii=False, indent=2))

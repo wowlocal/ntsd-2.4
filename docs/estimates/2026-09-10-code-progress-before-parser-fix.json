@@ -1,0 +1,6229 @@
+{
+  "schema": 1,
+  "classification": "Planning inference; documented native envelopes, NOT execution/branch coverage",
+  "revision": "029e590ad751b0f53da203dcb3021eeb1122e255",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "method": "Inclusive documented address markers; union removes overlaps; all .text retained as denominator; native // ranges plus reviewed positive study ranges and eight statically bounded whole bodies; other single-address functions omitted",
+  "limitations": [
+    "An envelope can include unsupported branches and excludes undocumented implemented code; it is neither a lower nor an upper bound on completed behavior.",
+    "Date of documentation is not necessarily date of implementation. Changes in annotation granularity change the metric.",
+    ".text contains runtime/platform/support code and possibly inline data. No proof all bytes need porting.",
+    "Linear disassembly is not a recovered CFG. Conditional-instruction counts are not branch coverage.",
+    "No unique executed-PC sets or per-branch native-equivalence map have been aggregated.",
+    "Elapsed Git intervals do not measure active agent hours or prior work before the first commit.",
+    "Cost multipliers and 50% integration allowance are explicit scenario assumptions, not fitted probabilities or confidence intervals.",
+    "CRT DLL, native device behavior, OS input/network, full-mode validation and Windows comparisons cannot be sized from EXE bytes alone.",
+    "A null time projection means the measured growth rate is nonpositive; no finite forward ETA is inferred from that window."
+  ],
+  "textSection": {
+    "start": "0x401000",
+    "endExclusive": "0x44630a",
+    "virtualBytes": 283402,
+    "rawBytes": 286720
+  },
+  "current": {
+    "envelopeBytes": 117349,
+    "envelopePercent": 41.407258946655276,
+    "sourceCommentBytes": 65005,
+    "nonpaddingLinearInstructions": 74087,
+    "insideEnvelopeInstructions": 28899,
+    "conditionalInstructions": 8438,
+    "insideEnvelopeConditionalInstructions": 3204,
+    "lines": {
+      "NTSDCore": {
+        "files": 124,
+        "lines": 14754
+      },
+      "NTSDApp": {
+        "files": 5,
+        "lines": 801
+      },
+      "NTSDReferenceChecks": {
+        "files": 61,
+        "lines": 9854
+      }
+    }
+  },
+  "calibration": {
+    "startCommit": "c9a5263e2f065cebadc6f07b75048f0bbdc0264c",
+    "endCommit": "029e590ad751b0f53da203dcb3021eeb1122e255",
+    "elapsedHours": 60.475,
+    "startEnvelopeBytes": 8281,
+    "growthBytes": 109068,
+    "envelopeBytesPerHour": 1803.522116577098,
+    "outsideEnvelopeBytes": 166053,
+    "literalLinearRemainingHours": 92.07150745406535
+  },
+  "projections": {
+    "documentedEnvelopeBytes": {
+      "total": 283402,
+      "start": 8281,
+      "current": 117349,
+      "growthPerHour": 1803.522116577098,
+      "remainingLinearHours": 92.07150745406535
+    },
+    "sourceCommentBytes": {
+      "total": 283402,
+      "start": 8281,
+      "current": 65005,
+      "growthPerHour": 937.9743695742042,
+      "remainingLinearHours": 232.8389848212397
+    },
+    "insideEnvelopeInstructions": {
+      "total": 74087,
+      "start": 2179,
+      "current": 28899,
+      "growthPerHour": 441.8354692021496,
+      "remainingLinearHours": 102.27336452095808
+    },
+    "insideEnvelopeConditionalInstructions": {
+      "total": 8438,
+      "start": 379,
+      "current": 3204,
+      "growthPerHour": 46.713517982637455,
+      "remainingLinearHours": 112.04465486725664
+    }
+  },
+  "rollingWindows": [
+    {
+      "targetHours": 6,
+      "actualHours": 6.603888888888889,
+      "startCommit": "834b36ae280654deeee2c5c0982597056d11e83e",
+      "bytesPerHour": 0.0,
+      "remainingLinearHours": null
+    },
+    {
+      "targetHours": 12,
+      "actualHours": 12.161388888888888,
+      "startCommit": "4678f1da081052344e1b006dc6e36b2c75d1d1e1",
+      "bytesPerHour": 15.376533199333045,
+      "remainingLinearHours": 10799.11823083779
+    },
+    {
+      "targetHours": 24,
+      "actualHours": 24.017222222222223,
+      "startCommit": "2cf272cd85b2297999da5010e85b0ba53a4739c3",
+      "bytesPerHour": 7.786079433739677,
+      "remainingLinearHours": 21326.90803030303
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "historical-mean",
+      "assumption": "Observed 60.5h envelope-growth rate continues",
+      "codeHours": 92.07150745406535,
+      "withAssumed50PercentIntegrationAllowanceHours": 138.10726118109804,
+      "continuousDays": 5.754469215879085,
+      "eightHourDays": 17.263407647637255
+    },
+    {
+      "name": "recent-rate",
+      "assumption": "Observed approximately 6h envelope-growth rate continues",
+      "codeHours": null,
+      "withAssumed50PercentIntegrationAllowanceHours": null,
+      "continuousDays": null,
+      "eightHourDays": null
+    },
+    {
+      "name": "recent-half-speed",
+      "assumption": "Unmeasured risk assumption: further 2x slowdown relative to recent rate",
+      "codeHours": null,
+      "withAssumed50PercentIntegrationAllowanceHours": null,
+      "continuousDays": null,
+      "eightHourDays": null
+    }
+  ],
+  "timeline": [
+    {
+      "commit": "ceead97a017f5cc2d440a7315cc3180ceeaf895f",
+      "timestamp": "2026-09-07T18:20:07+03:00",
+      "subject": "feat: add native macOS Naruto movement milestone",
+      "documentedEnvelopeBytes": 5348,
+      "sourceCommentBytes": 5348,
+      "lines": {
+        "NTSDCore": {
+          "files": 4,
+          "lines": 575
+        },
+        "NTSDApp": {
+          "files": 4,
+          "lines": 471
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 1409,
+      "insideEnvelopeConditionalInstructions": 230
+    },
+    {
+      "commit": "40b6ece6264c731dcc99c8ffd833d1595b7f358d",
+      "timestamp": "2026-09-07T19:38:07+03:00",
+      "subject": "feat: add native Naruto and Sasuke melee practice",
+      "documentedEnvelopeBytes": 9950,
+      "sourceCommentBytes": 9950,
+      "lines": {
+        "NTSDCore": {
+          "files": 7,
+          "lines": 1148
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 700
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 2553,
+      "insideEnvelopeConditionalInstructions": 426
+    },
+    {
+      "commit": "a9f2cfe2dce2181ece4af1378a4befbfde5100d7",
+      "timestamp": "2026-09-07T20:21:25+03:00",
+      "subject": "feat: add native Sasuke projectiles and chakra technique",
+      "documentedEnvelopeBytes": 8281,
+      "sourceCommentBytes": 8281,
+      "lines": {
+        "NTSDCore": {
+          "files": 8,
+          "lines": 1390
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 2179,
+      "insideEnvelopeConditionalInstructions": 379
+    },
+    {
+      "commit": "c9a5263e2f065cebadc6f07b75048f0bbdc0264c",
+      "timestamp": "2026-09-07T20:45:43+03:00",
+      "subject": "docs: map original engine research and porting sequence",
+      "documentedEnvelopeBytes": 8281,
+      "sourceCommentBytes": 8281,
+      "lines": {
+        "NTSDCore": {
+          "files": 8,
+          "lines": 1390
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 2179,
+      "insideEnvelopeConditionalInstructions": 379
+    },
+    {
+      "commit": "ea190824858e4ebf54e2e7a406078c4f0cabb71d",
+      "timestamp": "2026-09-07T21:13:28+03:00",
+      "subject": "research: trace original match tick and identify pipeline gaps",
+      "documentedEnvelopeBytes": 8281,
+      "sourceCommentBytes": 8281,
+      "lines": {
+        "NTSDCore": {
+          "files": 8,
+          "lines": 1390
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 2179,
+      "insideEnvelopeConditionalInstructions": 379
+    },
+    {
+      "commit": "76c50b7a2d3253ac8adf3ce6aa3c3d098eec8a66",
+      "timestamp": "2026-09-07T21:45:43+03:00",
+      "subject": "feat: preserve original constructor state and capture raw tick storage",
+      "documentedEnvelopeBytes": 9078,
+      "sourceCommentBytes": 9078,
+      "lines": {
+        "NTSDCore": {
+          "files": 9,
+          "lines": 1500
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "insideEnvelopeInstructions": 2342,
+      "insideEnvelopeConditionalInstructions": 380
+    },
+    {
+      "commit": "40137c3557b6f62fa0276054ad5d325ce5d5e273",
+      "timestamp": "2026-09-07T22:17:49+03:00",
+      "subject": "feat: reproduce the original loading-time actor pool",
+      "documentedEnvelopeBytes": 9754,
+      "sourceCommentBytes": 9754,
+      "lines": {
+        "NTSDCore": {
+          "files": 10,
+          "lines": 1560
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 1,
+          "lines": 93
+        }
+      },
+      "insideEnvelopeInstructions": 2497,
+      "insideEnvelopeConditionalInstructions": 382
+    },
+    {
+      "commit": "40583ba9c9eac78055e84016b0f0b605f267f361",
+      "timestamp": "2026-09-07T22:41:44+03:00",
+      "subject": "feat: reproduce the original catalog parent and registry",
+      "documentedEnvelopeBytes": 11046,
+      "sourceCommentBytes": 10236,
+      "lines": {
+        "NTSDCore": {
+          "files": 11,
+          "lines": 1738
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 2,
+          "lines": 176
+        }
+      },
+      "insideEnvelopeInstructions": 2835,
+      "insideEnvelopeConditionalInstructions": 402
+    },
+    {
+      "commit": "ed40eeb4ee5eca38b2ae895be4f3a2b7229c1ab9",
+      "timestamp": "2026-09-07T23:27:41+03:00",
+      "subject": "feat: load complete original object files natively",
+      "documentedEnvelopeBytes": 23001,
+      "sourceCommentBytes": 10335,
+      "lines": {
+        "NTSDCore": {
+          "files": 13,
+          "lines": 2041
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 3,
+          "lines": 324
+        }
+      },
+      "insideEnvelopeInstructions": 6070,
+      "insideEnvelopeConditionalInstructions": 611
+    },
+    {
+      "commit": "cdd0f4c12178e6dbacad297051cea3983b172c15",
+      "timestamp": "2026-09-07T23:50:40+03:00",
+      "subject": "feat: reproduce original background loading and resource lifecycle",
+      "documentedEnvelopeBytes": 25247,
+      "sourceCommentBytes": 10335,
+      "lines": {
+        "NTSDCore": {
+          "files": 14,
+          "lines": 2218
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 4,
+          "lines": 460
+        }
+      },
+      "insideEnvelopeInstructions": 6697,
+      "insideEnvelopeConditionalInstructions": 656
+    },
+    {
+      "commit": "e8f62989074ef35987c38f2962a50156d64a6cb2",
+      "timestamp": "2026-09-08T00:19:26+03:00",
+      "subject": "feat: reproduce the complete original stage data loader",
+      "documentedEnvelopeBytes": 27501,
+      "sourceCommentBytes": 10724,
+      "lines": {
+        "NTSDCore": {
+          "files": 15,
+          "lines": 2346
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 5,
+          "lines": 571
+        }
+      },
+      "insideEnvelopeInstructions": 7300,
+      "insideEnvelopeConditionalInstructions": 688
+    },
+    {
+      "commit": "fab8104a9815fe51d6d028ce8d3245ddda03b478",
+      "timestamp": "2026-09-08T00:53:06+03:00",
+      "subject": "feat: match VC80 integer parsing and trace all original objects",
+      "documentedEnvelopeBytes": 27501,
+      "sourceCommentBytes": 10724,
+      "lines": {
+        "NTSDCore": {
+          "files": 15,
+          "lines": 2342
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 5,
+          "lines": 575
+        }
+      },
+      "insideEnvelopeInstructions": 7300,
+      "insideEnvelopeConditionalInstructions": 688
+    },
+    {
+      "commit": "0f5ceeb57d8b2a98a58f1d4f9b63cae5382dfadf",
+      "timestamp": "2026-09-08T01:21:53+03:00",
+      "subject": "feat: preserve raw frames and load all original objects natively",
+      "documentedEnvelopeBytes": 27501,
+      "sourceCommentBytes": 10724,
+      "lines": {
+        "NTSDCore": {
+          "files": 16,
+          "lines": 2490
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 5,
+          "lines": 641
+        }
+      },
+      "insideEnvelopeInstructions": 7300,
+      "insideEnvelopeConditionalInstructions": 688
+    },
+    {
+      "commit": "29acb392fc85c9a76c3d28bf0e87e4e57f4968c9",
+      "timestamp": "2026-09-08T01:57:19+03:00",
+      "subject": "feat: load the complete original catalog with shared native resources",
+      "documentedEnvelopeBytes": 27501,
+      "sourceCommentBytes": 10724,
+      "lines": {
+        "NTSDCore": {
+          "files": 18,
+          "lines": 2623
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 6,
+          "lines": 865
+        }
+      },
+      "insideEnvelopeInstructions": 7300,
+      "insideEnvelopeConditionalInstructions": 688
+    },
+    {
+      "commit": "28943b6e333c1910fa98fd1a2fbc3f82796cd77c",
+      "timestamp": "2026-09-08T02:33:56+03:00",
+      "subject": "feat: reproduce common match preparation from the full catalog",
+      "documentedEnvelopeBytes": 28764,
+      "sourceCommentBytes": 11987,
+      "lines": {
+        "NTSDCore": {
+          "files": 19,
+          "lines": 2788
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 7,
+          "lines": 1078
+        }
+      },
+      "insideEnvelopeInstructions": 7614,
+      "insideEnvelopeConditionalInstructions": 716
+    },
+    {
+      "commit": "c18a0f4fafe9d41dfdc12fb98c02f7060f5d47fe",
+      "timestamp": "2026-09-08T03:04:20+03:00",
+      "subject": "feat: reproduce original recording initialization and RNG reset",
+      "documentedEnvelopeBytes": 30933,
+      "sourceCommentBytes": 14156,
+      "lines": {
+        "NTSDCore": {
+          "files": 20,
+          "lines": 2891
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 8,
+          "lines": 1207
+        }
+      },
+      "insideEnvelopeInstructions": 8144,
+      "insideEnvelopeConditionalInstructions": 725
+    },
+    {
+      "commit": "586b193783f21861e5c0c55f9ef997dfd4e6b890",
+      "timestamp": "2026-09-08T03:43:21+03:00",
+      "subject": "feat: reproduce original confirmed-match prelude",
+      "documentedEnvelopeBytes": 31562,
+      "sourceCommentBytes": 14785,
+      "lines": {
+        "NTSDCore": {
+          "files": 21,
+          "lines": 2983
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 9,
+          "lines": 1292
+        }
+      },
+      "insideEnvelopeInstructions": 8303,
+      "insideEnvelopeConditionalInstructions": 742
+    },
+    {
+      "commit": "be6f0f91b6eff09b66bce5bde63bfdbc773fe856",
+      "timestamp": "2026-09-08T04:22:31+03:00",
+      "subject": "feat: reproduce remaining menu state and random roster selection",
+      "documentedEnvelopeBytes": 34112,
+      "sourceCommentBytes": 17296,
+      "lines": {
+        "NTSDCore": {
+          "files": 22,
+          "lines": 3170
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 10,
+          "lines": 1474
+        }
+      },
+      "insideEnvelopeInstructions": 8899,
+      "insideEnvelopeConditionalInstructions": 823
+    },
+    {
+      "commit": "b9ff994feccef91a94ee37b73b83a387e1e89303",
+      "timestamp": "2026-09-08T04:48:28+03:00",
+      "subject": "feat: reproduce original CRT RNG initialization through match recording",
+      "documentedEnvelopeBytes": 34148,
+      "sourceCommentBytes": 17332,
+      "lines": {
+        "NTSDCore": {
+          "files": 23,
+          "lines": 3214
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 11,
+          "lines": 1581
+        }
+      },
+      "insideEnvelopeInstructions": 8909,
+      "insideEnvelopeConditionalInstructions": 823
+    },
+    {
+      "commit": "b54e5ca753c9ea0f2e43b1bf3a04043c453e00a4",
+      "timestamp": "2026-09-08T05:26:25+03:00",
+      "subject": "feat: reproduce original mouse input and main menu state transitions",
+      "documentedEnvelopeBytes": 35699,
+      "sourceCommentBytes": 18247,
+      "lines": {
+        "NTSDCore": {
+          "files": 24,
+          "lines": 3445
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 12,
+          "lines": 1709
+        }
+      },
+      "insideEnvelopeInstructions": 9332,
+      "insideEnvelopeConditionalInstructions": 862
+    },
+    {
+      "commit": "6a379d43f2d95d6bd451c537c8691f4df7b729d5",
+      "timestamp": "2026-09-08T05:58:15+03:00",
+      "subject": "feat: reproduce original menu presentation and world transition",
+      "documentedEnvelopeBytes": 37334,
+      "sourceCommentBytes": 18247,
+      "lines": {
+        "NTSDCore": {
+          "files": 25,
+          "lines": 3689
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 13,
+          "lines": 1876
+        }
+      },
+      "insideEnvelopeInstructions": 9866,
+      "insideEnvelopeConditionalInstructions": 905
+    },
+    {
+      "commit": "65ea14bd130778508882ec1f9ad9718aeb25fdbc",
+      "timestamp": "2026-09-08T06:43:39+03:00",
+      "subject": "feat: reproduce original WAV loading and startup sound resources",
+      "documentedEnvelopeBytes": 38825,
+      "sourceCommentBytes": 18587,
+      "lines": {
+        "NTSDCore": {
+          "files": 27,
+          "lines": 3932
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 14,
+          "lines": 2001
+        }
+      },
+      "insideEnvelopeInstructions": 10296,
+      "insideEnvelopeConditionalInstructions": 921
+    },
+    {
+      "commit": "187b2527bdd0b9a435e4b52afd0ffc43133bab1d",
+      "timestamp": "2026-09-08T07:00:06+03:00",
+      "subject": "feat: reproduce initial interface loading and bitmap error lifecycle",
+      "documentedEnvelopeBytes": 39477,
+      "sourceCommentBytes": 19239,
+      "lines": {
+        "NTSDCore": {
+          "files": 28,
+          "lines": 4027
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 15,
+          "lines": 2144
+        }
+      },
+      "insideEnvelopeInstructions": 10458,
+      "insideEnvelopeConditionalInstructions": 931
+    },
+    {
+      "commit": "e63d8d89936664fa514730e6086bb58786189677",
+      "timestamp": "2026-09-08T07:28:01+03:00",
+      "subject": "feat: load original catalog sounds through shared WAV engine",
+      "documentedEnvelopeBytes": 39532,
+      "sourceCommentBytes": 19294,
+      "lines": {
+        "NTSDCore": {
+          "files": 29,
+          "lines": 4076
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 16,
+          "lines": 2245
+        }
+      },
+      "insideEnvelopeInstructions": 10471,
+      "insideEnvelopeConditionalInstructions": 932
+    },
+    {
+      "commit": "8d96449ccd24e3eb6ed22a9856a6be285b37de1d",
+      "timestamp": "2026-09-08T08:05:24+03:00",
+      "subject": "feat: join original first loading through catalog pool and interface",
+      "documentedEnvelopeBytes": 40154,
+      "sourceCommentBytes": 19916,
+      "lines": {
+        "NTSDCore": {
+          "files": 30,
+          "lines": 4228
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 17,
+          "lines": 2422
+        }
+      },
+      "insideEnvelopeInstructions": 10604,
+      "insideEnvelopeConditionalInstructions": 948
+    },
+    {
+      "commit": "0272d43b6675a8512ff8e59aa4ceee17e6843e80",
+      "timestamp": "2026-09-08T08:51:23+03:00",
+      "subject": "feat: reproduce original local input and command packing",
+      "documentedEnvelopeBytes": 41229,
+      "sourceCommentBytes": 20016,
+      "lines": {
+        "NTSDCore": {
+          "files": 31,
+          "lines": 4342
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 18,
+          "lines": 2578
+        }
+      },
+      "insideEnvelopeInstructions": 10874,
+      "insideEnvelopeConditionalInstructions": 996
+    },
+    {
+      "commit": "eaac56286063f02a707db45366c40e51a63c97fa",
+      "timestamp": "2026-09-08T09:22:19+03:00",
+      "subject": "feat: reproduce original remote and playback input",
+      "documentedEnvelopeBytes": 41991,
+      "sourceCommentBytes": 20095,
+      "lines": {
+        "NTSDCore": {
+          "files": 32,
+          "lines": 4406
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 19,
+          "lines": 2750
+        }
+      },
+      "insideEnvelopeInstructions": 11074,
+      "insideEnvelopeConditionalInstructions": 1018
+    },
+    {
+      "commit": "30a6a2d3cd03516cfe0990741a0ed3fcfe84bc35",
+      "timestamp": "2026-09-08T10:44:53+03:00",
+      "subject": "feat: reproduce original hotkeys and packet control",
+      "documentedEnvelopeBytes": 46536,
+      "sourceCommentBytes": 24640,
+      "lines": {
+        "NTSDCore": {
+          "files": 33,
+          "lines": 4669
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 20,
+          "lines": 2997
+        }
+      },
+      "insideEnvelopeInstructions": 12187,
+      "insideEnvelopeConditionalInstructions": 1203
+    },
+    {
+      "commit": "d951cfa9b07241e3ee84d49696328777a998016d",
+      "timestamp": "2026-09-08T11:27:25+03:00",
+      "subject": "feat: reproduce original replay packet ticks",
+      "documentedEnvelopeBytes": 47377,
+      "sourceCommentBytes": 24954,
+      "lines": {
+        "NTSDCore": {
+          "files": 34,
+          "lines": 4810
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 21,
+          "lines": 3266
+        }
+      },
+      "insideEnvelopeInstructions": 12372,
+      "insideEnvelopeConditionalInstructions": 1217
+    },
+    {
+      "commit": "3badcac2deea7c3628fba30569644e95eec5542d",
+      "timestamp": "2026-09-08T12:14:30+03:00",
+      "subject": "feat: reproduce original round outcome control",
+      "documentedEnvelopeBytes": 47377,
+      "sourceCommentBytes": 24954,
+      "lines": {
+        "NTSDCore": {
+          "files": 35,
+          "lines": 5030
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 22,
+          "lines": 3468
+        }
+      },
+      "insideEnvelopeInstructions": 12372,
+      "insideEnvelopeConditionalInstructions": 1217
+    },
+    {
+      "commit": "46d90a455a8accff4df91285e749b1ffed2caf51",
+      "timestamp": "2026-09-08T13:02:02+03:00",
+      "subject": "feat: reproduce original music playback lifecycle",
+      "documentedEnvelopeBytes": 48024,
+      "sourceCommentBytes": 24954,
+      "lines": {
+        "NTSDCore": {
+          "files": 36,
+          "lines": 5198
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 23,
+          "lines": 3588
+        }
+      },
+      "insideEnvelopeInstructions": 12587,
+      "insideEnvelopeConditionalInstructions": 1232
+    },
+    {
+      "commit": "176bee778e07291ffb539db84de9e7a54c22222e",
+      "timestamp": "2026-09-08T13:47:53+03:00",
+      "subject": "feat: reproduce original menu resource initialization",
+      "documentedEnvelopeBytes": 49732,
+      "sourceCommentBytes": 26663,
+      "lines": {
+        "NTSDCore": {
+          "files": 37,
+          "lines": 5300
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 24,
+          "lines": 3751
+        }
+      },
+      "insideEnvelopeInstructions": 12947,
+      "insideEnvelopeConditionalInstructions": 1244
+    },
+    {
+      "commit": "881203b4a7c1667ddff2f9329577cdd1ab7aa8d0",
+      "timestamp": "2026-09-08T14:10:00+03:00",
+      "subject": "feat: reproduce original bitmap drawing requests",
+      "documentedEnvelopeBytes": 50870,
+      "sourceCommentBytes": 26663,
+      "lines": {
+        "NTSDCore": {
+          "files": 38,
+          "lines": 5414
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 25,
+          "lines": 3885
+        }
+      },
+      "insideEnvelopeInstructions": 13291,
+      "insideEnvelopeConditionalInstructions": 1268
+    },
+    {
+      "commit": "de8f256125c8d2ebe4b48a6b4eeb6b220dd16a4f",
+      "timestamp": "2026-09-08T14:39:53+03:00",
+      "subject": "feat: reproduce original front menu resource loading",
+      "documentedEnvelopeBytes": 61419,
+      "sourceCommentBytes": 37212,
+      "lines": {
+        "NTSDCore": {
+          "files": 40,
+          "lines": 5698
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 26,
+          "lines": 4024
+        }
+      },
+      "insideEnvelopeInstructions": 15038,
+      "insideEnvelopeConditionalInstructions": 1294
+    },
+    {
+      "commit": "f188e7afa99832ff45bf8d0015d7e5c18a6a5db8",
+      "timestamp": "2026-09-08T15:00:23+03:00",
+      "subject": "feat: reproduce original startup settings loading",
+      "documentedEnvelopeBytes": 61919,
+      "sourceCommentBytes": 37212,
+      "lines": {
+        "NTSDCore": {
+          "files": 41,
+          "lines": 5817
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 27,
+          "lines": 4160
+        }
+      },
+      "insideEnvelopeInstructions": 15200,
+      "insideEnvelopeConditionalInstructions": 1319
+    },
+    {
+      "commit": "7b8048860809066673a620cd33202dbf75d1eda2",
+      "timestamp": "2026-09-08T15:20:44+03:00",
+      "subject": "feat: reproduce original front screen drawing prelude",
+      "documentedEnvelopeBytes": 62060,
+      "sourceCommentBytes": 37353,
+      "lines": {
+        "NTSDCore": {
+          "files": 42,
+          "lines": 5944
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 28,
+          "lines": 4295
+        }
+      },
+      "insideEnvelopeInstructions": 15239,
+      "insideEnvelopeConditionalInstructions": 1325
+    },
+    {
+      "commit": "7f7cb57026c465acea4eb6ea45227de8d54b2c26",
+      "timestamp": "2026-09-08T15:45:28+03:00",
+      "subject": "feat: reproduce original menu content parser",
+      "documentedEnvelopeBytes": 63296,
+      "sourceCommentBytes": 37353,
+      "lines": {
+        "NTSDCore": {
+          "files": 43,
+          "lines": 6053
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 29,
+          "lines": 4382
+        }
+      },
+      "insideEnvelopeInstructions": 15548,
+      "insideEnvelopeConditionalInstructions": 1357
+    },
+    {
+      "commit": "22d806eeb6f9bd48d34707d05ed43cc152502c49",
+      "timestamp": "2026-09-08T15:58:05+03:00",
+      "subject": "feat: reproduce original menu panel bitmap lifecycle",
+      "documentedEnvelopeBytes": 64027,
+      "sourceCommentBytes": 37896,
+      "lines": {
+        "NTSDCore": {
+          "files": 44,
+          "lines": 6143
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 30,
+          "lines": 4500
+        }
+      },
+      "insideEnvelopeInstructions": 15704,
+      "insideEnvelopeConditionalInstructions": 1361
+    },
+    {
+      "commit": "14f0cea78648440fe5f9911ac482e994db5a7c05",
+      "timestamp": "2026-09-08T16:13:59+03:00",
+      "subject": "feat: reproduce original menu info writers",
+      "documentedEnvelopeBytes": 64259,
+      "sourceCommentBytes": 37896,
+      "lines": {
+        "NTSDCore": {
+          "files": 45,
+          "lines": 6255
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 31,
+          "lines": 4590
+        }
+      },
+      "insideEnvelopeInstructions": 15766,
+      "insideEnvelopeConditionalInstructions": 1363
+    },
+    {
+      "commit": "6540c0440c9f7d26e26ef0fa17391fd68436b2bc",
+      "timestamp": "2026-09-08T16:44:44+03:00",
+      "subject": "feat: reproduce joined original menu panel update",
+      "documentedEnvelopeBytes": 64519,
+      "sourceCommentBytes": 37896,
+      "lines": {
+        "NTSDCore": {
+          "files": 46,
+          "lines": 6324
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 32,
+          "lines": 4795
+        }
+      },
+      "insideEnvelopeInstructions": 15833,
+      "insideEnvelopeConditionalInstructions": 1374
+    },
+    {
+      "commit": "fb324de0cfcbd4d7b551cd9d07058a45303bb891",
+      "timestamp": "2026-09-08T17:06:07+03:00",
+      "subject": "feat: reproduce original front screen text and controls",
+      "documentedEnvelopeBytes": 65703,
+      "sourceCommentBytes": 39080,
+      "lines": {
+        "NTSDCore": {
+          "files": 48,
+          "lines": 6464
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 33,
+          "lines": 4943
+        }
+      },
+      "insideEnvelopeInstructions": 16158,
+      "insideEnvelopeConditionalInstructions": 1414
+    },
+    {
+      "commit": "b3e3435a3400110dd78056a70153692d88656580",
+      "timestamp": "2026-09-08T17:32:47+03:00",
+      "subject": "feat: reproduce original settings writer and printf segments",
+      "documentedEnvelopeBytes": 66285,
+      "sourceCommentBytes": 39080,
+      "lines": {
+        "NTSDCore": {
+          "files": 49,
+          "lines": 6600
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 34,
+          "lines": 5055
+        }
+      },
+      "insideEnvelopeInstructions": 16323,
+      "insideEnvelopeConditionalInstructions": 1436
+    },
+    {
+      "commit": "0b1101244ce2f81e944831557907f65f5276b395",
+      "timestamp": "2026-09-08T18:01:43+03:00",
+      "subject": "feat: reproduce original settings and waiting screens",
+      "documentedEnvelopeBytes": 67121,
+      "sourceCommentBytes": 39916,
+      "lines": {
+        "NTSDCore": {
+          "files": 51,
+          "lines": 6719
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 35,
+          "lines": 5232
+        }
+      },
+      "insideEnvelopeInstructions": 16553,
+      "insideEnvelopeConditionalInstructions": 1466
+    },
+    {
+      "commit": "8c606c8ace86a8d1d1b07e2131d4af6e6fa035bd",
+      "timestamp": "2026-09-08T18:24:07+03:00",
+      "subject": "feat: join original early resources to menu return",
+      "documentedEnvelopeBytes": 67121,
+      "sourceCommentBytes": 39916,
+      "lines": {
+        "NTSDCore": {
+          "files": 51,
+          "lines": 6733
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 36,
+          "lines": 5394
+        }
+      },
+      "insideEnvelopeInstructions": 16553,
+      "insideEnvelopeConditionalInstructions": 1466
+    },
+    {
+      "commit": "7d68ada4670e5e506f0c8197690e0a5e0d468af5",
+      "timestamp": "2026-09-08T18:53:29+03:00",
+      "subject": "feat: compose repeated original early-menu calls",
+      "documentedEnvelopeBytes": 67121,
+      "sourceCommentBytes": 39916,
+      "lines": {
+        "NTSDCore": {
+          "files": 52,
+          "lines": 6788
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 37,
+          "lines": 5696
+        }
+      },
+      "insideEnvelopeInstructions": 16553,
+      "insideEnvelopeConditionalInstructions": 1466
+    },
+    {
+      "commit": "c23a57cc04290fbd12f81f440aa4f1ea6e5674ef",
+      "timestamp": "2026-09-08T19:39:00+03:00",
+      "subject": "feat: join early-menu state to original loading",
+      "documentedEnvelopeBytes": 67121,
+      "sourceCommentBytes": 39916,
+      "lines": {
+        "NTSDCore": {
+          "files": 52,
+          "lines": 6788
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 38,
+          "lines": 5821
+        }
+      },
+      "insideEnvelopeInstructions": 16553,
+      "insideEnvelopeConditionalInstructions": 1466
+    },
+    {
+      "commit": "a3eee10432448a6dcd82b246a1cf857331bd15f1",
+      "timestamp": "2026-09-08T20:20:58+03:00",
+      "subject": "feat: continue native startup into character-menu resources",
+      "documentedEnvelopeBytes": 67121,
+      "sourceCommentBytes": 39916,
+      "lines": {
+        "NTSDCore": {
+          "files": 53,
+          "lines": 6825
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 39,
+          "lines": 6101
+        }
+      },
+      "insideEnvelopeInstructions": 16553,
+      "insideEnvelopeConditionalInstructions": 1466
+    },
+    {
+      "commit": "42820c9cdb610d0f94bebb4732fd94395439ecd4",
+      "timestamp": "2026-09-08T20:47:24+03:00",
+      "subject": "feat: recover shared menu input and mode transitions",
+      "documentedEnvelopeBytes": 68978,
+      "sourceCommentBytes": 41528,
+      "lines": {
+        "NTSDCore": {
+          "files": 55,
+          "lines": 6964
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 40,
+          "lines": 6242
+        }
+      },
+      "insideEnvelopeInstructions": 17032,
+      "insideEnvelopeConditionalInstructions": 1521
+    },
+    {
+      "commit": "0e165bd074cd7ccc86741392f5dd023d9985e605",
+      "timestamp": "2026-09-08T21:58:51+03:00",
+      "subject": "feat: compose original mode screen with native startup",
+      "documentedEnvelopeBytes": 71847,
+      "sourceCommentBytes": 42672,
+      "lines": {
+        "NTSDCore": {
+          "files": 58,
+          "lines": 7162
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 41,
+          "lines": 6442
+        }
+      },
+      "insideEnvelopeInstructions": 17821,
+      "insideEnvelopeConditionalInstructions": 1615
+    },
+    {
+      "commit": "c2c2c91bcb7ec9bd19fc1013ceab6aa5908e12f2",
+      "timestamp": "2026-09-08T22:39:01+03:00",
+      "subject": "feat: complete original menu output and nested returns",
+      "documentedEnvelopeBytes": 72062,
+      "sourceCommentBytes": 42852,
+      "lines": {
+        "NTSDCore": {
+          "files": 59,
+          "lines": 7210
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 42,
+          "lines": 6602
+        }
+      },
+      "insideEnvelopeInstructions": 17874,
+      "insideEnvelopeConditionalInstructions": 1618
+    },
+    {
+      "commit": "0a887be2598cba4b7c15082b808f8bec8bf2105e",
+      "timestamp": "2026-09-08T23:01:42+03:00",
+      "subject": "tools: add reproducible code-volume progress estimates",
+      "documentedEnvelopeBytes": 72062,
+      "sourceCommentBytes": 42852,
+      "lines": {
+        "NTSDCore": {
+          "files": 59,
+          "lines": 7210
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 42,
+          "lines": 6602
+        }
+      },
+      "insideEnvelopeInstructions": 17874,
+      "insideEnvelopeConditionalInstructions": 1618
+    },
+    {
+      "commit": "ccd555f05c286965d346fbbb074bcdeb32d374fb",
+      "timestamp": "2026-09-08T23:13:42+03:00",
+      "subject": "feat: preserve original input phases across menu cycles",
+      "documentedEnvelopeBytes": 72062,
+      "sourceCommentBytes": 42852,
+      "lines": {
+        "NTSDCore": {
+          "files": 60,
+          "lines": 7240
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 43,
+          "lines": 6852
+        }
+      },
+      "insideEnvelopeInstructions": 17874,
+      "insideEnvelopeConditionalInstructions": 1618
+    },
+    {
+      "commit": "20d18ae801143e9035f4c623206ee6cdaf24a9dd",
+      "timestamp": "2026-09-08T23:56:05+03:00",
+      "subject": "feat: reproduce original character selection and readiness",
+      "documentedEnvelopeBytes": 76961,
+      "sourceCommentBytes": 47329,
+      "lines": {
+        "NTSDCore": {
+          "files": 61,
+          "lines": 7466
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 44,
+          "lines": 7081
+        }
+      },
+      "insideEnvelopeInstructions": 19134,
+      "insideEnvelopeConditionalInstructions": 1774
+    },
+    {
+      "commit": "eb26182f59233e109ff57a78363ed76561713197",
+      "timestamp": "2026-09-09T00:45:31+03:00",
+      "subject": "feat: reproduce original match settings and start selection",
+      "documentedEnvelopeBytes": 78693,
+      "sourceCommentBytes": 47329,
+      "lines": {
+        "NTSDCore": {
+          "files": 63,
+          "lines": 7728
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 45,
+          "lines": 7165
+        }
+      },
+      "insideEnvelopeInstructions": 19573,
+      "insideEnvelopeConditionalInstructions": 1849
+    },
+    {
+      "commit": "fa898457397e0f2a1239514020ff9c68ac4871df",
+      "timestamp": "2026-09-09T01:32:49+03:00",
+      "subject": "feat: join original match launch with first gameplay entry",
+      "documentedEnvelopeBytes": 78693,
+      "sourceCommentBytes": 47329,
+      "lines": {
+        "NTSDCore": {
+          "files": 63,
+          "lines": 7756
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7404
+        }
+      },
+      "insideEnvelopeInstructions": 19573,
+      "insideEnvelopeConditionalInstructions": 1849
+    },
+    {
+      "commit": "6f2ff667b455f04b94f64ffb293da88c88f16317",
+      "timestamp": "2026-09-09T01:59:30+03:00",
+      "subject": "feat: reproduce generic actor input and DAT frame transfers",
+      "documentedEnvelopeBytes": 79538,
+      "sourceCommentBytes": 47770,
+      "lines": {
+        "NTSDCore": {
+          "files": 64,
+          "lines": 7918
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7404
+        }
+      },
+      "insideEnvelopeInstructions": 19787,
+      "insideEnvelopeConditionalInstructions": 1887
+    },
+    {
+      "commit": "50fcbdeeaa45791163cdbc574f7d9aa0083da321",
+      "timestamp": "2026-09-09T02:26:21+03:00",
+      "subject": "feat: reproduce complete original actor control",
+      "documentedEnvelopeBytes": 82040,
+      "sourceCommentBytes": 47981,
+      "lines": {
+        "NTSDCore": {
+          "files": 65,
+          "lines": 8204
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7404
+        }
+      },
+      "insideEnvelopeInstructions": 20523,
+      "insideEnvelopeConditionalInstructions": 2032
+    },
+    {
+      "commit": "e2f20ce5dda799afe470dd6a614553c7c333c9c7",
+      "timestamp": "2026-09-09T02:53:04+03:00",
+      "subject": "feat: join original world control with native match state",
+      "documentedEnvelopeBytes": 83427,
+      "sourceCommentBytes": 48745,
+      "lines": {
+        "NTSDCore": {
+          "files": 66,
+          "lines": 8319
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7454
+        }
+      },
+      "insideEnvelopeInstructions": 20865,
+      "insideEnvelopeConditionalInstructions": 2088
+    },
+    {
+      "commit": "71b74a24063f6bcb8a74790fc7ebdafcde635c81",
+      "timestamp": "2026-09-09T03:44:10+03:00",
+      "subject": "feat: port complete actor and world physics from original game",
+      "documentedEnvelopeBytes": 88297,
+      "sourceCommentBytes": 48956,
+      "lines": {
+        "NTSDCore": {
+          "files": 69,
+          "lines": 8738
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7476
+        }
+      },
+      "insideEnvelopeInstructions": 22103,
+      "insideEnvelopeConditionalInstructions": 2283
+    },
+    {
+      "commit": "08cbc6a1d908920cff7589a70e4fb9875773790c",
+      "timestamp": "2026-09-09T04:08:06+03:00",
+      "subject": "feat: port original depth and held-object world passes",
+      "documentedEnvelopeBytes": 90381,
+      "sourceCommentBytes": 48956,
+      "lines": {
+        "NTSDCore": {
+          "files": 71,
+          "lines": 8885
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7503
+        }
+      },
+      "insideEnvelopeInstructions": 22630,
+      "insideEnvelopeConditionalInstructions": 2333
+    },
+    {
+      "commit": "403048954e8f0b6ed9709e95228a91a87ab7dda9",
+      "timestamp": "2026-09-09T04:48:17+03:00",
+      "subject": "feat: port original contact collection and fusion passes",
+      "documentedEnvelopeBytes": 94789,
+      "sourceCommentBytes": 48992,
+      "lines": {
+        "NTSDCore": {
+          "files": 73,
+          "lines": 9181
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7525
+        }
+      },
+      "insideEnvelopeInstructions": 23692,
+      "insideEnvelopeConditionalInstructions": 2526
+    },
+    {
+      "commit": "0ef2a811393e86cd11b54bc27cf6a4ff49ace9a6",
+      "timestamp": "2026-09-09T05:51:28+03:00",
+      "subject": "feat: port original hit resolution and item passes",
+      "documentedEnvelopeBytes": 110683,
+      "sourceCommentBytes": 62223,
+      "lines": {
+        "NTSDCore": {
+          "files": 78,
+          "lines": 9858
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7583
+        }
+      },
+      "insideEnvelopeInstructions": 27144,
+      "insideEnvelopeConditionalInstructions": 3005
+    },
+    {
+      "commit": "445d7233e13f1c450d8063f9a37edea7d845a350",
+      "timestamp": "2026-09-09T06:24:48+03:00",
+      "subject": "feat: port original cpoint actions and attachment passes",
+      "documentedEnvelopeBytes": 114167,
+      "sourceCommentBytes": 63847,
+      "lines": {
+        "NTSDCore": {
+          "files": 80,
+          "lines": 10061
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 46,
+          "lines": 7640
+        }
+      },
+      "insideEnvelopeInstructions": 27975,
+      "insideEnvelopeConditionalInstructions": 3127
+    },
+    {
+      "commit": "30be76e5079c263b454bf68058953f7c6acf56b5",
+      "timestamp": "2026-09-09T07:11:07+03:00",
+      "subject": "feat: port original camera and background drawing",
+      "documentedEnvelopeBytes": 116191,
+      "sourceCommentBytes": 63847,
+      "lines": {
+        "NTSDCore": {
+          "files": 82,
+          "lines": 10258
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 47,
+          "lines": 7737
+        }
+      },
+      "insideEnvelopeInstructions": 28552,
+      "insideEnvelopeConditionalInstructions": 3175
+    },
+    {
+      "commit": "ec0d5369dd5de1ad09acf46c900ea08ca6ec661c",
+      "timestamp": "2026-09-09T07:29:17+03:00",
+      "subject": "docs: document progress estimator in agent instructions",
+      "documentedEnvelopeBytes": 116191,
+      "sourceCommentBytes": 63847,
+      "lines": {
+        "NTSDCore": {
+          "files": 82,
+          "lines": 10258
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 47,
+          "lines": 7737
+        }
+      },
+      "insideEnvelopeInstructions": 28552,
+      "insideEnvelopeConditionalInstructions": 3175
+    },
+    {
+      "commit": "d47d4145fe0569d3e56356856bdf0e5dcca2dec6",
+      "timestamp": "2026-09-09T08:00:52+03:00",
+      "subject": "tools: update progress estimates with overnight gameplay work",
+      "documentedEnvelopeBytes": 116191,
+      "sourceCommentBytes": 63847,
+      "lines": {
+        "NTSDCore": {
+          "files": 82,
+          "lines": 10258
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 47,
+          "lines": 7737
+        }
+      },
+      "insideEnvelopeInstructions": 28552,
+      "insideEnvelopeConditionalInstructions": 3175
+    },
+    {
+      "commit": "e3c220f9abc9a23414d99c34ff6c69254e35b762",
+      "timestamp": "2026-09-09T08:15:55+03:00",
+      "subject": "feat: port original World and Actor drawing",
+      "documentedEnvelopeBytes": 117008,
+      "sourceCommentBytes": 64664,
+      "lines": {
+        "NTSDCore": {
+          "files": 84,
+          "lines": 10494
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 48,
+          "lines": 7860
+        }
+      },
+      "insideEnvelopeInstructions": 28802,
+      "insideEnvelopeConditionalInstructions": 3188
+    },
+    {
+      "commit": "a2a853ca8720e9de5627c1ed327df1072bd961c6",
+      "timestamp": "2026-09-09T08:49:19+03:00",
+      "subject": "feat: port post-draw impulses and audit FPU precision",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 86,
+          "lines": 10572
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 49,
+          "lines": 7933
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "2cf272cd85b2297999da5010e85b0ba53a4739c3",
+      "timestamp": "2026-09-09T09:13:11+03:00",
+      "subject": "fix: model original x87 arithmetic precision",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 87,
+          "lines": 10619
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 49,
+          "lines": 7933
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "1fcc04b8540c11486cebcd3c0ca5b887e80d2b33",
+      "timestamp": "2026-09-09T09:45:14+03:00",
+      "subject": "test: validate initialized gameplay at original FPU precision",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 87,
+          "lines": 10619
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "92aed35a6d6380f333dfd0e37bcda352173666b1",
+      "timestamp": "2026-09-09T10:08:02+03:00",
+      "subject": "fix: preserve original arithmetic in actor control",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 87,
+          "lines": 10633
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "adf93da3bf48d00006765540f700c0faa0020a77",
+      "timestamp": "2026-09-09T10:25:52+03:00",
+      "subject": "test: verify original coordinate conversion and camera precision",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 87,
+          "lines": 10633
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "2be325da1a5f497f791a131f6be724e90f9e2446",
+      "timestamp": "2026-09-09T10:44:52+03:00",
+      "subject": "test: verify original DAT scanning at startup precision",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 87,
+          "lines": 10634
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "fcf9cd1dfc9813a7c7ea6a68ebced4d2b99c915b",
+      "timestamp": "2026-09-09T11:04:17+03:00",
+      "subject": "feat: port the original Actor frame scheduler",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 88,
+          "lines": 10807
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "246e7cfb9bfe6106fb157679bff8f1c73a5bd7ca",
+      "timestamp": "2026-09-09T11:30:14+03:00",
+      "subject": "feat: port post-draw transformations, particles and recovery",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 89,
+          "lines": 10986
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "ecd4b2ea36f14bc8f7b90298ae9cd014fabd8c4f",
+      "timestamp": "2026-09-09T11:48:04+03:00",
+      "subject": "feat: port generic post-draw opoint and frame lifetime",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 90,
+          "lines": 11182
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "279c60653eae10b03421c95079d79daaf07a6da9",
+      "timestamp": "2026-09-09T12:17:38+03:00",
+      "subject": "feat: port complete live-slot post-draw lifecycle",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 91,
+          "lines": 11444
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 50,
+          "lines": 7989
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "7c7c6bc5abf54ef8ee477155ffde02c2ba0f02c1",
+      "timestamp": "2026-09-09T12:49:05+03:00",
+      "subject": "test: join initialized matches through post-draw lifecycle",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 91,
+          "lines": 11444
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 51,
+          "lines": 8077
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "42b444a11ac1454827d5bdd14a898febc24fdacd",
+      "timestamp": "2026-09-09T13:40:01+03:00",
+      "subject": "feat: port post-draw commands and join initialized matches",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 92,
+          "lines": 11596
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 52,
+          "lines": 8144
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "22175e3199ddbac09f3ede54930f4a5e869b5135",
+      "timestamp": "2026-09-09T14:25:17+03:00",
+      "subject": "feat: port original HUD and join initialized gameplay",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 93,
+          "lines": 11689
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 53,
+          "lines": 8264
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "9e705cd69b8f988f63c84fd5ed1f9d6fff0dccc1",
+      "timestamp": "2026-09-09T14:45:47+03:00",
+      "subject": "feat: reproduce original diagnostic number formatting",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 94,
+          "lines": 11912
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 53,
+          "lines": 8264
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "46d93a810fcd4f3d407702e3b7dda4c7d95cfa54",
+      "timestamp": "2026-09-09T15:14:38+03:00",
+      "subject": "feat: port original post-HUD notices",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 95,
+          "lines": 12043
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 53,
+          "lines": 8264
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "56e9c19752c6b2a10d6d15c9f46d566cb28e0c20",
+      "timestamp": "2026-09-09T15:43:54+03:00",
+      "subject": "feat: join initialized matches through post-HUD notices",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 95,
+          "lines": 12078
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 54,
+          "lines": 8345
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "c67406679d9fa1a212c53c83a25027833e1c5c20",
+      "timestamp": "2026-09-09T16:46:36+03:00",
+      "subject": "feat: reproduce original replay compression",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 96,
+          "lines": 12142
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 54,
+          "lines": 8345
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "00aac270830bf12c10c2b97604d9ec6d3da77c62",
+      "timestamp": "2026-09-09T17:14:44+03:00",
+      "subject": "feat: reproduce original replay stream buffering",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 97,
+          "lines": 12230
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 54,
+          "lines": 8345
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "248f7e5690952c1acf23a95346f421ef9b58458c",
+      "timestamp": "2026-09-09T18:22:29+03:00",
+      "subject": "feat: reproduce whole original replay writer",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 98,
+          "lines": 12427
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 54,
+          "lines": 8345
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "9cf01e5f68a5e148a22bd8c1dbe1f4dda96c550b",
+      "timestamp": "2026-09-09T20:12:08+03:00",
+      "subject": "wip: checkpoint result recording, font helpers, and research scope",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 101,
+          "lines": 12720
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 55,
+          "lines": 8418
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "4678f1da081052344e1b006dc6e36b2c75d1d1e1",
+      "timestamp": "2026-09-09T21:04:32+03:00",
+      "subject": "feat: accept result recording and native tick output helpers",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 103,
+          "lines": 12859
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 55,
+          "lines": 8418
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "37b2a146b701e26544e2f2baf432622d62e7db2d",
+      "timestamp": "2026-09-09T21:33:28+03:00",
+      "subject": "feat: reproduce original result layout and replay indicators",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 104,
+          "lines": 13027
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 55,
+          "lines": 8418
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "9784426ec830eb9ff062350734ccf304aa7997aa",
+      "timestamp": "2026-09-09T21:39:34+03:00",
+      "subject": "feat: compare gameplay output order and controlled original return",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 105,
+          "lines": 13060
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 55,
+          "lines": 8418
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "872964f85d6e723e0251baaab4b6d7dbb2dc7328",
+      "timestamp": "2026-09-09T21:40:06+03:00",
+      "subject": "docs: record controlled gameplay output acceptance",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 105,
+          "lines": 13060
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 55,
+          "lines": 8418
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "582a2dee5dbb17d7a8adc7a87d5655194a163cce",
+      "timestamp": "2026-09-09T21:52:23+03:00",
+      "subject": "feat: join both initialized result layout continuations",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 105,
+          "lines": 13060
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 56,
+          "lines": 8482
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "c558f5656fa5dfff97d6a20961838c24314dae0e",
+      "timestamp": "2026-09-09T22:07:48+03:00",
+      "subject": "docs: map loaded tick runtime composition and remaining lifetimes",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 105,
+          "lines": 13060
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 56,
+          "lines": 8482
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "696e2a63150781eb6a1aec9b905415458c98ed19",
+      "timestamp": "2026-09-09T22:16:26+03:00",
+      "subject": "feat: compare initialized gameplay output and both returns",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 105,
+          "lines": 13078
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 57,
+          "lines": 8624
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "f98c5abeac2cafa96572c4027e45b128e7444382",
+      "timestamp": "2026-09-09T22:35:09+03:00",
+      "subject": "feat: compose the native unpaused gameplay body atomically",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 106,
+          "lines": 13232
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 58,
+          "lines": 8802
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "c65f9a8df875569032b370da4f0eefbdfd95712b",
+      "timestamp": "2026-09-09T23:07:07+03:00",
+      "subject": "feat: compare sixteen successive native gameplay calls",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 107,
+          "lines": 13284
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 59,
+          "lines": 9135
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "5a0916a050bcf88ce17ba312b9e73d89ac18a518",
+      "timestamp": "2026-09-09T23:14:50+03:00",
+      "subject": "feat: preserve command flags in the paused HUD callee",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 107,
+          "lines": 13307
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 59,
+          "lines": 9135
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "f09d23eea90ab71c438ca0bb6b5de003abced20b",
+      "timestamp": "2026-09-10T00:04:16+03:00",
+      "subject": "feat: preserve original application timer decisions",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 108,
+          "lines": 13333
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 59,
+          "lines": 9135
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "30ce08ed8d3b01d9d80c4ae9d47c88da10146216",
+      "timestamp": "2026-09-10T00:23:28+03:00",
+      "subject": "feat: continue own pause, single-step and resume",
+      "documentedEnvelopeBytes": 117162,
+      "sourceCommentBytes": 64818,
+      "lines": {
+        "NTSDCore": {
+          "files": 109,
+          "lines": 13422
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 60,
+          "lines": 9583
+        }
+      },
+      "insideEnvelopeInstructions": 28842,
+      "insideEnvelopeConditionalInstructions": 3190
+    },
+    {
+      "commit": "a11f5719942860697afa73e050d2aa52bc4fb49c",
+      "timestamp": "2026-09-10T00:50:00+03:00",
+      "subject": "feat: preserve original application service key scan",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 110,
+          "lines": 13464
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 60,
+          "lines": 9583
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "4298b7e2c63ca71a3c441cd80fb702cd513f8501",
+      "timestamp": "2026-09-10T01:00:37+03:00",
+      "subject": "feat: preserve full-surface clear and dispatcher prerequisites",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 111,
+          "lines": 13487
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 60,
+          "lines": 9583
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "9bb48f6b07d750340d940f739fdf853016554f3f",
+      "timestamp": "2026-09-10T01:28:13+03:00",
+      "subject": "feat: recover bundled library startup and native text behavior",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 112,
+          "lines": 13522
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 60,
+          "lines": 9583
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "5feeb809f502c69ffa69c0987f98b5429cba3f13",
+      "timestamp": "2026-09-10T01:33:31+03:00",
+      "subject": "test: verify 48 active-input pristine game calls",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 112,
+          "lines": 13525
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9809
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "5a28b0a89d245966a5720168e108b34dde895a33",
+      "timestamp": "2026-09-10T01:39:36+03:00",
+      "subject": "docs: audit bundled library impact on active controls",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 112,
+          "lines": 13525
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9809
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "fe2073393e5f5533b64877fa9e3f540ddc189cc5",
+      "timestamp": "2026-09-10T01:59:23+03:00",
+      "subject": "feat: connect bundled library preparation to stage commands",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 113,
+          "lines": 13586
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "0a7c7a62c588b1fa73a1d66e91ebf0fb290c68a0",
+      "timestamp": "2026-09-10T02:13:24+03:00",
+      "subject": "feat: preserve bundled library Actor control",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 114,
+          "lines": 13619
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "834b36ae280654deeee2c5c0982597056d11e83e",
+      "timestamp": "2026-09-10T02:37:59+03:00",
+      "subject": "feat: preserve bundled library contact filters",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 115,
+          "lines": 13668
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "db588b3bb4e65d80fd27f80f44da24fc0b5f5eb7",
+      "timestamp": "2026-09-10T04:08:40+03:00",
+      "subject": "Recover bundled library hit effects and movement order",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 116,
+          "lines": 13789
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "aa6f203606e88d623a3c1275d12a1f3495fe6299",
+      "timestamp": "2026-09-10T04:36:07+03:00",
+      "subject": "Recover complete library loading screen and message tail",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 117,
+          "lines": 13915
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "65706609634f578b841c12ba9a26cc07374007eb",
+      "timestamp": "2026-09-10T05:04:24+03:00",
+      "subject": "Recover static game constructors and preserve CRT NLS boundary",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 118,
+          "lines": 13950
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "62a42f390dd65bc01efb79f86a8837520f709d9d",
+      "timestamp": "2026-09-10T05:48:46+03:00",
+      "subject": "Recover whole window and display initialization order",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 119,
+          "lines": 14154
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "4595a0e01b44eb0ae2853bfa383f35203fbed7c9",
+      "timestamp": "2026-09-10T06:19:14+03:00",
+      "subject": "Prepare bounded Windows NLS reference capture",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 119,
+          "lines": 14154
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "9c26bf780d366907278315ef47d506c6c068e7da",
+      "timestamp": "2026-09-10T07:00:59+03:00",
+      "subject": "Recover original window input callbacks and ordered shutdown",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 120,
+          "lines": 14329
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "b2d116ed27954b0c58c670ec69f62265e5162fba",
+      "timestamp": "2026-09-10T07:29:08+03:00",
+      "subject": "Recover window lifecycle and whole display recreation",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 121,
+          "lines": 14461
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "97b91a633d2baa8b82bbb2fc53d77c5b2e2fbc20",
+      "timestamp": "2026-09-10T07:59:28+03:00",
+      "subject": "Recover original music graph event callbacks and initialization",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 122,
+          "lines": 14536
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "e850cad798693f0c69d131cc739be846e1b49d39",
+      "timestamp": "2026-09-10T08:21:44+03:00",
+      "subject": "Recover original server acceptance notification and handshake packets",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 123,
+          "lines": 14640
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "77cbfb6a4acedec94fc548724fc8579d635d1518",
+      "timestamp": "2026-09-10T08:57:54+03:00",
+      "subject": "Recover deferred client connection and paired handshake",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 124,
+          "lines": 14754
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    },
+    {
+      "commit": "029e590ad751b0f53da203dcb3021eeb1122e255",
+      "timestamp": "2026-09-10T09:14:13+03:00",
+      "subject": "Add automatic post-commit push hook",
+      "documentedEnvelopeBytes": 117349,
+      "sourceCommentBytes": 65005,
+      "lines": {
+        "NTSDCore": {
+          "files": 124,
+          "lines": 14754
+        },
+        "NTSDApp": {
+          "files": 5,
+          "lines": 801
+        },
+        "NTSDReferenceChecks": {
+          "files": 61,
+          "lines": 9854
+        }
+      },
+      "insideEnvelopeInstructions": 28899,
+      "insideEnvelopeConditionalInstructions": 3204
+    }
+  ],
+  "spans": [
+    {
+      "start": "0x401000",
+      "endExclusive": "0x401290",
+      "bytes": 656,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401290",
+      "endExclusive": "0x4012ff",
+      "bytes": 111,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4012ff",
+      "endExclusive": "0x4014e0",
+      "bytes": 481,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4014e0",
+      "endExclusive": "0x40195f",
+      "bytes": 1151,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40195f",
+      "endExclusive": "0x4019b0",
+      "bytes": 81,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4019b0",
+      "endExclusive": "0x401a27",
+      "bytes": 119,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x401a27",
+      "endExclusive": "0x401a30",
+      "bytes": 9,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401a30",
+      "endExclusive": "0x401a70",
+      "bytes": 64,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x401a70",
+      "endExclusive": "0x401c90",
+      "bytes": 544,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401c90",
+      "endExclusive": "0x401d27",
+      "bytes": 151,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x401d27",
+      "endExclusive": "0x401d30",
+      "bytes": 9,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401d30",
+      "endExclusive": "0x401d91",
+      "bytes": 97,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x401d91",
+      "endExclusive": "0x401da0",
+      "bytes": 15,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401da0",
+      "endExclusive": "0x401e86",
+      "bytes": 230,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x401e86",
+      "endExclusive": "0x401f30",
+      "bytes": 170,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x401f30",
+      "endExclusive": "0x402000",
+      "bytes": 208,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x402000",
+      "endExclusive": "0x402020",
+      "bytes": 32,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x402020",
+      "endExclusive": "0x4020be",
+      "bytes": 158,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4020be",
+      "endExclusive": "0x4020cf",
+      "bytes": 17,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4020cf",
+      "endExclusive": "0x4020f7",
+      "bytes": 40,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4020f7",
+      "endExclusive": "0x402810",
+      "bytes": 1817,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x402810",
+      "endExclusive": "0x402894",
+      "bytes": 132,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x402894",
+      "endExclusive": "0x4028a0",
+      "bytes": 12,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4028a0",
+      "endExclusive": "0x402a60",
+      "bytes": 448,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x402a60",
+      "endExclusive": "0x402b60",
+      "bytes": 256,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x402b60",
+      "endExclusive": "0x402d64",
+      "bytes": 516,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x402d64",
+      "endExclusive": "0x403270",
+      "bytes": 1292,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x403270",
+      "endExclusive": "0x4034d4",
+      "bytes": 612,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4034d4",
+      "endExclusive": "0x4034e0",
+      "bytes": 12,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4034e0",
+      "endExclusive": "0x4034eb",
+      "bytes": 11,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4034eb",
+      "endExclusive": "0x4061d0",
+      "bytes": 11493,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4061d0",
+      "endExclusive": "0x4064cd",
+      "bytes": 765,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4064cd",
+      "endExclusive": "0x40bbf0",
+      "bytes": 22307,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40bbf0",
+      "endExclusive": "0x40bd84",
+      "bytes": 404,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40bd84",
+      "endExclusive": "0x40be01",
+      "bytes": 125,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40be01",
+      "endExclusive": "0x40be38",
+      "bytes": 55,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40be38",
+      "endExclusive": "0x40c030",
+      "bytes": 504,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40c030",
+      "endExclusive": "0x40c0dc",
+      "bytes": 172,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40c0dc",
+      "endExclusive": "0x40c0e0",
+      "bytes": 4,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40c0e0",
+      "endExclusive": "0x40c158",
+      "bytes": 120,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40c158",
+      "endExclusive": "0x40c160",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40c160",
+      "endExclusive": "0x40c902",
+      "bytes": 1954,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40c902",
+      "endExclusive": "0x40c910",
+      "bytes": 14,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40c910",
+      "endExclusive": "0x40d09e",
+      "bytes": 1934,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40d09e",
+      "endExclusive": "0x40de30",
+      "bytes": 3474,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40de30",
+      "endExclusive": "0x40e161",
+      "bytes": 817,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40e161",
+      "endExclusive": "0x40e170",
+      "bytes": 15,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40e170",
+      "endExclusive": "0x40e2c9",
+      "bytes": 345,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40e2c9",
+      "endExclusive": "0x40e2d0",
+      "bytes": 7,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40e2d0",
+      "endExclusive": "0x40e446",
+      "bytes": 374,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40e446",
+      "endExclusive": "0x40e450",
+      "bytes": 10,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40e450",
+      "endExclusive": "0x40e48b",
+      "bytes": 59,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40e48b",
+      "endExclusive": "0x40e490",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40e490",
+      "endExclusive": "0x40ef6b",
+      "bytes": 2779,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x40ef6b",
+      "endExclusive": "0x40ef70",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x40ef70",
+      "endExclusive": "0x4122e8",
+      "bytes": 13176,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4122e8",
+      "endExclusive": "0x4122f0",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4122f0",
+      "endExclusive": "0x4127fc",
+      "bytes": 1292,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4127fc",
+      "endExclusive": "0x412800",
+      "bytes": 4,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x412800",
+      "endExclusive": "0x413078",
+      "bytes": 2168,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x413078",
+      "endExclusive": "0x413080",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x413080",
+      "endExclusive": "0x4143cc",
+      "bytes": 4940,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4143cc",
+      "endExclusive": "0x414a30",
+      "bytes": 1636,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x414a30",
+      "endExclusive": "0x414b70",
+      "bytes": 320,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x414b70",
+      "endExclusive": "0x415160",
+      "bytes": 1520,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x415160",
+      "endExclusive": "0x4151c3",
+      "bytes": 99,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4151c3",
+      "endExclusive": "0x416c70",
+      "bytes": 6829,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x416c70",
+      "endExclusive": "0x416fae",
+      "bytes": 830,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x416fae",
+      "endExclusive": "0x416fb0",
+      "bytes": 2,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x416fb0",
+      "endExclusive": "0x417083",
+      "bytes": 211,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x417083",
+      "endExclusive": "0x417090",
+      "bytes": 13,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x417090",
+      "endExclusive": "0x417163",
+      "bytes": 211,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x417163",
+      "endExclusive": "0x417170",
+      "bytes": 13,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x417170",
+      "endExclusive": "0x4171bd",
+      "bytes": 77,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4171bd",
+      "endExclusive": "0x4171c0",
+      "bytes": 3,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4171c0",
+      "endExclusive": "0x4171fd",
+      "bytes": 61,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4171fd",
+      "endExclusive": "0x417200",
+      "bytes": 3,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x417200",
+      "endExclusive": "0x4173fb",
+      "bytes": 507,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4173fb",
+      "endExclusive": "0x417400",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x417400",
+      "endExclusive": "0x417f7c",
+      "bytes": 2940,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x417f7c",
+      "endExclusive": "0x417f80",
+      "bytes": 4,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x417f80",
+      "endExclusive": "0x4187a4",
+      "bytes": 2084,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4187a4",
+      "endExclusive": "0x4187b0",
+      "bytes": 12,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4187b0",
+      "endExclusive": "0x419374",
+      "bytes": 3012,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x419374",
+      "endExclusive": "0x419380",
+      "bytes": 12,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x419380",
+      "endExclusive": "0x4196e0",
+      "bytes": 864,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4196e0",
+      "endExclusive": "0x4197a0",
+      "bytes": 192,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4197a0",
+      "endExclusive": "0x4198ea",
+      "bytes": 330,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4198ea",
+      "endExclusive": "0x4198f0",
+      "bytes": 6,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4198f0",
+      "endExclusive": "0x419a51",
+      "bytes": 353,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x419a51",
+      "endExclusive": "0x419a60",
+      "bytes": 15,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x419a60",
+      "endExclusive": "0x419e2f",
+      "bytes": 975,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x419e2f",
+      "endExclusive": "0x419e40",
+      "bytes": 17,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x419e40",
+      "endExclusive": "0x419e60",
+      "bytes": 32,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x419e60",
+      "endExclusive": "0x41a050",
+      "bytes": 496,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41a050",
+      "endExclusive": "0x41a24e",
+      "bytes": 510,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41a24e",
+      "endExclusive": "0x41a250",
+      "bytes": 2,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41a250",
+      "endExclusive": "0x41a591",
+      "bytes": 833,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41a591",
+      "endExclusive": "0x41b5d0",
+      "bytes": 4159,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41b5d0",
+      "endExclusive": "0x41bc88",
+      "bytes": 1720,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41bc88",
+      "endExclusive": "0x41bc90",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41bc90",
+      "endExclusive": "0x41d4b8",
+      "bytes": 6184,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41d4b8",
+      "endExclusive": "0x41d5db",
+      "bytes": 291,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41d5db",
+      "endExclusive": "0x41d715",
+      "bytes": 314,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41d715",
+      "endExclusive": "0x41e339",
+      "bytes": 3108,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41e339",
+      "endExclusive": "0x41eed2",
+      "bytes": 2969,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41eed2",
+      "endExclusive": "0x41eed8",
+      "bytes": 6,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41eed8",
+      "endExclusive": "0x41f497",
+      "bytes": 1471,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41f497",
+      "endExclusive": "0x41f4ac",
+      "bytes": 21,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41f4ac",
+      "endExclusive": "0x41f546",
+      "bytes": 154,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41f546",
+      "endExclusive": "0x41fb4e",
+      "bytes": 1544,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x41fb4e",
+      "endExclusive": "0x41fc62",
+      "bytes": 276,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x41fc62",
+      "endExclusive": "0x4229e2",
+      "bytes": 11648,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4229e2",
+      "endExclusive": "0x422ab9",
+      "bytes": 215,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x422ab9",
+      "endExclusive": "0x422ac0",
+      "bytes": 7,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x422ac0",
+      "endExclusive": "0x422af8",
+      "bytes": 56,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x422af8",
+      "endExclusive": "0x422b00",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x422b00",
+      "endExclusive": "0x422f5a",
+      "bytes": 1114,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x422f5a",
+      "endExclusive": "0x423230",
+      "bytes": 726,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x423230",
+      "endExclusive": "0x423476",
+      "bytes": 582,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x423476",
+      "endExclusive": "0x423480",
+      "bytes": 10,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x423480",
+      "endExclusive": "0x423674",
+      "bytes": 500,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x423674",
+      "endExclusive": "0x4236d0",
+      "bytes": 92,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4236d0",
+      "endExclusive": "0x4237d4",
+      "bytes": 260,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4237d4",
+      "endExclusive": "0x423910",
+      "bytes": 316,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x423910",
+      "endExclusive": "0x423939",
+      "bytes": 41,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x423939",
+      "endExclusive": "0x4246b0",
+      "bytes": 3447,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x4246b0",
+      "endExclusive": "0x424737",
+      "bytes": 135,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x424737",
+      "endExclusive": "0x424755",
+      "bytes": 30,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x424755",
+      "endExclusive": "0x42708a",
+      "bytes": 10549,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42708a",
+      "endExclusive": "0x42709b",
+      "bytes": 17,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42709b",
+      "endExclusive": "0x427128",
+      "bytes": 141,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x427128",
+      "endExclusive": "0x42712c",
+      "bytes": 4,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42712c",
+      "endExclusive": "0x427910",
+      "bytes": 2020,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x427910",
+      "endExclusive": "0x427915",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x427915",
+      "endExclusive": "0x427ca8",
+      "bytes": 915,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x427ca8",
+      "endExclusive": "0x42873e",
+      "bytes": 2710,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42873e",
+      "endExclusive": "0x428806",
+      "bytes": 200,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x428806",
+      "endExclusive": "0x42976b",
+      "bytes": 3941,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42976b",
+      "endExclusive": "0x429eb3",
+      "bytes": 1864,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x429eb3",
+      "endExclusive": "0x429f09",
+      "bytes": 86,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x429f09",
+      "endExclusive": "0x42a0af",
+      "bytes": 422,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42a0af",
+      "endExclusive": "0x42a114",
+      "bytes": 101,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42a114",
+      "endExclusive": "0x42b291",
+      "bytes": 4477,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42b291",
+      "endExclusive": "0x42b296",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42b296",
+      "endExclusive": "0x42b95a",
+      "bytes": 1732,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42b95a",
+      "endExclusive": "0x42cf8a",
+      "bytes": 5680,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42cf8a",
+      "endExclusive": "0x42d6ee",
+      "bytes": 1892,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42d6ee",
+      "endExclusive": "0x42d704",
+      "bytes": 22,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42d704",
+      "endExclusive": "0x42e0fa",
+      "bytes": 2550,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x42e0fa",
+      "endExclusive": "0x42e100",
+      "bytes": 6,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x42e100",
+      "endExclusive": "0x431b65",
+      "bytes": 14949,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x431b65",
+      "endExclusive": "0x431b70",
+      "bytes": 11,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x431b70",
+      "endExclusive": "0x431c65",
+      "bytes": 245,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x431c65",
+      "endExclusive": "0x431dcb",
+      "bytes": 358,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x431dcb",
+      "endExclusive": "0x4328f9",
+      "bytes": 2862,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x4328f9",
+      "endExclusive": "0x43290a",
+      "bytes": 17,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43290a",
+      "endExclusive": "0x432aab",
+      "bytes": 417,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x432aab",
+      "endExclusive": "0x43c690",
+      "bytes": 39909,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43c690",
+      "endExclusive": "0x43c709",
+      "bytes": 121,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43c709",
+      "endExclusive": "0x43c710",
+      "bytes": 7,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43c710",
+      "endExclusive": "0x43c77f",
+      "bytes": 111,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43c77f",
+      "endExclusive": "0x43c780",
+      "bytes": 1,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43c780",
+      "endExclusive": "0x43cc54",
+      "bytes": 1236,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43cc54",
+      "endExclusive": "0x43cc60",
+      "bytes": 12,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43cc60",
+      "endExclusive": "0x43cf3b",
+      "bytes": 731,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43cf3b",
+      "endExclusive": "0x43cf40",
+      "bytes": 5,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43cf40",
+      "endExclusive": "0x43cf64",
+      "bytes": 36,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43cf64",
+      "endExclusive": "0x43d157",
+      "bytes": 499,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43d157",
+      "endExclusive": "0x43d19f",
+      "bytes": 72,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43d19f",
+      "endExclusive": "0x43d2a0",
+      "bytes": 257,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43d2a0",
+      "endExclusive": "0x43d2b8",
+      "bytes": 24,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43d2b8",
+      "endExclusive": "0x43d2c0",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43d2c0",
+      "endExclusive": "0x43db39",
+      "bytes": 2169,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43db39",
+      "endExclusive": "0x43db40",
+      "bytes": 7,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43db40",
+      "endExclusive": "0x43dc48",
+      "bytes": 264,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43dc48",
+      "endExclusive": "0x43dc50",
+      "bytes": 8,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43dc50",
+      "endExclusive": "0x43dd57",
+      "bytes": 263,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43dd57",
+      "endExclusive": "0x43e940",
+      "bytes": 3049,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43e940",
+      "endExclusive": "0x43e99f",
+      "bytes": 95,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43e99f",
+      "endExclusive": "0x43e9db",
+      "bytes": 60,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43e9db",
+      "endExclusive": "0x43ea96",
+      "bytes": 187,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43ea96",
+      "endExclusive": "0x43ee50",
+      "bytes": 954,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43ee50",
+      "endExclusive": "0x43ef42",
+      "bytes": 242,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43ef42",
+      "endExclusive": "0x43ef50",
+      "bytes": 14,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43ef50",
+      "endExclusive": "0x43ef69",
+      "bytes": 25,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43ef69",
+      "endExclusive": "0x43ef70",
+      "bytes": 7,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43ef70",
+      "endExclusive": "0x43f001",
+      "bytes": 145,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43f001",
+      "endExclusive": "0x43f010",
+      "bytes": 15,
+      "inEnvelope": false
+    },
+    {
+      "start": "0x43f010",
+      "endExclusive": "0x43f2ff",
+      "bytes": 751,
+      "inEnvelope": true
+    },
+    {
+      "start": "0x43f2ff",
+      "endExclusive": "0x44630a",
+      "bytes": 28683,
+      "inEnvelope": false
+    }
+  ],
+  "rangeEvidence": [
+    {
+      "start": "0x417090",
+      "stop": "0x417162",
+      "source": "native/Sources/NTSDCore/OriginalActorControl.swift",
+      "line": 296,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x416fb0",
+      "stop": "0x417082",
+      "source": "native/Sources/NTSDCore/OriginalActorControl.swift",
+      "line": 301,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413080",
+      "stop": "0x4132ef",
+      "source": "native/Sources/NTSDCore/OriginalActorInput.swift",
+      "line": 3,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40e2d0",
+      "stop": "0x40e445",
+      "source": "native/Sources/NTSDCore/OriginalActorInput.swift",
+      "line": 67,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x412800",
+      "stop": "0x413077",
+      "source": "native/Sources/NTSDCore/OriginalActorInput.swift",
+      "line": 94,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x412fdd",
+      "stop": "0x41300f",
+      "source": "native/Sources/NTSDCore/OriginalActorInput.swift",
+      "line": 128,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41324c",
+      "stop": "0x4132ef",
+      "source": "native/Sources/NTSDCore/OriginalActorInput.swift",
+      "line": 146,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43e9db",
+      "stop": "0x43ea95",
+      "source": "native/Sources/NTSDCore/OriginalApplicationKeyScan.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4187b0",
+      "stop": "0x418c2f",
+      "source": "native/Sources/NTSDCore/OriginalCPointPlacement.swift",
+      "line": 2,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43cf40",
+      "stop": "0x43cf63",
+      "source": "native/Sources/NTSDCore/OriginalCRTRandom.swift",
+      "line": 20,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41233b",
+      "stop": "0x41251c",
+      "source": "native/Sources/NTSDCore/OriginalCatalogRegistry.swift",
+      "line": 61,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42a114",
+      "stop": "0x42b290",
+      "source": "native/Sources/NTSDCore/OriginalCharacterScreen.swift",
+      "line": 23,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42e0b6",
+      "stop": "0x42e0d2",
+      "source": "native/Sources/NTSDCore/OriginalCharacterScreen.swift",
+      "line": 23,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43d157",
+      "stop": "0x43d19e",
+      "source": "native/Sources/NTSDCore/OriginalClock.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41a2b0",
+      "stop": "0x41a3ce",
+      "source": "native/Sources/NTSDCore/OriginalClock.swift",
+      "line": 19,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40f0c2",
+      "stop": "0x40f124",
+      "source": "native/Sources/NTSDCore/OriginalDATDecoder.swift",
+      "line": 25,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413080",
+      "stop": "0x413208",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 89,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41324c",
+      "stop": "0x4132ef",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 98,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4133b1",
+      "stop": "0x413766",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 111,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413b13",
+      "stop": "0x413d74",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 147,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413e75",
+      "stop": "0x413f8d",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 167,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x414080",
+      "stop": "0x414184",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 179,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x412800",
+      "stop": "0x413077",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 214,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40e6de",
+      "stop": "0x40e6eb",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 259,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40eb18",
+      "stop": "0x40ec4e",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 265,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41fb4e",
+      "stop": "0x41fc61",
+      "source": "native/Sources/NTSDCore/OriginalFighter.swift",
+      "line": 333,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41043b",
+      "stop": "0x41046e",
+      "source": "native/Sources/NTSDCore/OriginalFrameLoader.swift",
+      "line": 141,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x411ef0",
+      "stop": "0x412274",
+      "source": "native/Sources/NTSDCore/OriginalFrameLoader.swift",
+      "line": 199,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41098e",
+      "stop": "0x410a99",
+      "source": "native/Sources/NTSDCore/OriginalFrameLoader.swift",
+      "line": 230,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40bbf0",
+      "stop": "0x40bd83",
+      "source": "native/Sources/NTSDCore/OriginalFrameStorage.swift",
+      "line": 68,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424a72",
+      "stop": "0x424a9c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 8,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424aad",
+      "stop": "0x424ace",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 9,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424ada",
+      "stop": "0x424b00",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 10,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424b0c",
+      "stop": "0x424b2c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 11,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424b45",
+      "stop": "0x424b6a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 14,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424b7a",
+      "stop": "0x424b9f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 15,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424baf",
+      "stop": "0x424bd4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 16,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424be3",
+      "stop": "0x424c0e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 17,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424c1e",
+      "stop": "0x424c4d",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 18,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424c5d",
+      "stop": "0x424c88",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 19,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424ca4",
+      "stop": "0x424ccc",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 22,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424cd7",
+      "stop": "0x424cfd",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 23,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424d0c",
+      "stop": "0x424d32",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 24,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424d41",
+      "stop": "0x424d67",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 25,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424d76",
+      "stop": "0x424d9c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 26,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424dab",
+      "stop": "0x424ddc",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 27,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424de8",
+      "stop": "0x424e11",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 28,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424e1c",
+      "stop": "0x424e4e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 29,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424e5a",
+      "stop": "0x424e83",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 30,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424e8f",
+      "stop": "0x424ebd",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 31,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424ec9",
+      "stop": "0x424ef6",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 32,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424f06",
+      "stop": "0x424f33",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 33,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424f43",
+      "stop": "0x424f70",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 34,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424f7c",
+      "stop": "0x424fa9",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 35,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424fb5",
+      "stop": "0x424fe2",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 36,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424ff2",
+      "stop": "0x425017",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 37,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425023",
+      "stop": "0x425048",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 38,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425054",
+      "stop": "0x425079",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 39,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425085",
+      "stop": "0x4250aa",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 40,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4250b6",
+      "stop": "0x4250df",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 41,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4250eb",
+      "stop": "0x425114",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 42,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425120",
+      "stop": "0x425149",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 43,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425155",
+      "stop": "0x42517e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 44,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42518a",
+      "stop": "0x4251b3",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 45,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4251bf",
+      "stop": "0x4251e4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 46,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4251fd",
+      "stop": "0x425222",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 49,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425232",
+      "stop": "0x425261",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 50,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42526d",
+      "stop": "0x425292",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 51,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42529e",
+      "stop": "0x4252c8",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 52,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4252e5",
+      "stop": "0x42530a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 55,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42531a",
+      "stop": "0x425343",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 56,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425353",
+      "stop": "0x425380",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 57,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425390",
+      "stop": "0x4253bd",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 58,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4253cd",
+      "stop": "0x4253f6",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 59,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425402",
+      "stop": "0x42542b",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 60,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42543b",
+      "stop": "0x425468",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 61,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425474",
+      "stop": "0x4254a1",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 62,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4254ad",
+      "stop": "0x4254d7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 63,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4254e7",
+      "stop": "0x425514",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 64,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425524",
+      "stop": "0x425551",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 65,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425561",
+      "stop": "0x42558e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 66,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42559e",
+      "stop": "0x4255cb",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 67,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4255db",
+      "stop": "0x425608",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 68,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425618",
+      "stop": "0x425641",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 69,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42564d",
+      "stop": "0x425676",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 70,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425686",
+      "stop": "0x4256b3",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 71,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4256c3",
+      "stop": "0x4256ed",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 72,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4256f9",
+      "stop": "0x42571e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 73,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42572a",
+      "stop": "0x42574f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 74,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42575b",
+      "stop": "0x425780",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 75,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42578c",
+      "stop": "0x4257b5",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 76,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4257ca",
+      "stop": "0x4257f4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 77,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425804",
+      "stop": "0x425829",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 78,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425839",
+      "stop": "0x42586b",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 79,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425877",
+      "stop": "0x4258a4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 80,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4258b0",
+      "stop": "0x4258de",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 81,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4258ea",
+      "stop": "0x425914",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 82,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425920",
+      "stop": "0x425948",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 83,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425954",
+      "stop": "0x42597c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 84,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425988",
+      "stop": "0x4259b0",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 85,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4259bc",
+      "stop": "0x4259e9",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 86,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4259f5",
+      "stop": "0x425a1d",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 87,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425a29",
+      "stop": "0x425a51",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 88,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425a5d",
+      "stop": "0x425a85",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 89,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425a91",
+      "stop": "0x425abe",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 90,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425aca",
+      "stop": "0x425af2",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 91,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425afe",
+      "stop": "0x425b2e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 92,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425b3a",
+      "stop": "0x425b6a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 93,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425b7f",
+      "stop": "0x425ba7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 94,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425bb3",
+      "stop": "0x425bdb",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 95,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425be7",
+      "stop": "0x425c0f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 96,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425c1b",
+      "stop": "0x425c47",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 97,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425c53",
+      "stop": "0x425c7f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 98,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425c8b",
+      "stop": "0x425cb7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 99,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425cc3",
+      "stop": "0x425cef",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 100,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425cfb",
+      "stop": "0x425d27",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 101,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425d33",
+      "stop": "0x425d5f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 102,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425d6b",
+      "stop": "0x425d97",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 103,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425da3",
+      "stop": "0x425dd0",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 104,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425de0",
+      "stop": "0x425e0c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 105,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425e1c",
+      "stop": "0x425e48",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 106,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425e65",
+      "stop": "0x425e8a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 109,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425e9a",
+      "stop": "0x425ec0",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 110,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425ed0",
+      "stop": "0x425ef9",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 111,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425f09",
+      "stop": "0x425f32",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 112,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425f42",
+      "stop": "0x425f6f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 113,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425f7f",
+      "stop": "0x425fa8",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 114,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425fb4",
+      "stop": "0x425fe1",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 115,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x425ff1",
+      "stop": "0x42601f",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 116,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42602f",
+      "stop": "0x426058",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 117,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426068",
+      "stop": "0x426091",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 118,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4260a1",
+      "stop": "0x4260ce",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 119,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4260de",
+      "stop": "0x426108",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 120,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426114",
+      "stop": "0x42613d",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 121,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426149",
+      "stop": "0x426172",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 122,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42617e",
+      "stop": "0x4261a7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 123,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4261b3",
+      "stop": "0x4261dc",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 124,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4261e8",
+      "stop": "0x426211",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 125,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42621d",
+      "stop": "0x426246",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 126,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426252",
+      "stop": "0x42627b",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 127,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426287",
+      "stop": "0x4262b4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 128,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4262c4",
+      "stop": "0x4262f1",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 129,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426301",
+      "stop": "0x42632e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 130,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42633e",
+      "stop": "0x426363",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 131,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426373",
+      "stop": "0x426398",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 132,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4263a8",
+      "stop": "0x4263d5",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 133,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4263f2",
+      "stop": "0x426417",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 136,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426427",
+      "stop": "0x426451",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 137,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426461",
+      "stop": "0x42648a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 138,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42649a",
+      "stop": "0x4264c4",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 139,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4264d4",
+      "stop": "0x4264f9",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 140,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426509",
+      "stop": "0x426537",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 141,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426547",
+      "stop": "0x426574",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 142,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426580",
+      "stop": "0x4265a9",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 143,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4265b9",
+      "stop": "0x4265e7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 144,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4265f3",
+      "stop": "0x42661c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 145,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426628",
+      "stop": "0x426651",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 146,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42665d",
+      "stop": "0x426686",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 147,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42669f",
+      "stop": "0x4266c5",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 150,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4266d5",
+      "stop": "0x4266fe",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 151,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42670e",
+      "stop": "0x426737",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 152,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426747",
+      "stop": "0x42676c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 153,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42677c",
+      "stop": "0x4267a5",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 154,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4267b5",
+      "stop": "0x4267df",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 155,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4267eb",
+      "stop": "0x426810",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 156,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42681c",
+      "stop": "0x426849",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 157,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426866",
+      "stop": "0x42688c",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 160,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42689c",
+      "stop": "0x4268c1",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 161,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4268d1",
+      "stop": "0x4268f6",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 162,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426906",
+      "stop": "0x426930",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 163,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42693c",
+      "stop": "0x426965",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 164,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426970",
+      "stop": "0x426998",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 165,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4269ad",
+      "stop": "0x4269d7",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 166,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4269e3",
+      "stop": "0x426a08",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 167,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426a14",
+      "stop": "0x426a39",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 168,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426a45",
+      "stop": "0x426a6a",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 169,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426a76",
+      "stop": "0x426aa3",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 170,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426ab3",
+      "stop": "0x426ad6",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 171,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426ae2",
+      "stop": "0x426b0e",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 172,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426b23",
+      "stop": "0x426b4d",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 173,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x426b5d",
+      "stop": "0x426b80",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift",
+      "line": 174,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x424755",
+      "stop": "0x427089",
+      "source": "native/Sources/NTSDCore/OriginalFrontMenuResources.swift",
+      "line": 17,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4275cb",
+      "stop": "0x42790f",
+      "source": "native/Sources/NTSDCore/OriginalFrontScreenAlternate.swift",
+      "line": 12,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42712c",
+      "stop": "0x4275cb",
+      "source": "native/Sources/NTSDCore/OriginalFrontScreenBody.swift",
+      "line": 10,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42709b",
+      "stop": "0x427127",
+      "source": "native/Sources/NTSDCore/OriginalFrontScreenPrelude.swift",
+      "line": 34,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42e87d",
+      "stop": "0x42fdf2",
+      "source": "native/Sources/NTSDCore/OriginalHitDamage.swift",
+      "line": 2,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42f70f",
+      "stop": "0x42fcaa",
+      "source": "native/Sources/NTSDCore/OriginalHitDamage.swift",
+      "line": 142,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42fdf2",
+      "stop": "0x43056e",
+      "source": "native/Sources/NTSDCore/OriginalHitGuard.swift",
+      "line": 2,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43056e",
+      "stop": "0x43187a",
+      "source": "native/Sources/NTSDCore/OriginalHitSpecial.swift",
+      "line": 2,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41c2f5",
+      "stop": "0x41c581",
+      "source": "native/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift",
+      "line": 47,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41bc90",
+      "stop": "0x41c581",
+      "source": "native/Sources/NTSDCore/OriginalInitialLoading.swift",
+      "line": 40,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41be98",
+      "stop": "0x41bfeb",
+      "source": "native/Sources/NTSDCore/OriginalInitialSoundLoading.swift",
+      "line": 10,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41c5e5",
+      "stop": "0x41d46f",
+      "source": "native/Sources/NTSDCore/OriginalInputControl.swift",
+      "line": 55,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x416c70",
+      "stop": "0x416fad",
+      "source": "native/Sources/NTSDCore/OriginalInputControl.swift",
+      "line": 193,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x422b00",
+      "stop": "0x422f59",
+      "source": "native/Sources/NTSDCore/OriginalKeyName.swift",
+      "line": 3,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41c581",
+      "stop": "0x41c5e5",
+      "source": "native/Sources/NTSDCore/OriginalLocalInput.swift",
+      "line": 13,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x427915",
+      "stop": "0x427ca7",
+      "source": "native/Sources/NTSDCore/OriginalMainMenu.swift",
+      "line": 67,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42d704",
+      "stop": "0x42e0d2",
+      "source": "native/Sources/NTSDCore/OriginalMatchContinuation.swift",
+      "line": 21,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42cf8a",
+      "stop": "0x42d1ff",
+      "source": "native/Sources/NTSDCore/OriginalMatchPrelude.swift",
+      "line": 22,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x42d1ff",
+      "stop": "0x42d6ed",
+      "source": "native/Sources/NTSDCore/OriginalMatchPreparation.swift",
+      "line": 9,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43ccf2",
+      "stop": "0x43cf10",
+      "source": "native/Sources/NTSDCore/OriginalMenuPanelBitmap.swift",
+      "line": 71,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4297ae",
+      "stop": "0x429e5a",
+      "source": "native/Sources/NTSDCore/OriginalMenuResourceLoading.swift",
+      "line": 16,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4229e2",
+      "stop": "0x422a95",
+      "source": "native/Sources/NTSDCore/OriginalMenuReturn.swift",
+      "line": 3,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x429e5a",
+      "stop": "0x429e78",
+      "source": "native/Sources/NTSDCore/OriginalModeScreen.swift",
+      "line": 8,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4322ad",
+      "stop": "0x4328f8",
+      "source": "native/Sources/NTSDCore/OriginalModeSelection.swift",
+      "line": 14,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413080",
+      "stop": "0x413208",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 96,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4133b1",
+      "stop": "0x413766",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 102,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413b13",
+      "stop": "0x413d74",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 130,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x413e75",
+      "stop": "0x413f8d",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 148,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x414080",
+      "stop": "0x414184",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 160,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41b910",
+      "stop": "0x41bc74",
+      "source": "native/Sources/NTSDCore/OriginalMovement.swift",
+      "line": 194,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40de30",
+      "stop": "0x40e160",
+      "source": "native/Sources/NTSDCore/OriginalObjectDrawing.swift",
+      "line": 38,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41f4ac",
+      "stop": "0x41f545",
+      "source": "native/Sources/NTSDCore/OriginalPostDrawImpulses.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41d469",
+      "stop": "0x41d4b7",
+      "source": "native/Sources/NTSDCore/OriginalReceivedInput.swift",
+      "line": 10,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40be01",
+      "stop": "0x40be37",
+      "source": "native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift",
+      "line": 3,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x43d2c0",
+      "stop": "0x43db38",
+      "source": "native/Sources/NTSDCore/OriginalReplayRecording.swift",
+      "line": 8,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41bdce",
+      "stop": "0x41be8b",
+      "source": "native/Sources/NTSDCore/OriginalReplayTick.swift",
+      "line": 70,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41d5db",
+      "stop": "0x41d714",
+      "source": "native/Sources/NTSDCore/OriginalReplayTick.swift",
+      "line": 82,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40c9f5",
+      "stop": "0x40cb79",
+      "source": "native/Sources/NTSDCore/OriginalStageLoader.swift",
+      "line": 101,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x4061d0",
+      "stop": "0x4064cc",
+      "source": "native/Sources/NTSDCore/OriginalStateRecord.swift",
+      "line": 80,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x419e40",
+      "stop": "0x419e5f",
+      "source": "native/Sources/NTSDCore/OriginalStateRecord.swift",
+      "line": 112,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41c052",
+      "stop": "0x41c2f5",
+      "source": "native/Sources/NTSDCore/OriginalWorldBootstrap.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41c0d8",
+      "stop": "0x41c2f5",
+      "source": "native/Sources/NTSDCore/OriginalWorldBootstrap.swift",
+      "line": 40,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41f2ac",
+      "stop": "0x41f484",
+      "source": "native/Sources/NTSDCore/OriginalWorldCPoints.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41f2b8",
+      "stop": "0x41f47d",
+      "source": "native/Sources/NTSDCore/OriginalWorldCPoints.swift",
+      "line": 147,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41eed8",
+      "stop": "0x41eefb",
+      "source": "native/Sources/NTSDCore/OriginalWorldContacts.swift",
+      "line": 6,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41e339",
+      "stop": "0x41e634",
+      "source": "native/Sources/NTSDCore/OriginalWorldControl.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x41eefb",
+      "stop": "0x41f2ac",
+      "source": "native/Sources/NTSDCore/OriginalWorldHits.swift",
+      "line": 1,
+      "kind": "native-comment"
+    },
+    {
+      "start": "0x40c160",
+      "stop": "0x40c901",
+      "source": "docs/research/BACKGROUND_LOADER.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40c0e0",
+      "stop": "0x40c157",
+      "source": "docs/research/BACKGROUND_LOADER.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40c030",
+      "stop": "0x40c0db",
+      "source": "docs/research/BACKGROUND_LOADER.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43ee50",
+      "stop": "0x43ef41",
+      "source": "docs/research/BITMAP_DRAWING.md",
+      "line": 5,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43ef70",
+      "stop": "0x43f000",
+      "source": "docs/research/BITMAP_DRAWING.md",
+      "line": 5,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43f010",
+      "stop": "0x43f2fe",
+      "source": "docs/research/BITMAP_DRAWING.md",
+      "line": 5,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4122f0",
+      "stop": "0x4127fb",
+      "source": "docs/research/CATALOG_REGISTRY.md",
+      "line": 6,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x414a30",
+      "stop": "0x414b6f",
+      "source": "docs/research/STAGE_LOADER.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40c910",
+      "stop": "0x40d09d",
+      "source": "docs/research/STAGE_LOADER.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40ef70",
+      "stop": "0x4122e7",
+      "source": "docs/research/OBJECT_LOADER.md",
+      "line": 6,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4014e0",
+      "stop": "0x40195e",
+      "source": "docs/research/WAVE_LOADING.md",
+      "line": 5,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4014e0",
+      "stop": "0x40195e",
+      "source": "docs/research/WAVE_LOADING.md",
+      "line": 28,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43c780",
+      "stop": "0x43cc53",
+      "source": "docs/research/MENU_CONTENT.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43cc60",
+      "stop": "0x43cf3a",
+      "source": "docs/research/MENU_PANEL_BITMAP.md",
+      "line": 5,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43c690",
+      "stop": "0x43c708",
+      "source": "docs/research/MENU_INFO_WRITING.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43c710",
+      "stop": "0x43c77e",
+      "source": "docs/research/MENU_INFO_WRITING.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x423230",
+      "stop": "0x423475",
+      "source": "docs/research/SETTINGS_WRITING.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x427915",
+      "stop": "0x427ca7",
+      "source": "docs/research/MAIN_MENU.md",
+      "line": 26,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x422ac0",
+      "stop": "0x422af7",
+      "source": "docs/research/MAIN_MENU.md",
+      "line": 27,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401a30",
+      "stop": "0x401a6f",
+      "source": "docs/research/MAIN_MENU.md",
+      "line": 28,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x402b60",
+      "stop": "0x402d63",
+      "source": "docs/research/MAIN_MENU.md",
+      "line": 29,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42d704",
+      "stop": "0x42e0f9",
+      "source": "docs/research/MATCH_CONTINUATION.md",
+      "line": 9,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42873e",
+      "stop": "0x428805",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 15,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4246b0",
+      "stop": "0x424736",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 16,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43ef50",
+      "stop": "0x43ef68",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 17,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x423910",
+      "stop": "0x423938",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 17,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401f30",
+      "stop": "0x401fff",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 18,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x402810",
+      "stop": "0x402893",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 18,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4028a0",
+      "stop": "0x402a5f",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 19,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401290",
+      "stop": "0x4012fe",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 20,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43e940",
+      "stop": "0x43e99e",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 21,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4019b0",
+      "stop": "0x401a26",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 22,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43d2a0",
+      "stop": "0x43d2b7",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 22,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401d30",
+      "stop": "0x401d90",
+      "source": "docs/research/MENU_PRESENTATION.md",
+      "line": 22,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x429e5a",
+      "stop": "0x429eb2",
+      "source": "docs/research/MODE_SCREEN.md",
+      "line": 38,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x431dcb",
+      "stop": "0x432137",
+      "source": "docs/research/MODE_SCREEN.md",
+      "line": 42,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x432137",
+      "stop": "0x4322ad",
+      "source": "docs/research/MODE_SCREEN.md",
+      "line": 43,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x43290a",
+      "stop": "0x4329a8",
+      "source": "docs/research/MODE_SCREEN.md",
+      "line": 46,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4329a8",
+      "stop": "0x432aaa",
+      "source": "docs/research/MODE_SCREEN.md",
+      "line": 47,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42976b",
+      "stop": "0x4297ae",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 27,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x402020",
+      "stop": "0x40207f",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 28,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401d30",
+      "stop": "0x401d90",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 29,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401c90",
+      "stop": "0x401d26",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 30,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401da0",
+      "stop": "0x401e85",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 31,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x402080",
+      "stop": "0x4020bd",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 32,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x401f30",
+      "stop": "0x401fff",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 33,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4020cf",
+      "stop": "0x4020f6",
+      "source": "docs/research/MUSIC_PLAYBACK.md",
+      "line": 34,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42e0d2",
+      "stop": "0x42e0f9",
+      "source": "docs/research/MENU_RETURN.md",
+      "line": 24,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4229e2",
+      "stop": "0x422a95",
+      "source": "docs/research/MENU_RETURN.md",
+      "line": 25,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x422a95",
+      "stop": "0x422ab8",
+      "source": "docs/research/MENU_RETURN.md",
+      "line": 26,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4287de",
+      "stop": "0x428805",
+      "source": "docs/research/MENU_RETURN.md",
+      "line": 28,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40e450",
+      "stop": "0x40e48a",
+      "source": "docs/research/ACTOR_INPUT.md",
+      "line": 32,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40e170",
+      "stop": "0x40e2c8",
+      "source": "docs/research/ACTOR_INPUT.md",
+      "line": 34,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40e2d0",
+      "stop": "0x40e445",
+      "source": "docs/research/ACTOR_INPUT.md",
+      "line": 35,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x413080",
+      "stop": "0x4143cb",
+      "source": "docs/research/ACTOR_CONTROL.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x417090",
+      "stop": "0x417162",
+      "source": "docs/research/ACTOR_CONTROL.md",
+      "line": 31,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x417170",
+      "stop": "0x4171bc",
+      "source": "docs/research/ACTOR_CONTROL.md",
+      "line": 32,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x40e490",
+      "stop": "0x40ef6a",
+      "source": "docs/research/ACTOR_PHYSICS.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x416fb0",
+      "stop": "0x417082",
+      "source": "docs/research/ACTOR_PHYSICS.md",
+      "line": 25,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x429f09",
+      "stop": "0x42a0ae",
+      "source": "docs/research/CHARACTER_SCREEN.md",
+      "line": 47,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42b296",
+      "stop": "0x42b959",
+      "source": "docs/research/MATCH_SELECTION.md",
+      "line": 34,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41e339",
+      "stop": "0x41e634",
+      "source": "docs/research/WORLD_CONTROL.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x403270",
+      "stop": "0x4034d3",
+      "source": "docs/research/WORLD_CONTROL.md",
+      "line": 17,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4034e0",
+      "stop": "0x4034ea",
+      "source": "docs/research/WORLD_CONTROL.md",
+      "line": 17,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41e634",
+      "stop": "0x41eed1",
+      "source": "docs/research/WORLD_PHYSICS.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x417f80",
+      "stop": "0x4187a3",
+      "source": "docs/research/WORLD_LINKS.md",
+      "line": 7,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x419380",
+      "stop": "0x4195ff",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 17,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4195ff",
+      "stop": "0x4196d3",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 18,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x417200",
+      "stop": "0x4173fa",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 19,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4171c0",
+      "stop": "0x4171fc",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 20,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x417400",
+      "stop": "0x417f7b",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 21,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4196d3",
+      "stop": "0x4196df",
+      "source": "docs/research/WORLD_CONTACTS.md",
+      "line": 22,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x42e100",
+      "stop": "0x431b64",
+      "source": "docs/research/WORLD_HITS.md",
+      "line": 161,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x418c30",
+      "stop": "0x419373",
+      "source": "docs/research/WORLD_CPOINTS.md",
+      "line": 14,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x4187b0",
+      "stop": "0x418c2f",
+      "source": "docs/research/WORLD_CPOINTS.md",
+      "line": 15,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41b5d0",
+      "stop": "0x41bc87",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 25,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41a250",
+      "stop": "0x41a590",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 26,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41a050",
+      "stop": "0x41a24d",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 27,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x415160",
+      "stop": "0x4151c2",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 29,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41f484",
+      "stop": "0x41f496",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 31,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x41f484",
+      "stop": "0x41f496",
+      "source": "docs/research/WORLD_CAMERA.md",
+      "line": 167,
+      "kind": "reviewed-study"
+    },
+    {
+      "start": "0x419a60",
+      "stop": "0x419e2e",
+      "source": "docs/research/LOCAL_INPUT.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_local_input.py"
+    },
+    {
+      "start": "0x4197a0",
+      "stop": "0x4198e9",
+      "source": "docs/research/RECEIVED_INPUT.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_received_input.py"
+    },
+    {
+      "start": "0x4198f0",
+      "stop": "0x419a50",
+      "source": "docs/research/RECEIVED_INPUT.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_received_input.py"
+    },
+    {
+      "start": "0x4236d0",
+      "stop": "0x4237d3",
+      "source": "docs/research/MENU_PANEL_UPDATE.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_menu_panel_update.py"
+    },
+    {
+      "start": "0x423480",
+      "stop": "0x423673",
+      "source": "docs/research/SETTINGS_LOADING.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_settings_loading.py"
+    },
+    {
+      "start": "0x431b70",
+      "stop": "0x431c64",
+      "source": "docs/research/MODE_SELECTION.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_mode_selection.py"
+    },
+    {
+      "start": "0x43db40",
+      "stop": "0x43dc47",
+      "source": "docs/research/REPLAY_TICK.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_replay_tick.py"
+    },
+    {
+      "start": "0x43dc50",
+      "stop": "0x43dd56",
+      "source": "docs/research/REPLAY_TICK.md",
+      "line": 1,
+      "kind": "whole-body-envelope",
+      "terminalRetSource": "tools/oracle_replay_tick.py"
+    }
+  ]
+}
