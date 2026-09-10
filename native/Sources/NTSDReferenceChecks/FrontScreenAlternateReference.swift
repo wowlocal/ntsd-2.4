@@ -27,7 +27,7 @@ public enum FrontScreenAlternateReference {
     }
     private struct Corpus: Decodable { let exeSHA256: String, dllSHA256: String, initialGlobals: String, initialLocal: Storage, cases: [Case], blobs: [String:Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front screen alternate reference: "+text) }
-    public static func compare(_ data: Data,onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32]) throws -> Void)? = nil) throws -> Result {
+    public static func compare(_ data: Data,libraryEnabled: Bool = false,onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32]) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",!c.cases.isEmpty else { throw error("Source identity") }
@@ -60,7 +60,7 @@ public enum FrontScreenAlternateReference {
         guard let document = try JSONSerialization.jsonObject(with: raw) as? [String:Any],var parent = document["parent"] as? [String:Any] else { throw error("Parent document") }
         parent["blobs"] = document["blobs"]
         var ownWorld: OriginalStateRecord?,ownGlobals: OriginalStateRecord?,ownLocal: OriginalStateRecord?,bitmaps: [UInt32:OriginalLoadedBitmap] = [:],surfaces: [UInt32:UInt32] = [:]
-        result.parent = try FrontScreenBodyReference.compare(JSONSerialization.data(withJSONObject: parent)) { world,state,local,resources,tokens in
+        result.parent = try FrontScreenBodyReference.compare(JSONSerialization.data(withJSONObject: parent),libraryEnabled: libraryEnabled) { world,state,local,resources,tokens in
             try check(state,globals(c.initialGlobals),"Own native body globals");try check(local,storage(c.initialLocal),"Own native body stack")
             ownWorld = world;ownGlobals = state;ownLocal = local;bitmaps = resources;surfaces = tokens
         }

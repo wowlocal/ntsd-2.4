@@ -595,6 +595,40 @@ wholemenus1/2/3, ownhostname provenance, librarytext routing and actualoutput/
 return/listener joins. All218pins stay immutable; unknownhostname storage stays
 unknown. ActualWindows/CRT/lib/fullapp/fullmatch/content/clean-Mac goal stays open.
 
+[NETWORK_MENU](docs/research/NETWORK_MENU.md) now composes whole427ca7 UI
+with library-enabled parent/body/presentation and the actual epilogue. BOTH
+fresh parents reproduce; each944caller starts/938UI/943ret4 then actual41bc90
+loading entry,60632/67198events and87network requests. Hostname51 bytes begin
+unknown; realmenu1→3 produces its NUL/index, then own append/backspace bytes.
+All300keys/bothShift paths,252rectangle controls, capacity/retained keys, timer
+wrap/dots, background missing/color-key failures and deferred client/error/exit
+paths compare. Enter displays Connecting; connect occurs on a later tick.
+
+Three17-start controls each match12UI and explicitly reject one unknown own
+partial receive at local+270/f4/114; source reads14/52/44 unknown bytes. They
+are NOT three successful native matches. Two additional enabled-sound controls
+each match20whole returns/16UI/27COMsound methods, including negativeHRESULTs
+and GetDC. All1944UI matches retain fullWorld/globals/hostname/resources and
+newlocal writes; source private stack remains unimported. Semantic root18World
+and root20target are proven arguments. SourceUI/tail CW0 remains0: this early
+VM has no CRT FPU startup, unlike the gameplayCW023f chain. No native process
+FPU, Windows, actualdevice or privateABI equivalence follows.
+
+Raw14tests18.195s/build48.80s; firstpackaged23tests22.745s/build49.08s; sound
+raw23tests9.930s/build0.27s. Final all-seven packaged23tests23.957s/build50.08s passed.
+218old+5firstpublished+2sound=225immutablepins; raw/packedJSON/bytes/SHA/all
+blobs/10vendorfiles/570isolatednativefiles checked. Jobs and observer corrections:
+build/research/network-menu-work.json. Source/raw/packaged jobs are terminal;
+no source restarted for silence. All6 foreign transform files stay untouched.
+
+Resource/audio/listener bindings in controlled variants are NOT own initialized
+producers. Main matrices keep device flag0; additive sound controls explicitly
+enable it. Partial source returns remain unsupported own reads with rollback.
+Reference callback composes these helpers; production OriginalFrontMenuLoop
+still returnsotherSelector and Practice is not wired to the new menus. NEXT
+CRT/NLS/WinMain, remaininglibraryhooks and initialized runtime/listener joins;
+whole app/window/input/audio/latency/Windows/match/content/clean-Mac remain open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

@@ -9,6 +9,7 @@ public enum FrontMenuLoopReference {
         public var helpers = 0, events = 0, draws = 0, reads = 0, clips = 0, blits = 0, fills = 0, constructors = 0, frees = 0, tables = 0, random = 0
         public var settings = 0, settingsReturns = 0, settingsEvents = 0, prints = 0, fileWrites = 0, failedWrites = 0, records = 0, bytes = 0
         public var parent = FrontMenuCompletionReference.Result()
+        public var libraryText: OriginalLibSurfaceText?
     }
     private struct Blob: Decodable { let count: Int, sha256: String, deflate: String }
     private struct Storage: Decodable { let bytes: String, defined: String }
@@ -23,7 +24,7 @@ public enum FrontMenuLoopReference {
     private struct Allocation: Decodable { let address: UInt32, backing: String? }
     private struct BitmapInput: Decodable { let resource: OriginalBitmapInput, surface: UInt32, colorKeyResult: Int32 }
     private struct Prefix: Decodable { let input: OriginalFrontScreenInput, fillBacking: String, allocation: Allocation?, bitmapInput: BitmapInput? }
-    private struct Body: Decodable { let input: OriginalFrontScreenBodyInput, local: Storage }
+    private struct Body: Decodable { let input: OriginalFrontScreenBodyInput, local: Storage;let libraryDCBefore: UInt32?,libraryDCAfter: UInt32? }
     private struct Fill: Decodable { let backing: String, address: UInt32 }
     private struct WriterEvent: Decodable {
         let kind: String, arguments: [UInt32], strings: [[UInt8]], format: String?, result: UInt32?, returnPC: UInt32?
@@ -41,6 +42,7 @@ public enum FrontMenuLoopReference {
     private struct Completion: Decodable {
         let entry: String, stimulus: [InputControlReference.GlobalWrite], input: CompletionInput, mainExit: OriginalMainMenuExit?, mainAfter: Snapshot?, mainEvents: Int?
         let helpers: [Helper], random: [Random], after: Snapshot, abi: ABI
+        let libraryDCBefore: UInt32?,libraryDCAfter: UInt32?
     }
     private struct Events: Decodable { let events: [OriginalFrontScreenEvent] }
     private struct Update: Decodable { let events: [OriginalMenuPanelUpdateEvent], children: [Empty], panelRecords: [Empty] }
@@ -74,6 +76,9 @@ public enum FrontMenuLoopReference {
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front menu loop reference: "+text) }
 
     public static func compare(_ data: Data,onLoading: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
+        try compare(data,libraryEnabled: false,continueNetwork: nil,onLoading: onLoading)
+    }
+    public static func compare(_ data: Data,libraryEnabled: Bool,continueNetwork: ((Int,inout OriginalStateRecord,inout OriginalStateRecord,inout OriginalCRTRandom,inout OriginalMenuPresentationMemory,inout OriginalLibSurfaceText,OriginalStateRecord?,inout OriginalFrontScreenPrelude) throws -> Void)? = nil,onLoading: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",!c.cases.isEmpty else { throw error("Source identity") }
@@ -105,11 +110,13 @@ public enum FrontMenuLoopReference {
             let bytes = try blob(s.dib),dib = try OriginalStateRecord(bytes: bytes,defined: [Bool](repeating: true,count: bytes.count))
             guard bytes.count >= 40,sources[s.path] == nil,try dib.integer(at: 4,as: Int32.self) == s.width,try dib.integer(at: 8,as: Int32.self) == s.height else { throw error("DIB identity") };sources[s.path] = s
         }
-        guard Set(sources.keys) == ["MENU_BACK1","MENU_BACK13"] else { throw error("Declared background inventory") }
+        if libraryEnabled {
+            guard !sources.isEmpty,sources.keys.allSatisfy({ path in (1...13).contains { path == "MENU_BACK\($0)" } }) else { throw error("Library background inventory") }
+        } else { guard Set(sources.keys) == ["MENU_BACK1","MENU_BACK13"] else { throw error("Declared background inventory") } }
         guard let document = try JSONSerialization.jsonObject(with: raw) as? [String:Any],var parent = document["parent"] as? [String:Any] else { throw error("Parent document") }
         parent["blobs"] = document["blobs"]
         var ownWorld: OriginalStateRecord?,ownGlobals: OriginalStateRecord?,ownCRT: OriginalCRTRandom?,ownMemory: OriginalMenuPresentationMemory?,ownPrefix: OriginalFrontScreenPrelude?
-        result.parent = try FrontMenuCompletionReference.compare(JSONSerialization.data(withJSONObject: parent)) { world,state,crt,bitmaps,surfaces,memory in
+        result.parent = try FrontMenuCompletionReference.compare(JSONSerialization.data(withJSONObject: parent),libraryEnabled: libraryEnabled) { world,state,crt,bitmaps,surfaces,memory in
             try check(state,globals(c.initialGlobals),"Own native first return");guard crt.state == c.initialCRT else { throw error("Own parent CRT") }
             let address = try state.integer(at: 0x4511ac-OriginalMatchPreparation.globalBase,as: UInt32.self)
             guard let bitmap = bitmaps[address],let surface = surfaces[address] else { throw error("Own parent background") }
@@ -118,6 +125,8 @@ public enum FrontMenuLoopReference {
         }
         guard var world = ownWorld,var state = ownGlobals,var crt = ownCRT,var memory = ownMemory,var prefix = ownPrefix else { throw error("Missing native parent") }
         var resources = OriginalFrontMenuResources()
+        var libraryText = result.parent.libraryText ?? OriginalLibSurfaceText()
+        guard (result.parent.libraryText != nil) == libraryEnabled else { throw error("Library first-return route") }
         func records(_ expected: [Record],_ label: String) throws {
             guard expected.count == memory.allocations.count,Set(expected.map(\.address)).count == expected.count else { throw error(label+" inventory") }
             for r in expected {
@@ -132,8 +141,8 @@ public enum FrontMenuLoopReference {
         let helperReturns: [UInt32:Set<UInt32>] = [
             0x415160:[0x4270df,0x427884],0x4237e0:[0x4270c9,0x4276a9],0x43c450:[0x4270c9,0x4276a9],0x423840:[0x4270f1],0x43ee50:[0x4238e6],
             0x43ef70:[0x43f0d5,0x43f212],0x43f010:[0x427114,0x4274f7,0x42752b,0x427566,0x42759d,0x4275bc,0x427616,0x42762b,0x42766c,0x4276e8,0x42776d,0x4277b8,0x4277d6,0x4277ee,0x427817,0x4278d9,0x42471c,0x427937,0x4279f0,0x427a90,0x428778],
-            0x401290:[0x427257,0x42727d,0x4272a4,0x4272f3,0x4273ac,0x42745d],0x401a30:[0x427318,0x4273d1,0x427482,0x427556,0x4276a4,0x427720,0x427798,0x4278f5,0x427a19],
-            0x423230:[0x42768d,0x427709],0x4028a0:[0x424728,0x42877e],0x422ac0:[0x427a31,0x427a76],0x423910:[0x424708],0x423b00:[0x427a60,0x427c9f],0x43e940:[0x424733,0x428789],0x43ef50:[0x42391f]
+            0x401290:[0x427257,0x42727d,0x4272a4,0x4272f3,0x4273ac,0x42745d],0x401a30:[0x427318,0x4273d1,0x427482,0x427556,0x4276a4,0x427720,0x427798,0x4278f5,0x427a19,0x427ab9],
+            0x402a60:[0x402b28],0x402ad0:[0x402c4d],0x402b60:[0x427acb],0x423230:[0x42768d,0x427709],0x4028a0:[0x424728,0x42877e],0x422ac0:[0x427a31,0x427a76],0x423910:[0x424708],0x423b00:[0x427a60,0x427c9f],0x43e940:[0x424733,0x428789],0x43ef50:[0x42391f]
         ]
         func helpers(_ values: [Helper]) throws {
             for h in values {
@@ -208,7 +217,12 @@ public enum FrontMenuLoopReference {
             },body: { state in
                 let p = try take("body"),i = p.body!;guard let backing = p.backing else { throw error("Before-body scratch") }
                 var local = try OriginalStateRecord(bytes: blob(backing),defined: [Bool](repeating: false,count: 0xc0)),blits = 0
-                let end = try OriginalFrontScreenBody.advance(globals: &state,local: &local,input: i.input,draw: { try draw($0,i.input.drawResults,&blits,width,height,memory.allocations,event) },observe: event)
+                let end: OriginalFrontScreenBody.Continuation
+                if libraryEnabled {
+                    guard i.libraryDCBefore == libraryText.retainedDC else { throw error("Own body DC before") }
+                    end = try OriginalFrontScreenBody.advanceWithLibrary(globals: &state,local: &local,libraryText: &libraryText,input: i.input,draw: { try draw($0,i.input.drawResults,&blits,width,height,memory.allocations,event) },observe: event)
+                    guard i.libraryDCAfter == libraryText.retainedDC else { throw error("Own body DC after") }
+                } else { end = try OriginalFrontScreenBody.advance(globals: &state,local: &local,input: i.input,draw: { try draw($0,i.input.drawResults,&blits,width,height,memory.allocations,event) },observe: event) }
                 try check(local,storage(i.local),item.label+" body scratch");ownLocal = local
                 try finish(p,state,end.rawValue,0x4275cb);result.bodies += 1;return end
             },alternate: { state,selector in
@@ -277,9 +291,14 @@ public enum FrontMenuLoopReference {
                     presentation = end == .present ? .tail : .epilogue;result.main += 1
                 } else if entry == .worldOne { presentation = .worldOne;result.worldOne += 1 }
                 if presentation == .tail { result.tails += 1 }
-                try OriginalMenuPresentation.apply(presentation,input: i.input.presentation,world: &world,globals: &state,memory: &memory) { e in
+                func presentEvent(_ e: OriginalMenuPresentationEvent) throws {
                     if e.kind == .bitmap { try drawing(e.arguments) } else { try event(.init(e.kind.rawValue,e.arguments,e.strings)) }
                 }
+                if libraryEnabled {
+                    guard i.libraryDCBefore == libraryText.retainedDC else { throw error("Own completion DC before") }
+                    try OriginalMenuPresentation.applyWithLibrary(presentation,input: i.input.presentation,world: &world,globals: &state,memory: &memory,libraryText: &libraryText,observe: presentEvent)
+                    guard i.libraryDCAfter == libraryText.retainedDC else { throw error("Own completion DC after") }
+                } else { try OriginalMenuPresentation.apply(presentation,input: i.input.presentation,world: &world,globals: &state,memory: &memory,observe: presentEvent) }
                 guard eventIndex == p.events.count,randomIndex == i.random.count,i.abi.endPC == 0x30000000,i.abi.endSP == 0x1000f42c,i.abi.saved == [0x11223344,0x22334455,0x33445566,0x44556677],i.abi.seh == 0x12345678 else { throw error("Completion events/ABI") }
                 try helpers(i.helpers);try snapshot(i.after,world,state,item.label+" completion")
             })
@@ -292,9 +311,16 @@ public enum FrontMenuLoopReference {
             default:throw error("Unprobed outer boundary")
             }
             try snapshot(item.after,world,state,item.label+" whole call")
+            if end == .otherSelector,let continueNetwork {
+                guard libraryEnabled else { throw error("Network continuation requires library route") }
+                try continueNetwork(caseIndex,&world,&state,&crt,&memory,&libraryText,ownLocal,&prefix)
+                let live = prefix.bitmaps.filter { memory.allocations[$0.key]?.live == true }
+                prefix = try .init(bitmaps: live,surfaces: prefix.surfaces.filter { live[$0.key] != nil })
+            }
             if end == .loading { try onLoading?(world,state,crt,memory) }
             result.cases += 1
         }
+        if libraryEnabled { result.libraryText = libraryText }
         return result
     }
 }

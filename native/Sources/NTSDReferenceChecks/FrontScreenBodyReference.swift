@@ -6,6 +6,7 @@ public enum FrontScreenBodyReference {
         public var cases = 0, events = 0, helpers = 0, texts = 0, draws = 0, reads = 0, clips = 0, blits = 0, sounds = 0, shells = 0
         public var records = 0, bytes = 0, boundaries = 0
         public var parent = MenuPanelUpdateReference.Result()
+        public var libraryText: OriginalLibSurfaceText?
     }
     private struct Blob: Decodable { let count: Int, sha256: String, deflate: String }
     private struct Storage: Decodable { let bytes: String, defined: String }
@@ -14,6 +15,7 @@ public enum FrontScreenBodyReference {
     private struct Helper: Decodable { let entry: UInt32, entrySP: UInt32, returnPC: UInt32, pop: UInt32, saved: [UInt32], returnSP: UInt32?, result: UInt32? }
     private struct Case: Decodable {
         let label: String, stimulus: [InputControlReference.GlobalWrite], input: OriginalFrontScreenBodyInput, events: [OriginalFrontScreenEvent], helpers: [Helper], pending: [Helper]
+        let libraryDCBefore: UInt32?, libraryDCAfter: UInt32?
         let continuation: OriginalFrontScreenBody.Continuation, endPC: UInt32, endSP: UInt32, globals: String, local: Storage, world: Storage, records: [Record]
     }
     private struct Corpus: Decodable {
@@ -21,7 +23,7 @@ public enum FrontScreenBodyReference {
         let literals: [Literal], links: [Literal], cases: [Case], blobs: [String:Blob]
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front screen body reference: "+text) }
-    public static func compare(_ data: Data, onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32]) throws -> Void)? = nil) throws -> Result {
+    public static func compare(_ data: Data, libraryEnabled: Bool = false, onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32]) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000), c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",c.localAddress == 0x1000f000,!c.cases.isEmpty else { throw error("Source identity") }
@@ -76,6 +78,7 @@ public enum FrontScreenBodyReference {
                let input = item["bitmapInput"] as? [String:Any],let surface = input["surface"] as? UInt32,let key = input["colorKeyResult"] as? Int32 { surfaces[address] = key < 0 ? 0 : surface }
         }
         guard surfaces.count == bitmaps.count else { throw error("All native resource surfaces") }
+        var libraryText = OriginalLibSurfaceText()
         var local = try OriginalStateRecord(bytes: blob(c.localBacking),defined: [Bool](repeating: false,count: 0xc0))
         let returns: [UInt32:Set<UInt32>] = [
             0x401290:[0x427257,0x42727d,0x4272a4,0x4272f3,0x4273ac,0x42745d],
@@ -109,7 +112,7 @@ public enum FrontScreenBodyReference {
             }
             let width = try state.integer(at: 0x44d78c-OriginalMatchPreparation.globalBase,as: Int32.self),height = try state.integer(at: 0x44d790-OriginalMatchPreparation.globalBase,as: Int32.self)
             guard !item.input.drawResults.isEmpty else { throw error("Draw responses") }
-            let end = try OriginalFrontScreenBody.advance(globals: &state,local: &local,input: item.input,draw: { args in
+            func draw(_ args: [UInt32]) throws {
                 guard let bitmap = bitmaps[args[0]],let surface = surfaces[args[0]] else { throw error("Unbound native bitmap") }
                 let input = OriginalBitmapDrawInput(x: Int32(bitPattern: args[1]),y: Int32(bitPattern: args[2]),frame: Int32(bitPattern: args[3]),colorKey: args[4],mirrored: args[5],
                     sourceSurface: surface,targetSurface: args[6],viewportWidth: width,viewportHeight: height)
@@ -121,7 +124,14 @@ public enum FrontScreenBodyReference {
                     var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e)
                     defer { blits += 1 };return item.input.drawResults[blits%item.input.drawResults.count]
                 })
-            },observe: event)
+            }
+            let end: OriginalFrontScreenBody.Continuation
+            if libraryEnabled {
+                guard item.libraryDCBefore == libraryText.retainedDC else { throw error("Own library DC before body") }
+                end = try OriginalFrontScreenBody.advanceWithLibrary(globals: &state,local: &local,libraryText: &libraryText,input: item.input,draw: draw,observe: event)
+                guard item.libraryDCAfter == libraryText.retainedDC else { throw error("Own library DC after body") }
+                result.libraryText = libraryText
+            } else { end = try OriginalFrontScreenBody.advance(globals: &state,local: &local,input: item.input,draw: draw,observe: event) }
             guard index == item.events.count,end == item.continuation else { throw error("Final continuation/events") }
             if end == .alternateDispatch { guard item.endPC == 0x4275cb,item.endSP == 0x1000f000,item.pending.isEmpty else { throw error("Final caller") } }
             else { guard end == .nullTextTarget,item.endPC == 0x401295,item.pending.last?.entry == 0x401290 else { throw error("Declared boundary") };result.boundaries += 1 }

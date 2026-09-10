@@ -1227,3 +1227,20 @@ World+7d8 hostname и4511dc index относятся к следующему who
 её первый NUL/index0, дальнейшие bytes — собственный key scan; неизвестные
 allocator bytes не становятся native input из expected snapshot. Append limit50
 означает51 необходимый byte с NUL, но не восстановленный sizeof всего World.
+
+### Whole network-menu composition
+
+[NETWORK_MENU](NETWORK_MENU.md) owns51 hostname bytes at World+7d8 separately
+from the2008-byte World prefix. Actual menu1→3 writes NUL/index0; untouched
+allocation backing remains unknown. The300-key scan preserves live key/Shift
+aliases, exact100/117 consumption and the50-byte capacity. Caller local1024
+bytes begin at rootSP+14; root18World/root20target have actual argument
+provenance. Source full bytes and actual write masks are preserved; private
+unwritten bytes are not adopted. Own partial receives reject local+270/f4/114
+with rollback, distinct from source whole returns. The separate256-byte exit
+frame compares its actual new writes, including enabled notification.
+
+WholeWorld/globals/resources/DC and actual tails compare in both backing
+controls. UI/tail sourceCW0 remains0; CRT FPU startup is not executed by this
+early-menu VM. Additional enabled sound binds the device flag and five existing
+COM test objects explicitly; it does not recover own audio initialization.

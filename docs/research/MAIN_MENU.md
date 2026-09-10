@@ -27,7 +27,9 @@ socket и names/RNG там объявлены на входе; полного me
 [MENU_CHARACTER](MENU_CHARACTER.md) добавляет10492 целых вызова422f60: AL и
 порядок Shift/GetKeyState совпали. Caller428371 sign-extends AL; API-dependent
 high EAX не является native контрактом. Полный300-key hostname scan, его
-собственная строка и menu1/2/3 остаются в [NETWORK_MENU_PLAN](NETWORK_MENU_PLAN.md).
+полный scan и собственная строка теперь соединены в [NETWORK_MENU](NETWORK_MENU.md):
+две944-start цепочки и дополнительные enabled-sound/partial-read контракты.
+Реальный listener/device startup и приложение остаются открытыми.
 Существующий World prefix0x7d8 не доказывает инициализацию hostname за ним.
 
 | Участок оригинала | Исполнение и граница |

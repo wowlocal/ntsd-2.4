@@ -1,0 +1,259 @@
+{
+  "scope": "Independently audit NTSD network-menu research captures and transport.\n\nPinned EXE/lib.dll/VC80 in the declared Unicorn environment; inspect immutable\ninstruction bytes, explicit loader patches, full blob bytes/masks, actual caller\nreturns and hostname/local write provenance. Platform responses remain inputs.\nUnknown private caller reads are listed, never made initialized by comparison.\nNo Windows, native match, device or private ABI claim follows from this audit.\n",
+  "path": "build/research/network-menu-partial-greeting-candidate1.json",
+  "rawBytes": 7630613,
+  "rawSHA256": "29788c268261e75d0bbf5460b6bdd863cf0a68cccd00bfd3acfee050f6469fc3",
+  "calls": 17,
+  "networkBodies": 13,
+  "continuations": {
+    "presentation": 13
+  },
+  "blobs": 194,
+  "atomicParts": 18,
+  "events": {
+    "draw": 67,
+    "read": 443,
+    "clip": 67,
+    "blit": 67,
+    "format": 15,
+    "text": 15,
+    "getDC": 15,
+    "setBackgroundMode": 15,
+    "setTextColor": 15,
+    "stringLength": 15,
+    "textOut": 15,
+    "releaseDC": 15,
+    "soundRequest": 5,
+    "write": 15,
+    "keyState": 1,
+    "network": 20,
+    "sleep": 4,
+    "timer": 4,
+    "fillRequest": 6,
+    "fill": 6,
+    "method": 1,
+    "free": 1
+  },
+  "networkRequests": {
+    "closeSocket": 3,
+    "socket": 2,
+    "hostLookup": 2,
+    "htons": 2,
+    "connect": 2,
+    "receive": 6,
+    "send": 2,
+    "cleanup": 1
+  },
+  "helperReturns": 165,
+  "reads": 1512,
+  "sourceWriteBytes": 6318,
+  "localWrittenBytes": 714,
+  "complete300KeyScans": 5,
+  "originalPCs": {
+    "EXE": 930,
+    "DLL": 51,
+    "CRT": 338
+  },
+  "excludedObservedPCs": [
+    4359998,
+    805323008,
+    805323024,
+    805323088,
+    805343232,
+    805343248,
+    805347616
+  ],
+  "unknownOwnLocalReads": [
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497540,
+      "bytes": "75",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497541,
+      "bytes": "20",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497542,
+      "bytes": "63",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497543,
+      "bytes": "61",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497544,
+      "bytes": "6e",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497545,
+      "bytes": "20",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497546,
+      "bytes": "63",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497547,
+      "bytes": "6f",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497548,
+      "bytes": "6e",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497549,
+      "bytes": "6e",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497550,
+      "bytes": "65",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497551,
+      "bytes": "63",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497552,
+      "bytes": "74",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-greeting",
+      "pc": 4359526,
+      "address": 268497553,
+      "bytes": "00",
+      "ownKnown": [
+        0
+      ]
+    }
+  ],
+  "platformAudioBindings": [
+    {
+      "address": 4544012,
+      "value": 671096864
+    },
+    {
+      "address": 4544016,
+      "value": 671096880
+    },
+    {
+      "address": 4544020,
+      "value": 671096896
+    },
+    {
+      "address": 4544024,
+      "value": 671096912
+    },
+    {
+      "address": 4544028,
+      "value": 671096928
+    }
+  ],
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "priorFixtures": 218,
+  "vendorFiles": 10,
+  "producerSHA256": "3bba96c1c5aefa8633dc3e2929195ef4fa419b06475cdae13326e651fdda0e75",
+  "fixture": "original-network-menu-partial-greeting.json",
+  "fixtureSHA256": "23dab897a3cccb15505edae95e4d716187c4940ccdccae4ce0cdd62de0220090",
+  "fixtureBytes": 5711731,
+  "nativeSuccessfulUIBodies": 12,
+  "nativeRejectedOwnReads": 1,
+  "nativeWholeCallerReturns": 16,
+  "nativeMatchedUIEvents": 770,
+  "nativeMatchedUIRequests": 11,
+  "nativeLocalContract": "Own written bytes/masks and recovered semantic arguments; private unwritten caller stack is not imported.",
+  "nativeProcessFPUClaim": false,
+  "sourceUIControlWord": 0,
+  "nativeRawTests": {
+    "tests": 14,
+    "seconds": 18.195,
+    "buildSeconds": 48.8
+  },
+  "packagedNativeCompared": true,
+  "nativePackagedTests": {
+    "tests": 23,
+    "seconds": 23.957,
+    "buildSeconds": 50.08,
+    "rawOverrides": false
+  },
+  "artifactVerified": true
+}

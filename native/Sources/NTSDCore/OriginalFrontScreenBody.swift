@@ -27,8 +27,23 @@ public enum OriginalFrontScreenBody {
     public static func advance(globals: inout OriginalStateRecord, local: inout OriginalStateRecord,
         input: OriginalFrontScreenBodyInput, draw: ([UInt32]) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
+        var libraryText: OriginalLibSurfaceText? = nil
+        return try execute(globals: &globals,local: &local,libraryText: &libraryText,input: input,draw: draw,observe: observe)
+    }
+    /// The installed library owns the retained DC across all text passes. The
+    /// complete body commits its own globals, local bytes and DC together.
+    public static func advanceWithLibrary(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,
+        libraryText: inout OriginalLibSurfaceText,input: OriginalFrontScreenBodyInput,
+        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
+        var text: OriginalLibSurfaceText? = libraryText
+        let end = try execute(globals: &globals,local: &local,libraryText: &text,input: input,draw: draw,observe: observe)
+        libraryText = text!;return end
+    }
+    private static func execute(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,
+        libraryText: inout OriginalLibSurfaceText?,input: OriginalFrontScreenBodyInput,
+        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void) throws -> Continuation {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == 0xc0 else { throw OriginalStateError.invalidStorage("Front screen body extent") }
-        var state = globals, scratch = local
+        var state = globals, scratch = local,ownText = libraryText
         let base = OriginalMatchPreparation.globalBase
         func bits(_ value: Int32) -> UInt32 { UInt32(bitPattern: value) }
         func word(_ address: Int) throws -> Int32 { try state.integer(at: address-base,as: Int32.self) }
@@ -60,8 +75,14 @@ public enum OriginalFrontScreenBody {
             let bytes = try string(offset), target = bits(try word(0x455608))
             try emit("text",[target,0x602010,color,bits(x),bits(y)],[bytes])
             guard target != 0 else { throw Stop(end: .nullTextTarget) }
-            try OriginalSurfaceText.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in
-                try emit(e.kind.rawValue,e.arguments,e.strings)
+            if ownText != nil {
+                try ownText!.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in
+                    try emit(e.kind.rawValue,e.arguments,e.strings)
+                }
+            } else {
+                try OriginalSurfaceText.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in
+                    try emit(e.kind.rawValue,e.arguments,e.strings)
+                }
             }
         }
         func sound() throws {
@@ -92,7 +113,7 @@ public enum OriginalFrontScreenBody {
             do { try draw(args) }
             catch OriginalStateError.invalidStorage(let detail) where detail == "Null bitmap target surface" { throw Stop(end: .nullDrawTarget) }
         }
-        func finish(_ end: Continuation) -> Continuation { globals = state;local = scratch;return end }
+        func finish(_ end: Continuation) -> Continuation { globals = state;local = scratch;libraryText = ownText;return end }
         do {
             try copyLiteral(0,0x48);try copyLiteral(1,0x84);try copyLiteral(2,0x64)
             let y = try word(0x45757c) &+ 491

@@ -5,6 +5,7 @@ public enum FrontMenuCompletionReference {
     public struct Result {
         public var cases = 0, main = 0, tails = 0, worldOne = 0, errors = 0, helpers = 0, events = 0, draws = 0, clips = 0, reads = 0, blits = 0, random = 0, tables = 0, frees = 0, formats = 0, posts = 0, records = 0, bytes = 0
         public var parent = FrontScreenAlternateReference.Result()
+        public var libraryText: OriginalLibSurfaceText?
     }
     private struct Blob: Decodable { let count: Int, sha256: String, deflate: String }
     private struct Storage: Decodable { let bytes: String, defined: String }
@@ -16,11 +17,12 @@ public enum FrontMenuCompletionReference {
     private struct Input: Decodable { let menu: OriginalMainMenuInput, presentation: OriginalMenuPresentationInput, drawResults: [Int32] }
     private struct Case: Decodable {
         let label: String, entry: String, stimulus: [InputControlReference.GlobalWrite], input: Input, mainExit: OriginalMainMenuExit?, mainAfter: Snapshot?, mainEvents: Int?
+        let libraryDCBefore: UInt32?, libraryDCAfter: UInt32?
         let events: [OriginalFrontScreenEvent], helpers: [Helper], random: [Random], after: Snapshot, abi: ABI
     }
     private struct Corpus: Decodable { let exeSHA256: String, dllSHA256: String, initialGlobals: String, initialCRT: UInt32, initialPointers: [UInt8], cases: [Case], blobs: [String:Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Front menu completion reference: "+text) }
-    public static func compare(_ data: Data,onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32],OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
+    public static func compare(_ data: Data,libraryEnabled: Bool = false,onNatural: ((OriginalStateRecord,OriginalStateRecord,OriginalCRTRandom,[UInt32:OriginalLoadedBitmap],[UInt32:UInt32],OriginalMenuPresentationMemory) throws -> Void)? = nil) throws -> Result {
         let raw = try MatchPreparationReference.unpack(data,maximumCount: 128_000_000),c = try JSONDecoder().decode(Corpus.self,from: raw)
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               c.dllSHA256 == "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",!c.cases.isEmpty,c.initialCRT == 1,c.initialPointers == [UInt8](repeating: 0,count: 8) else { throw error("Source identity/fresh PTD/BSS") }
@@ -51,7 +53,7 @@ public enum FrontMenuCompletionReference {
         var ownWorld: OriginalStateRecord?,ownGlobals: OriginalStateRecord?,ownLocal: OriginalStateRecord?
         var early: [UInt32:OriginalLoadedBitmap] = [:],tokens: [UInt32:UInt32] = [:]
         var memory = OriginalMenuPresentationMemory(replayPointers: try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 8),defined: [Bool](repeating: true,count: 8)))
-        result.parent = try FrontScreenAlternateReference.compare(JSONSerialization.data(withJSONObject: parent)) { world,state,local,bitmaps,surfaces in
+        result.parent = try FrontScreenAlternateReference.compare(JSONSerialization.data(withJSONObject: parent),libraryEnabled: libraryEnabled) { world,state,local,bitmaps,surfaces in
             try check(state,globals(c.initialGlobals),"Own native alternate parent");ownWorld = world;ownGlobals = state;ownLocal = local
             early = bitmaps;tokens = surfaces
             for (address,bitmap) in bitmaps {
@@ -63,6 +65,8 @@ public enum FrontMenuCompletionReference {
         guard var world = ownWorld,var state = ownGlobals,let local = ownLocal else { throw error("Missing native parent") }
         let target = local.bytes[0x20..<0x24].enumerated().reduce(UInt32(0)) { $0 | UInt32($1.element) << ($1.offset*8) }
         var crt = OriginalCRTRandom()
+        var libraryText = result.parent.parent.libraryText
+        guard (libraryText != nil) == libraryEnabled else { throw error("Library parent route") }
         let helperReturns: [UInt32:Set<UInt32>] = [
             0x43ef70:[0x43f0d5,0x43f212],0x43f010:[0x42471c,0x427937,0x4279f0,0x427a90,0x427b9c,0x427bf6,0x427c58,0x428778],
             0x423b00:[0x427a60,0x427bd4,0x427c2e,0x427c9f],0x4028a0:[0x424728,0x42877e],0x43e940:[0x424733,0x428789],
@@ -146,10 +150,16 @@ public enum FrontMenuCompletionReference {
             } else if item.entry == "worldOne" { presentation = .worldOne;result.worldOne += 1 }
             else { guard item.entry == "tail" else { throw error("Entry") } }
             if presentation == .tail { result.tails += 1 }
-            try OriginalMenuPresentation.apply(presentation,input: item.input.presentation,world: &world,globals: &state,memory: &memory) { e in
+            func presentEvent(_ e: OriginalMenuPresentationEvent) throws {
                 if e.kind == .bitmap { try draw(e.arguments) }
                 else { try event(.init(e.kind.rawValue,e.arguments,e.strings)) }
             }
+            if libraryEnabled {
+                guard item.libraryDCBefore == libraryText!.retainedDC else { throw error("Own library DC before completion") }
+                try OriginalMenuPresentation.applyWithLibrary(presentation,input: item.input.presentation,world: &world,globals: &state,memory: &memory,libraryText: &libraryText!,observe: presentEvent)
+                guard item.libraryDCAfter == libraryText!.retainedDC else { throw error("Own library DC after completion") }
+                result.libraryText = libraryText
+            } else { try OriginalMenuPresentation.apply(presentation,input: item.input.presentation,world: &world,globals: &state,memory: &memory,observe: presentEvent) }
             guard index == item.events.count,randomIndex == item.random.count,item.abi.endPC == 0x30000000,item.abi.endSP == 0x1000f42c,
                   item.abi.saved == [0x11223344,0x22334455,0x33445566,0x44556677],item.abi.seh == 0x12345678 else { throw error("Final events/ABI") }
             for h in item.helpers {

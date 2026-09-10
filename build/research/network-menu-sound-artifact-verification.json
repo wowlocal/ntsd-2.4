@@ -1,0 +1,106 @@
+{
+  "scope": "Independently audit NTSD network-menu research captures and transport.\n\nPinned EXE/lib.dll/VC80 in the declared Unicorn environment; inspect immutable\ninstruction bytes, explicit loader patches, full blob bytes/masks, actual caller\nreturns and hostname/local write provenance. Platform responses remain inputs.\nUnknown private caller reads are listed, never made initialized by comparison.\nNo Windows, native match, device or private ABI claim follows from this audit.\n",
+  "path": "build/research/network-menu-sound-primary-candidate1.json",
+  "rawBytes": 7889342,
+  "rawSHA256": "bda7bf15184f8d00d519727bed0c982b3ca4047a57727eebf918bfb23dd9729a",
+  "calls": 20,
+  "networkBodies": 16,
+  "continuations": {
+    "presentation": 16
+  },
+  "blobs": 209,
+  "atomicParts": 21,
+  "events": {
+    "draw": 85,
+    "read": 563,
+    "clip": 85,
+    "blit": 85,
+    "format": 18,
+    "text": 18,
+    "getDC": 18,
+    "setBackgroundMode": 14,
+    "setTextColor": 14,
+    "stringLength": 14,
+    "textOut": 14,
+    "releaseDC": 14,
+    "soundRequest": 9,
+    "soundMethod": 27,
+    "write": 20,
+    "keyState": 1,
+    "network": 11,
+    "sleep": 3,
+    "timer": 5,
+    "fillRequest": 9,
+    "fill": 9,
+    "method": 1,
+    "free": 1,
+    "shell": 1
+  },
+  "networkRequests": {
+    "closeSocket": 2,
+    "socket": 1,
+    "hostLookup": 1,
+    "htons": 1,
+    "connect": 1,
+    "receive": 3,
+    "send": 1,
+    "cleanup": 1
+  },
+  "helperReturns": 212,
+  "reads": 1513,
+  "sourceWriteBytes": 3181,
+  "localWrittenBytes": 650,
+  "complete300KeyScans": 5,
+  "originalPCs": {
+    "EXE": 995,
+    "DLL": 51,
+    "CRT": 338
+  },
+  "excludedObservedPCs": [
+    4359998,
+    805323008,
+    805323024,
+    805323040,
+    805323056,
+    805323072,
+    805323088,
+    805323104,
+    805343232,
+    805343248,
+    805347616
+  ],
+  "unknownOwnLocalReads": [],
+  "platformAudioBindings": [
+    {
+      "address": 4544012,
+      "value": 671096864
+    },
+    {
+      "address": 4544016,
+      "value": 671096880
+    },
+    {
+      "address": 4544020,
+      "value": 671096896
+    },
+    {
+      "address": 4544024,
+      "value": 671096912
+    },
+    {
+      "address": 4544028,
+      "value": 671096928
+    },
+    {
+      "address": 4517580,
+      "value": 671096864
+    }
+  ],
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "packedBytes": 5770919,
+  "packedSHA256": "3dc61537c4d92885c2338de413bb4c7d5cd3d3f0233e4ee9afd92b141691aa03",
+  "fullPackedBytesJSONEqual": true,
+  "priorFixtures": 218,
+  "vendorFiles": 10
+}

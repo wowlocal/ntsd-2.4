@@ -1,0 +1,135 @@
+{
+  "scope": "Independently audit NTSD network-menu research captures and transport.\n\nPinned EXE/lib.dll/VC80 in the declared Unicorn environment; inspect immutable\ninstruction bytes, explicit loader patches, full blob bytes/masks, actual caller\nreturns and hostname/local write provenance. Platform responses remain inputs.\nUnknown private caller reads are listed, never made initialized by comparison.\nNo Windows, native match, device or private ABI claim follows from this audit.\n",
+  "path": "build/research/network-menu-control-candidate2.json",
+  "rawBytes": 113018488,
+  "rawSHA256": "567579729268fa3cda3a08473295e9848c5fe6f246630e927527b367f624c3c9",
+  "calls": 944,
+  "networkBodies": 938,
+  "continuations": {
+    "presentation": 936,
+    "epilogue": 2
+  },
+  "blobs": 2060,
+  "atomicParts": 945,
+  "events": {
+    "draw": 4813,
+    "read": 36505,
+    "clip": 5751,
+    "blit": 5751,
+    "format": 1617,
+    "text": 1614,
+    "getDC": 1614,
+    "setBackgroundMode": 1614,
+    "setTextColor": 1614,
+    "stringLength": 1614,
+    "textOut": 1614,
+    "releaseDC": 1614,
+    "soundRequest": 57,
+    "write": 978,
+    "keyState": 92,
+    "network": 87,
+    "sleep": 15,
+    "timer": 104,
+    "fillRequest": 47,
+    "fill": 47,
+    "method": 7,
+    "free": 8,
+    "shell": 5,
+    "allocate": 3,
+    "construct": 3,
+    "load": 3,
+    "colorKey": 2,
+    "message": 2,
+    "debug": 2,
+    "release": 1
+  },
+  "networkRequests": {
+    "closeSocket": 18,
+    "socket": 9,
+    "hostLookup": 8,
+    "htons": 7,
+    "connect": 7,
+    "receive": 16,
+    "send": 5,
+    "cleanup": 7,
+    "sendTo": 2,
+    "message": 4,
+    "addressWord": 2,
+    "hostByAddress": 2
+  },
+  "helperReturns": 13293,
+  "reads": 221093,
+  "sourceWriteBytes": 14860,
+  "localWrittenBytes": 34469,
+  "complete300KeyScans": 695,
+  "originalPCs": {
+    "EXE": 1474,
+    "DLL": 51,
+    "CRT": 446
+  },
+  "excludedObservedPCs": [
+    4359998,
+    4360158,
+    4451600,
+    4477100,
+    805323008,
+    805323024,
+    805323088,
+    805323104,
+    805343232,
+    805343248,
+    805347616
+  ],
+  "unknownOwnLocalReads": [],
+  "platformAudioBindings": [
+    {
+      "address": 4544012,
+      "value": 671096864
+    },
+    {
+      "address": 4544016,
+      "value": 671096880
+    },
+    {
+      "address": 4544020,
+      "value": 671096896
+    },
+    {
+      "address": 4544024,
+      "value": 671096912
+    },
+    {
+      "address": 4544028,
+      "value": 671096928
+    }
+  ],
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "priorFixtures": 218,
+  "vendorFiles": 10,
+  "producerSHA256": "3bba96c1c5aefa8633dc3e2929195ef4fa419b06475cdae13326e651fdda0e75",
+  "fixture": "original-network-menu-control.json",
+  "fixtureSHA256": "5689184fddf142700973bf14eb221431a6be729537cacdde67e9c33314f02eff",
+  "fixtureBytes": 22164509,
+  "nativeSuccessfulUIBodies": 938,
+  "nativeRejectedOwnReads": 0,
+  "nativeWholeCallerReturns": 943,
+  "nativeMatchedUIEvents": 67198,
+  "nativeMatchedUIRequests": 87,
+  "nativeLocalContract": "Own written bytes/masks and recovered semantic arguments; private unwritten caller stack is not imported.",
+  "nativeProcessFPUClaim": false,
+  "sourceUIControlWord": 0,
+  "nativeRawTests": {
+    "tests": 14,
+    "seconds": 18.195,
+    "buildSeconds": 48.8
+  },
+  "packagedNativeCompared": true,
+  "nativePackagedTests": {
+    "tests": 23,
+    "seconds": 23.957,
+    "buildSeconds": 50.08,
+    "rawOverrides": false
+  },
+  "artifactVerified": true
+}

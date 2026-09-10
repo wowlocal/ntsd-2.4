@@ -1,0 +1,617 @@
+{
+  "scope": "Independently audit NTSD network-menu research captures and transport.\n\nPinned EXE/lib.dll/VC80 in the declared Unicorn environment; inspect immutable\ninstruction bytes, explicit loader patches, full blob bytes/masks, actual caller\nreturns and hostname/local write provenance. Platform responses remain inputs.\nUnknown private caller reads are listed, never made initialized by comparison.\nNo Windows, native match, device or private ABI claim follows from this audit.\n",
+  "path": "build/research/network-menu-partial-flags-candidate1.json",
+  "rawBytes": 7628096,
+  "rawSHA256": "d1b0405ef5290de704ff3b0370418d3fee42a7bf43bc23a79b5f6bec74505c5b",
+  "calls": 17,
+  "networkBodies": 13,
+  "continuations": {
+    "presentation": 13
+  },
+  "blobs": 194,
+  "atomicParts": 18,
+  "events": {
+    "draw": 67,
+    "read": 443,
+    "clip": 67,
+    "blit": 67,
+    "format": 15,
+    "text": 15,
+    "getDC": 15,
+    "setBackgroundMode": 15,
+    "setTextColor": 15,
+    "stringLength": 15,
+    "textOut": 15,
+    "releaseDC": 15,
+    "soundRequest": 5,
+    "write": 15,
+    "keyState": 1,
+    "network": 20,
+    "sleep": 4,
+    "timer": 4,
+    "fillRequest": 6,
+    "fill": 6,
+    "method": 1,
+    "free": 1
+  },
+  "networkRequests": {
+    "closeSocket": 3,
+    "socket": 2,
+    "hostLookup": 2,
+    "htons": 2,
+    "connect": 2,
+    "receive": 6,
+    "send": 2,
+    "cleanup": 1
+  },
+  "helperReturns": 165,
+  "reads": 1512,
+  "sourceWriteBytes": 6274,
+  "localWrittenBytes": 651,
+  "complete300KeyScans": 5,
+  "originalPCs": {
+    "EXE": 929,
+    "DLL": 51,
+    "CRT": 338
+  },
+  "excludedObservedPCs": [
+    4359998,
+    805323008,
+    805323024,
+    805323088,
+    805343232,
+    805343248,
+    805347616
+  ],
+  "unknownOwnLocalReads": [
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359815,
+      "address": 268497160,
+      "bytes": "31",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359830,
+      "address": 268497161,
+      "bytes": "31",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359845,
+      "address": 268497162,
+      "bytes": "31",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359860,
+      "address": 268497163,
+      "bytes": "31",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359875,
+      "address": 268497164,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359890,
+      "address": 268497165,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359905,
+      "address": 268497166,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359920,
+      "address": 268497167,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497192,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497193,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497194,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497195,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497196,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497197,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497198,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497199,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497200,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497201,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497202,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497203,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497204,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497205,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497206,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497207,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497208,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497209,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497210,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497211,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497212,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497213,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497214,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497215,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497216,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497217,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497218,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497219,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497220,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497221,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497222,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497223,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497224,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497225,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497226,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497227,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497228,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497229,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497230,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497231,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497232,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497233,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497234,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    },
+    {
+      "case": 16,
+      "label": "unsupported-partial-flags",
+      "pc": 4359952,
+      "address": 268497235,
+      "bytes": "30",
+      "ownKnown": [
+        0
+      ]
+    }
+  ],
+  "platformAudioBindings": [
+    {
+      "address": 4544012,
+      "value": 671096864
+    },
+    {
+      "address": 4544016,
+      "value": 671096880
+    },
+    {
+      "address": 4544020,
+      "value": 671096896
+    },
+    {
+      "address": 4544024,
+      "value": 671096912
+    },
+    {
+      "address": 4544028,
+      "value": 671096928
+    }
+  ],
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "packedBytes": 5711547,
+  "packedSHA256": "7896b6dbaa7f33a949b50a644747292d5cebd9a58aa7c92f37cc0194846a33a6",
+  "fullPackedBytesJSONEqual": true,
+  "priorFixtures": 218,
+  "vendorFiles": 10
+}

@@ -143,6 +143,17 @@ public enum OriginalMenuPresentation {
         world = execution.world; globals = execution.globals; memory = execution.memory
     }
 
+    /// The same complete menu tail/World1/epilogue with the bundled library's
+    /// text route. DC and all enclosing state commit only after the full return.
+    public static func applyWithLibrary(_ entry: OriginalMenuPresentationEntry,input: OriginalMenuPresentationInput,
+        world: inout OriginalStateRecord,globals: inout OriginalStateRecord,memory: inout OriginalMenuPresentationMemory,
+        libraryText: inout OriginalLibSurfaceText,
+        observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
+        var execution = Execution(world: world,globals: globals,memory: memory,input: input,libraryText: libraryText)
+        try execution.run(entry,observe)
+        world = execution.world;globals = execution.globals;memory = execution.memory;libraryText = execution.libraryText!
+    }
+
     /// Whole4028a0 with the installed library text behavior. This helper does
     /// not read World or allocation ownership; only globals/DC are committed.
     public static func overlayWithLibrary(globals: inout OriginalStateRecord,
