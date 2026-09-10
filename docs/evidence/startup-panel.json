@@ -1,0 +1,284 @@
+{
+  "sourceBytes": 71000012,
+  "sourceSHA256": "96c37d64a15753933e730ee54b1f9db5f83e0be829457af3c577ae5c5fc2af0b",
+  "producerSHA256": "f254ad5277e397d8f9149db971d96c8749733ee84c3343928181f160b9a8655a",
+  "counts": {
+    "sourceCallers": 220,
+    "nativeWholeCallers": 212,
+    "infoCalls": 220,
+    "sourceGlobalSnapshotBytes": 708494976,
+    "globalStores": 94418,
+    "crtReturns": 12534,
+    "sharedStackStores": 651780,
+    "contentCalls": 196,
+    "defaultsCalls": 192,
+    "nativeRejected": 8,
+    "bitmapCalls": 90
+  },
+  "events": {
+    "info-open": 220,
+    "info-tokens": 218,
+    "info-close": 218,
+    "info-scan": 404,
+    "info-format": 400,
+    "content-format": 392,
+    "content-open": 196,
+    "defaults-open": 192,
+    "defaults-writeFile": 388,
+    "defaults-print": 186,
+    "defaults-closeFile": 186,
+    "defaults-close": 186,
+    "defaults-write": 576,
+    "defaults-format": 384,
+    "content-gets": 5182,
+    "content-write": 23420,
+    "content-scan": 5182,
+    "content-close": 164,
+    "bitmap-allocate": 90,
+    "bitmap-construct": 68,
+    "bitmap-load": 68,
+    "bitmap-colorKey": 46,
+    "bitmap-write": 1374,
+    "bitmap-message": 40,
+    "bitmap-debug": 40,
+    "bitmap-release": 26,
+    "bitmap-destroy": 24,
+    "bitmap-free": 24
+  },
+  "nativeChildren": {
+    "info": 218,
+    "content": 190,
+    "defaults": 184,
+    "bitmap": 90
+  },
+  "nativeChildEvents": {
+    "info-open": 220,
+    "info-tokens": 218,
+    "info-close": 218,
+    "info-scan": 404,
+    "info-format": 400,
+    "content-format": 392,
+    "content-open": 196,
+    "defaults-open": 184,
+    "defaults-writeFile": 372,
+    "defaults-print": 178,
+    "defaults-closeFile": 178,
+    "defaults-close": 178,
+    "defaults-write": 552,
+    "defaults-format": 368,
+    "content-gets": 5182,
+    "content-write": 23418,
+    "content-scan": 5176,
+    "content-close": 158,
+    "bitmap-allocate": 90,
+    "bitmap-construct": 68,
+    "bitmap-load": 68,
+    "bitmap-colorKey": 46,
+    "bitmap-write": 1374,
+    "bitmap-message": 40,
+    "bitmap-debug": 40,
+    "bitmap-release": 26,
+    "bitmap-destroy": 24,
+    "bitmap-free": 24
+  },
+  "childReturnPCs": {
+    "0x43cf99": 220,
+    "0x43cfa2": 196,
+    "0x43cfb4": 192,
+    "0x43cfab": 90
+  },
+  "blobs": 1502,
+  "unknownBoundaries": [
+    {
+      "case": "missing-info-a5",
+      "kind": "info",
+      "offset": 28,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "empty-content-a5",
+      "kind": "content",
+      "offset": 604,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "truncated-0-a5",
+      "kind": "content",
+      "offset": 604,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "truncated-1-a5",
+      "kind": "content",
+      "offset": 104,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "missing-info-ramp",
+      "kind": "info",
+      "offset": 28,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "empty-content-ramp",
+      "kind": "content",
+      "offset": 604,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "truncated-0-ramp",
+      "kind": "content",
+      "offset": 604,
+      "count": 1,
+      "sourceReturn": 18
+    },
+    {
+      "case": "truncated-1-ramp",
+      "kind": "content",
+      "offset": 104,
+      "count": 1,
+      "sourceReturn": 18
+    }
+  ],
+  "actualEXE": 716,
+  "actualCRT": 1486,
+  "staticEXE": 740,
+  "unexecutedStatic": [
+    {
+      "address": "0x43c90e",
+      "bytes": "3c68",
+      "assembly": "cmp\tal, 0x68"
+    },
+    {
+      "address": "0x43c910",
+      "bytes": "7408",
+      "assembly": "je\t0x43c91a <.text+0x3b91a>"
+    },
+    {
+      "address": "0x43c912",
+      "bytes": "3c48",
+      "assembly": "cmp\tal, 0x48"
+    },
+    {
+      "address": "0x43c914",
+      "bytes": "0f8584020000",
+      "assembly": "jne\t0x43cb9e <.text+0x3bb9e>"
+    },
+    {
+      "address": "0x43ca1b",
+      "bytes": "3c68",
+      "assembly": "cmp\tal, 0x68"
+    },
+    {
+      "address": "0x43ca1d",
+      "bytes": "7408",
+      "assembly": "je\t0x43ca27 <.text+0x3ba27>"
+    },
+    {
+      "address": "0x43ca1f",
+      "bytes": "3c48",
+      "assembly": "cmp\tal, 0x48"
+    },
+    {
+      "address": "0x43ca21",
+      "bytes": "0f8584010000",
+      "assembly": "jne\t0x43cbab <.text+0x3bbab>"
+    },
+    {
+      "address": "0x43caf2",
+      "bytes": "3c68",
+      "assembly": "cmp\tal, 0x68"
+    },
+    {
+      "address": "0x43caf4",
+      "bytes": "7408",
+      "assembly": "je\t0x43cafe <.text+0x3bafe>"
+    },
+    {
+      "address": "0x43caf6",
+      "bytes": "3c48",
+      "assembly": "cmp\tal, 0x48"
+    },
+    {
+      "address": "0x43caf8",
+      "bytes": "0f85c9000000",
+      "assembly": "jne\t0x43cbc7 <.text+0x3bbc7>"
+    },
+    {
+      "address": "0x43ef44",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef45",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef46",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef47",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef48",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef49",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4a",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4b",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4c",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4d",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4e",
+      "bytes": "cc",
+      "assembly": "int3"
+    },
+    {
+      "address": "0x43ef4f",
+      "bytes": "cc",
+      "assembly": "int3"
+    }
+  ],
+  "oldFixturesUnchanged": 230,
+  "vendorFiles": 10,
+  "fullGlobalAndSharedStackStoreReconstruction": true,
+  "nativeCompared": true,
+  "fixture": "original-startup-panel.json",
+  "fixtureBytes": 11866492,
+  "fixtureSHA256": "1bdeb634ad52214d67df2565780c90f66a526204823d28d6428e4cc9bb4633ca",
+  "windowsVerified": false,
+  "fullGoalComplete": false,
+  "scope": "212 complete controlled callers;8 unknown-local source returns rejected natively with rollback. Same original CPU/stack; native carries own reader locals; earlier WinMain/CRT/application remain open."
+}

@@ -736,6 +736,51 @@ claim this stage. See build/research/menu-info-reading-work.json. NEXT whole
 43cf94..43cfb4 reader/content/panel/default selection, then date/time/music/input/
 WinMain/dispatcher/application composition. Full game/match/Windows/cleanMac open.
 
+[STARTUP_PANEL](docs/research/STARTUP_PANEL.md) now composes actual43cf94..43cfb4
+with reader43c4a0/content43c780/bitmap43cc60/defaults43c690 on one sourceCPU/stack.
+212 whole native callers match;8 more source returns have unknown-local reads
+and are native rejections with full rollback. Do not call these220matches.
+184 supported calls finish defaults/EAX18,28 finish bitmap/EAX1. Parent checks
+children in order, calls defaults once after any zero, and makes no retry/cache
+call. Failed bitmap wrapper remains owned through defaults; no invented cleanup.
+
+Native carries its own184info locals into content1104 at398hex. All other prior
+CRT stack backing stays unknown. Shared OriginalMenuContent has opt-in strict
+reads and lazy file sourcing after path formats; old declared-backing default
+contracts remain unchanged. Missinginfo2 rejectoffset28; empty/zero-linecontent4
+reject604; header-only2 reject104. Allsource220 still reach43cfb4 withSP1000f004;
+no source memory fault or unterminated-scan stop. Source shared physical bytes
+are retained, NOT imported natively or equated to private CRT stack ABI.
+
+212whole calls contain676child returns/39704events. Rejected prefixes add6info
+returns/88events: combined682/39792, separately from source698/39894. All90bitmap
+children and68constructor/24destructor returns match.32two-call own replacement
+chains preserve live/dead generations/reused addresses. Late replacement/default
+observer failures restore globals/resources/locals/output; buffer externaleffects.
+
+All10caller starts,716EXE/1486CRT actualPCs;740staticEXE includes12unexecutedh/H
+checks and12alignmentint3. CW037f/saved registers/declaredFSffffffff retained.
+All13DLL patches disjoint; no installer/CRTstartup/WinMainreturn/Windows claim.
+Source94418global/651780shared-stack stores reconstruct full bytes/masks;
+708494976source-global snapshotbytes include rejected continuations, not a
+wholesale native byte-count claim. OriginalMENU_BACK1 DIB language1028 is a
+controlled ad-path device binding, not added/downloaded game content.
+
+Raw13tests5.276s/build193.29s; packaged13tests5.019s/build0.30s passed, retaining
+info/roundtrip,704content/118bitmap/534writer/266panel-update cases under their
+old contracts.230oldpins unchanged/231current; raw71000012/packed11866492bytes/
+JSON/SHA/all1502blobs/10vendorfiles verified.584isolated native files exclude6
+untouched foreign transforms. Initialprobe used missinglanguage1033 and failed
+before caller execution; fixed to pinned1028, freshprobe/finalsource pass. Probe
+whole-stack trace is retained; final audit covers entire shared1104. Source/
+native expected rules needed no correction. All owned jobs terminal; NTSDNative
+linked. CUA inventory again failed nativepipe startup; no app/input action,
+live nativePID revalidated before its normal completion. Transport failure is
+not a safety refusal. Jobs/pins: build/research/startup-panel-work.json.
+NEXT actual43cfb4..43d078 date/time/music/cursor, earlierwindow/critical-section/
+CRT and full WinMain/dispatcher/app composition. Unknown local/WindowsNLS/lib
+transforms, actualinput/audio/latency/fullmatches/content/cleanMac remainopen.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

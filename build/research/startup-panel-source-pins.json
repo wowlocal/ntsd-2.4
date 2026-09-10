@@ -1,0 +1,21 @@
+{
+  "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+  "build/original/crt/msvcr80.dll": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "build/research/startup-panel-candidate1.json": "96c37d64a15753933e730ee54b1f9db5f83e0be829457af3c577ae5c5fc2af0b",
+  "build/research/startup-panel-candidate1-source.py": "f254ad5277e397d8f9149db971d96c8749733ee84c3343928181f160b9a8655a",
+  "build/research/startup-panel-probe1-source.py": "618c4787c097b8fa30ad96d2de6b291f1579a31c6c013d008dcf920a51428ae7",
+  "build/research/startup-panel-probe1.log": "342b523ef0a63b3a224bf929a7bfaf50b8c05e3984e77d885512c762d752d8fa",
+  "build/research/startup-panel-probe2.json": "b4bb38e4017bf0791cfb8d9499aa5925ba322478b19fc5f30d187a1331f0bb08",
+  "build/research/startup-panel-probe2-source.py": "38843c7706da6dfbc9a4bd199968aea099c75dae0f154d962cd87289062e5cf6",
+  "tools/oracle_crt.py": "bb8eade431bf8e89d8ebc4020427e0f8109d5b0a0f0b9633b5594f4c0cb4012f",
+  "tools/oracle_menu_info_reading.py": "72967b094dc397eb1fb1fefe9ce736fd4207a392012634275ae7bff58a7182ca",
+  "tools/oracle_menu_content.py": "13693f39762045489e398c2248a19ef15b1c77f149cadccd6d45ddfb6d9cce31",
+  "tools/oracle_menu_panel_bitmap.py": "d5930b089137ce37ebf0abcac16d8cd88e09b0920e173380eaadaa787303c163",
+  "tools/oracle_menu_info_writing.py": "6d10dfc6b9b59ed1ee010741b773d728d7f99fc3cfb9b836ced1d115c2591571",
+  "tools/oracle_state.py": "704229e023414622bfdbe4fe3fe6cf862f38bc315ab397f7ecee80753966efc6",
+  "tools/oracle_bitmap_drawing.py": "8f71793204bd1b3aa22bb14d2f9d2737d2f406740f1ea3c4afeff61c484888a7",
+  "tools/import_ntsd.py": "5c5fee71607c2752b8d1a79e7f569588fe0c6b43f551cf1e99a63e7d51c9aede",
+  "tools/inspect_original.py": "f0c09d227f61086f1e6a0aa2ade59daee1c438eb4bb9a5a1bb6430ad02c6c4f5",
+  "tools/oracle_startup_panel.py": "f254ad5277e397d8f9149db971d96c8749733ee84c3343928181f160b9a8655a"
+}

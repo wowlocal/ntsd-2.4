@@ -167,3 +167,8 @@ actual failure-selected defaults43c690. Then date/time/music/input and the
 remaining full WinMain/dispatcher/application joins. Earlier stack provenance,
 CRT/NLS, library transforms, Windows/device/input/latency/audio, full matches,
 all original content and clean-Mac acceptance remain open.
+
+The later [STARTUP_PANEL](STARTUP_PANEL.md) now executes that complete43cf94..
+43cfb4 selection with all actual children on one source CPU/stack. Native carries
+its own info locals into the shared content region and rejects unavailable
+backing explicitly. This still leaves earlier/full WinMain and app/Windows open.

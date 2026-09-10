@@ -14,12 +14,14 @@ public enum OriginalMenuContent {
     public struct Result: Sendable { public let value: UInt32?, boundaryCall: UInt32? }
     private struct Stop: Error { let call: UInt32 }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu content: "+text) }
-    public static func load(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,translatedBytes: [UInt8]?,file: UInt32 = 0x20001000,closeResult: Int32 = 0,
+    public static func load(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,translatedBytes: [UInt8]?,file: UInt32 = 0x20001000,closeResult: Int32 = 0,requireDefinedLocals: Bool = false,
+        fileSource: ((String) throws -> [UInt8]?)? = nil,
+        written: (Int,Int,[UInt8]) throws -> Void = { _,_,_ in },
         observe: (OriginalMenuContentEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> Result {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize, local.bytes.count == 0x450 else { throw error("Storage extent") }
         let base = OriginalMatchPreparation.globalBase
         var state = globals, scratch = local, position = 0, eof = false
-        let bytes = translatedBytes ?? []
+        var bytes = translatedBytes ?? [], available = translatedBytes != nil
         func emit(_ e: OriginalMenuContentEvent) throws { try observe(e,state,scratch) }
         func word(_ address: Int) throws -> Int32 { try state.integer(at: address-base,as: Int32.self) }
         func bytesOf(_ word: UInt32,_ count: Int = 4) -> [UInt8] { (0..<count).map { UInt8(truncatingIfNeeded: word >> ($0*8)) } }
@@ -27,6 +29,7 @@ public enum OriginalMenuContent {
             for (i,b) in bytes.enumerated() {
                 if region == 1 { try scratch.write(b,at: offset+i) } else { try state.write(b,at: offset-base+i) }
             }
+            try written(region,offset,bytes)
         }
         func write(_ address: Int,_ value: Int32,_ count: Int = 4) throws {
             try store(0,address,bytesOf(UInt32(bitPattern: value),count))
@@ -45,7 +48,15 @@ public enum OriginalMenuContent {
             e.result = output.isEmpty ? 0 : 1;e.position = position;e.eof = eof;try emit(e)
         }
         func scan(_ format: String,_ offset: Int,_ destinations: [(Int,Int)],_ call: UInt32) throws {
-            guard let end = scratch.bytes[offset...].firstIndex(of: 0) else { throw Stop(call: call) }
+            let end: Int
+            if requireDefinedLocals {
+                var at = offset
+                while try scratch.integer(at:at,as:UInt8.self) != 0 { at += 1 }
+                end = at
+            } else {
+                guard let found = scratch.bytes[offset...].firstIndex(of:0) else { throw Stop(call:call) }
+                end = found
+            }
             let text = String(String.UnicodeScalarView(scratch.bytes[offset..<end].map { UnicodeScalar($0) }))
             var scanner = try OriginalFrameScanner(text), assigned = 0
             let specs = format.split(separator: " ")
@@ -64,15 +75,25 @@ public enum OriginalMenuContent {
             var e = OriginalMenuContentEvent("scan",[UInt32(offset)]+destinations.flatMap { [UInt32($0.0),UInt32($0.1)] })
             e.format = format;e.result = assigned == 0 && scanner.eof ? UInt32.max : UInt32(assigned);try emit(e)
         }
-        func fixed(_ offset: Int,_ value: String) -> Bool { Array(scratch.bytes[offset..<offset+value.utf8.count]) == Array(value.utf8) }
-        func link(_ address: Int) -> Bool { [UInt8(63),104,72].contains(state.bytes[address-base]) }
+        func fixed(_ offset: Int,_ value: String) throws -> Bool {
+            if !requireDefinedLocals { return Array(scratch.bytes[offset..<offset+value.utf8.count]) == Array(value.utf8) }
+            for (i,byte) in value.utf8.enumerated() {
+                if try scratch.integer(at:offset+i,as:UInt8.self) != byte { return false }
+            }
+            return true
+        }
+        func link(_ address: Int) throws -> Bool {
+            let byte: UInt8 = try requireDefinedLocals ? state.integer(at:address-base,as:UInt8.self) : state.bytes[address-base]
+            return [UInt8(63),104,72].contains(byte)
+        }
         let index = try word(0x44d784), name = "data\\ad\(index).txt"
         for (address,format,output) in [(0x453c68,"data\\ad%d.txt",name),(0x453d40,"sprite\\sys\\ad%d.bmp","sprite\\sys\\ad\(index).bmp")] {
             try store(0,address,Array(output.utf8)+[0]);var e = OriginalMenuContentEvent("format",[UInt32(address),UInt32(bitPattern: index)])
             e.format = format;e.result = UInt32(output.utf8.count);try emit(e)
         }
-        var open = OriginalMenuContentEvent("open",[translatedBytes == nil ? 0 : file]);open.strings = [Array(name.utf8),Array("r".utf8)];try emit(open)
-        guard translatedBytes != nil else { return finish(0) }
+        if let fileSource { let input = try fileSource(name);bytes = input ?? [];available = input != nil }
+        var open = OriginalMenuContentEvent("open",[available ? file : 0]);open.strings = [Array(name.utf8),Array("r".utf8)];try emit(open)
+        guard available else { return finish(0) }
         guard file != 0 else { throw error("Present content with null FILE") }
         do {
             try gets(604);try write(0x44d778,-99)

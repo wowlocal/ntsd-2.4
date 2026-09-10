@@ -1,0 +1,191 @@
+{
+  "status": "accepted controlled whole startup panel caller; full WinMain/application open",
+  "previousGoalTurn": "progress:4abae57",
+  "base": "4abae570749c4865431c309eb168b749b5067dab",
+  "startedUTC": "2026-09-10T10:08:26.344225+00:00",
+  "priorFixtures": 230,
+  "fullGoalActive": true,
+  "sourceJobs": [
+    {
+      "name": "probe1",
+      "status": "terminal",
+      "exitCode": 1,
+      "pidNotCaptured": true,
+      "error": "StopIteration: MENU_BACK1 language1033 not found; pinned PE has language1028",
+      "UTC": "2026-09-10T10:13:19.214674+00:00",
+      "source": "build/research/startup-panel-probe1-source.py",
+      "log": "build/research/startup-panel-probe1.log",
+      "casesCompleted": 0
+    },
+    {
+      "name": "probe2",
+      "session": 23537,
+      "status": "terminal",
+      "exitCode": 0,
+      "pidNotCaptured": true,
+      "casesCompleted": 12,
+      "sha256": "b4bb38e4017bf0791cfb8d9499aa5925ba322478b19fc5f30d187a1331f0bb08",
+      "source": "build/research/startup-panel-probe2-source.py"
+    },
+    {
+      "name": "candidate1",
+      "pid": 47391,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_startup_panel.py",
+        "--output",
+        "build/research/startup-panel-candidate1.json"
+      ],
+      "status": "terminal",
+      "start": 1789035319.285722,
+      "exitCode": 0,
+      "end": 1789035442.483961,
+      "session": 91021
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "startup-panel-raw1",
+      "pid": 48472,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalStartupPanelTests|OriginalMenuInfoReadingTests|OriginalMenuContentTests|OriginalMenuPanelBitmapTests|OriginalMenuInfoWritingTests|OriginalMenuPanelUpdateTests"
+      ],
+      "start": 1789035741.7984052,
+      "exitCode": 0,
+      "end": 1789035942.2911549,
+      "session": 18216,
+      "tests": 13,
+      "testSeconds": 5.276,
+      "buildSeconds": 193.29
+    },
+    {
+      "name": "startup-panel-packaged",
+      "pid": 49636,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalStartupPanelTests|OriginalMenuInfoReadingTests|OriginalMenuContentTests|OriginalMenuPanelBitmapTests|OriginalMenuInfoWritingTests|OriginalMenuPanelUpdateTests"
+      ],
+      "start": 1789036120.226016,
+      "exitCode": 0,
+      "end": 1789036126.794731,
+      "buildSeconds": 0.3,
+      "tests": 13,
+      "testSeconds": 5.019,
+      "session": 63281
+    }
+  ],
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "sourceAuditScope": "Final capture records actual writes to the shared1104-byte region; probe2 retains its broader whole-stack trace unchanged.",
+  "uiInspection": {
+    "operation": "cua.getState()",
+    "UTC": "2026-09-10T10:24:27.982353+00:00",
+    "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+    "turn": "unavailable",
+    "apps": [],
+    "browsers": [],
+    "errors": [
+      "Native apps: Error: Sky Computer Use native pipe startup failed"
+    ],
+    "scope": "Tool transport failure, not a safety refusal. No app launched or input action executed.",
+    "nativeJobRevalidation": {
+      "pid": 48472,
+      "exitCode": 0,
+      "output": "48472 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-test -c release --filter OriginalStartupPanelTests|OriginalMenuInfoReadingTests|OriginalMenuContentTests|OriginalMenuPanelBitmapTests|OriginalMenuInfoWritingTests|OriginalMenuPanelUpdateTests"
+    }
+  },
+  "rawAcceptancePassed": true,
+  "sourceSHA256": "96c37d64a15753933e730ee54b1f9db5f83e0be829457af3c577ae5c5fc2af0b",
+  "artifactVerification": {
+    "session": 3156,
+    "exitCode": 0
+  },
+  "fixturePublished": true,
+  "currentFixtures": 231,
+  "publication": {
+    "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-startup-panel.json",
+    "sha256": "1bdeb634ad52214d67df2565780c90f66a526204823d28d6428e4cc9bb4633ca",
+    "bytes": 11866492,
+    "session": 66015,
+    "exitCode": 0
+  },
+  "acceptedMilestone": true,
+  "packagedAcceptancePassed": true,
+  "allOwnedJobsTerminal": true,
+  "nativeWholeCalls": 212,
+  "nativeUnknownRejections": 8,
+  "ownReplacementPairs": 32,
+  "nativeChildReturns": 682,
+  "nativeChildEvents": 39792,
+  "nativeProductionWiringComplete": false,
+  "windowsVerified": false,
+  "appWindowExercised": false,
+  "completedUTC": "2026-09-10T10:39:53.838688+00:00",
+  "terminalPIDRevalidation": [
+    {
+      "pid": 47391,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 48472,
+      "exitCode": 1,
+      "output": ""
+    },
+    {
+      "pid": 49636,
+      "exitCode": 1,
+      "output": ""
+    }
+  ],
+  "packagedArtifactVerification": {
+    "session": 45778,
+    "exitCode": 0
+  },
+  "isolatedNativeFiles": 584,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeExecutableSHA256": "0c38effc3acd4c26fb24e047b3cb4bd49422c2ae474e21c5b3fc57c235967df0",
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/MENU_CONTENT.md",
+    "docs/research/MENU_INFO_READING.md",
+    "docs/research/MENU_PANEL_BITMAP.md",
+    "docs/research/MENU_PANEL_UPDATE.md",
+    "docs/research/STARTUP_PANEL_PLAN.md",
+    "docs/research/STARTUP_PANEL.md",
+    "docs/evidence/startup-panel.json",
+    "tools/oracle_startup_panel.py",
+    "tools/verify_startup_panel.py",
+    "tools/accept_startup_panel.py",
+    "native/Sources/NTSDCore/OriginalMenuContent.swift",
+    "native/Sources/NTSDCore/OriginalStartupPanel.swift",
+    "native/Tests/NTSDCoreTests/OriginalStartupPanelTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-startup-panel.json"
+  ],
+  "finalReview": {
+    "session": 95748,
+    "exitCode": 0,
+    "localMarkdownLinks": 643,
+    "UTC": "2026-09-10T10:40:41.366146+00:00"
+  }
+}
