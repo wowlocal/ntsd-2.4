@@ -6,6 +6,11 @@ resource ownership, hostname bytes and library DC through the actual enclosing
 caller and presentation/epilogue. This is accepted controlled compatibility
 research, not production menu wiring, Windows networking or a full application.
 
+[MENU_SOUND_STARTUP](MENU_SOUND_STARTUP.md) now independently compares the
+device and five menu WAV producers in controlled43d08e..43d100. It does not
+replace this corpus's declared sound bindings or join earlier WinMain state to
+these menus. Both studies preserve their own unchanged source contracts.
+
 The pinned EXE, bundled lib.dll and VC80 run on Unicorn2.1.4. The actual DLL
 installer executes before the World constructor and fresh menu resources. Its
 13 patches, relocated instruction bytes and original files are verified. Low

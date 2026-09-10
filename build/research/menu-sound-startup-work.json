@@ -1,0 +1,175 @@
+{
+  "status": "accepted controlled menu sound startup; full application open",
+  "base": "26a77c36ad4341239a5ccc2ad020c1825cd704e2",
+  "startedUTC": "2026-09-10T08:43:00.785697+00:00",
+  "priorFixtures": 225,
+  "fullGoalActive": true,
+  "sourceStatus": "terminal",
+  "nativeStatus": "not started",
+  "ownedNativeFiles": [
+    "native/Sources/NTSDCore/OriginalMenuSoundStartup.swift",
+    "native/Tests/NTSDCoreTests/OriginalMenuSoundStartupTests.swift"
+  ],
+  "probe1": {
+    "exitCode": 1,
+    "reason": "Harness per-load region spacing was too small for original m_pass.wav; no input or expected result changed.",
+    "source": "build/research/menu-sound-startup-probe1-source.py"
+  },
+  "probe2": {
+    "exitCode": 0,
+    "cases": 2,
+    "sha256": "c0cfb1804eef0827dee4828dd253558a1dca49daa81f4987be45016a9fb20a1e"
+  },
+  "sourcePID": 28334,
+  "sourceCommand": [
+    "uv",
+    "run",
+    "tools/oracle_menu_sound_startup.py",
+    "--output",
+    "build/research/menu-sound-startup-candidate1.json"
+  ],
+  "sourceStarted": 1789030080.3031008,
+  "sourceExitCode": 0,
+  "sourceEnded": 1789030085.8004532,
+  "isolatedPackage": "/Users/michael/Developer/ntsd-2.4/build/research/menu-sound-startup-isolated/native",
+  "baseExportFiles": 570,
+  "sourceSession": 56490,
+  "nativeJobs": [
+    {
+      "key": "menu-sound-startup-raw-native",
+      "status": "terminal",
+      "pid": 28746,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalNetworkMenuTests"
+      ],
+      "packaged": false,
+      "start": 1789030229.6650748,
+      "exitCode": 1,
+      "end": 1789030234.339844,
+      "session": 7013
+    },
+    {
+      "key": "menu-sound-startup-raw-native2",
+      "status": "terminal",
+      "pid": 28962,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalNetworkMenuTests"
+      ],
+      "packaged": false,
+      "start": 1789030294.200487,
+      "exitCode": 0,
+      "end": 1789030503.9478788,
+      "session": 60273,
+      "tests": 5,
+      "testSeconds": 22.482,
+      "buildSeconds": 186.04
+    },
+    {
+      "key": "menu-sound-startup-packaged-native",
+      "status": "terminal",
+      "pid": 29858,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuSoundStartupTests|OriginalWaveLoaderTests|OriginalNetworkMenuTests"
+      ],
+      "packaged": true,
+      "start": 1789030600.6525812,
+      "exitCode": 0,
+      "end": 1789030624.318004,
+      "session": 94115,
+      "tests": 5,
+      "testSeconds": 22.466,
+      "buildSeconds": 0.29
+    }
+  ],
+  "fixturePublished": true,
+  "currentFixtures": 226,
+  "newFixtureFiles": [
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-sound-startup.json"
+  ],
+  "nativeRawCompared": true,
+  "sourceSHA256": "4f04e2a26a20b7dce8f23e17c651b5d9d85239223b2466102f4b6cb64d43b7e0",
+  "fixtureSHA256": "cdf7f25b26d5325c9745a6805fb9ca60a94a357d64c6a4ca947a5ccc33064556",
+  "rawBytes": 7643981,
+  "packedBytes": 3890251,
+  "appRender": {
+    "status": "terminal",
+    "pid": 29791,
+    "command": [
+      "/Users/michael/Developer/ntsd-2.4/build/research/menu-sound-startup-isolated/native/.build/release/NTSDNative",
+      "--data",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/game.json",
+      "--assets",
+      "/Users/michael/Developer/ntsd-2.4/build/NTSD Native.app/Contents/Resources/Assets",
+      "--capture-state",
+      "/Users/michael/Developer/ntsd-2.4/build/research/menu-sound-startup-app-state.json",
+      "--screenshot",
+      "/Users/michael/Developer/ntsd-2.4/build/research/menu-sound-startup-app-render.png"
+    ],
+    "start": 1789030576.4842272,
+    "executableSHA256": "4ce229b60e8a35a2eba440395ef73036f8d6c208dfb7501c68ab3fba73953d6f",
+    "dataSHA256": "b8bb574f4e8f01c3d7828fa0c1d9b1cf9fab9c2f46103684d33bbfa77461f835",
+    "scope": "Current Practice AppKit/SpriteKit built-in render only. New original menu sound startup is not wired into this app; no input/audio/latency/Windows claim.",
+    "exitCode": 0,
+    "end": 1789030578.647721,
+    "session": 29026,
+    "visualInspection": "1588x1200 built-in AppKit/SpriteKit capture visibly contains District, Naruto, Sasuke and HUD; no new menu-sound integration or interaction/audio/latency claim.",
+    "imageSHA256": "f5dcae845a43521de962e2fdd5df7f625e715320afb37008f619cd1ae237825c"
+  },
+  "acceptedMilestone": true,
+  "nativePackagedCompared": true,
+  "allOwnedJobsTerminal": true,
+  "completedUTC": "2026-09-10T09:01:35.306913+00:00",
+  "isolatedNativeFiles": 573,
+  "nativeWholeSegments": 112,
+  "nativeExplicitRejections": 10,
+  "nativeProductionWiringComplete": false,
+  "windowsVerified": false,
+  "corrections": [
+    {
+      "kind": "native compile",
+      "job": "menu-sound-startup-raw-native",
+      "reason": "Missing explicit as: UInt32.self arguments; no executable tests ran. Declared-readable input bytes and separate observed store mask distinguished before first execution."
+    },
+    {
+      "kind": "artifact verifier",
+      "session": 50552,
+      "exitCode": 1,
+      "reason": "Restored register assertion incorrectly included stopped WAV calls; limited to whole returns, source bytes unchanged.",
+      "correctedSession": 71994,
+      "correctedExitCode": 0
+    },
+    {
+      "kind": "owned-file review",
+      "session": 95375,
+      "exitCode": 1,
+      "reason": "Root export comparison incorrectly included foreign modified OriginalPostDrawSlotPrefix. Verified that root foreign hash is retained, while isolated file must match committed base archive; neither file changed.",
+      "correctedSession": 54980,
+      "correctedExitCode": 0
+    },
+    {
+      "kind": "artifact verifier CLI",
+      "session": 38233,
+      "exitCode": 1,
+      "reason": "The standalone CLI passed a relative fixture path to relative_to(absolute ROOT). Both audit paths now resolve before reporting; raw/packed bytes had already compared identically. No source/native/expected changes.",
+      "correctedSession": 9663,
+      "correctedExitCode": 0
+    }
+  ],
+  "independentArtifactVerification": true,
+  "localMarkdownLinks": 622
+}

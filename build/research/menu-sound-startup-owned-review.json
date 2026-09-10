@@ -1,0 +1,49 @@
+{
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/NETWORK_MENU.md",
+    "docs/research/MENU_SOUND_STARTUP_PLAN.md",
+    "docs/research/MENU_SOUND_STARTUP.md",
+    "docs/evidence/menu-sound-startup.json",
+    "tools/oracle_menu_sound_startup.py",
+    "tools/verify_menu_sound_startup.py",
+    "tools/accept_menu_sound_startup.py",
+    "native/Sources/NTSDCore/OriginalMenuSoundStartup.swift",
+    "native/Tests/NTSDCoreTests/OriginalMenuSoundStartupTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-sound-startup.json"
+  ],
+  "ownedHashes": {
+    "AGENTS.md": "21d46df736ed3ac0194f8dda1666f868d9b9bd3c00f9296a196a9f59dc208d1b",
+    "docs/RESEARCH_MAP.md": "c89ac38a4243f0e4841ec70144f596dbccc6f6193d95cada192a77a19c36c812",
+    "docs/research/ADDRESS_BOOK.md": "df67831b768738f2e074c2393a7dcaf0c2b260e1a0fd73b8f711d8b5ef6e98ff",
+    "docs/research/NETWORK_MENU.md": "73c663ecdc25b426282a388e357e709011edea57caa73ecf518180e0cea51904",
+    "docs/research/MENU_SOUND_STARTUP_PLAN.md": "3a6ecab65fbf9b2ed9174f13297c04133591246a6b340608ff7b18ed8a808686",
+    "docs/research/MENU_SOUND_STARTUP.md": "74276d3e7404f12b6aefbd07f3f027919392eb1d6a7e935592f956a25cce79a3",
+    "docs/evidence/menu-sound-startup.json": "b6ef26f56d282a183d23ebc41ee0b956387d38cab9ae4a7275c5579ea16b6880",
+    "tools/oracle_menu_sound_startup.py": "83cb09c2b8491780648f94bbc1a48ee516aa156035f9efeadb2c1fa3d0a01b9b",
+    "tools/verify_menu_sound_startup.py": "b32426e8f17c3c6b7aef733a5ec54c7ccf7c20ec4b287a47af9b9c576f986fe8",
+    "tools/accept_menu_sound_startup.py": "95cfa8b3e534ae02d5396c732b7b956c5597c66e4efb883dcd4e8d95637ff3c9",
+    "native/Sources/NTSDCore/OriginalMenuSoundStartup.swift": "040f93aa6b028267dad1cb1f3199c17fe7794f397678365de373df63cbb6a13f",
+    "native/Tests/NTSDCoreTests/OriginalMenuSoundStartupTests.swift": "faf9b55042fb0b7667ec494b0edec5da99448897caf7085425f7654a8d4a777b",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-sound-startup.json": "cdf7f25b26d5325c9745a6805fb9ca60a94a357d64c6a4ca947a5ccc33064556"
+  },
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "priorPins": 225,
+  "currentPins": 226,
+  "vendorFiles": 10,
+  "isolatedFiles": 573,
+  "localMarkdownLinks": 622,
+  "fullRawPackedJSONBytesSHA": true,
+  "atomicParts": 122,
+  "blobs": 146,
+  "allOwnedJobsTerminal": true
+}

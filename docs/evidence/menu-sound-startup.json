@@ -1,0 +1,182 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sourceSHA256": "4f04e2a26a20b7dce8f23e17c651b5d9d85239223b2466102f4b6cb64d43b7e0",
+  "sourceBytes": 7643981,
+  "producerSHA256": "83cb09c2b8491780648f94bbc1a48ee516aa156035f9efeadb2c1fa3d0a01b9b",
+  "cases": 122,
+  "wholeSegments": 112,
+  "explicitCreateBoundaries": 10,
+  "loads": {
+    "returned": 580,
+    "invalidCreateContinuation": 10
+  },
+  "helperReturns": 702,
+  "events": {
+    "deviceCreate": 122,
+    "cooperativeLevel": 116,
+    "load": 590,
+    "open": 560,
+    "descend": 1600,
+    "read": 1030,
+    "ascend": 520,
+    "allocate": 500,
+    "close": 550,
+    "create": 480,
+    "lock": 574,
+    "restore": 104,
+    "copy": 750,
+    "unlock": 470,
+    "free": 480,
+    "message": 96
+  },
+  "eventCount": 8542,
+  "stores": {
+    "API": 116,
+    "CPU": 1036
+  },
+  "retainedTemporaries": 20,
+  "comparedBytes": 533552320,
+  "blobs": 146,
+  "priorFixturesVerified": 225,
+  "actualInstructionStarts": 392,
+  "staticInstructionStarts": 408,
+  "unexecutedStatic": [
+    {
+      "address": "0x401535",
+      "bytes": "33c0",
+      "assembly": "xor\teax, eax"
+    },
+    {
+      "address": "0x401537",
+      "bytes": "5b",
+      "assembly": "pop\tebx"
+    },
+    {
+      "address": "0x401538",
+      "bytes": "8b8c24b4010000",
+      "assembly": "mov\tecx, dword ptr [esp + 0x1b4]"
+    },
+    {
+      "address": "0x40153f",
+      "bytes": "33cc",
+      "assembly": "xor\tecx, esp"
+    },
+    {
+      "address": "0x401541",
+      "bytes": "e86c3b0400",
+      "assembly": "call\t0x4450b2 <.text+0x440b2>"
+    },
+    {
+      "address": "0x401546",
+      "bytes": "81c4b8010000",
+      "assembly": "add\tesp, 0x1b8"
+    },
+    {
+      "address": "0x40154c",
+      "bytes": "c20400",
+      "assembly": "ret\t0x4"
+    },
+    {
+      "address": "0x4016cd",
+      "bytes": "56",
+      "assembly": "push\tesi"
+    },
+    {
+      "address": "0x4016ce",
+      "bytes": "ff155c724400",
+      "assembly": "call\tdword ptr [0x44725c]"
+    },
+    {
+      "address": "0x4016d4",
+      "bytes": "6a00",
+      "assembly": "push\t0x0"
+    },
+    {
+      "address": "0x4016d6",
+      "bytes": "6a00",
+      "assembly": "push\t0x0"
+    },
+    {
+      "address": "0x4016d8",
+      "bytes": "6828754400",
+      "assembly": "push\t0x447528"
+    },
+    {
+      "address": "0x4016dd",
+      "bytes": "6a00",
+      "assembly": "push\t0x0"
+    },
+    {
+      "address": "0x4016df",
+      "bytes": "ff15c8714400",
+      "assembly": "call\tdword ptr [0x4471c8]"
+    },
+    {
+      "address": "0x4016e5",
+      "bytes": "33c0",
+      "assembly": "xor\teax, eax"
+    },
+    {
+      "address": "0x4016e7",
+      "bytes": "e95b020000",
+      "assembly": "jmp\t0x401947 <.text+0x947>"
+    }
+  ],
+  "libraryPatchesDisjoint": true,
+  "actualSourceLibraryExecution": false,
+  "windowsVerified": false,
+  "appDeviceVerified": false,
+  "nativeCompared": true,
+  "sourceFiles": [
+    {
+      "path": "data\\m_join.wav",
+      "sha256": "477508bc6b675e5e9a87a9939ddd570f29912b998fe668a1cbda240df0781c47",
+      "count": 36138
+    },
+    {
+      "path": "data\\m_ok.wav",
+      "sha256": "44b1698e70871e1cce2821eda9215e0bfd68b89dd08868cc2d35fa7e59caaefc",
+      "count": 19450
+    },
+    {
+      "path": "data\\m_cancel.wav",
+      "sha256": "3e2d8c8e63463821e83983f7ea1fea19d499c78f7f0567c3d4df01542aaa641c",
+      "count": 18834
+    },
+    {
+      "path": "data\\m_pass.wav",
+      "sha256": "38d480100ae49990ef111cef4ff5485e37cfc087b136ba54e5473708612940fe",
+      "count": 379766
+    },
+    {
+      "path": "data\\m_end.wav",
+      "sha256": "5f66b7c622812319a26f9c4fb5afaf671bed70e9b955734a35f8dbd452df0794",
+      "count": 144510
+    }
+  ],
+  "allAtomicPartsVerified": true,
+  "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-menu-sound-startup.json",
+  "fixtureSHA256": "cdf7f25b26d5325c9745a6805fb9ca60a94a357d64c6a4ca947a5ccc33064556",
+  "fixtureBytes": 3890251,
+  "packedBytesVerified": true,
+  "nativeWholeSegmentMatches": 112,
+  "nativeExplicitRejections": 10,
+  "nativeMatchedWholeSegmentEvents": 8066,
+  "nativeMatchedWholeSegmentLoads": 560,
+  "nativePartialContractEvents": 476,
+  "nativeRawTests": 5,
+  "nativeRawTestSeconds": 22.482,
+  "nativeRawBuildSeconds": 186.04,
+  "packagedNativeCompared": true,
+  "initializedWinMainClaim": false,
+  "sourceControlWord": 895,
+  "nativeProcessFPUClaim": false,
+  "nativePackagedTests": 5,
+  "nativePackagedTestSeconds": 22.466,
+  "nativePackagedBuildSeconds": 0.29,
+  "allOwnedJobsTerminal": true,
+  "isolatedNativeFiles": 573,
+  "currentFixtures": 226,
+  "currentPracticeRenderVerified": true,
+  "newMenuSoundWiringVerified": false
+}

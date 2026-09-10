@@ -629,6 +629,38 @@ still returnsotherSelector and Practice is not wired to the new menus. NEXT
 CRT/NLS/WinMain, remaininglibraryhooks and initialized runtime/listener joins;
 whole app/window/input/audio/latency/Windows/match/content/clean-Mac remain open.
 
+[MENU_SOUND_STARTUP](docs/research/MENU_SOUND_STARTUP.md) now implements whole
+401970 and controlled43d08e..43d100 with five original4014e0 loads.112 whole
+segments match560WAV returns/672helpers/8066events/1092stores. Ten nonzero
+CreateSoundBuffer continuations stop before40187a and are explicit native
+rejections with rollback, NOT ten more whole matches. Their20 completed WAV
+returns plus10stops/476events remain a separate partial contract. Full comparison
+is533552320bytes/8542events; all20 short/failed-read temporary leaks retained.
+OriginalMenuSoundStartup returns its own five buffer/allocation results, preserves
+zero-only device HRESULT success, ignored cooperative errors, live output clear
+before Open and continued loads after ordinary failure. Native late fifth-load
+observer/missing successful device output roll back; buffer external effects.
+
+392actual starts=27caller+19device+342WAV+3cookie+1import;408static starts include
+16unexecuted (consecutive device recheck/nonPCM). All702completed helper returns
+and CW037f verified; failed WAV calls have NOT restored registers. End43d100 is
+unexecuted/SP1000f00c after three pending memset arguments, not WinMain return.
+The original13DLL patches are disjoint from these whole ranges; no DLL runs in
+this controlled source, no initialized WinMain/CRT or actual device claim.
+Prior HWND/globals/API tokens and scratch are explicit inputs. Full earlier
+window/settings/music/worker/CRT and menu consumer join stay open.
+
+Raw5tests22.482s/build186.04s; packaged5tests22.466s/build0.29s passed, including
+retained409-file WAV/allseven network fixtures.225oldpins unchanged/226current;
+raw7643981/packed3890251bytes/JSON/SHA/all146blobs/122atomicparts verified.
+10vendorfiles/573isolated native files checked. Source/native/app jobs terminal;
+see build/research/menu-sound-startup-work.json. The first probe's spacing was
+too small for m_pass.wav and was corrected before final capture. Initial native
+compile needed explicit integer types; verifier's saved-register condition was
+restricted to actual returns. No source expected bytes changed. Current Practice
+rendered District/Naruto/Sasuke/HUD and exited0; new audio/menu not wired, no
+input/latency/audio/Windows evidence. Full application/match/clean-Mac goal open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.
