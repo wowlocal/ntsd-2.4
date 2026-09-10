@@ -1018,6 +1018,42 @@ worker/stack composition and earlierCRT/NLS/library transforms/application/
 Windows/devices/fullmatches/allcontent/cleanMac. Actualdispatchernegative-result
 reachability remains open despite controlled recovery completion.
 
+[APPLICATION_DISPATCH_ENTRY](docs/research/APPLICATION_DISPATCH_ENTRY.md) now
+continues8 fresh own WinMain/loop chains through actual43e9a0 and4246b0 on
+staticWorld458b00 to required4450ac/SP1000ea6c. No allocator/World/dispatcher
+return supplied. Full174-event startup and accepted normal required loop
+reproduce; second loop uses actual minimize. Incoming0/1 is NOT a surface;
+actual455634/455608 remain own31002000/31003000. Negative query/clear HRESULTs
+still reach the same allocation.48globalstores/40events/24helperreturns compare,
+400704fullglobalbytes+masks. New135EXE/0DLL PCs=56dispatcher+26art+17clear+36World;
+13libpatch spans disjoint, unexecuted4450ac excluded. SourceCW stays037f.
+
+Own World2008bytes derive from PEzero-fill, not controlled22000020 or expected
+snapshot. No new CRT initializer-order claim. Original toggles4511f8 then
+requests1f50 for first front bitmap. Native shared OriginalFrontMenuResources
+reaches same allocate(index0), throws required dependency and retains startup,
+committedresize, MSG/counter/baseline/ownership via whole pending-loop rollback.
+Six late surface/front observers verify rollback. Native leaves1696private
+requestbytes unknown (zero/false); only160owned requestbytes compare with allmasks/
+requests/order. All1856source requestbytes retained. Independent replay of
+parent/loop+456CPU/5API stackstores reconstructs18432stackbytes/masks and24frames.
+Raw helpermasks excludeAPI outputs; lifetimeknownStack includes them.16normal
+FS:[0] prologue stores retained; no corruption/bypass or epilogue claim.
+
+Raw9release tests4.514s/build202.16s; finalpackaged9tests4.441s/build0.30s passed,
+including retainedloop/art/frontresources.238oldpins unchanged/239current;
+raw3075646/packed2453703bytes, fullbytes/JSON/SHA/151blobs/8parts/10vendorfiles
+verify.607isolatedfiles=604committedbase+3newoverlays exclude6foreign transforms.
+Failed initialprobe deep-copy VM-owner error preserved; JSON-only freeze fixed
+observer bookkeeping. Verifier corrected optionaldebugbytes and rawCPU/API mask
+contracts; source/native rules/expected unchanged. Allownjobs terminal; CUA
+nativepipe failed, no window/input action.
+Jobs:build/research/application-dispatch-entry-work.json.
+NEXT actual allocation/43ee50/front-resource own
+continuation, then World/menu/full dispatcher/worker and earlierCRT/NLS/lib
+transforms/application/Windows/devices/fullmatches/allcontent/cleanMac. Fullgoal
+remains active; this is still the first unreturned application dispatch.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

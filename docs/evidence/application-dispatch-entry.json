@@ -1,0 +1,88 @@
+{
+  "sourceBytes": 3075646,
+  "sourceSHA256": "f8017f13e12a7a7bd833f08c2248d5423c8ce21a7e3da0a16be35ec7e57823b0",
+  "producerSHA256": "f8605f9d796e68661a25fdec0ae18cef2057c64e5e9f776d390bd4e95dfd8198",
+  "cases": 8,
+  "parents": 1,
+  "loops": 2,
+  "fullStartupReproduced": true,
+  "acceptedRequiredLoopReproduced": true,
+  "fullGlobalsStackMasksReconstructed": true,
+  "staticWorldPEZeroFill": true,
+  "sourceFullGlobalBytes": 400704,
+  "sourceStackBytes": 18432,
+  "sourceWorldBytes": 16064,
+  "counts": {
+    "distinctLoopStackStores": 68,
+    "originalStackStores": 456,
+    "ownedRequestBytes": 160,
+    "opaqueRequestBytes": 1696,
+    "adapterStackWrites": 5,
+    "events": 40,
+    "stores": 48,
+    "frames": 24,
+    "frameReturns": 24,
+    "helperReturns": 24,
+    "sehStores": 16
+  },
+  "actualEXE": 135,
+  "actualDLL": 0,
+  "staticCoverage": {
+    "clear": {
+      "static": 17,
+      "executed": 17
+    },
+    "dispatcher": {
+      "static": 236,
+      "executed": 56
+    },
+    "screenshot": {
+      "static": 26,
+      "executed": 26
+    },
+    "staticWorldInitializer": {
+      "static": 2,
+      "executed": 0
+    },
+    "worldConstructor": {
+      "static": 12,
+      "executed": 0
+    }
+  },
+  "blobs": 151,
+  "atomicParts": 8,
+  "priorFixturesUnchanged": 238,
+  "vendorFiles": 10,
+  "libPatchSpansDisjoint": 13,
+  "requiredAddress": 4477100,
+  "requiredCount": 8016,
+  "wholeDispatcherReturns": 0,
+  "windowsVerified": false,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeCompared": true,
+  "fixture": "original-application-dispatch-entry.json",
+  "fixtureBytes": 2453703,
+  "fixtureSHA256": "2860df5bb6e87bb13152793206b7867898e2c0783b456899876b04f2c1df1d75",
+  "rawCorpus": "build/research/application-dispatch-entry-candidate1.json",
+  "nativeScope": "8 own startup/loop/dispatcher/staticWorld prefixes to required allocation; full own globals and ordered fields/masks,1696 opaque request bytes remain unknown; whole pending iteration rollback, no allocation/dispatcher/World return.",
+  "acceptanceLog": "build/research/application-dispatch-entry-raw1.log",
+  "sourceCallbacks": "Declared COM/OutputDebugStringA; no Windows/device execution",
+  "packagedAcceptance": {
+    "tests": 9,
+    "seconds": 4.441,
+    "buildSeconds": 0.3,
+    "rawOverride": false
+  },
+  "rawAcceptance": {
+    "tests": 9,
+    "seconds": 4.514,
+    "buildSeconds": 202.16,
+    "sourceCases": 8,
+    "lateFailures": 6
+  },
+  "sourceFrameMasks": "CPU stores only; query API output separately retained in stackStores/knownStack",
+  "nativeOpaqueRequestBytesCompared": false,
+  "nativeOwnedRequestBytes": 160,
+  "nativeOpaqueRequestBytes": 1696,
+  "fullGameGoalActive": true
+}

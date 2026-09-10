@@ -93,3 +93,9 @@ native export excludes the six foreign transform files. Full43e9a0,43e890
 recovery, actual own stack/static-World/worker composition, CRT/NLS, installed
 library routing/transforms, window/device/Windows/full matches/all content and
 clean-Mac acceptance remain open. Linking NTSDNative does not prove those paths.
+
+The newer [own dispatcher entry](APPLICATION_DISPATCH_ENTRY.md) composes this
+helper after the actual WinMain/message-loop parent, reconstructing full source
+stack provenance while leaving native private fields unknown. It reaches the
+first static-World allocation, without returning the whole dispatcher. Surface
+recovery is separately completed in [APPLICATION_RECOVERY](APPLICATION_RECOVERY.md).

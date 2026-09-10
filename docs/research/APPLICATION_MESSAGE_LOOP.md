@@ -71,6 +71,9 @@ from the preceding resize callback, and SP is1000eff4 with the real argument and
 return address pending. Native rejects this required operation and rolls back
 that iteration while retaining the previously committed callback. The source
 partial baseline/register state is preserved separately from native rollback.
+The newer [own dispatcher continuation](APPLICATION_DISPATCH_ENTRY.md) now executes this
+required entry and a minimize companion through the first front-resource
+allocation boundary4450ac, still without a dispatcher result.
 
 The new corpus requests Sleep4/5. Its4ms control supplies a backward second
 clock sample; this is an explicit numeric stimulus, not measured monotonic OS
