@@ -1,0 +1,63 @@
+{
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/MENU_CONTENT.md",
+    "docs/research/MENU_INFO_WRITING.md",
+    "docs/research/MENU_INFO_READING_PLAN.md",
+    "docs/research/MENU_INFO_READING.md",
+    "docs/evidence/menu-info-reading.json",
+    "docs/evidence/menu-info-roundtrip.json",
+    "tools/oracle_menu_info_reading.py",
+    "tools/oracle_menu_info_roundtrip.py",
+    "tools/verify_menu_info_reading.py",
+    "tools/accept_menu_info_reading.py",
+    "native/Sources/NTSDCore/OriginalMenuInfoReading.swift",
+    "native/Tests/NTSDCoreTests/OriginalMenuInfoReadingTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-reading.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-roundtrip.json"
+  ],
+  "ownedHashes": {
+    "AGENTS.md": "3ded6b1281c6488fa5d439c54496204d1bc6dc38701d6b2f5c4f5cd750b67542",
+    "docs/RESEARCH_MAP.md": "23a71bbc2fc8e6281075e54e1a53d8d9bddad44380dab62ee561bb4d8ea28baa",
+    "docs/research/ADDRESS_BOOK.md": "4ba3341980184091e878356006b157c576fc7e6e5ed29693096d8604c8a3159d",
+    "docs/research/MENU_CONTENT.md": "e83b016eaa72747337d93cf555723b5ada0ff9d286283a3048c18383ec309f7d",
+    "docs/research/MENU_INFO_WRITING.md": "31eb9708cc2e4131ed0a4ac0dd06cc41f67f6249714405eecccecd6073ca8d6d",
+    "docs/research/MENU_INFO_READING_PLAN.md": "9ae71c2c1d9213126a18c42f935a03a757db417468847a2a7d6772958be2c72e",
+    "docs/research/MENU_INFO_READING.md": "4a56b6d8c898fd3ebe9a5def93d011a86e3c3c0c33e9d250cfb7a671e839453a",
+    "docs/evidence/menu-info-reading.json": "a32176a9a0ac0a349e157f4f4c08bf9eb6a1cf7eeb9a6c6f32e58d5d5f7d6df6",
+    "docs/evidence/menu-info-roundtrip.json": "5d837a0798337084d21df71f6541a1b35ce7e6835a3e4a74c1c0816f801c707b",
+    "tools/oracle_menu_info_reading.py": "72967b094dc397eb1fb1fefe9ce736fd4207a392012634275ae7bff58a7182ca",
+    "tools/oracle_menu_info_roundtrip.py": "a9f9498d2fe47692d92cb349f78c4a966c4cf26e53a022a0918d9fabcc28b11f",
+    "tools/verify_menu_info_reading.py": "a68f34ae2bd240874db3031f742c2f9723a91a91c73a6f7ccbf16f13acd4d53a",
+    "tools/accept_menu_info_reading.py": "25ad58f0d4eae579e8326a8c117953aefc85ae5fb7f1923a67a04e403f8a31a0",
+    "native/Sources/NTSDCore/OriginalMenuInfoReading.swift": "f42a7b2ff454ce3f8ad668c46f41ef8e1f9f5bbe742ad734c0749f1c9df8acba",
+    "native/Tests/NTSDCoreTests/OriginalMenuInfoReadingTests.swift": "90b36d4da23c7978585895c09f02dab03bb3fbfb9f2ad105974f7ec4d6f568f4",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-reading.json": "87444bb32228ee2528645e329ee1b2203b1dceb2142eded33e967966d74c6882",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-roundtrip.json": "41aeca9cb764b3f822589a5a89ad40974ea495c8081c2faca9e5430d315ed705"
+  },
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "priorPins": 228,
+  "currentPins": 230,
+  "vendorFiles": 10,
+  "isolatedFiles": 581,
+  "localMarkdownLinks": 621,
+  "fullRawPackedJSONBytesSHA": true,
+  "atomicParts": [
+    196,
+    16
+  ],
+  "blobs": [
+    393,
+    158
+  ],
+  "allOwnedJobsTerminal": true
+}

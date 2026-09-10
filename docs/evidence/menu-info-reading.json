@@ -1,0 +1,43 @@
+{
+  "sourceSHA256": "2dcede6586c71883c30c3f66e532ae6e4eec1069b4fa4f611058995d3887a7c4",
+  "sourceBytes": 5955061,
+  "producerSHA256": "72967b094dc397eb1fb1fefe9ce736fd4207a392012634275ae7bff58a7182ca",
+  "counts": {
+    "globalSnapshotBytes": 66724224,
+    "localSnapshotBytes": 266064,
+    "localStores": 3600,
+    "globalStores": 5482,
+    "readerCRTReturns": 662,
+    "knownCallerReads": 1704,
+    "sourceReaderCalls": 196,
+    "nativeSupportedReaders": 194,
+    "unknownCallerReads": 2,
+    "nativeUnknownRejections": 2
+  },
+  "events": {
+    "open": 196,
+    "tokens": 194,
+    "close": 194,
+    "scan": 276,
+    "format": 192
+  },
+  "blobs": 393,
+  "unknownBoundaries": [
+    "missing-a5",
+    "missing-ramp"
+  ],
+  "actualEXE": 135,
+  "actualCRT": 1130,
+  "staticEXE": 135,
+  "unexecutedStatic": [],
+  "oldFixturesUnchanged": 228,
+  "vendorFiles": 10,
+  "fullReaderStoreReconstruction": true,
+  "nativeCompared": true,
+  "fixture": "original-menu-info-reading.json",
+  "fixtureSHA256": "87444bb32228ee2528645e329ee1b2203b1dceb2142eded33e967966d74c6882",
+  "fixtureBytes": 1465387,
+  "fullGoalComplete": false,
+  "windowsVerified": false,
+  "scope": "Controlled whole reader and declared own reader/cache-writer/reader ABI; two unknown-local rejections remain separate from194 whole main calls."
+}

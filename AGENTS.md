@@ -699,6 +699,43 @@ was verified before SIGTERM. Separate built-in render shows District/Naruto/
 Sasuke/HUD and exits0. New input/sound not wired, real input/latency/audio/Windows,
 full WinMain/match/content/clean-Mac remain open.
 
+[MENU_INFO_READING](docs/research/MENU_INFO_READING.md) now implements whole
+43c4a0..43c685/ret:194 complete native calls (82true/112false), plus2 original
+missing-file returns rejected natively for unknown local1c byte, with rollback.
+Do not call these196 whole native matches. Actual132reader+3cookie/1130CRT
+starts execute; all reader starts, not every branch outcome/Windows/privateABI.
+EntrySP1000f000/return1000f004, savedEBX/EBP/ESI/EDI and suppliedCW037f survive.
+
+Preserve failureflag0 before fopen, four single-byte clears after successfulopen,
+%s/%s/%s/%s and close before six-byte end comparison. Missingopen still compares
+unknown endtoken before flag. Local184 bytes exclude cookie; three52-byte spans
+are observed spacing, not recovered C array sizes. Native imports no unknown
+stack bytes; source full bytes/masks remain unchanged. now/dont_update require
+exactNUL. Date scanf widths4/2/2/2/2/2, literal slash, six-99sentinels; no calendar
+validation. Index/period are NOT initialized before%d: failed scan retains own
+values. Both paths format before final-99 checks; preserve trailing bytes/order.
+
+16additional own read/cache-write/read chains compare32reader/16writer returns,
+51descriptor requests/240accepted bytes; second reads7true/9false. Their global
+ABI is explicitly transferred between controlled CPUs, not WinMain. Native
+feeds only its own accepted writer bytes to its next reader. Full FILE/buffer/
+global states and masks agree; existing writer handles error/short writes. Main
+1052events include2pre-rejection opens; chains190reader+147writer events. Late
+second-format observer rolls back globals/locals; callers buffer externaleffects.
+Combined167EXE/1441CRT starts; all13 DLL patches disjoint, no installer in this
+source. Whole CRT/NLS, source private backing and initialized caller remainopen.
+
+Raw7tests2.269s/build51.67s; packaged7tests2.242s/build0.26s passed, retaining704
+content/534writer cases.228oldpins unchanged/230current. Mainraw5955061/packed
+1465387 and roundtrip1446631/434011 bytes/JSON/SHA/all393+158blobs verified;
+10vendorfiles/581isolated files checked,6foreign transform files untouched.
+First raw2tests0.158s/build195.51s also pass. Verifier initially imported Unicorn
+for a hash under systemPython; removed that unnecessary import, no source/native/
+expected change. All owned jobs terminal; NTSDNative linked, no window/device
+claim this stage. See build/research/menu-info-reading-work.json. NEXT whole
+43cf94..43cfb4 reader/content/panel/default selection, then date/time/music/input/
+WinMain/dispatcher/application composition. Full game/match/Windows/cleanMac open.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

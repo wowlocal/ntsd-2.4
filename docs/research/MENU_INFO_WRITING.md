@@ -134,3 +134,9 @@ prefix/value segments в настоящем CRT printf. После failed minus 
 writer теперь используют этот же `OriginalBufferedTextOutput.printFormat`.
 Прежние два корпуса и joined panel повторно прошли без изменения fixtures;
 их исторический объём не расширяется автоматически до новых settings сценариев.
+
+Позднейший [MENU_INFO_READING](MENU_INFO_READING.md) переносит ранний43c4a0:
+194 полных чтения и два отдельных отклонения неизвестного локального байта.
+Его16 собственных цепочек с cache43c710 передают принятые байты записи следующему
+читателю. Эти controlled ABI-связи не исполняют весь43cf94..43cfb4 с content/
+panel/defaults и не закрывают WinMain/Windows или подключение к приложению.

@@ -1,0 +1,162 @@
+{
+  "status": "accepted controlled whole reader and own cache roundtrips; full WinMain/application open",
+  "previousGoalTurn": "progress:75cc69e",
+  "base": "75cc69e427c1bcba5a1e1c7c135f0ed1f2f63934",
+  "startedUTC": "2026-09-10T09:43:57.205436+00:00",
+  "priorFixtures": 228,
+  "fullGoalActive": true,
+  "sourceJobs": [
+    {
+      "pid": 41947,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_menu_info_reading.py",
+        "--output",
+        "build/research/menu-info-reading-candidate1.json"
+      ],
+      "status": "terminal",
+      "start": 1789033626.80533,
+      "exitCode": 0,
+      "end": 1789033629.6222599,
+      "session": 51963
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "menu-info-reading-raw1",
+      "pid": 42520,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuInfoReadingTests"
+      ],
+      "start": 1789033824.563242,
+      "exitCode": 0,
+      "end": 1789034022.070986,
+      "session": 86892,
+      "tests": 2,
+      "testSeconds": 0.158,
+      "buildSeconds": 195.51
+    },
+    {
+      "name": "menu-info-reading-raw2",
+      "pid": 43446,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuInfoReadingTests|OriginalMenuInfoWritingTests|OriginalMenuContentTests"
+      ],
+      "start": 1789034110.293313,
+      "exitCode": 0,
+      "end": 1789034165.347695,
+      "session": 7664,
+      "tests": 7,
+      "testSeconds": 2.269,
+      "buildSeconds": 51.67
+    },
+    {
+      "name": "menu-info-reading-packaged",
+      "pid": 43928,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuInfoReadingTests|OriginalMenuInfoWritingTests|OriginalMenuContentTests"
+      ],
+      "start": 1789034257.3119712,
+      "exitCode": 0,
+      "end": 1789034260.842916,
+      "buildSeconds": 0.26,
+      "tests": 7,
+      "testSeconds": 2.242,
+      "session": 29215
+    }
+  ],
+  "foreignHashes": {
+    "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": "3dfe5dc1f484d6e6b714e37460916496cad3e95f6906a21fa15efeddd38a364e",
+    "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": "5da9ce0498b8e36ac5c2055591e109a1e06c438988b7c8cb095c4f198c05e792",
+    "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": "1d72bce2161e9beb92cf15ab3bfc7d797c1d2d1ca570046582140b15d2089961",
+    "tools/oracle_lib_transforms.py": "863919d87e4f2f419eee3c0621dd4d929e6a7627c238027e28c401e5319de430",
+    "tools/oracle_lib_transform_boundaries.py": "c3c5b584970fae5bfdb9ef93ca086887d693fbea8b743e02111d1e940714c269",
+    "docs/research/LIB_TRANSFORM_PLAN.md": "aa1fff3629a4bee15c6110f3132a91ea688b6974049605a56b47851a5292cbae"
+  },
+  "probe": {
+    "session": 77077,
+    "exitCode": 0,
+    "sha256": "7af848b8984f32ad1c43c3f440e2df81e3065a04bebf9e55e7ac78951d3023b3"
+  },
+  "roundtripSource": {
+    "session": 70652,
+    "status": "terminal",
+    "exitCode": 0,
+    "sha256": "ceffde432c84e95b5eac57a155d9fe3479d1c494ab4b7fb734113667a786304c",
+    "pidNotCaptured": true
+  },
+  "corrections": [
+    {
+      "kind": "verifier import",
+      "error": "ModuleNotFoundError: No module named unicorn",
+      "exitCode": 1,
+      "reason": "Read-only verifier unnecessarily imported the emulator module for a pinned constant; use explicit DLL hash. No source/native/expected change."
+    }
+  ],
+  "rawAcceptancePassed": true,
+  "fixturePublished": true,
+  "currentFixtures": 230,
+  "publications": [
+    {
+      "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-reading.json",
+      "sha256": "87444bb32228ee2528645e329ee1b2203b1dceb2142eded33e967966d74c6882",
+      "bytes": 1465387
+    },
+    {
+      "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-roundtrip.json",
+      "sha256": "41aeca9cb764b3f822589a5a89ad40974ea495c8081c2faca9e5430d315ed705",
+      "bytes": 434011
+    }
+  ],
+  "acceptedMilestone": true,
+  "packagedAcceptancePassed": true,
+  "allOwnedJobsTerminal": true,
+  "nativeWholeMainCalls": 194,
+  "nativeUnknownRejections": 2,
+  "ownRoundtrips": 16,
+  "nativeProductionWiringComplete": false,
+  "windowsVerified": false,
+  "appWindowExercised": false,
+  "completedUTC": "2026-09-10T10:02:17.526992+00:00",
+  "isolatedNativeFiles": 581,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeExecutableSHA256": "b9f60a47683d9493d3e5c630622a4bdde66ce8ff93a7aa876abec8c9f2454630",
+  "ownedFiles": [
+    "AGENTS.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/research/ADDRESS_BOOK.md",
+    "docs/research/MENU_CONTENT.md",
+    "docs/research/MENU_INFO_WRITING.md",
+    "docs/research/MENU_INFO_READING_PLAN.md",
+    "docs/research/MENU_INFO_READING.md",
+    "docs/evidence/menu-info-reading.json",
+    "docs/evidence/menu-info-roundtrip.json",
+    "tools/oracle_menu_info_reading.py",
+    "tools/oracle_menu_info_roundtrip.py",
+    "tools/verify_menu_info_reading.py",
+    "tools/accept_menu_info_reading.py",
+    "native/Sources/NTSDCore/OriginalMenuInfoReading.swift",
+    "native/Tests/NTSDCoreTests/OriginalMenuInfoReadingTests.swift",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-reading.json",
+    "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-roundtrip.json"
+  ]
+}

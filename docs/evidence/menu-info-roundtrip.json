@@ -1,0 +1,57 @@
+{
+  "sourceSHA256": "ceffde432c84e95b5eac57a155d9fe3479d1c494ab4b7fb734113667a786304c",
+  "sourceBytes": 1446631,
+  "producerSHA256": "a9f9498d2fe47692d92cb349f78c4a966c4cf26e53a022a0918d9fabcc28b11f",
+  "counts": {
+    "globalSnapshotBytes": 18503744,
+    "localSnapshotBytes": 46736,
+    "localStores": 515,
+    "globalStores": 1139,
+    "readerCRTReturns": 126,
+    "knownCallerReads": 222,
+    "sourceReaderCalls": 32,
+    "nativeSupportedReaders": 32,
+    "acceptedWriteBytes": 240,
+    "ownRoundtrips": 16
+  },
+  "events": {
+    "open": 32,
+    "tokens": 32,
+    "close": 32,
+    "scan": 48,
+    "format": 46,
+    "writer-format": 32,
+    "writer-open": 16,
+    "writer-writeFile": 51,
+    "writer-print": 16,
+    "writer-closeFile": 16,
+    "writer-close": 16
+  },
+  "blobs": 158,
+  "unknownBoundaries": [],
+  "actualEXE": 165,
+  "actualCRT": 1427,
+  "staticEXE": 167,
+  "unexecutedStatic": [
+    {
+      "address": "0x43c51f",
+      "bytes": "c744240801000000",
+      "assembly": "mov\tdword ptr [esp + 0x8], 0x1"
+    },
+    {
+      "address": "0x43c65c",
+      "bytes": "c744241001000000",
+      "assembly": "mov\tdword ptr [esp + 0x10], 0x1"
+    }
+  ],
+  "oldFixturesUnchanged": 228,
+  "vendorFiles": 10,
+  "fullReaderStoreReconstruction": true,
+  "nativeCompared": true,
+  "fixture": "original-menu-info-roundtrip.json",
+  "fixtureSHA256": "41aeca9cb764b3f822589a5a89ad40974ea495c8081c2faca9e5430d315ed705",
+  "fixtureBytes": 434011,
+  "fullGoalComplete": false,
+  "windowsVerified": false,
+  "scope": "Controlled whole reader and declared own reader/cache-writer/reader ABI; two unknown-local rejections remain separate from194 whole main calls."
+}
