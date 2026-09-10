@@ -58,6 +58,12 @@ public enum OriginalWaveLoader {
 
     public static func load(path: [UInt8], file: [UInt8], output: UInt32, platform p: OriginalWavePlatform,
                             observe: (OriginalWaveEvent) throws -> Void = { _ in }) throws -> OriginalWaveLoadResult {
+        try load(path:path,file:file,output:output,platform:p,outputStored:{ _ in },observe:observe)
+    }
+
+    public static func load(path: [UInt8], file: [UInt8], output: UInt32, platform p: OriginalWavePlatform,
+                            outputStored: (UInt32) throws -> Void,
+                            observe: (OriginalWaveEvent) throws -> Void = { _ in }) throws -> OriginalWaveLoadResult {
         guard !path.contains(0), path.count < 256, p.descendResults.count == 3,
               (0...2_000_000).contains(p.firstCount), (0...2_000_000).contains(p.secondCount),
               p.lockResults.count == 2 else { throw error("Platform input extent") }
@@ -74,6 +80,7 @@ public enum OriginalWaveLoader {
         func message(_ text: String) throws { try event(.message, [0, 0], [bytes(text), []]) }
         if p.device == 0 { result.returned = 1; return result } // output is untouched
         result.output = 0
+        try outputStored(0)
         try event(.open, [0, 0x10000], [path])
         if p.stream == 0 {
             try event(.message, [0, 0], [bytes("Could not Open Wave File <")+path+bytes(">"), path])
@@ -176,6 +183,7 @@ public enum OriginalWaveLoader {
         try event(.unlock, [p.buffer, p.firstPointer, UInt32(p.firstCount), p.secondPointer, UInt32(p.secondCount)])
         try event(.free); result.temporaryLive = false
         result.output = p.buffer; result.returned = 1
+        try outputStored(p.buffer)
         return result
     }
 }

@@ -48,6 +48,35 @@ false positives will not occur.
 
 ## Current research status
 
+**Latest own loading join: [APPLICATION_LOADING_PREFIX](docs/research/APPLICATION_LOADING_PREFIX.md).**
+Three retained application-menu activation parents now enter41bc90 on their own
+CPU/stack/World/resources.12 prefixes:9 reach actual catalog malloc request4450ac
+(81273768bytes,caller41bff5,SP1000e430);3 failed CreateSoundBuffer cases stop before
+retained40187a and are explicit native rejections, NOT successful loading calls.
+Own bodySP1000e43c,phase0->1,pause0;two10-byte command arrays are produced natively.
+MENU_WAIT,400+80 dword clears,18 WAVs,count18,presentation execute in order.
+187whole WAV returns/33other helpers;three short-read temporaries remain live.
+223full states,27611CPU+2302API stores/7118519bytes,6241local reads;872wave records/
+7243472bytes+masks and5575unchanged bitmap records/44689200bytes+masks.566EXE/0new
+DLL/CRT PCs;earlier installed library/DC,CRT/RNG,MSG/resources remain unchanged.
+Native OriginalInitialLoadingCommon is shared with retained full initial-loading
+controls. Five late failures retain previous menu iterations and roll back the
+pending prefix/iteration. No source private stack bytes or expected outputs imported.
+
+Read the linked study and `build/research/application-loading-prefix-work.json`
+for final raw/packaged acceptance and terminal jobs. Candidate1 source completed;
+never restart it.245old fixtures unchanged;246current. Final raw7tests57.097s/
+build198.64s and packaged7tests56.288s/build0.32s passed without raw overrides.
+All source/SwiftPM jobs terminal. Raw71768199/packed37335552bytes retain full
+bytes/JSON/SHA;7097blobs/12atomicparts/24DIB+18WAV/10vendor hashes verify.
+623isolated files;NTSDNative linked, no window/device claim.
+Next satisfy actual catalog allocation and4122f0 with this own state. The old
+catalog adapter's fixed60000020 overlaps the NEW declared common-WAV storage;
+do not remap/reuse that address over retained buffers. Its separate CRT/bitmap
+adapters also require an explicit own join, not silent replacement. Catalog/UI/
+input/ret4/held-clear/window/device/Windows/full-match/all-content/cleanMac stay open.
+CUA inventory still failed native-pipe startup; six foreign files remain untouched.
+
 **Latest own input join: [APPLICATION_MENU_INPUT](docs/research/APPLICATION_MENU_INPUT.md).**
 Fifty own chains preserve all47 completed APPLICATION_MENU_RETURN parents:
 47idle repeats and3delivered WM_MOUSEMOVE/down/up activation chains. Actual

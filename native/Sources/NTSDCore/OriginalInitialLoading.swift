@@ -46,19 +46,27 @@ public struct OriginalInitialLoading {
     public let paused: Bool, commands: [UInt8]
 
     /// Non-playback prologue; signed32-bit wrap/remainder is the original x86 rule.
-    public static func begin(globals: inout OriginalStateRecord) throws -> Bool {
+    public static func begin(globals: inout OriginalStateRecord,
+                             store: (Int, [UInt8]) throws -> Void = { _, _ in }) throws -> Bool {
         let base = OriginalMatchPreparation.globalBase
         guard globals.bytes.count == OriginalMatchPreparation.globalSize,
               try globals.integer(at: 0x450b84-base, as: Int32.self) == 0 else {
             throw OriginalStateError.invalidStorage("Initial loading playback prologue is not recovered")
         }
-        let phase = (try globals.integer(at: 0x450b90-base, as: Int32.self) &+ 1) % 2
-        try globals.write(phase, at: 0x450b90-base)
-        if phase == 0 {
-            try globals.write(globals.integer(at: 0x44fb60-base, as: UInt32.self), at: 0x450bfc-base)
-            try globals.write(globals.integer(at: 0x44fcb0-base, as: UInt32.self), at: 0x44fb60-base)
+        var candidate = globals
+        func write(_ value: UInt32, _ address: Int) throws {
+            try candidate.write(value, at: address-base)
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
         }
-        return try globals.integer(at: 0x450bfc-base, as: Int32.self) == 1
+        let phase = (try candidate.integer(at: 0x450b90-base, as: Int32.self) &+ 1) % 2
+        try write(UInt32(bitPattern:phase),0x450b90)
+        if phase == 0 {
+            try write(candidate.integer(at: 0x44fb60-base, as: UInt32.self),0x450bfc)
+            try write(candidate.integer(at: 0x44fcb0-base, as: UInt32.self),0x44fb60)
+        }
+        let paused = try candidate.integer(at: 0x450bfc-base, as: Int32.self) == 1
+        globals = candidate
+        return paused
     }
 
     public static func load(globals initialGlobals: OriginalStateRecord, world: OriginalStateRecord,
@@ -80,17 +88,15 @@ public struct OriginalInitialLoading {
                             observeProgress: @escaping (OriginalLoadingProgressEvent) throws -> Void = { _ in },
                             observeInterface: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws -> Self {
         let base = OriginalMatchPreparation.globalBase
-        var globals = initialGlobals, common: [OriginalWaveLoadResult] = []
-        guard try globals.integer(at: 0x44d05c-base, as: Int32.self) == 1,
-              try globals.integer(at: 0x458438-base, as: Int32.self) == 0 else {
+        guard try initialGlobals.integer(at: 0x44d05c-base, as: Int32.self) == 1,
+              try initialGlobals.integer(at: 0x458438-base, as: Int32.self) == 0 else {
             throw OriginalStateError.invalidStorage("First loading requires flag1 and an empty sound registry")
         }
-        let paused = try begin(globals: &globals)
-        try afterPrologue(globals,paused)
-        try OriginalInitialSoundLoading.load(globals: &globals, targetSurface: targetSurface,
-            fileSource: fileSource, platform: wavePlatform, afterWave: { i, wave, state in
-                common.append(wave); try afterCommonWave(i,wave,state)
-            }, observe: observeCommon)
+        let prefix = try OriginalInitialLoadingCommon.load(globals:initialGlobals,targetSurface:targetSurface,
+            fileSource:fileSource,platform:wavePlatform,afterPrologue:afterPrologue,
+            afterWave:afterCommonWave,observe:observeCommon)
+        var globals = prefix.globals
+        let paused = prefix.paused, common = prefix.sounds
         try afterCommon(globals)
         // The cache span includes later globals (graphics device, present mode).
         // Supply their existing bytes; initializing the whole span to zero loses them.

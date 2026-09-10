@@ -126,7 +126,11 @@ Tools: [source](../../tools/oracle_application_menu_input.py),
 [verifier](../../tools/verify_application_menu_input.py),
 [acceptance](../../tools/accept_application_menu_input.py).
 
-Next compose actual41bc90 using the retained own World2, resources, RNG, target,
+The [own loading prefix](APPLICATION_LOADING_PREFIX.md) now continues all three
+activation chains through prologue/common WAVs/presentation to the actual catalog
+allocation request. Its separate failure controls preserve this immutable parent.
+
+Next compose the remaining41bc90 using the retained own World2, resources, RNG, target,
 input, library and allocation lifetimes. Recover missing children at their real
 entry rather than importing controlled loading after-state. Worker execution/
 delivery/reentrancy, earlier full CRT/NLS, other dispatcher modes and repeated

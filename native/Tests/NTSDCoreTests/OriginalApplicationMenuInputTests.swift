@@ -86,7 +86,8 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             XCTAssertTrue(full == (try r.blob(s.state.globals)),c.spec.label+" checkpoint "+name);return s.state
         }
     }
-    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil) throws {
+    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,
+             loading: ((B.OwnContext, UInt32) throws -> Void)? = nil) throws {
         let c = r.c.cases[index];var reached = false,failed = false
         try M().run(r.indices[index],mr,body,front,br,er,continuation:{ initialLoop,initial in
             reached = true;var own = initial,loop = initialLoop
@@ -192,6 +193,13 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         let resultBytes = combined(g,world)
                         if continuation == .loading {
                             XCTAssertEqual(iteration.end,"loading");XCTAssertTrue(resultBytes == (try r.blob(iteration.after.globals)));XCTAssertEqual(iteration.after.pc,0x41bc90);XCTAssertEqual(iteration.after.sp,0x1000ea6c)
+                            if let loading {
+                                var pending = owned
+                                pending.base.globals = g;pending.outerAndWorldBytes = Array(resultBytes.dropFirst(0xb440))
+                                pending.base.outer = try .init(bytes:Array(pending.outerAndWorldBytes.prefix(0x854)),defined:[Bool](repeating:true,count:0x854))
+                                pending.base.local = try .init(bytes:Array(pending.outerAndWorldBytes.prefix(0x140)),defined:[Bool](repeating:true,count:0x140))
+                                try loading(pending,game.target)
+                            }
                             XCTAssertEqual(a.index,iteration.eventEnd);throw Stop.loading
                         }
                         XCTAssertEqual(continuation,.returned);_ = try a.checkpoint("worldReturn",resultBytes)
