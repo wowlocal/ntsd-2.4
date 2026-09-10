@@ -24,7 +24,12 @@ loaded DAT tables; their new branches are controlled cases.
 [LIB_WORLD_CONTACTS](LIB_WORLD_CONTACTS.md) now compares both contact hooks
 inside10661 whole calls, preserving all7925 pristine outcomes and late rollback.
 New contact kinds/state20 are likewise absent from the original loaded catalog.
-Four remaining jump destinations, the two-byte loading-label patch, enclosing
+[LIB_WORLD_HITS](LIB_WORLD_HITS.md) now composes both hit hooks inside18137
+whole calls. The unexpected0xb2 read stride and literal binary-Z addend are
+preserved. The latter changes164 old kind8 outcomes; fresh pristine controls
+prove that only their binary-Z words differ. Original data has6000+ effects,
+while2175 potential stride words have unknown backing and remain outside the
+controlled successful domain. Two remaining jump destinations, the loading-label patch, enclosing
 library-enabled callers and a fresh initialized application join remain open.
 
 ## Pinned artifacts and actual entry path
@@ -95,15 +100,15 @@ entries and follows control flow, keeping embedded pointer data separate.
 ## Installed hooks and remaining work
 
 These destinations are established by actual copy requests and verified jump
-bytes. Text, preparation/commands, Actor control and contacts have separate
+bytes. Text, preparation/commands, Actor control, contacts and hits have separate
 native studies linked below. The remaining behavior notes are static findings,
 not native comparisons or complete branch analyses.
 
 | EXE patch | DLL destination | Recovered role / required work |
 | --- | --- | --- |
-|430c8c|100013d0|Extended movement/interaction kinds and coordinate changes; continuations430ceb/43187a. Recover all branches and allocated-state use.|
+|430c8c|100013d0|Whole hits compared in [LIB_WORLD_HITS](LIB_WORLD_HITS.md): movement kinds, ordered timer/frame/coordinates, literal Z addend bits004176cb00447a08 and retained20000-byte target buffer; continuations430ceb/43187a.|
 |4176ac|10001807|Whole contact collection compared in [LIB_WORLD_CONTACTS](LIB_WORLD_CONTACTS.md):10661 calls, category groups and unchanged invulnerability gates; continuations4176cb/417f59.|
-|42fcb1|10001322|Extended state/frame/HP handling after hit damage; continuations42fcbb/42fd1d.|
+|42fcb1|10001322|Whole hits compared: live ITR.effect, type0 frame assignment through actual0xb2-stride read, preserved freeze3/30; continuations42fcbb/42fd1d. Apparent MP branch is statically unreachable.|
 |41f5fc|1000109d|Transform-state routing adds4000-range behavior before41f675; retain8000-range continuation41f60a.|
 |41408b|10001125|Whole Actor control compared in [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md):7168 calls, live zero EDI and x87 operands, state85/86 frame/facing order.|
 |4177b9|100011b9|Whole contacts compared: attacker current-frame state20 reverses the team gate and enters the effect check at41780b; three continuations and live stack provenance retained.|
@@ -122,10 +127,12 @@ BG99 perspective. The initialized application connection remains open. Existing
 pristine chains with zero command flags do not establish that enabled path.
 No global record is extended with expected source bytes to conceal provenance.
 
-The transform hook also contains a write through Actor+0x7b4 and the damage
-hook contains a0xb2 stride. Their allocation/layout and branch applicability
-need direct source investigation; do not silently correct them to familiar
-native sizes or claim an observed fault from disassembly alone.
+The transform hook's write through Actor+0x7b4 still needs allocation/lifetime
+provenance. The hit hook's0xb2 stride is now directly executed across all400
+controlled previous-frame indices, including cross-Frame reads. Its2175
+unknown words in the original loaded catalog are static potential reads, not
+observed source faults. Native rejects unknown bytes and rolls back; actual
+gameplay reachability/backing remains open. Do not silently repair source sizes.
 
 ## Compared replacement text
 

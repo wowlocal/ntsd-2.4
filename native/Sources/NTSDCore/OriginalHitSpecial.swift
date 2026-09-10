@@ -3,6 +3,7 @@ extension OriginalHitPass {
     // explicit original item/projectile exceptions.
     mutating func specialHit(_ attacker: Int,_ defender: Int,observe: (OriginalHitEvent) throws -> Void) throws {
         let a = try index(attacker),d = try index(defender),kind = try it(0)
+        if try libraryMovement(attacker,defender,kind: kind) { return }
         switch kind {
         case 6: try byte(d,0xea,3)
         case 1,3: try catchHit(attacker,defender)

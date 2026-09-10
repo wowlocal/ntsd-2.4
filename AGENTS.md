@@ -180,9 +180,49 @@ SwiftPM jobs terminal; NTSDNative linked. Exact jobs/pins/failed harness history
 build/research/lib-world-contacts-work.json. Full library-enabled own join,
 damage, app/window/device/Windows/full match and full-game goal stay open.
 
-Remaining hooks include430c8c movement,42fcb1damage,
-41f5fc transforms and424352loading, plus transparent-text/control/contact routing.
-Recover Actor+7b4 and0xb2-stride backing/branches without silently fixing source bugs.
+[LIB_WORLD_HITS](docs/research/LIB_WORLD_HITS.md) now composes installed42fcb1
+effect and430c8c movement inside18137 whole calls, including300World callers.
+Full400Actors/World7697487896bytes and equal masks,836913728globals,
+4754505728mutable ITR heap,362740000library target bytes,38384events and42891
+helper returns match Native. All238reachable/250static DLL starts execute;
+12missing starts form the statically unreachable MP block.3723EXE starts are
+separate from the real VC80 rand CPU. Actual15749hook entries preserve live
+roles/SPentry-0x80/ST0zero/CW/FPSW/tag; no native hardware-FPU claim.
+
+42fcb1 consumes ITR.effect, NOT Actor state.3/30 keepfreeze; other<6000 skip;
+>=6000/type0 reads Object+7ac+previous78*0xb2 and sets70=effect-6000 iff unequal.
+Preserve actual0xb2 stride, cross-Frame bytes and masks; no invented5000 MP rule.
+430c8c preserves ordered timer/frame and binary coordinates. Z adds literal
+DLL+3014 bits004176cb00447a08, NOT old+1 or a pointer dereference.824/825 retain
+first word of attackerSlot*8 in separate20000-byte target buffer;777 binds,
+equal allows, mismatch skips. Preserve all bytes and lifetime across calls.
+
+Of15690prior inputs,15526outcomes unchanged/164changed. Fresh164pristine whole
+calls recover exact old bytes: only164binary-Z words/1148bytes differ; all old
+masks/globals/heap/CRT/events agree. Do not call164unchanged native matches.
+Read-only137DAT/full loaded catalog census:4384ITRs,42effects>=5000 including
+13records/12distinct6000+ effects.42type0Objects*400potential stride words:
+14625defined/2175UNKNOWN/84crossFrame. Those2175 are static potential reads,
+NOT executed source faults. Controlled898reads coverall400previous indices;
+fully initialized synthetic backing does not resolve natural unknown storage.
+Native unknown Frame89byte8 and late second-sound observer verify full rollback,
+including target binding. Buffer external events until whole tick commits.
+
+Raw5release tests31.397s/build44.10s pass. First175.77s build passed all source
+comparisons but a new rollback test expected sound2 instead of0 atfall60; only
+that test expectation changed. Terminal failed log/test hash retained. Final
+packaged7tests68.432s/build175.93s pass: library17.335s, pristine13.856s,
+both prior initialized hit chains37.242s. Raw528/final530file exports from
+834b36a+five owned native files exclude unfinished concurrent transforms.
+205oldpins unchanged/207published; fullraw121622254/packed7304579bytes,
+JSON/SHA/all4347blobs and10vendor files independently verified. Paired164fixture
+is source-only/nativeComparedfalse. All owned source/SwiftPM jobs terminal0;
+NTSDNative linked, no app/window/device/Windows claim. Exact jobs/results:
+build/research/lib-world-hits-work.json. Complete raw corpus is never restarted.
+
+Remaining hooks include41f5fc transforms and424352loading, plus all enclosing
+library-enabled routing and full CRT initialization. Recover Actor+7b4 and
+actual unknown0xb2 backing/reachability without silently fixing source bugs.
 Old pristine-EXE fixture bytes remain immutable and valid in their declared
 unloaded-library controls; they do NOT establish the DLL-enabled application.
 Active captures are separate pristine controls: inspect their current process

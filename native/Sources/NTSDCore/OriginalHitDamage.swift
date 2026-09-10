@@ -90,6 +90,7 @@ extension OriginalHitPass {
         if try h(a,0x6f4) == 201 && h(d,0x6f8) == 0 { try world.write(UInt8(0),at: 4+attacker) }
         if try h(a,0x6f4) == 214 && h(d,0x6f8) == 0 { try put(a,0x2fc,0) }
         if try h(d,0x6f8) == 3 { try projectileHit(attacker,defender) }
+        if library != nil { try libraryHitEffect(d) }
         if try [3,30].contains(it(0x2c)) && h(d,0x6f8) == 0 && f(d,8,0x78) != 13 {
             try put(d,0x70,200);try put(d,0x88,0);try sound(d,14,observe: observe)
         }

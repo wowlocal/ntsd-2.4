@@ -1,0 +1,23 @@
+{
+  "scope": "Recover exact pristine source bytes for164 library-changed whole hit calls.\n\nFresh pristine EXE/VC80 WorldHits VM, explicitly without library installation,\nreexecutes only the164 inputs whose completed library results differ from\nimmutable pristine controls. Validate every old output hash/event/CRT result,\nthen retain full source pool/masks and exact deltas to library output. This\nisolates the kind8 Z change using executed original bodies, not invented\nexpected bytes. No hook is removed from an installed VM, no source artifact\nis edited, and neither control establishes an initialized Windows match.\n",
+  "corpus": "lib-hits-pristine-changes.json",
+  "sha256": "bb9f3b99679f74c11d7e691d5c1907e173fc8804962f7dfbf3502259d1845114",
+  "bytes": 122683,
+  "cases": 164,
+  "precisions": {
+    "895": 82,
+    "639": 82
+  },
+  "blobs": 13,
+  "differingBytes": 1148,
+  "zWords": 164,
+  "onlyBinaryZDiffers": true,
+  "helpers": 164,
+  "instructions": 171,
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "fixture": "original-lib-hits-pristine-changes.json",
+  "fixtureBytes": 22074,
+  "fixtureSHA256": "094add3751a4a641eccb0e86c0c12a664785b08e2268d7ee843d1ea1fcce7325",
+  "sourceOnlyPairedDeltaAudit": true
+}
