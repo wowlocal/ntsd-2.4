@@ -44,12 +44,12 @@ final class OriginalApplicationSettingsTests: XCTestCase {
         }
     }
     func compare(_ index: Int,_ r: Resources,_ br: Bitmap.Resources,_ er: Entry.Resources,fail: String? = nil,
-                 continuation: ((inout Bitmap.OwnContext) throws -> Void)? = nil) throws {
+                 completion: Bitmap.LoopCompletion? = nil,continuation: ((inout Bitmap.OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index],rawParent = try XCTUnwrap(r.rawParents[c.parent]) as NSDictionary
         let parentIndex = try XCTUnwrap(br.rawCases.firstIndex { ($0 as NSDictionary) == rawParent })
         XCTAssertEqual(try XCTUnwrap(r.rawParents[c.parent]) as NSDictionary,br.rawCases[parentIndex] as NSDictionary,"Fresh full source parent must reproduce")
         var eventIndex = 0,counts: [String:Int] = [:],reached = false
-        try Bitmap().own(parentIndex,br,er,fail:fail == nil ? nil : "applicationSettings",continuation:{ owned in
+        try Bitmap().own(parentIndex,br,er,fail:fail == nil ? nil : "applicationSettings",completion:completion,continuation:{ owned in
             reached = true
             XCTAssertEqual(owned.base.globals.bytes,Array(try r.blob(c.before.globals).prefix(0xb440)))
             let resources = owned.front.bitmaps,graphics = owned.graphics,prior = owned.base.globals

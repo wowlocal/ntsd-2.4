@@ -165,3 +165,12 @@ reports `Native apps: Error: Sky Computer Use native pipe startup failed`; no
 window/input action occurred. Actual Windows files/devices, pixels, sound/input
 latency, the complete Naruto/Sasuke District match, all original content/modes/
 network/replays and clean-Mac acceptance remain part of the active full-game goal.
+
+## Subsequent own menu return
+
+[APPLICATION_MENU_RETURN](APPLICATION_MENU_RETURN.md) now continues the accepted
+own body and separate settings-1 alternative through whole main/tail/World and
+dispatcher returns. Forty-seven first due iterations commit at43d110/SP1000effc;
+one pre-NULL cursor stop remains explicitly rejected with rollback. Full parents,
+resources/library and private-stack evidence remain separate and unchanged.
+Subsequent input/worker/CRT/NLS/Windows/device/app/full-match work stays open.

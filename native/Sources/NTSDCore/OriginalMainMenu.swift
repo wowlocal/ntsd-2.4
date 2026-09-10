@@ -69,18 +69,24 @@ extension OriginalMatchPreparation {
 public enum OriginalMainMenu {
     public static func run(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
         crt: inout OriginalCRTRandom,input: OriginalMainMenuInput,
+        store: @escaping OriginalWindowInput.Store = { _,_ in },
         observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
         guard world.bytes.count == OriginalStateRecord.worldPrefixSize,globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
-        var execution = Execution(world: world,globals: globals),random = crt
+        var execution = Execution(world: world,globals: globals,store:store),random = crt
         let result = try execution.consumeMainMenu(crt: &random,input: input,observe: observe)
         world = execution.world;globals = execution.globals;crt = random;return result
     }
     private struct Execution {
         var world: OriginalStateRecord,globals: OriginalStateRecord
+        let store: OriginalWindowInput.Store
         static let globalBase = OriginalMatchPreparation.globalBase
         static func error(_ text: String) -> OriginalStateError { .invalidStorage("Main menu: "+text) }
         func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
-        mutating func setGlobal(_ address: Int,_ value: Int32) throws { try globals.write(value,at: address-Self.globalBase) }
+        mutating func setGlobal(_ address: Int,_ value: Int32) throws {
+            try globals.write(value,at: address-Self.globalBase)
+            let bits = UInt32(bitPattern:value)
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded:bits >> ($0*8)) })
+        }
     mutating func consumeMainMenu(crt: inout OriginalCRTRandom, input: OriginalMainMenuInput,
                                          observe: (OriginalMainMenuEvent) throws -> Void) throws -> OriginalMainMenuExit {
         func event(_ kind: OriginalMainMenuEvent.Kind, _ words: [UInt32] = [], _ strings: [[UInt8]] = []) throws {

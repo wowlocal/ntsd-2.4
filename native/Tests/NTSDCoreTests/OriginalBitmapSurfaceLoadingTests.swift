@@ -164,11 +164,18 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         var earlyScreen = OriginalFrontScreenPrelude()
         var screenBody: OriginalFrontScreenBody.StartupResult? = nil
         var libraryText = OriginalLibSurfaceText()
+        var random = OriginalCRTRandom(),dispatchResult: Int32? = nil
         var frontSurfaces: [UInt32:UInt32] = [:]
         var outerAndWorldBytes: [UInt8] = []
     }
+    struct LoopCompletion {
+        let perform: (OriginalApplicationMessageLoop.Request,inout OwnContext) throws -> OriginalApplicationMessageLoop.Response
+        let counter: (UInt32) throws -> Void
+        let beforeCommit: (OriginalApplicationMessageLoop,OwnContext) throws -> Void
+        let completed: (OriginalApplicationMessageLoop,OwnContext) throws -> Void
+    }
     func own(_ index: Int,_ r: Resources,_ er: Entry.Resources,fail: String? = nil,
-             continuation: ((inout OwnContext) throws -> Void)? = nil) throws {
+             completion: LoopCompletion? = nil,continuation: ((inout OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index],parents = try XCTUnwrap(c.parents),parent = parents.parent,lc = parents.loop
         var globals = try OriginalStateRecord(bytes:r.blob(parent.initialGlobals),defined:[Bool](repeating:true,count:0xb440)),startup = OriginalWinMainStartup()
         let rawParent = try XCTUnwrap((r.rawCases[index]["parents"] as? [String:Any])?["parent"] as? [String:Any])
@@ -177,6 +184,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         try startup.run(instance:0x400000,show:10,globals:&globals,platform:initial,store:initial.store);try initial.complete(startup,globals)
         let outer = try OriginalStateRecord(bytes:r.blob(lc.initialOuter),defined:[Bool](repeating:true,count:0x854)),local = try OriginalStateRecord(bytes:Array(outer.bytes[..<0x140]),defined:Array(outer.defined[..<0x140])),pointers = try OriginalStateRecord(bytes:Array(outer.bytes[0x468..<0x470]),defined:Array(outer.defined[0x468..<0x470]))
         var state = OwnContext(base:.init(globals:globals,outer:outer,local:local,memory:.init(replayPointers:pointers))),loop = try OriginalApplicationMessageLoop(baseline:startup.random.state,counter:0)
+        state.random = startup.random
         let p = Loop.Adapter(lc,state.base,blob:r.blob)
         let firstWrapper = (startup.panel.panel.records.map(\.address).max() ?? 0x2800e020)+0x2000
         var reached = false
@@ -184,7 +192,10 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
             p.stepIndex = i;try p.snapshot(state.base,loop,step.before);let before = state,previous = loop
             do {
                 _ = try loop.step(context:&state,speed:{ try $0.base.globals.integer(at:0x44d02c-0x44d000,as:Int32.self) },target:{ try $0.base.globals.integer(at:0x451dac-0x44d000,as:UInt32.self) },perform:{ request,owned in
-                    if request.kind != .gameDispatch { return try p.perform(request,&owned.base) }
+                    if request.kind != .gameDispatch {
+                        if let completion, p.index == lc.events.count { return try completion.perform(request,&owned) }
+                        return try p.perform(request,&owned.base)
+                    }
                     XCTAssertNil(try p.next("gameDispatch",request.arguments,owned.base).response)
                     var bytes = owned.base.globals.bytes+[UInt8](repeating:0,count:0xc3a8-0xb440)
                     bytes.replaceSubrange(0xb440..<0xb440+0x854,with:owned.base.outerBytes(counter:previous.counter))
@@ -222,9 +233,17 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                     owned.front = front;owned.graphics = g;owned.base.globals = fg;owned.frontSurfaces = frontSurfaces
                     if fail == "settings" { throw Stop.late }
                     try continuation?(&owned)
+                    if let result = owned.dispatchResult, completion != nil { return .init(result:result) }
                     throw Stop.required
-                },counterWritten:p.counter)
-                try p.snapshot(state.base,loop,step.after)
+                },counterWritten:{ value in
+                    if let completion,step.end == "requiredDispatcher" { try completion.counter(value) }
+                    else { try p.counter(value) }
+                },beforeCommit:{ next,owned,_ in
+                    if step.end == "requiredDispatcher" { try completion?.beforeCommit(next,owned) }
+                })
+                if step.end == "requiredDispatcher" {
+                    reached = true;try XCTUnwrap(completion).completed(loop,state)
+                } else { try p.snapshot(state.base,loop,step.after) }
             } catch {
                 reached = true
                 if fail == nil { guard case Stop.required = error else { throw error } }
@@ -236,6 +255,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                 XCTAssertEqual(state.settings,before.settings);XCTAssertEqual(state.gameEntry,before.gameEntry)
                 XCTAssertEqual(state.earlyScreen.bitmaps,before.earlyScreen.bitmaps);XCTAssertEqual(state.earlyScreen.surfaces,before.earlyScreen.surfaces)
                 XCTAssertEqual(state.earlyScreen.retainedOperation,before.earlyScreen.retainedOperation)
+                XCTAssertEqual(state.random,before.random);XCTAssertEqual(state.dispatchResult,before.dispatchResult)
                 XCTAssertEqual(state.screenBody,before.screenBody);XCTAssertEqual(state.libraryText,before.libraryText)
                 XCTAssertEqual(state.frontSurfaces,before.frontSurfaces)
                 XCTAssertEqual(state.outerAndWorldBytes,before.outerAndWorldBytes)

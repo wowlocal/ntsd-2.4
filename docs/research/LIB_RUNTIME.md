@@ -240,3 +240,12 @@ attach;129 text calls and their retained DC compose through4275cb. Native uses
 its own target and produced local strings, leaving private bytes unknown. This
 closes that particular early-screen text connection; other enclosing callers,
 worker delivery, complete CRT/application startup and device output remain open.
+
+## Subsequent own menu return
+
+[APPLICATION_MENU_RETURN](APPLICATION_MENU_RETURN.md) now continues the accepted
+own body and separate settings-1 alternative through whole main/tail/World and
+dispatcher returns. Forty-seven first due iterations commit at43d110/SP1000effc;
+one pre-NULL cursor stop remains explicitly rejected with rollback. Full parents,
+resources/library and private-stack evidence remain separate and unchanged.
+Subsequent input/worker/CRT/NLS/Windows/device/app/full-match work stays open.

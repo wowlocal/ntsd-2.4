@@ -48,6 +48,40 @@ false positives will not occur.
 
 ## Current research status
 
+**Latest own application join: [APPLICATION_MENU_RETURN](docs/research/APPLICATION_MENU_RETURN.md).**
+Forty-seven fresh own early-menu/World/dispatcher chains finish the first due
+iteration at43d110/SP1000effc; one ordinary allocation-failure parent stops before
+NULL-cursor43f04b and is explicitly rejected with whole native rollback. All43
+body/40front/19settings/7bitmap parents reproduce. The47 World428805/ret4 returns
+reach43ecbf/SP1000eea0 with presentation HRESULT (0/-1/+1), then dispatcher43ed01
+returns retainedEBP1 to43d187/SP1000eff8. Timer baseline123456822/counter2; noSleep
+or recovery. Keep live4593a0==2 dependency414b70 open. No own mouse/worker injection.
+
+All1159 events/476helpers/399EXE PCs,285full states and5358stores/21432bytes
+reconstruct;94ordinarySEH stores and94ownABI returns.1199unchanged bitmap records/
+9611184bytes+masks;96undefined cursor-count reads remain declaredA5 backing.
+Native uses own target/selector/RNG/DC/resources and discards the World HRESULT
+as the dispatcher does.235retained private-local reads plus47cookie-call marker
+reads stay source evidence; do not import cookie/SEH/saved registers. Parent
+body strings remain produced native bytes; its local storage is dead after World.
+Nine late native failures cover bothBlts/panel/present/tailstore/dispatch/time/
+counter/commit and preserve the whole committed startup/callback state.
+
+Final raw17release tests passed59.937s/build61.34s; packaged17 passed59.457s/
+build65.75s without raw overrides. All source/SwiftPM jobs are terminal.
+243old fixtures remain unchanged;244current,1455blobs/48atomicparts/36assets/
+10vendor hashes verified,618isolated files. Raw67627503/packed14123660bytes
+retain complete JSON/bytes/SHA; never restart completed candidate1.
+
+Read the linked study and `build/research/application-menu-return-work.json`
+for finite acceptance and terminal job evidence. The actual relocated DLL attach
+still precedes an independently entered WinMain, not full PE/CRT/NLS startup.
+Next preserve this committed own state across subsequent input/menu/loading/
+selection delivery; worker and other dispatcher modes remain open. CUA inventory
+again had no apps/browsers and native-pipe startup failure. Full window/devices/
+Windows/Naruto-Sasuke match/all-content/network/replay/clean-Mac goal stays open.
+
+
 **Current fidelity priority: bundled lib.dll hooks before the full application
 join.** Read [LIB_RUNTIME](docs/research/LIB_RUNTIME.md). Actual PE entry445560
 calls4464c4/security-cookie setup then LoadLibraryA(4464ab `lib.dll`) at4464ce,

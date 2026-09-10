@@ -9,6 +9,17 @@ public enum OriginalApplicationDispatchEntry {
         public let worldAddress: UInt32, target: UInt32
     }
     public enum Boundary: Error, Equatable { case requiredMode(UInt32) }
+    ///43ecbf..43ed01 after this entry's World call. Both service-key branches
+    /// establish EBP1/EDI2 before the call. The original rereads the live mode;
+    /// mode2 requires414b70, while the other values return the retained1.
+    public static func finishWorldCall(globals: OriginalStateRecord) throws -> Int32 {
+        guard globals.bytes.count == globalSize else {
+            throw OriginalStateError.invalidStorage("Application dispatcher globals extent")
+        }
+        let mode = try globals.integer(at:0x4593a0-0x44d000,as:UInt32.self)
+        guard mode != 2 else { throw Boundary.requiredMode(mode) }
+        return 1
+    }
     public static func advance(incomingTarget _: UInt32,globals: inout OriginalStateRecord,
         perform: (OriginalWindowInitialization.Request,OriginalStateRecord) throws -> OriginalWindowInitialization.Response,
         store: OriginalWindowInput.Store = { _,_ in },

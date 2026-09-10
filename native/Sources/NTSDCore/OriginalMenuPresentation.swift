@@ -148,8 +148,9 @@ public enum OriginalMenuPresentation {
     public static func applyWithLibrary(_ entry: OriginalMenuPresentationEntry,input: OriginalMenuPresentationInput,
         world: inout OriginalStateRecord,globals: inout OriginalStateRecord,memory: inout OriginalMenuPresentationMemory,
         libraryText: inout OriginalLibSurfaceText,
+        store: @escaping OriginalWindowInput.Store = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
-        var execution = Execution(world: world,globals: globals,memory: memory,input: input,libraryText: libraryText)
+        var execution = Execution(world: world,globals: globals,memory: memory,input: input,libraryText: libraryText,store:store)
         try execution.run(entry,observe)
         world = execution.world;globals = execution.globals;memory = execution.memory;libraryText = execution.libraryText!
     }
@@ -170,6 +171,7 @@ public enum OriginalMenuPresentation {
         var world: OriginalStateRecord, globals: OriginalStateRecord, memory: OriginalMenuPresentationMemory
         let input: OriginalMenuPresentationInput
         var libraryText: OriginalLibSurfaceText? = nil
+        var store: OriginalWindowInput.Store = { _,_ in }
         typealias Observer = (OriginalMenuPresentationEvent) throws -> Void
         func bits(_ x: Int32) -> UInt32 { UInt32(bitPattern: x) }
         func word(_ address: Int) throws -> UInt32 {
@@ -178,6 +180,7 @@ public enum OriginalMenuPresentation {
         func signed(_ address: Int) throws -> Int32 { try Int32(bitPattern: word(address)) }
         mutating func write(_ address: Int, _ value: UInt32) throws {
             try globals.write(value, at: address-OriginalMatchPreparation.globalBase)
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
         }
         func string(_ address: Int) throws -> [UInt8] {
             var value: [UInt8] = [], current = address

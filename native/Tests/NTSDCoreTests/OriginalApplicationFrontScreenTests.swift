@@ -102,9 +102,9 @@ final class OriginalApplicationFrontScreenTests: XCTestCase {
         }
     }
     func run(_ index: Int,_ r: Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,
-             continuation: ((inout B.OwnContext) throws -> Void)? = nil) throws {
+             completion: B.LoopCompletion? = nil,continuation: ((inout B.OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index],si = try XCTUnwrap(r.settingKeys.firstIndex(of:c.parent));var reached = false
-        try S().compare(si,r.settings,br,er,fail:fail == nil ? nil : "front",continuation:{ owned in
+        try S().compare(si,r.settings,br,er,fail:fail == nil ? nil : "front",completion:completion,continuation:{ owned in
             reached = true
             let before = try r.blob(c.before.globals)
             XCTAssertEqual(owned.base.globals.bytes,Array(before.prefix(0xb440)))

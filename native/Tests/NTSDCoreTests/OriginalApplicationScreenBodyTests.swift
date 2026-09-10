@@ -12,13 +12,14 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
     struct Case: Decodable { let spec: Spec,parent: String,before: State,panelReturn: State,after: State,events: [F.Event],records: [B.Record],end: String }
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
-        let c: Corpus,frontIndices: [Int]
+        let c: Corpus,frontIndices: [Int],rawCases: [[String:Any]]
         var cache: [String:[UInt8]] = [:]
         init(_ front: F.Resources) throws {
             let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_SCREEN_BODY"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-screen-body",withExtension:"json",subdirectory:"Fixtures"))
             let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
             c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,43)
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any]),parents = try XCTUnwrap(raw["frontParents"] as? [String:[String:Any]])
+            rawCases = try XCTUnwrap(raw["cases"] as? [[String:Any]])
             XCTAssertEqual(parents.count,39)
             frontIndices = try c.cases.map { c in
                 let parent = try XCTUnwrap(parents[c.parent])
@@ -49,9 +50,9 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
             if fail == q.kind+"#\(occurrences[q.kind]!)" { throw B.Stop.late }
         }
     }
-    func run(_ index: Int,_ r: Resources,_ fr: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil) throws {
+    func run(_ index: Int,_ r: Resources,_ fr: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,completion: B.LoopCompletion? = nil,continuation: ((inout B.OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index];var reached = false
-        try F().run(r.frontIndices[index],fr,br,er,fail:fail == nil ? nil : "body",continuation:{ owned in
+        try F().run(r.frontIndices[index],fr,br,er,fail:fail == nil ? nil : "body",completion:completion,continuation:{ owned in
             reached = true
             XCTAssertEqual(owned.earlyScreen.retainedOperation,.sleep)
             let target = try XCTUnwrap(owned.settings?.target)
@@ -103,6 +104,7 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
             }
             owned.base.globals = globals;owned.libraryText = library;owned.screenBody = result
             if fail == "bodyBoundary" { throw B.Stop.late }
+            try continuation?(&owned)
         })
         XCTAssertTrue(reached)
     }
