@@ -353,7 +353,8 @@ shared native release children preserve the old menu/music contracts. Declared
 COM/free ownership is not actual Windows heap/device lifetime. Late post, second
 missing replay owner, NUL-store observer and undefined index verify whole rollback;
 buffer external effects until commit. Lifecycle messages are compared below;
-DirectShow400 and Winsock401 remain explicit unimplemented dependencies.
+DirectShow400 and Winsock401 were explicit unimplemented dependencies at that
+milestone; GRAPH_EVENTS below now compares400. Winsock401 remains open.
 
 All owned jobs terminal. First build176.09s linkedNTSDNative and passed6retained
 tests;3new tests failed BEFORE comparison on framed-zlib/raw-DEFLATE transport.
@@ -406,6 +407,42 @@ JSON/SHA/117blobs/320atomic records/10vendor hashes/546isolated nativefiles veri
 NTSDNative linked; app stillpractice, no window/device/Windows run. Foreign
 transforms excluded. Exact jobs: build/research/window-lifecycle-work.json.
 Full native application/match/content/network/clean-Mac and goal remain open.
+
+[GRAPH_EVENTS](docs/research/GRAPH_EVENTS.md) now matches371 whole message400
+callbacks through actual401e90/ret and4 separate whole401c90 initializations.
+Five callbacks retain their own native graph initialized from four zero slots;
+HWND/API responses remain declared, no full window/graph/playing-file join.
+Full17327744 storagebytes+masks,2358 requests,1588stores/6343bytes and2772actual
+local reads agree.1064GetEvent/693FreeEventParams/211positivezero seeks;4create/
+9queries/3notify/3flags/371default.137EXEPC=31WndProc+57drain+49init;746helper
+returns,0DLL after the separate fully reproduced installer. SuppliedCW023f/
+FPSW0/tagffff survives entry/return/seek observations; no native-process/Windows
+FPU claim. Combined immutable input/lifecycle/graph inventory is568/576WndProc
+starts;6Winsock and2negative43bdd0 debug remain, not all branch outcomes.
+
+Only exactE_ABORT terminates. Missing outputs retain frame+34code/+3cparam1/
++38param2; apply terminal outputs too. Read param2 beforeparam1/livecode, ignore
+seek/free HRESULTs, then original DefWindowProc. Native shares music graph
+initialization and seek. All64initial local bytes are declared stack backing,
+not app provenance; unread unknown locals survive. Missing required word or
+interface/exhausted provider/late default or init observer throws with rollback.
+No manufactured source NULL-COM fault or infinite queue; actual reachability,
+COM reentrancy and device lifetime stay open. Buffer external effects.
+
+Initial12raw tests41.330s/build178.31s passed. Finite-plan review added one
+native-only test for two missinginterface trials; new5raw0.326s/build45.77s.
+Final13packaged tests40.526s/build0.26s passed, graph0.296s, no raw override.
+An agent sequencing error launched premature packaged tests before fixture copy:
+5missing-resource failures before comparison,8retained passed; artifact check
+also lacked final exportpins. Logs/statuses preserved; process terminal before
+copy/pins and successful rerun. No source/native-rule/expected byte correction.
+All213oldpins unchanged/214current; fullraw2917279/packed132963bytes,JSON/SHA,
+79blobs/375atomic cases/10vendor files/549isolated exportfiles verified. First8
+probe cases unchanged; source corpus complete, never restart. All owned jobs
+terminal; NTSDNative linked, app stillpractice, no app/window/device/Windows run.
+Foreign transforms untouched. Jobs: build/research/graph-events-work.json.
+Next required notification is Winsock401/402ec0, then actual initialized
+delivery/CRT/WinMain/lib/app composition. Full goal remains open.
 
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.

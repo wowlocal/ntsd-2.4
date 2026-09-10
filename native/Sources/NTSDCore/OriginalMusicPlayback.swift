@@ -55,6 +55,11 @@ public enum OriginalMusicPlayback {
         let position = try word(globals,0x44f04c)
         guard position != 0 else { return }
         try method(word(globals,0x44f044),0x24,request: request)
+        try seekToStart(position: position,request: request)
+    }
+
+    /// Original binary64 positive-zero seek, shared by stop and graph event1.
+    public static func seekToStart(position: UInt32,request: Request) throws {
         try method(position,0x20,[0,0],request: request)
     }
 
@@ -113,6 +118,33 @@ public enum OriginalMusicPlayback {
         return false
     }
 
+    /// Whole401c90. Query HRESULTs are ignored; returned interface outputs
+    /// retain their independent provenance. A thrown observer rolls back globals.
+    @discardableResult
+    public static func initializeGraph(globals: inout OriginalStateRecord,request: Request,
+        store: OriginalWindowInput.Store = { _,_ in }) throws -> Int32 {
+        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Graph globals extent") }
+        var state = globals
+        func put(_ address: Int,_ pointer: UInt32) throws {
+            try state.write(pointer,at: address-base)
+            try store(address,(0..<4).map { UInt8(truncatingIfNeeded: pointer >> ($0*8)) })
+        }
+        let create = try request(.init(.createInstance,[0x44a2a4,0,1,0x44a254,0x44f040]))
+        if let pointer = create.pointer { try put(0x44f040,pointer) }
+        if create.result < 0 { globals = state;return -1 }
+        for (address,firstByte) in [(0x44f044,UInt8(0xb1)),(0x44f048,UInt8(0xb6)),(0x44f04c,UInt8(0xb2))] {
+            let graph = try word(state,0x44f040)
+            guard graph != 0 else { throw error("Null successful graph creation") }
+            let guid = [firstByte]+[0x68,0xa8,0x56,0xd4,0x0a,0xce,0x11,0xb0,0x3a,0,0x20,0xaf,0x0b,0xa7,0x70]
+            let response = try request(.init(.queryInterface,[graph],[guid]))
+            if let pointer = response.pointer { try put(address,pointer) }
+        }
+        try method(word(state,0x44f048),0x34,[word(state,0x4546f4),0x400,0],request: request)
+        try method(word(state,0x44f048),0x38,[0],request: request)
+        try state.write(UInt8(0),at: 0x44ef04-base);try store(0x44ef04,[0])
+        globals = state;return 0
+    }
+
     /// Whole402020 with401d30/401c90/401da0/401f30. Device and file APIs remain
     /// requests; no DirectShow or Windows implementation is shipped in the core.
     public static func play(_ path: [UInt8], globals: inout OriginalStateRecord,
@@ -129,23 +161,9 @@ public enum OriginalMusicPlayback {
         _ = try request(.init(.helper,[0x401d30]))
         try release(globals: &state,request: request)
         _ = try request(.init(.helper,[0x401c90]))
-        let create = try request(.init(.createInstance,[0x44a2a4,0,1,0x44a254,0x44f040]))
-        if let pointer = create.pointer { try state.write(pointer,at: 0x44f040-base) }
-        if create.result < 0 {
+        if try initializeGraph(globals: &state,request: request) < 0 {
             _ = try request(.init(.message,[0,0],[Array("Could not initialize DirectShow!".utf8),Array("ERROR".utf8)]))
         } else {
-            for (address,firstByte) in [(0x44f044,UInt8(0xb1)),(0x44f048,UInt8(0xb6)),(0x44f04c,UInt8(0xb2))] {
-                let graph = try word(state,0x44f040)
-                guard graph != 0 else { throw error("Null successful graph creation") }
-                let guid = [firstByte]+[0x68,0xa8,0x56,0xd4,0x0a,0xce,0x11,0xb0,0x3a,0,0x20,0xaf,0x0b,0xa7,0x70]
-                let response = try request(.init(.queryInterface,[graph],[guid]))
-                if let pointer = response.pointer { try state.write(pointer,at: address-base) }
-                // The original ignores all three QueryInterface HRESULTs.
-            }
-            let event = try word(state,0x44f048)
-            try method(event,0x34,[word(state,0x4546f4),0x400,0],request: request)
-            try method(word(state,0x44f048),0x38,[0],request: request)
-            try state.write(UInt8(0),at: 0x44ef04-base)
             _ = try request(.init(.helper,[0x401da0],[path]))
             let log = try string(state,0x44ef38)+Array("\\graph.log".utf8)
             guard log.count < 260, path.count <= (Int(UInt32.max)/2)-1 else { throw error("Graph stack/path extent") }

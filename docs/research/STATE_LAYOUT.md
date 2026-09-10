@@ -1102,3 +1102,31 @@ callback. Внешние эффекты нужно буферизовать до
 479helper-entry backings сохраняют неизвестные поля567 оконных/display-структур;
 маски описывают только поля, записанные helper. Порядок API/CPU stores проверен
 целиком, но реальные Windows stack/device bytes ими не устанавливаются.
+
+## Локальные параметры музыкальных событий
+
+[GRAPH_EVENTS](GRAPH_EVENTS.md) сравнивает371 полный callback400 и4 отдельных
+создания графа. У401e90 после сохранения EBP и выравнивания ESP вниз64 выделяется
+64-byte frame; в этих whole callbacks его адрес2000ef80.
+
+| Адрес / offset | Подтверждённое поведение |
+| --- | --- |
+| Frame+34 | Event code. API пишет первым, затем caller читает перед seek и повторно перед FreeEventParams |
+| Frame+3c | Parameter1. API пишет вторым, но CPU читает после parameter2 |
+| Frame+38 | Parameter2. API пишет третьим; CPU читает перед parameter1 |
+| `44f040`, `44f044`, `44f048`, `44f04c` | Graph/control/event/position.401c90 пишет независимые API outputs; отрицательные query HRESULTs не отменяют их |
+| `4546f4` | Notify event+34 получает этот HWND и message400. В own graph chain HWND объявлен, не получен из полного WinMain |
+| `44ef04` |401c90 очищает только первый byte после notify+34 и flags+38; create failure не очищает |
+
+Отсутствующий GetEvent output сохраняет прежнее слово. Даже E_ABORT может
+сначала записать outputs; только точный0x80004004 прекращает обработку.
+Остальные статусы читают local code, при1 вызывают seek с binary64+0, затем
+FreeEventParams(code,param1,param2). Globals во всех callbacks неизменны.
+Пять последовательных notifications используют собственный native graph,
+полученный от initializer с исходно нулевыми четырьмя слотами.
+
+Начальные64 bytes объявлены через stack pattern; это не восстановление полного
+стека приложения. Empty E_ABORT не требует ни одного из неизвестных слов.
+Нужное неизвестное чтение, отсутствующий interface, exhaustion и поздняя ошибка
+дают полный native rollback. Реальная COM reentrancy/доставка и device lifetime
+остаются открытыми; внешние эффекты буферизуются до общего commit.

@@ -1,0 +1,158 @@
+{
+  "scope": "Independently verify original graph-loop bytes, locals and request order.\n\nReconstruct the full aligned frame from declared entry backing and partial API\nwrites; replay actual parameter reads, seek+0, FreeEventParams and exactE_ABORT\ntermination. Check immutable journals, original instruction bytes and installer\nparent. This does not execute Windows/audio or invent source/native results.\n",
+  "rawSHA256": "5dd6ed995ad47956f476059e13578239e4e7ff8f58e9cb7d18fbaee7ff6b1c81",
+  "rawBytes": 2917279,
+  "cases": 375,
+  "wholeCallbacks": 371,
+  "graphInitializations": 4,
+  "ownRetainedCalls": 5,
+  "blobs": 79,
+  "events": {
+    "getEvent": 1064,
+    "windowDefault": 371,
+    "method": 910,
+    "createInstance": 4,
+    "queryInterface": 9
+  },
+  "methodOffsets": {
+    "0x30": 693,
+    "0x20": 211,
+    "0x34": 3,
+    "0x38": 3
+  },
+  "eventCount": 2358,
+  "helpers": {
+    "drain": 371,
+    "callback": 371,
+    "initializeGraph": 4
+  },
+  "helperCount": 746,
+  "stores": {
+    "API": 1585,
+    "CPU": 3
+  },
+  "storeCount": 1588,
+  "storeBytes": 6343,
+  "localReads": 2772,
+  "seeks": 211,
+  "comparedStorageBytes": 17327744,
+  "originalEXEPCs": 137,
+  "wndProcPCs": 31,
+  "drainPCs": 57,
+  "initializerPCs": 49,
+  "DLLPCs": 0,
+  "sourceFPU": {
+    "control": 575,
+    "status": 0,
+    "tag": 65535
+  },
+  "allSeekPositiveZero": true,
+  "fullInstallerEqual": true,
+  "allAtomicCasesEqual": true,
+  "ownProducerInitiallyZero": true,
+  "sourceToolSHA256": "eb510fe11b53231075c84a8a33e35121c834e82e32f09e5d17b9fecc7b53d342",
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "originalMemoryFaults": 0,
+  "first8ProbeCasesUnchanged": true,
+  "fixture": "original-graph-events.json",
+  "fixtureSHA256": "0807a5b72802f72b52e45df8168499680a27b70d4e38d2a39a9a6b508d08d0d2",
+  "fixtureBytes": 132963,
+  "nativeRawTests": 5,
+  "nativeRawTestSeconds": 0.326,
+  "nativeRawBuildSeconds": 45.77,
+  "initialRaw12": {
+    "session": 58693,
+    "exitCode": 0,
+    "tests": 12,
+    "buildSeconds": 178.31,
+    "testSeconds": 41.33,
+    "log": "graph-events-native-initial12.log"
+  },
+  "testExtension": "Finite-plan review added native-only missing event/position interface rollback trials. No source or core rule changed.",
+  "nativeAppExercised": false,
+  "actualAudibleLoopingCompared": false,
+  "fullCRTStartupCompared": false,
+  "actualCallbackReentrancyCompared": false,
+  "fullWndProcCompared": false,
+  "sourceTool": "tools/oracle_graph_events.py",
+  "nativeImplementation": "native/Sources/NTSDCore/OriginalGraphEvents.swift",
+  "combinedWndProcInventory": {
+    "executed": 568,
+    "staticStarts": 576,
+    "missing": [
+      {
+        "address": 4438154,
+        "bytes": "68c49e4400",
+        "instruction": "push 0x449ec4"
+      },
+      {
+        "address": 4438159,
+        "bytes": "ffd6",
+        "instruction": "call esi"
+      },
+      {
+        "address": 4438415,
+        "bytes": "51",
+        "instruction": "push ecx"
+      },
+      {
+        "address": 4438416,
+        "bytes": "53",
+        "instruction": "push ebx"
+      },
+      {
+        "address": 4438417,
+        "bytes": "56",
+        "instruction": "push esi"
+      },
+      {
+        "address": 4438418,
+        "bytes": "e82975fcff",
+        "instruction": "call 0x402ec0"
+      },
+      {
+        "address": 4438423,
+        "bytes": "83c40c",
+        "instruction": "add esp, 0xc"
+      },
+      {
+        "address": 4438426,
+        "bytes": "e985020000",
+        "instruction": "jmp 0x43bc24"
+      }
+    ],
+    "parents": {
+      "window-input": "13599d1f4cab88a67736994ca509d27fabd4673f57555c119e7f751423a05818",
+      "window-lifecycle": "626b6b3db20b47fac621755cc204f1d0959650b30087d7c690f1cb9b845da14f"
+    },
+    "allBranchOutcomes": false
+  },
+  "packagedTests": 13,
+  "packagedTestSeconds": 40.526,
+  "packagedBuildSeconds": 0.26,
+  "packagedGraphSeconds": 0.296,
+  "priorFixtures": 213,
+  "currentFixtures": 214,
+  "isolatedFiles": 549,
+  "vendorFiles": 10,
+  "fullJSONEqual": true,
+  "allOwnedJobsTerminal": true,
+  "prematurePackaged": {
+    "session": 17261,
+    "pid": 84458,
+    "exitCode": 1,
+    "tests": 13,
+    "failures": 5,
+    "buildSeconds": 0.24,
+    "testSeconds": 40.487,
+    "log": "graph-events-premature-native-packaged.log",
+    "reason": "Agent launched dependent export-copy before acceptance completed. Copy assertion failed, but test was launched without new fixture. All five graph tests failed missing resource URL before comparison; eight retained tests passed. Existing process was allowed to terminate before export correction. No source, native rules or expected bytes changed."
+  },
+  "prematureArtifactVerification": {
+    "exitCode": 1,
+    "log": "graph-events-premature-artifact-verification.log",
+    "reason": "Missing graph-events-final-export-pins.json after premature dependent copy assertion."
+  },
+  "verifierSHA256": "aab85978c979c2c1fce1f8dea4371e106b0beff7363a3f69a677ee8bd280357d"
+}
