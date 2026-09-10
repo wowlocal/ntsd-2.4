@@ -354,7 +354,7 @@ COM/free ownership is not actual Windows heap/device lifetime. Late post, second
 missing replay owner, NUL-store observer and undefined index verify whole rollback;
 buffer external effects until commit. Lifecycle messages are compared below;
 DirectShow400 and Winsock401 were explicit unimplemented dependencies at that
-milestone; GRAPH_EVENTS below now compares400. Winsock401 remains open.
+milestone; GRAPH_EVENTS and NETWORK_NOTIFICATION below now compare400/401.
 
 All owned jobs terminal. First build176.09s linkedNTSDNative and passed6retained
 tests;3new tests failed BEFORE comparison on framed-zlib/raw-DEFLATE transport.
@@ -441,8 +441,49 @@ All213oldpins unchanged/214current; fullraw2917279/packed132963bytes,JSON/SHA,
 probe cases unchanged; source corpus complete, never restart. All owned jobs
 terminal; NTSDNative linked, app stillpractice, no app/window/device/Windows run.
 Foreign transforms untouched. Jobs: build/research/graph-events-work.json.
-Next required notification is Winsock401/402ec0, then actual initialized
-delivery/CRT/WinMain/lib/app composition. Full goal remains open.
+Its next notification Winsock401/402ec0 is now compared below; actual initialized
+delivery/CRT/WinMain/lib/app composition and the full goal remain open.
+
+[NETWORK_NOTIFICATION](docs/research/NETWORK_NOTIFICATION.md) matches415 whole
+message401 callbacks through402ec0..40316e/ret and actual WndProc ret16. Full
+19216160storage bytes+masks,3692requests/1119304sendbytes agree. Four retained
+notices use their own native accept output; listener/names/RNG/stack/API inputs
+remain declared, not full menu/listen/client/peer/Windows provenance.225EXE PCs
+=36WndProc+181/182notification+8thunk/check;37CRT actual starts. Only4030e9 skipped
+alignment is absent from notification.1245EXEhelper returns+724actual VC80 memset
+returns,362complete REP copies/76bytes each,415unchanged cookie checks. Supplied
+CW023f and savedregisters survive, SP2000f014. Combined immutable WndProc
+inventory574/576 leaves only2negative43bdd0 debug starts; not all branch outcomes.
+
+Onlylow16lParam selects1/8/16/32; high16error/wParam ignored. READ/CONNECT/CLOSE
+onlyMessageBox, all pathsDefWindowProc. ACCEPT stores44f1af2 BEFORE accept, then
+storesreturned44f46c even-1. Exact-1 message thencloseaccepted/listener, no clears.
+Otherresults close listener,send14,clearrecv77,Sleep3000,recv77 ONCE,Sleep500,
+sendnames77,Sleep500,sendRNG3001,thenseats/remote names/44f1ae1. Numeric send/recv
+errors ignored; partial output retains priorzero suffix. Adapter combinations
+include non-OS status/output controls; do not call them actual Winsock behavior.
+Frame2000ef3c data160bytes ends beforecookie+a0; recv+0,packet+50,names+70.
+Fourglobal strings44fcc0+11*i copy throughNUL withoutstridecap, overlap live,
+then44packet NULs→underscores/finalNUL. First4seats get1/2/3/4 before ASCII1→-1;
+other4retain unlessASCII1. Remote44bytesrawstore thenunderscore→zero at44fcec.
+
+44237rawstores=43892CPU/345API;33377native semanticstores coalesce ONLY724CRT
+memsets. Bothwrite130913bytes;37790actualreads match. Rawwrites remain unchanged.
+Unknownnames/RNG,50-byte native-only name boundary,oversizedoutput78, unavailable
+recv andlateDefWindowProc roll back whole state; unknown untouchedlocals survive.
+Longsettings names' source reachability remains open; no manufactured source
+cookie/control fault, safety refusal or source/native-rule correction. Buffer
+external effects. All8probe cases unchanged; full415source terminal, neverrestart.
+
+Raw10release tests12.074s/build179.41s; finalpackaged10tests11.552s/build0.28s,
+new4tests2.047s, no rawoverride. Retained5graph tests+menu1020probes/450mouse/
+4150events/14networkfailures pass.214oldpins unchanged/215current; independent
+fullraw41676959/packed3897568bytes,JSON/SHA/684blobs/415atomicrecords,10vendor
+hashes and552isolatednativefiles verify. No file/source/expected byte correction;
+allownedjobs terminal0; NTSDNative linked, noapp/window/device/Windows exercise.
+Foreigntransforms unchanged. Jobs: build/research/network-notification-work.json.
+Client402d70, full initialized menu/listening/peer/callback routing, CRT/NLS/
+WinMain/lib/macOS runtime join and complete game/clean-Mac goal remain open.
 
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.

@@ -1130,3 +1130,31 @@ FreeEventParams(code,param1,param2). Globals во всех callbacks неизм�
 Нужное неизвестное чтение, отсутствующий interface, exhaustion и поздняя ошибка
 дают полный native rollback. Реальная COM reentrancy/доставка и device lifetime
 остаются открытыми; внешние эффекты буферизуются до общего commit.
+
+## Серверное сетевое уведомление
+
+[NETWORK_NOTIFICATION](NETWORK_NOTIFICATION.md) сравнивает415 whole callbacks
+401/402ec0. Dispatch использует только low16(lParam); wParam и high16 error не
+выбирают socket или обработку ошибки. Платформенные ответы объявлены отдельно.
+
+| Адрес / offset | Подтверждённое поведение |
+| --- | --- |
+| `44f1b4` | Listener читается перед store44f1af=2; после accept закрывается без очистки global |
+| `44f46c` | Результат accept записывается даже при-1; все send/recv и error close используют live word |
+| `44f1af` | Byte2 пишется до accept и сохраняется при ошибке; прежнее значение не восстанавливается |
+| `44f1ae` | Byte1 после отправок и обновления seats/names; не очищается при accept-1 или READ/CONNECT/CLOSE |
+| Frame+00..4c |77-byte recv, сначала настоящий memset0; один API output prefix, остальной хвост сохраняет0 |
+| Frame+50..9c |77-byte outgoing packet: literal19dwords+1byte,45 underscores at+70, четыре live NUL strings с шагом11, NUL→underscore44bytes, finalNUL |
+| `44fcc0+11*i`, i0..3 | Строки читаются до NUL, без ограничения stride11; packet writes могут перекрываться |
+| `44ff90..450b48` |Все3001 bytes отправляются третьим send, включая последний байт |
+| `450b4c..450b68` |Первым четырём сначала1/2/3/4; все8 получают-1 только для соответствующего ASCII1 в recv. Остальные4 сохраняют старые values |
+| `44fcec..44fd17` |44 remote bytes из recv+32: сначала raw store, затем отдельный zero store для underscore |
+
+Frame base в whole corpus2000ef3c;160 bytes заканчиваются до исходного cookie
+at+a0. Untouched+4d..4f/+9d..9f сохраняют backing/unknown mask. Все415 настоящих
+cookie checks проходят; это не разрешение копировать неизвестное содержимое
+cookie в native. Длинные settings names остаются открытой границей достижимости;
+native выход за восстановленный local record явно отклоняет с полным откатом.
+Три send и Sleep3000/500/500 сохраняются при numeric errors. Четыре retained
+уведомления несут собственный результат accept; listener/menu/client/peer и
+настоящая Windows delivery пока не соединены.

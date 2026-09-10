@@ -40,8 +40,9 @@ Winsock402ec0, one at43bc1f for DirectShow401e90, and two at43b88a/43b88f requir
 a negative43bdd0 result. The latter actually returns0/1 in this contract. This
 is an instruction inventory, not every branch outcome or complete WndProc.
 The later [GRAPH_EVENTS](GRAPH_EVENTS.md) adds the DirectShow caller instruction,
-bringing the separately verified union to568/576. Winsock remains open; this
-does not change the original lifecycle corpus or its historical567-start union.
+bringing the separately verified union to568/576. The later
+[NETWORK_NOTIFICATION](NETWORK_NOTIFICATION.md) adds Winsock, giving574/576.
+Neither changes the original lifecycle corpus or its historical567-start union.
 
 ## Original lifecycle behavior
 
@@ -191,7 +192,7 @@ codec vendor files and the isolated native export. Transport deflation only
 packs the research fixture. No EXE, DLL or interpreter enters native runtime.
 
 DirectShow400/401e90 is now separately compared in [GRAPH_EVENTS](GRAPH_EVENTS.md).
-The next required message consumer is Winsock401/402ec0.
+Winsock401/402ec0 is separately compared in [NETWORK_NOTIFICATION](NETWORK_NOTIFICATION.md).
 Input events retain the separate accepted WINDOW_INPUT contract. The public
 lifecycle API rejects those specialized messages instead of treating them as
 ordinary defaults. Actual callbacks during window APIs, CRT/NLS/WinMain, library

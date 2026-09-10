@@ -149,7 +149,9 @@ packs the research fixture; no EXE/DLL/emulator enters native runtime.
 Together with immutable WINDOW_INPUT and WINDOW_LIFECYCLE corpora,568/576 static
 WndProc starts have executed. The eight remaining are six Winsock caller starts
 43b98f..43b99a and two negative43bdd0 debug starts43b88a/43b88f. This union is not
-every branch outcome or a complete native WndProc router. Winsock401/402ec0,
-initialized delivery during APIs, CRT/NLS/WinMain, lib transforms/routing, macOS
+every branch outcome or a complete native WndProc router. The later
+[NETWORK_NOTIFICATION](NETWORK_NOTIFICATION.md) separately compares401/402ec0
+and brings that inventory to574/576; the original graph corpus is unchanged.
+Initialized delivery during APIs, CRT/NLS/WinMain, lib transforms/routing, macOS
 renderer/audio/input/timing, full matches/content/network/replays and actual
 Windows/device/clean-Mac acceptance remain open. The full game goal is not complete.

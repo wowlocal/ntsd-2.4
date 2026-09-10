@@ -1,0 +1,106 @@
+{
+  "scope": "Verify original NTSD handshake packets, live storage and bounded source traces.\n\nRebuild declared globals from PE/installer plus explicit inputs; independently\nmodel packet/local reads and request/store order, compare raw CPU/API writes,\nCRT memset, REP copy and unchanged cookie checks. This reads immutable artifacts;\nit performs no network operation and is not Windows/peer/native evidence itself.\n",
+  "rawSHA256": "cd14c267c9b27b8a63095bdf0afbd4d2ee8f737d068c2bbabbfc5756d9a31c24",
+  "rawBytes": 41676959,
+  "cases": 415,
+  "retainedCalls": 4,
+  "acceptedCalls": 362,
+  "failedAcceptCalls": 1,
+  "blobs": 684,
+  "events": {
+    "accept": 363,
+    "closeSocket": 364,
+    "send": 1086,
+    "sleep": 1086,
+    "receive": 362,
+    "windowDefault": 415,
+    "message": 16
+  },
+  "eventCount": 3692,
+  "sendBytes": 1119304,
+  "semanticStores": 33377,
+  "semanticStoreBytes": 130913,
+  "rawStores": {
+    "CPU": 43892,
+    "API": 345
+  },
+  "rawStoreCount": 44237,
+  "rawStoreBytes": 130913,
+  "reads": 37790,
+  "memsetCalls": 724,
+  "completeREPs": 362,
+  "cookieChecks": 415,
+  "helpers": {
+    "cookieCheck": 415,
+    "notification": 415,
+    "callback": 415
+  },
+  "helperCount": 1245,
+  "comparedStorageBytes": 19216160,
+  "originalEXEPCs": 225,
+  "DLLPCs": 37,
+  "wndProcPCs": 36,
+  "notificationPCs": 181,
+  "notificationMissing": [
+    {
+      "address": 4206825,
+      "bytes": "8da42400000000",
+      "instruction": "lea esp, [esp]"
+    }
+  ],
+  "combinedWndProc": {
+    "executed": 574,
+    "staticStarts": 576,
+    "missing": [
+      {
+        "address": 4438154,
+        "bytes": "68c49e4400",
+        "instruction": "push 0x449ec4"
+      },
+      {
+        "address": 4438159,
+        "bytes": "ffd6",
+        "instruction": "call esi"
+      }
+    ],
+    "parents": {
+      "window-input": "13599d1f4cab88a67736994ca509d27fabd4673f57555c119e7f751423a05818",
+      "window-lifecycle": "626b6b3db20b47fac621755cc204f1d0959650b30087d7c690f1cb9b845da14f",
+      "graph-events": "5dd6ed995ad47956f476059e13578239e4e7ff8f58e9cb7d18fbaee7ff6b1c81"
+    },
+    "allBranchOutcomes": false
+  },
+  "originalMemoryFaults": 0,
+  "fullInstallerEqual": true,
+  "allAtomicCasesEqual": true,
+  "first8ProbeCasesUnchanged": true,
+  "declaredBeforeReconstructed": true,
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "fixture": "original-network-notification.json",
+  "fixtureSHA256": "c3e967399f3a7cf7f96b149bc8ed4eb1cbeba9fa118f0fb2d7019560996fbca7",
+  "fixtureBytes": 3897568,
+  "nativeRawTests": 10,
+  "nativeRawTestSeconds": 12.074,
+  "nativeRawBuildSeconds": 179.41,
+  "nativeAppExercised": false,
+  "actualNetworkSessionCompared": false,
+  "fullCRTStartupCompared": false,
+  "actualCallbackReentrancyCompared": false,
+  "fullWndProcCompared": false,
+  "sourceTool": "tools/oracle_network_notification.py",
+  "nativeImplementation": "native/Sources/NTSDCore/OriginalNetworkNotification.swift",
+  "packagedTests": 10,
+  "packagedTestSeconds": 11.552,
+  "packagedBuildSeconds": 0.28,
+  "packagedNetworkSeconds": 2.047,
+  "priorFixtures": 214,
+  "currentFixtures": 215,
+  "isolatedFiles": 552,
+  "vendorFiles": 10,
+  "fullJSONEqual": true,
+  "allOwnedJobsTerminal": true,
+  "sourceToolSHA256": "d67c4f5974e11bebcceda2fbc3d02f3bf066c84d1a6065568d175bbeeca6006d",
+  "verifierSHA256": "feaa5ade13a926a29ae0e3687a1342c862dcf7b70a374da225a8528095f0c88e",
+  "nativeRawNetworkSeconds": 2.327
+}
