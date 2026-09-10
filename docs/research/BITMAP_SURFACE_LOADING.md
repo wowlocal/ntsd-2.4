@@ -204,3 +204,8 @@ the early screen and whole World/dispatcher return. Earlier CRT/NLS, private
 backing, library transforms, worker/application integration, actual Windows,
 window/input/audio, complete matches/all content and clean-Mac acceptance remain
 open. The full game goal remains active.
+
+Continuation: [APPLICATION_SETTINGS](APPLICATION_SETTINGS.md) now executes the
+whole settings helper from seven fresh own parents through42709b. Its native
+scratch remains unknown until written; the full World/dispatcher still awaits
+the screen consumer. The original bitmap fixtures above remain unchanged.

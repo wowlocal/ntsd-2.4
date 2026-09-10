@@ -123,3 +123,9 @@ SwiftPM команды последовательны. Далее — насто
 из WinMain через настоящий static World458b00 и все bitmap loaders. Его settings
 ещё не выполнен. Следующее соединение должно продолжить именно этот стек/CRT и
 ресурсы; прежний явно заданный500-byte scratch не является его backing.
+
+[APPLICATION_SETTINGS](APPLICATION_SETTINGS.md) now completes that own join:
+17 whole settings returns and1 separate missing-FILE stop on fresh full parents.
+All825 scratch reads use current-call writes, so Native needs none of the
+private source backing. Caller EDI comes from its own GameEntry target; ESI=-1
+is retained for42709b. This earlier supplied-scratch corpus remains unchanged.

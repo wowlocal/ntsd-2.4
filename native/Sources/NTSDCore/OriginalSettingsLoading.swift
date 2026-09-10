@@ -13,10 +13,29 @@ public struct OriginalSettingsEvent: Equatable, Sendable {
 /// explicit platform inputs. This does not implement Windows CRT file opening.
 public enum OriginalSettingsLoading {
     public enum Continuation: String, Codable, Sendable { case ready, nullFile }
+    public struct StartupResult: Equatable, Sendable {
+        public let continuation: Continuation, scratch: OriginalStateRecord
+        public let target: UInt32?, retainedESI: UInt32?
+    }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Settings loading: "+text) }
+
+    /// Fresh application helper lifetime: private scratch is not supplied from
+    /// a source stack snapshot. Only this call's writes can own its bytes.
+    public static func loadOwnStartup(globals: inout OriginalStateRecord,
+        translatedBytes: [UInt8], file: UInt32, scratchAddress: UInt32, target: UInt32, closeResult: Int32 = 0,
+        observe: (OriginalSettingsEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> StartupResult {
+        var scratch = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x1f4),defined:[Bool](repeating:false,count:0x1f4))
+        let continuation = try loadAndContinueStartup(globals:&globals,scratch:&scratch,translatedBytes:translatedBytes,
+            file:file,scratchAddress:scratchAddress,closeResult:closeResult,requireDefinedStrings:true,observe:observe)
+        // 42708e reloads the original World argument, then427098 sets ESI=-1.
+        // Preserve the own caller value rather than copying its source stack.
+        return .init(continuation:continuation,scratch:scratch,target:continuation == .ready ? target : nil,
+                     retainedESI:continuation == .ready ? UInt32.max : nil)
+    }
 
     public static func loadAndContinueStartup(globals: inout OriginalStateRecord, scratch: inout OriginalStateRecord,
         translatedBytes: [UInt8], file: UInt32, scratchAddress: UInt32, closeResult: Int32 = 0, flagClearValue: UInt32 = 0,
+        requireDefinedStrings: Bool = false,
         observe: (OriginalSettingsEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> Continuation {
         let base = OriginalMatchPreparation.globalBase
         guard globals.bytes.count == OriginalMatchPreparation.globalSize, scratch.bytes.count == 0x1f4 else { throw error("Storage extent") }
@@ -41,6 +60,9 @@ public enum OriginalSettingsLoading {
         func string(_ record: OriginalStateRecord, _ offset: Int) throws -> [UInt8] {
             guard offset >= 0, offset < record.bytes.count,
                   let end = record.bytes[offset...].firstIndex(of: 0) else { throw error("Unterminated string outside supplied storage") }
+            if requireDefinedStrings && !record.defined[offset...end].allSatisfy({ $0 }) {
+                throw error("String reads unknown private storage")
+            }
             return Array(record.bytes[offset..<end])
         }
         var open = OriginalSettingsEvent(.open,[file]);open.strings = ["data\\control.txt","r"];try emit(open)

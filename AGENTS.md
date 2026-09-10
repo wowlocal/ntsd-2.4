@@ -1103,6 +1103,42 @@ build/research/bitmap-surface-loading-work.json. NEXT actualown423480 settings,
 then earlyscreen/World/dispatcher, earlierCRT/NLS/privatebacking/librarytransforms,
 worker/application/Windows/devices/fullmatches/allcontent/cleanMac. Fullgoalactive.
 
+[APPLICATION_SETTINGS](docs/research/APPLICATION_SETTINGS.md) now continues
+whole423480 on the own WinMain/loop/front CPU/stack/CRT:17 actual returns through
+42709b/SP1000ea74 and1 missing-FILE stop before4234db/fscanf. Seven full bitmap
+parents reproduce;18 fresh chains, no forced retry/CRT reset/scratch injection.
+Source799scans/53gets/36feof=888CRTreturns,1197events/257callerwrites;
+202EXE+733CRTstarts,195/197settings(twoalignment)+4/4caller.13libpatchesdisjoint.
+
+Own scratch1000e878/count500 ends beforecookie, not a C-array-size claim.
+All825reads/1284bytes use current-call writes. Primary311earlier-known bytes
+stay private evidence. Native loadOwnStartup starts0/false and requires defined
+strings;2277owned/476723unknown scratch bytes at958compared checkpoints.
+Fullglobals use native prefix plus independently rebuilt unchanged World/outer.
+Original152573CPUstores/566870bytes and976fullstates reconstruct, including
+allstackbytes/masks;1598CRTdatastores restore unchanged fullCRT/PTD/calendar.
+274declared_read requests/2984bytes; realWindows open/translation/readerrors open.
+
+Helper preserves registers, then42708e restores EDI from rootSP20 and427098
+setsESIffffffff. Only actual4246fd writes savedtarget in fullownhistory. Native
+uses ownGameEntry.target, not expectedstack. MissingFILE supplies no returned
+registers.427092 stores ownEBX0 after helperreturn. Typed outputs remain staged;
+18outerrollback checks+7latefailures preserve committedstartup/callback/MSG/
+counter/baseline/ownership. No World/dispatcher return or screen execution yet.
+
+Raw9tests11.049s/build195.18s and packaged9tests10.388s/build0.26s
+passed, including retainedsettings/bitmap/entry; no rawoverride in final tests.
+Initialbuildonly failed on missing optionaltestcontext default; no tests ran.
+Initialverifier incorrectly applied helperregisterpreservation acrosscaller;
+actualtarget/ESI updates were preserved without changing original expectedbytes.
+All240oldpins unchanged,241current;1207blobs/18parts/7parents/10vendorhashes
+verify. Completedcandidate1 must never restart. Exact raw/packed acceptance,
+processes and hashes: build/research/application-settings-work.json.
+NTSDNative linked; owncomposer remains separate from Practice app. CUA pipe
+unavailable, no window/input/device action. NEXT actual42709b screen consumer,
+then wholeWorld/dispatcher, earlierCRT/NLS/library/privatebacking, worker/app,
+Windows/device/fullmatch/allcontent/network/cleanMac. Fullgoal stays active.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

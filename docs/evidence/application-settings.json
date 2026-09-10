@@ -1,0 +1,82 @@
+{
+  "sourceBytes": 38354477,
+  "sourceSHA256": "f5f3c58d2ac8aa3c2a37d2d220b2994eee02a312cdba80235b736bc8d13f1532",
+  "producerSHA256": "5d9317c8d47ac39c98c73742ceae5a3b94d77cda9a33b1e90a77694212e8da76",
+  "cases": 18,
+  "parents": 7,
+  "counts": {
+    "ownTargetStores": 18,
+    "ready": 17,
+    "stateCheckpoints": 976,
+    "fullGlobalBytes": 48885888,
+    "scratchBytes": 488000,
+    "stackBytes": 8994816,
+    "CPUStores": 152573,
+    "CPUStoreBytes": 566870,
+    "scratchReads": 825,
+    "scratchReadBytes": 1284,
+    "CRTDataStores": 1598,
+    "CRTReturns": 888,
+    "readRequests": 274,
+    "readBytes": 2984,
+    "nullFile": 1
+  },
+  "events": {
+    "open": 18,
+    "scan": 799,
+    "gets": 53,
+    "write": 257,
+    "eof": 36,
+    "close": 17,
+    "settingsReturn": 17
+  },
+  "coverage": {
+    "settings": {
+      "static": 197,
+      "executed": 195,
+      "unexecuted": [
+        {
+          "address": "0x4234c9",
+          "bytes": "8da42400000000",
+          "instruction": "lea\tesp, [esp]"
+        },
+        {
+          "address": "0x42351d",
+          "bytes": "8d4900",
+          "instruction": "lea\tecx, [ecx]"
+        }
+      ]
+    },
+    "caller": {
+      "static": 4,
+      "executed": 4,
+      "unexecuted": []
+    }
+  },
+  "actualEXE": 202,
+  "actualCRT": 733,
+  "blobs": 1207,
+  "atomicParts": 18,
+  "priorFixturesUnchanged": 240,
+  "vendorFiles": 10,
+  "libPatchSpansDisjoint": 13,
+  "fullOriginalStatesReconstructed": true,
+  "ownFullParentsUnchanged": true,
+  "ownCRTPTDRetained": true,
+  "sourceScratchReadsAllProduced": true,
+  "nativeComparedStateCheckpoints": 958,
+  "nativeComparedFullGlobalBytes": 47984304,
+  "nativeScratchOwnedCheckpointBytes": 2277,
+  "nativeScratchUnknownCheckpointBytes": 476723,
+  "wholeDispatcherReturns": 0,
+  "windowsVerified": false,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "nativeCompared": true,
+  "fixture": "original-application-settings.json",
+  "fixtureBytes": 7826352,
+  "fixtureSHA256": "73bbc8475c73f1d1c6752b9127f3019cd9222f757903bc7c9de52ab39658a06f",
+  "rawCorpus": "build/research/application-settings-candidate1.json",
+  "acceptanceLog": "build/research/application-settings-raw2.log",
+  "nativeScope": "17 whole own settings returns and1 missing-FILE stop, full immutable startup/loop/front parents. Native compares settings events and owned scratch only; original private stack remains evidence. Native own GameEntry supplies restored target. Whole pending loop rolls back at required screen/nullFile or late failures; no World/dispatcher/Windows return.",
+  "sourceCallbacks": "Declared fopen/fclose/translated _read and existing single-thread services; no Windows file execution."
+}

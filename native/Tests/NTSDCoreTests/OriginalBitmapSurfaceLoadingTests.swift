@@ -154,8 +154,12 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         XCTAssertEqual(matched,59);XCTAssertEqual(rejected,2)
         print("BITMAP SURFACE 59 whole loader/copy matches;2 original returns require unknown private backing and are explicitly rejected with rollback")
     }
-    struct OwnContext { var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics() }
-    func own(_ index: Int,_ r: Resources,_ er: Entry.Resources,fail: String? = nil) throws {
+    struct OwnContext {
+        var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics()
+        var settings: OriginalSettingsLoading.StartupResult? = nil, gameEntry: OriginalApplicationDispatchEntry.GameEntry? = nil
+    }
+    func own(_ index: Int,_ r: Resources,_ er: Entry.Resources,fail: String? = nil,
+             continuation: ((inout OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index],parents = try XCTUnwrap(c.parents),parent = parents.parent,lc = parents.loop
         var globals = try OriginalStateRecord(bytes:r.blob(parent.initialGlobals),defined:[Bool](repeating:true,count:0xb440)),startup = OriginalWinMainStartup()
         let rawParent = try XCTUnwrap((r.rawCases[index]["parents"] as? [String:Any])?["parent"] as? [String:Any])
@@ -178,6 +182,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                     var full = try OriginalStateRecord(bytes:bytes,defined:[Bool](repeating:true,count:bytes.count))
                     let ec = er.c.cases[c.spec.windowParam == 1 ? 1 : 0],entry = Entry.Stage(ec,er,bytes,fail:nil)
                     let game = try OriginalApplicationDispatchEntry.advance(incomingTarget:request.arguments[0],globals:&full,perform:entry.surface,store:entry.store)
+                    owned.gameEntry = game
                     let wo = Int(game.worldAddress)-0x44d000,world = try OriginalStateRecord(bytes:Array(full.bytes[wo..<wo+0x7d8]),defined:[Bool](repeating:true,count:0x7d8))
                     var fg = try OriginalStateRecord(bytes:Array(full.bytes[..<0xb440]),defined:Array(full.defined[..<0xb440])),front = owned.front,g = owned.graphics
                     var a: Adapter?,first = true
@@ -202,6 +207,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                     XCTAssertEqual(fg.bytes,Array(complete.shadow[..<0xb440]))
                     owned.front = front;owned.graphics = g;owned.base.globals = fg
                     if fail == "settings" { throw Stop.late }
+                    try continuation?(&owned)
                     throw Stop.required
                 },counterWritten:p.counter)
                 try p.snapshot(state.base,loop,step.after)
@@ -213,6 +219,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
                 XCTAssertEqual(state.base.globals,before.base.globals);XCTAssertEqual(state.base.outer,before.base.outer);XCTAssertEqual(state.base.local,before.base.local)
                 XCTAssertEqual(state.base.memory.replayPointers,before.base.memory.replayPointers);XCTAssertEqual(state.base.memory.allocations,before.base.memory.allocations)
                 XCTAssertEqual(state.front.bitmaps,before.front.bitmaps);XCTAssertEqual(state.graphics,before.graphics)
+                XCTAssertEqual(state.settings,before.settings);XCTAssertEqual(state.gameEntry,before.gameEntry)
                 XCTAssertEqual(loop.message,previous.message);XCTAssertEqual(loop.timer.baseline,previous.timer.baseline);XCTAssertEqual(loop.counter,previous.counter)
             }
         }
