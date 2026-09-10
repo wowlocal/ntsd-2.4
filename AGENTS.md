@@ -220,7 +220,47 @@ is source-only/nativeComparedfalse. All owned source/SwiftPM jobs terminal0;
 NTSDNative linked, no app/window/device/Windows claim. Exact jobs/results:
 build/research/lib-world-hits-work.json. Complete raw corpus is never restarted.
 
-Remaining hooks include41f5fc transforms and424352loading, plus all enclosing
+[LIB_LOADING](docs/research/LIB_LOADING.md) now implements whole4242e0/ret,
+installed424352/424357 label/text, all rendering/link/overlay/present children
+and actual43d230 message-pump tail.318controlled returns compare14673792global
+bytes and20727events;1303global/384DC stores independently reconstruct.
+309animated/9no-draw;1180draws/1776Blts/240fills/391GetDC/384text outputs,
+640clocks/78Sleep/73Shell;309Peek/23Get/22Translate/22Dispatch.5082helper
+returns,840EXE+80DLL+414CRT actual PCs. All253reachable caller starts execute;
+282straight-line starts include28bypassed label/NOP and1alignment. Both DLL
+bodies76starts+4import thunks. Not every child branch or actual Windows.
+
+Preserve unsigned elapsed33/100 and fresh clock requests, signed wrapped phase
+increment/remainder10. All three DLL strings say Loading files; phase<2 uses
+ffffff,5..7 uses99,othersff at608/60,background0. Caller filename stays unread.
+458420 is a BITMAP wrapper. Eight100-byte link slots skip leading?, retain
+column3's extended right hover bound and top/bottom/left/right fill order.
+Clear held before sound/Sleep300/Shell, retain4511b8 after link processing,
+then cursor/overlay/present/message pump. GetMessage-1 is nonzero in the actual
+branch. APIs are declared responses; no URL/message/device operation occurs.
+All240fill inputs retain92unknown helper-entry bytes with their separate mask;
+this does not recover initialized application stack/worker provenance.
+
+Six linked calls independently retain timer/phase/click/DC; five carries.
+Native late Dispatch callback and missing bitmap reject with full global/DC
+rollback after earlier label output. Buffer all external effects until commit.
+Raw4release tests11.687s/build176.07s pass first build: loading0.155s, text0.080s,
+pristine presentation11.452s.532-file db588b3+three owned native files excludes
+unfinished transforms.207oldpins unchanged/208published; fullraw7085256/packed
+1080643bytes/JSON/SHA/all513blobs and10vendor hashes independently verified.
+Two terminal source harness failures retained: initial panel binding and its
+caller read observer. Verifier corrected actual installer scratch309c; expected
+source bytes and game algorithms unchanged. Complete source is never restarted.
+Final packaged6release tests24.923s/build177.75s pass without raw overrides:
+both old initial-loading controls13.206s, newloading0.143s, text0.080s and
+pristine presentation11.494s.533-file export keeps the same three native files
+plus new fixture. All owned source/SwiftPM jobs terminal; NTSDNative linked,
+no app/window/device/Windows claim. Jobs: build/research/lib-loading-work.json.
+The enclosing
+initial/catalog loading, asynchronous panel worker and full library app join
+remain open; previous pristine no-draw loading fixtures keep their own scope.
+
+Remaining hook is41f5fc transforms, plus all enclosing
 library-enabled routing and full CRT initialization. Recover Actor+7b4 and
 actual unknown0xb2 backing/reachability without silently fixing source bugs.
 Old pristine-EXE fixture bytes remain immutable and valid in their declared

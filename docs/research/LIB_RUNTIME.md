@@ -29,7 +29,9 @@ whole calls. The unexpected0xb2 read stride and literal binary-Z addend are
 preserved. The latter changes164 old kind8 outcomes; fresh pristine controls
 prove that only their binary-Z words differ. Original data has6000+ effects,
 while2175 potential stride words have unknown backing and remain outside the
-controlled successful domain. Two remaining jump destinations, the loading-label patch, enclosing
+controlled successful domain. [LIB_LOADING](LIB_LOADING.md) now compares318
+complete loading calls with the label jump/two-byte patch, real output children
+and message-pump return. One remaining transform destination, enclosing
 library-enabled callers and a fresh initialized application join remain open.
 
 ## Pinned artifacts and actual entry path
@@ -113,8 +115,8 @@ not native comparisons or complete branch analyses.
 |41408b|10001125|Whole Actor control compared in [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md):7168 calls, live zero EDI and x87 operands, state85/86 frame/facing order.|
 |4177b9|100011b9|Whole contacts compared: attacker current-frame state20 reverses the team gate and enters the effect check at41780b; three continuations and live stack provenance retained.|
 |401290|10001298|Whole replacement text routine; native276-call comparison completed below.|
-|424352|10001236|Loading-label selection/text/color changes before4243b1.|
-|424357|two bytes `90 90`|Accompanies the preceding loading-label jump; preserve as part of that source path.|
+|424352|10001236|Whole loading compared in [LIB_LOADING](LIB_LOADING.md):318 calls, signed phase colors, identical Loading files strings, bitmap/link/output/message order; continuation4243b1.|
+|424357|two bytes `90 90`|Installed bytes preserved and verified; the label jump bypasses both NOPs and the former caller label block.|
 |4214d7|10001a9a|Whole command3/catalog consumer compared in [LIB_STAGE_COMMANDS](LIB_STAGE_COMMANDS.md), retaining distinct continuations.|
 |42d5ce|10001b1b|Whole preparation compared: retains450c1c write and writes only byte450bb8=3.|
 |42d30b|10001b2e|Whole preparation compared: copies BG perspective+0xc into459ff8 before X RNG.|

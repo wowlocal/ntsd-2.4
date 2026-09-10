@@ -131,9 +131,22 @@ public enum OriginalMenuPresentation {
         world = execution.world; globals = execution.globals; memory = execution.memory
     }
 
+    /// Whole4028a0 with the installed library text behavior. This helper does
+    /// not read World or allocation ownership; only globals/DC are committed.
+    public static func overlayWithLibrary(globals: inout OriginalStateRecord,
+        libraryText: inout OriginalLibSurfaceText, input: OriginalMenuPresentationInput,
+        observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
+        guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
+        let unused = try OriginalStateRecord(bytes: [],defined: [])
+        var execution = Execution(world: unused,globals: globals,memory: .init(replayPointers: unused),input: input,libraryText: libraryText)
+        try execution.overlay(observe)
+        globals = execution.globals;libraryText = execution.libraryText!
+    }
+
     private struct Execution {
         var world: OriginalStateRecord, globals: OriginalStateRecord, memory: OriginalMenuPresentationMemory
         let input: OriginalMenuPresentationInput
+        var libraryText: OriginalLibSurfaceText? = nil
         typealias Observer = (OriginalMenuPresentationEvent) throws -> Void
         func bits(_ x: Int32) -> UInt32 { UInt32(bitPattern: x) }
         func word(_ address: Int) throws -> UInt32 {
@@ -189,12 +202,18 @@ public enum OriginalMenuPresentation {
         }
         /// 401290 executes GetDC -> GDI text setup/output -> ReleaseDC. Failed
         /// GetDC skips GDI and release. Colors are raw COLORREF, not RGB guesses.
-        func text(_ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
+        mutating func text(_ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
             guard bytes.count < 512 else { throw error("Overlay stack string extent") }
+            if libraryText != nil {
+                let target = try word(0x455608)
+                try libraryText!.draw(bytes,target: target,background: 0,color: color,x: 3,y: 531,
+                                      dcResult: input.dcResult,dc: input.dc,observe: observe)
+                return
+            }
             try OriginalSurfaceText.draw(bytes,target: word(0x455608),background: 0,color: color,
                                          x: 3,y: 531,dcResult: input.dcResult,dc: input.dc,observe: observe)
         }
-        func formatted(_ format: String, _ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
+        mutating func formatted(_ format: String, _ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
             // Recording strings start at local+18 and the cookie is at+20c:
             // 500 bytes including NUL. Stack overwrites are outside this API.
             if format != "Volume: %d", bytes.count >= 500 { throw error("Recording notice stack extent") }
