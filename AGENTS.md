@@ -984,6 +984,40 @@ build/research/application-art-setup-work.json. NEXT whole43e9a0/43e890,
 required own staticWorld/worker/stack composition, earlierCRT/NLS/lib routing/
 transforms and full app/device/match/content/clean-Mac goal remain open.
 
+[APPLICATION_RECOVERY](docs/research/APPLICATION_RECOVERY.md) now implements
+whole43e890/43e860 with actual401ae0/401a80 and43bdd0 children.318 whole recovery
+returns+3 own initializations match;1 ordinary null-back source fault is explicitly
+rejected, NOT322matches. Source5113requests/2431helper returns/2236global stores,
+840structures/65968bytes,565EXE/0DLL newPCs. All18restore+14/16caller starts run;
+43e8b1/b6 need a negative43bdd0, but its217actual returns are0/1. Do not invent
+negative helper success. Primary restore result ignored; backnonnegative or
+exact8876024c becomes0. Other negative triggersflag1, release/clearback-primary-
+draw when drawexists, DestroyWindow, wholeconfiguration, ShowWindow(liveHWND,5),
+flag0. ShowWindow numeric result survives as recovery result. Shared display
+destruction also serves unchanged Alt+Enter lifecycle corpus.
+
+Two own43bec0 initializations each continue6recoveries; third ownsfailedcreation
+thenfault. All14retained states and576stackbytes exactly retain own previous
+output;28955CPU/116API stackwrites reconstruct. Fresh globaltemplate includes
+normal installer cookie/complement stores44eea4/a8, notpurePE; verifier corrected
+that assumption, sourceexpected unchanged. Helpers retain suppliedopaque frames,
+notownWinMain provenance. After negative restore and CreateWindow0, original
+still ShowWindow(0,5)/flag0; next43e876 reads4bytesat0/UC_ERR_READ_UNMAPPED.
+Native explicit missing-back rejection preserves preceding failed-create state.
+Six late failures verify whole globals/object-lifetime/buffered-context rollback.
+
+Raw13release tests23.212s/build203.64s; finalpackaged13tests23.211s/build0.3s,
+including retainedwindow init/lifecycle/art/message-loop, allpassed.237oldpins
+unchanged/238current; raw11152693/packed1368288bytes, fullJSON/bytes/SHA/93blobs/
+322parts/10vendorhashes verify.600committedbasefiles+ownedoverlays exclude6foreign.
+Firstprobe helper-return bookkeeping error retained; four completeprobe cases
+and failedtrial requests/stores unchanged. Source/nativejobs terminal; no rules
+or sourceexpected corrections. CUA nativepipe failure, no window/input action.
+Jobs:build/research/application-recovery-work.json. NEXT whole43e9a0/ownWorld/
+worker/stack composition and earlierCRT/NLS/library transforms/application/
+Windows/devices/fullmatches/allcontent/cleanMac. Actualdispatchernegative-result
+reachability remains open despite controlled recovery completion.
+
 [WINDOWS_REFERENCE_PREPARATION](docs/research/WINDOWS_REFERENCE_PREPARATION.md)
 prepares freestanding x86/ARM64 Windows NLS collectors,22KERNEL32 imports/noCRT.
 The exact type1/UTF16NUL/count1 CRT request remains unanswered on actual Windows.

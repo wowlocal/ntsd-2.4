@@ -7,8 +7,10 @@ experiments remain in [TICK_PIPELINE](TICK_PIPELINE.md).
 
 The first timer-slice dependency is now compared in
 [APPLICATION_TIMER](APPLICATION_TIMER.md):2025 decisions/8163 requests, with
-all59 actual timer instruction starts. The whole dispatcher, recovery routine,
-message loop and initialized device join below remain open.
+all59 actual timer instruction starts. The whole dispatcher and initialized
+device join below remain open. The message loop is compared in [APPLICATION_MESSAGE_LOOP](APPLICATION_MESSAGE_LOOP.md),
+and the recovery body in [APPLICATION_RECOVERY](APPLICATION_RECOVERY.md); their
+whole application/actual device composition remains open.
 
 The reference is the pinned NTSD2.4 EXE, SHA256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.

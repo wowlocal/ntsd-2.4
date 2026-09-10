@@ -33,14 +33,6 @@ public enum OriginalWindowLifecycle {
                 try store(address,output)
             }
         }
-        func releaseDisplay() throws {
-            if try word(0x457578) == 0 { return }
-            for address in [0x455608,0x455634] {
-                let pointer = try word(address)
-                if pointer != 0 { _ = try numeric("release",[pointer]);try put(address,0) }
-            }
-            _ = try numeric("release",[word(0x457578)]);try put(0x457578,0)
-        }
         var returned: Int32?
         switch input.message {
         case 2:
@@ -80,9 +72,7 @@ public enum OriginalWindowLifecycle {
                 if try word(0x44d794) != 0 {
                     let fullscreen = try word(0x458430) == 0
                     try put(0x458434,1);try put(0x458430,fullscreen ? 1 : 0)
-                    try releaseDisplay()
-                    let window = try word(0x4546f4)
-                    if window != 0 { _ = try numeric("destroyWindow",[window]) }
+                    try OriginalDisplayDestruction.destroy(globals: &state,perform: perform,store: store)
                     _ = try OriginalWindowInitialization.configure(globals: &state,backing: backing,perform: perform,store: store)
                     //43bdd0 returns0/1, so its signed-negative debug branch
                     //cannot run. Even0 still reaches ShowWindow and flag clear.

@@ -90,3 +90,8 @@ source overlays. Raw release2tests passed0.026s/build173.41s. Final packaged rel
 Process/source hashes are retained in
 `build/research/application-timer-work.json`. Active-gameplay and paused-gameplay
 work in the shared checkout were excluded from this comparison.
+
+The formerly declared recovery body is now compared independently in
+[APPLICATION_RECOVERY](APPLICATION_RECOVERY.md):318 whole returns and the
+separate ordinary null-back source fault. Timer delivery, whole43e9a0 and
+Windows device recovery remain distinct boundaries.

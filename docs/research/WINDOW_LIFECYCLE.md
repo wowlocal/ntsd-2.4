@@ -199,3 +199,7 @@ ordinary defaults. Actual callbacks during window APIs, CRT/NLS/WinMain, library
 routing/transforms, macOS event translation and renderer/audio/loop ownership
 remain open. The practice app, full Naruto/Sasuke District match, all content,
 network/replays, Windows/device checks and clean-Mac acceptance are not complete.
+
+Display destruction401ae0/401a80 is now shared with
+[APPLICATION_RECOVERY](APPLICATION_RECOVERY.md). The unchanged lifecycle corpus
+verifies the extraction; whole recovery also executes the existing43bdd0.
