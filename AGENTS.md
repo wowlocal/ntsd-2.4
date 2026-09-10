@@ -260,6 +260,35 @@ The enclosing
 initial/catalog loading, asynchronous panel worker and full library app join
 remain open; previous pristine no-draw loading fixtures keep their own scope.
 
+[STARTUP_STORAGE](docs/research/STARTUP_STORAGE.md) compares12 controlled calls
+of actual CRT _initterm(4472c8,4472d4), executing36 original game constructors.
+Whole accepted EXE/lib installer case0 reproduces unchanged before this separate
+call; this does NOT continue the incomplete CRT startup.27EXE+47CRT PCs,
+25584storage bytes+masks,1248stores/4992written bytes. Observed458440..458c94 is
+NOT sizeof:4031b0 clears only words0/130/134;414440 reads/writes nothing;
+419e40 clears first word then400 bytes. Preserve all other bytes/provenance.
+Four native calls carry their own results; late third-completion error rolls
+back all storage. No expected after-state, runtime DLL or patching imported.
+
+Fresh actual MSVCR80 entry7813232b reaches unresolved GetStringTypeW, BEFORE EXE:
+1274CRT PCs/188API entries/622CPU stores1885bytes. It actually initializes
+heap/TLS/PTD532 and writes _acmdln781c3b24 at781321d9 from GetCommandLineA.
+First NLS request return7813b3b5 is type1/one UTF16 NUL, an availability probe,
+NOT a complete classification table. Output backing d8e9 is not an API result.
+No NLS answer is supplied; do not force failure/host tables to complete startup.
+Separate missing-KERNEL32 attach returns0 and destroys heap:285PCs/14APIs.
+Do NOT call that successful startup.11 exploratory captures/source versions
+retained; no source memory fault or safety refusal. Windows APIs remain declared.
+
+Raw3release tests0.580s/build175.80s and packaged3tests0.570s/build0.28s pass:
+12constructor calls, late rollback and retained968sound calls. Isolated535files
+at aa6f203+two native files exclude concurrent transforms; final537 adds two
+fixtures.208oldpins unchanged/210current; fullraw797945/packed52712bytes,JSON/
+SHA/exact two embedded raw CRT captures and10vendor files verify. All owned
+source/SwiftPM jobs terminal. NTSDNative linked, no app/window/device/Windows.
+Jobs: build/research/startup-storage-work.json and crt-startup-work.json.
+Full CRT/NLS, library-enabled app join and full original-content goal stay open.
+
 Remaining hook is41f5fc transforms, plus all enclosing
 library-enabled routing and full CRT initialization. Recover Actor+7b4 and
 actual unknown0xb2 backing/reachability without silently fixing source bugs.

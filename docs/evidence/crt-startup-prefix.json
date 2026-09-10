@@ -1,0 +1,71 @@
+{
+  "corpus": "crt-startup-prefix.json",
+  "fixture": "original-crt-startup-prefix.json",
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "fullCRTStartupCompared": false,
+  "incompleteCRT": {
+    "rawSHA256": "fe2617f95fd8f878ea2604daa6c6d7cb8af472c47329c336f69b4c5fc793ca58",
+    "rawBytes": 119000,
+    "actualCRTPCs": 1274,
+    "apiEvents": 188,
+    "cpuStores": 622,
+    "cpuStoreBytes": 1885,
+    "boundary": {
+      "arguments": [
+        1,
+        2014926832,
+        1,
+        536930732
+      ],
+      "destinationBefore": "d8e9",
+      "image": "msvcr80.dll",
+      "kind": "GetStringTypeW",
+      "pc": 805324080,
+      "phase": "crtAttach",
+      "returnPC": 2014557109,
+      "sourceBytes": "0000"
+    },
+    "commandLineProducer": {
+      "address": 2015116068,
+      "pc": 2014519769,
+      "size": 4,
+      "value": 654315520
+    }
+  },
+  "rejectedCRT": {
+    "rawSHA256": "6afbc8c51606a5f49719eec4b677ec832994e561b68f08c1cf2c91ea01937b81",
+    "rawBytes": 16061,
+    "actualCRTPCs": 285,
+    "apiEvents": 14
+  },
+  "rawSHA256": "de8ecc4f80d3ce23d1e073cdf5e986062dcbe3c9c7840b3975dc547d1317af4b",
+  "rawBytes": 154495,
+  "fixtureBytes": 23554,
+  "fixtureSHA256": "16b201b9ebf05d0fcef2b706f2a1f7ed6c1586ca3f0c26df883e52f2c7f06165",
+  "artifactVerification": {
+    "corpora": [
+      {
+        "corpus": "startup-storage",
+        "rawBytes": 643450,
+        "packedBytes": 29158,
+        "rawSHA256": "1d8551f96f8bc81591ef5aba24ab2333d8d89d590fc5b4a906f6b6834e1b91eb",
+        "packedSHA256": "667ed74899a118dc026da30bd17d3cec932ee1bc37c16dce9bf4d9809085eaae"
+      },
+      {
+        "corpus": "crt-startup-prefix",
+        "rawBytes": 154495,
+        "packedBytes": 23554,
+        "rawSHA256": "de8ecc4f80d3ce23d1e073cdf5e986062dcbe3c9c7840b3975dc547d1317af4b",
+        "packedSHA256": "16b201b9ebf05d0fcef2b706f2a1f7ed6c1586ca3f0c26df883e52f2c7f06165"
+      }
+    ],
+    "embeddedCRTOriginalCaptures": 2,
+    "priorUnchanged": 208,
+    "currentFixtures": 210,
+    "vendorFiles": 10,
+    "exportFiles": 537,
+    "fullCRTStartupCompared": false,
+    "windowsVerified": false
+  }
+}

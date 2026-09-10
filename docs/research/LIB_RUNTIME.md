@@ -221,3 +221,9 @@ whole library, full CRT startup, real Windows loader/raster, native app window,
 complete match/content, device timing or clean-Mac behavior. Preserve the full
 native-game goal and prioritize the remaining installed hooks before treating
 the earlier pristine chains as the delivered application's behavior.
+
+The later [STARTUP_STORAGE](STARTUP_STORAGE.md) accepts the three controlled
+game constructor callbacks after an unchanged whole installer. Its separate
+actual MSVCR80 process-attach chain stops at the first unresolved Windows NLS
+query before EXE entry. Neither result closes full CRT/library application
+initialization; see [CRT_STARTUP_PLAN](CRT_STARTUP_PLAN.md).
