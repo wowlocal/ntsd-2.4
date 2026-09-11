@@ -1,19 +1,32 @@
 # Current guarded-capture status
 
+Both old additional captures are now terminal1: parent1 at2026-09-11
+04:11:26.405842UTC (24244.519s), parent2 at04:11:01.192218UTC (24199.795s).
+[Preserved failures](../evidence/application-catalog-control-wave-guard-errors.json)
+retain180253388/180320549bytes and exact source errors. Both reached410a4d
+with24completed Objects/154registered WAVs and the same pending155th
+SNDDATA_2144.wav allocation/API inputs as primary1. Its first-region guard
+assertion fails in the research return observer. The old allocation-layout
+explanation remains distinct from terminal guard bytes, which were not separately
+captured. No source/Windows game crash or successful native24/full-catalog match
+is claimed. Sessions45694/5385 are terminal1 and all four source PIDs absent.
+No automatic retry or replacement control capture was launched. Corrected
+primary4 and its890-pin guarded20 watcher remain live unchanged.
+
 Both additional twenty-Object audit sets are now fully terminal0:
 [final/intermediate/read/native completion](../evidence/application-catalog-control20-completion.json).
 Each read audit checks556244408 stack reads/1920124614 bytes and73 catalog reads/
 187 bytes against all541554289 writes, with zero undefined observed bytes.
-Unobserved/private storage remains unknown. Their full source captures and the
-corrected primary remain live; no full catalog return or publication is accepted.
+Unobserved/private storage remains unknown. Their old full source captures are
+terminal as above; corrected primary remains live. No full catalog return or publication is accepted.
 
 The bounded [WAV guard study](CATALOG_WAVE_GUARDS.md) now passes155 paired
 original helper calls and native comparisons, preserving all154 prior own PCM
 records and all actual guards. The fresh guarded firstObject has complete source
 equality and a passing native test. Its full capture remains live; the guarded20
 watcher15664/session49998 will run all three source audits and the frozen native
-test with890 immutable inputs. Both additional20 intermediate and full final
-trace/blob audits also pass; their read audits remain live. Full own catalog
+test with890 immutable inputs. Both additional20 intermediate, full final
+trace/blob and read audits pass and are terminal. Full own catalog
 is still incomplete. Subsequent paragraphs retain chronological status notes.
 
 Primarycandidate1 is terminal at a research allocation-guard assertion after24

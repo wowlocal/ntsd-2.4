@@ -1,0 +1,269 @@
+{
+  "scope": "Preserve actual terminal failures of both additional own catalog captures. Pinned NTSD/lib/VC80 in declared Unicorn harness; read/hash existing immutable failure evidence only. Both fail at the same research WAV guard assertion as primary1, with identical pending WAV allocation/API inputs. The prior guard-allocation layout explains the overlap; terminal guard bytes were not separately captured, so do not promote that inference to a direct guard-byte observation. No source retry, guard removal, original crash claim, native full24/catalog match or Windows/device claim. The corrected primary4 capture continues independently.",
+  "threadId": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+  "observedUTC": "2026-09-11T04:18:25.176746+00:00",
+  "producerSHA256": "b7236ff811c90077acd15d27f384c67e36c71f688fec05adee04c8940627d30b",
+  "jobs": [
+    {
+      "parentIndex": 1,
+      "session": 45694,
+      "sourcePIDs": [
+        60899,
+        60900
+      ],
+      "exitCode": 1,
+      "startedUTC": "2026-09-10T21:27:21.886728+00:00",
+      "endedUTC": "2026-09-11T04:11:26.405842+00:00",
+      "elapsedSeconds": 24244.519,
+      "observedTerminalUTC": "2026-09-11T04:18:25.176746+00:00",
+      "operation": "Original registered WAV4014e0 helper returned to410a4d; research observer validates first-region guards while composing whole own catalog.",
+      "error": "AssertionError()",
+      "errorText": "",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog.py\", line 329, in run_catalog\n    self.uc.emu_start(start,0,count=1_000_000);start=self.uc.reg_read(UC_X86_REG_EIP);chunks+=1\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 769, in emu_start\n    raise self._hook_exception\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 363, in wrapper\n    return func(uc, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 1063, in __hook_code_cb\n    callback(uc, address, size, user_data)\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog.py\", line 160, in code\n    q=self.wave.current;assert sp==q['entrySP']+8 and [u.reg_read(r) for r in REGS]==q['saved'];self.wave.finish_wave('returned',u.reg_read(UC_X86_REG_EAX))\n                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_menu_sound_startup.py\", line 123, in finish_wave\n    first=self.record('first'),second=self.record('second'),format=self.device_format,descriptor=self.descriptor,\n          ^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_wave_loader.py\", line 166, in record\n    assert self.uc.mem_read(a-32,32)==b'\\x96'*32 and self.uc.mem_read(a+r['count'],32)==b'\\x69'*32\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+      "sourcePC": "0x410a4d",
+      "sourceSP": "0x1000dc90",
+      "completedObjects": 24,
+      "completedRegisteredWaves": 154,
+      "pendingWave": {
+        "label": "data\\SNDDATA_2144.wav",
+        "path": [
+          100,
+          97,
+          116,
+          97,
+          92,
+          83,
+          78,
+          68,
+          68,
+          65,
+          84,
+          65,
+          95,
+          50,
+          49,
+          52,
+          52,
+          46,
+          119,
+          97,
+          118
+        ],
+        "file": "4d4ed9523d0292028f2205b3a466edbacc886aa2b2a563d03bf454a33072750b",
+        "input": {
+          "destination": 4533168,
+          "device": 603979808,
+          "stream": 591724545,
+          "buffer": 604002336,
+          "firstPointer": 2156793888,
+          "secondPointer": 2156806176,
+          "descendResults": [
+            0,
+            0,
+            0
+          ],
+          "formatReadResult": 18,
+          "ascendResult": 0,
+          "dataReadResult": 20440,
+          "createResult": 0,
+          "lockResults": [
+            0,
+            0
+          ],
+          "restoreResult": -1,
+          "unlockResult": -1,
+          "closeResult": -1,
+          "firstCount": 10220,
+          "secondCount": 10220,
+          "ramp": false
+        },
+        "entrySP": 268491912,
+        "returnPC": 4262477,
+        "saved": [
+          2014797579,
+          1214251040,
+          4547130,
+          154
+        ],
+        "outputBefore": 0,
+        "beforeGlobals": "0d55d8a297b79bfcb4948a4eac100509d40ca73dd216b837fc8a1066fc916e72",
+        "registryIndex": 154
+      },
+      "pendingObject": {
+        "sp": 268493196,
+        "returnPC": 4269722,
+        "saved": [
+          1409286144,
+          1879048224,
+          822095872,
+          4488152
+        ],
+        "address": 1214251040,
+        "arguments": [
+          7,
+          0,
+          268493456,
+          822095872
+        ],
+        "eventStart": 61667,
+        "storeStart": 669097940
+      },
+      "pendingInputExactlyEqualsPrimary1": true,
+      "guardBytesCapturedSeparately": false,
+      "completeCatalogReturned": false,
+      "native24ObjectMatchClaim": false,
+      "safetyRefusal": false,
+      "artifacts": {
+        "build/research/application-catalog-candidate2-nominal.failure.json": {
+          "bytes": 180253388,
+          "sha256": "fc79afe09dfd16c73af13df5241c5db631286be1c36706abc3778ed0609debfc"
+        },
+        "build/research/application-catalog-candidate2-nominal.object-000020.json": {
+          "bytes": 145953356,
+          "sha256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29"
+        },
+        "build/research/application-catalog-candidate2-nominal.log": {
+          "bytes": 418330,
+          "sha256": "142949ed6b9ae7d65feda3d4b82884507038e5e6ad1d65eaedb3deac33778db2"
+        }
+      }
+    },
+    {
+      "parentIndex": 2,
+      "session": 5385,
+      "sourcePIDs": [
+        60950,
+        60951
+      ],
+      "exitCode": 1,
+      "startedUTC": "2026-09-10T21:27:41.397098+00:00",
+      "endedUTC": "2026-09-11T04:11:01.192218+00:00",
+      "elapsedSeconds": 24199.795,
+      "observedTerminalUTC": "2026-09-11T04:18:25.176746+00:00",
+      "operation": "Original registered WAV4014e0 helper returned to410a4d; research observer validates first-region guards while composing whole own catalog.",
+      "error": "AssertionError()",
+      "errorText": "",
+      "traceback": "Traceback (most recent call last):\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog.py\", line 329, in run_catalog\n    self.uc.emu_start(start,0,count=1_000_000);start=self.uc.reg_read(UC_X86_REG_EIP);chunks+=1\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 769, in emu_start\n    raise self._hook_exception\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 363, in wrapper\n    return func(uc, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/.cache/uv/environments-v2/oracle-application-catalog-027f3ab65fda9bd8/lib/python3.11/site-packages/unicorn/unicorn_py3/unicorn.py\", line 1063, in __hook_code_cb\n    callback(uc, address, size, user_data)\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog.py\", line 160, in code\n    q=self.wave.current;assert sp==q['entrySP']+8 and [u.reg_read(r) for r in REGS]==q['saved'];self.wave.finish_wave('returned',u.reg_read(UC_X86_REG_EAX))\n                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_menu_sound_startup.py\", line 123, in finish_wave\n    first=self.record('first'),second=self.record('second'),format=self.device_format,descriptor=self.descriptor,\n          ^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/michael/Developer/ntsd-2.4/tools/oracle_wave_loader.py\", line 166, in record\n    assert self.uc.mem_read(a-32,32)==b'\\x96'*32 and self.uc.mem_read(a+r['count'],32)==b'\\x69'*32\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+      "sourcePC": "0x410a4d",
+      "sourceSP": "0x1000dc90",
+      "completedObjects": 24,
+      "completedRegisteredWaves": 154,
+      "pendingWave": {
+        "label": "data\\SNDDATA_2144.wav",
+        "path": [
+          100,
+          97,
+          116,
+          97,
+          92,
+          83,
+          78,
+          68,
+          68,
+          65,
+          84,
+          65,
+          95,
+          50,
+          49,
+          52,
+          52,
+          46,
+          119,
+          97,
+          118
+        ],
+        "file": "4d4ed9523d0292028f2205b3a466edbacc886aa2b2a563d03bf454a33072750b",
+        "input": {
+          "destination": 4533168,
+          "device": 603979808,
+          "stream": 591724545,
+          "buffer": 604002336,
+          "firstPointer": 2156793888,
+          "secondPointer": 2156806176,
+          "descendResults": [
+            0,
+            0,
+            0
+          ],
+          "formatReadResult": 18,
+          "ascendResult": 0,
+          "dataReadResult": 20440,
+          "createResult": 0,
+          "lockResults": [
+            0,
+            0
+          ],
+          "restoreResult": -1,
+          "unlockResult": -1,
+          "closeResult": -1,
+          "firstCount": 10220,
+          "secondCount": 10220,
+          "ramp": false
+        },
+        "entrySP": 268491912,
+        "returnPC": 4262477,
+        "saved": [
+          2014797579,
+          1214251040,
+          4547130,
+          154
+        ],
+        "outputBefore": 0,
+        "beforeGlobals": "b1c33ce59073af76e7fa3f0901fb48021d7d158d0e31b1c0e4b13a7ec03e8976",
+        "registryIndex": 154
+      },
+      "pendingObject": {
+        "sp": 268493196,
+        "returnPC": 4269722,
+        "saved": [
+          1409286144,
+          1879048224,
+          822095872,
+          4488152
+        ],
+        "address": 1214251040,
+        "arguments": [
+          7,
+          0,
+          268493456,
+          822095872
+        ],
+        "eventStart": 61667,
+        "storeStart": 669097940
+      },
+      "pendingInputExactlyEqualsPrimary1": true,
+      "guardBytesCapturedSeparately": false,
+      "completeCatalogReturned": false,
+      "native24ObjectMatchClaim": false,
+      "safetyRefusal": false,
+      "artifacts": {
+        "build/research/application-catalog-candidate3-nominal.failure.json": {
+          "bytes": 180320549,
+          "sha256": "47944cae6adc180f7ddd78e3cd8b59cf41aed2d360a59cb3c244ca106cfe9b28"
+        },
+        "build/research/application-catalog-candidate3-nominal.object-000020.json": {
+          "bytes": 146011682,
+          "sha256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b"
+        },
+        "build/research/application-catalog-candidate3-nominal.log": {
+          "bytes": 418350,
+          "sha256": "4cae7bd7f9c85c4d9c4c336813e067060ca8536c219f6b68456fe1d1c10de556"
+        }
+      }
+    }
+  ],
+  "retained20Audits": "docs/evidence/application-catalog-control20-completion.json",
+  "allocationStudy": "docs/research/CATALOG_WAVE_GUARDS.md",
+  "liveGuardedSource": {
+    "pids": [
+      11635,
+      11636
+    ],
+    "session": 59274,
+    "watcherPID": 15664,
+    "watcherSession": 49998,
+    "frozenInputPins": 890
+  },
+  "automaticRetriesStarted": false
+}

@@ -48,6 +48,19 @@ false positives will not occur.
 
 ## Current research status
 
+Both old additional catalog captures are now terminal1 at the WAV research
+guard assertion; see [preserved errors](docs/evidence/application-catalog-control-wave-guard-errors.json).
+Parent1 ended04:11:26.405842UTC/24244.519s; parent2 ended04:11:01.192218UTC/
+24199.795s on2026-09-11. Sessions45694/5385 are reaped;60899/60900 and60950/60951
+are absent. Each has24completed Objects/154WAVs, pendingSNDDATA_2144.wav/index154
+at actual410a4d/SP1000dc90. Pending allocation/API inputs exactly equal primary1.
+Raw failures180253388/180320549bytes retain exact error/stacktrace/state; this
+is not a source game crash, safety refusal or native24/full-catalog match.
+Terminal guard bytes remain uncaptured separately; keep the prior overlap
+explanation as allocation-layout evidence. Both fully audited20 checkpoints
+remain unchanged. No new retry was launched. Corrected primary4/11636 and its
+890-pin guarded20 watcher15664 remain live; full catalog/own continuation open.
+
 **Whole controlled menu bitmap composition: [CHARACTER_MENU_SURFACE](docs/research/CHARACTER_MENU_SURFACE.md).**
 OriginalMenuResourceLoading now has a full43ee50/43ed10/4013d0/CRT route with
 staged globals/bitmap owners/platform context.23ready controlled returns match;
@@ -67,7 +80,7 @@ corpora. All247oldfixtures unchanged; new248th preserves full raw bytes/masks.
 Final packaged2release tests2.806s/build222.35s passed without raw override;
 all634archived files verified,633raw-test files unchanged. NTSDNative linked;
 no window/device run. Source/native jobs terminal0; own
-catalog2/3/guarded4 and guarded20 watcher remain live. Full own menu/helper/music
+catalog2/3 are now terminal1 as above; guarded4 and guarded20 watcher remain live. Full own menu/helper/music
 join, app, Windows/device/full-game/clean-Mac goals remain open. Read its work JSON.
 
 All additional own20 audits are now terminal0; see
@@ -77,8 +90,8 @@ all merged with541554289writes; zero undefined observed read bytes. Unread/priva
 storage remains unknown. Read audits2762.275/2758.599s complete their earlier
 final/intermediate/native checks (53566native record comparisons/59581783bytes
 plus masks each). Runner12919/session75293 and all six audit children are terminal.
-Original2/3 and corrected primary4 captures remain live; guarded20 watcher15664
-still waits with890frozenpins. No full catalog return/native publication follows.
+Original2/3 later stopped at the guard assertion above; corrected primary4 and
+guarded20 watcher15664 remain live with890frozenpins. No full catalog return/native publication follows.
 
 **Native menu music/resource transaction: [CHARACTER_MENU_STARTUP](docs/research/CHARACTER_MENU_STARTUP.md).**
 OriginalCharacterMenuStartup keeps music before the resource prefix's4512cc

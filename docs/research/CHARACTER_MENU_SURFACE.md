@@ -109,8 +109,9 @@ NTSDNative linked in both builds; no application window or device was exercised.
 See [evidence](../evidence/character-menu-surface.json) and
 `build/research/character-menu-surface-work.json` for jobs, pins and verification.
 
-All new source and native jobs are terminal0. The original own catalog2/3 and corrected
-primary4 captures continue independently, with their frozen watcher untouched.
+All new source and native jobs are terminal0. The original own catalog2/3 later
+ended at the preserved WAV research guard assertion; their audited20 snapshots
+remain unchanged. Corrected primary4 continues with its frozen watcher untouched.
 The full own catalog/loading, menu entry with installed library and complete
 bitmap/music composition, app window, Windows/device, full match/all-content
 and clean-Mac checks remain open. EXE/DLL execution and transport deflation are
