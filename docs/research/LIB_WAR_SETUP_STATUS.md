@@ -58,6 +58,27 @@ unfinished snapshot. No new War source comparison or application-window claim
 follows from those retained checks.
 The accepted milestone remains cd80865; this work is unfinished.
 
+The additional Native-only outer test completes fresh13-resource loading and
+one retained eight-fighter Random call, then verifies eight late rollbacks at
+waiting bitmap output, overlay text, present and final before-return. Both
+Native tests pass0.113s/build15.74s; Swift42072/session4456 terminal0. The test
+uses declared dependency responses, not a device or source after-state. No game
+code changed. All264 isolated package inputs are pinned.
+
+[Static preparation inspection](LIB_WAR_PREPARATION_STATIC.md) verifies330
+starts/1359 bytes after43a21f and the actual `_Battle` format, CPU slot+10,
+three RNG streams and pending-push stack provenance. It executes no original
+instruction and is not a native preparation comparison.
+
+X5 remains absent after at least three consecutive goal turns. Independent
+setup implementation, compilation, retained checks, Native rollback and static
+preparation inspection are complete within their declared limits. The current
+sequence is now blocked on the preserved corpus: full audit, War comparison,
+packaging and reproducible preparation-parent evidence cannot be completed
+without it. This is a storage dependency, not completed compatibility work.
+The user has already been asked to reconnect X5; no completed source capture
+was retried. The complete game objective remains unfulfilled.
+
 After X5 returns, verify its exact UUID, source2 raw size/SHA and574 atomic
 parts before using them. Reconcile existing job records with actual processes.
 Do not replace canonical symlinks, lower storage reserves, restart source2 or

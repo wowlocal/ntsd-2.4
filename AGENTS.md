@@ -69,7 +69,7 @@ and the synthetic RNG table's zero-byte input error retain separate logs; origin
 producer/expected bytes are unchanged. This is NOT whole source equivalence or
 an accepted milestone. The574-case comparator, eight source-coupled rollback
 trials and War surface adapter now compile against accepted Core/reference
-checks; full original comparison/outer-output trials remain unexecuted. The
+checks; full original comparison/eight source-coupled trials remain unexecuted. The
 new before-resource observer retains Native-only6trial success0.061s/build152.06s.
 Indexing requires the full source audit, exact raw hash and574atomic part hashes;
 synthetic9.44MB cross-chunk/truncated-JSON checks are tooling-only evidence.
@@ -78,6 +78,17 @@ setup/252selection plus late rollback; this is not a new War match. All263
 small-package inputs are pinned,295oldfixtures and23other pending files unchanged.
 Twenty owned files form an explicitly unfinished snapshot; accepted base stays
 cd80865. All source/Swift jobs including39213/39833 are terminal.
+Native-only outer ownership now passes two nominal calls and8late failures:
+fresh13resources and retained8Random fighters roll back at waiting bitmap,
+overlay text, present and final return. Two tests including prior6inner trials
+pass0.113s/build15.74s; Swift42072/session4456 terminal0,264package inputs pinned.
+No game/expected bytes changed. [War preparation static evidence](docs/research/LIB_WAR_PREPARATION_STATIC.md)
+verifies330starts/1359PEbytes, `_Battle`, CPU slot+10, RNG123/125/127 and root2c/
+root38 provenance. This is no original execution/whole preparation/Windows proof.
+Independent setup checks are exhausted; full audit/comparison/packaging and
+the actual preparation parent require X5. Its absence recurred across at least
+three consecutive goal turns. Resume from the preserved corpus when it returns;
+do not substitute recapture or unverified implementation for that dependency.
 X5 disappeared during dependency
 build; source already completed and hashed. UUID3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548
 is absent from diskutil; do not replace canonical symlinks or recapture originals.

@@ -46,8 +46,9 @@ Three existing dispatcher files now accept a War continuation. The default
 preserves the earlier `.selectionStage` boundary. `advanceWithWar` connects
 fresh/cached menu resources, War and common returned output with one staged
 environment; its War owner commits only after the outer call succeeds.
-Earlier mode4 CPU selection, full original output comparison and a late outer
-output rollback test remain open. No game/app runtime route is claimed here.
+Earlier mode4 CPU selection and full original output comparison remain open.
+The Native-only outer rollback check is recorded below; the source-coupled
+outer check still awaits X5. No game/app runtime route is claimed here.
 
 The small local package contains exact accepted Git cd80865 Core/codec plus
 the pending War files and three dispatcher edits. Full code compiles. The first
@@ -113,3 +114,20 @@ and reference code come from Git cd80865. These retained matches establish no
 new War match. The20 pending owned files are preserved as an unfinished snapshot;
 the frozen source plan/input correction/producer and all295 accepted fixtures
 remain unchanged. All study processes are terminal. The full-game goal stays open.
+
+`OriginalWarOuterRollbackTests` now checks the complete native outer call using
+the same small DAT catalog and declared image/API responses. One chain creates
+all11 menu plus two War resources; a retained call selects eight live Random
+fighters. Each chain rejects four later dependencies: waiting bitmap output,
+overlay text, present and the final before-return observer. All eight failures
+restore World/Actors/globals, resources, RNG, library DC and buffered events.
+Both nominal calls complete; the final DC comes from the later output helper.
+These are controlled Native ownership checks, not Windows/device/network calls
+or source matches. No game code or expected artifact changed. The two Native
+tests pass0.113s/build15.74s, including the retained six inner rollback trials;
+session4456/Swift42072 is terminal0. The package has264 pinned inputs.
+
+[Static preparation evidence](LIB_WAR_PREPARATION_STATIC.md) now identifies the
+next330 starts/1359 bytes, actual `_Battle` filename suffix, CPU destination
+seat+10, streams123/125/127 and retained caller-word producers. It executes no
+source and does not resolve the setup corpus dependency.
