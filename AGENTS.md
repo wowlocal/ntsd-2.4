@@ -48,6 +48,32 @@ false positives will not occur.
 
 ## Current research status
 
+**Continuous menu music/full-bitmap prefix: [CHARACTER_MENU_MUSIC_SURFACE](docs/research/CHARACTER_MENU_MUSIC_SURFACE.md).**
+OriginalCharacterMenuStartup now composes actual4229cc/429730 music and whole
+bitmap helpers through429e5a in one native transaction.16 controlled prefixes
+match;5 unknown-operand source returns are explicit native rollback rejections.
+Music's actual sprintf log starts at1000dee4, later loader BITMAP backing:
+failed first GetObject consumes own log+4/+8. Retain native-produced bytes and
+partial masks, then own GetObject writes;219 loader lifetimes independently
+verified. Empty directory leaves one height byte unknown; no-format gates and
+first failed copy description remain unknown. No private expected stack import.
+16 matches retain227checkpoints/1650bitmaprecords/13226400bytes+masks,
+18music snapshots/468bytes+masks,3427events and729helper returns. Eight late
+native-only failures roll back globals/music/bitmap owners/platform environment.
+All21source calls reach429e5a:42410writes/15770reads/344snapshots/529blobs;
+922EXE+335CRT instruction starts,13_getptd boundaries excluded.9reads contain
+33unknown bytes in the5rejected cases; no Windows/device/every-branch claim.
+Actual prologue rootSP1000eab4->body1000e000;CW037f retained; menu unreturned.
+Raw15release tests89.487s/build218.86s and packaged2tests2.389s/build217.81s
+pass.248oldfixtures unchanged;249current. All636packaged archive files verify,
+including635unchanged raw-test inputs. Source/native jobs terminal0; NTSDNative
+linked, no app window. Atomic-part verifier's overstrict full-asset-set check was
+corrected to exact used-entry comparison; all21parts/oldproducer/nominalprobe
+preserved, no source/native expected changes. Guarded catalog4/11636 and watcher
+15664 remain live (8completed Objects at latest observation); their frozen inputs,
+14pending native/3source/6foreign files stay unchanged. Full own catalog/loading/
+menu return/app/Windows/device/full-match/all-content/network/clean-Mac stays open.
+
 Both old additional catalog captures are now terminal1 at the WAV research
 guard assertion; see [preserved errors](docs/evidence/application-catalog-control-wave-guard-errors.json).
 Parent1 ended04:11:26.405842UTC/24244.519s; parent2 ended04:11:01.192218UTC/

@@ -11,14 +11,25 @@ extension OriginalMenuResourceLoading {
         perform: @escaping (OriginalBitmapSurfaceLoading.Request, inout Context) throws -> OriginalBitmapSurfaceLoading.Response,
         checkpoint: (OriginalMenuResourceCheckpoint, OriginalStateRecord, [UInt32:OriginalLoadedBitmap], inout Context) throws -> Void = { _,_,_,_ in },
         observe: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in }) throws -> OriginalMenuResourceResult {
+        try loadWithSurfaceLoading(globals: &globals, context: &context,
+            loaderScratch: OriginalBitmapSurfaceLoading.LoaderScratch(), allocate: allocate,
+            perform: perform, checkpoint: checkpoint, observe: observe)
+    }
+    mutating func loadWithSurfaceLoading<Context>(globals: inout OriginalStateRecord,
+        context: inout Context, loaderScratch: OriginalBitmapSurfaceLoading.LoaderScratch,
+        allocate: (Int, inout Context) throws -> OriginalInterfaceAllocation,
+        perform: @escaping (OriginalBitmapSurfaceLoading.Request, inout Context) throws -> OriginalBitmapSurfaceLoading.Response,
+        checkpoint: (OriginalMenuResourceCheckpoint, OriginalStateRecord, [UInt32:OriginalLoadedBitmap], inout Context) throws -> Void,
+        observe: (OriginalInterfaceEvent, inout Context) throws -> Void) throws -> OriginalMenuResourceResult {
         var candidate = self, state = globals, environment = context
-        var scratch = try OriginalBitmapSurfaceLoading.CopyScratch()
+        var scratch = try OriginalBitmapSurfaceLoading.CopyScratch(), loader = loaderScratch
         let result = try candidate.load(globals: &state, allocate: { try allocate($0, &environment) },
             source: { _,_ in throw OriginalStateError.invalidStorage("Unexpected menu image-result provider") },
             deviceResult: { _ in throw OriginalStateError.invalidStorage("Unexpected menu device-result provider") },
             constructBitmap: { _,allocation,device,path in
                 try OriginalBitmapConstructor.constructWithSurfaceLoading(path: path, optional: false,
-                    backing: allocation.backing, device: device, flags: 0x40, context: &environment, copyScratch: &scratch, perform: perform)
+                    backing: allocation.backing, device: device, flags: 0x40, context: &environment,
+                    copyScratch: &scratch, loaderScratch: &loader, perform: perform)
             }, checkpoint: { cp,globals,bitmaps in try checkpoint(cp, globals, bitmaps, &environment) },
             observe: { try observe($0, &environment) })
         self = candidate; globals = state; context = environment

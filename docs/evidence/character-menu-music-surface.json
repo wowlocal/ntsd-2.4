@@ -1,0 +1,148 @@
+{
+  "scope": "Controlled continuous4229cc->429730 music and whole bitmap initialization to429e5a; pinned NTSD EXE/VC80/11DIBs on one Unicorn2.1.4 CPU with declared PTD/COM/image/GDI/file/allocator inputs.16 complete native prefix matches and5 explicitly rejected unknown-operand source returns are separate contracts. Not own installed-lib catalog/menu return, app or Windows/device evidence.",
+  "timeUTC": "2026-09-11T04:56:32.525515+00:00",
+  "sourceArtifacts": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "embeddedDIBs": 11,
+    "environment": "Unicorn2.1.4; declared CW037f retained"
+  },
+  "acceptance": {
+    "rawTests": 15,
+    "rawTestSeconds": 89.487,
+    "rawBuildSeconds": 218.86,
+    "packagedTests": 2,
+    "packagedTestSeconds": 2.389,
+    "packagedBuildSeconds": 217.81,
+    "completeMatches": 16,
+    "unknownOperandRejections": 5,
+    "lateNativeRollbackControls": 8,
+    "windowExercised": false,
+    "windowsVerified": false
+  },
+  "nativeCompared": {
+    "completeControlledStates": 16,
+    "checkpoints": 227,
+    "bitmapRecords": 1650,
+    "bitmapRecordBytes": 13226400,
+    "musicRecordSnapshots": 18,
+    "musicRecordBytes": 468,
+    "events": 3427,
+    "platformRequests": 2785,
+    "musicEvents": 312,
+    "helpers": {
+      "constructors": 165,
+      "loaders": 165,
+      "copies": 163,
+      "memsets": 164,
+      "sprintf": 11,
+      "music": 61
+    },
+    "explicitUnknownOperandRejections": 5,
+    "lateNativeRollbackControls": 8
+  },
+  "sourceCounts": {
+    "formats": 13,
+    "reads": 15770,
+    "readBytes": 60213,
+    "writes": 42410,
+    "writeBytes": 195385,
+    "eventGlobals": 4099,
+    "snapshots": 344,
+    "musicSnapshots": 22,
+    "musicSnapshotBytes": 572,
+    "loaderLifetimeEntries": 219,
+    "requestStructures": 874,
+    "requestStructureBytes": 57684,
+    "recordSnapshots": 2200,
+    "recordSnapshotBytes": 17635200,
+    "musicHelperReturns": 77,
+    "controlledCRTBoundaries": 13,
+    "helperReturns": 890,
+    "undefinedReads": 9,
+    "undefinedReadBytes": 33,
+    "cases": 21,
+    "blobs": 529,
+    "blobBytes": 18965218,
+    "originalEXEPCs": 922,
+    "originalCRTPCs": 335
+  },
+  "fixture": "original-character-menu-music-surface.json",
+  "artifactVerification": {
+    "timeUTC": "2026-09-11T04:49:54.120773+00:00",
+    "rawBytes": 10208849,
+    "rawSHA256": "6c06a17885eaae0eb8308387b67ca0a96c414966fab674878f2d7f34fc1d9553",
+    "fixtureBytes": 2276096,
+    "fixtureSHA256": "4ec002db9419a58bbb58deb785ba6d861571cd8b0a451118acace2fbce92672c",
+    "fullBytesAndJSONMatch": true,
+    "parents": [
+      {
+        "path": "build/research/character-menu-music-surface-capture1.json",
+        "sha256": "586dc14b7cd671fbaafdbf0cdd54faa3992127e5f983115b7f211cd69e099008",
+        "bytes": 6947479,
+        "cases": 14
+      },
+      {
+        "path": "build/research/character-menu-music-log-capture1.json",
+        "sha256": "9f7ae8cabd286c1dcac213ad075a9266cfbb51d654b53fab415a163019213f54",
+        "bytes": 4234221,
+        "cases": 7
+      }
+    ],
+    "blobs": 529,
+    "blobBytes": 18965218,
+    "assets": 11,
+    "priorFixturesUnchanged": 248,
+    "currentFixtures": 249
+  },
+  "bindings": "Native own formatted graph-log bytes seed only recovered loader dimension storage; own GetObject/description outputs preserve later lifetimes. Bitmap+0 is canonical1/0 for an opaque source surface; other bytes/masks exact. Fresh current-call request bytes stay canonical0 under false masks.",
+  "artifacts": {
+    "build/research/character-menu-music-surface-native-verification.json": {
+      "bytes": 13833,
+      "sha256": "f8530d3689d64478583d995c438458f94198a0fa17ecda1ac10d0ec2d1269b3b"
+    },
+    "build/research/character-menu-music-surface-source-verification.json": {
+      "bytes": 800006,
+      "sha256": "e8bae8602bf4d9bf835b838c8bd975a7690e19287544d718731f2bb8804a7216"
+    },
+    "build/research/character-menu-music-surface-artifact-verification.json": {
+      "bytes": 864,
+      "sha256": "c3e179d011a659861839d6fcd9fc27df9e02d358717d2f5b81c1556675128ac9"
+    },
+    "build/research/character-menu-music-surface-source-preservation.json": {
+      "bytes": 5586,
+      "sha256": "98b055a67b0ec7a8e5a6cc99083ddf36de10fccfbdc9da83590412210980aafb"
+    },
+    "build/research/character-menu-music-surface-atomic-verifier-attempt1-error.json": {
+      "bytes": 1027,
+      "sha256": "c7dc2e5cd568242c6dbc5ab7ee5b17718983e9f8e3889ad6553072d7c688ca53"
+    },
+    "build/research/character-menu-music-surface-native1-input-verification.json": {
+      "bytes": 367,
+      "sha256": "29e79fb608616fad3e2ca242ab35a46d0c22e750f64f86c0fe1c287510c18135"
+    },
+    "build/research/character-menu-music-surface-packaged2-input-verification.json": {
+      "bytes": 361,
+      "sha256": "2abdea8fd9187ab87f1b02ccf4927fc4f788562832808146a807ff8b6f1702cc"
+    },
+    "build/research/character-menu-music-surface-preservation1.json": {
+      "bytes": 1795,
+      "sha256": "417a059591b4f7aa179c8d61f8a93b861f0e097eb215bce3a3de823a8d4d1e60"
+    },
+    "build/research/character-menu-music-surface-initial-source.py": {
+      "bytes": 13104,
+      "sha256": "8ab1362c3a96d90adc11fa565700be12ab61e5a35c179bb7f1a3b4911c66d0c4"
+    },
+    "build/research/character-menu-music-surface-preservation-final.json": {
+      "bytes": 1579,
+      "sha256": "6ac98cb349ca01cae4778bc166176c5c6a878015a9372c348a3c1e14de6c9a47"
+    }
+  },
+  "openDependencies": [
+    "unknown storage outside recovered graph-log/GetObject/description lifetimes",
+    "full own installed-lib catalog/loading/menu-helper composition",
+    "character-menu dispatch and actual return",
+    "app renderer/window/input latency/audio and Windows/device comparisons",
+    "full match/all-content/network/clean-Mac goal"
+  ]
+}

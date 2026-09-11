@@ -46,25 +46,44 @@ public enum OriginalBitmapSurfaceLoading {
             }
         }
     }
+    /// Loader BITMAP width/height at the same menu-call depth. Before the first
+    /// image, these bytes may belong to the native music graph-log string.
+    /// Later GetObject writes replace them. No captured stack is accepted.
+    struct LoaderScratch {
+        var dimensions: OriginalStateRecord
+        init() throws { dimensions = try unknown(8) }
+        mutating func graphLog(_ bytes: [UInt8]) throws {
+            for (i,byte) in (bytes+[0]).enumerated() where (4..<12).contains(i) {
+                try dimensions.write(byte,at:i-4)
+            }
+        }
+        mutating func apply(_ response: Response) throws {
+            for write in response.writes {
+                for (i,byte) in write.bytes.enumerated() where (4..<12).contains(write.offset+i) {
+                    try dimensions.write(byte,at:write.offset+i-4)
+                }
+            }
+        }
+    }
     @discardableResult
     public static func load<Context>(path: [UInt8],device: UInt32,flags: UInt32,
         width: UInt32 = 0,height: UInt32 = 0,pixelFormat: [UInt32]? = nil,
         context: inout Context,
         dimensions: (Int,UInt32,inout Context) throws -> Void = { _,_,_ in },
         perform: (Request,inout Context) throws -> Response) throws -> UInt32 {
-        var scratch = try CopyScratch()
+        var scratch = try CopyScratch(), loader = try LoaderScratch()
         return try load(path:path,device:device,flags:flags,width:width,height:height,pixelFormat:pixelFormat,
-            context:&context,copyScratch:&scratch,dimensions:dimensions,perform:perform)
+            context:&context,copyScratch:&scratch,loaderScratch:&loader,dimensions:dimensions,perform:perform)
     }
     static func load<Context>(path: [UInt8],device: UInt32,flags: UInt32,
         width: UInt32 = 0,height: UInt32 = 0,pixelFormat: [UInt32]? = nil,
-        context: inout Context,copyScratch: inout CopyScratch,
+        context: inout Context,copyScratch: inout CopyScratch,loaderScratch: inout LoaderScratch,
         dimensions: (Int,UInt32,inout Context) throws -> Void = { _,_,_ in },
         perform: (Request,inout Context) throws -> Response) throws -> UInt32 {
         guard !path.contains(0),pixelFormat == nil || pixelFormat!.count == 8 else {
             throw OriginalStateError.invalidStorage("Bitmap image name/pixel format")
         }
-        var candidate = context, scratch = copyScratch
+        var candidate = context, scratch = copyScratch, loader = loaderScratch
         func request(_ q: Request) throws -> Response { try perform(q,&candidate) }
         let module = try request(.init("module",[0]))
         var bitmap = try request(.init("image",[UInt32(bitPattern:module.result),0,width,height,0x2010],strings:[path])).result
@@ -77,10 +96,11 @@ public enum OriginalBitmapSurfaceLoading {
         var object = try unknown(24)
         let description = try request(.init("getObject",[handle,24],structure:object))
         try apply(description,&object) // GetObject's numeric result is ignored.
+        try loader.apply(description)
         var surfaceDescription = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:108),defined:[Bool](repeating:true,count:108))
-        let w = try field(object,4,"bitmap width")
+        let w = try field(loader.dimensions,0,"bitmap width")
         try dimensions(0,w,&candidate);try surfaceDescription.write(w,at:12)
-        let h = try field(object,8,"bitmap height")
+        let h = try field(loader.dimensions,4,"bitmap height")
         try dimensions(1,h,&candidate);try surfaceDescription.write(h,at:8)
         try surfaceDescription.write(flags,at:104)
         try surfaceDescription.write(UInt32(108),at:0);try surfaceDescription.write(UInt32(7),at:4)
@@ -90,11 +110,11 @@ public enum OriginalBitmapSurfaceLoading {
             try surfaceDescription.write(UInt32(0x1007),at:4)
         }
         let created = try request(.init("createSurface",[device,0],structure:surfaceDescription))
-        if created.result != 0 { context = candidate;return 0 } // No DeleteObject here.
+        if created.result != 0 { context = candidate;loaderScratch = loader;return 0 } // No DeleteObject here.
         guard let surface = created.output else { throw Boundary.missingOutput("created surface") }
         _ = try copy(surface:surface,bitmap:handle,context:&candidate,copyScratch:&scratch,perform:perform)
         _ = try request(.init("deleteObject",[handle]))
-        context = candidate;copyScratch = scratch;return surface
+        context = candidate;copyScratch = scratch;loaderScratch = loader;return surface
     }
     @discardableResult
     public static func copy<Context>(surface: UInt32,bitmap: UInt32,x: UInt32 = 0,y: UInt32 = 0,
@@ -140,20 +160,21 @@ extension OriginalBitmapConstructor {
     public static func constructWithSurfaceLoading<Context>(path: String,optional: Bool,
         backing: [UInt8],device: UInt32,flags: UInt32,context: inout Context,
         perform: (OriginalBitmapSurfaceLoading.Request,inout Context) throws -> OriginalBitmapSurfaceLoading.Response) throws -> OriginalLoadedBitmap {
-        var scratch = try OriginalBitmapSurfaceLoading.CopyScratch()
+        var scratch = try OriginalBitmapSurfaceLoading.CopyScratch(), loader = try OriginalBitmapSurfaceLoading.LoaderScratch()
         return try constructWithSurfaceLoading(path:path,optional:optional,backing:backing,device:device,flags:flags,
-            context:&context,copyScratch:&scratch,perform:perform)
+            context:&context,copyScratch:&scratch,loaderScratch:&loader,perform:perform)
     }
     static func constructWithSurfaceLoading<Context>(path: String,optional: Bool,
         backing: [UInt8],device: UInt32,flags: UInt32,context: inout Context,
         copyScratch: inout OriginalBitmapSurfaceLoading.CopyScratch,
+        loaderScratch: inout OriginalBitmapSurfaceLoading.LoaderScratch,
         perform: (OriginalBitmapSurfaceLoading.Request,inout Context) throws -> OriginalBitmapSurfaceLoading.Response) throws -> OriginalLoadedBitmap {
         guard backing.count == 0x1f50,!path.utf8.contains(0),path.utf8.count < 200 else {
             throw OriginalStateError.invalidStorage("Bitmap constructor allocation/name boundary")
         }
-        var candidate = context, scratch = copyScratch, record = try OriginalStateRecord(bytes:backing,defined:[Bool](repeating:false,count:backing.count))
+        var candidate = context, scratch = copyScratch, loader = loaderScratch, record = try OriginalStateRecord(bytes:backing,defined:[Bool](repeating:false,count:backing.count))
         var width: Int32?,height: Int32?
-        let surface = try OriginalBitmapSurfaceLoading.load(path:Array(path.utf8),device:device,flags:flags,context:&candidate,copyScratch:&scratch,dimensions:{ index,value,_ in
+        let surface = try OriginalBitmapSurfaceLoading.load(path:Array(path.utf8),device:device,flags:flags,context:&candidate,copyScratch:&scratch,loaderScratch:&loader,dimensions:{ index,value,_ in
             try record.write(value,at:4+index*4)
             if index == 0 { width = Int32(bitPattern:value) } else { height = Int32(bitPattern:value) }
         },perform:perform)
@@ -169,7 +190,7 @@ extension OriginalBitmapConstructor {
             _ = try request(.init("debug",strings:[Array("Couldn't set the color key.\n".utf8)]))
             _ = try request(.init("release",[surface]));try record.write(UInt32(0),at:0)
         }
-        context = candidate;copyScratch = scratch
+        context = candidate;copyScratch = scratch;loaderScratch = loader
         return .init(input:.init(path:path,present:surface != 0,width:width,height:height),optional:optional,storage:record)
     }
 }

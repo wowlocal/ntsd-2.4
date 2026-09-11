@@ -25,14 +25,14 @@ final class OriginalCharacterMenuSurfaceTests: XCTestCase {
     final class Resources {
         let c: Corpus
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_CHARACTER_MENU_SURFACE"].map { URL(fileURLWithPath:$0) }
+        init(url suppliedURL: URL? = nil, expectedCases: Int = 27) throws {
+            let url = try suppliedURL ?? ProcessInfo.processInfo.environment["NTSD_CHARACTER_MENU_SURFACE"].map { URL(fileURLWithPath:$0) }
                 ?? XCTUnwrap(Bundle.module.url(forResource:"original-character-menu-surface",withExtension:"json",subdirectory:"Fixtures"))
             let raw = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:120_000_000)
             c = try JSONDecoder().decode(Corpus.self, from:raw)
             XCTAssertEqual(c.exeSHA256, "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
             XCTAssertEqual(c.crtSHA256, "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
-            XCTAssertEqual(c.cases.count, 27); XCTAssertEqual(c.assets.count, 11)
+            XCTAssertEqual(c.cases.count, expectedCases); XCTAssertEqual(c.assets.count, 11)
         }
         func blob(_ key: String) throws -> [UInt8] {
             if let raw = cache[key] { return raw }
