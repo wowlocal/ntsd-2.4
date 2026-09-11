@@ -1,0 +1,147 @@
+{
+  "scope": "Preserved original catalog research-storage boundary, byte-identical terminal trace storage recovery, and separately started unchanged fresh source capture. No whole catalog/native/Windows success claim.",
+  "timeUTC": "2026-09-11T08:58:50.508810+00:00",
+  "prior": {
+    "job": {
+      "scope": "Fresh pinned original application catalog run with corrected research WAV\nallocation extents. See application-catalog-guarded-plan.md. Prior source0 is\nterminal at a preserved guard assertion; other source processes and old expected\nbytes stay untouched. Full actual instructions/guards remain; no retry, fault\ncontinuation, native/Windows completion claim or external system access.\n",
+      "name": "candidate4-guarded",
+      "parentIndex": 0,
+      "pid": 11635,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.json",
+        "--compact-states",
+        "--max-chunks",
+        "20000",
+        "--checkpoint-every",
+        "20"
+      ],
+      "producerSHA256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4",
+      "startedUTC": "2026-09-11T02:39:09.624932+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 22138.594,
+      "endedUTC": "2026-09-11T08:48:08.175163+00:00"
+    },
+    "session": 59274,
+    "terminalChunk": "31b464",
+    "output": {
+      "path": "build/research/application-catalog-candidate4-guarded.json",
+      "bytes": 175841575,
+      "sha256": "949a7a632e366543eac32a515ca28b5dd3df5cd4b19edd91bb8e6e7ad7cdb3a5"
+    },
+    "end": "dependency",
+    "dependency": {
+      "kind": "researchStorageLimit",
+      "pc": 2014806892,
+      "reservedBytes": 6442450944
+    },
+    "completedObjects": 24,
+    "allocatedObjects": 25,
+    "registeredWaves": 151,
+    "nativeAcceptedObjects": 20,
+    "fullReturn": false
+  },
+  "storage": {
+    "inventory": {
+      "path": "build/research/catalog-trace-duplicate-inventory1.json",
+      "bytes": 22851316,
+      "sha256": "75ecddc3c3a3d338d391945d06da079da4aaa863c8c7a842089cfd051cd3616f"
+    },
+    "job": {
+      "scope": "Deduplicate byte-identical immutable trace files of four terminal NTSD captures.\nThe original NTSD/lib/VC80 controlled-emulation observations stay unchanged.\nCheck every manifest and all original packed bytes; replace only identical file\nstorage with an APFS clone, then compare complete bytes again. Preserve paths,\nlengths, SHA, mode/timestamps, raw expected results and indices. No game execution,\nprocess control, capture retry, trace recompression or logical data deletion.\n",
+      "pid": 78035,
+      "status": "terminal",
+      "startedUTC": "2026-09-11T08:52:01.597698+00:00",
+      "inventorySHA256": "75ecddc3c3a3d338d391945d06da079da4aaa863c8c7a842089cfd051cd3616f",
+      "sourceProcesses": "  PID  PPID STAT ELAPSED      TIME COMMAND\n",
+      "freeBefore": 5933752320,
+      "clonedFiles": 125292,
+      "verifiedCanonicalFiles": 42174,
+      "logicalDuplicateBytes": 15817825009,
+      "elapsedSeconds": 119.18,
+      "freeCurrent": 21999333376,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T08:54:00.782423+00:00",
+      "freeAfter": 22000947200,
+      "indexesUnchanged": 36,
+      "completionLogSHA256": "479a4da69e032d1982408a4753c24044931f27f74f076b1603037c37aaa40011",
+      "expectedBytesChanged": false,
+      "capturesRestarted": false
+    },
+    "session": 66458,
+    "terminalChunk": "09e14a",
+    "completedLog": {
+      "path": "build/research/catalog-trace-clones2-completed.jsonl",
+      "bytes": 41218875,
+      "sha256": "479a4da69e032d1982408a4753c24044931f27f74f076b1603037c37aaa40011"
+    },
+    "completeManifestRowsVerified": 125292,
+    "script": {
+      "path": "build/research/clone-terminal-catalog-traces2.py",
+      "bytes": 4185,
+      "sha256": "a16e8347862d717207a16e1a936f21a0f03157384b564973a5c726b2129b909c"
+    },
+    "initialPreflightError": {
+      "path": "build/research/catalog-trace-clones1-preflight-error.json",
+      "bytes": 615,
+      "sha256": "42caf31d358ce7bee5b2df7818f17c6c27ac1260922bd418a4a446f7f4bcbf5f"
+    },
+    "initialScript": {
+      "path": "build/research/clone-terminal-catalog-traces.py",
+      "bytes": 4040,
+      "sha256": "b7d588a4dcacaf2ccaaff0ac6107415d078bb35be4abdfb7624ba3468d93e522"
+    },
+    "initialLog": {
+      "path": "build/research/catalog-trace-clones1.log",
+      "bytes": 1017,
+      "sha256": "9f0215d5162ab12700b166dff46876946f61dd049e9ca51772510afbd7854ebd"
+    }
+  },
+  "freshCapture": {
+    "jobSnapshot": {
+      "scope": "Fresh original whole-catalog capture after the recorded storage limit was resolved.\nPinned NTSD/lib/VC80 and original assets, controlled Unicorn; unchanged guarded\nproducer, parent, instructions, APIs and6GiB reserve. Prior candidate4 is terminal\nat researchStorageLimit, not a game return. All old traces remain byte-identical\nAPFS clones. See APPLICATION_CATALOG_STORAGE_PLAN.md. No live restart, silence\nretry, memory/protection corruption, source fault continuation or Windows claim.\n",
+      "name": "candidate5-resourced",
+      "parentIndex": 0,
+      "pid": 78860,
+      "status": "running",
+      "command": [
+        "uv",
+        "run",
+        "/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json",
+        "--compact-states",
+        "--max-chunks",
+        "20000",
+        "--checkpoint-every",
+        "20"
+      ],
+      "producerSHA256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4",
+      "startedUTC": "2026-09-11T08:56:40.904466+00:00",
+      "inputManifest": "build/research/application-catalog-candidate5-resourced-inputs.json",
+      "inputManifestSHA256": "01449f3e9390870a7dfa379c1ba2abe503f50cbc55ebcb32bf08f2d020a83515"
+    },
+    "jobFile": "build/research/application-catalog-candidate5-resourced-job.json",
+    "session": 70280,
+    "uvPID": 78860,
+    "pythonPID": 78863,
+    "processObservation": "  PID  PPID STAT ELAPSED      TIME COMMAND\n78860 78850 S      02:10   0:00.02 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n78863 78860 R      02:10   2:09.10 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python3 /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n",
+    "inputs": {
+      "path": "build/research/application-catalog-candidate5-resourced-inputs.json",
+      "bytes": 180612,
+      "sha256": "01449f3e9390870a7dfa379c1ba2abe503f50cbc55ebcb32bf08f2d020a83515"
+    },
+    "runner": {
+      "path": "build/research/run-application-catalog-candidate5-resourced.py",
+      "bytes": 3309,
+      "sha256": "cc748d1f9dadb318e15edb5d626fd64a7df1621db1b4b2592dfb28fb84c4caf1"
+    },
+    "fullReturn": false
+  },
+  "rawOrExpectedEdited": false,
+  "windowsOrDeviceVerified": false
+}

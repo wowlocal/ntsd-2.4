@@ -766,3 +766,29 @@ observation), so whole catalog41c018, initialized application and device/Windows
 acceptance remain open. The separate [roster operand audit](CHARACTER_ROSTER_INPUT_PLAN.md)
 prepares controlled character selection from original resources without importing
 this unfinished parent's private state.
+
+## Storage boundary and fresh capture
+
+Guarded candidate4 is now terminal0 at its declared6GiB research storage limit,
+7817836c, with24 completed Objects, one pending Object and151 registered WAVs.
+Its175841575-byte output is preserved; this is not a whole return or a new
+24-Object native acceptance. [Storage plan](APPLICATION_CATALOG_STORAGE_PLAN.md)
+and [machine evidence](../evidence/application-catalog-storage.json) retain the
+actual terminal process/session, exact dependency and output/trace hashes.
+
+After all four old captures were terminal,125292 byte-identical trace copies
+were replaced with APFS clones of42174 verified canonical files. Every complete
+packed byte sequence, SHA, path, length, mode/mtime and36 index files survives;
+there is no recompression or logical deletion. The completed manifest covers
+15817825009 duplicate bytes, and free space rose from5933752320 to22000947200.
+The initial preflight used the wrong historical job-file location and failed
+before any clone; its script/error/log are preserved separately.
+
+Fresh candidate5-resourced starts the exact unchanged guarded producer/parent,
+with the same checkpoint/chunk/reserve limits, after real process/pin/free-space
+revalidation. UV78860/Python78863 and session70280 identify that new CPU; the
+old candidate4 CPU is not resumed. No source guard is bypassed and all old
+expected results remain intact. Whole catalog return and its complete native/
+trace/read/intermediate-state acceptance remain open. Follow the current job
+record in build/research rather than treating this historical live snapshot as
+proof that a process is still running.
