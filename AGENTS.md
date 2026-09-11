@@ -48,6 +48,29 @@ false positives will not occur.
 
 ## Current research status
 
+**Library menu continuation: [LIB_MENU_CONTINUATION](docs/research/LIB_MENU_CONTINUATION.md).**
+OriginalModeMenuContinuation stages screen/panel/network/overlay/volume/present
+through422ab8; OriginalMenuReturn shares pristine/library output and retainedDC.
+54controlled actualret4 returns+2playback continuations match;4panel boundaries
+explicitly roll back. Actual41bc90 prologue creates normal cookie/SEH storage,
+then declared4229cc entry skips the earlier tick body. ReturnSP1000f008/FSchain/
+saved registers/CW023f verify; outer424746/heldclear is not executed. Cached
+menu10/loadFlag0 runs no new resource/music child; own initialized join stays open.
+All60558stores/221140reads/606APIreads/1500final+6900point regions/2330helpers/
+250blobs verify;1563EXE+51lib+407CRT starts. Only570false-mask reads are pinned
+EXEcookie44eea4.56compared continuations retain8098events/2258helpers. Native
+creates local strings and stages all owners/event buffer; no expected private
+stack import. Five late failures after free/network/volume/present/beforeReturn
+verify whole rollback. Raw11release tests52.626s/build227.45s, new2tests0.771s;
+packaged2tests0.644s/build0.33s pass. All646packaged composition files verify;
+252oldfixtures unchanged,253current. No source/expected/game-rule correction.
+All study source/SwiftPM jobs terminal; NTSDNative linked, no app window/device.
+Guarded catalog11636/watcher15664 remain live (18Objects latest), frozen/pending/
+foreign files unchanged.4242e0 is already LIB_LOADING; APPLICATION_TIMER and
+MESSAGE_LOOP are existing controlled contracts. Next own initialized catalog/
+menu/output/outer loop and app integration. Full Windows/full-match/all-content/
+network/clean-Mac goal remains open; this is not a full initialized tick.
+
 **Whole enabled-panel screen: [MODE_PANEL_SCREEN](docs/research/MODE_PANEL_SCREEN.md).**
 OriginalModeScreen.advanceWithLibraryPanel composes actual431d10 with installed
 text and whole423b00, selection/release/help/cursor.26controlled ret16 returns+

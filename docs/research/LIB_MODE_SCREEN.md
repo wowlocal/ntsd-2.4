@@ -1,5 +1,10 @@
 # Mode screen with the installed library text helper
 
+The subsequent [library menu continuation](LIB_MENU_CONTINUATION.md) now
+compares54 controlled actual422ab8/ret4 returns and two playback continuations,
+including network/overlay/volume/present and whole rollback. Its declared
+menu-tail entry skips the earlier tick body; own initialized composition remains open.
+
 This study recovers whole431d10 with the bundled lib.dll replacement of401290.
 The replacement requests transparent background mode1 and retains its DC only
 after nonnegative GetDC. The pristine EXE helper instead uses background color.

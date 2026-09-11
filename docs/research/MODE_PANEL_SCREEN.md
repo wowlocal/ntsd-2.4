@@ -1,5 +1,10 @@
 # Mode screen with the complete enabled panel
 
+The subsequent [library menu continuation](LIB_MENU_CONTINUATION.md) now
+compares54 controlled actual422ab8/ret4 returns and two playback continuations,
+including network/overlay/volume/present and whole rollback. Its declared
+menu-tail entry skips the earlier tick body; own initialized composition remains open.
+
 OriginalModeScreen.advanceWithLibraryPanel joins the accepted whole423b00 panel
 to431d10, its bundled-library text replacement, selection, help and cursor tail.
 The private screen routine passes current staged resources to the panel after
