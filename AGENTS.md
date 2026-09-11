@@ -48,6 +48,38 @@ false positives will not occur.
 
 ## Current research status
 
+**Retained Tournament arena release: [LIB_TOURNAMENT_ARENA_RELEASE](docs/research/LIB_TOURNAMENT_ARENA_RELEASE.md).**
+51whole source/native preparations/actual432ab0ret12+422ab8ret4 match.17three-call
+sequences load each ordinary arena, select99 to release it, then reload. Only
+three declared confirmation fields/ordinary ABI change; NOT intervening fights.
+All6817constructor results,302surface Release/free pairs,604bitmap constructors/
+9664API requests and51recordings/331075272bytes compare. Release return0/1/17/
+ffffffff is ignored before wrapper free; only the first layer pointer clears.
+Stale tail pointers do not free twice. Shadows/builtin99/playback survive;
+old recording frees before newcalloc. Native OriginalBitmapRelease stages effects.
+1208tracked game-owned release reads/370821recording reads have provenance;
+1649points/1787569records/16726960638bytes+masks,5731334stores/818706instruction
+reads/3982API reads/45507helpers/357FPU points/2909starts. Unknown cookie/small
+portrait counts remain unknown. COM flags are controlled responses, NOT device
+object destruction, Windows reference counting or heap behavior.
+All17first preparations reproduce prior actual bytes/masks/events/reads/returns;
+all51atomic parts/1898572records/31012part blobs verify. Source188.845s terminal0.
+Native1comparator internal setGlobal compile error and first audit's nested
+label difference are preserved; public record-write/label-only audit corrections
+changed no source/game/expected bytes. Native2also disambiguates chronological
+loader returns across reset event indices. Raw6tests166.406s/build104.36s pass,
+including new93.712s and retained98preparation72.694s. Packaged3tests80.220s/
+build0.32s pass without raw override; late release/free/replay/return/reload and
+missing-continuation rollback verified.278oldfixtures unchanged;281current.
+Three88720875-byte transport files restore1086612920raw bytes/JSON/SHA; all693
+package/archive files and frozen/pending/foreign pins verify. Allstudyjobs terminal.
+Separate catalog5samePython78863 reached20Objects. Fresh20checkpoint matches
+accepted20except9directory names;32258packed parts/4079557743bytes all equal and
+hash verified. This reuses source-byte evidence, NOT a new Native run/full return.
+NEXT TeamTournament434ab0/War, own initialized catalog/library/outer-loop/app join.
+Fullmatch/window/device/Windows/cleanMac/full goal stay open; no new UI claim.
+Frozen evidence/work: build/research/lib-tournament-arena-release/.
+
 **Tournament preparation: [LIB_TOURNAMENT_PREPARATION](docs/research/LIB_TOURNAMENT_PREPARATION.md).**
 98controlled source/native ret4 calls:77menu-only+21whole434349 preparations.
 A fresh78-call human chain and20declared confirmations cover17ordinary arenas,

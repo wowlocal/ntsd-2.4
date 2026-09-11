@@ -1,0 +1,713 @@
+{
+  "scope": "Whole51 controlled retained Tournament arena load/release/reload confirmations; original instructions in Unicorn and independent Native comparison. No played fight, whole catalog, actual Windows/device, app window or full-goal claim.",
+  "verifiedUTC": "2026-09-11T14:21:43.851578+00:00",
+  "plan": {
+    "path": "docs/research/LIB_TOURNAMENT_ARENA_RELEASE_PLAN.md",
+    "bytes": 3728,
+    "sha256": "2b8b8b0cfec8c105754f842aa36fb6ccc7d12f6b9721f5d4c24b4e118975e5da"
+  },
+  "base": "144468e087501aa6b49bae65ae7efdd7e582344a",
+  "cases": 51,
+  "wholePreparations": 51,
+  "actualRet4": 51,
+  "actualRet12": 51,
+  "constructorReturns": 6817,
+  "releasePairs": 302,
+  "bitmapAllocations": 604,
+  "backgroundAPIRequests": 9664,
+  "recordingBytes": 331075272,
+  "source": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1.json",
+    "bytes": 1086612920,
+    "sha256": "b7b905726fd3d4c2c97e038e43a560336ea2fabf46f34463eee08768a4ba46de"
+  },
+  "finiteInputs": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-finite-inputs1.json",
+    "bytes": 81784,
+    "sha256": "d31765aaead8c06a916f12422e7578321a16c7d0b2594970d7d6844b9ca88bee"
+  },
+  "sourceInputs": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1-input-pins.json",
+    "bytes": 40422,
+    "sha256": "9d1ad9cafbf2cb894a157936d975d2fe7ced51995a1926dfe5059b52cef39797"
+  },
+  "sourceProducer": {
+    "path": "tools/oracle_lib_tournament_arena_release.py",
+    "bytes": 7545,
+    "sha256": "3efdecb676704b8a4c49b0169f94441965bb4202bff902991b15f64925b3f47c"
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run the finite retained Tournament load/release/reload sequences with whole ret12/ret4, actual layer Release/free instructions, replay ownership and pinned inputs.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_TOURNAMENT_ARENA_RELEASE_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 95495,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_tournament_arena_release.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-tournament-arena-release/lib-tournament-arena-release-probe1.json",
+        "--limit",
+        "3"
+      ],
+      "startedUTC": "2026-09-11T13:57:38.591962+00:00",
+      "inputPins": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-probe1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 12.197,
+      "endedUTC": "2026-09-11T13:57:50.786988+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-tournament-arena-release/lib-tournament-arena-release-probe1.json": {
+          "bytes": 63991698,
+          "sha256": "f620b9edb0310088a5b280d9148225d88f01812b7d5353713e7d515d1a57ce9a"
+        }
+      }
+    },
+    {
+      "scope": "Run the finite retained Tournament load/release/reload sequences with whole ret12/ret4, actual layer Release/free instructions, replay ownership and pinned inputs.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_TOURNAMENT_ARENA_RELEASE_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 95661,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_tournament_arena_release.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T13:58:45.154670+00:00",
+      "inputPins": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 188.845,
+      "endedUTC": "2026-09-11T14:01:53.996206+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1.json": {
+          "bytes": 1086612920,
+          "sha256": "b7b905726fd3d4c2c97e038e43a560336ea2fabf46f34463eee08768a4ba46de"
+        }
+      }
+    }
+  ],
+  "sourceAudit": {
+    "artifact": {
+      "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-audit1.json",
+      "bytes": 3034,
+      "sha256": "7b7ccaba6ada46abdb1712bd12e7bfc99afa735a699960d0d73938fbbd8ca46b"
+    },
+    "summary": {
+      "scope": "Read-only audit of whole Tournament preparation and retained menu calls.\nPinned original EXE/lib/VC80/DAT/BMP evidence from controlled Unicorn2.1.4;\nno execution, fault continuation, expected edits or Windows/device claim.\nReconstruct all recorded storage from declared inputs and actual writes, checking\nreads/masks, every complete checkpoint/final record, allocations and true ABI\nreturns. Verify Actor-constructor provenance, full replay reads and FD/FE/FF,\ndate/local string backing and actual4347ba rootSP10 with pending12arguments.\nLIB_TOURNAMENT_ARENA_RELEASE_PLAN.md defines finite acceptance and open boundaries.\n",
+      "source": "/Users/michael/Developer/ntsd-2.4/build/research/lib-tournament-arena-release/lib-tournament-arena-release-capture1.json",
+      "rawBytes": 1086612920,
+      "rawSHA256": "b7b905726fd3d4c2c97e038e43a560336ea2fabf46f34463eee08768a4ba46de",
+      "constructorReturns": 6817,
+      "stores": 5731334,
+      "storedBytes": 19797197,
+      "instructionReads": 818706,
+      "instructionReadBytes": 2555598,
+      "pointRecords": 1787569,
+      "pointBytes": 16726960638,
+      "points": 1649,
+      "APIReads": 3982,
+      "APIReadBytes": 68727,
+      "preparationPoints": 357,
+      "recordingReads": 370821,
+      "recordingReadBytes": 1005618,
+      "helperReturns": 45507,
+      "wholePreparations": 51,
+      "recordingBytes": 331075272,
+      "bitmapAllocations": 604,
+      "finalRecords": 55829,
+      "finalBytes": 814852458,
+      "knownReleaseReads": 1208,
+      "releasePairs": 302,
+      "staleTailReloads": 17,
+      "randomStreams": {
+        "0xfe": 102,
+        "0xff": 102
+      },
+      "instructionStarts": 2909,
+      "blobs": 3869,
+      "blobBytes": 396701176,
+      "unknownReads": [
+        {
+          "pc": "0x41bcaa",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x41bcbb",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x429744",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x429756",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x43ee56",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 791
+        },
+        {
+          "pc": "0x4450b2",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 995
+        },
+        {
+          "pc": "0x432ab6",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x43f04b",
+          "address": "0x7402202c",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x43f183",
+          "address": "0x7402202c",
+          "bytes": 4,
+          "count": 51
+        },
+        {
+          "pc": "0x43f04b",
+          "address": "0x7402a02c",
+          "bytes": 4,
+          "count": 357
+        },
+        {
+          "pc": "0x43f183",
+          "address": "0x7402a02c",
+          "bytes": 4,
+          "count": 357
+        },
+        {
+          "pc": "0x40c042",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 34
+        },
+        {
+          "pc": "0x4028a6",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "count": 51
+        }
+      ],
+      "nativeCompared": false,
+      "windowsVerified": false
+    }
+  },
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "session": 30958,
+      "evidence": "lib-tournament-arena-release-native1-job.json",
+      "status": "terminal",
+      "pid": 96974,
+      "exitCode": 1,
+      "reason": "Comparator compile: internal setGlobal inaccessible. No game comparison ran; public record write fixes declared bridge only.",
+      "terminalChunk": "8e855d"
+    },
+    {
+      "name": "native2",
+      "session": 10129,
+      "evidence": "lib-tournament-arena-release-native2-job.json",
+      "status": "terminal",
+      "pid": 97766,
+      "exitCode": 0,
+      "terminalChunk": "a35352",
+      "tests": 6,
+      "testSeconds": 166.406,
+      "buildSeconds": 104.36,
+      "newTests": 3,
+      "newTestSeconds": 93.712,
+      "retainedTests": 3,
+      "retainedTestSeconds": 72.694
+    },
+    {
+      "name": "packaged",
+      "scope": "Packaged acceptance of retained Tournament arena release/reload.\nSame isolated Core/tests as the latest passing raw acceptance, adding only the lossless transport files.\nNo raw environment override or reference execution. Preserve input composition.\n",
+      "pid": 98953,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTournamentArenaReleaseTests"
+      ],
+      "startedUTC": "2026-09-11T14:15:09.481886+00:00",
+      "inputFiles": 693,
+      "manifest": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 82.556,
+      "endedUTC": "2026-09-11T14:16:32.034472+00:00",
+      "session": 35666,
+      "terminalChunk": "c06285",
+      "tests": 3,
+      "testSeconds": 80.22,
+      "buildSeconds": 0.32,
+      "rawOverride": false
+    }
+  ],
+  "nativeRawInputs": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-input-pins.json",
+    "bytes": 88739,
+    "sha256": "f9b3731c997c9e4fbb8dc13d59d0a7c4b98f0e5ecc23a9a04c4a0637afdaca6e"
+  },
+  "nativeRawComposition": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-input-composition.json",
+    "bytes": 802,
+    "sha256": "0ceeb481e8045e23396db11a92617fa9d80382661fffcaa648bb21976b08db27"
+  },
+  "nativePackagedInputs": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-input-pins.json",
+    "bytes": 89186,
+    "sha256": "b6605ac13d374bbcd141312185c44f68fc19b5ccd3e43786528bf1e60c9add5e"
+  },
+  "nativePackagedComposition": {
+    "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-input-composition.json",
+    "bytes": 1407,
+    "sha256": "b9567bd18cc3c72ca7c330caa2092475917a2b94e96d927c27ef5676e01d8931"
+  },
+  "artifactVerification": {
+    "summary": {
+      "wholePreparations": 51,
+      "backgroundAllocations": 604,
+      "backgroundAPIRequests": 9664,
+      "cases": 51
+    },
+    "timeUTC": "2026-09-11T14:14:06.586647+00:00",
+    "files": 690,
+    "priorFixturesUnchanged": 278,
+    "fixturePins": 281,
+    "rawBytes": 1086612920,
+    "rawSHA256": "b7b905726fd3d4c2c97e038e43a560336ea2fabf46f34463eee08768a4ba46de",
+    "packedBytes": 88720875,
+    "packedFiles": {
+      "original-lib-tournament-arena-release-part0.json": {
+        "bytes": 52016252,
+        "sha256": "83302990359ac3e1680740e1e32856ee1d797e98c29c5cff15204e10ba5302af"
+      },
+      "original-lib-tournament-arena-release-part1.json": {
+        "bytes": 36704324,
+        "sha256": "29eab4f324629d63094e77131253fcacc16c904e02889623b38a9b3bbb2446b7"
+      },
+      "original-lib-tournament-arena-release.json": {
+        "bytes": 299,
+        "sha256": "615ed523f16b6cb902b9af6b15d87d35793e25d8230dc75d7efc4d95af191aee"
+      }
+    },
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true,
+    "archives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+        "bytes": 3277477,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "6e9ec045e040f64c2905b86e53110e7bd4383e4dcf56f7c1a380402239e1211d",
+        "bytes": 11201,
+        "files": 3
+      },
+      "build/research/fresh-character-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+        "bytes": 6570,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "06d125ae67c376cae1e625b0ebae29fcfe37a559118b0997f8da3316f066826b",
+        "bytes": 6566103,
+        "files": 1
+      },
+      "build/research/lib-character-roster-native1-owned-inputs.tar.gz": {
+        "sha256": "0ecc7960e90c2b62e594fa663f52690aefdbdba442fc31be72d151cd98a9717a",
+        "bytes": 7548,
+        "files": 1
+      },
+      "build/research/lib-character-roster-packaged-fixture-inputs.tar.gz": {
+        "sha256": "901caa31889eaad3b01c288c505320af24787b721de64d36237c5c5f92a617d2",
+        "bytes": 25727492,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native1-owned-inputs.tar.gz": {
+        "sha256": "0df7f8b1c0a950a7dfc15eeb7852b075a782ed1c9dad14d85c6cb714829d519f",
+        "bytes": 18168,
+        "files": 6
+      },
+      "build/research/lib-selection-stage-native2-owned-inputs.tar.gz": {
+        "sha256": "65d655eef6ed27a58bd7b06366fc9999772693133f63d0107e7a13591c330503",
+        "bytes": 3463,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native3-owned-inputs.tar.gz": {
+        "sha256": "3045d375ba78b52a7b1a91bee44e4472c65a545f8375331507116defc040477f",
+        "bytes": 8056,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native4-owned-inputs.tar.gz": {
+        "sha256": "4bb428afcd783a8bb45a9d512abb170e863359918a2b0e1817be43aadec93a29",
+        "bytes": 8352,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-packaged-fixture-inputs.tar.gz": {
+        "sha256": "7de658c5f21dd747f1f50b6511921fc0f2e564f36b78866ce5d18d904a003ca4",
+        "bytes": 101468551,
+        "files": 3
+      },
+      "build/research/lib-selection-commands-native1-owned-inputs.tar.gz": {
+        "sha256": "0d5ea810e42d3278d06278cf2d627bce26f4ffcdd96880088433a4e9c2b48d77",
+        "bytes": 11761,
+        "files": 2
+      },
+      "build/research/lib-selection-commands-packaged-fixture-inputs.tar.gz": {
+        "sha256": "ac3ad8f7b9ac7cf29db9ca6d6330022f9562651a36fd4d6edeebe4f30c39cbc4",
+        "bytes": 136786489,
+        "files": 4
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-native1-owned-inputs.tar.gz": {
+        "sha256": "c7c25f05758e5c5b84d55da9e3461285758fcf8f4c59f2fb632f7989c6dfd7aa",
+        "bytes": 14025,
+        "files": 3
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-fixture-inputs.tar.gz": {
+        "sha256": "53b21bdc5faad5bdaaf29e3c28ca22b25a88fe10a70fb29ff1c26f6d28962c1a",
+        "bytes": 117142789,
+        "files": 4
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-owned-inputs.tar.gz": {
+        "sha256": "85f9b5319c50cda15b399ac156b1a8bc343317dbee32e985d2bc18b690619803",
+        "bytes": 15434,
+        "files": 3
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native2-owned-inputs.tar.gz": {
+        "sha256": "f863ad829bbe0e031a6267ed6f0f164c9e93a7d378c972b79933e559a6849349",
+        "bytes": 4452,
+        "files": 1
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-packaged-fixture-inputs.tar.gz": {
+        "sha256": "0c18d81b2d9228008ca108e3e3a1a5cb83830f4dfe37eaba86f4f99fcb4c1784",
+        "bytes": 125260983,
+        "files": 4
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native1-owned-inputs.tar.gz": {
+        "sha256": "87251fbf495a560e926ecd706320e3eabadaecfc6eef0b5ca8f66a5c4d637813",
+        "bytes": 22003,
+        "files": 6
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native2-owned-inputs.tar.gz": {
+        "sha256": "dd3e92af5571307549cacde60997bd7b688b31e3b1cb2b5ff432c718755696e6",
+        "bytes": 3458,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native3-owned-inputs.tar.gz": {
+        "sha256": "a97131842ba01928d08432db4ca86d4f123356bb23715dc2f9f8de33ce769942",
+        "bytes": 9076,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native4-owned-inputs.tar.gz": {
+        "sha256": "8d3f8b5da9eca8585440d99272b8425f65b8ab8beaca8638b12b63092cf368fd",
+        "bytes": 9207,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native5-owned-inputs.tar.gz": {
+        "sha256": "babf1534742874b287a0704670f612d1a93175801e7c9c18ac0972c5f6eb72f7",
+        "bytes": 9207,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-packaged-fixture-inputs.tar.gz": {
+        "sha256": "9fcb06420be5075777714c66e8b8d4a035661b10694022727e041a53ea61fdf7",
+        "bytes": 102442201,
+        "files": 4
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native1-owned-inputs.tar.gz": {
+        "sha256": "51a87a93affcd6381affff3ba06d257b38fab2b6af585c47beec8ebd97cd5020",
+        "bytes": 6740,
+        "files": 3
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native2-owned-inputs.tar.gz": {
+        "sha256": "0ea36dba9e92d661d058dd6dd7a2710ed3eea5c1154e602f56f99f2660251fba",
+        "bytes": 7232,
+        "files": 4
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native3-owned-inputs.tar.gz": {
+        "sha256": "4aa7a6d62b3998d008055f7e5d2f7888e355e10c22ad5310c960d38be99feaf7",
+        "bytes": 19172,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native4-owned-inputs.tar.gz": {
+        "sha256": "9a5d647827f9d5548ad302e0b8be33e36260592d46b1a8f5c53640e417359cd2",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native5-owned-inputs.tar.gz": {
+        "sha256": "7b45fe212ff51b8931e688ca697792f872e77624f1447ed40b6226c0843be9b1",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native6-owned-inputs.tar.gz": {
+        "sha256": "28ccdeed5879c6ae9c49aeb9b2bee83f4271b02cd0465649f0c6ad19923e1836",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native7-owned-inputs.tar.gz": {
+        "sha256": "e73670f0e3c84008690c8eb0ab7a3f49eb8294105074fa8437f6505ed3ebd99a",
+        "bytes": 19884,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "50809311f2fe40217e430a313cd7f7c11d94859e4214235ad14b8849aeb5f521",
+        "bytes": 70284593,
+        "files": 3
+      },
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-owned-inputs.tar.gz": {
+        "sha256": "bfd5a1b41e18a5cb736ae8ba25e0b2ddac4cb2b1c74934efba7bb026bee958fa",
+        "bytes": 14227,
+        "files": 3
+      },
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-owned-inputs.tar.gz": {
+        "sha256": "bf634fc47178f615f3cdaf702bfc07c23bc93e96f387b5e71cccc435928d6d53",
+        "bytes": 14325,
+        "files": 3
+      }
+    },
+    "compositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-packaged-input-composition.json": "854ab4865ab28a8b5c8ef389634d772529b7e785fc295da61930b3d505d171d3",
+      "build/research/fresh-character-menu-native1-input-composition.json": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "build/research/fresh-character-menu-packaged-input-composition.json": "7dd04d1cf490a3d38b6be18835756cc4de8e71dfbe88f064d1e6f18a978dbfcb",
+      "build/research/lib-character-roster-packaged-input-composition.json": "b6eb57e70fb5e2a773da3c2e5fab10df25a01a6e2e697c0f6b8c9973a89aac41",
+      "build/research/lib-selection-stage-native1-input-composition.json": "8f5dc6fa4ce17f8ca39e69998d60b266388dcf0039ba82fe6527e15b2db2b1cd",
+      "build/research/lib-selection-stage-native2-input-composition.json": "bdf475c07ea9fcb1d3405509ed44da46099783d778f9e6d2d1d3cd2f5fb8ba22",
+      "build/research/lib-selection-stage-native3-input-composition.json": "5d76916c7019e26c953d8b59886cb52fd81f9280feefb80b9b967200fd8fdcd3",
+      "build/research/lib-selection-stage-packaged-input-composition.json": "81527f47a482f0ffdb3f6bacac91975b0eabbd4a59f0c2865917eb961c98f641",
+      "build/research/lib-selection-commands-packaged-input-composition.json": "c6dc4f5adae97aea4ab9d8194aab867fe5e3643e77c4c8fa60895fa5ddf0a412",
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-input-composition.json": "feb441b67f5cf19515e25e17df50e65b4f63615cffb904a7aa6eee34efc03fe2",
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-composition.json": "c339ae2734ed66b99bb369e33189b617c9479182b9fd32d9de3b992b4f95c585",
+      "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-composition.json": "a323b599d6278cee7faed3b0896b586c5830830121fe033dbac7cc3402b4276b",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native1-input-composition.json": "531d41136e030c5a623fe2aa533552c250b3f4e1c30f686d502f11e13b3de4c4",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native2-input-composition.json": "4ef92c1df540310a2a9c255ae9310ba689fd578823e0b2487712dbb69a2700be",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native3-input-composition.json": "b4253e6df3a43ba929c3c78d95908e01753e29565de438e00d598f4800006885",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native4-input-composition.json": "86cd84d54eb11079b79101edb0571590dc591d80f4f545d62efc9440e6b86865",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-packaged-input-composition.json": "0ec28c55fc4d21fda2e378fad2222cddbae03ce6820e556a99780b6005851f27",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native1-input-composition.json": "d2e4fbcfee76f360894542d1ee59263f4edcd41e7a61b586087131287413acc4",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native2-input-composition.json": "a442b3d569f86416e71f81318c1c88ef756742da9c5ada87f3637b43f5a5f386",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native3-input-composition.json": "ef7156b9cf32da07b7e7f94cfd1f947431cdb630fc39f52b61a5c30482ea28d7",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native4-input-composition.json": "b4a05ed174ce704f284a005088e86afb48a6ce468120c40ccf70f6f125aaab47",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native5-input-composition.json": "fa5178486881118243a6e8a2f168f8387feaf4762343d5450ffe5fa5905d4d5e",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native6-input-composition.json": "93143bb2dffb13e1a945e37dfcb06eef132b68c2b9373fe7b186f690f2681ab6",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-packaged-input-composition.json": "7e13bd277382b1230f85c080004b79a4bb78237a03da5383c960235c5766ce4b",
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-input-composition.json": "9a7326b7e74d02f5b11149b8c28de422e82775df9868189981f27dfc48879a8b",
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-input-composition.json": "0ceeb481e8045e23396db11a92617fa9d80382661fffcaa648bb21976b08db27"
+    }
+  },
+  "packagedVerification": {
+    "timeUTC": "2026-09-11T14:18:37.356344+00:00",
+    "files": 693,
+    "unchangedRawFiles": 690,
+    "composition": {
+      "baseComposition": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-input-composition.json",
+      "baseCompositionSHA256": "9a7326b7e74d02f5b11149b8c28de422e82775df9868189981f27dfc48879a8b",
+      "ownedArchive": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "bf634fc47178f615f3cdaf702bfc07c23bc93e96f387b5e71cccc435928d6d53",
+      "ownedFiles": [
+        "Sources/NTSDCore/OriginalBitmapRelease.swift",
+        "Tests/NTSDCoreTests/OriginalLibTournamentArenaReleaseTests.swift",
+        "Tests/NTSDCoreTests/OriginalTournamentArenaReleaseSurfaceAdapter.swift"
+      ],
+      "completeManifest": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-input-pins.json",
+      "files": 693,
+      "fixtureArchive": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "3ad7ac8d201dc57712d601b642fb989f00b38ed6f85981530cd916f2cea4d78b",
+      "fixtureFiles": [
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release-part0.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release-part1.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release.json"
+      ],
+      "layout": "Recursively verified accepted Core plus roster comparator, then the lossless multipart fixture"
+    },
+    "priorCompleteArchiveAudit": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 281,
+    "oldFixturesUnchanged": 278,
+    "fullRawBytesAndJSONEqual": true,
+    "preservation": {
+      "foreignHashes": 6,
+      "nativeOwnedPending": 14,
+      "sourceOwnedPending": 3,
+      "application-catalog-frozen-watch40-inputs.json": 886,
+      "application-catalog-control20-parent1-inputs.json": 887,
+      "application-catalog-control20-parent2-inputs.json": 887,
+      "application-catalog-guarded20-inputs.json": 890,
+      "application-catalog-candidate5-resourced-inputs.json": 890
+    }
+  },
+  "parentPreservation": {
+    "artifact": {
+      "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-parent-preservation.json",
+      "bytes": 10832,
+      "sha256": "f0f8163aff478b41015511ab62d1574a5fc9dc47a8550bac2441f5ad579be2a3"
+    },
+    "completePreparations": 17
+  },
+  "allAtomicParts": {
+    "artifact": {
+      "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-parts-verification.json",
+      "bytes": 7179,
+      "sha256": "98172f481d6f810cdddef0566699614b8762d6a337d1d5d2a7bf4aeba8536e69"
+    },
+    "parts": 51,
+    "partBlobs": 31012,
+    "records": 1898572
+  },
+  "failures": [
+    {
+      "kind": "comparator compile",
+      "job": {
+        "path": "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-job.json",
+        "bytes": 1565,
+        "sha256": "d58c3181d9bcffe6ff98177e38d32e52a6bc8957da7e78465ea36079f9474548"
+      },
+      "error": "'setGlobal' is inaccessible due to 'internal' protection level",
+      "resolution": "Use public storage.write for the same three declared bridge fields. No source/game/expected changes."
+    },
+    {
+      "timeUTC": "2026-09-11T14:05:48.425327+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "toolChunk": "8f26a6",
+      "exitCode": 1,
+      "error": "AssertionError: (0, 'startup')",
+      "operation": "Read-only comparison of prior accepted first preparation",
+      "reason": "Nested startup spec retains the declared case label; new study label differs, original behavior comparison has not failed."
+    }
+  ],
+  "native2ComparatorChange": "Chronological constructor/loader history lookup because event indices reset at each retained call. No game behavior change.",
+  "boundaries": [
+    "Only menu27/arena/random fields and ordinary ABI/button stimuli change between calls; no intervening played-fight producer.",
+    "Controlled COM Release flag records supplied platform response, not real COM object destruction or Windows reference counting.",
+    "Retained unknown cookie and small-portrait frame count masks remain unknown; all1208 tracked game-owned release reads and370821 replay reads are known.",
+    "Dead wrapper/replay bytes retained only for research observation; no Windows heap equivalence.",
+    "No source memory fault or safety refusal in this study; old failures remain separate.",
+    "Native callback effects must remain buffered until the enclosing call commits."
+  ],
+  "catalogObservation": {
+    "timeUTC": "2026-09-11T14:21:43.851578+00:00",
+    "pid": 78863,
+    "parents": [
+      78850,
+      78860
+    ],
+    "status": "same process live; never restarted",
+    "lastObjects": 21,
+    "lastLogLine": "{'chunks': 2361, 'pc': '0x414993', 'scans': 2150003, 'decoders': 21, 'objects': 21, 'catalogChildren': 0, 'stores': 596471128, 'seconds': 19495.96}",
+    "processes": "78850 72826 Fri Sep 11 11:56:39 2026     05:25:04   0:01.14 /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/run-application-catalog-candidate5-resourced.py\n78860 78850 Fri Sep 11 11:56:40 2026     05:25:03   0:00.02 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n78863 78860 Fri Sep 11 11:56:40 2026     05:25:03 324:06.86 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python3 /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n"
+  },
+  "independentCatalog20": {
+    "artifact": {
+      "path": "build/research/application-catalog-candidate5-checkpoint20-equality.json",
+      "bytes": 2764,
+      "sha256": "9cfd3a9ab9b05e763866c25cf80df7ae428b005085773a0966abe933cb6837dc"
+    },
+    "summary": {
+      "scope": "Verify fresh catalog5's20-Object atomic source checkpoint against accepted catalog4 bytes.\nOnly nine declared trace directory names may differ. Compare every referenced\npacked trace file byte-for-byte and with its immutable hash/length. Prior full\nraw/instruction/read/native audits remain separate; this adds source-byte\nreproduction evidence, not a new native run or a full catalog return. Never\nmodify/restart the live source or either checkpoint/trace directory.\n",
+      "timeUTC": "2026-09-11T14:18:20.601386+00:00",
+      "priorSourceSHA256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8",
+      "freshSourceSHA256": "3232806593cba9298cc88d39864ba353fd5341c63cbd6451baa8ea2b3d236bb1",
+      "allCheckpointDataEqualExceptNineDirectoryNames": true,
+      "allReferencedPackedTraceBytesEqual": true,
+      "parts": 32258,
+      "packedBytes": 4079557743,
+      "declaredDecodedBytes": 129358779160,
+      "groups": {
+        "recordTables": {
+          "parts": 6,
+          "records": 1006
+        },
+        "writes": {
+          "parts": 10832,
+          "records": 541554289
+        },
+        "localReads": {
+          "parts": 11126,
+          "records": 556244408
+        },
+        "catalogReads": {
+          "parts": 2,
+          "records": 73
+        },
+        "scans": {
+          "parts": 74,
+          "records": 3619898
+        },
+        "outputCalls": {
+          "parts": 34,
+          "records": 1660219
+        },
+        "stackStores": {
+          "parts": 10036,
+          "records": 501716797
+        },
+        "crtStores": {
+          "parts": 146,
+          "records": 7239674
+        },
+        "globalStores": {
+          "parts": 2,
+          "records": 9698
+        }
+      },
+      "acceptedPriorVerificationSHA256": "c9564d7636bb2f7e278224ca66a6eb0bc940004f0582604bb79f998156b02e5b",
+      "sameLiveProcess": "78850 72826 Fri Sep 11 11:56:39 2026     05:21:41   0:01.14 /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/run-application-catalog-candidate5-resourced.py\n78860 78850 Fri Sep 11 11:56:40 2026     05:21:40   0:00.02 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n78863 78860 Fri Sep 11 11:56:40 2026     05:21:40 320:44.28 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python3 /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n",
+      "newNativeExecution": false,
+      "fullCatalogReturn": false,
+      "fullGoalComplete": false
+    }
+  },
+  "fullGoalComplete": false,
+  "next": "TeamTournament434ab0, War, own initialized catalog/library/preparation/outer-loop/app join; full match, Windows/device/clean-Mac remain open."
+}
