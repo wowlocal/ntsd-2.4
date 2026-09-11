@@ -48,6 +48,29 @@ false positives will not occur.
 
 ## Current research status
 
+**Catalog5 trace transport: [APPLICATION_CATALOG_TRACE_STORAGE](docs/research/APPLICATION_CATALOG_TRACE_STORAGE.md).**
+Same Python78863/UV78860/wrapper78850 continues; no restart or new source match.
+Its canonical build/research/application-catalog-candidate5-resourced.traces is
+now a symlink to /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/
+application-catalog-candidate5-resourced.traces. X5 APFS UUID3A4F5FA6-DC86-4C6E-
+87E2-EAC2C2D72548 had244800352256freebytes. Only task-owned development data there;
+Native shipping/runtime fixtures stay self-contained. Revalidate mount/job/ps.
+Worker SIGSTOP/closed-FD proof/copy/fullverify/symlink/SIGCONT took7.046s.
+11313files/1420742160bytes, mode/mtime and allpaths/hashes preserved. Independent
+11304immutableparts/9indexprefixes plus264newparts/31053103packedbytes fully verify;
+samePID chunks767->768/stores193851829->194105552, last6Objects. No whole return.
+Oldindexbytes retained in full migration inventory. Verified redundant backup
+removed; internalfree8076685312->9534283776. All890source5/886/887/887/890olderpins,
+14pendingNative/3pendingSource/6foreign/263fixtures unchanged. Producer, APIs,
+VM inputs,20000chunks/20Objectcheckpoint/6GiB INTERNAL-parent reserve unchanged.
+Host elapsed log includes pause; declared source clock unaffected. No new Native
+code/tests, UI/device/Windows or full-catalog claim. New large raw studies and
+isolated builds should use the X5 task area. Existing frozen packages/verification
+files remain immutable. Mode1/2/3/4 static findings are in build/research/
+lib-selection-other-modes-notes.md; no new mode capture/Native change yet.
+Full initialized library join/match/outerloop/app/all-content/Windows/device/
+network/clean-Mac goal stays open.
+
 **Library VS reselect/reroll: [LIB_SELECTION_COMMANDS](docs/research/LIB_SELECTION_COMMANDS.md).**
 338source/native calls match:336actual422ab8ret4 and2unreturned42cf8a boundaries.
 194whole parent calls reproduce unchanged. Six option2 commands/30tagEA choices

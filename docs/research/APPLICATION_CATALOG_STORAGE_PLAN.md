@@ -45,3 +45,9 @@ limit is not a successful whole return. No fabricated helper/CRT success,
 private expected-state import, memory/protection corruption, fault continuation
 or automatic retry of a platform safety refusal is authorized. The existing
 guard and the full catalog dependency remain in force.
+
+The later [trace-storage preservation](APPLICATION_CATALOG_TRACE_STORAGE.md)
+keeps the already-running candidate5 PID and VM. Its verified growing trace
+directory now lives on the task-owned X5 APFS area through the original canonical
+path. A7.046s host pause, full copied bytes/index history and subsequent new
+parts are recorded separately. No source restart or6GiB guard change occurred.
