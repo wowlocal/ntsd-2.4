@@ -1,0 +1,280 @@
+{
+  "base": "a2a66cc717f267913b19c482259a6f9f85d16744",
+  "sourceScope": "26 whole mode-screen returns,2 playback continuations and4 panel boundaries; all old standalone and enclosing corpora unchanged",
+  "sourceVerification": {
+    "scope": "Read-only audit of whole installed-library mode-screen and enabled-panel composition.\n\nPinned NTSD EXE/lib.dll and Unicorn2.1.4 observations recover whole431d10\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nSee docs/research/MODE_PANEL_SCREEN_PLAN.md for finite inputs and open boundaries.\n",
+    "rawBytes": 15893078,
+    "rawSHA256": "5183f197af87a49ee58c672aa351e381e3daf774c1ad04ae706f170e591621ec",
+    "cases": 32,
+    "ends": {
+      "returned": 26,
+      "playback": 2,
+      "zeroTimerRange": 2,
+      "noSelectableRow": 2
+    },
+    "instructionReads": 110256,
+    "instructionReadBytes": 176154,
+    "writes": 27942,
+    "writeBytes": 102836,
+    "APIReads": 490,
+    "APIReadBytes": 7290,
+    "records": 704,
+    "recordBytes": 6137856,
+    "helpers": 1218,
+    "events": {
+      "fill": 56,
+      "enter": 32,
+      "leave": 32,
+      "draw": 308,
+      "read": 2330,
+      "clip": 366,
+      "blit": 366,
+      "getDC": 210,
+      "setBackgroundMode": 148,
+      "setTextColor": 148,
+      "stringLength": 148,
+      "textOut": 148,
+      "releaseDC": 148,
+      "panel": 30,
+      "keyName": 112,
+      "soundRequest": 16,
+      "soundMethod": 48,
+      "sleep": 10,
+      "shell": 10,
+      "timer": 8,
+      "method": 4,
+      "free": 4
+    },
+    "instructionStarts": 1447,
+    "exeInstructionStarts": 1396,
+    "libraryInstructionStarts": 51,
+    "blobCount": 131,
+    "decodedBlobBytes": 4786976,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x431d16",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 32
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 26
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "comparedCounts": {
+    "cases": 28,
+    "returns": 26,
+    "playback": 2,
+    "events": {
+      "fill": 52,
+      "enter": 28,
+      "leave": 28,
+      "draw": 286,
+      "read": 2164,
+      "clip": 340,
+      "blit": 340,
+      "getDC": 198,
+      "setBackgroundMode": 136,
+      "setTextColor": 136,
+      "stringLength": 136,
+      "textOut": 136,
+      "releaseDC": 136,
+      "panel": 26,
+      "keyName": 112,
+      "soundRequest": 16,
+      "soundMethod": 48,
+      "sleep": 10,
+      "shell": 10,
+      "timer": 6,
+      "method": 4,
+      "free": 4
+    },
+    "eventCount": 4352,
+    "helpers": 1146,
+    "sourceRecords": 616,
+    "sourceRecordBytes": 5370624,
+    "sourcePCs": 1442,
+    "sourceEXEPCs": 1391,
+    "sourceLIBPCs": 51
+  },
+  "rawAcceptance": {
+    "tests": 12,
+    "seconds": 26.92,
+    "buildSeconds": 224.09,
+    "newTests": 2,
+    "newTestSeconds": 0.283,
+    "retainedTests": 10,
+    "NTSDNativeLinked": true,
+    "appWindowVerified": false
+  },
+  "packagedAcceptance": {
+    "tests": 2,
+    "seconds": 0.23,
+    "buildSeconds": 0.33,
+    "rawOverrides": false
+  },
+  "packagedInputVerification": {
+    "timeUTC": "2026-09-11T06:36:41.819699+00:00",
+    "files": 643,
+    "unchangedRawFiles": 642,
+    "archive": "build/research/mode-panel-screen-packaged-inputs.tar.gz",
+    "archiveBytes": 924819029,
+    "archiveSHA256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+    "fixtureSHA256": "a649156b79d924428aa2003c854b7425f6d5bedd95a3af485d295cbcaa83ce76",
+    "allPackageAndArchivedBytesVerified": true,
+    "allFixturesVerified": 252,
+    "fullRawBytesAndJSONEqual": true
+  },
+  "scopeBoundaries": [
+    "26 controlled ret16 returns and2 playback continuations match;4 panel boundaries are explicit native rejections",
+    "Live bitmap ownership is staged after selection releases; own initialized loader/catalog/menu composition remains open",
+    "No private source stack/expected after-state enters native inputs; undefined fill padding has separate backing",
+    "No full original branch, Windows, device, full-match, all-content, network or clean-Mac claim"
+  ],
+  "reviewErrors": [],
+  "sourceJobs": [
+    {
+      "scope": "Run one bounded whole mode-screen and panel composition study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MODE_PANEL_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 49571,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_mode_panel_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/mode-panel-screen-probe1.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T06:28:56.006176+00:00",
+      "inputPins": "build/research/mode-panel-screen-probe1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.15,
+      "endedUTC": "2026-09-11T06:28:56.154464+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/mode-panel-screen-probe1.json": {
+          "bytes": 494333,
+          "sha256": "2e1c9c935acdf5ef204cebacd82b8f982b81db69b6e0b684281ed7140deb4064"
+        }
+      },
+      "session": 63302,
+      "terminalChunk": "a72b30"
+    },
+    {
+      "scope": "Run one bounded whole mode-screen and panel composition study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MODE_PANEL_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 49612,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_mode_panel_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/mode-panel-screen-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T06:29:09.736185+00:00",
+      "inputPins": "build/research/mode-panel-screen-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 2.715,
+      "endedUTC": "2026-09-11T06:29:12.449726+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/mode-panel-screen-capture1.json": {
+          "bytes": 15893078,
+          "sha256": "5183f197af87a49ee58c672aa351e381e3daf774c1ad04ae706f170e591621ec"
+        }
+      },
+      "session": 82679,
+      "terminalChunk": "eee431"
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 49791,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalModePanelScreenTests|OriginalModeScreenTests|OriginalLibModeScreenTests|OriginalModeSelectionTests|OriginalLibSurfaceTextTests|OriginalMenuPanelDrawingTests"
+      ],
+      "startedUTC": "2026-09-11T06:30:05.414250+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 252.862,
+      "endedUTC": "2026-09-11T06:34:18.269758+00:00",
+      "session": 41656,
+      "terminalChunk": "f86eec"
+    },
+    {
+      "name": "packaged",
+      "pid": 50765,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalModePanelScreenTests"
+      ],
+      "startedUTC": "2026-09-11T06:35:21.378067+00:00",
+      "scope": "Packaged whole mode-screen and enabled-panel acceptance. Same isolated source package as passing raw native1, plus lossless fixture only. No raw environment override; all ten retained screen/selection/panel/library tests already passed with the unchanged core.",
+      "inputFiles": 643,
+      "archive": "build/research/mode-panel-screen-packaged-inputs.tar.gz",
+      "manifest": "build/research/mode-panel-screen-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 1.726,
+      "endedUTC": "2026-09-11T06:35:23.101409+00:00",
+      "session": 45199,
+      "terminalChunk": "082d8e"
+    }
+  ],
+  "inputVerification": {
+    "timeUTC": "2026-09-11T06:34:23.886972+00:00",
+    "base": "a2a66cc717f267913b19c482259a6f9f85d16744",
+    "rawFiles": 642,
+    "acceptedUnchangedFiles": 640,
+    "initialArchiveFiles": 642,
+    "ownedFiles": {
+      "native/Sources/NTSDCore/OriginalModeScreen.swift": "6ce6ef0c9675b9dd4b0f4444835d27c7bfabfd66e0d473d819ffadf236ddb377",
+      "native/Tests/NTSDCoreTests/OriginalModePanelScreenTests.swift": "ac721e026b50326e74f3fd05702e98685899966a9fd1982eb9f145c5a5dc74b2"
+    },
+    "rawBytes": 15893078,
+    "rawSHA256": "5183f197af87a49ee58c672aa351e381e3daf774c1ad04ae706f170e591621ec",
+    "packedBytes": 1531944,
+    "packedSHA256": "a649156b79d924428aa2003c854b7425f6d5bedd95a3af485d295cbcaa83ce76",
+    "fullBytesAndJSONEqual": true
+  },
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": 886,
+    "application-catalog-control20-parent1-inputs.json": 887,
+    "application-catalog-control20-parent2-inputs.json": 887,
+    "application-catalog-guarded20-inputs.json": 890,
+    "timeUTC": "2026-09-11T06:34:28.542523+00:00"
+  },
+  "study": "MODE_PANEL_SCREEN",
+  "plan": "docs/research/MODE_PANEL_SCREEN_PLAN.md",
+  "documentation": "docs/research/MODE_PANEL_SCREEN.md",
+  "implementation": "native/Sources/NTSDCore/OriginalModeScreen.swift",
+  "tests": "native/Tests/NTSDCoreTests/OriginalModePanelScreenTests.swift",
+  "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-mode-panel-screen.json",
+  "newFixture": 252,
+  "oldFixturesUnchanged": 251,
+  "sourceSafetyRefusals": [],
+  "nativeVerification": "build/research/mode-panel-screen-native-verification.json",
+  "work": "build/research/mode-panel-screen-work.json"
+}

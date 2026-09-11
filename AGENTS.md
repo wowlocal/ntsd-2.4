@@ -48,6 +48,28 @@ false positives will not occur.
 
 ## Current research status
 
+**Whole enabled-panel screen: [MODE_PANEL_SCREEN](docs/research/MODE_PANEL_SCREEN.md).**
+OriginalModeScreen.advanceWithLibraryPanel composes actual431d10 with installed
+text and whole423b00, selection/release/help/cursor.26controlled ret16 returns+
+2playback continuations match;4panel boundaries explicitly roll back the whole
+screen. Panel sees current staged resource ownership after background release;
+native draw observers verify the dead background, and a prior outer link consumes
+held before a panel banner. Globals/resources/local strings/retainedDC commit
+together. No private source stack or expected after-state supplies operands.
+Full32source audit:110256reads/490APIreads/27942stores/704regions/1218helpers/
+131blobs,1396EXE+51DLL PCs. Only false-mask reads are the pinned EXE cookie.
+28compared continuations:4352events/1146helpers/1391EXE+51DLL PCs. Four late
+native-only failures after free at panel timer/Shell,27thhelp label and final
+cursor verify whole rollback. Raw12release tests26.920s/build224.09s pass,
+new2tests0.283s; retained ten tests unchanged. Packaged2tests0.230s/build0.33s
+pass; all643packaged inputs verify. NTSDNative linked, no app window.
+Source/native comparisons need no expected or game-rule correction.252fixtures
+now include251unchanged old pins; packaged evidence is in the study/work JSON.
+Guarded catalog11636/watcher15664 remain live (17Objects latest), all frozen/
+pending/foreign inputs unchanged. Next own initialized menu and actual outer
+timer loop; full catalog/app/Windows/device/full-match/all-content/network/
+clean-Mac goal stays open. This controlled screen is not an own full menu return.
+
 **Enabled panel body: [MENU_PANEL_DRAW](docs/research/MENU_PANEL_DRAW.md).**
 OriginalMenuPanelDrawing implements whole423b00 including4242b3..4242d7 cold
 blink tail/shared4242b2ret.1008controlled whole returns match;2zero-timer and

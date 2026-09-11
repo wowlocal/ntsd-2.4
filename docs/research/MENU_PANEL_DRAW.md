@@ -5,8 +5,9 @@ OriginalMenuPanelDrawing implements whole423b00, including the cold blink tail
 whole returns match; four unavailable-result boundaries are explicit native
 rollback rejections. See the [finite plan](MENU_PANEL_DRAW_PLAN.md) and
 [evidence](../evidence/menu-panel-draw.json). This is the panel dependency of the
-[installed-library mode screen](LIB_MODE_SCREEN.md); their enclosing enabled
-composition and own initialized resource chain remain open.
+[installed-library mode screen](LIB_MODE_SCREEN.md). Their controlled enclosing
+composition is now compared in [MODE_PANEL_SCREEN](MODE_PANEL_SCREEN.md);
+the own initialized resource chain remains open.
 
 ## Reference, environment and finite domain
 

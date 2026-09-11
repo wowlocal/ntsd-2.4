@@ -27,7 +27,8 @@ public enum OriginalModeScreen {
         var libraryText: OriginalLibSurfaceText?
         return try execute(world:state.world,actors:state.actors,globals:&state.globals,memory:&memory,
             local:&local,libraryText:&libraryText,worldAddress:worldAddress,target:target,input:input,
-            fillBacking:fillBacking,background:background,update:update,panel:panel,draw:draw,observe:observe)
+            fillBacking:fillBacking,background:background,update:update,
+            panel:{ state,_ in try panel(&state) },draw:draw,observe:observe)
     }
 
     /// Same whole screen using the bundled library text replacement. World and
@@ -46,7 +47,37 @@ public enum OriginalModeScreen {
         var text: OriginalLibSurfaceText? = libraryText
         let result = try execute(world:world,actors:actors,globals:&globals,memory:&memory,local:&local,
             libraryText:&text,worldAddress:worldAddress,target:target,input:input,fillBacking:fillBacking,
-            background:background,update:update,panel:panel,draw:draw,observe:observe)
+            background:background,update:update,panel:{ state,_ in try panel(&state) },draw:draw,observe:observe)
+        libraryText = text!
+        return result
+    }
+
+    /// Installed-library screen with the whole enabled panel. The panel sees
+    /// current staged resources after selection releases; all screen state and
+    /// retained text DC commit together. Caller effects still require buffering.
+    public static func advanceWithLibraryPanel(world: OriginalStateRecord, actors: [OriginalStateRecord],
+        globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
+        local: inout OriginalStateRecord, libraryText: inout OriginalLibSurfaceText,
+        worldAddress: UInt32, target: UInt32,
+        input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
+        background: (inout OriginalStateRecord,inout OriginalMenuPresentationMemory) throws -> Void,
+        update: (inout OriginalStateRecord) throws -> Void,
+        milliseconds: () throws -> UInt32,
+        draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> OriginalModeScreenExit {
+        var text: OriginalLibSurfaceText? = libraryText
+        let result = try execute(world:world,actors:actors,globals:&globals,memory:&memory,local:&local,
+            libraryText:&text,worldAddress:worldAddress,target:target,input:input,fillBacking:fillBacking,
+            background:background,update:update,panel:{ state,owned in
+                _ = try OriginalMenuPanelDrawing.draw(globals:&state,target:target,
+                    previous:{ try $0.integer(at:0x4513c4-OriginalMatchPreparation.globalBase,as:Int32.self) },
+                    bitmap:{ address in
+                        guard let allocation=owned.allocations[address],allocation.live else {
+                            throw OriginalStateError.invalidStorage("Menu panel bitmap ownership")
+                        }
+                        return allocation.storage
+                    },milliseconds:milliseconds,drawBitmap:{ args,globals in try draw(args,globals,owned) },observe:observe)
+            },draw:draw,observe:observe)
         libraryText = text!
         return result
     }
@@ -58,7 +89,7 @@ public enum OriginalModeScreen {
         input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
         background: (inout OriginalStateRecord,inout OriginalMenuPresentationMemory) throws -> Void,
         update: (inout OriginalStateRecord) throws -> Void,
-        panel: (inout OriginalStateRecord) throws -> Void,
+        panel: (inout OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws -> OriginalModeScreenExit {
         guard local.bytes.count == 0x704 else { throw OriginalStateError.invalidStorage("Mode screen local extent") }
@@ -150,7 +181,7 @@ public enum OriginalModeScreen {
             try emit($0.kind.rawValue,$0.arguments)
         }
         if selection == .playback { return finish(.playback) }
-        try emit("panel",[0x4513c4,target]);try panel(&state)
+        try emit("panel",[0x4513c4,target]);try panel(&state,owned)
         if try word(0x4513c0) > 0 {
             try bitmap(0x45117c,5,39,7)
             for seat in 0..<4 {
