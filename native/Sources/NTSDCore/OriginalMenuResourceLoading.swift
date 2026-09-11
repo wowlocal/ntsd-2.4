@@ -15,7 +15,8 @@ public struct OriginalMenuResourceResult: Codable, Equatable, Sendable {
 
 /// 4297ae..429e5a, after the real menu prologue/music request. All eleven
 /// resources share43ee50. The SPARK rectangle writes leave every other byte
-/// and initialization mask untouched. Pixels/device acquisition are boundaries.
+/// and initialization mask untouched. A supplied constructor owns image/copy/
+/// device handling; the enclosing operation must stage its external effects.
 public struct OriginalMenuResourceLoading {
     public static let paths = ["CHARMENU","CM1","CM2","CM3","CM4","CM5","CMA","CMA2","CMC","RFACE","SPARK"]
     public static let slots = [0x4512c4,0x4512b0,0x4512b4,0x4512b8,0x4512bc,0x4512c0,0x4512ac,0x4512a8,0x44fd88,0x44fd84,0x44f8fc]
@@ -27,6 +28,7 @@ public struct OriginalMenuResourceLoading {
                               allocate: (Int) throws -> OriginalInterfaceAllocation,
                               source: (Int, String) throws -> OriginalBitmapInput,
                               deviceResult: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
+                              constructBitmap: ((Int, OriginalInterfaceAllocation, UInt32, String) throws -> OriginalLoadedBitmap)? = nil,
                               checkpoint: (OriginalMenuResourceCheckpoint, OriginalStateRecord, [UInt32:OriginalLoadedBitmap]) throws -> Void = { _,_,_ in },
                               observe: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws -> OriginalMenuResourceResult {
         let base = OriginalMatchPreparation.globalBase
@@ -45,10 +47,15 @@ public struct OriginalMenuResourceLoading {
                 if allocation.address != 0 {
                     guard candidate.bitmaps[allocation.address] == nil else { throw OriginalStateError.invalidStorage("Live menu bitmap allocation reused") }
                     try observe(.init(.construct,[allocation.address,0x40,0],[Array(path.utf8)]))
-                    let input = try source(index,path), output = try deviceResult(index)
-                    guard input.path == path else { throw OriginalStateError.invalidStorage("Menu resource binding") }
-                    candidate.bitmaps[allocation.address] = try OriginalBitmapConstructor.construct(input,optional: false,backing: allocation.backing,
-                        device: device,flags: 0x40,surface: output.surface,colorKeyResult: output.colorKeyResult,observe: observe)
+                    if let constructBitmap {
+                        candidate.bitmaps[allocation.address] = try .checkedConstruction(
+                            constructBitmap(index,allocation,device,path),path: path,optional: false)
+                    } else {
+                        let input = try source(index,path), output = try deviceResult(index)
+                        guard input.path == path else { throw OriginalStateError.invalidStorage("Menu resource binding") }
+                        candidate.bitmaps[allocation.address] = try OriginalBitmapConstructor.construct(input,optional: false,backing: allocation.backing,
+                            device: device,flags: 0x40,surface: output.surface,colorKeyResult: output.colorKeyResult,observe: observe)
+                    }
                 }
                 // This path replaces old global pointers without releasing them.
                 try state.write(allocation.address,at: Self.slots[index]-base)

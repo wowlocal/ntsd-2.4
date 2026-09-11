@@ -48,6 +48,28 @@ false positives will not occur.
 
 ## Current research status
 
+**Whole controlled menu bitmap composition: [CHARACTER_MENU_SURFACE](docs/research/CHARACTER_MENU_SURFACE.md).**
+OriginalMenuResourceLoading now has a full43ee50/43ed10/4013d0/CRT route with
+staged globals/bitmap owners/platform context.23ready controlled returns match;
+2NULL-SPARK partial boundaries stay separate, and2source returns consuming
+unknown first bitmap/copy dimensions are explicit native rollback rejections.
+The25compared states retain2319records/18589104bytes+masks/4289events/905helpers.
+Keep the copy descriptor's own eight height/width bytes during the contiguous
+menu pass: failed SPARK description uses RFACE120x120, or CMC365x103 if RFACE
+never produced a description. Current-call API masks are distinct from lifetime.
+No captured/private stack is imported. Six late native-only failures roll back.
+Independent all40733writes/10796reads/402snapshots/504blobs verify; full-stack
+observer retains all27old case fields/373blobs exactly. Ordinary SP+aa0 unwind
+state writes exposed the old snapshot extent, not a source crash or protection
+corruption. Source613EXE+33CRT starts; no every-branch/FPU/Windows claim.
+Raw13release tests88.119s/build223.87s passed, including retained bitmap/UI/menu
+corpora. All247oldfixtures unchanged; new248th preserves full raw bytes/masks.
+Final packaged2release tests2.806s/build222.35s passed without raw override;
+all634archived files verified,633raw-test files unchanged. NTSDNative linked;
+no window/device run. Source/native jobs terminal0; own
+catalog2/3/guarded4 and guarded20 watcher remain live. Full own menu/helper/music
+join, app, Windows/device/full-game/clean-Mac goals remain open. Read its work JSON.
+
 All additional own20 audits are now terminal0; see
 [control20 completion](docs/evidence/application-catalog-control20-completion.json).
 Each parent1/2 has556244408stackreads/1920124614bytes and73catalogreads/187bytes,

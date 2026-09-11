@@ -1,0 +1,114 @@
+{
+  "scope": "Whole controlled character-menu resource caller with actual bitmap/CRT helpers; see both bounded study plans. Original27 source cases comprise25 ready and2 NULL-SPARK boundaries. Native compares23ready and2partial states;2unknown-input source returns are rejected and rolled back, never counted as successful matches.",
+  "timeUTC": "2026-09-11T04:13:31.540516+00:00",
+  "sourceArtifacts": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "embeddedDIBs": 11,
+    "environment": "Unicorn2.1.4 with declared image/GDI/COM/allocator responses; reference execution only"
+  },
+  "acceptance": {
+    "rawTests": 13,
+    "rawTestSeconds": 88.119,
+    "rawBuildSeconds": 223.87,
+    "packagedTests": 2,
+    "packagedTestSeconds": 2.806,
+    "packagedBuildSeconds": 222.35,
+    "readyMatches": 23,
+    "nullSparkPartialStates": 2,
+    "unavailableOperandRejections": 2,
+    "lateNativeRollbackControls": 6,
+    "windowExercised": false,
+    "windowsVerified": false
+  },
+  "sourceCounts": {
+    "writes": 40733,
+    "writeBytes": 192598,
+    "snapshots": 402,
+    "reads": 10796,
+    "readBytes": 42458,
+    "eventGlobals": 4176,
+    "requestStructures": 962,
+    "requestStructureBytes": 63492,
+    "recordSnapshots": 2539,
+    "recordSnapshotBytes": 20352624,
+    "helperReturns": 993,
+    "cases": 27,
+    "blobs": 504,
+    "blobBytes": 17195210,
+    "originalEXEPCs": 613,
+    "originalCRTPCs": 33
+  },
+  "nativeCompared": {
+    "completeControlledStates": 25,
+    "ready": 23,
+    "nullSparkPartial": 2,
+    "checkpoints": 345,
+    "records": 2319,
+    "recordBytes": 18589104,
+    "events": 4289,
+    "platformRequests": 3802,
+    "helperReturns": 905
+  },
+  "fixture": "original-character-menu-surface.json",
+  "rawBytes": 9382573,
+  "rawSHA256": "6cece6b2e7c8d8cdf36ed5a40a677672a46d8aa2565b90bd1b99c9578b9770d1",
+  "fixtureBytes": 1994747,
+  "fixtureSHA256": "7a88b8d9b9be73d7c799e06a1c9ea5d4f6b694b21799a1d3e88102c62adda7de",
+  "oldFixturesUnchanged": 247,
+  "currentFixtures": 248,
+  "openDependencies": [
+    "first unavailable bitmap/copy descriptor dimensions prior-frame provenance",
+    "other retained copy frame depths/lifetimes",
+    "own installed-lib full catalog/loading/menu-helper/music composition",
+    "app renderer/window/device and Windows comparisons",
+    "full match/all-content/network/clean-Mac goal"
+  ],
+  "artifacts": {
+    "build/research/character-menu-surface-native-verification.json": {
+      "bytes": 9111,
+      "sha256": "17263050d0dd668882465c68247b5a6736dff1c24309c85f997f3829949a941e"
+    },
+    "build/research/character-menu-surface-source-verification.json": {
+      "bytes": 168584,
+      "sha256": "53a774828cf7ac376f98c1b693be4cbb57a7de727c9783b4739e8470a23a1099"
+    },
+    "build/research/character-menu-surface-fullstack-preservation.json": {
+      "bytes": 1171,
+      "sha256": "89ade6b3d5c2aa7401f7ca485254116cb4a66f77e9c1aa5c07a4f45fa5556faf"
+    },
+    "build/research/character-menu-surface-native1-input-verification.json": {
+      "bytes": 463,
+      "sha256": "89d772d4b6973e0e576a8de0e8972322c23999617e28aaa078314ea2eb6ed067"
+    },
+    "build/research/character-menu-surface-packaged2-input-verification.json": {
+      "bytes": 465,
+      "sha256": "752ced0b41dcb20e06bde96904c9e848c0fccc7b80e20f300c78a2e29297e1f3"
+    },
+    "build/research/character-menu-surface-verifier-attempt1-error.json": {
+      "bytes": 620,
+      "sha256": "b13c3f39a7db296a6b75633eb54789014d6c836c0c074161358436fee0335e17"
+    },
+    "build/research/character-menu-surface-verifier-attempt2-error.json": {
+      "bytes": 786,
+      "sha256": "c09554bce8ed043d930353d8dd35f9ef37e39d931674b324799a2ae2fc5cf5b1"
+    },
+    "build/research/character-menu-surface-packaging-attempt1-error.json": {
+      "bytes": 571,
+      "sha256": "8bc03b6e92570fd28adf1dd17c4484757ef7c251c8fcb67be70e30cc0078da0a"
+    },
+    "build/research/character-menu-surface-fullstack1.json": {
+      "bytes": 9382573,
+      "sha256": "6cece6b2e7c8d8cdf36ed5a40a677672a46d8aa2565b90bd1b99c9578b9770d1"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-character-menu-surface.json": {
+      "bytes": 1994747,
+      "sha256": "7a88b8d9b9be73d7c799e06a1c9ea5d4f6b694b21799a1d3e88102c62adda7de"
+    },
+    "build/research/character-menu-surface-preservation.json": {
+      "bytes": 795,
+      "sha256": "8c03f850b3a8a11fe013d8d3151b7c046dbc939fc43d12e9ec502bf0df60b6bc"
+    }
+  },
+  "bindings": "Bitmap+0 uses original opaque surface token to canonical1/0 binding. Other bitmap bytes/masks exact; globals preserve declared allocation tokens. Unknown private API request bytes stay native canonical0 under false current-call masks."
+}
