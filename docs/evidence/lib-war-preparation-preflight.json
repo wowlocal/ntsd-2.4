@@ -1,0 +1,289 @@
+{
+  "scope": "Bound22-call whole War preparation preflight. Full matrix/resource-error and application acceptance remain open.",
+  "updatedUTC": "2026-09-11T22:36:42.487681+00:00",
+  "source": {
+    "raw": {
+      "bytes": 192093188,
+      "sha256": "e3abb5dec759c28103c5a746972d7fb1469e7fa7b8ca151a09fc952e6d5621f6"
+    },
+    "cases": 22,
+    "counts": {
+      "source2ParentReproductions": 4,
+      "atomicCases": 22,
+      "atomicBytes": 379611326,
+      "constructorReturns": 802,
+      "wholeReturns": 22,
+      "stores": 423800,
+      "storedBytes": 1545315,
+      "instructionReads": 266876,
+      "instructionReadBytes": 981927,
+      "pointRecords": 475960,
+      "pointBytes": 1359294944,
+      "points": 444,
+      "APIReads": 5389,
+      "APIReadBytes": 19986,
+      "helperReturns": 6659,
+      "finalRecords": 23582,
+      "finalBytes": 75158656,
+      "readyBridges": 2,
+      "popupBridges": 0,
+      "warReturns": 20,
+      "warBitmapAllocations": 4,
+      "warPoints": 144,
+      "readyConsumerBindings": 16,
+      "preparationInputBridges": 2,
+      "preparationInputWrites": 14,
+      "liveRandomLists": 14,
+      "arenaBitmapAllocations": 20,
+      "musicAllocations": 2,
+      "musicAllocationBytes": 60,
+      "recordingAllocations": 2,
+      "preparationPoints": 52,
+      "definedPreparationNoticeReads": 2,
+      "recordingReads": 14556,
+      "recordingReadBytes": 39450,
+      "preparedHuman": 10,
+      "preparedParticipants": 16,
+      "preparedCPU": 6,
+      "recordingBytes": 12983344,
+      "wholePreparations": 2,
+      "declaredPEParentOverrides": 1,
+      "recordingNoticeFormats": 1
+    },
+    "instructionStarts": 4406,
+    "declaredPreparationStarts": 330,
+    "executedPreparationStarts": 291,
+    "blobs": 1032,
+    "environment": "Unicorn2.1.4/CW023f, C locale, normal declared APIs",
+    "explicitInputBridges": true,
+    "ownStartupProvenanceRecovered": false,
+    "job": {
+      "scope": "Execute separate22-call War preparation with explicitly bound ordinary phase/input-control/recording-notice and metadata-string inputs after each two-call resource/ready parent. Same original EXE/lib/VC80 Unicorn2.1.4/CW023f, controlled normal API responses and exact-size music allocation. Four accepted source2 parent calls must reproduce; actual complete preparation/ret1c/ret4 and all source bytes/masks retained atomically. Preserve completed source3 and its six unbound recording inputs; no unknown Native after-state import, source fault continuation, Windows/device claim or original pointer/protection modification. All original BG files are explicitly pinned before this new study.",
+      "status": "terminal",
+      "pid": 75274,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_preparation_bound.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-bound-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T22:04:19.614708+00:00",
+      "originalExecuted": true,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T22:05:01.480031+00:00",
+      "elapsedSeconds": 41.867,
+      "inputsUnchanged": true
+    }
+  },
+  "unboundSource": {
+    "raw": {
+      "bytes": 191867336,
+      "sha256": "1c47170deeeb395042fe02042cb016d99f6e6bb378d1f998eae96b627cb079e2"
+    },
+    "cases": 22,
+    "finiteAcceptanceComplete": false,
+    "unboundRecordingInputs": [
+      {
+        "pc": 4444947,
+        "address": 4555820,
+        "count": 4,
+        "bytes": "00000000",
+        "known": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "occurrences": 2
+      },
+      {
+        "pc": 4444961,
+        "address": 4524948,
+        "count": 4,
+        "bytes": "00000000",
+        "known": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "occurrences": 2
+      },
+      {
+        "pc": 4445056,
+        "address": 4521240,
+        "count": 1,
+        "bytes": "00",
+        "known": [
+          0
+        ],
+        "occurrences": 2
+      },
+      {
+        "pc": 4445088,
+        "address": 4520192,
+        "count": 1,
+        "bytes": "00",
+        "known": [
+          0
+        ],
+        "occurrences": 2
+      },
+      {
+        "pc": 4445120,
+        "address": 4520080,
+        "count": 1,
+        "bytes": "00",
+        "known": [
+          0
+        ],
+        "occurrences": 2
+      },
+      {
+        "pc": 4446989,
+        "address": 4524944,
+        "count": 4,
+        "bytes": "00000000",
+        "known": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "occurrences": 2
+      }
+    ],
+    "recordingNoticeAlsoUnbound": true,
+    "neverRestart": true
+  },
+  "native": {
+    "rawCasesMatched": 22,
+    "rawBuildSeconds": 117.53,
+    "rawTestSeconds": 17.241,
+    "lateRollbackTrials": 12,
+    "rawJob": {
+      "scope": "Native release comparison of separate bound22-call War preparation through full outer return, two initialized controlled parents, actual arena/participant/music/input/replay composition and12 late whole-outer rollback trials. Rebuild all137Object/101BG from accepted Native loaders. Exact745 accepted package plus7 owned files,749 total;23 protected pending files excluded and unchanged. Source execution is already terminal; no unknown source-state injection, Windows/device/whole-game claim. Full arena/failure matrix remains open. First compilation rejected an optional escaping closure capturing non-escaping callbacks. Preserve the log and all749 input hashes; the synchronous War stage now explicitly receives staged presentation/music owners. No game rule or expected bytes changed. Test2 matched all22 source calls and12 rollback trials, but the two music predicates selected an earlier graph-initialization method at the same offset34. Tighten both predicates to RenderFile with the owned converted2c020020 buffer. Preserve the prior passed result with that limit; Native game code/source bytes unchanged.",
+      "status": "terminal",
+      "pid": 78487,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibWarPreparationTests"
+      ],
+      "startedUTC": "2026-09-11T22:24:20.780059+00:00",
+      "originalExecuted": false,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T22:26:36.280260+00:00",
+      "elapsedSeconds": 135.503,
+      "inputsUnchanged": true
+    },
+    "packagedVerified": true,
+    "comparisonBoundary": "Owned fields at declared checkpoints/helper/events; full source-only instruction/store/stack audit, no private Native stack or per-instruction x87-status equivalence",
+    "packagedJob": {
+      "scope": "Final packaged bound22-call War preparation comparison with12 corrected late rollback trials, plus retained574-call whole War setup/default BEFORE43a21f and210-call whole Team Tournament preparation through the shared outer dispatcher. All751 frozen Native package files/318 fixtures; normal Bundle resources, no raw override. No source execution or full matrix/game/Windows/device claim.",
+      "status": "terminal",
+      "pid": 79027,
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibWarPreparationTests/testWholeBoundPreparationAndLateRollback|OriginalLibWarSetupTests/testWholeWarMenuAndLateCoupledRollback|OriginalLibTeamTournamentPreparationTests/testWholeTeamTournamentPreparationRetainsLibraryMenu"
+      ],
+      "startedUTC": "2026-09-11T22:27:32.180128+00:00",
+      "originalExecuted": false,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T22:34:51.819003+00:00",
+      "elapsedSeconds": 439.626,
+      "inputsUnchanged": true
+    },
+    "packagedTests": 3,
+    "packagedBuildSeconds": 0.3,
+    "packagedTestSeconds": 438.19,
+    "packagedPreflightSeconds": 17.199,
+    "retainedWarSetupCases": 574,
+    "retainedWarSetupSeconds": 363.318,
+    "retainedTeamPreparationCases": 210,
+    "retainedTeamPreparationSeconds": 57.673,
+    "packagedSession": 99588,
+    "packagedTerminalChunk": "fe6b54",
+    "progressProfile": {
+      "path": "build/research/lib-war-preparation/native-preflight1-packaged1-profile1.json",
+      "scope": "One-second read-only sample of revalidated live Native xctest. Observed retained War comparison/JSON processing; test never restarted. Not an original CPU/device measurement."
+    }
+  },
+  "artifacts": {
+    "transport": {
+      "scope": "Independently verify bound22-call War preparation fixture transport.\nRead only completed pinned NTSD EXE/lib/VC80 Unicorn2.1.4 evidence. Compare all\nraw bytes/masks/metadata, groups/cases/audit and embedded blob digests. Preserve\nold unbound source provenance and source/tool failure evidence. No source\nexecution, Native/Windows/device/full-matrix acceptance claim.\n",
+      "timeUTC": "2026-09-11T22:25:03.514983+00:00",
+      "cases": 22,
+      "raw": {
+        "bytes": 192093188,
+        "sha256": "e3abb5dec759c28103c5a746972d7fb1469e7fa7b8ca151a09fc952e6d5621f6"
+      },
+      "files": {
+        "original-lib-war-preparation-bound.json": {
+          "bytes": 3362027,
+          "sha256": "5b49a5d4acdf0ec42a9a25a5514aa821299fbfea24a83c12a1a0c2df113271e6"
+        },
+        "original-lib-war-preparation-bound-cases1.json": {
+          "bytes": 19529470,
+          "sha256": "7e006af70ab1f3da4e160f26901a1a7f68492a12a9d9495bde23ebb037ff047f"
+        }
+      },
+      "packedBytes": 22891497,
+      "metadataBytes": 19284960,
+      "metadataSHA256": "1ba63d2a2d2317260fb21d7ab3c4f2f64cd12dff9c3cedfb6242a2d9d3402072",
+      "blobs": 1032,
+      "decodedBlobBytes": 53272046,
+      "sourceBytesEqual": true,
+      "allGroupCaseAndBlobDigestsVerified": true,
+      "coverage": {
+        "preflightCalls": 22,
+        "preparations": 2,
+        "parentCallsReproduced": 4,
+        "explicitControlledInputBridges": 2,
+        "ownStartupProvenanceRecovered": false,
+        "recordingNoticeInputsBound": true,
+        "recordingInputsBound": true,
+        "complete": true
+      },
+      "nativeCompared": false
+    },
+    "archive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-preflight-native-package1.tar.gz",
+      "bytes": 2566938927,
+      "sha256": "f12996cbd259502a563901ac73bb5b6389ad9ebc5bf7c36cbe80c66d9e453d8d"
+    },
+    "nativePackageFiles": 751,
+    "previousFixturesUnchanged": 316,
+    "currentFixtures": 318,
+    "protectedPendingFilesUnchanged": 23,
+    "sourceInputPinSets": {
+      "unboundCapture3": 405,
+      "boundCapture1": 653
+    },
+    "sourceInputsUnchanged": true,
+    "prospectiveGitPackageVerified": true
+  },
+  "failuresPreserved": [
+    "build/research/lib-war-preparation/war-preparation-parent-capture1-review.json",
+    "build/research/lib-war-preparation/war-preparation-parent-capture2-review.json",
+    "build/research/lib-war-preparation/war-preparation-parent-audit1-review.json",
+    "build/research/lib-war-preparation/native-preflight1-test1-review.json",
+    "build/research/lib-war-preparation/native-preflight1-test2-review.json",
+    "build/research/lib-war-preparation/native-window-availability1.json"
+  ],
+  "fullPreparationMatrixComplete": false,
+  "windowVerified": false,
+  "windowsVerified": false,
+  "fullGameComplete": false,
+  "nextPlan": "docs/research/LIB_WAR_PREPARATION_MATRIX_PLAN.md",
+  "acceptedAsPreflight": true,
+  "next": "Execute separately frozen256-call/56-preparation success matrix, then finite ordinary resource-error contracts; War gameplay/own startup/app remain open."
+}

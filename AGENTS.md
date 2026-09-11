@@ -48,6 +48,42 @@ false positives will not occur.
 
 ## Current research status
 
+**War preparation preflight: [LIB_WAR_PREPARATION_NATIVE_PREFLIGHT](docs/research/LIB_WAR_PREPARATION_NATIVE_PREFLIGHT.md).**
+Separate bound22 calls match Native through20War/22outer returns, two whole
+preparations,16participants(6CPU/10human),20arena bitmaps, two30-byte music
+buffers and12983344 recording bytes. Four source2 parent calls/802constructor
+returns reproduce. Full source444points/475960records/1359294944bytes+masks,
+423800stores/266876instruction reads/5389API reads/6659helpers/4406original PCs
+are audited;291/330preparation starts, not all branch outcomes. Native compares
+owned fields/checkpoints/events, not private stack/per-instruction x87 status.
+
+Completed unbound capture3 remains unchanged with six unbound recording inputs
+and450be4; finite acceptance=false. The separate bound capture explicitly sets
+ordinary phase/input/notice/metadata before each third call. This is controlled
+input provenance, not own full startup. Unknown source zeros were never Native
+inputs. Source1 nested graph.log observer and source2 exact30-byte music
+allocator corrections, first audit unknown-input failure and full unbound audit
+are preserved. Never restart any completed source for this preflight.
+
+Raw22/12late rollback trials pass17.241s/build117.53s. Final packaged3tests pass
+438.190s/build0.30s: preflight17.199s, retained574War363.318s and210Team57.673s.
+The first Swift optional-closure compile failure is preserved; synchronous
+owner passing fixes the join. First successful music rollback matched earlier
+method34; corrected trial targets RenderFile with own2c020020 buffer. No source
+expected or Native game rule changed for22 acceptance. One-second read-only
+Native profile showed active old War comparison/JSON work; no test restarted.
+
+Two lossless transports22891497bytes reproduce full192093188raw and1032blobs.
+316oldfixtures unchanged,318current/751package/Git-base/archive verified;
+23protected files unchanged. Source405/653pins still match. All source/SwiftPM/
+archive jobs terminal. NTSDNative linked; CUA native pipe remains unavailable,
+no window/device/Windows claim. NEXT [256-call/56-preparation success matrix](docs/research/LIB_WAR_PREPARATION_MATRIX_PLAN.md),
+then ordinary resource-error contracts,43a860War and own startup/outerloop/app.
+Full preparation/match/game/network/window/input/audio/Windows/cleanMac goal
+remains open. Evidence: docs/evidence/lib-war-preparation-preflight.json and
+build/research/application-catalog-work.json/libWarPreparation.
+
+
 **War setup: [LIB_WAR_SETUP](docs/research/LIB_WAR_SETUP.md).**
 806 source/native observations:574 setup+192 separate-cell+40 multi-human calls;
 805outer422ab8ret4/801War439ecdret1c, four resource parents and one BEFORE43a21f.

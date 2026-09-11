@@ -28,6 +28,7 @@ public enum OriginalWarSetup {
         observe: (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in },
         resourceEvent: (OriginalInterfaceEvent,inout Environment) throws -> Void = { _,_ in },
         beforeResource: (Int,OriginalStateRecord,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in },
+        prepare: (inout OriginalMatchPreparation,inout Environment) throws -> Bool = { _,_ in false },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalCharacterScreenExit {
         var candidate=state,owned=memory,library=libraryText,context=environment
         var local: [Int:Int32]=[:]
@@ -343,7 +344,10 @@ public enum OriginalWarSetup {
         if try button(0x4513b4) {
             try OriginalWarTroops.finalize(&candidate.globals);try write(0x4513b4,0);try sound(0x455610)
             switch try word(0x451b84) {
-            case 0:try mark(0x43a21f);return finish(.warMatchPreparation)
+            case 0:
+                try mark(0x43a21f)
+                guard try prepare(&candidate,&context) else { return finish(.warMatchPreparation) }
+                return try returnMenu()
             case 1:try write(0x4512c8,0);try write(0x44d020,3);try write(0x44d024,100);try write(0x44d028,1)
             case 2:try write(0x44d020,201)
             case 3:
