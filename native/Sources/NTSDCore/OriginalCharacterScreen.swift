@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation, teamTournamentPrelude, teamTournamentMatchPreparation }
+public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation, teamTournamentPrelude, teamTournamentMatchPreparation, warMatchPreparation }
 
 public struct OriginalCharacterScreenCheckpoint: Equatable, Sendable {
     public let pc: UInt32, seat: Int
@@ -57,6 +57,7 @@ public enum OriginalCharacterScreen {
         includeTailCheckpoint: Bool = false,
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
+        warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32],inout OriginalLibSurfaceText?) throws -> OriginalCharacterScreenExit = { _,_,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var candidate = state, library = libraryText
         let base = OriginalMatchPreparation.globalBase
@@ -170,7 +171,11 @@ public enum OriginalCharacterScreen {
             try write(0x4512c8,0);try write(0x44d020,1);local[0x3c] = 0
         } else if menu == 2 { try write(0x4512c8,3);try write(0x44d020,1);local[0x3c] = 0 }
         if try mode == 4 && word(0x4512c8) == 3 && word(0x44d020) < 200 { try write(0x44d020,200) }
-        if try (200..<300).contains(word(0x44d020)) { return finish(.selectionStage) }
+        if try (200..<300).contains(word(0x44d020)) {
+            let result=try warStage(&candidate,&library)
+            if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
+            return finish(result)
+        }
         try mark(0x42a114)
         try write(0x451224,(word(0x451224) &+ 1)%30)
         for slot in 0..<400 { let value = try team(slot);if !(0...4).contains(value) { try setTeam(slot,0) } }

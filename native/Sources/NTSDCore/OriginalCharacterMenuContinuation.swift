@@ -8,6 +8,7 @@ public enum OriginalCharacterMenuContinuation {
         environment: inout Environment,includeTournamentBracket: Bool = false,includeTeamTournamentBracket: Bool = false,target: UInt32,input: OriginalFrontScreenBodyInput,
         tournamentPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void)? = nil,
         teamTournamentPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void)? = nil,
+        warStage: (inout OriginalMatchPreparation,inout OriginalLibSurfaceText?,inout Environment) throws -> OriginalCharacterScreenExit = { _,_,_ in .selectionStage },
         outputInput: OriginalMenuPresentationInput,milliseconds: UInt32,
         musicRequest: (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
@@ -47,7 +48,7 @@ public enum OriginalCharacterMenuContinuation {
                     },
                     draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
                     checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
-            })
+            },warStage:{ scene,text in try warStage(&scene,&text,&candidate) })
         if end == .returned {
             try OriginalMenuReturn.advanceWithLibrary(world:&scene.world,globals:&scene.globals,memory:&owned,libraryText:&text,
                 input:outputInput,milliseconds:milliseconds,fillBacking:[UInt8](repeating:0,count:100),wholeEarlyReturn:false,

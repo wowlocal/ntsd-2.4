@@ -48,6 +48,47 @@ false positives will not occur.
 
 ## Current research status
 
+**UNFINISHED War setup: [LIB_WAR_SETUP_PLAN](docs/research/LIB_WAR_SETUP_PLAN.md)
+and [input correction](docs/research/LIB_WAR_SETUP_INPUTS.md).
+[Current recovery status](docs/research/LIB_WAR_SETUP_STATUS.md).**
+Source574 calls completed,573 returns including2 resource parents and1 BEFORE
+43a21f; raw3456631996bytes SHA9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa.
+Source2 session25129 is terminal0; NEVER restart. Full corpus audit/Native whole
+menu comparison remain pending. Probe3's4 calls independently audit83points/
+88813records/233445114bytes,780helpers and8 actual ready consumer bindings.
+Initial fresh loading cleared ready inputs;145 preliminary cases plus temporary
+were retained before revalidated Python26976 SIGINT/terminal130. Manifest3 adds
+an actual resource-parent return before each declared ready bridge; no own CPU
+selection reachability or played battle claim. Preserve manifests1/2 and errors.
+Pending OriginalWarSetup/OriginalWarMenuContinuation now compose the whole menu,
+two owned bitmaps, live Random choices and three shared dispatcher hooks. Read
+[Native pending limits](docs/research/LIB_WAR_SETUP_NATIVE_PENDING.md). The small
+Git-cd80865 Core package compiles; one Native-only24-Object test completes a
+menu return and6late rollback trials in0.059s/build75.04s. Missing try annotations
+and the synthetic RNG table's zero-byte input error retain separate logs; original
+producer/expected bytes are unchanged. This is NOT whole source equivalence or
+an accepted milestone. The574-case comparator, eight source-coupled rollback
+trials and War surface adapter now compile against accepted Core/reference
+checks; full original comparison/outer-output trials remain unexecuted. The
+new before-resource observer retains Native-only6trial success0.061s/build152.06s.
+Indexing requires the full source audit, exact raw hash and574atomic part hashes;
+synthetic9.44MB cross-chunk/truncated-JSON checks are tooling-only evidence.
+Retained packaged6tests185.895s/build15.44s pass:373Team setup/373Tournament
+setup/252selection plus late rollback; this is not a new War match. All263
+small-package inputs are pinned,295oldfixtures and23other pending files unchanged.
+Twenty owned files form an explicitly unfinished snapshot; accepted base stays
+cd80865. All source/Swift jobs including39213/39833 are terminal.
+X5 disappeared during dependency
+build; source already completed and hashed. UUID3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548
+is absent from diskutil; do not replace canonical symlinks or recapture originals.
+Local interruption/work/archive: build/research/lib-war-storage-interruption/;
+master application-catalog-work.json/libWarSetup records sessions and pending
+files. A small Git-cd80865 Core/codec package compiles Core/tests; Native-only
+late frame rollback1test previously passed0.001s/build77.65s. It excludes pending catalog
+work and establishes no numerical equivalence. On X5 return, verify
+existing574 atomic cases/full raw hash and actual jobs before further work.
+Accepted base remains cd80865/715files/295fixtures. Full game goal stays open.
+
 **Team Tournament preparation: [LIB_TEAM_TOURNAMENT_PREPARATION](docs/research/LIB_TEAM_TOURNAMENT_PREPARATION.md).**
 210whole436fb5ret12+422ab8ret4 matches:154menu-only+56preparations.22fresh401
 constructor parents/8822results; own137Object/101BG rebuild and126geometry words.
