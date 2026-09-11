@@ -23,7 +23,14 @@ public enum OriginalMusicConfiguration {
     public static func advance(state: inout OriginalMatchPreparation, mode: Int32, left: Int32, right: Int32,
                                target: UInt32, input: OriginalFrontScreenBodyInput,
                                observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
-        var candidate = state
+        var library: OriginalLibSurfaceText?
+        try advanceCommon(state:&state,libraryText:&library,mode:mode,left:left,right:right,target:target,input:input,observe:observe)
+    }
+
+    static func advanceCommon(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText?, mode: Int32, left: Int32, right: Int32,
+                              target: UInt32, input: OriginalFrontScreenBodyInput,
+                              observe: (OriginalFrontScreenEvent) throws -> Void) throws {
+        var candidate = state,library = libraryText
         func writeString(_ value: String,_ address: Int) throws {
             for (i,b) in (Array(value.utf8)+[0]).enumerated() { try candidate.globals.write(b,at: address-OriginalMatchPreparation.globalBase+i) }
         }
@@ -60,10 +67,17 @@ public enum OriginalMusicConfiguration {
         for (i,b) in (text+[0]).enumerated() { try candidate.globals.write(b,at: 0x44f060-OriginalMatchPreparation.globalBase+i) }
         try observe(.init("format",[UInt32(text.count)],[Array("Music: %s".utf8),text]))
         for (bytes,y,color) in [(text,Int32(3),UInt32(0xd8775a)),(Array("(Press Left/Right to change)".utf8),20,0xa03f22)] {
-            try OriginalSurfaceText.draw(bytes,target: target,background: 0,color: color,x: 603,y: y,dcResult: input.dcResult,dc: input.dc) {
-                try observe(.init($0.kind.rawValue,$0.arguments,$0.strings))
+            if var text = library {
+                try text.draw(bytes,target:target,background:0,color:color,x:603,y:y,dcResult:input.dcResult,dc:input.dc) {
+                    try observe(.init($0.kind.rawValue,$0.arguments,$0.strings))
+                }
+                library = text
+            } else {
+                try OriginalSurfaceText.draw(bytes,target: target,background: 0,color: color,x: 603,y: y,dcResult: input.dcResult,dc: input.dc) {
+                    try observe(.init($0.kind.rawValue,$0.arguments,$0.strings))
+                }
             }
         }
-        state = candidate
+        state = candidate;libraryText = library
     }
 }

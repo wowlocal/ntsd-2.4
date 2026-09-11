@@ -1,28 +1,45 @@
 import Foundation
 
-/// Own human screen through42b296 computer count and42cb86 VS settings.
-/// The current continuation covers zero computer participants, then the actual
-///42cf8a match-prelude boundary. Computer character/team and other modes remain
-/// explicit unsupported continuations; no state is synthesized to skip them.
+/// Human screen, computer count/character/team selection and VS settings through
+/// the actual42cf8a match-prelude boundary. Other modes remain explicit boundaries.
 public enum OriginalMatchSelection {
     public static func advance(state: inout OriginalMatchPreparation, selectionAtEntry: UInt32, target: UInt32,
         input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws -> OriginalCharacterScreenExit {
-        try OriginalCharacterScreen.advance(state: &state,selectionAtEntry: selectionAtEntry,target: target,input: input,
-            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,selectionStage: { candidate,local in
-                try continueSelection(state: &candidate,locals: &local,target: target,input: input,
+        var library: OriginalLibSurfaceText?
+        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+    }
+
+    public static func advanceWithLibrary(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText, selectionAtEntry: UInt32, target: UInt32,
+        input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
+        draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws -> OriginalCharacterScreenExit {
+        var library: OriginalLibSurfaceText? = libraryText
+        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+        libraryText = library!;return end
+    }
+
+    private static func advanceCommon(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText?, selectionAtEntry: UInt32, target: UInt32,
+        input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
+        draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
+        observe: (OriginalFrontScreenEvent) throws -> Void,
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        try OriginalCharacterScreen.advanceCommon(state: &state,libraryText:&libraryText,selectionAtEntry: selectionAtEntry,target: target,input: input,
+            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,selectionStage: { candidate,local,library in
+                try continueSelection(state: &candidate,locals: &local,libraryText:&library,target: target,input: input,
                     fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint)
             })
     }
 
-    private static func continueSelection(state: inout OriginalMatchPreparation, locals: inout [Int:Int32],target: UInt32,
+    private static func continueSelection(state: inout OriginalMatchPreparation, locals: inout [Int:Int32],libraryText: inout OriginalLibSurfaceText?,target: UInt32,
         input: OriginalFrontScreenBodyInput,fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
-        var candidate = state,local = locals
+        var candidate = state,local = locals,library = libraryText
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Match selection: "+message) }
         func word(_ address: Int) throws -> Int32 { try candidate.global(address) }
         func write(_ address: Int,_ value: Int32) throws { try candidate.setGlobal(address,value) }
@@ -36,7 +53,7 @@ public enum OriginalMatchSelection {
         func mark(_ pc: UInt32) throws {
             try checkpoint(.init(pc: pc,seat: -1,locals: local.filter { [0x20,0x28,0x34,0x38,0x3c].contains($0.key) }),candidate)
         }
-        func finish(_ exit: OriginalCharacterScreenExit) -> OriginalCharacterScreenExit { state = candidate;locals = local;return exit }
+        func finish(_ exit: OriginalCharacterScreenExit) -> OriginalCharacterScreenExit { state = candidate;locals = local;libraryText = library;return exit }
         func sound() throws {
             try OriginalMatchPrelude.confirmationSound(in: candidate.globals) { e in
                 switch e {
@@ -50,8 +67,14 @@ public enum OriginalMatchSelection {
             try draw(.init(bitmap: .menu(UInt32(bitPattern: word(slot))),x: x,y: y,target: target,frame: frame,colorKey: key),candidate.globals)
         }
         func text(_ bytes: [UInt8],_ x: Int32,_ y: Int32,_ foreground: UInt32,_ background: UInt32 = 0) throws {
-            try OriginalSurfaceText.draw(bytes,target: UInt32(bitPattern: word(0x455608)),background: background,color: foreground,x: x,y: y,
-                dcResult: input.dcResult,dc: input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+            if var text = library {
+                try text.draw(bytes,target:UInt32(bitPattern:word(0x455608)),background:background,color:foreground,x:x,y:y,
+                    dcResult:input.dcResult,dc:input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+                library = text
+            } else {
+                try OriginalSurfaceText.draw(bytes,target: UInt32(bitPattern: word(0x455608)),background: background,color: foreground,x: x,y: y,
+                    dcResult: input.dcResult,dc: input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+            }
         }
         func fill(_ x: Int32,_ y: Int32,_ width: Int32,_ height: Int32) throws {
             var event = OriginalFrontScreenEvent("fill")
@@ -75,7 +98,7 @@ public enum OriginalMatchSelection {
             local[0x30] = minimum
             var count = try word(0x44d070)
             if count == -100 || count < minimum || count > inactive { count = minimum;try write(0x44d070,count) }
-            var confirmed = false
+            var confirmedSeat: Int?
             for seat in 0..<8 where try active(seat) {
                 let latch = 0x451268+seat*4
                 let edge = try word(latch) == 0 && local[0x3c] == 1
@@ -84,23 +107,30 @@ public enum OriginalMatchSelection {
                 } else if try button(seat,0xcf) {
                     if edge { count &-= 1;if count < minimum { count = inactive } };try write(latch,1)
                 } else if try button(seat,0xd1) {
-                    if edge { confirmed = true;break };try write(latch,1)
+                    if edge { confirmedSeat = seat;break };try write(latch,1)
                 } else { try write(latch,0) }
             }
             try write(0x44d070,count)
-            if confirmed {
+            if let confirmedSeat {
                 try sound();try write(0x4512c8,2)
-                guard count == 0 else { throw error("Computer character/team selection") }
-                try write(0x44d06c,2)
-                for seat in 0..<8 { try write(0x451228+seat*4,word(0x451248+seat*4) < 0 ? 1 : 0) }
-                try write(0x4512c8,3)
-                for seat in 0..<8 where try word(0x451228+seat*4) != 0 {
-                    let choices = try candidate.randomRosterCandidates()
-                    guard !choices.isEmpty else { throw error("Empty roster requires original scratch provenance") }
-                    if candidate.catalog.objects.count > 1 { local[0x20] = Int32(candidate.catalog.objects.count) }
-                    try observe(.init("candidates",[UInt32(seat)]+choices.map(UInt32.init)))
-                    let ordinal = choices[Int(try candidate.drawMenuRandom(stream: 0xd7,range: Int32(choices.count),observe: observe))]
-                    try write(0x451248+seat*4,Int32(ordinal));try candidate.actors[actor(seat)].write(UInt32(ordinal),at: 0x368)
+                if count == 0 {
+                    try write(0x44d06c,2)
+                    for seat in 0..<8 { try write(0x451228+seat*4,word(0x451248+seat*4) < 0 ? 1 : 0) }
+                    try write(0x4512c8,3)
+                    for seat in 0..<8 where try word(0x451228+seat*4) != 0 {
+                        let choices = try candidate.randomRosterCandidates()
+                        guard !choices.isEmpty else { throw error("Empty roster requires original scratch provenance") }
+                        if candidate.catalog.objects.count > 1 { local[0x20] = Int32(candidate.catalog.objects.count) }
+                        try observe(.init("candidates",[UInt32(seat)]+choices.map(UInt32.init)))
+                        let ordinal = choices[Int(try candidate.drawMenuRandom(stream: 0xd7,range: Int32(choices.count),observe: observe))]
+                        try write(0x451248+seat*4,Int32(ordinal));try candidate.actors[actor(seat)].write(UInt32(ordinal),at: 0x368)
+                    }
+                } else {
+                    var assigned = 0
+                    for seat in 0..<8 where try !active(seat) && assigned < count {
+                        try write(0x451200+assigned*4,Int32(seat));try write(0x451288+seat*4,11);assigned += 1
+                    }
+                    try write(0x4511fc,0);try write(0x451268+confirmedSeat*4,1)
                 }
             }
             for value in Int32(0)...7 {
@@ -114,13 +144,9 @@ public enum OriginalMatchSelection {
         }
         if try (2...3).contains(word(0x4512c8)) {
             try mark(0x42b964)
-            for offset in [0x34,0x28,0x38,0x2c,0x30] { local[offset] = 0 }
-            guard try word(0x4512c8) == 3,try word(0x44d070) == 0 else { throw error("Computer selection continuation") }
-            //42bd90 still reads the current computer-seat binding with count0.
-            let index = try word(0x4511fc)
-            guard (0..<8).contains(index) else { throw error("Computer index extent") }
-            let seat = try word(0x451200+Int(index)*4)
-            guard (0..<8).contains(seat),![11,12].contains(try word(0x451288+Int(seat)*4)) else { throw error("Computer seat body") }
+            try OriginalComputerSelection.advance(state:&candidate,locals:&local,libraryText:&library,target:target,input:input,draw:draw,observe:observe)
+        }
+        if try word(0x4512c8) == 3 {
             try mark(0x42cb86)
             for offset in [0x34,0x20,0x30,0x38,0x18] { local[offset] = 0 }
             try bitmap(0x451178,3,3,8);try bitmap(0x451178,3,159,15,1)
@@ -150,7 +176,7 @@ public enum OriginalMatchSelection {
             if local[0x34] != 0 { let next = try word(0x44d06c) &- 1;try write(0x44d06c,next < 0 ? 5 : next) }
             if local[0x20] != 0 { try write(0x44d06c,(word(0x44d06c) &+ 1)%6) }
             let mode = try word(0x451160)
-            try OriginalMusicConfiguration.advance(state: &candidate,mode: mode,left: local[0x30]!,right: local[0x38]!,target: target,input: input,observe: observe)
+            try OriginalMusicConfiguration.advanceCommon(state: &candidate,libraryText:&library,mode: mode,left: local[0x30]!,right: local[0x38]!,target: target,input: input,observe: observe)
             try mark(0x42cf6c)
             let confirmation = local[0x18]!
             if try word(0x450b98) != 0 || (confirmation != 0 && word(0x44d06c) == 0) {

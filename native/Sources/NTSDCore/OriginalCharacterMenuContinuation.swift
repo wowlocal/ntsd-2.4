@@ -1,5 +1,5 @@
 /// Declared4229cc through fresh/cached menu resources, the human character
-/// body and actual422ab8 return. Selection stages remain explicit continuations.
+/// body/VS selection and actual422ab8 return, or the42cf8a match-prelude boundary.
 /// External observers must buffer effects in the staged value environment.
 public enum OriginalCharacterMenuContinuation {
     public static func advance<Environment>(state: inout OriginalMatchPreparation,
@@ -22,10 +22,10 @@ public enum OriginalCharacterMenuContinuation {
         var scene=state,owned=memory,audio=music,images=resources,text=libraryText,candidate=environment
         let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&scene.globals,music:&audio,resources:&images,environment:&candidate,
             musicRequest:musicRequest,allocate:allocate,perform:perform,afterMusic:afterMusic,checkpoint:resourceCheckpoint,observe:resourceEvent,beforeCommit:afterStartup)
-        let end = try OriginalCharacterScreen.advanceWithLibrary(state:&scene,libraryText:&text,selectionAtEntry:startup.resources.selectionAtEntry,
-            target:target,input:input,fillBacking:[UInt8](repeating:0,count:100),
+        let end = try OriginalMatchSelection.advanceWithLibrary(state:&scene,libraryText:&text,selectionAtEntry:startup.resources.selectionAtEntry,
+            target:target,input:input,fillBacking:{ [UInt8](repeating:0,count:100) },
             draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
-            checkpoint:{ try characterCheckpoint($0,$1,&candidate) },includeTailCheckpoint:true)
+            checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
         if end == .returned {
             try OriginalMenuReturn.advanceWithLibrary(world:&scene.world,globals:&scene.globals,memory:&owned,libraryText:&text,
                 input:outputInput,milliseconds:milliseconds,fillBacking:[UInt8](repeating:0,count:100),wholeEarlyReturn:false,

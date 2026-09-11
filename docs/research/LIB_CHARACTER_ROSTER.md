@@ -101,3 +101,9 @@ Source/SwiftPM jobs этого этапа терминальны; окно и у
 возврат остаётся открытым. Далее нужны полные selection stages, собственная
 библиотечная инициализация/внешний цикл, окно/input/audio, полный матч, Windows,
 весь игровой объём, сеть и чистая macOS.
+
+The subsequent [LIB_SELECTION_STAGE](LIB_SELECTION_STAGE.md) now continues
+ordinary VS count/computer/team/arena/music selection through250 actual returns
+and two Start boundaries. Its declared RNG/configuration/control-team inputs
+are distinct; this70-case corpus remains unchanged and passes with the shared
+new Core. Reselection/reroll, other modes and the own application join stay open.

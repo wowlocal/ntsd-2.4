@@ -48,6 +48,36 @@ false positives will not occur.
 
 ## Current research status
 
+**Library VS computer/team/arena selection: [LIB_SELECTION_STAGE](docs/research/LIB_SELECTION_STAGE.md).**
+252source/native calls match:250actual422ab8ret4 and2unreturned42cf8a Start
+boundaries. Two retained127/125call sequences preserve fresh11bitmaps, full
+World/400Actor/globals, libraryDC, ordered output and18150caller counter words.
+Naruto17/Sasuke21 plus2CPUs: count wrap/cancel, first/last/Random characters,
+team/backtracking, last-CPU common-team exclusion, final all8 Random flags and
+live tagd9 candidates, Random/99/District arena, difficulty, Music OFF/Random/
+MainTheme and Start. Shared native human/selection/music text preserves itsDC.
+Source5666points/4340156records/12577896740bytes,193032finalrecords/559412280bytes,
+277968stores/496589instructionreads/8132APIreads/9967helpers/2628blobs verified.
+3981starts=3490EXE+51lib+440CRT; observed coverage, not all branch outcomes.
+41371events/4784undefined bitmapreads retain original masks.19arena names and
+count derive from raw DAT/constructor; Native uses its normally loaded catalog.
+Declared RNG tables derive from verified CRT seeds17/ffffffff; not own startup.
+Source1's12zero table bytes were correctly rejected by Native, NOT a match;
+source1/raw/audit and Native failures retained. Source2 bytearray setup error
+before first menu call is preserved; source3 changes Python type only. Initial
+Swift outer-try and later test atlas semantic binding corrections are archived;
+no Native RNG rule, source1 expected byte or old fixture changed. Source3 ends0
+58.888s. Raw2tests62.271s/build81.60s and packaged2tests60.022s/build0.29s pass,
+including late CPU portrait/arena text rollback retaining every prior call.
+Six retained tests passed with the same Core in native2 (8.715/23.206/35.918s).
+Full recursive archives/658packaged files and all256old fixtures verified;
+259current files include the new index/two transport parts,133974409bytes,
+restoring the exact1044042967rawbytes/JSON/SHA. All study jobs terminal;
+NTSDNative linked, no window/device/Windows claim. Catalog5 Python78863 remains
+separate: last observed4Objects, no whole return; revalidate actual job/ps.
+Next reselect/reroll/other-mode consumers and own initialized library/prelude/
+outer-loop/app join. Full-match/all-content/network/Windows/clean-Mac goal open.
+
 **Retained library character selection: [LIB_CHARACTER_ROSTER](docs/research/LIB_CHARACTER_ROSTER.md).**
 70actualret4 returns match across two35call sequences: own fresh11menu bitmaps,
 Naruto17/Sasuke21, press/held/release, Random retaining ActorObject, left to41,

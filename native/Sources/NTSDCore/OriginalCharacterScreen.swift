@@ -33,7 +33,7 @@ public enum OriginalCharacterScreen {
         includeTailCheckpoint: Bool = false,
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText?
-        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:selectionStage)
+        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:{ state,locals,_ in try selectionStage(&state,&locals) })
     }
 
     public static func advanceWithLibrary(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText, selectionAtEntry: UInt32, target: UInt32,
@@ -44,18 +44,18 @@ public enum OriginalCharacterScreen {
         includeTailCheckpoint: Bool = false,
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText? = libraryText
-        let result = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:selectionStage)
+        let result = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:{ state,locals,_ in try selectionStage(&state,&locals) })
         libraryText = library!
         return result
     }
 
-    private static func advanceCommon(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText?, selectionAtEntry: UInt32, target: UInt32,
+    static func advanceCommon(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText?, selectionAtEntry: UInt32, target: UInt32,
         input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
         includeTailCheckpoint: Bool = false,
-        selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32],inout OriginalLibSurfaceText?) throws -> OriginalCharacterScreenExit = { _,_,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var candidate = state, library = libraryText
         let base = OriginalMatchPreparation.globalBase
         var local: [Int:Int32] = [0x20:0,0x28:0,0x34:0,0x38:0,0x3c:Int32(bitPattern: selectionAtEntry)]
@@ -255,7 +255,7 @@ public enum OriginalCharacterScreen {
         let selection = try word(0x4512c8)
         try write(0x44d074,selection)
         if (1...3).contains(selection) {
-            let exit = try selectionStage(&candidate,&local)
+            let exit = try selectionStage(&candidate,&local,&library)
             return finish(exit)
         }
         if includeTailCheckpoint { try mark(0x42e0b6) }

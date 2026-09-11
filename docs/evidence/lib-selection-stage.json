@@ -1,0 +1,320 @@
+{
+  "scope": "Pinned original VS computer count/character/team/arena/music selection with installed-library text, controlled source3 input and ordinary ret4/prelude boundaries; separate from own initialized catalog and Windows/device runtime.",
+  "timeUTC": "2026-09-11T09:54:26.142947+00:00",
+  "fixture": "original-lib-selection-stage.json",
+  "fixtureSHA256": "319f3078ad9975165c961481c464ca8d5145e695386d66602925da208468270b",
+  "fixtureFiles": {
+    "original-lib-selection-stage-part0.json": {
+      "bytes": 67144884,
+      "sha256": "39d597d9e0fde0e71af6670fe5e7292771239d166657a0a8ae698ff5e4587742"
+    },
+    "original-lib-selection-stage-part1.json": {
+      "bytes": 66829244,
+      "sha256": "65ac39ce375dab01691f14cfe751d5c5a0d032b9523e6074642e3762fd051cc4"
+    },
+    "original-lib-selection-stage.json": {
+      "bytes": 281,
+      "sha256": "319f3078ad9975165c961481c464ca8d5145e695386d66602925da208468270b"
+    }
+  },
+  "fixtureBytes": 133974409,
+  "corpus": "lib-selection-stage-capture3.json",
+  "bytes": 1044042967,
+  "sha256": "d4c6da12ed8bffb4534890ae701dce40825cb1dbc4d5c27b1d39b99bab9ffd3e",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "source": {
+    "scope": "Run one bounded retained character roster/menu sequence through actual returns with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_SELECTION_STAGE_PLAN.md. No live producer modification/restart.\n",
+    "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+    "status": "terminal",
+    "pid": 87323,
+    "command": [
+      "uv",
+      "run",
+      "tools/oracle_lib_selection_stage.py",
+      "--output",
+      "/Users/michael/Developer/ntsd-2.4/build/research/lib-selection-stage-capture3.json"
+    ],
+    "startedUTC": "2026-09-11T09:40:15.468037+00:00",
+    "inputPins": "build/research/lib-selection-stage-capture3-input-pins.json",
+    "exitCode": 0,
+    "elapsedSeconds": 58.888,
+    "endedUTC": "2026-09-11T09:41:14.348237+00:00",
+    "inputsUnchanged": true,
+    "artifacts": {
+      "build/research/lib-selection-stage-capture3.json": {
+        "bytes": 1044042967,
+        "sha256": "d4c6da12ed8bffb4534890ae701dce40825cb1dbc4d5c27b1d39b99bab9ffd3e"
+      }
+    }
+  },
+  "sourceAudit": {
+    "scope": "Read-only full trace audit of retained VS computer/team/arena selection and ret4 or prelude boundaries.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/LIB_SELECTION_STAGE_PLAN.md for finite inputs and open boundaries.\n",
+    "undefinedBitmapReads": [
+      {
+        "pc": "0x43f04b",
+        "bytes": 4,
+        "reads": 1534
+      },
+      {
+        "pc": "0x43f183",
+        "bytes": 4,
+        "reads": 1534
+      },
+      {
+        "pc": "0x43f18c",
+        "bytes": 4,
+        "reads": 429
+      },
+      {
+        "pc": "0x43f190",
+        "bytes": 4,
+        "reads": 429
+      },
+      {
+        "pc": "0x43f197",
+        "bytes": 4,
+        "reads": 429
+      },
+      {
+        "pc": "0x43f19e",
+        "bytes": 4,
+        "reads": 429
+      }
+    ],
+    "rawBytes": 1044042967,
+    "rawSHA256": "d4c6da12ed8bffb4534890ae701dce40825cb1dbc4d5c27b1d39b99bab9ffd3e",
+    "cases": 252,
+    "ends": {
+      "returned": 250,
+      "matchPrelude": 2
+    },
+    "writes": 277968,
+    "writeBytes": 1097530,
+    "instructionReads": 496589,
+    "instructionReadBytes": 1945078,
+    "pointRecords": 4340156,
+    "pointRecordBytes": 12577896740,
+    "points": 5666,
+    "APIReads": 8132,
+    "APIReadBytes": 65268,
+    "records": 193032,
+    "recordBytes": 559412280,
+    "helpers": 9967,
+    "characterSemanticCounterWords": 18150,
+    "freshBitmapRecords": 2772,
+    "musicAllocations": 0,
+    "events": {
+      "startup": 418,
+      "fill": 340,
+      "draw": 1720,
+      "read": 11117,
+      "clip": 2149,
+      "blit": 2149,
+      "getDC": 3784,
+      "setBackgroundMode": 3784,
+      "setTextColor": 3784,
+      "stringLength": 3784,
+      "textOut": 3784,
+      "releaseDC": 3784,
+      "method": 250,
+      "soundRequest": 40,
+      "soundMethod": 120,
+      "format": 238,
+      "candidates": 10,
+      "random": 42,
+      "musicConfiguration": 62,
+      "stopMusic": 4,
+      "musicMethod": 8
+    },
+    "instructionStarts": 3981,
+    "exeInstructionStarts": 3490,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 440,
+    "blobCount": 2628,
+    "decodedBlobBytes": 134249912,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 252
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 252
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 252
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 252
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 22
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 772
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 250
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "nativeCompared": true,
+  "windowsVerified": false,
+  "ownInitializedApplication": false,
+  "sourceOnlyInvalidRNG": "build/research/lib-selection-stage-rng-input-error.json",
+  "setupError": "build/research/lib-selection-stage-capture2-setup-error.json",
+  "testAdapterError": "build/research/lib-selection-stage-native3-adapter-error.json",
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 85381,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionStageTests|OriginalLibCharacterRosterTests|OriginalFreshCharacterMenuTests|OriginalMatchSelectionTests"
+      ],
+      "startedUTC": "2026-09-11T09:30:43.407018+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 5.856,
+      "endedUTC": "2026-09-11T09:30:49.260817+00:00"
+    },
+    {
+      "name": "native2",
+      "pid": 85598,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionStageTests|OriginalLibCharacterRosterTests|OriginalFreshCharacterMenuTests|OriginalMatchSelectionTests"
+      ],
+      "startedUTC": "2026-09-11T09:31:40.997006+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 362.627,
+      "endedUTC": "2026-09-11T09:37:43.617899+00:00"
+    },
+    {
+      "name": "native3",
+      "pid": 87561,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T09:41:48.389788+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 140.099,
+      "endedUTC": "2026-09-11T09:44:08.485079+00:00"
+    },
+    {
+      "name": "native4",
+      "pid": 88454,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T09:45:31.029676+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 144.555,
+      "endedUTC": "2026-09-11T09:47:55.580447+00:00"
+    },
+    {
+      "name": "packaged",
+      "scope": "Packaged acceptance of retained library computer/team/arena selection.\nSame isolated Core/tests as the latest passing raw acceptance, adding only three lossless transport files.\nNo raw environment override or reference execution. Preserve input composition.\n",
+      "pid": 89566,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T09:50:45.856358+00:00",
+      "inputFiles": 658,
+      "manifest": "build/research/lib-selection-stage-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 62.572,
+      "endedUTC": "2026-09-11T09:51:48.425762+00:00"
+    }
+  ],
+  "nativeRaw": {
+    "tests": 2,
+    "seconds": 62.271,
+    "buildSeconds": 81.6,
+    "wholeSeconds": 33.357,
+    "rollbackSeconds": 28.915
+  },
+  "packaged": {
+    "tests": 2,
+    "seconds": 60.022,
+    "buildSeconds": 0.29,
+    "wholeSeconds": 32.196,
+    "rollbackSeconds": 27.826
+  },
+  "retainedRegression": {
+    "tests": 6,
+    "coreUnchangedSinceNative2": true,
+    "freshMenuSeconds": 8.715,
+    "rosterSeconds": 23.206,
+    "ownPristineSelectionSeconds": 35.918
+  },
+  "boundaries": [
+    "250actual422ab8ret4",
+    "2unreturned42cf8aStart",
+    "declaredCRTderivedRNGseed17/ffffffff",
+    "declaredrawDATcatalog/arenaoperandviews",
+    "reselect/reroll/othermodes/open",
+    "ownlibraryinitialization/outerloop/fullmatch/app/Windows/device/cleanMac/open"
+  ],
+  "artifactVerification": "build/research/lib-selection-stage-artifact-verification.json",
+  "packagedInputVerification": "build/research/lib-selection-stage-packaged-input-verification.json",
+  "packagedFiles": 658,
+  "fixtures": 259,
+  "oldFixturesUnchanged": 256,
+  "previousVerifications": {
+    "lib-character-roster-native-verification.json": "a9134b1a7f93eca8f0cb15dc94db650d833304716255472795aa2275558ab103",
+    "fresh-character-menu-native-verification.json": "1108a4c1d2b9cb1493488ddcaa8ead4ade3e18874f5d5f56048565061ee3992c",
+    "roster-catalog-completion-verification.json": "c9564d7636bb2f7e278224ca66a6eb0bc940004f0582604bb79f998156b02e5b",
+    "lib-menu-continuation-native-verification.json": "3caf6fcd43c270c9f9d265e9a1e1e8c233295a215601f9c51ae89980c3cfcda6"
+  }
+}
