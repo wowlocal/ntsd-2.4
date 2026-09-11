@@ -153,3 +153,7 @@ Next join the own initialized catalog/menu and remaining selected bodies,
 then the outer loop and app integration. Full Naruto/Sasuke District match,
 application input/animation/audio, Windows, all original content/network and
 clean-Mac acceptance remain open. The full native-game goal is unchanged.
+
+Свежий библиотечный вход в человеческий экран и actualret4 отдельно сравнен
+в [FRESH_CHARACTER_MENU](FRESH_CHARACTER_MENU.md). Он использует Random-only
+контролируемые места и не заменяет собственную последовательность выбора.

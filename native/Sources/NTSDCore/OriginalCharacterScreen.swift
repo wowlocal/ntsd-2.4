@@ -32,7 +32,31 @@ public enum OriginalCharacterScreen {
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
         includeTailCheckpoint: Bool = false,
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
-        var candidate = state
+        var library: OriginalLibSurfaceText?
+        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:selectionStage)
+    }
+
+    public static func advanceWithLibrary(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText, selectionAtEntry: UInt32, target: UInt32,
+        input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
+        draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
+        includeTailCheckpoint: Bool = false,
+        selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        var library: OriginalLibSurfaceText? = libraryText
+        let result = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,includeTailCheckpoint:includeTailCheckpoint,selectionStage:selectionStage)
+        libraryText = library!
+        return result
+    }
+
+    private static func advanceCommon(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText?, selectionAtEntry: UInt32, target: UInt32,
+        input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
+        draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
+        includeTailCheckpoint: Bool = false,
+        selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32]) throws -> OriginalCharacterScreenExit = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        var candidate = state, library = libraryText
         let base = OriginalMatchPreparation.globalBase
         var local: [Int:Int32] = [0x20:0,0x28:0,0x34:0,0x38:0,0x3c:Int32(bitPattern: selectionAtEntry)]
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Character screen: "+message) }
@@ -46,7 +70,7 @@ public enum OriginalCharacterScreen {
         func team(_ seat: Int) throws -> Int32 { try candidate.actors[actor(seat)].integer(at: 0x364,as: Int32.self) }
         func setTeam(_ seat: Int,_ value: Int32) throws { try candidate.actors[actor(seat)].write(value,at: 0x364) }
         func mark(_ pc: UInt32,_ seat: Int = -1) throws { try checkpoint(.init(pc: pc,seat: seat,locals: local),candidate) }
-        func finish(_ exit: OriginalCharacterScreenExit) -> OriginalCharacterScreenExit { state = candidate;return exit }
+        func finish(_ exit: OriginalCharacterScreenExit) -> OriginalCharacterScreenExit { state = candidate;libraryText = library;return exit }
         func sound(_ slot: Int) throws {
             try OriginalMatchPrelude.playSound(in: candidate.globals,slot: slot) { e in
                 switch e {
@@ -61,8 +85,14 @@ public enum OriginalCharacterScreen {
             return Array(bytes[offset..<end])
         }
         func text(_ bytes: [UInt8],_ x: Int32,_ y: Int32,_ color: UInt32) throws {
-            try OriginalSurfaceText.draw(bytes,target: UInt32(bitPattern: word(0x455608)),background: 0,color: color,x: x,y: y,
-                dcResult: input.dcResult,dc: input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+            if var text = library {
+                try text.draw(bytes,target: UInt32(bitPattern: word(0x455608)),background: 0,color: color,x: x,y: y,
+                    dcResult: input.dcResult,dc: input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+                library = text
+            } else {
+                try OriginalSurfaceText.draw(bytes,target: UInt32(bitPattern: word(0x455608)),background: 0,color: color,x: x,y: y,
+                    dcResult: input.dcResult,dc: input.dc) { try observe(.init($0.kind.rawValue,$0.arguments,$0.strings)) }
+            }
         }
         func bitmap(_ source: OriginalCharacterScreenDraw.Bitmap,_ x: Int32,_ y: Int32) throws {
             try draw(.init(bitmap: source,x: x,y: y,target: target),candidate.globals)

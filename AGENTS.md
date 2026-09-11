@@ -48,6 +48,33 @@ false positives will not occur.
 
 ## Current research status
 
+**Fresh character menu: [FRESH_CHARACTER_MENU](docs/research/FRESH_CHARACTER_MENU.md).**
+OriginalCharacterMenuContinuation owns fresh11bitmaps through human character
+body and actual422ab8ret4; shared CharacterScreen adds installed-library text.
+28controlled whole returns match,2NULL-SPARK stops explicitly roll back.
+Currentmenu1/3 skips music child;0music calls/allocations, null-wide response
+unread. Initial source scope prose overstated fresh music; raw retained, docs
+correct it. Compare400Actor/World/globals on13bodypoints+final,1820counterwords,
+308fresh bitmap records,10357events/2347helpers/1421EXE+51lib+33CRT starts.
+All30source replay83763stores/65799reads/1786APIreads/12840final records+
+420296checkpoint records/2427helpers/770blobs.1032undefined bitmap reads retain
+allocator patterns/masks; positive ramp count takes original frame-1 fallthrough.
+No unknown private stack/catalog input imported.6late failures after resource/
+body/output mutations plus1early music-gate failure retain every staged owner.
+Source1/2 observer allow-list errors preserve5parts each. Completed source3
+missed8helper return observations; source4 restores them with all prior states/
+reads/writes/events/instructions identical.3verifier errors are preserved.
+Initial native build244.14s linkedNTSDNative;6retained tests passed including
+both34frame own character chains.2new tests initially missed prerequisite sound
+state for their test-container catalog; self-contained accepted catalog fixes
+that comparator setup only. Raw2tests8.982s/build80.30s; packaged2tests8.873s/
+build0.28s pass.651package files/recursive archives verify;254old fixtures
+unchanged,255current. All study jobs terminal; no window/device/Windows claim.
+Guarded catalog11636 now21Objects and watcher15664 remain live. Guarded20 native,
+final-state and intermediate snapshot audits passed; read audit61253 still live.
+Pending/foreign/frozen bytes unchanged. Next selected catalog/selection stages,
+own initialized library/menu/outer loop/app; full goal stays open.
+
 **Fresh library menu: [FRESH_LIBRARY_MENU](docs/research/FRESH_LIBRARY_MENU.md).**
 Actual4229cc now runs fresh music/sprintf/11wholebitmap helpers, screen/panel,
 network/overlay/volume/present and422ab8 on one source CPU.22controlled ret4

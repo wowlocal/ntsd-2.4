@@ -1,0 +1,248 @@
+#!/usr/bin/env python3
+"""Read-only audit of fresh music/bitmap loading through installed-library menu and actual return.
+
+Pinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8
+text/input/output order, owned string production and retained library DC.
+Replay every recorded store/read and final region; verify actual instruction
+bytes and ordinary return ABI. This executes no game, edits no expected byte,
+continues no fault, and establishes no Windows/device/own-catalog equivalence.
+Actual41bc90 prologue establishes ordinary cookie/SEH backing; the declared
+menu tail skips the intervening tick body. This is not an own complete tick.
+See docs/research/FRESH_CHARACTER_MENU_PLAN.md for finite inputs and open boundaries.
+"""
+from pathlib import Path
+import argparse,base64,collections,hashlib,json,struct,zlib
+from inspect_original import PE
+from import_ntsd import DEFAULT_SOURCE,EXE_SHA256
+
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+
+def verify(path):
+ raw=path.read_bytes();d=json.loads(raw)
+ exe=next(DEFAULT_SOURCE.glob('*.exe')).read_bytes();lib=(DEFAULT_SOURCE/'lib.dll').read_bytes()
+ assert sha(exe)==EXE_SHA256==d['exeSHA256'] and sha(lib)==d['libSHA256']=='28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba'
+ crt=(Path(__file__).resolve().parents[1]/'build/original/crt/msvcr80.dll').read_bytes()
+ assert sha(crt)==d['crtSHA256']=='c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d'
+ pe=PE(exe);lp=PE(lib);cp=PE(crt);blobs={}
+ for key,b in d['blobs'].items():
+  value=zlib.decompress(base64.b64decode(b['deflate']),-15)
+  assert len(value)==b['count'] and sha(value)==key==b['sha256'];blobs[key]=value
+ def record(x):
+  value=blobs[x['storage']['bytes']];mask=blobs[x['storage']['defined']]
+  assert len(value)==len(mask) and set(mask)<={0,1}
+  return bytearray(value),bytearray(mask)
+ def exe_bytes(p,n):return exe[pe.offset(p-0x400000):pe.offset(p-0x400000)+n]
+ stats=collections.Counter();pcs={};ends=collections.Counter();events=collections.Counter();unknown=collections.Counter();bitmap_unknown=collections.Counter();last_dc=0
+ assert len(d['cases'])==len(d['installations'])==30
+ assert [c['spec'] for c in d['cases']]==json.loads((path.parent/'fresh-character-menu-finite-inputs.json').read_bytes())
+ for index,(c,install) in enumerate(zip(d['cases'],d['installations'])):
+  label=c['spec']['label'];state={x['address']:record(x) for x in c['before']};alive={x['address']:x['live'] for x in c['before'] if x['live'] is not None}
+  assert len(state)==428 and len(alive)==20
+  assert c['cw']==0x23f and c['end'] in ('returned','playback','nullSpark')
+  assert install['base']==d['libraryAddress']==0x36000000 and install['preferredBase']==lp.base and install['libSHA256']==sha(lib) and install['result']==1
+  assert len(install['patches'])==13 and [a['count'] for a in install['allocations']]==[4000,20000]
+  for p in install['patches']:assert bytes.fromhex(p['before'])==exe_bytes(p['address'],p['count']) and len(bytes.fromhex(p['after']))==p['count']
+  assert [e for e in install['events'] if e['name']=='RtlMoveMemory']==[dict(name='RtlMoveMemory',returnPC=e['returnPC'],**p) for e,p in zip([e for e in install['events'] if e['name']=='RtlMoveMemory'],install['patches'])]
+  protections={}
+  for e in install['events']:
+   if e['name']=='VirtualProtect':
+    p,n,v,out=e['arguments'];page=p&~4095;assert n in (2,5) and e['result']==1 and e['oldProtection']==protections.get(page,0x20);protections[page]=v
+  assert all(v==0x20 for v in protections.values())
+  for rel in install['relocations']:
+   p=rel['offset'];assert struct.unpack('<I',lib[lp.offset(p):lp.offset(p)+4])[0]==rel['before']
+   assert rel['after']==(rel['before']+install['base']-lp.base)&0xffffffff
+  assert len(set(install['instructions']))==len(install['instructions']) and all(0x36001000<=p<0x36001c96 for p in install['instructions'])
+  def owner(p,n):
+   found=[(a,v) for a,v in state.items() if a<=p and p+n<=a+len(v[0])];assert len(found)==1,(label,hex(p),n)
+   a,(v,m)=found[0];return a,v,m,p-a
+  # Independently build all six declared atlas inputs, without source after-state.
+  for i in range(5):
+   value=bytearray(0x1f50);struct.pack_into('<4I',value,0,0x26004000+i*16,64,64,500)
+   for j in range(500):
+    for off,x in ((0x10,j%8*8),(0x7e0,j%8*8),(0xfb0,8),(0x1780,8)):struct.pack_into('<I',value,off+j*4,x)
+   assert state[0x27000020+i*0x2000]==(value,bytearray(b'\1'*0x1f50))
+  control=c['spec']['control'];panel=0x27000020+(0xc000 if control else 0xa000)
+  value=bytearray((i*37+11)&255 for i in range(0x1f50)) if control else bytearray(b'\xa5'*0x1f50);mask=bytearray(0x1f50)
+  def put(off,values):
+   raw=struct.pack('<'+'I'*len(values),*values);value[off:off+len(raw)]=raw;mask[off:off+len(raw)]=b'\1'*len(raw)
+  put(0,[0x26004050,794,550,11])
+  rects=[[0,0,397,34],[397,0,397,34],[0,34,198,194],[198,34,198,194],[396,34,198,194],[594,34,198,194],[0,228,198,194],[198,228,198,194],[396,228,198,194],[594,228,198,194],[0,422,794,128]]
+  for i in range(13):
+   rect=rects[i] if i<11 else [i%8*8,i%8*8,8,8]
+   for off,x in zip((0x10,0x7e0,0xfb0,0x1780),rect):put(off+i*4,[x])
+  assert state[panel]==(value,mask)
+  lib_before=bytes(state[0x36000000][0]);initial_dc=int.from_bytes(lib_before[0x306e:0x3072],'little')
+  assert initial_dc==(last_dc if c['spec'].get('chain') else 0)
+  for pc,code in c['instructions'].items():
+   p=int(pc,16);value=bytes.fromhex(code)
+   if p>=0x78130000:expected=crt[cp.offset(p-cp.base):cp.offset(p-cp.base)+len(value)]
+   elif p>=0x36000000:expected=lib_before[p-0x36000000:p-0x36000000+len(value)]
+   else:
+    expected=exe_bytes(p,len(value))
+    for patch in install['patches']:
+     start=patch['address'];new=bytes.fromhex(patch['after'])
+     expected=bytes(new[q-start] if start<=q<start+len(new) else expected[q-p] for q in range(p,p+len(value)))
+   assert value==expected,(label,pc,value.hex(),expected.hex());assert pc not in pcs or pcs[pc]==code;pcs[pc]=code
+  reads=collections.defaultdict(list)
+  for kind,items in [('instruction',c['reads']),('API',c['apiReads'])]:
+   for x in items:reads[x['storeCount']].append((kind,x))
+  def lifetime(prefix):
+   result=dict(alive)
+   for event in prefix:
+    if event['kind']=='free':assert result[event['arguments'][0]];result[event['arguments'][0]]=False
+    elif event['kind']=='startup':
+     e=event['startup'];p=0
+     if e.get('kind')=='allocate':p=e['address']
+     if e.get('kind')=='music' and e['music']['kind']=='allocate':p=e['music']['response']['pointer'] or 0
+     if p:assert not result[p];result[p]=True
+   return result
+  points=collections.defaultdict(list)
+  for point in c['points']:points[point['storeCount']].append(point)
+  for step in range(len(c['writes'])+1):
+   for point in points.pop(step,[]):
+    assert len(point['records'])==428
+    for x in point['records']:
+     assert state[x['address']]==record(x),(label,point['kind'],hex(x['address']),'full point bytes/mask')
+     if x['live'] is not None:
+      expected=lifetime(c['events'][:point['eventCount']])[x['address']]
+      assert x['live']==expected
+     stats['pointRecords']+=1;stats['pointRecordBytes']+=len(state[x['address']][0])
+    assert 0<=point['readCount']<=len(c['reads']) and 0<=point['eventCount']<=len(c['events'])
+    stats['points']+=1
+   for kind,x in reads.pop(step,[]):
+    p,n=x['address'],x['count'];value=bytes.fromhex(x['bytes']);mask=bytes(x['known']);assert n==len(value)==len(mask)
+    if kind=='instruction':assert hex(x['pc']) in c['instructions']
+    if x.get('kind')=='pinnedEXE':assert value==exe_bytes(p,n) and mask==b'\1'*n
+    else:
+     a,v,m,off=owner(p,n);assert v[off:off+n]==value and m[off:off+n]==mask,(label,kind,step,x)
+     if 0 in mask:
+      # Base masks are write coverage for original globals. Their initial
+      # cookie/worker toggle bytes are pinned EXE data, not unknown stack.
+      if p in (0x44eea4,0x44d784):
+       assert value==exe_bytes(p,n) and kind=='instruction';unknown[(x['pc'],p,n)]+=1
+      else:
+       assert kind=='instruction' and x['pc'] in (0x43f04b,0x43f183,0x43f18c,0x43f190,0x43f197,0x43f19e) and a>=0x50000020 and off=={0x43f04b:12,0x43f183:12,0x43f18c:12,0x43f190:0xfac,0x43f197:0x7dc,0x43f19e:0x177c}[x['pc']] and n==4 and mask==bytes(4)
+       initial=next(v for v in c['before'] if v['address']==a)
+       assert value==blobs[initial['storage']['bytes']][off:off+4]
+       assert any(e['kind']=='read' and e['read']==dict(offset=off,value=int.from_bytes(value,'little'),defined=False) for e in c['events'][x['eventIndex']:x['eventIndex']+1])
+       bitmap_unknown[(x['pc'],n)]+=1
+    assert 0<=x['eventIndex']<=len(c['events'])
+    stats[kind+'Reads']+=1;stats[kind+'ReadBytes']+=n
+   if step==len(c['writes']):break
+   w=c['writes'][step];p=w['address'];value=bytes.fromhex(w['bytes']);a,v,m,off=owner(p,len(value));v[off:off+len(value)]=value;m[off:off+len(value)]=b'\1'*len(value)
+   assert 0<=w['eventIndex']<=len(c['events'])
+   if w['pc'] is None:assert len(value) in (4,24,26,108) and (0x10000000<=p<0x10010000 or 0x44d000<=p<0x458440 or 0x2c010020<=p<0x2c01003a)
+   else:assert hex(w['pc']) in c['instructions']
+   if a==0x36000000:assert p==0x3600306e and len(value)==4 and c['spec'].get('dcResult',0)>=0 and int.from_bytes(value,'little')==c['spec'].get('dc',0x76543210)
+   stats['writes']+=1;stats['writeBytes']+=len(value)
+  assert not reads and not points
+  for event in c['events']:
+   events[event['kind']]+=1
+  alive=lifetime(c['events'])
+  for event in c['events']:
+   if event['kind']=='fill':
+    f=event['fill'];assert f['defined']==[i<4 or 0x50<=i<0x54 for i in range(100)]
+    assert f['effects'][:4]==[100,0,0,0] and f['effects'][0x50:0x54] in ([0x65,0x25,0x12,0],[255,255,255,0],[0,0,0,0])
+  for x in c['after']:
+   p=x['address'];assert state[p]==record(x),(label,hex(p),'full final bytes/mask')
+   if x['live'] is not None:assert x['live']==alive[p]
+   stats['records']+=1;stats['recordBytes']+=len(state[p][0])
+  lib_after=bytes(state[0x36000000][0]);assert lib_before[:0x306e]==lib_after[:0x306e] and lib_before[0x3072:]==lib_after[0x3072:]
+  for h in c['helpers']:
+   assert h['returnSP']==h['entrySP']+4+h['pop'] and len(h['saved'])==4 and h['firstStore']<=h['lastStore']<=len(c['writes']) and h['eventStart']<=h['eventEnd']<=len(c['events'])
+   if h['entry']==0x401290:
+    assert h['arguments'][0]==d['target'] and len(h['text'])<4096
+    assert any(x['address']==h['textAddress'] and bytes.fromhex(x['bytes'])==bytes(h['text'])+b'\0' and all(x['known']) for x in c['apiReads'])
+   stats['helpers']+=1
+  assert c['saved']==[0x11223344,0x22334455,0x33445566,0x44556677]
+  assert c['points'][0]['sp']==d['tailSP']==d['entrySP']-0x644
+  assert c['screenSP'] is None
+  if c['end']=='nullSpark':assert c['characterSP'] is None and c['endPC']==0x429b21 and len(c['pending'])==1
+  else:
+   assert c['end']=='returned' and c['characterSP']==d['tailSP']-0xab4
+   assert c['endSP']==d['entrySP']+8 and not c['pending'] and c['endPC']==0x30000000
+   assert [p['kind'] for p in c['points']][-4:]==['character-0x42e0d2','menuReturned','matchBeforeReturn','returned']
+   assert state[0]==(bytearray(bytes.fromhex('78563412')),bytearray(b'\1'*4))
+   assert c['instructions']['0x42e0f9']=='c20c00' and c['instructions']['0x422ab8']=='c20400'
+   assert sum(h['entry']==0x429730 and h['pop']==12 for h in c['helpers'])==1
+   points=[p for p in c['points'] if p['kind'].startswith('character-')]
+   assert len(points)==13 and sum(p['kind']=='character-0x42a25a' for p in points)==8
+   assert [p['seat'] for p in points if p['kind']=='character-0x42a25a']==list(range(8))
+   for point in points:
+    assert point['sp']==c['characterSP'];stack=record(next(x for x in point['records'] if x['address']==d['stackAddress']))
+    for key,value in point['locals'].items():
+     off=point['sp']+int(key)-d['stackAddress'];assert all(stack[1][off:off+4]);assert int.from_bytes(stack[0][off:off+4],'little')==value
+    stats['characterSemanticCounterWords']+=len(point['locals'])
+   # Only independently declared400 Actor bindings can appear in the table.
+   assert len(c['actorAddresses'])==400 and len(set(c['actorAddresses']))==400
+   for index,p in enumerate(c['actorAddresses']):
+    assert p==0x25000020+(399-index if c['spec']['control'] else index)*0x500
+    assert state[d['worldAddress']][0][0x194+index*4:0x198+index*4]==p.to_bytes(4,'little')
+    assert 0<=int.from_bytes(state[p][0][0x364:0x368],'little',signed=True)<=4
+   assert {int(pc,16) for pc in c['instructions'] if 0x42a670<=int(pc,16)<0x42a7d7}<={0x42a709,0x42a710}
+  assert c['points'][1]['kind']=='musicReturned' and c['points'][2]['kind']=='resources-prefix'
+  assert not any(e['kind']=='panel' for e in c['events'])
+
+  if c['spec'].get('chain'):last_dc=int.from_bytes(state[0x36000000][0][0x306e:0x3072],'little')
+  ends[c['end']]+=1
+ # Embedded resources and every successful API bitmap/description output derive
+ # from pinned DIBs or the preceding native-equivalent descriptor request.
+ resources={x['path'][1]:x for x in pe.resources() if x['path'][0]==2}
+ assert len(d['assets'])==11
+ for asset_path,asset in d['assets'].items():
+  item=resources[asset_path];dib=exe[item['fileOffset']:item['fileOffset']+item['size']]
+  assert asset['kind']=='embedded' and blobs[asset['raw']]==dib
+  width,height=struct.unpack_from('<ii',dib,4);planes,bpp=struct.unpack_from('<HH',dib,12)
+  assert [width,abs(height),planes,bpp]==[asset[k] for k in ('width','height','planes','bpp')]
+ for c in d['cases']:
+  startup=c['startup'];assert [e['startup'] for e in c['events'] if e['kind']=='startup']==startup['events']
+  surfaces={}
+  for e in startup['events']:
+   if 'request' not in e:continue
+   q,response=e['request'],e['response'];kind=q['kind']
+   if kind=='getObject' and response['result']:
+    a=startup['images'][str(q['words'][0])]['asset'];w,h,bpp,planes=(a[k] for k in ('width','height','bpp','planes'))
+    expected=struct.pack('<4iHHI',0,w,h,((w*bpp+31)//32)*4,planes,bpp,0)
+    assert response['writes']==[dict(offset=0,bytes=list(expected))]
+   if kind=='createSurface' and response.get('output') is not None:surfaces[response['output']]=q['bytes']
+   if kind=='description' and response['result']>=0:assert response['writes']==[dict(offset=0,bytes=surfaces[q['words'][0]])]
+  for p,surface in startup['surfaces'].items():assert surfaces[int(p)]==surface['description']
+  assert len(startup['allocations'])==11 and len(startup['records'])==(10 if c['end']=='nullSpark' else 11)
+  expected=[0 if i in startup['spec'].get('nulls',[]) else 0x50000020+(10-i if c['spec']['control'] else i)*0x2000 for i in range(11)]
+  assert [a['address'] for a in startup['allocations']]==expected
+  for a in startup['allocations']:
+   if a['address']:
+    initial=bytes(i%256 for i in range(0x1f50)) if c['spec']['control'] else b'\xa5'*0x1f50
+    assert blobs[a['backing']]==initial
+  for record in startup['records']+startup['musicAllocations']:
+   final=next(x for x in c['after'] if x['address']==record['address'])
+   assert final['storage']==dict(bytes=record['bytes'],defined=record['mask']) and final['live']
+  stats['freshBitmapRecords']+=len(startup['records']);stats['musicAllocations']+=len(startup['musicAllocations'])
+ # Independently compare every retained atomic source part, including nominal.
+ for i,c in enumerate(d['cases']):
+  directory=path.parent/'fresh-character-menu-capture4.parts'
+  x=json.loads((directory/f'{i:04d}.json').read_bytes());assert x['case']==c and x['installation']==d['installations'][i]
+  assert all(d['blobs'][k]==v for k,v in x['blobs'].items()) and all(d['assets'][k]==v for k,v in x['assets'].items())
+ probe=json.loads((path.parent/'fresh-character-menu-probe1.json').read_bytes());assert probe['cases'][0]==d['cases'][0]
+ prior=json.loads((path.parent/'fresh-character-menu-capture3.json').read_bytes())
+ assert all(d['blobs'][k]==v for k,v in prior['blobs'].items()) and d['assets']==prior['assets'] and d['installations']==prior['installations']
+ for old,new in zip(prior['cases'],d['cases']):
+  assert old.keys()==new.keys()
+  for key in old:
+   if key not in ('helpers','startup'):assert old[key]==new[key],(new['spec']['label'],key)
+  for key in old['startup']:
+   if key!='helpers':assert old['startup'][key]==new['startup'][key]
+  assert all(h in new['helpers'] for h in old['helpers'])
+  extra=[h for h in new['helpers'] if h not in old['helpers']]
+  assert [(h['entry'],h['returnPC']) for h in extra]==([(0x78144a20,0x431d09),(0x4450b2,0x42e0f3),(0x4450b2,0x402a59),(0x4450b2,0x422ab5)] if new['spec']['label'].startswith('cancel') else [])
+
+ for attempt in (1,2):
+  for i in range(5):
+   part=json.loads((path.parent/f'fresh-character-menu-capture{attempt}.parts/{i:04d}.json').read_bytes())
+   assert part['case']==d['cases'][i] and part['installation']==d['installations'][i]
+   assert all(d['blobs'][k]==v for k,v in part['blobs'].items())
+ return dict(scope=__doc__,undefinedBitmapReads=[dict(pc=hex(pc),bytes=n,reads=count) for (pc,n),count in bitmap_unknown.items()],rawBytes=len(raw),rawSHA256=sha(raw),cases=len(d['cases']),ends=dict(ends),**stats,events=dict(events),instructionStarts=len(pcs),exeInstructionStarts=sum(int(p,16)<0x36000000 for p in pcs),libraryInstructionStarts=sum(0x36000000<=int(p,16)<0x36005000 for p in pcs),crtInstructionStarts=sum(int(p,16)>=0x78130000 for p in pcs),blobCount=len(blobs),decodedBlobBytes=sum(map(len,blobs.values())),writeMaskFalseReadsWithPinnedEXEProvenance=[dict(pc=hex(pc),address=hex(p),bytes=n,reads=count) for (pc,p,n),count in unknown.items()],nativeCompared=False,windowsVerified=False)
+
+if __name__=='__main__':
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('source',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();assert not a.output.exists()
+ result=verify(a.source);a.output.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

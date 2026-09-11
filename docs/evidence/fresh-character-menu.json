@@ -1,0 +1,315 @@
+{
+  "scope": "Fresh owned menu bitmaps through installed-library human character screen and declared4229cc actualret4. Research-only pinned NTSD/lib/VC80 controlled Unicorn, not a full initialized tick or Windows/device/app.",
+  "nativeCompared": true,
+  "source": {
+    "scope": "Read-only audit of fresh music/bitmap loading through installed-library menu and actual return.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/FRESH_CHARACTER_MENU_PLAN.md for finite inputs and open boundaries.\n",
+    "undefinedBitmapReads": [
+      {
+        "pc": "0x43f04b",
+        "bytes": 4,
+        "reads": 258
+      },
+      {
+        "pc": "0x43f183",
+        "bytes": 4,
+        "reads": 258
+      },
+      {
+        "pc": "0x43f18c",
+        "bytes": 4,
+        "reads": 129
+      },
+      {
+        "pc": "0x43f190",
+        "bytes": 4,
+        "reads": 129
+      },
+      {
+        "pc": "0x43f197",
+        "bytes": 4,
+        "reads": 129
+      },
+      {
+        "pc": "0x43f19e",
+        "bytes": 4,
+        "reads": 129
+      }
+    ],
+    "rawBytes": 113499742,
+    "rawSHA256": "0414a82e4cb81bce45334820c374c37c2fcdbf9c47d365194e4a82007633f6a1",
+    "cases": 30,
+    "ends": {
+      "returned": 28,
+      "nullSpark": 2
+    },
+    "writes": 83763,
+    "writeBytes": 376452,
+    "instructionReads": 65799,
+    "instructionReadBytes": 259758,
+    "pointRecords": 420296,
+    "pointRecordBytes": 1838851956,
+    "points": 982,
+    "APIReads": 1786,
+    "APIReadBytes": 10656,
+    "records": 12840,
+    "recordBytes": 56176740,
+    "helpers": 2427,
+    "characterSemanticCounterWords": 1820,
+    "freshBitmapRecords": 328,
+    "musicAllocations": 0,
+    "events": {
+      "startup": 6234,
+      "fill": 28,
+      "draw": 258,
+      "read": 1935,
+      "clip": 387,
+      "blit": 387,
+      "getDC": 246,
+      "setBackgroundMode": 228,
+      "setTextColor": 228,
+      "stringLength": 228,
+      "textOut": 228,
+      "releaseDC": 228,
+      "method": 28,
+      "soundRequest": 24,
+      "soundMethod": 72
+    },
+    "instructionStarts": 1506,
+    "exeInstructionStarts": 1422,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 33,
+    "blobCount": 770,
+    "decodedBlobBytes": 35219864,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 30
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 30
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 30
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 30
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 328
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 412
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 28
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "native": {
+    "matchedCandidates": 28,
+    "events": 10357,
+    "eventKinds": {
+      "startup": 5852,
+      "fill": 28,
+      "draw": 258,
+      "read": 1935,
+      "clip": 387,
+      "blit": 387,
+      "getDC": 246,
+      "setBackgroundMode": 228,
+      "setTextColor": 228,
+      "stringLength": 228,
+      "textOut": 228,
+      "releaseDC": 228,
+      "method": 28,
+      "soundRequest": 24,
+      "soundMethod": 72
+    },
+    "helpers": 2347,
+    "exePCs": 1421,
+    "libPCs": 51,
+    "crtPCs": 33,
+    "startupEventKinds": {
+      "allocate": 308,
+      "construct": 308,
+      "module": 616,
+      "image": 616,
+      "getObject": 616,
+      "createSurface": 308,
+      "restore": 308,
+      "createDC": 308,
+      "selectObject": 308,
+      "description": 308,
+      "getDC": 308,
+      "stretch": 308,
+      "releaseDC": 308,
+      "deleteDC": 308,
+      "deleteObject": 308,
+      "colorKey": 308
+    },
+    "freshBitmaps": 308,
+    "musicCalls": 0,
+    "musicAllocations": 0,
+    "nullWideNotConsumed": true,
+    "initialSourceScopeCorrection": "Music gate executes, but currentmenu1/3 never satisfies previous!=10 and current==10; no music/sprintf/graph-log child. Raw scope prose preserved as originally emitted.",
+    "sourceSHA256": "0414a82e4cb81bce45334820c374c37c2fcdbf9c47d365194e4a82007633f6a1"
+  },
+  "rawAcceptance": {
+    "tests": 2,
+    "seconds": 8.982,
+    "buildSeconds": 80.3
+  },
+  "retainedAcceptance": {
+    "tests": 6,
+    "firstBuildSeconds": 244.14,
+    "allPassed": true,
+    "ownCharacterFramesPerChain": 34
+  },
+  "packagedAcceptance": {
+    "tests": 2,
+    "seconds": 8.873,
+    "buildSeconds": 0.28
+  },
+  "artifact": {
+    "timeUTC": "2026-09-11T08:02:52.765764+00:00",
+    "files": 650,
+    "priorFixturesUnchanged": 254,
+    "fixturePins": 255,
+    "rawBytes": 113499742,
+    "rawSHA256": "0414a82e4cb81bce45334820c374c37c2fcdbf9c47d365194e4a82007633f6a1",
+    "packedBytes": 9864941,
+    "packedSHA256": "84cc3eb69ab92dedab22047fb8ea1cb3af86fdb6bfd1a56eb64bc57b934ae08d",
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true,
+    "archives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+        "bytes": 3277477,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "6e9ec045e040f64c2905b86e53110e7bd4383e4dcf56f7c1a380402239e1211d",
+        "bytes": 11201,
+        "files": 3
+      },
+      "build/research/fresh-character-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+        "bytes": 6570,
+        "files": 1
+      }
+    },
+    "compositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-packaged-input-composition.json": "854ab4865ab28a8b5c8ef389634d772529b7e785fc295da61930b3d505d171d3",
+      "build/research/fresh-character-menu-native1-input-composition.json": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "build/research/fresh-character-menu-native2-input-composition.json": "6945bdd020b461a5eb4a152bf3702668dbfdb33766774b5eecc1837d1c66bd29"
+    }
+  },
+  "preservation": {
+    "timeUTC": "2026-09-11T08:04:50.400291+00:00",
+    "files": 651,
+    "unchangedRawFiles": 650,
+    "composition": {
+      "base": "a7f2c835dc3692218c60ad1138fb720b1e5261f4",
+      "baseComposition": "build/research/fresh-character-menu-native1-input-composition.json",
+      "baseCompositionSHA256": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "baseManifest": "build/research/fresh-character-menu-native1-input-pins.json",
+      "ownedArchive": "build/research/fresh-character-menu-native2-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+      "ownedFiles": [
+        "Tests/NTSDCoreTests/OriginalFreshCharacterMenuTests.swift"
+      ],
+      "completeManifest": "build/research/fresh-character-menu-packaged-input-pins.json",
+      "files": 651,
+      "layout": "Recursively verified accepted base and native overlays, then single new fixture overlay",
+      "fixtureArchive": "build/research/fresh-character-menu-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "06d125ae67c376cae1e625b0ebae29fcfe37a559118b0997f8da3316f066826b",
+      "fixtureFile": "Tests/NTSDCoreTests/Fixtures/original-fresh-character-menu.json"
+    },
+    "priorCompleteArchiveAudit": "build/research/fresh-character-menu-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 255,
+    "fullRawBytesAndJSONEqual": true
+  },
+  "failures": {
+    "sourceObserver": [
+      "fresh-character-menu-source1-observer-error.json",
+      "fresh-character-menu-source2-observer-error.json"
+    ],
+    "sourceReturnObservationGap": "fresh-character-menu-source3-helper-audit-gap.json",
+    "verifiers": [
+      "fresh-character-menu-verifier1-error.json",
+      "fresh-character-menu-verifier2-error.json",
+      "fresh-character-menu-verifier3-error.json"
+    ],
+    "nativeSetup": "fresh-character-menu-native1-comparison-error.json",
+    "sourceFaults": 0,
+    "safetyRefusals": 0
+  },
+  "rollback": {
+    "sourceNullSparkRejections": 2,
+    "lateNativeObservers": 6,
+    "earlyMusicGateObserver": 1
+  },
+  "sourceVersionsPreserved": true,
+  "allGameStateAndEventBytesUnchangedByObserverCorrection": true,
+  "retainedDCCompared": true,
+  "privateExpectedStackImported": false,
+  "musicChildExecuted": false,
+  "musicNullWideResponseConsumed": false,
+  "controlledCatalogUsedOnlyAsUnreadNativeContainer": true,
+  "initializedOwnTick": false,
+  "windowsVerified": false,
+  "appWindowVerified": false,
+  "deviceVerified": false,
+  "work": "build/research/fresh-character-menu-work.json",
+  "verifiedUTC": "2026-09-11T08:06:52.762153+00:00"
+}
