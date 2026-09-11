@@ -8,6 +8,7 @@ public enum OriginalTournamentBracket {
     }
     static func advance(state: inout OriginalMatchPreparation,locals: inout [Int:Int32],libraryText: inout OriginalLibSurfaceText?,initialize: Bool,
         target: UInt32,fillBacking: [UInt8],resumeMusic: (inout OriginalStateRecord) throws -> Void,
+        prepare: (inout OriginalMatchPreparation) throws -> Bool = { _ in false },
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
@@ -150,7 +151,10 @@ public enum OriginalTournamentBracket {
                     else { try write(0x4513d8,0);try clearAssignments() }
                 }
             }
-            if try word(0x4513d8)==3 { try mark(0x434349);return finish(.tournamentMatchPreparation) }
+            if try word(0x4513d8)==3 {
+                try mark(0x434349)
+                if try !prepare(&candidate) { return finish(.tournamentMatchPreparation) }
+            }
         }
         try mark(0x4347c5)
         if try word(0x44d020)==28 {

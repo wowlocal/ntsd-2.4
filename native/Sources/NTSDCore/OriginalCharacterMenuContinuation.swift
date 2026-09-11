@@ -6,6 +6,7 @@ public enum OriginalCharacterMenuContinuation {
         memory: inout OriginalMenuPresentationMemory,music: inout OriginalMusicMemory,
         resources: inout OriginalMenuResourceLoading,libraryText: inout OriginalLibSurfaceText,
         environment: inout Environment,includeTournamentBracket: Bool = false,target: UInt32,input: OriginalFrontScreenBodyInput,
+        tournamentPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void)? = nil,
         outputInput: OriginalMenuPresentationInput,milliseconds: UInt32,
         musicRequest: (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
@@ -29,6 +30,10 @@ public enum OriginalCharacterMenuContinuation {
                 guard includeTournamentBracket else { return try OriginalTournamentBracket.unavailable(&scene,&local,&text,initialize) }
                 return try OriginalTournamentBracket.advance(state:&scene,locals:&local,libraryText:&text,initialize:initialize,target:target,fillBacking:[UInt8](repeating:0,count:100),
                     resumeMusic:{ state in try OriginalMusicPlayback.resumeMatch(globals:&state,memory:&audio) { try musicRequest($0,&candidate) } },
+                    prepare:{ state in
+                        guard let tournamentPreparation else { return false }
+                        try tournamentPreparation(&state,&owned,&candidate);return true
+                    },
                     draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
                     checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
             })

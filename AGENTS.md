@@ -48,6 +48,42 @@ false positives will not occur.
 
 ## Current research status
 
+**Tournament preparation: [LIB_TOURNAMENT_PREPARATION](docs/research/LIB_TOURNAMENT_PREPARATION.md).**
+98controlled source/native ret4 calls:77menu-only+21whole434349 preparations.
+A fresh78-call human chain and20declared confirmations cover17ordinary arenas,
+99, both FD outcomes, human/CPU placements, HP/state and round-name branches.
+Actual432ab0ret12 and422ab8ret4 execute; NOT played matches/own library startup.
+Each parent executes419e40+400Actors; all8421constructor outputs/masks match
+independently built Native. Source accepted catalog views retain101BG/137Object90
+operands; Native rebuilds137Objects from raw resources. Whole43d2c0 yields21
+buffers/136325112bytes, retaining playback and freeing old recording beforecalloc.
+332actual BG bitmap constructors/4980API requests compare. All ordinary BGs enter
+unloaded:40c0e0's zero-sentinel path only. A live BG requires explicit release/free
+continuation; missing continuation throws with whole rollback. Nonempty release
+in the whole Tournament caller remains a dynamic dependency, NOT silent success.
+2409points/2578709records/7872738990bytes+masks;2460998stores/425430instructionreads/
+3622APIreads/22508helpers/147preparation-FPU points/152703known recording reads.
+4084instruction starts include constructor parents. FD2/FE42/FF42. Noallbranches.
+4347ba[esp+1c] still means rootSP10 with12pending arguments; no pointer fault.
+First raw98 had unknown44eed0 in20controlled replay entries: Native4 and audit1
+both rejected it. OriginalPE52zero bytes recover its provenance before fresh
+capture2. All2788586record bytes, events/writes/instructions/helpers/returns stay
+identical; only127686repeated PE-known mask bits change. Both raw files retained.
+Probe1 missed terminal hook after constructor until=STOP; Native1pending-API and
+Native3explicit-self compile errors retained. Native5/audit2 prematurely opened
+unpublished source2 and failed; only after source terminal did checks rerun.
+Native6 raw2tests59.355s passed; Native7 raw3tests79.407s/build245.86s also checks
+all arena/bitmap rollback and unconnected-live-release rejection. The earlier
+250bracket calls passed2tests56.823s/build254.19s with identical shared dispatcher.
+Artifact verification restores988830043raw bytes from92803102packaged bytes;
+275oldfixtures unchanged,278current. Packaged3tests72.734s pass without raw
+override; all687package/archive bytes and frozen/pending/foreign pins verify.
+No new window/device/Windows/cleanMac evidence. Full goal remains open. Next:
+whole nonempty Tournament arena release, TeamTournament434ab0/War, initialized
+library/catalog/app join. Same catalog5Python78863 stays live; never restart for
+silence; latest19Objects. Final package/jobs/pins: build/research/lib-tournament-preparation/.
+Frozen acceptance: build/research/lib-tournament-preparation/lib-tournament-preparation-native-verification.json.
+
 **Tournament bracket/mode2: [LIB_TOURNAMENT_BRACKET](docs/research/LIB_TOURNAMENT_BRACKET.md).**
 250source/native calls match:249actual422ab8ret4+1BEFORE434349 preparation.
 78human-chain/165allCPU-chain/7controlled entries; simulation reaches a winner,
