@@ -48,6 +48,28 @@ false positives will not occur.
 
 ## Current research status
 
+**Team Tournament bracket: [LIB_TEAM_TOURNAMENT_BRACKET](docs/research/LIB_TEAM_TOURNAMENT_BRACKET.md).**
+377 source/native calls:375whole436fb5ret12+422ab8ret4,2BEFORE436747 after actual
+CPU placement. Three fresh87human/69mixed/166CPU chains plus55controlled entries;
+NOT played fights or old373source reproduction. All48special-ID/difficulty
+configurations,51CPU choices/102ordered HP stores,12result stores/6Actor health
+halves, heldCA1/occupied seats/cancel/four assignments and paired winner compare.
+Geometry504bytes/126words is independently initialized from recovered EXE data.
+All9062points/7702700records/23169087260bytes+masks,
+565555stores/509765instruction reads/8296API reads/23922helpers,
+3548starts/3354blobs and377atomic cases audit. Unknown bitmap masks stay
+unknown; CA is declared input history, cookie is file provenance. Three Start
+music graphs and stop-before-winner-sound remain. Raw6tests223.791s/build267.34s
+include retained373Team setup/250Tournament; packaged2tests94.072s/build0.38s.
+All four late-current-call rollback cases pass. Manifest-only KeyError and first
+auditor's zero-label address omission retained; corrected fullaudit2 verifies
+2574labels. No original expected or Native game byte changed for acceptance.
+285oldfixtures unchanged;290current/707package/Git/archive bytes verified.
+Allstudyjobs terminal. Same catalog5Python78863 live with25Objects; never restart.
+Two terminal raw corpora and two Native archives preserved bytewise on X5.
+NEXT436747 Team Actor/arena/replay preparation, War, own catalog/library/outerloop/
+app. Fullmatch/game/network/window/input/audio/Windows/cleanMac goal stays open.
+
 **Team Tournament setup: [LIB_TEAM_TOURNAMENT_SETUP](docs/research/LIB_TEAM_TOURNAMENT_SETUP.md).**
 Mode3/menu120..125/434ab0 matches372whole actual436fb5ret12+422ab8ret4 and one
 BEFORE435a58 Start boundary;373 retained calls. Four pair teams retain both

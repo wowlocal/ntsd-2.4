@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation, teamTournamentPrelude }
+public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation, teamTournamentPrelude, teamTournamentMatchPreparation }
 
 public struct OriginalCharacterScreenCheckpoint: Equatable, Sendable {
     public let pc: UInt32, seat: Int
@@ -56,6 +56,7 @@ public enum OriginalCharacterScreen {
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
         includeTailCheckpoint: Bool = false,
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
+        teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
         selectionStage: (inout OriginalMatchPreparation,inout [Int:Int32],inout OriginalLibSurfaceText?) throws -> OriginalCharacterScreenExit = { _,_,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
         var candidate = state, library = libraryText
         let base = OriginalMatchPreparation.globalBase
@@ -152,7 +153,7 @@ public enum OriginalCharacterScreen {
         }
         if (120...150).contains(menu) {
             let result=try OriginalTeamTournamentSetup.advance(state:&candidate,libraryText:&library,target:target,input:input,
-                fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+                fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,continueBracket:teamTournamentStage)
             if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
             return finish(result)
         }

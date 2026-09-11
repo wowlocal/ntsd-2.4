@@ -17,9 +17,10 @@ public enum OriginalMatchSelection {
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
-        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
+        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
+        teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText? = libraryText
-        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage)
+        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage)
         libraryText = library!;return end
     }
 
@@ -28,9 +29,10 @@ public enum OriginalMatchSelection {
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
-        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
+        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
+        teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
         try OriginalCharacterScreen.advanceCommon(state: &state,libraryText:&libraryText,selectionAtEntry: selectionAtEntry,target: target,input: input,
-            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,tournamentStage:tournamentStage,selectionStage: { candidate,local,library in
+            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,selectionStage: { candidate,local,library in
                 try continueSelection(state: &candidate,locals: &local,libraryText:&library,target: target,input: input,
                     fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint)
             })

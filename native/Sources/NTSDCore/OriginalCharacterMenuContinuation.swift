@@ -5,8 +5,9 @@ public enum OriginalCharacterMenuContinuation {
     public static func advance<Environment>(state: inout OriginalMatchPreparation,
         memory: inout OriginalMenuPresentationMemory,music: inout OriginalMusicMemory,
         resources: inout OriginalMenuResourceLoading,libraryText: inout OriginalLibSurfaceText,
-        environment: inout Environment,includeTournamentBracket: Bool = false,target: UInt32,input: OriginalFrontScreenBodyInput,
+        environment: inout Environment,includeTournamentBracket: Bool = false,includeTeamTournamentBracket: Bool = false,target: UInt32,input: OriginalFrontScreenBodyInput,
         tournamentPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void)? = nil,
+        teamTournamentPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void)? = nil,
         outputInput: OriginalMenuPresentationInput,milliseconds: UInt32,
         musicRequest: (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
@@ -33,6 +34,16 @@ public enum OriginalCharacterMenuContinuation {
                     prepare:{ state in
                         guard let tournamentPreparation else { return false }
                         try tournamentPreparation(&state,&owned,&candidate);return true
+                    },
+                    draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
+                    checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
+            },teamTournamentStage:{ scene,local,text,initialize in
+                guard includeTeamTournamentBracket else { return try OriginalTeamTournamentBracket.unavailable(&scene,&local,&text,initialize) }
+                return try OriginalTeamTournamentBracket.advance(state:&scene,locals:&local,libraryText:&text,initialize:initialize,target:target,fillBacking:[UInt8](repeating:0,count:100),
+                    resumeMusic:{ state in try OriginalMusicPlayback.resumeMatch(globals:&state,memory:&audio) { try musicRequest($0,&candidate) } },
+                    prepare:{ state in
+                        guard let teamTournamentPreparation else { return false }
+                        try teamTournamentPreparation(&state,&owned,&candidate);return true
                     },
                     draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
                     checkpoint:{ try characterCheckpoint($0,$1,&candidate) })

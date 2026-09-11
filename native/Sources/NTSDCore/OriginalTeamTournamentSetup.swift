@@ -6,7 +6,8 @@ public enum OriginalTeamTournamentSetup {
         target: UInt32, input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
+        continueBracket: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
         var candidate=state,library=libraryText,local: [Int:Int32]=[:]
         let base=OriginalMatchPreparation.globalBase
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Team Tournament setup: "+message) }
@@ -98,7 +99,7 @@ public enum OriginalTeamTournamentSetup {
             }
             try write(0x44d020,125);try write(0x451408,2)
         }
-        guard try word(0x451160)==3,(120...125).contains(try word(0x44d020)),candidate.actors.count==400 else { throw error("Other tournament stage") }
+        guard try word(0x451160)==3,(120...129).contains(try word(0x44d020)),candidate.actors.count==400 else { throw error("Other tournament stage") }
         try candidate.advanceMenuInput();try mark(0x434af2)
         if try word(0x44d020)==120 {
             try write(0x44d020,121);try write(0x451414,0);try write(0x451410,0)
@@ -237,7 +238,7 @@ public enum OriginalTeamTournamentSetup {
                 switch try word(0x451408) {
                 case 0:
                     try mark(0x435a58)
-                    return finish(.teamTournamentPrelude)
+                    let end=try continueBracket(&candidate,&local,&library,true);return finish(end)
                 case 1:try write(0x44d020,120);try mark(0x436f9d);return finish(.returned)
                 case 2:try write(0x44d020,124);try mark(0x436f9d);return finish(.returned)
                 case 3:
@@ -257,6 +258,9 @@ public enum OriginalTeamTournamentSetup {
                 try write(0x4513b8,0);try sound(0x455614);try write(0x44d020,122);try write(0x451408,0)
                 for seat in 0..<8 where try word(0x451344+seat*4)==1 { try write(0x44d0c0+seat*4,-1) }
             }
+        }
+        if try word(0x44d020)>=126 {
+            let end=try continueBracket(&candidate,&local,&library,false);return finish(end)
         }
         try mark(0x435c7c);try mark(0x436f9d);return finish(.returned)
     }
