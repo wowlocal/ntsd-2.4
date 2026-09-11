@@ -15,6 +15,11 @@ The first native replacement is
 It matches276 calls through the actually installed401290 jump and complete DLL
 text routine, including six retained-state calls. Native preserves transparent
 background mode, the retained DC and the original HRESULT behavior.
+[LIB_MODE_SCREEN](LIB_MODE_SCREEN.md) now composes that replacement inside
+whole431d10:106 controlled ret16 returns and four playback continuations match;
+two panel/worker boundaries remain explicit native rollback rejections. Native
+strings own their bytes, and globals/resources/local storage/DC commit together.
+This is separate from the still-running own installed-library catalog chain.
 [LIB_STAGE_COMMANDS](LIB_STAGE_COMMANDS.md) now compares the command hook and
 three whole-preparation hooks, connecting their own requested-ID output to the
 whole consumer. [LIB_ACTOR_CONTROL](LIB_ACTOR_CONTROL.md) additionally compares

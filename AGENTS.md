@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Installed-library mode screen: [LIB_MODE_SCREEN](docs/research/LIB_MODE_SCREEN.md).**
+OriginalModeScreen shares pristine/library routes and stages globals/resources/
+local storage/retainedDC.106 controlled ret16 returns+4playback continuations
+match; valid-panel423b1a and worker43c780 remain2explicit native rollback
+rejections. Own strings start zero/undefined; all consumed bytes throughNUL must
+be defined. No private source stack import; fill's92undefined bytes stay separate.
+110compared paths:13906events/3771helpers/1272EXE+51DLL instruction starts.
+Full112source audit:87109stores/364460reads/2330APIreads/2353regions/247blobs;
+all bytes/masks/atomic parts verify. Global write-mask false reads are pinned EXE
+cookie44eea4 and toggle44d784=-99, not unknown stack. Both partial native globals
+match at their dependency boundaries before rollback. Four late failures pass.
+All1264pristine screens/2690selection/276library text controls remain;6retained
+tests pass24.318s. New raw2tests0.906s/build68.33s and packaged2tests0.667s/
+build0.27s pass; initial fullbuild220.98s linkedNTSDNative, no app window.
+249oldfixtures unchanged;250current, all638packaged archive files verified.
+Initial observer inventory errors, actual unmapped panel read from erroneous
+pointer1 input, verifier/path errors and two native worker-input test errors
+are preserved. No fault continuation, expected edit or safety refusal. Source
+and SwiftPM jobs for this study terminal. Guarded catalog11636/watcher15664
+remain live (12Objects latest); all frozen/pending/foreign inputs unchanged.
+Full own catalog/menu return/app/Windows/device/full-match/all-content/network/
+clean-Mac goal stays open. Next compose actual initialized menu and its enabled
+dependencies; this controlled whole-screen contract does not replace that chain.
+
 **Continuous menu music/full-bitmap prefix: [CHARACTER_MENU_MUSIC_SURFACE](docs/research/CHARACTER_MENU_MUSIC_SURFACE.md).**
 OriginalCharacterMenuStartup now composes actual4229cc/429730 music and whole
 bitmap helpers through429e5a in one native transaction.16 controlled prefixes

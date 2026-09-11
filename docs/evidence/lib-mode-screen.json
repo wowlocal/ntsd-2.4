@@ -1,0 +1,518 @@
+{
+  "scope": "Controlled whole431d10 with actual installed lib.dll text, original fill/bitmap/clip/input/sound/release/key-name helpers on Unicorn2.1.4.106 native full-return matches and4playback continuations;2explicit dependency-boundary rollback rejections. No own catalog/menu/app/Windows/device equivalence.",
+  "timeUTC": "2026-09-11T05:37:52.242235+00:00",
+  "sourceArtifacts": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "librarySHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+    "environment": "Unicorn2.1.4, relocated lib36000000, rootSP1000f000/bodySP1000e8e8, CW023f"
+  },
+  "acceptance": {
+    "completeReturns": 106,
+    "playbackContinuations": 4,
+    "nativeBoundaryRejections": 2,
+    "nativeLateRollbackControls": 4,
+    "rawTests": 2,
+    "rawTestSeconds": 0.906,
+    "rawBuildSeconds": 68.33,
+    "retainedTests": 6,
+    "retainedTestSeconds": 24.318,
+    "initialBuildSeconds": 220.98,
+    "packagedTests": 2,
+    "packagedTestSeconds": 0.667,
+    "packagedBuildSeconds": 0.27,
+    "unchangedPriorFixtures": 249,
+    "currentFixtures": 250,
+    "windowExercised": false,
+    "windowsVerified": false
+  },
+  "nativeCompared": {
+    "cases": 110,
+    "returns": 106,
+    "playback": 4,
+    "helpers": 3771,
+    "events": {
+      "fill": 110,
+      "enter": 110,
+      "leave": 110,
+      "draw": 677,
+      "read": 5387,
+      "clip": 893,
+      "blit": 893,
+      "getDC": 930,
+      "setBackgroundMode": 800,
+      "setTextColor": 800,
+      "stringLength": 800,
+      "textOut": 800,
+      "releaseDC": 800,
+      "panel": 106,
+      "keyName": 588,
+      "soundRequest": 15,
+      "soundMethod": 45,
+      "sleep": 3,
+      "shell": 3,
+      "method": 24,
+      "free": 8,
+      "postQuit": 4
+    },
+    "eventCount": 13906,
+    "sourceRecords": 2310,
+    "sourceRecordBytes": 20217120,
+    "sourcePCs": 1323,
+    "sourceEXEPCs": 1272,
+    "sourceLIBPCs": 51,
+    "nativeRecords": 2310,
+    "nativeRecordBytes": 10953360,
+    "stringTextCalls": 930
+  },
+  "sourceVerification": {
+    "scope": "Read-only audit of the controlled installed-library mode-screen corpus.\n\nPinned NTSD EXE/lib.dll and Unicorn2.1.4 observations recover whole431d10\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nSee docs/research/LIB_MODE_SCREEN_PLAN.md for finite inputs and open boundaries.\n",
+    "rawBytes": 51431876,
+    "rawSHA256": "6f74de1f2d3d4f305a1f0137a75bc6e73f790c7b9aec333dd5b99262d0d9db9e",
+    "cases": 112,
+    "ends": {
+      "returned": 106,
+      "playback": 4,
+      "enabledPanel": 1,
+      "workerChild": 1
+    },
+    "instructionReads": 364460,
+    "instructionReadBytes": 549488,
+    "writes": 87109,
+    "writeBytes": 316663,
+    "APIReads": 2330,
+    "APIReadBytes": 27635,
+    "records": 2353,
+    "recordBytes": 20584708,
+    "helpers": 3789,
+    "events": {
+      "fill": 112,
+      "enter": 112,
+      "leave": 111,
+      "draw": 682,
+      "read": 5425,
+      "clip": 899,
+      "blit": 899,
+      "getDC": 933,
+      "setBackgroundMode": 803,
+      "setTextColor": 803,
+      "stringLength": 803,
+      "textOut": 803,
+      "releaseDC": 803,
+      "panel": 107,
+      "keyName": 588,
+      "soundRequest": 15,
+      "soundMethod": 45,
+      "sleep": 3,
+      "shell": 3,
+      "method": 24,
+      "free": 8,
+      "postQuit": 4
+    },
+    "instructionStarts": 1335,
+    "exeInstructionStarts": 1284,
+    "libraryInstructionStarts": 51,
+    "blobCount": 247,
+    "decodedBlobBytes": 10488620,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x431d16",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 112
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 106
+      },
+      {
+        "pc": "0x423708",
+        "address": "0x44d784",
+        "bytes": 4,
+        "reads": 1
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "raw": {
+    "path": "build/research/lib-mode-screen-native-input.json",
+    "bytes": 51431876,
+    "sha256": "6f74de1f2d3d4f305a1f0137a75bc6e73f790c7b9aec333dd5b99262d0d9db9e"
+  },
+  "fixture": {
+    "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-mode-screen.json",
+    "bytes": 4499136,
+    "sha256": "b7dd9b054f9dabf2482328d3091882a54747b5b54e610e1b978a85dc83beb750"
+  },
+  "inputVerification": {
+    "base": "47f31fd7985146844d489b11c9f3eba2ca28b16f",
+    "files": 637,
+    "acceptedUnchangedFiles": 635,
+    "ownedFiles": {
+      "Sources/NTSDCore/OriginalModeScreen.swift": "5c5053fcdd117fb7266e6a583c26a1660ff63b4acd67f9cc20b4fd895a2aad69",
+      "Tests/NTSDCoreTests/OriginalLibModeScreenTests.swift": "18246a8d414f24a815789d23ee6fb5f96898e3a5d966c68a6f17dafbfea92f96"
+    },
+    "initialArchiveFiles": 637,
+    "preservedTestRevisions": [
+      "native2",
+      "native3"
+    ],
+    "rawBytes": 51431876,
+    "rawSHA256": "6f74de1f2d3d4f305a1f0137a75bc6e73f790c7b9aec333dd5b99262d0d9db9e",
+    "packedBytes": 4499136,
+    "packedSHA256": "b7dd9b054f9dabf2482328d3091882a54747b5b54e610e1b978a85dc83beb750",
+    "fullRawBytesAndJSONEqual": true,
+    "timeUTC": "2026-09-11T05:33:48.098057+00:00"
+  },
+  "packagedInputVerification": {
+    "timeUTC": "2026-09-11T05:37:03.255886+00:00",
+    "files": 638,
+    "unchangedRawFiles": 637,
+    "archive": "build/research/lib-mode-screen-packaged-inputs.tar.gz",
+    "archiveBytes": 914302978,
+    "archiveSHA256": "d2888261c5fd3047ef0f7cfebf796070bf0bf07c5b54a57ecb1f154d949e1f60",
+    "fixtureSHA256": "b7dd9b054f9dabf2482328d3091882a54747b5b54e610e1b978a85dc83beb750",
+    "allPackageAndArchivedBytesVerified": true
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run one bounded character-menu surface study with pinned inputs and terminal job evidence.\nPinned NTSD/VC80 instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 36777,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_mode_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-probe1.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T05:11:17.731672+00:00",
+      "inputPins": "build/research/lib-mode-screen-probe1-input-pins.json",
+      "exitCode": 1,
+      "elapsedSeconds": 0.962,
+      "endedUTC": "2026-09-11T05:11:18.688222+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-mode-screen-probe1.failure.json": {
+          "bytes": 348899,
+          "sha256": "4d120e447b9afdf8f72bbf59f75b8cc673e3a2717106925f201971ad9c1e8de5"
+        }
+      }
+    },
+    {
+      "scope": "Run one bounded character-menu surface study with pinned inputs and terminal job evidence.\nPinned NTSD/VC80 instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 36928,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_mode_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-probe2.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T05:12:19.884163+00:00",
+      "inputPins": "build/research/lib-mode-screen-probe2-input-pins.json",
+      "exitCode": 1,
+      "elapsedSeconds": 0.133,
+      "endedUTC": "2026-09-11T05:12:20.016002+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-mode-screen-probe2.failure.json": {
+          "bytes": 415511,
+          "sha256": "1381c2f778c4810840806f2b25e48fdc794b9f5a6aecf0d4e565b8be5413c5ce"
+        }
+      }
+    },
+    {
+      "scope": "Run one bounded installed-library mode-screen study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 37786,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_mode_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-probe3.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T05:17:53.188293+00:00",
+      "inputPins": "build/research/lib-mode-screen-probe3-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.115,
+      "endedUTC": "2026-09-11T05:17:53.300942+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-mode-screen-probe3.json": {
+          "bytes": 444437,
+          "sha256": "87e0c385e7a791aceca16c1216282aa88f63aca21f944429066ffc523abf0031"
+        }
+      }
+    },
+    {
+      "scope": "Run one bounded installed-library mode-screen study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 37955,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_mode_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T05:19:00.005437+00:00",
+      "inputPins": "build/research/lib-mode-screen-capture1-input-pins.json",
+      "exitCode": 1,
+      "elapsedSeconds": 8.675,
+      "endedUTC": "2026-09-11T05:19:08.678926+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-mode-screen-capture1.failure.json": {
+          "bytes": 414341,
+          "sha256": "0d8d49e437fe6e538ae13f02416cd101e89f295c14a83266e64e3cd820931a63"
+        }
+      }
+    },
+    {
+      "scope": "Run one bounded installed-library mode-screen study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 38155,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_mode_screen.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-boundaries1.json",
+        "--boundaries-only"
+      ],
+      "startedUTC": "2026-09-11T05:20:15.749412+00:00",
+      "inputPins": "build/research/lib-mode-screen-boundaries1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.137,
+      "endedUTC": "2026-09-11T05:20:15.884131+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-mode-screen-boundaries1.json": {
+          "bytes": 464413,
+          "sha256": "22d9d44cb1551da3e5524ab14d665010fc2faf69a2ff8294e5e398fbbc34c817"
+        }
+      }
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 38751,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibModeScreenTests|OriginalModeScreenTests|OriginalModeSelectionTests|OriginalLibSurfaceTextTests"
+      ],
+      "startedUTC": "2026-09-11T05:23:50.091870+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 248.53,
+      "endedUTC": "2026-09-11T05:27:58.586470+00:00",
+      "session": 12678,
+      "terminalChunk": "a7ad8a"
+    },
+    {
+      "name": "native2",
+      "pid": 39771,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibModeScreenTests"
+      ],
+      "startedUTC": "2026-09-11T05:29:23.672335+00:00",
+      "scope": "Recompare only new installed-library mode-screen tests after correcting the verified initial worker-toggle input. Accepted native core and all source bytes unchanged.",
+      "exitCode": 1,
+      "elapsedSeconds": 70.007,
+      "endedUTC": "2026-09-11T05:30:33.676255+00:00",
+      "session": 79684,
+      "terminalChunk": "428e4d"
+    },
+    {
+      "name": "native3",
+      "pid": 40309,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibModeScreenTests"
+      ],
+      "startedUTC": "2026-09-11T05:32:45.744794+00:00",
+      "scope": "Recompare only new installed-library mode-screen tests after correcting the verified initial worker-toggle input. Accepted native core and all source bytes unchanged.",
+      "exitCode": 0,
+      "elapsedSeconds": 69.884,
+      "endedUTC": "2026-09-11T05:33:55.625686+00:00",
+      "session": 72426,
+      "terminalChunk": "c9494a"
+    },
+    {
+      "name": "packaged",
+      "pid": 40726,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibModeScreenTests"
+      ],
+      "startedUTC": "2026-09-11T05:35:12.145070+00:00",
+      "scope": "Packaged installed-library mode-screen acceptance. Same isolated source package as passing raw native3, plus lossless fixture only. No raw environment override; all six retained screen/selection/library tests already passed with the unchanged core.",
+      "inputFiles": 638,
+      "archive": "build/research/lib-mode-screen-packaged-inputs.tar.gz",
+      "manifest": "build/research/lib-mode-screen-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 1.987,
+      "endedUTC": "2026-09-11T05:35:14.129962+00:00",
+      "session": 5936,
+      "terminalChunk": "e3a76a"
+    }
+  ],
+  "preservedErrors": [
+    {
+      "timeUTC": "2026-09-11T05:12:19.834920+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": "exec immediate terminal, chunk37a175",
+      "job": {
+        "scope": "Run one bounded character-menu surface study with pinned inputs and terminal job evidence.\nPinned NTSD/VC80 instructions run only in the controlled Unicorn research harness.\nScope: LIB_MODE_SCREEN_PLAN.md. No live producer modification/restart.\n",
+        "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+        "status": "terminal",
+        "pid": 36777,
+        "command": [
+          "uv",
+          "run",
+          "tools/oracle_lib_mode_screen.py",
+          "--output",
+          "/Users/michael/Developer/ntsd-2.4/build/research/lib-mode-screen-probe1.json",
+          "--limit",
+          "1"
+        ],
+        "startedUTC": "2026-09-11T05:11:17.731672+00:00",
+        "inputPins": "build/research/lib-mode-screen-probe1-input-pins.json",
+        "exitCode": 1,
+        "elapsedSeconds": 0.962,
+        "endedUTC": "2026-09-11T05:11:18.688222+00:00",
+        "inputsUnchanged": true,
+        "artifacts": {
+          "build/research/lib-mode-screen-probe1.failure.json": {
+            "bytes": 348899,
+            "sha256": "4d120e447b9afdf8f72bbf59f75b8cc673e3a2717106925f201971ad9c1e8de5"
+          }
+        }
+      },
+      "error": "AssertionError: 0x401290",
+      "meaning": "Recorder allowed-instruction inventory omitted the declared patched401290 entry; stopped before executing the installed jump, not a game memory/cookie fault or safety refusal.",
+      "sourceSnapshot": "build/research/lib-mode-screen-probe1-source.py",
+      "sourceSHA256": "c556b285146633bb13e27db8ede1bfc88f208f29b563761aaa3c76dd12f1d767",
+      "correction": "Include the already-declared exact patched401290 entry, retaining all instruction/API checks. Distinguish static pinned EXE literal API reads from owned stack/global reads.",
+      "automaticRetry": false
+    },
+    {
+      "timeUTC": "2026-09-11T05:17:32.810457+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": null,
+      "terminalChunk": "16df22",
+      "operation": "Controlled installed-library whole431d10; observer instruction inventory at disabled423b00 panel return.",
+      "error": "AssertionError('0x4242af')",
+      "sourceErrorTimeUTC": "2026-09-11T05:12:20.002205+00:00",
+      "sourcePreserved": "build/research/lib-mode-screen-probe2-source.py",
+      "sourceSHA256": "a9790f6b7d563dc4d03efce42bb01a95c7dff11bf6b33c2396bff649d1089fcf",
+      "classification": "Research observer inventory assertion, not a source memory/protection fault or safety refusal.",
+      "finding": "Existing retained oracle_mode_screen.py explicitly includes4242af..4242b2. Verify pinned instructions before extending this new observer."
+    },
+    {
+      "timeUTC": "2026-09-11T05:20:15.646480+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": 57778,
+      "terminalChunk": "6c6b83",
+      "operation": "Controlled whole431d10 enabled panel entry",
+      "error": "unicorn.unicorn_py3.unicorn.UcError: Invalid memory read (UC_ERR_READ_UNMAPPED)",
+      "failure": "lib-mode-screen-capture1.failure.json",
+      "source": "lib-mode-screen-capture1-source.py",
+      "sourceSHA256": "fee46f90b48d1f75952a68b1fb3f2054a5cffcc4c44bf91642cc3ca8ac946f9d",
+      "finding": "The new producer incorrectly supplied integer1 for global458420, which423b11 dereferences as a header pointer. Actual unmapped read is preserved. Not a game-reachable source fault, native match, safety refusal, or bypass. No further execution from the fault.",
+      "completedParts": 110,
+      "next": "Independent valid controlled4-byte header at26006200 containing1; stop before enabled body423b1a. Preserve all110 previous complete cases; execute only this declared valid-header case and independent worker boundary."
+    },
+    {
+      "timeUTC": "2026-09-11T05:26:02.216063+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "chunk": "cee040",
+      "error": "AssertionError at verify_lib_mode_screen.py:35: len(state)==20+(label==enabled-panel)",
+      "verifierSHA256": "aceb9e29de3770c0b50ebedd0e4edb20d3f67aef4edad76a07b7c8f3f0a2b07c",
+      "finding": "Read-only verifier inventory arithmetic omitted one region: globals+World+9Actors+2replays+pointers+stack+library+5bitmaps =21, plus valid panel header =22. Correct inventory assertion only; raw corpus unchanged."
+    },
+    {
+      "timeUTC": "2026-09-11T05:27:56.240417+00:00",
+      "chunk": "1542cf",
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: 'original-active-gameplay-control.json'",
+      "finding": "Fixture pin keys are basenames, not repository-relative paths. Pending/foreign/frozen checks completed before this read-only path error. Resolve basename under native/Tests/NTSDCoreTests/Fixtures; no pin or artifact changed."
+    },
+    {
+      "operation": "First native comparison of installed-library mode screen",
+      "error": "State bytes have no recovered initialization: 1924, 4 bytes",
+      "log": "build/research/lib-mode-screen-native1.log",
+      "session": 12678,
+      "terminalChunk": "a7ad8a",
+      "timeUTC": "2026-09-11T05:29:22.379335+00:00",
+      "finding": "Last worker boundary reads global44d784. Source write mask is false, but independent source audit verifies its initial zero against pinned EXE. New test explicitly supplies that recovered zero as defined native input; no game logic or expected source byte changes. First6retained tests and4late rollback cases passed. Previous test source and all build inputs remain archived."
+    },
+    {
+      "operation": "Second native new-screen comparison",
+      "error": "XCTAssertEqual failed: [157,255,255,255] is not equal to [0,0,0,0]",
+      "log": "build/research/lib-mode-screen-native2.log",
+      "session": 79684,
+      "terminalChunk": "428e4d",
+      "timeUTC": "2026-09-11T05:32:44.649650+00:00",
+      "finding": "The test correction mistakenly assumed zero for44d784. Reading the pinned EXE and actual recorded423708 read confirms9dffffff =-99. Correct the declared test input to that exact value; also compare globals at both native dependency boundaries before rollback. No original capture, expected byte or native game algorithm changes."
+    }
+  ],
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": 886,
+    "application-catalog-control20-parent1-inputs.json": 887,
+    "application-catalog-control20-parent2-inputs.json": 887,
+    "application-catalog-guarded20-inputs.json": 890,
+    "fixtures": 249,
+    "timeUTC": "2026-09-11T05:27:58.209217+00:00",
+    "liveProcesses": "  PID  PPID STAT  ELAPSED  %CPU COMMAND\n11635 11633 S    02:48:49   0.0 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.json --compact-states --max-chunks 20000 --checkpoint-every 20\n11636 11635 R    02:48:49  99.8 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.json --compact-states --max-chunks 20000 --checkpoint-every 20\n15664 72826 Ss   02:23:28   0.0 /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-catalog-guarded20-watch/watch.py build/research/application-catalog-guarded20-inputs.json\n"
+  },
+  "sourceToolHashes": {
+    "tools/oracle_lib_mode_screen.py": "74acfd52f663f4156ac06b1f6e13b13c330589a15c4d4723bc23d120ff8939eb",
+    "tools/verify_lib_mode_screen.py": "c0cafa5de70b0b09c18bd9fbbe76eccd97df4da4405a1c9ef365ea73ee7e71f2"
+  },
+  "openBoundaries": [
+    "Own full installed-library catalog/loading and initialized mode-screen chain",
+    "Enabled panel/worker/file/background composition and actual outer menu return",
+    "Native application engine connection, window/input latency/animation/audio",
+    "Windows full-game comparison, complete Naruto/Sasuke match, all original content/network, clean macOS"
+  ]
+}
