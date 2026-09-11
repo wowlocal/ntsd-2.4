@@ -1,6 +1,6 @@
 import Foundation
 
-/// Human screen, computer count/character/team selection and VS settings through
+/// Human screen, computer count/character/team selection and VS/Stage settings through
 /// the actual42cf8a match-prelude boundary. Other modes remain explicit boundaries.
 public enum OriginalMatchSelection {
     public static func advance(state: inout OriginalMatchPreparation, selectionAtEntry: UInt32, target: UInt32,
@@ -81,7 +81,8 @@ public enum OriginalMatchSelection {
             event.fill = try OriginalSurfaceFilling.request(target: UInt32(bitPattern: word(0x455608)),x: x,y: y,width: width,height: height,
                 color: 0xffffff,backing: fillBacking());try observe(event)
         }
-        guard try word(0x451160) == 0,try word(0x450c2c) == 0 else { throw error("Other mode selection continuation") }
+        let mode = try word(0x451160)
+        guard (0...1).contains(mode),try word(0x450c2c) == 0 else { throw error("Other mode selection continuation") }
         if try word(0x4512c8) == 1 {
             try mark(0x42b296);try write(0x451220,0);try bitmap(0x44fd88,218,215)
             var inactive: Int32 = 0,teams = [Int32](repeating: 0,count: 5)
@@ -94,7 +95,7 @@ public enum OriginalMatchSelection {
             }
             local[0x18] = inactive
             if inactive == 0 { try write(0x4512c8,3) }
-            let minimum: Int32 = teams.reduce(0,&+) < 2 ? 1 : 0
+            let minimum: Int32 = teams.reduce(0,&+) < 2 && mode != 1 ? 1 : 0
             local[0x30] = minimum
             var count = try word(0x44d070)
             if count == -100 || count < minimum || count > inactive { count = minimum;try write(0x44d070,count) }
@@ -154,11 +155,22 @@ public enum OriginalMatchSelection {
             let option = try word(0x44d06c)
             if options.indices.contains(Int(option)) { let (x,y,frame) = options[Int(option)];try bitmap(0x451178,x,y,frame) }
             if try word(0x44d028) == 1 { try write(0x44d024,100) }
-            let arena = try word(0x44d024)
-            guard candidate.backgrounds.indices.contains(Int(arena)) else { throw error("Arena name record") }
-            let record = candidate.backgrounds[Int(arena)]
-            guard let end = record.bytes[0x3cc...].firstIndex(of: 0),record.defined[0x3cc...end].allSatisfy({ $0 }) else { throw error("Arena name extent") }
-            try text(Array(record.bytes[0x3cc..<end]),174,91,0xff9b9b)
+            if mode == 1 {
+                let stage = try word(0x450b94),decade = stage/10
+                if stage%10 != 0 { try write(0x450b94,decade &* 10) }
+                try bitmap(0x451178,15,87,23)
+                if option == 3 { try bitmap(0x451178,15,87,22) }
+                // 42cd5d/42cd6a produce the two local bytes; 42cd90..42cdad
+                // copy the nine-byte literal. No retained source stack input.
+                if decade < 5 { try text([UInt8(truncatingIfNeeded:decade &+ 0x31)],194,91,0xff9b9b) }
+                else { try text(Array("Survival".utf8),174,91,0xff9b9b) }
+            } else {
+                let arena = try word(0x44d024)
+                guard candidate.backgrounds.indices.contains(Int(arena)) else { throw error("Arena name record") }
+                let record = candidate.backgrounds[Int(arena)]
+                guard let end = record.bytes[0x3cc...].firstIndex(of: 0),record.defined[0x3cc...end].allSatisfy({ $0 }) else { throw error("Arena name extent") }
+                try text(Array(record.bytes[0x3cc..<end]),174,91,0xff9b9b)
+            }
             if let label = [Int32(2):"Easy",1:"Normal",0:"Difficult",-1:"CRAZY!"][try word(0x450c30)] {
                 try text(Array(label.utf8),174,115,0xff9b9b)
             }

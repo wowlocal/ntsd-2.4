@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Library Stage/mode1: [LIB_STAGE_MODE](docs/research/LIB_STAGE_MODE.md).**
+279source/native calls match:277actual422ab8ret4+2before42cf8a. Two retained
+chains preserve Naruto17/Sasuke21/team1, zero/twoCPUs, countwrap/cancel/backtrack,
+immediate Stage readiness, all six Stage labels, difficulty/musicON/OFF,
+reselect/reroll and Start.44live lists=12d7/10d8/22EA; held input adds no RNG.
+130Stage local strings are actual same-call SP83c producers; Native imports no
+stack backing. Stage finalCPU retains own SP20Worldcursor1b4; VSusesSP38.
+6443points/4935338records/14302751270bytes,333846stores/616042instructionreads/
+9152APIreads/11827helpers/20955counterwords/3004blobs independently verify.
+3551starts=3060EXE+51lib+440CRT;49476events/5252undefinedbitmapreads keep masks.
+Fresh parent shared inputs/behavior match14472records each/331+394events;
+whole parent inputs differ explicitly, NOT two identical parent reproductions.
+Source1terminal0 71.780s. First auditor argument-index error preserved; corrected
+five-word text args and d7 versus d8/EA eventStart. Source/Core/comparator unchanged.
+Raw6tests218.308s/build253.24s includes new72.106s+oldVS146.203s; packaged2tests
+66.947s/build0.36s pass, both late rollbacks.263oldfixtures unchanged,267current;
+index/3parts154668128bytes restore1192975961raw bytes/JSON/SHA. All668package
+files/recursive archives and frozen/pending/foreign pins verified. Large new
+study/builds use task-ownedX5 via build/research/lib-stage-mode; shipping files
+remain regular local files. All Stage jobs terminal, Native linked, noUIclaim.
+Catalog5samePython78863 stilllive, last9Objects; never restart for silence.
+NEXT modes2/3/4, then own library/catalog/menu/prelude/outer-loop/app join.
+Full match/allcontent/network/Windows/device/clean-Mac goal remains open.
+
 **Catalog5 trace transport: [APPLICATION_CATALOG_TRACE_STORAGE](docs/research/APPLICATION_CATALOG_TRACE_STORAGE.md).**
 Same Python78863/UV78860/wrapper78850 continues; no restart or new source match.
 Its canonical build/research/application-catalog-candidate5-resourced.traces is

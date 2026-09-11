@@ -1,4 +1,4 @@
-/// VS computer selection42b964..42cb86. Ordinary catalog/Actor ownership is
+/// VS/Stage computer selection42b964..42cb86. Ordinary catalog/Actor ownership is
 /// semantic; no original caller stack, private pointer or EXE runs natively.
 /// The caller stages state and external events through the complete menu call.
 enum OriginalComputerSelection {
@@ -93,23 +93,26 @@ enum OriginalComputerSelection {
             }
             throw error("Roster traversal does not terminate")
         }
-        func randomize() throws {
+        func randomize(stream: Int32 = 0xd9) throws {
+            let stage = stream == 0xd8
+            if stage { local[0x30] = 0;local[0x20] = 0x194 }
             for seat in 0..<8 { try write(0x451228+seat*4,word(0x451248+seat*4) < 0 ? 1 : 0) }
             for seat in 0..<8 {
                 if try word(0x451228+seat*4) != 0 {
                     let choices = try candidate.randomRosterCandidates()
                     guard !choices.isEmpty else { throw error("Empty roster requires original scratch provenance") }
-                    if candidate.catalog.objects.count > 1 { local[0x20] = Int32(candidate.catalog.objects.count) }
+                    if !stage && candidate.catalog.objects.count > 1 { local[0x20] = Int32(candidate.catalog.objects.count) }
                     try observe(.init("candidates",[UInt32(seat)]+choices.map(UInt32.init)))
-                    let ordinal = choices[Int(try candidate.drawMenuRandom(stream:0xd9,range:Int32(choices.count),observe:observe))]
+                    let ordinal = choices[Int(try candidate.drawMenuRandom(stream:stream,range:Int32(choices.count),observe:observe))]
                     try write(0x451248+seat*4,Int32(ordinal));try candidate.actors[actor(seat)].write(UInt32(ordinal),at:0x368)
                 }
                 // Semantic World offset for the actual retained Actor-table cursor.
-                local[0x38] = Int32(0x194+(seat+1)*4)
+                local[stage ? 0x20 : 0x38] = Int32(0x194+(seat+1)*4)
             }
             try write(0x44d06c,2);try write(0x4512c8,3)
         }
-        guard try word(0x451160) == 0 else { throw error("Other modes") }
+        let mode = try word(0x451160)
+        guard (0...1).contains(mode) else { throw error("Other modes") }
         for offset in [0x34,0x28,0x38,0x2c,0x30] { local[offset] = 0 }
         if try word(0x4512c8) == 2 {
             for seat in 0..<8 where try candidate.world.integer(at:4+seat,as:UInt8.self) != 0 {
@@ -143,6 +146,13 @@ enum OriginalComputerSelection {
             }
             if local[0x2c] != 0 {
                 try sound(0x45560c);try setStatus(seat,12);local[0x2c] = 0
+                if mode == 1 {
+                    try setStatus(seat,13)
+                    try write(0x451220,word(0x451248+seat*4) < 0 ? 1 : 0)
+                    index = try word(0x4511fc) &+ 1;try write(0x4511fc,index)
+                    if index >= count { try randomize(stream:0xd8) }
+                    else { try setStatus(computer(index),11) }
+                }
             }
             if local[0x30] != 0 {
                 try sound(0x455614);local[0x30] = 0
@@ -151,7 +161,7 @@ enum OriginalComputerSelection {
                     try write(0x4512c8,1)
                     for i in 0..<8 where try status(i) == 11 { try setStatus(i,0) }
                 } else {
-                    index &-= 1;try setStatus(computer(index),12);try write(0x4511fc,index)
+                    index &-= 1;try setStatus(computer(index),mode == 1 ? 11 : 12);try write(0x4511fc,index)
                 }
             }
         }
@@ -159,7 +169,7 @@ enum OriginalComputerSelection {
         index = try word(0x4511fc);seat = try computer(index)
         if try status(seat) == 12 {
             var excluded: Int32 = -1
-            if index == count &- 1 {
+            if mode == 0 && index == count &- 1 {
                 for other in 0..<8 where try other != seat && status(other)%10 == 3 {
                     let value = try team(other)
                     if value == 0 { excluded = -2 }
