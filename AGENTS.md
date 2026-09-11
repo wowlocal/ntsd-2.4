@@ -48,6 +48,24 @@ false positives will not occur.
 
 ## Current research status
 
+**Team Tournament setup: [LIB_TEAM_TOURNAMENT_SETUP](docs/research/LIB_TEAM_TOURNAMENT_SETUP.md).**
+Mode3/menu120..125/434ab0 matches372whole actual436fb5ret12+422ab8ret4 and one
+BEFORE435a58 Start boundary;373 retained calls. Four pair teams retain both
+fighters/team words across1100swaps/2200RNG calls;56liveRandom lists,100music
+RNG calls and1992controller labels match. All42small resources come from source
+DAT/BMP and independent native catalog. Full6853source points/5825050records/
+17521270690bytes+masks,467524stores/538300instruction reads/5910API reads,
+21749helpers/2825starts/3082blobs audit; every373atomic case retained. Unknown
+bitmap masks remain unknown; cookie provenance is file data, not Windows state.
+Source83.69s terminal0. Native raw8tests264.931s/build275.55s
+include Team+Tournament/Stage/VS; packaged2tests71.243s/build0.36s.
+Late shuffle/label rollback passes.281oldfixtures unchanged;285current/699files
+and complete raw/packedbytes/JSON/SHA/archive composition verified. Allstudyjobs
+terminal. Catalog5 samePython78863 remains live with23Objects; never restarted.
+Next BEFORE435a58 Team bracket/four-participant preparation/results, then War,
+own catalog/library/outer-loop/app; fullmatch/game/window/device/Windows/
+cleanMac goal stays open. No newUI claim; following436fc0Stage helper excluded.
+
 **Retained Tournament arena release: [LIB_TOURNAMENT_ARENA_RELEASE](docs/research/LIB_TOURNAMENT_ARENA_RELEASE.md).**
 51whole source/native preparations/actual432ab0ret12+422ab8ret4 match.17three-call
 sequences load each ordinary arena, select99 to release it, then reload. Only

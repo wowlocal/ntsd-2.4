@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation }
+public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude, tournamentMatchPreparation, teamTournamentPrelude }
 
 public struct OriginalCharacterScreenCheckpoint: Equatable, Sendable {
     public let pc: UInt32, seat: Int
@@ -147,6 +147,12 @@ public enum OriginalCharacterScreen {
         if (20...50).contains(menu) {
             let result=try OriginalTournamentSetup.advance(state:&candidate,libraryText:&library,target:target,input:input,
                 fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,continueBracket:tournamentStage)
+            if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
+            return finish(result)
+        }
+        if (120...150).contains(menu) {
+            let result=try OriginalTeamTournamentSetup.advance(state:&candidate,libraryText:&library,target:target,input:input,
+                fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
             if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
             return finish(result)
         }
