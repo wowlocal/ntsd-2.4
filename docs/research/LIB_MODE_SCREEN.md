@@ -15,6 +15,10 @@ See the finite [plan](LIB_MODE_SCREEN_PLAN.md), preceding continuous
 [music/resource prefix](CHARACTER_MENU_MUSIC_SURFACE.md), retained
 [MODE_SCREEN](MODE_SCREEN.md) and [library runtime](LIB_RUNTIME.md).
 
+The enabled panel now has its separate whole [MENU_PANEL_DRAW](MENU_PANEL_DRAW.md)
+comparison. This screen's retained boundary fixture remains unchanged; composing
+that full panel with the enclosing screen and live resource ownership is next.
+
 ## Reference and controlled execution
 
 Pinned original NTSD EXE SHA256

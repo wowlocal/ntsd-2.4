@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Enabled panel body: [MENU_PANEL_DRAW](docs/research/MENU_PANEL_DRAW.md).**
+OriginalMenuPanelDrawing implements whole423b00 including4242b3..4242d7 cold
+blink tail/shared4242b2ret.1008controlled whole returns match;2zero-timer and
+2ineligible-scan boundaries are explicit rollback rejections, not full matches.
+Retain unsigned timer modulo, signed/wrapped animation, live previous/held aliases,
+24banner rows (last6omit upperY), arrow width453f70 and ordered clear/sound/Sleep/
+Shell. No per-call44d780 increment is invented. Controlled sparse bitmap inputs
+are independently reconstructed; no private stack/unknown expected bytes imported.
+Full1012source audit:273994reads/268APIreads/219660stores/21252regions,
+11150helpers/1856blobs; no observed undefined reads.731EXE PCs,536/538panel
+instructions; only skipped alignment424028/42402f absent. Installer preserved,
+but panel children hit no DLL code. Native1008:47136events/11146helpers,
+20160nonstackrecords/119202048bytes+masks plus semantic minima. Five native-only
+observer failures check rollback (timer is before mutation, four are later).
+Raw10release tests5.270s/build220.99s retain all panel/startup/lib-screen parents;
+packaged2tests1.529s/build0.32s pass. NTSDNative linked, no app window/device.
+250oldfixtures unchanged;251current; all641packaged inputs verified. Initial
+four Swift try-placement compiler errors preserved; no expected/game-rule edits.
+All panel source/native jobs terminal. Guarded catalog11636/watcher15664 remain
+live (16Objects latest); pending/frozen/foreign inputs unchanged. Next compose
+this body into its real mode-screen call with live resource ownership, then own
+initialized menu; full catalog/app/Windows/full-match/all-content/network/clean-Mac
+goal remains open. Standalone panel does not close the enclosing enabled path.
+
 **Installed-library mode screen: [LIB_MODE_SCREEN](docs/research/LIB_MODE_SCREEN.md).**
 OriginalModeScreen shares pristine/library routes and stages globals/resources/
 local storage/retainedDC.106 controlled ret16 returns+4playback continuations

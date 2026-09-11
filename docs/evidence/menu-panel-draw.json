@@ -1,0 +1,348 @@
+{
+  "base": "8d2cc05cf4f3d9c142ccb7f516887b762e3a4adb",
+  "sourceScope": "1008 whole controlled returns plus2 zero-divisor and2 ineligible-scan boundaries; retained panel/loading/update/startup/library mode-screen parents unchanged",
+  "sourceVerification": {
+    "scope": "Read-only compatibility audit of original423b00 panel/timer/cold-tail calls.\nVerify pinned NTSD bytes, actual code starts, full store/read/mask provenance,\nowned atlas inputs, retained globals, complete ABI returns and explicit stops.\nNo source execution, expected edits, fault continuation or Windows/device claim.\nThe finite domain and unavailable-result boundaries are MENU_PANEL_DRAW_PLAN.md.\n",
+    "rawBytes": 86099991,
+    "rawSHA256": "066928c1ddc2138f2bb92a9f9a9744ea5598336020be9809fe02096e2784415a",
+    "cases": 1012,
+    "ends": {
+      "returned": 1008,
+      "zeroTimerRange": 2,
+      "noSelectableRow": 2
+    },
+    "events": {
+      "draw": 4640,
+      "read": 32066,
+      "clip": 4640,
+      "blit": 4226,
+      "timer": 54,
+      "fill": 728,
+      "soundRequest": 134,
+      "soundMethod": 402,
+      "sleep": 134,
+      "shell": 134
+    },
+    "eventCount": 47158,
+    "instructionReads": 273994,
+    "instructionReadBytes": 995608,
+    "writes": 219660,
+    "writeBytes": 878640,
+    "records": 21252,
+    "recordBytes": 185997504,
+    "helpers": 11150,
+    "atomicParts": 1012,
+    "APIReads": 268,
+    "APIReadBytes": 4470,
+    "instructionStarts": 731,
+    "panelInstructionStarts": 536,
+    "panelStaticInstructions": 538,
+    "missingAlignment": [
+      {
+        "address": 4341800,
+        "bytes": "8da42400000000",
+        "mnemonic": "lea",
+        "operands": "esp, [esp]"
+      },
+      {
+        "address": 4341807,
+        "bytes": "90",
+        "mnemonic": "nop",
+        "operands": ""
+      }
+    ],
+    "blobCount": 1856,
+    "decodedBlobBytes": 85210944,
+    "undefinedObservedReads": 0,
+    "allSourcePartsAndDeclaredAtlasInputsVerified": true,
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "comparedCounts": {
+    "cases": 1008,
+    "events": {
+      "draw": 4638,
+      "read": 32052,
+      "clip": 4638,
+      "blit": 4224,
+      "timer": 52,
+      "fill": 728,
+      "soundRequest": 134,
+      "soundMethod": 402,
+      "sleep": 134,
+      "shell": 134
+    },
+    "eventCount": 47136,
+    "helpers": 11146,
+    "sourceRecords": 21168,
+    "sourceRecordBytes": 185262336,
+    "nativeComparedNonStackRecords": 20160,
+    "nativeComparedNonStackBytes": 119202048,
+    "sourcePCs": 730
+  },
+  "rawAcceptance": {
+    "tests": 10,
+    "seconds": 5.27,
+    "buildSeconds": 220.99,
+    "newTests": 2,
+    "newTestSeconds": 1.808,
+    "retainedTests": 8,
+    "NTSDNativeLinked": true,
+    "appWindowVerified": false
+  },
+  "packagedAcceptance": {
+    "tests": 2,
+    "seconds": 1.529,
+    "buildSeconds": 0.32,
+    "rawOverrides": false
+  },
+  "packagedInputVerification": {
+    "timeUTC": "2026-09-11T06:21:00.477421+00:00",
+    "files": 641,
+    "unchangedRawFiles": 640,
+    "archive": "build/research/menu-panel-draw-packaged-inputs.tar.gz",
+    "archiveBytes": 923778875,
+    "archiveSHA256": "6e5fba2ba6cf3bd50763fc86c52b106d9dc03c64e97d08dcf3549f6db0cf9809",
+    "fixtureSHA256": "c6d672d2ae44e6d9a230c33c9b070df01c2d864dfaf6f1aef6f8812142116d8b",
+    "allPackageAndArchivedBytesVerified": true,
+    "allFixturesVerified": 251,
+    "fullRawBytesAndJSONEqual": true
+  },
+  "scopeBoundaries": [
+    "Standalone controlled panel; whole enabled mode-screen composition remains open",
+    "No own initialized atlas/header/string provenance or full menu return claim",
+    "Two zero-divisor stops and two repeated-scan stops are native rejections, not matches",
+    "No x86 private stack/EAX ABI equivalence; native minima are semantic results",
+    "Five native-only observer rollback points: initial timer precedes mutation; four later points",
+    "No Windows, device, full-match, whole-content, network or clean-Mac claim"
+  ],
+  "reviewErrors": [
+    {
+      "timeUTC": "2026-09-11T06:04:49.121385+00:00",
+      "session": 9497,
+      "terminalChunk": "15dee3",
+      "error": "Four Swift compiler errors: operator can throw but expression is not marked with try",
+      "log": "build/research/menu-panel-draw-native1.log",
+      "finding": "Place try before the complete short-circuit expressions at source lines63/76/109/116. No executable native test ran, source expected data or algorithm rule changed. Original native inputs remain archived."
+    }
+  ],
+  "study": "MENU_PANEL_DRAW",
+  "plan": "docs/research/MENU_PANEL_DRAW_PLAN.md",
+  "documentation": "docs/research/MENU_PANEL_DRAW.md",
+  "implementation": "native/Sources/NTSDCore/OriginalMenuPanelDrawing.swift",
+  "tests": "native/Tests/NTSDCoreTests/OriginalMenuPanelDrawingTests.swift",
+  "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-draw.json",
+  "sourceJobs": [
+    {
+      "scope": "Run one bounded menu-panel draw/timer study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MENU_PANEL_DRAW_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 44029,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_menu_panel_draw.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-panel-draw-probe1.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T05:55:50.727150+00:00",
+      "inputPins": "build/research/menu-panel-draw-probe1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.095,
+      "endedUTC": "2026-09-11T05:55:50.820276+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/menu-panel-draw-probe1.json": {
+          "bytes": 90922,
+          "sha256": "748c95c46ca7ee7a4264175acca40f8cb102aba3858de306e1e576b59b5262c7"
+        }
+      },
+      "session": null,
+      "terminalChunk": "b5d121"
+    },
+    {
+      "scope": "Run one bounded menu-panel draw/timer study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MENU_PANEL_DRAW_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 44288,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_menu_panel_draw.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-panel-draw-probe2.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T05:57:30.513443+00:00",
+      "inputPins": "build/research/menu-panel-draw-probe2-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.075,
+      "endedUTC": "2026-09-11T05:57:30.586759+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/menu-panel-draw-probe2.json": {
+          "bytes": 90926,
+          "sha256": "81da1de11d4d33e50762122cc50ac785ed5299c934176f0ad896b19a02c3c42f"
+        }
+      },
+      "session": null,
+      "terminalChunk": "6d7b8d"
+    },
+    {
+      "scope": "Run one bounded menu-panel draw/timer study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MENU_PANEL_DRAW_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 44558,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_menu_panel_draw.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-panel-draw-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T05:59:24.740479+00:00",
+      "inputPins": "build/research/menu-panel-draw-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 28.396,
+      "endedUTC": "2026-09-11T05:59:53.134689+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/menu-panel-draw-capture1.json": {
+          "bytes": 85382830,
+          "sha256": "e5caca5a50cf7ff7876d41ed1014e0833682c20758d4f1024297f15d09a045db"
+        }
+      },
+      "session": 9337,
+      "terminalChunk": "cb13d9"
+    },
+    {
+      "scope": "Run one bounded menu-panel draw/timer study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: MENU_PANEL_DRAW_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 45240,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_menu_panel_draw.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/menu-panel-draw-extension1.json",
+        "--extension-only"
+      ],
+      "startedUTC": "2026-09-11T06:03:17.127482+00:00",
+      "inputPins": "build/research/menu-panel-draw-extension1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.33,
+      "endedUTC": "2026-09-11T06:03:17.455769+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/menu-panel-draw-extension1.json": {
+          "bytes": 738566,
+          "sha256": "00c3ec3ccfba0714a0ab69857c499c5a4370c8126e6f18e90ac6040dfb5b1d98"
+        }
+      },
+      "session": null,
+      "terminalChunk": "541235"
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 44786,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuPanelDrawingTests|OriginalLibModeScreenTests|OriginalMenuPanelBitmapTests|OriginalMenuPanelUpdateTests|OriginalStartupPanelTests"
+      ],
+      "startedUTC": "2026-09-11T06:00:43.809546+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 5.232,
+      "endedUTC": "2026-09-11T06:00:49.035833+00:00",
+      "session": 9497,
+      "terminalChunk": "15dee3"
+    },
+    {
+      "name": "native2",
+      "pid": 45468,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuPanelDrawingTests|OriginalLibModeScreenTests|OriginalMenuPanelBitmapTests|OriginalMenuPanelUpdateTests|OriginalStartupPanelTests"
+      ],
+      "startedUTC": "2026-09-11T06:04:50.227902+00:00",
+      "scope": "Compile/test the whole panel after correcting Swift short-circuit try placement; include the ten finite coverage extension calls and all retained panel/lib-screen dependencies. No expected source bytes changed.",
+      "exitCode": 0,
+      "elapsedSeconds": 227.992,
+      "endedUTC": "2026-09-11T06:08:38.217446+00:00",
+      "session": 82796,
+      "terminalChunk": "b6116e"
+    },
+    {
+      "name": "packaged",
+      "pid": 47803,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuPanelDrawingTests"
+      ],
+      "startedUTC": "2026-09-11T06:18:42.300685+00:00",
+      "scope": "Packaged whole enabled menu-panel acceptance. Same isolated source package as passing raw native2, plus lossless fixture only. No raw environment override; all eight retained panel/startup/installed-screen tests already passed with the unchanged core.",
+      "inputFiles": 641,
+      "archive": "build/research/menu-panel-draw-packaged-inputs.tar.gz",
+      "manifest": "build/research/menu-panel-draw-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 2.989,
+      "endedUTC": "2026-09-11T06:18:45.287272+00:00",
+      "session": 89924,
+      "terminalChunk": "bf85ae"
+    }
+  ],
+  "inputVerification": {
+    "base": "8d2cc05cf4f3d9c142ccb7f516887b762e3a4adb",
+    "rawFiles": 640,
+    "acceptedUnchangedFiles": 638,
+    "changedNative1ToNative2": [
+      "Sources/NTSDCore/OriginalMenuPanelDrawing.swift",
+      "Tests/NTSDCoreTests/OriginalMenuPanelDrawingTests.swift"
+    ],
+    "initialArchiveFiles": 640,
+    "fixtures": 251,
+    "oldFixturesUnchanged": 250,
+    "rawBytes": 86099991,
+    "rawSHA256": "066928c1ddc2138f2bb92a9f9a9744ea5598336020be9809fe02096e2784415a",
+    "packedBytes": 12890016,
+    "packedSHA256": "c6d672d2ae44e6d9a230c33c9b070df01c2d864dfaf6f1aef6f8812142116d8b",
+    "fullBytesAndJSONEqual": true
+  },
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": 886,
+    "application-catalog-control20-parent1-inputs.json": 887,
+    "application-catalog-control20-parent2-inputs.json": 887,
+    "application-catalog-guarded20-inputs.json": 890,
+    "timeUTC": "2026-09-11T06:18:24.384427+00:00",
+    "liveProcesses": "  PID  PPID STAT  ELAPSED  %CPU COMMAND\n11635 11633 S    03:39:15   0.0 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.json --compact-states --max-chunks 20000 --checkpoint-every 20\n11636 11635 R    03:39:15 100.0 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.json --compact-states --max-chunks 20000 --checkpoint-every 20\n15664 72826 Ss   03:13:54   0.0 /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-catalog-guarded20-watch/watch.py build/research/application-catalog-guarded20-inputs.json\n"
+  },
+  "newFixture": 251,
+  "oldFixturesUnchanged": 250,
+  "sourceSafetyRefusals": [],
+  "nativeVerification": "build/research/menu-panel-draw-native-verification.json",
+  "work": "build/research/menu-panel-draw-work.json",
+  "comparisonScope": "1008 native whole returns and4 explicit native rejection boundaries; source audits include all1012 cases; unknown padding not byte-matched; no private source stack imported"
+}
