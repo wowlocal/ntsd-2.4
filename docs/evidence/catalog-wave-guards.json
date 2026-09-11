@@ -1,0 +1,205 @@
+{
+  "scope": "Research harness WAV allocation correction, controlled whole original4014e0 calls, and the fresh guarded own first-Object checkpoint. Full own catalog is incomplete. No runtime game algorithm, original asset or accepted fixture changed.",
+  "createdUTC": "2026-09-11T03:07:26.535999+00:00",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Unicorn2.1.4; retained declared MMIO/COM/CRT-copy adapters; no actual Windows/audio device execution"
+  },
+  "preservedFailure": {
+    "path": "build/research/application-catalog-candidate1-nominal.failure.json",
+    "bytes": 180308699,
+    "sha256": "9d2c5f74539a728e2be70165f5dceacd107bec08b5cc193824b2c7f8d77e298b"
+  },
+  "guardFailureReport": {
+    "path": "build/research/application-catalog-candidate1-wave-guard-error.json",
+    "bytes": 5024,
+    "sha256": "17fbb9451d7e8646b7638565817f63fe22f0dc60079475b11181b69a467dbf40"
+  },
+  "guardedProducer": {
+    "path": "tools/oracle_application_catalog_guarded.py",
+    "bytes": 35616,
+    "sha256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4"
+  },
+  "previousProducer": {
+    "path": "tools/oracle_application_catalog.py",
+    "bytes": 35079,
+    "sha256": "b7236ff811c90077acd15d27f384c67e36c71f688fec05adee04c8940627d30b"
+  },
+  "probeProducer": {
+    "path": "tools/oracle_application_catalog_wave_guard_probe.py",
+    "bytes": 7988,
+    "sha256": "01a854ff42211e829c6aa02398f2eedaddc993638aaa33d702c524e554663205"
+  },
+  "allocationModel": {
+    "path": "build/research/application-catalog-wave-allocation-layout.json",
+    "bytes": 2747,
+    "sha256": "4d7be6a06f70db0f02908114e1e1d108e888ee3cec759c4015b4e4feefe229ea"
+  },
+  "controlled": {
+    "source": {
+      "path": "build/research/application-catalog-wave-guard-probe.json",
+      "bytes": 14486916,
+      "sha256": "3d0b829ceded74d56f49fb83347dac137ee15c6b32dbfd90459ba125b4b3b360"
+    },
+    "sourceJob": {
+      "path": "build/research/application-catalog-wave-guard-probe-job.json",
+      "bytes": 846,
+      "sha256": "53e3c852fbde805de7e3249bba8000ee43d7797ff587e1d77394cbe86649683f"
+    },
+    "pairedWholeCalls": 155,
+    "totalOriginalCalls": 310,
+    "priorCompletedOwnPCMComparisons": 154,
+    "allocationRegions": 414,
+    "payloadBytesPerLayout": 8468898,
+    "observedLeadingTrailingGuards": 828,
+    "originalEXEPCs": 231,
+    "eventsPerLayout": 2336,
+    "nativeComparedBytesAndMasks": 22781908,
+    "nativeReturns": 155,
+    "fullOwnCallerCompared": false,
+    "pendingOwnSourceReturnAccepted": false,
+    "stack": "Declared standalone A5/ramp, entry1000f000, real ret4 to1000f008; saved11111111/22222222/33333333/44444444"
+  },
+  "native": {
+    "input": {
+      "path": "build/research/application-catalog-wave-guard-native.json",
+      "bytes": 51759428,
+      "sha256": "180820153bd6f258bd8d9ad2690672f80f38c391533b4aeaa414c0230a71d465"
+    },
+    "inputPreservation": {
+      "path": "build/research/application-catalog-wave-guard-native-inputs.json",
+      "bytes": 1528,
+      "sha256": "98638f6c952448c0a20d486c0c231e0a69801e0b7ba9daa4fe314e16c239b011"
+    },
+    "job": {
+      "path": "build/research/application-catalog-wave-guard-native-job.json",
+      "bytes": 486,
+      "sha256": "82821e692a54f146061f2d456d27dada056e0af1f8a1e71da6d9e49bf38a051a"
+    },
+    "log": {
+      "path": "build/research/application-catalog-wave-guard-native.log",
+      "bytes": 226,
+      "sha256": "a8ecdf7d60bc76c5164c98ce305dfb0c48b1c7f1e59d9081d4ab0351dac33ca5"
+    },
+    "exitCode": 0,
+    "seconds": 1.234188417,
+    "newControlledReturns": 155,
+    "retainedCases": 431,
+    "retainedStartupPasses": 3,
+    "retainedStartupLoads": 54,
+    "totalCases": 586,
+    "totalBytesAndMasks": 98610946,
+    "totalEvents": 9318,
+    "explicitInvalidCreateContinuations": 2,
+    "successfulDirectCaseReturns": 584,
+    "nativeGameCodeChanged": false
+  },
+  "guardedFirst": {
+    "source": {
+      "path": "build/research/application-catalog-candidate4-guarded.object-000001.json",
+      "bytes": 37044101,
+      "sha256": "4d8f870c725f091576cd1a48a2a5be54a08c78e92f03e75ac12de7b035789d1b"
+    },
+    "verification": {
+      "path": "build/research/application-catalog-guarded-first-verification.json",
+      "bytes": 5550,
+      "sha256": "f8720dbd6046b2d018247b0d0c71a6a38ad35d338fbd170c7f77b63999245479"
+    },
+    "nativeJob": {
+      "path": "build/research/application-catalog-guarded-first-native-job.json",
+      "bytes": 1010,
+      "sha256": "b45c4183752f419adcf619f79167c509b27396046c670c309ad96841c0db33b0"
+    },
+    "nativeLog": {
+      "path": "build/research/application-catalog-guarded-first-native.log",
+      "bytes": 1499,
+      "sha256": "471dc473a10c5ac4cf8c3b504b560ed4497bf69b9863b1a6a820fe4b111bce19"
+    },
+    "traceParts": 1408,
+    "traceRows": 70062806,
+    "actualPackedBytesCompared": 175799283,
+    "priorAuditedRawTraceBytesReused": 5534239774,
+    "rawTraceReparsed": false,
+    "decodedBlobs": 4478,
+    "decodedBlobBytes": 462275047,
+    "allowedJSONDifferences": [
+      "scope",
+      "case/writes/directory",
+      "case/localReads/directory",
+      "case/catalogReads/directory",
+      "case/scans/directory",
+      "case/outputCalls/directory",
+      "case/stackStores/directory",
+      "case/crtStores/directory",
+      "case/globalStores/directory",
+      "case/recordTables/directory"
+    ],
+    "nativeTests": 1,
+    "nativeSeconds": 7.031,
+    "records": 233,
+    "bytesAndMasks": 277122,
+    "objects": 1,
+    "frames": 222,
+    "wrappers": 10,
+    "registeredWaves": 9,
+    "frozenNativePins": 886,
+    "fullCatalogReturned": false
+  },
+  "remaining": [
+    "Fresh guarded own20 and later problem-WAV continuation/full137 catalog return",
+    "Additional own parent1/2 read-provenance audits; full final and intermediate-state audits passed separately",
+    "Full native application loading/pool/UI join, app window, Windows/device/fullmatch/all-content/cleanMac"
+  ],
+  "additionalOwnTwenty": [
+    {
+      "parentIndex": 1,
+      "nativeWholeFactory": {
+        "status": "terminal0",
+        "snapshots": 20,
+        "recordComparisons": 53566,
+        "bytesAndMasks": 59581783
+      },
+      "finalTraceVerification": {
+        "path": "build/research/application-catalog-candidate2-nominal.object-000020-verification.json",
+        "sha256": "a86ec93e3faec82176b07ece05563c4e4ba56d9fac0b3893cb6c53473ed2874f",
+        "bytes": 696
+      },
+      "intermediateStateVerification": {
+        "path": "build/research/application-catalog-candidate2-nominal.object-000020-snapshots-verification.json",
+        "sha256": "7f039c150f7880d7e62adb2126dcaee7cc5376ee6a1b7e68ba4ebb7e4c3aad7f",
+        "bytes": 407903
+      },
+      "status": {
+        "path": "build/research/application-catalog-control20-parent1-status.json",
+        "sha256": "6801746d04582a19d269fb4e0475f96d8c22bcf5344077e43c79b56239b64099",
+        "bytes": 2379
+      },
+      "readProvenance": "still running; no acceptance claimed"
+    },
+    {
+      "parentIndex": 2,
+      "nativeWholeFactory": {
+        "status": "terminal0",
+        "snapshots": 20,
+        "recordComparisons": 53566,
+        "bytesAndMasks": 59581783
+      },
+      "finalTraceVerification": {
+        "path": "build/research/application-catalog-candidate3-nominal.object-000020-verification.json",
+        "sha256": "28627ed8fde9b8b1362e68542e3b4978f5f989503cca83c33041541e1623dcc2",
+        "bytes": 695
+      },
+      "intermediateStateVerification": {
+        "path": "build/research/application-catalog-candidate3-nominal.object-000020-snapshots-verification.json",
+        "sha256": "47a6d88d1b4254418987de60b29066716870f100d1611f5c3413ccb01d5f6898",
+        "bytes": 407903
+      },
+      "status": {
+        "path": "build/research/application-catalog-control20-parent2-status.json",
+        "sha256": "83da29bb9643ea94aef7a7c18fa578ead7ebb87f36623b3ec29867edcd6ea23b",
+        "bytes": 2379
+      },
+      "readProvenance": "still running; no acceptance claimed"
+    }
+  ]
+}

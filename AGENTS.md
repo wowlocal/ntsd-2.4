@@ -48,6 +48,25 @@ false positives will not occur.
 
 ## Current research status
 
+**WAV research guard correction: [CATALOG_WAVE_GUARDS](docs/research/CATALOG_WAVE_GUARDS.md).**
+155 controlled whole4014e0 pairs now agree for disjoint/corrected adjacent
+buffers:414regions/8468898payloadbytes,828actual guards intact,231EXEPCs.
+All154 completed own PCM/temporary records retain exactbytes/masks/liveness;
+pendingSNDDATA_2144.wav now returns in this standalone helper, NOT its own caller.
+Frozen native comparison passes155newreturns/22781908bytes+masks/2336events;
+retained431cases+3startup/54loads unchanged, including2explicit invalid-create
+boundaries. Combined comparison1.234s; no native code/asset/fixture change.
+The fresh guarded firstObject reproduces complete oldstate and all1408packed
+traceparts/175799283bytes. Raw5.534GB/order proof reuses the previously audited
+20prefix explicitly;4478blobs/462275047bytes freshly decoded. Native1test7.031s
+matches233records/277122bytes+masks,1Object/222Frames/10wrappers/9WAVs.
+All886nativepins unchanged. These bounded jobs terminal0; full source remains
+LIVE. Guarded20 watcher15664/session49998 waits with890pins and no children.
+Additional own20 intermediate audits now passed2142states/5323542records/
+13016786426bytes+masks each; full final trace/blob audits now also terminal0,
+while read-provenance audits remain live. Keep prior primary
+guard failure and old producer untouched; no full catalog/app/Windows claim.
+
 **Native loading-to-round entry: [INITIAL_MATCH_ENTRY](docs/research/INITIAL_MATCH_ENTRY.md).**
 OriginalInitialMatchEntry retains actual loaded UI/catalog/common/registered
 audio, both commands, pause, caller precision and input ownership through the
