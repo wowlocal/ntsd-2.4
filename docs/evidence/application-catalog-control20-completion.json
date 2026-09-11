@@ -1,0 +1,262 @@
+{
+  "scope": "Completed read-only final/intermediate/read-provenance verification and frozen native child-state comparison for the two additional original own twenty-Object checkpoints. Pinned NTSD/lib/VC80 controlled Unicorn observations; no new source execution or imported native after-state. Full catalog return and original old allocation guard boundary remain open.",
+  "UTC": "2026-09-11T03:36:02.084882+00:00",
+  "parents": [
+    {
+      "parentIndex": 1,
+      "source": {
+        "path": "build/research/application-catalog-candidate2-nominal.object-000020.json",
+        "bytes": 145953356,
+        "sha256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29"
+      },
+      "nativeLog": {
+        "path": "build/research/application-catalog-control20-parent1-native.log",
+        "bytes": 5242,
+        "sha256": "dc4e939cae234a43ab258a9dcddbc61632fe49cae39a74959f93eb4f927f2e83"
+      },
+      "nativeSnapshots": 20,
+      "nativeRecordComparisons": 53566,
+      "nativeBytesAndMasks": 59581783,
+      "nativeSeconds": 13.369,
+      "reports": {
+        "verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate2-nominal.object-000020-verification.json",
+            "bytes": 696,
+            "sha256": "a86ec93e3faec82176b07ece05563c4e4ba56d9fac0b3893cb6c53473ed2874f"
+          },
+          "summary": {
+            "source": "application-catalog-candidate2-nominal.object-000020.json",
+            "rawSHA256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29",
+            "allBlobs": 17405,
+            "traceParts": 32258,
+            "traceRawBytes": 129358779160,
+            "tracePackedBytes": 4079557743,
+            "traceRecords": {
+              "recordTables": 1006,
+              "writes": 541554289,
+              "localReads": 556244408,
+              "catalogReads": 73,
+              "scans": 3619898,
+              "outputCalls": 1660219,
+              "stackStores": 501716797,
+              "crtStores": 7239674,
+              "globalStores": 9698
+            },
+            "reconstructedRegions": 5318,
+            "reconstructedBytes": 92817467,
+            "sourceOnly": true,
+            "nativeCompared": false,
+            "windowsVerified": false,
+            "seconds": 2105.962
+          }
+        },
+        "snapshots-verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate2-nominal.object-000020-snapshots-verification.json",
+            "bytes": 407903,
+            "sha256": "7f039c150f7880d7e62adb2126dcaee7cc5376ee6a1b7e68ba4ebb7e4c3aad7f"
+          },
+          "summary": {
+            "source": "application-catalog-candidate2-nominal.object-000020.json",
+            "sourceSHA256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29",
+            "sourceBytes": 145953356,
+            "checkpoints": 2142,
+            "recordSnapshots": 1006,
+            "recordsChecked": 5323542,
+            "bytesChecked": 13016786426,
+            "catalogBytes": 81273768,
+            "writes": 541554289,
+            "partCounts": {
+              "recordTables": 6,
+              "writes": 10832
+            },
+            "partRawBytes": 40623876241,
+            "partPackedBytes": 762345179,
+            "checkedBlobs": 7252,
+            "localWrites": 0,
+            "messageWrites": 0,
+            "controlWords": {
+              "895": 2142
+            },
+            "seconds": 933.042,
+            "nativeCompared": false,
+            "windowsVerified": false
+          }
+        },
+        "reads-verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate2-nominal.object-000020-reads-verification.json",
+            "bytes": 1299,
+            "sha256": "5ecf9cce5ea22045e5b78843f91dbb8d13ec171f410e2e57f3619656243cbe0b"
+          },
+          "summary": {
+            "source": "application-catalog-candidate2-nominal.object-000020.json",
+            "sourceSHA256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29",
+            "sourceBytes": 145953356,
+            "writes": 541554289,
+            "reads": {
+              "stackReads": 556244408,
+              "catalogReads": 73
+            },
+            "readBytes": {
+              "stackReads": 1920124614,
+              "catalogReads": 187
+            },
+            "undefinedReadBytes": {
+              "stackReads": 0,
+              "catalogReads": 0
+            },
+            "readPCs": {
+              "stackReads": 1189,
+              "catalogReads": 3
+            },
+            "partCounts": {
+              "stackReads": 11126,
+              "catalogReads": 2,
+              "writes": 10832
+            },
+            "partRawBytes": 99138453060,
+            "partPackedBytes": 3513330246,
+            "seconds": 2762.275,
+            "nativeCompared": false,
+            "windowsVerified": false
+          }
+        }
+      }
+    },
+    {
+      "parentIndex": 2,
+      "source": {
+        "path": "build/research/application-catalog-candidate3-nominal.object-000020.json",
+        "bytes": 146011682,
+        "sha256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b"
+      },
+      "nativeLog": {
+        "path": "build/research/application-catalog-control20-parent2-native.log",
+        "bytes": 5242,
+        "sha256": "6cad77bc1cd288287cc89beb8f665b926273aba942f01f5e50335f8eb1e7615a"
+      },
+      "nativeSnapshots": 20,
+      "nativeRecordComparisons": 53566,
+      "nativeBytesAndMasks": 59581783,
+      "nativeSeconds": 13.519,
+      "reports": {
+        "verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate3-nominal.object-000020-verification.json",
+            "bytes": 695,
+            "sha256": "28627ed8fde9b8b1362e68542e3b4978f5f989503cca83c33041541e1623dcc2"
+          },
+          "summary": {
+            "source": "application-catalog-candidate3-nominal.object-000020.json",
+            "rawSHA256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b",
+            "allBlobs": 17406,
+            "traceParts": 32258,
+            "traceRawBytes": 129358779160,
+            "tracePackedBytes": 4079557743,
+            "traceRecords": {
+              "recordTables": 1006,
+              "writes": 541554289,
+              "localReads": 556244408,
+              "catalogReads": 73,
+              "scans": 3619898,
+              "outputCalls": 1660219,
+              "stackStores": 501716797,
+              "crtStores": 7239674,
+              "globalStores": 9698
+            },
+            "reconstructedRegions": 5318,
+            "reconstructedBytes": 92817467,
+            "sourceOnly": true,
+            "nativeCompared": false,
+            "windowsVerified": false,
+            "seconds": 2105.89
+          }
+        },
+        "snapshots-verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate3-nominal.object-000020-snapshots-verification.json",
+            "bytes": 407903,
+            "sha256": "47a6d88d1b4254418987de60b29066716870f100d1611f5c3413ccb01d5f6898"
+          },
+          "summary": {
+            "source": "application-catalog-candidate3-nominal.object-000020.json",
+            "sourceSHA256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b",
+            "sourceBytes": 146011682,
+            "checkpoints": 2142,
+            "recordSnapshots": 1006,
+            "recordsChecked": 5323542,
+            "bytesChecked": 13016786426,
+            "catalogBytes": 81273768,
+            "writes": 541554289,
+            "partCounts": {
+              "recordTables": 6,
+              "writes": 10832
+            },
+            "partRawBytes": 40623876241,
+            "partPackedBytes": 762345179,
+            "checkedBlobs": 7252,
+            "localWrites": 0,
+            "messageWrites": 0,
+            "controlWords": {
+              "895": 2142
+            },
+            "seconds": 940.316,
+            "nativeCompared": false,
+            "windowsVerified": false
+          }
+        },
+        "reads-verification": {
+          "artifact": {
+            "path": "build/research/application-catalog-candidate3-nominal.object-000020-reads-verification.json",
+            "bytes": 1299,
+            "sha256": "768d8b71cbc92dff0f9173b5f2d215cd505bf14b2cf262c0e36f4a6dff08e552"
+          },
+          "summary": {
+            "source": "application-catalog-candidate3-nominal.object-000020.json",
+            "sourceSHA256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b",
+            "sourceBytes": 146011682,
+            "writes": 541554289,
+            "reads": {
+              "stackReads": 556244408,
+              "catalogReads": 73
+            },
+            "readBytes": {
+              "stackReads": 1920124614,
+              "catalogReads": 187
+            },
+            "undefinedReadBytes": {
+              "stackReads": 0,
+              "catalogReads": 0
+            },
+            "readPCs": {
+              "stackReads": 1189,
+              "catalogReads": 3
+            },
+            "partCounts": {
+              "stackReads": 11126,
+              "catalogReads": 2,
+              "writes": 10832
+            },
+            "partRawBytes": 99138453060,
+            "partPackedBytes": 3513330246,
+            "seconds": 2758.599,
+            "nativeCompared": false,
+            "windowsVerified": false
+          }
+        }
+      }
+    }
+  ],
+  "auditStatus": {
+    "path": "build/research/application-catalog-control20-audits/status.json",
+    "bytes": 2709,
+    "sha256": "ca73202535cc220b1abb7b766dfcfdb89a8c15eda3c68f5b1f4549ee4234dc5e"
+  },
+  "allAuditChildrenTerminal": true,
+  "rawOrExpectedEdited": false,
+  "fullCatalogReturned": false,
+  "windowsOrDeviceVerified": false,
+  "sourceCaptureContinues": true
+}

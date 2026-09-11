@@ -48,6 +48,16 @@ false positives will not occur.
 
 ## Current research status
 
+All additional own20 audits are now terminal0; see
+[control20 completion](docs/evidence/application-catalog-control20-completion.json).
+Each parent1/2 has556244408stackreads/1920124614bytes and73catalogreads/187bytes,
+all merged with541554289writes; zero undefined observed read bytes. Unread/private
+storage remains unknown. Read audits2762.275/2758.599s complete their earlier
+final/intermediate/native checks (53566native record comparisons/59581783bytes
+plus masks each). Runner12919/session75293 and all six audit children are terminal.
+Original2/3 and corrected primary4 captures remain live; guarded20 watcher15664
+still waits with890frozenpins. No full catalog return/native publication follows.
+
 **Native menu music/resource transaction: [CHARACTER_MENU_STARTUP](docs/research/CHARACTER_MENU_STARTUP.md).**
 OriginalCharacterMenuStartup keeps music before the resource prefix's4512cc
 write and stages globals/music allocations/11bitmap owners/platform environment

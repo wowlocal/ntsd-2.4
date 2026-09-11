@@ -1,5 +1,12 @@
 # Current guarded-capture status
 
+Both additional twenty-Object audit sets are now fully terminal0:
+[final/intermediate/read/native completion](../evidence/application-catalog-control20-completion.json).
+Each read audit checks556244408 stack reads/1920124614 bytes and73 catalog reads/
+187 bytes against all541554289 writes, with zero undefined observed bytes.
+Unobserved/private storage remains unknown. Their full source captures and the
+corrected primary remain live; no full catalog return or publication is accepted.
+
 The bounded [WAV guard study](CATALOG_WAVE_GUARDS.md) now passes155 paired
 original helper calls and native comparisons, preserving all154 prior own PCM
 records and all actual guards. The fresh guarded firstObject has complete source
