@@ -157,3 +157,9 @@ BG `40c160` и слойные `40c030/40c0e0` теперь
 [`43d2c0`](REPLAY_INITIALIZATION.md) теперь также перенесён и проверен.
 Наличие общей
 подготовки не означает восстановления всей ветки режима или полного такта.
+
+The newer [pool/UI composition](INITIAL_POOL_INTERFACE.md) adds sequential
+allocation callbacks and compares every408 Actor constructor return in each of
+ten unchanged controlled UI chains. It stages the complete pool/UI context and
+retains prior state on late native exceptions. The eight layouts above still
+pass through the same bootstrap body; own catalog/pool composition remains open.

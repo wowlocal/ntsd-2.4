@@ -149,3 +149,9 @@ Windows/NLS/workers, actual window/devices, complete Naruto/Sasuke District matc
 all content/network/replays and clean-Mac acceptance remain open. The three
 application catalog source captures continue independently; this controlled
 milestone does not change or restart them.
+
+The [pool/UI composition](INITIAL_POOL_INTERFACE.md) now stages both Actor
+allocation/construction and this complete UI loader in one native operation.
+Its new constructor-return comparisons replay the same immutable source writes;
+no fixture or expected byte changed. This adds a controlled native composition,
+not the still-pending own application-catalog continuation.

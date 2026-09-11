@@ -1,0 +1,92 @@
+{
+  "scope": "Controlled41c052..41c581 native pool/UI composition; no own catalog/application/Windows/device completion claim",
+  "source": {
+    "study": "INITIAL_INTERFACE_SURFACE",
+    "reexecuted": false,
+    "cases": 10,
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "rawSHA256": "703086bd4b03017ca5aebfed49af80472cc0e1ee960f60c259adb031b81356dd",
+    "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json",
+    "fixtureSHA256": "7f739a9a72c7fc66c740a5dae8afaa4364219b5c11ce24d2962593b3c2fa7df3",
+    "environment": "Pinned original on controlled Unicorn CPU; CW0, declared catalog[0]/Object+90/outerframe/allocations/platform responses. Native comparison uses original assets, never expected Actor records as inputs."
+  },
+  "comparison": {
+    "actorAllocations": 4000,
+    "constructorReturns": 4080,
+    "constructorBytesPlusMasks": 4308480,
+    "finalRecords": 4095,
+    "finalBytesPlusMasks": 4925440,
+    "totalRecordComparisons": 8175,
+    "totalBytesPlusMasks": 9233920,
+    "bitmapAllocationRequests": 100,
+    "bitmapConstructors": 85,
+    "platformRequests": 1406,
+    "declaredSelectorInputs": 10,
+    "nativeOnlyRollbackControls": 7,
+    "unchangedBootstrapLayouts": 8,
+    "unchangedBootstrapRecords": 6416,
+    "unchangedBootstrapBytesPlusMasks": 6790528
+  },
+  "native": {
+    "compared": true,
+    "job": {
+      "name": "native1",
+      "pid": 98982,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests"
+      ],
+      "startedUTC": "2026-09-11T01:22:13.336124+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 234.745,
+      "endedUTC": "2026-09-11T01:26:08.090937+00:00",
+      "session": 35607,
+      "tests": 12,
+      "testSeconds": 7.119,
+      "buildSeconds": 225.6,
+      "newTests": 3,
+      "newTestSeconds": 5.079,
+      "controlledSeconds": 2.973,
+      "rawOverride": false
+    },
+    "logSHA256": "1a73af3165158b26d77d0520ae62aeab2565a6302f2ffa6b25a2cc4d0bb6bad9",
+    "base": "72cd80855db63e9d890652b72668e180d04360b6",
+    "ownedFiles": {
+      "native/Sources/NTSDCore/OriginalWorldBootstrap.swift": "3d0cf0dc1ec94e92288424e2f1f4322be394d8e01c145b239d1df83d6a05517d",
+      "native/Sources/NTSDCore/OriginalInitialPoolAndInterface.swift": "fc410e90a5e4b18ef30c0a669be2217a9f9872200cd897dab278b1e4e5778f4f",
+      "native/Tests/NTSDCoreTests/OriginalInitialPoolAndInterfaceTests.swift": "6a6531659be6ab442c114490332aa22b1b909a3ad9c2d1e6191712029c5b43db"
+    },
+    "inputArchive": {
+      "scope": "Read-only preservation audit of the native pool/UI build inputs. Verify all\nfrozen archive bytes and the minimal overlay on accepted72cd808. This is not a\nsource or native game execution; reference inputs are never changed.\n",
+      "base": "72cd80855db63e9d890652b72668e180d04360b6",
+      "baseFiles": 626,
+      "unchangedBaseFiles": 625,
+      "files": 628,
+      "memberBytes": 1244034379,
+      "archiveBytes": 908096018,
+      "archiveSHA256": "283aa3966f4d4e68d2e33c250e93f836b61c700cfcc18ee573dd740e831c7158",
+      "manifestSHA256": "222d671f7cefabf808cebd8cdd837967b0c2a17abe06edabb0c02163d68334c7",
+      "seconds": 6.652
+    },
+    "NTSDNativeLinked": true,
+    "windowVerified": false,
+    "windowsVerified": false,
+    "deviceVerified": false
+  },
+  "fixturePins": {
+    "unchanged": 247,
+    "new": 0
+  },
+  "boundaries": [
+    "No source NULL Actor allocation cases; native thrown failures are rollback controls, not source matches.",
+    "Canonical non-null ordinal bindings are retained; unknown source/private stack bytes are not native inputs.",
+    "First Object+90 is a declared controlled boundary; own continuation must obtain it from its loaded catalog.",
+    "Full own catalog/pool/UI,41bc90 return, full match, all content and clean-Mac acceptance remain open."
+  ]
+}

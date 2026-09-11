@@ -48,6 +48,23 @@ false positives will not occur.
 
 ## Current research status
 
+**Independent pool/UI composition: [INITIAL_POOL_INTERFACE](docs/research/INITIAL_POOL_INTERFACE.md).**
+Native now requests400Actor allocations in constructor order, then reconstructs
+slots0..7 and executes whole UI loading in one staged value-semantic context.
+The same10 immutable UI source cases compare4080whole constructor records/
+4308480bytes+masks plus4095finalrecords/4925440bytes+masks:8175/9233920 total.
+4000Actor malloc requests,100bitmap mallocs,85constructors/1406platform requests;
+ten selector writes remain declared controls. Seven late native exceptions
+retain caller context/no new pool/UI result; NULL Actor source path stays open.
+The old8bootstrap layouts and13UIcases still pass; no source field was changed.
+
+Independent72cd808+3file package passed12release tests7.119s/build225.60s;
+new3tests5.079s,controlled2.973s. All628native archive files verified,625base
+files unchanged.247old fixtures unchanged; no new fixture. NTSDNative linked,
+no window/device run. Own Object+90 must come from the loaded native catalog.
+This controlled dependency does not complete own catalog/pool/UI or full41bc90.
+
+
 
 **Independent UI dependency: [INITIAL_INTERFACE_SURFACE](docs/research/INITIAL_INTERFACE_SURFACE.md).**
 Ten controlled original World/pool/UI chains now compare whole43ee50/43ed10/
@@ -71,10 +88,16 @@ build221.07s passed without raw overrides.626frozen native files verified;619bas
 files unchanged.246old fixture pins unchanged;247current. Fullraw96729868/
 packed9086144bytes/JSON/SHA,203blobs,10DIBs and10atomicparts verified. NTSDNative
 linked; no window/device run. This study's source/SwiftPM jobs are terminal.
-The THREE own application-catalog captures and their20Object watcher remain
-independently LIVE and unaccepted; read build/research/application-catalog-work.json.
-Do not restart them or modify their23pinned inputs. The minimal UI commit accepts
-only the shared bitmap binding validator, not the pending catalog implementation.
+The THREE full own application-catalog captures remain LIVE and unaccepted.
+Primary20Object child-state comparison passes20Objects/4995Frame/194wrappers,
+with94wholeWAVs and semantic requests/globals; no complete catalog/files result.
+The one-shot20Object watcher and both children are terminal0; final source replay
+verified17406blobs/32258parts and5318regions/92817467bytes. All2142intermediate
+states also replay; independent read audit94196 remains LIVE. Only after watcher
+termination were the exact tested child-state Core/probe files copied; original
+23pins/archives stay preserved. Read build/research/application-catalog-work.json.
+Never restart live captures for silence. Pending catalog implementation remains
+unaccepted; the controlled pool/UI commit does not include those changes.
 Own catalog/pool/UI, full41bc90/app, Windows/devices/fullmatch/all-content/cleanMac
 remain open. Six foreign files are untouched.
 
