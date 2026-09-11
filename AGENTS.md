@@ -48,6 +48,34 @@ false positives will not occur.
 
 ## Current research status
 
+**Retained library character selection: [LIB_CHARACTER_ROSTER](docs/research/LIB_CHARACTER_ROSTER.md).**
+70actualret4 returns match across two35call sequences: own fresh11menu bitmaps,
+Naruto17/Sasuke21, press/held/release, Random retaining ActorObject, left to41,
+right across noncharacters toRandom/back17, teams/ready/countdown115. Native
+normally rebuilds all137catalog entries/42portraits; only known owner bindings
+normalize, no source private/expected input. Core unchanged. Full World/400Actor/
+globals on13bodypoints plus entry/exit,4550counterwords,12071ordered events and
+770checks of22created/retained bitmap owners match.0music calls/allocations.
+Source audit72055stores/126849reads/1584APIreads/1496points/1116016point records/
+52220final records/2885helpers/991blobs;1835EXE+51lib+33CRT starts.2336undefined
+bitmap reads retain bytes/masks; remaining false masks are pinned EXEcookie.
+Each complete next-before equals previous-after plus declared buttons/ABI;
+all stack history stays source-only. Two late portrait/present errors roll back
+current owners/events while retaining prior successful calls and supplied input.
+Two verifier variable-shadowing errors and one artifact manifest-path error
+preserved; source/native/expected unchanged. Raw2tests22.891s/build234.48s,
+packaged2tests22.562s/build0.35s pass.653package files/recursive archives verified,
+255old fixtures unchanged/256current. All study jobs terminal; NTSDNative linked,
+no window/device/Windows claim. Next whole selection stages and own library join.
+Catalog4 exited0 at6GiB researchStorageLimit/7817836c:24completed/25allocated
+Objects/151registeredWAVs; no whole return/new24native acceptance. All old bytes
+survive125292APFSclones/15817825009duplicate bytes;36indexes unchanged, free
+space grew5933752320->22000947200. [Storage plan](docs/research/APPLICATION_CATALOG_STORAGE_PLAN.md).
+After actual terminal/pin/space checks, unchanged source5 started: UV78860/
+Python78863/session70280, same producer/parent/checkpoint/chunk/6GiB guard.
+Read current job/ps, not historical live prose. Full catalog/application/outer
+loop/full-match/Windows/all-content/network/clean-Mac goal stays open.
+
 **Catalog prefix and roster provenance: [CHARACTER_ROSTER_INPUT_PLAN](docs/research/CHARACTER_ROSTER_INPUT_PLAN.md).**
 Guarded20 watcher15664 and all four children61251..61254 are terminal0.
 Native frozen binary passed1test12.772s:20 full Object/4995Frame/194bitmap/

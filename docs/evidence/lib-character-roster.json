@@ -1,0 +1,399 @@
+{
+  "scope": "Two retained35-call installed-library character-menu sequences. Controlled declared catalog operands from raw pinned files, actual prologue/menu tail/ret4, full native state/events/ownership comparison and current-call rollback. Earlier tick/input acquisition, own library catalog/outer application/Windows/device/full game remain open.",
+  "timeUTC": "2026-09-11T09:04:09.161765+00:00",
+  "source": {
+    "path": "build/research/lib-character-roster-capture1.json",
+    "bytes": 269742968,
+    "sha256": "45896611b1afeb4c8deaa15272fddbdfea771b9bc79ac0a36bcc65b3882e5d05"
+  },
+  "fixture": {
+    "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-character-roster.json",
+    "bytes": 35591633,
+    "sha256": "ece488eaa87f990c53ba188546ceddfac11ad7b4e27cabc1c489de4f6c79827e"
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run one bounded retained character roster/menu sequence through actual returns with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_CHARACTER_ROSTER_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 75139,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_character_roster.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-character-roster-probe1.json",
+        "--limit",
+        "2"
+      ],
+      "startedUTC": "2026-09-11T08:38:41.630898+00:00",
+      "inputPins": "build/research/lib-character-roster-probe1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 1.094,
+      "endedUTC": "2026-09-11T08:38:42.722740+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-character-roster-probe1.json": {
+          "bytes": 10639624,
+          "sha256": "cd5f60c7dc7cf360702d96a5f51417d5ac9775ed11389d60705aa1bc4f166e17"
+        }
+      },
+      "session": 42929,
+      "terminalChunk": "9e79ef"
+    },
+    {
+      "scope": "Run one bounded retained character roster/menu sequence through actual returns with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_CHARACTER_ROSTER_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 75226,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_character_roster.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-character-roster-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T08:39:14.219228+00:00",
+      "inputPins": "build/research/lib-character-roster-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 14.455,
+      "endedUTC": "2026-09-11T08:39:28.671976+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-character-roster-capture1.json": {
+          "bytes": 269742968,
+          "sha256": "45896611b1afeb4c8deaa15272fddbdfea771b9bc79ac0a36bcc65b3882e5d05"
+        }
+      },
+      "session": 95094,
+      "terminalChunk": "de342a"
+    }
+  ],
+  "sourceAudit": {
+    "artifact": {
+      "path": "build/research/lib-character-roster-source-verification3.json",
+      "bytes": 3109,
+      "sha256": "f26d5c510080ce6ca96a5d928702c188fd53f4504766ac496fdc87e01c77ed81"
+    },
+    "session": 88384,
+    "terminalChunk": "148f8e",
+    "exitCode": 0,
+    "summary": {
+      "scope": "Read-only audit of retained character catalog/menu selection and actual returns.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/LIB_CHARACTER_ROSTER_PLAN.md for finite inputs and open boundaries.\n",
+      "undefinedBitmapReads": [
+        {
+          "pc": "0x43f04b",
+          "bytes": 4,
+          "reads": 642
+        },
+        {
+          "pc": "0x43f183",
+          "bytes": 4,
+          "reads": 642
+        },
+        {
+          "pc": "0x43f18c",
+          "bytes": 4,
+          "reads": 263
+        },
+        {
+          "pc": "0x43f190",
+          "bytes": 4,
+          "reads": 263
+        },
+        {
+          "pc": "0x43f197",
+          "bytes": 4,
+          "reads": 263
+        },
+        {
+          "pc": "0x43f19e",
+          "bytes": 4,
+          "reads": 263
+        }
+      ],
+      "rawBytes": 269742968,
+      "rawSHA256": "45896611b1afeb4c8deaa15272fddbdfea771b9bc79ac0a36bcc65b3882e5d05",
+      "cases": 70,
+      "ends": {
+        "returned": 70
+      },
+      "writes": 72055,
+      "writeBytes": 289384,
+      "instructionReads": 126849,
+      "instructionReadBytes": 501588,
+      "pointRecords": 1116016,
+      "pointRecordBytes": 3320590416,
+      "points": 1496,
+      "APIReads": 1584,
+      "APIReadBytes": 12576,
+      "records": 52220,
+      "recordBytes": 155375220,
+      "helpers": 2885,
+      "characterSemanticCounterWords": 4550,
+      "freshBitmapRecords": 770,
+      "musicAllocations": 0,
+      "events": {
+        "startup": 418,
+        "fill": 70,
+        "draw": 642,
+        "read": 4525,
+        "clip": 905,
+        "blit": 905,
+        "getDC": 748,
+        "setBackgroundMode": 748,
+        "setTextColor": 748,
+        "stringLength": 748,
+        "textOut": 748,
+        "releaseDC": 748,
+        "method": 70,
+        "soundRequest": 12,
+        "soundMethod": 36
+      },
+      "instructionStarts": 1919,
+      "exeInstructionStarts": 1835,
+      "libraryInstructionStarts": 51,
+      "crtInstructionStarts": 33,
+      "blobCount": 991,
+      "decodedBlobBytes": 38353304,
+      "writeMaskFalseReadsWithPinnedEXEProvenance": [
+        {
+          "pc": "0x41bcaa",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 70
+        },
+        {
+          "pc": "0x41bcbb",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 70
+        },
+        {
+          "pc": "0x429744",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 70
+        },
+        {
+          "pc": "0x429756",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 70
+        },
+        {
+          "pc": "0x43ee56",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 22
+        },
+        {
+          "pc": "0x4450b2",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 232
+        },
+        {
+          "pc": "0x4028a6",
+          "address": "0x44eea4",
+          "bytes": 4,
+          "reads": 70
+        }
+      ],
+      "nativeCompared": false,
+      "windowsVerified": false
+    }
+  },
+  "native": {
+    "jobs": [
+      {
+        "name": "native1",
+        "pid": 76882,
+        "status": "terminal",
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibCharacterRosterTests"
+        ],
+        "startedUTC": "2026-09-11T08:45:34.195702+00:00",
+        "exitCode": 0,
+        "elapsedSeconds": 259.964,
+        "endedUTC": "2026-09-11T08:49:54.157131+00:00",
+        "session": 13118,
+        "terminalChunk": "3f0e9c"
+      },
+      {
+        "name": "packaged",
+        "scope": "Packaged acceptance of the retained library character-roster sequence.\nSame isolated Core/tests as passing native1, adding only the lossless new fixture.\nNo raw environment override or reference execution. Preserve input composition.\n",
+        "pid": 78868,
+        "status": "terminal",
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibCharacterRosterTests"
+        ],
+        "startedUTC": "2026-09-11T08:56:42.117798+00:00",
+        "inputFiles": 653,
+        "manifest": "build/research/lib-character-roster-packaged-input-pins.json",
+        "exitCode": 0,
+        "elapsedSeconds": 24.198,
+        "endedUTC": "2026-09-11T08:57:06.313241+00:00",
+        "session": 27290,
+        "terminalChunk": "cc8728"
+      }
+    ],
+    "logs": [
+      {
+        "path": "build/research/lib-character-roster-native1.log",
+        "bytes": 18209,
+        "sha256": "602fd38df904a71220ca06c5acda9dcedc4041901828d452601e80ef14a298b6"
+      },
+      {
+        "path": "build/research/lib-character-roster-packaged.log",
+        "bytes": 1503,
+        "sha256": "b6cc3810b94ab2b98a50b68ef29b6c1b73c5dc5d03cbd0519947d783e7b19866"
+      }
+    ],
+    "rawTests": 2,
+    "rawBuildSeconds": 234.48,
+    "rawTestSeconds": 22.891,
+    "packagedTests": 2,
+    "packagedBuildSeconds": 0.35,
+    "packagedTestSeconds": 22.562,
+    "wholeReturns": 70,
+    "sequenceLength": 35,
+    "sequences": 2,
+    "characterPointsPerCall": 13,
+    "semanticCounterWords": 4550,
+    "events": 12071,
+    "newMenuBitmapOwners": 22,
+    "comparedMenuBitmapRecords": 770,
+    "loadedCatalogObjects": 137,
+    "portraitInputs": 42,
+    "lateFailures": [
+      "afterSelectedPortrait",
+      "afterPresent"
+    ],
+    "nativeCoreChanged": false
+  },
+  "artifacts": {
+    "verification": {
+      "path": "build/research/lib-character-roster-artifact-verification.json",
+      "bytes": 3367,
+      "sha256": "cda8dadf60ea56fdceb26871a83b5bc3e9975e6242ec50c7e8fa792d57c25cb2"
+    },
+    "packagedVerification": {
+      "path": "build/research/lib-character-roster-packaged-input-verification.json",
+      "bytes": 1865,
+      "sha256": "fc0e8545af5cee2e784c5c2830c2d07f2a0d83d9b29747926da6a10941b1b761"
+    },
+    "recursiveArchives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+        "bytes": 3277477,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "6e9ec045e040f64c2905b86e53110e7bd4383e4dcf56f7c1a380402239e1211d",
+        "bytes": 11201,
+        "files": 3
+      },
+      "build/research/fresh-character-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+        "bytes": 6570,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "06d125ae67c376cae1e625b0ebae29fcfe37a559118b0997f8da3316f066826b",
+        "bytes": 6566103,
+        "files": 1
+      },
+      "build/research/lib-character-roster-native1-owned-inputs.tar.gz": {
+        "sha256": "0ecc7960e90c2b62e594fa663f52690aefdbdba442fc31be72d151cd98a9717a",
+        "bytes": 7548,
+        "files": 1
+      }
+    },
+    "recursiveCompositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-packaged-input-composition.json": "854ab4865ab28a8b5c8ef389634d772529b7e785fc295da61930b3d505d171d3",
+      "build/research/fresh-character-menu-native1-input-composition.json": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "build/research/fresh-character-menu-packaged-input-composition.json": "7dd04d1cf490a3d38b6be18835756cc4de8e71dfbe88f064d1e6f18a978dbfcb",
+      "build/research/lib-character-roster-native1-input-composition.json": "617e4ec1e621cd6f1dafbbeec2f0ef44bcaff4ecc3fd2d55c769d2b36cfce47e"
+    },
+    "fixturePins": {
+      "path": "build/research/lib-character-roster-fixture-pins.json",
+      "bytes": 27235,
+      "sha256": "3afadac9004c6a5b228c4e3a69783302972f549ea91de2823846339bcff7ded4"
+    },
+    "allOldFixturesUnchanged": 255,
+    "currentFixtures": 256,
+    "packageFiles": 653,
+    "rawPackedBytesAndJSONEqual": true
+  },
+  "errors": [
+    {
+      "path": "build/research/lib-character-roster-source-verifier1-error.json",
+      "bytes": 624,
+      "sha256": "2ab622208625fc63dd1e3d5cb9b9217ecac32fb2aea5ab753d8dc91dda89fc66"
+    },
+    {
+      "path": "build/research/lib-character-roster-source-verifier2-error.json",
+      "bytes": 848,
+      "sha256": "c887e4f408f6b22a48be283fb037d61abb0b34eee5fd894dc96bfa559a703a18"
+    },
+    {
+      "path": "build/research/lib-character-roster-artifact1-error.json",
+      "bytes": 552,
+      "sha256": "d2563a27a26a14c8aaccde8b631cee8468c2abc5da247eba26a81ec8ea517205"
+    }
+  ],
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": 886,
+    "application-catalog-control20-parent1-inputs.json": 887,
+    "application-catalog-control20-parent2-inputs.json": 887,
+    "application-catalog-guarded20-inputs.json": 890,
+    "application-catalog-candidate5-resourced-inputs.json": 890
+  },
+  "catalogStorageEvidence": "docs/evidence/application-catalog-storage.json",
+  "gameExpectedEdited": false,
+  "privateSourceStateImported": false,
+  "ownInitializedLibraryCatalog": false,
+  "windowsVerified": false,
+  "appWindowOrDeviceVerified": false
+}
