@@ -132,3 +132,9 @@ comparisons. The whole initialized library catalog is still running separately.
 No full tick/match, Windows execution, app-window/device output, input latency,
 audio fidelity, all-content/network or clean-Mac completion follows from this
 controlled study. The full native-game goal remains open.
+
+The subsequent [LIB_SELECTION_COMMANDS](LIB_SELECTION_COMMANDS.md) study now
+matches338 retained calls through options1/2, including194 unchanged whole
+parent calls, repeated Random, reselect and a fresh ready route. Its raw and
+packaged tests and full provenance audits pass; this parent corpus is unchanged.
+Other modes and the own initialized library/prelude/application join remain open.

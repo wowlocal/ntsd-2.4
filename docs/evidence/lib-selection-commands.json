@@ -1,0 +1,344 @@
+{
+  "scope": "Whole controlled retained VS reselect/reroll commands with installed lib.dll text:338 calls,336 actualret4 and2 prelude boundaries. Pinned EXE/lib/VC80 execution is research-only. Native common continuation retains live roster/RNG/DC/owners and rollback; no full own initialization, Windows/device/full-game claim.",
+  "timeUTC": "2026-09-11T10:23:26.053405+00:00",
+  "base": "b488eb42567e23a0178ddfb8e1e0ffb24cca46dd",
+  "source": {
+    "scope": "Run one bounded retained character roster/menu sequence through actual returns with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_SELECTION_COMMANDS_PLAN.md. No live producer modification/restart.\n",
+    "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+    "status": "terminal",
+    "pid": 92975,
+    "command": [
+      "uv",
+      "run",
+      "tools/oracle_lib_selection_commands.py",
+      "--output",
+      "/Users/michael/Developer/ntsd-2.4/build/research/lib-selection-commands-capture1.json"
+    ],
+    "startedUTC": "2026-09-11T10:08:50.849388+00:00",
+    "inputPins": "build/research/lib-selection-commands-capture1-input-pins.json",
+    "exitCode": 0,
+    "elapsedSeconds": 82.918,
+    "endedUTC": "2026-09-11T10:10:13.765706+00:00",
+    "inputsUnchanged": true,
+    "artifacts": {
+      "build/research/lib-selection-commands-capture1.json": {
+        "bytes": 1406196370,
+        "sha256": "6fbc8465786f92034727115206aaed31144d981d790612ba04b3b75473e28c8e"
+      }
+    }
+  },
+  "sourceSession": 35819,
+  "sourceTerminalChunk": "7ee34b",
+  "sourceAudit": {
+    "scope": "Read-only full trace audit of retained VS reselection/reroll commands and ret4 or prelude boundaries.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/LIB_SELECTION_COMMANDS_PLAN.md for finite inputs and open boundaries.\n",
+    "undefinedBitmapReads": [
+      {
+        "pc": "0x43f04b",
+        "bytes": 4,
+        "reads": 2124
+      },
+      {
+        "pc": "0x43f183",
+        "bytes": 4,
+        "reads": 2124
+      },
+      {
+        "pc": "0x43f18c",
+        "bytes": 4,
+        "reads": 604
+      },
+      {
+        "pc": "0x43f190",
+        "bytes": 4,
+        "reads": 604
+      },
+      {
+        "pc": "0x43f197",
+        "bytes": 4,
+        "reads": 604
+      },
+      {
+        "pc": "0x43f19e",
+        "bytes": 4,
+        "reads": 604
+      }
+    ],
+    "rawBytes": 1406196370,
+    "rawSHA256": "6fbc8465786f92034727115206aaed31144d981d790612ba04b3b75473e28c8e",
+    "cases": 338,
+    "ends": {
+      "returned": 336,
+      "matchPrelude": 2
+    },
+    "identicalParentCalls": 194,
+    "writes": 375375,
+    "writeBytes": 1481526,
+    "instructionReads": 714856,
+    "instructionReadBytes": 2804192,
+    "pointRecords": 5820068,
+    "pointRecordBytes": 16866724220,
+    "points": 7598,
+    "APIReads": 10840,
+    "APIReadBytes": 87818,
+    "records": 258908,
+    "recordBytes": 750322820,
+    "helpers": 13572,
+    "characterSemanticCounterWords": 24370,
+    "freshBitmapRecords": 3718,
+    "musicAllocations": 0,
+    "rerollCommands": 6,
+    "rerollAssignments": 30,
+    "reselectionCommands": 2,
+    "events": {
+      "startup": 418,
+      "fill": 442,
+      "draw": 2388,
+      "read": 15488,
+      "clip": 2992,
+      "blit": 2992,
+      "getDC": 5080,
+      "setBackgroundMode": 5080,
+      "setTextColor": 5080,
+      "stringLength": 5080,
+      "textOut": 5080,
+      "releaseDC": 5080,
+      "method": 336,
+      "soundRequest": 70,
+      "soundMethod": 210,
+      "format": 296,
+      "candidates": 50,
+      "random": 108,
+      "musicConfiguration": 88,
+      "stopMusic": 4,
+      "musicMethod": 8
+    },
+    "instructionStarts": 4102,
+    "exeInstructionStarts": 3611,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 440,
+    "blobCount": 3694,
+    "decodedBlobBytes": 197460712,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 338
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 338
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 338
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 338
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 22
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 1030
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 336
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "sourceAuditSession": 55687,
+  "sourceAuditTerminalChunk": "fdc98e",
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 93787,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionCommandsTests|OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T10:09:45.845229+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 391.391,
+      "endedUTC": "2026-09-11T10:16:17.263974+00:00"
+    },
+    {
+      "name": "packaged",
+      "scope": "Packaged acceptance of retained library reselection/reroll commands.\nSame isolated Core/tests as the latest passing raw acceptance, adding only the lossless transport files.\nNo raw environment override or reference execution. Preserve input composition.\n",
+      "pid": 95443,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibSelectionCommandsTests"
+      ],
+      "startedUTC": "2026-09-11T10:19:02.134067+00:00",
+      "inputFiles": 663,
+      "manifest": "build/research/lib-selection-commands-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 79.22,
+      "endedUTC": "2026-09-11T10:20:21.352482+00:00"
+    }
+  ],
+  "nativeAcceptance": {
+    "session": 89743,
+    "terminalChunk": "5e75fe",
+    "buildSeconds": 249.54,
+    "tests": 4,
+    "seconds": 139.662,
+    "newTestsSeconds": 79.349,
+    "newWholeSeconds": 43.078,
+    "newRollbackSeconds": 36.272,
+    "retainedTestsSeconds": 60.313
+  },
+  "packagedAcceptance": {
+    "session": 4013,
+    "terminalChunk": "da3629",
+    "buildSeconds": 0.34,
+    "tests": 2,
+    "seconds": 76.698,
+    "wholeSeconds": 41.629,
+    "rollbackSeconds": 35.068,
+    "rawEnvironmentOverride": false
+  },
+  "artifactVerification": {
+    "timeUTC": "2026-09-11T10:17:56.045987+00:00",
+    "files": 659,
+    "priorFixturesUnchanged": 259,
+    "fixturePins": 263,
+    "rawBytes": 1406196370,
+    "rawSHA256": "6fbc8465786f92034727115206aaed31144d981d790612ba04b3b75473e28c8e",
+    "packedBytes": 180606280,
+    "packedFiles": {
+      "original-lib-selection-commands-part0.json": {
+        "bytes": 67134860,
+        "sha256": "c01ba497399bbdd20a868ed5b7227352d422356d0f8da418de9d121662e88bc7"
+      },
+      "original-lib-selection-commands-part1.json": {
+        "bytes": 66945700,
+        "sha256": "a5f622df47d125336fefc44818b5f1ab4bd3553b011538aa5a6b45b05d98e2f8"
+      },
+      "original-lib-selection-commands-part2.json": {
+        "bytes": 46525388,
+        "sha256": "1f2fae68b5deb2ddcb5844512138cf6ea48c92d4cf13ff09bce04f143173b481"
+      },
+      "original-lib-selection-commands.json": {
+        "bytes": 332,
+        "sha256": "f411284ebd732cfd076a45833cedb0156751ff3e1c1c5beaa8d5a92eb1affb1e"
+      }
+    },
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true
+  },
+  "artifactSession": 4725,
+  "artifactTerminalChunk": "8e0fd2",
+  "packageVerification": {
+    "timeUTC": "2026-09-11T10:21:26.860464+00:00",
+    "files": 663,
+    "unchangedRawFiles": 659,
+    "composition": {
+      "base": "b488eb42567e23a0178ddfb8e1e0ffb24cca46dd",
+      "baseComposition": "build/research/lib-selection-stage-packaged-input-composition.json",
+      "baseCompositionSHA256": "81527f47a482f0ffdb3f6bacac91975b0eabbd4a59f0c2865917eb961c98f641",
+      "baseManifest": "build/research/lib-selection-stage-packaged-input-pins.json",
+      "ownedArchive": "build/research/lib-selection-commands-native1-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "0d5ea810e42d3278d06278cf2d627bce26f4ffcdd96880088433a4e9c2b48d77",
+      "ownedFiles": [
+        "Sources/NTSDCore/OriginalMatchSelection.swift",
+        "Tests/NTSDCoreTests/OriginalLibSelectionCommandsTests.swift"
+      ],
+      "completeManifest": "build/research/lib-selection-commands-packaged-input-pins.json",
+      "files": 663,
+      "layout": "Recursively verified accepted Core plus roster comparator, then the lossless multipart fixture",
+      "fixtureArchive": "build/research/lib-selection-commands-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "ac3ad8f7b9ac7cf29db9ca6d6330022f9562651a36fd4d6edeebe4f30c39cbc4",
+      "fixtureFiles": [
+        "Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part0.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part1.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part2.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands.json"
+      ]
+    },
+    "priorCompleteArchiveAudit": "build/research/lib-selection-commands-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 263,
+    "oldFixturesUnchanged": 259,
+    "fullRawBytesAndJSONEqual": true,
+    "preservation": {
+      "foreignHashes": 6,
+      "nativeOwnedPending": 14,
+      "sourceOwnedPending": 3,
+      "application-catalog-frozen-watch40-inputs.json": 886,
+      "application-catalog-control20-parent1-inputs.json": 887,
+      "application-catalog-control20-parent2-inputs.json": 887,
+      "application-catalog-guarded20-inputs.json": 890,
+      "application-catalog-candidate5-resourced-inputs.json": 890
+    }
+  },
+  "packageAuditSession": 43841,
+  "packageAuditTerminalChunk": "3e21e2",
+  "storage": {
+    "scope": "Apply the finite APFS physical-storage plan for completed original VS menu prefixes.\nExact whole-file bytes/SHA, mode/mtime and paths survive. No live trace,\noriginal execution, expected-result edit, fault or protection operation.\n",
+    "timeUTC": "2026-09-11T10:21:21.516454+00:00",
+    "planSHA256": "c10cfe6a52a130fa25e6ce214daa19598153bc1c30c918b2029e45ed89e83b61",
+    "files": 194,
+    "logicalDuplicateBytes": 1157412946,
+    "freeBefore": 7035580416,
+    "freeAfter": 8193622016,
+    "elapsedSeconds": 2.233,
+    "fullBytesMasksAndPathsUnchanged": true
+  },
+  "storageSession": 77150,
+  "storageTerminalChunk": "1925cf",
+  "filePins": {
+    "docs/research/LIB_SELECTION_COMMANDS_PLAN.md": "e86097e1c1118d4e3067cc60794400e4b3c04bc6df239c2756cdeafec8a47a6b",
+    "tools/oracle_lib_selection_commands.py": "c7cd131e80577f89c71869d4d1aa45f263461c39d78690ee34ee774daa6d4b29",
+    "tools/verify_lib_selection_commands.py": "366a7058f7a196a4b02f16218acccae76e47c058848ac64b10262281870557cf",
+    "build/research/lib-selection-commands-static.txt": "01493fc319809d9e2910ceefe703cfb80aab83a19d36afc941baa51029b015e2",
+    "build/research/lib-selection-commands-finite-inputs.json": "ad19a19d8d0de07fcf41e65074293588788c38263ce7adfb7e7ac6d18925a6e2",
+    "build/research/lib-selection-commands-capture1-input-pins.json": "f20470b835a13c17008c7c8c939a0a55154c16964f6e6a3aa2384f897dcef9bd",
+    "build/research/lib-selection-commands-source-verification1.json": "4a5d424e1f24d7df1ba3e47cf34771c2255426418d7bcdbb1eb274e8b5a331db",
+    "build/research/lib-selection-commands-native1-input-composition.json": "9eaa0feb92fd0aee3d00587dbb6ae9e3ccd90c6f186aead42f11c4382d7cc8bd",
+    "build/research/lib-selection-commands-packaged-input-composition.json": "c6dc4f5adae97aea4ab9d8194aab867fe5e3643e77c4c8fa60895fa5ddf0a412",
+    "build/research/lib-selection-commands-artifact-verification.json": "f61a9e4e045111ec8b504d872072e9daccd103e75413722ef3b932a6d259aa74",
+    "build/research/lib-selection-commands-packaged-input-verification.json": "959de557a1f72ee763eb352a6b07fbef95a1b9c23d164bd4e8d561a5b3761325",
+    "build/research/lib-selection-commands-storage-plan.json": "c10cfe6a52a130fa25e6ce214daa19598153bc1c30c918b2029e45ed89e83b61",
+    "build/research/lib-selection-commands-storage-verification.json": "19281cb21221959e98266d4660ac65803a3f004895c2f9c766c6011db401f8e5"
+  },
+  "errors": [],
+  "sourceFaults": 0,
+  "safetyRefusals": 0,
+  "nativeCompared": true,
+  "appLinked": true,
+  "appWindowVerified": false,
+  "windowsVerified": false,
+  "deviceVerified": false,
+  "ownInitializedLibraryJoin": false,
+  "fullGoalComplete": false
+}

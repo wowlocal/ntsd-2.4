@@ -183,15 +183,23 @@ public enum OriginalMatchSelection {
                 try mark(0x42cf8a);return finish(.matchPrelude)
             }
             try mark(confirmation == 0 ? 0x42d789 : 0x42d706)
-            guard try confirmation == 0 || [3,4,5].contains(word(0x44d06c)) else { throw error("Reselection/reroll caller locals") }
+            let action = try word(0x44d06c)
             try candidate.continueMenu(confirmation: confirmation,bitmapSource: { _ in throw error("Unexpected bitmap loading") },observe: { e in
                 switch e {
                 case .device(.soundRequest(let loop)):try observe(.init("soundRequest",[loop ? 1 : 0]))
                 case .device(.soundMethod(let resource,let offset,let args)):try observe(.init("soundMethod",[resource,UInt32(offset)]+args))
                 case .state(.resetInput):break // Real431c70 state writes are performed by continueMenu.
+                case .candidates(let seat,let ordinals):try observe(.init("candidates",[UInt32(seat)]+ordinals.map(UInt32.init)))
+                case .state(.random(let stream,let range,let result,let beforeIndex,let beforeCounter,let index,let counter)):
+                    try observe(.init("random",[stream,range,result,Int32(beforeIndex),Int32(beforeCounter),Int32(index),Int32(counter)].map(UInt32.init(bitPattern:))))
                 default:throw error("Unexpected continuation event")
                 }
             })
+            if confirmation != 0 && action == 2 {
+                // 42df7c..42e0b0 visits all eight seats. Preserve its own World
+                // cursor as a semantic offset; never import source stack bytes.
+                local[0x20] = 0x1b4;local[0x34] = 32
+            }
         }
         try mark(0x42e0b6)
         if try word(0x44d078) <= 0 && word(0x4512c8) == 0 { try write(0x4512c8,1) }

@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Library VS reselect/reroll: [LIB_SELECTION_COMMANDS](docs/research/LIB_SELECTION_COMMANDS.md).**
+338source/native calls match:336actual422ab8ret4 and2unreturned42cf8a boundaries.
+194whole parent calls reproduce unchanged. Six option2 commands/30tagEA choices
+retain live all8 candidate exclusions, inactive Random seats, held-input gates;
+two option1 resets preserve concrete choices/ActorObject while resetting only
+flag==1 selections. Both human/CPU ready routes then reach District/Start.
+Native reuses shared continuation; SP20=own Worldcursor1b4/SP34=32, no source
+stack import. Full7598points/5820068records/16866724220bytes,258908finalrecords/
+750322820bytes,375375stores/714856instructionreads/10840APIreads/13572helpers/
+24370counterwords/3694blobs verified.4102starts=3611EXE+51lib+440CRT; observed
+coverage, not all branches.56370events/6664undefined bitmapreads retain masks.
+Source1terminal0 82.918s; no new source/Native/verifier corrections or faults.
+Raw4tests139.662s/build249.54s includes new79.349s and prior60.313s. Packaged2tests
+76.698s/build0.34s pass; late third-reroll-return and post-reselect rollback keep
+all prior calls/owners/DC. Full663package files/recursive archives verified;
+259oldfixtures unchanged,263current; index/3parts180606280bytes restore exact
+1406196370rawbytes/JSON/SHA. All study source/SwiftPM jobs terminal, Native linked;
+no window/device/Windows claim.194identical completed atomic prefixes now APFS
+clone1157412946logicalduplicatebytes with every byte/path/hash/mode/mtime retained;
+free7035580416->8193622016. Catalog5 Python78863 remains separate/live, last5Objects;
+its traces/890frozeninputs/6GiB reserve unchanged. Revalidate actual job/ps.
+Next other modes, own initialized library/prelude/outer-loop/app join; full-match/
+all-content/network/Windows/device/clean-Mac goal stays open.
+
 **Library VS computer/team/arena selection: [LIB_SELECTION_STAGE](docs/research/LIB_SELECTION_STAGE.md).**
 252source/native calls match:250actual422ab8ret4 and2unreturned42cf8a Start
 boundaries. Two retained127/125call sequences preserve fresh11bitmaps, full
