@@ -11,7 +11,7 @@ final class OriginalWarPreparationSurfaceAdapter {
     typealias API = OriginalBitmapSurfaceLoading
     let c: Test.WarGraphics,r: Test.Resources
     var index=0,allocation=0,globalKeys: [String]=[]
-    init(_ c: Test.WarGraphics,_ r: Test.Resources) { self.c=c;self.r=r;self.allocation=0 }
+    init(_ c: Test.WarGraphics,_ r: Test.Resources) { self.c=c;self.r=r;self.allocation=c.allocationStart ?? 0 }
     func next(_ kind: String) throws -> Base.Event {
         guard index<c.events.count else { throw Test.Stop.unexpected }
         let e=c.events[index];index += 1;XCTAssertEqual(e.kind ?? e.request?.kind,kind);return e
@@ -69,25 +69,42 @@ final class OriginalWarPreparationSurfaceAdapter {
             XCTAssertEqual(response,captured,"Owned platform output");try observe();return response
         }
     }
+    func release(_ index: Int,_ bitmap: OriginalLoadedBitmap,_ context: inout Base.Context,
+                 observe: (String,UInt32) throws -> Void) throws {
+        let ordinal=index-r.catalog.bitmaps.count
+        XCTAssertGreaterThanOrEqual(ordinal,0);XCTAssertLessThan(ordinal,c.allocationStart ?? 0)
+        let wrapper=try XCTUnwrap(c.allocations[ordinal].address)
+        let surface=try XCTUnwrap(context.surfaceForWrapper[wrapper])
+        try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context) { q,g in
+            let e=try self.next(q.kind),expected=try XCTUnwrap(e.request),response=try XCTUnwrap(e.response)
+            XCTAssertEqual(q.words,expected.words);XCTAssertEqual(q.strings,expected.strings);XCTAssertNil(q.bytes);XCTAssertNil(q.defined)
+            self.globalKeys.append(try XCTUnwrap(e.globals));g.requested.append(try XCTUnwrap(e.key))
+            if q.kind=="release" { XCTAssertEqual(g.surfacesReleased[surface],false);g.surfacesReleased[surface]=true }
+            else { XCTAssertEqual(q.kind,"free");XCTAssertEqual(g.surfacesReleased[surface],true) }
+            try observe(q.kind,wrapper);return response
+        }
+    }
     func compareGlobals(_ globals: OriginalStateRecord) throws {
-        // All BG API requests precede434765 and change no game globals. Each
+        // All BG API requests precede43a42d and change no game globals. Each
         // captured request independently checks this whole native stage value.
         for key in Set(globalKeys) { XCTAssertEqual(globals.bytes,Array(try r.blob(key).prefix(globals.bytes.count))) }
     }
     func compare(_ state: OriginalMatchPreparation,_ context: Base.Context) throws {
         XCTAssertEqual(index,c.events.count);XCTAssertEqual(allocation,c.allocations.count)
         XCTAssertEqual(state.bitmaps.count,r.catalog.bitmaps.count+allocation)
+        let history=c.constructionHistory ?? c.helpers
         for (i,record) in c.records.enumerated() {
             let bitmap=state.bitmaps[r.catalog.bitmaps.count+i],surface=try XCTUnwrap(context.surfaceForWrapper[record.address])
             var expected=try r.blob(record.bytes)
             XCTAssertEqual(Array(expected.prefix(4)),(0..<4).map { UInt8(truncatingIfNeeded:surface >> ($0*8)) });expected.replaceSubrange(0..<4,with:[1,0,0,0])
             XCTAssertEqual(bitmap.storage.bytes,expected);XCTAssertEqual(bitmap.storage.defined,try r.blob(record.mask).map { $0 != 0 })
-            let constructorIndex=try XCTUnwrap(c.helpers.firstIndex { $0.kind=="constructor" && $0.wrapper==record.address })
-            let h=c.helpers[constructorIndex]
+            let constructorIndex=try XCTUnwrap(history.firstIndex { $0.kind=="constructor" && $0.wrapper==record.address })
+            let h=history[constructorIndex]
             // Event indices restart at each call; the enclosing constructor's
             // immediately preceding loader return preserves call provenance.
-            let loader=try XCTUnwrap(c.helpers[..<constructorIndex].last { $0.kind=="loader" && $0.eventStart>=h.eventStart && $0.eventEnd<=h.eventEnd })
+            let loader=try XCTUnwrap(history[..<constructorIndex].last { $0.kind=="loader" && $0.eventStart>=h.eventStart && $0.eventEnd<=h.eventEnd })
             XCTAssertEqual(bitmap.input.path,loader.path);XCTAssertTrue(bitmap.input.present);XCTAssertFalse(bitmap.optional)
+            if let live=c.wrapperLive?[String(record.address)] { XCTAssertEqual(state.releasedBitmaps.contains(r.catalog.bitmaps.count+i),!live) }
         }
         XCTAssertEqual(context.imagesDeleted,Dictionary(uniqueKeysWithValues:c.images.map { (UInt32($0.key)!,$0.value.deleted) }))
         XCTAssertEqual(context.surfacesReleased,Dictionary(uniqueKeysWithValues:c.surfaces.map { (UInt32($0.key)!,$0.value.released) }))

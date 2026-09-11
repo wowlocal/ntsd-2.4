@@ -1,0 +1,351 @@
+{
+  "scope": "Accepted finite War preparation success matrix; normal declared APIs and controlled confirmations, not played fights, own startup, resource-failure equivalence, Windows/device or full-game completion.",
+  "timeUTC": "2026-09-11T23:52:03.004788+00:00",
+  "referenceBase": "2469ed79c512e7dd98be36f6cb2c0f884f07aa25",
+  "references": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "environment": "Unicorn2.1.4/CW023f/C locale; source EXE/DLL execution is development tooling only"
+  },
+  "raw": {
+    "bytes": 2866445440,
+    "sha256": "79b14f3aaa971e5ef1d60eac6d72955c1f9c924fcc2c2948caa74de67d24495a"
+  },
+  "sourceCounts": {
+    "capture1CallsReproduced": 25,
+    "capture2RetainedCalls": 234,
+    "source2ParentReproductions": 40,
+    "atomicCases": 256,
+    "atomicBytes": 5122072088,
+    "constructorReturns": 8020,
+    "wholeReturns": 256,
+    "stores": 8625139,
+    "storedBytes": 30708144,
+    "instructionReads": 3608524,
+    "instructionReadBytes": 12924773,
+    "pointRecords": 7125784,
+    "pointBytes": 40878800788,
+    "points": 6596,
+    "APIReads": 65425,
+    "APIReadBytes": 288008,
+    "helperReturns": 105415,
+    "finalRecords": 275579,
+    "finalBytes": 1445571426,
+    "readyBridges": 20,
+    "popupBridges": 0,
+    "warReturns": 236,
+    "warBitmapAllocations": 40,
+    "warPoints": 1764,
+    "readyConsumerBindings": 160,
+    "preparationInputBridges": 20,
+    "preparationInputWrites": 140,
+    "liveRandomLists": 140,
+    "retainedRandomObjectBindings": 144,
+    "matrixInputBridges": 56,
+    "matrixInputWrites": 510,
+    "arenaBitmapAllocations": 619,
+    "musicAllocations": 56,
+    "musicAllocationBytes": 1604,
+    "recordingAllocations": 56,
+    "preparationPoints": 1348,
+    "definedPreparationNoticeReads": 56,
+    "knownReleaseReads": 2177,
+    "numericPoints": 680,
+    "recordingReads": 407530,
+    "recordingReadBytes": 1104562,
+    "preparedHuman": 172,
+    "preparedParticipants": 340,
+    "preparedCPU": 168,
+    "independentlyExpectedBitmapAllocations": 619,
+    "recordingBytes": 363533632,
+    "wholePreparations": 56,
+    "initialRecordingFrees": 20,
+    "releasePairs": 302,
+    "recordingReplacements": 36,
+    "staleTailReloads": 18,
+    "declaredPEParentOverrides": 10,
+    "recordingNoticeFormats": 28,
+    "capture2PrefixReproduced": 10
+  },
+  "sourceInstructionStarts": 4456,
+  "sourceAudit": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-audit3.json",
+    "bytes": 180804,
+    "sha256": "8b5a1b1c00fa87f392f17f5e6dc0b6d44ad46d28e569af06ff2766c2c5393c1b"
+  },
+  "preparationCoverage": {
+    "executed": 295,
+    "declared": 330,
+    "allBranchOutcomes": false,
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-coverage1.json",
+      "bytes": 4694,
+      "sha256": "495a46950e6d652558c5e0cb1200daf9995ab053542fb14c4ddae98eb6f841c3"
+    }
+  },
+  "composition": {
+    "retainedFixedCalls": 234,
+    "freshRandomCalls": 22,
+    "parentCallsReproduced": 40,
+    "capture1PartsIdentical": 25,
+    "capture2PrefixReproduced": 10,
+    "uniqueStartupCountClaim": false
+  },
+  "sourceJobs": {
+    "war-preparation-matrix-capture1": {
+      "scope": "Whole War preparation256-call/56-preparation controlled success matrix.\nPinned NTSD EXE/lib/VC80/resources, Unicorn2.1.4/CW023f/C locale and normal APIs.\nTwenty fresh original401-constructor chains reproduce forty resource/ready\nparent calls, then actual live Random and Start. Declared ordinary settings,\nparticipant/team/multiplier and RNG entry inputs vary fixed/random arenas and\nsparse seats. Retain all memory/stack/FPU/store/read/helper evidence, bitmap\nRelease/free/reload and recording replacement through ret1c/ret4. Synthetic\nmapping/allocator ownership is separate from real Windows/host/device behavior.\nNo control/protection corruption, unknown after-state import, source-fault\ncontinuation or Native/full-game claim. Preserve completed22-call preflight and\nall failures; never restart for silence. LIB_WAR_PREPARATION_MATRIX_PLAN.md and\nLIB_WAR_PREPARATION_MATRIX_INPUTS.md freeze the finite boundary before capture.\n",
+      "status": "terminal",
+      "pid": 83187,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_preparation_matrix.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T22:48:52.357604+00:00",
+      "originalExecuted": true,
+      "exitCode": 1,
+      "endedUTC": "2026-09-11T22:49:45.943315+00:00",
+      "elapsedSeconds": 53.588,
+      "inputsUnchanged": true
+    },
+    "war-preparation-matrix-capture2": {
+      "scope": "Whole War preparation256-call/56-preparation controlled success matrix.\nPinned NTSD EXE/lib/VC80/resources, Unicorn2.1.4/CW023f/C locale and normal APIs.\nTwenty fresh original401-constructor chains reproduce forty resource/ready\nparent calls, then actual live Random and Start. Declared ordinary settings,\nparticipant/team/multiplier and RNG entry inputs vary fixed/random arenas and\nsparse seats. Retain all memory/stack/FPU/store/read/helper evidence, bitmap\nRelease/free/reload and recording replacement through ret1c/ret4. Synthetic\nmapping/allocator ownership is separate from real Windows/host/device behavior.\nNo control/protection corruption, unknown after-state import, source-fault\ncontinuation or Native/full-game claim. Preserve completed22-call preflight and\nall failures; never restart for silence. LIB_WAR_PREPARATION_MATRIX_PLAN.md and\nLIB_WAR_PREPARATION_MATRIX_INPUTS.md freeze the finite boundary before capture.\nLIB_WAR_PREPARATION_MATRIX_LIFETIMES.md corrects the synthetic arena reserve:\nat most30 wrappers per load,60 retained allocations across load/99/reload.",
+      "status": "terminal",
+      "pid": 84389,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_preparation_matrix.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-capture2.json"
+      ],
+      "startedUTC": "2026-09-11T22:56:57.782520+00:00",
+      "originalExecuted": true,
+      "exitCode": 1,
+      "endedUTC": "2026-09-11T23:06:12.116475+00:00",
+      "elapsedSeconds": 554.329,
+      "inputsUnchanged": true
+    },
+    "war-preparation-matrix-capture3": {
+      "scope": "Finish the controlled War success matrix with two fresh Random chains.\nPinned NTSD EXE/lib/VC80/original resources, Unicorn2.1.4/CW023f/C locale and\nnormal declared APIs. Retain234 completed fixed-arena calls bytewise; execute\nonly22 calls from two fresh401-constructor parents. Account for actual music\nstream1 before arena stream123; no RNG result hook or after-state import.\nMemory/stack/ownership traces recover arena/participant/recording order, at\nsynthetic allocation/device boundaries separate from Windows/host behavior.\nPreserve capture2's245 complete returns, including the normal arena9 return\nthat failed the old input expectation. Never resume or restart that process.\nNo source memory fault/protection change/safeguard retry or Native/full-game\nclaim. LIB_WAR_PREPARATION_MATRIX_RANDOM_INPUTS.md defines the finite correction.",
+      "status": "terminal",
+      "pid": 86537,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_preparation_matrix_random.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-capture3.json"
+      ],
+      "startedUTC": "2026-09-11T23:11:18.020634+00:00",
+      "originalExecuted": true,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T23:14:15.743717+00:00",
+      "elapsedSeconds": 177.725,
+      "inputsUnchanged": true
+    }
+  },
+  "preservedFailures": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-capture1-review.json",
+      "bytes": 8705,
+      "sha256": "91142755b5c74272f598306e5c3eab701362b1904f4a8cf777af3c904ef8e2cc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-capture2-review.json",
+      "bytes": 67070,
+      "sha256": "d97144f25b61b11ffd0f44259cc8cb9e2f81d1e93265c87c489bf5763b0024a1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-audit-native-authoring1-review.json",
+      "bytes": 3146,
+      "sha256": "ec225108220b494cae92bc8fa0e092b6a85078e3d12a3c7f26932d4c1cdfd939"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-audit2-review.json",
+      "bytes": 2156,
+      "sha256": "131efae57df5506d727d99d2b65aa55d55a1aeabfb7aa45b1ff96684b4d3a6a8"
+    }
+  ],
+  "sourceMemoryFault": false,
+  "newSafetyRefusal": false,
+  "native": {
+    "raw": {
+      "calls": 256,
+      "tests": 1,
+      "testSeconds": 148.773,
+      "buildSeconds": 0.34,
+      "rollbackTrials": 6,
+      "job": {
+        "scope": "Whole Native War success matrix256 outer/236 War returns,56 preparations,340 participants,680 numeric checkpoints and six source-coupled release/free/old-recording-free rollback trials. Corpus has234 retained fixed and22 fresh Random calls with prior music RNG. Independent catalog and owned state only; no private stack/CPU ABI, Windows/device/window or full-game claim.",
+        "status": "terminal",
+        "pid": 89893,
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarPreparationTests.testWholeMatrixAndRetainedReleaseRollback"
+        ],
+        "startedUTC": "2026-09-11T23:32:33.132504+00:00",
+        "originalExecuted": false,
+        "exitCode": 0,
+        "endedUTC": "2026-09-11T23:35:03.473323+00:00",
+        "elapsedSeconds": 150.344,
+        "inputsUnchanged": true
+      },
+      "session": 71386,
+      "terminalChunk": "925cf7"
+    },
+    "retained": {
+      "calls": 22,
+      "tests": 1,
+      "testSeconds": 17.2,
+      "buildSeconds": 204.18,
+      "rollbackTrials": 12,
+      "job": {
+        "scope": "Build corrected public-record test accesses and compare unchanged bound22 preflight/12 rollback cases from bundled fixtures. Matrix raw pins are from terminal source3; full matrix audit and Native comparison remain pending. No source execution, Windows/window/device claim.",
+        "status": "terminal",
+        "pid": 87766,
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarPreparationTests.testWholeBoundPreparationAndLateRollback"
+        ],
+        "startedUTC": "2026-09-11T23:18:36.859168+00:00",
+        "originalExecuted": false,
+        "exitCode": 0,
+        "endedUTC": "2026-09-11T23:22:19.880657+00:00",
+        "elapsedSeconds": 223.022,
+        "inputsUnchanged": true
+      },
+      "session": 66509,
+      "terminalChunk": "193467"
+    },
+    "packaged": {
+      "tests": 2,
+      "testSeconds": 206.977,
+      "buildSeconds": 197.8,
+      "matrixSeconds": 189.878,
+      "preflightSeconds": 17.098,
+      "rawOverrides": false,
+      "job": {
+        "scope": "Final bundled Native War matrix256 calls/56 preparations/680numeric checkpoints/6release rollback trials plus unchanged bound22 preflight/12earlier rollbacks. All325 fixture pins,759 package files and full raw/transport6140blob verification retained. No raw fixture override, original execution, app-window/device/Windows/full-game claim.",
+        "status": "terminal",
+        "pid": 91084,
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarPreparationTests"
+        ],
+        "startedUTC": "2026-09-11T23:40:11.740710+00:00",
+        "originalExecuted": false,
+        "exitCode": 0,
+        "endedUTC": "2026-09-11T23:46:57.354341+00:00",
+        "elapsedSeconds": 405.612,
+        "inputsUnchanged": true
+      },
+      "session": 17683,
+      "terminalChunk": "92493b"
+    },
+    "numericPoints": 680,
+    "comparison": "Owned fields/checkpoints/ordered events and complete buffers/masks, not private stack or per-instruction CPU ABI",
+    "rollbackContract": "Native observer errors at success-trace events; no claim of original API-failure equivalence",
+    "gameRulesChanged": false,
+    "NTSDNativeLinked": true
+  },
+  "transport": {
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-transport1.json",
+      "bytes": 2611,
+      "sha256": "4b0d7e5f00a429553a45a5fe575410ba59502629d75cf34fc840dd47648bc3c7"
+    },
+    "files": {
+      "original-lib-war-preparation-matrix.json": {
+        "bytes": 26369282,
+        "sha256": "ae2c8dd96fcbf362ee9d6194c356089e68bde7ff12d84a99606e83806a8b5205"
+      },
+      "original-lib-war-preparation-matrix-cases1.json": {
+        "bytes": 57178122,
+        "sha256": "63c2a1553dffe101b6c1984cc5ae4aadf1751d80ce6775353df866eb14df9cd1"
+      },
+      "original-lib-war-preparation-matrix-cases2.json": {
+        "bytes": 58975100,
+        "sha256": "dbbf1f004e859f574d38fe8d379540b44d444d8ef2c7cb57a0c3f3b443bd57f6"
+      },
+      "original-lib-war-preparation-matrix-cases3.json": {
+        "bytes": 61440070,
+        "sha256": "3374c9aec21fd44618c65373e6d6401de4a2566a205cebcfa866b47b018d559e"
+      },
+      "original-lib-war-preparation-matrix-cases4.json": {
+        "bytes": 61192842,
+        "sha256": "a207eadd8e47b4456c8fcb289b92bc52ee4473c00846927d845d16a49c238aa9"
+      },
+      "original-lib-war-preparation-matrix-cases5.json": {
+        "bytes": 57191036,
+        "sha256": "d5ec685c4885d69b880145b7e3940ba48e8cad593e6500d13963b0f899916481"
+      },
+      "original-lib-war-preparation-matrix-cases6.json": {
+        "bytes": 6308059,
+        "sha256": "2b06803b7d2cbdb4a191d51697bef2fe40d7b0400231aa74359f0ee33419209c"
+      }
+    },
+    "packedBytes": 328654511,
+    "blobs": 6140,
+    "decodedBlobBytes": 615145016,
+    "metadataBytes": 184493027,
+    "maxCaseBytes": 26481646,
+    "completeRawBytesAndJSON": true
+  },
+  "package": {
+    "files": 759,
+    "fixtures": 325,
+    "previousFixturesUnchanged": 318,
+    "pins": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/native-matrix1-packaged-pins.json",
+      "bytes": 98306,
+      "sha256": "b397b0033761fe9e47e0e09897f3e8a0dff04c4be1016075ff0741fe966c001d"
+    },
+    "fixturePins": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-fixture-pins.json",
+      "bytes": 44518,
+      "sha256": "a5974b973a4f5228beb8a2598f10810550790e72bcfd41d02f54f88d769d4212"
+    },
+    "archive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-native-package1.tar.gz",
+      "bytes": 2794788229,
+      "sha256": "b66bf18dea2d656581cf396d385dca676be7098da3d0bf04bf62548ad06cbfa7"
+    },
+    "allArchiveMembersReverified": true,
+    "prospectiveGit": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-matrix-prospective-native1.json",
+      "bytes": 528,
+      "sha256": "c5b3c1e5272280079b87ad0d5af398fe5d1cb95cea5c84ee0df4f19542cdeb6e"
+    }
+  },
+  "protectedFilesUnchanged": 23,
+  "allCurrentStudyJobsTerminal": true,
+  "finiteSuccessMatrixAccepted": true,
+  "fullPreparationComplete": false,
+  "wholeGameComplete": false,
+  "windowVerified": false,
+  "deviceVerified": false,
+  "windowsVerified": false,
+  "remaining": [
+    "Ordinary resource/API and replay allocation failures",
+    "43a860 War gameplay",
+    "Own complete catalog/startup/outer loop/app join",
+    "Played full matches and all content/network",
+    "Window/input/audio/Windows/clean-Mac verification"
+  ]
+}

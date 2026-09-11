@@ -1,7 +1,8 @@
 /// Whole War Start43a21f..43a769: arena, eight live seat choices, music and
 /// recording. Own state commits together; callbacks must stage external effects
 /// until the enclosing War and outer menu return commits. Controlled source
-/// preflight covers two preparations; the full arena/failure matrix remains open.
+/// matrix covers56 successful preparations; ordinary resource failures and
+/// the own full-startup join remain separate open comparisons.
 public enum OriginalWarPreparation {
     public static func prepare(state: inout OriginalMatchPreparation,
         memory: inout OriginalMenuPresentationMemory,localTime: () throws -> OriginalLocalTime,
@@ -12,6 +13,7 @@ public enum OriginalWarPreparation {
         resumeMusic: (inout OriginalStateRecord) throws -> Void,
         allocateReplay: (Int) throws -> UInt32,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        numericCheckpoint: (UInt32,Int,OriginalMatchPreparation) throws -> Void = { _,_,_ in },
         checkpoint: (UInt32,OriginalMatchPreparation,OriginalMenuPresentationMemory,[UInt8]) throws -> Void = { _,_,_,_ in }) throws {
         var scene=state,owned=memory,name: [UInt8]=[]
         func error(_ s: String) -> OriginalStateError { .invalidStorage("War preparation: "+s) }
@@ -86,6 +88,7 @@ public enum OriginalWarPreparation {
             try scene.actors[a].write(objectField,at:0x31c)
             try scene.actors[a].writeBinary64(cpu ? 0 : -50,at:0x60)
             try scene.actors[a].writeBinary64(300,at:0x68)
+            try numericCheckpoint(cpu ? 0x43a4a8 : 0x43a5f2,seat,scene)
             try scene.actors[a].write(team,at:0x364);try scene.actors[a].write(team,at:0x344)
             try scene.world.write(UInt8(1),at:4+slot);try scene.actors[a].write(Int32(75),at:8)
             let arena=scene.backgrounds[Int(arenaIndex)]
@@ -97,6 +100,7 @@ public enum OriginalWarPreparation {
             if !cpu { try scene.actors[a].write(Int32(0),at:0x14) }
             try scene.actors[a].writeBinary64(Double(x),at:0x58);try scene.actors[a].writeBinary64(Double(z),at:0x68)
             if !cpu { try scene.actors[a].writeBinary64(0,at:0x60) }
+            try numericCheckpoint(cpu ? 0x43a553 : 0x43a6a8,seat,scene)
             try scene.actors[a].write(Int32(200),at:0x308)
             if try word(0x451160)==1 { try scene.actors[a].write(Int32(500),at:0x308) }
             try scene.actors[a].write(Int32(slot),at:0x354)

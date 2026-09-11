@@ -5,12 +5,12 @@ import NTSDCore
 
 final class OriginalLibWarPreparationTests: XCTestCase {
     enum Study: String, Equatable {
-        case preparation
-        var count: Int { 22 }
-        var rawBytes: Int { 192_093_188 }
-        var rawSHA256: String { "e3abb5dec759c28103c5a746972d7fb1469e7fa7b8ca151a09fc952e6d5621f6" }
-        var environment: String { "NTSD_LIB_WAR_PREPARATION_INDEX" }
-        var fixture: String { "original-lib-war-preparation-bound" }
+        case preparation,matrix
+        var count: Int { self == .preparation ? 22 : 256 }
+        var rawBytes: Int { self == .preparation ? 192_093_188 : 2_866_445_440 }
+        var rawSHA256: String { self == .preparation ? "e3abb5dec759c28103c5a746972d7fb1469e7fa7b8ca151a09fc952e6d5621f6" : "79b14f3aaa971e5ef1d60eac6d72955c1f9c924fcc2c2948caa74de67d24495a" }
+        var environment: String { self == .preparation ? "NTSD_LIB_WAR_PREPARATION_INDEX" : "NTSD_LIB_WAR_PREPARATION_MATRIX_INDEX" }
+        var fixture: String { self == .preparation ? "original-lib-war-preparation-bound" : "original-lib-war-preparation-matrix" }
     }
     typealias Base = OriginalCharacterMenuSurfaceTests
     typealias Music = OriginalCharacterMenuMusicSurfaceTests
@@ -32,7 +32,9 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     struct CellEdit: Decodable { let row: Int,side: Int,unit: Int,address: Int }
     struct Actions: Decodable { let row: Int,mask: Int,address: Int }
     struct PreparationInputs: Decodable { let words: [String:Int32],strings: [String:String] }
-    struct Spec: Decodable { let preparationInputs: PreparationInputs?,localTime: [UInt16]?,expectedPreparation: Bool?; let bridgeGlobals: [String:Int32]?, bridgeReady: [Ready]?; let buttons: [[Int]]?; let expectedEdit: CellEdit?,expectedActions: Actions?; let label: String, control: Bool, music: MusicSpec?, chain: Bool?, dcResult: Int32?, dc: UInt32?, methodResult: Int32?, milliseconds: UInt32? }
+    struct MatrixSeat: Decodable { let seat: Int,status: Int32,team: Int32 }
+    struct MatrixInputs: Decodable { let words: [String:Int32],seats: [MatrixSeat]? }
+    struct Spec: Decodable { let matrixInputs: MatrixInputs?,generation: Int?,matrixOrdinal: Int?; let preparationInputs: PreparationInputs?,localTime: [UInt16]?,expectedPreparation: Bool?; let bridgeGlobals: [String:Int32]?, bridgeReady: [Ready]?; let buttons: [[Int]]?; let expectedEdit: CellEdit?,expectedActions: Actions?; let label: String, control: Bool, music: MusicSpec?, chain: Bool?, dcResult: Int32?, dc: UInt32?, methodResult: Int32?, milliseconds: UInt32? }
     struct Ready: Decodable { let seat: Int,object: Int,team: Int32,status: Int32 }
     struct Point: Decodable { let name: String?; let kind: String,records: [Record],eventCount: Int,storeCount: Int,seat: UInt32?,locals: [String:UInt32]? }
     struct Helper: Decodable { let entry: UInt32,firstStore: Int,lastStore: Int? }
@@ -58,6 +60,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     struct Parent: Decodable { let firstCase: Int,constructors: ConstructorParent }
     struct WarGraphics: Decodable {
         let events: [Base.Event],allocations: [Base.Allocation],records: [Base.Record]
+        let allocationStart: Int?,constructionHistory: [Base.Helper]?,wrapperLive: [String:Bool]?
         let helpers: [Base.Helper],images: [String:Base.Image],surfaces: [String:Base.Surface],dcs: [String:Bool]
     }
     struct Corpus: Decodable {
@@ -316,6 +319,21 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     func run(_ item: Case,_ r: Resources,_ retained: inout Retained?,failure: String? = nil) throws -> Int {
         var initial=try retained ?? initialize(item,r)
         if item.spec.chain == true {
+            if let inputs=item.spec.matrixInputs {
+                XCTAssertNil(item.spec.preparationInputs)
+                let allowed=Set([0x44d020,0x451b84,0x44d024,0x44d028,0x44d758,0x44d75c,0x450bcc,0x450c34])
+                for (p,v) in inputs.words {
+                    let address=try XCTUnwrap(Int(p));XCTAssertTrue(allowed.contains(address))
+                    try initial.prepared.globals.write(v,at:address-OriginalMatchPreparation.globalBase)
+                }
+                for row in inputs.seats ?? [] {
+                    XCTAssertTrue((0..<8).contains(row.seat));XCTAssertTrue([0,3,13].contains(row.status));XCTAssertTrue((1...2).contains(row.team))
+                    let ordinal=try initial.prepared.globals.integer(at:0x451248+row.seat*4-OriginalMatchPreparation.globalBase,as:Int32.self)
+                    XCTAssertEqual(try initial.prepared.actors[row.seat].integer(at:0x368,as:UInt32.self),UInt32(bitPattern:ordinal))
+                    try initial.prepared.globals.write(row.status,at:0x451288+row.seat*4-OriginalMatchPreparation.globalBase)
+                    try initial.prepared.actors[row.seat].write(row.team,at:0x364)
+                }
+            }
             if let inputs=item.spec.preparationInputs {
                 XCTAssertEqual(inputs.words,[String(0x450b90):1,String(0x450b94):0,String(0x45842c):0,String(0x450be4):item.spec.control ? 1 : 0])
                 XCTAssertEqual(inputs.strings,[String(0x44fd18):"War preservation",String(0x44f900):"Controlled reference",String(0x44f890):"NTSD 2.4"])
@@ -357,15 +375,15 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         XCTAssertEqual(matches.count,1)
         let startupIndex = try XCTUnwrap(matches.first)
         let a = try Base.Adapter(r.startup.c.cases[startupIndex],r.startup)
-        var eventIndex=0,characterPoint=0,musicIndex=0,warPoint=0,preparationPoint=0
+        var eventIndex=0,characterPoint=0,musicIndex=0,warPoint=0,preparationPoint=0,numericPoint=0
         var preparationAdapter: OriginalWarPreparationSurfaceAdapter?
         let warAdapter=item.warGraphics.map { OriginalWarPreparationMenuSurfaceAdapter($0,r,control:item.spec.control) }
         let firstFrontCount=committed.front.count
         func compareMusic(_ records: [Base.Record],_ memory: OriginalMusicMemory) throws {
             XCTAssertEqual(records.count,memory.allocations.count)
             for record in records {
-                XCTAssertEqual(record.kind,"music-wide");XCTAssertTrue([26,30].contains(record.count))
-                XCTAssertEqual(try r.startup.blob(record.initial),record.count==30 ? (0..<30).map { item.spec.control ? UInt8($0) : 0xa5 } : a.pattern(record.count))
+                XCTAssertEqual(record.kind,"music-wide");XCTAssertTrue(record.count>0 && record.count<0x1000 && record.count%2==0)
+                XCTAssertEqual(try r.startup.blob(record.initial),record.address>=0x2c020020 ? (0..<record.count).map { item.spec.control ? UInt8($0%256) : 0xa5 } : a.pattern(record.count))
                 let value=try XCTUnwrap(memory.allocations[record.address])
                 XCTAssertEqual(value.bytes,try r.startup.blob(record.bytes))
                 XCTAssertEqual(value.defined,try r.startup.blob(record.mask).map { $0 != 0 })
@@ -380,6 +398,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 for i in a.effects.indices { XCTAssertEqual(a.effects[i],a.defined[i] ? b.effects[i] : 0) }
             } else if e != expected { XCTFail("\(item.spec.label) event\(eventIndex): \(e), expected \(expected)");throw Stop.unexpected }
             eventIndex += 1;environment.front.append(e)
+            if failure=="replayFree",e.kind=="free",[UInt32(0x75000020),0x77000020,0x77640020].contains(e.arguments[0]) { throw Stop.injected }
             let currentEvents=environment.front.suffix(environment.front.count-firstFrontCount)
             if failure=="secondRandom",e.kind=="random",e.arguments[0]==0x122,
                 currentEvents.filter({ $0.kind=="random" && $0.arguments[0]==0x122 }).count==2 { throw Stop.injected }
@@ -464,7 +483,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 warPreparation:{ scene,owned,audio,env in
                     let pg=try XCTUnwrap(item.preparationGraphics)
                     let adapter=OriginalWarPreparationSurfaceAdapter(pg,r);preparationAdapter=adapter
-                    env.preparationGraphics=env.warGraphics
+                    if (pg.allocationStart ?? 0)==0 { env.preparationGraphics=env.warGraphics }
                     try OriginalWarPreparation.prepare(state:&scene,memory:&owned,localTime:{
                         let t=try XCTUnwrap(item.spec.localTime)
                         return .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7])
@@ -473,14 +492,23 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         let result=try adapter.construct(path,optional,backing,&graphics) { try event(.init("preparationBitmap"),&env) }
                         env.preparationGraphics=graphics
                         if failure=="bitmap" { throw Stop.injected };return result
+                    },releaseBitmap:{ index,bitmap in
+                        var graphics=env.preparationGraphics
+                        try adapter.release(index,bitmap,&graphics) { kind,_ in
+                            try event(.init("preparationBitmap"),&env)
+                            if failure==kind { throw Stop.injected }
+                        }
+                        env.preparationGraphics=graphics
                     },resumeMusic:{ globals in
+                        var musicAllocationIndex=audio.allocations.keys.filter { $0>=0x2c020020 }.count
                         try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&audio) { request in
                             let expected=item.bodyMusic[musicIndex];musicIndex += 1
                             XCTAssertEqual(request,.init(expected.kind,expected.arguments,expected.strings))
                             try event(.init(request.kind.rawValue,request.arguments,request.strings),&env)
                             var response=expected.response
                             if request.kind == .allocate {
-                                response = .init(pointer:0x2c020020,bytes:(0..<Int(request.arguments[0])).map { item.spec.control ? UInt8($0%256) : 0xa5 })
+                                response = .init(pointer:0x2c020020+UInt32(musicAllocationIndex)*0x1000,bytes:(0..<Int(request.arguments[0])).map { item.spec.control ? UInt8($0%256) : 0xa5 })
+                                musicAllocationIndex += 1
                             } else if request.kind == .convert {
                                 XCTAssertTrue(request.strings[0].allSatisfy { $0<128 })
                                 let bytes=(request.strings[0]+[0]).flatMap { [$0,UInt8(0)] }
@@ -492,9 +520,18 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         }
                     },allocateReplay:{ bytes in
                         XCTAssertEqual(bytes,0x630e18)
-                        if failure=="allocateReplay" { throw Stop.injected };return 0x75000020
-                    },observe:{ try event($0,&env) },checkpoint:{ pc,value,allocation,name in
-                        let points=item.points.filter { $0.kind.hasPrefix("war-preparation-") }
+                        if failure=="allocateReplay" { throw Stop.injected }
+                        let generation=item.spec.generation ?? 0
+                        return generation==0 ? 0x75000020 : 0x77000020+UInt32(generation-1)*0x640000
+                    },observe:{ try event($0,&env) },numericCheckpoint:{ pc,seat,value in
+                        let points=item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }
+                        if item.spec.matrixOrdinal == nil { XCTAssertTrue(points.isEmpty);return }
+                        guard numericPoint<points.count else { throw Stop.unexpected }
+                        let expected=points[numericPoint];numericPoint += 1
+                        XCTAssertEqual(expected.kind,"war-preparation-numeric-0x"+String(pc,radix:16));XCTAssertEqual(expected.seat,UInt32(seat))
+                        XCTAssertEqual(eventIndex,expected.eventCount);try compareState(value,expected.records)
+                    },checkpoint:{ pc,value,allocation,name in
+                        let points=item.points.filter { $0.kind.hasPrefix("war-preparation-0x") }
                         let expected=points[preparationPoint];preparationPoint += 1
                         XCTAssertEqual(expected.kind,"war-preparation-0x"+String(pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                         try compareState(value,expected.records)
@@ -509,7 +546,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                             let pointer=try r.record(XCTUnwrap(expected.records.first { $0.address==0x4588a8 }))
                             try self.compare(allocation.replayPointers,pointer,"recording pointers")
                             let recorded=try r.record(XCTUnwrap(expected.records.first { $0.address==item.replayAddress }))
-                            try self.compare(XCTUnwrap(allocation.allocations[0x75000020]).storage,recorded,"whole recording")
+                            try self.compare(XCTUnwrap(allocation.allocations[try XCTUnwrap(item.replayAddress)]).storage,recorded,"whole recording")
                             if failure=="recording" { throw Stop.injected }
                         }
                     })
@@ -627,8 +664,13 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 try compare(allocation.storage,try r.record(record),item.spec.label+" retained allocation")
             }
             if let adapter=warAdapter { try adapter.compare(war,committed.warGraphics) }
-            XCTAssertEqual(preparationPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-") }.count)
+            XCTAssertEqual(preparationPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-0x") }.count)
+            XCTAssertEqual(numericPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }.count)
             if let adapter=preparationAdapter { try adapter.compare(prepared,committed.preparationGraphics) }
+            for record in item.after where [UInt32(0x75000020),0x77000020,0x77640020].contains(record.address) {
+                let allocation=try XCTUnwrap(memory.allocations[record.address]);XCTAssertEqual(allocation.live,record.live)
+                try compare(allocation.storage,r.record(record),"retained recording bytes/mask")
+            }
             if let replay=item.replayAddress {
                 let allocation=try XCTUnwrap(memory.allocations[replay]);XCTAssertTrue(allocation.live)
                 try compare(allocation.storage,try XCTUnwrap(after[replay]),"whole recording after outer return")

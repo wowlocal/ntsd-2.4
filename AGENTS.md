@@ -48,6 +48,42 @@ false positives will not occur.
 
 ## Current research status
 
+**War preparation success matrix: [LIB_WAR_PREPARATION_MATRIX](docs/research/LIB_WAR_PREPARATION_MATRIX.md).**
+256whole outer/236War returns and56preparations match Native:340participants
+(168CPU/172human),619arena bitmaps,302Release/free pairs,56recordings/363533632
+bytes and56music buffers/1604bytes. Preserve20initial recording frees separately
+from36generated replacements, sparse seats/live Random Objects, retained dead
+wrappers, numeric intermediate stores and music RNG BEFORE random arena RNG.
+680numeric checkpoints compare owned Native state, not private stack/CPU ABI.
+All6596source points/7125784records/40878800788bytes+masks,8625139stores,
+3608524instruction reads/65425API reads/105415helpers/6140blobs audit.4456original
+starts;295/330preparation starts, not all branch outcomes.
+
+Capture1's30-wrapper cumulative reserve error stopped after25calls; preserve its
+failure and662pins. Capture2's corrected60-wrapper reserve reproduced25parts,
+then returned245calls normally before a Random expectation failed: music stream1
+consumed the first draw, so actual arena9 differed from expected0. This is NOT a
+source memory fault or a successful match to that expectation.693pins unchanged.
+Capture3 retains234fixed calls bytewise and executes only22fresh Random calls;
+ten old prefix calls reproduce and actual arenas0/99 match corrected inputs.
+943pins unchanged.20constructor parents/8020results and40old parent calls have
+overlapping reproduction counts. Never restart any completed source for this
+matrix. Frozen plans/failed producers/parts and all original expected bytes stay.
+
+Audit1 optional-field and audit2 initial-recording filter errors are retained.
+Native first compile used internal test conveniences; public record access fixes
+the test. No game rule/expected byte changed for acceptance. Retained22/12rollback
+trials pass17.200s/build204.18s; matrix256/6new rollback trials148.773s/build0.34s.
+Final bundled2tests206.977s/build197.80s pass without raw overrides. Rollbacks inject
+Native observer errors at source success events, not original API-failure matches.
+Seven transports328654511bytes reproduce full2866445440raw/JSON/SHA/all6140blobs.
+318oldfixtures unchanged,325current/759package/Git-base/archive verified;23protected
+files unchanged. Allstudyjobs terminal. NTSDNative linked; no window/device or
+Windows claim. NEXT ordinary resource-error contracts,43a860War gameplay and own
+startup/outerloop/app. Fullpreparation/match/game/network/Windows/cleanMac goal
+remains open. Evidence: docs/evidence/lib-war-preparation-matrix.json and
+build/research/application-catalog-work.json/libWarPreparation/matrix.
+
 **War preparation preflight: [LIB_WAR_PREPARATION_NATIVE_PREFLIGHT](docs/research/LIB_WAR_PREPARATION_NATIVE_PREFLIGHT.md).**
 Separate bound22 calls match Native through20War/22outer returns, two whole
 preparations,16participants(6CPU/10human),20arena bitmaps, two30-byte music
