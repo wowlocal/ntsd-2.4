@@ -1,4 +1,11 @@
-# War Native implementation — not accepted
+# War Native implementation — work history
+
+Current result: [806 source/native setup comparisons](LIB_WAR_SETUP.md) pass,
+including all44 cells,14 multi-human action combinations and18 coupled rollback
+trials. Independent transport and all745 archive/package bytes are verified;
+seven packaged tests pass473.097s/build0.31s. The text below preserves earlier states and their limitations.
+
+## Historical record
 
 This continues the frozen [War plan](LIB_WAR_SETUP_PLAN.md), its
 [input correction](LIB_WAR_SETUP_INPUTS.md), and the
@@ -11,7 +18,8 @@ The reference is the pinned NTSD EXE
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`,
 lib.dll `28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba`
 and the completed574-call Unicorn2.1.4/CW023f capture2. Its bytes are on the
-currently unavailable X5. No original call was repeated during this work.
+temporarily unavailable X5. It has since returned, with exact raw/part/input
+hashes verified. No original call was repeated during the storage interruption.
 Local `static-war4.py/.json/.txt` reads and verifies PE instruction bytes with
 llvm-objdump. Its2120 decoded starts include both frame helpers, alignment
 and the preparation region; this is static evidence, not executed coverage.
@@ -131,3 +139,11 @@ session4456/Swift42072 is terminal0. The package has264 pinned inputs.
 next330 starts/1359 bytes, actual `_Battle` filename suffix, CPU destination
 seat+10, streams123/125/127 and retained caller-word producers. It executes no
 source and does not resolve the setup corpus dependency.
+
+Restoration update: four source-derived dependency tests pass0.331s/build285.01s
+in the full724-file accepted-base package:132 operations/3286 scalar stores,
+666 frame helpers/3604 fills and late rollback. Whole menu comparison remains
+pending. The full source audit exposed only7 adjusted cells out of the required44;
+see the [separate cell supplement](LIB_WAR_CELL_COVERAGE_PLAN.md). The requirement
+is unchanged. A build-only testing-support failure is preserved separately.
+Grouped transport and its loader are written but still await validation.

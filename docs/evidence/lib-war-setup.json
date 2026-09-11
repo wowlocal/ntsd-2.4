@@ -1,0 +1,3080 @@
+{
+  "scope": "Finite War438b40 troop/participant/settings setup and enclosing41bc90/4229cc menu continuation through actual439ecd ret1c and422ab8 ret4, with separate BEFORE43a21f Start boundary.",
+  "accepted": true,
+  "packagedNativePending": false,
+  "base": "cd8086512d1258a43907079ed3e77e9dd0172fc9",
+  "unfinishedSnapshots": [
+    "13f48b1",
+    "066700b"
+  ],
+  "updatedUTC": "2026-09-11T21:36:05.834875+00:00",
+  "fullGoalComplete": false,
+  "referenceArtifacts": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d"
+  },
+  "environment": "Pinned NTSD EXE/lib.dll/VC80 and original DAT/head/small BMP/embedded DIB under controlled Unicorn2.1.4/CW023f, C locale and declared normal allocator/COM/GDI/music responses. Actual prologue41bc90 followed by declared4229cc tail; no Windows/device/played battle or fully initialized app claim. Native Swift owns its catalog/resources/World/Actors; no original EXE/DLL at runtime.",
+  "gameBehavior": [
+    "44 active/reserve troop cells and all14 action-mask/row combinations through actual per-seat input arbitration",
+    "30 preset/strength/side combinations, both multipliers, four frame phases, live Random lists, popup/apply/cancel/Jump and settings",
+    "two owned War bitmaps, sparse geometry/masks, same-call transitions and output/sound order",
+    "whole current-call rollback including resource/RNG/text/preset/finalization/present/before-return observers"
+  ],
+  "sourceAudit": {
+    "setup": {
+      "path": "build/research/lib-war/lib-war-full-audit3.json",
+      "sha256": "e4d7b80b4266e8d066a6c437d3e9b5151284f8d7430cdbfe94b2e969bbbbab32",
+      "audit": {
+        "scope": "Read-only complete War setup evidence audit, not original execution.\nPinned EXE/lib/VC80 and DAT/BMP/DIB references, controlled Unicorn2.1.4/CW023f.\nReconstruct whole records/masks from declared inputs and real writes; verify\nevery read, checkpoint, helper/REP return, live Random list and preset result.\nStream raw JSON and audit one atomic case at a time to bound host memory.\nLIB_WAR_SETUP_PLAN.md and LIB_WAR_SETUP_INPUTS.md retain source input correction,\nunknown backing and BEFORE43a21f boundary. No expected edits, source-fault\ncontinuation, Windows/device/full app or Native equivalence claim.\n",
+        "timeUTC": "2026-09-11T20:40:14.344113+00:00",
+        "raw": {
+          "bytes": 3456631996,
+          "sha256": "9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa"
+        },
+        "cases": 574,
+        "counts": {
+          "atomicCases": 574,
+          "atomicBytes": 10659456066,
+          "constructorReturns": 802,
+          "wholeReturns": 573,
+          "stores": 5310901,
+          "storedBytes": 20501319,
+          "instructionReads": 5549014,
+          "instructionReadBytes": 20722348,
+          "pointRecords": 10017974,
+          "pointBytes": 26379972012,
+          "points": 9354,
+          "APIReads": 142102,
+          "APIReadBytes": 393338,
+          "helperReturns": 133201,
+          "finalRecords": 614750,
+          "finalBytes": 1618830468,
+          "readyBridges": 2,
+          "popupBridges": 30,
+          "warReturns": 571,
+          "warBitmapAllocations": 4,
+          "warPoints": 4142,
+          "readyConsumerBindings": 16,
+          "completeREPs": 36,
+          "REPBytes": 2816,
+          "presetTableCells": 330,
+          "liveRandomLists": 28,
+          "preparationBoundaries": 1,
+          "declaredPEParentOverrides": 1
+        },
+        "instructionStarts": 4000,
+        "randomStreams": {
+          "1": 84,
+          "290": 28
+        },
+        "liveRandomLists": [
+          {
+            "case": 340,
+            "seat": 2,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 340,
+            "seat": 3,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 340,
+            "seat": 4,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 340,
+            "seat": 5,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 340,
+            "seat": 6,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 340,
+            "seat": 7,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              24,
+              25,
+              26,
+              28,
+              29,
+              30,
+              31,
+              32,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 2,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              25,
+              26,
+              28,
+              29,
+              30,
+              31,
+              32,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 3,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              25,
+              26,
+              28,
+              30,
+              31,
+              32,
+              34,
+              35,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 4,
+            "choices": [
+              18,
+              20,
+              22,
+              23,
+              25,
+              26,
+              28,
+              30,
+              31,
+              32,
+              34,
+              35,
+              36,
+              37,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 5,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              23,
+              25,
+              26,
+              28,
+              30,
+              31,
+              32,
+              34,
+              35,
+              36,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 6,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              23,
+              25,
+              26,
+              28,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 343,
+            "seat": 7,
+            "choices": [
+              18,
+              19,
+              20,
+              23,
+              25,
+              26,
+              27,
+              28,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 0,
+            "choices": [
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 1,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 2,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 3,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 4,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              23,
+              24,
+              25,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 5,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              23,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 6,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              23,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 536,
+            "seat": 7,
+            "choices": [
+              17,
+              18,
+              19,
+              21,
+              23,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 0,
+            "choices": [
+              18,
+              19,
+              21,
+              23,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 1,
+            "choices": [
+              18,
+              19,
+              20,
+              23,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 2,
+            "choices": [
+              18,
+              19,
+              20,
+              24,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              39,
+              40
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 3,
+            "choices": [
+              18,
+              19,
+              20,
+              24,
+              26,
+              27,
+              28,
+              30,
+              31,
+              32,
+              33,
+              34,
+              36,
+              37,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 4,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              24,
+              26,
+              27,
+              28,
+              30,
+              31,
+              32,
+              33,
+              34,
+              37,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 5,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              24,
+              25,
+              26,
+              27,
+              30,
+              31,
+              32,
+              33,
+              34,
+              37,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 6,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              24,
+              25,
+              26,
+              27,
+              30,
+              31,
+              33,
+              34,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          },
+          {
+            "case": 539,
+            "seat": 7,
+            "choices": [
+              18,
+              19,
+              20,
+              22,
+              24,
+              25,
+              26,
+              27,
+              30,
+              31,
+              34,
+              35,
+              37,
+              38,
+              39,
+              40,
+              41
+            ]
+          }
+        ],
+        "REPStarts": {
+          "4429689": 8,
+          "4429706": 8,
+          "4430381": 4,
+          "4430398": 4,
+          "4430919": 2,
+          "4430928": 2,
+          "4431002": 2,
+          "4431023": 2,
+          "4431685": 2,
+          "4431702": 2
+        },
+        "presetCombinations": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            3
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            0,
+            1,
+            3
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            2,
+            2
+          ],
+          [
+            0,
+            2,
+            3
+          ],
+          [
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            0,
+            3,
+            3
+          ],
+          [
+            0,
+            4,
+            1
+          ],
+          [
+            0,
+            4,
+            2
+          ],
+          [
+            0,
+            4,
+            3
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            2
+          ],
+          [
+            1,
+            0,
+            3
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            1,
+            1,
+            3
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            1,
+            3,
+            2
+          ],
+          [
+            1,
+            3,
+            3
+          ],
+          [
+            1,
+            4,
+            1
+          ],
+          [
+            1,
+            4,
+            2
+          ],
+          [
+            1,
+            4,
+            3
+          ]
+        ],
+        "editedCells": [
+          4511232,
+          4511248,
+          4511256,
+          4511316,
+          4511320,
+          4511344,
+          4511396
+        ],
+        "framePhases": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "blobs": 4235,
+        "decodedBlobBytes": 225432818,
+        "unknownReads": [
+          {
+            "pc": 4204710,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 573
+          },
+          {
+            "pc": 4308138,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 574
+          },
+          {
+            "pc": 4308155,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 574
+          },
+          {
+            "pc": 4364100,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 574
+          },
+          {
+            "pc": 4364118,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 574
+          },
+          {
+            "pc": 4426580,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 572
+          },
+          {
+            "pc": 4426598,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 572
+          },
+          {
+            "pc": 4451926,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 26
+          },
+          {
+            "pc": 4452427,
+            "address": 1342177324,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452427,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452427,
+            "address": 1342226476,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452427,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452427,
+            "address": 1946157100,
+            "count": 4,
+            "occurrences": 42
+          },
+          {
+            "pc": 4452427,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452427,
+            "address": 1946296364,
+            "count": 4,
+            "occurrences": 414
+          },
+          {
+            "pc": 4452427,
+            "address": 1946312748,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452427,
+            "address": 1946320940,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452427,
+            "address": 1946329132,
+            "count": 4,
+            "occurrences": 443
+          },
+          {
+            "pc": 4452427,
+            "address": 1946337324,
+            "count": 4,
+            "occurrences": 69
+          },
+          {
+            "pc": 4452427,
+            "address": 1946345516,
+            "count": 4,
+            "occurrences": 32
+          },
+          {
+            "pc": 4452427,
+            "address": 1946353708,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452427,
+            "address": 1946361900,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452427,
+            "address": 1946378284,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452427,
+            "address": 1946386476,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452427,
+            "address": 1946394668,
+            "count": 4,
+            "occurrences": 98
+          },
+          {
+            "pc": 4452427,
+            "address": 1946419244,
+            "count": 4,
+            "occurrences": 98
+          },
+          {
+            "pc": 4452427,
+            "address": 1946427436,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452427,
+            "address": 1946443820,
+            "count": 4,
+            "occurrences": 72
+          },
+          {
+            "pc": 4452427,
+            "address": 1946452012,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452427,
+            "address": 1946460204,
+            "count": 4,
+            "occurrences": 66
+          },
+          {
+            "pc": 4452427,
+            "address": 1946468396,
+            "count": 4,
+            "occurrences": 69
+          },
+          {
+            "pc": 4452427,
+            "address": 1946492972,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452427,
+            "address": 1979711532,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4452427,
+            "address": 1979719724,
+            "count": 4,
+            "occurrences": 100
+          },
+          {
+            "pc": 4452739,
+            "address": 1342177324,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452739,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452739,
+            "address": 1342226476,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452739,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452739,
+            "address": 1946157100,
+            "count": 4,
+            "occurrences": 42
+          },
+          {
+            "pc": 4452739,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 1144
+          },
+          {
+            "pc": 4452739,
+            "address": 1946296364,
+            "count": 4,
+            "occurrences": 414
+          },
+          {
+            "pc": 4452739,
+            "address": 1946312748,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452739,
+            "address": 1946320940,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452739,
+            "address": 1946329132,
+            "count": 4,
+            "occurrences": 443
+          },
+          {
+            "pc": 4452739,
+            "address": 1946337324,
+            "count": 4,
+            "occurrences": 69
+          },
+          {
+            "pc": 4452739,
+            "address": 1946345516,
+            "count": 4,
+            "occurrences": 32
+          },
+          {
+            "pc": 4452739,
+            "address": 1946353708,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452739,
+            "address": 1946361900,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452739,
+            "address": 1946378284,
+            "count": 4,
+            "occurrences": 3
+          },
+          {
+            "pc": 4452739,
+            "address": 1946386476,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452739,
+            "address": 1946394668,
+            "count": 4,
+            "occurrences": 98
+          },
+          {
+            "pc": 4452739,
+            "address": 1946419244,
+            "count": 4,
+            "occurrences": 98
+          },
+          {
+            "pc": 4452739,
+            "address": 1946427436,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452739,
+            "address": 1946443820,
+            "count": 4,
+            "occurrences": 72
+          },
+          {
+            "pc": 4452739,
+            "address": 1946452012,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452739,
+            "address": 1946460204,
+            "count": 4,
+            "occurrences": 66
+          },
+          {
+            "pc": 4452739,
+            "address": 1946468396,
+            "count": 4,
+            "occurrences": 69
+          },
+          {
+            "pc": 4452739,
+            "address": 1946492972,
+            "count": 4,
+            "occurrences": 35
+          },
+          {
+            "pc": 4452739,
+            "address": 1979711532,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4452739,
+            "address": 1979719724,
+            "count": 4,
+            "occurrences": 100
+          },
+          {
+            "pc": 4452748,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452748,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452748,
+            "address": 1979711532,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4452752,
+            "address": 1342214092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452752,
+            "address": 1342263244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452752,
+            "address": 1979715532,
+            "count": 4,
+            "occurrences": 283
+          },
+          {
+            "pc": 4452752,
+            "address": 1979723724,
+            "count": 4,
+            "occurrences": 87
+          },
+          {
+            "pc": 4452759,
+            "address": 1342212092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452759,
+            "address": 1342261244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452759,
+            "address": 1979713532,
+            "count": 4,
+            "occurrences": 283
+          },
+          {
+            "pc": 4452759,
+            "address": 1979721724,
+            "count": 4,
+            "occurrences": 87
+          },
+          {
+            "pc": 4452766,
+            "address": 1342216092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452766,
+            "address": 1342265244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452766,
+            "address": 1979717532,
+            "count": 4,
+            "occurrences": 283
+          },
+          {
+            "pc": 4452766,
+            "address": 1979725724,
+            "count": 4,
+            "occurrences": 87
+          },
+          {
+            "pc": 4477106,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 2316
+          }
+        ],
+        "sourceAudited": true,
+        "coverage": {
+          "expectedEditableCells": [
+            4511224,
+            4511228,
+            4511232,
+            4511236,
+            4511240,
+            4511244,
+            4511248,
+            4511252,
+            4511256,
+            4511260,
+            4511264,
+            4511268,
+            4511272,
+            4511276,
+            4511280,
+            4511284,
+            4511288,
+            4511292,
+            4511296,
+            4511300,
+            4511304,
+            4511308,
+            4511312,
+            4511316,
+            4511320,
+            4511324,
+            4511328,
+            4511332,
+            4511336,
+            4511340,
+            4511344,
+            4511348,
+            4511352,
+            4511356,
+            4511360,
+            4511364,
+            4511368,
+            4511372,
+            4511376,
+            4511380,
+            4511384,
+            4511388,
+            4511392,
+            4511396
+          ],
+          "missingEditableCells": [
+            4511224,
+            4511228,
+            4511236,
+            4511240,
+            4511244,
+            4511252,
+            4511260,
+            4511264,
+            4511268,
+            4511272,
+            4511276,
+            4511280,
+            4511284,
+            4511288,
+            4511292,
+            4511296,
+            4511300,
+            4511304,
+            4511308,
+            4511312,
+            4511324,
+            4511328,
+            4511332,
+            4511336,
+            4511340,
+            4511348,
+            4511352,
+            4511356,
+            4511360,
+            4511364,
+            4511368,
+            4511372,
+            4511376,
+            4511380,
+            4511384,
+            4511388,
+            4511392
+          ],
+          "complete": false
+        },
+        "finiteAcceptanceComplete": false,
+        "nativeCompared": false,
+        "windowsVerified": false,
+        "wholeGameComplete": false
+      },
+      "manifestSHA256": "fa7f5a638867576d201e860caa06f39e0a7b46a4cf25549e4b4507eb2dbe8d1f"
+    },
+    "cells": {
+      "path": "build/research/lib-war/lib-war-cells-audit1.json",
+      "sha256": "e435d95df4c0b59ac60f93a236ba60c1832a6c09ebf6fed8e2267509c74cdd73",
+      "audit": {
+        "scope": "Read-only complete War setup evidence audit, not original execution.\nPinned EXE/lib/VC80 and DAT/BMP/DIB references, controlled Unicorn2.1.4/CW023f.\nReconstruct whole records/masks from declared inputs and real writes; verify\nevery read, checkpoint, helper/REP return, live Random list and preset result.\nStream raw JSON and audit one atomic case at a time to bound host memory.\nLIB_WAR_SETUP_PLAN.md and LIB_WAR_SETUP_INPUTS.md retain source input correction,\nunknown backing and BEFORE43a21f boundary. No expected edits, source-fault\ncontinuation, Windows/device/full app or Native equivalence claim.\n",
+        "timeUTC": "2026-09-11T20:47:23.943063+00:00",
+        "raw": {
+          "bytes": 1138424571,
+          "sha256": "d2f17f5a4b32cc950227de4c1061430d34242fb7b6a883c79a43d02a38547f57"
+        },
+        "cases": 192,
+        "counts": {
+          "source2ParentReproductions": 2,
+          "atomicCases": 192,
+          "atomicBytes": 3292189784,
+          "constructorReturns": 401,
+          "wholeReturns": 192,
+          "stores": 1723667,
+          "storedBytes": 6657872,
+          "instructionReads": 1787617,
+          "instructionReadBytes": 6673642,
+          "pointRecords": 3310381,
+          "pointBytes": 8716961658,
+          "points": 3091,
+          "APIReads": 47054,
+          "APIReadBytes": 122144,
+          "helperReturns": 42900,
+          "finalRecords": 205630,
+          "finalBytes": 541485024,
+          "readyBridges": 1,
+          "popupBridges": 0,
+          "warReturns": 191,
+          "warBitmapAllocations": 2,
+          "warPoints": 1338,
+          "readyConsumerBindings": 8,
+          "declaredCellEdits": 44
+        },
+        "instructionStarts": 2854,
+        "randomStreams": {},
+        "liveRandomLists": [],
+        "REPStarts": {},
+        "presetCombinations": [],
+        "editedCells": [
+          4511224,
+          4511228,
+          4511232,
+          4511236,
+          4511240,
+          4511244,
+          4511248,
+          4511252,
+          4511256,
+          4511260,
+          4511264,
+          4511268,
+          4511272,
+          4511276,
+          4511280,
+          4511284,
+          4511288,
+          4511292,
+          4511296,
+          4511300,
+          4511304,
+          4511308,
+          4511312,
+          4511316,
+          4511320,
+          4511324,
+          4511328,
+          4511332,
+          4511336,
+          4511340,
+          4511344,
+          4511348,
+          4511352,
+          4511356,
+          4511360,
+          4511364,
+          4511368,
+          4511372,
+          4511376,
+          4511380,
+          4511384,
+          4511388,
+          4511392,
+          4511396
+        ],
+        "framePhases": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "blobs": 1890,
+        "decodedBlobBytes": 93592256,
+        "unknownReads": [
+          {
+            "pc": 4204710,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 192
+          },
+          {
+            "pc": 4308138,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 192
+          },
+          {
+            "pc": 4308155,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 192
+          },
+          {
+            "pc": 4364100,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 192
+          },
+          {
+            "pc": 4364118,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 192
+          },
+          {
+            "pc": 4426580,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4426598,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4451926,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 13
+          },
+          {
+            "pc": 4452427,
+            "address": 1342177324,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452427,
+            "address": 1342226476,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452427,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452427,
+            "address": 1946296364,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452427,
+            "address": 1946329132,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452739,
+            "address": 1342177324,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452739,
+            "address": 1342226476,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452739,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 382
+          },
+          {
+            "pc": 4452739,
+            "address": 1946296364,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452739,
+            "address": 1946329132,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452752,
+            "address": 1979715532,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452759,
+            "address": 1979713532,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4452766,
+            "address": 1979717532,
+            "count": 4,
+            "occurrences": 191
+          },
+          {
+            "pc": 4477106,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 780
+          }
+        ],
+        "sourceAudited": true,
+        "coverage": {
+          "expectedEditableCells": [
+            4511224,
+            4511228,
+            4511232,
+            4511236,
+            4511240,
+            4511244,
+            4511248,
+            4511252,
+            4511256,
+            4511260,
+            4511264,
+            4511268,
+            4511272,
+            4511276,
+            4511280,
+            4511284,
+            4511288,
+            4511292,
+            4511296,
+            4511300,
+            4511304,
+            4511308,
+            4511312,
+            4511316,
+            4511320,
+            4511324,
+            4511328,
+            4511332,
+            4511336,
+            4511340,
+            4511344,
+            4511348,
+            4511352,
+            4511356,
+            4511360,
+            4511364,
+            4511368,
+            4511372,
+            4511376,
+            4511380,
+            4511384,
+            4511388,
+            4511392,
+            4511396
+          ],
+          "missingEditableCells": [],
+          "complete": true
+        },
+        "finiteAcceptanceComplete": true,
+        "nativeCompared": false,
+        "windowsVerified": false,
+        "wholeGameComplete": false,
+        "profile": "cells"
+      },
+      "manifestSHA256": "678f104a42226b839904f0c52d3cf326c24323da14c4f8920bfeebe53e2f0bf8"
+    },
+    "multiaction": {
+      "path": "build/research/lib-war/lib-war-multiaction-audit1.json",
+      "sha256": "32dcb6d03358c0a40fb667bc62e306f849f24f2e32cc41822f23dd1b3e226fc6",
+      "audit": {
+        "scope": "Read-only complete War setup evidence audit, not original execution.\nPinned EXE/lib/VC80 and DAT/BMP/DIB references, controlled Unicorn2.1.4/CW023f.\nReconstruct whole records/masks from declared inputs and real writes; verify\nevery read, checkpoint, helper/REP return, live Random list and preset result.\nStream raw JSON and audit one atomic case at a time to bound host memory.\nLIB_WAR_SETUP_PLAN.md and LIB_WAR_SETUP_INPUTS.md retain source input correction,\nunknown backing and BEFORE43a21f boundary. No expected edits, source-fault\ncontinuation, Windows/device/full app or Native equivalence claim.\n",
+        "timeUTC": "2026-09-11T21:03:23.515011+00:00",
+        "raw": {
+          "bytes": 247848404,
+          "sha256": "fba1f47a4f7770405cd139fbc2ee2bfbd86f0c059f0658e29d56c2fe8bd8f36c"
+        },
+        "cases": 40,
+        "counts": {
+          "source2ParentReproductions": 2,
+          "atomicCases": 40,
+          "atomicBytes": 623116157,
+          "constructorReturns": 401,
+          "declaredPEParentOverrides": 1,
+          "wholeReturns": 40,
+          "stores": 357118,
+          "storedBytes": 1380658,
+          "instructionReads": 373299,
+          "instructionReadBytes": 1394652,
+          "pointRecords": 705709,
+          "pointBytes": 1857948282,
+          "points": 659,
+          "APIReads": 9662,
+          "APIReadBytes": 25677,
+          "helperReturns": 9005,
+          "finalRecords": 42838,
+          "finalBytes": 112796688,
+          "readyBridges": 1,
+          "popupBridges": 0,
+          "warReturns": 39,
+          "warBitmapAllocations": 2,
+          "warPoints": 274,
+          "readyConsumerBindings": 8,
+          "declaredActionCombinations": 14
+        },
+        "instructionStarts": 2825,
+        "randomStreams": {},
+        "liveRandomLists": [],
+        "REPStarts": {},
+        "presetCombinations": [],
+        "editedCells": [
+          4511224,
+          4511312
+        ],
+        "framePhases": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "blobs": 739,
+        "decodedBlobBytes": 24101232,
+        "unknownReads": [
+          {
+            "pc": 4204710,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4308138,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4308155,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4364100,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4364118,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 40
+          },
+          {
+            "pc": 4426580,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 39
+          },
+          {
+            "pc": 4426598,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 39
+          },
+          {
+            "pc": 4451926,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 13
+          },
+          {
+            "pc": 4452427,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452427,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452427,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452427,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452739,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452739,
+            "address": 1946214444,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946222636,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946230828,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946239020,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946247212,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946255404,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946271788,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946279980,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452739,
+            "address": 1946288172,
+            "count": 4,
+            "occurrences": 78
+          },
+          {
+            "pc": 4452748,
+            "address": 1342210092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452748,
+            "address": 1342259244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452752,
+            "address": 1342214092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452752,
+            "address": 1342263244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452752,
+            "address": 1979723724,
+            "count": 4,
+            "occurrences": 39
+          },
+          {
+            "pc": 4452759,
+            "address": 1342212092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452759,
+            "address": 1342261244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452759,
+            "address": 1979721724,
+            "count": 4,
+            "occurrences": 39
+          },
+          {
+            "pc": 4452766,
+            "address": 1342216092,
+            "count": 4,
+            "occurrences": 8
+          },
+          {
+            "pc": 4452766,
+            "address": 1342265244,
+            "count": 4,
+            "occurrences": 1
+          },
+          {
+            "pc": 4452766,
+            "address": 1979725724,
+            "count": 4,
+            "occurrences": 39
+          },
+          {
+            "pc": 4477106,
+            "address": 4517540,
+            "count": 4,
+            "occurrences": 172
+          }
+        ],
+        "sourceAudited": true,
+        "coverage": {
+          "expectedEditableCells": [
+            4511224,
+            4511312
+          ],
+          "missingEditableCells": [],
+          "actionCombinations": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "complete": true
+        },
+        "finiteAcceptanceComplete": true,
+        "nativeCompared": false,
+        "windowsVerified": false,
+        "wholeGameComplete": false,
+        "profile": "multiaction"
+      },
+      "manifestSHA256": "ff78a8c0b06a87f96e932e652278a9c698dd9b246a1e34776facec61b4079b3a"
+    }
+  },
+  "aggregate": {
+    "atomicCases": 806,
+    "atomicBytes": 14574762007,
+    "constructorReturns": 1604,
+    "wholeReturns": 805,
+    "stores": 7391686,
+    "storedBytes": 28539849,
+    "instructionReads": 7709930,
+    "instructionReadBytes": 28790642,
+    "pointRecords": 14034064,
+    "pointBytes": 36954881952,
+    "points": 13104,
+    "APIReads": 198818,
+    "APIReadBytes": 541159,
+    "helperReturns": 185106,
+    "finalRecords": 863218,
+    "finalBytes": 2273112180,
+    "readyBridges": 4,
+    "popupBridges": 30,
+    "warReturns": 801,
+    "warBitmapAllocations": 8,
+    "warPoints": 5754,
+    "readyConsumerBindings": 32,
+    "completeREPs": 36,
+    "REPBytes": 2816,
+    "presetTableCells": 330,
+    "liveRandomLists": 28,
+    "preparationBoundaries": 1,
+    "declaredPEParentOverrides": 2,
+    "source2ParentReproductions": 4,
+    "declaredCellEdits": 44,
+    "declaredActionCombinations": 14,
+    "instructionStartsUnion": 4003,
+    "blobVerifications": 6864,
+    "blobVerificationCountIsNotUnique": true,
+    "reproducedParentCalls": 4,
+    "distinctSourceCorpuses": 3
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run the finite retained War setup through whole ret1c/ret4 or BEFORE43a21f, troop/preset/Random and resource ownership and pinned inputs.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_WAR_SETUP_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 28379,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_setup.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-war/lib-war-capture2.json"
+      ],
+      "startedUTC": "2026-09-11T17:03:06.467167+00:00",
+      "inputPins": "build/research/lib-war/lib-war-capture2-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 768.798,
+      "endedUTC": "2026-09-11T17:15:55.255178+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-war/lib-war-capture2.json": {
+          "bytes": 3456631996,
+          "sha256": "9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa"
+        }
+      },
+      "path": "build/research/lib-war/lib-war-capture2-job.json",
+      "session": 25129,
+      "terminalChunk": "64b613"
+    },
+    {
+      "scope": "Execute new bounded192-call War cell coverage supplement under original pinned NTSD EXE/lib/VC80 Unicorn2.1.4, ordinary inputs/resources and41bc90/4229cc/438b40/ret1c/ret4. First2 fresh provenance calls must reproduce source2 exactly. Separate Defense and Right presses target44 cells; full read/store/helper/ownership traces retained atomically. Completed574-call capture2 is not rerun or replaced. No source fault continuation, damaged pointers, Windows/device or full-game claim.",
+      "status": "terminal",
+      "pid": 61995,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_cells.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-war/lib-war-cells-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T20:39:33.686031+00:00",
+      "originalExecuted": true,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T20:43:54.421620+00:00",
+      "elapsedSeconds": 260.734,
+      "inputsUnchanged": true,
+      "path": "build/research/lib-war/lib-war-cells-capture1.job.json",
+      "session": 66493,
+      "terminalChunk": "509f78"
+    },
+    {
+      "scope": "Execute bounded40-call War multi-human-seat action supplement under pinned original EXE/lib/VC80 Unicorn2.1.4/CW023f. Reproduce source2 control calls412/413, relocate only parent index annotation, then separate human seats0/1/2 deliver all7 Attack/Jump/Defense masks on active/reserve rows. Actual438bbb flags, target stores and complete calls are retained. No input-global injection, CPU keys, source fault continuation, replacement capture or Windows/device claim.",
+      "status": "terminal",
+      "pid": 65188,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_war_multiaction.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-war/lib-war-multiaction-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T20:58:57.620227+00:00",
+      "originalExecuted": true,
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T20:59:53.858431+00:00",
+      "elapsedSeconds": 56.241,
+      "inputsUnchanged": true,
+      "path": "build/research/lib-war/lib-war-multiaction-capture1.job.json",
+      "session": 50531,
+      "terminalChunk": "0849d4"
+    }
+  ],
+  "nativeRaw": {
+    "scope": "Whole Native comparison of806 separately pinned War calls:574 setup,192 complete cell traversal and40 multi-human-action calls. Check805 outer/801 War returns, one BEFORE43a21f, all44 cells,14 action masks,18 coupled late rollback trials, and192 numeric operations/896 frame helpers with exact stores/fills. Re-run574 through the generalized loader; no game/expected changes or original/device execution.",
+    "status": "terminal",
+    "pid": 67453,
+    "command": [
+      "swift",
+      "test",
+      "-c",
+      "release",
+      "--skip-build",
+      "--filter",
+      "Original(WarDependencies|LibWarSetup)Tests"
+    ],
+    "startedUTC": "2026-09-11T21:13:46.139375+00:00",
+    "originalExecuted": false,
+    "exitCode": 0,
+    "endedUTC": "2026-09-11T21:20:03.623390+00:00",
+    "elapsedSeconds": 377.48,
+    "inputsUnchanged": true,
+    "session": 34009,
+    "terminalChunk": "b49794",
+    "tests": 7,
+    "testSeconds": 374.882,
+    "setupSeconds": 264.001,
+    "cellsSeconds": 88.034,
+    "multiactionSeconds": 22.347,
+    "dependencySeconds": 0.501
+  },
+  "nativePackaged": {
+    "scope": "Final packaged Native War setup comparison: same806 declared original calls and18 source-coupled late rollback trials plus four numeric/frame dependency tests. Exact pinned NTSD EXE/lib/VC80 observations are fixture transport only; the macOS process runs Native code, no EXE/DLL, and claims no device/window or played battle. All21 published fixtures are independently byte-verified against immutable raw source corpora. Normal Swift test copies bundle resources; no NTSD raw overrides.",
+    "status": "terminal",
+    "pid": 69609,
+    "command": [
+      "swift",
+      "test",
+      "-c",
+      "release",
+      "--filter",
+      "Original(WarDependencies|LibWarSetup)Tests"
+    ],
+    "startedUTC": "2026-09-11T21:27:49.527424+00:00",
+    "originalExecuted": false,
+    "exitCode": 0,
+    "endedUTC": "2026-09-11T21:35:43.459043+00:00",
+    "elapsedSeconds": 473.926,
+    "inputsUnchanged": true,
+    "session": 81947,
+    "tests": 7,
+    "testSeconds": 473.097,
+    "buildSeconds": 0.31,
+    "rawOverrides": false,
+    "setupSeconds": 362.424,
+    "cellsSeconds": 89.776,
+    "multiactionSeconds": 20.423,
+    "terminalChunk": "5b0115",
+    "dependencySeconds": 0.475
+  },
+  "dependencyTransport": {
+    "scope": "Lossless dependency transport plus exact retained132-operation/574-frame-call projection and14 action combinations. Native execution remains a separate running job.",
+    "timeUTC": "2026-09-11T21:18:05.281846+00:00",
+    "rawBytes": 4953767,
+    "rawSHA256": "f8169042f1651bc15a00d5fd56896ee13bc00b3e425986418d8f69c980de0149",
+    "packedBytes": 114747,
+    "packedSHA256": "5ecf99f915d2f95418e39e224142fecfd742cae80e1b3bdecfcdcf0bd2da8e2c",
+    "operations": 192,
+    "scalarStores": 3560,
+    "frameHelpers": 896,
+    "fills": 4984,
+    "priorOperationsUnchanged": 132,
+    "priorFrameCallsUnchanged": 574,
+    "actionCombinations": [
+      [
+        "active",
+        1
+      ],
+      [
+        "active",
+        2
+      ],
+      [
+        "active",
+        3
+      ],
+      [
+        "active",
+        4
+      ],
+      [
+        "active",
+        5
+      ],
+      [
+        "active",
+        6
+      ],
+      [
+        "active",
+        7
+      ],
+      [
+        "reserve",
+        1
+      ],
+      [
+        "reserve",
+        2
+      ],
+      [
+        "reserve",
+        3
+      ],
+      [
+        "reserve",
+        4
+      ],
+      [
+        "reserve",
+        5
+      ],
+      [
+        "reserve",
+        6
+      ],
+      [
+        "reserve",
+        7
+      ]
+    ],
+    "bytesVerified": true
+  },
+  "transportVerification": {
+    "setup": {
+      "scope": "Independently verify grouped War research transport against original raw bytes.\n\nRead-only verification of pinned574-call setup or192-call cell-supplement\nNTSD EXE/lib/VC80 Unicorn2.1.4 evidence. Compare every reconstructed byte with\nthe retained raw file, every group/case/metadata/audit digest, and all embedded\nblob bytes. Keep masks, source2's coverage gap and declared caller boundaries.\nNo original execution, Native comparison, pixel/device or whole-game claim.\n",
+      "timeUTC": "2026-09-11T20:54:56.266348+00:00",
+      "cases": 574,
+      "raw": {
+        "bytes": 3456631996,
+        "sha256": "9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa"
+      },
+      "files": {
+        "original-lib-war-setup.json": {
+          "bytes": 12425123,
+          "sha256": "b86c0f56b68bf84b6d863265ca5a35022f045a32c575d48c6087efa34bd96575"
+        },
+        "original-lib-war-setup-cases1.json": {
+          "bytes": 34520268,
+          "sha256": "5b4760371ee405c2281de2c6bbe77fb8d4fbb3583b8dd675b2b3b104b3cb962d"
+        },
+        "original-lib-war-setup-cases2.json": {
+          "bytes": 34013417,
+          "sha256": "126e21a48d9d60da25c0aa713cff9cdcfa4414a1cd3eeeb7f88680ffdbfc58db"
+        },
+        "original-lib-war-setup-cases3.json": {
+          "bytes": 34019290,
+          "sha256": "9cbab9aec68fc76701af148c6c15605aa37ff821fcf39d4182b26d9857c4c259"
+        },
+        "original-lib-war-setup-cases4.json": {
+          "bytes": 34007910,
+          "sha256": "9b0032451013f4f4af5938ad5b9dad4b52fc1bb6e96a60b179ed3acf46387cfb"
+        },
+        "original-lib-war-setup-cases5.json": {
+          "bytes": 34802838,
+          "sha256": "13ea0d54c1af1f49775c5c06aeb6c3d9cccf3a8d7712b64e331af9f32477a868"
+        },
+        "original-lib-war-setup-cases6.json": {
+          "bytes": 35538686,
+          "sha256": "8df7f8a75991f7b7667f9addc9b905f17c3c192141580e23553b569c0e7e9c13"
+        },
+        "original-lib-war-setup-cases7.json": {
+          "bytes": 35306734,
+          "sha256": "a65aedc9e5cb60a46013df02e16a95f119b0255844cb98b8828d1942660a68f0"
+        },
+        "original-lib-war-setup-cases8.json": {
+          "bytes": 34991662,
+          "sha256": "d67f5b74ff1b74907e7a8edd053a5f21acce61f3ebba59b4c0cf43581740e8c9"
+        },
+        "original-lib-war-setup-cases9.json": {
+          "bytes": 34553394,
+          "sha256": "b97b61b8c65293657a896213cd906d4de1ad42810368dae061cc399cc58c75ae"
+        },
+        "original-lib-war-setup-cases10.json": {
+          "bytes": 34262978,
+          "sha256": "1c9d8f51e6e7a295efd405fcb8a596b51b6b971d3b42214e8bc321c685f3dd1e"
+        },
+        "original-lib-war-setup-cases11.json": {
+          "bytes": 35118642,
+          "sha256": "90a2d4542c8d3c2b26aae63ed687c9edec67d994eeccf84c51605f101bddfda2"
+        },
+        "original-lib-war-setup-cases12.json": {
+          "bytes": 16726624,
+          "sha256": "6682570043ca34a06f0bb4154152c1928e8bd1161ca55df8e10a6fba6bafbf0a"
+        }
+      },
+      "packedBytes": 410287566,
+      "metadataBytes": 36302537,
+      "metadataSHA256": "bf06540c2a03c0fb7f95cccd738fbe63ae4509bd1de3ec97a7df4c7d2583f299",
+      "blobs": 4235,
+      "decodedBlobBytes": 225432818,
+      "sourceBytesEqual": true,
+      "allGroupCaseAndBlobDigestsVerified": true,
+      "coverage": {
+        "expectedEditableCells": [
+          4511224,
+          4511228,
+          4511232,
+          4511236,
+          4511240,
+          4511244,
+          4511248,
+          4511252,
+          4511256,
+          4511260,
+          4511264,
+          4511268,
+          4511272,
+          4511276,
+          4511280,
+          4511284,
+          4511288,
+          4511292,
+          4511296,
+          4511300,
+          4511304,
+          4511308,
+          4511312,
+          4511316,
+          4511320,
+          4511324,
+          4511328,
+          4511332,
+          4511336,
+          4511340,
+          4511344,
+          4511348,
+          4511352,
+          4511356,
+          4511360,
+          4511364,
+          4511368,
+          4511372,
+          4511376,
+          4511380,
+          4511384,
+          4511388,
+          4511392,
+          4511396
+        ],
+        "missingEditableCells": [
+          4511224,
+          4511228,
+          4511236,
+          4511240,
+          4511244,
+          4511252,
+          4511260,
+          4511264,
+          4511268,
+          4511272,
+          4511276,
+          4511280,
+          4511284,
+          4511288,
+          4511292,
+          4511296,
+          4511300,
+          4511304,
+          4511308,
+          4511312,
+          4511324,
+          4511328,
+          4511332,
+          4511336,
+          4511340,
+          4511348,
+          4511352,
+          4511356,
+          4511360,
+          4511364,
+          4511368,
+          4511372,
+          4511376,
+          4511380,
+          4511384,
+          4511388,
+          4511392
+        ],
+        "complete": false
+      },
+      "nativeCompared": false,
+      "path": "build/research/lib-war/lib-war-transport-setup-verification1.json",
+      "sha256": "e20e6df986c9f5fafb2b8c7fcb30eb801324de99a0893ef6375e317b2c9fe51e"
+    },
+    "cells": {
+      "scope": "Independently verify grouped War research transport against original raw bytes.\n\nRead-only verification of pinned574-call setup or192-call cell-supplement\nNTSD EXE/lib/VC80 Unicorn2.1.4 evidence. Compare every reconstructed byte with\nthe retained raw file, every group/case/metadata/audit digest, and all embedded\nblob bytes. Keep masks, source2's coverage gap and declared caller boundaries.\nNo original execution, Native comparison, pixel/device or whole-game claim.\n",
+      "timeUTC": "2026-09-11T21:06:37.940800+00:00",
+      "cases": 192,
+      "raw": {
+        "bytes": 1138424571,
+        "sha256": "d2f17f5a4b32cc950227de4c1061430d34242fb7b6a883c79a43d02a38547f57"
+      },
+      "files": {
+        "original-lib-war-cells.json": {
+          "bytes": 5337359,
+          "sha256": "793845aaf9e432015de4d2e0a11d4ab3326cc44c9282981cf44f2c17c9b2d5c0"
+        },
+        "original-lib-war-cells-cases1.json": {
+          "bytes": 34421040,
+          "sha256": "1e8cca6d5d4b33838b0213dd01be04cd559167541f4acfc63a727c8a42c20d58"
+        },
+        "original-lib-war-cells-cases2.json": {
+          "bytes": 33934653,
+          "sha256": "f13dab405ef24f2fe7e47a360d8e58d2992d305ae8f0b8997ded1cc465c87297"
+        },
+        "original-lib-war-cells-cases3.json": {
+          "bytes": 33852714,
+          "sha256": "25e116b753aed841252fd0b03ec58118c9dfa33e820100dae3d8673b8de268b4"
+        },
+        "original-lib-war-cells-cases4.json": {
+          "bytes": 28353490,
+          "sha256": "2322da8924fd05e77f48c9a6e535b615fe7b57b838a20e557ac4fb57ab27b7f2"
+        }
+      },
+      "packedBytes": 135899256,
+      "metadataBytes": 15712061,
+      "metadataSHA256": "28dd9ad568ed190b5dce3de1b00d10dccb9ffe2d555488811c195bb75621ce4b",
+      "blobs": 1890,
+      "decodedBlobBytes": 93592256,
+      "sourceBytesEqual": true,
+      "allGroupCaseAndBlobDigestsVerified": true,
+      "coverage": {
+        "expectedEditableCells": [
+          4511224,
+          4511228,
+          4511232,
+          4511236,
+          4511240,
+          4511244,
+          4511248,
+          4511252,
+          4511256,
+          4511260,
+          4511264,
+          4511268,
+          4511272,
+          4511276,
+          4511280,
+          4511284,
+          4511288,
+          4511292,
+          4511296,
+          4511300,
+          4511304,
+          4511308,
+          4511312,
+          4511316,
+          4511320,
+          4511324,
+          4511328,
+          4511332,
+          4511336,
+          4511340,
+          4511344,
+          4511348,
+          4511352,
+          4511356,
+          4511360,
+          4511364,
+          4511368,
+          4511372,
+          4511376,
+          4511380,
+          4511384,
+          4511388,
+          4511392,
+          4511396
+        ],
+        "missingEditableCells": [],
+        "complete": true
+      },
+      "nativeCompared": false,
+      "path": "build/research/lib-war/lib-war-transport-cells-verification1.json",
+      "sha256": "6ba2dfb8aaabaa492af28f16c9d741b82e302e33b7710fc6cda4d40030361cf9"
+    },
+    "multiaction": {
+      "scope": "Independently verify grouped War research transport against original raw bytes.\n\nRead-only verification of pinned574-call setup or192-call cell-supplement\nNTSD EXE/lib/VC80 Unicorn2.1.4 evidence. Compare every reconstructed byte with\nthe retained raw file, every group/case/metadata/audit digest, and all embedded\nblob bytes. Keep masks, source2's coverage gap and declared caller boundaries.\nNo original execution, Native comparison, pixel/device or whole-game claim.\n",
+      "timeUTC": "2026-09-11T21:13:46.118044+00:00",
+      "cases": 40,
+      "raw": {
+        "bytes": 247848404,
+        "sha256": "fba1f47a4f7770405cd139fbc2ee2bfbd86f0c059f0658e29d56c2fe8bd8f36c"
+      },
+      "files": {
+        "original-lib-war-multiaction.json": {
+          "bytes": 2254143,
+          "sha256": "5e7fa324cfb17524ef50b2ba1cd5148c3b3d40f18ea8a8cb7d96977f233612f1"
+        },
+        "original-lib-war-multiaction-cases1.json": {
+          "bytes": 27602202,
+          "sha256": "91a76bbc1f0ed42e8ca66f531ea06501e3460904455ff915e0b8087df84560c1"
+        }
+      },
+      "packedBytes": 29856345,
+      "metadataBytes": 10574971,
+      "metadataSHA256": "3ba47121202fea6e70aa679bf73dde119681ad62245b1f88b55d142806045730",
+      "blobs": 739,
+      "decodedBlobBytes": 24101232,
+      "sourceBytesEqual": true,
+      "allGroupCaseAndBlobDigestsVerified": true,
+      "coverage": {
+        "expectedEditableCells": [
+          4511224,
+          4511312
+        ],
+        "missingEditableCells": [],
+        "actionCombinations": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            6
+          ],
+          [
+            2,
+            7
+          ]
+        ],
+        "complete": true
+      },
+      "nativeCompared": false,
+      "path": "build/research/lib-war/lib-war-transport-multiaction-verification1.json",
+      "sha256": "23d7a2377cbf9db5d80ce5b84b83f49370cda2c6a6230faeddf8cc5b3d813450"
+    }
+  },
+  "fixturePublication": {
+    "scope": "Publish21 new byte-verified War fixture transports after806 raw Native matches.\nPreserve all295 accepted fixtures,23 other pending files and the tested724-file\nisolated package. Add only verified transport bytes; no source expectation edits.\n",
+    "timeUTC": "2026-09-11T21:22:56.147703+00:00",
+    "newFixtures": 21,
+    "fixtures": 316,
+    "oldFixturesUnchanged": 295,
+    "packageFiles": 745,
+    "protectedFilesUnchanged": 23,
+    "files": {
+      "original-lib-war-setup.json": "b86c0f56b68bf84b6d863265ca5a35022f045a32c575d48c6087efa34bd96575",
+      "original-lib-war-setup-cases1.json": "5b4760371ee405c2281de2c6bbe77fb8d4fbb3583b8dd675b2b3b104b3cb962d",
+      "original-lib-war-setup-cases2.json": "126e21a48d9d60da25c0aa713cff9cdcfa4414a1cd3eeeb7f88680ffdbfc58db",
+      "original-lib-war-setup-cases3.json": "9cbab9aec68fc76701af148c6c15605aa37ff821fcf39d4182b26d9857c4c259",
+      "original-lib-war-setup-cases4.json": "9b0032451013f4f4af5938ad5b9dad4b52fc1bb6e96a60b179ed3acf46387cfb",
+      "original-lib-war-setup-cases5.json": "13ea0d54c1af1f49775c5c06aeb6c3d9cccf3a8d7712b64e331af9f32477a868",
+      "original-lib-war-setup-cases6.json": "8df7f8a75991f7b7667f9addc9b905f17c3c192141580e23553b569c0e7e9c13",
+      "original-lib-war-setup-cases7.json": "a65aedc9e5cb60a46013df02e16a95f119b0255844cb98b8828d1942660a68f0",
+      "original-lib-war-setup-cases8.json": "d67f5b74ff1b74907e7a8edd053a5f21acce61f3ebba59b4c0cf43581740e8c9",
+      "original-lib-war-setup-cases9.json": "b97b61b8c65293657a896213cd906d4de1ad42810368dae061cc399cc58c75ae",
+      "original-lib-war-setup-cases10.json": "1c9d8f51e6e7a295efd405fcb8a596b51b6b971d3b42214e8bc321c685f3dd1e",
+      "original-lib-war-setup-cases11.json": "90a2d4542c8d3c2b26aae63ed687c9edec67d994eeccf84c51605f101bddfda2",
+      "original-lib-war-setup-cases12.json": "6682570043ca34a06f0bb4154152c1928e8bd1161ca55df8e10a6fba6bafbf0a",
+      "original-lib-war-cells.json": "793845aaf9e432015de4d2e0a11d4ab3326cc44c9282981cf44f2c17c9b2d5c0",
+      "original-lib-war-cells-cases1.json": "1e8cca6d5d4b33838b0213dd01be04cd559167541f4acfc63a727c8a42c20d58",
+      "original-lib-war-cells-cases2.json": "f13dab405ef24f2fe7e47a360d8e58d2992d305ae8f0b8997ded1cc465c87297",
+      "original-lib-war-cells-cases3.json": "25e116b753aed841252fd0b03ec58118c9dfa33e820100dae3d8673b8de268b4",
+      "original-lib-war-cells-cases4.json": "2322da8924fd05e77f48c9a6e535b615fe7b57b838a20e557ac4fb57ab27b7f2",
+      "original-lib-war-multiaction.json": "5e7fa324cfb17524ef50b2ba1cd5148c3b3d40f18ea8a8cb7d96977f233612f1",
+      "original-lib-war-multiaction-cases1.json": "91a76bbc1f0ed42e8ca66f531ea06501e3460904455ff915e0b8087df84560c1",
+      "original-war-dependencies.json": "5ecf99f915d2f95418e39e224142fecfd742cae80e1b3bdecfcdcf0bd2da8e2c"
+    },
+    "packagedNativeTestPending": true
+  },
+  "rollback": {
+    "wholeSourceCoupledTrials": 18,
+    "setupTrials": 8,
+    "cellsTrials": 5,
+    "multiactionTrials": 5,
+    "points": [
+      "secondResource",
+      "lateText",
+      "lateFrame",
+      "present",
+      "beforeReturn",
+      "latePreset",
+      "secondRandom",
+      "lateFinalize"
+    ],
+    "wholeCallState": [
+      "World",
+      "400 Actors",
+      "globals",
+      "owned bitmap backing and masks",
+      "RNG",
+      "library DC",
+      "buffered events"
+    ],
+    "independentDependencyRollbackTests": 2
+  },
+  "retainedDispatcher": {
+    "tests": 6,
+    "seconds": 185.895,
+    "buildSeconds": 15.44,
+    "session": 37523,
+    "pid": 39833,
+    "terminalChunk": "a8710a",
+    "sourceCallCounts": {
+      "teamTournamentSetup": 373,
+      "tournamentSetup": 373,
+      "selection": 252
+    }
+  },
+  "reviewHistory": [
+    "Initial frozen572-call plan preceded the resource-parent correction: ready inputs before fresh menu loading were cleared; source1 was intentionally stopped for this observed provenance gap, with145 atomic cases preserved. Source2 declares two resource parents and574 calls. See LIB_WAR_SETUP_INPUTS.md.",
+    "X5 disappeared after source2 completed. Exact UUID returned; full raw,574atomic hashes and387 frozen inputs revalidated. Old Swift30285 is absent; original completion unknown, stale record preserved. No completed source restarted.",
+    "Restoration helper first expected missing diskutil Mounted key. Preserved x5-restored-integrity1.json; correction uses MountPoint/Locked/WritableVolume and verified all inputs.",
+    "Audit1 first compared control initial451b80 to PE0 before applying declared3. Correct auditor verifies PE bytes, then declared input; no source expected changes.",
+    "Audit2 reconstructed all574 calls, then failed44-cell assertion: only7cells adjusted. Same-seat key priority suppresses later actions. Audit3 preserves this gap;192-cell and40 multi-human supplements independently reproduce their two source2 parents and close separate declared requirements.",
+    "Generalizing the auditor briefly produced an authoring SyntaxError, caught by py_compile before source/audit execution. Frozen erroneous version and correction preserved.",
+    "Full build-only --build-tests lacked ModuleNotTestable support; normal swift test list compiled both comparator revisions. No Native game rule or expected byte changed during806 raw/packaged acceptance.",
+    "Historical independent Native compile/rollback tooling errors are retained in LIB_WAR_SETUP_STATUS.md and LIB_WAR_SETUP_NATIVE_PENDING.md."
+  ],
+  "boundaries": [
+    "806 calls include4 reproduced parent observations, not806 unique initial states.4003 executed instruction starts do not prove every branch outcome.",
+    "Source private caller stack, cookies and raw addresses are audited separately; Native does not import them or claim Windows C++ ABI equivalence.",
+    "Ready bridges and30 popup selector/strength bridges are declared input boundaries; earlier mode4 character/CPU selection reachability remains open.",
+    "Ready teams beyond1/2 retain unresolved X provenance. Missing live resources/unknown width/empty Random lists reject with rollback. Static NULL geometry write is unsupported, not a newly reproduced source fault or successful match.",
+    "Short-row retained cursor5 uses final cell in static Native rule; this specific path is not separately dynamically established by the finite806 corpus.",
+    "Start stops before43a21f;330 starts/1359 bytes of following preparation are static only.43a860 War gameplay remains open.",
+    "Native app integration, own full catalog/library/outer loop, full match/game/network, window/input/audio/Windows/clean Mac remain open. Catalog5 is terminal at unchanged6GiB reserve after28Objects; never restart."
+  ],
+  "artifactVerification": {
+    "scope": "Read-only verify745 frozen Native source/fixture files against the prospective\nowned Git change, preserve their exact bytes in an archive, and verify every\narchive member. This is packaging evidence, not original/device execution or\nNative acceptance. Protect all295 prior fixtures and23 unrelated pending files.\n",
+    "timeUTC": "2026-09-11T21:33:46.393905+00:00",
+    "headBeforeAcceptance": "066700b5beed3558e483ea86a673e65a57eb1974",
+    "packageFiles": 745,
+    "ownedNativeFiles": 33,
+    "prospectiveGitBytesEqual": true,
+    "priorFixturesUnchanged": 295,
+    "protectedFilesUnchanged": 23,
+    "archive": {
+      "path": "build/research/lib-war/lib-war-accepted-native-package1.tar.gz",
+      "bytes": 2609867037,
+      "sha256": "fc69cb06ec49702cf544a0bda76d3b1972cec0a8e4ebf0b7923f6f3cb5137cfb",
+      "verifiedMembers": 745
+    },
+    "packagePinsSHA256": "a49c4437961326028b8f754cb2d69bf1ac7f3a8f040d58d1db26aa9d9767340f",
+    "packagedNativeAcceptanceSeparate": true,
+    "session": 32689,
+    "terminalChunk": "07dbcb"
+  },
+  "fixturePins": {
+    "path": "build/research/lib-war/lib-war-fixture-pins.json",
+    "sha256": "96391b035656cfaa8456bad80193f66ca37943b671fbe5d9fe57585bd75d5834",
+    "count": 316
+  }
+}

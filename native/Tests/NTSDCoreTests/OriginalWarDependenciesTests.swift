@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import NTSDCore
+@testable import NTSDReferenceChecks
 
 /// Explicit numeric/rectangle entry inputs extracted from whole source War
 /// calls. This does not compare the whole Native War menu or own participant join.
@@ -17,10 +18,13 @@ final class OriginalWarDependenciesTests: XCTestCase {
     struct Corpus: Decodable { let cases: Int,operations: [Operation],frames: [Call] }
     enum Trial: Error { case stop }
     func corpus() throws -> Corpus {
-        guard let path=ProcessInfo.processInfo.environment["NTSD_WAR_DEPENDENCIES"] else {
-            throw XCTSkip("War dependency evidence is pending packaging and whole menu composition")
+        let url: URL
+        if let path=ProcessInfo.processInfo.environment["NTSD_WAR_DEPENDENCIES"] {
+            url=URL(fileURLWithPath:path)
+        } else {
+            url=try XCTUnwrap(Bundle.module.url(forResource:"original-war-dependencies",withExtension:"json",subdirectory:"Fixtures"))
         }
-        return try JSONDecoder().decode(Corpus.self,from:Data(contentsOf:URL(fileURLWithPath:path)))
+        return try JSONDecoder().decode(Corpus.self,from:MatchPreparationReference.unpack(Data(contentsOf:url)))
     }
     func initial() throws -> OriginalStateRecord {
         var g=try OriginalStateRecord(bytes:[UInt8](repeating:0,count:OriginalMatchPreparation.globalSize),defined:[Bool](repeating:false,count:OriginalMatchPreparation.globalSize))
@@ -44,7 +48,7 @@ final class OriginalWarDependenciesTests: XCTestCase {
         }
     }
     func testTroopStoresAgainstOriginalBranches() throws {
-        let c=try corpus();XCTAssertEqual(c.cases,574)
+        let c=try corpus();XCTAssertEqual(c.cases,806)
         var kinds=Set<String>()
         for op in c.operations {
             XCTAssertTrue(op.inputs.known);var g=try initial()

@@ -48,57 +48,42 @@ false positives will not occur.
 
 ## Current research status
 
-**UNFINISHED War setup: [LIB_WAR_SETUP_PLAN](docs/research/LIB_WAR_SETUP_PLAN.md)
-and [input correction](docs/research/LIB_WAR_SETUP_INPUTS.md).
-[Current recovery status](docs/research/LIB_WAR_SETUP_STATUS.md).**
-Source574 calls completed,573 returns including2 resource parents and1 BEFORE
-43a21f; raw3456631996bytes SHA9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa.
-Source2 session25129 is terminal0; NEVER restart. Full corpus audit/Native whole
-menu comparison remain pending. Probe3's4 calls independently audit83points/
-88813records/233445114bytes,780helpers and8 actual ready consumer bindings.
-Initial fresh loading cleared ready inputs;145 preliminary cases plus temporary
-were retained before revalidated Python26976 SIGINT/terminal130. Manifest3 adds
-an actual resource-parent return before each declared ready bridge; no own CPU
-selection reachability or played battle claim. Preserve manifests1/2 and errors.
-Pending OriginalWarSetup/OriginalWarMenuContinuation now compose the whole menu,
-two owned bitmaps, live Random choices and three shared dispatcher hooks. Read
-[Native pending limits](docs/research/LIB_WAR_SETUP_NATIVE_PENDING.md). The small
-Git-cd80865 Core package compiles; one Native-only24-Object test completes a
-menu return and6late rollback trials in0.059s/build75.04s. Missing try annotations
-and the synthetic RNG table's zero-byte input error retain separate logs; original
-producer/expected bytes are unchanged. This is NOT whole source equivalence or
-an accepted milestone. The574-case comparator, eight source-coupled rollback
-trials and War surface adapter now compile against accepted Core/reference
-checks; full original comparison/eight source-coupled trials remain unexecuted. The
-new before-resource observer retains Native-only6trial success0.061s/build152.06s.
-Indexing requires the full source audit, exact raw hash and574atomic part hashes;
-synthetic9.44MB cross-chunk/truncated-JSON checks are tooling-only evidence.
-Retained packaged6tests185.895s/build15.44s pass:373Team setup/373Tournament
-setup/252selection plus late rollback; this is not a new War match. All263
-small-package inputs are pinned,295oldfixtures and23other pending files unchanged.
-Twenty owned files form an explicitly unfinished snapshot; accepted base stays
-cd80865. All source/Swift jobs including39213/39833 are terminal.
-Native-only outer ownership now passes two nominal calls and8late failures:
-fresh13resources and retained8Random fighters roll back at waiting bitmap,
-overlay text, present and final return. Two tests including prior6inner trials
-pass0.113s/build15.74s; Swift42072/session4456 terminal0,264package inputs pinned.
-No game/expected bytes changed. [War preparation static evidence](docs/research/LIB_WAR_PREPARATION_STATIC.md)
-verifies330starts/1359PEbytes, `_Battle`, CPU slot+10, RNG123/125/127 and root2c/
-root38 provenance. This is no original execution/whole preparation/Windows proof.
-Independent setup checks are exhausted; full audit/comparison/packaging and
-the actual preparation parent require X5. Its absence recurred across at least
-three consecutive goal turns. Resume from the preserved corpus when it returns;
-do not substitute recapture or unverified implementation for that dependency.
-X5 disappeared during dependency
-build; source already completed and hashed. UUID3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548
-is absent from diskutil; do not replace canonical symlinks or recapture originals.
-Local interruption/work/archive: build/research/lib-war-storage-interruption/;
-master application-catalog-work.json/libWarSetup records sessions and pending
-files. A small Git-cd80865 Core/codec package compiles Core/tests; Native-only
-late frame rollback1test previously passed0.001s/build77.65s. It excludes pending catalog
-work and establishes no numerical equivalence. On X5 return, verify
-existing574 atomic cases/full raw hash and actual jobs before further work.
-Accepted base remains cd80865/715files/295fixtures. Full game goal stays open.
+**War setup: [LIB_WAR_SETUP](docs/research/LIB_WAR_SETUP.md).**
+806 source/native observations:574 setup+192 separate-cell+40 multi-human calls;
+805outer422ab8ret4/801War439ecdret1c, four resource parents and one BEFORE43a21f.
+Supplements reproduce four old parent calls, not806unique initial states. Four
+fresh401-constructor parents own137Object/101BG catalog views and eight War
+bitmaps. Full13104points/14034064records/36954881952bytes+masks audited;
+7391686stores/7709930instruction reads/198818API reads/185106helper returns.
+4003original instruction starts are a union, not all branch outcomes. Private
+stack stays source-audited; Native imports no unknown backing or private ABI.
+
+Audit2 exposed seven edited cells in574: same-seat Right/Defense selects Right;
+Attack/Jump/Defense selects Attack. Immutable audit3 retains the37-cell gap.
+The new192-call sequence edits all44cells with separate keys, and40calls use
+three human seats for all14 active/reserve action masks. All30preset/strength/
+side combinations,330cells,36REP/2816bytes and28liveRandom lists compare.
+Keep last-ID Object binding, sparse geometry/masks, reserve-before-active copies,
+Jump restore-then-continue, live Random lists and same-call settings/sound order.
+
+Raw7tests374.882s and packaged7tests473.097s/build0.31s pass;18coupled
+late rollbacks plus four dependency tests (192operations/3560stores and896frame
+helpers/4984fills). Retained6Team/Tournament/selection tests185.895s pass through
+the same shared dispatcher. No game/expected change was needed for806acceptance.
+All21transports reproduce exact raw bytes/JSON/SHA/all6864per-corpus blob checks.
+295oldfixtures unchanged;316current/745package/prospective Git/archive verified.
+23other pending files remain unchanged. NTSDNative links; no window/device claim.
+
+X5 exact UUID/raw/574parts/387inputs reverified after restoration. Never restart
+completed source2/cell/multi or catalog5. Historical Swift30285 completion remains
+unknown; all current source/Swift jobs are terminal. Preserve storage, diskutil
+key, input-phase audit, coverage-gap, authoring syntax and build-only testing-
+support failures; source bytes/plans were not replaced to obtain acceptance.
+Ready teamX outside1/2, static short-row cursor5 and NULL geometry boundaries
+remain explicit. NEXT entire43a21f preparation (330starts/1359bytes STATIC only),
+43a860War gameplay and own catalog/library/outerloop/app. Fullmatch/game/network/
+window/input/audio/Windows/cleanMac goal remains active. See work records in
+build/research/application-catalog-work.json/libWarSetup and build/research/lib-war.
 
 **Team Tournament preparation: [LIB_TEAM_TOURNAMENT_PREPARATION](docs/research/LIB_TEAM_TOURNAMENT_PREPARATION.md).**
 210whole436fb5ret12+422ab8ret4 matches:154menu-only+56preparations.22fresh401

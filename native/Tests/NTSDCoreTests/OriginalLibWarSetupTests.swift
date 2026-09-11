@@ -4,6 +4,20 @@ import NTSDCore
 @testable import NTSDReferenceChecks
 
 final class OriginalLibWarSetupTests: XCTestCase {
+    enum Study: String, Equatable {
+        case setup,cells,multiaction
+        var count: Int { switch self { case .setup:return 574;case .cells:return 192;case .multiaction:return 40 } }
+        var rawBytes: Int { switch self { case .setup:return 3_456_631_996;case .cells:return 1_138_424_571;case .multiaction:return 247_848_404 } }
+        var rawSHA256: String {
+            switch self {
+            case .setup:return "9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa"
+            case .cells:return "d2f17f5a4b32cc950227de4c1061430d34242fb7b6a883c79a43d02a38547f57"
+            case .multiaction:return "fba1f47a4f7770405cd139fbc2ee2bfbd86f0c059f0658e29d56c2fe8bd8f36c"
+            }
+        }
+        var environment: String { "NTSD_LIB_WAR_"+rawValue.uppercased()+"_INDEX" }
+        var fixture: String { "original-lib-war-"+rawValue }
+    }
     typealias Base = OriginalCharacterMenuSurfaceTests
     typealias Music = OriginalCharacterMenuMusicSurfaceTests
     struct Environment: Equatable {
@@ -20,7 +34,9 @@ final class OriginalLibWarSetupTests: XCTestCase {
     struct Transport: Decodable { let count: Int,sha256: String,deflateSHA256: String,deflateParts: [String] }
     struct Storage: Decodable { let bytes: String, defined: String }
     struct Record: Decodable { let address: UInt32, storage: Storage, live: Bool? }
-    struct Spec: Decodable { let bridgeGlobals: [String:Int32]?, bridgeReady: [Ready]?; let buttons: [[Int]]?; let label: String, control: Bool, music: MusicSpec?, chain: Bool?, dcResult: Int32?, dc: UInt32?, methodResult: Int32?, milliseconds: UInt32? }
+    struct CellEdit: Decodable { let row: Int,side: Int,unit: Int,address: Int }
+    struct Actions: Decodable { let row: Int,mask: Int,address: Int }
+    struct Spec: Decodable { let bridgeGlobals: [String:Int32]?, bridgeReady: [Ready]?; let buttons: [[Int]]?; let expectedEdit: CellEdit?,expectedActions: Actions?; let label: String, control: Bool, music: MusicSpec?, chain: Bool?, dcResult: Int32?, dc: UInt32?, methodResult: Int32?, milliseconds: UInt32? }
     struct Ready: Decodable { let seat: Int,object: Int,team: Int32,status: Int32 }
     struct Point: Decodable { let name: String?; let kind: String,records: [Record],eventCount: Int,storeCount: Int,seat: UInt32?,locals: [String:UInt32]? }
     struct Helper: Decodable { let entry: UInt32,firstStore: Int,lastStore: Int? }
@@ -54,32 +70,69 @@ final class OriginalLibWarSetupTests: XCTestCase {
         let worldAddress: UInt32, bitmapAddress: UInt32, target: UInt32, libraryAddress: UInt32, stackAddress: UInt32, entrySP: UInt32, tailSP: UInt32
     }
     enum Stop: Error, Equatable { case injected, unexpected }
-    struct IndexedCase: Decodable { let index: Int,label: String,path: String,bytes: Int,sha256: String }
+    struct IndexedCase: Decodable { let index: Int,label: String,path: String,bytes: Int,sha256: String; let position: Int? }
     struct IndexDocument: Decodable {
         struct Source: Decodable { let bytes: Int,sha256: String }
-        struct Audit: Decodable { let path: String,sha256: String }
+        struct Audit: Decodable { let path: String?,sha256: String }
+        struct FilePin: Decodable { let bytes: Int,sha256: String }
         let schema: Int,source: Source,audit: Audit,cases: [IndexedCase]
+        let auditBlob: Blob?,metadataBlob: Blob?,files: [String:FilePin]?
     }
     final class Index {
+        struct Group: Decodable { let firstCase: Int,cases: [Blob] }
         let url: URL,c: IndexDocument,metadata: [String:Any]
-        init() throws {
-            guard let path=ProcessInfo.processInfo.environment["NTSD_LIB_WAR_SETUP_INDEX"] else {
-                throw XCTSkip("Pending War source comparison requires the hash-verified574-case index; X5 corpus is unavailable")
+        private var groupPath: String?,group: Group?
+        private static func unpack(_ blob: Blob,maximumCount: Int) throws -> Data {
+            let data=Data(try MatchPreparationReference.inflate(blob.deflate,count:blob.count,maximumCount:maximumCount))
+            guard MatchPreparationReference.digest(data)==blob.sha256 else { throw Stop.unexpected }
+            return data
+        }
+        init(_ study: Study = .setup) throws {
+            if let path=ProcessInfo.processInfo.environment[study.environment] {
+                url=URL(fileURLWithPath:path)
+            } else {
+                url=try XCTUnwrap(Bundle.module.url(forResource:study.fixture,withExtension:"json",subdirectory:"Fixtures"))
             }
-            url=URL(fileURLWithPath:path)
             let data=try Data(contentsOf:url)
             c=try JSONDecoder().decode(IndexDocument.self,from:data)
-            let document=try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
-            metadata=try XCTUnwrap(document["metadata"] as? [String:Any])
-            guard c.schema==1,c.source.bytes==3_456_631_996,
-                c.source.sha256=="9b7e923c7f43ef328c4e7760ae5633589d83ce2bcbef430258f8d8f53a40b1aa",
-                c.cases.count==574,c.cases.map(\.index)==Array(0..<574) else { throw Stop.unexpected }
-            let audit=try Data(contentsOf:URL(fileURLWithPath:c.audit.path))
+            let audit: Data
+            if c.schema==1 {
+                let document=try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
+                metadata=try XCTUnwrap(document["metadata"] as? [String:Any])
+                audit=try Data(contentsOf:URL(fileURLWithPath:XCTUnwrap(c.audit.path)))
+            } else {
+                guard c.schema==2 else { throw Stop.unexpected }
+                metadata=try XCTUnwrap(JSONSerialization.jsonObject(with:Self.unpack(XCTUnwrap(c.metadataBlob),maximumCount:256_000_000)) as? [String:Any])
+                audit=try Self.unpack(XCTUnwrap(c.auditBlob),maximumCount:16_000_000)
+            }
+            guard c.source.bytes==study.rawBytes,c.source.sha256==study.rawSHA256,
+                c.cases.count==study.count,c.cases.map(\.index)==Array(0..<study.count) else { throw Stop.unexpected }
             guard MatchPreparationReference.digest(audit)==c.audit.sha256 else { throw Stop.unexpected }
             let report=try XCTUnwrap(JSONSerialization.jsonObject(with:audit) as? [String:Any])
-            guard report["sourceAudited"] as? Bool == true,report["cases"] as? Int == 574,
+            guard report["sourceAudited"] as? Bool == true,report["cases"] as? Int == study.count,
                 let raw=report["raw"] as? [String:Any],raw["bytes"] as? Int==c.source.bytes,
                 raw["sha256"] as? String==c.source.sha256 else { throw Stop.unexpected }
+        }
+        func part(_ number: Int) throws -> [String:Any] {
+            let entry=c.cases[number],path=url.deletingLastPathComponent().appendingPathComponent(entry.path)
+            if c.schema==1 {
+                let data=try Data(contentsOf:path)
+                guard data.count==entry.bytes,MatchPreparationReference.digest(data)==entry.sha256 else { throw Stop.unexpected }
+                return try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
+            }
+            if groupPath != entry.path {
+                let pin=try XCTUnwrap(c.files?[entry.path]),data=try Data(contentsOf:path)
+                guard data.count==pin.bytes,MatchPreparationReference.digest(data)==pin.sha256 else { throw Stop.unexpected }
+                group=try JSONDecoder().decode(Group.self,from:data);groupPath=entry.path
+            }
+            let group=try XCTUnwrap(group),position=try XCTUnwrap(entry.position)
+            guard group.cases.indices.contains(position),group.firstCase+position==number else { throw Stop.unexpected }
+            let blob=group.cases[position]
+            guard blob.count==entry.bytes,blob.sha256==entry.sha256 else { throw Stop.unexpected }
+            let item=try XCTUnwrap(JSONSerialization.jsonObject(with:Self.unpack(blob,maximumCount:32_000_000)) as? [String:Any])
+            let parents=try XCTUnwrap(metadata["parents"] as? [[String:Any]])
+            let parent=try XCTUnwrap(parents.last { ($0["firstCase"] as? Int ?? Int.max)<=number })
+            return ["case":item,"parents":[parent],"assets":try XCTUnwrap(metadata["assets"]),"blobs":try XCTUnwrap(metadata["blobs"])]
         }
     }
     final class Resources {
@@ -89,10 +142,7 @@ final class OriginalLibWarSetupTests: XCTestCase {
         let catalog: OriginalLoadedCatalog
         var bitmapAddresses: [Int:UInt32] = [:]
         init(_ index: Index,_ number: Int,catalog: OriginalLoadedCatalog) throws {
-            let entry=index.c.cases[number],url=index.url.deletingLastPathComponent().appendingPathComponent(entry.path)
-            let data=try Data(contentsOf:url)
-            guard data.count==entry.bytes,MatchPreparationReference.digest(data)==entry.sha256 else { throw Stop.unexpected }
-            let part=try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
+            let entry=index.c.cases[number],part=try index.part(number)
             var document=index.metadata
             document["cases"]=[try XCTUnwrap(part["case"])];document["parents"]=part["parents"]
             document["assets"]=part["assets"];document["blobs"]=part["blobs"]
@@ -490,6 +540,13 @@ final class OriginalLibWarSetupTests: XCTestCase {
                     // audit. These checkpoints expose owned game state only.
                     XCTAssertNil(expected.locals)
                     if point.pc==0x438bbb,initial.war.bitmaps.isEmpty { buffer.warGraphics=buffer.graphics }
+                    if point.pc==0x438bbb,let actions=item.spec.expectedActions {
+                        var mask=0
+                        for (i,address) in [0x4513b4,0x4513b8,0x4513bc].enumerated() {
+                            if try state.globals.integer(at:address-base,as:Int32.self) != 0 { mask |= 1<<i }
+                        }
+                        XCTAssertEqual(mask,actions.mask,item.spec.label+" actual Native menu input flags")
+                    }
                     try compareState(state,expected.records)
                     try XCTUnwrap(warAdapter).compareOwned(owned,expected.records,buffer.warGraphics)
                     if failure=="secondResource",point.pc==0x438d2a { throw Stop.injected }
@@ -532,9 +589,9 @@ final class OriginalLibWarSetupTests: XCTestCase {
         }
         return eventIndex
     }
-    func compareParent(_ item: Case,_ r: Resources) throws {
+    func compareParent(_ item: Case,_ r: Resources,firstCase: Int) throws {
         for parent in r.corpus.parents {
-            XCTAssertEqual(parent.firstCase,item.spec.control ? 412 : 0)
+            XCTAssertEqual(parent.firstCase,firstCase)
             XCTAssertEqual(parent.constructors.calls.count,401)
             for (index,call) in parent.constructors.calls.enumerated() {
                 let size=index==0 ? OriginalStateRecord.worldPrefixSize : OriginalStateRecord.actorSize
@@ -566,21 +623,30 @@ final class OriginalLibWarSetupTests: XCTestCase {
         }
     }
     func testWholeWarMenuAndLateCoupledRollback() throws {
-        let index=try Index()
+        try compareStudy(.setup)
+    }
+    func testSeparateNavigationEditsEveryTroopCell() throws {
+        try compareStudy(.cells)
+    }
+    func testMultipleHumanSeatsCombineAllTroopActions() throws {
+        try compareStudy(.multiaction)
+    }
+    func compareStudy(_ study: Study) throws {
+        let index=try Index(study)
         let urlCatalog=try XCTUnwrap(Bundle.module.url(forResource:"original-loaded-catalog",withExtension:"json",subdirectory:"Fixtures"))
         var loaded: OriginalLoadedCatalog?
         _ = try LoadedCatalogReference.compare(Data(contentsOf:urlCatalog),onLoaded:{ loaded=$0 })
         let catalog=try XCTUnwrap(loaded)
         var retained: Retained?,events=0,expectedEvents=0,parents=0,returns=0,warReturns=0,boundaries=0
-        var trials=Set<String>()
+        var trials=Set<String>(),editedCells=Set<Int>(),actionPairs=Set<String>()
         for number in index.c.cases.indices {
             try autoreleasepool {
                 let r=try Resources(index,number,catalog:catalog),item=r.corpus.cases[0]
                 if item.spec.chain != true {
-                    retained=nil;try compareParent(item,r);parents += 1
+                    retained=nil;try compareParent(item,r,firstCase:study == .setup && item.spec.control ? 412 : 0);parents += 1
                 }
                 var failures: [String]=[]
-                if item.spec.label=="war-ready" { failures=["secondResource","lateText","lateFrame","present","beforeReturn"] }
+                if item.spec.label=="war-ready" || study == .multiaction && item.spec.label=="war-ready-control" { failures=["secondResource","lateText","lateFrame","present","beforeReturn"] }
                 if item.spec.label=="preset-table-0-0-0" { failures.append("latePreset") }
                 if !trials.contains("secondRandom"),item.events.filter({ $0.kind=="random" && $0.arguments.first==0x122 }).count>=2 { failures.append("secondRandom") }
                 if item.end=="warMatchPreparation" { failures.append("lateFinalize") }
@@ -590,14 +656,32 @@ final class OriginalLibWarSetupTests: XCTestCase {
                     XCTAssertTrue(trials.insert(failure).inserted)
                 }
                 events += try run(item,r,&retained);expectedEvents += item.events.count
+                if let edit=item.spec.expectedEdit {
+                    XCTAssertEqual(study,.cells)
+                    let address=(edit.row%2==1 ? 0x44d5f8 : 0x44d650)+(edit.side*11+edit.unit)*4
+                    XCTAssertEqual(edit.address,address)
+                    XCTAssertTrue(editedCells.insert(address).inserted)
+                }
+                if let actions=item.spec.expectedActions {
+                    XCTAssertEqual(study,.multiaction)
+                    XCTAssertEqual(actions.address,actions.row==1 ? 0x44d5f8 : 0x44d650)
+                    XCTAssertTrue(actionPairs.insert("\(actions.row):\(actions.mask)").inserted)
+                }
                 if item.end=="returned" {
                     returns += 1
                     if item.points.contains(where:{ $0.kind.hasPrefix("war-") }) { warReturns += 1 }
                 } else { XCTAssertEqual(item.end,"warMatchPreparation");boundaries += 1 }
+                if number%25==0 {
+                    FileHandle.standardError.write(Data("War compared \(number): \(item.spec.label)\n".utf8))
+                }
             }
         }
-        XCTAssertEqual(parents,2);XCTAssertEqual(returns,573);XCTAssertEqual(warReturns,571);XCTAssertEqual(boundaries,1)
+        XCTAssertEqual(parents,study == .setup ? 2 : 1);XCTAssertEqual(returns,study.count-(study == .setup ? 1 : 0))
+        XCTAssertEqual(warReturns,study.count-(study == .setup ? 3 : 1));XCTAssertEqual(boundaries,study == .setup ? 1 : 0)
         XCTAssertEqual(events,expectedEvents);XCTAssertGreaterThan(events,10_000)
-        XCTAssertEqual(trials,Set(["secondResource","lateText","lateFrame","present","beforeReturn","latePreset","secondRandom","lateFinalize"]))
+        let common=Set(["secondResource","lateText","lateFrame","present","beforeReturn"])
+        XCTAssertEqual(trials,study == .setup ? common.union(["latePreset","secondRandom","lateFinalize"]) : common)
+        if study == .cells { XCTAssertEqual(editedCells,Set(stride(from:0x44d5f8,to:0x44d6a8,by:4))) }
+        if study == .multiaction { XCTAssertEqual(actionPairs,Set((1...2).flatMap { row in (1...7).map { "\(row):\($0)" } })) }
     }
 }

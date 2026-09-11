@@ -4,6 +4,8 @@ Pinned EXE/lib/VC80 and DAT/BMP/DIB references, controlled Unicorn2.1.4/CW023f.
 Reconstruct whole records/masks from declared inputs and real writes; verify
 every read, checkpoint, helper/REP return, live Random list and preset result.
 Stream raw JSON and audit one atomic case at a time to bound host memory.
+Separate profiles retain574 setup,192 cell-traversal and40 multi-human-action
+calls. The latter two reproduce their exact original parent calls first.
 LIB_WAR_SETUP_PLAN.md and LIB_WAR_SETUP_INPUTS.md retain source input correction,
 unknown backing and BEFORE43a21f boundary. No expected edits, source-fault
 continuation, Windows/device/full app or Native equivalence claim.
@@ -35,10 +37,13 @@ def stream_document(path):
   assert buffer.startswith(',');metadata=json.loads('{'+buffer[1:])
  return metadata,case_hashes,dict(bytes=count,sha256=hash.hexdigest())
 
-def verify(path,limit=None):
+def verify(path,limit=None,profile='setup'):
+ assert profile in ('setup','cells','multiaction')
+ total={'setup':574,'cells':192,'multiaction':40}[profile]
  d,case_hashes,raw_pin=stream_document(path);stats=collections.Counter();unknown=collections.Counter();pcs={};streams=collections.Counter()
- manifest=json.loads((path.parent/'lib-war-manifest3.json').read_text())
- if limit is None:assert len(case_hashes)==len(d['installations'])==len(manifest)==574
+ manifest_name={'setup':'lib-war-manifest3.json','cells':'lib-war-cells-manifest1.json','multiaction':'lib-war-multiaction-manifest1.json'}[profile]
+ manifest=json.loads((path.parent/manifest_name).read_text())
+ if limit is None:assert len(case_hashes)==len(d['installations'])==len(manifest)==total
  else:assert len(case_hashes)==len(d['installations'])==limit;manifest=manifest[:limit]
  files=[(DEFAULT_SOURCE/'NTSD 2.4.exe').read_bytes(),(DEFAULT_SOURCE/'lib.dll').read_bytes(),(ROOT/'build/original/crt/msvcr80.dll').read_bytes()]
  assert [sha(b) for b in files]==[EXE_SHA256,'28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba','c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d']
@@ -67,10 +72,19 @@ def verify(path,limit=None):
    assert b==expected,(hex(p),b.hex(),bytes(expected).hex())
    assert key not in pcs or pcs[key]==value;pcs[key]=value
  parents={p['firstCase']:p for p in d['parents']};previous=None
- preset_combinations=set();visited_cells=set();rep_pcs=collections.Counter();frame_phases=set();random_lists=[]
+ preset_combinations=set();visited_cells=set();rep_pcs=collections.Counter();frame_phases=set();random_lists=[];action_pairs=set()
  for index,(spec,install) in enumerate(zip(manifest,d['installations'])):
   part=path.with_suffix('.parts')/f'{index:04d}.json';part_raw=part.read_bytes();part_doc=json.loads(part_raw);c=part_doc['case'];label=spec['label']
   assert sha(canonical(c))==case_hashes[index] and c['spec']==spec,(index,label,'atomic case/manifest')
+  if profile in ('cells','multiaction') and index<2:
+   source_index=json.loads((path.parent/'lib-war-index1.json').read_text())
+   pin=source_index['cases'][index+(412 if profile=='multiaction' else 0)];prior_raw=(path.parent/pin['path']).read_bytes()
+   assert len(prior_raw)==pin['bytes'] and sha(prior_raw)==pin['sha256']
+   prior=json.loads(prior_raw)
+   prior_parents=prior['parents']
+   if profile=='multiaction':assert prior_parents[0]['firstCase']==412;prior_parents[0]['firstCase']=0
+   assert canonical(c)==canonical(prior['case']) and canonical(part_doc['parents'])==canonical(prior_parents)
+   stats['source2ParentReproductions']+=1
   assert part_doc['installation']==install
   for k,v in part_doc['blobs'].items():assert d['blobs'][k]==v
   stats['atomicCases']+=1;stats['atomicBytes']+=len(part_raw)
@@ -89,7 +103,17 @@ def verify(path,limit=None):
     stats['constructorReturns']+=1
    for view in parent['fileBackedInputs']:
     p=view['address'];b=bytes.fromhex(view['bytes']);assert b==exe(p,len(b))
-    assert state[0x44d000][0][p-0x44d000:p-0x44d000+len(b)]==b,(label,'PE parent bytes',hex(p))
+    # The parent first reads literal PE backing, then applies the declared
+    # initial globals. In particular, control starts the pulse phase at3;
+    # this is an input override of PE451b80=0, not a different source byte.
+    expected=bytearray(b)
+    for key,value in spec.get('globals',{}).items():
+     address=int(key)
+     if p<=address and address+4<=p+len(b):
+      supplied=struct.pack('<I',value&0xffffffff)
+      if expected[address-p:address-p+4]!=supplied:stats['declaredPEParentOverrides']+=1
+      expected[address-p:address-p+4]=supplied
+    assert state[0x44d000][0][p-0x44d000:p-0x44d000+len(b)]==expected,(label,'PE parent plus declared globals',hex(p))
   if spec.get('chain'):
    prior=records(previous['after']);declared=[]
    for p,v in spec.get('bridgeGlobals',{}).items():declared.append(dict(address=int(p),bytes=struct.pack('<I',v&0xffffffff).hex()))
@@ -102,6 +126,24 @@ def verify(path,limit=None):
     a,v,m=found[0];v[p-a:p-a+len(b)]=b;m[p-a:p-a+len(b)]=b'\1'*len(b)
    assert prior==state,(label,'whole retained parent')
   previous=c
+  if profile=='cells' and 'expectedEdit' in spec:
+   edit=spec['expectedEdit'];row=edit['row'];side=edit['side'];unit=edit['unit']
+   assert row in range(1,5) and side in (0,1) and unit in (range(6) if row<=2 else range(6,11))
+   address=(0x44d5f8 if row%2 else 0x44d650)+(side*11+unit)*4
+   assert edit['address']==address
+   writes=[w for w in c['writes'] if w['pc'] in (0x43962b,0x439637,0x439647,0x439652,0x43965b,0x439663)]
+   assert writes and {w['address'] for w in writes}=={address}
+   stats['declaredCellEdits']+=1
+  if profile=='multiaction' and 'expectedActions' in spec:
+   action=spec['expectedActions'];row=action['row'];mask=action['mask']
+   assert row in (1,2) and mask in range(1,8)
+   address=0x44d5f8 if row==1 else 0x44d650;assert action['address']==address
+   point=next(p for p in c['points'] if p['kind']=='war-0x438bbb')
+   g=records(point['records'])[0x44d000][0]
+   actual=sum((struct.unpack_from('<i',g,p-0x44d000)[0]!=0)<<i for i,p in enumerate((0x4513b4,0x4513b8,0x4513bc)))
+   assert actual==mask and (row,mask) not in action_pairs;action_pairs.add((row,mask))
+   writes=[w for w in c['writes'] if w['pc'] in (0x43962b,0x439637,0x439647,0x439652,0x43965b,0x439663)]
+   assert writes and {w['address'] for w in writes}=={address};stats['declaredActionCombinations']+=1
   assert c['cw']==0x23f
   if c['end']=='returned':
    assert c['endPC']==0x30000000 and c['endSP']==d['entrySP']+8 and not c['pending'];assert c['instructions']['0x422ab8']=='c20400'
@@ -194,10 +236,22 @@ def verify(path,limit=None):
   stats['finalRecords']+=len(state);stats['finalBytes']+=sum(len(v) for v,m in state.values())
   if index%25==0:print('audited',index,label,flush=True)
  if limit is None:
-  assert preset_combinations=={(s,p,k) for s in range(2) for p in range(5) for k in range(1,4)}
-  assert visited_cells==set(range(0x44d5f8,0x44d6a8,4)) and frame_phases=={0,1,2,3}
-  assert stats['wholeReturns']==573 and stats['warReturns']==571 and stats['preparationBoundaries']==1
-  assert stats['readyConsumerBindings']==16 and stats['constructorReturns']==802 and stats['warBitmapAllocations']==4
+  assert frame_phases=={0,1,2,3}
+  if profile=='setup':
+   assert preset_combinations=={(s,p,k) for s in range(2) for p in range(5) for k in range(1,4)}
+   assert stats['wholeReturns']==573 and stats['warReturns']==571 and stats['preparationBoundaries']==1
+   assert stats['readyConsumerBindings']==16 and stats['constructorReturns']==802 and stats['warBitmapAllocations']==4
+  elif profile=='cells':
+   assert not preset_combinations and stats['source2ParentReproductions']==2 and stats['declaredCellEdits']==44
+   assert stats['wholeReturns']==192 and stats['warReturns']==191 and stats['preparationBoundaries']==0
+   assert stats['readyConsumerBindings']==8 and stats['constructorReturns']==401 and stats['warBitmapAllocations']==2
+   assert visited_cells==set(range(0x44d5f8,0x44d6a8,4))
+  else:
+   assert not preset_combinations and stats['source2ParentReproductions']==2 and stats['declaredActionCombinations']==14
+   assert action_pairs=={(row,mask) for row in (1,2) for mask in range(1,8)}
+   assert stats['wholeReturns']==40 and stats['warReturns']==39 and stats['preparationBoundaries']==0
+   assert stats['readyConsumerBindings']==8 and stats['constructorReturns']==401 and stats['warBitmapAllocations']==2
+   assert visited_cells=={0x44d5f8,0x44d650}
  resources={x['path'][1]:x for x in images[0].resources() if x['path'][0]==2}
  for name,a in d['assets'].items():
   if a['kind']=='embedded':r=resources[name];b=files[0][r['fileOffset']:r['fileOffset']+r['size']];dib=b
@@ -206,8 +260,13 @@ def verify(path,limit=None):
   assert [w,abs(h),planes,bpp]==[a[k] for k in ('width','height','planes','bpp')]
  for group in [d['roster']['sourceFiles'],d['roster']['smallSourceFiles'],d['arenas']['sourceFiles']]:
   for name,pin in group.items():b=(DEFAULT_SOURCE/name).read_bytes();assert dict(bytes=len(b),sha256=sha(b))==pin
- return dict(scope=__doc__,timeUTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),raw=raw_pin,cases=len(case_hashes),counts=dict(stats),instructionStarts=len(pcs),instructions=pcs,randomStreams=dict(streams),liveRandomLists=random_lists,REPStarts=dict(rep_pcs),presetCombinations=sorted(preset_combinations),editedCells=sorted(visited_cells),framePhases=sorted(frame_phases),blobs=len(blobs),decodedBlobBytes=sum(map(len,blobs.values())),unknownReads=[dict(pc=p,address=a,count=n,occurrences=v) for (p,a,n),v in sorted(unknown.items())],sourceAudited=True,nativeCompared=False,windowsVerified=False,wholeGameComplete=False)
+ # Capture2's simultaneous Right/Defense stimuli edit only seven cells.
+ # Preserve the44-cell acceptance requirement and report its remaining gap
+ # separately from successful reconstruction of every captured byte/mask.
+ expected_cells={0x44d5f8,0x44d650} if profile=='multiaction' else set(range(0x44d5f8,0x44d6a8,4))
+ coverage=dict(expectedEditableCells=sorted(expected_cells),missingEditableCells=sorted(expected_cells-visited_cells),actionCombinations=sorted(action_pairs),complete=limit is None and visited_cells==expected_cells)
+ return dict(scope=__doc__,timeUTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),raw=raw_pin,cases=len(case_hashes),counts=dict(stats),instructionStarts=len(pcs),instructions=pcs,randomStreams=dict(streams),liveRandomLists=random_lists,REPStarts=dict(rep_pcs),presetCombinations=sorted(preset_combinations),editedCells=sorted(visited_cells),framePhases=sorted(frame_phases),blobs=len(blobs),decodedBlobBytes=sum(map(len,blobs.values())),unknownReads=[dict(pc=p,address=a,count=n,occurrences=v) for (p,a,n),v in sorted(unknown.items())],sourceAudited=True,coverage=coverage,finiteAcceptanceComplete=coverage['complete'],nativeCompared=False,windowsVerified=False,wholeGameComplete=False)
 
 if __name__=='__main__':
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('source',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--limit',type=int);a=p.parse_args();assert not a.output.exists()
- result=verify(a.source,a.limit);a.output.write_text(json.dumps(result,indent=2)+'\n');print({k:result[k] for k in ('cases','counts','instructionStarts','blobs')})
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('source',type=Path);p.add_argument('--output',type=Path,required=True);p.add_argument('--limit',type=int);p.add_argument('--profile',choices=['setup','cells','multiaction'],default='setup');a=p.parse_args();assert not a.output.exists()
+ result=verify(a.source,a.limit,a.profile);result['profile']=a.profile;a.output.write_text(json.dumps(result,indent=2)+'\n');print({k:result[k] for k in ('cases','counts','instructionStarts','blobs','finiteAcceptanceComplete','coverage')})

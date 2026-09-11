@@ -1,4 +1,43 @@
-# War setup — unfinished work, 2026-09-11
+# War setup — work history, 2026-09-11
+
+Current result: [806 source/native setup comparisons](LIB_WAR_SETUP.md) pass,
+including all44 cells,14 multi-human action combinations and18 coupled rollback
+trials. Independent transport and all745 archive/package bytes are verified;
+seven packaged tests pass473.097s/build0.31s. The text below preserves earlier states and their limitations.
+
+## Historical record
+
+X5 has returned with the exact UUID. `x5-restored-integrity2.json` verifies the
+full raw size/SHA,574 atomic-part hashes and387 frozen input pins. The old30285
+Swift process is absent; its historical running record stays unchanged, with
+actual completion unknown. The first restoration helper expected a nonexistent
+`Mounted` plist key; its traceback remains in `x5-restored-integrity1.json`.
+
+Full audit1 corrected a PE/input-order assumption: the control explicitly sets
+451b80=3 after PE supplies0. Full audit2 reached the final coverage assertion
+and found only7 edited cells, not44. The read-only coverage diagnosis preserves
+actual438bbb action flags: simultaneous Right/Defense selects Right alone,
+and Attack/Jump/Defense selects Attack alone. Audit3 retains the expected44
+addresses and explicitly reports missing coverage; no expected byte is edited.
+The [192-call supplement](LIB_WAR_CELL_COVERAGE_PLAN.md) uses separate edit and
+navigation edges after reproducing the original two parent calls. Its new source
+job is tracked under `build/research/lib-war`; completed capture2 is not restarted.
+
+The full isolated package has724 files from accepted cd80865 plus12 War files.
+Four Native dependency tests pass0.331s/build285.01s, comparing132 operations/
+3286 ordered scalar stores and666 helpers/3604 fills, plus rollback. NTSDNative
+links; no window/device claim. A later build-only --build-tests invocation failed
+because modules lacked testing support; its log is retained, and normal swift
+test remains the required path. Whole War Native comparison and its eight
+source-coupled rollback trials remain pending. Grouped fixture transport is
+written but not yet validated. Combined44-cell acceptance stays open.
+
+The records below describe the earlier storage interruption and local work;
+statements that X5 was unavailable belong to that historical interval. The
+current full-game goal is active, with source and Native jobs recorded in
+application-catalog-work.json/libWarSetup and the study directories.
+
+## Earlier interruption and independent work
 
 The [finite plan](LIB_WAR_SETUP_PLAN.md) and [input correction](LIB_WAR_SETUP_INPUTS.md)
 are retained. Source capture2 completed all574 declared calls and exited0:
