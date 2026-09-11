@@ -17,6 +17,9 @@ public enum OriginalModeMenuContinuation {
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
         perform: @escaping (OriginalBitmapSurfaceLoading.Request,inout Environment) throws -> OriginalBitmapSurfaceLoading.Response,
         resourceEvent: (OriginalInterfaceEvent,inout Environment) throws -> Void = { _,_ in },
+        afterMusic: (Bool,OriginalStateRecord,OriginalMusicMemory,inout Environment) throws -> Void = { _,_,_,_ in },
+        resourceCheckpoint: (OriginalMenuResourceCheckpoint,OriginalStateRecord,[UInt32:OriginalLoadedBitmap],inout Environment) throws -> Void = { _,_,_,_ in },
+        afterStartup: (OriginalCharacterMenuStartup.Result,OriginalStateRecord,OriginalMusicMemory,OriginalMenuResourceLoading,inout Environment) throws -> Void = { _,_,_,_,_ in },
         background: (inout OriginalStateRecord,inout OriginalMenuPresentationMemory,inout Environment) throws -> Void,
         update: (inout OriginalStateRecord,inout Environment) throws -> Void,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory,inout Environment) throws -> Void,
@@ -25,7 +28,7 @@ public enum OriginalModeMenuContinuation {
         checkpoint: (String,OriginalStateRecord,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalModeScreenExit {
         var scene=world,state=globals,owned=memory,audio=music,images=resources,scratch=local,text=libraryText,candidate=environment
         _ = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&state,music:&audio,resources:&images,environment:&candidate,
-            musicRequest:musicRequest,allocate:allocate,perform:perform,observe:resourceEvent)
+            musicRequest:musicRequest,allocate:allocate,perform:perform,afterMusic:afterMusic,checkpoint:resourceCheckpoint,observe:resourceEvent,beforeCommit:afterStartup)
         guard try OriginalModeScreen.selectsModeScreen(globals:&state) else {
             throw OriginalModeMenuContinuationError.requiresMenuBody(try state.integer(at:0x44d020-OriginalMatchPreparation.globalBase,as:Int32.self))
         }

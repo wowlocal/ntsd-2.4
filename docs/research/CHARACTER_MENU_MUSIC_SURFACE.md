@@ -1,5 +1,11 @@
 # Continuous character-menu music and bitmap initialization
 
+The subsequent [fresh library menu](FRESH_LIBRARY_MENU.md) joins music and all
+11 bitmap constructors to the controlled screen/output/actual ret4:22 returns
+and two playback continuations match, with two explicit NULL-SPARK rollbacks.
+Full historical stack masks and current screen-local write lifetimes stay separate.
+Own initialized catalog/menu and the earlier tick body remain open.
+
 This study recovers the original menu entry from4229cc through the429730
 prologue, music and every resource helper to429e5a. It supports the native game
 menu. It is a controlled prefix, not an own installed-lib catalog continuation,

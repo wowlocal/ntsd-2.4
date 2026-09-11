@@ -1,0 +1,726 @@
+{
+  "scope": "Isolated accepted694b5e1 plus fresh whole-menu composition observer and source comparison. Clone each immutable base input, preserve the existing three-archive base composition and new two-file overlay. No reference execution or pending/live producer changes.",
+  "base": "694b5e16de7c1c441575f5a20cb9538ac7889b37",
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 59808,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalFreshLibraryMenuTests|OriginalLibMenuContinuationTests|OriginalMenuReturnTests|OriginalModePanelScreenTests|OriginalMenuCycleTests|OriginalLibLoadingTests|OriginalCharacterMenuMusicSurfaceTests"
+      ],
+      "startedUTC": "2026-09-11T07:22:26.701176+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 286.126,
+      "endedUTC": "2026-09-11T07:27:12.824696+00:00",
+      "session": 35114,
+      "terminalChunk": "9d2927"
+    },
+    {
+      "name": "native2",
+      "pid": 61079,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalFreshLibraryMenuTests"
+      ],
+      "startedUTC": "2026-09-11T07:29:40.886752+00:00",
+      "scope": "Retest only new fresh-menu comparisons after correcting the test's owner selection and local-lifetime contract. Full source bytes/masks stay immutable; all11 retained tests passed native1 with unchanged Core. Preserve both initial archive and new test overlay.",
+      "inputComposition": {
+        "base": "694b5e16de7c1c441575f5a20cb9538ac7889b37",
+        "baseComposition": "build/research/fresh-library-menu-native1-input-composition.json",
+        "baseCompositionSHA256": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+        "baseManifest": "build/research/fresh-library-menu-native1-input-pins.json",
+        "ownedArchive": "build/research/fresh-library-menu-native2-owned-inputs.tar.gz",
+        "ownedArchiveSHA256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "ownedFiles": [
+          "Tests/NTSDCoreTests/OriginalFreshLibraryMenuTests.swift"
+        ],
+        "completeManifest": "build/research/fresh-library-menu-native2-input-pins.json",
+        "files": 647,
+        "layout": "Immutable native1 inputs plus corrected new comparison test only"
+      },
+      "exitCode": 0,
+      "elapsedSeconds": 82.641,
+      "endedUTC": "2026-09-11T07:31:03.525006+00:00",
+      "session": 62001,
+      "terminalChunk": "02ee3c"
+    },
+    {
+      "name": "packaged",
+      "pid": 61663,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalFreshLibraryMenuTests"
+      ],
+      "startedUTC": "2026-09-11T07:33:14.101428+00:00",
+      "scope": "Packaged fresh music/resources and library menu return acceptance. Same isolated source package as passing raw native2, plus lossless fixture only. No raw environment override; all11 retained menu return/cycle/loading/screen/music/cached-menu tests already passed with the unchanged core.",
+      "inputFiles": 648,
+      "archive": "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz",
+      "manifest": "build/research/fresh-library-menu-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 5.915,
+      "endedUTC": "2026-09-11T07:33:20.013712+00:00",
+      "session": 90787,
+      "terminalChunk": "36f300"
+    }
+  ],
+  "finalInputComposition": {
+    "base": "694b5e16de7c1c441575f5a20cb9538ac7889b37",
+    "baseComposition": "build/research/fresh-library-menu-native1-input-composition.json",
+    "baseCompositionSHA256": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+    "baseManifest": "build/research/fresh-library-menu-native1-input-pins.json",
+    "ownedArchive": "build/research/fresh-library-menu-native2-owned-inputs.tar.gz",
+    "ownedArchiveSHA256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+    "ownedFiles": [
+      "Tests/NTSDCoreTests/OriginalFreshLibraryMenuTests.swift"
+    ],
+    "completeManifest": "build/research/fresh-library-menu-packaged-input-pins.json",
+    "files": 648,
+    "layout": "Recursively verified accepted base and native overlays, then single new fixture overlay",
+    "fixtureArchive": "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz",
+    "fixtureArchiveSHA256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+    "fixtureFile": "Tests/NTSDCoreTests/Fixtures/original-fresh-library-menu.json"
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run one bounded fresh music/resources through library menu and actual return study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: FRESH_LIBRARY_MENU_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 58269,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_fresh_library_menu.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/fresh-library-menu-probe1.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T07:16:41.653279+00:00",
+      "inputPins": "build/research/fresh-library-menu-probe1-input-pins.json",
+      "exitCode": 1,
+      "elapsedSeconds": 0.266,
+      "endedUTC": "2026-09-11T07:16:41.917269+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/fresh-library-menu-probe1.failure.json": {
+          "bytes": 737428,
+          "sha256": "1f17dcf7bd6f8b92879a7f2a6dc863a2e7bffc438b8929694c0d017215998ba5"
+        }
+      },
+      "terminalChunk": "de96f7"
+    },
+    {
+      "scope": "Run one bounded fresh music/resources through library menu and actual return study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: FRESH_LIBRARY_MENU_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 58403,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_fresh_library_menu.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/fresh-library-menu-probe2.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T07:17:36.235886+00:00",
+      "inputPins": "build/research/fresh-library-menu-probe2-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 0.472,
+      "endedUTC": "2026-09-11T07:17:36.706370+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/fresh-library-menu-probe2.json": {
+          "bytes": 1942700,
+          "sha256": "3ee7f2f5e5dee2bf9f73e3b8d2240ea980950fe328d7cc28980004cdb6ec88e6"
+        }
+      },
+      "terminalChunk": "1bc73c"
+    },
+    {
+      "scope": "Run one bounded fresh music/resources through library menu and actual return study with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: FRESH_LIBRARY_MENU_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 58461,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_fresh_library_menu.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/fresh-library-menu-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T07:17:57.682496+00:00",
+      "inputPins": "build/research/fresh-library-menu-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 10.873,
+      "endedUTC": "2026-09-11T07:18:08.554268+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/fresh-library-menu-capture1.json": {
+          "bytes": 33313873,
+          "sha256": "e85130ff1acbf9b6dbf5bb45864f7606ec19dddd7aa694eea35c1f3ea9258e87"
+        }
+      },
+      "terminalChunk": "e5ca3c",
+      "session": 31442
+    }
+  ],
+  "sourceVerification": {
+    "scope": "Read-only audit of fresh music/bitmap loading through installed-library menu and actual return.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/FRESH_LIBRARY_MENU_PLAN.md for finite inputs and open boundaries.\n",
+    "rawBytes": 33313873,
+    "rawSHA256": "e85130ff1acbf9b6dbf5bb45864f7606ec19dddd7aa694eea35c1f3ea9258e87",
+    "cases": 26,
+    "ends": {
+      "returned": 22,
+      "playback": 2,
+      "nullSpark": 2
+    },
+    "writes": 80348,
+    "writeBytes": 346674,
+    "instructionReads": 113986,
+    "instructionReadBytes": 247772,
+    "pointRecords": 20350,
+    "pointRecordBytes": 802814100,
+    "points": 550,
+    "APIReads": 1634,
+    "APIReadBytes": 13620,
+    "records": 962,
+    "recordBytes": 37951212,
+    "helpers": 2280,
+    "freshBitmapRecords": 284,
+    "musicAllocations": 22,
+    "screenLocalinstructionReads": 64510,
+    "screenLocalinstructionReadBytes": 65728,
+    "screenLocalAPIReads": 312,
+    "screenLocalAPIReadBytes": 5124,
+    "screenLocalCurrentWrittenBytes": 2592,
+    "events": {
+      "startup": 6028,
+      "fill": 34,
+      "enter": 24,
+      "leave": 24,
+      "draw": 232,
+      "read": 1762,
+      "clip": 278,
+      "blit": 278,
+      "getDC": 134,
+      "setBackgroundMode": 134,
+      "setTextColor": 134,
+      "stringLength": 134,
+      "textOut": 134,
+      "releaseDC": 134,
+      "panel": 22,
+      "method": 38,
+      "soundRequest": 6,
+      "soundMethod": 18,
+      "free": 2,
+      "timer": 2,
+      "format": 4,
+      "queryInterface": 2,
+      "audioVolumeRead": 2,
+      "keyName": 56,
+      "sleep": 2,
+      "shell": 2
+    },
+    "instructionStarts": 2709,
+    "exeInstructionStarts": 2219,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 439,
+    "blobCount": 645,
+    "decodedBlobBytes": 29638724,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 26
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 26
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 26
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 26
+      },
+      {
+        "pc": "0x401da6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 24
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 396
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 284
+      },
+      {
+        "pc": "0x431d16",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 24
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 22
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "comparedCounts": {
+    "cases": 24,
+    "returns": 22,
+    "playback": 2,
+    "explicitNullSparkRejections": 2,
+    "eventCount": 9184,
+    "events": {
+      "startup": 5592,
+      "fill": 34,
+      "enter": 24,
+      "leave": 24,
+      "draw": 232,
+      "read": 1762,
+      "clip": 278,
+      "blit": 278,
+      "getDC": 134,
+      "setBackgroundMode": 134,
+      "setTextColor": 134,
+      "stringLength": 134,
+      "textOut": 134,
+      "releaseDC": 134,
+      "panel": 22,
+      "method": 38,
+      "soundRequest": 6,
+      "soundMethod": 18,
+      "free": 2,
+      "timer": 2,
+      "format": 4,
+      "queryInterface": 2,
+      "audioVolumeRead": 2,
+      "keyName": 56,
+      "sleep": 2,
+      "shell": 2
+    },
+    "startupEvents": {
+      "music": 616,
+      "allocate": 264,
+      "construct": 264,
+      "module": 528,
+      "image": 528,
+      "getObject": 522,
+      "createSurface": 262,
+      "restore": 260,
+      "createDC": 260,
+      "selectObject": 260,
+      "description": 260,
+      "getDC": 260,
+      "stretch": 260,
+      "releaseDC": 260,
+      "deleteDC": 260,
+      "deleteObject": 260,
+      "colorKey": 260,
+      "message": 4,
+      "debug": 4
+    },
+    "musicEvents": {
+      "helper": 118,
+      "method": 250,
+      "createInstance": 24,
+      "queryInterface": 88,
+      "format": 22,
+      "createFile": 22,
+      "allocate": 22,
+      "convert": 22,
+      "closeHandle": 22,
+      "audioVolumeRead": 22,
+      "message": 4
+    },
+    "helpers": 2188,
+    "exeInstructionStarts": 2218,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 439,
+    "freshBitmapRecords": 264,
+    "freshBitmapBytes": 2116224,
+    "musicAllocations": 20,
+    "sourcePoints": 520,
+    "screenLocalLifetimes": [
+      {
+        "label": "nominal",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "confirm-release",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "network-overlay",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "volume-up",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "help",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "panel-click",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "playback",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "surface-last-positive",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "retained-missing-rface",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "create-graph-negative",
+        "fullHistoricalDefinedBytes": 553,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 445
+      },
+      {
+        "label": "render-negative",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "null-wide",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "nominal-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "confirm-release-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "network-overlay-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "volume-up-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "help-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "panel-click-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "playback-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "surface-last-positive-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "retained-missing-rface-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "create-graph-negative-control",
+        "fullHistoricalDefinedBytes": 553,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 445
+      },
+      {
+        "label": "render-negative-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      },
+      {
+        "label": "null-wide-control",
+        "fullHistoricalDefinedBytes": 695,
+        "currentScreenWrittenBytes": 108,
+        "previousHelperDefinedBytes": 587
+      }
+    ]
+  },
+  "inputVerification": {
+    "timeUTC": "2026-09-11T07:32:39.042547+00:00",
+    "files": 647,
+    "priorFixturesUnchanged": 253,
+    "fixturePins": 254,
+    "rawBytes": 33313873,
+    "rawSHA256": "e85130ff1acbf9b6dbf5bb45864f7606ec19dddd7aa694eea35c1f3ea9258e87",
+    "packedBytes": 4445832,
+    "packedSHA256": "af2a141bb9831a36ed743f1d3467c1e63a4579945e878b79ea76024e464b0518",
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true,
+    "archives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      }
+    },
+    "compositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-native2-input-composition.json": "42830754314434890c76d8c50ddc30f260b5afd8c08305ff69b67bcebdfb68cd"
+    }
+  },
+  "packagedInputVerification": {
+    "timeUTC": "2026-09-11T07:35:41.999185+00:00",
+    "files": 648,
+    "unchangedRawFiles": 647,
+    "composition": {
+      "base": "694b5e16de7c1c441575f5a20cb9538ac7889b37",
+      "baseComposition": "build/research/fresh-library-menu-native1-input-composition.json",
+      "baseCompositionSHA256": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "baseManifest": "build/research/fresh-library-menu-native1-input-pins.json",
+      "ownedArchive": "build/research/fresh-library-menu-native2-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+      "ownedFiles": [
+        "Tests/NTSDCoreTests/OriginalFreshLibraryMenuTests.swift"
+      ],
+      "completeManifest": "build/research/fresh-library-menu-packaged-input-pins.json",
+      "files": 648,
+      "layout": "Recursively verified accepted base and native overlays, then single new fixture overlay",
+      "fixtureArchive": "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+      "fixtureFile": "Tests/NTSDCoreTests/Fixtures/original-fresh-library-menu.json"
+    },
+    "priorCompleteArchiveAudit": "build/research/fresh-library-menu-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 254,
+    "fullRawBytesAndJSONEqual": true
+  },
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": 886,
+    "application-catalog-control20-parent1-inputs.json": 887,
+    "application-catalog-control20-parent2-inputs.json": 887,
+    "application-catalog-guarded20-inputs.json": 890,
+    "timeUTC": "2026-09-11T07:35:39.691675+00:00",
+    "sourceRevision1Preserved": true
+  },
+  "retainedAcceptance": {
+    "nativeJob": "native1",
+    "retainedTests": 11,
+    "retainedPassed": true,
+    "totalTests": 13,
+    "totalSeconds": 54.106,
+    "buildSeconds": 230.07,
+    "newTestsFailed": 2,
+    "failures": 8,
+    "unexpected": 2,
+    "NTSDNativeLinked": true,
+    "appWindowVerified": false
+  },
+  "rawAcceptance": {
+    "nativeJob": "native2",
+    "tests": 2,
+    "seconds": 4.667,
+    "buildSeconds": 77.29,
+    "CoreUnchangedFromRetainedAcceptance": true
+  },
+  "packagedAcceptance": {
+    "tests": 2,
+    "seconds": 4.476,
+    "buildSeconds": 0.28,
+    "rawOverrides": false
+  },
+  "reviewErrors": [
+    {
+      "scope": "First fresh menu probe stopped on Python observer AttributeError at4450a0; no game memory fault or safety refusal. Preserve source revision/error. Replace inherited constructor-only memset adapter with observation so actual thunk/CRT instructions execute; no source/expected byte edits.",
+      "timeUTC": "2026-09-11T07:17:36.185434+00:00",
+      "probe1Producer": "build/research/fresh-library-menu-probe1-producer.py",
+      "probe1ProducerSHA256": "44aefafda9a32268a48b6f7fc12915d96aa55d09baa124038cb0582ffdce850b",
+      "terminalChunk": "de96f7",
+      "exitCode": 1,
+      "errorFile": "build/research/fresh-library-menu-probe1.failure.json",
+      "errorSHA256": "1f17dcf7bd6f8b92879a7f2a6dc863a2e7bffc438b8929694c0d017215998ba5",
+      "nativeCompared": false
+    },
+    {
+      "timeUTC": "2026-09-11T07:24:33.858888+00:00",
+      "error": "AttributeError: 'str' object has no attribute 'parent'",
+      "operation": "Final atomic-part path lookup after full memory and asset audit; asset-loop variable shadowed input Path. No source/native/expected changes.",
+      "session": 8220,
+      "terminalChunk": "51e935",
+      "verifierSHA256": "982624150160fb3ab21dde23ce17aa7770a8bd204753ca1924ff14d48afcff95"
+    },
+    {
+      "timeUTC": "2026-09-11T07:25:53.490241+00:00",
+      "operation": "Independent report review found raw byte-count/hash used final DIB due to variable shadowing. Full trace/asset/part audit passed, but metadata report is explicitly invalid and preserved. Rename DIB local; do not alter source/expected/native bytes.",
+      "session": 99980,
+      "terminalChunk": "3e9517",
+      "verifierSHA256": "e00f11cd919cf6239bca3cead1897ba15affb4f69af574ea358ab878324e4075",
+      "incorrectReport": "build/research/fresh-library-menu-source-verification2-incorrect-metadata.json"
+    },
+    {
+      "timeUTC": "2026-09-11T07:29:41.417311+00:00",
+      "native1Session": 35114,
+      "native1TerminalChunk": "9d2927",
+      "native1Exit": 1,
+      "tests": 13,
+      "freshTestsFailed": 2,
+      "retainedTestsPassed": 11,
+      "failures": 8,
+      "unexpected": 2,
+      "reason": [
+        "Copied test seeded12 not-yet-allocated research buffers into the common presentation owner (20 versus8); they belong to later native allocator callbacks.",
+        "The source local span retains prior music/bitmap helper writes. Initial comparison incorrectly treated their complete historical masks as new screen-local writes. Independent CPU/API lifetime audit is required before comparing current native local storage."
+      ],
+      "changes": "Test owner selection and explicit current-screen write comparison only. Keep source full bytes/masks and Core game rules unchanged.",
+      "initialTest": "build/research/fresh-library-menu-native1-test.swift",
+      "initialTestSHA256": "0c8dda00c6c24e08951d37785096f01edc2b0fbfe55f82635a8248df6436d2d3",
+      "initialRawArchive": "build/research/fresh-library-menu-native1-input-composition.json"
+    }
+  ],
+  "sourceVerificationToolSessions": [
+    {
+      "session": 8220,
+      "exitCode": 1,
+      "terminalChunk": "51e935"
+    },
+    {
+      "session": 99980,
+      "exitCode": 0,
+      "terminalChunk": "3e9517",
+      "reportMetadataInvalid": true
+    },
+    {
+      "session": 28404,
+      "exitCode": 0,
+      "terminalChunk": "32f00a"
+    },
+    {
+      "session": 49724,
+      "exitCode": 0,
+      "terminalChunk": "edd668",
+      "additionalLifetimeAudit": true
+    }
+  ],
+  "scopeBoundaries": [
+    "22 controlled actualret4 returns+2 playback continuations match;2 NULL-SPARK stops are explicit rollback rejections",
+    "Actual41bc90 prologue creates ordinary cookie/SEH state; declared4229cc skips earlier tick body and stops before outer424746/heldclear",
+    "Fresh11 wrappers retain their own native resource owner; this selected mode screen does not consume those new wrappers as draw operands",
+    "Full source historical bytes/masks remain;108 current screen-local written bytes compare and every local CPU/API read has current-writer provenance",
+    "COM/GDI/allocator/CRT/PTD/time responses are controlled adapters; no host/Windows/device/full initialized tick/full-match/all-content/network/clean-Mac claim"
+  ],
+  "guarded20Observation": "build/research/application-catalog-guarded20-fresh-menu-observation.json",
+  "status": "accepted within declared controlled fresh-menu boundary",
+  "plan": "docs/research/FRESH_LIBRARY_MENU_PLAN.md",
+  "artifactPaths": {
+    "source": "build/research/fresh-library-menu-capture1.json",
+    "sourceAudit": "build/research/fresh-library-menu-lifetime-verification.json",
+    "fixturePins": "build/research/fresh-library-menu-fixture-pins.json",
+    "nativeManifest": "build/research/fresh-library-menu-native2-input-pins.json",
+    "packagedManifest": "build/research/fresh-library-menu-packaged-input-pins.json",
+    "packagedComposition": "build/research/fresh-library-menu-packaged-input-composition.json"
+  }
+}

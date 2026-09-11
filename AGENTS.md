@@ -48,6 +48,31 @@ false positives will not occur.
 
 ## Current research status
 
+**Fresh library menu: [FRESH_LIBRARY_MENU](docs/research/FRESH_LIBRARY_MENU.md).**
+Actual4229cc now runs fresh music/sprintf/11wholebitmap helpers, screen/panel,
+network/overlay/volume/present and422ab8 on one source CPU.22controlled ret4
+returns+2playback continuations match;2NULL-SPARK stops explicitly roll back.
+Native composition exposes staged music/resource/startup observers; whole owners
+and event buffer survive seven late failures. Fullsource80348stores/113986reads/
+1634APIreads/962final+20350point regions/2280helpers/645blobs verify.2219EXE+
+51lib+439CRT starts; only854false-mask reads are pinned EXEcookie. Native24paths
+compare9184events/2188helpers/264freshbitmaps/20musicallocations. Sourcefull
+historical stack masks remain unchanged: current screen writes108localbytes;
+64510instruction+312API reads consume only its own writes.587/445prior-helper
+bytes stay separate and unread; native never imports private source storage.
+Initial source observer AttributeError and two verifier variable-shadowing
+errors are preserved. First native run passed11retained tests; two new tests
+failed copied owner-count/local-lifetime assumptions. Corrected comparator only
+passes2tests4.667s/build77.29s; initial build230.07s linkedNTSDNative. Packaged
+2tests4.476s/build0.28s pass; all648inputs/recursivearchives verify,253oldfixtures
+unchanged/254current. No expected or Core game-rule edits. All study jobs terminal;
+no app window/device. Actual41bc90prologue then declaredtail skips earlier tick.
+Guarded20 source146002564bytes/SHA9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8
+now exists; frozen native61254 passed12.772s. Source audits61251/61252/61253,
+catalog11636 and watcher15664 remain live; all frozen/pending/foreign pins intact.
+Next own catalog/menu/other bodies/outer loop/app. Full match/Windows/all-content/
+network/clean-Mac goal stays open; controlled fresh return is not an initialized tick.
+
 **Library menu continuation: [LIB_MENU_CONTINUATION](docs/research/LIB_MENU_CONTINUATION.md).**
 OriginalModeMenuContinuation stages screen/panel/network/overlay/volume/present
 through422ab8; OriginalMenuReturn shares pristine/library output and retainedDC.

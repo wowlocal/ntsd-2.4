@@ -1,5 +1,11 @@
 # Library menu continuation through the actual match return
 
+The subsequent [fresh library menu](FRESH_LIBRARY_MENU.md) joins music and all
+11 bitmap constructors to the controlled screen/output/actual ret4:22 returns
+and two playback continuations match, with two explicit NULL-SPARK rollbacks.
+Full historical stack masks and current screen-local write lifetimes stay separate.
+Own initialized catalog/menu and the earlier tick body remain open.
+
 OriginalModeMenuContinuation stages the selected mode screen, whole enabled
 panel and subsequent output in one native operation. OriginalMenuReturn now
 shares its pristine/library paths, including network text, overlay, volume and
