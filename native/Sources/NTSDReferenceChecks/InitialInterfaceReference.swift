@@ -5,6 +5,7 @@ public enum InitialInterfaceReference {
     public struct Result {
         public var cases = 0, sources = 0, constructors = 0, poolConstructors = 0, records = 0, bytes = 0
         public var events = 0, nullAllocations = 0, messages = 0, releases = 0
+        public var providedConstructors = 0
     }
     private struct Source: Decodable { let path: String, sha256: String, bytes: String; let width: Int32, height: Int32 }
     private struct Allocation: Decodable { let address: UInt32; let backing: String }
@@ -31,7 +32,9 @@ public enum InitialInterfaceReference {
         }
         return try stride(from: 0, to: raw.count, by: 2).map { try nibble(raw[$0])*16+nibble(raw[$0+1]) }
     }
-    public static func compare(_ data: Data) throws -> Result {
+    /// The supplied-constructor route retains this corpus's explicit43ed10
+    /// device-result boundary; it does not turn these cases into whole GDI runs.
+    public static func compare(_ data: Data, useProvidedConstructor: Bool = false) throws -> Result {
         let corpus = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(data))
         guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               corpus.sources.count == 10, Set(corpus.sources.map(\.path)).count == 10 else { throw error("Source identity") }
@@ -80,19 +83,39 @@ public enum InitialInterfaceReference {
             var loader = OriginalInitialInterfaceLoading(), events: [OriginalInterfaceEvent] = []
             guard Set(item.inputs.map(\.index)).count == item.inputs.count else { throw error("Duplicate device result index") }
             let inputs = Dictionary(uniqueKeysWithValues: item.inputs.map { ($0.index,$0) })
-            try loader.load(globals: &globals, allocate: { index in
-                let a = item.allocations[index]
-                return try .init(address: a.address, backing: hex(a.backing))
-            }, source: { index,path in
+            func resource(_ index: Int, _ path: String) throws -> OriginalBitmapInput {
                 guard let input = inputs[index], let source = sources[path], input.resource.path == path else { throw error("Device/source binding") }
                 if input.resource.present {
                     guard input.resource.width == source.width, input.resource.height == source.height else { throw error("Device/source dimensions") }
                 }
                 return input.resource
+            }
+            var constructor: ((Int, OriginalInterfaceAllocation, UInt32, String) throws -> OriginalLoadedBitmap)?
+            if useProvidedConstructor {
+                let expectedDevice = try globals.integer(at: 0x457578-OriginalMatchPreparation.globalBase, as: UInt32.self)
+                constructor = { index,allocation,device,path in
+                    guard device == expectedDevice, allocation.address == item.allocations[index].address,
+                          allocation.backing == (try hex(item.allocations[index].backing)),
+                          path == OriginalInitialInterfaceLoading.paths[index], let output = inputs[index] else {
+                        throw error("Supplied constructor binding")
+                    }
+                    result.providedConstructors += 1
+                    return try OriginalBitmapConstructor.construct(resource(index,path), optional: false,
+                        backing: allocation.backing, device: device, flags: 0x40, surface: output.surface,
+                        colorKeyResult: output.colorKeyResult) { events.append($0) }
+                }
+            }
+            try loader.load(globals: &globals, allocate: { index in
+                let a = item.allocations[index]
+                return try .init(address: a.address, backing: hex(a.backing))
+            }, source: { index,path in
+                guard !useProvidedConstructor else { throw error("Unexpected legacy source request") }
+                return try resource(index,path)
             }, deviceResult: { index in
+                guard !useProvidedConstructor else { throw error("Unexpected legacy device request") }
                 guard let input = inputs[index] else { throw error("Missing device result") }
                 return (input.surface,input.colorKeyResult)
-            }, afterBitmap: { index,state in
+            }, constructBitmap: constructor, afterBitmap: { index,state in
                 let point = item.checkpoints[index], raw = try hex(point.globals)
                 guard point.slot == OriginalInitialInterfaceLoading.slots[index],
                       point.value == item.allocations[index].address else { throw error("Original global assignment") }

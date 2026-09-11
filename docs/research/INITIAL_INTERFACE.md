@@ -148,3 +148,9 @@ whole43ed10/4013d0 and composes them in the own front-resource path. It preserve
 dimensions written before failed CreateSurface, which the older explicitly
 supplied image-result boundary here did not exercise. This corpus is unchanged;
 its callers do not automatically acquire the newer own loader composition.
+
+The newer [controlled whole UI surface composition](INITIAL_INTERFACE_SURFACE.md)
+now compares ten pool/UI chains with actual43ed10/4013d0/CRT memset. The explicit
+`loadWithSurfaceLoading` route stages its own globals/bitmaps/platform context;
+the default device-result route and all13 cases above remain unchanged. This
+adds a controlled dependency, not the pending own catalog/UI continuation.

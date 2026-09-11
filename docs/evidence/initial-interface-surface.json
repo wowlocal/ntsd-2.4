@@ -1,0 +1,397 @@
+{
+  "scope": "Ten controlled World/pool/initial-UI callers with whole43ee50/43ed10/4013d0 at declared catalog/outer/allocator/API boundaries. Not own catalog/UI, full41bc90, private C++ ABI, Windows or device evidence.",
+  "acceptedUTC": "2026-09-11T00:46:02.783691+00:00",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "sourceCases": 10,
+  "sourceAndNativeDirectMatches": 10,
+  "nativeOnlyRollbackControls": 4,
+  "sourceVerification": {
+    "scope": "Read-only verification of controlled original pool/UI surface evidence.\nVerify every full blob/DIB and original instruction byte, merge operand reads\nwith prior actual/API writes and reconstruct all retained states/records/masks.\nThe declared allocator/outer/catalog/API inputs remain controlled boundaries;\nno source execution, expected-state mutation or native/Windows coverage claim.\n",
+    "source": "initial-interface-surface-candidate1.json",
+    "sourceSHA256": "703086bd4b03017ca5aebfed49af80472cc0e1ee960f60c259adb031b81356dd",
+    "sourceBytes": 96729868,
+    "blobs": 203,
+    "assets": 10,
+    "cases": [
+      {
+        "label": "nominal-a5",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 183,
+        "writes": 116756,
+        "writeBytes": 415541,
+        "reads": 5753,
+        "readBytes": 21755,
+        "undefinedReadBytes": 0,
+        "helpers": 858,
+        "events": 591,
+        "originalPCs": 728
+      },
+      {
+        "label": "nominal-ramp-reverse",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 183,
+        "writes": 116756,
+        "writeBytes": 415541,
+        "reads": 5753,
+        "readBytes": 21755,
+        "undefinedReadBytes": 0,
+        "helpers": 858,
+        "events": 591,
+        "originalPCs": 728
+      },
+      {
+        "label": "null-all",
+        "records": 401,
+        "recordBytes": 424408,
+        "states": 13,
+        "writes": 115209,
+        "writeBytes": 408204,
+        "reads": 5313,
+        "readBytes": 20025,
+        "undefinedReadBytes": 0,
+        "helpers": 818,
+        "events": 411,
+        "originalPCs": 456
+      },
+      {
+        "label": "null-alternating",
+        "records": 406,
+        "recordBytes": 464488,
+        "states": 98,
+        "writes": 115979,
+        "writeBytes": 411869,
+        "reads": 5533,
+        "readBytes": 20890,
+        "undefinedReadBytes": 0,
+        "helpers": 838,
+        "events": 501,
+        "originalPCs": 703
+      },
+      {
+        "label": "missing-first",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 172,
+        "writes": 116656,
+        "writeBytes": 414997,
+        "reads": 5721,
+        "readBytes": 21630,
+        "undefinedReadBytes": 0,
+        "helpers": 856,
+        "events": 580,
+        "originalPCs": 745
+      },
+      {
+        "label": "missing-last",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 172,
+        "writes": 116656,
+        "writeBytes": 414997,
+        "reads": 5721,
+        "readBytes": 21630,
+        "undefinedReadBytes": 0,
+        "helpers": 856,
+        "events": 580,
+        "originalPCs": 745
+      },
+      {
+        "label": "surface-first-negative",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 174,
+        "writes": 116705,
+        "writeBytes": 415213,
+        "reads": 5734,
+        "readBytes": 21679,
+        "undefinedReadBytes": 0,
+        "helpers": 857,
+        "events": 582,
+        "originalPCs": 745
+      },
+      {
+        "label": "surface-last-positive",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 174,
+        "writes": 116706,
+        "writeBytes": 415217,
+        "reads": 5734,
+        "readBytes": 21679,
+        "undefinedReadBytes": 0,
+        "helpers": 857,
+        "events": 582,
+        "originalPCs": 745
+      },
+      {
+        "label": "key-last-negative",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 186,
+        "writes": 116766,
+        "writeBytes": 415581,
+        "reads": 5753,
+        "readBytes": 21755,
+        "undefinedReadBytes": 0,
+        "helpers": 858,
+        "events": 594,
+        "originalPCs": 741
+      },
+      {
+        "label": "dc-last-negative",
+        "records": 411,
+        "recordBytes": 504568,
+        "states": 181,
+        "writes": 116740,
+        "writeBytes": 415477,
+        "reads": 5747,
+        "readBytes": 21731,
+        "undefinedReadBytes": 0,
+        "helpers": 858,
+        "events": 589,
+        "originalPCs": 728
+      }
+    ],
+    "originalPCs": 768,
+    "elapsedSeconds": 1.668
+  },
+  "transport": {
+    "scope": "Lossless full transport for original controlled pool/UI evidence.\nPreserve every original field, expected byte/mask, read/store and declared\nboundary. Verify all atomic source parts and full raw/packed JSON roundtrip.\nNo executable run, fixture replacement or native/Windows completion claim.\n",
+    "rawBytes": 96729868,
+    "rawSHA256": "703086bd4b03017ca5aebfed49af80472cc0e1ee960f60c259adb031b81356dd",
+    "packedBytes": 9086144,
+    "packedSHA256": "7f739a9a72c7fc66c740a5dae8afaa4364219b5c11ce24d2962593b3c2fa7df3",
+    "atomicParts": [
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0000.json",
+        "bytes": 10299417,
+        "sha256": "458b98ffe029c966cf30dff4eeecc1c715fa35c801c912cb3cdef3a611a92f65"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0001.json",
+        "bytes": 10305802,
+        "sha256": "57cca1cb1a523a835202d97395f2bcee7c565482fbd519fea9ff94972c4c521e"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0002.json",
+        "bytes": 10007090,
+        "sha256": "0dab071b86432eeaf049d4fe4d82196fe2b93784a875227abdb2373bfc80bb15"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0003.json",
+        "bytes": 10154742,
+        "sha256": "5e1dfcce32287cdb155e90c5e580bfd20b04203bc102b4d7cd2362de2cd16065"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0004.json",
+        "bytes": 10281602,
+        "sha256": "3063e7809e2517cacfe43d5297a7ebbf45cfee141a143b855bdc73dcc5930bf5"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0005.json",
+        "bytes": 10281476,
+        "sha256": "523032b515db1e8facbab6790b0b6ace93b0ce0911cacc50e9748a0010abb43f"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0006.json",
+        "bytes": 10288911,
+        "sha256": "eff31a689102ea10bfc8cf22b3387bb38972e589441aefc09e93355bc5bcdf70"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0007.json",
+        "bytes": 10289097,
+        "sha256": "4ed45aeaa5108356a60933e4121b46884d326a43a5efe4e924881fc1d1b29726"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0008.json",
+        "bytes": 10301395,
+        "sha256": "ee3e2f282666cda1c6becade68adffbf05c1be6a72af14db1bfd95e8afd429b9"
+      },
+      {
+        "path": "build/research/initial-interface-surface-candidate1.parts/0009.json",
+        "bytes": 10296952,
+        "sha256": "01f8998fd829cf28d78f3e9c364f8ef6854b05c02e6bb90bc6d5da5b1075e010"
+      }
+    ],
+    "fullBytesAndJSONEqual": true,
+    "elapsedSeconds": 3.813
+  },
+  "fixture": {
+    "file": "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json",
+    "bytes": 9086144,
+    "sha256": "7f739a9a72c7fc66c740a5dae8afaa4364219b5c11ce24d2962593b3c2fa7df3",
+    "priorUnchanged": 246,
+    "currentCount": 247
+  },
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 90728,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInitialInterfaceSurfaceProbeTests|OriginalInitialInterfaceTests|OriginalBitmapSurfaceLoadingTests|OriginalBootstrapTests"
+      ],
+      "startedUTC": "2026-09-11T00:33:45.912181+00:00",
+      "archive": "build/research/initial-interface-surface-native1-inputs.tar.gz",
+      "inputFiles": 625,
+      "sourceSHA256": "703086bd4b03017ca5aebfed49af80472cc0e1ee960f60c259adb031b81356dd",
+      "exitCode": 0,
+      "elapsedSeconds": 216.756,
+      "endedUTC": "2026-09-11T00:37:22.666179+00:00",
+      "session": 2359,
+      "tests": 12,
+      "testSeconds": 5.028,
+      "buildSeconds": 210.34,
+      "controlledTestsSeconds": 1.513,
+      "unknownPrivateAPIBytes": 12036
+    },
+    {
+      "name": "minimal-packaged",
+      "pid": 91967,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInitialInterfaceSurfaceTests|OriginalInitialInterfaceTests|OriginalBitmapSurfaceLoadingTests|OriginalBootstrapTests"
+      ],
+      "startedUTC": "2026-09-11T00:40:38.024254+00:00",
+      "base": "4545435980d7dc2977b656c133819c9e9b5fa18a",
+      "archive": "build/research/initial-interface-surface-minimal-inputs.tar.gz",
+      "inputFiles": 626,
+      "rawOverride": false,
+      "exitCode": 0,
+      "elapsedSeconds": 228.339,
+      "endedUTC": "2026-09-11T00:44:26.356803+00:00",
+      "session": 42193,
+      "tests": 12,
+      "testSeconds": 5.348,
+      "buildSeconds": 221.07
+    }
+  ],
+  "sourceJobs": [
+    {
+      "name": "probe1",
+      "pid": 88990,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_initial_interface_surface.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/initial-interface-surface-probe1.json",
+        "--limit",
+        "1"
+      ],
+      "startedUTC": "2026-09-11T00:22:28.114288+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 4.132,
+      "endedUTC": "2026-09-11T00:22:32.242808+00:00",
+      "session": 53085
+    },
+    {
+      "name": "candidate1",
+      "pid": 89105,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_initial_interface_surface.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/initial-interface-surface-candidate1.json"
+      ],
+      "startedUTC": "2026-09-11T00:23:07.467532+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 29.212,
+      "endedUTC": "2026-09-11T00:23:36.677937+00:00",
+      "session": 71362
+    }
+  ],
+  "nativeInputArchives": {
+    "scope": "Read-only audit of complete frozen native inputs and standalone UI delta.\nVerify every archive member/full SHA and the minimal package's exact base delta.\nThis supports reproducible builds; it does not prove game/device completion.\n",
+    "reports": [
+      {
+        "name": "native1",
+        "files": 625,
+        "unpackedBytes": 1234978404,
+        "archiveBytes": 902664482,
+        "archiveSHA256": "9618223dd5b8750c887980e6ddeee98c2d2cd34f9f0e5e8f2e25e94806bf8a50",
+        "manifestSHA256": "e2559f2e440addd20c35875229c5b0ee8662b63261a0ac3f10d756d2d75ef2af"
+      },
+      {
+        "name": "minimal",
+        "files": 626,
+        "unpackedBytes": 1244019934,
+        "archiveBytes": 908091761,
+        "archiveSHA256": "c5996a9645eb6d232ac40e3e8f322620b1817be7463e7bbc7306cfece10577a8",
+        "manifestSHA256": "98aaf6bece7f111a92b3e4c75589aa0435df72c630df65412978cc22e12f974c",
+        "base": "4545435980d7dc2977b656c133819c9e9b5fa18a",
+        "unchangedBaseFiles": 619,
+        "changed": [
+          "Sources/NTSDCore/OriginalInitialInterfaceLoading.swift",
+          "Sources/NTSDCore/OriginalObjectLoader.swift",
+          "Sources/NTSDReferenceChecks/InitialInterfaceReference.swift",
+          "Tests/NTSDCoreTests/OriginalInitialInterfaceTests.swift"
+        ],
+        "added": [
+          "Sources/NTSDCore/OriginalInitialInterfaceSurfaceLoading.swift",
+          "Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json",
+          "Tests/NTSDCoreTests/OriginalInitialInterfaceSurfaceTests.swift"
+        ],
+        "unchangedPriorFixtures": 246
+      }
+    ],
+    "elapsedSeconds": 11.73
+  },
+  "nativePrivateAPIBytesUnknown": 12036,
+  "sourcePCs": {
+    "EXE": 733,
+    "CRT": 35,
+    "pool": 155,
+    "UI": 162
+  },
+  "helperKinds": {
+    "world": 10,
+    "actor": 4080,
+    "memset": 4173,
+    "constructor": 85,
+    "loader": 85,
+    "copy": 81
+  },
+  "reviewErrors": [
+    {
+      "operation": "Independent verifier initially imposed Actor EAX==this",
+      "evidence": "build/research/initial-interface-surface-verifier-return-assumption.json",
+      "resolution": "Original406489 loadsfffffc18 and returns it at4064cc; verifier now checks that actual value. Source/Core/expected bytes unchanged.",
+      "staticEvidence": "build/research/initial-interface-surface-actor-static.txt",
+      "staticSHA256": "832d04a1757f0ae0d5d40f8109b2463e7ec8cccb77945a5bed62e56ca8206206",
+      "safetyRefusal": false
+    },
+    {
+      "UTC": "2026-09-11T00:38:54.433709+00:00",
+      "operation": "Lossless transport packaging under system Python3.9",
+      "error": "TypeError: compress() takes at most 2 arguments (3 given)",
+      "resolution": "Use compressobj(wbits=-15) supported by Python3.9; source corpus unchanged; no packed output had been written",
+      "safetyRefusal": false,
+      "session": 81363
+    }
+  ],
+  "nativeShippingRuntime": "Swift/native helpers, no EXE/DLL/emulation",
+  "windowsVerified": false,
+  "windowExercised": false,
+  "ownCatalogReturn": false,
+  "tools": {
+    "tools/oracle_initial_interface_surface.py": "aa4615e393c9d432e9cf8dbd54c94a7ca84ae82b12f58e6d9573fc2d6d571f1c",
+    "tools/verify_initial_interface_surface.py": "04fc1ee26c3658b77f8a2a518347c53237b87f579cd598ac44459bf556fc35a9"
+  }
+}

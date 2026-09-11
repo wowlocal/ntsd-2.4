@@ -46,6 +46,9 @@ public enum OriginalBitmapConstructor {
 
 /// Parent41c2f5..41c581, immediately after the actual400-slot bootstrap.
 /// Allocation failures skip constructors; ordinary device failures keep wrappers.
+/// A supplied constructor owns image/copy/device handling. Buffer its external
+/// effects in the enclosing candidate; this loader stages only its own globals
+/// and bitmap records until all ten stores and the loading-flag clear succeed.
 public struct OriginalInitialInterfaceLoading {
     public static let paths = ["PAUSE", "DEMO", "SCORE_BOARD1", "SCORE_BOARD2", "SCORE_BOARD3", "SCORE_BOARD4", "WIN_ALIVE", "WIN_DEAD", "LOSE_DEAD", "BARS"]
     public static let slots = [0x44ff8c, 0x44f8f8, 0x44fcb4, 0x44fd8c, 0x44f88c, 0x44f87c, 0x44fd90, 0x44fd94, 0x44fb64, 0x44fd7c]
@@ -56,6 +59,7 @@ public struct OriginalInitialInterfaceLoading {
                               allocate: (Int) throws -> OriginalInterfaceAllocation,
                               source: (Int, String) throws -> OriginalBitmapInput,
                               deviceResult: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
+                              constructBitmap: ((Int, OriginalInterfaceAllocation, UInt32, String) throws -> OriginalLoadedBitmap)? = nil,
                               afterBitmap: (Int, OriginalStateRecord) throws -> Void = { _, _ in },
                               observe: (OriginalInterfaceEvent) throws -> Void = { _ in }) throws {
         let base = OriginalMatchPreparation.globalBase
@@ -71,11 +75,16 @@ public struct OriginalInitialInterfaceLoading {
             if allocation.address != 0 {
                 guard candidate.bitmaps[allocation.address] == nil else { throw OriginalStateError.invalidStorage("Live bitmap allocation reused") }
                 try observe(.init(.construct, [allocation.address, 0x40, 0], [Array(path.utf8)]))
-                let input = try source(index, path), output = try deviceResult(index)
-                guard input.path == path else { throw OriginalStateError.invalidStorage("Initial interface resource binding") }
-                candidate.bitmaps[allocation.address] = try OriginalBitmapConstructor.construct(input, optional: false,
-                    backing: allocation.backing, device: device, flags: 0x40, surface: output.surface,
-                    colorKeyResult: output.colorKeyResult, observe: observe)
+                if let constructBitmap {
+                    candidate.bitmaps[allocation.address] = try .checkedConstruction(
+                        constructBitmap(index, allocation, device, path), path: path, optional: false)
+                } else {
+                    let input = try source(index, path), output = try deviceResult(index)
+                    guard input.path == path else { throw OriginalStateError.invalidStorage("Initial interface resource binding") }
+                    candidate.bitmaps[allocation.address] = try OriginalBitmapConstructor.construct(input, optional: false,
+                        backing: allocation.backing, device: device, flags: 0x40, surface: output.surface,
+                        colorKeyResult: output.colorKeyResult, observe: observe)
+                }
             }
             // No release of the previous global pointer occurs on this path.
             try state.write(allocation.address, at: Self.slots[index]-base)

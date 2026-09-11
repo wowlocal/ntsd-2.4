@@ -24,6 +24,14 @@ public struct OriginalLoadedBitmap: Equatable, Sendable {
         return Self(input: resource, optional: optional, storage: try constructionStorage(resource, backing: Array(repeating: fill, count: 0x1f50)))
     }
 
+    static func checkedConstruction(_ bitmap: Self, path: String, optional: Bool) throws -> Self {
+        guard bitmap.input.path == path, bitmap.optional == optional, bitmap.storage.bytes.count == 0x1f50,
+              try bitmap.storage.integer(at: 0, as: UInt32.self) <= 1 else {
+            throw OriginalStateError.invalidStorage("Loader bitmap constructor binding")
+        }
+        return bitmap
+    }
+
     /// Shared wrapper writes; the caller decides how to handle a missing required
     /// resource. Device lifecycle and error reporting live in OriginalBitmapConstructor.
     static func constructionStorage(_ resource: OriginalBitmapInput, backing: [UInt8]) throws -> OriginalStateRecord {

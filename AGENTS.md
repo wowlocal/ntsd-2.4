@@ -48,6 +48,36 @@ false positives will not occur.
 
 ## Current research status
 
+
+**Independent UI dependency: [INITIAL_INTERFACE_SURFACE](docs/research/INITIAL_INTERFACE_SURFACE.md).**
+Ten controlled original World/pool/UI chains now compare whole43ee50/43ed10/
+4013d0 and actualCRT memset through41c581:85bitmap constructors,1406platform
+requests,4095records/4925440bytes+masks,5601events and8514helper returns.
+733EXE+35CRT PCs;155/156pool starts(NULL Actor allocation absent),162/162UI.
+All ten DIBs remain original. Preserve known dimensions after nonzero surface
+creation results, unused positive-result surface, clear after negative colorKey,
+null bitmap allocation skips and ten pointer stores before44d05c=0.
+
+Native loadWithSurfaceLoading stages loader/globals/value-semantic device context;
+four late native-only failures retain all three.12036privateAPI bytes remain
+0/false, not imported from source stack. Independent replay verifies1164929writes/
+4142637bytes,56762reads/214529bytes and1536state/API snapshots;0undefined observed
+read bytes does not make unread/private padding known. Actor406489 leaves EAX
+fffffc18 atret; a verifier's incorrect this-return assertion was corrected only
+in that verifier. CapturedCW0 is controlled, not own037f or a host/Windows claim.
+
+Raw12tests5.028s/build210.34s; independent minimal packaged12tests5.348s/
+build221.07s passed without raw overrides.626frozen native files verified;619base
+files unchanged.246old fixture pins unchanged;247current. Fullraw96729868/
+packed9086144bytes/JSON/SHA,203blobs,10DIBs and10atomicparts verified. NTSDNative
+linked; no window/device run. This study's source/SwiftPM jobs are terminal.
+The THREE own application-catalog captures and their20Object watcher remain
+independently LIVE and unaccepted; read build/research/application-catalog-work.json.
+Do not restart them or modify their23pinned inputs. The minimal UI commit accepts
+only the shared bitmap binding validator, not the pending catalog implementation.
+Own catalog/pool/UI, full41bc90/app, Windows/devices/fullmatch/all-content/cleanMac
+remain open. Six foreign files are untouched.
+
 **Latest own loading join: [APPLICATION_LOADING_PREFIX](docs/research/APPLICATION_LOADING_PREFIX.md).**
 Three retained application-menu activation parents now enter41bc90 on their own
 CPU/stack/World/resources.12 prefixes:9 reach actual catalog malloc request4450ac
