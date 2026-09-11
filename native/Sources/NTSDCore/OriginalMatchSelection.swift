@@ -16,9 +16,10 @@ public enum OriginalMatchSelection {
         input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
+        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText? = libraryText
-        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage)
         libraryText = library!;return end
     }
 
@@ -26,9 +27,10 @@ public enum OriginalMatchSelection {
         input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
+        tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable) throws -> OriginalCharacterScreenExit {
         try OriginalCharacterScreen.advanceCommon(state: &state,libraryText:&libraryText,selectionAtEntry: selectionAtEntry,target: target,input: input,
-            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,selectionStage: { candidate,local,library in
+            fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,tournamentStage:tournamentStage,selectionStage: { candidate,local,library in
                 try continueSelection(state: &candidate,locals: &local,libraryText:&library,target: target,input: input,
                     fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint)
             })

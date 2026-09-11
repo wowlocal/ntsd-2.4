@@ -48,6 +48,34 @@ false positives will not occur.
 
 ## Current research status
 
+**Tournament bracket/mode2: [LIB_TOURNAMENT_BRACKET](docs/research/LIB_TOURNAMENT_BRACKET.md).**
+250source/native calls match:249actual422ab8ret4+1BEFORE434349 preparation.
+78human-chain/165allCPU-chain/7controlled entries; simulation reaches a winner,
+NOT seven played fights. Menu26 scans scores/rounds and consumesFA/FB/FC; group5
+ID preference, signed HP scaling, geometry504file-backed bytes, menu27 seats/
+cancel/history, menu28 HP/state/result carry and menu29 winner/dismiss match.
+Both Start music graphs run;2wide26-byte allocations stay live. Winner stops
+music before sound.8human labels and live catalog/portrait/resource owners stay.
+5127points/4357950records/13108354710bytes,250314stores/254696instructionreads/
+4212APIreads/11201helpers/5773semanticwords/1901blobs independently verify.
+3204starts=2816EXE+51lib+337CRT. Source3 reproduces every249 earlier source2
+case/installation and its blobs unchanged, then verifies actualCA1/D1=1 held
+Attack. The earlier misleading held label was an occupied-seat fresh press.
+No expected case was removed/relabelled. Native5 raw2tests62.762s/build94.23s
+pass; sameCore retained373 setup tests passed66.043s. Packaged2tests57.694s/
+build0.32s pass without raw override; whole music/assignment rollbacks pass.
+271oldfixtures unchanged,275current;4new135255139bytes restore1026658386raw.
+All680package/recursivearchive and frozen/pending/foreign pins are verified.
+Source1 adapter401dd4 return-route error, Native1missingtry, Native2extra guard
+checkpoints and Native3duplicate-label lookup errors are retained. Guards are
+compared with zero intervening source stores/events; labels also match complete
+entry globals. Game logic did not change after Native1's syntax annotations.
+Next434349 assigns CPU slots and constructs Tournament actors/arena/replay.
+4347ba[esp+1c] reads rootSP10 because12argument bytes remain; NOT a pointer fault.
+No new own fulltick/match/window/device/Windows/cleanMac claim. Catalog5same
+Python78863 is still live, last16Objects; never restart it for silence.
+Full goal and TeamTournament434ab0/War/own initialized library/app join stay open.
+
 **Tournament setup/mode2: [LIB_TOURNAMENT_SETUP](docs/research/LIB_TOURNAMENT_SETUP.md).**
 373source/native calls match:372actual422ab8ret4+1BEFORE4338c3 bracket entry.
 Actual mode2 routes menu20/432ab0, NOT menu3. Primary229 retains Naruto17/Sasuke21

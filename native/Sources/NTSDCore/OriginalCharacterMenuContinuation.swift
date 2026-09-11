@@ -5,7 +5,7 @@ public enum OriginalCharacterMenuContinuation {
     public static func advance<Environment>(state: inout OriginalMatchPreparation,
         memory: inout OriginalMenuPresentationMemory,music: inout OriginalMusicMemory,
         resources: inout OriginalMenuResourceLoading,libraryText: inout OriginalLibSurfaceText,
-        environment: inout Environment,target: UInt32,input: OriginalFrontScreenBodyInput,
+        environment: inout Environment,includeTournamentBracket: Bool = false,target: UInt32,input: OriginalFrontScreenBodyInput,
         outputInput: OriginalMenuPresentationInput,milliseconds: UInt32,
         musicRequest: (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
@@ -25,7 +25,13 @@ public enum OriginalCharacterMenuContinuation {
         let end = try OriginalMatchSelection.advanceWithLibrary(state:&scene,libraryText:&text,selectionAtEntry:startup.resources.selectionAtEntry,
             target:target,input:input,fillBacking:{ [UInt8](repeating:0,count:100) },
             draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
-            checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
+            checkpoint:{ try characterCheckpoint($0,$1,&candidate) },tournamentStage:{ scene,local,text,initialize in
+                guard includeTournamentBracket else { return try OriginalTournamentBracket.unavailable(&scene,&local,&text,initialize) }
+                return try OriginalTournamentBracket.advance(state:&scene,locals:&local,libraryText:&text,initialize:initialize,target:target,fillBacking:[UInt8](repeating:0,count:100),
+                    resumeMusic:{ state in try OriginalMusicPlayback.resumeMatch(globals:&state,memory:&audio) { try musicRequest($0,&candidate) } },
+                    draw:{ try draw($0,$1,images,&candidate) },observe:{ try observe($0,&candidate) },
+                    checkpoint:{ try characterCheckpoint($0,$1,&candidate) })
+            })
         if end == .returned {
             try OriginalMenuReturn.advanceWithLibrary(world:&scene.world,globals:&scene.globals,memory:&owned,libraryText:&text,
                 input:outputInput,milliseconds:milliseconds,fillBacking:[UInt8](repeating:0,count:100),wholeEarlyReturn:false,
