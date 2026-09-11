@@ -207,22 +207,31 @@ public enum MenuCycleReference {
             guard let music = item.music,let resources = item.resources else { throw error("Menu continuation resources") }
             guard music.kind == "menu",music.inherited,music.stimulus.isEmpty,music.events.isEmpty,music.calls.isEmpty,music.formats.isEmpty,
                   music.endPC == 0x4297ae,music.endSP == 0x1000df08 else { throw error("Retained music entry") }
-            try OriginalMusicPlayback.enterMenu(globals: &state.globals,memory: &musicMemory,request: { _ in throw error("Unexpected music request") })
-            try check(state.globals,defined(music.afterGlobals),"Music globals");checkpoints += 1
-            guard musicMemory.allocations.count == music.allocations.count else { throw error("Music inventory") }
-            for a in music.allocations {
-                guard let own = musicMemory.allocations[a.address] else { throw error("Music ownership") };try check(own,storage(a.storage),"Music bytes")
-            }
             guard resources.inherited,resources.stimulus.isEmpty,resources.allocations.isEmpty,resources.inputs.isEmpty,resources.calls.isEmpty,resources.events.isEmpty,
                   resources.endPC == 0x429e5a,resources.endSP == 0x1000df08 else { throw error("Retained resource entry") }
             var pointIndex = 0
-            let result = try loader.load(globals: &state.globals,allocate: { _ in throw error("Unexpected menu allocation") },source: { _,_ in throw error("Unexpected bitmap load") },
-                deviceResult: { _ in throw error("Unexpected bitmap device request") },checkpoint: { point,globals,_ in
+            var menuEnvironment: [String] = []
+            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
+                musicRequest: { _,_ in throw error("Unexpected music request") },
+                allocate: { _,_ in throw error("Unexpected menu allocation") },source: { _,_,_ in throw error("Unexpected bitmap load") },
+                deviceResult: { _,_ in throw error("Unexpected bitmap device request") },
+                afterMusic: { entered,musicGlobals,loadedMusic,steps in
+                    guard !entered else { throw error("Unexpected retained music entry") }
+                    steps.append("music")
+                    try check(musicGlobals,defined(music.afterGlobals),"Music globals");checkpoints += 1
+                    guard loadedMusic.allocations.count == music.allocations.count else { throw error("Music inventory") }
+                    for a in music.allocations {
+                        guard let own = loadedMusic.allocations[a.address] else { throw error("Music ownership") };try check(own,storage(a.storage),"Music bytes")
+                    }
+                },checkpoint: { point,globals,_,steps in
+                    steps.append(point.kind.rawValue)
                     guard pointIndex < resources.checkpoints.count else { throw error("Resource checkpoint count") }
                     let p = resources.checkpoints[pointIndex];pointIndex += 1;checkpoints += 1
                     guard point == .init(p.kind,index: p.index),p.records.isEmpty else { throw error("Resource checkpoint") }
                     try check(globals,defined(p.globals),"Retained resource globals")
-                },observe: { _ in throw error("Unexpected resource event") })
+                },observe: { _,_ in throw error("Unexpected resource event") })
+            let result = startup.resources
+            guard menuEnvironment == ["music"]+resources.checkpoints.map({ $0.kind.rawValue }) else { throw error("Retained music/resource order") }
             guard result.continuation == .ready,result.continuation == resources.continuation,result.selectionAtEntry == resources.selectionAtEntry,
                   pointIndex == resources.checkpoints.count,loader.bitmaps.count == resources.records.count else { throw error("Resource completion") }
             try check(state.globals,defined(resources.globals),"Menu dispatch globals")

@@ -1,0 +1,112 @@
+{
+  "scope": "Native ordered menu music/resource transaction on unchanged historical source controls. Source branch coverage and platform boundaries remain those of the original studies; five rollback checks are native-only.",
+  "createdUTC": "2026-09-11T03:28:19.317936+00:00",
+  "base": "ebe460a07631787f273b9600a0e0047f31a6a005",
+  "ownedFiles": {
+    "native/Sources/NTSDCore/OriginalCharacterMenuStartup.swift": "5f88936f0b9fdcaaae5a47fb606845939d15692daf385675ad4ac23c00c18771",
+    "native/Sources/NTSDReferenceChecks/MenuStartupReference.swift": "805d0591e5290df952dccd05506ddd46b1a027aa0ce893150fe4be57de9e4aa7",
+    "native/Sources/NTSDReferenceChecks/MenuCycleReference.swift": "6b0084aebbe5d13102da54dd8ab91e11f19b33dbd7f76dfb8c055d48b0053b5f",
+    "native/Tests/NTSDCoreTests/OriginalMenuStartupTests.swift": "90d07ef0916d080a8c995d3af2e512ff00bdf5f984202ffaec42dbd531a94d8c"
+  },
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 18377,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuStartupTests|OriginalMenuResourcesTests|OriginalMenuCycleTests"
+      ],
+      "startedUTC": "2026-09-11T03:21:18.685452+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 315.39,
+      "endedUTC": "2026-09-11T03:26:34.066570+00:00",
+      "tests": 6,
+      "testSeconds": 81.648,
+      "buildSeconds": 230.55,
+      "suites": {
+        "OriginalMenuStartupTests": 15.82,
+        "OriginalMenuResourcesTests": 40.435,
+        "OriginalMenuCycleTests": 25.393
+      },
+      "appLinked": true,
+      "appWindowExercised": false
+    }
+  ],
+  "archiveVerification": {
+    "scope": "Verify exact isolated native source/input archive against its own manifest\nand the previously verified accepted native tree. No original execution,\nexpected mutation or source process control; pending work stays separate.\n",
+    "UTC": "2026-09-11T03:22:29.040103+00:00",
+    "base": "ebe460a07631787f273b9600a0e0047f31a6a005",
+    "files": 631,
+    "unchangedAcceptedBaseFiles": 627,
+    "ownedFiles": 4,
+    "fixtureFiles": 247,
+    "archive": "build/research/character-menu-startup-native1-inputs.tar.gz",
+    "archiveBytes": 908103659,
+    "archiveSHA256": "4fd06189b44d8e17ec7627479409b4a10432c442aa6c2886db4d79712c4df5ce",
+    "memberBytes": 1244065326,
+    "manifestSHA256": "298e0409b7f6f109fc7e526732b215d10865920d8bd5043bddb86e00f544d2f3",
+    "seconds": 4.346465458
+  },
+  "retainedOwnStartup": {
+    "cases": 2,
+    "records": 6824,
+    "bytesAndMasks": 11897268,
+    "checkpoints": 44,
+    "events": 136
+  },
+  "retainedRepeatedMenus": {
+    "corpora": 2,
+    "callsPerCorpus": 4,
+    "returnsPerCorpus": 3
+  },
+  "retainedResourceControls": {
+    "corpora": 2,
+    "casesPerCorpus": 187,
+    "constructorsPerCorpus": 1049,
+    "nullSparkBoundariesPerCorpus": 6,
+    "musicParentCases": 374,
+    "roundParentCases": 2074,
+    "replayParentCases": 1134
+  },
+  "rollbackTrials": [
+    "completedMusic",
+    "sixthBitmap",
+    "SPARKFlag",
+    "finalObserver",
+    "nullSparkRejection"
+  ],
+  "expectedFixturesChanged": false,
+  "newSourceExecution": false,
+  "newFixture": false,
+  "priorFixturePins": 247,
+  "sourceGameAlgorithmsChanged": false,
+  "explicitNullSparkRejectionIsSourceMatch": false,
+  "remaining": [
+    "Installed-lib own full catalog/loading return",
+    "Whole43ed10/COM surface-helper composition for character-menu resources",
+    "Remaining menu dispatch/render/return and application integration",
+    "Window/latency/audio, Windows/device/fullmatch/all-content/cleanMac"
+  ],
+  "artifacts": [
+    {
+      "path": "build/research/character-menu-startup-native1.log",
+      "bytes": 19769,
+      "sha256": "8aa153e138c67f5f796e5939772ce8e728753d868cd3a54a14541f0bc90c1910"
+    },
+    {
+      "path": "build/research/character-menu-startup-native-verification.json",
+      "bytes": 3442,
+      "sha256": "5f0b62b840d15896e355c85fab08c90e6da790722d8f9b7bd184c830c80d0df6"
+    },
+    {
+      "path": "build/research/character-menu-startup-input-verification.json",
+      "bytes": 772,
+      "sha256": "726197ec8f96c52fdcd26bc35b4e51f2135b0ee3ba4132b2039cc5d7c44c6863"
+    }
+  ]
+}

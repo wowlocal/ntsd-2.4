@@ -48,6 +48,22 @@ false positives will not occur.
 
 ## Current research status
 
+**Native menu music/resource transaction: [CHARACTER_MENU_STARTUP](docs/research/CHARACTER_MENU_STARTUP.md).**
+OriginalCharacterMenuStartup keeps music before the resource prefix's4512cc
+write and stages globals/music allocations/11bitmap owners/platform environment
+through its final observer. Both MENU_STARTUP and repeated MENU_CYCLE consumers
+use it. NULL-SPARK is an explicit native rollback rejection, not a source match;
+the standalone resource API retains its old partial boundary separately.
+Both startup checks retain6824records/11897268bytes+masks/44checkpoints/136events;
+both repeated4call/3return chains and187resource/374music/2074round/1134replay
+controls retain their original assertions. Five new native-only failures after
+music/sixthbitmap/SPARKflag/finalobserver/NULL-SPARK retain all caller values.
+Independentebe460a+4files passed6release tests81.648s/build230.55s. All631archive
+files verified,627basefiles/247fixtures unchanged. Jobs terminal0; NTSDNative
+linked, no window/Windows/device claim. Historical43ed10/COM result boundaries
+remain; full character-menu surface-helper composition, own catalog/loading,
+menu dispatch/return and full-game goal are open. Read its work JSON and plan.
+
 **WAV research guard correction: [CATALOG_WAVE_GUARDS](docs/research/CATALOG_WAVE_GUARDS.md).**
 155 controlled whole4014e0 pairs now agree for disjoint/corrected adjacent
 buffers:414regions/8468898payloadbytes,828actual guards intact,231EXEPCs.

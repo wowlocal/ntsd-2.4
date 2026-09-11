@@ -210,28 +210,6 @@ public enum MenuStartupReference {
             var musicMemory = OriginalMusicMemory(),musicIndex = 0,formatIndex = 0
             let music = c.music
             guard music.kind == "menu",music.inherited,music.stimulus.isEmpty,music.endPC == 0x4297ae,music.endSP == c.end.sp else { throw error("Actual menu/music entry") }
-            try OriginalMusicPlayback.enterMenu(globals: &state.globals,memory: &musicMemory,request: { event in
-                guard musicIndex < music.events.count else { throw error("Excess music event") }
-                let e = music.events[musicIndex];musicIndex += 1;events += 1
-                guard event == .init(e.kind,e.arguments,e.strings) else { throw error("Music event\(musicIndex)") }
-                if event.kind == .format {
-                    guard formatIndex < music.formats.count,event.strings.count == 2 else { throw error("CRT format witness") }
-                    let f = music.formats[formatIndex];formatIndex += 1
-                    guard event.arguments == [UInt32(bitPattern: f.result)],f.bytes == (event.strings[1]+[0]).map({ String(format: "%02x",$0) }).joined() else { throw error("Actual CRT format") }
-                }
-                return e.response
-            })
-            let helpers = music.events.filter { $0.kind == .helper }.map { $0.arguments[0] }
-            guard musicIndex == music.events.count,formatIndex == music.formats.count,helpers.sorted() == music.calls.map(\.entry).sorted(),
-                  musicMemory.allocations.count == music.allocations.count else { throw error("Music completion/inventory") }
-            let helperReturns: [UInt32:UInt32] = [0x402020:0x4297ab,0x401d30:0x402085,0x401c90:0x40208a,0x401da0:0x4020a2,0x401f30:0x4020c9]
-            for h in music.calls { guard helperReturns[h.entry] == h.returnAddress,h.returnSP == h.entrySP+4,h.saved.count == 4 else { throw error("Music helper ABI") } }
-            try check(state.globals,defined(music.afterGlobals),"Music globals");checkpoints += 1
-            for a in music.allocations {
-                guard let owned = musicMemory.allocations[a.address] else { throw error("Music allocation") }
-                try check(owned,storage(a.storage),"Music UTF16")
-            }
-
             let resources = c.resources
             guard resources.inherited,resources.stimulus.isEmpty,resources.endPC == c.end.pc,resources.endSP == c.end.sp,
                   resources.allocations.count == 11,resources.inputs.count == 11,resources.calls.count == 11,c.sources.count == 11 else { throw error("Character-menu resource provenance") }
@@ -252,23 +230,52 @@ public enum MenuStartupReference {
                     try check(a.storage,value,"Character-menu bitmap")
                 }
             }
-            let result = try loader.load(globals: &state.globals,allocate: { index in
+            var menuEnvironment: [String] = []
+            let startup = try OriginalCharacterMenuStartup.run(globals: &state.globals,music: &musicMemory,resources: &loader,environment: &menuEnvironment,
+                musicRequest: { event,_ in
+                guard musicIndex < music.events.count else { throw error("Excess music event") }
+                let e = music.events[musicIndex];musicIndex += 1;events += 1
+                guard event == .init(e.kind,e.arguments,e.strings) else { throw error("Music event\(musicIndex)") }
+                if event.kind == .format {
+                    guard formatIndex < music.formats.count,event.strings.count == 2 else { throw error("CRT format witness") }
+                    let f = music.formats[formatIndex];formatIndex += 1
+                    guard event.arguments == [UInt32(bitPattern: f.result)],f.bytes == (event.strings[1]+[0]).map({ String(format: "%02x",$0) }).joined() else { throw error("Actual CRT format") }
+                }
+                return e.response
+            },allocate: { index,_ in
                 guard index == allocationIndex,index < resources.allocations.count else { throw error("Menu allocation order") };allocationIndex += 1
                 let a = resources.allocations[index];return try .init(address: a.address,backing: blob(a.backing))
-            },source: { index,path in
+            },source: { index,path,_ in
                 guard let input = inputs[index],let source = sources[path],input.resource.path == path,input.surface != 0,
                       input.resource.present,input.resource.width == source.width,input.resource.height == source.height else { throw error("Original resource/device input") }
                 return input.resource
-            },deviceResult: { index in
+            },deviceResult: { index,_ in
                 guard let input = inputs[index] else { throw error("Device input") };return (input.surface,input.colorKeyResult)
-            },checkpoint: { point,globals,owned in
+            },afterMusic: { entered,musicGlobals,loadedMusic,steps in
+                guard entered else { throw error("Missing own music entry") }
+                steps.append("music")
+                let helpers = music.events.filter { $0.kind == .helper }.map { $0.arguments[0] }
+                guard musicIndex == music.events.count,formatIndex == music.formats.count,helpers.sorted() == music.calls.map(\.entry).sorted(),
+                      loadedMusic.allocations.count == music.allocations.count else { throw error("Music completion/inventory") }
+                let helperReturns: [UInt32:UInt32] = [0x402020:0x4297ab,0x401d30:0x402085,0x401c90:0x40208a,0x401da0:0x4020a2,0x401f30:0x4020c9]
+                for h in music.calls { guard helperReturns[h.entry] == h.returnAddress,h.returnSP == h.entrySP+4,h.saved.count == 4 else { throw error("Music helper ABI") } }
+                try check(musicGlobals,defined(music.afterGlobals),"Music globals");checkpoints += 1
+                for a in music.allocations {
+                    guard let owned = loadedMusic.allocations[a.address] else { throw error("Music allocation") }
+                    try check(owned,storage(a.storage),"Music UTF16")
+                }
+
+            },checkpoint: { point,globals,owned,steps in
+                steps.append(point.kind.rawValue)
                 guard pointIndex < resources.checkpoints.count else { throw error("Excess resource checkpoint") }
                 let p = resources.checkpoints[pointIndex];pointIndex += 1;checkpoints += 1
                 guard point == .init(p.kind,index: p.index) else { throw error("Resource checkpoint order") }
                 try check(globals,defined(p.globals),"Character-menu globals");try bitmaps(p.records,owned)
-            },observe: { event in
+            },observe: { event,_ in
                 guard eventIndex < resources.events.count,event == resources.events[eventIndex] else { throw error("Resource event\(eventIndex)") };eventIndex += 1;events += 1
             })
+            let result = startup.resources
+            guard menuEnvironment == ["music"]+resources.checkpoints.map({ $0.kind.rawValue }) else { throw error("Music/resource transaction order") }
             guard allocationIndex == 11,eventIndex == resources.events.count,pointIndex == resources.checkpoints.count,
                   result.continuation == .ready,result.continuation == resources.continuation,result.selectionAtEntry == resources.selectionAtEntry else { throw error("Resource completion") }
             let returns: [UInt32] = [0x429812,0x429851,0x429890,0x4298cf,0x42990e,0x42994d,0x42998c,0x4299cb,0x429a0a,0x429a49,0x429a88]
