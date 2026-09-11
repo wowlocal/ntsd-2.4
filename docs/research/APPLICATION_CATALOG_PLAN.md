@@ -735,3 +735,34 @@ The whole catalog return remains open. These stronger checks must also cover
 later checkpoints/full output; the existing20Object watcher only starts the
 older final reconstruction and native semantic comparison. No accepted fixture
 or runtime game rule changed during this source-evidence verification.
+
+## Guarded twenty-Object checkpoint: completed audits
+
+The fresh guarded primary's atomic20-Object source is146002564bytes,
+SHA9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8.
+Watcher15664 and all four children61251..61254 completed with exit0; the last
+read audit ended2026-09-11T08:14:50UTC. No source capture or passing check was
+restarted. [Completion evidence](../evidence/application-catalog-guarded20-completion.json)
+retains each report/log hash, job command, frozen input pins and live observation.
+
+The already-built native comparator passes1test12.772s. It compares each of20
+child prefixes, ending at20full Object records,4995Frame allocations,
+194bitmap wrappers and94full registered WAVs. Final child storage is5643803
+bytes plus masks; complete semantic events/globals and allocation order agree.
+Native parent-registry storage and private C++ ABI remain separate boundaries.
+
+Final source reconstruction verifies17406blobs and32258trace parts containing
+129358779160raw bytes;541554289writes reconstruct5318regions/92817467bytes.
+The independent intermediate audit verifies2142points,5323542record comparisons
+and13016786426bytes. All2142 source control words are037f. The read audit merges
+556244408stack reads/1920124614bytes and73catalog reads/187bytes with preceding
+writes; neither has an observed unknown byte. This says nothing about unread
+private storage or actual Windows/hardware FPU state.
+
+All890 frozen guarded20 inputs, the older watch/control pins,14pending native,
+3pending source,6foreign files and255current fixtures remain unchanged. The
+full guarded primary CPU11636 continues independently (23Objects at the recorded
+observation), so whole catalog41c018, initialized application and device/Windows
+acceptance remain open. The separate [roster operand audit](CHARACTER_ROSTER_INPUT_PLAN.md)
+prepares controlled character selection from original resources without importing
+this unfinished parent's private state.

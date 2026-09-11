@@ -1,0 +1,197 @@
+{
+  "scope": "Read-only character roster operand provenance from raw original registry/DAT/BMP inputs and pinned constructor literal. Compare retained original catalog bytes/masks; no new source execution, screen comparison, own initialized catalog or Windows/device claim.",
+  "verifiedUTC": "2026-09-11T08:30:30.537983+00:00",
+  "audit": {
+    "path": "build/research/character-roster-input-audit.json",
+    "bytes": 125412,
+    "sha256": "d619979d8b524168bb8a4c37a368875e606ea8f69ba4009e57c289161b19dd1c"
+  },
+  "verifier": {
+    "path": "tools/verify_character_roster_inputs.py",
+    "bytes": 7734,
+    "sha256": "b8c98660719fa6e3dd988e37e3f368b7c5ad2ddf2918fdab9e2e1aba4f3e1f31"
+  },
+  "successfulJob": {
+    "session": 88637,
+    "terminalChunk": "56f9ec",
+    "exitCode": 0,
+    "log": {
+      "path": "build/research/character-roster-input-audit2.log",
+      "bytes": 2301,
+      "sha256": "641bc261c63cf2d6500bca15efaa2f6fb4359c693740553f85c475fbac668848"
+    }
+  },
+  "initialError": {
+    "artifact": {
+      "path": "build/research/character-roster-input-audit1-error.json",
+      "bytes": 634,
+      "sha256": "5880a2342056e5e8fdecb7b89212e257a6a3b726e585e2e62df614207b92863b"
+    },
+    "verifier": {
+      "path": "build/research/character-roster-input-audit1-verifier.py",
+      "bytes": 7278,
+      "sha256": "ff96f62fff9b98d1ec78e99a25aec8ad299357f273d013af943ad9f7aa58ba8b"
+    },
+    "log": {
+      "path": "build/research/character-roster-input-audit.log",
+      "bytes": 706,
+      "sha256": "52ad6c3d8a4a0c22dafde0f7dc646e2b7d88a0cecc93f21dcb40b4154930ecd1"
+    }
+  },
+  "summary": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "fixture": {
+      "path": "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog.json",
+      "packedBytes": 4723835,
+      "packedSHA256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e",
+      "rawBytes": 9905907,
+      "rawSHA256": "7a0ab99eac1a05b56a1bbe90667b661d804949e9229fa8a489b2cb155fd95590"
+    },
+    "allBlobs": 3366,
+    "allBlobBytes": 95070529,
+    "registryEntries": 137,
+    "DATDecodedBytes": 5135155,
+    "nameTailBytes": 8220,
+    "defaultNameSource": {
+      "address": 4491376,
+      "bytes": "6e6f6e6500",
+      "stores": [
+        4255807,
+        4255833
+      ]
+    },
+    "portraitWrappers": 42,
+    "portraitWrapperBytes": 336672,
+    "selectableOrdinals": {
+      "0": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "1": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ]
+    },
+    "sourceFilesCount": 180,
+    "allSelectableNamesAndPortraitsKnown": true,
+    "nativeExpectedInputsImported": false,
+    "newOriginalExecution": false,
+    "ownInitializedLibraryCatalog": false,
+    "windowsVerified": false
+  },
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-frozen-watch40-inputs.json",
+        "bytes": 180370,
+        "sha256": "691c8fdb4f937f04d22d55d90e4818b810b0c5fa27ea59f2e21dc74713fe2e39"
+      },
+      "pins": 886
+    },
+    "application-catalog-control20-parent1-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-control20-parent1-inputs.json",
+        "bytes": 180974,
+        "sha256": "5ec8906957fc1bedb9a897f6f98e394d4213b68d2aaaa50ea8e57f80e0f020bd"
+      },
+      "pins": 887
+    },
+    "application-catalog-control20-parent2-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-control20-parent2-inputs.json",
+        "bytes": 180974,
+        "sha256": "a76a77a2446bed55914107577e2c04a0e498a10985b68a2b5c07e027f1a43bad"
+      },
+      "pins": 887
+    },
+    "application-catalog-guarded20-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-guarded20-inputs.json",
+        "bytes": 181584,
+        "sha256": "310337a6b9d46b5595f0b2b40e3b8b4ba0315a567b120cbc091898406102cddc"
+      },
+      "pins": 890
+    },
+    "fixturePins": {
+      "manifest": {
+        "path": "build/research/fresh-character-menu-fixture-pins.json",
+        "bytes": 27127,
+        "sha256": "54a31bfd6e8b96e24e60265bd42b4f0e335f50a08aa8e75e2caaf9923b83f871"
+      },
+      "unchanged": 255
+    }
+  },
+  "cacheStorageOperation": {
+    "path": "build/research/completed-fixture-cache-clones1.json",
+    "bytes": 87217,
+    "sha256": "8146aed7bad5c8c051f060033721c2d5887d946dd9c7a3d04be0082e8b693209"
+  },
+  "nativeImplementationChanged": false,
+  "existingExpectedEdited": false
+}

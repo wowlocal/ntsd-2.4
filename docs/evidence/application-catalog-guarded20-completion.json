@@ -1,0 +1,265 @@
+{
+  "scope": "Completed guarded twenty-Object prefix: original NTSD/lib/VC80 in controlled Unicorn, complete immutable trace/final/intermediate/read audits and frozen native child comparison. The still-running whole catalog and private parent ABI are separate open dependencies.",
+  "verifiedUTC": "2026-09-11T08:30:30.537983+00:00",
+  "source": {
+    "path": "build/research/application-catalog-candidate4-guarded.object-000020.json",
+    "bytes": 146002564,
+    "sha256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8"
+  },
+  "status": {
+    "path": "build/research/application-catalog-guarded20-status.json",
+    "bytes": 3567,
+    "sha256": "4b7588a1a0bae64d62898e8e2472b7886ee98c161aef2d4cb6eb2e7ef38205cc"
+  },
+  "jobs": [
+    {
+      "name": "sourceVerification",
+      "pid": 61251,
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-frozen-watch40/verify-application-catalog-probe.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.object-000020.json"
+      ],
+      "log": "application-catalog-candidate4-guarded.object-000020-verification.log",
+      "status": "terminal",
+      "startedUTC": "2026-09-11T07:30:36.351447+00:00",
+      "exitCode": 0
+    },
+    {
+      "name": "snapshotVerification",
+      "pid": 61252,
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-control20-audits/verify-snapshots.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.object-000020.json"
+      ],
+      "log": "application-catalog-candidate4-guarded.object-000020-snapshots-verification.log",
+      "status": "terminal",
+      "startedUTC": "2026-09-11T07:30:36.354988+00:00",
+      "exitCode": 0
+    },
+    {
+      "name": "readVerification",
+      "pid": 61253,
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-control20-audits/verify-reads.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate4-guarded.object-000020.json"
+      ],
+      "log": "application-catalog-candidate4-guarded.object-000020-reads-verification.log",
+      "status": "terminal",
+      "startedUTC": "2026-09-11T07:30:36.358349+00:00",
+      "exitCode": 0
+    },
+    {
+      "name": "nativeComparison",
+      "pid": 61254,
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xctest",
+        "-XCTest",
+        "NTSDCoreTests.OriginalApplicationCatalogWholeProbeTests/testCapturedOwnBoundaryThroughWholeFactory",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-child-storage1/native/.build/arm64-apple-macosx/release/NTSDNativePackageTests.xctest"
+      ],
+      "log": "application-catalog-guarded20-native.log",
+      "status": "terminal",
+      "startedUTC": "2026-09-11T07:30:36.361426+00:00",
+      "exitCode": 0
+    }
+  ],
+  "reports": {
+    "verification": {
+      "artifact": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-verification.json",
+        "bytes": 696,
+        "sha256": "69fe1a7693765fd83257ec0b65b3db680f3228df4a87cce3853ff48c2ee20627"
+      },
+      "log": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-verification.log",
+        "bytes": 628,
+        "sha256": "0189c4c3c5e8866ccfb5dba13a5ef622dc3003b25c64e6738fcf1a0cf43afa87"
+      },
+      "summary": {
+        "source": "application-catalog-candidate4-guarded.object-000020.json",
+        "rawSHA256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8",
+        "allBlobs": 17406,
+        "traceParts": 32258,
+        "traceRawBytes": 129358779160,
+        "tracePackedBytes": 4079557743,
+        "traceRecords": {
+          "recordTables": 1006,
+          "writes": 541554289,
+          "localReads": 556244408,
+          "catalogReads": 73,
+          "scans": 3619898,
+          "outputCalls": 1660219,
+          "stackStores": 501716797,
+          "crtStores": 7239674,
+          "globalStores": 9698
+        },
+        "reconstructedRegions": 5318,
+        "reconstructedBytes": 92817467,
+        "sourceOnly": true,
+        "nativeCompared": false,
+        "windowsVerified": false,
+        "seconds": 1980.253
+      }
+    },
+    "snapshots-verification": {
+      "artifact": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-snapshots-verification.json",
+        "bytes": 407903,
+        "sha256": "b14bcf0f14214ac35b8f8e01950a4db5bb42544269ccdb5ff72895d1453f2a14"
+      },
+      "log": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-snapshots-verification.log",
+        "bytes": 1263,
+        "sha256": "94c74695f64e69ea76ccdc424da3bc64464869ed1bcc2427a67c6c51127b1dbf"
+      },
+      "summary": {
+        "source": "application-catalog-candidate4-guarded.object-000020.json",
+        "sourceSHA256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8",
+        "sourceBytes": 146002564,
+        "checkpoints": 2142,
+        "recordSnapshots": 1006,
+        "recordsChecked": 5323542,
+        "bytesChecked": 13016786426,
+        "catalogBytes": 81273768,
+        "writes": 541554289,
+        "partCounts": {
+          "recordTables": 6,
+          "writes": 10832
+        },
+        "partRawBytes": 40623876241,
+        "partPackedBytes": 762345179,
+        "checkedBlobs": 7252,
+        "localWrites": 0,
+        "messageWrites": 0,
+        "controlWords": {
+          "895": 2142
+        },
+        "seconds": 811.059,
+        "nativeCompared": false,
+        "windowsVerified": false
+      }
+    },
+    "reads-verification": {
+      "artifact": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-reads-verification.json",
+        "bytes": 1299,
+        "sha256": "fbf1884f9c2ef4212148b61247dfc5300eacf7f29c9dff5fd7241c9b7bce7865"
+      },
+      "log": {
+        "path": "build/research/application-catalog-candidate4-guarded.object-000020-reads-verification.log",
+        "bytes": 1203,
+        "sha256": "1cd5c9937222ab24102df1a4683196d2ad82752f11aaceea9013a23ed897bd72"
+      },
+      "summary": {
+        "source": "application-catalog-candidate4-guarded.object-000020.json",
+        "sourceSHA256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8",
+        "sourceBytes": 146002564,
+        "writes": 541554289,
+        "reads": {
+          "stackReads": 556244408,
+          "catalogReads": 73
+        },
+        "readBytes": {
+          "stackReads": 1920124614,
+          "catalogReads": 187
+        },
+        "undefinedReadBytes": {
+          "stackReads": 0,
+          "catalogReads": 0
+        },
+        "readPCs": {
+          "stackReads": 1189,
+          "catalogReads": 3
+        },
+        "partCounts": {
+          "stackReads": 11126,
+          "catalogReads": 2,
+          "writes": 10832
+        },
+        "partRawBytes": 99138453060,
+        "partPackedBytes": 3513330246,
+        "seconds": 2650.173,
+        "nativeCompared": false,
+        "windowsVerified": false
+      }
+    }
+  },
+  "native": {
+    "log": {
+      "path": "build/research/application-catalog-guarded20-native.log",
+      "bytes": 5242,
+      "sha256": "9929acbeb75bafe0e64eea6d7eb6d01c5a9001accbd163b1294350b9ae5c4ff8"
+    },
+    "tests": 1,
+    "seconds": 12.772,
+    "comparedChildPrefixes": 20,
+    "fullObjectRecords": 20,
+    "frameAllocations": 4995,
+    "weaponAllocations": 0,
+    "bitmapWrappers": 194,
+    "registeredWAVs": 94,
+    "finalChildBytesAndMasks": 5643803,
+    "allPrefixRecordComparisons": 53566,
+    "allPrefixBytesAndMasks": 59581783,
+    "semanticEventsAndGlobalsCompared": true,
+    "parentRegistryAndPrivateABICompared": false
+  },
+  "preservation": {
+    "foreignHashes": 6,
+    "nativeOwnedPending": 14,
+    "sourceOwnedPending": 3,
+    "application-catalog-frozen-watch40-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-frozen-watch40-inputs.json",
+        "bytes": 180370,
+        "sha256": "691c8fdb4f937f04d22d55d90e4818b810b0c5fa27ea59f2e21dc74713fe2e39"
+      },
+      "pins": 886
+    },
+    "application-catalog-control20-parent1-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-control20-parent1-inputs.json",
+        "bytes": 180974,
+        "sha256": "5ec8906957fc1bedb9a897f6f98e394d4213b68d2aaaa50ea8e57f80e0f020bd"
+      },
+      "pins": 887
+    },
+    "application-catalog-control20-parent2-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-control20-parent2-inputs.json",
+        "bytes": 180974,
+        "sha256": "a76a77a2446bed55914107577e2c04a0e498a10985b68a2b5c07e027f1a43bad"
+      },
+      "pins": 887
+    },
+    "application-catalog-guarded20-inputs.json": {
+      "manifest": {
+        "path": "build/research/application-catalog-guarded20-inputs.json",
+        "bytes": 181584,
+        "sha256": "310337a6b9d46b5595f0b2b40e3b8b4ba0315a567b120cbc091898406102cddc"
+      },
+      "pins": 890
+    },
+    "fixturePins": {
+      "manifest": {
+        "path": "build/research/fresh-character-menu-fixture-pins.json",
+        "bytes": 27127,
+        "sha256": "54a31bfd6e8b96e24e60265bd42b4f0e335f50a08aa8e75e2caaf9923b83f871"
+      },
+      "unchanged": 255
+    }
+  },
+  "liveObservation": {
+    "path": "build/research/application-catalog-guarded20-completion-observation.json",
+    "bytes": 1214,
+    "sha256": "35b2a15be8585e823442b8df46844000aaa1466240d80645b7acbc8135a06f62"
+  },
+  "allAuditChildrenTerminal": true,
+  "sourceCaptureContinues": true,
+  "fullCatalogReturned": false,
+  "rawOrExpectedEdited": false,
+  "windowsOrDeviceVerified": false
+}

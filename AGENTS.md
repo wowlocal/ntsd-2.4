@@ -48,6 +48,26 @@ false positives will not occur.
 
 ## Current research status
 
+**Catalog prefix and roster provenance: [CHARACTER_ROSTER_INPUT_PLAN](docs/research/CHARACTER_ROSTER_INPUT_PLAN.md).**
+Guarded20 watcher15664 and all four children61251..61254 are terminal0.
+Native frozen binary passed1test12.772s:20 full Object/4995Frame/194bitmap/
+94registeredWAVs, every child prefix, semantic events/globals and allocation
+order. Final child5643803bytes+masks; parent registry/private ABI remain separate.
+Independent full final trace audit checks17406blobs/32258parts; intermediate
+audit2142states/5323542records/13016786426bytes; read audit556244408stack+
+73catalog reads has0observed unknown bytes. CW037f is a source observation.
+All890frozen inputs and255fixtures unchanged. Full guarded catalog11636 remains
+live, last observed23Objects; this is still not its whole return or Windows.
+Read-only roster audit derives all137registry entries/5135155DATdecodedbytes,
+8220name-tail bytes and42full8016-byte portrait wrappers from180original files.
+All3366retained catalog blobs verify;25locked/42unlocked selectable entries have
+known names/portraits. Missing DATname uses constructor448870 literal none;
+initial audit omitted that producer, preserved error, then corrected only its
+derivation. No new EXE execution/native rule/expected changes; bitmap addresses
+in audit are comparison metadata, never native inputs. Next actual selected
+catalog/selection/team/ready continuation, then own initialized library/menu/
+outer loop/app; full-match/Windows/all-content/clean-Mac goal stays open.
+
 **Fresh character menu: [FRESH_CHARACTER_MENU](docs/research/FRESH_CHARACTER_MENU.md).**
 OriginalCharacterMenuContinuation owns fresh11bitmaps through human character
 body and actual422ab8ret4; shared CharacterScreen adds installed-library text.
