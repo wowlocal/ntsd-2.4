@@ -1,0 +1,673 @@
+{
+  "scope": "Mode2 actual432ab0 menu20..25 retained controlled compatibility;372actual422ab8ret4+1BEFORE4338c3. No bracket/full match/own library startup/Windows/device claim.",
+  "timeUTC": "2026-09-11T11:52:13.766591+00:00",
+  "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+  "base": "277785e456c2e4b1d9d1b13dfd17bef8d8c36f7e",
+  "accepted": true,
+  "fullGoalComplete": false,
+  "environment": {
+    "reference": "Pinned original NTSD EXE/lib.dll/VC80 and raw DAT/head/small BMP/DIBs",
+    "execution": "Unicorn2.1.4/CW023f controlled API/COM/GDI/allocators/clock; actual prologue plus declared4229cc tail",
+    "syntheticAtlas": "45116c aliases existing declared451178 geometry, not original pixels",
+    "inputProvenance": "Raw Object+728 small resources; Native uses independently loaded catalog. Label7800 from file-backed44d31c; no source stack import.",
+    "native": "Private Swift/native code only; no original EXE/DLL/emulator in shipping runtime"
+  },
+  "sourceJob": {
+    "scope": "Run one bounded retained character roster/menu sequence through actual returns with pinned inputs and terminal job evidence.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_TOURNAMENT_SETUP_PLAN.md. No live producer modification/restart.\n",
+    "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+    "status": "terminal",
+    "pid": 57771,
+    "command": [
+      "uv",
+      "run",
+      "tools/oracle_lib_tournament_setup.py",
+      "--output",
+      "/Users/michael/Developer/ntsd-2.4/build/research/lib-tournament-setup/lib-tournament-setup-capture1.json"
+    ],
+    "startedUTC": "2026-09-11T11:31:20.191668+00:00",
+    "inputPins": "build/research/lib-tournament-setup/lib-tournament-setup-capture1-input-pins.json",
+    "exitCode": 0,
+    "elapsedSeconds": 72.981,
+    "endedUTC": "2026-09-11T11:32:33.159054+00:00",
+    "inputsUnchanged": true,
+    "artifacts": {
+      "build/research/lib-tournament-setup/lib-tournament-setup-capture1.json": {
+        "bytes": 1268449644,
+        "sha256": "193498e6e20147cef0cd52b99a62244cd57352081bb4373a54ee392896051a62"
+      }
+    }
+  },
+  "sourceAudit": {
+    "scope": "Read-only full trace audit of retained Tournament roster/controller/shuffle/settings and ret4 or prelude boundaries.\n\nPinned NTSD EXE/lib.dll/VC80 and Unicorn2.1.4 observations recover 4229cc through429730/422ab8\ntext/input/output order, owned string production and retained library DC.\nReplay every recorded store/read and final region; verify actual instruction\nbytes and ordinary return ABI. This executes no game, edits no expected byte,\ncontinues no fault, and establishes no Windows/device/own-catalog equivalence.\nActual41bc90 prologue establishes ordinary cookie/SEH backing; the declared\nmenu tail skips the intervening tick body. This is not an own complete tick.\nSee docs/research/LIB_TOURNAMENT_SETUP_PLAN.md for finite inputs and open boundaries.\n",
+    "controllerLabels": {
+      "C": 1623,
+      "1": 206,
+      "2": 163
+    },
+    "randomStreams": {
+      "0xf7": 1100,
+      "0xf8": 1100,
+      "0xf9": 56,
+      "0x1": 100
+    },
+    "undefinedBitmapReads": [
+      {
+        "pc": "0x43f04b",
+        "bytes": 4,
+        "reads": 1396
+      },
+      {
+        "pc": "0x43f183",
+        "bytes": 4,
+        "reads": 1396
+      },
+      {
+        "pc": "0x43f18c",
+        "bytes": 4,
+        "reads": 82
+      },
+      {
+        "pc": "0x43f190",
+        "bytes": 4,
+        "reads": 82
+      },
+      {
+        "pc": "0x43f197",
+        "bytes": 4,
+        "reads": 82
+      },
+      {
+        "pc": "0x43f19e",
+        "bytes": 4,
+        "reads": 82
+      }
+    ],
+    "rawBytes": 1268449644,
+    "rawSHA256": "193498e6e20147cef0cd52b99a62244cd57352081bb4373a54ee392896051a62",
+    "cases": 373,
+    "ends": {
+      "returned": 372,
+      "tournamentPrelude": 1
+    },
+    "writes": 334197,
+    "writeBytes": 1320013,
+    "instructionReads": 423419,
+    "instructionReadBytes": 1590631,
+    "pointRecords": 5190950,
+    "pointRecordBytes": 15613950110,
+    "points": 6107,
+    "APIReads": 5910,
+    "APIReadBytes": 32412,
+    "records": 317050,
+    "recordBytes": 953660290,
+    "helpers": 15781,
+    "characterSemanticCounterWords": 5824,
+    "freshBitmapRecords": 4103,
+    "musicAllocations": 0,
+    "liveCandidateLists": 56,
+    "shuffleCalls": 22,
+    "controllerLabelCalls": 1992,
+    "events": {
+      "startup": 418,
+      "draw": 3227,
+      "read": 20207,
+      "clip": 3309,
+      "blit": 3309,
+      "fill": 255,
+      "getDC": 2787,
+      "setBackgroundMode": 2787,
+      "setTextColor": 2787,
+      "stringLength": 2787,
+      "textOut": 2787,
+      "releaseDC": 2787,
+      "method": 372,
+      "soundRequest": 154,
+      "soundMethod": 462,
+      "random": 2356,
+      "candidates": 56,
+      "musicConfiguration": 124,
+      "format": 124,
+      "stopMusic": 6,
+      "musicMethod": 12
+    },
+    "instructionStarts": 2710,
+    "exeInstructionStarts": 2324,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 335,
+    "blobCount": 2782,
+    "decodedBlobBytes": 139138320,
+    "writeMaskFalseReadsWithPinnedEXEProvenance": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 373
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 373
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 373
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 373
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 22
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 1510
+      },
+      {
+        "pc": "0x432ab6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 373
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "reads": 372
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 72137,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTournamentSetupTests|OriginalLibStageModeTests|OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T11:36:37.043732+00:00",
+      "exitCode": 1,
+      "elapsedSeconds": 6.543,
+      "endedUTC": "2026-09-11T11:36:43.584012+00:00"
+    },
+    {
+      "name": "native2",
+      "pid": 73287,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTournamentSetupTests|OriginalLibStageModeTests|OriginalLibSelectionStageTests"
+      ],
+      "startedUTC": "2026-09-11T11:39:01.317385+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 467.438,
+      "endedUTC": "2026-09-11T11:46:48.755379+00:00"
+    },
+    {
+      "name": "packaged",
+      "scope": "Packaged acceptance of retained Tournament/mode2 menu.\nSame isolated Core/tests as the latest passing raw acceptance, adding only the lossless transport files.\nNo raw environment override or reference execution. Preserve input composition.\n",
+      "pid": 74974,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTournamentSetupTests"
+      ],
+      "startedUTC": "2026-09-11T11:48:32.844147+00:00",
+      "inputFiles": 674,
+      "manifest": "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 68.596,
+      "endedUTC": "2026-09-11T11:49:41.424906+00:00"
+    }
+  ],
+  "rawAcceptance": {
+    "session": "98492",
+    "pid": 73287,
+    "status": "terminal",
+    "terminalChunk": "525291",
+    "exitCode": 0,
+    "buildSeconds": 259.46,
+    "tests": 6,
+    "testSeconds": 206.504,
+    "newTournamentSeconds": 70.375,
+    "retainedVSSeconds": 64.865,
+    "retainedStageSeconds": 71.264
+  },
+  "packagedAcceptance": {
+    "session": "38709",
+    "pid": 74974,
+    "status": "terminal",
+    "exitCode": 0,
+    "terminalChunk": "3bd0fe",
+    "buildSeconds": 0.36,
+    "tests": 2,
+    "seconds": 66.058,
+    "rollbackSeconds": 28.578,
+    "wholeSeconds": 37.479
+  },
+  "artifactVerification": {
+    "timeUTC": "2026-09-11T11:48:02.353893+00:00",
+    "files": 670,
+    "priorFixturesUnchanged": 267,
+    "fixturePins": 271,
+    "rawBytes": 1268449644,
+    "rawSHA256": "193498e6e20147cef0cd52b99a62244cd57352081bb4373a54ee392896051a62",
+    "packedBytes": 165387326,
+    "packedFiles": {
+      "original-lib-tournament-setup-part0.json": {
+        "bytes": 64245640,
+        "sha256": "d4131dcbab12d5412d2cb3c0e331103b5683378c9f6a404c7ff2a9391175958c"
+      },
+      "original-lib-tournament-setup-part1.json": {
+        "bytes": 64736872,
+        "sha256": "c2e433fd092d51959ec6d369aef9b4bf99f6c8395c9062419c114c9f7c95c643"
+      },
+      "original-lib-tournament-setup-part2.json": {
+        "bytes": 36404488,
+        "sha256": "21d78c6dd3562f427cd486ec60447b540239d6a98b52803c7a8c5017609834f4"
+      },
+      "original-lib-tournament-setup.json": {
+        "bytes": 326,
+        "sha256": "3e76321ea9bb076657e23e2106f9cbe3951bf3a9b9191b7582bc293ff90e242b"
+      }
+    },
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true,
+    "archives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+        "bytes": 3277477,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "6e9ec045e040f64c2905b86e53110e7bd4383e4dcf56f7c1a380402239e1211d",
+        "bytes": 11201,
+        "files": 3
+      },
+      "build/research/fresh-character-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+        "bytes": 6570,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "06d125ae67c376cae1e625b0ebae29fcfe37a559118b0997f8da3316f066826b",
+        "bytes": 6566103,
+        "files": 1
+      },
+      "build/research/lib-character-roster-native1-owned-inputs.tar.gz": {
+        "sha256": "0ecc7960e90c2b62e594fa663f52690aefdbdba442fc31be72d151cd98a9717a",
+        "bytes": 7548,
+        "files": 1
+      },
+      "build/research/lib-character-roster-packaged-fixture-inputs.tar.gz": {
+        "sha256": "901caa31889eaad3b01c288c505320af24787b721de64d36237c5c5f92a617d2",
+        "bytes": 25727492,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native1-owned-inputs.tar.gz": {
+        "sha256": "0df7f8b1c0a950a7dfc15eeb7852b075a782ed1c9dad14d85c6cb714829d519f",
+        "bytes": 18168,
+        "files": 6
+      },
+      "build/research/lib-selection-stage-native2-owned-inputs.tar.gz": {
+        "sha256": "65d655eef6ed27a58bd7b06366fc9999772693133f63d0107e7a13591c330503",
+        "bytes": 3463,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native3-owned-inputs.tar.gz": {
+        "sha256": "3045d375ba78b52a7b1a91bee44e4472c65a545f8375331507116defc040477f",
+        "bytes": 8056,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native4-owned-inputs.tar.gz": {
+        "sha256": "4bb428afcd783a8bb45a9d512abb170e863359918a2b0e1817be43aadec93a29",
+        "bytes": 8352,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-packaged-fixture-inputs.tar.gz": {
+        "sha256": "7de658c5f21dd747f1f50b6511921fc0f2e564f36b78866ce5d18d904a003ca4",
+        "bytes": 101468551,
+        "files": 3
+      },
+      "build/research/lib-selection-commands-native1-owned-inputs.tar.gz": {
+        "sha256": "0d5ea810e42d3278d06278cf2d627bce26f4ffcdd96880088433a4e9c2b48d77",
+        "bytes": 11761,
+        "files": 2
+      },
+      "build/research/lib-selection-commands-packaged-fixture-inputs.tar.gz": {
+        "sha256": "ac3ad8f7b9ac7cf29db9ca6d6330022f9562651a36fd4d6edeebe4f30c39cbc4",
+        "bytes": 136786489,
+        "files": 4
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-native1-owned-inputs.tar.gz": {
+        "sha256": "c7c25f05758e5c5b84d55da9e3461285758fcf8f4c59f2fb632f7989c6dfd7aa",
+        "bytes": 14025,
+        "files": 3
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-fixture-inputs.tar.gz": {
+        "sha256": "53b21bdc5faad5bdaaf29e3c28ca22b25a88fe10a70fb29ff1c26f6d28962c1a",
+        "bytes": 117142789,
+        "files": 4
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-owned-inputs.tar.gz": {
+        "sha256": "85f9b5319c50cda15b399ac156b1a8bc343317dbee32e985d2bc18b690619803",
+        "bytes": 15434,
+        "files": 3
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native2-owned-inputs.tar.gz": {
+        "sha256": "f863ad829bbe0e031a6267ed6f0f164c9e93a7d378c972b79933e559a6849349",
+        "bytes": 4452,
+        "files": 1
+      }
+    },
+    "compositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-packaged-input-composition.json": "854ab4865ab28a8b5c8ef389634d772529b7e785fc295da61930b3d505d171d3",
+      "build/research/fresh-character-menu-native1-input-composition.json": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "build/research/fresh-character-menu-packaged-input-composition.json": "7dd04d1cf490a3d38b6be18835756cc4de8e71dfbe88f064d1e6f18a978dbfcb",
+      "build/research/lib-character-roster-packaged-input-composition.json": "b6eb57e70fb5e2a773da3c2e5fab10df25a01a6e2e697c0f6b8c9973a89aac41",
+      "build/research/lib-selection-stage-native1-input-composition.json": "8f5dc6fa4ce17f8ca39e69998d60b266388dcf0039ba82fe6527e15b2db2b1cd",
+      "build/research/lib-selection-stage-native2-input-composition.json": "bdf475c07ea9fcb1d3405509ed44da46099783d778f9e6d2d1d3cd2f5fb8ba22",
+      "build/research/lib-selection-stage-native3-input-composition.json": "5d76916c7019e26c953d8b59886cb52fd81f9280feefb80b9b967200fd8fdcd3",
+      "build/research/lib-selection-stage-packaged-input-composition.json": "81527f47a482f0ffdb3f6bacac91975b0eabbd4a59f0c2865917eb961c98f641",
+      "build/research/lib-selection-commands-packaged-input-composition.json": "c6dc4f5adae97aea4ab9d8194aab867fe5e3643e77c4c8fa60895fa5ddf0a412",
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-input-composition.json": "feb441b67f5cf19515e25e17df50e65b4f63615cffb904a7aa6eee34efc03fe2",
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-composition.json": "c339ae2734ed66b99bb369e33189b617c9479182b9fd32d9de3b992b4f95c585",
+      "build/research/lib-tournament-setup/lib-tournament-setup-native2-input-composition.json": "56796779cedf53372c2eb0841b44eb53d2712587bbb4b9211ac4f5105f1eb33b"
+    }
+  },
+  "packagedInputs": {
+    "timeUTC": "2026-09-11T11:50:11.221344+00:00",
+    "files": 674,
+    "unchangedRawFiles": 670,
+    "composition": {
+      "base": "277785e456c2e4b1d9d1b13dfd17bef8d8c36f7e",
+      "baseComposition": "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-composition.json",
+      "baseCompositionSHA256": "c339ae2734ed66b99bb369e33189b617c9479182b9fd32d9de3b992b4f95c585",
+      "baseManifest": "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-pins.json",
+      "ownedArchive": "build/research/lib-tournament-setup/lib-tournament-setup-native2-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "f863ad829bbe0e031a6267ed6f0f164c9e93a7d378c972b79933e559a6849349",
+      "ownedFiles": [
+        "Sources/NTSDCore/OriginalTournamentSetup.swift"
+      ],
+      "completeManifest": "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-pins.json",
+      "files": 674,
+      "layout": "Recursively verified accepted Core plus roster comparator, then the lossless multipart fixture",
+      "fixtureArchive": "build/research/lib-tournament-setup/lib-tournament-setup-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "0c18d81b2d9228008ca108e3e3a1a5cb83830f4dfe37eaba86f4f99fcb4c1784",
+      "fixtureFiles": [
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part0.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part1.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part2.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup.json"
+      ]
+    },
+    "priorCompleteArchiveAudit": "build/research/lib-tournament-setup/lib-tournament-setup-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 271,
+    "oldFixturesUnchanged": 267,
+    "fullRawBytesAndJSONEqual": true,
+    "preservation": {
+      "foreignHashes": 6,
+      "nativeOwnedPending": 14,
+      "sourceOwnedPending": 3,
+      "application-catalog-frozen-watch40-inputs.json": 886,
+      "application-catalog-control20-parent1-inputs.json": 887,
+      "application-catalog-control20-parent2-inputs.json": 887,
+      "application-catalog-guarded20-inputs.json": 890,
+      "application-catalog-candidate5-resourced-inputs.json": 890
+    }
+  },
+  "corrections": [
+    {
+      "session": "43291",
+      "terminalChunk": "663289",
+      "error": "Core guard second throwing clause required try; corrected only syntax before native2."
+    },
+    {
+      "session": "11577",
+      "terminalChunk": "0ebc75",
+      "error": "Final arena assertion used19 ordinary arenas; actual17 ordinary+2special. Full previous trace loops completed; whole auditor failed and is not acceptance."
+    },
+    {
+      "detail": "21 steps through17 ordinary+2special positions end at2; District visited at19th press. Source expected bytes/finite inputs unchanged.",
+      "sourceExpectedChanged": false,
+      "gameRulesChanged": false
+    }
+  ],
+  "rollback": [
+    "Third shuffle RNG call after a completed swap",
+    "Third one-byte controller text after prior calls"
+  ],
+  "remaining": [
+    "Tournament bracket/menu26/prelude",
+    "Team Tournament434ab0 and War",
+    "Simultaneous multi-seat and unlocked roster branch coverage",
+    "Own full library/catalog/menu/outer-loop/app join",
+    "Full match/all content/network/Windows/window/device/clean-Mac"
+  ],
+  "catalogObservation": {
+    "timeUTC": "2026-09-11T11:50:31.365106+00:00",
+    "processes": "  PID  PPID STAT  ELAPSED      TIME COMMAND\n78850 72826 Ss   02:53:52   0:01.14 /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/run-application-catalog-candidate5-resourced.py\n78860 78850 S    02:53:51   0:00.02 uv run /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n78863 78860 R    02:53:51 173:16.92 /Users/michael/.cache/uv/environments-v2/oracle-application-catalog-guarded-f61395bd3bab36d5/bin/python3 /Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py --output /Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json --compact-states --max-chunks 20000 --checkpoint-every 20\n",
+    "last": {
+      "chunks": 1281,
+      "pc": "0x78175ee2",
+      "scans": 1168207,
+      "decoders": 12,
+      "objects": 12,
+      "catalogChildren": 0,
+      "stores": 323630172,
+      "seconds": 10422.68
+    },
+    "wholeReturn": false
+  },
+  "pins": {
+    "docs/research/LIB_TOURNAMENT_SETUP_PLAN.md": {
+      "bytes": 4021,
+      "sha256": "6112c10716b87635dfe561ad0bd9d57cc215bc725d6a7cc0f173a0eb015e0eb5"
+    },
+    "tools/oracle_lib_tournament_setup.py": {
+      "bytes": 10609,
+      "sha256": "d9ede483e504bc5c83f405f256ae6ef7f5118657e79214fe80378db8686a9836"
+    },
+    "tools/verify_lib_tournament_setup.py": {
+      "bytes": 27057,
+      "sha256": "322742559e43ded794a81c27bd4ce7631adff267d9f15102789b85eeddec13c5"
+    },
+    "native/Sources/NTSDCore/OriginalCharacterScreen.swift": {
+      "bytes": 18713,
+      "sha256": "5e63f88cd1b3d451ba9b321bc8dcfbf4f5530dd6d69b76ca0fdd5c94e57098f8"
+    },
+    "native/Sources/NTSDCore/OriginalTournamentSetup.swift": {
+      "bytes": 16716,
+      "sha256": "c369d2f9e847884b9144b4e1e2af4f309bc133e9e1d90e62d15a7f6aa9ca59a9"
+    },
+    "native/Tests/NTSDCoreTests/OriginalLibTournamentSetupTests.swift": {
+      "bytes": 31870,
+      "sha256": "1d725af70603434906f46bf7b25d024445f0dca48ec5941f9fa3aec9682e747f"
+    },
+    "build/research/lib-stage-mode/lib-stage-mode-native-verification.json": {
+      "bytes": 5647,
+      "sha256": "83b8ce8c26c2ac315acdfc4dd08ad2bf62436292ab7e98a3bde8263a8c3004fc"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-finite-inputs.json": {
+      "bytes": 60306,
+      "sha256": "d31750fc345a6f606efe882de9970e3f5958daca8fcde45dc9e3fa7b6e9f31f6"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-capture1.json": {
+      "bytes": 1268449644,
+      "sha256": "193498e6e20147cef0cd52b99a62244cd57352081bb4373a54ee392896051a62"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-capture1-job.json": {
+      "bytes": 1108,
+      "sha256": "9e78b9e4358c498f9186b4de5e410f8d1703d6116fb281d78f2dd6b948d9ed62"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-capture1-input-pins.json": {
+      "bytes": 39713,
+      "sha256": "2e82b27ac7c430bdd00e791093a17be388234be6c101428a244979b11cdfdb76"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-capture1-transport.json": {
+      "bytes": 249,
+      "sha256": "c6577656db87a6cb47a391b1bb921742ed99abf4b7338e6f1f4e716bdcac0157"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit1-job.json": {
+      "bytes": 751,
+      "sha256": "2846c43bdf0c5cad504ef3d9b34e3123cf49d28c73922b97662ddd041671ebcc"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-auditor1-error.json": {
+      "bytes": 635,
+      "sha256": "1adb8718656754ec0c3ee21a80312640fcef2f9a6f5c17bb2f00be2e68489276"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit2.json": {
+      "bytes": 3688,
+      "sha256": "15ca177bd223a98d0828b5cfa5167180a735135c4c4bd63ae152dfd21e36d0b2"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit2-job.json": {
+      "bytes": 751,
+      "sha256": "5e84903c23562f351c2f9feed44539f9b4a798975238ca032d77ff5c758124ac"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-pins.json": {
+      "bytes": 85969,
+      "sha256": "ce3acc085963f26f568d1249bed979fa3ad583d4a3d3a51f42bd719668d534cb"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-composition.json": {
+      "bytes": 969,
+      "sha256": "c339ae2734ed66b99bb369e33189b617c9479182b9fd32d9de3b992b4f95c585"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native2-input-pins.json": {
+      "bytes": 85969,
+      "sha256": "f05bcbb438e90ba7cb36a4c2ad272a0c81b73d5a861ee95d01314f895916cc88"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native2-input-composition.json": {
+      "bytes": 829,
+      "sha256": "56796779cedf53372c2eb0841b44eb53d2712587bbb4b9211ac4f5105f1eb33b"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-pins.json": {
+      "bytes": 86535,
+      "sha256": "3ddd4eb07d92e6e18367d06f4b162e9c15e7d79571a47eaa4e8b906a7b426254"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-composition.json": {
+      "bytes": 1404,
+      "sha256": "a323b599d6278cee7faed3b0896b586c5830830121fe033dbac7cc3402b4276b"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-artifact-verification.json": {
+      "bytes": 7662,
+      "sha256": "e6dec2e6b45abdae200282bb05fa54300ee09ac5a99c3dd024678044099f65e3"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-verification.json": {
+      "bytes": 2240,
+      "sha256": "099704a1907d324e32a9bf5f0edee54b69d344aea1ab2a15a65e00f7c908b683"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native-work.json": {
+      "bytes": 3379,
+      "sha256": "e73f4e33fd9aa7505e4a993382cf3fc716761e8eeee865b900b39920259c8c69"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-capture1.log": {
+      "bytes": 25812,
+      "sha256": "9528ba82d6abd353d43ac47e9cea0f6c6993751ec1ced579872d8daebf82c4a0"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit1.py": {
+      "bytes": 26480,
+      "sha256": "28440f42de446b84a74339e1e90979f3372d61e28d8fc16215fedbf37abcc449"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit1.log": {
+      "bytes": 537,
+      "sha256": "c852ac0032919ba168b74573d48bc8d956fc1cd152d580dfcfee52fdf3e1704b"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-source-audit2.py": {
+      "bytes": 27057,
+      "sha256": "322742559e43ded794a81c27bd4ce7631adff267d9f15102789b85eeddec13c5"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native1.log": {
+      "bytes": 2456,
+      "sha256": "66b3543687fe242932f638d066a3e864fec07b82f81b2362ba596048eaaa7893"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native2.log": {
+      "bytes": 19544,
+      "sha256": "a83bf8e40dcc49ef442f44eb07b429e0efb24e3515914b5acfee508960c02298"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-packaged.log": {
+      "bytes": 1493,
+      "sha256": "5025037c59d61af7681728549eb1df3e811f046158297427f111aeab46f3bc1d"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native1-owned-inputs.tar.gz": {
+      "bytes": 15434,
+      "sha256": "85f9b5319c50cda15b399ac156b1a8bc343317dbee32e985d2bc18b690619803"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-native2-owned-inputs.tar.gz": {
+      "bytes": 4452,
+      "sha256": "f863ad829bbe0e031a6267ed6f0f164c9e93a7d378c972b79933e559a6849349"
+    },
+    "build/research/lib-tournament-setup/lib-tournament-setup-packaged-fixture-inputs.tar.gz": {
+      "bytes": 125260983,
+      "sha256": "0c18d81b2d9228008ca108e3e3a1a5cb83830f4dfe37eaba86f4f99fcb4c1784"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part0.json": {
+      "bytes": 64245640,
+      "sha256": "d4131dcbab12d5412d2cb3c0e331103b5683378c9f6a404c7ff2a9391175958c"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part1.json": {
+      "bytes": 64736872,
+      "sha256": "c2e433fd092d51959ec6d369aef9b4bf99f6c8395c9062419c114c9f7c95c643"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part2.json": {
+      "bytes": 36404488,
+      "sha256": "21d78c6dd3562f427cd486ec60447b540239d6a98b52803c7a8c5017609834f4"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup.json": {
+      "bytes": 326,
+      "sha256": "3e76321ea9bb076657e23e2106f9cbe3951bf3a9b9191b7582bc293ff90e242b"
+    }
+  }
+}

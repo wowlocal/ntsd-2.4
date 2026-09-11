@@ -1,6 +1,6 @@
 import Foundation
 
-public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude }
+public enum OriginalCharacterScreenExit: String, Codable, Sendable { case returned, selectionStage, matchPrelude, tournamentPrelude }
 
 public struct OriginalCharacterScreenCheckpoint: Equatable, Sendable {
     public let pc: UInt32, seat: Int
@@ -143,6 +143,12 @@ public enum OriginalCharacterScreen {
         }
         guard candidate.actors.count == 400 else { throw error("Actor pool extent") }
         let mode = try word(0x451160),menu = try word(0x44d020)
+        if (20...50).contains(menu) {
+            let result=try OriginalTournamentSetup.advance(state:&candidate,libraryText:&library,target:target,input:input,
+                fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+            if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
+            return finish(result)
+        }
         guard try !(mode == 5 && word(0x450c2c) == 0),![10,300].contains(menu),
               !(20...50).contains(menu),!(120...150).contains(menu) else { throw error("Other menu dispatcher") }
         if menu == 3 {

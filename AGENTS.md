@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Tournament setup/mode2: [LIB_TOURNAMENT_SETUP](docs/research/LIB_TOURNAMENT_SETUP.md).**
+373source/native calls match:372actual422ab8ret4+1BEFORE4338c3 bracket entry.
+Actual mode2 routes menu20/432ab0, NOT menu3. Primary229 retains Naruto17/Sasuke21
+humans+6RandomCPUs; control144 all8CPUs. Menus20..25 cover controller renumbering/
+backtracking,11shufflepasses each, f9 reroll/reselect, settings/music and quit10.
+2200shuffleRNG=1100swaps;56livef9lists/100musicdraws/1992one-byte labels verify.
+Raw DAT/BMP supply42small Object+728 operands; Native uses its loaded catalog.
+Label44d31c writes one byte, retaining file-backedNUL44d31d; no source stack import.
+Synthetic45116c atlas aliases451178; not original pixels. Start remains unreturned.
+6107points/5190950records/15613950110bytes,334197stores/423419instructionreads/
+5910APIreads/15781helpers/5824semanticwords/2782blobs independently verify.
+2710starts=2324EXE+51lib+335CRT;51113events/3120undefinedbitmapreads keep masks.
+Source1terminal0 72.981s. Native1guard missingtry and auditor1wrong final-arena
+assertion are preserved; no game/expected/comparator correction.17ordinary+2
+special arena positions mean21presses end2; District was visited at19th press.
+Raw6tests206.504s/build259.46s includes Tournament70.375s+Stage71.264s+VS64.865s.
+Packaged2tests66.058s/build0.36s pass without raw override; both late rollbacks.
+267oldfixtures unchanged,271current;4new165387326bytes restore1268449644rawbytes.
+All674package/recursivearchive/frozen/pending/foreign bytes verified. Studyjobs
+terminal, Native linked, noUIclaim. Catalog5samePython78863 live, last12Objects.
+Frozen acceptance: build/research/lib-tournament-setup/lib-tournament-setup-native-verification.json.
+NEXT Tournament bracket26/prelude, Team Tournament434ab0, War; own initialized
+library/catalog/menu/prelude/outer-loop/app join. Full goal remains open.
+
 **Library Stage/mode1: [LIB_STAGE_MODE](docs/research/LIB_STAGE_MODE.md).**
 279source/native calls match:277actual422ab8ret4+2before42cf8a. Two retained
 chains preserve Naruto17/Sasuke21/team1, zero/twoCPUs, countwrap/cancel/backtrack,
