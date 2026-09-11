@@ -48,6 +48,31 @@ false positives will not occur.
 
 ## Current research status
 
+**Team Tournament preparation: [LIB_TEAM_TOURNAMENT_PREPARATION](docs/research/LIB_TEAM_TOURNAMENT_PREPARATION.md).**
+210whole436fb5ret12+422ab8ret4 matches:154menu-only+56preparations.22fresh401
+constructor parents/8822results; own137Object/101BG rebuild and126geometry words.
+Two87human/69mixed chains plus54controlled confirmations cover17arena triples,
+99 and both109random outcomes.34bridges retain assignments without a played fight;
+actual CPU re-placement gives34x4/6x6/16x8 Actors,300total, four identities each.
+Do not claim224 or56ordinary four-Actor battles. Normal result clears assignments.
+Whole date/_2on2_/phase2SemiFinal/4Final/default names,26Start recording outputs,
+10a/10b placement and44d034-before450bbc order match.302Release/free pairs,
+649bitmap constructors/10339API requests,56recordings/363533632bytes+masks.
+All5426points/5827637records/28589773748bytes+masks,
+6551690stores/1123172instruction reads/6719API reads/59951helpers,
+4208starts/5240blobs/210atomic cases audit. Unknown masks preserved.
+Raw8tests339.02s/build276.18s include377Team bracket/51Arena release;
+packaged3tests132.8s/build0.38s. Six late rollback points and missing
+live release rejection pass. Source-wait wrapper/audit1format/audit2Actor-count/
+optional event-counter errors preserved; no source expected or Native game changes.
+Frozen plan/producer stay unchanged.290oldfixtures unchanged;295current/715package
+and archive bytes verified. Allstudyjobs terminal. Catalog5 also terminal at
+unchanged6GiB researchStorageLimit:28complete Objects/29thpending, nofullreturn.
+All48855packedparts/23754blobs/890inputpins verify; no new28-Object Native run.
+Three old Native archives3708467200bytes preserved on X5 with canonical symlinks.
+Never restart a completed source or lower reserve. NEXT War, own catalog/library/outerloop/app.
+Fullmatch/game/network/window/input/audio/Windows/cleanMac goal remains open.
+
 **Team Tournament bracket: [LIB_TEAM_TOURNAMENT_BRACKET](docs/research/LIB_TEAM_TOURNAMENT_BRACKET.md).**
 377 source/native calls:375whole436fb5ret12+422ab8ret4,2BEFORE436747 after actual
 CPU placement. Three fresh87human/69mixed/166CPU chains plus55controlled entries;

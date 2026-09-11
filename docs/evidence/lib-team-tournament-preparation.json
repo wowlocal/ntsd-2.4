@@ -1,0 +1,3074 @@
+{
+  "scope": "Team Tournament436747 preparation composed through210 whole library/menu caller returns:154 menu-only and56 preparations, with17 retained ordinary-arena load/release/reload sequences.",
+  "accepted": true,
+  "base": "0896c744c7da0011dbc7821330bc0a05e400053b",
+  "fullGoalComplete": false,
+  "referenceArtifacts": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d"
+  },
+  "environment": "Pinned original EXE/lib.dll/VC80 and DAT/BMP/DIB resources under controlled Unicorn2.1.4/CW023f with declared time/allocator/COM/GDI responses. Native Swift reconstructs its own catalog, Actors, geometry, strings and recording buffers; no original execution at runtime.",
+  "gameBehavior": [
+    "date/_2on2_/SemiFinal/Final/default replay naming and Start recording output",
+    "participant HP/state/team/Object/position initialization with109/10a/10b RNG",
+    "whole retained arena surface Release/free, stale tail pointers and reload",
+    "whole mode3 recording allocation/free and all buffers/masks",
+    "actual enclosing ret12/ret4 and current-call rollback"
+  ],
+  "finiteManifestSHA256": "a05f1800a03d7ad8b3ca127401841730a01357fc745b9a7af31b811a13d2b7dd",
+  "sourceAudit": {
+    "scope": "Read-only audit of whole Team Tournament preparation and retained menu calls.\nPinned original EXE/lib/VC80/DAT/BMP evidence from controlled Unicorn2.1.4;\nno execution, fault continuation, expected edits or Windows/device claim.\nReconstruct all recorded storage from declared inputs and actual writes, checking\nreads/masks, every complete checkpoint/final record, allocations and true ABI\nreturns. Verify Actor-constructor provenance, full replay reads and 109/10a/10b,\ndate/local string backing and actual436afa rootSP10 with pending12arguments.\nLIB_TEAM_TOURNAMENT_PREPARATION_PLAN.md defines finite acceptance and open boundaries.\n",
+    "source": "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+    "rawBytes": 2116304179,
+    "rawSHA256": "b9d2cbb7489d12ed4fbc05beb42d3a9d5be97099b110a6a57910f0202f1133d1",
+    "constructorReturns": 8822,
+    "stores": 6551690,
+    "storedBytes": 22748385,
+    "instructionReads": 1123172,
+    "instructionReadBytes": 3665214,
+    "pointRecords": 5827637,
+    "pointBytes": 28589773748,
+    "points": 5426,
+    "APIReads": 6719,
+    "APIReadBytes": 83281,
+    "helperReturns": 59951,
+    "finalRecords": 225850,
+    "finalBytes": 1293553012,
+    "preparationPoints": 392,
+    "recordingReads": 407480,
+    "recordingReadBytes": 1104512,
+    "CPUPlacementStores": 252,
+    "preparationsWith4Actors": 34,
+    "preparedParticipants": 300,
+    "independentlyExpectedBitmapAllocations": 649,
+    "wholePreparations": 56,
+    "recordingBytes": 363533632,
+    "bitmapAllocations": 649,
+    "controlledBridges": 34,
+    "knownReleaseReads": 1208,
+    "releasePairs": 302,
+    "staleTailReloads": 17,
+    "recordingNoticeFormats": 26,
+    "preparationsWith6Actors": 6,
+    "preparationsWith8Actors": 16,
+    "atomicCases": 210,
+    "randomStreams": {
+      "0x103": 16,
+      "0x10a": 300,
+      "0x10b": 300,
+      "0x109": 2
+    },
+    "instructionStarts": 4208,
+    "blobs": 5240,
+    "blobBytes": 506767972,
+    "unknownReads": [
+      {
+        "pc": "0x41bcaa",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x41bcbb",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x429744",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x429756",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x43ee56",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 891
+      },
+      {
+        "pc": "0x4450b2",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 1733
+      },
+      {
+        "pc": "0x434ab6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x5001202c",
+        "bytes": 4,
+        "count": 84
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x5001202c",
+        "bytes": 4,
+        "count": 84
+      },
+      {
+        "pc": "0x4028a6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 210
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7403402c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7403402c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7404602c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7404602c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7403c02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7403c02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7402802c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7402802c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7404a02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7404a02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7403e02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7403e02c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7403002c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7403002c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7405202c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7405202c",
+        "bytes": 4,
+        "count": 64
+      },
+      {
+        "pc": "0x401da6",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 2
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7203402c",
+        "bytes": 4,
+        "count": 10
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7203402c",
+        "bytes": 4,
+        "count": 10
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7204602c",
+        "bytes": 4,
+        "count": 14
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7204602c",
+        "bytes": 4,
+        "count": 14
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7203c02c",
+        "bytes": 4,
+        "count": 4
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7203c02c",
+        "bytes": 4,
+        "count": 4
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7202802c",
+        "bytes": 4,
+        "count": 4
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7202802c",
+        "bytes": 4,
+        "count": 4
+      },
+      {
+        "pc": "0x40c042",
+        "address": "0x44eea4",
+        "bytes": 4,
+        "count": 37
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7402202c",
+        "bytes": 4,
+        "count": 216
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7402202c",
+        "bytes": 4,
+        "count": 216
+      },
+      {
+        "pc": "0x43f04b",
+        "address": "0x7402a02c",
+        "bytes": 4,
+        "count": 216
+      },
+      {
+        "pc": "0x43f183",
+        "address": "0x7402a02c",
+        "bytes": 4,
+        "count": 216
+      }
+    ],
+    "nativeCompared": false,
+    "windowsVerified": false
+  },
+  "eventSummary": {
+    "scope": "Read-only event and instruction union counts from all210 immutable atomic source cases, no source re-execution or Native claim",
+    "events": 81470,
+    "bitmapAPIRequests": 10339,
+    "bitmapConstructors": 649,
+    "exeInstructionStarts": 3680,
+    "libraryInstructionStarts": 51,
+    "crtInstructionStarts": 477,
+    "eventKinds": {
+      "startup": 4598,
+      "draw": 3220,
+      "read": 20420,
+      "clip": 3220,
+      "blit": 3220,
+      "fill": 1178,
+      "getDC": 1576,
+      "setBackgroundMode": 1576,
+      "setTextColor": 1576,
+      "stringLength": 1576,
+      "textOut": 1576,
+      "releaseDC": 1576,
+      "method": 232,
+      "soundRequest": 138,
+      "soundMethod": 414,
+      "candidates": 16,
+      "random": 618,
+      "musicConfiguration": 14,
+      "format": 154,
+      "helper": 10,
+      "createInstance": 2,
+      "queryInterface": 8,
+      "createFile": 2,
+      "allocate": 2,
+      "convert": 2,
+      "closeHandle": 2,
+      "audioVolumeRead": 2,
+      "localTime": 56,
+      "reconstruct": 21580,
+      "releaseLayers": 952,
+      "loadLayers": 37,
+      "preparationBitmap": 11637,
+      "resetInput": 56,
+      "replayEntry": 56,
+      "free": 56,
+      "calloc": 56,
+      "timer": 56
+    },
+    "preparations": [
+      {
+        "index": 86,
+        "label": "preparation-prepare-match-human",
+        "generation": 0,
+        "events": 916,
+        "bitmapEvents": 255,
+        "bitmapConstructors": 15,
+        "bitmapAPIRequests": 225
+      },
+      {
+        "index": 155,
+        "label": "preparation-prepare-match-mixed",
+        "generation": 0,
+        "events": 924,
+        "bitmapEvents": 255,
+        "bitmapConstructors": 15,
+        "bitmapAPIRequests": 225
+      },
+      {
+        "index": 156,
+        "label": "controlled-team-preparation-0",
+        "generation": 0,
+        "events": 1071,
+        "bitmapEvents": 255,
+        "bitmapConstructors": 15,
+        "bitmapAPIRequests": 225
+      },
+      {
+        "index": 157,
+        "label": "controlled-team-preparation-0-release",
+        "generation": 1,
+        "events": 636,
+        "bitmapEvents": 30,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 30
+      },
+      {
+        "index": 158,
+        "label": "controlled-team-preparation-0-reload",
+        "generation": 2,
+        "events": 862,
+        "bitmapEvents": 255,
+        "bitmapConstructors": 15,
+        "bitmapAPIRequests": 225
+      },
+      {
+        "index": 159,
+        "label": "controlled-team-preparation-1",
+        "generation": 0,
+        "events": 1290,
+        "bitmapEvents": 459,
+        "bitmapConstructors": 27,
+        "bitmapAPIRequests": 405
+      },
+      {
+        "index": 160,
+        "label": "controlled-team-preparation-1-release",
+        "generation": 1,
+        "events": 681,
+        "bitmapEvents": 54,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 54
+      },
+      {
+        "index": 161,
+        "label": "controlled-team-preparation-1-reload",
+        "generation": 2,
+        "events": 1093,
+        "bitmapEvents": 459,
+        "bitmapConstructors": 27,
+        "bitmapAPIRequests": 405
+      },
+      {
+        "index": 162,
+        "label": "controlled-team-preparation-2",
+        "generation": 0,
+        "events": 1053,
+        "bitmapEvents": 221,
+        "bitmapConstructors": 13,
+        "bitmapAPIRequests": 195
+      },
+      {
+        "index": 163,
+        "label": "controlled-team-preparation-2-release",
+        "generation": 1,
+        "events": 660,
+        "bitmapEvents": 26,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 26
+      },
+      {
+        "index": 164,
+        "label": "controlled-team-preparation-2-reload",
+        "generation": 2,
+        "events": 840,
+        "bitmapEvents": 221,
+        "bitmapConstructors": 13,
+        "bitmapAPIRequests": 195
+      },
+      {
+        "index": 165,
+        "label": "controlled-team-preparation-3",
+        "generation": 0,
+        "events": 1214,
+        "bitmapEvents": 391,
+        "bitmapConstructors": 23,
+        "bitmapAPIRequests": 345
+      },
+      {
+        "index": 166,
+        "label": "controlled-team-preparation-3-release",
+        "generation": 1,
+        "events": 659,
+        "bitmapEvents": 46,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 46
+      },
+      {
+        "index": 167,
+        "label": "controlled-team-preparation-3-reload",
+        "generation": 2,
+        "events": 1005,
+        "bitmapEvents": 391,
+        "bitmapConstructors": 23,
+        "bitmapAPIRequests": 345
+      },
+      {
+        "index": 168,
+        "label": "controlled-team-preparation-4",
+        "generation": 0,
+        "events": 977,
+        "bitmapEvents": 153,
+        "bitmapConstructors": 9,
+        "bitmapAPIRequests": 135
+      },
+      {
+        "index": 169,
+        "label": "controlled-team-preparation-4-release",
+        "generation": 1,
+        "events": 638,
+        "bitmapEvents": 18,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 18
+      },
+      {
+        "index": 170,
+        "label": "controlled-team-preparation-4-reload",
+        "generation": 2,
+        "events": 780,
+        "bitmapEvents": 153,
+        "bitmapConstructors": 9,
+        "bitmapAPIRequests": 135
+      },
+      {
+        "index": 171,
+        "label": "controlled-team-preparation-5",
+        "generation": 0,
+        "events": 1128,
+        "bitmapEvents": 289,
+        "bitmapConstructors": 17,
+        "bitmapAPIRequests": 255
+      },
+      {
+        "index": 172,
+        "label": "controlled-team-preparation-5-release",
+        "generation": 1,
+        "events": 675,
+        "bitmapEvents": 34,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 34
+      },
+      {
+        "index": 173,
+        "label": "controlled-team-preparation-5-reload",
+        "generation": 2,
+        "events": 915,
+        "bitmapEvents": 289,
+        "bitmapConstructors": 17,
+        "bitmapAPIRequests": 255
+      },
+      {
+        "index": 174,
+        "label": "controlled-team-preparation-6",
+        "generation": 0,
+        "events": 952,
+        "bitmapEvents": 136,
+        "bitmapConstructors": 8,
+        "bitmapAPIRequests": 120
+      },
+      {
+        "index": 175,
+        "label": "controlled-team-preparation-6-release",
+        "generation": 1,
+        "events": 622,
+        "bitmapEvents": 16,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 16
+      },
+      {
+        "index": 176,
+        "label": "controlled-team-preparation-6-reload",
+        "generation": 2,
+        "events": 743,
+        "bitmapEvents": 136,
+        "bitmapConstructors": 8,
+        "bitmapAPIRequests": 120
+      },
+      {
+        "index": 177,
+        "label": "controlled-team-preparation-7",
+        "generation": 0,
+        "events": 1171,
+        "bitmapEvents": 340,
+        "bitmapConstructors": 20,
+        "bitmapAPIRequests": 300
+      },
+      {
+        "index": 178,
+        "label": "controlled-team-preparation-7-release",
+        "generation": 1,
+        "events": 667,
+        "bitmapEvents": 40,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 40
+      },
+      {
+        "index": 179,
+        "label": "controlled-team-preparation-7-reload",
+        "generation": 2,
+        "events": 974,
+        "bitmapEvents": 340,
+        "bitmapConstructors": 20,
+        "bitmapAPIRequests": 300
+      },
+      {
+        "index": 180,
+        "label": "controlled-team-preparation-8",
+        "generation": 0,
+        "events": 1291,
+        "bitmapEvents": 459,
+        "bitmapConstructors": 27,
+        "bitmapAPIRequests": 405
+      },
+      {
+        "index": 181,
+        "label": "controlled-team-preparation-8-release",
+        "generation": 1,
+        "events": 688,
+        "bitmapEvents": 54,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 54
+      },
+      {
+        "index": 182,
+        "label": "controlled-team-preparation-8-reload",
+        "generation": 2,
+        "events": 1078,
+        "bitmapEvents": 459,
+        "bitmapConstructors": 27,
+        "bitmapAPIRequests": 405
+      },
+      {
+        "index": 183,
+        "label": "controlled-team-preparation-9",
+        "generation": 0,
+        "events": 1248,
+        "bitmapEvents": 425,
+        "bitmapConstructors": 25,
+        "bitmapAPIRequests": 375
+      },
+      {
+        "index": 184,
+        "label": "controlled-team-preparation-9-release",
+        "generation": 1,
+        "events": 663,
+        "bitmapEvents": 50,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 50
+      },
+      {
+        "index": 185,
+        "label": "controlled-team-preparation-9-reload",
+        "generation": 2,
+        "events": 1039,
+        "bitmapEvents": 425,
+        "bitmapConstructors": 25,
+        "bitmapAPIRequests": 375
+      },
+      {
+        "index": 186,
+        "label": "controlled-team-preparation-10",
+        "generation": 0,
+        "events": 909,
+        "bitmapEvents": 85,
+        "bitmapConstructors": 5,
+        "bitmapAPIRequests": 75
+      },
+      {
+        "index": 187,
+        "label": "controlled-team-preparation-10-release",
+        "generation": 1,
+        "events": 630,
+        "bitmapEvents": 10,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 10
+      },
+      {
+        "index": 188,
+        "label": "controlled-team-preparation-10-reload",
+        "generation": 2,
+        "events": 712,
+        "bitmapEvents": 85,
+        "bitmapConstructors": 5,
+        "bitmapAPIRequests": 75
+      },
+      {
+        "index": 189,
+        "label": "controlled-team-preparation-11",
+        "generation": 0,
+        "events": 1196,
+        "bitmapEvents": 357,
+        "bitmapConstructors": 21,
+        "bitmapAPIRequests": 315
+      },
+      {
+        "index": 190,
+        "label": "controlled-team-preparation-11-release",
+        "generation": 1,
+        "events": 683,
+        "bitmapEvents": 42,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 42
+      },
+      {
+        "index": 191,
+        "label": "controlled-team-preparation-11-reload",
+        "generation": 2,
+        "events": 983,
+        "bitmapEvents": 357,
+        "bitmapConstructors": 21,
+        "bitmapAPIRequests": 315
+      },
+      {
+        "index": 192,
+        "label": "controlled-team-preparation-12",
+        "generation": 0,
+        "events": 918,
+        "bitmapEvents": 102,
+        "bitmapConstructors": 6,
+        "bitmapAPIRequests": 90
+      },
+      {
+        "index": 193,
+        "label": "controlled-team-preparation-12-release",
+        "generation": 1,
+        "events": 618,
+        "bitmapEvents": 12,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 12
+      },
+      {
+        "index": 194,
+        "label": "controlled-team-preparation-12-reload",
+        "generation": 2,
+        "events": 709,
+        "bitmapEvents": 102,
+        "bitmapConstructors": 6,
+        "bitmapAPIRequests": 90
+      },
+      {
+        "index": 195,
+        "label": "controlled-team-preparation-13",
+        "generation": 0,
+        "events": 1341,
+        "bitmapEvents": 510,
+        "bitmapConstructors": 30,
+        "bitmapAPIRequests": 450
+      },
+      {
+        "index": 196,
+        "label": "controlled-team-preparation-13-release",
+        "generation": 1,
+        "events": 687,
+        "bitmapEvents": 60,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 60
+      },
+      {
+        "index": 197,
+        "label": "controlled-team-preparation-13-reload",
+        "generation": 2,
+        "events": 1144,
+        "bitmapEvents": 510,
+        "bitmapConstructors": 30,
+        "bitmapAPIRequests": 450
+      },
+      {
+        "index": 198,
+        "label": "controlled-team-preparation-14",
+        "generation": 0,
+        "events": 968,
+        "bitmapEvents": 136,
+        "bitmapConstructors": 8,
+        "bitmapAPIRequests": 120
+      },
+      {
+        "index": 199,
+        "label": "controlled-team-preparation-14-release",
+        "generation": 1,
+        "events": 650,
+        "bitmapEvents": 16,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 16
+      },
+      {
+        "index": 200,
+        "label": "controlled-team-preparation-14-reload",
+        "generation": 2,
+        "events": 755,
+        "bitmapEvents": 136,
+        "bitmapConstructors": 8,
+        "bitmapAPIRequests": 120
+      },
+      {
+        "index": 201,
+        "label": "controlled-team-preparation-15",
+        "generation": 0,
+        "events": 1265,
+        "bitmapEvents": 442,
+        "bitmapConstructors": 26,
+        "bitmapAPIRequests": 390
+      },
+      {
+        "index": 202,
+        "label": "controlled-team-preparation-15-release",
+        "generation": 1,
+        "events": 665,
+        "bitmapEvents": 52,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 52
+      },
+      {
+        "index": 203,
+        "label": "controlled-team-preparation-15-reload",
+        "generation": 2,
+        "events": 1056,
+        "bitmapEvents": 442,
+        "bitmapConstructors": 26,
+        "bitmapAPIRequests": 390
+      },
+      {
+        "index": 204,
+        "label": "controlled-team-preparation-16",
+        "generation": 0,
+        "events": 1198,
+        "bitmapEvents": 374,
+        "bitmapConstructors": 22,
+        "bitmapAPIRequests": 330
+      },
+      {
+        "index": 205,
+        "label": "controlled-team-preparation-16-release",
+        "generation": 1,
+        "events": 664,
+        "bitmapEvents": 44,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 44
+      },
+      {
+        "index": 206,
+        "label": "controlled-team-preparation-16-reload",
+        "generation": 2,
+        "events": 1001,
+        "bitmapEvents": 374,
+        "bitmapConstructors": 22,
+        "bitmapAPIRequests": 330
+      },
+      {
+        "index": 207,
+        "label": "controlled-team-preparation-99",
+        "generation": 0,
+        "events": 838,
+        "bitmapEvents": 0,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 0
+      },
+      {
+        "index": 208,
+        "label": "controlled-team-preparation-random-ordinary",
+        "generation": 0,
+        "events": 1072,
+        "bitmapEvents": 255,
+        "bitmapConstructors": 15,
+        "bitmapAPIRequests": 225
+      },
+      {
+        "index": 209,
+        "label": "controlled-team-preparation-random-special",
+        "generation": 0,
+        "events": 831,
+        "bitmapEvents": 0,
+        "bitmapConstructors": 0,
+        "bitmapAPIRequests": 0
+      }
+    ]
+  },
+  "sourceJobs": [
+    {
+      "scope": "Run the finite retained Team Tournament preparation and retained arenas through whole ret12/ret4, four participants/Actor/BG/replay ownership and pinned inputs.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_TEAM_TOURNAMENT_PREPARATION_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 16429,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_team_tournament_preparation.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-probe1.json",
+        "--controlled-only",
+        "--limit",
+        "3"
+      ],
+      "startedUTC": "2026-09-11T15:55:57.365526+00:00",
+      "inputPins": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-probe1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 12.376,
+      "endedUTC": "2026-09-11T15:56:09.739896+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-probe1.json": {
+          "bytes": 66360227,
+          "sha256": "409381ad524776ee29f61a39cce5e9e73959fe8f743acfac3cefa0242ea1d3c6"
+        }
+      },
+      "name": "probe1",
+      "session": 61975,
+      "terminalChunk": "bcac6b"
+    },
+    {
+      "scope": "Run the finite retained Team Tournament preparation and retained arenas through whole ret12/ret4, four participants/Actor/BG/replay ownership and pinned inputs.\nPinned NTSD EXE/lib.dll instructions run only in the controlled Unicorn research harness.\nScope: LIB_TEAM_TOURNAMENT_PREPARATION_PLAN.md. No live producer modification/restart.\n",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "status": "terminal",
+      "pid": 16578,
+      "command": [
+        "uv",
+        "run",
+        "tools/oracle_lib_team_tournament_preparation.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json"
+      ],
+      "startedUTC": "2026-09-11T15:56:54.156351+00:00",
+      "inputPins": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 266.752,
+      "endedUTC": "2026-09-11T16:01:20.905527+00:00",
+      "inputsUnchanged": true,
+      "artifacts": {
+        "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json": {
+          "bytes": 2116304179,
+          "sha256": "b9d2cbb7489d12ed4fbc05beb42d3a9d5be97099b110a6a57910f0202f1133d1"
+        }
+      },
+      "name": "capture1",
+      "session": 5295,
+      "terminalChunk": "4e0185"
+    }
+  ],
+  "nativeJobs": [
+    {
+      "name": "native1",
+      "pid": 18307,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTeamTournamentPreparationTests|OriginalLibTeamTournamentBracketTests|OriginalLibTournamentArenaReleaseTests"
+      ],
+      "startedUTC": "2026-09-11T16:03:59.156362+00:00",
+      "temporaryDirectory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-team-tournament-preparation/native-temporary/",
+      "exitCode": 0,
+      "elapsedSeconds": 618.61,
+      "endedUTC": "2026-09-11T16:14:17.785951+00:00",
+      "session": 86646
+    },
+    {
+      "name": "packaged",
+      "scope": "Run Team preparation tests from the lossless packaged fixture on the exact passing isolated Core, without raw overrides or original execution.",
+      "pid": 22011,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalLibTeamTournamentPreparationTests"
+      ],
+      "startedUTC": "2026-09-11T16:27:17.086320+00:00",
+      "inputFiles": 715,
+      "manifest": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-packaged-input-pins.json",
+      "exitCode": 0,
+      "elapsedSeconds": 135.609,
+      "endedUTC": "2026-09-11T16:29:32.690459+00:00",
+      "temporaryDirectory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-team-tournament-preparation/packaged-temporary"
+    }
+  ],
+  "auditJobs": [
+    {
+      "scope": "Independent read-only complete Team preparation trace/read/lifetime/Actor/arena/replay audit; source1 terminal, no original execution or expected-byte edits.",
+      "status": "terminal",
+      "pid": 18301,
+      "startedUTC": "2026-09-11T16:03:57.695568+00:00",
+      "command": [
+        "python3",
+        "/Users/michael/Developer/ntsd-2.4/tools/verify_lib_team_tournament_preparation.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-audit1.json"
+      ],
+      "verifierSHA256": "a27a0e859c65ccdf1b67bbe93ead198d9532f20880d28500734fb050587424f9",
+      "exitCode": 1,
+      "endedUTC": "2026-09-11T16:05:30.262744+00:00",
+      "elapsedSeconds": 92.548,
+      "verifierUnchanged": true,
+      "name": "audit1",
+      "session": 93571,
+      "terminalChunk": "fdc1bd"
+    },
+    {
+      "scope": "Independent read-only complete Team preparation trace/read/lifetime/Actor/arena/replay audit; source1 terminal, no original execution or expected-byte edits.",
+      "status": "terminal",
+      "pid": 19362,
+      "startedUTC": "2026-09-11T16:10:11.661685+00:00",
+      "command": [
+        "python3",
+        "/Users/michael/Developer/ntsd-2.4/tools/verify_lib_team_tournament_preparation.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-audit2.json"
+      ],
+      "verifierSHA256": "96c5e9c3facaa05c205de24b0ac3b3c601777f44504c064dd3df9880336be286",
+      "exitCode": 1,
+      "endedUTC": "2026-09-11T16:12:05.298561+00:00",
+      "elapsedSeconds": 113.638,
+      "verifierUnchanged": true,
+      "name": "audit2",
+      "session": 85151
+    },
+    {
+      "scope": "Independent read-only complete Team preparation trace/read/lifetime/Actor/arena/replay audit; source1 terminal, no original execution or expected-byte edits.",
+      "status": "terminal",
+      "pid": 20886,
+      "startedUTC": "2026-09-11T16:20:27.591365+00:00",
+      "command": [
+        "python3",
+        "/Users/michael/Developer/ntsd-2.4/tools/verify_lib_team_tournament_preparation.py",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-audit3.json"
+      ],
+      "verifierSHA256": "7b565eab85302b85c0de0d3b128da3e8b5f20b8ed6e7853bec5e978dbe201aed",
+      "exitCode": 0,
+      "endedUTC": "2026-09-11T16:24:17.913994+00:00",
+      "elapsedSeconds": 230.356,
+      "verifierUnchanged": true,
+      "name": "audit3",
+      "session": 78137
+    }
+  ],
+  "nativeRaw": {
+    "tests": 8,
+    "seconds": 339.02,
+    "buildSeconds": 276.18
+  },
+  "nativePackaged": {
+    "tests": 3,
+    "seconds": 132.8,
+    "buildSeconds": 0.38
+  },
+  "artifactVerification": {
+    "summary": {
+      "cases": 210,
+      "ends": {
+        "returned": 210
+      }
+    },
+    "timeUTC": "2026-09-11T16:26:52.813918+00:00",
+    "files": 710,
+    "priorFixturesUnchanged": 290,
+    "fixturePins": 295,
+    "rawBytes": 2116304179,
+    "rawSHA256": "b9d2cbb7489d12ed4fbc05beb42d3a9d5be97099b110a6a57910f0202f1133d1",
+    "packedBytes": 200312305,
+    "packedFiles": {
+      "original-lib-team-tournament-preparation-part0.json": {
+        "bytes": 59527208,
+        "sha256": "9484466183f68386d03aab45ddcd28b2da65aa825bb5caf6bffc2008b6dd37d6"
+      },
+      "original-lib-team-tournament-preparation-part1.json": {
+        "bytes": 62245924,
+        "sha256": "f28a2abe97668f6562ea608dcd2cc81656341481f96bbedec69dd8480861b5b9"
+      },
+      "original-lib-team-tournament-preparation-part2.json": {
+        "bytes": 55828892,
+        "sha256": "6ef91232d185bed2722a6bc2663e1e2e8b988dd1eb700794f375a374aadf6231"
+      },
+      "original-lib-team-tournament-preparation-part3.json": {
+        "bytes": 22709868,
+        "sha256": "374692d9fafe690054ca3932ae80f5f7d9abf21f75aff62c345a6d4eeab38fe1"
+      },
+      "original-lib-team-tournament-preparation.json": {
+        "bytes": 413,
+        "sha256": "e519ad4fdcbf7b10b8bc94189ab3f16f75fe9e3f1a605bcab56e97661ba82d92"
+      }
+    },
+    "fullBytesAndJSONEqual": true,
+    "allNativeInputBytesAndArchiveCompositionVerified": true,
+    "archives": {
+      "build/research/mode-panel-screen-packaged-inputs.tar.gz": {
+        "sha256": "35c3b3d90e83aef994d8029aad234885ee83ecfc788cd08636ad222fd37d8a5c",
+        "bytes": 924819029,
+        "files": 643
+      },
+      "build/research/lib-menu-continuation-native1-owned-inputs.tar.gz": {
+        "sha256": "19095a4d44eee2d0d8c83677cd26d6347357581bf2fff100ed34d672e9bcf539",
+        "bytes": 7304,
+        "files": 3
+      },
+      "build/research/lib-menu-continuation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "fea4364cc6b8d7eab169be97d39db4edd3ba5b80caec6c17df4ced118940b162",
+        "bytes": 2574758,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "86a9db3d520f9de2e22d270680049b0a6d27899dca21e7fd6ab0cf476c5ca8c6",
+        "bytes": 7507,
+        "files": 2
+      },
+      "build/research/fresh-library-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "3c2a9ddb35355253b8ba6e75b4e29d188d92666b0ce6d8a93ab034c0ba9d469a",
+        "bytes": 7012,
+        "files": 1
+      },
+      "build/research/fresh-library-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "424d1729a2979313963dd4f4c3c87bdcbb6ce5de96b37ca599c80fe3cafeeb17",
+        "bytes": 3277477,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-native1-owned-inputs.tar.gz": {
+        "sha256": "6e9ec045e040f64c2905b86e53110e7bd4383e4dcf56f7c1a380402239e1211d",
+        "bytes": 11201,
+        "files": 3
+      },
+      "build/research/fresh-character-menu-native2-owned-inputs.tar.gz": {
+        "sha256": "6cd55b4409953501f162a820ee1b3af8836946439b90ae9545c8780acbbebe55",
+        "bytes": 6570,
+        "files": 1
+      },
+      "build/research/fresh-character-menu-packaged-fixture-inputs.tar.gz": {
+        "sha256": "06d125ae67c376cae1e625b0ebae29fcfe37a559118b0997f8da3316f066826b",
+        "bytes": 6566103,
+        "files": 1
+      },
+      "build/research/lib-character-roster-native1-owned-inputs.tar.gz": {
+        "sha256": "0ecc7960e90c2b62e594fa663f52690aefdbdba442fc31be72d151cd98a9717a",
+        "bytes": 7548,
+        "files": 1
+      },
+      "build/research/lib-character-roster-packaged-fixture-inputs.tar.gz": {
+        "sha256": "901caa31889eaad3b01c288c505320af24787b721de64d36237c5c5f92a617d2",
+        "bytes": 25727492,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native1-owned-inputs.tar.gz": {
+        "sha256": "0df7f8b1c0a950a7dfc15eeb7852b075a782ed1c9dad14d85c6cb714829d519f",
+        "bytes": 18168,
+        "files": 6
+      },
+      "build/research/lib-selection-stage-native2-owned-inputs.tar.gz": {
+        "sha256": "65d655eef6ed27a58bd7b06366fc9999772693133f63d0107e7a13591c330503",
+        "bytes": 3463,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native3-owned-inputs.tar.gz": {
+        "sha256": "3045d375ba78b52a7b1a91bee44e4472c65a545f8375331507116defc040477f",
+        "bytes": 8056,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-native4-owned-inputs.tar.gz": {
+        "sha256": "4bb428afcd783a8bb45a9d512abb170e863359918a2b0e1817be43aadec93a29",
+        "bytes": 8352,
+        "files": 1
+      },
+      "build/research/lib-selection-stage-packaged-fixture-inputs.tar.gz": {
+        "sha256": "7de658c5f21dd747f1f50b6511921fc0f2e564f36b78866ce5d18d904a003ca4",
+        "bytes": 101468551,
+        "files": 3
+      },
+      "build/research/lib-selection-commands-native1-owned-inputs.tar.gz": {
+        "sha256": "0d5ea810e42d3278d06278cf2d627bce26f4ffcdd96880088433a4e9c2b48d77",
+        "bytes": 11761,
+        "files": 2
+      },
+      "build/research/lib-selection-commands-packaged-fixture-inputs.tar.gz": {
+        "sha256": "ac3ad8f7b9ac7cf29db9ca6d6330022f9562651a36fd4d6edeebe4f30c39cbc4",
+        "bytes": 136786489,
+        "files": 4
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-native1-owned-inputs.tar.gz": {
+        "sha256": "c7c25f05758e5c5b84d55da9e3461285758fcf8f4c59f2fb632f7989c6dfd7aa",
+        "bytes": 14025,
+        "files": 3
+      },
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-fixture-inputs.tar.gz": {
+        "sha256": "53b21bdc5faad5bdaaf29e3c28ca22b25a88fe10a70fb29ff1c26f6d28962c1a",
+        "bytes": 117142789,
+        "files": 4
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-owned-inputs.tar.gz": {
+        "sha256": "85f9b5319c50cda15b399ac156b1a8bc343317dbee32e985d2bc18b690619803",
+        "bytes": 15434,
+        "files": 3
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-native2-owned-inputs.tar.gz": {
+        "sha256": "f863ad829bbe0e031a6267ed6f0f164c9e93a7d378c972b79933e559a6849349",
+        "bytes": 4452,
+        "files": 1
+      },
+      "build/research/lib-tournament-setup/lib-tournament-setup-packaged-fixture-inputs.tar.gz": {
+        "sha256": "0c18d81b2d9228008ca108e3e3a1a5cb83830f4dfe37eaba86f4f99fcb4c1784",
+        "bytes": 125260983,
+        "files": 4
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native1-owned-inputs.tar.gz": {
+        "sha256": "87251fbf495a560e926ecd706320e3eabadaecfc6eef0b5ca8f66a5c4d637813",
+        "bytes": 22003,
+        "files": 6
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native2-owned-inputs.tar.gz": {
+        "sha256": "dd3e92af5571307549cacde60997bd7b688b31e3b1cb2b5ff432c718755696e6",
+        "bytes": 3458,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native3-owned-inputs.tar.gz": {
+        "sha256": "a97131842ba01928d08432db4ca86d4f123356bb23715dc2f9f8de33ce769942",
+        "bytes": 9076,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native4-owned-inputs.tar.gz": {
+        "sha256": "8d3f8b5da9eca8585440d99272b8425f65b8ab8beaca8638b12b63092cf368fd",
+        "bytes": 9207,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native5-owned-inputs.tar.gz": {
+        "sha256": "babf1534742874b287a0704670f612d1a93175801e7c9c18ac0972c5f6eb72f7",
+        "bytes": 9207,
+        "files": 1
+      },
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-packaged-fixture-inputs.tar.gz": {
+        "sha256": "9fcb06420be5075777714c66e8b8d4a035661b10694022727e041a53ea61fdf7",
+        "bytes": 102442201,
+        "files": 4
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native1-owned-inputs.tar.gz": {
+        "sha256": "51a87a93affcd6381affff3ba06d257b38fab2b6af585c47beec8ebd97cd5020",
+        "bytes": 6740,
+        "files": 3
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native2-owned-inputs.tar.gz": {
+        "sha256": "0ea36dba9e92d661d058dd6dd7a2710ed3eea5c1154e602f56f99f2660251fba",
+        "bytes": 7232,
+        "files": 4
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native3-owned-inputs.tar.gz": {
+        "sha256": "4aa7a6d62b3998d008055f7e5d2f7888e355e10c22ad5310c960d38be99feaf7",
+        "bytes": 19172,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native4-owned-inputs.tar.gz": {
+        "sha256": "9a5d647827f9d5548ad302e0b8be33e36260592d46b1a8f5c53640e417359cd2",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native5-owned-inputs.tar.gz": {
+        "sha256": "7b45fe212ff51b8931e688ca697792f872e77624f1447ed40b6226c0843be9b1",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native6-owned-inputs.tar.gz": {
+        "sha256": "28ccdeed5879c6ae9c49aeb9b2bee83f4271b02cd0465649f0c6ad19923e1836",
+        "bytes": 19175,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native7-owned-inputs.tar.gz": {
+        "sha256": "e73670f0e3c84008690c8eb0ab7a3f49eb8294105074fa8437f6505ed3ebd99a",
+        "bytes": 19884,
+        "files": 6
+      },
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-packaged-fixture-inputs.tar.gz": {
+        "sha256": "50809311f2fe40217e430a313cd7f7c11d94859e4214235ad14b8849aeb5f521",
+        "bytes": 70284593,
+        "files": 3
+      },
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-owned-inputs.tar.gz": {
+        "sha256": "bfd5a1b41e18a5cb736ae8ba25e0b2ddac4cb2b1c74934efba7bb026bee958fa",
+        "bytes": 14227,
+        "files": 3
+      },
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native2-owned-inputs.tar.gz": {
+        "sha256": "bf634fc47178f615f3cdaf702bfc07c23bc93e96f387b5e71cccc435928d6d53",
+        "bytes": 14325,
+        "files": 3
+      },
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-fixture-inputs.tar.gz": {
+        "sha256": "3ad7ac8d201dc57712d601b642fb989f00b38ed6f85981530cd916f2cea4d78b",
+        "bytes": 67191604,
+        "files": 3
+      },
+      "build/research/lib-team-tournament/lib-team-tournament-setup-native1-owned-inputs.tar.gz": {
+        "sha256": "9f252e386603d82ade76343a38ecff060be6e26a7c98366b6c21bcaebe91b29f",
+        "bytes": 15779,
+        "files": 3
+      },
+      "build/research/lib-team-tournament/lib-team-tournament-setup-packaged-fixture-inputs.tar.gz": {
+        "sha256": "260a6c6eb67c2ca957e87e759663b1f4fa4767c764ad06f64223bc5695d4456a",
+        "bytes": 139829901,
+        "files": 4
+      },
+      "build/research/lib-team-tournament-bracket/lib-team-tournament-bracket-native1-owned-inputs.tar.gz": {
+        "sha256": "65fd81f05eecbd729f0e77901d893bd8ec17f7832a733c244f316c874bd96ffd",
+        "bytes": 23999,
+        "files": 7
+      },
+      "build/research/lib-team-tournament-bracket/lib-team-tournament-bracket-packaged-fixture-inputs.tar.gz": {
+        "sha256": "85635d3131443fa3c3985ea1d6e293371861485308c25496075b909564a8fc46",
+        "bytes": 181527001,
+        "files": 5
+      },
+      "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-native1-owned-inputs.tar.gz": {
+        "sha256": "8620c748ffa2a48d473c85fbae74fccf7cf9f3e80daf83dee0cfbe97155ff371",
+        "bytes": 16099,
+        "files": 3
+      }
+    },
+    "compositions": {
+      "build/research/lib-menu-continuation-packaged-input-composition.json": "3808e34a727e9f648e6b299f05915ca20400a5338321a0c1bb186a5b71de1e2d",
+      "build/research/fresh-library-menu-native1-input-composition.json": "610b1938f0a28ec0c71aedee8de9b4eea046831ef15af73f177b6356b66d0726",
+      "build/research/fresh-library-menu-packaged-input-composition.json": "854ab4865ab28a8b5c8ef389634d772529b7e785fc295da61930b3d505d171d3",
+      "build/research/fresh-character-menu-native1-input-composition.json": "d5f4d650ad248d2f870ac900a4c2d117ba103f2fdce62e433293aaeeb411a048",
+      "build/research/fresh-character-menu-packaged-input-composition.json": "7dd04d1cf490a3d38b6be18835756cc4de8e71dfbe88f064d1e6f18a978dbfcb",
+      "build/research/lib-character-roster-packaged-input-composition.json": "b6eb57e70fb5e2a773da3c2e5fab10df25a01a6e2e697c0f6b8c9973a89aac41",
+      "build/research/lib-selection-stage-native1-input-composition.json": "8f5dc6fa4ce17f8ca39e69998d60b266388dcf0039ba82fe6527e15b2db2b1cd",
+      "build/research/lib-selection-stage-native2-input-composition.json": "bdf475c07ea9fcb1d3405509ed44da46099783d778f9e6d2d1d3cd2f5fb8ba22",
+      "build/research/lib-selection-stage-native3-input-composition.json": "5d76916c7019e26c953d8b59886cb52fd81f9280feefb80b9b967200fd8fdcd3",
+      "build/research/lib-selection-stage-packaged-input-composition.json": "81527f47a482f0ffdb3f6bacac91975b0eabbd4a59f0c2865917eb961c98f641",
+      "build/research/lib-selection-commands-packaged-input-composition.json": "c6dc4f5adae97aea4ab9d8194aab867fe5e3643e77c4c8fa60895fa5ddf0a412",
+      "build/research/lib-stage-mode/lib-stage-mode-packaged-input-composition.json": "feb441b67f5cf19515e25e17df50e65b4f63615cffb904a7aa6eee34efc03fe2",
+      "build/research/lib-tournament-setup/lib-tournament-setup-native1-input-composition.json": "c339ae2734ed66b99bb369e33189b617c9479182b9fd32d9de3b992b4f95c585",
+      "build/research/lib-tournament-setup/lib-tournament-setup-packaged-input-composition.json": "a323b599d6278cee7faed3b0896b586c5830830121fe033dbac7cc3402b4276b",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native1-input-composition.json": "531d41136e030c5a623fe2aa533552c250b3f4e1c30f686d502f11e13b3de4c4",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native2-input-composition.json": "4ef92c1df540310a2a9c255ae9310ba689fd578823e0b2487712dbb69a2700be",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native3-input-composition.json": "b4253e6df3a43ba929c3c78d95908e01753e29565de438e00d598f4800006885",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-native4-input-composition.json": "86cd84d54eb11079b79101edb0571590dc591d80f4f545d62efc9440e6b86865",
+      "build/research/lib-tournament-bracket/lib-tournament-bracket-packaged-input-composition.json": "0ec28c55fc4d21fda2e378fad2222cddbae03ce6820e556a99780b6005851f27",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native1-input-composition.json": "d2e4fbcfee76f360894542d1ee59263f4edcd41e7a61b586087131287413acc4",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native2-input-composition.json": "a442b3d569f86416e71f81318c1c88ef756742da9c5ada87f3637b43f5a5f386",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native3-input-composition.json": "ef7156b9cf32da07b7e7f94cfd1f947431cdb630fc39f52b61a5c30482ea28d7",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native4-input-composition.json": "b4a05ed174ce704f284a005088e86afb48a6ce468120c40ccf70f6f125aaab47",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native5-input-composition.json": "fa5178486881118243a6e8a2f168f8387feaf4762343d5450ffe5fa5905d4d5e",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-native6-input-composition.json": "93143bb2dffb13e1a945e37dfcb06eef132b68c2b9373fe7b186f690f2681ab6",
+      "build/research/lib-tournament-preparation/lib-tournament-preparation-packaged-input-composition.json": "7e13bd277382b1230f85c080004b79a4bb78237a03da5383c960235c5766ce4b",
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-native1-input-composition.json": "9a7326b7e74d02f5b11149b8c28de422e82775df9868189981f27dfc48879a8b",
+      "build/research/lib-tournament-arena-release/lib-tournament-arena-release-packaged-input-composition.json": "b9567bd18cc3c72ca7c330caa2092475917a2b94e96d927c27ef5676e01d8931",
+      "build/research/lib-team-tournament/lib-team-tournament-setup-packaged-input-composition.json": "36da7d6f5295771f8ddf76ea5922c89966804ee32b200be14dc67f6e7c298dbb",
+      "build/research/lib-team-tournament-bracket/lib-team-tournament-bracket-packaged-input-composition.json": "921aae296f18f0181d2d89e3835030f04c7ffb36f236f9526a4eb53fc2e4cb54",
+      "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-native1-input-composition.json": "3fb5e5bd753dcba16c678c2b22d32e3beffc9609ae8f9ba4c5dd199e0150579c"
+    }
+  },
+  "packagedVerification": {
+    "timeUTC": "2026-09-11T16:30:16.524963+00:00",
+    "files": 715,
+    "unchangedRawFiles": 710,
+    "composition": {
+      "base": "0896c744c7da0011dbc7821330bc0a05e400053b",
+      "baseComposition": "build/research/lib-team-tournament-bracket/lib-team-tournament-bracket-packaged-input-composition.json",
+      "baseCompositionSHA256": "921aae296f18f0181d2d89e3835030f04c7ffb36f236f9526a4eb53fc2e4cb54",
+      "baseManifest": "build/research/lib-team-tournament-bracket/lib-team-tournament-bracket-packaged-input-pins.json",
+      "ownedArchive": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-native1-owned-inputs.tar.gz",
+      "ownedArchiveSHA256": "8620c748ffa2a48d473c85fbae74fccf7cf9f3e80daf83dee0cfbe97155ff371",
+      "ownedFiles": [
+        "Sources/NTSDCore/OriginalTeamTournamentPreparation.swift",
+        "Tests/NTSDCoreTests/OriginalLibTeamTournamentPreparationTests.swift",
+        "Tests/NTSDCoreTests/OriginalTeamTournamentPreparationSurfaceAdapter.swift"
+      ],
+      "completeManifest": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-packaged-input-pins.json",
+      "files": 715,
+      "layout": "Recursively verified accepted Core plus Team preparation/dispatcher/comparator and lossless multipart fixture",
+      "fixtureArchive": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-packaged-fixture-inputs.tar.gz",
+      "fixtureArchiveSHA256": "b73c9a4d9bb5bdc69affa19a3699efd4b690d6d3ace859d0f80e987bd6b7d6be",
+      "fixtureFiles": [
+        "Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part0.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part1.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part2.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part3.json",
+        "Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation.json"
+      ]
+    },
+    "priorCompleteArchiveAudit": "build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-artifact-verification.json",
+    "allPackageAndArchiveCompositionBytesVerified": true,
+    "allFixturesVerified": 295,
+    "oldFixturesUnchanged": 290,
+    "fullRawBytesAndJSONEqual": true,
+    "preservation": {
+      "foreignHashes": 6,
+      "nativeOwnedPending": 14,
+      "sourceOwnedPending": 3,
+      "application-catalog-frozen-watch40-inputs.json": 886,
+      "application-catalog-control20-parent1-inputs.json": 887,
+      "application-catalog-control20-parent2-inputs.json": 887,
+      "application-catalog-guarded20-inputs.json": 890,
+      "application-catalog-candidate5-resourced-inputs.json": 890
+    }
+  },
+  "rollback": [
+    "late surface release",
+    "wrapper free after release",
+    "replay allocation after earlier side effects",
+    "completed whole recording checkpoint",
+    "enclosing beforeReturn",
+    "bitmap reload after prior release",
+    "explicit unavailable live-arena release continuation: rejection, not another source match"
+  ],
+  "reviewHistory": {
+    "source-static-review": {
+      "scope": "Pre-execution source generation review; no original instructions, manifest or expected result produced before correction",
+      "correction": "RNG tag textual replacement also altered ffffffff/ffff numeric masks in the generated draft. Restored the original32-bit RNG and mapping masks before manifest creation. Retained generator script records the original draft construction.",
+      "sourceExpectedChanged": false
+    },
+    "native-source-wait1-error": {
+      "timeUTC": "2026-09-11T16:03:15.168690+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": 37909,
+      "terminalChunk": "0c7479",
+      "exitCode": 1,
+      "operation": "Prepared isolated710-file package then waited for source terminal job publication, before starting any Swift build/test",
+      "error": "subprocess.CalledProcessError: Command '['ps', '-p', '16578', '-o', 'command=']' returned non-zero exit status 1.",
+      "cause": "Source child had completed all210 calls and exited; capture runner was still hashing/reporting its completed raw output. Native waiter treated the missing child during that handoff as an exception instead of rereading the source runner job.",
+      "sourceRestarted": false,
+      "swiftStarted": false,
+      "sourceExpectedChanged": false,
+      "runnerSHA256": "79a4fb0d7ea96fb604cf636138e395420e52dd1d9d491800672b7b353e6e0f10"
+    },
+    "audit1-recording-notice-error": {
+      "timeUTC": "2026-09-11T16:10:11.534432+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": 93571,
+      "terminalChunk": "fdc1bd",
+      "job": {
+        "scope": "Independent read-only complete Team preparation trace/read/lifetime/Actor/arena/replay audit; source1 terminal, no original execution or expected-byte edits.",
+        "status": "terminal",
+        "pid": 18301,
+        "startedUTC": "2026-09-11T16:03:57.695568+00:00",
+        "command": [
+          "python3",
+          "/Users/michael/Developer/ntsd-2.4/tools/verify_lib_team_tournament_preparation.py",
+          "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+          "--output",
+          "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-audit1.json"
+        ],
+        "verifierSHA256": "a27a0e859c65ccdf1b67bbe93ead198d9532f20880d28500734fb050587424f9",
+        "exitCode": 1,
+        "endedUTC": "2026-09-11T16:05:30.262744+00:00",
+        "elapsedSeconds": 92.548,
+        "verifierUnchanged": true
+      },
+      "error": "AssertionError at verify_lib_team_tournament_preparation.py:190",
+      "case": "controlled-team-preparation-1",
+      "cause": "The verifier assumed all whole-caller sprintf outputs were the two preparation name formats. Actual4029ae also returns Start recording '%s'... for the enabled recording notice. Source/native expected bytes were not changed.",
+      "observedPreparationReturns": [
+        "436795",
+        "436848"
+      ],
+      "observedAdditionalReturn": "4029ae",
+      "sourceRestarted": false
+    },
+    "audit2-active-count-error": {
+      "timeUTC": "2026-09-11T16:20:27.497551+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "job": {
+        "scope": "Independent read-only complete Team preparation trace/read/lifetime/Actor/arena/replay audit; source1 terminal, no original execution or expected-byte edits.",
+        "status": "terminal",
+        "pid": 19362,
+        "startedUTC": "2026-09-11T16:10:11.661685+00:00",
+        "command": [
+          "python3",
+          "/Users/michael/Developer/ntsd-2.4/tools/verify_lib_team_tournament_preparation.py",
+          "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-capture1.json",
+          "--output",
+          "/Users/michael/Developer/ntsd-2.4/build/research/lib-team-tournament-preparation/lib-team-tournament-preparation-audit2.json"
+        ],
+        "verifierSHA256": "96c5e9c3facaa05c205de24b0ac3b3c601777f44504c064dd3df9880336be286",
+        "exitCode": 1,
+        "endedUTC": "2026-09-11T16:12:05.298561+00:00",
+        "elapsedSeconds": 113.638,
+        "verifierUnchanged": true
+      },
+      "error": "AssertionError at len(active)==len(drawX)==len(drawZ)==4",
+      "firstCase": 160,
+      "operation": "Read-only independent audit of immutable controlled Team preparation source corpus",
+      "observations": {
+        "scope": "Read-only actual preparation entry actors and RNG counts from all56 immutable atomic cases; controlled retained bridges are not played fights.",
+        "rows": [
+          {
+            "index": 86,
+            "label": "preparation-prepare-match-human",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 155,
+            "label": "preparation-prepare-match-mixed",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 156,
+            "label": "controlled-team-preparation-0",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 157,
+            "label": "controlled-team-preparation-0-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 158,
+            "label": "controlled-team-preparation-0-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 159,
+            "label": "controlled-team-preparation-1",
+            "generation": 0,
+            "active": [
+              6,
+              7,
+              10,
+              11
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 160,
+            "label": "controlled-team-preparation-1-release",
+            "generation": 1,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 161,
+            "label": "controlled-team-preparation-1-reload",
+            "generation": 2,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 162,
+            "label": "controlled-team-preparation-2",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 163,
+            "label": "controlled-team-preparation-2-release",
+            "generation": 1,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 164,
+            "label": "controlled-team-preparation-2-reload",
+            "generation": 2,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 165,
+            "label": "controlled-team-preparation-3",
+            "generation": 0,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 166,
+            "label": "controlled-team-preparation-3-release",
+            "generation": 1,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 167,
+            "label": "controlled-team-preparation-3-reload",
+            "generation": 2,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 168,
+            "label": "controlled-team-preparation-4",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 169,
+            "label": "controlled-team-preparation-4-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 170,
+            "label": "controlled-team-preparation-4-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 171,
+            "label": "controlled-team-preparation-5",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 172,
+            "label": "controlled-team-preparation-5-release",
+            "generation": 1,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 173,
+            "label": "controlled-team-preparation-5-reload",
+            "generation": 2,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 174,
+            "label": "controlled-team-preparation-6",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 175,
+            "label": "controlled-team-preparation-6-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 176,
+            "label": "controlled-team-preparation-6-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 177,
+            "label": "controlled-team-preparation-7",
+            "generation": 0,
+            "active": [
+              6,
+              7,
+              10,
+              11
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 178,
+            "label": "controlled-team-preparation-7-release",
+            "generation": 1,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 179,
+            "label": "controlled-team-preparation-7-reload",
+            "generation": 2,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 180,
+            "label": "controlled-team-preparation-8",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 181,
+            "label": "controlled-team-preparation-8-release",
+            "generation": 1,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 182,
+            "label": "controlled-team-preparation-8-reload",
+            "generation": 2,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 183,
+            "label": "controlled-team-preparation-9",
+            "generation": 0,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 184,
+            "label": "controlled-team-preparation-9-release",
+            "generation": 1,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 185,
+            "label": "controlled-team-preparation-9-reload",
+            "generation": 2,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 186,
+            "label": "controlled-team-preparation-10",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 187,
+            "label": "controlled-team-preparation-10-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 188,
+            "label": "controlled-team-preparation-10-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 189,
+            "label": "controlled-team-preparation-11",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 190,
+            "label": "controlled-team-preparation-11-release",
+            "generation": 1,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 191,
+            "label": "controlled-team-preparation-11-reload",
+            "generation": 2,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 192,
+            "label": "controlled-team-preparation-12",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 193,
+            "label": "controlled-team-preparation-12-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 194,
+            "label": "controlled-team-preparation-12-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 195,
+            "label": "controlled-team-preparation-13",
+            "generation": 0,
+            "active": [
+              6,
+              7,
+              10,
+              11
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 196,
+            "label": "controlled-team-preparation-13-release",
+            "generation": 1,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 197,
+            "label": "controlled-team-preparation-13-reload",
+            "generation": 2,
+            "active": [
+              6,
+              7,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 198,
+            "label": "controlled-team-preparation-14",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 199,
+            "label": "controlled-team-preparation-14-release",
+            "generation": 1,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 200,
+            "label": "controlled-team-preparation-14-reload",
+            "generation": 2,
+            "active": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 201,
+            "label": "controlled-team-preparation-15",
+            "generation": 0,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 202,
+            "label": "controlled-team-preparation-15-release",
+            "generation": 1,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 203,
+            "label": "controlled-team-preparation-15-reload",
+            "generation": 2,
+            "active": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "assignments": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 204,
+            "label": "controlled-team-preparation-16",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 205,
+            "label": "controlled-team-preparation-16-release",
+            "generation": 1,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 6,
+              "0x10b": 6
+            }
+          },
+          {
+            "index": 206,
+            "label": "controlled-team-preparation-16-reload",
+            "generation": 2,
+            "active": [
+              0,
+              1,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3,
+              2,
+              3,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 8,
+              "0x10b": 8
+            }
+          },
+          {
+            "index": 207,
+            "label": "controlled-team-preparation-99",
+            "generation": 0,
+            "active": [
+              10,
+              11,
+              12,
+              13
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 208,
+            "label": "controlled-team-preparation-random-ordinary",
+            "generation": 0,
+            "active": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "assignments": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "draws": {
+              "0x109": 1,
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          },
+          {
+            "index": 209,
+            "label": "controlled-team-preparation-random-special",
+            "generation": 0,
+            "active": [
+              6,
+              7,
+              10,
+              11
+            ],
+            "assignments": [
+              1,
+              0,
+              2,
+              3
+            ],
+            "draws": {
+              "0x109": 1,
+              "0x10a": 4,
+              "0x10b": 4
+            }
+          }
+        ],
+        "summary": {
+          "activeCounts": {
+            "4": 34,
+            "6": 6,
+            "8": 16
+          },
+          "participants": 300
+        }
+      },
+      "explanation": "The declared retained bridges reenter menu127/counter5 with prior CPU assignments intact. Actual4366c5..436747 repeats CPU placement in the first pair of free human/CPU seats; actual43670a/436711/436736 write assignment/active/Object pointer. Thus six or eight active Actors occur in22 controlled repeat cases; the other34 preparations have four. All56 contain four participant identities. The bridge omits real post-result assignment clearing; this is a controlled resource-lifetime scenario, not reachable ordinary post-fight proof. Native already processes all20 slots and all210 whole calls passed before this audit correction.",
+      "sourceExpectedBytesChanged": false,
+      "nativeChanged": false,
+      "planPreserved": true
+    },
+    "event-summary1-error": {
+      "timeUTC": "2026-09-11T16:22:03.293043+00:00",
+      "thread": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+      "session": 20655,
+      "terminalChunk": "3e80eb",
+      "exitCode": 1,
+      "error": "KeyError: 'kind' in optional bitmap-event metadata counter",
+      "sourceChanged": false,
+      "nativeChanged": false,
+      "operation": "Read-only supplementary event summary of retained atomic case JSON, no source execution; failed before output publication",
+      "correction": "Use get(kind): API event records have request instead of allocation kind."
+    }
+  },
+  "catalogObservation": {
+    "timeUTC": "2026-09-11T16:34:29.895695+00:00",
+    "pythonPID": 78863,
+    "processes": "",
+    "lastObjects": 28,
+    "lastLogLine": "{'chunks': 3248, 'pc': '0x30000270', 'scans': 2959369, 'decoders': 28, 'objects': 28, 'catalogChildren': 0, 'stores': 820142722, 'seconds': 27064.07}",
+    "status": "terminal after28 complete Objects at unchanged6GiB researchStorageLimit; no restart",
+    "terminalVerification": "build/research/application-catalog-candidate5-terminal-verification.json",
+    "terminalVerificationSHA256": "fecf8486ef084d5ae8b122f3d3bf212982b6c7e7f430622b318bf14e3b2c1d4c",
+    "fullReturn": false
+  },
+  "catalogTerminalIntegrity": {
+    "scope": "Read-only integrity verification of the terminal original catalog5 research snapshot.\nPinned NTSD EXE/lib/VC80 runs ended at the unchanged6GiB research-storage guard after28 complete Objects, not a game return. Verify the immutable raw JSON, every embedded blob and every referenced packed trace part, producer/input hashes and terminal process identities. This is storage/provenance evidence only, without replaying original instructions, resuming a fault, changing reserves, Native comparison or Windows/device claims.\n",
+    "timeUTC": "2026-09-11T16:32:14.939176+00:00",
+    "job": {
+      "scope": "Fresh original whole-catalog capture after the recorded storage limit was resolved.\nPinned NTSD/lib/VC80 and original assets, controlled Unicorn; unchanged guarded\nproducer, parent, instructions, APIs and6GiB reserve. Prior candidate4 is terminal\nat researchStorageLimit, not a game return. All old traces remain byte-identical\nAPFS clones. See APPLICATION_CATALOG_STORAGE_PLAN.md. No live restart, silence\nretry, memory/protection corruption, source fault continuation or Windows claim.\n",
+      "name": "candidate5-resourced",
+      "parentIndex": 0,
+      "pid": 78860,
+      "status": "terminal",
+      "command": [
+        "uv",
+        "run",
+        "/Users/michael/Developer/ntsd-2.4/tools/oracle_application_catalog_guarded.py",
+        "--output",
+        "/Users/michael/Developer/ntsd-2.4/build/research/application-catalog-candidate5-resourced.json",
+        "--compact-states",
+        "--max-chunks",
+        "20000",
+        "--checkpoint-every",
+        "20"
+      ],
+      "producerSHA256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4",
+      "startedUTC": "2026-09-11T08:56:40.904466+00:00",
+      "inputManifest": "build/research/application-catalog-candidate5-resourced-inputs.json",
+      "inputManifestSHA256": "01449f3e9390870a7dfa379c1ba2abe503f50cbc55ebcb32bf08f2d020a83515",
+      "exitCode": 0,
+      "elapsedSeconds": 27073.474,
+      "endedUTC": "2026-09-11T16:27:54.315452+00:00"
+    },
+    "session": 70280,
+    "terminalChunk": "edf89a",
+    "terminalProcesses": "  PID  PPID STARTED                      ELAPSED      TIME COMMAND\n",
+    "rawBytes": 205769031,
+    "rawSHA256": "c8ba9595aedf9bf4fbba98ddff9783dd24710fe90c955a28e655f54420fadc61",
+    "blobs": 23754,
+    "decodedBlobBytes": 1942616865,
+    "parts": 48855,
+    "packedBytes": 6183435332,
+    "declaredRawTraceBytes": 196078046836,
+    "traceGroups": {
+      "recordTables": {
+        "parts": 8,
+        "records": 1375,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "writes": {
+        "parts": 16404,
+        "records": 820142722,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "localReads": {
+        "parts": 16851,
+        "records": 842459726,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "catalogReads": {
+        "parts": 3,
+        "records": 91,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "scans": {
+        "parts": 112,
+        "records": 5484325,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "outputCalls": {
+        "parts": 52,
+        "records": 2518351,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "stackStores": {
+        "parts": 15201,
+        "records": 759917695,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "crtStores": {
+        "parts": 221,
+        "records": 10968478,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      },
+      "globalStores": {
+        "parts": 3,
+        "records": 15746,
+        "encoding": "ordered-json-array-zlib-parts-v1"
+      }
+    },
+    "allReferencedPackedBytesHashVerified": true,
+    "allEmbeddedBlobsVerified": true,
+    "wholeDecodedTraceAudit": false,
+    "sourceInputPins": 890,
+    "producerAndInputsUnchanged": true,
+    "objectsReturned": 28,
+    "decodersReturned": 28,
+    "allocatedObjects": 29,
+    "frameAllocations": 7427,
+    "bitmaps": 260,
+    "registeredWaves": 208,
+    "pendingObject": {
+      "sp": 268493196,
+      "returnPC": 4269722,
+      "saved": [
+        1409286144,
+        1879048224,
+        822095872,
+        4488152
+      ],
+      "address": 1215299616,
+      "arguments": [
+        12,
+        0,
+        268493456,
+        822095872
+      ],
+      "eventStart": 72311,
+      "storeStart": 811901178
+    },
+    "dependency": {
+      "kind": "researchStorageLimit",
+      "pc": 805306992,
+      "reservedBytes": 6442450944
+    },
+    "end": "dependency",
+    "diskFreeBytes": 6342500352,
+    "newNativeExecution": false,
+    "fullCatalogReturn": false,
+    "fullGoalComplete": false
+  },
+  "retainedArchiveStorage": {
+    "scope": "Preserve three completed task-owned Native input archives byte-for-byte on X5 and retain canonical paths as symlinks after hash verification. Restore internal headroom after catalog5's unchanged6GiB storage guard fired; never restart it or lower the reserve. No shipping/foreign/reference bytes or archive members change.",
+    "timeUTC": "2026-09-11T16:33:23.176747+00:00",
+    "beforeFreeBytes": 8483229696,
+    "files": [
+      {
+        "path": "build/research/application-catalog-object-file-catalog1-inputs.tar",
+        "target": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-team-tournament-preparation/retained-input-archives/application-catalog-object-file-catalog1-inputs.tar",
+        "bytes": 1236152320,
+        "sha256": "77786018affa1ad174a7c5b41b1210be3ffdf9e39d35f82a899612b379a9d1c0"
+      },
+      {
+        "path": "build/research/application-catalog-object-file-catalog2-prefix-inputs.tar",
+        "target": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-team-tournament-preparation/retained-input-archives/application-catalog-object-file-catalog2-prefix-inputs.tar",
+        "bytes": 1236152320,
+        "sha256": "17051f51bdd0b5ee7d0f461e7c2422e54b212bc0e5af8da0db2476f1ae239400"
+      },
+      {
+        "path": "build/research/application-catalog-object-file-catalog3-weapon-inputs.tar",
+        "target": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-team-tournament-preparation/retained-input-archives/application-catalog-object-file-catalog3-weapon-inputs.tar",
+        "bytes": 1236162560,
+        "sha256": "c8a7f35659e424dc5e4c76c0d87a65193b5ca896694fa00fdaf5fbf562377b01"
+      }
+    ],
+    "sourceJobs": [
+      {
+        "name": "object-file-catalog1",
+        "pid": 71343,
+        "status": "terminal",
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalApplicationCatalogFactoryProbeTests|OriginalApplicationCatalogFileProbeTests|OriginalApplicationCatalogObjectProbeTests|OriginalLoadedCatalogTests|OriginalBackgroundTests|OriginalStageTests|OriginalCatalogTests"
+        ],
+        "start": 1789079590.605422,
+        "exitCode": 0,
+        "end": 1789079866.237221,
+        "verification": {
+          "tests": 21,
+          "seconds": 58.292,
+          "buildSeconds": 215.34,
+          "scope": "3complete oldraw catalogs through file factory and finalStage cleanup rollback; retained ownObjects/files/BG/Stage/registry/catalog controls"
+        }
+      },
+      {
+        "name": "object-file-catalog2-prefix",
+        "pid": 72316,
+        "status": "terminal",
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalApplicationCatalogFactoryProbeTests/testOwnFirstObjectUsesTheSharedCatalogFactory"
+        ],
+        "start": 1789079894.3010602,
+        "exitCode": 0,
+        "end": 1789079985.563261,
+        "verification": {
+          "tests": 1,
+          "seconds": 20.402,
+          "buildSeconds": 70.14,
+          "trials": 4,
+          "eventsPerTrial": 2014,
+          "scope": "sharedfilefactory tofirstObject own3nominal+negativeclose, explicitnativecheckpoint, notfullcatalog return"
+        }
+      },
+      {
+        "name": "object-file-catalog3-weapon",
+        "pid": 75848,
+        "status": "terminal",
+        "command": [
+          "swift",
+          "test",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalApplicationCatalogFactoryProbeTests|OriginalApplicationCatalogFileProbeTests|OriginalApplicationCatalogObjectProbeTests|OriginalLoadedCatalogTests|OriginalBackgroundTests|OriginalStageTests|OriginalCatalogTests|OriginalObjectTests"
+        ],
+        "start": 1789081222.70383,
+        "exitCode": 0,
+        "end": 1789081527.851583,
+        "verification": {
+          "tests": 27,
+          "seconds": 88.34,
+          "buildSeconds": 215.96,
+          "scope": "all3fullraw filefactory/allocationorders,130weaponpathrecords perwholecatalog, repeated2pathallocations+late rollback, own4prefix andretainedObject/files/registry/BG/Stage/catalog controls"
+        }
+      }
+    ],
+    "afterFreeBytes": 12190842880
+  },
+  "boundaries": [
+    "154 menu-only and56 full preparations among210 actual436fb5ret12/422ab8ret4 returns; no played battles or initialized own library startup claimed",
+    "34 controlled bridge calls change menu/arena/random globals while retaining complete prior resources/Actors/assignments; they omit the normal post-result assignment clear",
+    "Four participant identities produce four active Actors in34 preparations, six in6 and eight in16 retained controlled repeats;300 Actor preparations, not224 or56 ordinary four-Actor battles",
+    "Phase6/default suffix is an explicit scalar boundary; its natural reachability is not proved",
+    "COM/GDI/allocator/local-time responses and synthetic addresses are research contracts, not actual Windows/device/heap behavior",
+    "Unknown bitmap/cookie masks remain unchanged where no provenance was recovered; Native imports no unknown source stack or expected after-state",
+    "War, own initialized catalog/library/outer-loop/app integration, full match/game/network/window/input/audio/Windows/clean-Mac remain open"
+  ]
+}
