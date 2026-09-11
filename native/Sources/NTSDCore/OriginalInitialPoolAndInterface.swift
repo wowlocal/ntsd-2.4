@@ -19,6 +19,39 @@ public struct OriginalInitialPoolAndInterface {
         afterPool: (OriginalWorldBootstrap, Bool, inout Context) throws -> Void = { _,_,_ in },
         afterBitmap: (Int, OriginalStateRecord, inout Context) throws -> Void = { _,_,_ in },
         observeInterface: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in }) throws -> Self {
+        try load(world: world, globals: globals, firstObjectWord90: { firstObjectWord90 }, context: &context,
+            allocateActor: allocateActor, allocateInterface: allocateInterface, perform: perform,
+            afterActorConstructor: afterActorConstructor, afterPool: afterPool, afterBitmap: afterBitmap,
+            observeInterface: observeInterface)
+    }
+
+    public static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord,
+        firstObjectWord90: () throws -> Int32, context: inout Context,
+        allocateActor: (Int, Int, inout Context) throws -> [UInt8],
+        allocateInterface: (Int, inout Context) throws -> OriginalInterfaceAllocation,
+        perform: @escaping (OriginalBitmapSurfaceLoading.Request, inout Context) throws -> OriginalBitmapSurfaceLoading.Response,
+        afterActorConstructor: (Int, Bool, OriginalStateRecord, inout Context) throws -> Void = { _,_,_,_ in },
+        afterPool: (OriginalWorldBootstrap, Bool, inout Context) throws -> Void = { _,_,_ in },
+        afterBitmap: (Int, OriginalStateRecord, inout Context) throws -> Void = { _,_,_ in },
+        observeInterface: (OriginalInterfaceEvent, inout Context) throws -> Void = { _,_ in }) throws -> Self {
+        try load(world: world, globals: globals, firstObjectWord90: firstObjectWord90, context: &context,
+            allocateActor: allocateActor, afterActorConstructor: afterActorConstructor, afterPool: afterPool,
+            loadInterface: { state, environment in
+                var interface = OriginalInitialInterfaceLoading()
+                try interface.loadWithSurfaceLoading(globals: &state, context: &environment,
+                    allocate: allocateInterface, perform: perform, afterBitmap: afterBitmap, observe: observeInterface)
+                return interface
+            })
+    }
+
+    /// Shared composition; legacy controlled callers retain their declared
+    /// constructor-device boundary, while the public route executes full helpers.
+    static func load<Context>(world: OriginalStateRecord, globals: OriginalStateRecord,
+        firstObjectWord90: () throws -> Int32, context: inout Context,
+        allocateActor: (Int, Int, inout Context) throws -> [UInt8],
+        afterActorConstructor: (Int, Bool, OriginalStateRecord, inout Context) throws -> Void,
+        afterPool: (OriginalWorldBootstrap, Bool, inout Context) throws -> Void,
+        loadInterface: (inout OriginalStateRecord, inout Context) throws -> OriginalInitialInterfaceLoading) throws -> Self {
         var environment = context, state = globals
         var bootstrap = try OriginalWorldBootstrap(world: world,
             allocateActor: { try allocateActor($0, $1, &environment) },
@@ -27,9 +60,7 @@ public struct OriginalInitialPoolAndInterface {
         try bootstrap.activateStagingActors(firstObjectWord90: firstObjectWord90,
             afterConstructor: { try afterActorConstructor($0, true, $1, &environment) })
         try afterPool(bootstrap, true, &environment)
-        var interface = OriginalInitialInterfaceLoading()
-        try interface.loadWithSurfaceLoading(globals: &state, context: &environment,
-            allocate: allocateInterface, perform: perform, afterBitmap: afterBitmap, observe: observeInterface)
+        let interface = try loadInterface(&state, &environment)
         context = environment
         return .init(bootstrap: bootstrap, interface: interface, globals: state)
     }

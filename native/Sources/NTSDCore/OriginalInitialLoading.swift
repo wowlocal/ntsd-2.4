@@ -82,6 +82,7 @@ public struct OriginalInitialLoading {
                             afterCommonWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             afterCommon: (OriginalStateRecord) throws -> Void = { _ in },
                             afterCatalog: (OriginalStateRecord) throws -> Void = { _ in },
+                            afterCatalogContinuation: (OriginalInitialLoadingContinuation) throws -> Void = { _ in },
                             afterPool: (OriginalWorldBootstrap, Bool) throws -> Void = { _, _ in },
                             afterInterfaceBitmap: (Int, OriginalStateRecord) throws -> Void = { _, _ in },
                             observeCommon: (OriginalInitialSoundEvent) throws -> Void = { _ in },
@@ -96,7 +97,6 @@ public struct OriginalInitialLoading {
             fileSource:fileSource,platform:wavePlatform,afterPrologue:afterPrologue,
             afterWave:afterCommonWave,observe:observeCommon)
         var globals = prefix.globals
-        let paused = prefix.paused, common = prefix.sounds
         try afterCommon(globals)
         // The cache span includes later globals (graphics device, present mode).
         // Supply their existing bytes; initializing the whole span to zero loses them.
@@ -121,14 +121,10 @@ public struct OriginalInitialLoading {
             try globals.write(wave.output,at: 0x452948-base+index*4)
         }
         try afterCatalog(globals)
-        var bootstrap = try OriginalWorldBootstrap(world: world, actorBacking: actorBacking)
-        try afterPool(bootstrap,false)
-        try bootstrap.activateStagingActors(firstObjectWord90: catalog.objects[0].header.integer(at: 0x90, as: Int32.self))
-        try afterPool(bootstrap,true)
-        var interface = OriginalInitialInterfaceLoading()
-        try interface.load(globals: &globals, allocate: allocateInterface, source: interfaceSource,
-                           deviceResult: interfaceDevice, afterBitmap: afterInterfaceBitmap, observe: observeInterface)
-        return .init(globals: globals, bootstrap: bootstrap, catalog: catalog, registeredSounds: loaded.sounds,
-                     commonSounds: common, interface: interface, paused: paused, commands: [UInt8](repeating: 0,count: 20))
+        let continuation = try OriginalInitialLoadingContinuation(prefix: prefix, resources: loaded, world: world, globals: globals)
+        try afterCatalogContinuation(continuation)
+        return try continuation.completeWithProvidedInterface(actorBacking: actorBacking,
+            allocateInterface: allocateInterface, interfaceSource: interfaceSource, interfaceDevice: interfaceDevice,
+            afterPool: afterPool, afterBitmap: afterInterfaceBitmap, observeInterface: observeInterface)
     }
 }

@@ -75,6 +75,12 @@ DeleteObject; last global-store observer; and a direct late staging observer
 over a previously constructed pool. Existing numeric resource failures remain
 successful original/native continuations under their declared API responses.
 
+The later [postcatalog continuation](INITIAL_LOADING_CONTINUATION.md) now defers
+Object+90 reads until each staging consumer, compares all80 retained read
+boundaries and adds an eighth-read rollback control. It also retains actual
+native catalog/common resources through this pool/UI result. The source corpus
+and this milestone's original comparison below remain unchanged.
+
 ## Verification and remaining work
 
 An independent package exported accepted72cd808 plus only the three native code/

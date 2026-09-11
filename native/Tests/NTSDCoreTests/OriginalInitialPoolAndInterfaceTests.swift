@@ -9,7 +9,8 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
     typealias U = OriginalInitialInterfaceSurfaceTests
     struct Write: Decodable { let address: UInt32, bytes: String }
     struct Helper: Decodable { let kind: String, entry: UInt32, wrapper: UInt32?, firstStore: Int, lastStore: Int, eventStart: Int, eventEnd: Int }
-    struct Trace: Decodable { let writes: [Write], helpers: [Helper] }
+    struct Read: Decodable { let address: UInt32, count: Int, bytes: String, known: [Int], region: String, storeCount: Int }
+    struct Trace: Decodable { let writes: [Write], helpers: [Helper], reads: [Read] }
     struct Corpus: Decodable { let cases: [Trace] }
     struct Context: Equatable {
         var ui = U.Context()
@@ -66,6 +67,9 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
     }
     func run(_ c: U.Case,_ r: U.Resources,_ trace: Trace,failure: String? = nil) throws -> OriginalInitialPoolAndInterface? {
         let a=try U.Adapter(c,r,failure:failure),constructors=ConstructorComparison(c,trace,a.pattern(0x420))
+        let wordReads=trace.reads.filter { $0.region == "object-word90" }
+        XCTAssertEqual(wordReads.count,8)
+        var wordReadIndex=0
         var world=try OriginalStateRecord.worldPrefix(over:a.pattern(0x7d8))
         try world.write(c.selector,at:0)
         let initial=try r.blob(c.initial.globals)
@@ -74,7 +78,17 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
         let before=context
         do {
             result=try OriginalInitialPoolAndInterface.load(world:world,globals:globals,
-                firstObjectWord90:Int32(bitPattern:c.firstObjectWord90),context:&context,
+                firstObjectWord90:{
+                    let read=wordReads[wordReadIndex],helper=constructors.helpers[400+wordReadIndex]
+                    XCTAssertEqual(constructors.index,401+wordReadIndex)
+                    XCTAssertEqual(read.address,c.objectAddress+0x90);XCTAssertEqual(read.count,4)
+                    XCTAssertEqual(read.known,[1,1,1,1]);XCTAssertEqual(read.storeCount,helper.lastStore+1)
+                    let bytes=(0..<4).map { UInt8(truncatingIfNeeded:c.firstObjectWord90 >> ($0*8)) }
+                    XCTAssertEqual(read.bytes,bytes.map { String(format:"%02x",$0) }.joined())
+                    wordReadIndex += 1
+                    if failure=="word90#8" && wordReadIndex==8 { throw U.Stop.injected }
+                    return Int32(bitPattern:c.firstObjectWord90)
+                },context:&context,
                 allocateActor:{ slot,count,state in
                     XCTAssertEqual(slot,state.actorTokens.count);XCTAssertEqual(state.constructed.count,slot)
                     let e=c.events[slot+1],token=0x75000020+UInt32(c.spec.reverse == true ? 399-slot : slot)*0x500
@@ -101,6 +115,7 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
         }
         let value=try XCTUnwrap(result)
         XCTAssertEqual(constructors.index,408);XCTAssertEqual(context.constructed,c.constructorSlots)
+        XCTAssertEqual(wordReadIndex,8)
         XCTAssertEqual(context.actorTokens,c.actorAddresses);XCTAssertEqual(context.retainedMarker,before.retainedMarker)
         XCTAssertEqual(a.index,a.events.count);XCTAssertEqual(a.stores,10)
         XCTAssertEqual(value.globals.bytes+a.suffix,try r.blob(c.after.globals))
@@ -140,7 +155,7 @@ final class OriginalInitialPoolAndInterfaceTests: XCTestCase {
     }
     func testLateAllocationConstructorAndUIFailuresRetainContext() throws {
         let r=try U.Resources(),t=try traces()
-        for failure in ["allocate399","constructor407","poolComplete","createSurface#10","deleteObject#10","lastGlobal"] {
+        for failure in ["allocate399","constructor407","word90#8","poolComplete","createSurface#10","deleteObject#10","lastGlobal"] {
             XCTAssertNil(try run(r.c.cases[0],r,t[0],failure:failure))
         }
     }

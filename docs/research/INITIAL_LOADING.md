@@ -1,5 +1,12 @@
 # R02.1 / R03.1 / R14 — непрерывная первая загрузка
 
+Нативное соединение обновлено в
+[INITIAL_LOADING_CONTINUATION](INITIAL_LOADING_CONTINUATION.md): после каталога
+сохраняются собственные ресурсы, пауза, оба буфера команд и текущие globals;
+Object+90 читается после каждого повторного конструктора. Оба корпуса ниже
+неизменны и повторно совпали через общую композицию пула. Их исторические
+границы frozen clock и supplied43ed10 device result сохраняются.
+
 Эталон: оригинальный NTSD2.4 EXE, SHA-256
 `3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c`.
 [oracle_initial_loading.py](../../tools/oracle_initial_loading.py) выполняет

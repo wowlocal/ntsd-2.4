@@ -57,6 +57,13 @@ public struct OriginalWorldBootstrap: Equatable, Sendable {
     /// not per-character rules or assumptions about the final match formation.
     public mutating func activateStagingActors(firstObjectWord90: Int32,
                 afterConstructor: (Int, OriginalStateRecord) throws -> Void = { _, _ in }) throws {
+        try activateStagingActors(firstObjectWord90: { firstObjectWord90 }, afterConstructor: afterConstructor)
+    }
+
+    /// Read Object+90 at each original consumer, after that Actor constructor.
+    /// A missing value must not prevent the preceding allocations/constructions.
+    public mutating func activateStagingActors(firstObjectWord90: () throws -> Int32,
+                afterConstructor: (Int, OriginalStateRecord) throws -> Void = { _, _ in }) throws {
         var candidate = self
         let positions: [(Double, Double)] = [(200, 0), (210, 0), (210, 0), (210, 0),
                                              (580, -200), (570, 0), (580, -200), (570, 0)]
@@ -64,7 +71,7 @@ public struct OriginalWorldBootstrap: Equatable, Sendable {
             try candidate.actors[slot].reconstructActor()
             try afterConstructor(slot, candidate.actors[slot])
             try candidate.actors[slot].write(UInt32(0), at: 0x368)
-            try candidate.actors[slot].write(firstObjectWord90, at: 0x31c)
+            try candidate.actors[slot].write(firstObjectWord90(), at: 0x31c)
             try candidate.actors[slot].writeBinary64(position.0, at: 0x58)
             try candidate.actors[slot].writeBinary64(position.1, at: 0x60)
             try candidate.actors[slot].writeBinary64(300, at: 0x68)

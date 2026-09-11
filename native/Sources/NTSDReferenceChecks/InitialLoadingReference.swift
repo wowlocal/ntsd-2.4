@@ -37,6 +37,7 @@ public enum InitialLoadingReference {
     public static func compare(loading: Data, catalog: Data, sounds: Data,
                                initialState: (world: OriginalStateRecord, globals: OriginalStateRecord)? = nil,
                                onCommonEvent: (OriginalInitialSoundEvent) throws -> Void = { _ in },
+                               onCatalog: (OriginalInitialLoadingContinuation) throws -> Void = { _ in },
                                onLoaded: (OriginalInitialLoading) throws -> Void = { _ in }) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(loading))
         let identity = try JSONDecoder().decode(CatalogIdentity.self, from: MatchPreparationReference.unpack(catalog))
@@ -153,6 +154,7 @@ public enum InitialLoadingReference {
                 try global(globals,item.afterGlobals,"Common globals\(i)")
             }, afterCommon: { try global($0,c.common.afterGlobals,"After common") },
             afterCatalog: { try global($0,c.afterCatalog,"After catalog") },
+            afterCatalogContinuation: onCatalog,
             afterPool: { try pool($0,$1 ? c.staged : c.allocated) },
             afterInterfaceBitmap: { i,globals in
                 let point = c.interface.checkpoints[i]

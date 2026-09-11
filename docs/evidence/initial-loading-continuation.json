@@ -1,0 +1,210 @@
+{
+  "scope": "Native continuation from completed common/catalog resources to pool/UI. The retained full-loading device boundary and whole-helper UI corpus remain distinct; no new source/own application/Windows/device completion claim.",
+  "status": "All14 packaged release tests passed",
+  "source": {
+    "reexecuted": false,
+    "wholeLoading": [
+      {
+        "scope": "Continuous real41bc90..41c581: non-playback prologue,18 WAVs,full catalog,\n400-slot pool and10 UI constructors. No CPU/stack or loaded-state replacement\nbetween stages. OS/CRT/device/allocator inputs remain explicit boundaries.\n",
+        "inventory": {
+          "commonWAV": 18,
+          "registeredWAV": 400,
+          "objects": 137,
+          "frames": 15388,
+          "backgrounds": 17,
+          "stages": 25,
+          "stagePhases": 138,
+          "actorConstructors": 408,
+          "interfaceConstructors": 10,
+          "loadingRecords": 929,
+          "loadingBytesMasks": 3106120,
+          "audioBytesMasks": 66210142,
+          "catalogBytesMasks": 112063739,
+          "loadingEvents": 13027,
+          "registryAudioEvents": 6426,
+          "progressCalls": 4231,
+          "timeGetTimeCalls": 8464,
+          "sleep5Calls": 4231,
+          "checksum": 31475378
+        },
+        "files": {
+          "initial-loading": {
+            "corpus": "initial-loading.json",
+            "sha256": "4e3f31bc130b29eaaaab56db6c913981193e1d39289553925b82fc1655265b9b",
+            "bytes": 2177996,
+            "fixture": "original-initial-loading.json",
+            "fixtureSHA256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e",
+            "fixtureBytes": 1051199
+          },
+          "initial-loading-catalog": {
+            "corpus": "initial-loading-catalog.json",
+            "sha256": "d4ca1ef618fc80acaa10312cfa0844ce534775b8b39af0251b1f914e5942bac1",
+            "bytes": 95291091,
+            "fixture": "original-initial-loading-catalog.json",
+            "fixtureSHA256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb",
+            "fixtureBytes": 4794711
+          },
+          "initial-loading-sounds": {
+            "corpus": "initial-loading-sounds.json",
+            "sha256": "846b2821faab82d53a890f142b217f98574f1b4f8a19b2ce259dddcc0c6fdcb6",
+            "bytes": 47381600,
+            "fixture": "original-initial-loading-sounds.json",
+            "fixtureSHA256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb",
+            "fixtureBytes": 46495428
+          }
+        }
+      },
+      {
+        "scope": "Continuous real41bc90..41c581: non-playback prologue,18 WAVs,full catalog,\n400-slot pool and10 UI constructors. No CPU/stack or loaded-state replacement\nbetween stages. OS/CRT/device/allocator inputs remain explicit boundaries.\n",
+        "inventory": {
+          "commonWAV": 18,
+          "registeredWAV": 400,
+          "objects": 137,
+          "frames": 15388,
+          "backgrounds": 17,
+          "stages": 25,
+          "stagePhases": 138,
+          "actorConstructors": 408,
+          "interfaceConstructors": 10,
+          "loadingRecords": 929,
+          "loadingBytesMasks": 3106120,
+          "audioBytesMasks": 66210142,
+          "catalogBytesMasks": 112063739,
+          "loadingEvents": 13027,
+          "registryAudioEvents": 6426,
+          "progressCalls": 4231,
+          "timeGetTimeCalls": 8464,
+          "sleep5Calls": 4231,
+          "checksum": 31475378
+        },
+        "files": {
+          "initial-loading": {
+            "corpus": "initial-loading-control.json",
+            "sha256": "c80cecb648ee14e7d86b65f322343d3c701a7c299de63bf3163b43ea149273a3",
+            "bytes": 2180309,
+            "fixture": "original-initial-loading-control.json",
+            "fixtureSHA256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a",
+            "fixtureBytes": 1052727
+          },
+          "initial-loading-catalog": {
+            "corpus": "initial-loading-catalog-control.json",
+            "sha256": "685f09b8ed03f58c4a14c0ce865cc2bf8a6d6cc184a18432150b163b0203d907",
+            "bytes": 95291147,
+            "fixture": "original-initial-loading-catalog-control.json",
+            "fixtureSHA256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455",
+            "fixtureBytes": 4794379
+          },
+          "initial-loading-sounds": {
+            "corpus": "initial-loading-sounds-control.json",
+            "sha256": "17004f02c972f9fbc2737ba7e226a65b4d87c0723e66a095f19ffd452965ac4e",
+            "bytes": 47387328,
+            "fixture": "original-initial-loading-sounds-control.json",
+            "fixtureSHA256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265",
+            "fixtureBytes": 46510372
+          }
+        }
+      }
+    ],
+    "wholeUI": {
+      "study": "INITIAL_INTERFACE_SURFACE",
+      "reexecuted": false,
+      "cases": 10,
+      "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+      "rawSHA256": "703086bd4b03017ca5aebfed49af80472cc0e1ee960f60c259adb031b81356dd",
+      "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json",
+      "fixtureSHA256": "7f739a9a72c7fc66c740a5dae8afaa4364219b5c11ce24d2962593b3c2fa7df3",
+      "environment": "Pinned original on controlled Unicorn CPU; CW0, declared catalog[0]/Object+90/outerframe/allocations/platform responses. Native comparison uses original assets, never expected Actor records as inputs."
+    },
+    "newDependencyOrder": {
+      "reads": 80,
+      "bytes": 320,
+      "cases": 10,
+      "rule": "After each of eight staging constructors and exactly one Actor+368 pointer store",
+      "auditSHA256": "fb616e7a9b2ba9987cd070e2cab1e09528a904bd6e81aa7c268c8f747682b6f0"
+    }
+  },
+  "comparison": {
+    "wholeLoadingCases": 2,
+    "wholeLoadingBytesPlusMasks": 362760002,
+    "poolUIRecords": 8175,
+    "poolUIBytesPlusMasks": 9233920,
+    "poolUIRollbackControls": 8,
+    "additionalNativeOnlyCompletedAndFinalRollback": true,
+    "testCurrentGlobalWord": {
+      "address": 4555824,
+      "value": 324508639,
+      "sourceMatchClaim": false
+    },
+    "fullHelperNativeOnlyPlatform": "Missing image for both image requests per UI constructor; no application renderer substitution"
+  },
+  "native": {
+    "job": {
+      "name": "native1",
+      "pid": 5658,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalInitialLoadingTests|OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests"
+      ],
+      "startedUTC": "2026-09-11T02:03:17.831386+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 247.464,
+      "endedUTC": "2026-09-11T02:07:25.288713+00:00",
+      "session": 30531,
+      "tests": 14,
+      "testSeconds": 20.873,
+      "buildSeconds": 224.56,
+      "fullLoadingSeconds": 13.474,
+      "poolUITestSeconds": 5.421,
+      "controlledPoolUISeconds": 3.101,
+      "rawOverride": false
+    },
+    "base": "b16b981878f0a7b146fe1918a9bfee02605938bd",
+    "ownedFiles": {
+      "native/Sources/NTSDCore/OriginalWorldBootstrap.swift": "c3e246f8df16378c6006fd768bd6a427eead81e50cb13f2853966718c9ffbf22",
+      "native/Sources/NTSDCore/OriginalInitialPoolAndInterface.swift": "656098468e37a6816cc1c198f6bc8c1be5c20608ed28d0512937fb14a1f1f54a",
+      "native/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift": "436c286dca7a638ed537767e00bf66449cea47d3a4a221939985209155731d3a",
+      "native/Sources/NTSDCore/OriginalInitialLoading.swift": "55d16e4efa816d5df7c8063414d378064c3500a7aee841d2239ec46401f133d4",
+      "native/Sources/NTSDReferenceChecks/InitialLoadingReference.swift": "d63f8c8758c37ef906bca1ad82d9efce0c7bad954fcbbbc189d69805974ec664",
+      "native/Tests/NTSDCoreTests/OriginalInitialPoolAndInterfaceTests.swift": "e628bf528af17e7002c088d9f4e4f606386e8bc64196ad1b202b7a52fb811469",
+      "native/Tests/NTSDCoreTests/OriginalInitialLoadingTests.swift": "68b0b8b4ba9456523a79ab4df2f09e272550aba81b586a3ae1aaf8b251dbc424"
+    },
+    "inputArchive": {
+      "scope": "Read-only preservation audit of the native pool/UI build inputs. Verify all\nfrozen archive bytes and the minimal overlay on acceptedb16b981. This is not a\nsource or native game execution; reference inputs are never changed.\n",
+      "base": "b16b981878f0a7b146fe1918a9bfee02605938bd",
+      "baseFiles": 628,
+      "unchangedBaseFiles": 622,
+      "files": 629,
+      "memberBytes": 1244046278,
+      "archiveBytes": 908099300,
+      "archiveSHA256": "829b9ab317f77602575723a544aaf21d1a7c473925971a81e091771ae44fd14a",
+      "manifestSHA256": "e261d7d9453fb0d6c5521ada55e63bf5a3ae7e70af4d8e77b7e1d5f1ff797c08",
+      "seconds": 6.691
+    },
+    "NTSDNativeLinked": true,
+    "windowVerified": false,
+    "windowsVerified": false,
+    "deviceVerified": false,
+    "compared": true,
+    "logSHA256": "41ca638d2bc08839ac605a1627c5f1835362e39d12148d6d5144601a1ac84156",
+    "compilerNotes": [
+      "The legacy provided-interface adapter infers its local context as Void; compiler warning retained. No compile failure.",
+      "Existing unrelated backward trailing-closure warnings remain."
+    ]
+  },
+  "fixturePins": {
+    "unchanged": 247,
+    "new": 0
+  },
+  "boundaries": [
+    "Legacy full-loading captures retain provided43ed10 device results and frozen progress clock.",
+    "Public continuation requires current globals from actual native catalog execution and performs no earlier cache restore.",
+    "Source NULL Actor behavior and private/unknown storage remain outside this comparison.",
+    "The installed-library own catalog return, pool/UI and full41bc90 are still pending; full match/all content/clean-Mac acceptance remain open."
+  ]
+}

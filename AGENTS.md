@@ -48,6 +48,30 @@ false positives will not occur.
 
 ## Current research status
 
+**Native postcatalog continuation: [INITIAL_LOADING_CONTINUATION](docs/research/INITIAL_LOADING_CONTINUATION.md).**
+OriginalInitialLoadingContinuation consumes actual native common/catalog/sound
+owners and current World/globals, then stages pool/UI through a final observer.
+Keep prefix pause and both10-byte commands; never restore earlier cache globals.
+Its Object+90 provider runs after each staging constructor and Actor+368 store:
+all80 retained source reads verify exact order/bytes/known masks across10cases.
+The old full-loading2cases now share this pool continuation and retain their
+provided43ed10 device/frozen-clock boundary;362760002bytes+masks still compare.
+The separate whole-helper UI corpus retains8175records/9233920bytes+masks.
+Eight pool/UI native-only rollback controls now include the eighth word read;
+an additional public completion/final-failure control retains actual native
+catalog/audio/commands/current globals. Its missing-image responses are a
+native-only platform test, not a new source own-loading or app renderer claim.
+
+Independentb16b981+7owned files passed14release tests20.873s/build224.56s;
+full loading2tests13.474s,pool/UI3tests5.421s.629archive files verified,622base
+files unchanged;247fixtures unchanged/no newfixture. NTSDNative linked;
+no window/device/Windows execution. All jobs for this native study are terminal.
+The THREE own catalog captures and frozen40-checkpoint watcher remain LIVE;
+never change their frozen inputs or restart for silence. Pending catalog14files
+and six foreign files remain separate. Full own catalog/pool/UI/41bc90, app,
+Windows/devices/fullmatch/all-content/cleanMac remain open. Job/archive evidence:
+build/research/initial-loading-continuation-work.json and application-catalog-work.json.
+
 **Independent pool/UI composition: [INITIAL_POOL_INTERFACE](docs/research/INITIAL_POOL_INTERFACE.md).**
 Native now requests400Actor allocations in constructor order, then reconstructs
 slots0..7 and executes whole UI loading in one staged value-semantic context.
@@ -93,7 +117,9 @@ Primary20Object child-state comparison passes20Objects/4995Frame/194wrappers,
 with94wholeWAVs and semantic requests/globals; no complete catalog/files result.
 The one-shot20Object watcher and both children are terminal0; final source replay
 verified17406blobs/32258parts and5318regions/92817467bytes. All2142intermediate
-states also replay; independent read audit94196 remains LIVE. Only after watcher
+states also replay; independent read audit94196 is terminal0:556244408stack
+reads/1920124614bytes and73catalog reads/187bytes,0undefined observed readbytes.
+Unknown unread storage remains unknown. Only after watcher
 termination were the exact tested child-state Core/probe files copied; original
 23pins/archives stay preserved. Read build/research/application-catalog-work.json.
 Never restart live captures for silence. Pending catalog implementation remains
