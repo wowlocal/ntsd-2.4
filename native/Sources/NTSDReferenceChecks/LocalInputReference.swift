@@ -95,7 +95,7 @@ public enum LocalInputReference {
             }
         }
         let initial = try InitialLoadingReference.compare(loading: loading,catalog: catalog,sounds: sounds,onLoaded: { loaded in
-            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals)
+            var state = try OriginalMatchPreparation(loading: loaded,arithmeticPrecision: .bits64)
             var commands = Array(loaded.commands.prefix(10))
             for (index,item) in c.cases.enumerated() {
                 guard item.natural == (index == 0), item.commandsBefore.count == 10, item.commandsAfter.count == 10 else { throw error("Case order/commands") }
@@ -139,6 +139,12 @@ public enum LocalInputReference {
                 else { try state.localInput(phase: Int32(bitPattern: phase),mode: Int32(bitPattern: mode),commands: &commands,beforeDispatch: before,dispatch: dispatch) }
                 guard commands == item.commandsAfter, dispatchCount == item.dispatch.count else { throw error(item.label+" command/dispatch result") }
                 try snapshot(state,item.after,item.label+" final")
+                // Native ownership check, separate from source snapshot counts.
+                guard state.interface.bitmaps.count == loaded.interface.bitmaps.count else { throw error("Retained loaded UI inventory") }
+                for (address,bitmap) in loaded.interface.bitmaps {
+                    guard let retained = state.interface.bitmaps[address], retained.input == bitmap.input,
+                          retained.optional == bitmap.optional, retained.storage == bitmap.storage else { throw error("Retained loaded UI bytes/masks") }
+                }
                 if let call = item.call {
                     guard call.arguments == [phase,mode,c.commandsAddress], call.saved.count == 4, beforeCount == 1,
                           call.returnAddress == item.endPC, item.stackAfter == call.entrySP+16,

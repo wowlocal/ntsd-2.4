@@ -78,6 +78,7 @@ public enum MenuStartupReference {
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Menu startup reference: "+text) }
     public static func compare(startup: Data, menu: Data, loading: Data, catalog: Data, sounds: Data, arithmeticPrecision: OriginalArithmeticPrecision = .bits64,
+        onEntry: (OriginalInitialLoading, OriginalInputControlContext, OriginalInitialMatchEntry) throws -> Void = { _,_,_ in },
         onReady: ((OriginalMatchPreparation,OriginalInputControlContext,OriginalCRTRandom,OriginalMusicMemory,OriginalMenuResourceLoading) throws -> Void)? = nil) throws -> Result {
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(startup,maximumCount: 128_000_000))
         guard c.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
@@ -156,7 +157,7 @@ public enum MenuStartupReference {
         }
         let parent = try MenuLoadingReference.compare(menu: menu,loading: loading,catalog: catalog,sounds: sounds,onLoaded: { loaded,crt,earlyMemory in
             callbacks += 1;guard callbacks == 1,!loaded.paused,loaded.commands.count == 20 else { throw error("Own loaded continuation") }
-            var state = try OriginalMatchPreparation(catalog: loaded.catalog,bootstrap: loaded.bootstrap,globals: loaded.globals,interface: loaded.interface,arithmeticPrecision: arithmeticPrecision)
+            var state = try OriginalMatchPreparation(loading: loaded,arithmeticPrecision: arithmeticPrecision)
             var context = OriginalInputControlContext(savedPlayback: try .init(bytes: c.savedAtFirstMenu,defined: [Bool](repeating: true,count: 0x320)),memory: earlyMemory)
             var commands = Array(loaded.commands.prefix(10));let playback = Array(loaded.commands.suffix(10))
             try retained(state,context.memory,crt,c.retainedBefore)
@@ -172,14 +173,16 @@ public enum MenuStartupReference {
                   control.stackBefore.count == 28,Array(control.stackBefore[4..<14]) == commands,Array(control.stackBefore[16..<26]) == playback else { throw error("Natural call/stack provenance") }
             var phaseIndex = 0,replayIndex = 0,roundIndex = 0
             let order: [OriginalLoadedMatchEntry.Checkpoint] = [.localBeforeDispatch,.local,.control,.received,.replay,.round]
-            let outcome = try OriginalLoadedMatchEntry.run(state: &state,paused: loaded.paused,commands: &commands,playbackCommands: playback,context: &context,
-                controlBoundary: { _ in throw error("Unexpected natural control platform request") },
-                replayEvent: { event in
+            var environment: [OriginalLoadedMatchEntry.Checkpoint] = []
+            let entry = try OriginalInitialMatchEntry.run(loading: loaded,inputContext: context,arithmeticPrecision: arithmeticPrecision,environment: &environment,
+                controlBoundary: { _,_ in throw error("Unexpected natural control platform request") },
+                replayEvent: { event,_ in
                     guard replayIndex < replay.events.count,event == replay.events[replayIndex] else { throw error("Replay event") };replayIndex += 1;events += 1
-                },roundEvent: { event in
+                },roundEvent: { event,_ in
                     guard roundIndex < round.events.count,event == round.events[roundIndex] else { throw error("Round event") };roundIndex += 1;events += 1
-                },checkpoint: { phase,value,owned,buffer in
+                },checkpoint: { phase,value,owned,buffer,steps in
                     guard phaseIndex < order.count,phase == order[phaseIndex],buffer == local.commandsAfter else { throw error("Original continuation order/commands") }
+                    steps.append(phase)
                     phaseIndex += 1;checkpoints += 1
                     switch phase {
                     case .localBeforeDispatch:try pool(value,local.beforeDispatch,"Before AI")
@@ -194,7 +197,10 @@ public enum MenuStartupReference {
                     case .round:try snapshot(value,owned,round.after,"Round")
                     }
                 })
-            guard phaseIndex == order.count,replayIndex == replay.events.count,roundIndex == round.events.count,
+            try onEntry(loaded,context,entry)
+            state = entry.state; context = entry.inputContext; commands = entry.commands
+            let outcome = entry.round
+            guard phaseIndex == order.count,environment == order,replayIndex == replay.events.count,roundIndex == round.events.count,
                   outcome.continuation == round.continuation,outcome.stageDefeated == round.stageDefeated,
                   control.receiveCalls.count == 1 else { throw error("Input/round result") }
             let received = control.receiveCalls[0]

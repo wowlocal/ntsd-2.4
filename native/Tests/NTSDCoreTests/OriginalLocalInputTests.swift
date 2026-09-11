@@ -9,7 +9,9 @@ final class OriginalLocalInputTests: XCTestCase {
             return try Data(contentsOf: url)
         }
         let r = try LocalInputReference.compare(input: fixture("original-local-input"),loading: fixture("original-initial-loading"),
-            catalog: fixture("original-initial-loading-catalog"),sounds: fixture("original-initial-loading-sounds"))
+            catalog: fixture("original-initial-loading-catalog"),sounds: fixture("original-initial-loading-sounds"),onNatural:{ state,_,_ in
+                XCTAssertEqual(state.interface.bitmaps.count,10)
+            })
         XCTAssertEqual(r.initial.catalog.catalog.objects,137)
         XCTAssertEqual(r.initial.catalog.catalog.checksum,31_475_378)
         XCTAssertEqual(r.cases,303)

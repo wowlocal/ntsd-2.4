@@ -1,0 +1,255 @@
+{
+  "scope": "Native first input/replay/round entry from actual loading owners, with UI/audio retention and a staged platform environment. Original controlled source boundaries are retained; no new own installed-library catalog/full-call/Windows/device claim.",
+  "status": "All12 packaged release tests passed",
+  "source": {
+    "reexecuted": false,
+    "references": {
+      "menu-startup": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+        "scope": "Own fresh early menus/loading -> local/control/replay/round -> music/resources.\nSame CPU/World/stack throughout the natural first phase1 path to429e5a.\nNo post-loading game-state stimuli, replay buffers, paused-entry jump or new\nWorld. Platform/CRT/allocator boundaries remain explicit; no Windows/UI claim.\n",
+        "corpus": "menu-startup.json",
+        "sha256": "c5521e687fa8a4eae5d736a4b41c863a26f9454491ff934e250f8e45744dbc79",
+        "bytes": 546495,
+        "parents": {
+          "menu-loading": {
+            "fixture": "original-menu-loading.json",
+            "sha256": "c7aa707bb32d37837704b94d0afd98baac26f23f2f28b9d668f27fa2ca2a7e7f"
+          },
+          "menu-loading-state": {
+            "fixture": "original-menu-loading-state.json",
+            "sha256": "98f27037ba83a543f4b26d001674d13e45d047b945d07d1dff75106e5f954643"
+          },
+          "menu-loading-catalog": {
+            "fixture": "original-menu-loading-catalog.json",
+            "sha256": "977acc448a16e69ff13f60fca48e5af3c84ef9c6d178740d22023d289a1c3140"
+          },
+          "menu-loading-sounds": {
+            "fixture": "original-menu-loading-sounds.json",
+            "sha256": "500c20cbb3d822b24ab9640a4e568666dbe071d41ff912134249dbff44119cb1"
+          }
+        },
+        "nativeCompared": true,
+        "nativeComparison": "Menu startup matches original: own 119 early calls/loading -> 1 local /1 received calls -> round/menu -> 5 music helpers /11 character-menu constructors; 22 checkpoints /68 events /3412 records /5948634 bytes+masks. Actual continuation reaches429e5a on the same World; selection dispatch, full match, app UI and Windows open",
+        "fixture": "original-menu-startup.json",
+        "fixtureSHA256": "73ea816b774cd0cef9bfffac44811b3c0106052347dc4d412ac3397d05551194",
+        "fixtureBytes": 346002
+      },
+      "menu-startup-control": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+        "scope": "Own fresh early menus/loading -> local/control/replay/round -> music/resources.\nSame CPU/World/stack throughout the natural first phase1 path to429e5a.\nNo post-loading game-state stimuli, replay buffers, paused-entry jump or new\nWorld. Platform/CRT/allocator boundaries remain explicit; no Windows/UI claim.\n",
+        "corpus": "menu-startup-control.json",
+        "sha256": "3c7d435aa48b04cc8a2c25352465c9e9910d200c0d8ae7e030cfeefea5990174",
+        "bytes": 564383,
+        "parents": {
+          "menu-loading": {
+            "fixture": "original-menu-loading-control.json",
+            "sha256": "54334dd243f5c24ee52e47d386e07a214bc76dff209c30c1d954276ead7b6efd"
+          },
+          "menu-loading-state": {
+            "fixture": "original-menu-loading-state-control.json",
+            "sha256": "ec76d7eaa3ae05231c8b03660bb219bfe7f81b6ece7ac35f8ba105c4fdf3e47e"
+          },
+          "menu-loading-catalog": {
+            "fixture": "original-menu-loading-catalog-control.json",
+            "sha256": "24d3d4ba6c5d238c18880a494b4b68e1a8968a47b01dd18e953c3bd505c1627a"
+          },
+          "menu-loading-sounds": {
+            "fixture": "original-menu-loading-sounds-control.json",
+            "sha256": "37ea6643bab721478160b4ee7d413a7512a27efd863260a5aa86c490daffe0ee"
+          }
+        },
+        "nativeCompared": true,
+        "nativeComparison": "Menu startup matches original: own 119 early calls/loading -> 1 local /1 received calls -> round/menu -> 5 music helpers /11 character-menu constructors; 22 checkpoints /68 events /3412 records /5948634 bytes+masks. Actual continuation reaches429e5a on the same World; selection dispatch, full match, app UI and Windows open",
+        "fixture": "original-menu-startup-control.json",
+        "fixtureSHA256": "e5a8b368e5f0c4f2f087969966c72333ce6534bae105f9140e16c2a22b58bb75",
+        "fixtureBytes": 335670
+      },
+      "local-input": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "scope": "Real41c581..41c5e5 directly after verified first loading, then real419a60\nthrough ret12 under keyboard/joystick/packing/dispatch stimuli. AI4094b0 and\nnon-character406ba0 are explicit no-effect call boundaries in dispatch probes;\nthe natural first-loading continuation has no such active tail slots.\n",
+        "corpus": "local-input.json",
+        "sha256": "c7c1e231a3b9e92fcf73c55e5c3664acc2a59db7413829ed7fe6b623560ad139",
+        "cases": 303,
+        "nativeComparison": "Local input matches original: 303 cases, 301 real ret12, 242808 records, 284213408 bytes/masks, 756 character AI /309 object requests at explicit child boundaries; full first loading 18+400 WAVs /137 Objects",
+        "fixture": "original-local-input.json",
+        "fixtureSHA256": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a",
+        "fixtureBytes": 2675764,
+        "parents": {
+          "initial-loading": {
+            "fixture": "original-initial-loading.json",
+            "sha256": "abb735f8070afc56f2e2becc3bd064b8bfaf8c5c75290091526685d8ef879d6e"
+          },
+          "initial-loading-catalog": {
+            "fixture": "original-initial-loading-catalog.json",
+            "sha256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb"
+          },
+          "initial-loading-sounds": {
+            "fixture": "original-initial-loading-sounds.json",
+            "sha256": "cb085f43c2ad6de68c6411f558ad48a148f8bfa41d5c69b7a9af1079aa15e3fb"
+          }
+        },
+        "inventory": {
+          "cases": 303,
+          "realReturns": 301,
+          "records": 242808,
+          "bytesMasks": 284213408,
+          "characterAIRequests": 756,
+          "objectInputRequests": 309,
+          "keyboardCombinations": 128,
+          "joystickCombinations": 128,
+          "sourceObjectBindings": 137
+        },
+        "verification": {
+          "selectedTests": 3,
+          "failures": 0,
+          "seconds": 249.612,
+          "newInputTestsSeconds": 172.239,
+          "oldMatchPreparationSeconds": 77.373,
+          "releaseAppBuildSeconds": 2.58,
+          "parentRawReproduction": "All three raw initial-loading captures reproduced byte for byte in each VM before natural input continuation",
+          "oldFixtures": "All six inherited SHA256 verified, no changes",
+          "scope": "AI/object bodies and OS polling are explicit open boundaries; no full game or Windows input/latency proof"
+        }
+      },
+      "local-input-control": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "scope": "Real41c581..41c5e5 directly after verified first loading, then real419a60\nthrough ret12 under keyboard/joystick/packing/dispatch stimuli. AI4094b0 and\nnon-character406ba0 are explicit no-effect call boundaries in dispatch probes;\nthe natural first-loading continuation has no such active tail slots.\n",
+        "corpus": "local-input-control.json",
+        "sha256": "b089507491756a03d94d78da71969017d6c6f9c4a7e0c12348176063f84b1c54",
+        "cases": 303,
+        "nativeComparison": "Local input matches original: 303 cases, 300 real ret12, 242406 records, 283742856 bytes/masks, 756 character AI /309 object requests at explicit child boundaries; full first loading 18+400 WAVs /137 Objects",
+        "fixture": "original-local-input-control.json",
+        "fixtureSHA256": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c",
+        "fixtureBytes": 2799176,
+        "parents": {
+          "initial-loading": {
+            "fixture": "original-initial-loading-control.json",
+            "sha256": "a078293441718ad3240e3dd36256e23962e4ec1a5379691bb085e6b49e2a1b2a"
+          },
+          "initial-loading-catalog": {
+            "fixture": "original-initial-loading-catalog-control.json",
+            "sha256": "6d1fa26899c46dfe7c201bb26ee78d7172a0bbe4cbb85ecc80b57018ab89d455"
+          },
+          "initial-loading-sounds": {
+            "fixture": "original-initial-loading-sounds-control.json",
+            "sha256": "f5c31800d2157ef9a0f29223a67d3db98400679933092d34180dc4b4cd65d265"
+          }
+        },
+        "inventory": {
+          "cases": 303,
+          "realReturns": 300,
+          "records": 242406,
+          "bytesMasks": 283742856,
+          "characterAIRequests": 756,
+          "objectInputRequests": 309,
+          "keyboardCombinations": 128,
+          "joystickCombinations": 128,
+          "sourceObjectBindings": 137
+        },
+        "verification": {
+          "selectedTests": 3,
+          "failures": 0,
+          "seconds": 249.612,
+          "newInputTestsSeconds": 172.239,
+          "oldMatchPreparationSeconds": 77.373,
+          "releaseAppBuildSeconds": 2.58,
+          "parentRawReproduction": "All three raw initial-loading captures reproduced byte for byte in each VM before natural input continuation",
+          "oldFixtures": "All six inherited SHA256 verified, no changes",
+          "scope": "AI/object bodies and OS polling are explicit open boundaries; no full game or Windows input/latency proof"
+        }
+      }
+    },
+    "naturalContinuation": "phase1/pause0/menu10, six input/round checkpoints through4229cc, then retained music/resources through429e5a",
+    "roundStageDefeated": [
+      0,
+      0
+    ],
+    "savedPlaybackInput": "Declared pre-first-menu PE458588..4588a7 bytes, never after-state or private stack"
+  },
+  "native": {
+    "job": {
+      "name": "native1",
+      "pid": 8785,
+      "status": "terminal",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalMenuStartupTests|OriginalLocalInputTests|OriginalInputControlTests|OriginalReplayTickTests|OriginalMatchRoundTests|OriginalMenuCycleTests"
+      ],
+      "startedUTC": "2026-09-11T02:21:43.483904+00:00",
+      "exitCode": 0,
+      "elapsedSeconds": 375.119,
+      "endedUTC": "2026-09-11T02:27:58.595854+00:00",
+      "session": 30683,
+      "xctestPID": 9553,
+      "tests": 12,
+      "testSeconds": 150.07,
+      "buildSeconds": 222.81,
+      "menuStartupSeconds": 15.691,
+      "localInputSeconds": 15.155,
+      "inputControlSeconds": 24.033,
+      "replaySeconds": 31.578,
+      "roundSeconds": 38.397,
+      "menuCycleSeconds": 25.216,
+      "rawOverride": false
+    },
+    "base": "87859ce14984a664edb8a0f926fba1d1c971e23c",
+    "ownedFiles": {
+      "native/Sources/NTSDCore/OriginalInitialMatchEntry.swift": "6fd28263c069f23ecef141926c910499d8e475cd50e7b2332d48df5c3e0b27ea",
+      "native/Sources/NTSDReferenceChecks/LocalInputReference.swift": "0963e696117259334451cf544801f6ccaa1990379dec04e5b5c4a647893dfd59",
+      "native/Sources/NTSDReferenceChecks/MenuStartupReference.swift": "57437bde96f1b04ea61062267eee046193a92cf4f9ef60775084aeaa5ff41608",
+      "native/Tests/NTSDCoreTests/OriginalLocalInputTests.swift": "a66464ffe35c30d8655b85201f86aaeb771cc574185006cdfe1bbed3c5fc63e3",
+      "native/Tests/NTSDCoreTests/OriginalMenuStartupTests.swift": "10992fe0dcbf700908942fb411a2877bf333494647e1a9b965e800a0dd3de7d6"
+    },
+    "inputArchive": {
+      "scope": "Read-only preservation audit of the native pool/UI build inputs. Verify all\nfrozen archive bytes and the minimal overlay on accepted87859ce. This is not a\nsource or native game execution; reference inputs are never changed.\n",
+      "base": "87859ce14984a664edb8a0f926fba1d1c971e23c",
+      "baseFiles": 629,
+      "unchangedBaseFiles": 625,
+      "files": 630,
+      "memberBytes": 1244054838,
+      "archiveBytes": 908101979,
+      "archiveSHA256": "55b2d1d9681e6618a858802f48537768968f642040d0ce029b039178b42ebcf7",
+      "manifestSHA256": "22159d903d2c67f2d464096387a203389eb92740df5a3e881018911ef9f0167f",
+      "seconds": 6.612
+    },
+    "NTSDNativeLinked": true,
+    "windowVerified": false,
+    "windowsVerified": false,
+    "deviceVerified": false,
+    "compared": true,
+    "logSHA256": "d7bdca6e50d56f51eed28864da635bd68af12618074e3d7b2ac8b23bc679b96d"
+  },
+  "comparison": {
+    "menuStartupCases": 2,
+    "menuStartupCheckpoints": 44,
+    "menuStartupEvents": 136,
+    "menuStartupRecords": 6824,
+    "menuStartupBytesPlusMasks": 11897268,
+    "localInputCases": 606,
+    "nativeOnlyUIRetentionChecks": 6060,
+    "nativeOnlyUIRetentionBytesPlusMasks": 48576960,
+    "nativeOnlyRetainedWaveResults": 836,
+    "nativeOnlyRetainedInterfaceWrappers": 20,
+    "nativeOnlyRollbackControls": [
+      "after local input",
+      "after round dispatcher",
+      "final observer"
+    ]
+  },
+  "fixturePins": {
+    "unchanged": 247,
+    "new": 0
+  },
+  "boundaries": [
+    "Source natural first entries are phase1/unpaused/menu10; controlled LocalInput AI/object probes keep explicit child boundaries.",
+    "Arithmetic precision and caller saved-playback/early resource ownership must be supplied with native provenance.",
+    "Source instruction/branch coverage did not increase; new UI/audio checks establish native retention.",
+    "Actual own catalog/pool/UI/41bc90, app/window/sound/input latency, Windows, full match/all content/cleanMac remain open."
+  ]
+}

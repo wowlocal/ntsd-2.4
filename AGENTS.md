@@ -48,6 +48,44 @@ false positives will not occur.
 
 ## Current research status
 
+**Native loading-to-round entry: [INITIAL_MATCH_ENTRY](docs/research/INITIAL_MATCH_ENTRY.md).**
+OriginalInitialMatchEntry retains actual loaded UI/catalog/common/registered
+audio, both commands, pause, caller precision and input ownership through the
+shared local/control/received/replay/round path. Its environment commits after
+the final observer. Both historical MENU_STARTUP controls retain all6824records/
+11897268bytes+masks and following music/resources; stageDefeated remains0.
+LocalInputReference's omitted interface is fixed by the shared loading initializer:
+all606cases retain6060full native UI records.836wave results and20wrappers retain
+full native bytes/masks/lifetimes. Three late native-only failures retain the
+caller environment/input/loading state. These add no source branch coverage.
+Independent87859ce+5files passed12release tests150.070s/build222.81s, including
+both2993control/1134replay/2074round corpora and both repeated menu chains.
+630archive files verified,625base files unchanged;247fixtures unchanged. All
+native-study jobs terminal0; NTSDNative linked, no window/Windows/device claim.
+
+Catalog update: primarycandidate1/44120/session66401 is terminal1 at a research
+WAV guard assertion after24Objects/154WAVs. Its180308699-byte failure capture
+and immutable20 checkpoint remain. PendingSNDDATA_2144.wav has20440data bytes;
+the declared allocator reserved only32 guard bytes although region() writes
+32 on BOTH sides. Across414 allocations/155WAV layouts, only this temporary
+needs20480->24576 mapped bytes. Its trailing guard overlaps24bytes of the next
+leading guard by the pinned initialization code. Terminal guard bytes were not
+separately captured; keep this inference distinct from observation and do not
+claim a Windows/game crash or successful whole native match.
+
+Original candidate2/3 remain LIVE unchanged. Their atomic20 checkpoints now
+pass the frozen native child-state comparison; full trace verifiers10313/10315
+remain LIVE, intermediate/read audits still next. Watchers9432/9529 retain887
+frozen pins each. The old primary40 watcher2066 was confirmed waiting with no
+children, then terminated143 after primary1 failed; its886inputs stay unchanged.
+A separately named guarded producer changes only the mapping extent and study
+docstring, retaining every guard check. Fresh candidate4 now runs the same
+primary chain toward full137/max20000chunks/6GiB reserve/checkpoints20.
+Do not edit/restart live producers, replace old expected bytes, or import private
+source storage. Read build/research/application-catalog-work.json, its guarded
+plan/error/layout reports and initial-match-entry-work.json. Own full catalog/
+pool/UI/41bc90, app, Windows/devices/fullmatch/all-content/cleanMac remain open.
+
 **Native postcatalog continuation: [INITIAL_LOADING_CONTINUATION](docs/research/INITIAL_LOADING_CONTINUATION.md).**
 OriginalInitialLoadingContinuation consumes actual native common/catalog/sound
 owners and current World/globals, then stages pool/UI through a final observer.
@@ -66,8 +104,8 @@ Independentb16b981+7owned files passed14release tests20.873s/build224.56s;
 full loading2tests13.474s,pool/UI3tests5.421s.629archive files verified,622base
 files unchanged;247fixtures unchanged/no newfixture. NTSDNative linked;
 no window/device/Windows execution. All jobs for this native study are terminal.
-The THREE own catalog captures and frozen40-checkpoint watcher remain LIVE;
-never change their frozen inputs or restart for silence. Pending catalog14files
+The catalog jobs have advanced to the guarded-capture status above;
+never change frozen inputs or restart for silence. Pending catalog14files
 and six foreign files remain separate. Full own catalog/pool/UI/41bc90, app,
 Windows/devices/fullmatch/all-content/cleanMac remain open. Job/archive evidence:
 build/research/initial-loading-continuation-work.json and application-catalog-work.json.
