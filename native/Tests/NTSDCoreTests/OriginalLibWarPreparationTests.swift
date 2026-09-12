@@ -45,6 +45,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             let nullAllocationOrdinal: Int?,missingLoaderIndices: [Int]?,results: [String:Int32]?
         }
         let graphics: Graphics
+        let music: OriginalWarPreparationMusicAdapter.Input?
     }
     struct Case: Decodable {
         let resourceFailureInput: ResourceFailureInput?
@@ -515,24 +516,37 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         }
                         env.preparationGraphics=graphics
                     },resumeMusic:{ globals in
-                        var musicAllocationIndex=audio.allocations.keys.filter { $0>=0x2c020020 }.count
-                        try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&audio) { request in
-                            let expected=item.bodyMusic[musicIndex];musicIndex += 1
-                            XCTAssertEqual(request,.init(expected.kind,expected.arguments,expected.strings))
-                            try event(.init(request.kind.rawValue,request.arguments,request.strings),&env)
-                            var response=expected.response
-                            if request.kind == .allocate {
-                                response = .init(pointer:0x2c020020+UInt32(musicAllocationIndex)*0x1000,bytes:(0..<Int(request.arguments[0])).map { item.spec.control ? UInt8($0%256) : 0xa5 })
-                                musicAllocationIndex += 1
-                            } else if request.kind == .convert {
-                                XCTAssertTrue(request.strings[0].allSatisfy { $0<128 })
-                                let bytes=(request.strings[0]+[0]).flatMap { [$0,UInt8(0)] }
-                                response = .init(result:request.arguments[3]==0 ? 0 : Int32(request.strings[0].count+1),bytes:request.arguments[3]==0 ? [] : bytes)
+                        let musicAdapter=try OriginalWarPreparationMusicAdapter(item.resourceFailureInput?.music,control:item.spec.control,memory:audio)
+                        var musicGlobals=globals
+                        try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&audio,store:{ address,bytes in
+                            for (i,byte) in bytes.enumerated() { try musicGlobals.write(byte,at:address-base+i) }
+                        }) { request in
+                            let response=try musicAdapter.response(request)
+                            if request.kind == .message {
+                                // The source graphics observer owns MessageBox; music
+                                // stores have already changed globals at this request.
+                                let captured=try adapter.next("message"),expected=try XCTUnwrap(captured.request)
+                                XCTAssertEqual(request.arguments,expected.words);XCTAssertEqual(request.strings,expected.strings)
+                                XCTAssertNil(expected.bytes);XCTAssertNil(expected.defined)
+                                XCTAssertEqual(captured.response,.init(result:response.result))
+                                let key=try XCTUnwrap(captured.key);XCTAssertEqual(key,"message#1")
+                                env.preparationGraphics.requested.append(key)
+                                let own=try r.sourceGlobals(musicGlobals)
+                                XCTAssertEqual(own.bytes,Array(try r.blob(XCTUnwrap(captured.globals)).prefix(own.bytes.count)))
+                                try event(.init("preparationBitmap"),&env)
+                            } else {
+                                guard musicIndex<item.bodyMusic.count else { throw Stop.unexpected }
+                                let expected=item.bodyMusic[musicIndex];musicIndex += 1
+                                XCTAssertEqual(request,.init(expected.kind,expected.arguments,expected.strings))
+                                XCTAssertEqual(response,expected.response,"Declared music response")
+                                try event(.init(request.kind.rawValue,request.arguments,request.strings),&env)
                             }
-                            XCTAssertEqual(response,expected.response);env.music.append(request)
+                            env.music.append(request)
+                            if let key=OriginalWarPreparationMusicAdapter.rollbackKey(request),failure=="musicAPI:"+key { throw Stop.injected }
                             if failure=="music",request.kind == .method,request.arguments.count==4,request.arguments[1]==0x34,request.arguments[2]==0x2c020020 { throw Stop.injected }
                             return response
                         }
+                        XCTAssertEqual(musicGlobals,globals,"Music stores reconstruct own globals, including message boundaries")
                     },allocateReplay:{ bytes in
                         XCTAssertEqual(bytes,0x630e18)
                         if failure=="allocateReplay" { throw Stop.injected }

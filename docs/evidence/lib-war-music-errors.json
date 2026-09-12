@@ -1,0 +1,2970 @@
+{
+  "schema": 1,
+  "timeUTC": "2026-09-12T13:15:49.169486+00:00",
+  "scope": "Nine saved whole War returns: two nominal controls and seven music-error controls. Native only, no new original execution. The full native game goal remains active.",
+  "baseCommit": "e32dd6cecb0f9422d064456031c5e7e825c14e97",
+  "study": "docs/research/LIB_WAR_MUSIC_ERRORS.md",
+  "acceptance": {
+    "nativeCompared": true,
+    "wholeReturnedCases": 9,
+    "rawPassed": true,
+    "bundledPassed": true,
+    "regressionsPassed": true,
+    "independentContractReview": true,
+    "transportVerified": true,
+    "nativeArchiveVerified": true,
+    "evidenceArchiveVerified": true,
+    "stagedNativeVerified": true
+  },
+  "cases": [
+    {
+      "scenario": 0,
+      "ordinal": 0,
+      "input": {
+        "label": "normal-primary",
+        "control": false
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s00-capture2.parts/call-00.json",
+        "bytes": 35693376,
+        "sha256": "d2f7d69e00c60b8d318031b1e2c504d33ebacb5af0663af9d627abe495e92c4e",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1319,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 1,
+      "ordinal": 0,
+      "input": {
+        "label": "normal-control",
+        "control": true
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s01-capture2.parts/call-00.json",
+        "bytes": 36477194,
+        "sha256": "c3b690f058b5e61ce4a53fd87a7f8ed7ce324b3cf0450fcb7080fae8516510a4",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1496,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 11
+    },
+    {
+      "scenario": 20,
+      "ordinal": 0,
+      "input": {
+        "label": "music-create",
+        "control": false,
+        "music": {
+          "createResult": -1,
+          "createPointer": 0
+        }
+      },
+      "musicInput": {
+        "createResult": -1,
+        "createPointer": 0,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s20-capture2.parts/call-00.json",
+        "bytes": 35581171,
+        "sha256": "537484b91657dee9fd75c7fb802797f3b91d31c802006d98587f1d48a6f06e31",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1302,
+      "bodyMusic": 9,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 21,
+      "ordinal": 0,
+      "input": {
+        "label": "music-query-0",
+        "control": false,
+        "musicQuery": 0
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          -1,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          0,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s21-capture2.parts/call-00.json",
+        "bytes": 35690051,
+        "sha256": "be22744d4f16b9be72ea0c26d9cc5a7518d3e115606f2a4597ae3ef79ede4de1",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1318,
+      "bodyMusic": 26,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 23,
+      "ordinal": 0,
+      "input": {
+        "label": "music-query-2",
+        "control": false,
+        "musicQuery": 2
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          -1,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          0,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s23-capture2.parts/call-00.json",
+        "bytes": 35693391,
+        "sha256": "ff03fe3bb21b5c69c129b5f2b7fc52cd9577ccba504ce52f5c9b4fe2ad500345",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1319,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 24,
+      "ordinal": 0,
+      "input": {
+        "label": "music-query-3",
+        "control": false,
+        "musicQuery": 3
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          -1
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          0
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s24-capture2.parts/call-00.json",
+        "bytes": 35690035,
+        "sha256": "365e33658ccb9a9bd9d6b3bd401340fba4ab3297c83d0c5c7c252e12830a0027",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1316,
+      "bodyMusic": 24,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 25,
+      "ordinal": 0,
+      "input": {
+        "label": "music-wide-null",
+        "control": false,
+        "music": {
+          "nullAllocation": true
+        }
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": true,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s25-capture2.parts/call-00.json",
+        "bytes": 35689931,
+        "sha256": "c6d5113efb4d07aa62e84dcedf61a12b5e68753d15b9b1e499d0c51bb7f8d7c2",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1319,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 26,
+      "ordinal": 0,
+      "input": {
+        "label": "music-render",
+        "control": false,
+        "music": {
+          "renderResult": -1
+        }
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": -1,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "complete",
+        "conversionResult": null
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s26-capture2.parts/call-00.json",
+        "bytes": 35703463,
+        "sha256": "e694f2d4fd08522595af34ad5140a40b5c5e9d8bcd2868c764c4ad57f5e81620",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1320,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 0
+    },
+    {
+      "scenario": 27,
+      "ordinal": 0,
+      "input": {
+        "label": "music-conversion",
+        "control": false,
+        "music": {
+          "conversion": "none",
+          "conversionResult": 0
+        }
+      },
+      "musicInput": {
+        "createResult": 0,
+        "createPointer": 738205696,
+        "queryResults": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "queryPointers": [
+          738205952,
+          738206208,
+          738206464,
+          738206720
+        ],
+        "methodResult": -2147467259,
+        "renderResult": 0,
+        "getResult": 0,
+        "setResult": -1,
+        "fileResult": -1,
+        "nullAllocation": false,
+        "conversion": "none",
+        "conversionResult": 0
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s27-capture2.parts/call-00.json",
+        "bytes": 35693190,
+        "sha256": "728d541297433ef509c342694b5f9996c4b8a54f3f7da7abc463aacc93b2eabf",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "events": 1319,
+      "bodyMusic": 27,
+      "numeric": 16,
+      "prefixFirst": 0
+    }
+  ],
+  "comparison": {
+    "wholeReturnedCasesPerRun": 9,
+    "orderedFrontEventsPerRun": 12028,
+    "bodyMusicEventsPerRun": 221,
+    "messageEventsPerRun": 2,
+    "graphicsAPIRequestsIncludingMessagesPerRun": 827,
+    "numericCheckpointsPerRun": 144,
+    "newWrapperOwnersPerRun": 55,
+    "newWideOwnersPerRun": 7,
+    "newWideBytesPerRun": 210,
+    "nativeRollbackTrialsPerRun": 27,
+    "nativePrefixCallsPerRun": 90,
+    "distinctPrefixReferenceCases": 20,
+    "testMethodExecutions": 22,
+    "uniqueTestMethods": 21,
+    "returnedCaseExecutionsAcrossRawAndBundled": 18,
+    "rollbackTrialExecutionsAcrossRawAndBundled": 54,
+    "prefixCallExecutionsAcrossRawAndBundled": 180,
+    "scope": "Whole War comparator checks owned records/masks, ordered events, numeric intermediate values, complete recording buffers and retained resource owners. No expected after-state/private source ABI supplies Native state."
+  },
+  "contract": {
+    "inputs": "resourceFailureInput.music, independent numeric results and optional outputs; nil differs from0. spec.music is absent from these nine. Defaults come from pinned producer contract, not expected responses.",
+    "core": "resumeMatch forwards an optional store observer to existing play. No game rule changed; the default preserves all prior callers.",
+    "messages": "s20/s26 consume final preparationGraphics message#1 and whole preparationBitmap, between bodyMusic7/8 and20/21; musicIndex is unchanged. Native requests include both messages.",
+    "messageGlobals": "Full46144-byte source blobs compared with own-global shadow after forwarded music stores. Source messages have no independent mask field; successful shadow==globals includes masks, and whole checkpoint/after records retain source mask comparisons.",
+    "nullAllocation": "s25 produces pointer0/bytesnil, convert0/bytes[], Render[graph,0x34,0,0] without strings and no wide owner.",
+    "conversion": "s27 independently creates declared30-byte a5 backing with unknown masks at separate token2c020020. Conversionnone/result0 writesnothing; Render passes owned opaque bytes without UTF-16 decoding. No actual Windows converter/codec claim.",
+    "owners": "55 new live wrappers across9calls,7 new retained wide owners/210bytes. s01 owns15 arena wrappers,other8 own5each.",
+    "rollback": "27observer-error trials: exact callback following processing of selected target result, recording, beforeReturn. Reaching that callback does not mean its own returned response has been applied. Whole coupled state must remain unchanged.",
+    "exactStoppedFrontCounts": [
+      926,
+      1096,
+      915,
+      916,
+      918,
+      930,
+      926,
+      928,
+      926
+    ],
+    "prefix": "s01 localproof0..9 mapsbound11..20; other8 map0..9.90Nativeprefix executions overlap20saved reference cases."
+  },
+  "reference": {
+    "sha256": {
+      "exe": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "crt": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+      "lib": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba"
+    },
+    "environment": "Historical pinned EXE/lib/VC80 in Unicorn2.1.4,CW023f,C locale,flat32-bit segments/explicitFS and controlled APIresponses. Not Windows/device behavior. Current card reads saved data and runs Native only; no original/emulator/capture,producer imports or old audit reruns.",
+    "inputPins": {
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.json": {
+        "bytes": 7588,
+        "sha256": "dd0e5a7bab2ef77d6317fb7f759418b27a0ba75efb8e77d50c66523b642bdf8a"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.job.json": {
+        "bytes": 1067,
+        "sha256": "bf352f085c067a820a162bf71f138014f3f9739c82ce02bb58548d7be7851e0d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.config.json": {
+        "bytes": 65291,
+        "sha256": "5666c3b4cb684030418aff7ecb0e1aef16fedaf9399f1bc0f7bb957d46941937"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.pins.json": {
+        "bytes": 110327,
+        "sha256": "e018d4a35676b567d434d32223274a042d855afe823253734066279905afa1fe"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.parts/call-00.json": {
+        "bytes": 35693376,
+        "sha256": "d2f7d69e00c60b8d318031b1e2c504d33ebacb5af0663af9d627abe495e92c4e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.json": {
+        "bytes": 7587,
+        "sha256": "42af244ffff1f0d2487f1ea9edc1dedaf2beb46fe64dcbedb1d68e9ca7c6fdb5"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.job.json": {
+        "bytes": 1067,
+        "sha256": "5494c2c49a5676ddf3cff290a7193a97c331594c71ffb7aecc8f998bf1ba6bc6"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.config.json": {
+        "bytes": 65291,
+        "sha256": "8b929dab1cc791acdb9fa89c31c53368669f633e0bfb6142f4d49b1ee2ed1887"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.pins.json": {
+        "bytes": 110327,
+        "sha256": "abede8c011d74ac70974405e6f2aa12c5422e231e0dbdb0eba5e1652c2f79553"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.parts/call-00.json": {
+        "bytes": 36477194,
+        "sha256": "c3b690f058b5e61ce4a53fd87a7f8ed7ce324b3cf0450fcb7080fae8516510a4"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.json": {
+        "bytes": 7633,
+        "sha256": "005fe9a7ef7def45f2f10df32e6ad808862e20b35a7dae4fe361eceacff77bbe"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "f5060ba29fd24100f6759328867dc7ba8865fc5ac4f729c2323a496fb97e7e73"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "13a602a4935a0cd5ac2b56e7132d41fac241059aaae34745501947856ca67c8e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "4360a49d3c13a0f2610402460a598a1cf4a2c2e2c7af3d7a6c06cbc581117f26"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.parts/call-00.json": {
+        "bytes": 35581171,
+        "sha256": "537484b91657dee9fd75c7fb802797f3b91d31c802006d98587f1d48a6f06e31"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.json": {
+        "bytes": 7603,
+        "sha256": "3823c619191c3504f5c77639fd13d497fd0fa836346802233cb4718d7dcb78dd"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "3c717d8bc799ad6484395f51d3b14b2c61e7fcbb20a1e18c2c510aeec6049b13"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "6fa7f1c6287de306f2e55cd2412817219da5d031a6fd0f14aedc7ae3e0920a57"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "715ad30ec37691b0e4ddf340b6a868a0f252aecfdfa89376fd4a0a21d65e49d5"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.parts/call-00.json": {
+        "bytes": 35690051,
+        "sha256": "be22744d4f16b9be72ea0c26d9cc5a7518d3e115606f2a4597ae3ef79ede4de1"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.json": {
+        "bytes": 7603,
+        "sha256": "a2a4c6c3a431508ccacd70abd9eaeb2565ba80e6b4455c44c53620815be97121"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "2d15a0bdbbee580ee081c9688342a2ef3dd847d9f554ce68f4b4fbb45f044283"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "e8eb7b942cda2a042e7da3df5016b26276b4822680ec79fee493b2a92e57cc6c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "e4c667dcebb21a3f011eb06baccdc6d4efc76bc0544d84655d95dd85c40f93c5"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.parts/call-00.json": {
+        "bytes": 35693391,
+        "sha256": "ff03fe3bb21b5c69c129b5f2b7fc52cd9577ccba504ce52f5c9b4fe2ad500345"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.json": {
+        "bytes": 7603,
+        "sha256": "bf176ffd66ceace7b29d48ad22dc875f15ca52db3325ebc8d0810f690bdff46c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "35a83fad63b1c04e0f5954a6964d2f93b69f842484b02edd8c31988db750ebef"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "d4123a6ea17dd8bfd70726f7e86127eabf7ab3d6f95e311369b7273f6593ee44"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "60d0fd6345218a86f5e263348735728646e9dc4a9508edaaf5cb90d940cdade2"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.parts/call-00.json": {
+        "bytes": 35690035,
+        "sha256": "365e33658ccb9a9bd9d6b3bd401340fba4ab3297c83d0c5c7c252e12830a0027"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.json": {
+        "bytes": 7622,
+        "sha256": "536f891822878267d7d6e631ed1922941c6114d8e0932f56d2fe97927f503b41"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.job.json": {
+        "bytes": 942,
+        "sha256": "bf91e8f432345de7a67e49ee6414a5c793588ab18c90864d7ce06dbe751d43e1"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.config.json": {
+        "bytes": 65166,
+        "sha256": "dcc0e12f9cb784fcf43570cf69c8be2fd673caa6a838a9af4a2b446320c7cbd7"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "6879c344e996d50a6dfdf7b84e3f55facd33bdd449da17fc9c79a6ab8d2986dc"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.parts/call-00.json": {
+        "bytes": 35689931,
+        "sha256": "c6d5113efb4d07aa62e84dcedf61a12b5e68753d15b9b1e499d0c51bb7f8d7c2"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.json": {
+        "bytes": 7615,
+        "sha256": "ce099158fd841edc999532319f97b4c947cd10ed673f7e048120f0f4ceddf319"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "e9918ff1571ff9a7237de2834b7b5937c7990123cafa5f8b469446341b67f776"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "ac20305f667cf8278496d748c40c8922dde69d9df2de092a49901fd2ed4fd0ad"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "91254e4008ff3e4f5214bcf508553d7cddeba4defdcb1ae49f62eb0820cbec45"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.parts/call-00.json": {
+        "bytes": 35703463,
+        "sha256": "e694f2d4fd08522595af34ad5140a40b5c5e9d8bcd2868c764c4ad57f5e81620"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.json": {
+        "bytes": 7642,
+        "sha256": "ad914808039ab2b800f5601c3e70c4cccc8c045989fa3413bd2bcfe003120892"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.job.json": {
+        "bytes": 942,
+        "sha256": "571589aee9239fc5e3ec66ba0494f345221b7e109179046dc95f76af000990d8"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.config.json": {
+        "bytes": 65167,
+        "sha256": "fa6cd96f42b0650d4325fdde0e4f925e02bb51306b438b25609e27734e826086"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "3479fa897559918d8b7816eef225aa7e3b5e6240efe0875a4eae103764fc29fc"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.parts/call-00.json": {
+        "bytes": 35693190,
+        "sha256": "728d541297433ef509c342694b5f9996c4b8a54f3f7da7abc463aacc93b2eabf"
+      },
+      "docs/evidence/lib-war-preparation-errors.json": {
+        "bytes": 76785,
+        "sha256": "34bc5a205882b19172947fc86e11063c20e1a06cc35318e5de50fd54ac0fe7ff"
+      },
+      "docs/evidence/lib-war-nullable-bitmap.json": {
+        "bytes": 32824,
+        "sha256": "8ac8232d1cbc37499d2cb3ca34b8434c2b1b47c3e475dca7f25d04bc0cd3db96"
+      },
+      "docs/evidence/lib-war-partial-surfaces.json": {
+        "bytes": 62547,
+        "sha256": "0d01bff1cc8e62f08c2080eb42c0cb9d94b492c486df690065c32fdce272bcd0"
+      },
+      "docs/evidence/lib-war-graphics-errors.json": {
+        "bytes": 79783,
+        "sha256": "4081dd9f3cf8553b663462a11f1c03a1369b981b31e8ee32a7861760f5f5308d"
+      },
+      "build/research/lib-war-preparation/war-errors-completion-20260912/inventory2.json": {
+        "bytes": 315652,
+        "sha256": "75a96b6e5eae6b2139de5c3d807d9c17b912a41c360e0c68880e3a7211c4f6f4"
+      },
+      "build/research/lib-war-preparation/war-graphics-errors-native-20260912/next-music-errors-review.json": {
+        "bytes": 6595,
+        "sha256": "25db05d25ba15af320c27b5c6b4438ca5b144156b7428af52bd6db028594573f"
+      },
+      "tools/oracle_lib_war_preparation.py": {
+        "bytes": 13488,
+        "sha256": "82c22ff67485dd1014596b63a7cef1df1612b5984ee375770a9140f4e54ec2fe"
+      },
+      "tools/oracle_music_playback.py": {
+        "bytes": 18935,
+        "sha256": "6b6d9e410c7321427b45217d4522fb3bf26d29e50ef4d00c2357b3cfc7c74d96"
+      },
+      "tools/oracle_war_preparation_errors.py": {
+        "bytes": 11177,
+        "sha256": "2341c9e6f6b35db0701329985b3b88558fbb812a68c86b0d2cb230d49be9e8e3"
+      },
+      "tools/oracle_war_preparation_fs_errors.py": {
+        "bytes": 8150,
+        "sha256": "5bdeba408eb938acc9354ed49240d5f5a39fa47f33ef9299f7cbb83180f507c0"
+      },
+      "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+        "bytes": 38476,
+        "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+      },
+      "docs/research/LIB_WAR_PREPARATION_ERRORS_PLAN.md": {
+        "bytes": 6532,
+        "sha256": "1d1afa9108c1db799a5d2b8dbfe4370609e01c2e73c2149b9e1d7419b746e695"
+      }
+    },
+    "plan": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/plan.json",
+      "bytes": 94861,
+      "sha256": "f6daf75f621fa473537202df01fc6e62bdb1fd486932ba21d49b8ea7a964f7cc"
+    }
+  },
+  "transport": {
+    "counts": {
+      "returnedCalls": 9,
+      "rawBytes": 321911802,
+      "packedBytes": 43240464,
+      "blobEntries": 6503,
+      "blobEntryBytes": 305288594,
+      "distinctBlobs": 1103,
+      "distinctBlobBytes": 55563532,
+      "boundPrefixProofLinks": 90,
+      "distinctBoundPrefixes": 20,
+      "normalControls": 2,
+      "musicErrorCases": 7,
+      "declaredMusicInputsCompared": 9,
+      "selectedSourceFaults": 0,
+      "historicalSourceFaultsExcluded": 9,
+      "sourceEvidencePinsUnchanged": 57,
+      "oldFixturesUnchanged": 350
+    },
+    "artifacts": [
+      {
+        "scenario": 0,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.parts/call-00.json",
+          "bytes": 35693376,
+          "sha256": "d2f7d69e00c60b8d318031b1e2c504d33ebacb5af0663af9d627abe495e92c4e"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s00-call-00.json",
+          "bytes": 4782328,
+          "sha256": "5088149e4558ee3735947f6fea0f723eb751cc2c802b5a2d33d0d0b0d7955731"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s00-capture2.json",
+          "bytes": 7588,
+          "sha256": "dd0e5a7bab2ef77d6317fb7f759418b27a0ba75efb8e77d50c66523b642bdf8a"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "normal-primary",
+          "control": false
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.parts/call-00.json",
+          "bytes": 36477194,
+          "sha256": "c3b690f058b5e61ce4a53fd87a7f8ed7ce324b3cf0450fcb7080fae8516510a4"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s01-call-00.json",
+          "bytes": 4992908,
+          "sha256": "dc7a1837c2508fe48559212c84d36b896ae90d9c73086cfd45b4d1769118ec9d"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s01-capture2.json",
+          "bytes": 7587,
+          "sha256": "42af244ffff1f0d2487f1ea9edc1dedaf2beb46fe64dcbedb1d68e9ca7c6fdb5"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "normal-control",
+          "control": true
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 11,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 766,
+        "blobBytes": 34091380,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 11,
+            "normalizedSHA256": "7dadc4c95f89bfaed9948e58bd6ccb3a648c32b8d9f033be7d31c5a01aa988da",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 11
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 12,
+            "normalizedSHA256": "8e95e698314bf2e612a6bf0f66a5291ee9e08c9fdc0b9de5921802a7c6d7a007",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 12
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 13,
+            "normalizedSHA256": "1ce5e6aa0d5d1ad43b38b6e8db42551c2d74341633f63bc64d7a705378afc0bb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 13
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 14,
+            "normalizedSHA256": "5015a0917e5f73dfb6e2fd25bc370e551efe9b12f929da1026b1130c2398910b",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 14
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 15,
+            "normalizedSHA256": "442e3355b7d2f4e8a12807cc71ac25f522dfddaaedb634a7a2b6ce4fdb99c882",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 15
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 16,
+            "normalizedSHA256": "c1403d928018bccd42f6449d1a179bf6e08f3c28c3801789cfbefaffcfe9a1f7",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 16
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 17,
+            "normalizedSHA256": "c318b7a24a3e55cde3cc4ae6ff651aeb5d6e188ebc6c5282b1932d6e6edb03f9",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 17
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 18,
+            "normalizedSHA256": "f4c64ad73b49de65c0d9bd710b756933a953d6edbea81182ecf5eced0f99840f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 18
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 19,
+            "normalizedSHA256": "26a3d28884f44984096246a832cdbbdbb0ac74e1cb47c600ed2a4c275989c9f8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 19
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 20,
+            "normalizedSHA256": "74a9e48f715cb2c3698c9ab93d46f10f427cd5d951bc6b238a89a622168de828",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 20
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 20,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.parts/call-00.json",
+          "bytes": 35581171,
+          "sha256": "537484b91657dee9fd75c7fb802797f3b91d31c802006d98587f1d48a6f06e31"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s20-call-00.json",
+          "bytes": 4767112,
+          "sha256": "06782ea4cca72611b0fd95da35ce3cccdb6c3bcb0902367bea3ffa08ab907c50"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s20-capture2.json",
+          "bytes": 7633,
+          "sha256": "005fe9a7ef7def45f2f10df32e6ad808862e20b35a7dae4fe361eceacff77bbe"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-create",
+          "control": false,
+          "music": {
+            "createResult": -1,
+            "createPointer": 0
+          }
+        },
+        "declaredMusicInput": {
+          "createResult": -1,
+          "createPointer": 0,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 714,
+        "blobBytes": 33836476,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 21,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.parts/call-00.json",
+          "bytes": 35690051,
+          "sha256": "be22744d4f16b9be72ea0c26d9cc5a7518d3e115606f2a4597ae3ef79ede4de1"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s21-call-00.json",
+          "bytes": 4781636,
+          "sha256": "95407036542608d50da03341752c71cf8bbef03f0218f5b7f9df2fa4e1957bcf"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s21-capture2.json",
+          "bytes": 7603,
+          "sha256": "3823c619191c3504f5c77639fd13d497fd0fa836346802233cb4718d7dcb78dd"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-query-0",
+          "control": false,
+          "musicQuery": 0
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            -1,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            0,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 23,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.parts/call-00.json",
+          "bytes": 35693391,
+          "sha256": "ff03fe3bb21b5c69c129b5f2b7fc52cd9577ccba504ce52f5c9b4fe2ad500345"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s23-call-00.json",
+          "bytes": 4782360,
+          "sha256": "0f6c471dd39cb3277bf7116f91692ad7712dff8a883ed07e82cda9828213baae"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s23-capture2.json",
+          "bytes": 7603,
+          "sha256": "a2a4c6c3a431508ccacd70abd9eaeb2565ba80e6b4455c44c53620815be97121"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-query-2",
+          "control": false,
+          "musicQuery": 2
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            -1,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            0,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 24,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.parts/call-00.json",
+          "bytes": 35690035,
+          "sha256": "365e33658ccb9a9bd9d6b3bd401340fba4ab3297c83d0c5c7c252e12830a0027"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s24-call-00.json",
+          "bytes": 4782056,
+          "sha256": "1f13b0caddf766b6f13d8aca5deb9ac613667188d634ec5a41f788dc8c118c44"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s24-capture2.json",
+          "bytes": 7603,
+          "sha256": "bf176ffd66ceace7b29d48ad22dc875f15ca52db3325ebc8d0810f690bdff46c"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-query-3",
+          "control": false,
+          "musicQuery": 3
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            0
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 25,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.parts/call-00.json",
+          "bytes": 35689931,
+          "sha256": "c6d5113efb4d07aa62e84dcedf61a12b5e68753d15b9b1e499d0c51bb7f8d7c2"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s25-call-00.json",
+          "bytes": 4780628,
+          "sha256": "92a6c131b8853284ee4d0ed6397c2b20fba5034a01fa48ed3eb4d6adeb8d58f7"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s25-capture2.json",
+          "bytes": 7622,
+          "sha256": "536f891822878267d7d6e631ed1922941c6114d8e0932f56d2fe97927f503b41"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-wide-null",
+          "control": false,
+          "music": {
+            "nullAllocation": true
+          }
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": true,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 715,
+        "blobBytes": 33902012,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 26,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.parts/call-00.json",
+          "bytes": 35703463,
+          "sha256": "e694f2d4fd08522595af34ad5140a40b5c5e9d8bcd2868c764c4ad57f5e81620"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s26-call-00.json",
+          "bytes": 4789400,
+          "sha256": "3a825d31f5f48680afd8f98308f0ae46a222d283e35ca7d9bc8032ae348fc913"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s26-capture2.json",
+          "bytes": 7615,
+          "sha256": "ce099158fd841edc999532319f97b4c947cd10ed673f7e048120f0f4ceddf319"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-render",
+          "control": false,
+          "music": {
+            "renderResult": -1
+          }
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": -1,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "complete",
+          "conversionResult": null
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 719,
+        "blobBytes": 33948246,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 27,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.parts/call-00.json",
+          "bytes": 35693190,
+          "sha256": "728d541297433ef509c342694b5f9996c4b8a54f3f7da7abc463aacc93b2eabf"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s27-call-00.json",
+          "bytes": 4782036,
+          "sha256": "a883b8700e174cc3bdf00a072388db4b76a9612d642b567ee714771658c6a9b4"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s27-capture2.json",
+          "bytes": 7642,
+          "sha256": "ad914808039ab2b800f5601c3e70c4cccc8c045989fa3413bd2bcfe003120892"
+        },
+        "end": "returned",
+        "declaredScenario": {
+          "label": "music-conversion",
+          "control": false,
+          "music": {
+            "conversion": "none",
+            "conversionResult": 0
+          }
+        },
+        "declaredMusicInput": {
+          "createResult": 0,
+          "createPointer": 738205696,
+          "queryResults": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "queryPointers": [
+            738205952,
+            738206208,
+            738206464,
+            738206720
+          ],
+          "methodResult": -2147467259,
+          "renderResult": 0,
+          "getResult": 0,
+          "setResult": -1,
+          "fileResult": -1,
+          "nullAllocation": false,
+          "conversion": "none",
+          "conversionResult": 0
+        },
+        "prefixFirst": 0,
+        "declaredInputsMatchSavedCase": true,
+        "blobs": 717,
+        "blobBytes": 33902072,
+        "boundPrefixProofs": [
+          {
+            "proofIndex": 0,
+            "boundIndex": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "proofIndex": 1,
+            "boundIndex": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "proofIndex": 2,
+            "boundIndex": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "proofIndex": 3,
+            "boundIndex": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "proofIndex": 4,
+            "boundIndex": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "proofIndex": 5,
+            "boundIndex": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "proofIndex": 6,
+            "boundIndex": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "proofIndex": 7,
+            "boundIndex": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "proofIndex": 8,
+            "boundIndex": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "proofIndex": 9,
+            "boundIndex": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      }
+    ],
+    "verification": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/package-verification1.json",
+      "bytes": 65351,
+      "sha256": "a1277ba20f6791c74aa9e305129fe6fd3dd6e1439a7c49f40fa58fe46dc4a31b"
+    },
+    "producer": {
+      "path": "tools/package_war_music_error_references.py",
+      "bytes": 11329,
+      "sha256": "a9f4403057456dee40ad86fd9e678f7c02d7cf642ab3a56d31ac1a8d38347b1c"
+    }
+  },
+  "historicalSourceFaultsExcluded": [
+    {
+      "scenario": 3,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json",
+        "bytes": 16391099,
+        "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34",
+        "end": "sourceFault",
+        "endPC": 4243734,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [
+          {
+            "kind": "release",
+            "words": [
+              838979584
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979727904
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838983680
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979736096
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838987776
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979744288
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838991872
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979752480
+            ],
+            "strings": []
+          }
+        ],
+        "wrapperLive": {
+          "1979727904": false,
+          "1979736096": false,
+          "1979744288": false,
+          "1979752480": false
+        }
+      }
+    },
+    {
+      "scenario": 4,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [],
+        "wrapperLive": {
+          "1979727904": true,
+          "1979736096": true,
+          "1979744288": true,
+          "1979752480": true,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 5,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [
+          {
+            "kind": "release",
+            "words": [
+              838979584
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979727904
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838983680
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979736096
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838987776
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979744288
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838991872
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979752480
+            ],
+            "strings": []
+          }
+        ],
+        "wrapperLive": {
+          "1979727904": false,
+          "1979736096": false,
+          "1979744288": false,
+          "1979752480": false,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 6,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [],
+        "wrapperLive": {
+          "1979727904": true,
+          "1979736096": true,
+          "1979744288": true,
+          "1979752480": true,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 7,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [
+          {
+            "kind": "release",
+            "words": [
+              838979584
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979727904
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838983680
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979736096
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838987776
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979744288
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838991872
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979752480
+            ],
+            "strings": []
+          }
+        ],
+        "wrapperLive": {
+          "1979727904": false,
+          "1979736096": false,
+          "1979744288": false,
+          "1979752480": false,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 8,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [],
+        "wrapperLive": {
+          "1979727904": true,
+          "1979736096": true,
+          "1979744288": true,
+          "1979752480": true,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 9,
+      "call": {
+        "ordinal": 1,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856,
+        "graphicsReleaseFree": [
+          {
+            "kind": "release",
+            "words": [
+              838979584
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979727904
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838983680
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979736096
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838987776
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979744288
+            ],
+            "strings": []
+          },
+          {
+            "kind": "release",
+            "words": [
+              838991872
+            ],
+            "strings": []
+          },
+          {
+            "kind": "free",
+            "words": [
+              1979752480
+            ],
+            "strings": []
+          }
+        ],
+        "wrapperLive": {
+          "1979727904": false,
+          "1979736096": false,
+          "1979744288": false,
+          "1979752480": false,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 22,
+      "call": {
+        "ordinal": 0,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json",
+        "bytes": 23916521,
+        "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e",
+        "end": "sourceFault",
+        "endPC": 4201726,
+        "endSP": 268489860,
+        "graphicsReleaseFree": [],
+        "wrapperLive": {
+          "1979727904": true,
+          "1979736096": true,
+          "1979744288": true,
+          "1979752480": true,
+          "1979760672": true
+        }
+      }
+    },
+    {
+      "scenario": 28,
+      "call": {
+        "ordinal": 0,
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json",
+        "bytes": 32841343,
+        "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce",
+        "end": "sourceFault",
+        "endPC": 4444925,
+        "endSP": 268489696,
+        "graphicsReleaseFree": [],
+        "wrapperLive": {
+          "1979727904": true,
+          "1979736096": true,
+          "1979744288": true,
+          "1979752480": true,
+          "1979760672": true
+        }
+      }
+    }
+  ],
+  "nativeRuns": [
+    {
+      "name": "native1",
+      "job": {
+        "scope": "Freeze and compare the music-error War Native candidate against saved raw data.\nNo original code, emulator, source producer or capture is invoked.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarMusicErrorTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1-inputs.json",
+        "nativeFiles": 804,
+        "rawOverride": {
+          "NTSD_WAR_MUSIC_ERROR_DIRECTORY": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation"
+        },
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T12:58:27.863538+00:00",
+        "pid": 45938,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 339.890843792,
+        "endedUTC": "2026-09-12T13:04:07.756390+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native1.job.json",
+        "bytes": 1191,
+        "sha256": "ed8443e574c59bb88ce8c2d5bd6c3d6cdcab3b8fe7adea2c5b2c080937506cec"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native1.log",
+        "bytes": 23203,
+        "sha256": "525631a528d6c4885e6c0d55267442e5c113d99f1267078cc0ee1b23863db4d4"
+      },
+      "buildSeconds": 281.27,
+      "testSeconds": 56.435,
+      "testCount": 1,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalLibWarMusicErrorTests",
+          "method": "testWholeMusicErrorsAndCoupledRollback",
+          "seconds": 56.435
+        }
+      ]
+    },
+    {
+      "name": "native2",
+      "job": {
+        "scope": "Bundled nine music-error War returns and retained whole War regressions.\nNo original execution; all NTSD raw overrides are removed from the environment.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarMusicErrorTests|OriginalLibWarPreparationTests|OriginalLibWarNullableBitmapTests|OriginalLibWarPartialSurfaceTests|OriginalLibWarGraphicsErrorTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1-inputs.json",
+        "nativeFiles": 804,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T13:04:55.851157+00:00",
+        "pid": 47113,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 371.625908792,
+        "endedUTC": "2026-09-12T13:11:07.470934+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native2.job.json",
+        "bytes": 1203,
+        "sha256": "bb8f59dc5bcb671db5da961b37d11b47d4384889f2fad5d77dc524c1ae6a3d85"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native2.log",
+        "bytes": 21457,
+        "sha256": "0bc803f905156291db317d10c240b69520c0439b4741b33a8a8242bb55556e4b"
+      },
+      "buildSeconds": 0.34,
+      "testSeconds": 370.173,
+      "testCount": 6,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalLibWarGraphicsErrorTests",
+          "method": "testWholeGraphicsErrorsAndExactAPIRollback",
+          "seconds": 50.373
+        },
+        {
+          "suite": "OriginalLibWarMusicErrorTests",
+          "method": "testWholeMusicErrorsAndCoupledRollback",
+          "seconds": 56.316
+        },
+        {
+          "suite": "OriginalLibWarNullableBitmapTests",
+          "method": "testReturnedAllocationFailuresRetainOwnedLayersAndRollback",
+          "seconds": 18.941
+        },
+        {
+          "suite": "OriginalLibWarPartialSurfaceTests",
+          "method": "testWholeReturnedPartialSurfacesAndCoupledRollback",
+          "seconds": 38.86
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeBoundPreparationAndLateRollback",
+          "seconds": 16.807
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeMatrixAndRetainedReleaseRollback",
+          "seconds": 188.877
+        }
+      ]
+    },
+    {
+      "name": "native3",
+      "job": {
+        "scope": "Bundled shared music/graph/menu/launch and Tournament/Team resumeMatch regressions.\nNo original execution; all NTSD raw overrides are removed from the environment.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalMusicPlaybackTests|OriginalGraphEventsTests|OriginalCharacterMenuMusicSurfaceTests|OriginalMatchLaunchTests|OriginalLibTournamentBracketTests|OriginalLibTeamTournamentBracketTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/candidate1-inputs.json",
+        "nativeFiles": 804,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T13:11:24.783313+00:00",
+        "pid": 48257,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 225.30700766700002,
+        "endedUTC": "2026-09-12T13:15:10.091622+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native3.job.json",
+        "bytes": 1245,
+        "sha256": "0e369391491b8e28f2478e2eb470702a1c1078434a5dbf61b264433baf1bba82"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native3.log",
+        "bytes": 6147,
+        "sha256": "e5cc2b2bfa4c3dfb619ba30b96aca46ba69e7e39f836a56dc59c623fed75d7b9"
+      },
+      "buildSeconds": 0.14,
+      "testSeconds": 224.595,
+      "testCount": 15,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalCharacterMenuMusicSurfaceTests",
+          "method": "testContinuousMusicAndWholeBitmapMenuWithOwnedLogStorage",
+          "seconds": 1.747
+        },
+        {
+          "suite": "OriginalCharacterMenuMusicSurfaceTests",
+          "method": "testLateCombinedErrorsRollBackMusicResourcesGlobalsAndEnvironment",
+          "seconds": 0.743
+        },
+        {
+          "suite": "OriginalGraphEventsTests",
+          "method": "testGraphInitializationLateFailureRollsBack",
+          "seconds": 0.032
+        },
+        {
+          "suite": "OriginalGraphEventsTests",
+          "method": "testLateCallbackAndProviderExhaustionRollBackLocals",
+          "seconds": 0.028
+        },
+        {
+          "suite": "OriginalGraphEventsTests",
+          "method": "testMissingGraphInterfacesRollBackLocals",
+          "seconds": 0.027
+        },
+        {
+          "suite": "OriginalGraphEventsTests",
+          "method": "testUnknownLocalsAreRequiredOnlyWhenRead",
+          "seconds": 0.028
+        },
+        {
+          "suite": "OriginalGraphEventsTests",
+          "method": "testWholeNotificationsAndOwnGraphProducer",
+          "seconds": 0.183
+        },
+        {
+          "suite": "OriginalLibTeamTournamentBracketTests",
+          "method": "testLateTeamTournamentStagesRollBackCurrentCall",
+          "seconds": 40.073
+        },
+        {
+          "suite": "OriginalLibTeamTournamentBracketTests",
+          "method": "testTeamTournamentBracketRetainsWholeLibraryMenu",
+          "seconds": 52.97
+        },
+        {
+          "suite": "OriginalLibTournamentBracketTests",
+          "method": "testLateTournamentMusicAndAssignmentRollBackCurrentCall",
+          "seconds": 24.474
+        },
+        {
+          "suite": "OriginalLibTournamentBracketTests",
+          "method": "testTournamentBracketRetainsWholeLibraryMenu",
+          "seconds": 31.003
+        },
+        {
+          "suite": "OriginalMatchLaunchTests",
+          "method": "testOwnStartThroughEnabledMusicAndRecordingToFirstGameplayEntry",
+          "seconds": 18.128
+        },
+        {
+          "suite": "OriginalMatchLaunchTests",
+          "method": "testSameWholeLaunchWithRampAndReverseActorAddresses",
+          "seconds": 18.106
+        },
+        {
+          "suite": "OriginalMusicPlaybackTests",
+          "method": "testEnabledMusicFromNaturalFirstMenu",
+          "seconds": 18.487
+        },
+        {
+          "suite": "OriginalMusicPlaybackTests",
+          "method": "testMusicWithReversePoolAndRampStorage",
+          "seconds": 18.569
+        }
+      ]
+    }
+  ],
+  "regressionPlan": {
+    "timeUTC": "2026-09-12T12:56:47.582646+00:00",
+    "phase": "Before first Native execution",
+    "reason": "Independent reviewer traced resumeMatch direct callers in MatchLaunchReference and CharacterMenuContinuation; preserve both launch and Tournament/Team bracket methods after optional store forwarding. No new source cases or changed acceptance boundary.",
+    "reviewer": "/root/war_contract_review",
+    "warBundled": {
+      "suites": [
+        "OriginalLibWarMusicErrorTests",
+        "OriginalLibWarPreparationTests",
+        "OriginalLibWarNullableBitmapTests",
+        "OriginalLibWarPartialSurfaceTests",
+        "OriginalLibWarGraphicsErrorTests"
+      ],
+      "methods": 6,
+      "timeoutSeconds": 1800
+    },
+    "sharedBundled": {
+      "suites": [
+        "OriginalMusicPlaybackTests",
+        "OriginalGraphEventsTests",
+        "OriginalCharacterMenuMusicSurfaceTests",
+        "OriginalMatchLaunchTests",
+        "OriginalLibTournamentBracketTests",
+        "OriginalLibTeamTournamentBracketTests"
+      ],
+      "methods": 15,
+      "timeoutSeconds": 2400
+    },
+    "uniqueBundledMethods": 21,
+    "rawMethods": 1,
+    "originalExecuted": false
+  },
+  "nativePackage": {
+    "verifiedUTC": "2026-09-12T13:05:05.179736+00:00",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/native-candidate1.tar",
+    "archivePin": {
+      "bytes": 3980011520,
+      "sha256": "4d1a1bf8edd7d64c92f1e6b785ac2772afda33262b27489a252959c3e58ff3f0"
+    },
+    "nativeFiles": 804,
+    "nativeBytes": 3978560249,
+    "currentFixtures": 359,
+    "protectedFixturesUnchanged": 350,
+    "sourcePinsUnchanged": 57,
+    "candidateMatchesWorkingNative": true,
+    "allArchiveMembersAndBytesMatch": true,
+    "manifest": "candidate1-inputs.json",
+    "nativeRegressions": "Separate native2 and native3 jobs; archive equality is not its test result.",
+    "originalExecuted": false
+  },
+  "evidenceArchive": {
+    "verifiedUTC": "2026-09-12T13:15:42.674159+00:00",
+    "scope": "Nine returned raw cases, retained source metadata and terminal Native verification. Full Native package is in its separate archive; nine historical source faults remain in prior archives.",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-music-errors-native-20260912/music-evidence1.tar",
+    "archivePin": {
+      "bytes": 324904960,
+      "sha256": "123c8d22126a5dde71382edefbeff5d0233a6a43d0ba31229bd3358934fd1033"
+    },
+    "members": 96,
+    "memberBytes": 324728212,
+    "manifest": "evidence-members.json",
+    "manifestPin": {
+      "bytes": 18640,
+      "sha256": "8de43b88ca83511234437cf305aa6886aa624746f14c246ba7fc909aa407b9e1"
+    },
+    "allArchiveMembersAndBytesMatch": true,
+    "sourcePinsUnchanged": 57,
+    "nativeJobsTerminal": 3,
+    "nativeJobsExitCode": 0,
+    "volumeUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "internalFreeBytes": 9373528064,
+    "originalExecuted": false,
+    "faultComparedAsReturn": false,
+    "safetyIncidentResolved": false,
+    "fullGameComplete": false
+  },
+  "gitIndex": {
+    "verifiedUTC": "2026-09-12T13:00:58.945987+00:00",
+    "baseCommit": "e32dd6cecb0f9422d064456031c5e7e825c14e97",
+    "nativeFiles": 804,
+    "nativeBytes": 3978560249,
+    "allStagedNativeBlobsMatchCandidate": true,
+    "candidateManifest": "candidate1-inputs.json",
+    "uncommittedNativeDiff": [],
+    "originalExecuted": false
+  },
+  "candidateCopy": {
+    "timeUTC": "2026-09-12T12:58:27.863201+00:00",
+    "regularFiles": 804,
+    "clonedPriorFiles": 791,
+    "copiedChangedOrNewFiles": 13,
+    "allCurrentPriorAndResultBytesVerified": true,
+    "originalExecuted": false
+  },
+  "supportingPins": {
+    "review1.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/review1.json",
+      "bytes": 2302,
+      "sha256": "55d0525f78c3a40211c14fb4c457eae3789fa960dd4c19c4078dd94dd8c616fb"
+    },
+    "archive-review1.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/archive-review1.json",
+      "bytes": 932,
+      "sha256": "5789c887b052186bb481102a6a9fdb68c7309ae20a53fd7288cc649aae337142"
+    },
+    "regression-plan1.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/regression-plan1.json",
+      "bytes": 1117,
+      "sha256": "990df1aab99a9c1d20f9b99306541b2d60abffa713ec9d5eb8b08172dda76b97"
+    },
+    "preservation1.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/preservation1.json",
+      "bytes": 332,
+      "sha256": "3ac1381c5068bda80a3fec1094036d3d166d8bfe02c9a01bfbeb2608f8296817"
+    },
+    "candidate1-inputs.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/candidate1-inputs.json",
+      "bytes": 142876,
+      "sha256": "cdb93fd258c2d839de5da91c308d5fa59c0eb57f632c2a122a7665f86b1c57c4"
+    },
+    "candidate1-copy-verification.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/candidate1-copy-verification.json",
+      "bytes": 213,
+      "sha256": "d77512d0b37e2ac2a0b8713279102d056a0f5fc2f43b177132e0bef7154c6cb4"
+    },
+    "native-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native-archive-verification.json",
+      "bytes": 740,
+      "sha256": "6751865d3e70556f335edb10782ac6eb7b7c25b7576c3bcc21ee2d5dfd53ca4d"
+    },
+    "native-git-index-verification.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/native-git-index-verification.json",
+      "bytes": 322,
+      "sha256": "02290122f35ef0463ada5c639560048b9c79c91ebed40416275aeb5cf56618cb"
+    },
+    "evidence-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/evidence-archive-verification.json",
+      "bytes": 1094,
+      "sha256": "284938cc39b171ebd20cc4d0731769fbc60a4ab871e4ca2c44561cbacde257b7"
+    },
+    "evidence-members.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/evidence-members.json",
+      "bytes": 18640,
+      "sha256": "8de43b88ca83511234437cf305aa6886aa624746f14c246ba7fc909aa407b9e1"
+    },
+    "next-boundaries-review.json": {
+      "path": "build/research/lib-war-preparation/war-music-errors-native-20260912/next-boundaries-review.json",
+      "bytes": 7977,
+      "sha256": "c2f2aca50c52ff4e594d98cb8e3a5e93ce6579ee1f5f4510ee99f69054760d9e"
+    }
+  },
+  "archiveReview": {
+    "timeUTC": "2026-09-12T13:07:04.594385+00:00",
+    "reviewer": "/root/war_contract_review",
+    "phase": "Before evidence archive execution",
+    "finding": "Metadata additions could overwrite plan input pins with fresh hashes before validation. No actual input change was observed; this was a final-gate logic gap.",
+    "retainedDraft": {
+      "path": "archive-evidence-draft1.py",
+      "bytes": 4758,
+      "sha256": "ebc3bc2518e930ca3cad1c9db1dc0733195c342b1c29e94ef40df29ed439caec"
+    },
+    "correction": "After all merges, independently require every original plan input value and current file pin to equal its frozen expected value, then verify every final archive member.",
+    "correctedProducer": {
+      "path": "archive-evidence.py",
+      "bytes": 5022,
+      "sha256": "8f97fc876dd9f97e62b2171860055703cb9e8dc73469e751cb216d3bd9fae825"
+    },
+    "originalExecuted": false,
+    "nativeChanged": false,
+    "historicalArtifactsChanged": false
+  },
+  "review": {
+    "timeUTC": "2026-09-12T12:58:20.095419+00:00",
+    "reviewer": "/root/war_contract_review",
+    "phase": "Independent contract/code review before first Native candidate execution",
+    "materialFindings": [],
+    "reviewedPins": {
+      "native/Sources/NTSDCore/OriginalMusicPlayback.swift": {
+        "bytes": 11860,
+        "sha256": "e683d260fcc67df5a3d50293d4b8d627193eb1e78bbd45b81591b9718189bdd0"
+      },
+      "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift": {
+        "bytes": 60790,
+        "sha256": "e92b485e0c594c127365ec0f7864f1cac84d396d3a362a5c6fcd31df137b4a39"
+      },
+      "native/Tests/NTSDCoreTests/OriginalWarPreparationMusicAdapter.swift": {
+        "bytes": 4208,
+        "sha256": "448512e42529c3edd7c3a28297e0c542fa1f2a114438c83e3da9216d98ec9d35"
+      },
+      "native/Tests/NTSDCoreTests/OriginalLibWarMusicErrorTests.swift": {
+        "bytes": 10836,
+        "sha256": "7a7917c061e370cbafe649c68fb2fc917160f6f2568d7eab5feec6ba0824e245"
+      },
+      "tools/package_war_music_error_references.py": {
+        "bytes": 11329,
+        "sha256": "a9f4403057456dee40ad86fd9e678f7c02d7cf642ab3a56d31ac1a8d38347b1c"
+      }
+    },
+    "checked": [
+      "9exactstoppedfrontcounts926/1096/915/916/918/930/926/928/926 independently read from retainedraw",
+      "s01localproof0..9 linksbound11..20,other8links0..9;90ownNativeprefixcalls/20distinct",
+      "Responses independently derived fromdeclaredcontrols; niloutput and0staydistinct",
+      "Messagebridge consumesgraphics/wholeeventwithoutmusicIndex;full46144globalbytes aftermusicstores,ownshadow==returnedglobals includingmasks",
+      "Wholecaller/records/masks/recordings/55wrappers/7wideowners210bytes remaincompared;27coupledrollbacktrials",
+      "s25NULLRender withoutowner/strings;s27declaredopaquea5backing andallunknownmasks",
+      "Coreoptionalstore forwarding preservesdefaultcallers;sharedregressionssupplement coversdirectMatchLaunch/Tournament/Teambracket paths",
+      "Packaging57sourcepins/350oldfixtures/90links20distinct withfaultsseparate"
+    ],
+    "pendingAcceptance": [
+      "Native raw/bundled/21unique regressionmethods",
+      "CompleteNative/package/archive/Git equality"
+    ],
+    "reviewerExecutedOriginal": false,
+    "reviewerExecutedNative": false,
+    "sourceFaultsAccepted": false,
+    "safetyIncidentResolved": false,
+    "fullGameComplete": false
+  },
+  "reviewPhaseNote": "The immutable review predates tests; pendingAcceptance describes that phase. Completed current gates are in acceptance/nativeRuns/archive/Git proofs.",
+  "openBoundary": {
+    "sourceFaultsAcceptedAsNativeMatches": false,
+    "nextReview": {
+      "recordedUTC": "2026-09-12T13:08:13.575827+00:00",
+      "reviewer": "/root/catalog_pending_review",
+      "scope": "Read-only readiness review of two saved normal War returns with failed bitmap metadata APIs; recover provenance and lifetime of retained dimensions. No original, Native, producer imports, fault continuation or historical audit rerun.",
+      "readiness": "Saved producers and inter-call retention are identified; an OWN Native retained-scratch join remains to implement and verify. Neither case is accepted by this review.",
+      "verificationReportedByReviewer": {
+        "scenarioMetadataRawPins": 10,
+        "sourcePrefixPins": 10,
+        "allComparedWithInventoryOrPrefixProof": true,
+        "sixteenBytesInitiallyA5Mask0ThenDefined": true,
+        "noInterveningWritesInPrefix2Through9OrCurrentCaseBeforeConsumers": true,
+        "beforeAfterBytesAndMasksPreserved": true
+      },
+      "cases": [
+        {
+          "scenario": 10,
+          "ordinal": 0,
+          "rawPin": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.parts/call-00.json",
+            "bytes": 35693238,
+            "sha256": "ce3c1e43d09403356fe0e93258eaa9c62d723d2c31337c0271e85e85e74f63cb"
+          },
+          "status": "returned; not yet Native accepted",
+          "declaredAPI": {
+            "getObject#27": 0
+          }
+        },
+        {
+          "scenario": 11,
+          "ordinal": 0,
+          "rawPin": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.parts/call-00.json",
+            "bytes": 35692906,
+            "sha256": "b8b09cc3f84f9766a4db3269bf122e3645a24645b32d2b775a76ff7b3d959a4a"
+          },
+          "status": "returned; not yet Native accepted",
+          "declaredAPI": {
+            "description#14": -1
+          }
+        }
+      ],
+      "prefixPins": [
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+          "bytes": 17494106,
+          "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+          "bytes": 16082713,
+          "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+          "bytes": 15266091,
+          "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+          "bytes": 15274771,
+          "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+          "bytes": 15310900,
+          "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+          "bytes": 16064259,
+          "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+          "bytes": 15377460,
+          "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+          "bytes": 15402361,
+          "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+          "bytes": 15419313,
+          "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+        },
+        {
+          "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+          "bytes": 15441688,
+          "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+        }
+      ],
+      "counts": {
+        "returnedCases": 2,
+        "rawBytes": 71386144,
+        "wholeEvents": 2638,
+        "checkpoints": 120,
+        "numericCheckpoints": 32,
+        "graphicsAPIs": 150,
+        "newLiveWrappers": 10,
+        "plannedNativePrefixCalls": 20,
+        "distinctPrefixCases": 10,
+        "plannedLateRollbackTrials": 6
+      },
+      "producers": [
+        {
+          "case": "bound0001 war-ready, last BATTLETROOPS loader",
+          "writeIndices": [
+            363,
+            364
+          ],
+          "instructionPC": "0x78144a7f",
+          "sourceDescriptorBase": "0x1000d310",
+          "ownedBytes": "CreateSurface descriptor[72..<80] after its actual memset",
+          "futureConsumers": [
+            "s10 loader43ed79 reads1000d358",
+            "s10 loader43ed94 reads1000d35c"
+          ]
+        },
+        {
+          "case": "bound0001 war-ready, last BATTLETROOPS copy",
+          "writeIndices": [
+            417,
+            418
+          ],
+          "resultStorePC": "0x40146a",
+          "ownedBytes": "Declared getDC#13.output and its returned result",
+          "futureConsumers": [
+            "s11 copy40147e reads1000d258",
+            "s11 copy40148a reads1000d25c"
+          ],
+          "outputProvenance": "Controlled API counter37000000+16*13, not image metadata."
+        }
+      ],
+      "callerDepths": {
+        "menuLoaderSP": "0x1000d394",
+        "menuCopySP": "0x1000d2e4",
+        "preparationLoaderSP": "0x1000d36c",
+        "preparationCopySP": "0x1000d2bc",
+        "difference": "0x28",
+        "constraint": "A global last-GetDC value is wrong: preparation getDC#14 writes1000d230 and cannot replace the retained menu value at1000d258. Model separate semantic producer/consumer slots, not imported source ABI."
+      },
+      "nativeWork": [
+        "Retain own descriptor[72..<80] and declared GetDC output/result through WarMenuMemory and later Start, including masks.",
+        "Initialize the corresponding arena loader/copy scratch from that owned retained state; fresh public scratch remains unknown by default.",
+        "Write retained state from Native descriptor and actual independently built API response, never expected requests/stack blobs/wrapper after-state.",
+        "Preserve distinct lifetime-defined masks versus current-helper API output masks when a failure wrote nothing.",
+        "Include all new retained state in the staged owner and complete rollback; limit depth relationship to this proven caller chain.",
+        "Add exact result overrides getObject#27=0 anddescription#14=-1 without output writes."
+      ],
+      "observableDistinction": "s10 wrapper dims0/0 arise from prior own descriptor, while later copy GetObject recoversactual384/383. s11 wrapper stays384/383; Stretch uses retained GetDC output/result as destination height/width. Keep full ownership andrequest comparisons.",
+      "rollback": [
+        "s10 aftercreateSurface#14,recording,beforeReturn",
+        "s11 afterstretch#14,recording,beforeReturn",
+        "Additional late War-menu failure while forming retained state must roll back; count/point to declare in next frozen plan."
+      ],
+      "regressions": [
+        "War preflight/matrix and allacceptederrorcards",
+        "Changed shared bitmap/menu callers",
+        "Retained direct unknown-field rejections"
+      ],
+      "subsequentSourceFaultRejections": [
+        "s03/01: fourRelease/free then missingfifthwrapper; native BG release ownership boundary.",
+        "s04..s09/01: NULL/clearedsurface; lastlayercases firstrelease4. Use native Arena bitmap release ownership rejection, not XCTestUnwrap observer.",
+        "s22/00: missingeventinterface; native rejection/fullrollback.",
+        "s28/00: replaycallocNULL afteroldrecordingfree; native rejection/fullrollback separatefrom sourceattemptedNULLwrite."
+      ],
+      "openDependencies": [
+        "All9sourcefaults remain separatefromreturnedmatches",
+        "Three prior safetyincidents remainopen; blockedoperations not retried",
+        "Fullgame,ownstartup/catalog/loop/app andWindows/device/cleanMac remainopen"
+      ],
+      "originalExecuted": false,
+      "nativeExecuted": false,
+      "filesChangedByReviewer": false,
+      "nativeAccepted": false,
+      "sourceFaultsAcceptedAsMatches": false,
+      "safetyIncidentResolved": false,
+      "fullGameComplete": false
+    },
+    "privateDimensions": "Saved producers are located in bound0001; the owned Native scratch retention across caller depths is not implemented or accepted for s10/s11.",
+    "otherDependencies": [
+      "Separate Native rejection/rollback of nine original source faults.",
+      "Own catalog/startup/War gameplay/library/outer loop/application, full matches, all content/network and Windows/device/clean-Mac acceptance.",
+      "Three prior safety incidents remain open; no blocked-operation retry or incident resolution."
+    ]
+  },
+  "originalExecuted": false,
+  "sourceRuns": 0,
+  "windowsVerified": false,
+  "deviceVerified": false,
+  "safetyIncidentResolved": false,
+  "fullPreparationComplete": false,
+  "fullGameComplete": false
+}

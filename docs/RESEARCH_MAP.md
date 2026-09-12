@@ -30,8 +30,8 @@ CPU-сессия не запускалась, прежние safety incidents н
 завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
 faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
 live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
-остаётся открытым за пределами NULL/partial/graphics-карточек ниже. Нужны music adapters,
-provenance private dimensions в двух returned случаях и отдельные fault rollback
+остаётся открытым за пределами NULL/partial/graphics/music-карточек ниже. Нужны
+собственный retained scratch в двух returned случаях и отдельные fault rollback
 проверки. Четыре поздних wrapper при первом NULL переживают следующий Start.
 Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
 
@@ -76,6 +76,23 @@ Core/expected не менялись, нового исполнения ориг�
 s00/s01/s20/s21/s23/s24/s25/s26/s27 с готовой входной provenance, отдельным
 message bridge и 27 rollback trials. Она ещё не принята; s10/s11 dimensions,
 полный error corpus, игра, приложение и incidents остаются открыты.
+
+[Музыкальные ошибки War и штатные контроли](research/LIB_WAR_MUSIC_ERRORS.md)
+приняты для девяти saved returned s00/s01/s20/s21/s23/s24/s25/s26/s27/call-00:
+12 028 событий, 144 numeric checkpoints, 221 bodyMusic events, два сообщения,
+827 graphics API requests, 55 wrappers, семь wide buffers/210bytes и 27 откатов.
+Responses независимы от expected; message globals сверяются после music stores,
+NULL Render и opaque conversion backing сохраняют владельцев и исходные маски.
+Raw56.435с, bundled War6методов370.173с и shared15методов224.595с прошли;
+21 уникальный bundled метод. Core только передаёт optional store observer,
+правила/expected не менялись. 350 прежних fixtures неизменны, 359 текущих/
+804 Native-файла, Git и оба архива проверены. Нового исполнения оригинала нет.
+[Приёмка](evidence/lib-war-music-errors.json). Всего принято26из28returned;
+девять source faults остаются отдельно. Для последних s10/s11 найдены предыдущие
+производители descriptor/GetDC bytes в bound0001 и их сохранность через0002..0009.
+Следующая карточка по CURRENT_WORK — собственный retained scratch между разными
+глубинами War menu и preparation с полным rollback; Native join ещё не принят.
+Полный error corpus, игра, приложение, Windows/device и incidents остаются открыты.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

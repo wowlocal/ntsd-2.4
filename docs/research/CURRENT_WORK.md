@@ -71,6 +71,20 @@ matrix/preflight/nullable/partial и общие BitmapSurfaceLoading/CharacterMe
 [Приёмка](../evidence/lib-war-graphics-errors.json). Девять source faults остаются
 отдельно; всего приняты 17 из 28 returned error-corpus вызовов.
 
+Приняты [музыкальные ошибки War и два штатных контроля](LIB_WAR_MUSIC_ERRORS.md):
+девять saved returned s00/s01/s20/s21/s23/s24/s25/s26/s27, только call-00.
+Сравнились 12 028 событий, 144 numeric checkpoints, 221 bodyMusic events,
+два сообщения, 827 graphics API requests, 55 wrapper owners и семь wide buffers /
+210 bytes; прошли 27 связанных откатов. Responses строятся из declared inputs.
+Сообщения сверяются с собственными globals после music stores; NULL Render и
+opaque backing после conversion0 сохраняют владельцев и исходные маски.
+Raw 56.435с; шесть bundled War-тестов 370.173с и пятнадцать общих тестов
+224.595с прошли на одном frozen candidate — 21 уникальный bundled метод.
+Core только передаёт optional store observer; правила игры и expected не менялись.
+350 прежних fixtures неизменны, 359 текущих/804 Native-файла, Git и оба архива
+сверены. Новый source не исполнялся. [Приёмка](../evidence/lib-war-music-errors.json).
+Всего принято 26 из 28 returned вызовов; девять source faults остаются отдельно.
+
 ## Непринятая работа и отказ Codex
 
 Текущий незакрытый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -91,8 +105,8 @@ matrix/preflight/nullable/partial и общие BitmapSurfaceLoading/CharacterMe
   290 сохранённых producer proofs,37 переходов live-owner flags и9 failure
   sidecars. Это чтение готовых данных; новых исполнений оригинала нет.
 - В исторической сводке `nativeCompared=false`, `fullPreparationComplete=false`,
-  `fullGameComplete=false`. Приёмки трёх NULL-вызовов, шести partial-surface
-  и восьми graphics-error возвратов выше не переписывают этот источник;
+  `fullGameComplete=false`. Приёмки трёх NULL-вызовов, шести partial-surface,
+  восьми graphics-error и девяти control/music возвратов не переписывают источник;
   полный Native error corpus ещё не принят.
 - Проверка процессов по командам War error capture/audit, transform boundaries
   и result recording не нашла соответствующих работающих процессов на момент
@@ -119,47 +133,54 @@ matrix/preflight/nullable/partial и общие BitmapSurfaceLoading/CharacterMe
 
 ## Следующая независимая карточка
 
-**Музыкальные ошибки и два штатных контроля: девять saved returned
-s00/s01/s20/s21/s23/s24/s25/s26/s27, только call-00.**
+**Собственное сохранение bitmap scratch между War menu и Start:
+два normal returned s10/s11, только call-00.**
 
 Инвентаризацию не начинать заново. По сохранённым результатам и readonly review в
-`build/research/lib-war-preparation/war-graphics-errors-native-20260912/next-music-errors-review.json`
-оформить конечный Native-план. Объём: 12 028 whole-caller events, 144 numeric
-checkpoints, 221 bodyMusic events, 827 preparationGraphics API requests, включая
-два сообщения, 55 новых wrapper owners и семь wide owners / 210 bytes.
-Девять Native-цепочек выполняют 90 prefix calls, перекрывающих двадцать прежних
-случаев: s01 требует bound 0011..0020 с firstCase11, остальные — 0000..0009.
+`build/research/lib-war-preparation/war-music-errors-native-20260912/next-boundaries-review.json`
+оформить конечный Native-план. Объём: 2 638 whole-caller events, 32 numeric
+checkpoints, 150 graphics API requests и десять новых живых wrappers.
+Две Native-цепочки выполняют по десять собственных prefix calls, перекрывающих
+те же десять принятых bound 0000..0009.
 
-Строить музыкальные responses независимо из `resourceFailureInput.music` и
-закреплённого producer contract, сохраняя различие nil output и явного 0.
-`spec.music` у этих девяти отсутствует. Expected responses остаются сравнением.
-В s20/s26 сообщение находится последним в preparationGraphics, а не bodyMusic;
-нужен мост `.message` → whole `.preparationBitmap` без увеличения musicIndex.
-Сравнивать его globals после музыкальных stores по собственному shadow.
-Минимальный возможный join — optional store callback у resumeMatch, переданный
-существующему play(store:); это не разрешение импортировать source after-state.
+Происхождение всех 16 нужных байт найдено в accepted bound0001 `war-ready`,
+последнем BATTLETROOPS. Stores363/364 от memset собственного CreateSurface
+descriptor задают bytes[72..<80]; это будущие loader width/height в s10.
+Stores417/418 сохраняют declared getDC#13.output и его result; это будущие
+copy height/width в s11. До этих stores backing A5/unknown; после них байты
+определены. Prefix0002..0009 и текущие вызовы до потребителей не перезаписывают
+их; полные before/after records сохраняют bytes/masks. Наблюдаемые 0/0 и
+0/370000d0 нельзя задавать литералами как игровые размеры.
 
-Для s27 producer явно объявляет собственный allocation 2c020020 с backing
-a5 × count, defined=false и live=true. Native самостоятельно создаёт 30 байтов
-с исходными unknown masks; conversion none/result0 ничего не записывает.
-Render получает собственный opaque buffer без UTF-16 decoding. s25 сохраняет
-NULL allocation, convert/Render с NULL и отсутствие wide owner. Это контроль
-синтетических API-ответов, не проверка Windows converter/codec.
+Native уже создаёт descriptor и получает API response, но теряет эти поля
+между вызовами. Добавить собственное retained state через WarMenuMemory и
+передать его в arena loader/copy scratch. Разделить source caller depths:
+menu loader/copy SP1000d394/1000d2e4 и preparation1000d36c/1000d2bc, сдвиг0x28.
+Глобальный «последний GetDC» неверен: новый getDC#14 пишет другое место и не
+заменяет прежнее значение, использованное как height. Модель должна хранить
+отдельные семантические producer/consumer slots, без импорта source stack.
 
-Проверить полные records/masks/owners и 27 связанных откатов: по одной точке
-после обработки целевого результата, затем recording и beforeReturn в каждом
-случае. Точные callback requests описаны в review; получение запроса и применение
-его возвращаемого ответа различаются. Сохранить matrix 256, preflight 22,
-nullable 3, partial 6, graphics 8; при изменении resumeMatch — также
-OriginalMusicPlaybackTests, OriginalGraphEventsTests и связанные music/menu callers.
-Новое исполнение оригинала для этих девяти сохранённых возвратов не требуется.
+Обновлять retained state из собственного descriptor и фактического declared
+API response. Сохранить различие lifetime masks и current-helper API masks:
+при getObject#27=0 / description#14=-1 новых writes нет. s10 получает wrapper
+0/0, но последующий copy GetObject возвращает реальные 384/383. В s11 wrapper
+остаётся 384/383, а destination dimensions Stretch берутся из retained slots.
+Все прежние ownership, globals, recording и request comparisons остаются полными.
+
+Предусмотреть шесть late rollback trials: после createSurface#14 для s10 /
+stretch#14 для s11, затем recording и beforeReturn для обоих. Дополнительно
+объявить точку и число откатов формирования retained state в позднем War-menu
+caller. Новое состояние входит в общую транзакцию. Сохранить matrix/preflight,
+все принятые error cards, изменённые общие bitmap/menu регрессии и старые direct
+unknown-field rejections. Найденная связь глубин не распространяется автоматически
+на другие caller paths. Новое исполнение оригинала для этой карточки не нужно.
 
 Это новая работа над Native по готовым данным, а не повтор исходного захвата.
 Она не разрешает затронутую отказом операцию и не закрывает incident. Остальные
-зависимости перечислены в итоговом исследовании: music/replay contracts,
-whole-War сравнения, девять отдельных fault rejection trials и s10/s11 с
-неустановленным собственным происхождением private dimensions. Два последних
-нормально вернулись; объявлять их source faults или подставлять expected нельзя.
+зависимости перечислены в итоговом исследовании: whole-War scratch join,
+девять отдельных fault rejection trials и дальнейшие replay/gameplay contracts.
+s10/s11 нормально вернулись; собственное Native-сохранение найденных producer
+bytes ещё не реализовано. Объявлять их source faults или подставлять expected нельзя.
 Новые источники для удобства формата/адаптера не запускать.
 
 ## Дальнейшая сквозная очередь
@@ -187,4 +208,4 @@ Native-карточкой выше: их исходные версии сохр�
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
 Исторический work JSON не переписывался. Новые принятые NULL/partial-surface/
-graphics-error контракты и следующая музыкальная карточка описаны выше.
+graphics/music-error контракты и следующая карточка retained scratch описаны выше.
