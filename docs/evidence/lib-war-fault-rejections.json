@@ -1,0 +1,3287 @@
+{
+  "schema": 1,
+  "timeUTC": "2026-09-12T15:06:42.645401+00:00",
+  "scope": "Nine separate Native ownership/music/recording rejections with full caller rollback, compared to the available request/checkpoint prefixes of immutable saved source faults. Source memory faults are not accepted Native matches.",
+  "baseCommit": "8684cc4a9a8b07e546c10025be6d5535e7be254e",
+  "study": "docs/research/LIB_WAR_FAULT_REJECTIONS.md",
+  "acceptance": {
+    "nativeRejectionsVerified": 9,
+    "sourceFaultsAcceptedAsMatches": false,
+    "rawPassed": true,
+    "bundledPassed": true,
+    "regressionsPassed": true,
+    "independentContractReview": true,
+    "transportVerified": true,
+    "nativeArchiveVerified": true,
+    "evidenceArchiveVerified": true,
+    "stagedNativeVerified": true
+  },
+  "cases": [
+    {
+      "scenario": 3,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json",
+        "bytes": 16391099,
+        "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.failure.json",
+        "bytes": 4495961,
+        "sha256": "1c7b37eb6d257d66a33f3b4765244affacc52f615fd1a2828d57f64c36f4fb2c"
+      },
+      "nativeGuard": "BG release ownership",
+      "expectedNativeFrontPrefix": 805,
+      "stagedReleaseFreePairsBeforeGuard": 4,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 4,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json",
+        "bytes": 4491375,
+        "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 797,
+      "stagedReleaseFreePairsBeforeGuard": 0,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 5,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json",
+        "bytes": 4497645,
+        "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 805,
+      "stagedReleaseFreePairsBeforeGuard": 4,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 6,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json",
+        "bytes": 4491201,
+        "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 797,
+      "stagedReleaseFreePairsBeforeGuard": 0,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 7,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json",
+        "bytes": 4498271,
+        "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 805,
+      "stagedReleaseFreePairsBeforeGuard": 4,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 8,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json",
+        "bytes": 4491398,
+        "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 797,
+      "stagedReleaseFreePairsBeforeGuard": 0,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 9,
+      "ordinal": 1,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json",
+        "bytes": 4497204,
+        "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+      },
+      "nativeGuard": "Arena bitmap release ownership",
+      "expectedNativeFrontPrefix": 805,
+      "stagedReleaseFreePairsBeforeGuard": 4,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 22,
+      "ordinal": 0,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json",
+        "bytes": 23916521,
+        "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.failure.json",
+        "bytes": 4816775,
+        "sha256": "3a48eb95cdc355f064b91719a0a8263fb25bb266219efdced12a288067c79be9"
+      },
+      "nativeGuard": "Original music: Null COM continuation",
+      "expectedNativeFrontPrefix": 917,
+      "stagedReleaseFreePairsBeforeGuard": 0,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    },
+    {
+      "scenario": 28,
+      "ordinal": 0,
+      "rawPin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json",
+        "bytes": 32841343,
+        "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce"
+      },
+      "failurePin": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.failure.json",
+        "bytes": 13118772,
+        "sha256": "55aff8ae422c29fa643b4ef6b8cfdb7fb2fddf3a09c3b9d6339461718bb816ed"
+      },
+      "nativeGuard": "War preparation: Recording allocation unavailable or live alias",
+      "expectedNativeFrontPrefix": 1316,
+      "stagedReleaseFreePairsBeforeGuard": 0,
+      "nativeAccepted": false,
+      "nativeRejectionVerified": true,
+      "sourceFaultAcceptedAsMatch": false,
+      "nativeAcceptedMeaning": "Preserved plan field: source faults are not accepted Native matches"
+    }
+  ],
+  "comparison": {
+    "rawBytes": 171511851,
+    "sourceEvents": 7845,
+    "comparableNativeFrontPrefixEvents": 7844,
+    "separateAllocatorResults": 1,
+    "checkpoints": 214,
+    "numericCheckpoints": 32,
+    "musicEvents": 38,
+    "preparationGraphicsEvents": 202,
+    "nativePrefixCalls": 90,
+    "distinctPrefixCases": 10,
+    "acceptedCall00ParentReproductions": 7,
+    "returnedParentInvocations": 97,
+    "rejectedInvocations": 9,
+    "totalInvocations": 106,
+    "wholeRollbackTrials": 9,
+    "stagedReleaseFreePairs": 16,
+    "orderedOuterPoints": 45,
+    "orderedWarPoints": 63,
+    "orderedPreparationPoints": 74,
+    "orderedNumericPoints": 32,
+    "finalCandidateUniqueBundledMethods": 18,
+    "finalCandidateMethodExecutions": 19,
+    "rejectedExecutionsAcrossRawAndBundled": 18,
+    "returnedParentExecutionsAcrossRawAndBundled": 194
+  },
+  "contract": {
+    "exactGuards": "Only OriginalStateError.invalidStorage with each declared exact message is accepted; Stop.unexpected, XCTest unwrap or another error fails the comparison. Every reached front event, all214 ordered points,38 music requests/responses and202 graphics events are consumed.",
+    "ownedParents": "Nine own chains execute ten accepted prefixes each, then seven required returned call00 parents. These97 parent invocations overlap references, not97 distinct reference states.",
+    "missingSurface": "Surface0 reaches the existing Core guard only when own marker0 and input.present=false and there is no surface binding. Missing binding for marker1 or present=true is a harness error. s08/s09 retain their released surface identity; guard prevents repeated Release.",
+    "stagedReleases": "Four last-layer cases stage16 ordered Release/free pairs. Diagnostic context request flags match saved flags; committed owners, records, masks and contexts roll back. s09 Release ordinals start2. These are controlled requests, not device destruction.",
+    "releaseGlobals": "All32 release/free API globals compare to own43a3b1 snapshot. Saved evidence and Core review establish no intervening game-global change; this anchor is not a new live post-guard snapshot.",
+    "music": "s22 keeps three queries despite query1 negative result and output0. Null COM continuation precedes notify, format and wide allocation. All11 body events match before rollback.",
+    "recording": "s28 allocator receives0x630e18 and returns0 from declared.replayNull. Compare1316 front events ending free(0x26003000), then the separate allocator result. Original source includes1317events/calloc0, later global stores and attemptedNULLwrite; Native guard precedes those observations. Expected unchanged.",
+    "recordingDiagnosticLimit": "Core code review establishes staged live=false and pointer clear afterfree and beforeallocator. Runtime callbacks observe free/allocator and whole rollback only; no dynamic middle-state snapshot is claimed. Old0x26003000 and neighbor0x26003100 both remain fully live with original bytes/masks/pointers afterthrow.",
+    "rollback": "Globals, World, Actors, BGs, bitmap records and release ownership/order, War scratch, all resource contexts, music buffers, recordings, library and committed events equal own declared entry. Source fault after-state is never used as Native rollback target.",
+    "startupReportBoundary": "Saved fault publication omits nested startup/output metadata. Five early checkpoints compare at actual no-op callbacks with own retained owners; output slots are explicitly unused Native API arguments, not source-derived values. Unexpected requests/output fail acceptance.",
+    "productionChanges": "No Core game-rule change. Test adapter exposes existing guards; comparison adds exact boundary/prefix and whole rollback assertions."
+  },
+  "reference": {
+    "sha256": {
+      "exe": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "crt": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+      "lib": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba"
+    },
+    "environment": "Historical pinned EXE/lib/VC80 in Unicorn2.1.4,CW023f,C locale,flat32-bit segments/explicitFS and controlled APIresponses. Not Windows/device behavior. Current card reads saved data and runs Native only; no original/emulator/capture,producer imports or old audit reruns.",
+    "inputPins": {
+      "docs/evidence/lib-war-preparation-errors.json": {
+        "bytes": 76785,
+        "sha256": "34bc5a205882b19172947fc86e11063c20e1a06cc35318e5de50fd54ac0fe7ff"
+      },
+      "docs/evidence/lib-war-nullable-bitmap.json": {
+        "bytes": 32824,
+        "sha256": "8ac8232d1cbc37499d2cb3ca34b8434c2b1b47c3e475dca7f25d04bc0cd3db96"
+      },
+      "docs/evidence/lib-war-partial-surfaces.json": {
+        "bytes": 62547,
+        "sha256": "0d01bff1cc8e62f08c2080eb42c0cb9d94b492c486df690065c32fdce272bcd0"
+      },
+      "docs/evidence/lib-war-graphics-errors.json": {
+        "bytes": 79783,
+        "sha256": "4081dd9f3cf8553b663462a11f1c03a1369b981b31e8ee32a7861760f5f5308d"
+      },
+      "build/research/lib-war-preparation/war-errors-completion-20260912/inventory2.json": {
+        "bytes": 315652,
+        "sha256": "75a96b6e5eae6b2139de5c3d807d9c17b912a41c360e0c68880e3a7211c4f6f4"
+      },
+      "build/research/lib-war-preparation/war-graphics-errors-native-20260912/next-music-errors-review.json": {
+        "bytes": 6595,
+        "sha256": "25db05d25ba15af320c27b5c6b4438ca5b144156b7428af52bd6db028594573f"
+      },
+      "tools/oracle_lib_war_preparation.py": {
+        "bytes": 13488,
+        "sha256": "82c22ff67485dd1014596b63a7cef1df1612b5984ee375770a9140f4e54ec2fe"
+      },
+      "tools/oracle_music_playback.py": {
+        "bytes": 18935,
+        "sha256": "6b6d9e410c7321427b45217d4522fb3bf26d29e50ef4d00c2357b3cfc7c74d96"
+      },
+      "tools/oracle_war_preparation_errors.py": {
+        "bytes": 11177,
+        "sha256": "2341c9e6f6b35db0701329985b3b88558fbb812a68c86b0d2cb230d49be9e8e3"
+      },
+      "tools/oracle_war_preparation_fs_errors.py": {
+        "bytes": 8150,
+        "sha256": "5bdeba408eb938acc9354ed49240d5f5a39fa47f33ef9299f7cbb83180f507c0"
+      },
+      "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+        "bytes": 38476,
+        "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+      },
+      "docs/research/LIB_WAR_PREPARATION_ERRORS_PLAN.md": {
+        "bytes": 6532,
+        "sha256": "1d1afa9108c1db799a5d2b8dbfe4370609e01c2e73c2149b9e1d7419b746e695"
+      },
+      "docs/evidence/lib-war-music-errors.json": {
+        "bytes": 110767,
+        "sha256": "bcc159702e07a1d60c661e17383a1b095a8cf7c3a05b47d962662b219ebbc38e"
+      },
+      "build/research/lib-war-preparation/war-music-errors-native-20260912/next-boundaries-review.json": {
+        "bytes": 7977,
+        "sha256": "c2f2aca50c52ff4e594d98cb8e3a5e93ce6579ee1f5f4510ee99f69054760d9e"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json": {
+        "bytes": 17494106,
+        "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json": {
+        "bytes": 16082713,
+        "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json": {
+        "bytes": 15266091,
+        "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json": {
+        "bytes": 15274771,
+        "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json": {
+        "bytes": 15310900,
+        "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json": {
+        "bytes": 16064259,
+        "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json": {
+        "bytes": 15377460,
+        "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json": {
+        "bytes": 15402361,
+        "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json": {
+        "bytes": 15419313,
+        "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+      },
+      "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json": {
+        "bytes": 15441688,
+        "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.json": {
+        "bytes": 7643,
+        "sha256": "bd58dfdcc43505aa06c6f1dfe6826f8dd2bba905ba9eaf638b4f33be67ef3535"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.job.json": {
+        "bytes": 942,
+        "sha256": "69ca6cd9253cc94d1b550205cded69fa0473094706082e76e243b97371e588a2"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.config.json": {
+        "bytes": 65166,
+        "sha256": "eaf216eb5af66f7e16d2e042825379933044cc7dc2a3e11b268bada2b935f152"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "a2029244f0938e60a21ff8527e35415d11bcdaa641eb35d68319e5bd3ea543a9"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s10-capture2.parts/call-00.json": {
+        "bytes": 35693238,
+        "sha256": "ce3c1e43d09403356fe0e93258eaa9c62d723d2c31337c0271e85e85e74f63cb"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.json": {
+        "bytes": 7648,
+        "sha256": "a417f68d98c4d06942ba809916fd48a4321cbc9931747aec0256e36704f1e998"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.job.json": {
+        "bytes": 944,
+        "sha256": "86a4afe19dab9d51e62d36773e845cb8392d8e395b201326cac83b35ae42dfa1"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.config.json": {
+        "bytes": 65168,
+        "sha256": "90929538e1d2fabf60e8ced5c0f9fc18f03455b1981d48b22d7fb25d3a50ed0c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "da33a3dd388e84277f627449d7c937245406de1b210147e7dd29b6ed2894fedd"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s11-capture2.parts/call-00.json": {
+        "bytes": 35692906,
+        "sha256": "b8b09cc3f84f9766a4db3269bf122e3645a24645b32d2b775a76ff7b3d959a4a"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.json": {
+        "bytes": 7949,
+        "sha256": "f635a75d68b3b6e3f61179ee6e293db7ecd3a0ce45f60b6dbe830e345241de55"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.job.json": {
+        "bytes": 1067,
+        "sha256": "29bced99ad980d391fe54a33d1bdaec706c8df7e0822f84dfa387e829e206b82"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.config.json": {
+        "bytes": 65291,
+        "sha256": "fedc04427d50530d5b5c9232dc2c48b8c6b09efa0ce75669e45267d22ebc414d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.pins.json": {
+        "bytes": 110327,
+        "sha256": "a1c3e03e38ac378b434339c5beadad0ae68f1116f8015433f3784607e594cff2"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.json": {
+        "bytes": 7951,
+        "sha256": "d32c4e172728e0f9a1b8a8ecbc5ef9deba89dd6c0974fab7e0d9d85d3a0a9aef"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "938bc848e7d5e2fbeab427d2fd5aeab4cbaf6d72fccbb60c9298ef8f996a5211"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "481fda3bb6d8895ffab9da052471877d439e1f28d6fd37ac2a14bee590c0427d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "bc1935867b04def856897063b41c9868bbbefeda434a35b7182f578a2a8c4fd9"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.json": {
+        "bytes": 7951,
+        "sha256": "e31829e051b1301f944a081464f80ea57b51d8dedec2aacefa13d81cb1f4bce6"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "37936eb191c778cd4bf6816fc1d2a360c0b5e3659c9dd5fa306578d7ed531946"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "7c5f4c834f3a46aaee6ed353b77bc8efce224af29c5c275a032a24a9d4f91efe"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "7815c7483dca6cca7df7b97eaf227b6e1d618c84273c88092c1f365badf1eab0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.json": {
+        "bytes": 7953,
+        "sha256": "93fc3cc24e154f901d49051d4a96685c5b2ccc65cf09d7234aa9509a6218de62"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "9aadace7a2274a87bb04b1a4268d51ea9e84b340bdbd729dadeef4f52caf31cf"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "bb4a7f449f3fa54907aa7ae68c1f8e21bad602ea09f6b2cd40af5b341de4668d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "c64dad614c04c4eaa6f768b770b8ff01e131aeb168bce748a1166ae05560fde6"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.json": {
+        "bytes": 7953,
+        "sha256": "2ee9562810cb0272f9a20ec269ecda7cc59275a76709214bcd5d138de9c37cd0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "f6c05932b72a91ff7a0b2f42a6a3152b22eac014d4180649ead6b44f8fbfe452"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "a54aca02d9f261f0edbbcbd4790091b821899eafad946d44e024365447dc5f2f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "6b955f4609ff63fe256df335678669aff37ae175b6ebdada8f8bf9159fce6f0f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.json": {
+        "bytes": 7943,
+        "sha256": "1ff4c44d6f580da6a5a8cc7f792939a4c7b3343787fa338c27ca1bebf8313e19"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.job.json": {
+        "bytes": 935,
+        "sha256": "13952f73aad42bf4f5e8c982fd533b3379919cb76e9828a01ca01e3a196d9778"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.config.json": {
+        "bytes": 65159,
+        "sha256": "b3eecf1d400ad5e871d01aa10e3a83d202ea87ffdc088cf9783ea8174af98e12"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "7384aeececf37a97f88941d201f499979312fe42edc10c3c1816be9c23430cd0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.json": {
+        "bytes": 7943,
+        "sha256": "ececaf61c38a51aa7b62ff94b47c0e8894ac0e8ee1d092d6dd951ffe043a22e3"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.job.json": {
+        "bytes": 935,
+        "sha256": "0b7013949a30f16fe17d4904ffdc478dab615ec748c98575f9a60c2004913bef"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.config.json": {
+        "bytes": 65159,
+        "sha256": "455afa7eceb3cad2a605c5d0e16e64a09de8f8a464e7af9d7494fa845278deae"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "a4da8b36589b7a0cc6b3e036e2af12c9e915ff4d5c301be7fd38e72bb33fc46f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.json": {
+        "bytes": 7604,
+        "sha256": "129bd9123254c837081321e69e80847a4fd9261767cf356232503e3779ecd10c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "c66b0de71693f1885091a09e5f246289cceec595a1c0652a5ee4ef7257eec068"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "02c70783eb2d29426215fb0fda11420c9e0272eea8e2cc2266199e9dc7fd59ec"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "40cd7d1436dab15e1ad38e90b002a262b7f18605cdc4cc080e7b8962dedb2caf"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.json": {
+        "bytes": 7605,
+        "sha256": "728b78a9c6bea39ec7a3fddef0048e3960113eebf2b7ccbc2b35b90ffd3a1aee"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.job.json": {
+        "bytes": 1069,
+        "sha256": "6d5eb8e0fd4896b95e4afeeb5f13a2f0a4375e9a30367557b5928ff8d963136e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.config.json": {
+        "bytes": 65293,
+        "sha256": "52cd2813f1147b157551c58c2ce0390c42937edbc3fc96231d1bdb13440c32e0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.pins.json": {
+        "bytes": 110327,
+        "sha256": "6838e8f09256eb9334a4a1265df3d92f8c81ebb2564767bb30f152ec1b75da84"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json": {
+        "bytes": 16391099,
+        "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.failure.json": {
+        "bytes": 4495961,
+        "sha256": "1c7b37eb6d257d66a33f3b4765244affacc52f615fd1a2828d57f64c36f4fb2c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json": {
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json": {
+        "bytes": 4491375,
+        "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json": {
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json": {
+        "bytes": 4497645,
+        "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json": {
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json": {
+        "bytes": 4491201,
+        "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json": {
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json": {
+        "bytes": 4498271,
+        "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json": {
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json": {
+        "bytes": 4491398,
+        "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json": {
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json": {
+        "bytes": 4497204,
+        "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json": {
+        "bytes": 23916521,
+        "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.failure.json": {
+        "bytes": 4816775,
+        "sha256": "3a48eb95cdc355f064b91719a0a8263fb25bb266219efdced12a288067c79be9"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json": {
+        "bytes": 32841343,
+        "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.failure.json": {
+        "bytes": 13118772,
+        "sha256": "55aff8ae422c29fa643b4ef6b8cfdb7fb2fddf3a09c3b9d6339461718bb816ed"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-00.json": {
+        "bytes": 35639552,
+        "sha256": "d333c0f19de94ac0cfa92c5354a7e335c33e85eb0bb20d52b9aeb3f627e7de56"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json": {
+        "bytes": 35669702,
+        "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json": {
+        "bytes": 35670064,
+        "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json": {
+        "bytes": 35676576,
+        "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json": {
+        "bytes": 35677671,
+        "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json": {
+        "bytes": 35698247,
+        "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json": {
+        "bytes": 35698291,
+        "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd"
+      },
+      "build/research/lib-war-preparation/war-retained-scratch-native-20260912/next-boundaries-review.json": {
+        "bytes": 17635,
+        "sha256": "3117b208e99ca73255fa97e7532924fb2399154cd93bfe53e92c4aca9688fca8"
+      },
+      "build/research/lib-war-preparation/war-retained-scratch-native-20260912/candidate3-inputs.json": {
+        "bytes": 143628,
+        "sha256": "6c549585d2b288735b62eb1c06004f2d75e142656eb32efc8d5af77b30ffbf80"
+      },
+      "docs/evidence/lib-war-retained-scratch.json": {
+        "bytes": 87147,
+        "sha256": "673b71a055857933cfbf6f89a50b5085aba8bbd96b58216304fb1be9063bb5ff"
+      }
+    },
+    "plan": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/plan.json",
+      "bytes": 102383,
+      "sha256": "6f2627e8f94b5ae86e0afbca8b223528e09f5c5954f3674bde48f94305ca9a80"
+    }
+  },
+  "transport": {
+    "counts": {
+      "sourceFaultCalls": 9,
+      "returnedCallsPackaged": 0,
+      "rawBytes": 171511851,
+      "packedBytes": 27308268,
+      "blobEntries": 6517,
+      "blobEntryBytes": 282761864,
+      "distinctBlobs": 985,
+      "distinctBlobBytes": 49804030,
+      "maximumBlobBytes": 6491672,
+      "sidecars": 9,
+      "sidecarRawBytes": 49398602,
+      "sidecarBlobEntriesEqualVerifiedRawBlobs": 6516,
+      "sidecarBlobEntryBytes": 282761834,
+      "boundPrefixProofLinks": 90,
+      "distinctBoundPrefixes": 10,
+      "existingParentFixturesReused": 7,
+      "sourceEvidencePinsUnchanged": 98,
+      "oldFixturesUnchanged": 361
+    },
+    "artifacts": [
+      {
+        "scenario": 3,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json",
+          "bytes": 16391099,
+          "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s03-call-01.json",
+          "bytes": 2743720,
+          "sha256": "7fa3185f93412a19359bf0b32f2cb6d281240a8c16bb367f573f0dae1163f8eb"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.failure.json",
+          "bytes": 4495961,
+          "sha256": "1c7b37eb6d257d66a33f3b4765244affacc52f615fd1a2828d57f64c36f4fb2c"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.json",
+          "bytes": 7949,
+          "sha256": "f635a75d68b3b6e3f61179ee6e293db7ecd3a0ce45f60b6dbe830e345241de55"
+        },
+        "end": "sourceFault",
+        "endPC": 4243734,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 726,
+        "blobBytes": 34537018,
+        "sidecarBlobs": 726,
+        "sidecarBlobBytes": 34537018,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 3,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-00.json",
+            "bytes": 35639552,
+            "sha256": "d333c0f19de94ac0cfa92c5354a7e335c33e85eb0bb20d52b9aeb3f627e7de56"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-nullable-s03-call-00.json",
+            "bytes": 4775228,
+            "sha256": "ec7268dc3f09100aa80f51bf4347b1affb8352c87ebfbf71c38f86661862e1e8"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 4,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+          "bytes": 16389111,
+          "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s04-call-01.json",
+          "bytes": 2745728,
+          "sha256": "f2ebc7f9fc66b50671cad0d86548c5fe572ec781cc285355ee519d8713603f70"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json",
+          "bytes": 4491375,
+          "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.json",
+          "bytes": 7951,
+          "sha256": "d32c4e172728e0f9a1b8a8ecbc5ef9deba89dd6c0974fab7e0d9d85d3a0a9aef"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 730,
+        "blobBytes": 34553990,
+        "sidecarBlobs": 730,
+        "sidecarBlobBytes": 34553990,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 4,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json",
+            "bytes": 35669702,
+            "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s04-call-00.json",
+            "bytes": 4782988,
+            "sha256": "89ca6216b82eefb67e23e3b9d31cc576aa9a0f2e9e0c4e704ad2a73af3ea72d2"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 5,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+          "bytes": 16397379,
+          "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s05-call-01.json",
+          "bytes": 2747424,
+          "sha256": "b68b4a13812604fa860b57ce5acaff822e02b95312bc5f706bf46ca992c2baee"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json",
+          "bytes": 4497645,
+          "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.json",
+          "bytes": 7951,
+          "sha256": "e31829e051b1301f944a081464f80ea57b51d8dedec2aacefa13d81cb1f4bce6"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 730,
+        "blobBytes": 34553990,
+        "sidecarBlobs": 730,
+        "sidecarBlobBytes": 34553990,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 5,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json",
+            "bytes": 35670064,
+            "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s05-call-00.json",
+            "bytes": 4783260,
+            "sha256": "a73d1f6c1866ea01c7e86324d3fa7ceff213d45652f8a6a77e8bf711e7de41b0"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 6,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+          "bytes": 16389408,
+          "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s06-call-01.json",
+          "bytes": 2744428,
+          "sha256": "79a4acfa822ed000d4e35ca95790de8144851f9ae31999791a84065e101df582"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json",
+          "bytes": 4491201,
+          "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.json",
+          "bytes": 7953,
+          "sha256": "93fc3cc24e154f901d49051d4a96685c5b2ccc65cf09d7234aa9509a6218de62"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 729,
+        "blobBytes": 34545974,
+        "sidecarBlobs": 729,
+        "sidecarBlobBytes": 34545974,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 6,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json",
+            "bytes": 35676576,
+            "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s06-call-00.json",
+            "bytes": 4781440,
+            "sha256": "dff70ac48c2b8994fbb251213a39790c3e0c1647d01ccd24ee3881141c978e5b"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 7,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+          "bytes": 16398469,
+          "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s07-call-01.json",
+          "bytes": 2746856,
+          "sha256": "6a5bfd6b3838aee1e9ae0852dc3749e0696bf5684e4cfba38f994fe3e20ce871"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json",
+          "bytes": 4498271,
+          "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.json",
+          "bytes": 7953,
+          "sha256": "2ee9562810cb0272f9a20ec269ecda7cc59275a76709214bcd5d138de9c37cd0"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 729,
+        "blobBytes": 34545974,
+        "sidecarBlobs": 729,
+        "sidecarBlobBytes": 34545974,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 7,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json",
+            "bytes": 35677671,
+            "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s07-call-00.json",
+            "bytes": 4781940,
+            "sha256": "c690397148c217365a602b162843fe845892dc1d15d324fe3be6f1498622c93e"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 8,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+          "bytes": 16390364,
+          "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s08-call-01.json",
+          "bytes": 2744788,
+          "sha256": "532e0d57e82a6f77b16992b18d02c20c28b61bd3af026b8175cb586f37aa8e76"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json",
+          "bytes": 4491398,
+          "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.json",
+          "bytes": 7943,
+          "sha256": "1ff4c44d6f580da6a5a8cc7f792939a4c7b3343787fa338c27ca1bebf8313e19"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 730,
+        "blobBytes": 34546486,
+        "sidecarBlobs": 730,
+        "sidecarBlobBytes": 34546486,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 8,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json",
+            "bytes": 35698247,
+            "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s08-call-00.json",
+            "bytes": 4782692,
+            "sha256": "ee9c2379dd4de9be5633586beed9ae987965e8ba2cb8b34a6b4611945fe71044"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 9,
+        "ordinal": 1,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+          "bytes": 16398157,
+          "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s09-call-01.json",
+          "bytes": 2746016,
+          "sha256": "e19997098ab333887aaf9039550822fd0c8933c2565a2e12810dc60666dc4c62"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json",
+          "bytes": 4497204,
+          "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.json",
+          "bytes": 7943,
+          "sha256": "ececaf61c38a51aa7b62ff94b47c0e8894ac0e8ee1d092d6dd951ffe043a22e3"
+        },
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 730,
+        "blobBytes": 34546486,
+        "sidecarBlobs": 730,
+        "sidecarBlobBytes": 34546486,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": {
+          "scenario": 9,
+          "source": {
+            "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json",
+            "bytes": 35698291,
+            "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd"
+          },
+          "existingFixture": {
+            "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s09-call-00.json",
+            "bytes": 4782700,
+            "sha256": "6584349333192bb75344d8c7cae07ac5977709a5cd1ea8c48758cc178747c3e5"
+          },
+          "end": "returned",
+          "wholeRawRoundtripExact": true,
+          "newFixtureCreated": false
+        },
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 22,
+        "ordinal": 0,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json",
+          "bytes": 23916521,
+          "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s22-call-00.json",
+          "bytes": 3639436,
+          "sha256": "605457ad49ec3a6195ede339a2433235fc058529da8db5c4f42fdb3113e72cf0"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.failure.json",
+          "bytes": 4816775,
+          "sha256": "3a48eb95cdc355f064b91719a0a8263fb25bb266219efdced12a288067c79be9"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.json",
+          "bytes": 7604,
+          "sha256": "129bd9123254c837081321e69e80847a4fd9261767cf356232503e3779ecd10c"
+        },
+        "end": "sourceFault",
+        "endPC": 4201726,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 702,
+        "blobBytes": 20321476,
+        "sidecarBlobs": 702,
+        "sidecarBlobBytes": 20321476,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [],
+        "parentReference": null,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 28,
+        "ordinal": 0,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json",
+          "bytes": 32841343,
+          "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s28-call-00.json",
+          "bytes": 4449872,
+          "sha256": "c86278e35083f61fe2b0d7d7d58dde6c11ffd2e49a4ced8e0824214cda6e411a"
+        },
+        "failureSidecar": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.failure.json",
+          "bytes": 13118772,
+          "sha256": "55aff8ae422c29fa643b4ef6b8cfdb7fb2fddf3a09c3b9d6339461718bb816ed"
+        },
+        "report": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.json",
+          "bytes": 7605,
+          "sha256": "728b78a9c6bea39ec7a3fddef0048e3960113eebf2b7ccbc2b35b90ffd3a1aee"
+        },
+        "end": "sourceFault",
+        "endPC": 4444925,
+        "nativeCompared": false,
+        "nativeAccepted": false,
+        "blobs": 711,
+        "blobBytes": 20610470,
+        "sidecarBlobs": 710,
+        "sidecarBlobBytes": 20610440,
+        "sidecarFieldsExact": [
+          "spec",
+          "before",
+          "after",
+          "events",
+          "writes",
+          "reads",
+          "apiReads",
+          "helpers",
+          "pending",
+          "instructions"
+        ],
+        "allSidecarBlobsEqualVerifiedRawBlobs": true,
+        "rawOnlyBlobKeys": [
+          "3f602f0d44c26057387596e3793a79c92cf2cf3722b843f7fa30bd40f9bf0fb4"
+        ],
+        "parentReference": null,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0000.json",
+              "bytes": 17494106,
+              "sha256": "8e9d09b67d36fb2b3f609ad2f55bedb8864e4c935a531ef6110e99125ca6f2eb"
+            }
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0001.json",
+              "bytes": 16082713,
+              "sha256": "260dac2ab4e56ccf1f8c5e0b1be2dcdedb5a77d3615fd10ed621e459dde757bb"
+            }
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0002.json",
+              "bytes": 15266091,
+              "sha256": "dfcc6a7d07acb3c30f0a8b6faf23f47d4f57ed3c97a1df98485d9037b5d2c237"
+            }
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0003.json",
+              "bytes": 15274771,
+              "sha256": "377bf6c4e0c312978bfcbd93f503eda20ccdfe25501d5892b50b866fc7674260"
+            }
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0004.json",
+              "bytes": 15310900,
+              "sha256": "3fbf5a030679e0ba11358b7cf2cc8fe27cdb0e06bdb53e462beec19aa68f61c6"
+            }
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0005.json",
+              "bytes": 16064259,
+              "sha256": "38eb77cb13b21bc2900ba4eec2994189888acbdb8fbf3a25e01dbfdd66dc8df5"
+            }
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0006.json",
+              "bytes": 15377460,
+              "sha256": "c2cb3f3e4edcc2537a97864f2365ee5395e15955fe33787448c30e4277e4ebff"
+            }
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0007.json",
+              "bytes": 15402361,
+              "sha256": "fd1fdb2efa28489d73d08172e60db547b702712acf4a4db19325426206a7c727"
+            }
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0008.json",
+              "bytes": 15419313,
+              "sha256": "163fb7ec100622464f27921179d5f6e7290a037bdb72ff1e13dd7ae5b0f57c69"
+            }
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9,
+            "atomicPrefix": {
+              "path": "build/research/lib-war-preparation/war-preparation-bound-capture1.parts/0009.json",
+              "bytes": 15441688,
+              "sha256": "fadf722b818588bb1d9d3b1d0b6ba08ad7ce9264c4253b02786b7935b7857333"
+            }
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      }
+    ],
+    "existingParentReferences": [
+      {
+        "scenario": 3,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-00.json",
+          "bytes": 35639552,
+          "sha256": "d333c0f19de94ac0cfa92c5354a7e335c33e85eb0bb20d52b9aeb3f627e7de56"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-nullable-s03-call-00.json",
+          "bytes": 4775228,
+          "sha256": "ec7268dc3f09100aa80f51bf4347b1affb8352c87ebfbf71c38f86661862e1e8"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 4,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json",
+          "bytes": 35669702,
+          "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s04-call-00.json",
+          "bytes": 4782988,
+          "sha256": "89ca6216b82eefb67e23e3b9d31cc576aa9a0f2e9e0c4e704ad2a73af3ea72d2"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 5,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json",
+          "bytes": 35670064,
+          "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s05-call-00.json",
+          "bytes": 4783260,
+          "sha256": "a73d1f6c1866ea01c7e86324d3fa7ceff213d45652f8a6a77e8bf711e7de41b0"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 6,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json",
+          "bytes": 35676576,
+          "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s06-call-00.json",
+          "bytes": 4781440,
+          "sha256": "dff70ac48c2b8994fbb251213a39790c3e0c1647d01ccd24ee3881141c978e5b"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 7,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json",
+          "bytes": 35677671,
+          "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s07-call-00.json",
+          "bytes": 4781940,
+          "sha256": "c690397148c217365a602b162843fe845892dc1d15d324fe3be6f1498622c93e"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 8,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json",
+          "bytes": 35698247,
+          "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s08-call-00.json",
+          "bytes": 4782692,
+          "sha256": "ee9c2379dd4de9be5633586beed9ae987965e8ba2cb8b34a6b4611945fe71044"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      },
+      {
+        "scenario": 9,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json",
+          "bytes": 35698291,
+          "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd"
+        },
+        "existingFixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s09-call-00.json",
+          "bytes": 4782700,
+          "sha256": "6584349333192bb75344d8c7cae07ac5977709a5cd1ea8c48758cc178747c3e5"
+        },
+        "end": "returned",
+        "wholeRawRoundtripExact": true,
+        "newFixtureCreated": false
+      }
+    ],
+    "verification": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/package-verification1.json",
+      "bytes": 93865,
+      "sha256": "609730629275429b8e38e05247c16f27ecc058fded00929573b2ed4542dfbad1"
+    },
+    "producer": {
+      "path": "tools/package_war_fault_rejection_references.py",
+      "bytes": 14901,
+      "sha256": "9266fbf1bafc573822325254311a10089c008df51663a79e463dd83849b64cca"
+    }
+  },
+  "nativeRuns": [
+    {
+      "name": "native4",
+      "job": {
+        "scope": "Freeze and compare the fault-rejection War Native candidate against saved raw data.\nNo original code, emulator, source producer or capture is invoked.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarFaultRejectionTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2-inputs.json",
+        "nativeFiles": 818,
+        "rawOverride": {
+          "NTSD_WAR_FAULT_REJECTION_DIRECTORY": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation"
+        },
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T14:44:07.939678+00:00",
+        "pid": 68285,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 335.93011774999997,
+        "endedUTC": "2026-09-12T14:49:43.876856+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native4.job.json",
+        "bytes": 1220,
+        "sha256": "b2d4b4a876ebbc91ca57a277c39f9707e3c0be100dc17dd541ae754014b0430d"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native4.log",
+        "bytes": 23456,
+        "sha256": "96d29c04b241871c48b7275e9032353b02adc5b08db3ddb62406b71d136b4d2b"
+      },
+      "buildSeconds": 278.35,
+      "testSeconds": 56.029,
+      "testCount": 1,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalLibWarFaultRejectionTests",
+          "method": "testNineNativeGuardsRetainWholeCallerState",
+          "seconds": 56.029
+        }
+      ]
+    },
+    {
+      "name": "native5",
+      "job": {
+        "scope": "Bundled nine separate Native fault rejections and all accepted whole War regressions.\nNo original execution; all NTSD raw overrides are removed from the environment.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarFaultRejectionTests|OriginalLibWarRetainedScratchTests|OriginalLibWarMusicErrorTests|OriginalLibWarPreparationTests|OriginalLibWarNullableBitmapTests|OriginalLibWarPartialSurfaceTests|OriginalLibWarGraphicsErrorTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2-inputs.json",
+        "nativeFiles": 818,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T14:49:56.327200+00:00",
+        "pid": 69337,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 445.143871166,
+        "endedUTC": "2026-09-12T14:57:21.476669+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native5.job.json",
+        "bytes": 1297,
+        "sha256": "479cfa9fd8527648ca7309d3b05ec46da2b95ccf3968e22085171b39c297d3d6"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native5.log",
+        "bytes": 24120,
+        "sha256": "18f74baca81fa33f1e88d0793c02fe64e558c2c287dc8d1ebac4eea8b43f0514"
+      },
+      "buildSeconds": 0.34,
+      "testSeconds": 443.553,
+      "testCount": 8,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalLibWarFaultRejectionTests",
+          "method": "testNineNativeGuardsRetainWholeCallerState",
+          "seconds": 57.065
+        },
+        {
+          "suite": "OriginalLibWarGraphicsErrorTests",
+          "method": "testWholeGraphicsErrorsAndExactAPIRollback",
+          "seconds": 49.993
+        },
+        {
+          "suite": "OriginalLibWarMusicErrorTests",
+          "method": "testWholeMusicErrorsAndCoupledRollback",
+          "seconds": 56.502
+        },
+        {
+          "suite": "OriginalLibWarNullableBitmapTests",
+          "method": "testReturnedAllocationFailuresRetainOwnedLayersAndRollback",
+          "seconds": 19.018
+        },
+        {
+          "suite": "OriginalLibWarPartialSurfaceTests",
+          "method": "testWholeReturnedPartialSurfacesAndCoupledRollback",
+          "seconds": 39.149
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeBoundPreparationAndLateRollback",
+          "seconds": 16.72
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeMatrixAndRetainedReleaseRollback",
+          "seconds": 187.616
+        },
+        {
+          "suite": "OriginalLibWarRetainedScratchTests",
+          "method": "testWholeRetainedScratchAndCoupledRollback",
+          "seconds": 17.49
+        }
+      ]
+    },
+    {
+      "name": "native6",
+      "job": {
+        "scope": "Bundled shared bitmap/menu and retained whole War setup regressions.\nNo original execution; all NTSD raw overrides are removed from the environment.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalBitmapSurfaceLoadingTests|OriginalCharacterMenuSurfaceTests|OriginalWarSetupNativeTests|OriginalLibWarSetupTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/candidate2-inputs.json",
+        "nativeFiles": 818,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T14:58:07.875932+00:00",
+        "pid": 70626,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 474.97172608299996,
+        "endedUTC": "2026-09-12T15:06:02.797890+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native6.job.json",
+        "bytes": 1175,
+        "sha256": "3c4cf61ff9004713a2be37e20574cc70cdcfcede57f0e1b4f6d5a7a9234930a3"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native6.log",
+        "bytes": 5995,
+        "sha256": "98658803b36206a8bc5d106038a9778c200d038816c95daa5187ced56971ba20"
+      },
+      "buildSeconds": 0.14,
+      "testSeconds": 474.245,
+      "testCount": 10,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testLateResourceFailuresRetainCommittedStartupAndCallback",
+          "seconds": 1.221
+        },
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+          "seconds": 1.642
+        },
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testWholeLoaderAndCopyAtOwnedPlatformFields",
+          "seconds": 0.303
+        },
+        {
+          "suite": "OriginalCharacterMenuSurfaceTests",
+          "method": "testLateMenuSurfaceErrorsRollBackAllOwnedState",
+          "seconds": 0.557
+        },
+        {
+          "suite": "OriginalCharacterMenuSurfaceTests",
+          "method": "testWholeCharacterMenuSurfaceCallsAndUnavailableOperands",
+          "seconds": 1.997
+        },
+        {
+          "suite": "OriginalLibWarSetupTests",
+          "method": "testMultipleHumanSeatsCombineAllTroopActions",
+          "seconds": 20.964
+        },
+        {
+          "suite": "OriginalLibWarSetupTests",
+          "method": "testSeparateNavigationEditsEveryTroopCell",
+          "seconds": 90.407
+        },
+        {
+          "suite": "OriginalLibWarSetupTests",
+          "method": "testWholeWarMenuAndLateCoupledRollback",
+          "seconds": 357.042
+        },
+        {
+          "suite": "OriginalWarSetupNativeTests",
+          "method": "testOuterOutputFailureRollsBackFreshResourcesAndRetainedRandom",
+          "seconds": 0.057
+        },
+        {
+          "suite": "OriginalWarSetupNativeTests",
+          "method": "testWholeMenuRollsBackAfterLateDependencies",
+          "seconds": 0.054
+        }
+      ]
+    }
+  ],
+  "nativePackage": {
+    "verifiedUTC": "2026-09-12T14:50:06.712235+00:00",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/native-candidate2.tar",
+    "archivePin": {
+      "bytes": 4016947200,
+      "sha256": "5f1a5d13077d992628c8375354c9ecfc97f83bb15bff1d2614cfbe0de746710d"
+    },
+    "nativeFiles": 818,
+    "nativeBytes": 4015474361,
+    "currentFixtures": 370,
+    "protectedFixturesUnchanged": 361,
+    "sourcePinsUnchanged": 98,
+    "candidateMatchesWorkingNative": true,
+    "allArchiveMembersAndBytesMatch": true,
+    "manifest": "candidate2-inputs.json",
+    "nativeRegressions": "Separate native5 and native6 jobs; archive equality is not its test result.",
+    "originalExecuted": false
+  },
+  "evidenceArchive": {
+    "verifiedUTC": "2026-09-12T15:06:27.953595+00:00",
+    "scope": "Nine saved source faults and sidecars, seven returned parents and ten prefix references; frozen plan, reviews and terminal Native-only checks. Source faults remain distinct from Native rejections. Full current Native package has a separate archive.",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-fault-rejections-native-20260912/fault-rejections-evidence2.tar",
+    "archivePin": {
+      "bytes": 703385600,
+      "sha256": "42dfe8d27c0731934e65c905af903a2d432d33edd4300b4137e50aaa102ff768"
+    },
+    "members": 159,
+    "memberBytes": 703095235,
+    "manifest": "evidence-members.json",
+    "manifestPin": {
+      "bytes": 31761,
+      "sha256": "6b83636e956e1525124bbe9efc0bfe4745a8a048b0537a09caf55733d2760bef"
+    },
+    "allArchiveMembersAndBytesMatch": true,
+    "sourcePinsUnchanged": 98,
+    "nativeJobsTerminal": 4,
+    "finalCandidateJobsExitCode": 0,
+    "diagnosticFailuresPreserved": true,
+    "volumeUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "internalFreeBytes": 9179676672,
+    "originalExecuted": false,
+    "safetyIncidentResolved": false,
+    "fullGameComplete": false
+  },
+  "gitIndex": {
+    "verifiedUTC": "2026-09-12T14:50:19.583948+00:00",
+    "baseCommit": "8684cc4a9a8b07e546c10025be6d5535e7be254e",
+    "nativeFiles": 818,
+    "nativeBytes": 4015474361,
+    "stagedPaths": [
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s03-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s04-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s05-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s06-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s07-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s08-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s09-call-01.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s22-call-00.json",
+      "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s28-call-00.json",
+      "native/Tests/NTSDCoreTests/OriginalLibWarFaultRejectionTests.swift",
+      "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift",
+      "native/Tests/NTSDCoreTests/OriginalWarPreparationSurfaceAdapter.swift"
+    ],
+    "manifest": "candidate2-inputs.json",
+    "allStagedNativeBlobsMatchCandidate": true,
+    "uncommittedNativeDiff": false,
+    "meaning": "No unstaged Native difference; staged changes are awaiting final checks and commit.",
+    "originalExecuted": false
+  },
+  "candidateCopy": {
+    "timeUTC": "2026-09-12T14:44:07.939184+00:00",
+    "regularFiles": 818,
+    "clonedPriorFiles": 817,
+    "copiedChangedOrNewFiles": 1,
+    "allCurrentPriorAndResultBytesVerified": true,
+    "originalExecuted": false
+  },
+  "review": {
+    "schema": 1,
+    "reviewedUTC": "2026-09-12T14:43:35.502587+00:00",
+    "reviewer": "/root/war_contract_review",
+    "candidate": 2,
+    "result": "correctedContractApprovedPendingCompilationAndNativeChecks",
+    "swiftPins": [
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift",
+        "bytes": 74186,
+        "sha256": "a2f7393da8c73cd6a7534f2dc43cbb91656f402b94df3c015e4204336abc01fa"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalWarPreparationSurfaceAdapter.swift",
+        "bytes": 12368,
+        "sha256": "4d4b692ac6864d7cbb60bc8a05ef1f95b28d0b198e0ede2dae9fb118a4dcd7e8"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalLibWarFaultRejectionTests.swift",
+        "bytes": 9521,
+        "sha256": "6044552158cb5e5082460b7b8aa18c38c87b9596693c234bd719e5e79f3c0136"
+      }
+    ],
+    "priorReview": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/review1.json",
+      "bytes": 10194,
+      "sha256": "1e19121ab60705cf017be103318a599e2070c13409e58193bd21545dadea4ea3"
+    },
+    "priorReviewGap": {
+      "schema": "Review1 missed that every selected raw fault case omits nested startup and output. Required Case.startup prevented entry to the Native guard.",
+      "callbacks": "Review1 incorrectly approved consumption of five named pre-War checkpoints through the late menu-output checkpoint callback. Core emits those stages through entry/afterMusic/resourceCheckpoint/afterStartup, not the output callback.",
+      "preservation": "Review1 remains byte-identical. Its no-substantial-issue conclusion was premature. Preserve candidate1, terminal job/log and the separate plan correction."
+    },
+    "diagnosticCandidate1": {
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native1.job.json",
+        "bytes": 1215,
+        "sha256": "b519836fad29935625f0ce0b1dc863c1495ce6dd7674ecb0cdc49a136b521625"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native1.log",
+        "bytes": 22963,
+        "sha256": "9895454575d83aae009c9aa5a27fe4b747884022b749010c23e78160a94d120e"
+      },
+      "status": "terminal",
+      "exitCode": 1,
+      "failureType": "DecodingError.keyNotFound(startup)",
+      "failureLocation": "Resources Corpus decoding for first s03/call-01",
+      "testCount": 1,
+      "failureCount": 1,
+      "unexpectedFailureCount": 1,
+      "buildSeconds": 282.78,
+      "testSeconds": 11.871,
+      "nativeBoundaryReached": false,
+      "sourceMismatch": false,
+      "acceptance": false
+    },
+    "correctionReview": {
+      "rawAbsence": "Case.startup and output are optional. Resources projects an empty startup case list with expectedCases0 when the nested source report is absent, retaining original assets/blobs and not borrowing another case.",
+      "baseResourcesDependency": "Base.Resources permits cases[] and independently checks EXE/CRT and11 menu assets; it supplies blob access only in the missing-startup branch. No Base.Adapter is created. WarMenuSurfaceAdapter uses Resources.corpus/blob/record and has no direct startup-report dependency.",
+      "entryScope": "Missing-startup mode requires a retained chain; current/previous menu202, load flag0 and selection3 are checked against own retained globals. Every selected saved fault has five named checkpoints at eventCount0. Source examples s03/s22/s28 additionally confirmed 11 menu assets,46144-byte globals and empty War graphics event lists.",
+      "pointMapping": [
+        {
+          "source": "declaredTail",
+          "native": "own entry immediately before advanceWithWar"
+        },
+        {
+          "source": "musicReturned",
+          "native": "afterMusic callback; require musicEntered false"
+        },
+        {
+          "source": "resources-prefix",
+          "native": "resourceCheckpoint(.prefix)"
+        },
+        {
+          "source": "resources-complete",
+          "native": "resourceCheckpoint(.complete)"
+        },
+        {
+          "source": "startupReturned",
+          "native": "afterStartup callback; require ready and selectionAtEntry3"
+        }
+      ],
+      "noOpOwnership": "No-op callbacks compare complete own globals/World/Actors/BG records to saved points and retain initial music allocations, startup bitmaps and environment. No source expected state becomes an input.",
+      "unexpectedOperations": "With no startup adapter, startup music/allocate/perform/resource events and new War resource construction requiring its suffix fail as harness errors. Exact Native error matching cannot accept those errors.",
+      "missingOutput": "Explicit zero-valued unused Native response slots satisfy the nonoptional Core API argument. They are not recovered source responses or known source storage. Rejections must precede output; output checkpoints/events and an unexpected normal return fail acceptance.",
+      "swiftReview": "The potentially throwing optional adapter pattern expression was moved to an explicitly throwing let before XCTAssertEqual. Other nested XCTUnwrap calls are covered by the surrounding try expression. No compiler/typechecker was executed by this reviewer.",
+      "contextCompleteness": "Diagnostic graphics contexts are compared independently. s22/s28 completed constructor-owned records are compared at the last actual preparation checkpoint. Earlier release/free flags denote staged requests; full rollback still compares caller entry ownership.",
+      "remainingBoundary": "The earlier s28 local recording live/clear observation limit and source-fault-versus-Native-rejection distinction remain unchanged.",
+      "coreChanged": false,
+      "sourceExpectedChanged": false,
+      "substantialUnresolvedIssues": []
+    },
+    "finalAcceptance": "Pending candidate2 compilation, raw nine-chain checks, bundled/shared regressions, byte/archive/Git gates. Read-only review is not Native acceptance.",
+    "sourceExecuted": false,
+    "nativeExecutedByReviewer": false,
+    "producerImported": false,
+    "oldAuditExecuted": false,
+    "codeOrFixtureFilesChangedByReviewer": false,
+    "onlyWrittenPath": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/review2.json"
+  },
+  "initialReview": {
+    "schema": 1,
+    "reviewedUTC": "2026-09-12T14:32:18.852848+00:00",
+    "reviewer": "/root/war_contract_review",
+    "result": "contractApprovedPendingNativeChecks",
+    "planPin": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/plan.json",
+      "bytes": 102383,
+      "sha256": "6f2627e8f94b5ae86e0afbca8b223528e09f5c5954f3674bde48f94305ca9a80"
+    },
+    "swiftPins": [
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift",
+        "bytes": 70895,
+        "sha256": "0fde056302fc23be24cb43cd34430589b43569174797523d5bed6097f5b52c93"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalWarPreparationSurfaceAdapter.swift",
+        "bytes": 12368,
+        "sha256": "4d4b692ac6864d7cbb60bc8a05ef1f95b28d0b198e0ede2dae9fb118a4dcd7e8"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalLibWarFaultRejectionTests.swift",
+        "bytes": 9521,
+        "sha256": "6044552158cb5e5082460b7b8aa18c38c87b9596693c234bd719e5e79f3c0136"
+      }
+    ],
+    "savedSourceCases": [
+      {
+        "scenario": 3,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json",
+          "bytes": 16391099,
+          "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34"
+        }
+      },
+      {
+        "scenario": 4,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+          "bytes": 16389111,
+          "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+        }
+      },
+      {
+        "scenario": 5,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+          "bytes": 16397379,
+          "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+        }
+      },
+      {
+        "scenario": 6,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+          "bytes": 16389408,
+          "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+        }
+      },
+      {
+        "scenario": 7,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+          "bytes": 16398469,
+          "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+        }
+      },
+      {
+        "scenario": 8,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+          "bytes": 16390364,
+          "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+        }
+      },
+      {
+        "scenario": 9,
+        "ordinal": 1,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+          "bytes": 16398157,
+          "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+        }
+      },
+      {
+        "scenario": 22,
+        "ordinal": 0,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json",
+          "bytes": 23916521,
+          "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e"
+        }
+      },
+      {
+        "scenario": 28,
+        "ordinal": 0,
+        "rawPin": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json",
+          "bytes": 32841343,
+          "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce"
+        }
+      }
+    ],
+    "sourceReadScope": "Read selected JSON fields in nine saved raw sourceFault calls. No source execution, producer imports, old auditor rerun or Native execution. Source file hashes are the frozen plan pins verified by packaging; this review independently inspected the selected records, not a repeat whole-source hash audit.",
+    "independentFindings": {
+      "sourceFaultCallsRead": 9,
+      "earlyNamedPointsChecked": 45,
+      "earlyNamedKinds": [
+        "declaredTail",
+        "musicReturned",
+        "resources-prefix",
+        "resources-complete",
+        "startupReturned"
+      ],
+      "earlyNamedActorAndBGStorage": "In every one of 45 named pre-War points, all 400 Actor and 101 BG storage bytes/mask references equal their corresponding entry references. Native comparison may retain those own entry records; no expected after-state enters Native state.",
+      "earlyNamedActorAndBGDifferences": 0,
+      "savedCheckpointCounts": {
+        "outerNamed": 45,
+        "war": 63,
+        "preparation": 74,
+        "numeric": 32,
+        "total": 214
+      },
+      "savedCheckpointCountsByCase": "s03..s09:16 each; s22:50; s28:52. All saved checkpoints precede the corresponding Native guard.",
+      "diagnosticFrontEvents": 7844,
+      "sourceFrontEvents": 7845,
+      "separateAllocatorResults": 1,
+      "musicEvents": 38,
+      "graphicsEvents": 202,
+      "releaseRequestPairs": 16,
+      "releasePairsCases": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "releaseGlobalsAnchor": "For s03/s05/s07/s09, the first saved release API globals exactly equal the complete source globals at43a3b1. Rejection completion compares every collected release/free global key with the Native checkpoint anchor. This is an anchor comparison with idempotent intervening clears, not an additional live Core snapshot.",
+      "s22": "Declared queryResults[0,-1,0,0] and queryPointers[2c002100,0,2c002300,2c002400]. All three b1/b6/b2 queries complete, then exact OriginalStateError.invalidStorage(Original music: Null COM continuation) occurs before notify/format/wide allocation, at917 front events.",
+      "s28": "Replay NULL comes from resourceFailureInput.declared.replayNull. Native allocator receives0x630e18 and returns0. Exact guard occurs after front free(0x26003000), before front calloc; source has one additional calloc(0,1,0x630e18) event and a subsequent NULL write fault."
+    },
+    "codeAssessment": {
+      "guardTypeAndMessage": "Only the expected OriginalStateError.invalidStorage detail is accepted. Stop.unexpected, XCTest unwrap and other error types cannot establish a Native rejection.",
+      "prefixCompleteness": "Runner compares each reached event, exact ordered point identities/event counts, all group consumption counts, full music event/response prefix and complete graphics request prefix.",
+      "surfaceFallback": "surface0 only when own marker0 and input.present=false with no binding. Marker1 or marker0 with present=true still requires owned surface identity. Existing released surface identity is passed to Core; marker0 rejects before another Release.",
+      "stagedEffects": "A diagnostic graphics value records successful earlier Release/free requests; full caller state/owner/event contexts are compared to entry after rejection. Release flags describe buffered requests, not device destruction.",
+      "rollback": "Checks globals, World, Actors, all recording allocation bytes/masks/live flags and pointers, War memory including bitmap scratch, library, platform/event contexts, music allocations, startup bitmap resources, BG records, bitmap records, released bitmap set and order.",
+      "s28ObservationLimit": "The allocator callback does not expose Core local recording memory. Staged old live=false and pointer clear0 follow from static code review of OriginalWarPreparation.swift121..129, not a dynamic internal snapshot. Runtime checks cover exact free event, allocator arguments/result, guard placement and complete rollback of both original recording owners.",
+      "coreChanged": false,
+      "substantialUnresolvedIssues": []
+    },
+    "packager": {
+      "producerPin": {
+        "path": "tools/package_war_fault_rejection_references.py",
+        "bytes": 14901,
+        "sha256": "9266fbf1bafc573822325254311a10089c008df51663a79e463dd83849b64cca"
+      },
+      "verificationPin": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/package-verification1.json",
+        "bytes": 93865,
+        "sha256": "609730629275429b8e38e05247c16f27ecc058fded00929573b2ed4542dfbad1"
+      },
+      "counts": {
+        "sourceFaultCalls": 9,
+        "returnedCallsPackaged": 0,
+        "rawBytes": 171511851,
+        "packedBytes": 27308268,
+        "blobEntries": 6517,
+        "blobEntryBytes": 282761864,
+        "distinctBlobs": 985,
+        "distinctBlobBytes": 49804030,
+        "maximumBlobBytes": 6491672,
+        "sidecars": 9,
+        "sidecarRawBytes": 49398602,
+        "sidecarBlobEntriesEqualVerifiedRawBlobs": 6516,
+        "sidecarBlobEntryBytes": 282761834,
+        "boundPrefixProofLinks": 90,
+        "distinctBoundPrefixes": 10,
+        "existingParentFixturesReused": 7,
+        "sourceEvidencePinsUnchanged": 98,
+        "oldFixturesUnchanged": 361
+      },
+      "review": "Standard-library-only data packaging. Fixed plan hash,98 input pins and361 old fixtures checked before/after, nine exact sourceFault identities, full raw/JSON/blob roundtrips, bounded DEFLATE count+1 with EOF/trailing-data checks,90 normalized/raw prefix links,seven old parent fixtures reused. Nine sidecars match ten saved case fields and their blobs are byte-equal to verified raw blobs. The one additional30-byte s28 raw-only blob is explicitly pinned and retained. No original/Native/producer/auditor execution."
+    },
+    "acceptanceBoundaries": [
+      "Native rejections with rollback are not successful matches to source faults.",
+      "No equivalence to source fault after-state, failed write, device destruction, Windows behavior or full private ABI is claimed.",
+      "Three existing safety incidents and the full native game goal remain open.",
+      "Final Native raw/bundled/shared regressions, package/archive/Git preservation gates remain pending."
+    ],
+    "reviewOperations": {
+      "sourceExecuted": false,
+      "nativeExecuted": false,
+      "producerImported": false,
+      "auditExecuted": false,
+      "codeOrFixtureFilesChangedByReviewer": false,
+      "onlyWrittenPath": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/review1.json"
+    }
+  },
+  "diagnosticFailure": {
+    "recordedUTC": "2026-09-12T14:41:21.160567+00:00",
+    "plan": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/plan.json",
+      "bytes": 102383,
+      "sha256": "6f2627e8f94b5ae86e0afbca8b223528e09f5c5954f3674bde48f94305ca9a80"
+    },
+    "reason": "First candidate exposes missing nested startup/output reports in saved sourceFault format. Correct comparison projection and actual no-op startup callback mapping, without changing any source bytes or Core game rules.",
+    "failedRun": {
+      "job": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native1.job.json",
+        "bytes": 1215,
+        "sha256": "b519836fad29935625f0ce0b1dc863c1495ce6dd7674ecb0cdc49a136b521625"
+      },
+      "log": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native1.log",
+        "bytes": 22963,
+        "sha256": "9895454575d83aae009c9aa5a27fe4b747884022b749010c23e78160a94d120e"
+      },
+      "nativeFiles": {
+        "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/candidate1-inputs.json",
+        "bytes": 145616,
+        "sha256": "8df760b89c551a10e1595a494dac4b201d99e9935baa46130a944b4a9afe8d3a"
+      },
+      "buildSeconds": 282.78,
+      "testSeconds": 11.871,
+      "testMethods": 1,
+      "failures": 1,
+      "unexpected": 1,
+      "failure": "DecodingError.keyNotFound startup at cases[0]",
+      "classification": "harness decode error, not Native rejection or source/native mismatch",
+      "pidAbsent": true
+    },
+    "reviewGap": "review1 incorrectly accepted startup-required decoding and routed five early checkpoints through the late MenuReturn callback. review1 stays immutable; independent reviewer identified this gap for the next candidate.",
+    "correction": [
+      "Keep absent source startup/output optional. Empty Base.Resources cases holds only blob/asset metadata, not a fabricated startup report.",
+      "Require an own retained chain with current/previous menu202,loadflag0,selection3. No startup adapter; unexpected startup requests remain harness errors.",
+      "Compare declaredTail at entry; musicReturned in afterMusic; resources-prefix/complete in corresponding resourceCheckpoint callbacks; startupReturned in afterStartup. Own Actors/BGs/World retain entry state at these stages.",
+      "Explicit unused zero response slots satisfy the existing nonoptional output argument only in expected-rejection calls. They have no claimed source semantics; output callbacks/events or a normal return fail acceptance.",
+      "Source faults/expected/98pins/370fixtures unchanged; no original execution or old packager/auditor rerun."
+    ],
+    "nativeCorrectionRound": 2,
+    "scopeUnchanged": true,
+    "sourceRuns": 0,
+    "safetyIncidentResolved": false,
+    "fullGameComplete": false
+  },
+  "scopeClarification": {
+    "recordedUTC": "2026-09-12T14:31:49.659015+00:00",
+    "sourceRuns": 0,
+    "scopeClarifications": [
+      "Nine Native rejections are not accepted source fault matches.",
+      "214 pre-guard checkpoints:45 outer named,63 War,74 preparation,32 numeric,0 character. All reached in order.",
+      "32 release/free API globals compare to own43a3b1 checkpoint; no game global mutation between that anchor and these requests, established from saved source and Core review.",
+      "s28 staged recording.live=false/replayPointer.clear after free is established by Core code review; callbacks dynamically observe only exact free request, allocator arguments/result and full post-throw rollback. No live middle-state snapshot claim.",
+      "NULL surface fallback requires own marker0 and input.present=false; released known surfaces keep identity; missing binding with marker1 or present=true stays harness error.",
+      "No Core production change. Ten shared regression methods remain sufficient, including two WarSetupNative methods defined across primary file and extension."
+    ],
+    "reviewer": "war_contract_review",
+    "planUnchanged": true,
+    "beforePins": {
+      "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift": {
+        "bytes": 64835,
+        "sha256": "6d90880c075146b18320f41ae57fe77ea790018b2641f696d061c3a469bce285"
+      },
+      "native/Tests/NTSDCoreTests/OriginalWarPreparationSurfaceAdapter.swift": {
+        "bytes": 11681,
+        "sha256": "43a129c1a83f12a16bf31f4a0a7b3878b1c8e3c9956e6b2b26c46d2dbf070ab2"
+      }
+    }
+  },
+  "reviewPhaseNote": "review2 approved the corrected contract before execution; actual terminal gates are listed in acceptance/nativeRuns. Publication review is retained separately before commit.",
+  "supportingPins": {
+    "review1.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/review1.json",
+      "bytes": 10194,
+      "sha256": "1e19121ab60705cf017be103318a599e2070c13409e58193bd21545dadea4ea3"
+    },
+    "review2.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/review2.json",
+      "bytes": 6119,
+      "sha256": "ae55b64d7b96336306196d9de64fe827d50b4c340923af75ed99aba95fbac004"
+    },
+    "plan-amendment1.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/plan-amendment1.json",
+      "bytes": 2793,
+      "sha256": "be47ba8410e1e679b2b89a12c1cd0ac06a2b9cd5d356ca9e16d5784a0287c7f2"
+    },
+    "scope-clarification1.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/scope-clarification1.json",
+      "bytes": 1528,
+      "sha256": "227f72279a204b57d680780d00dbae4474810d574ed48f72a32678c935aa9430"
+    },
+    "initial-process-verification.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/initial-process-verification.json",
+      "bytes": 1849,
+      "sha256": "a624c07406b7309c7323780982f55368910a01a605c12815ae2fe735b87c0323"
+    },
+    "candidate2-inputs.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/candidate2-inputs.json",
+      "bytes": 145616,
+      "sha256": "160d48b5f6d94a86b9ff45e094794fd839c528f9577e689070406bd900bf2789"
+    },
+    "candidate2-copy-verification.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/candidate2-copy-verification.json",
+      "bytes": 212,
+      "sha256": "efd2a7b8940ca091da42cbf4d97f92e4db481c2cd89d1e4181f8076dce8fb09d"
+    },
+    "native-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native-archive-verification.json",
+      "bytes": 744,
+      "sha256": "556ef56faec3fdaef923e14991d00280c4e621a82fe06e6330f4502976f7874a"
+    },
+    "native-git-index-verification.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/native-git-index-verification.json",
+      "bytes": 1498,
+      "sha256": "50a76c1d9ee2cf9385ce4df58a71bb4896acdc461b6c59c4baebdc8f0715b842"
+    },
+    "evidence-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/evidence-archive-verification.json",
+      "bytes": 1184,
+      "sha256": "5582bc638d2b77030413fcb2eb33814eaf6832f294a9ddb6f4029b8da91b180a"
+    },
+    "evidence-members.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/evidence-members.json",
+      "bytes": 31761,
+      "sha256": "6b83636e956e1525124bbe9efc0bfe4745a8a048b0537a09caf55733d2760bef"
+    },
+    "next-work-review.json": {
+      "path": "build/research/lib-war-preparation/war-fault-rejections-native-20260912/next-work-review.json",
+      "bytes": 8975,
+      "sha256": "d99851deb4ecca203f58638d081bd5292569f217727f71ee49f3d8d0f1e1d8dc"
+    }
+  },
+  "nextWork": {
+    "schemaVersion": 1,
+    "reviewer": "/root/catalog_pending_review",
+    "recordedUTC": "2026-09-12T14:37:18.319037+00:00",
+    "status": "ready for one finite Native composition card; implementation and acceptance not performed",
+    "task": "Own repeated-menu application iteration in production Core",
+    "gameResult": "A reusable Native owner advances delivered menu input through Main World0 to World1, confirmation sound and 3000 RNG draws, then releases the background and reaches World2/loading with the prior completed iterations preserved.",
+    "milestone": "Move an already-compared menu/outer-loop composition out of XCTest into the shipping Core, providing the next app-integration seam. No new gameplay branch coverage or visible app result is claimed by this extraction.",
+    "whyNext": [
+      "OriginalApplicationMenuInputTests.run currently implements the own message/dispatcher/World/menu composition in test closures; OriginalBitmapSurfaceLoadingTests.OwnContext owns its retained state only in the test target.",
+      "The shared Core handlers already implement the selected path. NTSDApp/main.swift still launches MeleeScene/MovementScene Practice and does not use the own application composer.",
+      "All required selected source continuations are already accepted and their raw/fixture SHA identities were rechecked in this review. No new source execution is needed for the finite extraction."
+    ],
+    "finiteScope": {
+      "sourceCases": 50,
+      "idleRepeats": 47,
+      "activationChains": 3,
+      "completedIterations": 62,
+      "pendingLoadingBoundaries": 3,
+      "retainedDistinctMenuParents": 47,
+      "orderedEvents": 18835,
+      "actualRandomCalls": 9000,
+      "wholeDeliveredCallbacks": 9,
+      "fullCheckpoints": 869,
+      "bitmapRecordComparisons": 21725,
+      "bitmapBytesPlusSeparateMasks": 174147600,
+      "lateRollbackControls": [
+        "windowDefault#1",
+        "blit#3",
+        "soundMethod#3",
+        "write#1500",
+        "randomTable#1",
+        "free#1",
+        "method#3",
+        "commit"
+      ],
+      "entry": "Native-produced committed APPLICATION_MENU_RETURN state; reconstruct accepted startup/menu parents through existing Native functions, never load parent after-state into the coordinator.",
+      "exit": "62 complete iterations commit; 3 own loading requests at the established 41bc90 boundary retain the previous completed counter7/baseline123456888 and roll back the pending iteration."
+    },
+    "implementation": {
+      "proposedNewCore": [
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift"
+      ],
+      "adaptTests": [
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift"
+      ],
+      "reuseCore": [
+        "OriginalApplicationMessageLoop",
+        "OriginalWindowInput",
+        "OriginalApplicationDispatchEntry",
+        "OriginalFrontMenuLoop",
+        "OriginalFrontScreenPrelude",
+        "OriginalFrontScreenBody",
+        "OriginalFrontScreenAlternate",
+        "OriginalMainMenu",
+        "OriginalMenuPresentation",
+        "OriginalBitmapDrawing",
+        "OriginalCRTRandom",
+        "OriginalLibSurfaceText"
+      ],
+      "contract": [
+        "Production Core owns value-semantic globals/World and their real aliases, MSG/timer/counter, bitmap registry/live flags and raw surface bindings, RNG, library DC and body-local lifetime. Import neither XCTest types nor NTSDReferenceChecks/JSON corpus logic.",
+        "Use typed declared platform replies and own resource outputs. Keep expected snapshots/event comparisons exclusively in test adapters. Preserve unknown masks and existing declared backing boundaries; do not turn private stack/A5 evidence into native-owned known values.",
+        "Buffer sound/graphics/free effects in the staged context until the whole iteration commits; a late thrown error must not leak effects or RNG/owner changes.",
+        "Loading request is a named production continuation/dependency, not XCTest Stop.loading or a successful loading return. Preserve its pending-state handoff for the already-accepted loading-prefix tests.",
+        "Keep unsupported network/settings/worker/new-dispatch branches explicit. Do not widen successful-domain claims by supplying zero/default returns."
+      ]
+    },
+    "acceptance": [
+      "Freeze actual current transitive Core/test inputs and existing fixture identities before implementation; the pins here describe this read-only review, not the future candidate.",
+      "Route every selected menu-input invocation through the new public Core composer, then retain all 18835 events, full records/masks, intermediate checkpoints, RNG, DC, timer/counter and owner comparisons.",
+      "Retain all eight late rollback controls and explicit three loading boundaries with full coupled state checks.",
+      "Run selected existing ApplicationMenuReturn, ApplicationMenuInput, ApplicationMessageLoop and ApplicationLoadingPrefix regressions; especially preserve the latter pending-state handoff. No source producer/audit rerun.",
+      "Independent review must check ownership/aliasing, external-effect buffering and that tests actually invoke the new Core composer. Package/fixture byte verification is a separate gate."
+    ],
+    "alternativesNotChosen": {
+      "war43a860": "CURRENT_WORK/RESEARCH_MAP retain this as open; no 43a860 implementation was found in current Native Swift code. The inspected ready War evidence proves preparation/menu return, not this gameplay child. A Native match for it would need a separately justified finite original contract/capture; it is not ready on the evidence checked here.",
+      "fullOwnCatalog": "CURRENT_WORK records terminal candidate5 storage limit after 28 Objects; legacy full catalogs and accepted file projections do not provide a full own application/catalog return."
+    },
+    "openAfterCard": [
+      "Full own catalog and loading return/held clear",
+      "Actual AppKit menu rendering/input/audio integration and device comparison",
+      "Earlier full PE/CRT/NLS startup",
+      "Workers/reentrancy and other application dispatch branches",
+      "War43a860 and full installed-library gameplay loop",
+      "Full match/game/clean-Mac acceptance"
+    ],
+    "sourceExecutionRequired": false,
+    "nativeExecutionPerformedByReviewer": false,
+    "producerOrAuditExecutionPerformed": false,
+    "safety": {
+      "incidentsRemainOpen": 3,
+      "register": "docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "affectedSourceOperationsRetried": false,
+      "sourceFaultMatchesClaimed": false
+    },
+    "reviewActions": [
+      "Read current navigation, applicable immutable history, selected study/Core/test/app text and saved acceptance metadata",
+      "Recomputed SHA-256 of the two selected raw corpora and their unchanged bundled fixtures",
+      "Verified target X5 mount UUID 3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548; wrote only this small review JSON"
+    ],
+    "pins": [
+      {
+        "path": "build/research/application-menu-input-candidate1.json",
+        "bytes": 132657719,
+        "sha256": "33292e107dface97563ea36a3d55e4108ce051d85352345c22e46a8ab898fc18"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json",
+        "bytes": 37774137,
+        "sha256": "e1eb47c2d27dc5da54877dafa3471d03abc34cd608016252b5845634b4f8b6f0"
+      },
+      {
+        "path": "build/research/application-menu-return-candidate1.json",
+        "bytes": 67627503,
+        "sha256": "7723fdb6706e94a647e489e57e3729d1c81529ad474a02d936cb5038846e677d"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-return.json",
+        "bytes": 14123660,
+        "sha256": "0fa998dbc893663030a57d146d9ac3959c7c02e283340efe30c6fd34d57becc7"
+      },
+      {
+        "path": "docs/evidence/application-menu-input.json",
+        "bytes": 3863,
+        "sha256": "348c0cd9b3c2de5130804df261e92f4f2b0d66b520083a733422f41e926fe881"
+      },
+      {
+        "path": "docs/evidence/application-menu-return.json",
+        "bytes": 77548,
+        "sha256": "874e53c783f0986f2049c4b4551dc7043e4d99524059e166921e67835082980a"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+        "bytes": 23816,
+        "sha256": "19540e5ef09e8e31f8d2a3018dc9b0a5e57e4049e1419c6cb9311d9e27542e6a"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift",
+        "bytes": 21565,
+        "sha256": "fac3c2f70ed4b47f8f15a4e1551b88975089aa4f099df83154665e170a2f40d3"
+      },
+      {
+        "path": "native/Sources/NTSDCore/OriginalApplicationMessageLoop.swift",
+        "bytes": 4519,
+        "sha256": "7896c6a984b10ed9fde9b707bb0e3e303f08ff35d6f62be00e99e72bfb1be8d5"
+      },
+      {
+        "path": "native/Sources/NTSDCore/OriginalFrontMenuLoop.swift",
+        "bytes": 2642,
+        "sha256": "6eae61256043826efcb2e807ac23b8903e5b9831886f4fd037ebd86264aaf64b"
+      },
+      {
+        "path": "native/Sources/NTSDApp/main.swift",
+        "bytes": 18757,
+        "sha256": "9cb5c126977e24ec6bc9a2ff5e933e692a3641088cdd571ff1fe3e4921770954"
+      }
+    ]
+  },
+  "openDependencies": [
+    "Source faults remain original memory faults, separate from Native rejection checks.",
+    "Three prior safety incidents remain open; no blocked-operation retry.",
+    "Later metadata consumers of music private ABI require independent semantic provenance.",
+    "Own catalog/startup/library/outerloop/app, War gameplay, full matches/content/network and Windows/device/cleanMac remain open."
+  ],
+  "originalExecuted": false,
+  "sourceRuns": 0,
+  "safetyIncidentResolved": false,
+  "windowsVerified": false,
+  "deviceVerified": false,
+  "fullPreparationComplete": false,
+  "fullGameComplete": false
+}

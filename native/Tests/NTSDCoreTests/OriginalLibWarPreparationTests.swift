@@ -41,10 +41,12 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     struct Write: Decodable { let address: UInt32,bytes: String }
     struct Read: Decodable { let address: UInt32,count: Int,storeCount: Int }
     struct ResourceFailureInput: Decodable {
+        struct Declared: Decodable { let replayNull: Bool? }
         struct Graphics: Decodable {
             let nullAllocationOrdinal: Int?,missingLoaderIndices: [Int]?,results: [String:Int32]?
         }
         let graphics: Graphics
+        let declared: Declared?
         let music: OriginalWarPreparationMusicAdapter.Input?
     }
     struct Case: Decodable {
@@ -57,7 +59,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         let stimulus: [Write]?
         let bodyMusic: [Music.MusicEvent],musicAfter: [Base.Record]
         let events: [OriginalFrontScreenEvent], end: String, endSP: UInt32, cw: UInt32
-        let startup: Startup, characterSP: UInt32?, screenSP: UInt32?,output: OriginalMenuPresentationInput,points: [Point]
+        let startup: Startup?, characterSP: UInt32?, screenSP: UInt32?,output: OriginalMenuPresentationInput?,points: [Point]
     }
     struct Portrait: Decodable { let address: UInt32, surface: UInt32, width: Int32, height: Int32, path: String }
     struct Entry: Decodable { let ordinal: Int,id: Int32,type: Int32,address: UInt32,nameTail: String,nameMask: String,portrait: Portrait?,small: Portrait? }
@@ -78,6 +80,10 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         let worldAddress: UInt32, bitmapAddress: UInt32, target: UInt32, libraryAddress: UInt32, stackAddress: UInt32, entrySP: UInt32, tailSP: UInt32
     }
     enum Stop: Error, Equatable { case injected, unexpected }
+    struct NativeRejection {
+        let message: String,frontEvents: Int,releaseFreePairs: Int
+        let replayNull: Bool
+    }
     struct IndexedCase: Decodable { let index: Int,label: String,path: String,bytes: Int,sha256: String; let position: Int? }
     struct IndexDocument: Decodable {
         struct Source: Decodable { let bytes: Int,sha256: String }
@@ -161,11 +167,19 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             XCTAssertEqual(corpus.cases.count,1);XCTAssertEqual(corpus.cases[0].spec.label,expectedLabel)
             var projected=document
             projected["assets"]=(try XCTUnwrap(document["assets"] as? [String:Any])).filter { OriginalMenuResourceLoading.paths.contains($0.key) }
-            projected["cases"]=[try XCTUnwrap((try XCTUnwrap(document["cases"] as? [[String:Any]])).first?["startup"])]
+            let startup=(try XCTUnwrap(document["cases"] as? [[String:Any]])).first?["startup"]
+            if let startup { projected["cases"]=[startup] }
+            else {
+                // Fault publication omitted this nested report. Keep its
+                // absence; the test compares the saved outer checkpoints at
+                // real Native startup callbacks instead of inventing a report.
+                XCTAssertEqual(corpus.cases[0].end,"sourceFault")
+                projected["cases"]=[]
+            }
             let temporary=FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-war-startup-"+UUID().uuidString+".json")
             try JSONSerialization.data(withJSONObject:projected).write(to:temporary)
             defer { try? FileManager.default.removeItem(at:temporary) }
-            startup=try Base.Resources(url:temporary,expectedCases:1)
+            self.startup=try Base.Resources(url:temporary,expectedCases:startup == nil ? 0 : 1)
             XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
             XCTAssertEqual(corpus.libSHA256,"28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba")
             XCTAssertEqual(corpus.worldAddress,0x22000020);XCTAssertEqual(corpus.bitmapAddress,0x27000020)
@@ -328,7 +342,11 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     }
     @discardableResult
     func run(_ item: Case,_ r: Resources,_ retained: inout Retained?,failure: String? = nil,
-             compareRetainedScratch: Bool = false) throws -> Int {
+             compareRetainedScratch: Bool = false,rejection: NativeRejection? = nil) throws -> Int {
+        if rejection != nil {
+            XCTAssertNil(failure);XCTAssertEqual(item.end,"sourceFault")
+            guard retained != nil,item.spec.chain == true else { throw Stop.unexpected }
+        }
         var initial=try retained ?? initialize(item,r)
         if item.spec.chain == true {
             if let inputs=item.spec.matrixInputs {
@@ -383,11 +401,33 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         let initialActors=actors
         // Match both the label and complete declared entry globals.
         let entryGlobals=try XCTUnwrap(item.before.first { $0.address==UInt32(base) }).storage.bytes
-        let matches=r.startup.c.cases.indices.filter { r.startup.c.cases[$0].spec.label==item.spec.label && r.startup.c.cases[$0].before.globals==entryGlobals }
-        XCTAssertEqual(matches.count,1)
-        let startupIndex = try XCTUnwrap(matches.first)
-        let a = try Base.Adapter(r.startup.c.cases[startupIndex],r.startup)
+        let a: Base.Adapter?
+        if item.startup != nil {
+            let matches=r.startup.c.cases.indices.filter { r.startup.c.cases[$0].spec.label==item.spec.label && r.startup.c.cases[$0].before.globals==entryGlobals }
+            XCTAssertEqual(matches.count,1)
+            a=try Base.Adapter(r.startup.c.cases[XCTUnwrap(matches.first)],r.startup)
+        } else {
+            XCTAssertNotNil(rejection);XCTAssertTrue(r.startup.c.cases.isEmpty)
+            XCTAssertEqual(try [0x44d020,0x4512cc,0x44d07c,0x4512c8].map {
+                try initial.prepared.globals.integer(at:$0-base,as:UInt32.self)
+            },[202,202,0,3])
+            a=nil
+        }
+        let outputInput: OriginalMenuPresentationInput
+        if let output=item.output { outputInput=output }
+        else {
+            XCTAssertNotNil(rejection)
+            // Explicit unused Native response slots, not recovered source
+            // values. The exact guard and event prefix must precede output.
+            let unused:[String:Int]=["targetSurface":0,"methodResult":0,"queryResult":0,"audioGetResult":0,
+                "audioSetResult":0,"queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":0,"postResult":0]
+            outputInput=try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:unused))
+        }
         var eventIndex=0,characterPoint=0,musicIndex=0,warPoint=0,preparationPoint=0,numericPoint=0
+        var reachedPoints: [String]=[],diagnosticFront: [OriginalFrontScreenEvent]=[]
+        var diagnosticGraphics: Base.Context?,diagnosticGlobals: OriginalStateRecord?
+        var diagnosticPreparationState: OriginalMatchPreparation?
+        var allocatorResults: [(bytes:Int,address:UInt32)]=[]
         var preparationAdapter: OriginalWarPreparationSurfaceAdapter?
         let warAdapter=item.warGraphics.map { OriginalWarPreparationMenuSurfaceAdapter($0,r,control:item.spec.control) }
         let firstFrontCount=committed.front.count
@@ -436,7 +476,10 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             XCTAssertEqual(records.count,memory.allocations.count)
             for record in records {
                 XCTAssertEqual(record.kind,"music-wide");XCTAssertTrue(record.count>0 && record.count<0x1000 && record.count%2==0)
-                XCTAssertEqual(try r.startup.blob(record.initial),record.address>=0x2c020020 ? (0..<record.count).map { item.spec.control ? UInt8($0%256) : 0xa5 } : a.pattern(record.count))
+                let pattern: [UInt8]
+                if record.address>=0x2c020020 { pattern=(0..<record.count).map { item.spec.control ? UInt8($0%256) : 0xa5 } }
+                else { pattern=try XCTUnwrap(a).pattern(record.count) }
+                XCTAssertEqual(try r.startup.blob(record.initial),pattern)
                 let value=try XCTUnwrap(memory.allocations[record.address])
                 XCTAssertEqual(value.bytes,try r.startup.blob(record.bytes))
                 XCTAssertEqual(value.defined,try r.startup.blob(record.mask).map { $0 != 0 })
@@ -451,6 +494,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 for i in a.effects.indices { XCTAssertEqual(a.effects[i],a.defined[i] ? b.effects[i] : 0) }
             } else if e != expected { XCTFail("\(item.spec.label) event\(eventIndex): \(e), expected \(expected)");throw Stop.unexpected }
             eventIndex += 1;environment.front.append(e)
+            if rejection != nil { diagnosticFront.append(e) }
             if failure=="replayFree",e.kind=="free",[UInt32(0x75000020),0x77000020,0x77640020].contains(e.arguments[0]) { throw Stop.injected }
             let currentEvents=environment.front.suffix(environment.front.count-firstFrontCount)
             if failure=="secondRandom",e.kind=="random",e.arguments[0]==0x122,
@@ -501,6 +545,13 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 let i=Int((record.address-0x50000020)/0x2000);XCTAssertEqual(actual.input.path,OriginalMenuResourceLoading.paths[item.spec.control ? 10-i : i]);XCTAssertTrue(actual.input.present)
             }
         }
+        func compareFaultStartup(_ name: String,_ state: OriginalStateRecord) throws {
+            guard rejection != nil else { return }
+            let point=try XCTUnwrap(item.points.first { $0.kind==name })
+            XCTAssertEqual(eventIndex,point.eventCount);reachedPoints.append(name)
+            var stage=initial.prepared;stage.globals=state
+            try compareState(stage,point.records)
+        }
         func draw(_ request: OriginalCharacterScreenDraw,_ state: OriginalStateRecord,
                   _ images: [UInt32:OriginalLoadedBitmap],_ isWar: Bool,_ buffer: inout Environment) throws {
             let address: UInt32,surface: UInt32
@@ -531,6 +582,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         try compareState(prepared,item.before)
         try compareScratch(war.bitmapScratch,item.before)
         XCTAssertEqual(library.retainedDC,try XCTUnwrap(before[c.libraryAddress]).integer(at:0x306e,as:UInt32.self))
+        try compareFaultStartup("declaredTail",prepared.globals)
         do {
             let end=try OriginalCharacterMenuContinuation.advanceWithWar(state:&prepared,memory:&memory,music:&music,resources:&resources,war:&war,libraryText:&library,environment:&committed,
                 target:c.target,input:.init(dcResult:item.spec.dcResult ?? 0,dc:item.spec.dc ?? 0x76543210,methodResult:item.spec.methodResult ?? -1,drawResults:[-1],shellResult:33),
@@ -543,6 +595,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         return .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7])
                     },constructBitmap:{ path,optional,backing in
                         var graphics=env.preparationGraphics
+                        defer { if rejection != nil { diagnosticGraphics=graphics } }
                         let result=try adapter.construct(path,optional,backing,&graphics,scratch:&scratch,afterRequest:{ key in
                             if failure=="graphicsAPI:"+key { throw Stop.injected }
                         }) { try event(.init("preparationBitmap"),&env) }
@@ -560,6 +613,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         };return result
                     },releaseBitmap:{ index,bitmap in
                         var graphics=env.preparationGraphics
+                        defer { if rejection != nil { diagnosticGraphics=graphics } }
                         try adapter.release(index,bitmap,&graphics) { kind,_ in
                             try event(.init("preparationBitmap"),&env)
                             if failure==kind { throw Stop.injected }
@@ -605,19 +659,28 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         XCTAssertEqual(bytes,0x630e18)
                         if failure=="allocateReplay" { throw Stop.injected }
                         let generation=item.spec.generation ?? 0
-                        return generation==0 ? 0x75000020 : 0x77000020+UInt32(generation-1)*0x640000
+                        let address: UInt32=item.resourceFailureInput?.declared?.replayNull == true ? 0 :
+                            (generation==0 ? 0x75000020 : 0x77000020+UInt32(generation-1)*0x640000)
+                        allocatorResults.append((bytes,address))
+                        return address
                     },observe:{ try event($0,&env) },numericCheckpoint:{ pc,seat,value in
                         let points=item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }
                         if item.spec.matrixOrdinal == nil && item.resourceFailureInput == nil { XCTAssertTrue(points.isEmpty);return }
                         guard numericPoint<points.count else { throw Stop.unexpected }
                         let expected=points[numericPoint];numericPoint += 1
+                        reachedPoints.append(expected.kind)
                         XCTAssertEqual(expected.kind,"war-preparation-numeric-0x"+String(pc,radix:16));XCTAssertEqual(expected.seat,UInt32(seat))
                         XCTAssertEqual(eventIndex,expected.eventCount);try compareState(value,expected.records)
                     },checkpoint:{ pc,value,allocation,name in
                         let points=item.points.filter { $0.kind.hasPrefix("war-preparation-0x") }
                         let expected=points[preparationPoint];preparationPoint += 1
+                        reachedPoints.append(expected.kind)
                         XCTAssertEqual(expected.kind,"war-preparation-0x"+String(pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                         try compareState(value,expected.records)
+                        if rejection != nil {
+                            diagnosticGlobals=try r.sourceGlobals(value.globals)
+                            diagnosticPreparationState=value
+                        }
                         try compareScratch(scratch,expected.records)
                         if pc != 0x43a21f {
                             let text=try XCTUnwrap(expected.name),pairs=Array(text.utf8)
@@ -635,8 +698,9 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         }
                     })
                 },
-                outputInput:item.output,milliseconds:item.spec.milliseconds ?? 17,
+                outputInput:outputInput,milliseconds:item.spec.milliseconds ?? 17,
                 musicRequest:{ request,env in
+                    let a=try XCTUnwrap(a,"Missing source startup report permits no startup music requests")
                     let expected=item.bodyMusic[musicIndex];musicIndex += 1
                     XCTAssertEqual(request,.init(expected.kind,expected.arguments,expected.strings))
                     try event(.init(request.kind.rawValue,request.arguments,request.strings),&env)
@@ -654,31 +718,45 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                     if failure=="music",request.kind == .method,request.arguments.count==4,request.arguments[1]==0x34,request.arguments[2]==0x2c020020 { throw Stop.injected }
                     return response
                 },allocate:{ i,env in
-                    let value=try a.allocate(i,&env.graphics);try event(.init("startup"),&env);return value
+                    let value=try XCTUnwrap(a).allocate(i,&env.graphics);try event(.init("startup"),&env);return value
                 },warAllocate:{ i,env in
                     let value=try XCTUnwrap(warAdapter).allocate(i,&env.warGraphics)
                     try event(.init("warBitmap"),&env);return value
                 },perform:{ q,env in
-                    let response=try a.perform(q,&env.graphics);try event(.init("startup"),&env);return response
+                    let response=try XCTUnwrap(a).perform(q,&env.graphics);try event(.init("startup"),&env);return response
                 },warPerform:{ q,env in
                     let response=try XCTUnwrap(warAdapter).perform(q,&env.warGraphics)
                     try event(.init("warBitmap"),&env);return response
                 },bitmapStorage:{ token,_ in
                     try XCTUnwrap(initial.memory.allocations[token]).storage
                 },resourceEvent:{ e,env in
-                    try a.observe(e,&env.graphics)
+                    try XCTUnwrap(a).observe(e,&env.graphics)
                     if e.kind != .allocate { try event(.init("startup"),&env) }
                 },warResourceEvent:{ e,env in
                     try XCTUnwrap(warAdapter).observe(e,&env.warGraphics)
                     if e.kind != .allocate { try event(.init("warBitmap"),&env) }
                 },warBeforeResource:{ _,state,_,_ in
-                    try XCTUnwrap(warAdapter).shadow=r.sourceGlobals(state).bytes+a.suffix
+                    try XCTUnwrap(warAdapter).shadow=r.sourceGlobals(state).bytes+XCTUnwrap(a).suffix
                 },afterMusic:{ entered,state,memory,env in
-                    XCTAssertFalse(entered);XCTAssertEqual(a.index,item.startup.musicBoundary.eventCount)
-                    a.shadow=try r.sourceGlobals(state).bytes+a.suffix;XCTAssertEqual(a.shadow,try r.startup.blob(item.startup.musicBoundary.snapshot.globals))
-                    try compareMusic(item.startup.musicBoundary.allocations,memory)
+                    try compareFaultStartup("musicReturned",state)
+                    XCTAssertFalse(entered)
+                    if let a,let startup=item.startup {
+                        XCTAssertEqual(a.index,startup.musicBoundary.eventCount)
+                        a.shadow=try r.sourceGlobals(state).bytes+a.suffix;XCTAssertEqual(a.shadow,try r.startup.blob(startup.musicBoundary.snapshot.globals))
+                        try compareMusic(startup.musicBoundary.allocations,memory)
+                    } else {
+                        XCTAssertEqual(memory.allocations,initial.music.allocations)
+                        XCTAssertEqual(env,initial.environment)
+                    }
                     if failure == "afterMusic" { throw Stop.injected }
                 },resourceCheckpoint:{ point,state,images,buffer in
+                    try compareFaultStartup("resources-"+point.kind.rawValue,state)
+                    guard let a else {
+                        XCTAssertTrue(["prefix","complete"].contains(point.kind.rawValue))
+                        XCTAssertEqual(images,initial.resources.bitmaps)
+                        XCTAssertEqual(buffer,initial.environment)
+                        return
+                    }
                     if item.spec.chain != true { try a.stored(point,r.sourceGlobals(state),images,&buffer.graphics) }
                     else {
                         let expected=a.c.checkpoints[a.stores];a.stores += 1
@@ -686,10 +764,20 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         a.shadow=try r.sourceGlobals(state).bytes+a.suffix;XCTAssertEqual(a.shadow,try r.startup.blob(expected.snapshot.globals))
                         try compareImages(expected.records,images,buffer)
                     }
-                },afterStartup:{ _,state,memory,images,env in
+                },afterStartup:{ result,state,memory,images,env in
+                    try compareFaultStartup("startupReturned",state)
+                    guard let a,let startup=item.startup else {
+                        XCTAssertFalse(result.musicEntered)
+                        XCTAssertEqual(result.resources.continuation,.ready)
+                        XCTAssertEqual(result.resources.selectionAtEntry,3)
+                        XCTAssertEqual(memory.allocations,initial.music.allocations)
+                        XCTAssertEqual(images.bitmaps,initial.resources.bitmaps)
+                        XCTAssertEqual(env,initial.environment)
+                        return
+                    }
                     XCTAssertEqual(try r.sourceGlobals(state).bytes+a.suffix,try r.startup.blob(a.c.after.globals))
                     XCTAssertEqual(a.index,a.events.count);XCTAssertEqual(a.stores,a.c.checkpoints.count)
-                    try compareMusic(item.startup.musicAllocations,memory);try compareImages(a.c.records,images.bitmaps,env)
+                    try compareMusic(startup.musicAllocations,memory);try compareImages(a.c.records,images.bitmaps,env)
                     if failure == "afterStartup" { throw Stop.injected }
                 },draw:{ request,state,images,buffer in
                     try draw(request,state,images.bitmaps,false,&buffer)
@@ -699,6 +787,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 characterCheckpoint:{ point,state,buffer in
                     let points=item.points.filter { $0.kind.hasPrefix("character-") }
                     let expected=points[characterPoint];characterPoint += 1
+                    reachedPoints.append(expected.kind)
                     XCTAssertEqual(expected.kind,"character-0x"+String(point.pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                     if point.pc == 0x42a25a { XCTAssertEqual(expected.seat,UInt32(point.seat)) }
                     var expectedLocals=(expected.locals ?? [:]).reduce(into:[Int:Int32]()) { $0[Int($1.key)!]=Int32(bitPattern:$1.value) }
@@ -715,6 +804,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                     let points=item.points.filter { $0.kind.hasPrefix("war-0x") }
                     guard warPoint<points.count else { throw Stop.unexpected }
                     let expected=points[warPoint];warPoint += 1
+                    reachedPoints.append(expected.kind)
                     XCTAssertEqual(expected.kind,"war-0x"+String(point.pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                     // Source retains the full private stack in its read/store
                     // audit. These checkpoints expose owned game state only.
@@ -734,10 +824,14 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                     if failure=="latePreset",point.pc==0x439e76 { throw Stop.injected }
                     if failure=="lateFinalize",point.pc==0x43a21f { throw Stop.injected }
                 },checkpoint:{ name,scene,state,buffer in
+                    reachedPoints.append(name)
                     let point=try XCTUnwrap(item.points.first { $0.kind == name });XCTAssertEqual(eventIndex,point.eventCount)
                     let expected=try XCTUnwrap(point.records.first { $0.address == UInt32(base) });try compare(state,try r.nativeGlobals(r.record(expected)),name+" globals");try compareWorld(scene,point.records)
+                    XCTAssertNil(rejection,"A faulted caller must not reach menu output")
                     if failure == "beforeReturn" && name == "matchBeforeReturn" { throw Stop.injected }
                 })
+            XCTAssertNil(rejection,"Expected the declared Native guard, but the whole caller returned")
+            let a=try XCTUnwrap(a)
             XCTAssertNil(failure);XCTAssertEqual(warPoint,item.points.filter { $0.kind.hasPrefix("war-0x") }.count);XCTAssertEqual(end.rawValue,item.end);XCTAssertEqual(eventIndex,item.events.count)
             XCTAssertEqual(item.cw,0x23f)
             XCTAssertEqual(item.endSP,item.end == "warMatchPreparation" ? try XCTUnwrap(item.warSP) : c.entrySP+8)
@@ -771,8 +865,61 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             XCTAssertEqual(library.retainedDC,try XCTUnwrap(after[c.libraryAddress]).integer(at:0x306e,as:UInt32.self))
             XCTAssertEqual(committed.front.count-firstFrontCount,item.events.count)
             retained=Retained(war:war,prepared:prepared,memory:memory,library:library,music:music,resources:resources,environment:committed)
-        } catch let error as Stop {
-            guard error == .injected else { throw error };XCTAssertNotNil(failure)
+        } catch {
+            if let rejection {
+                guard let native=error as? OriginalStateError,
+                      case .invalidStorage(let message)=native else { throw error }
+                XCTAssertEqual(message,rejection.message,"Exact Native boundary, not a harness failure")
+                XCTAssertEqual(eventIndex,rejection.frontEvents)
+                XCTAssertEqual(diagnosticFront.count,rejection.frontEvents)
+                XCTAssertEqual(reachedPoints,item.points.map(\.kind),"Consume every saved pre-guard checkpoint in order")
+                XCTAssertEqual(characterPoint,item.points.filter { $0.kind.hasPrefix("character-") }.count)
+                XCTAssertEqual(warPoint,item.points.filter { $0.kind.hasPrefix("war-0x") }.count)
+                XCTAssertEqual(preparationPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-0x") }.count)
+                XCTAssertEqual(numericPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }.count)
+                XCTAssertEqual(musicIndex,item.bodyMusic.count)
+                let adapter=try XCTUnwrap(preparationAdapter)
+                XCTAssertEqual(adapter.index,adapter.c.events.count,"Complete graphics request prefix")
+                XCTAssertEqual(adapter.allocation,adapter.c.allocations.count)
+                let graphics=diagnosticGraphics ?? initial.environment.preparationGraphics
+                adapter.compareContext(graphics)
+                // In music/replay cases bitmap construction has returned in
+                // full. Compare its owned bytes/masks and retained wrappers.
+                if item.bodyMusic.count>0 { try adapter.compare(XCTUnwrap(diagnosticPreparationState),graphics) }
+                // Release callbacks do not change globals. No post-release
+                // checkpoint exists in these faulted source calls.
+                if rejection.releaseFreePairs>0 { try adapter.compareGlobals(XCTUnwrap(diagnosticGlobals)) }
+                let releaseEvents=adapter.c.events.filter { $0.request?.kind=="release" }
+                let freeEvents=adapter.c.events.filter { $0.request?.kind=="free" }
+                XCTAssertEqual(releaseEvents.count,rejection.releaseFreePairs)
+                XCTAssertEqual(freeEvents.count,rejection.releaseFreePairs)
+                if rejection.releaseFreePairs>0 {
+                    for e in releaseEvents {
+                        let surface=try XCTUnwrap(e.request?.words.first)
+                        XCTAssertEqual(initial.environment.preparationGraphics.surfacesReleased[surface],false)
+                        XCTAssertEqual(graphics.surfacesReleased[surface],true,"Staged request only; rollback below preserves the owner")
+                    }
+                }
+                if rejection.replayNull {
+                    XCTAssertEqual(item.resourceFailureInput?.declared?.replayNull,true)
+                    XCTAssertEqual(allocatorResults.count,1)
+                    let allocation=try XCTUnwrap(allocatorResults.first)
+                    XCTAssertEqual(allocation.bytes,0x630e18);XCTAssertEqual(allocation.address,0)
+                    XCTAssertEqual(item.events.count,rejection.frontEvents+1)
+                    XCTAssertEqual(item.events.last,.init("calloc",[0,1,0x630e18]))
+                    XCTAssertEqual(diagnosticFront.last,.init("free",[0x26003000]))
+                    XCTAssertFalse(diagnosticFront.contains { $0.kind=="calloc" })
+                    for address in [UInt32(0x26003000),0x26003100] {
+                        XCTAssertEqual(initialMemory.allocations[address]?.live,true)
+                    }
+                } else {
+                    XCTAssertTrue(allocatorResults.isEmpty)
+                    XCTAssertEqual(item.events.count,rejection.frontEvents)
+                }
+            } else {
+                guard let stop=error as? Stop,stop == .injected else { throw error }
+                XCTAssertNotNil(failure)
+            }
             XCTAssertEqual(prepared.globals,initialGlobals);XCTAssertEqual(prepared.world,initialWorld);XCTAssertEqual(prepared.actors,initialActors);XCTAssertEqual(memory.allocations,initialMemory.allocations);XCTAssertEqual(memory.replayPointers,initialMemory.replayPointers)
             XCTAssertEqual(war,initial.war)
             XCTAssertEqual(library,initialLibrary);XCTAssertEqual(committed,initial.environment)

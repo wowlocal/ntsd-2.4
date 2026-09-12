@@ -116,7 +116,14 @@ final class OriginalWarPreparationSurfaceAdapter {
         let wrapper=owners[ordinal]
         let request=try XCTUnwrap(c.allocations.firstIndex { $0.address==wrapper })
         XCTAssertLessThan(request,c.allocationStart ?? 0)
-        let surface=try XCTUnwrap(context.surfaceForWrapper[wrapper])
+        let surface: UInt32
+        if let owned=context.surfaceForWrapper[wrapper] { surface=owned }
+        else if try bitmap.storage.integer(at:0,as:UInt32.self)==0,!bitmap.input.present {
+            // An owned wrapper whose loader produced no surface reaches the
+            // Core ownership guard. A missing binding for marker1 is a harness
+            // error, never a substitute NULL platform response.
+            surface=0
+        } else { surface=try XCTUnwrap(context.surfaceForWrapper[wrapper]) }
         try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context) { q,g in
             let e=try self.next(q.kind),expected=try XCTUnwrap(e.request),response=try XCTUnwrap(e.response)
             XCTAssertEqual(q.words,expected.words);XCTAssertEqual(q.strings,expected.strings);XCTAssertNil(q.bytes);XCTAssertNil(q.defined)
@@ -160,6 +167,11 @@ final class OriginalWarPreparationSurfaceAdapter {
             }
             if let live=c.wrapperLive?[String(record.address)] { XCTAssertEqual(state.releasedBitmaps.contains(r.catalog.bitmaps.count+i),!live) }
         }
+        compareContext(context)
+    }
+    /// Controlled request bookkeeping at the reached prefix; this is separate
+    /// from the outer caller's committed state and real device lifetimes.
+    func compareContext(_ context: Base.Context) {
         XCTAssertEqual(context.imagesDeleted,Dictionary(uniqueKeysWithValues:c.images.map { (UInt32($0.key)!,$0.value.deleted) }))
         XCTAssertEqual(context.surfacesReleased,Dictionary(uniqueKeysWithValues:c.surfaces.map { (UInt32($0.key)!,$0.value.released) }))
         XCTAssertEqual(context.surfaceDescriptions,Dictionary(uniqueKeysWithValues:c.surfaces.map { (UInt32($0.key)!,$0.value.description) }))

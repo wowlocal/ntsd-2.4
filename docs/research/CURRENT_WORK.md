@@ -101,9 +101,27 @@ Expected не менялись, нового исполнения оригина
 [Приёмка](../evidence/lib-war-retained-scratch.json). Теперь приняты все 28 returned
 вызовов в их объявленных границах; девять source faults остаются отдельно.
 
+Приняты [девять Native отказов с полным rollback](LIB_WAR_FAULT_REJECTIONS.md)
+по saved s03..s09/call-01,s22/00,s28/00. Каждый тест выполняет97 returned parent
+invocations и9 отдельных отказов, сравнивает7844 front events плюс отдельный
+allocator0,214 checkpoints (включая32numeric),38music и202graphics events.
+Шестнадцать staged Release/free pairs в четырёх last-layer случаях полностью
+откатываются вместе с globals/World/Actors/BG/bitmap/music/replay/War/library/events.
+Это Native rejections, а не matches исходных memory faults. Для s28 guard стоит
+до front calloc; middle-state clear/live установлен code review, не snapshot.
+Raw56.029с/build278.35с; bundled War8 за443.553с
+и shared10 за474.245с прошли:18 уникальных bundled методов.
+Первый кандидат остановился на отсутствующем nested startup report; ошибка,
+первый review и поправка callback mapping сохранены. Core/expected не менялись.
+Все361 прежних fixtures,370 текущих/818 Native-файлов, Git и оба архива проверены.
+Нового исполнения оригинала нет. [Приёмка](../evidence/lib-war-fault-rejections.json).
+Все28 returned error-corpus вызовов приняты в своих границах; для девяти source
+faults проверены отдельные Native rejection/rollback contracts. Полная игра и
+три safety incidents остаются открытыми.
+
 ## Непринятая работа и отказ Codex
 
-Текущий незакрытый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
+Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
 Среда и сохранённые исправления стенда описаны в [FS](LIB_WAR_PREPARATION_ERRORS_FS.md)
 и [FS/stack](LIB_WAR_PREPARATION_ERRORS_FS_STACK.md). Они не меняют реальную Windows
 среду и не разрешают повторять исходные ошибки или продолжать faulted VM.
@@ -124,7 +142,8 @@ Expected не менялись, нового исполнения оригина
   `fullGameComplete=false`. Приёмки трёх NULL-вызовов, шести partial-surface,
   восьми graphics-error, девяти control/music и двух retained-scratch возвратов
   не переписывают источник;
-  полный Native error corpus ещё не принят.
+  девять отдельных rejection/rollback contracts приняты новой карточкой выше;
+  source faults не считаются успешными matches.
 - Проверка процессов по командам War error capture/audit, transform boundaries
   и result recording не нашла соответствующих работающих процессов на момент
   чтения. Перед любым дальнейшим действием нужна новая проверка; это не инвентарь
@@ -150,54 +169,36 @@ Expected не менялись, нового исполнения оригина
 
 ## Следующая независимая карточка
 
-**Девять отдельных Native rejections с полным rollback по сохранённым source faults.**
+**Собственный coordinator menu/outer-loop в production Core.**
 
-Использовать готовую инвентаризацию и read-only review
-`build/research/lib-war-preparation/war-retained-scratch-native-20260912/next-boundaries-review.json`.
-Проверены 54 pins: 45 report/job/config/pins/raw и девять failure sidecars.
-Нового исполнения оригинала, producer imports, исторического audit rerun или
-продолжения faulted VM не требуется. Девять отказов Native не являются matches
-с исходными memory faults и не закрывают safety incidents.
+Read-only readiness:
+`build/research/lib-war-preparation/war-fault-rejections-native-20260912/next-work-review.json`.
+Сейчас композиция находится в `OriginalApplicationMenuInputTests.run` и тестовом
+`OriginalBitmapSurfaceLoadingTests.OwnContext`; приложение запускает Practice.
+Вынести подтверждённую цепочку в `OriginalApplicationMenuSession.swift` с собственными
+владельцами состояния и объявленными platform responses.
 
-Конечный объём: s03..s09/call-01, s22/00 и s28/00. Девять собственных цепочек
-проходят по десять accepted bound prefix calls; перед семью call-01 воспроизводят
-уже принятый call-00 с его owners. Итого 97 returned parent invocations и девять
-rejected invocations. Это 90 перекрывающихся prefix calls/десять references,
-семь parent-call воспроизведений и девять полных coupled rollback checks.
+Конечный путь: доставленный ввод → Main World0→1 → confirmation sound и3000 RNG
+на активацию → освобождение фона → World2 с явной loading boundary. Готовы
+50 сохранённых цепочек:47 idle repeats и3 activation chains,62 completed iterations,
+3 loading boundaries,18835 событий,9000 RNG calls и869 полных checkpoints.
+Это собственные Native parents, а не загрузка их ожидаемого after-state.
+Восемь поздних rollback controls сохраняют предыдущие завершённые итерации.
 
-| Случаи | Native boundary | Сравнимые front events до отказа |
-| --- | --- | ---: |
-| s03/01 | BG release ownership после четырёх Release/free | 805 |
-| s04/01, s06/01, s08/01 | Arena bitmap release ownership | 797 каждый |
-| s05/01, s07/01, s09/01 | Та же граница после четырёх пар | 805 каждый |
-| s22/00 | Null COM continuation после трёх QueryInterface | 917 |
-| s28/00 | Recording allocation unavailable or live alias | 1316 + отдельный allocator result |
+Перед изменениями закрепить фактические Core/test/fixture inputs и прочитать
+APPLICATION_MENU_INPUT, APPLICATION_MENU_RETURN, APPLICATION_LOADING_PREFIX,
+APPLICATION_MESSAGE_LOOP и соответствующие исторические ограничения.
+Сохранить все существующие сравнения bytes/masks/owners/RNG/DC/timer/counter;
+компаратор и JSON остаются в тестах. Loading request — явное production-продолжение,
+не XCTest Stop.loading и не успешный возврат загрузки. Проверить общий откат
+платформенных эффектов и pending-state handoff для LoadingPrefix.
 
-Для s04..s07 adapter сейчас раньше Core выбрасывает XCTest unwrap из-за отсутствия
-surface binding. Передавать surface0 допустимо только при собственном marker0
-и отсутствии собственного surface owner. Отсутствующий binding при marker1
-остаётся ошибкой стенда. s08/s09 сохраняют известную released surface identity;
-Core отвергает marker0 до повторного Release. У s09 ordinal Release начинается с2.
-
-s22 сохраняет отрицательный event query с явным output0 и третий query после него;
-Native отвергает NULL event interface до notify, без wide allocation. Для s28
-подать0 из declared.replayNull, а не из ожидаемого after-state. Source содержит
-1317 событий, включая calloc0, последующие stores и attempted NULL write.
-Native guard стоит до front calloc; сравнить 1316 событий и отдельно объявленные
-allocator arguments/result. Не менять expected и не сравнивать Native rollback
-с исходным fault snapshot как успешный результат.
-
-Сохранить весь доступный prefix, точный тип/текст Native guard, 16 staged
-Release/free пар в четырёх last-layer случаях и полный rollback globals/World/
-Actors/BG/War scratch/resource contexts/music/recording/library/events. Общий
-XCTAssertThrowsError, Stop.unexpected или XCTest unwrap не устанавливают эту границу.
-Корпус содержит 171 511 851 raw bytes, 7 845 source events и 214 checkpoints;
-текущий placement guards допускает 7 844 front events плюс отдельный allocator result.
-
-Дальнейший consumer loader storage после его замены музыкальным private ABI
-остаётся отдельной неподдержанной связью. Текущая приёмка s10/s11 заканчивается
-после их normal returns и не импортирует эти слова в Native. Сначала оформить
-конечный план rejection-карточки с обязательными retained War/shared регрессиями.
+Обязательны прежние ApplicationMenuReturn, ApplicationMenuInput,
+ApplicationMessageLoop и ApplicationLoadingPrefix regressions плюс независимый
+review ownership/aliases/эффектов. Для этого конечного извлечения нового исполнения
+оригинала, source producer или исторического audit не требуется.
+Карточка готовит подключение цикла к приложению; окно, полный каталог/loading,
+War43a860 и сыгранный матч ею не проверяются. Три safety incidents остаются открыты.
 
 ## Дальнейшая сквозная очередь
 

@@ -30,7 +30,7 @@ CPU-сессия не запускалась, прежние safety incidents н
 завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
 faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
 live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
-остаётся открытым для девяти отдельных fault rejection/rollback проверок.
+дополнено девятью отдельными Native rejection/rollback contracts ниже.
 Все28returned теперь приняты в границах NULL/partial/graphics/music/scratch-карточек ниже. Четыре поздних wrapper при первом NULL переживают следующий Start.
 Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
 
@@ -106,11 +106,28 @@ Expected не менялись, нового исполнения оригина
 [Приёмка](evidence/lib-war-retained-scratch.json). Теперь приняты все 28 returned
 вызовов в их объявленных границах; девять source faults остаются отдельно.
 
-Следующая карточка по CURRENT_WORK — девять Native ownership/music/replay
-rejections с whole rollback, 97 returned parent invocations и девять отказов.
-s28 сравнивает 1316 front events и отдельный allocator result; исходный calloc0
-и fault snapshot не выдаются за Native match. Новое исполнение оригинала не нужно.
-Полный error corpus, игра, приложение, Windows/device и incidents остаются открыты.
+Приняты [девять Native отказов с полным rollback](research/LIB_WAR_FAULT_REJECTIONS.md)
+по saved s03..s09/call-01,s22/00,s28/00. Каждый тест выполняет97 returned parent
+invocations и9 отдельных отказов, сравнивает7844 front events плюс отдельный
+allocator0,214 checkpoints (включая32numeric),38music и202graphics events.
+Шестнадцать staged Release/free pairs в четырёх last-layer случаях полностью
+откатываются вместе с globals/World/Actors/BG/bitmap/music/replay/War/library/events.
+Это Native rejections, а не matches исходных memory faults. Для s28 guard стоит
+до front calloc; middle-state clear/live установлен code review, не snapshot.
+Raw56.029с/build278.35с; bundled War8 за443.553с
+и shared10 за474.245с прошли:18 уникальных bundled методов.
+Первый кандидат остановился на отсутствующем nested startup report; ошибка,
+первый review и поправка callback mapping сохранены. Core/expected не менялись.
+Все361 прежних fixtures,370 текущих/818 Native-файлов, Git и оба архива проверены.
+Нового исполнения оригинала нет. [Приёмка](evidence/lib-war-fault-rejections.json).
+Все28 returned error-corpus вызовов приняты в своих границах; для девяти source
+faults проверены отдельные Native rejection/rollback contracts. Полная игра и
+три safety incidents остаются открытыми.
+
+Следующая конечная карточка по CURRENT_WORK — вынести собственную композицию
+menu/outer-loop из XCTest в production Core. Готовы50 saved chains/62 completed
+iterations/3 loading boundaries; новое исполнение оригинала не требуется.
+Полный каталог, War43a860, приложение, игра и Windows/device остаются открытыми.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
