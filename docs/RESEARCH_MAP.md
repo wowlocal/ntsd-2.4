@@ -16,6 +16,15 @@
 **Ближайший шаг: [изменения из bundled lib.dll](research/LIB_RUNTIME.md),
 затем полная инициализация, внешний цикл времени и подключение общего движка к приложению.**
 
+[Ошибки ресурсов подготовки War](research/LIB_WAR_PREPARATION_ERRORS.md):
+завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
+faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
+live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
+остаётся открытым. Нужны nullable bitmap owners, корректные surface/music adapters,
+provenance private dimensions в двух returned случаях и отдельные fault rollback
+проверки. Четыре поздних wrapper при первом NULL переживают следующий Start.
+Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
+
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
 619 bitmap арены,302 пары Release/free и56 полных записей повторов. Проверены

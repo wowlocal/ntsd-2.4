@@ -1,0 +1,2108 @@
+{
+  "schema": 1,
+  "scope": "Completion of the interrupted War resource-error source-evidence phase. The retained29capture2reports/37newcalls are audited and inventoried; Native contracts and the safety incident remain open.",
+  "timeUTC": "2026-09-12T06:10:22.720705+00:00",
+  "baseCommit": "ffe16f4",
+  "sourceSession": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+  "sourceTurn": "01a092ec-9aa9-7470-afec-71c033491ff1",
+  "incidentUTC": "2026-09-12T00:30:32.397Z",
+  "status": "retained-source-evidence-verified-native-open",
+  "originalExecutedInContinuation": false,
+  "sourceCapture2Jobs": 29,
+  "sourceAudited": true,
+  "nativeCompared": false,
+  "nativeCodeChanged": false,
+  "nativeTestsRun": false,
+  "sourceCaptureRetry": false,
+  "incidentResolved": false,
+  "windowsVerified": false,
+  "fullPreparationComplete": false,
+  "fullGameComplete": false,
+  "auditCounts": {
+    "prefixReproductions": 290,
+    "scenarios": 29,
+    "retainedWholeJoins": 37,
+    "bitmapAllocationRequests": 155,
+    "bitmapAllocations": 153,
+    "musicAllocationRequests": 28,
+    "musicAllocations": 27,
+    "recordingAllocationRequests": 29,
+    "recordingAllocations": 28,
+    "stores": 3611059,
+    "storedBytes": 12569000,
+    "instructionReads": 829068,
+    "instructionReadBytes": 2783085,
+    "pointRecords": 2036730,
+    "pointBytes": 7971924220,
+    "points": 1894,
+    "APIReads": 11080,
+    "APIReadBytes": 66887,
+    "helperReturns": 33060,
+    "wholeReturns": 28,
+    "calls": 37,
+    "sourceFaults": 9
+  },
+  "auditDetails": {
+    "instructionStarts": 3408,
+    "distinctBlobs": 1451,
+    "decodedBlobBytes": 80575112,
+    "unknownReadTuples": 57,
+    "unknownReadOccurrences": 2677,
+    "elapsedSeconds": 112.291
+  },
+  "inventoryCounts": {
+    "prefixProofSidecars": 290,
+    "liveOwnerJoins": 37,
+    "returned": 28,
+    "terminalJobs": 29,
+    "failureBlobComparisons": 6516,
+    "failureSidecars": 9,
+    "sourceFault": 9
+  },
+  "sourceInputPins": 725,
+  "sourceInputPinReference": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory2.json",
+    "bytes": 315652,
+    "sha256": "75a96b6e5eae6b2139de5c3d807d9c17b912a41c360e0c68880e3a7211c4f6f4"
+  },
+  "distinctAcceptedPrefixFiles": 20,
+  "rawCallBytes": 1171470808,
+  "scenarios": [
+    {
+      "scenario": 0,
+      "label": "normal-primary",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s00-capture2.json",
+      "reportPin": {
+        "bytes": 7588,
+        "sha256": "dd0e5a7bab2ef77d6317fb7f759418b27a0ba75efb8e77d50c66523b642bdf8a"
+      },
+      "startedUTC": "2026-09-12T00:21:37.528994+00:00",
+      "endedUTC": "2026-09-12T00:21:56.060607+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s00-capture2.parts/call-00.json",
+          "bytes": 35693376,
+          "sha256": "d2f7d69e00c60b8d318031b1e2c504d33ebacb5af0663af9d627abe495e92c4e",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 1,
+      "label": "normal-control",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s01-capture2.json",
+      "reportPin": {
+        "bytes": 7587,
+        "sha256": "42af244ffff1f0d2487f1ea9edc1dedaf2beb46fe64dcbedb1d68e9ca7c6fdb5"
+      },
+      "startedUTC": "2026-09-12T00:22:13.179837+00:00",
+      "endedUTC": "2026-09-12T00:22:32.084101+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s01-capture2.parts/call-00.json",
+          "bytes": 36477194,
+          "sha256": "c3b690f058b5e61ce4a53fd87a7f8ed7ce324b3cf0450fcb7080fae8516510a4",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true,
+            "1979768864": true,
+            "1979777056": true,
+            "1979785248": true,
+            "1979793440": true,
+            "1979801632": true,
+            "1979809824": true,
+            "1979818016": true,
+            "1979826208": true,
+            "1979834400": true,
+            "1979842592": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 2,
+      "label": "wrapperNull-0",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s02-capture2.json",
+      "reportPin": {
+        "bytes": 7948,
+        "sha256": "a5f3b5619801562032913cf4f3de6e6d7fac132843a1e73a80f708bf6f784e66"
+      },
+      "startedUTC": "2026-09-12T00:25:36.844055+00:00",
+      "endedUTC": "2026-09-12T00:26:01.340655+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s02-capture2.parts/call-00.json",
+          "bytes": 35621490,
+          "sha256": "29364c720cdc4bcda666576556a99001344900b3cc56bb2e356575ee87a3280c",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s02-capture2.parts/call-01.json",
+          "bytes": 35764638,
+          "sha256": "dbee1a12634438351a39005f40fb7562bc2a79eeea6dbbd2840e6e4c4276c5f0",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 3,
+      "label": "wrapperNull-4",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.json",
+      "reportPin": {
+        "bytes": 7949,
+        "sha256": "f635a75d68b3b6e3f61179ee6e293db7ecd3a0ce45f60b6dbe830e345241de55"
+      },
+      "startedUTC": "2026-09-12T00:25:36.844132+00:00",
+      "endedUTC": "2026-09-12T00:25:57.763024+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-00.json",
+          "bytes": 35639552,
+          "sha256": "d333c0f19de94ac0cfa92c5354a7e335c33e85eb0bb20d52b9aeb3f627e7de56",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.json",
+          "bytes": 16391099,
+          "sha256": "208455097ad0acbc4be61381917b3ebadcb84f4cedb276d1b50f6b5d3da95c34",
+          "end": "sourceFault",
+          "endPC": 4243734,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838979584
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979727904
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838983680
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979736096
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838987776
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979744288
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838991872
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979752480
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": false,
+            "1979736096": false,
+            "1979744288": false,
+            "1979752480": false
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.failure.json",
+            "bytes": 4495961,
+            "sha256": "1c7b37eb6d257d66a33f3b4765244affacc52f615fd1a2828d57f64c36f4fb2c"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:25:57.145872+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 0,
+                  "edx": 838992128,
+                  "esi": 1691666068,
+                  "edi": 4,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243734,
+                  "eflags": 151
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 0,
+              "edx": 838992128,
+              "esi": 1691666068,
+              "edi": 4,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243734,
+              "eflags": 151
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s03-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 4,
+      "label": "imageMissing-0",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.json",
+      "reportPin": {
+        "bytes": 7951,
+        "sha256": "d32c4e172728e0f9a1b8a8ecbc5ef9deba89dd6c0974fab7e0d9d85d3a0a9aef"
+      },
+      "startedUTC": "2026-09-12T00:27:48.685072+00:00",
+      "endedUTC": "2026-09-12T00:28:09.744466+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json",
+          "bytes": 35669702,
+          "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+          "bytes": 16389111,
+          "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json",
+            "bytes": 4491375,
+            "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:09.136409+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979727904,
+                  "edx": 0,
+                  "esi": 1691666052,
+                  "edi": 0,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 6
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979727904,
+              "edx": 0,
+              "esi": 1691666052,
+              "edi": 0,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 6
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 5,
+      "label": "imageMissing-4",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.json",
+      "reportPin": {
+        "bytes": 7951,
+        "sha256": "e31829e051b1301f944a081464f80ea57b51d8dedec2aacefa13d81cb1f4bce6"
+      },
+      "startedUTC": "2026-09-12T00:27:48.685065+00:00",
+      "endedUTC": "2026-09-12T00:28:09.795182+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json",
+          "bytes": 35670064,
+          "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+          "bytes": 16397379,
+          "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838979584
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979727904
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838983680
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979736096
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838987776
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979744288
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838991872
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979752480
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": false,
+            "1979736096": false,
+            "1979744288": false,
+            "1979752480": false,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json",
+            "bytes": 4497645,
+            "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:09.181784+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979760672,
+                  "edx": 838992128,
+                  "esi": 1691666068,
+                  "edi": 4,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 151
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979760672,
+              "edx": 838992128,
+              "esi": 1691666068,
+              "edi": 4,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 151
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 6,
+      "label": "createSurface-0",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.json",
+      "reportPin": {
+        "bytes": 7953,
+        "sha256": "93fc3cc24e154f901d49051d4a96685c5b2ccc65cf09d7234aa9509a6218de62"
+      },
+      "startedUTC": "2026-09-12T00:28:10.325472+00:00",
+      "endedUTC": "2026-09-12T00:28:31.516542+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json",
+          "bytes": 35676576,
+          "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+          "bytes": 16389408,
+          "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json",
+            "bytes": 4491201,
+            "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:30.875596+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979727904,
+                  "edx": 0,
+                  "esi": 1691666052,
+                  "edi": 0,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 6
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979727904,
+              "edx": 0,
+              "esi": 1691666052,
+              "edi": 0,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 6
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 7,
+      "label": "createSurface-4",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.json",
+      "reportPin": {
+        "bytes": 7953,
+        "sha256": "2ee9562810cb0272f9a20ec269ecda7cc59275a76709214bcd5d138de9c37cd0"
+      },
+      "startedUTC": "2026-09-12T00:28:10.369776+00:00",
+      "endedUTC": "2026-09-12T00:28:31.516550+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json",
+          "bytes": 35677671,
+          "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+          "bytes": 16398469,
+          "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838979584
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979727904
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838983680
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979736096
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838987776
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979744288
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838991872
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979752480
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": false,
+            "1979736096": false,
+            "1979744288": false,
+            "1979752480": false,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json",
+            "bytes": 4498271,
+            "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:30.869850+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979760672,
+                  "edx": 838992128,
+                  "esi": 1691666068,
+                  "edi": 4,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 151
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979760672,
+              "edx": 838992128,
+              "esi": 1691666068,
+              "edi": 4,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 151
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 8,
+      "label": "colorKey-0",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.json",
+      "reportPin": {
+        "bytes": 7943,
+        "sha256": "1ff4c44d6f580da6a5a8cc7f792939a4c7b3343787fa338c27ca1bebf8313e19"
+      },
+      "startedUTC": "2026-09-12T00:28:32.121724+00:00",
+      "endedUTC": "2026-09-12T00:28:53.465165+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json",
+          "bytes": 35698247,
+          "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838979584
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+          "bytes": 16390364,
+          "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json",
+            "bytes": 4491398,
+            "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:52.827242+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979727904,
+                  "edx": 0,
+                  "esi": 1691666052,
+                  "edi": 0,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 6
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979727904,
+              "edx": 0,
+              "esi": 1691666052,
+              "edi": 0,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 6
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 9,
+      "label": "colorKey-4",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.json",
+      "reportPin": {
+        "bytes": 7943,
+        "sha256": "ececaf61c38a51aa7b62ff94b47c0e8894ac0e8ee1d092d6dd951ffe043a22e3"
+      },
+      "startedUTC": "2026-09-12T00:28:32.121714+00:00",
+      "endedUTC": "2026-09-12T00:28:53.485002+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json",
+          "bytes": 35698291,
+          "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838995968
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        },
+        {
+          "ordinal": 1,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+          "bytes": 16398157,
+          "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724",
+          "end": "sourceFault",
+          "endPC": 4243736,
+          "endSP": 268489856,
+          "graphicsReleaseFree": [
+            {
+              "kind": "release",
+              "words": [
+                838979584
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979727904
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838983680
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979736096
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838987776
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979744288
+              ],
+              "strings": []
+            },
+            {
+              "kind": "release",
+              "words": [
+                838991872
+              ],
+              "strings": []
+            },
+            {
+              "kind": "free",
+              "words": [
+                1979752480
+              ],
+              "strings": []
+            }
+          ],
+          "wrapperLive": {
+            "1979727904": false,
+            "1979736096": false,
+            "1979744288": false,
+            "1979752480": false,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json",
+            "bytes": 4497204,
+            "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:28:52.864536+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 1610637248,
+                  "ecx": 1979760672,
+                  "edx": 838992128,
+                  "esi": 1691666068,
+                  "edi": 4,
+                  "ebp": 805310720,
+                  "esp": 268489856,
+                  "eip": 4243736,
+                  "eflags": 151
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 1610637248,
+              "ecx": 1979760672,
+              "edx": 838992128,
+              "esi": 1691666068,
+              "edi": 4,
+              "ebp": 805310720,
+              "esp": 268489856,
+              "eip": 4243736,
+              "eflags": 151
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 10,
+      "label": "getObject-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s10-capture2.json",
+      "reportPin": {
+        "bytes": 7643,
+        "sha256": "bd58dfdcc43505aa06c6f1dfe6826f8dd2bba905ba9eaf638b4f33be67ef3535"
+      },
+      "startedUTC": "2026-09-12T00:28:54.043822+00:00",
+      "endedUTC": "2026-09-12T00:29:13.844765+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s10-capture2.parts/call-00.json",
+          "bytes": 35693238,
+          "sha256": "ce3c1e43d09403356fe0e93258eaa9c62d723d2c31337c0271e85e85e74f63cb",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 11,
+      "label": "description-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s11-capture2.json",
+      "reportPin": {
+        "bytes": 7648,
+        "sha256": "a417f68d98c4d06942ba809916fd48a4321cbc9931747aec0256e36704f1e998"
+      },
+      "startedUTC": "2026-09-12T00:28:54.053768+00:00",
+      "endedUTC": "2026-09-12T00:29:13.872235+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s11-capture2.parts/call-00.json",
+          "bytes": 35692906,
+          "sha256": "b8b09cc3f84f9766a4db3269bf122e3645a24645b32d2b775a76ff7b3d959a4a",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 12,
+      "label": "getDC-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s12-capture2.json",
+      "reportPin": {
+        "bytes": 7636,
+        "sha256": "e74caea98eeef379a83a06f1196544c124f0a162ff729b216aafede59889c3fc"
+      },
+      "startedUTC": "2026-09-12T00:29:14.481378+00:00",
+      "endedUTC": "2026-09-12T00:29:34.786027+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s12-capture2.parts/call-00.json",
+          "bytes": 35689891,
+          "sha256": "8ce2af0a628240712ccfbe0298b81ee7c09e365ca3c713e9e06ac0aa2bd6090d",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 13,
+      "label": "restore-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s13-capture2.json",
+      "reportPin": {
+        "bytes": 7640,
+        "sha256": "2585b44a0ba2fe30c88a39012ede486937f0a08e1fb8c1f4cda0bfa43694e26d"
+      },
+      "startedUTC": "2026-09-12T00:29:14.487225+00:00",
+      "endedUTC": "2026-09-12T00:29:34.777192+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s13-capture2.parts/call-00.json",
+          "bytes": 35693556,
+          "sha256": "eb4ca720501d22fd79d48b6a14e9a2b9dcb0aa81b75d81f0ba28281a8bd33812",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 14,
+      "label": "createDC-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s14-capture2.json",
+      "reportPin": {
+        "bytes": 7641,
+        "sha256": "310b09521f35d64c879edaed25da4abe81aa341892651bdd311de037c8a29cd0"
+      },
+      "startedUTC": "2026-09-12T00:29:35.420964+00:00",
+      "endedUTC": "2026-09-12T00:29:55.361472+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s14-capture2.parts/call-00.json",
+          "bytes": 35693475,
+          "sha256": "dc8977708f22ba866e69a08f571a036683a37bf3fb6111b5809abc5a857559d3",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 15,
+      "label": "selectObject-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s15-capture2.json",
+      "reportPin": {
+        "bytes": 7649,
+        "sha256": "dc7aa5cc34f96dfcc8bf9fc0b56639c085e0b336d094cd1c08244ae978b1454c"
+      },
+      "startedUTC": "2026-09-12T00:29:35.421228+00:00",
+      "endedUTC": "2026-09-12T00:29:55.383259+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s15-capture2.parts/call-00.json",
+          "bytes": 35693579,
+          "sha256": "f856ef19296c29eb00b56b80785cd491556ac8eb0f20cda19010514e698670f0",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 16,
+      "label": "stretch-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s16-capture2.json",
+      "reportPin": {
+        "bytes": 7639,
+        "sha256": "e4cf8157ab34fbc390107db146e4a14617936f71071fbb401df3379cff63b900"
+      },
+      "startedUTC": "2026-09-12T00:29:55.959729+00:00",
+      "endedUTC": "2026-09-12T00:30:15.810149+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s16-capture2.parts/call-00.json",
+          "bytes": 35693550,
+          "sha256": "4cbe26293644d0926fbbcacd078458e467a9a9b0c7296225a3664342e85f0f0e",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 17,
+      "label": "releaseDC-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s17-capture2.json",
+      "reportPin": {
+        "bytes": 7644,
+        "sha256": "4937233db860b6b35a9d0836d6b0775f3cf21e8913912608eebc88794f3bce3c"
+      },
+      "startedUTC": "2026-09-12T00:29:55.976365+00:00",
+      "endedUTC": "2026-09-12T00:30:15.844169+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s17-capture2.parts/call-00.json",
+          "bytes": 35693574,
+          "sha256": "0f32f8f594f18271c2380c9ee714c568c993189c2f3d903ff428f7599791dea1",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 18,
+      "label": "deleteDC-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s18-capture2.json",
+      "reportPin": {
+        "bytes": 7641,
+        "sha256": "025e49f1e3ec2df79394f68b067ebbc76825ec18e0014e1a0159ab759d587efe"
+      },
+      "startedUTC": "2026-09-12T00:30:16.407501+00:00",
+      "endedUTC": "2026-09-12T00:30:36.331566+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s18-capture2.parts/call-00.json",
+          "bytes": 35693559,
+          "sha256": "b75cbf0cce90476bd3b5e758f5846f0a2cce4b8428e27150ea6592591ff93755",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 19,
+      "label": "deleteObject-first",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s19-capture2.json",
+      "reportPin": {
+        "bytes": 7649,
+        "sha256": "27194a7d07cccdb75db125ab7e004c368bc088842b229caf09deaae87d03001f"
+      },
+      "startedUTC": "2026-09-12T00:30:16.436503+00:00",
+      "endedUTC": "2026-09-12T00:30:36.407887+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s19-capture2.parts/call-00.json",
+          "bytes": 35693596,
+          "sha256": "598ad400df2a97d1707015afce02fd2907d6beda0c4a9185ab44a571f47eb899",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 20,
+      "label": "music-create",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s20-capture2.json",
+      "reportPin": {
+        "bytes": 7633,
+        "sha256": "005fe9a7ef7def45f2f10df32e6ad808862e20b35a7dae4fe361eceacff77bbe"
+      },
+      "startedUTC": "2026-09-12T00:30:36.922865+00:00",
+      "endedUTC": "2026-09-12T00:30:56.799337+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s20-capture2.parts/call-00.json",
+          "bytes": 35581171,
+          "sha256": "537484b91657dee9fd75c7fb802797f3b91d31c802006d98587f1d48a6f06e31",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 21,
+      "label": "music-query-0",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s21-capture2.json",
+      "reportPin": {
+        "bytes": 7603,
+        "sha256": "3823c619191c3504f5c77639fd13d497fd0fa836346802233cb4718d7dcb78dd"
+      },
+      "startedUTC": "2026-09-12T00:30:37.001147+00:00",
+      "endedUTC": "2026-09-12T00:30:56.810440+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s21-capture2.parts/call-00.json",
+          "bytes": 35690051,
+          "sha256": "be22744d4f16b9be72ea0c26d9cc5a7518d3e115606f2a4597ae3ef79ede4de1",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 22,
+      "label": "music-query-1",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s22-capture2.json",
+      "reportPin": {
+        "bytes": 7604,
+        "sha256": "129bd9123254c837081321e69e80847a4fd9261767cf356232503e3779ecd10c"
+      },
+      "startedUTC": "2026-09-12T00:30:57.398546+00:00",
+      "endedUTC": "2026-09-12T00:31:13.987193+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.json",
+          "bytes": 23916521,
+          "sha256": "0ad21c2e4b63bb19b7dfed20163015cc0e635c622cf9a07f9faa095fd4a7f45e",
+          "end": "sourceFault",
+          "endPC": 4201726,
+          "endSP": 268489860,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.failure.json",
+            "bytes": 4816775,
+            "sha256": "3a48eb95cdc355f064b91719a0a8263fb25bb266219efdced12a288067c79be9"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory read (UC_ERR_READ_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:31:13.291205+00:00",
+                "access": 19,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 570425376,
+                  "ecx": 738205760,
+                  "edx": 1929379841,
+                  "esi": 570425812,
+                  "edi": 4517584,
+                  "ebp": 570425380,
+                  "esp": 268489860,
+                  "eip": 4201726,
+                  "eflags": 70
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [],
+            "registers": {
+              "eax": 0,
+              "ebx": 570425376,
+              "ecx": 738205760,
+              "edx": 1929379841,
+              "esi": 570425812,
+              "edi": 4517584,
+              "ebp": 570425380,
+              "esp": 268489860,
+              "eip": 4201726,
+              "eflags": 70
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s22-capture2.parts/call-00.failure.json"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 23,
+      "label": "music-query-2",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s23-capture2.json",
+      "reportPin": {
+        "bytes": 7603,
+        "sha256": "a2a4c6c3a431508ccacd70abd9eaeb2565ba80e6b4455c44c53620815be97121"
+      },
+      "startedUTC": "2026-09-12T00:30:57.398535+00:00",
+      "endedUTC": "2026-09-12T00:31:17.190571+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s23-capture2.parts/call-00.json",
+          "bytes": 35693391,
+          "sha256": "ff03fe3bb21b5c69c129b5f2b7fc52cd9577ccba504ce52f5c9b4fe2ad500345",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 24,
+      "label": "music-query-3",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s24-capture2.json",
+      "reportPin": {
+        "bytes": 7603,
+        "sha256": "bf176ffd66ceace7b29d48ad22dc875f15ca52db3325ebc8d0810f690bdff46c"
+      },
+      "startedUTC": "2026-09-12T00:31:14.597913+00:00",
+      "endedUTC": "2026-09-12T00:31:34.122446+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s24-capture2.parts/call-00.json",
+          "bytes": 35690035,
+          "sha256": "365e33658ccb9a9bd9d6b3bd401340fba4ab3297c83d0c5c7c252e12830a0027",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 25,
+      "label": "music-wide-null",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s25-capture2.json",
+      "reportPin": {
+        "bytes": 7622,
+        "sha256": "536f891822878267d7d6e631ed1922941c6114d8e0932f56d2fe97927f503b41"
+      },
+      "startedUTC": "2026-09-12T00:31:17.798618+00:00",
+      "endedUTC": "2026-09-12T00:31:37.324063+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s25-capture2.parts/call-00.json",
+          "bytes": 35689931,
+          "sha256": "c6d5113efb4d07aa62e84dcedf61a12b5e68753d15b9b1e499d0c51bb7f8d7c2",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 26,
+      "label": "music-render",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s26-capture2.json",
+      "reportPin": {
+        "bytes": 7615,
+        "sha256": "ce099158fd841edc999532319f97b4c947cd10ed673f7e048120f0f4ceddf319"
+      },
+      "startedUTC": "2026-09-12T00:31:34.730981+00:00",
+      "endedUTC": "2026-09-12T00:31:54.236723+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s26-capture2.parts/call-00.json",
+          "bytes": 35703463,
+          "sha256": "e694f2d4fd08522595af34ad5140a40b5c5e9d8bcd2868c764c4ad57f5e81620",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 27,
+      "label": "music-conversion",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s27-capture2.json",
+      "reportPin": {
+        "bytes": 7642,
+        "sha256": "ad914808039ab2b800f5601c3e70c4cccc8c045989fa3413bd2bcfe003120892"
+      },
+      "startedUTC": "2026-09-12T00:31:37.938864+00:00",
+      "endedUTC": "2026-09-12T00:31:57.386284+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s27-capture2.parts/call-00.json",
+          "bytes": 35693190,
+          "sha256": "728d541297433ef509c342694b5f9996c4b8a54f3f7da7abc463aacc93b2eabf",
+          "end": "returned",
+          "endPC": 805306368,
+          "endSP": 268496904,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          }
+        }
+      ]
+    },
+    {
+      "scenario": 28,
+      "label": "replay-null",
+      "report": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s28-capture2.json",
+      "reportPin": {
+        "bytes": 7605,
+        "sha256": "728b78a9c6bea39ec7a3fddef0048e3960113eebf2b7ccbc2b35b90ffd3a1aee"
+      },
+      "startedUTC": "2026-09-12T00:22:13.179837+00:00",
+      "endedUTC": "2026-09-12T00:22:32.207213+00:00",
+      "calls": [
+        {
+          "ordinal": 0,
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.json",
+          "bytes": 32841343,
+          "sha256": "3df59245ed7dd20cd8046076cbc32cbeeac7e130b85e96964f77765c9b7132ce",
+          "end": "sourceFault",
+          "endPC": 4444925,
+          "endSP": 268489696,
+          "graphicsReleaseFree": [],
+          "wrapperLive": {
+            "1979727904": true,
+            "1979736096": true,
+            "1979744288": true,
+            "1979752480": true,
+            "1979760672": true
+          },
+          "failureSidecar": {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.failure.json",
+            "bytes": 13118772,
+            "sha256": "55aff8ae422c29fa643b4ef6b8cfdb7fb2fddf3a09c3b9d6339461718bb816ed"
+          },
+          "sourceFault": {
+            "error": "UcError()",
+            "errorText": "Invalid memory write (UC_ERR_WRITE_UNMAPPED)",
+            "invalidAccesses": [
+              {
+                "timeUTC": "2026-09-12T00:22:31.092907+00:00",
+                "access": 20,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "registers": {
+                  "eax": 0,
+                  "ebx": 570425376,
+                  "ecx": 0,
+                  "edx": 4,
+                  "esi": 400,
+                  "edi": 570427380,
+                  "ebp": 570425380,
+                  "esp": 268489696,
+                  "eip": 4444925,
+                  "eflags": 18
+                },
+                "fpu": {
+                  "cw": 575,
+                  "sw": 0,
+                  "tag": 54613
+                }
+              }
+            ],
+            "failedWriteHooks": [
+              {
+                "pc": 4444925,
+                "address": 0,
+                "size": 4,
+                "value": 0,
+                "storeCount": 118014,
+                "eventCount": 1317
+              }
+            ],
+            "registers": {
+              "eax": 0,
+              "ebx": 570425376,
+              "ecx": 0,
+              "edx": 4,
+              "esi": 400,
+              "edi": 570427380,
+              "ebp": 570425380,
+              "esp": 268489696,
+              "eip": 4444925,
+              "eflags": 18
+            },
+            "fpu": {
+              "cw": 575,
+              "sw": 0,
+              "tag": 54613
+            },
+            "failureFile": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s28-capture2.parts/call-00.failure.json"
+          }
+        }
+      ]
+    }
+  ],
+  "jobsFinishedAfterModelRefusal": [
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "auditLimits": [
+    "290prefix proofs validate saved references/digests;fresh normalized prefix equality was performed by the historical producer, not re-executed here.",
+    "Opcode checks use pinned EXE plus declared patches, pinned CRT and inherited captured lib storage; instruction-start union is not sequence or branch coverage.",
+    "Recorded allocation/free/checkpoint flags are consistent;retained dead records remain. This is not Windows heap/device behavior or proof against all post-free accesses.",
+    "Terminal fault records are preserved;fault address formation and full FPU/API semantics are not independently re-executed."
+  ],
+  "openNativeDependencies": [
+    {
+      "id": "nullable-bitmap-owner",
+      "cases": [
+        "s02/call-00",
+        "s02/call-01",
+        "s03/call-00"
+      ],
+      "sourceOutcome": "returned",
+      "status": "implementation-and-whole-caller-comparison-open"
+    },
+    {
+      "id": "partial-surface-and-request-owner-adapter",
+      "status": "whole-caller-comparison-open"
+    },
+    {
+      "id": "private-dimension-provenance",
+      "cases": [
+        "s10/call-00",
+        "s11/call-00"
+      ],
+      "sourceOutcome": "returned",
+      "status": "missing-owned-provenance-do-not-import-expected"
+    },
+    {
+      "id": "music-allocation-conversion-adapter",
+      "cases": [
+        "s25/call-00",
+        "s27/call-00"
+      ],
+      "status": "declared-stimulus-adaptation-open"
+    },
+    {
+      "id": "remaining-returned-comparisons",
+      "status": "shared-helper-support-is-not-whole-War-acceptance"
+    },
+    {
+      "id": "source-fault-rejection",
+      "calls": 9,
+      "status": "whole-coupled-rollback-unverified-rejection-is-not-match"
+    },
+    {
+      "id": "native-packaging-regressions",
+      "status": "open"
+    }
+  ],
+  "preservation": {
+    "timeUTC": "2026-09-12T06:08:59.505501+00:00",
+    "scope": "Verify every continuation input and all31 pre-existing pending files plus325accepted fixtures remain byte-identical.",
+    "results": {
+      "inputs-before.json": {
+        "count": 1229,
+        "allUnchanged": true
+      },
+      "protected-before.json": {
+        "count": 356,
+        "allUnchanged": true
+      }
+    },
+    "originalExecuted": false,
+    "nativeChanged": false
+  },
+  "frozenStudyFiles": {
+    "docs/research/LIB_WAR_PREPARATION_ERRORS_PLAN.md": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/LIB_WAR_PREPARATION_ERRORS_PLAN.md",
+      "bytes": 6532,
+      "sha256": "1d1afa9108c1db799a5d2b8dbfe4370609e01c2e73c2149b9e1d7419b746e695"
+    },
+    "docs/research/LIB_WAR_PREPARATION_ERRORS_FS.md": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/LIB_WAR_PREPARATION_ERRORS_FS.md",
+      "bytes": 3131,
+      "sha256": "ba6dafa971176ea421aacb1f11eb816bd47903aa9f35fa306dda8a9344d42849"
+    },
+    "docs/research/LIB_WAR_PREPARATION_ERRORS_FS_STACK.md": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/LIB_WAR_PREPARATION_ERRORS_FS_STACK.md",
+      "bytes": 1623,
+      "sha256": "e4cda0cce2a42f01b5c3e5d560a0af0cf7b2442e435b6e74851f43faf94fc0ae"
+    },
+    "tools/inspect_war_preparation_errors.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/inspect_war_preparation_errors.py",
+      "bytes": 2381,
+      "sha256": "3232511f80dea9f63a38136cf123dd8da5e6f994220574f4359ae6672e4f32df"
+    },
+    "tools/oracle_war_preparation_errors.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/oracle_war_preparation_errors.py",
+      "bytes": 11177,
+      "sha256": "2341c9e6f6b35db0701329985b3b88558fbb812a68c86b0d2cb230d49be9e8e3"
+    },
+    "tools/oracle_war_preparation_fs_errors.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/oracle_war_preparation_fs_errors.py",
+      "bytes": 8150,
+      "sha256": "5bdeba408eb938acc9354ed49240d5f5a39fa47f33ef9299f7cbb83180f507c0"
+    },
+    "tools/probe_war_fs_environment.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/probe_war_fs_environment.py",
+      "bytes": 4466,
+      "sha256": "1ff10b9b72088b7694466216dead1ce5026620e2907843b12c12a25d5ace0ad5"
+    },
+    "tools/probe_war_fs_stack.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/probe_war_fs_stack.py",
+      "bytes": 5241,
+      "sha256": "532bb59e3316688dce3c740d1100aae0ce6f6a62fa0accf78f2ca6210dd328d0"
+    },
+    "tools/verify_war_preparation_errors.py": {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_war_preparation_errors.py",
+      "bytes": 12459,
+      "sha256": "c21288e4216c5551907adb6f635d78346b4cdc628858aed3555dc092a0c5b146"
+    }
+  },
+  "newInventoryTool": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_war_preparation_error_inventory.py",
+    "bytes": 8213,
+    "sha256": "a8d79d55914c575c39233083259f504934a15e608d2417134167ad6aee94135d"
+  },
+  "archive": {
+    "scope": "Read every archived member and verify exact bytes/SHA against pinned sources; no extraction, execution or Native claim.",
+    "timeUTC": "2026-09-12T06:07:54.294754+00:00",
+    "archive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/source-evidence.tar.gz",
+      "bytes": 195387246,
+      "sha256": "30f25d83af85827b140716c107a2ca8dffe7e2f4e2374652a130f601d76585e4"
+    },
+    "members": 623,
+    "rawMemberBytes": 1698034920,
+    "elapsedSeconds": 10.62,
+    "allMemberBytesVerified": true,
+    "originalExecuted": false,
+    "nativeCompared": false
+  },
+  "review": {
+    "timeUTC": "2026-09-12T06:09:29.757097+00:00",
+    "reviewer": "war_contract_review",
+    "role": "independent read-only contract and verifier review",
+    "originalExecuted": false,
+    "nativeTestsRun": false,
+    "filesChanged": false,
+    "status": "no remaining material findings for source-evidence milestone",
+    "findings": [
+      {
+        "subject": "Native nullable bitmap allocation / missing surfaces / music stimuli / private dimensions / fault rollback",
+        "resolution": "Retained as open Native dependencies; no new Native acceptance claimed"
+      },
+      {
+        "subject": "Frozen auditor scope and inherited opcode/prefix evidence",
+        "resolution": "Limitations explicitly documented;290producer proofs are not independent fresh-prefix reconstruction"
+      },
+      {
+        "subject": "Cross-call live flags and exact finite inventory",
+        "resolution": "Separate inventory verifies29identities/37outcomes/37live joins and job/config/pins"
+      },
+      {
+        "subject": "Failure-sidecar blob payload",
+        "resolution": "inventory2 verifies6516blob entries against audited atomic blobs;successful inventory1 and producer retained"
+      },
+      {
+        "subject": "Next Native scope",
+        "resolution": "Exactly three returned calls s02/00,s02/01,s03/00;faulted s03/01 remains separate"
+      }
+    ],
+    "reviewedFiles": [
+      "tools/verify_war_preparation_errors.py",
+      "tools/verify_war_preparation_error_inventory.py",
+      "docs/research/LIB_WAR_PREPARATION_ERRORS.md",
+      "docs/research/CURRENT_WORK.md",
+      "docs/CONTINUE_GOAL.md",
+      "docs/RESEARCH_MAP.md"
+    ],
+    "fullPreparationComplete": false,
+    "fullGameComplete": false
+  },
+  "artifacts": {
+    "manifest.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/manifest.json",
+      "bytes": 35168,
+      "sha256": "856e5edf4efc260e523933a5c2e3ddfa806f2e5ef670732f5e3e03f39b3d5905"
+    },
+    "inputs-before.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inputs-before.json",
+      "bytes": 272641,
+      "sha256": "a60ed58ff40f5e77ddc5ad64071fa00a496bbb0aa4ecea9746531e6cf96f85ab"
+    },
+    "protected-before.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/protected-before.json",
+      "bytes": 77511,
+      "sha256": "67cd0aa8f33379330b9ecc05aa7c58e1cb8aee480c99a7c2fe60eca1f472e465"
+    },
+    "audit3.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/audit3.json",
+      "bytes": 143014,
+      "sha256": "43019f946f086f6be64a01911719b51cbf3ffabca47717eb895397c53227d203"
+    },
+    "audit3.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/audit3.config.json",
+      "bytes": 4927,
+      "sha256": "602fbe46128c4b5314e4939296ec2b8fb2799c43853c3b0d038cc9159accc697"
+    },
+    "audit3.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/audit3.job.json",
+      "bytes": 5293,
+      "sha256": "69275b377b84b0c272edb316cbf16c0bd3c255acb46d94303b61aba66751d67e"
+    },
+    "audit3.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/audit3.log",
+      "bytes": 539,
+      "sha256": "a8dd9861fc72c2c99cdaca7674ad90ea12211f3f0ad4c001462c1ea315308746"
+    },
+    "inventory-plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory-plan.json",
+      "bytes": 955,
+      "sha256": "29f789f0f924a0f7ddadca2005aba12b0cd26238a45f08f7a5a17b4e5a3bcfae"
+    },
+    "inventory1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory1.json",
+      "bytes": 315616,
+      "sha256": "6b5e07e7f30d8b45b39dce1fc8e502afc7a2f668097700aecb8c84bf5840844b"
+    },
+    "inventory1-producer.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory1-producer.py",
+      "bytes": 8008,
+      "sha256": "153d1a4386a0e2a12953ff77d966bcfb2e3b63cdd78398bfae01daf0ead627bc"
+    },
+    "inventory1.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory1.job.json",
+      "bytes": 814,
+      "sha256": "e40fe72cbd3d8284e48d335801dd8a906bcfc449b6b278f5eab07cfc3ea89742"
+    },
+    "inventory2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory2.json",
+      "bytes": 315652,
+      "sha256": "75a96b6e5eae6b2139de5c3d807d9c17b912a41c360e0c68880e3a7211c4f6f4"
+    },
+    "inventory2.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory2.config.json",
+      "bytes": 877,
+      "sha256": "1b0c184bd4db259fd1d254248e5f57a04e4248e3c74cdbb631275a5578d91b85"
+    },
+    "inventory2.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory2.job.json",
+      "bytes": 1013,
+      "sha256": "14a9e02899e2f1ab06a5a770687f4920e75ba8b4bd33a1407857eb08c4e0e6fc"
+    },
+    "inventory2.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/inventory2.log",
+      "bytes": 159,
+      "sha256": "c5102e824a045de4f2afe4f2a02aac4e9f5bd8e91a8466f7d2fdac7170a834e0"
+    },
+    "source-evidence-archive-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/source-evidence-archive-inputs.json",
+      "bytes": 211738,
+      "sha256": "ad6ecf3557a83a051607f9cb121697027a869f54e5d4069e5e10cda6f66152fa"
+    },
+    "source-evidence-archive-verification.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/source-evidence-archive-verification.json",
+      "bytes": 634,
+      "sha256": "ab67d268bf2251fb0e3d055934d33e044db7e50939ac190a48fef39c8f4db6c3"
+    },
+    "preservation1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/preservation1.json",
+      "bytes": 425,
+      "sha256": "b0e16070144563db101f8439440b61ed13fe4a79993c07ae9ef99668a8383745"
+    },
+    "review.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-errors-completion-20260912/review.json",
+      "bytes": 1649,
+      "sha256": "1df9f0c8c50b17164b0d9cf205ea672be8e7586902d5ae9ee18f8c5654c3fa84"
+    }
+  }
+}
