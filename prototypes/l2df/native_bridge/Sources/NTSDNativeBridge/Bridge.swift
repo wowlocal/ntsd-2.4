@@ -41,7 +41,7 @@ private func result(_ error: Error) -> Int32 {
 public func bridgeABIVersion() -> UInt32 { 1 }
 
 @_cdecl("ntsd_bridge_capabilities")
-public func bridgeCapabilities() -> UInt32 { 3 } // Actor storage + pristine front/settings; no gameplay.
+public func bridgeCapabilities() -> UInt32 { 7 } // Actor storage + front/settings + first menu return; no gameplay.
 
 @_cdecl("ntsd_bridge_live_sessions")
 public func bridgeLiveSessions() -> UInt32 {
@@ -191,6 +191,30 @@ public func bridgeLoadFrontSettings(_ handle: UInt64) -> Int32 {
 @_cdecl("ntsd_bridge_developer_front_rollback")
 public func bridgeDeveloperFrontRollback(_ handle: UInt64) -> Int32 {
     loadFrontSettings(handle, failBeforeCommit: true)
+}
+
+private func continueFrontScreen(_ handle: UInt64, milliseconds: UInt32, failBeforeCommit: Bool) -> Int32 {
+    locked {
+        guard var session = sessions[handle] else { return Result.handle.rawValue }
+        guard case .loaded(var loaded) = session.payload else { return Result.unsupported.rawValue }
+        guard session.revision < UInt64.max else { return Result.limit.rawValue }
+        do {
+            try loaded.continueFrontScreen(milliseconds: milliseconds, failBeforeCommit: failBeforeCommit)
+            session.payload = .loaded(loaded); session.revision += 1
+            sessions[handle] = session
+            return Result.ok.rawValue
+        } catch { return result(error) }
+    }
+}
+
+@_cdecl("ntsd_bridge_continue_front_screen")
+public func bridgeContinueFrontScreen(_ handle: UInt64, _ milliseconds: UInt32) -> Int32 {
+    continueFrontScreen(handle, milliseconds: milliseconds, failBeforeCommit: false)
+}
+
+@_cdecl("ntsd_bridge_developer_screen_rollback")
+public func bridgeDeveloperScreenRollback(_ handle: UInt64, _ milliseconds: UInt32) -> Int32 {
+    continueFrontScreen(handle, milliseconds: milliseconds, failBeforeCommit: true)
 }
 
 /// Query size with bytes=nil/capacity=0. Revision accompanies each successful

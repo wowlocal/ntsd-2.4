@@ -1,0 +1,661 @@
+{
+  "createdAtUTC": "2026-09-12T11:18:11.764319+00:00",
+  "status": "accepted within two owned pristine first menu returns",
+  "mainReadOnlyRevision": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+  "baselineWorktreeCommit": "81c9a8a2257e54b3f95204fc2b6750f0e1f78342",
+  "originalEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sourceExecution": false,
+  "fullGameComplete": false,
+  "abiVersion": 1,
+  "capabilityMask": 7,
+  "capabilities": [
+    "ACTOR_STORAGE",
+    "FRONT_SETTINGS",
+    "FIRST_MENU_RETURN"
+  ],
+  "gameplayCapability": false,
+  "lifecycle": {
+    "from": "FRONT_SETTINGS_READY",
+    "fromValue": 3,
+    "to": "FIRST_MENU_RETURN",
+    "toValue": 4,
+    "revisionFrom": 1,
+    "revisionTo": 2
+  },
+  "profiles": [
+    "declared A5 backing/ascending logical identities; milliseconds 0",
+    "declared ramp backing/reverse logical identities; milliseconds 0"
+  ],
+  "library": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/swift-build/arm64-apple-macosx/release/libNTSDNativeBridge.dylib",
+    "bytes": 6822664,
+    "sha256": "0c0f5a49b82b922386600602ecca230233c6a0e586e6bc021bf16e754fdb1064"
+  },
+  "architecture": "arm64",
+  "swiftVersion": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)\nTarget: arm64-apple-macosx26.0",
+  "macOS": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83",
+  "cExports": [
+    "ntsd_bridge_abi_version",
+    "ntsd_bridge_capabilities",
+    "ntsd_bridge_continue_front_screen",
+    "ntsd_bridge_create",
+    "ntsd_bridge_create_pristine",
+    "ntsd_bridge_destroy",
+    "ntsd_bridge_developer_front_rollback",
+    "ntsd_bridge_developer_screen_rollback",
+    "ntsd_bridge_info",
+    "ntsd_bridge_live_sessions",
+    "ntsd_bridge_load_front_settings",
+    "ntsd_bridge_loaded_snapshot",
+    "ntsd_bridge_read_i32",
+    "ntsd_bridge_setup_apply_i32",
+    "ntsd_bridge_snapshot"
+  ],
+  "jobs": [
+    {
+      "command": [
+        "swift",
+        "build",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/package",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/swift-build",
+        "--cache-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/cache",
+        "--config-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/config",
+        "--security-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/security",
+        "--manifest-cache",
+        "local",
+        "-c",
+        "release",
+        "--product",
+        "NTSDNativeBridge",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/package",
+      "pid": 20791,
+      "processStart": "Sat Sep 12 13:58:15 2026",
+      "createdAtUTC": "2026-09-12T10:58:15.454289+00:00",
+      "state": "terminal",
+      "limitSeconds": 300,
+      "sizeLimitBytes": 2147483648,
+      "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/build-job",
+      "exitCode": 1,
+      "endedAtUTC": "2026-09-12T10:59:39.110646+00:00",
+      "elapsedSeconds": 83.655633708
+    },
+    {
+      "command": [
+        "swift",
+        "build",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/package",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/swift-build",
+        "--cache-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/cache",
+        "--config-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/config",
+        "--security-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/security",
+        "--manifest-cache",
+        "local",
+        "-c",
+        "release",
+        "--product",
+        "NTSDNativeBridge",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/package",
+      "pid": 21527,
+      "processStart": "Sat Sep 12 14:01:40 2026",
+      "createdAtUTC": "2026-09-12T11:01:40.098747+00:00",
+      "state": "terminal",
+      "limitSeconds": 300,
+      "sizeLimitBytes": 2147483648,
+      "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/build-job",
+      "exitCode": 0,
+      "endedAtUTC": "2026-09-12T11:03:06.048536+00:00",
+      "elapsedSeconds": 85.935837542
+    },
+    {
+      "command": [
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/runtime/love.app/Contents/MacOS/love",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+      "pid": 21914,
+      "processStart": "Sat Sep 12 14:03:28 2026",
+      "createdAtUTC": "2026-09-12T11:03:28.364123+00:00",
+      "state": "terminal",
+      "limitSeconds": 90,
+      "sizeLimitBytes": null,
+      "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/job",
+      "exitCode": 0,
+      "endedAtUTC": "2026-09-12T11:03:31.382715+00:00",
+      "elapsedSeconds": 3.018293125
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/compare.py"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+      "pid": 24394,
+      "processStart": "Sat Sep 12 14:14:02 2026",
+      "createdAtUTC": "2026-09-12T11:14:02.208654+00:00",
+      "state": "terminal",
+      "limitSeconds": 90,
+      "sizeLimitBytes": null,
+      "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/job",
+      "exitCode": 0,
+      "endedAtUTC": "2026-09-12T11:14:03.214210+00:00",
+      "elapsedSeconds": 1.004966458
+    }
+  ],
+  "verification": {
+    "pass": true,
+    "ffiAssertions": 336,
+    "fullConstructorComparisons": [
+      {
+        "label": "constructor-a",
+        "bytes": 1056,
+        "maskBytes": 1056,
+        "knownBytes": 913
+      },
+      {
+        "label": "constructor-b",
+        "bytes": 1056,
+        "maskBytes": 1056,
+        "knownBytes": 913
+      }
+    ],
+    "loadedSessionComparisons": [
+      {
+        "profile": 0,
+        "fixture": "original-settings-loading.json",
+        "fixtureSHA256": "b0c95deb903f0ec03b6cd15a8dad8186433ece4616e75912ecee49d09c852517",
+        "records": 144,
+        "semanticBytesAndMasks": 2949520,
+        "frontEvents": 6892,
+        "settingsEvents": 63,
+        "bitmapRecords": 24,
+        "actualSHA256": "5ab34f0440cf0c5b8b69688669251f7441687073cb7f52430b282642c1f2cee6",
+        "pass": true
+      },
+      {
+        "profile": 1,
+        "fixture": "original-settings-loading-control.json",
+        "fixtureSHA256": "0440f022b596e9cd7618b891f60a4bba28b8b74a648a5cdff4188af0c9411443",
+        "records": 144,
+        "semanticBytesAndMasks": 2949520,
+        "frontEvents": 6892,
+        "settingsEvents": 63,
+        "bitmapRecords": 24,
+        "actualSHA256": "6112cb497d547753b41cb8fe666b1474ab5fbe3de05ba818cdf37f6f38d8dcd8",
+        "pass": true
+      }
+    ],
+    "frontScreenComparisons": [
+      {
+        "profile": 0,
+        "pass": true,
+        "fixture": "original-menu-loading.json",
+        "fixtureSHA256": "c7aa707bb32d37837704b94d0afd98baac26f23f2f28b9d668f27fa2ca2a7e7f",
+        "actualSHA256": "5be6ec8b927f75a5e7990c6b61bc164b2d5d71be82cdbe12832000cfc934a81c",
+        "phases": [
+          "prefix",
+          "panel",
+          "body",
+          "alternate",
+          "main",
+          "completion"
+        ],
+        "phaseEvents": [
+          17,
+          2,
+          153,
+          0,
+          11,
+          20
+        ],
+        "recordComparisons": 202,
+        "recordBytes": 1740888,
+        "maskBytes": 1740888,
+        "privateBodyKnownBytes": 96,
+        "privateFillKnownBytes": 8,
+        "ownedBitmapRecords": 25,
+        "scope": "Two controlled pristine first returns with independently checked own private projection; no device/application/gameplay claim"
+      },
+      {
+        "profile": 1,
+        "pass": true,
+        "fixture": "original-menu-loading-control.json",
+        "fixtureSHA256": "54334dd243f5c24ee52e47d386e07a214bc76dff209c30c1d954276ead7b6efd",
+        "actualSHA256": "34cb109f8b8ce5be9bb16be03ecda4fc354f865a7b346676716e41fefe186c40",
+        "phases": [
+          "prefix",
+          "panel",
+          "body",
+          "alternate",
+          "main",
+          "completion"
+        ],
+        "phaseEvents": [
+          24,
+          2,
+          153,
+          0,
+          11,
+          27
+        ],
+        "recordComparisons": 202,
+        "recordBytes": 1740888,
+        "maskBytes": 1740888,
+        "privateBodyKnownBytes": 96,
+        "privateFillKnownBytes": 8,
+        "ownedBitmapRecords": 25,
+        "scope": "Two controlled pristine first returns with independently checked own private projection; no device/application/gameplay claim"
+      }
+    ],
+    "decoderControls": {
+      "pass": true,
+      "checks": 14,
+      "scope": "Only typed optional Blit effects and known-empty panel strings; no generic defaults"
+    },
+    "packageFilesVerified": 187,
+    "resultSHA256": "21ea5c363667b2e5070e9b7bab9f95ec41d59729d8f37a33b91474eb0c59f00c",
+    "v2ComparatorSHA256": "59b2a916202a02f7480bf4cf40d1842381d44cfb270bef097a5ca88034a06716",
+    "priorSchemaMismatch": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/comparison-error.txt",
+    "nativeRepeated": false,
+    "sourceExecution": false,
+    "scope": "Owned boot/front-settings/first menu return, two controlled pristine profiles. No device/application/gameplay claim. Original result lifecycle label belongs to Actor suite; loaded exports establish2->3->4."
+  },
+  "counts": {
+    "actorAssertionsRetained": 201,
+    "frontSettingsAssertionsRetained": 68,
+    "newFirstReturnAssertions": 67,
+    "ffiAssertions": 336,
+    "decoderControls": 14,
+    "recordComparisonsPerProfile": 202,
+    "recordBytesPerProfile": 1740888,
+    "maskBytesPerProfile": 1740888,
+    "checkpointEventEntries": 420,
+    "uniqueEventsAcrossBothFirstReturns": 398,
+    "mainEventsRepeatedInCompletion": 22,
+    "ownedBitmapRecordsPerProfile": 25,
+    "privateBodyKnownBytes": 96,
+    "privateBodyOwnUnknownBytes": 96,
+    "privateFillKnownBytes": 8,
+    "privateFillOwnUnknownBytes": 92,
+    "mainGitFiles": 184,
+    "frozenBuildCopies": 199,
+    "compiledFilesIncludingManifest": 187,
+    "ffiPins": 87,
+    "comparisonPins": 36,
+    "failedBuildCopiesVerified": 199
+  },
+  "ownership": {
+    "latePlatformBindings": [
+      4544008,
+      4517580,
+      4537868,
+      4544052,
+      4555592
+    ],
+    "earlierSettingsHistoryPreservedBytewise": true,
+    "constructorAndOldReadyOutputsPreservedBytewise": true,
+    "wholeLateRollbackBytewiseIdentical": true,
+    "freshOwnerReturnBytewiseIdentical": true,
+    "ownedDIBsBoot": 23,
+    "ownedDIBsAddedPerReturn": 1,
+    "newBackgroundKey": "MENU_BACK1",
+    "all13BackgroundKeysSupportedOnDemand": true,
+    "all13WholeReturnCasesVerified": false,
+    "declaredMutableTestCopies": [
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/embedded/023.dib",
+        "copy": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/owned-input/embedded/023.dib",
+        "sha256": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8",
+        "bytes": 226,
+        "mutableTestCopy": true
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/embedded/026.dib",
+        "copy": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/owned-input/embedded/026.dib",
+        "sha256": "fc02a0d1d7f5b19b15536959bedbdf566fccf6ef34e42b25b08d7220bd9242f8",
+        "bytes": 1328156,
+        "mutableTestCopy": true
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/original/data/control.txt",
+        "copy": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/owned-input/original/data/control.txt",
+        "sha256": "cc7f84872d9b95fe64c1c95cc7895b3e2c0a52a3ae0f7f7970f0b3c56b7037c0",
+        "bytes": 179,
+        "mutableTestCopy": true
+      }
+    ],
+    "syntheticSurfaceTokenCollisionDoesNotAliasImageAndBackbuffer": true,
+    "drawOwnerIncludesResourceGenerationAndTargetRole": true,
+    "localReadProvenance": "Runtime own record plus independent replay of 110 ordered local stores, known strings/NUL and owned target. Only declared 96-byte body/8-byte fill source projections compare; private source backing retained unchanged."
+  },
+  "failuresAndCorrections": [
+    {
+      "outcome": "PreExecutionReviewFinding",
+      "reason": "Synthesized nil panelWord was omitted versus explicit source null",
+      "correction": "Explicit wrapper encoding before first build; Core and exact comparator unchanged",
+      "evidence": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-prebuild-01/diagnosis.json"
+    },
+    {
+      "outcome": "NativeBuildError",
+      "reason": "Negative -1234 audioVolume inferred as UInt32 in heterogeneous dictionary",
+      "correction": "Explicit [String:Any]/Int32(-1234) and named observe closure; new isolated build after diagnosis",
+      "failedBuild": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01",
+      "failedElapsedSeconds": 83.655633708,
+      "failedSourceSHA256": "4a1eaefdf5aeed035501d07ceb262cb00146e26ba121e31120321b82656f08c1",
+      "acceptedSourceSHA256": "756c98262c13ef53eda9e9c229c9bfbd9d59b6c53da2703f715011715be4718d"
+    },
+    {
+      "outcome": "ExportSchemaComparisonMismatch",
+      "reason": "Optional Blit.effects omitted versus null; panel common event adds exact empty strings array",
+      "correction": "Independent reviewed V2 typed semantic decoder; original V1, expected, runtime and outputs unchanged. Only saved outputs compared again.",
+      "evidence": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/schema-diagnosis.json",
+      "v1SHA256": "9b8c2718e0375d394b2457c57efe910dd2657b59a720b517f1bb02ec981637d6",
+      "v2SHA256": "59b2a916202a02f7480bf4cf40d1842381d44cfb270bef097a5ca88034a06716"
+    },
+    {
+      "outcome": "RootAuditFormattingError",
+      "reason": "otool header used a symlink path versus resolved library path",
+      "correction": "Both paths resolve to identical pinned library; all dependency lines compare exactly",
+      "evidence": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/root-audit-error-01.json"
+    }
+  ],
+  "independentReview": {
+    "reviewer": "/root/l2df_reference_review",
+    "outcome": "PASS",
+    "basis": "Independent typed decoder review before comparison, post-comparison source/output/pin review, local/read provenance, actual compiled set and artifact identity",
+    "scope": "Two controlled pristine first returns only; 398 unique events across 420 checkpoint entries",
+    "pendingFutureDriverReview": false,
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/independent-review-01.json",
+      "bytes": 20708,
+      "sha256": "ebd549d38bb67459e7f7c76a19c58577db7628198cf8a6fc468badf02def2f98"
+    },
+    "futureDriverReport": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/independent-future-driver-review-01.json",
+      "bytes": 3031,
+      "sha256": "f61a45f277293f7ece2ca5bf60da088f8e8fc52f2f1d084465479feb0ab1a2f7"
+    }
+  },
+  "futureDriver": {
+    "createdAtUTC": "2026-09-12T11:15:22.601406+00:00",
+    "reason": "Use reviewed V2 typed event decoder for future new runs after completed comparison-01. No Native/FFI repetition.",
+    "nativeRepeated": false,
+    "oldDriver": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/check_ffi.py",
+      "sha256": "fef5c10c7405075f8b57f9ee533b4408dfd979c30f3818ac7dc1e46f7a33977b"
+    },
+    "futureDriver": {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/native_bridge/check_ffi.py",
+      "sha256": "9ddaf80b9bc7cb87f38d19932a2363f9f44bbaf723264b96ba18d0ae5fc79c54"
+    },
+    "comparatorV2": {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/native_bridge/front_screen_reference_v2.py",
+      "sha256": "59b2a916202a02f7480bf4cf40d1842381d44cfb270bef097a5ca88034a06716"
+    },
+    "completedComparison": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/verification.json",
+      "sha256": "dc6313a3a7e92db093184ecfbda5657e5abba874f385eadaba8979e668dc3c2c"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/inputs.json",
+      "bytes": 98743,
+      "sha256": "188e3c3a4426c0efe1d652c254bbc3f979e74574ad7f28d80d927236eb8fa536"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/artifact.json",
+      "bytes": 415805,
+      "sha256": "a4919a36d22cac445c741f5f29a2e3a31ab883654c8c5c6e3f2b7851137aa7bb"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/package-verification.json",
+      "bytes": 58209,
+      "sha256": "4670bdc5c4922285c032914e1ef982891e87f6c23bc3e50767dca161df375de7"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/plan.md",
+      "bytes": 13547,
+      "sha256": "2f6a9d65b2a606dbd1ce1822c0bdc58c56e826880a84156401747b5f03c4464f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/build-job/job.json",
+      "bytes": 1705,
+      "sha256": "f8729630af5329ca9748c1f701a5b380f618d3bd682f32a2303534c9c90dce9f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/build-job/stdout.log",
+      "bytes": 1452,
+      "sha256": "3f884c4b3dd5748ad3b19df825484ef2e9a5a1e4f9d39284dc9bcaf3a8581c4b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/root-audit-error-01.json",
+      "bytes": 790,
+      "sha256": "cbb19741e35d537b980a9bb50e8b3b73400d88cedc70603374d3dc7c3e7ade81"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/root-build-audit-02.json",
+      "bytes": 14530,
+      "sha256": "9bc722ca5f63933350bc905162ed3abf66738266a34e1ebeeb2ecb791a586b68"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/root-comparison-audit-01.json",
+      "bytes": 8535,
+      "sha256": "ddbb33bd1f85e234961baac5690cf136ae4269c66a3b2101e73619e60feca003"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/future-driver-01.json",
+      "bytes": 1244,
+      "sha256": "4a1bfbcbea082e84e505eba44dfea01dd63915a204802c9bf5bc133e63c4b712"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/inputs.json",
+      "bytes": 43462,
+      "sha256": "a0bec2b071356b46eadcc2cb31238629a51e2d85b38411e1fc60684aea2f049e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/result.json",
+      "bytes": 7194,
+      "sha256": "21ea5c363667b2e5070e9b7bab9f95ec41d59729d8f37a33b91474eb0c59f00c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/job/job.json",
+      "bytes": 856,
+      "sha256": "152ff36258ea4b6744eeee2510143c02a6ff4570523405d9c844af1af8e4a640"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/job/stdout.log",
+      "bytes": 58,
+      "sha256": "5cb9087e6a715e6f9c3f6dfbd9185898a9eec2b2571c36ff3b637d44c58879f5"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/comparison-error.txt",
+      "bytes": 600,
+      "sha256": "f86b40d2a81e12855f6ddfae72be395ae09ee22bf78225c3fdf6a105b7df05bc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/schema-diagnosis.json",
+      "bytes": 5254,
+      "sha256": "9558d909b2855a01e8d39fbd0cb5c0196fb2f213bd1ed149a0cf5ba37f4420d3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front_screen_reference.py",
+      "bytes": 15250,
+      "sha256": "9b8c2718e0375d394b2457c57efe910dd2657b59a720b517f1bb02ec981637d6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/inputs.json",
+      "bytes": 11088,
+      "sha256": "6598eeb73adcc339874594118bec3835da09009471df199df48bf19bb65e1441"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/verification.json",
+      "bytes": 3810,
+      "sha256": "dc6313a3a7e92db093184ecfbda5657e5abba874f385eadaba8979e668dc3c2c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/compare.py",
+      "bytes": 4173,
+      "sha256": "b4532416c7d5aa1902fcb21725ec1c4cda9e9af462d88224cc681870d8fb8ca5"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/front_screen_reference_v2.py",
+      "bytes": 19212,
+      "sha256": "59b2a916202a02f7480bf4cf40d1842381d44cfb270bef097a5ca88034a06716"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/job/job.json",
+      "bytes": 791,
+      "sha256": "a3371c4da1dc9c1866d5a9b1a4e7d0445f43cd9ec1d4bbc2d699c1f3433851de"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/comparison-01/job/stdout.log",
+      "bytes": 3134,
+      "sha256": "0e2155e73366d6d534fae26527f94e9e455436080dae9e8d142bb5a58373eae7"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-prebuild-01/diagnosis.json",
+      "bytes": 916,
+      "sha256": "7903accb6d5af83a8b0ce3f42cc49ea0ea5cadc2299a03d7079294a0f995ab64"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-prebuild-01/explicit-null-review.json",
+      "bytes": 323,
+      "sha256": "a1484549b6518d850a4631791036e50d343d20a400aa7b63fb700a59f0220318"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/inputs.json",
+      "bytes": 98743,
+      "sha256": "a050c6a48fbb0d09a8167614cc19a41b615f3d462274e7e69ac77b205279fbcc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/build-job/job.json",
+      "bytes": 1705,
+      "sha256": "6fe9feca1998484d79af4d9bd0bc24238456f52f47318e7d8c5f0084c8d6b697"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/build-job/stdout.log",
+      "bytes": 4094,
+      "sha256": "01bf993de4377874458e27e8a1aebe715b3c9c84560153093c5959f2af816c28"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/manifest.json",
+      "bytes": 364864,
+      "sha256": "49b323e944d0cef672eae2d7b45d36c759c73c30b060d5faa34422c0813a144a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-0-after-resource-removal.json",
+      "bytes": 13744311,
+      "sha256": "5be6ec8b927f75a5e7990c6b61bc164b2d5d71be82cdbe12832000cfc934a81c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-0-fresh.json",
+      "bytes": 13744311,
+      "sha256": "5be6ec8b927f75a5e7990c6b61bc164b2d5d71be82cdbe12832000cfc934a81c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-0-returned.json",
+      "bytes": 13744311,
+      "sha256": "5be6ec8b927f75a5e7990c6b61bc164b2d5d71be82cdbe12832000cfc934a81c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-0-rollback.json",
+      "bytes": 9192417,
+      "sha256": "5ab34f0440cf0c5b8b69688669251f7441687073cb7f52430b282642c1f2cee6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-1-fresh.json",
+      "bytes": 13776182,
+      "sha256": "34cb109f8b8ce5be9bb16be03ecda4fc354f865a7b346676716e41fefe186c40"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-1-returned.json",
+      "bytes": 13776182,
+      "sha256": "34cb109f8b8ce5be9bb16be03ecda4fc354f865a7b346676716e41fefe186c40"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/ffi/ffi-01/front-1-rollback.json",
+      "bytes": 9197073,
+      "sha256": "6112cb497d547753b41cb8fe666b1474ab5fbe3de05ba818cdf37f6f38d8dcd8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-01/compile-diagnosis.json",
+      "bytes": 60476,
+      "sha256": "429345f907300e9ae840b1ccd016747fe97f6b123a5061ac15d5d9c02574ebfa"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-private-provenance-review-01.json",
+      "bytes": 1871,
+      "sha256": "2d9066111abc762ccbc685ae0c3f68745ea98e7481e57ae84679a32a4133e4bd"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-plan-review-01.json",
+      "bytes": 1133,
+      "sha256": "fd1ce84b76d6e4fcb7b0d0ad0641ee1dddabe8240ec380fc06a85ea85481abf9"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/independent-review-01.json",
+      "bytes": 20708,
+      "sha256": "ebd549d38bb67459e7f7c76a19c58577db7628198cf8a6fc468badf02def2f98"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/front-screen-02/independent-future-driver-review-01.json",
+      "bytes": 3031,
+      "sha256": "f61a45f277293f7ece2ca5bf60da088f8e8fc52f2f1d084465479feb0ab1a2f7"
+    }
+  ],
+  "preservation": {
+    "mainClean": true,
+    "coreChanged": false,
+    "compiledWrapperChangedAfterSuccessfulBuild": false,
+    "originalExpectedChanged": false,
+    "failedBuildAndV1Retained": true,
+    "nativeFFIRepeated": false,
+    "previousAppsChanged": false,
+    "oldLibrariesAndSessionArtifactsUnchanged": true,
+    "futureDriverChangedAfterComparison": true,
+    "futureDriverChangeIndependentlyReviewed": true
+  },
+  "limitations": [
+    "Two controlled pristine natural first returns only; not whole 119-call menu or bundled-library application",
+    "No source World EAX is captured by these retained completion parents; C ABI OK is transport status",
+    "Unknown source private storage remains unknown and is not an input",
+    "Headless typed platform replies; no real COM/GDI/network/thread/heap claims",
+    "No displayed menu, gameplay tick, complete catalog/match/content/modes, device input/audio/network or clean-Mac acceptance",
+    "Local arm64 dylib signature only; no release signing or Intel acceptance",
+    "Existing safety incidents and blocked dependencies remain open"
+  ],
+  "next": "Own application startup and first due menu-loop return with restored bundled-library behavior, using retained APPLICATION_MENU_RETURN 47 completed cases plus one explicit NULL-cursor boundary. Then own input/loading/catalog consumers; full game goal remains active.",
+  "postTerminalAuthoringChanges": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/native_bridge/README.md",
+      "frozenSHA256": "8fa1976a27ce9d7afe8bd1e4ffdbe60282d650bdd8f22de75414e358eae13049",
+      "currentSHA256": "b773ca4b8a59b241f7df09f6d8546338dc43169902bd2f53683daae6c23116e2"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/native_bridge/check_ffi.py",
+      "frozenSHA256": "fef5c10c7405075f8b57f9ee533b4408dfd979c30f3818ac7dc1e46f7a33977b",
+      "currentSHA256": "9ddaf80b9bc7cb87f38d19932a2363f9f44bbaf723264b96ba18d0ae5fc79c54"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/docs/research/L2DF_FRONT_SCREEN_SESSION.md",
+      "frozenSHA256": "2f6a9d65b2a606dbd1ce1822c0bdc58c56e826880a84156401747b5f03c4464f",
+      "currentSHA256": "bedba279478ef5235b6c04836ad883c7ba6e9fa3d5dd6cd7c7c347f6178446c0"
+    }
+  ]
+}

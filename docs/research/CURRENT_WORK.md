@@ -206,10 +206,29 @@ globals/scratch. Один build/один Native FFI run terminal0;269 ABI checks
 owner. Текущий `.app` по-прежнему Practice; tick API, весь игровой цикл,
 устройства и остальные критерии полной цели открыты.
 
-**Следующий конечный этап реализуется:** [первый полный возврат меню](L2DF_FRONT_SCREEN_SESSION.md)
-продолжает собственную сессию прямо с42709b, без повторной инициализации.
-План прошёл независимый contract review: два сохранённых natural вызова,
-собственное временное хранилище, полные события/владение/rollback и прежние
-регрессии. Все13 фонов доступны по запросу; два whole-case эталона используют ms0.
-Код, компаратор, build и FFI ещё не приняты. Последующие внешние вызовы должны
-довести того же владельца до World2 и загрузки каталога.
+**Первый возврат меню принят:** [FIRST_MENU_RETURN](L2DF_FRONT_SCREEN_SESSION.md)
+продолжает того же владельца прямо с42709b, lifecycle3→4/revision1→2.
+Два сохранённых natural профиля совпали по202 записям/1740888 байтам и стольким
+же маскам каждый, шести фазам и25 bitmap owners.420 checkpoint event entries
+содержат398 разных событий:22 main events повторно входят в completion.
+Полный поздний rollback, независимый fresh owner и удаление уже скопированного
+фона проверены; прежние settings/Actor outputs сохранены побайтно.
+
+Первый build завершился ошибкой Swift-типа отрицательной громкости; исправленный
+build terminal0/85.936s. Один Native FFI terminal0/3.018s,336 ABI checks.
+Первый внешний comparator остановился на двух различиях JSON-схемы; отдельный
+проверенный v2 прочёл прежние outputs, terminal0/1.005s и14 decoder controls.
+Native/Core/expected ради сравнения не менялись и не перезапускались.
+Все187 compiled inputs/199 copies/184 main Git/87 FFI/36 comparison pins
+проверены независимо. Сохранены prebuild null-field finding, compile failure,
+первый comparator и ошибка root-аудита заголовка otool. Приёмка:
+[evidence](../evidence/l2df-front-screen-session.json). Нет нового окна/устройства
+или игрового tick; `.app` остаётся прежним Practice. Все jobs этого этапа terminal.
+
+Следующая конкретная задача уточнена по готовому [APPLICATION_MENU_RETURN](APPLICATION_MENU_RETURN.md):
+вынести собственный application startup и первый due menu-loop return с
+восстановленным поведением bundled library,47 завершённых случаев и отдельной
+NULL-cursor boundary. Сохранённые pristine16+48 gameplay calls остаются эталоном
+своей цепочки; они не доказывают работу NTSD с библиотекой. Далее — сохранённый
+application input/loading consumer и собственный каталог. Полный catalog join,
+матч, весь контент/режимы/сеть/устройства/clean Mac и прежние incidents открыты.

@@ -1,6 +1,61 @@
 # Native session bridge
 
-The current library additionally creates an owned pristine session from the
+The current library continues the same owned session from `FRONT_SETTINGS_READY`
+to `FIRST_MENU_RETURN` through the original prefix, panel, pristine body,
+alternate, main-menu and presentation handlers. Call
+`ntsd_bridge_continue_front_screen(handle, milliseconds)` with an explicit UInt32
+clock. Its background provider looks up all 13 original MENU_BACK resources on
+request and retains the consumed DIB. The two validated whole trajectories use
+clock 0 and the declared A5/ascending and ramp/reverse headless profiles.
+
+The call commits one revision or restores the complete previous owner. It keeps
+25 bitmap owners, globals/World, CRT/replay state, typed retained Sleep and full
+phase observations, including source-dependent extra draws. Draw exports bind
+resource identity separately from the target surface role. The native private
+body/fill storage has independently checked producers and known-byte masks.
+No device side effect is performed by this headless interface; no tick is exported.
+
+Current arm64 library, 6,822,664 bytes:
+
+```text
+build/l2df-prototype/loaded-session-20260912/front-screen-02/swift-build/arm64-apple-macosx/release/libNTSDNativeBridge.dylib
+```
+
+SHA-256 `0c0f5a49b82b922386600602ecca230233c6a0e586e6bc021bf16e754fdb1064`.
+It passed local code-signature verification and links Apple system/Swift libraries.
+ABI 1 capabilities are 1|2|4 (Actor storage, front/settings, first menu return);
+lifecycles are 1 Actor storage, 2 pristine boot, 3 ready settings, 4 first return.
+The original EXE/DLL, reference cases and expected snapshots are absent from the
+native package. This is a development library, not a release game or portable app.
+
+Completed commands from this worktree:
+
+```sh
+python3 prototypes/l2df/native_bridge/build.py --study loaded-session-20260912 --label front-screen-02 --plan L2DF_FRONT_SCREEN_SESSION.md
+python3 prototypes/l2df/native_bridge/check_ffi.py --study loaded-session-20260912 --build-label front-screen-02 --label ffi-01 --resources build/l2df-prototype/loaded-session-20260912/resources-01/resources
+```
+
+Existing labels refuse overwrite; choose fresh labels only for a new authorized
+test. `front-screen-01` preserves the initial compiler failure; the repaired
+build took 85.94 s. One LÖVE 11.5/LuaJIT run took 3.018 s and passed 336 assertions.
+Its first external comparator rejected two JSON schema differences. The reviewed
+V2 decoder maps only optional Blit `effects` omission to nil and the panel's
+explicitly empty string array to its narrower source event type. All saved
+Native outputs and V1 remain unchanged. The read-only final comparison is
+`front-screen-02/comparison-01/verification.json`; it passed 14 decoder controls,
+the complete old Actor/front/settings checks and both first-menu returns.
+The future driver now selects this V2 decoder; Native was not repeated for that
+tool update.
+
+Each new trajectory matched 202 record comparisons (1,740,888 record bytes plus
+the same mask count), all 25 owners, inputs, RNG/replay state and six checkpoints.
+The main-menu 11-event checkpoint is included again in the final 20/27-event
+completion checkpoint; it is not an extra source call. All 187 compiled inputs
+matched their frozen pins. See [the full contract and retained failures](../../../docs/research/L2DF_FRONT_SCREEN_SESSION.md).
+
+## Earlier boot/front/settings handoff
+
+The earlier library additionally creates an owned pristine session from the
 exported original resources and runs the original front-resource/settings
 handoff. `ntsd_bridge_create_pristine` reports `PRISTINE_BOOT`; only a successful
 `ntsd_bridge_load_front_settings` changes it to `FRONT_SETTINGS_READY`. The
@@ -17,7 +72,7 @@ No tick or gameplay capability is exported. The original Actor-storage API
 below remains available; using its setup/read functions on a pristine owner
 returns `UNSUPPORTED`.
 
-Current arm64 library:
+Earlier arm64 library, preserved unchanged:
 
 ```text
 build/l2df-prototype/loaded-session-20260912/session-01/swift-build/arm64-apple-macosx/release/libNTSDNativeBridge.dylib

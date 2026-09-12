@@ -40,7 +40,7 @@ function love.errorhandler(message)
 end
 function love.load()
  check('ABI version',lib.ntsd_bridge_abi_version()==1)
- check('declared capabilities without gameplay',lib.ntsd_bridge_capabilities()==1 or lib.ntsd_bridge_capabilities()==3)
+ check('declared capabilities without gameplay',lib.ntsd_bridge_capabilities()==1 or lib.ntsd_bridge_capabilities()==3 or lib.ntsd_bridge_capabilities()==7)
  check('initial registry empty',lib.ntsd_bridge_live_sessions()==0)
  local b=backing(0xa5);local original=ffi.string(b,1056)
  local sentinel=ffi.new('uint64_t[1]',0x112233)

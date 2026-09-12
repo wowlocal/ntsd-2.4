@@ -10,9 +10,11 @@ extern "C" {
 #define NTSD_BRIDGE_ACTOR_SIZE 1056u
 #define NTSD_BRIDGE_CAP_ACTOR_STORAGE 1u
 #define NTSD_BRIDGE_CAP_FRONT_SETTINGS 2u
+#define NTSD_BRIDGE_CAP_FIRST_MENU_RETURN 4u
 #define NTSD_BRIDGE_ACTOR_STORAGE 1u
 #define NTSD_BRIDGE_PRISTINE_BOOT 2u
 #define NTSD_BRIDGE_FRONT_SETTINGS_READY 3u
+#define NTSD_BRIDGE_FIRST_MENU_RETURN 4u
 enum ntsd_bridge_result {
     NTSD_BRIDGE_OK = 0, NTSD_BRIDGE_INVALID_ARGUMENT = 1,
     NTSD_BRIDGE_ABI_MISMATCH = 2, NTSD_BRIDGE_INVALID_HANDLE = 3,
@@ -53,6 +55,12 @@ int32_t ntsd_bridge_load_front_settings(uint64_t handle);
 /* Developer test: execute the real consumers and reject at final commit.
    Returns UNSUPPORTED; every owned byte, mask and revision stays unchanged. */
 int32_t ntsd_bridge_developer_front_rollback(uint64_t handle);
+/* Continue the same caller from ready settings to the first semantic ret4.
+   Explicit unsigned clock; named headless platform profile, no device/tick.
+   Request-time DIB reads are copied/verified before a single owned commit. */
+int32_t ntsd_bridge_continue_front_screen(uint64_t handle, uint32_t milliseconds);
+/* Developer late failure after the full sequence; no state/effects commit. */
+int32_t ntsd_bridge_developer_screen_rollback(uint64_t handle, uint32_t milliseconds);
 /* Read-only JSON observation of actual owner, schema1, at most32MB.
    bytes=NULL/capacity=0 queries size; short buffers write no outputs.
    Each successful result includes revision; buffers may not overlap. */

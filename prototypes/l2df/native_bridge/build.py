@@ -128,6 +128,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--label', required=True)
     parser.add_argument('--study', choices=['native-bridge-20260912', 'loaded-session-20260912'], default='native-bridge-20260912')
+    parser.add_argument('--plan', choices=['L2DF_NATIVE_BRIDGE.md', 'L2DF_LOADED_SESSION.md', 'L2DF_FRONT_SCREEN_SESSION.md'])
     args = parser.parse_args()
     assert args.label and Path(args.label).name == args.label and args.label not in ('.', '..')
     storage, volume = storage_check()
@@ -169,14 +170,14 @@ def main():
         pins.append({'path': str(source), 'copy': str(target), 'bytes': source.stat().st_size, 'sha256': sha(source)})
     shutil.copy2(wrapper / 'Package.swift', package / 'Package.swift')
     shutil.copytree(wrapper / 'Sources/NTSDNativeBridge', package / 'Sources/NTSDNativeBridge')
-    plan = ROOT / 'docs/research' / ('L2DF_LOADED_SESSION.md' if args.study == 'loaded-session-20260912' else 'L2DF_NATIVE_BRIDGE.md')
+    plan = ROOT / 'docs/research' / (args.plan or ('L2DF_LOADED_SESSION.md' if args.study == 'loaded-session-20260912' else 'L2DF_NATIVE_BRIDGE.md'))
     shutil.copy2(plan, root / 'plan.md')
     pins.append({'path': str(plan), 'copy': str(root / 'plan.md'), 'bytes': plan.stat().st_size, 'sha256': sha(plan)})
     manifest = {'createdAtUTC': now(), 'sourceRevision': REVISION, 'storage': volume, 'pins': pins,
                 'swiftVersion': subprocess.check_output(['swift', '--version'], text=True).strip(),
                 'macOS': subprocess.check_output(['sw_vers'], text=True).strip(),
                 'architecture': subprocess.check_output(['uname', '-m'], text=True).strip(),
-                'scope': 'Owned constructor/boot/front-settings; no match/tick; no original execution'}
+                'scope': 'Owned constructor/boot/front-settings/first menu return; no match/tick; no original execution'}
     write_json(root / 'inputs.json', manifest)
     command = ['swift', 'build', '--package-path', str(package), '--scratch-path', str(root / 'swift-build'),
                '--cache-path', str(root / 'cache'), '--config-path', str(root / 'config'),

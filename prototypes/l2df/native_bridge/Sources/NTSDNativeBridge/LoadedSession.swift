@@ -21,7 +21,7 @@ enum LoadedPlatformProfile: UInt32 {
     static let scratch: UInt32 = 0x1000ee04
 }
 
-private struct ResourceManifest: Decodable {
+struct ResourceManifest: Decodable {
     let schemaVersion: Int, originalEXESHA256: String, runtimeContainsOriginalExecutable: Bool
     struct Globals: Decodable {
         let base, count, fileBytes, zeroFillStart, zeroFillEnd: Int
@@ -60,7 +60,8 @@ struct LoadedSession {
     var lifecycle: UInt32 = 2 // PRISTINE_BOOT
     var world: OriginalStateRecord
     var globals: OriginalStateRecord
-    let savedPlayback: OriginalStateRecord, replayPointers: OriginalStateRecord
+    let savedPlayback: OriginalStateRecord
+    var replayPointers: OriginalStateRecord
     let profile: LoadedPlatformProfile
     let resourceRoot: URL, manifestSHA256: String
     private let rawControl: [UInt8], dibs: [String: [UInt8]], inputs: [String: OriginalBitmapInput]
@@ -71,6 +72,7 @@ struct LoadedSession {
     private var settingsEvents: [SettingsExport] = []
     private var scratch: OriginalStateRecord?
     private var settingsContinuation: String?
+    private var frontScreen: LoadedFrontScreen?
 
     static func digest(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
 
@@ -170,6 +172,18 @@ struct LoadedSession {
         self = candidate
     }
 
+    mutating func continueFrontScreen(milliseconds: UInt32, failBeforeCommit: Bool = false) throws {
+        guard lifecycle == 3 else { throw LoadedSessionError.lifecycle }
+        var candidate = self
+        var screen = try LoadedFrontScreen(front: front, profile: profile, replayPointers: replayPointers)
+        try screen.run(world: &candidate.world, globals: &candidate.globals, milliseconds: milliseconds,
+                       profile: profile, root: resourceRoot, manifestSHA256: manifestSHA256)
+        candidate.replayPointers = screen.memory.replayPointers
+        candidate.frontScreen = screen; candidate.lifecycle = 4
+        if failBeforeCommit { throw LoadedSessionError.deliberateRollback }
+        self = candidate
+    }
+
     func snapshot(revision: UInt64) throws -> Data {
         struct Bitmap: Encodable { let address: UInt32, input: OriginalBitmapInput, optional: Bool, storage: LoadedRecordExport }
         struct Export: Encodable {
@@ -178,6 +192,7 @@ struct LoadedSession {
             let frontGlobals: LoadedRecordExport?, frontEvents: [OriginalFrontMenuEvent], bitmaps: [Bitmap]
             let settingsEvents: [SettingsExport], scratch: LoadedRecordExport?, settingsContinuation: String?
             let ownedDIBCount, ownedDIBBytes, rawControlBytes: Int
+            let frontScreen: LoadedFrontScreen.Export?
         }
         let value = Export(schema: 1, lifecycle: lifecycle, revision: revision, profile: profile.rawValue,
             manifestSHA256: manifestSHA256, initialGlobals: .init(initialGlobals), world: .init(world), globals: .init(globals),
@@ -186,7 +201,8 @@ struct LoadedSession {
                 let b = front.bitmaps[address]!
                 return Bitmap(address: address, input: b.input, optional: b.optional, storage: .init(b.storage))
             }, settingsEvents: settingsEvents, scratch: scratch.map(LoadedRecordExport.init), settingsContinuation: settingsContinuation,
-            ownedDIBCount: dibs.count, ownedDIBBytes: dibs.values.reduce(0) { $0 + $1.count }, rawControlBytes: rawControl.count)
+            ownedDIBCount: dibs.count, ownedDIBBytes: dibs.values.reduce(0) { $0 + $1.count }, rawControlBytes: rawControl.count,
+            frontScreen: frontScreen?.export())
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         return try encoder.encode(value)
     }

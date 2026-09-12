@@ -1,6 +1,10 @@
 # Owned first front-menu return
 
-Status: finite implementation plan, 2026-09-12; code/build acceptance pending.
+Status: accepted within two owned pristine first-menu returns, 2026-09-12;
+implementation, comparison and independent review passed. Published
+[evidence](../evidence/l2df-front-screen-session.json) binds the scope and inputs.
+The pre-execution card is
+preserved in both build input snapshots and `front-screen-plan-01.md`.
 The next executable transition is `FRONT_SETTINGS_READY` → `FIRST_MENU_RETURN`
 in the existing native owner. It completes the first pristine early-menu caller
 through its retained actual `ret 4` witness. It does not establish a displayed
@@ -212,3 +216,117 @@ The next composed dependency after this accepted return is the existing repeated
 outer-menu consumer leading to World2, then real catalog loading in the same
 owner. Existing catalog resource mapping is input evidence only. This card does
 not implement those calls or declare the complete game ready.
+
+## Implementation, corrections and retained result
+
+`LoadedFrontScreen.swift` implements the direct continuation in the existing
+owner; `LoadedSession.swift` commits its state only after completion. ABI1 adds
+capability4 and two symbols: the actual continuation and a developer late-failure
+trial. The successful lifecycle is2→3→4 with revision0→1→2; no tick or source EAX
+is invented. Owned resource records retain raw surface words and known masks;
+draw views are canonical only at the shared drawing boundary. An immutable draw
+view spans the first body/completion, whose declared path does not allocate or
+release; an unexpected release rejects. Future outer calls require a live-owner
+review before reusing that bounded callback contract.
+
+The request-time provider verifies the unchanged create-time manifest digest,
+contained regular-file path, DIB SHA/extent/dimensions and the selected key among
+all13 MENU_BACK resources. It copies only requested bytes and leaves the earlier
+23-DIB boot inventory unchanged. The owner retains the extra DIB and its resource
+identity after the generated test copy is removed. No original pack is modified.
+
+Independent pre-execution review covered code, input provenance, both private
+storage projections, complete typed comparison and package/input gates. Before
+execution, root found synthesized `panelWord:nil` encoding would omit the explicit
+null required by the declared input export. A custom encoder corrected that
+observation field; prior bytes and the recursive null audit are preserved in
+`front-screen-prebuild-01/`. It was not a Native execution failure.
+
+Build `front-screen-01` ended1 after83.6556 s (PID20791, start13:58:15 Moscow).
+Swift inferred the nested presentation dictionary as `[String:UInt32]` and
+rejected the original signed audio volume−1234. `compile-diagnosis.json`, the
+exact compiler log, plan and all199 frozen copies remain unchanged. Independent
+review approved only explicit heterogeneous dictionary/Int32 typing and the
+named observer argument; no Core rule, input value or expected result changed.
+
+The separate repair `front-screen-02` ended0 after85.9358 s (PID21527,
+start14:01:40 Moscow), using95,970,235 bytes. Its arm64 dylib is6,822,664 bytes,
+SHA `0c0f5a49b82b922386600602ecca230233c6a0e586e6bc021bf16e754fdb1064`.
+All187 compiled source/manifest files match frozen inputs; the library has15
+bridge symbols, no tick and Apple system/Swift dependencies. Local
+`codesign --verify --strict` passed. Host macOS26.6.2/25G83, Swift6.3.3; this is
+not universal/x86_64, notarized release or clean-Mac acceptance.
+
+One Native LÖVE11.5/LuaJIT arm64 FFI run, `front-screen-02/ffi/ffi-01`, ended0 in
+3.0183 s (PID21914, start14:03:28 Moscow), passing336 assertions. Both late-return
+failures preserved the whole earlier state; valid continuation then matched an
+independent fresh owner exactly. Wrong lifecycle/kind/stale handles rejected;
+all owners were released. Only three generated input copies changed: control.txt
+became the declared test string, LF2_CURSOR DIB was removed after create, and
+MENU_BACK1 DIB was removed after its successful constructor request. Original
+resources, other copies and all runtime/input snapshots remain pinned.
+
+The first external comparator stopped on `prefix complete semantic events`.
+`comparison-error.txt`, V1 and `schema-diagnosis.json` preserve that result. The
+diagnosis found two typed JSON representation differences: synthesized
+`OriginalBitmapBlit.effects:nil` is omitted, while the source spells null;
+`OriginalMenuPanelUpdateEvent` has only kind/arguments, while the wrapper's common
+event explicitly includes empty strings. This was an export-schema comparison
+mismatch, not a source fault or an accepted whole Native match.
+
+The separately retained `front_screen_reference_v2.py` decodes only these two
+established type boundaries. Blit payload keys must be exact; omitted effects
+maps to nil and still differs from every non-null source value. Only the panel
+phase may remove an exactly empty array under exact source/Native key sets.
+All other keys, types, numbers, events, bytes and masks remain exact. Fourteen
+positive/negative controls cover non-null effects, required/extra fields,
+boolean/numeric distinction, panel type/content, phase isolation and unchanged
+input objects. Reviewer approved this decoder; V1, Native, Core and expected
+bytes were not edited or rerun to obtain agreement.
+
+One read-only `front-screen-02/comparison-01` ended0 in1.0050 s (PID24394,
+start14:14:02 Moscow). Its36 pins and the original87 FFI pins were checked before
+and after comparison. Final `verification.json` SHA is
+`dc6313a3a7e92db093184ecfbda5657e5abba874f385eadaba8979e668dc3c2c`.
+V2 SHA is `59b2a916202a02f7480bf4cf40d1842381d44cfb270bef097a5ca88034a06716`.
+Both first returns passed202 record comparisons each:1,740,888 record bytes and
+the same number of mask bytes, all25 owners, platform inputs, draw associations,
+globals/World/CRT/replay, complete phase events and110 ordered local stores.
+The local audit checks24 literal stores, the y store,85 numeric decode stores,
+three known strings/NULs and two known targets; final own body mask has96 known
+bytes. Fill has exactly8 known bytes. Main's11-event checkpoint is included in
+completion's20/27 events and is not an additional source call. Across both profiles
+there are420 checkpoint event entries but398 unique continuation events; the
+two11-event main checkpoints account for the duplication.
+
+Both old settings trajectories remain byte-for-byte equal to the previous
+accepted outputs:144 comparisons and2,949,520 record bytes plus the same mask
+count per profile,6,892 front events,63 settings events and53 observed source
+globals/scratch pairs. The full two Actor constructor records/masks also match.
+The immutable FFI `result.json` still labels the shared report ACTOR_STORAGE;
+actual loaded exports establish the additional2→3→4 lifecycle, not that label.
+
+Root's independent artifact audit is `root-build-audit-02.json`, SHA
+`9bc722ca5f63933350bc905162ed3abf66738266a34e1ebeeb2ecb791a586b68`:
+184 main Git files,199 frozen copies,187 compiled inputs,87 FFI pins and15 exports.
+The first root audit compared symlink versus resolved `otool` header spellings;
+its error is preserved in `root-audit-error-01.json`. Both paths bind the same
+library and all dependency lines match. Old session artifacts, Actor outputs,
+libraries and the existing app remain unchanged.
+
+Final independent review accepted the retained comparison and the separate
+future-driver diff. Root's [build audit](../../build/l2df-prototype/loaded-session-20260912/front-screen-02/root-build-audit-02.json)
+and [comparison audit](../../build/l2df-prototype/loaded-session-20260912/front-screen-02/root-comparison-audit-01.json)
+bind actual artifacts, input snapshots and the preserved failures.
+
+After terminal comparison, the future `check_ffi.py` was changed only to copy/
+select V2 and include its14 controls. `future-driver-01.json` binds the original
+frozen driver, new tool bytes and completed verification; no Native/FFI repeat
+was made for that tool change. Completed commands and library location are in
+the [bridge README](../../prototypes/l2df/native_bridge/README.md).
+
+The full game remains open. Root selected the owned DLL-aware application first
+menu-loop return as the next finite consumer, using its existing47+1 retained
+cases and separate provenance plan. Repeated outer menus/World2/catalog remain
+subsequent dependencies. None of those calls, or window/pixels/physical input/
+audio/device behavior, is accepted by this pristine first-return comparison.
