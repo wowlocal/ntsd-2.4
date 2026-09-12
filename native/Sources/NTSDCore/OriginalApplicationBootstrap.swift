@@ -30,12 +30,14 @@ public struct OriginalApplicationBootstrap {
         public let backgroundAllocation: OriginalInterfaceAllocation
         public let frontResponses: [OriginalBitmapSurfaceLoading.Response]
         public let backgroundResponses: [OriginalBitmapSurfaceLoading.Response]
+        public let bitmapResources: [String:OriginalApplicationStartupInputs.Bitmap]?
         public init(settings: Settings,prefix: OriginalFrontScreenInput,body: OriginalFrontScreenBodyInput,
             frontAllocations: [OriginalInterfaceAllocation],backgroundAllocation: OriginalInterfaceAllocation,
-            frontResponses: [OriginalBitmapSurfaceLoading.Response],backgroundResponses: [OriginalBitmapSurfaceLoading.Response]) {
+            frontResponses: [OriginalBitmapSurfaceLoading.Response],backgroundResponses: [OriginalBitmapSurfaceLoading.Response],
+            bitmapResources: [String:OriginalApplicationStartupInputs.Bitmap]? = nil) {
             self.settings = settings;self.prefix = prefix;self.body = body
             self.frontAllocations = frontAllocations;self.backgroundAllocation = backgroundAllocation
-            self.frontResponses = frontResponses;self.backgroundResponses = backgroundResponses
+            self.frontResponses = frontResponses;self.backgroundResponses = backgroundResponses;self.bitmapResources = bitmapResources
         }
     }
     public enum Observation {

@@ -72,20 +72,21 @@ final class OriginalWinMainStartupTests: XCTestCase {
     }
     final class Adapter: OriginalApplicationStartupPlatform {
         let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String],fail: String?
+        let startupInputs: OriginalApplicationStartupInputs?
         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]
         /// Every mutable member is a value. Blob's shared cache holds immutable
         /// input bytes and is not a reply position or an external effect queue.
         func stagedCopy() throws -> Adapter {
-            let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail)
+            let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail,startupInputs:startupInputs)
             copy.index = index;copy.storeIndex = storeIndex;copy.stageIndex = stageIndex
             copy.calendarIndex = calendarIndex;copy.joyIndex = joyIndex;copy.capsIndex = capsIndex
             copy.waves = waves;copy.childIndex = childIndex;copy.writes = writes
             copy.expected = expected;copy.mask = mask
             return copy
         }
-        init(_ c: Case,_ raw: [String:Any],sources: [String:String],blob: @escaping (String) throws -> [UInt8],initial: [UInt8],fail: String? = nil) throws {
-            self.c = c;self.blob = blob;self.sources = sources;self.fail = fail;shadow = initial;expected = initial;mask = [UInt8](repeating:0,count:initial.count)
+        init(_ c: Case,_ raw: [String:Any],sources: [String:String],blob: @escaping (String) throws -> [UInt8],initial: [UInt8],fail: String? = nil,startupInputs: OriginalApplicationStartupInputs? = nil) throws {
+            self.startupInputs = startupInputs;self.c = c;self.blob = blob;self.sources = sources;self.fail = fail;shadow = initial;expected = initial;mask = [UInt8](repeating:0,count:initial.count)
             rawEvents = try XCTUnwrap(raw["events"] as? [[String:Any]])
         }
         func store(_ address: Int,_ bytes: [UInt8]) {
@@ -140,6 +141,11 @@ final class OriginalWinMainStartupTests: XCTestCase {
             return try XCTUnwrap(e.response)
         }
         func file(_ path: String) throws -> [UInt8]? {
+            if let startupInputs {
+                let actual = try startupInputs.file(path)
+                let expected = try path == "data\\adinfo.txt" ? c.spec.panel.info : sources[path].map(blob) ?? c.spec.panel.content
+                XCTAssertEqual(actual,expected);return actual
+            }
             if path == "data\\adinfo.txt" { return c.spec.panel.info }
             if let h = sources[path] { return try blob(h) }
             let content = try XCTUnwrap(c.panel.children.first { $0.kind == "content" })

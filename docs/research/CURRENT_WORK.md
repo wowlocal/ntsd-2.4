@@ -155,6 +155,21 @@ rejection/rollback. Startup144 операции (7input/20own-memory/117platform
 file/package/AppKit/audio, полная загрузка/каталог/игра и три incidents открыты.
 
 
+Принят [регулярный пакет startup inputs](APPLICATION_STARTUP_INPUTS.md):
+46 файлов/29700372 bytes содержат PE initial record50088 с доказанными masks,
+adinfo/control, пять WAV и36 исходных DIB. Native владеет неизменяемым снимком,
+строит19 settings inputs из явных преобразований control и получает bitmap
+metadata из DIB, surface descriptions — из своего CreateSurface request.
+Все48 primary attempts,50 MenuInput chains и12 LoadingPrefix cases используют
+этого родителя; полные image/surface bindings сравниваются, сохраняются в Session
+и откатываются вместе с ним. 28 bundled release-методов прошли за173.944с,
+сборка295.28с. Проверены перенос в .app, отсутствие/порча пакета и независимость
+снимка от последующего удаления файлов. Native1 path-alias failure, неисполненный
+frozen candidate2 и исправленный candidate3 сохранены; expected не менялись.
+Все370 fixtures,871 Native-файл и оба архива проверены. [Приёмка](../evidence/application-startup-inputs.json).
+Новое исполнение оригинала не требовалось. Это inputs/metadata, ещё не pixels,
+host graphics/audio, запуск приложения или полная игра; три incidents открыты.
+
 ## Непринятая работа и отказ Codex
 
 Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -205,37 +220,29 @@ file/package/AppKit/audio, полная загрузка/каталог/игра
 
 ## Следующая независимая карточка
 
-**Регулярный пакет входов startup и неизменяемое Native представление файлов.**
+**Декодирование 36 packaged DIB в собственные неизменяемые RGB pixels.**
 
 Read-only readiness и границы:
-`build/research/application-bootstrap-native-20260912/review4-results.json`.
-Следующая карточка приближает самостоятельный запуск через принятый Core bootstrap.
-Сначала закрепить конечный план для original-entry: объявленные PE initial bytes/
-masks, adinfo/ad-content/control, исходные изображения/пять WAV/music paths и
-их происхождение. Runtime загружает обычные ресурсы; research JSON, expected
-после вызова, EXE/DLL и эмулятор не являются runtime-источниками.
+`build/research/application-startup-inputs-native-20260912/readiness4.json`.
+Следующий шаг приближает собственный renderer через уже принятый bitmap-input
+owner. Объём — 23 BI_RGB/24-bit и13 BI_RLE8/8-bit ресурса текущего пакета;
+байты пакета, metadata и прежние expected/masks остаются неизменными.
 
-Подготовить независимый Native snapshot/input provider для существующего
-Bootstrap: PE full/masks,15 исходных байтов adinfo, отсутствие ad0.txt, control
-с доказанным CRLF-to-LF преобразованием, пять WAV и конечный набор bitmap inputs.
-Clock/calendar/joystick/device responses остаются явными контролируемыми входами
-в тестовых адаптерах до отдельных host contracts. Panel default writes остаются
-выходом существующего Core, а не уже реализованным сохранением в host filesystem.
+Первый gate — конечный план и независимый набор decoded pixels/defined masks
+с provenance, ориентацией/stride/palette и инвентарём встреченных RLE-команд.
+Такого принятого pixel golden пока нет: готовые metadata tests его не заменяют.
+После независимой проверки реализовать общий Native decoder, сравнить все36
+ресурсов побайтно и передать результат через собственные bitmap-input bindings.
+Незаписанные RLE-области не объявлять известными нулями без доказательства;
+color key/alpha и реальный surface raster остаются отдельными контрактами.
+Сохранить необходимые Bootstrap/MenuInput/LoadingPrefix и snapshot/rollback
+регрессии. Выполнение оригинала и перезапуск исторических производителей для
+этого преобразования данных не требуются.
 
-Сначала использовать готовые исходные файлы и сохранённые доказательства. Новое
-исполнение оригинала, повтор capture/auditor или закрытие incidents не требуется.
-До реализации зафиксировать точные случаи/файлы/команды/лимиты и review provenance.
-Сравнить полученные входы побайтно с declared saved inputs, затем провести через
-Core startup/first menu и прежние MenuInput/LoadingPrefix chains; сохранить
-required rollback и все370 fixtures. Независимая проверка исключает импорт
-expected state и совместное использование изменяемых позиций чтения.
-Общий Windows CRT text mode, произвольные пути/read errors и реальные файловые
-сохранения не принимаются по этому ограниченному input contract.
-
-Эта карточка не подключает Practice app и не заявляет готовность AppKit queue/
-key/mouse/clock, raster/audio delivery, более ранних PE/CRT/NLS, private capability
-backing или worker reentrancy. Полная загрузка/каталог, War43a860/матч/игра/
-Windows/cleanMac остаются отдельными продолжениями.
+Practice NSImage с общей прозрачностью чёрного не является эталоном этих pixels.
+Карточка не подключает AppKit window/input/clock/audio, не доказывает Windows
+GDI/DirectDraw поведение или полный кадр. Полная загрузка/каталог, War43a860,
+матч/игра/Windows/cleanMac и три safety incidents остаются открытыми.
 
 ## Дальнейшая сквозная очередь
 

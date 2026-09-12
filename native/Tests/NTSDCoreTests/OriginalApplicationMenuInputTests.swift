@@ -98,6 +98,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             reached = true
             typealias Session = OriginalApplicationMenuSession
             var session = try Session(state:initial.menuSessionState(counter:initialLoop.counter),loop:initialLoop)
+            let parentBindings = try XCTUnwrap(session.state.bitmapInputs)
             let ownExtras = r.extras[index]
             let a = Adapter(c,r,ownExtras,session.state.full.bytes,fail)
             let responses = Session.Responses(draw:c.spec.drawResult,presentation:c.spec.presentResult,
@@ -147,6 +148,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             func snapshot(_ state: State,_ owned: Session.State,_ timer: Loop) throws {
                 XCTAssertTrue(owned.full.bytes == (try r.blob(state.globals)),c.spec.label+" full state")
                 XCTAssertTrue(owned.full.defined.allSatisfy { $0 },"Selected parent has independent PE provenance; source write masks are separate")
+                XCTAssertEqual(owned.bitmapInputs,parentBindings)
                 XCTAssertEqual(owned.random.state,state.random);XCTAssertEqual(owned.libraryText.retainedDC,state.retainedDC)
                 XCTAssertEqual(timer.counter,state.counter);XCTAssertEqual(timer.timer.baseline,state.baseline)
                 XCTAssertEqual(timer.message.bytes,try r.blob(state.message));XCTAssertEqual(timer.message.defined,try r.blob(state.messageMask).map { $0 != 0 })
@@ -157,6 +159,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             }
             func unchanged(_ prior: Session,_ oldEffects: [Session.Effect]) {
                 let own = session.state, before = prior.state
+                XCTAssertEqual(own.bitmapInputs,before.bitmapInputs)
                 XCTAssertEqual(own.full,before.full)
                 XCTAssertEqual(own.memory.allocations,before.memory.allocations);XCTAssertEqual(own.memory.replayPointers,before.memory.replayPointers)
                 XCTAssertEqual(own.front.bitmaps,before.front.bitmaps);XCTAssertEqual(own.earlyScreen.bitmaps,before.earlyScreen.bitmaps)
@@ -207,7 +210,10 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         XCTAssertTrue(pending.state.full.defined.allSatisfy { $0 })
                         XCTAssertEqual(iteration.after.pc,0x41bc90);XCTAssertEqual(iteration.after.sp,0x1000ea6c)
                         XCTAssertEqual(pending.stagedEffects,try expectedEffects(eventStart,iteration.eventEnd))
-                        try loading?(initial.receivingMenuState(pending.state),pending.target)
+                        XCTAssertEqual(pending.state.bitmapInputs,parentBindings)
+                        let loadingState = try initial.receivingMenuState(pending.state)
+                        XCTAssertEqual(loadingState.bitmapInputs,parentBindings)
+                        try loading?(loadingState,pending.target)
                         XCTAssertEqual(a.index,iteration.eventEnd);unchanged(prior,oldEffects)
                     }
                 } catch {

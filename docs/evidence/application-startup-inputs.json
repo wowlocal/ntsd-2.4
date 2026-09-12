@@ -1,0 +1,1063 @@
+{
+  "schema": 1,
+  "acceptedUTC": "2026-09-12T17:20:14.106965+00:00",
+  "status": "finite bundled startup inputs and Native ownership verified",
+  "baseCommit": "ee23b00a9eca06b2780fcc06595c833c30a471d4",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved Unicorn2.1.4 records, declared platform replies. Current task reads saved records and executes Native release on macOS only.",
+    "sourceExecution": false,
+    "producerImports": false,
+    "historicalAuditExecution": false
+  },
+  "scope": {
+    "menuReturnChains": 48,
+    "completedFirstMenu": 47,
+    "separateNullCursorBoundary": 1,
+    "overlappingBodyParents": 43,
+    "overlappingFrontParents": 40,
+    "overlappingSettingsParents": 19,
+    "overlappingBitmapParents": 7,
+    "distinctNestedWinMainParents": 1,
+    "nestedWinMainLabel": "original-entry",
+    "menuReturnLateControls": 9,
+    "retainedMenuSessionChains": 50,
+    "retainedLoadingPrefixCases": 12,
+    "separateWinMainDomain": {
+      "cases": 35,
+      "wholeMatches": 23,
+      "sourceStops": 5,
+      "unknownProvenanceRejections": 7,
+      "lateControls": 6
+    }
+  },
+  "implementation": {
+    "nativePaths": {
+      "native/Package.swift": {
+        "bytes": 2539,
+        "sha256": "7e5e306d5fd5e02b92f70b9792ac82db62f8d85c7228039aa83837820b5e8037"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift": {
+        "bytes": 3830,
+        "sha256": "3a489bbbe59cfd038dd4217882ce8bdc44ecfd8790203c8990c54e0da9744043"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift": {
+        "bytes": 8686,
+        "sha256": "49732e83bb88730196a59345e2a82ba82524a04f489d4dd841d8357b42f69050"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+        "bytes": 33966,
+        "sha256": "c7073776898030319d179d4065f86353be27c36757ea35b3a0f94cca3ef7ef0f"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift": {
+        "bytes": 8329,
+        "sha256": "89267006b25d38ee80640806bbe018de7d405a24460c383e336d5e91d4316e74"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS2.dib": {
+        "bytes": 5326,
+        "sha256": "293eb23bedd7894b5ef609d38a719380f5fa7d293b4d0e9bb8f2fa5ffc9b7591"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS3.dib": {
+        "bytes": 5362,
+        "sha256": "d02f304b8938c38b8dd73aa059d4adb7cc5ae717fb91fc8cc52889b0fc365d46"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS4.dib": {
+        "bytes": 5382,
+        "sha256": "f709f93fa75d5f594f520efa867640de1bc7053c0efb44a39be287d875c112c2"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS5.dib": {
+        "bytes": 5354,
+        "sha256": "525a338dfc2e937bb1616a71fadbabe3a24d5858db3bb6d81e74f00add84f77d"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS6.dib": {
+        "bytes": 6410,
+        "sha256": "7d779d0ec1921bcdaef7d3bd72685fe09a65a38d2f97673fdbaeb28a41a33b7a"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/ENDING.dib": {
+        "bytes": 695560,
+        "sha256": "402ad51a04bd92753d6403e17d10343bff80a13f279a792d0f47a0964013d1de"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/FRAME.dib": {
+        "bytes": 32224,
+        "sha256": "61d6e9f33ba01fe38a82791657444fde9c2662e56f4a6a1b0965d522260e58aa"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/LF2_CURSOR.dib": {
+        "bytes": 226,
+        "sha256": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK1.dib": {
+        "bytes": 1328156,
+        "sha256": "fc02a0d1d7f5b19b15536959bedbdf566fccf6ef34e42b25b08d7220bd9242f8"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK10.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK11.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK12.dib": {
+        "bytes": 1328156,
+        "sha256": "46b2ab4f6fc996da0d4731434ea0a65849821999d83a8a081a944b4420a8cae7"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK13.dib": {
+        "bytes": 1328156,
+        "sha256": "32121d81d7d2967ee2b405b77c9ee44ccf1bd34d1730ce567aa03e384dbd7586"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK2.dib": {
+        "bytes": 1328156,
+        "sha256": "37b0787367994e0fa77593b06d16f2efe80abb1d392a0bbb10c2010ac8ded119"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK3.dib": {
+        "bytes": 1328156,
+        "sha256": "37b0787367994e0fa77593b06d16f2efe80abb1d392a0bbb10c2010ac8ded119"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK4.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK5.dib": {
+        "bytes": 1328156,
+        "sha256": "46b2ab4f6fc996da0d4731434ea0a65849821999d83a8a081a944b4420a8cae7"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK6.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK7.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK8.dib": {
+        "bytes": 1328156,
+        "sha256": "32121d81d7d2967ee2b405b77c9ee44ccf1bd34d1730ce567aa03e384dbd7586"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK9.dib": {
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP.dib": {
+        "bytes": 1192040,
+        "sha256": "84eb0f1ef805abb37c530c820933ad3e812e9f892e15cf8f9c23a12326e4ec8d"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP2.dib": {
+        "bytes": 937768,
+        "sha256": "5b3f75255cab8a1c2fcbdc123aabeb5f2d97c4fa5dec25cf2af0eb7b4e18b8b8"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP3.dib": {
+        "bytes": 1430440,
+        "sha256": "6771e910d48731b6ad6e6590e80eba55c4dfefe09f2acf6a3b38398f1d9d9e6f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP4.dib": {
+        "bytes": 1430440,
+        "sha256": "9390981dd824514dfa57a7bbda6f89271fd7d5b6e5d91c545ef20045b8f3bb10"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP5.dib": {
+        "bytes": 1430440,
+        "sha256": "7b75397bd44ce754c93351d91e7c47540ad5c2b48c694b327276f3341b278aca"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP6.dib": {
+        "bytes": 1907240,
+        "sha256": "3dff21032f258c8824a217ed98b212883dd927427d3550b254dcd219fc6e99e9"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP7.dib": {
+        "bytes": 1155640,
+        "sha256": "46a6098867e45c220efd4753d4cb39f2ba3a527e4e52e21f9b920f66f81eedab"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_WAIT.dib": {
+        "bytes": 1311240,
+        "sha256": "daff20e1f4e584762582607430aa093439e020711674d9558f6896a0c124b7f7"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/SLOGAN.dib": {
+        "bytes": 34362,
+        "sha256": "75a1333b34af89e74916269a3e59fed97fda40ed88daeab91c2a21413a32d134"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS0.dib": {
+        "bytes": 22110,
+        "sha256": "a53c2e39d01b588018291a0e1e91a2427414a46202f71250a38c51be3ac612e7"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS1.dib": {
+        "bytes": 22566,
+        "sha256": "3ad7b5399e49a43af7fb34cf47218ac858a94b61dc8658dc68ce8ac5fe15b36a"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS2.dib": {
+        "bytes": 22570,
+        "sha256": "3e3afad77549ecc140a5a553d5864beea8e37402d33bfe78145f223437595238"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS3.dib": {
+        "bytes": 22570,
+        "sha256": "28bb0e7d7f4d4551be7d8a33e1f27423c5280649c3977c1d7797465ca2e81c21"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS4.dib": {
+        "bytes": 22358,
+        "sha256": "bd5851b4d2abe828af0866ccdb57734c1841b71c5c68e196d495ac3ffb30120e"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS5.dib": {
+        "bytes": 22358,
+        "sha256": "b05708b5c44d8fe0dcecdb19021c2d8a17c65cf591036a67f1297775f4f59869"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/adinfo.txt": {
+        "bytes": 15,
+        "sha256": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt": {
+        "bytes": 179,
+        "sha256": "cc7f84872d9b95fe64c1c95cc7895b3e2c0a52a3ae0f7f7970f0b3c56b7037c0"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_cancel.wav": {
+        "bytes": 18834,
+        "sha256": "3e2d8c8e63463821e83983f7ea1fea19d499c78f7f0567c3d4df01542aaa641c"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_end.wav": {
+        "bytes": 144510,
+        "sha256": "5f66b7c622812319a26f9c4fb5afaf671bed70e9b955734a35f8dbd452df0794"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_join.wav": {
+        "bytes": 36138,
+        "sha256": "477508bc6b675e5e9a87a9939ddd570f29912b998fe668a1cbda240df0781c47"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_ok.wav": {
+        "bytes": 19450,
+        "sha256": "44b1698e70871e1cce2821eda9215e0bfd68b89dd08868cc2d35fa7e59caaefc"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_pass.wav": {
+        "bytes": 379766,
+        "sha256": "38d480100ae49990ef111cef4ff5485e37cfc087b136ba54e5473708612940fe"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/initial.bin": {
+        "bytes": 50088,
+        "sha256": "be350b20d7a33c12b8d6e8f29577709c7c1de76a82e233f581eeabb114ffc22f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/initial.mask": {
+        "bytes": 50088,
+        "sha256": "29bbc06e1493e8bd00588f66e097ba7c04f2b97c514009461b614b00629f26f8"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalStartup/manifest.json": {
+        "bytes": 15290,
+        "sha256": "f67aff089a95f230b4e7f5c381ac92b420a5541f7fea6b6a268986aa6b7ef177"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift": {
+        "bytes": 38365,
+        "sha256": "8940aff4973564e73a588663e4d10be548d0dc24bf0cbb93649e57325c63fb5e"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift": {
+        "bytes": 11048,
+        "sha256": "589f185d11c6b700a26c6fcf1a34cd3527274cc52a1e803358232c2cdbf47576"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": {
+        "bytes": 25684,
+        "sha256": "efa9f5f297012139729fe126d814a4d0459bd27b3db9dcc9d1325c0e38dff06b"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationStartupInputsTests.swift": {
+        "bytes": 9081,
+        "sha256": "253b1d8360b4c8b5a9517509cad4f68eddd37e1b11cdc362cd92a3a9e9cbc6e3"
+      },
+      "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift": {
+        "bytes": 24160,
+        "sha256": "19d1c173d80bd1b5014d9cd1d229860a25967d5de21114690a68f9abc2296e9b"
+      },
+      "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift": {
+        "bytes": 28836,
+        "sha256": "59da36ec520cab31491a5af77b02b8f510f02327b5aa7306e3d80e345876ff2f"
+      }
+    },
+    "packagerPaths": {
+      "tools/package_startup_inputs.py": {
+        "bytes": 4118,
+        "sha256": "f08dcb9a082d4f6475dd37fc9057fdbb90b13f9fb7235913f38bb618d67b2411"
+      },
+      "tools/package_assets.py": {
+        "bytes": 1129,
+        "sha256": "160d76a02909312dfab44f34503fae343de40e184b47d72f3f4d82dc29f2c090"
+      },
+      ".gitattributes": {
+        "bytes": 253,
+        "sha256": "bfa4ecb348911ae3272ec1abe59415a4275748a5a64c723c5740dc36c8034198"
+      }
+    },
+    "initialRecordBytes": 50088,
+    "fileBackedBytes": 8192,
+    "PEZeroFillBytes": 41896,
+    "allInitialMasksKnownFromPE": true,
+    "embeddedDIBs": 36,
+    "DIBBytes": 28986014,
+    "uncompressed24Bit": 23,
+    "RLE8Bit": 13,
+    "menuWAVs": 5,
+    "regularPackageFiles": 46,
+    "immutableSnapshot": true,
+    "settingsInputsFromExplicitPackageOverlays": 19,
+    "bitmapMetadataFromPackagedDIB": true,
+    "surfaceDescriptionsFromNativeCreateSurfaceRequest": true,
+    "initialBindingsComparedCompletely": true,
+    "bindingsStagedWithSession": true,
+    "pendingLoadingRetainsBindings": true,
+    "runtimeExpectedImports": false,
+    "runtimeReferenceChecksDependency": false,
+    "RLEPixelDecoderImplemented": false,
+    "hostDeviceImplemented": false
+  },
+  "validation": {
+    "candidate": "candidate3",
+    "configuration": "release",
+    "bundledFixtures": true,
+    "rawOverrides": false,
+    "buildSeconds": 295.28,
+    "testSeconds": 173.944,
+    "methods": [
+      {
+        "name": "OriginalApplicationBootstrapTests testLateFirstMenuFailuresRetainStartupAndResize",
+        "seconds": 9.757
+      },
+      {
+        "name": "OriginalApplicationBootstrapTests testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+        "seconds": 0.361
+      },
+      {
+        "name": "OriginalApplicationFrontScreenTests testLateScreenFailuresRollBackCommittedStartupAndCallback",
+        "seconds": 3.179
+      },
+      {
+        "name": "OriginalApplicationFrontScreenTests testOwnScreenUsesWholeBackgroundLoaderAndPrivateFillMasks",
+        "seconds": 10.808
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+        "seconds": 8.3
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testOwnLoadingCommonSoundsAndOrdinaryFailures",
+        "seconds": 14.58
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 10.067
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 40.784
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 3.122
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testLateMenuReturnFailuresRollBackWholeIteration",
+        "seconds": 7.167
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+        "seconds": 35.043
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testLateFailureRollsBackContextMessageCounterAndBaseline",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+        "seconds": 0.075
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testWholeLoopAndOwnStartupCallbacks",
+        "seconds": 1.011
+      },
+      {
+        "name": "OriginalApplicationScreenBodyTests testLateBodyFailuresRollBackWholePendingIteration",
+        "seconds": 3.613
+      },
+      {
+        "name": "OriginalApplicationScreenBodyTests testOwnPanelAndBodyUseInstalledTextAndProducedLocalBytes",
+        "seconds": 14.053
+      },
+      {
+        "name": "OriginalApplicationSettingsTests testLateSettingsFailuresRollBackWholePendingLoop",
+        "seconds": 2.168
+      },
+      {
+        "name": "OriginalApplicationSettingsTests testOwnSettingsPreserveParentsAndUseProducedScratch",
+        "seconds": 4.696
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testPackageRejectsMissingCorruptAndUnexpectedFiles",
+        "seconds": 0.21
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+        "seconds": 0.102
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testLateResourceFailuresRetainCommittedStartupAndCallback",
+        "seconds": 1.223
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+        "seconds": 1.655
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testWholeLoaderAndCopyAtOwnedPlatformFields",
+        "seconds": 0.304
+      },
+      {
+        "name": "OriginalWinMainStartupTests testContinuousStartupOwnedStateAndExplicitBoundaries",
+        "seconds": 1.039
+      },
+      {
+        "name": "OriginalWinMainStartupTests testLateRollbackOfWholeStartup",
+        "seconds": 0.624
+      }
+    ],
+    "methodCount": 28,
+    "job": {
+      "scope": "Native-only release validation of regular startup package and native input/bitmap provenance.\nSaved reference fixtures are read; no original, producer or historical auditor executes.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-startup-inputs-native-20260912/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-startup-inputs-native-20260912/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationBootstrapTests|OriginalWinMainStartupTests|OriginalBitmapSurfaceLoadingTests|OriginalApplicationSettingsTests|OriginalApplicationFrontScreenTests|OriginalApplicationScreenBodyTests|OriginalApplicationMenuReturnTests|OriginalApplicationMenuInputTests|OriginalApplicationMessageLoopTests|OriginalApplicationLoadingPrefixTests|OriginalApplicationStartupInputsTests"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-startup-inputs-native-20260912/candidate3-inputs.json",
+      "nativeFiles": 871,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-12T17:07:04.261089+00:00",
+      "pid": 95076,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 470.693768916,
+      "endedUTC": "2026-09-12T17:14:54.979791+00:00"
+    },
+    "primaryAttempts": 48,
+    "firstMenuCommits": 47,
+    "separateNullCursorRejection": 1,
+    "retainedMenuInputChains": 50,
+    "retainedLoadingPrefixCases": 12,
+    "startupLateControls": 6,
+    "firstMenuLateControls": 17,
+    "retainedMenuReturnLateControls": 9,
+    "newPackageMethods": 4,
+    "strictRelocatedAppResourcesTestPassed": true,
+    "frozenCandidate2Executed": false
+  },
+  "packageVerification": {
+    "path": "native/Sources/NTSDCore/Resources/OriginalStartup",
+    "files": 46,
+    "payloadFiles": 45,
+    "bytes": 29700372,
+    "payloadBytes": 29685082,
+    "manifest": {
+      "bytes": 15290,
+      "sha256": "f67aff089a95f230b4e7f5c381ac92b420a5541f7fea6b6a268986aa6b7ef177"
+    },
+    "exactNamesAndModes": true,
+    "directories": {
+      ".": "0755",
+      "bitmaps": "0755",
+      "data": "0755"
+    },
+    "entries": [
+      {
+        "path": "bitmaps/CS2.dib",
+        "bytes": 5326,
+        "sha256": "293eb23bedd7894b5ef609d38a719380f5fa7d293b4d0e9bb8f2fa5ffc9b7591",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/CS3.dib",
+        "bytes": 5362,
+        "sha256": "d02f304b8938c38b8dd73aa059d4adb7cc5ae717fb91fc8cc52889b0fc365d46",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/CS4.dib",
+        "bytes": 5382,
+        "sha256": "f709f93fa75d5f594f520efa867640de1bc7053c0efb44a39be287d875c112c2",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/CS5.dib",
+        "bytes": 5354,
+        "sha256": "525a338dfc2e937bb1616a71fadbabe3a24d5858db3bb6d81e74f00add84f77d",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/CS6.dib",
+        "bytes": 6410,
+        "sha256": "7d779d0ec1921bcdaef7d3bd72685fe09a65a38d2f97673fdbaeb28a41a33b7a",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/ENDING.dib",
+        "bytes": 695560,
+        "sha256": "402ad51a04bd92753d6403e17d10343bff80a13f279a792d0f47a0964013d1de",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/FRAME.dib",
+        "bytes": 32224,
+        "sha256": "61d6e9f33ba01fe38a82791657444fde9c2662e56f4a6a1b0965d522260e58aa",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/LF2_CURSOR.dib",
+        "bytes": 226,
+        "sha256": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK1.dib",
+        "bytes": 1328156,
+        "sha256": "fc02a0d1d7f5b19b15536959bedbdf566fccf6ef34e42b25b08d7220bd9242f8",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK10.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK11.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK12.dib",
+        "bytes": 1328156,
+        "sha256": "46b2ab4f6fc996da0d4731434ea0a65849821999d83a8a081a944b4420a8cae7",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK13.dib",
+        "bytes": 1328156,
+        "sha256": "32121d81d7d2967ee2b405b77c9ee44ccf1bd34d1730ce567aa03e384dbd7586",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK2.dib",
+        "bytes": 1328156,
+        "sha256": "37b0787367994e0fa77593b06d16f2efe80abb1d392a0bbb10c2010ac8ded119",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK3.dib",
+        "bytes": 1328156,
+        "sha256": "37b0787367994e0fa77593b06d16f2efe80abb1d392a0bbb10c2010ac8ded119",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK4.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK5.dib",
+        "bytes": 1328156,
+        "sha256": "46b2ab4f6fc996da0d4731434ea0a65849821999d83a8a081a944b4420a8cae7",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK6.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK7.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK8.dib",
+        "bytes": 1328156,
+        "sha256": "32121d81d7d2967ee2b405b77c9ee44ccf1bd34d1730ce567aa03e384dbd7586",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_BACK9.dib",
+        "bytes": 1328156,
+        "sha256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP.dib",
+        "bytes": 1192040,
+        "sha256": "84eb0f1ef805abb37c530c820933ad3e812e9f892e15cf8f9c23a12326e4ec8d",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP2.dib",
+        "bytes": 937768,
+        "sha256": "5b3f75255cab8a1c2fcbdc123aabeb5f2d97c4fa5dec25cf2af0eb7b4e18b8b8",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP3.dib",
+        "bytes": 1430440,
+        "sha256": "6771e910d48731b6ad6e6590e80eba55c4dfefe09f2acf6a3b38398f1d9d9e6f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP4.dib",
+        "bytes": 1430440,
+        "sha256": "9390981dd824514dfa57a7bbda6f89271fd7d5b6e5d91c545ef20045b8f3bb10",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP5.dib",
+        "bytes": 1430440,
+        "sha256": "7b75397bd44ce754c93351d91e7c47540ad5c2b48c694b327276f3341b278aca",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP6.dib",
+        "bytes": 1907240,
+        "sha256": "3dff21032f258c8824a217ed98b212883dd927427d3550b254dcd219fc6e99e9",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_CLIP7.dib",
+        "bytes": 1155640,
+        "sha256": "46a6098867e45c220efd4753d4cb39f2ba3a527e4e52e21f9b920f66f81eedab",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/MENU_WAIT.dib",
+        "bytes": 1311240,
+        "sha256": "daff20e1f4e584762582607430aa093439e020711674d9558f6896a0c124b7f7",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/SLOGAN.dib",
+        "bytes": 34362,
+        "sha256": "75a1333b34af89e74916269a3e59fed97fda40ed88daeab91c2a21413a32d134",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS0.dib",
+        "bytes": 22110,
+        "sha256": "a53c2e39d01b588018291a0e1e91a2427414a46202f71250a38c51be3ac612e7",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS1.dib",
+        "bytes": 22566,
+        "sha256": "3ad7b5399e49a43af7fb34cf47218ac858a94b61dc8658dc68ce8ac5fe15b36a",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS2.dib",
+        "bytes": 22570,
+        "sha256": "3e3afad77549ecc140a5a553d5864beea8e37402d33bfe78145f223437595238",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS3.dib",
+        "bytes": 22570,
+        "sha256": "28bb0e7d7f4d4551be7d8a33e1f27423c5280649c3977c1d7797465ca2e81c21",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS4.dib",
+        "bytes": 22358,
+        "sha256": "bd5851b4d2abe828af0866ccdb57734c1841b71c5c68e196d495ac3ffb30120e",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "bitmaps/WORDS5.dib",
+        "bytes": 22358,
+        "sha256": "b05708b5c44d8fe0dcecdb19021c2d8a17c65cf591036a67f1297775f4f59869",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/adinfo.txt",
+        "bytes": 15,
+        "sha256": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/control.txt",
+        "bytes": 179,
+        "sha256": "cc7f84872d9b95fe64c1c95cc7895b3e2c0a52a3ae0f7f7970f0b3c56b7037c0",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/m_cancel.wav",
+        "bytes": 18834,
+        "sha256": "3e2d8c8e63463821e83983f7ea1fea19d499c78f7f0567c3d4df01542aaa641c",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/m_end.wav",
+        "bytes": 144510,
+        "sha256": "5f66b7c622812319a26f9c4fb5afaf671bed70e9b955734a35f8dbd452df0794",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/m_join.wav",
+        "bytes": 36138,
+        "sha256": "477508bc6b675e5e9a87a9939ddd570f29912b998fe668a1cbda240df0781c47",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/m_ok.wav",
+        "bytes": 19450,
+        "sha256": "44b1698e70871e1cce2821eda9215e0bfd68b89dd08868cc2d35fa7e59caaefc",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "data/m_pass.wav",
+        "bytes": 379766,
+        "sha256": "38d480100ae49990ef111cef4ff5485e37cfc087b136ba54e5473708612940fe",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "initial.bin",
+        "bytes": 50088,
+        "sha256": "be350b20d7a33c12b8d6e8f29577709c7c1de76a82e233f581eeabb114ffc22f",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "initial.mask",
+        "bytes": 50088,
+        "sha256": "29bbc06e1493e8bd00588f66e097ba7c04f2b97c514009461b614b00629f26f8",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 15290,
+        "sha256": "f67aff089a95f230b4e7f5c381ac92b420a5541f7fea6b6a268986aa6b7ef177",
+        "mode": "0644",
+        "regular": true,
+        "exactBytesEqualIndependentExpected": true
+      }
+    ],
+    "DIBFiles": 36,
+    "wholeOriginalFiles": 7,
+    "initialStateAndMaskFiles": 2,
+    "allProvenanceEqualInventory": true
+  },
+  "fixturePreservation": {
+    "files": 370,
+    "bytes": 4011376402,
+    "exactNames": true,
+    "allRegular": true,
+    "allBytesAndSHA256EqualInitialManifest": true
+  },
+  "artifactVerification": {
+    "currentNativeFiles": 871,
+    "fixtures": 370,
+    "allPlanPins": 91,
+    "archives": {
+      "native-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-startup-inputs-native-20260912/native-candidate3.tar",
+        "members": 871,
+        "payloadBytes": 4045280185,
+        "tar": {
+          "bytes": 4046848000,
+          "sha256": "af03f8b6df0520a382135165a959d57055e6ac9cc394c6051fef9ef8f9136350"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T17:19:00.357215+00:00",
+        "protectedFixtures": 370,
+        "currentNativeFiles": 871,
+        "sourceExecuted": false
+      },
+      "evidence-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-startup-inputs-native-20260912/startup-inputs-evidence3.tar",
+        "members": 312,
+        "payloadBytes": 607206935,
+        "tar": {
+          "bytes": 607784960,
+          "sha256": "fbf4ced992188d621f3565e707a3e90552e323d6982703aeabe9e46d13f46596"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T17:19:01.924593+00:00",
+        "allPlanPins": 91,
+        "supersededBaseInputsPreserved": [
+          "native/Package.swift",
+          "tools/package_assets.py"
+        ],
+        "native1FailurePreserved": true,
+        "candidate2FrozenButUnexecuted": true,
+        "sourceExecuted": false
+      }
+    },
+    "prospectiveGitVerification": "separate post-publication precommit-verification.json; required before commit"
+  },
+  "independentReview": {
+    "inputAndPackageReviewer": "/root/catalog_test_completion",
+    "candidateReviewer": "/root/catalog_pending_review",
+    "reports": [
+      "input-inventory1.json",
+      "package-verification1.json",
+      "review3-candidate3.json",
+      "readiness4.json"
+    ],
+    "publicationReview": "review5-publication.json required before commit; separate post-archive record"
+  },
+  "preservedDiagnostics": {
+    "native1": {
+      "exitCode": 1,
+      "buildSeconds": 308.06,
+      "testSeconds": 151.3,
+      "methods": 28,
+      "failures": 1,
+      "unexpected": 1,
+      "cause": "Foundation /var vs /private/var URL spelling broke exact relative member names in relocated snapshot test",
+      "correction": "Normalize both root and enumerated URLs; retain exact member set and symlink rejection; original/expected/package unchanged"
+    },
+    "candidate2": "Frozen review/bundle corrections before Native1 final failure inspection; never executed; retained unchanged",
+    "pathDiagnostic1": "Intermediate diagnostic did not reconstruct the original URL argument; retained",
+    "pathDiagnostic2": "Exact original /var argument enumerates /private/var URLs; both normalized sets equal all46 manifest members",
+    "packageVerifier": "First new Python verifier SyntaxError retained; corrected read-only verifier altered no source/package bytes"
+  },
+  "limits": [
+    "AppKit queue/clock/raster/audio/effect delivery",
+    "earlier PE/CRT/NLS and private fullscreen/capabilities backing",
+    "workers/reentrancy/unsupported dispatcher",
+    "full own loading/catalog return",
+    "War43a860/full match/all game/Windows/cleanMac",
+    "three safety incidents",
+    "general CRT text mode/arbitrary host paths/read errors/user-file persistence",
+    "full asset coverage beyond finite startup inputs",
+    "Pixels/RLE decoding and actual surface/window delivery",
+    "Successful GetObject/description with deliberately suppressed writes outside selected contract",
+    "18 additional LoadingPrefix common-sound names remain separate retained regression inputs",
+    "Normal nested original-entry has no panel bitmap child; no new panel bitmap/device acceptance"
+  ],
+  "artifacts": {
+    "build/research/application-startup-inputs-native-20260912/plan.json": {
+      "bytes": 33231,
+      "sha256": "b66901f8297ace17a69db0790b0922675da75d3be545ae41c6e5c46a820464f3"
+    },
+    "build/research/application-startup-inputs-native-20260912/plan-amendment1.json": {
+      "bytes": 542,
+      "sha256": "e09fa08a87594044eadb5c350274dfa7d4583fb4fd3d55550d1bdfb9ca845a9e"
+    },
+    "build/research/application-startup-inputs-native-20260912/initial-native.json": {
+      "bytes": 146317,
+      "sha256": "3e70ec596c5c5648a7efbb876a7fe3506f835adcef0c106106587153e9390e43"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate1-inputs.json": {
+      "bytes": 155288,
+      "sha256": "9e366a162757a3d2211f071e98d05ab5a06fe1e28b5b808c012a0ca5430b159e"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate2-inputs.json": {
+      "bytes": 155288,
+      "sha256": "e865230c9505d8842676ed3e5bf135d327527c7ecae24a334cca27ced01603fd"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate3-inputs.json": {
+      "bytes": 155288,
+      "sha256": "d7ce76f99e9435ac95734612c8760fc570ade7f6859db8c6cff80674a00e8080"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate2-amendment.json": {
+      "bytes": 724,
+      "sha256": "2f1d4928b9c1d335f7e60f6b6538541006eeac8f7dc8429b98554e0d615be6df"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate2-bundle-correction.json": {
+      "bytes": 530,
+      "sha256": "6601c3824d6716464bee44e694b2b3f22c11ecd09acbb024c6de2de524944697"
+    },
+    "build/research/application-startup-inputs-native-20260912/candidate3-amendment.json": {
+      "bytes": 1404,
+      "sha256": "a20f23c6fd2828c9effdb06dd170305f06a4e330961ff4fae0798e8982fb1e4a"
+    },
+    "build/research/application-startup-inputs-native-20260912/native1.job.json": {
+      "bytes": 1422,
+      "sha256": "b8233937e6f5533b58930fe448c7e6ec00be5bdd8184c9645aab2d15a24d2471"
+    },
+    "build/research/application-startup-inputs-native-20260912/native1.log": {
+      "bytes": 33440,
+      "sha256": "0acb8a2e38a629d4bd29011c84f6b6ef7a4b64bf23aa47a57cd44056a3518a12"
+    },
+    "build/research/application-startup-inputs-native-20260912/native3.job.json": {
+      "bytes": 1422,
+      "sha256": "574b73f312ba685905acf266febcf89f050a7021863edb5aeed885dd81253f4d"
+    },
+    "build/research/application-startup-inputs-native-20260912/native3.log": {
+      "bytes": 32879,
+      "sha256": "3b9dcbb27b55867c9ae35c77bd42db234e7f7af6d63f593e40dd18cb6fc0c662"
+    },
+    "build/research/application-startup-inputs-native-20260912/input-inventory1.json": {
+      "bytes": 44218,
+      "sha256": "410ea9f3b7577af23de55ae8e511d71f6677e080a05144376a42f0b4b466a720"
+    },
+    "build/research/application-startup-inputs-native-20260912/package-verification1.json": {
+      "bytes": 20274,
+      "sha256": "27052a35b17200cd11f158977167f42bd1dab9c83c3067c7d7073b36f68025be"
+    },
+    "build/research/application-startup-inputs-native-20260912/bundle-placement-verification1.json": {
+      "bytes": 7420,
+      "sha256": "d5eb236985cde0831c06be71f45a67f928ddbd753b4840f2a55cdfb70c0d64ce"
+    },
+    "build/research/application-startup-inputs-native-20260912/review1-design.json": {
+      "bytes": 19994,
+      "sha256": "121a235a01eff9286b43e7e561b0ecf66ef89c1671f5b3f4db6a20fc1ffa520e"
+    },
+    "build/research/application-startup-inputs-native-20260912/review2-candidate1.json": {
+      "bytes": 14432,
+      "sha256": "6481430afb947181b60f746160d617e0bbbc87c68eba9d963d0739354ec5e75e"
+    },
+    "build/research/application-startup-inputs-native-20260912/review3-candidate3.json": {
+      "bytes": 11426,
+      "sha256": "a885a5c7c606971390dfc2bef7b337a5ecfb69cac528876ef09fd2443c5e1e38"
+    },
+    "build/research/application-startup-inputs-native-20260912/readiness4.json": {
+      "bytes": 40953,
+      "sha256": "ea1ce14e5c88cbddb7b5f8f1b021e5c3af46d699adf64b1d722fa761d232eddd"
+    },
+    "build/research/application-startup-inputs-native-20260912/package-path-diagnostic.log": {
+      "bytes": 727,
+      "sha256": "4bb1096432d769f6d5b608ff47dc94c98f17f987b3590de9fd6e7c9c56a32fed"
+    },
+    "build/research/application-startup-inputs-native-20260912/package-path-diagnostic2.log": {
+      "bytes": 682,
+      "sha256": "5a34e3ef54bd8221d1c8ba1982f420620ea17cad1c28565629df5f2aa785ed87"
+    },
+    "build/research/application-startup-inputs-native-20260912/evidence-members.json": {
+      "bytes": 54897,
+      "sha256": "3d6371a68a8bde08a014d7e46a61792afa8b30f8191f1bb75aab23aeb1fb848c"
+    },
+    "build/research/application-startup-inputs-native-20260912/native-archive-verification.json": {
+      "bytes": 485,
+      "sha256": "d1206ae12c7eb35e7415dc7b37e06fcc784cf592a3382fa597ccb1dca9c6c99c"
+    },
+    "build/research/application-startup-inputs-native-20260912/evidence-archive-verification.json": {
+      "bytes": 630,
+      "sha256": "b7ed8ab4a705c587dcb8d422d8a272e777695f3c03a294dc39b9d094381fd235"
+    },
+    "build/research/application-startup-inputs-native-20260912/archive-storage-verification.json": {
+      "bytes": 243,
+      "sha256": "a604282fbd120e72dfb6a20e304b5bee744078e89cc3e1fefe584edec7f0824a"
+    },
+    "build/research/application-startup-inputs-native-20260912/plan-amendment2-git-bytes.json": {
+      "bytes": 613,
+      "sha256": "7bd501cbe55efc7910e4de07a7e38d8888006dd2b04bf28d1eb2f6c3bd67382e"
+    },
+    "build/research/application-startup-inputs-native-20260912/git-resource-byte-policy.json": {
+      "bytes": 742,
+      "sha256": "ca9021171f7c07f4dd847b8f94219478275282ec3b4baf930a48b1c24b73ca58"
+    }
+  },
+  "sourceExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "sourceFaultMatchesClaimed": false,
+  "windowsOrDeviceVerified": false,
+  "appWindowVerified": false,
+  "fullGameComplete": false,
+  "safetyIncidentsRemainOpen": 3
+}

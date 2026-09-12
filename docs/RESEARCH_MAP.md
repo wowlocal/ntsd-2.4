@@ -159,10 +159,25 @@ rejection/rollback. Startup144 операции (7input/20own-memory/117platform
 [Приёмка](evidence/application-bootstrap.json). Это проверка declared inputs;
 file/package/AppKit/audio, полная загрузка/каталог/игра и три incidents открыты.
 
-Следующая конечная карточка по CURRENT_WORK — регулярный пакет объявленных
-startup inputs и неизменяемый Native file snapshot/input provider. Источники
-пакета и translated bytes требуют точного provenance; research JSON/expected/EXE
-не входят в runtime. AppKit/renderer/audio и полная игра остаются открытыми.
+Принят [регулярный пакет startup inputs](research/APPLICATION_STARTUP_INPUTS.md):
+46 файлов/29700372 bytes содержат PE initial record50088 с доказанными masks,
+adinfo/control, пять WAV и36 исходных DIB. Native владеет неизменяемым снимком,
+строит19 settings inputs из явных преобразований control и получает bitmap
+metadata из DIB, surface descriptions — из своего CreateSurface request.
+Все48 primary attempts,50 MenuInput chains и12 LoadingPrefix cases используют
+этого родителя; полные image/surface bindings сравниваются, сохраняются в Session
+и откатываются вместе с ним. 28 bundled release-методов прошли за173.944с,
+сборка295.28с. Проверены перенос в .app, отсутствие/порча пакета и независимость
+снимка от последующего удаления файлов. Native1 path-alias failure, неисполненный
+frozen candidate2 и исправленный candidate3 сохранены; expected не менялись.
+Все370 fixtures,871 Native-файл и оба архива проверены. [Приёмка](evidence/application-startup-inputs.json).
+Новое исполнение оригинала не требовалось. Это inputs/metadata, ещё не pixels,
+host graphics/audio, запуск приложения или полная игра; три incidents открыты.
+
+Следующая конечная карточка по CURRENT_WORK — декодирование36 packaged DIB
+в Native RGB pixels с явными masks и передачей через bitmap-input owner.
+Независимые pixel goldens и RLE command coverage — первый gate следующей
+карточки; metadata acceptance их не подменяет. AppKit/renderer/audio открыты.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

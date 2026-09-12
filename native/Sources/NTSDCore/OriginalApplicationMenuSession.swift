@@ -22,6 +22,7 @@ public struct OriginalApplicationMenuSession {
         public var random: OriginalCRTRandom
         public var screenBody: OriginalFrontScreenBody.StartupResult?
         public internal(set) var settings: OriginalSettingsLoading.StartupResult?
+        public internal(set) var bitmapInputs: OriginalApplicationBitmapInputs?
 
         /// Adopt the already constructed menu parent exactly once. Surface
         /// tokens come from its own CreateSurface responses, never snapshots.
@@ -255,6 +256,7 @@ public struct OriginalApplicationMenuSession {
                     var resources = owned.front, screen = owned.earlyScreen, library = owned.libraryText
                     var random = owned.random, memory = owned.memory, body = owned.screenBody
                     var settings = owned.settings
+                    var bitmapInputs = owned.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
                     var frontSurfaces: [UInt32:UInt32] = [:]
                     var frontAPIIndex = 0,backgroundAPIIndex = 0
                     // Drawing callbacks run while presentation borrows memory.
@@ -280,7 +282,11 @@ public struct OriginalApplicationMenuSession {
                                 let replies = at == .resources ? input.frontResponses : input.backgroundResponses
                                 let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
                                 guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
-                                let response = replies[index]
+                                let control = replies[index]
+                                let response: OriginalBitmapSurfaceLoading.Response
+                                if var bindings = bitmapInputs {
+                                    response = try bindings.response(q,control:control);bitmapInputs = bindings
+                                } else { response = control }
                                 if at == .resources { frontAPIIndex += 1 } else { backgroundAPIIndex += 1 }
                                 try bootstrapObserve(.bitmap(at,q,response))
                                 effects.append(.bitmap(q,response))
@@ -423,7 +429,7 @@ public struct OriginalApplicationMenuSession {
                     })
                     let resultRecord = try combined(g,world)
                     owned.full = resultRecord; owned.front = resources; owned.earlyScreen = screen
-                    owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings
+                    owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings;owned.bitmapInputs = bitmapInputs
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
                         throw Loading(pending:.init(state:owned,target:game.target,stagedEffects:effects))

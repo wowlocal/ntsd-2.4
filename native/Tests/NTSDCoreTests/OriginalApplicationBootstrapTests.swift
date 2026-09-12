@@ -32,6 +32,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         XCTAssertEqual(actual.state.random,previous.state.random)
         XCTAssertEqual(actual.state.screenBody,previous.state.screenBody)
         XCTAssertEqual(actual.state.settings,previous.state.settings)
+        XCTAssertEqual(actual.state.bitmapInputs,previous.state.bitmapInputs)
         XCTAssertEqual(actual.loop.message,previous.loop.message)
         XCTAssertEqual(actual.loop.counter,previous.loop.counter)
         XCTAssertEqual(actual.loop.timer.baseline,previous.loop.timer.baseline)
@@ -74,13 +75,13 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         let bi = try XCTUnwrap(br.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:rawBitmap) })
         let bc = br.c.cases[bi],parents = try XCTUnwrap(bc.parents),parent = parents.parent,lc = parents.loop
         let rawParent = try XCTUnwrap((br.rawCases[bi]["parents"] as? [String:Any])?["parent"] as? [String:Any])
-        let initialGlobals = try br.blob(parent.initialGlobals),outer = try br.blob(lc.initialOuter)
-        // The saved independent PE verifier establishes these initial regions.
-        // The trailing World storage is PE zero-fill, not a returned snapshot.
-        let bytes = initialGlobals+outer+[UInt8](repeating:0,count:0xc3a8-0xb440-0x854)
-        let initial = try OriginalStateRecord(bytes:bytes,defined:[Bool](repeating:true,count:bytes.count))
+        let package = try OriginalApplicationStartupInputsTests.shared.get()
+        let initial = package.initial,initialGlobals = Array(initial.bytes[..<0xb440])
+        // Saved initial bytes are comparison-only; Native owns package data.
+        XCTAssertEqual(initialGlobals,try br.blob(parent.initialGlobals))
+        XCTAssertEqual(Array(initial.bytes[0xb440..<0xb440+0x854]),try br.blob(lc.initialOuter))
         let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(parent.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
-        var platform = try Parent.Adapter(parent,rawParent,sources:sources,blob:br.blob,initial:initialGlobals)
+        var platform = try Parent.Adapter(parent,rawParent,sources:sources,blob:br.blob,initial:initialGlobals,startupInputs:package)
         let oldPlatform = platform
         var app = A()
         let startupBatch = try app.start(instance:0x400000,show:10,initial:initial,platform:&platform,
@@ -167,7 +168,9 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
             return .init(address:nextWrapper,backing:[UInt8](repeating:0xa5,count:0x1f50))
         }
         let backgroundToken: UInt32 = fc.spec.null == true ? 0 : nextWrapper
-        let input = A.MenuInputs(settings:.init(bytes:try sr.blob(sc.input),file:sc.spec.present == false ? 0 : 0x20001000,
+        let control = try OriginalApplicationStartupInputsTests.control(sc.spec.label,package)
+        XCTAssertEqual(control,try sr.blob(sc.input),"Declared settings overlay must reproduce saved input")
+        let input = A.MenuInputs(settings:.init(bytes:control,file:sc.spec.present == false ? 0 : 0x20001000,
             scratchAddress:sr.c.scratchAddress,closeResult:sc.spec.close ?? 0),
             prefix:.init(drawTarget:0,milliseconds:fc.spec.milliseconds ?? 123456900,threadHandle:fc.spec.thread ?? 0x50010000,
                 threadID:0xabcd,lastError:5,fillResult:fc.spec.fillResult ?? 0,drawResults:[fc.spec.drawResult ?? 0]),
@@ -175,7 +178,8 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
                 methodResult:bodyCase?.spec.methodResult ?? 0,drawResults:bodyCase?.spec.drawResults ?? [0],shellResult:bodyCase?.spec.shellResult ?? 0),
             frontAllocations:frontAllocations,
             backgroundAllocation:.init(address:backgroundToken,backing:backgroundToken == 0 ? [] : [UInt8](repeating:0xa5,count:0x1f50)),
-            frontResponses:bc.events.compactMap(\.response),backgroundResponses:fc.events.compactMap(\.response))
+            frontResponses:bc.events.compactMap(\.response).map { .init(result:$0.result,output:$0.output) },
+            backgroundResponses:fc.events.compactMap(\.response).map { .init(result:$0.result,output:$0.output) },bitmapResources:package.bitmaps)
         // Independent projection of the immutable source request streams. Core
         // events and Core classifiers are not used to construct expected effects.
         func request(_ q: OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Request {
@@ -242,6 +246,28 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         }
         func compareMenuEnd(_ loop: Session.Loop,_ owned: Session.State) throws {
             let a = try XCTUnwrap(menu)
+            let bindings = try XCTUnwrap(owned.bitmapInputs)
+            XCTAssertEqual(Set(bindings.images.keys),Set(try fc.images.keys.map { try XCTUnwrap(UInt32($0)) }))
+            XCTAssertEqual(Set(bindings.surfaces.keys),Set(try fc.surfaces.keys.map { try XCTUnwrap(UInt32($0)) }))
+            let rawImages = try XCTUnwrap(front.rawCases[fi]["images"] as? [String:[String:Any]])
+            for (key,source) in fc.images {
+                let actual = try XCTUnwrap(bindings.images[XCTUnwrap(UInt32(key))])
+                XCTAssertEqual(actual.deleted,source.deleted)
+                let asset = try XCTUnwrap(rawImages[key]?["asset"] as? [String:Any])
+                XCTAssertEqual(actual.bitmap.dib,try front.blob(XCTUnwrap(asset["raw"] as? String)))
+            }
+            var releases: [UInt32:[Int32]] = [:]
+            let operations = bc.events.compactMap { e in e.request.map { ($0,e.response) } } + fc.events.compactMap { e in e.request.map { ($0,e.response) } }
+            for (q,response) in operations where q.kind == "release" {
+                releases[try XCTUnwrap(q.words.first),default:[]].append(try XCTUnwrap(response).result)
+            }
+            for (key,source) in fc.surfaces {
+                let token = try XCTUnwrap(UInt32(key)),actual = try XCTUnwrap(bindings.surfaces[token])
+                XCTAssertEqual(actual.descriptor.bytes,source.description)
+                XCTAssertTrue(actual.descriptor.defined.allSatisfy { $0 })
+                XCTAssertEqual(actual.releaseResults,releases[token] ?? [])
+                XCTAssertEqual(!actual.releaseResults.isEmpty,source.released)
+            }
             XCTAssertEqual(a.index,c.events.count);XCTAssertEqual(a.mask,try r.blob(c.after.mask))
             XCTAssertEqual(a.shadow,try r.blob(c.after.globals));XCTAssertEqual(owned.full.bytes,a.shadow)
             XCTAssertEqual(loop.counter,c.after.counter);XCTAssertEqual(loop.timer.baseline,c.after.baseline)
@@ -444,10 +470,10 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         let br = try B.Resources(),bc = br.c.cases[61],parents = try XCTUnwrap(bc.parents),c = parents.parent
         let raw = try XCTUnwrap((br.rawCases[61]["parents"] as? [String:Any])?["parent"] as? [String:Any])
         let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(c.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
-        let bytes = try br.blob(c.initialGlobals)+br.blob(parents.loop.initialOuter)+[UInt8](repeating:0,count:0xc3a8-0xb440-0x854)
-        let initial = try OriginalStateRecord(bytes:bytes,defined:[Bool](repeating:true,count:bytes.count))
+        let package = try OriginalApplicationStartupInputsTests.shared.get(),initial = package.initial,bytes = initial.bytes
+        XCTAssertEqual(Array(bytes[..<0xb440]),try br.blob(c.initialGlobals))
         for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
-            var app = A(),p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(bytes[..<0xb440]),fail:phase)
+            var app = A(),p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(bytes[..<0xb440]),fail:phase,startupInputs:package)
             let original = p;var attempted: Parent.Adapter?,published: A.Started?
             do {
                 published = try app.start(instance:0x400000,show:10,initial:initial,platform:&p,store:{ $0.store($1,$2) },
@@ -462,6 +488,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
             XCTAssertEqual(p.waves,0);XCTAssertEqual(p.childIndex,-1);XCTAssertEqual(p.writes,0)
             XCTAssertEqual(p.shadow,Array(bytes[..<0xb440]));XCTAssertEqual(p.expected,p.shadow)
             XCTAssertEqual(p.mask,[UInt8](repeating:0,count:0xb440))
+            XCTAssertEqual(p.startupInputs,package);XCTAssertEqual(attempted?.startupInputs,package)
         }
     }
 }

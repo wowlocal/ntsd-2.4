@@ -16,3 +16,7 @@ for path in DEFAULT_SOURCE.rglob('*'):
     count += 1
 print(f'Packaged {count} original BMP/WAV resources.')
 shutil.copytree(ROOT / 'build/original/bitmaps', destination.parent / 'OriginalInterface', dirs_exist_ok=True)
+
+# The production startup input reader uses this same ordinary package in an app.
+from package_startup_inputs import package as package_startup_inputs
+print(package_startup_inputs(destination.parent / "OriginalStartup"))

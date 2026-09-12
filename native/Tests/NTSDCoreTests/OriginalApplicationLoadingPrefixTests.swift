@@ -69,6 +69,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
     }
     @discardableResult
     func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
+        let retainedBitmapInputs = try XCTUnwrap(own.bitmapInputs)
         let full = own.base.globals.bytes+own.outerAndWorldBytes
         XCTAssertTrue(full == (try r.blob(c.before.globals)));XCTAssertEqual(own.random.state,c.before.random)
         XCTAssertEqual(own.libraryText.retainedDC,c.before.retainedDC);XCTAssertEqual(target,0x31003000)
@@ -127,6 +128,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             }
             XCTAssertNil(result)
         }
+        XCTAssertEqual(own.bitmapInputs,retainedBitmapInputs)
         XCTAssertEqual(own.base.globals,prior)
         if fail == nil {
             XCTAssertEqual(a.index,c.events.count);XCTAssertEqual(a.mask,try r.blob(c.after.mask))
