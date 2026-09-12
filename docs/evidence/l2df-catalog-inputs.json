@@ -1,0 +1,75 @@
+{
+  "createdAtUTC": "2026-09-12T10:32:04.207384+00:00",
+  "status": "resource input bindings verified; Native catalog comparison not performed",
+  "mainReadOnlyRevision": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+  "resourceManifestSHA256": "49b323e944d0cef672eae2d7b45d36c759c73c30b060d5faa34422c0813a144a",
+  "sourceExecution": false,
+  "nativeCompared": false,
+  "fullCatalogLoaded": false,
+  "fullGameComplete": false,
+  "cases": [
+    {
+      "fixture": "original-loaded-catalog.json",
+      "rawFilesCompared": 156,
+      "bitmapInputsCompared": 669,
+      "rawBytesCompared": 5235806,
+      "missingBitmapInputs": 0
+    },
+    {
+      "fixture": "original-initial-loading-catalog.json",
+      "rawFilesCompared": 156,
+      "bitmapInputsCompared": 669,
+      "rawBytesCompared": 5235806,
+      "missingBitmapInputs": 0
+    }
+  ],
+  "overlap": "Both retained contexts request the same original files/images; counts are not unique content totals",
+  "comparison": "Exact156sourcefile byte arrays and669declared bitmap presence/hash/dimensions per fixture; case and separator mapping retains original request spelling",
+  "elapsedSeconds": 0.9658878750000001,
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/catalog-input-bindings-plan-01.json",
+      "bytes": 1806,
+      "sha256": "58ac6362d6f49f8c5cd84fbb0f07433031531d8fe8dcc14d41dd4a8eece46459"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/catalog-input-bindings-01.json",
+      "bytes": 606243,
+      "sha256": "f136fd775ef3cd685050fd73f3aa986afe14b4257fa77107ea3b2852395617cb"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/catalog-input-bindings-review-01.json",
+      "bytes": 970,
+      "sha256": "7db83c56957fea2aa381cdb3fc38fb1d66381789b95b137081a647b02a8bf8ee"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog.json",
+      "bytes": 4723835,
+      "sha256": "5fcd6e364a7761fcad4dc5af9792acf18e20b7bd9ff6ea89a66955c48a2af05e"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-catalog.json",
+      "bytes": 4794711,
+      "sha256": "e681421389a0199644bf3fea92f8258c9e6c531bfe3df8252cd02e389780d8bb"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/manifest.json",
+      "bytes": 364864,
+      "sha256": "49b323e944d0cef672eae2d7b45d36c759c73c30b060d5faa34422c0813a144a"
+    }
+  ],
+  "independentReview": {
+    "status": "PASS",
+    "reviewer": "/root/l2df_reference_review",
+    "uniqueResourceFilesRead": 825,
+    "uniqueResourceBytesRead": 633270828
+  },
+  "limitations": [
+    "Only raw resource input provenance, not Native catalog execution",
+    "No file-lifetime, allocator, progress-clock or game-state acceptance",
+    "Existing retained fixture and resource bytes unchanged",
+    "No original captures repeated"
+  ]
+}

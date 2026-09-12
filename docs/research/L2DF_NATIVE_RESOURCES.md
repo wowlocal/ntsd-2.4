@@ -78,4 +78,33 @@ Next: the owned session consumes the original control file and 23 unique DIB
 keys for 24 front bitmap wrappers, then continues settings. Each consumed input
 must be verified and retained by its Swift owner. The two natural retained
 settings trajectories compare actual session bytes, masks, events and rollback;
-their expected snapshots remain external to the runtime.
+their expected snapshots remain external to the runtime. That bounded consumer
+is now accepted in [the owned session](L2DF_LOADED_SESSION.md).
+
+## Input binding for the later catalog
+
+A separate read-only check binds this unchanged package to the raw inputs in
+`original-loaded-catalog.json` and `original-initial-loading-catalog.json`.
+It reads the retained compressed JSON/blobs and the exported files; no original
+or Native code executes. This prepares a file/bitmap provider for the later
+menu-to-catalog join and does not load or accept a new Native catalog.
+
+Each retained context has the same 156 raw file inputs (parent registry plus
+155 children), totaling 5,235,806 bytes, and 669 unique bitmap input paths.
+All raw file bytes match their source blobs; bitmap presence, source hashes and
+signed dimensions match. All requested images are present. These two overlapping
+input sets are not 312 distinct files or 1,338 distinct game images. Repeated
+bitmap constructors remain separate owners when the real catalog runs.
+
+Lookup translates Windows path separators and resolves a unique case-insensitive
+manifest name while retaining the request and original spelling. Embedded keys
+resolve by key/language, independently of numbered output paths. The manifest
+has no ambiguous case-insensitive file or embedded-key entries. Input hashes and
+complete mappings are retained in
+`resources-01/catalog-input-bindings-plan-01.json` and
+`resources-01/catalog-input-bindings-01.json`; the check took 0.966 seconds.
+Independent read-only review derived the requests again from both fixtures and
+verified the exact report set/order against all 825 distinct resource files;
+it passed. [Evidence](../evidence/l2df-catalog-inputs.json) pins the plan, mappings
+and review. No native game-state, allocator, file-lifetime or progress-clock
+acceptance follows.
