@@ -126,7 +126,8 @@ public struct OriginalFrameLoader {
     /// stream. The caller has consumed <frame>; no artificial section EOF here.
     mutating func consumeFrameBody(_ input: inout OriginalFrameScanner,
                                   allocate: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
-                                  onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in }) throws -> OriginalFrameRecord {
+                                  onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
+                                  onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in }) throws -> OriginalFrameRecord {
         guard let index = try input.integer(), (0..<400).contains(index) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Expected a frame index in 0...399")
         }
@@ -190,7 +191,7 @@ public struct OriginalFrameLoader {
                 try record.write(pointer, at: 0x170)
                 for (offset, byte) in bytes.enumerated() { try heap.write(byte, at: pointer, offset: offset) }
                 try record.write(Int32(-1), at: 0x174) // 41097b, before lookup/loading
-                _ = try updatedSounds.register(sound, assignIndex: { try record.write($0, at: 0x174) }, onNewSound: onNewSound)
+                _ = try updatedSounds.register(sound, assignIndex: { try record.write($0, at: 0x174) }, onNewSound: onNewSound, onCommit: onSoundCache)
             }
             // Original %s loop ignores unknown tokens; it does not strip comments.
         }
@@ -238,7 +239,8 @@ struct OriginalSoundRegistry {
     }
     mutating func register(_ path: String, previous: Int32 = -1, kind: OriginalSoundRegistration.Kind = .frame,
                            assignIndex: (Int32) throws -> Void = { _ in },
-                           onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in }) throws -> Int32 {
+                           onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
+                           onCommit: ([UInt8], Int) throws -> Void = { _, _ in }) throws -> Int32 {
         let incoming = path.unicodeScalars.map { UInt8($0.value) } + [0]
         guard incoming.count <= 256 else {
             throw OriginalLoaderError.outsideVerifiedDomain("Original sound scratch buffer")
@@ -262,8 +264,10 @@ struct OriginalSoundRegistry {
         try assignIndex(Int32(count))
         try onNewSound(.init(kind: kind, index: count, path: path, cacheBefore: bytes))
         bytes.replaceSubrange(start..<start+incoming.count, with: incoming)
-        defer { count += 1 }
-        return Int32(count)
+        let assigned = count
+        count += 1
+        try onCommit(bytes, count)
+        return Int32(assigned)
     }
 }
 
@@ -274,17 +278,24 @@ struct OriginalFrameScanner {
     let bytes: [UInt8]
     var position = 0
     private(set) var eof = false
-    init(_ text: String) throws {
+    private let observeRead: ((Int) throws -> Void)?
+    init(_ text: String, observeRead: ((Int) throws -> Void)? = nil) throws {
         guard text.unicodeScalars.allSatisfy({ $0.value <= 255 }) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Decoded DAT must contain Latin-1 bytes")
         }
         bytes = text.unicodeScalars.map { UInt8($0.value) }
+        self.observeRead = observeRead
     }
     private func whitespace(_ byte: UInt8) -> Bool { byte == 32 || (9...13).contains(byte) }
     mutating func skipSpace() { while position < bytes.count && whitespace(bytes[position]) { position += 1 } }
     var isAtEnd: Bool { bytes[position...].allSatisfy(whitespace) }
     mutating func token() throws -> String {
-        guard let result = optionalToken() else { throw OriginalLoaderError.outsideVerifiedDomain("Unexpected end of frame") }
+        guard let result = try observedToken() else { throw OriginalLoaderError.outsideVerifiedDomain("Unexpected end of frame") }
+        return result
+    }
+    mutating func observedToken() throws -> String? {
+        let result = optionalToken()
+        try observeRead?(position)
         return result
     }
     mutating func optionalToken() -> String? {
@@ -298,7 +309,7 @@ struct OriginalFrameScanner {
     mutating func integer() throws -> Int32? {
         skipSpace()
         // fscanf sets EOF even when no assignment can be made after whitespace.
-        guard position < bytes.count else { eof = true; return nil }
+        guard position < bytes.count else { eof = true; try observeRead?(position); return nil }
         var negative = false
         if bytes[position] == 43 || bytes[position] == 45 {
             negative = bytes[position] == 45; position += 1
@@ -310,6 +321,7 @@ struct OriginalFrameScanner {
             position += 1
         }
         if position == bytes.count { eof = true }
+        try observeRead?(position)
         guard position > start else { return nil }
         return Int32(bitPattern: negative ? 0 &- value : value)
     }
@@ -320,13 +332,14 @@ struct OriginalFrameScanner {
     mutating func binary64() throws -> Double? {
         skipSpace()
         let suffix = String(String.UnicodeScalarView(bytes[position...].map { UnicodeScalar($0) }))
-        guard let range = suffix.range(of: #"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"#, options: .regularExpression) else { return nil }
+        guard let range = suffix.range(of: #"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"#, options: .regularExpression) else { try observeRead?(position); return nil }
         let literal = String(suffix[range])
         guard let value = Double(literal), value.isFinite else {
             throw OriginalLoaderError.outsideVerifiedDomain("Non-finite decimal is outside the object-loader domain")
         }
         position += literal.utf8.count
         if position == bytes.count { eof = true }
+        try observeRead?(position)
         return value
     }
 }

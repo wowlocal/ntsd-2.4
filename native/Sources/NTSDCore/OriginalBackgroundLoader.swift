@@ -22,28 +22,34 @@ public struct OriginalBackgroundLoader {
     /// supplied catalog record. Existing bytes AND provenance survive sparse writes.
     /// State is committed only after a complete supported parse succeeds.
     public mutating func parse(decoded: String, backing: OriginalStateRecord, bitmapFill: UInt8 = 0xa5,
+                               constructBitmap: OriginalLoadedBitmap.Constructor? = nil,
+                               onRead: ((Int) throws -> Void)? = nil,
+                               onChecksum: (UInt32) throws -> Void = { _ in },
                                bitmapSource: (String) throws -> OriginalBitmapInput) throws -> OriginalStateRecord {
         var candidate = self
-        let result = try candidate.consume(decoded: decoded, backing: backing, bitmapFill: bitmapFill, source: bitmapSource)
+        let result = try candidate.consume(decoded: decoded, backing: backing, bitmapFill: bitmapFill, source: bitmapSource, constructBitmap: constructBitmap, onRead: onRead, onChecksum: onChecksum)
         self = candidate
         return result
     }
 
     private mutating func consume(decoded: String, backing: OriginalStateRecord, bitmapFill: UInt8,
-                                  source: (String) throws -> OriginalBitmapInput) throws -> OriginalStateRecord {
+                                  source: (String) throws -> OriginalBitmapInput,
+                                  constructBitmap: OriginalLoadedBitmap.Constructor?,
+                                  onRead: ((Int) throws -> Void)?, onChecksum: (UInt32) throws -> Void) throws -> OriginalStateRecord {
         guard backing.bytes.count == Self.recordSize else { throw Self.error("BG storage size") }
         guard !decoded.unicodeScalars.contains(where: { $0.value == 0 || $0.value == 0x1a }) else { throw Self.error("NUL/DOS EOF in decoded source") }
-        var input = try OriginalFrameScanner(decoded), record = backing
+        var input = try OriginalFrameScanner(decoded, observeRead: onRead), record = backing
         for offset in [0x1c, 0xc, 0x10] { try record.write(Int32(0), at: offset) }
         outerTokens = []
         var token: String?
         while !input.eof {
-            if let next = input.optionalToken() { token = try Self.bounded(next, limit: 100) }
+            if let next = try input.observedToken() { token = try Self.bounded(next, limit: 100) }
             guard let current = token else { throw Self.error("Uninitialized outer token") }
             outerTokens.append(current)
             for (index, scalar) in current.unicodeScalars.enumerated() {
                 checksum &+= UInt32(bitPattern: Int32(Int8(bitPattern: UInt8(scalar.value)))) &* UInt32(index)
             }
+            try onChecksum(checksum)
             if current == "name:" {
                 let name = try Self.bounded(input.token(), limit: 100)
                 let bytes = name.unicodeScalars.prefix(29).map { UInt8($0.value) == 95 ? UInt8(32) : UInt8($0.value) }
@@ -66,7 +72,7 @@ public struct OriginalBackgroundLoader {
                     try record.write(x, at: 0x14)
                     if let y = try input.integer() { try record.write(y, at: 0x18) }
                 }
-                let bitmap = try appendBitmap(path, fill: bitmapFill, source: source)
+                let bitmap = try appendBitmap(path, fill: bitmapFill, source: source, constructBitmap: constructBitmap)
                 try record.write(UInt32(bitmap + 1), at: 0x98c)
             }
             if current == "layer:" {
@@ -100,12 +106,13 @@ public struct OriginalBackgroundLoader {
     /// 40c030 creates every layer wrapper in file order, including repeated paths.
     /// Caller decides when to invoke this; parsing metadata does not load the layers.
     public mutating func loadLayers(in record: inout OriginalStateRecord, bitmapFill: UInt8 = 0xa5,
+                                    constructBitmap: OriginalLoadedBitmap.Constructor? = nil,
                                     bitmapSource: (String) throws -> OriginalBitmapInput) throws {
         var candidate = self, storage = record
         let count = try Self.layerCount(storage)
         for index in 0..<count {
             let path = try Self.readString(storage, at: 0x20 + index*30, limit: 30)
-            let bitmap = try candidate.appendBitmap(path, fill: bitmapFill, source: bitmapSource)
+            let bitmap = try candidate.appendBitmap(path, fill: bitmapFill, source: bitmapSource, constructBitmap: constructBitmap)
             try storage.write(UInt32(bitmap + 1), at: 0x914 + index*4)
         }
         self = candidate; record = storage
@@ -135,10 +142,16 @@ public struct OriginalBackgroundLoader {
         return released
     }
 
-    private mutating func appendBitmap(_ path: String, fill: UInt8, source: (String) throws -> OriginalBitmapInput) throws -> Int {
-        let input = try source(path)
-        guard input.path == path else { throw Self.error("Bitmap provider returned a different path") }
-        let bitmap = try OriginalLoadedBitmap.construct(input, optional: false, fill: fill)
+    private mutating func appendBitmap(_ path: String, fill: UInt8, source: (String) throws -> OriginalBitmapInput,
+                                       constructBitmap: OriginalLoadedBitmap.Constructor?) throws -> Int {
+        let bitmap: OriginalLoadedBitmap
+        if let constructBitmap {
+            bitmap = try .checkedConstruction(constructBitmap(path, false, Array(repeating: fill, count: 0x1f50)), path: path, optional: false)
+        } else {
+            let input = try source(path)
+            guard input.path == path else { throw Self.error("Bitmap provider returned a different path") }
+            bitmap = try .construct(input, optional: false, fill: fill)
+        }
         let index = bitmaps.count
         bitmaps.append(bitmap)
         return index

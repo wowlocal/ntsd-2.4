@@ -8,6 +8,7 @@ public struct OriginalRegisteredSoundLoading {
 
     public mutating func load(_ request: OriginalSoundRegistration, device: UInt32, outputBefore: UInt32,
                               platform: OriginalWavePlatform, fileSource: (String) throws -> [UInt8],
+                              outputStored: (UInt32) throws -> Void = { _ in },
                               onWave: (OriginalWaveEvent) throws -> Void = { _ in },
                               onVolume: ([UInt32]) throws -> Void = { _ in }) throws {
         // The parent skips the helper entirely when audio is disabled.
@@ -17,7 +18,7 @@ public struct OriginalRegisteredSoundLoading {
               buffers[request.index] == nil else { throw OriginalStateError.invalidStorage("Registered sound device/index binding") }
         let file = try platform.stream == 0 ? [] : fileSource(request.path)
         let result = try OriginalWaveLoader.load(path: request.path.unicodeScalars.map { UInt8($0.value) },
-            file: file, output: outputBefore, platform: platform, observe: onWave)
+            file: file, output: outputBefore, platform: platform, outputStored: outputStored, observe: onWave)
         guard result.exit == .returned, result.output != 0 else {
             // The EXE dereferences the resulting buffer even after an ordinary
             // false return. Do not silently advance the cache past that fault.

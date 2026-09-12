@@ -67,7 +67,8 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             try event(.init("write",[UInt32(address),UInt32(bytes.count),value]))
         }
     }
-    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,fail: String? = nil) throws {
+    @discardableResult
+    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
         let full = own.base.globals.bytes+own.outerAndWorldBytes
         XCTAssertTrue(full == (try r.blob(c.before.globals)));XCTAssertEqual(own.random.state,c.before.random)
         XCTAssertEqual(own.libraryText.retainedDC,c.before.retainedDC);XCTAssertEqual(target,0x31003000)
@@ -131,6 +132,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             XCTAssertEqual(a.index,c.events.count);XCTAssertEqual(a.mask,try r.blob(c.after.mask))
             XCTAssertEqual(result != nil,c.end == "catalogAllocation")
         }
+        return result
     }
     func run(_ indices: [Int],failures: [String?]) throws {
         let r = try Resources(),fr = try I.F.Resources(),body = try I.Body.Resources(fr),mr = try I.M.Resources(body,fr),ir = try I.Resources(mr),br = try B.Resources(),er = try B.Entry.Resources()

@@ -11,6 +11,7 @@ public enum OriginalLibLoadingProgress {
         draw: ([UInt32]) throws -> Void, fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         message: (String,[UInt8]) throws -> MessageResponse,
+        checkpoint: (OriginalStateRecord) throws -> Void = { _ in },
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Loading globals extent") }
         var state = globals, text = libraryText
@@ -18,7 +19,7 @@ public enum OriginalLibLoadingProgress {
         func signed(_ p: Int) throws -> Int32 { Int32(bitPattern: try word(p)) }
         func put(_ p: Int,_ value: UInt32) throws { try state.write(value,at: p-0x44d000) }
         func bits(_ n: Int32) -> UInt32 { UInt32(bitPattern: n) }
-        func emit(_ kind: String,_ args: [UInt32] = [],_ strings: [[UInt8]] = []) throws { try observe(.init(kind,args,strings)) }
+        func emit(_ kind: String,_ args: [UInt32] = [],_ strings: [[UInt8]] = []) throws { try checkpoint(state);try observe(.init(kind,args,strings)) }
         func now() throws -> UInt32 { let value = try time();try emit("timeGetTime",[value]);return value }
         func bitmap(_ p: Int,_ x: Int32,_ y: Int32,_ frame: Int32,_ key: UInt32 = 1) throws {
             let args = try [word(p),bits(x),bits(y),bits(frame),key,0,input.targetSurface]
@@ -71,7 +72,7 @@ public enum OriginalLibLoadingProgress {
                             try emit("fillCall",rectangle.map(bits)+[0xffffff])
                             let request = try OriginalSurfaceFilling.request(target: word(0x455608),x: rectangle[0],y: rectangle[1],
                                 width: rectangle[2],height: rectangle[3],color: 0xffffff,backing: fillBacking())
-                            var event = OriginalFrontScreenEvent("fill");event.fill = request;try observe(event);_ = try performFill(request)
+                            var event = OriginalFrontScreenEvent("fill");event.fill = request;try checkpoint(state);try observe(event);_ = try performFill(request)
                         }
                         if try word(0x457580) == 1 && word(0x4511b8) == 0 { try click(string(address)) }
                     }
@@ -87,9 +88,28 @@ public enum OriginalLibLoadingProgress {
         try put(0x4511b8,word(0x457580))
         try bitmap(0x451170,min(775,signed(0x4546f0)),min(535,signed(0x453cdc) &+ 2),-1)
         try emit("stage",[0x4028a0])
-        try OriginalMenuPresentation.overlayWithLibrary(globals: &state,libraryText: &text,input: input) { try emit($0.kind.rawValue,$0.arguments,$0.strings) }
+        // Overlay owns a separate candidate during its inout call. Its own
+        // writes update the observer view without reading borrowed storage.
+        var overlayState = state
+        try OriginalMenuPresentation.overlayWithLibrary(globals: &overlayState,libraryText: &text,input: input,store: { address,bytes in
+            for (i,byte) in bytes.enumerated() { try state.write(byte,at:address-0x44d000+i) }
+        }) { try emit($0.kind.rawValue,$0.arguments,$0.strings) }
+        state = overlayState
         try emit("stage",[0x43e940])
         try OriginalMenuPresentation.presentSurface(globals: state) { try emit($0.kind.rawValue,$0.arguments,$0.strings) }
+        try processMessage(message: message) { try checkpoint(state);try observe($0) }
+        globals = state;libraryText = text
+    }
+
+    /// Whole43d230, shared by loading-progress and the Object token countdown.
+    /// The caller stages any external message effects until its operation commits.
+    public static func processMessage(
+        message: (String,[UInt8]) throws -> MessageResponse,
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
+        func bits(_ n: Int32) -> UInt32 { UInt32(bitPattern: n) }
+        func emit(_ kind: String,_ args: [UInt32] = [],_ strings: [[UInt8]] = []) throws {
+            try observe(.init(kind,args,strings))
+        }
         //43d230 processes at most one message. GetMessage -1 is nonzero here.
         let peek = try message("PeekMessageA",[])
         try emit("PeekMessageA",[bits(peek.result),0,0,0,0],peek.result != 0 ? [peek.bytes] : [])
@@ -102,6 +122,5 @@ public enum OriginalLibLoadingProgress {
                 _ = try message("DispatchMessageA",get.bytes);try emit("DispatchMessageA",[],[get.bytes])
             }
         }
-        globals = state;libraryText = text
     }
 }

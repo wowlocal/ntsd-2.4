@@ -1,0 +1,631 @@
+{
+  "scope": "Complete the22remaining pending catalog/loading and library-transform files using immutable saved NTSD data. This is bounded Native compatibility acceptance, not full own catalog/application/game or resolution of earlier safety incidents.",
+  "verifiedUTC": "2026-09-12T06:50:59.640408+00:00",
+  "baseCommit": "fbfc3c079c97930a1fbec13fb875806e92272f9e",
+  "plan": {
+    "path": "build/research/pending-completion-20260912/plan.json",
+    "bytes": 69210,
+    "sha256": "166854e999b3c2cf77e09d7943d1ae4bc0ecfc64462cb9670d0a30d8abbf1a0a"
+  },
+  "environment": {
+    "observedUTC": "2026-09-12T06:48:19.370728+00:00",
+    "host": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.9.6",
+    "swift": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)\nTarget: arm64-apple-macosx26.0",
+    "volumeUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "volumeMount": "/Volumes/X5",
+    "internalFreeBytes": 9501560832,
+    "x5FreeBytes": 110546829312,
+    "requiredInternalReserveBytes": 6442450944,
+    "nativeRawOverrides": false,
+    "originalExecution": false
+  },
+  "status": {
+    "nativeCompared": true,
+    "returnedTransformCases": 1760,
+    "sourceFaultNativeMatches": 0,
+    "fullOwnCatalogReturned": false,
+    "fullLibraryLoopCompared": false,
+    "warErrorCorpusCompared": false,
+    "fullGameComplete": false,
+    "windowsOrDevicesVerified": false,
+    "originalExecuted": false,
+    "priorSafetyIncidentsResolved": false
+  },
+  "native": {
+    "jobs": [
+      {
+        "job": {
+          "path": "build/research/pending-completion-20260912/native1.job.json",
+          "bytes": 1434,
+          "sha256": "b3ba81e58fd135ef507e78e99e1925527fe8ad174be72b149a3843ac296ac29d"
+        },
+        "log": {
+          "path": "build/research/pending-completion-20260912/native1.log",
+          "bytes": 50759,
+          "sha256": "3c23b0921846667d6b9790e560e35fcbf36a6b69b9d090df5a8af263565e3ccf"
+        },
+        "inputPins": {
+          "path": "build/research/pending-completion-20260912/candidate1-inputs.json",
+          "bytes": 136628,
+          "sha256": "318f76d91bcea1d2551af91fc8fd28e65815fce4a5381c85a8065c672e1847cb"
+        },
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibTransformTests|OriginalPostDrawSlotPrefixTests|OriginalActorSchedulerTests|OriginalLoadedCatalogFilesTests|OriginalLoadingFilesTests|OriginalLoadedCatalogTests|OriginalObjectTests|OriginalFrameLoaderTests|OriginalCatalogTests|OriginalBackgroundTests|OriginalStageTests|OriginalCatalogSoundsTests|OriginalLibLoadingTests|OriginalApplicationLoadingPrefixTests|OriginalLibWarPreparationTests|OriginalLibWarPreparationMatrixTests"
+        ],
+        "status": "terminal",
+        "exitCode": 0,
+        "tests": 40,
+        "testSeconds": 288.07,
+        "buildSeconds": 328.9,
+        "elapsedSeconds": 619.233,
+        "testCases": [
+          {
+            "suite": "OriginalActorSchedulerTests",
+            "name": "testLateFrameFailureRollsBackEarlierSoundAndCounters",
+            "seconds": 0.002
+          },
+          {
+            "suite": "OriginalActorSchedulerTests",
+            "name": "testPublicSchedulerRollsBackWhenSecondSoundObserverFails",
+            "seconds": 0.0
+          },
+          {
+            "suite": "OriginalActorSchedulerTests",
+            "name": "testWholeSchedulerAndRealSoundAgainstOriginalInstructions",
+            "seconds": 2.653
+          },
+          {
+            "suite": "OriginalApplicationLoadingPrefixTests",
+            "name": "testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+            "seconds": 6.468
+          },
+          {
+            "suite": "OriginalApplicationLoadingPrefixTests",
+            "name": "testOwnLoadingCommonSoundsAndOrdinaryFailures",
+            "seconds": 10.087
+          },
+          {
+            "suite": "OriginalBackgroundTests",
+            "name": "testFailuresPreserveBackgroundSessionAndLiveLayerReferences",
+            "seconds": 0.0
+          },
+          {
+            "suite": "OriginalBackgroundTests",
+            "name": "testOriginalBackgroundParsingAndResourceLifecycle",
+            "seconds": 0.069
+          },
+          {
+            "suite": "OriginalCatalogSoundsTests",
+            "name": "testCompleteSourceCatalogWithEnabledWaveLoading",
+            "seconds": 6.732
+          },
+          {
+            "suite": "OriginalCatalogSoundsTests",
+            "name": "testRepeatedObjectsUseTheLiveOriginalSoundCache",
+            "seconds": 0.696
+          },
+          {
+            "suite": "OriginalCatalogTests",
+            "name": "testCatalogParentAgainstOriginalInstructions",
+            "seconds": 0.016
+          },
+          {
+            "suite": "OriginalCatalogTests",
+            "name": "testUnsupportedRegistryInputsCannotBecomeLoadedState",
+            "seconds": 0.0
+          },
+          {
+            "suite": "OriginalFrameLoaderTests",
+            "name": "testOriginalX86SnapshotsAfterEveryOccurrence",
+            "seconds": 0.004
+          },
+          {
+            "suite": "OriginalFrameLoaderTests",
+            "name": "testUnsupportedInputDoesNotCommitPartialState",
+            "seconds": 0.0
+          },
+          {
+            "suite": "OriginalLibLoadingTests",
+            "name": "testWholeLoadingCallerAndHelpers",
+            "seconds": 0.15
+          },
+          {
+            "suite": "OriginalLibTransformTests",
+            "name": "testMissingProvenanceInvalidExtentAndLateObserverRollback",
+            "seconds": 0.054
+          },
+          {
+            "suite": "OriginalLibTransformTests",
+            "name": "testRecordedSourceFaultsAreRejectedWithWholeRollback",
+            "seconds": 0.004
+          },
+          {
+            "suite": "OriginalLibTransformTests",
+            "name": "testRetainedAliasesAndActivityBoundaries",
+            "seconds": 0.068
+          },
+          {
+            "suite": "OriginalLibTransformTests",
+            "name": "testWholeSlotPrefixAgainstOriginalInstructions",
+            "seconds": 1.754
+          },
+          {
+            "suite": "OriginalLibWarPreparationTests",
+            "name": "testWholeBoundPreparationAndLateRollback",
+            "seconds": 20.863
+          },
+          {
+            "suite": "OriginalLibWarPreparationTests",
+            "name": "testWholeMatrixAndRetainedReleaseRollback",
+            "seconds": 196.904
+          },
+          {
+            "suite": "OriginalLoadedCatalogFilesTests",
+            "name": "testFinalStageCleanupFailureDoesNotPublishCatalogOrFiles",
+            "seconds": 0.49
+          },
+          {
+            "suite": "OriginalLoadedCatalogFilesTests",
+            "name": "testInterleavedDuplicateSourcesThroughOwnedFiles",
+            "seconds": 0.7
+          },
+          {
+            "suite": "OriginalLoadedCatalogFilesTests",
+            "name": "testRepeatedWeaponPathAllocationsAndLateRollback",
+            "seconds": 0.048
+          },
+          {
+            "suite": "OriginalLoadedCatalogFilesTests",
+            "name": "testWholeRawCatalogThroughOwnedFiles",
+            "seconds": 7.304
+          },
+          {
+            "suite": "OriginalLoadedCatalogFilesTests",
+            "name": "testWholeTextCatalogThroughOwnedFiles",
+            "seconds": 7.414
+          },
+          {
+            "suite": "OriginalLoadedCatalogTests",
+            "name": "testCompleteOriginalCatalogWithRawFilesAndZeroBacking",
+            "seconds": 5.727
+          },
+          {
+            "suite": "OriginalLoadedCatalogTests",
+            "name": "testCompleteOriginalCatalogWithTextFiles",
+            "seconds": 5.76
+          },
+          {
+            "suite": "OriginalLoadedCatalogTests",
+            "name": "testInterleavedChildrenAndDuplicateSourceIDs",
+            "seconds": 0.662
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testObjectFileLifecycleAndCleanupRollback",
+            "seconds": 0.145
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testObjectFileTransactionDropsDecodeOnLateCleanup",
+            "seconds": 0.136
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testWholeFirstDATFileRequestsAndLateRollback",
+            "seconds": 0.114
+          },
+          {
+            "suite": "OriginalObjectTests",
+            "name": "testAllSourceObjectsAndRawFrameStorage",
+            "seconds": 8.511
+          },
+          {
+            "suite": "OriginalObjectTests",
+            "name": "testCompleteObjectStreamsAgainstOriginalInstructions",
+            "seconds": 0.594
+          },
+          {
+            "suite": "OriginalObjectTests",
+            "name": "testFailedObjectDoesNotCommitSharedLoadingState",
+            "seconds": 0.0
+          },
+          {
+            "suite": "OriginalObjectTests",
+            "name": "testObjectStreamsWithMicrosoftScanf",
+            "seconds": 0.384
+          },
+          {
+            "suite": "OriginalPostDrawSlotPrefixTests",
+            "name": "testLateParticleFailureRollsBackAliasedParentPoolGlobalsAndRetainedIndex",
+            "seconds": 0.001
+          },
+          {
+            "suite": "OriginalPostDrawSlotPrefixTests",
+            "name": "testMissingRetainedIndexIsRequiredOnlyWhenOriginalDereferencesIt",
+            "seconds": 0.001
+          },
+          {
+            "suite": "OriginalPostDrawSlotPrefixTests",
+            "name": "testWholeSlotPrefixAgainstOriginalInstructions",
+            "seconds": 0.719
+          },
+          {
+            "suite": "OriginalStageTests",
+            "name": "testUnsupportedStageDoesNotCommitEarlierParsedStages",
+            "seconds": 0.005
+          },
+          {
+            "suite": "OriginalStageTests",
+            "name": "testWholeStageTableAgainstOriginalInstructions",
+            "seconds": 2.831
+          }
+        ]
+      },
+      {
+        "job": {
+          "path": "build/research/pending-completion-20260912/native2.job.json",
+          "bytes": 1275,
+          "sha256": "8c15e3122c3a06b14cf8f0462fdb158c8fc53e57b59806521fbe025e239733bc"
+        },
+        "log": {
+          "path": "build/research/pending-completion-20260912/native2.log",
+          "bytes": 6660,
+          "sha256": "5a4455f36b742cf231cbe4bec50f3ae4e05ef89949018c5c63955282899e99f9"
+        },
+        "inputPins": {
+          "path": "build/research/pending-completion-20260912/candidate2-inputs.json",
+          "bytes": 136821,
+          "sha256": "2bbf7a86da144f6ff13ce78466a2fba239a7cbd1f1d52ffb9d42bce7eb9d4a30"
+        },
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLoadingFilesTests"
+        ],
+        "status": "terminal",
+        "exitCode": 0,
+        "tests": 4,
+        "testSeconds": 0.549,
+        "buildSeconds": 142.49,
+        "elapsedSeconds": 144.42817804199998,
+        "testCases": [
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testDeclaredNegativeClosesRetainObjectFileBytesAndOrder",
+            "seconds": 0.154
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testObjectFileLifecycleAndCleanupRollback",
+            "seconds": 0.143
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testObjectFileTransactionDropsDecodeOnLateCleanup",
+            "seconds": 0.137
+          },
+          {
+            "suite": "OriginalLoadingFilesTests",
+            "name": "testWholeFirstDATFileRequestsAndLateRollback",
+            "seconds": 0.115
+          }
+        ]
+      }
+    ],
+    "testExecutions": 44,
+    "uniqueTests": 41,
+    "failures": 0,
+    "packagedWithoutRawOverrides": true,
+    "composition": "native1 compares all pending Core and12new tests plus retained regressions. Only the new LoadingFilesTests file and added negative-close fixture differ in native2; all4file tests pass there. No Core/reference/other test code changed between runs.",
+    "linkedBinary": "native-candidate2 archive contains the source package; release NTSDNative binary remains in task swift/arm64-apple-macosx/release/NTSDNative. Linking is not window/device verification."
+  },
+  "transform": {
+    "corpora": {
+      "lib-transforms": {
+        "source": "/Users/michael/Developer/ntsd-2.4/build/original/lib-transforms.json",
+        "rawBytes": 1622913,
+        "rawSHA256": "afbba6e63fcc3b94ba8453e332ace5659d0b0c50e6311eca0308a1cc35f19dd6",
+        "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-lib-transforms.json",
+        "packedBytes": 79319,
+        "packedSHA256": "2bab14fdb51c97b884e443177319e569b4c78dee4a91fe23a67c2219f4e6ac7d",
+        "returnedCases": 1688,
+        "events": 2827,
+        "recordedExtendedWrites": 371,
+        "instructionStarts": 744,
+        "sourceFaults": 0,
+        "groups": {
+          "activity": 16,
+          "transform": 180,
+          "transform-chain": 1,
+          "duplicate-id": 1,
+          "hp": 280,
+          "mp-gates": 126,
+          "mp-amount": 165,
+          "particle-gate": 10,
+          "particles": 108,
+          "retained-index": 4,
+          "scheduler-after-transform": 6,
+          "library-transform": 780,
+          "library-duplicate": 6,
+          "library-after-9995": 1,
+          "library-retained-frame": 4
+        }
+      },
+      "lib-transform-boundaries": {
+        "source": "/Users/michael/Developer/ntsd-2.4/build/original/lib-transform-boundaries.json",
+        "rawBytes": 107457,
+        "rawSHA256": "cbfd623e3a64e0b6ac96ec7c71796e81b746bb6b316b984a7ea7282708d3427d",
+        "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-lib-transform-boundaries.json",
+        "packedBytes": 12854,
+        "packedSHA256": "df3e1a2db759551e55cba96c1573ac9373b0f62232e84483f7e02e079ef400c3",
+        "returnedCases": 72,
+        "events": 653,
+        "recordedExtendedWrites": 68,
+        "instructionStarts": 568,
+        "sourceFaults": 4,
+        "groups": {
+          "library-alias": 60,
+          "library-activity": 12
+        }
+      }
+    },
+    "retainedPristineCases": 897,
+    "pristineComparison": "Decoded cases field-for-field equal after removing only new extendedWrites and tailSHA256; both full new raw JSON corpora separately byte-roundtrip.",
+    "nativeObservations": "Whole normalized World/400Actor bytes/masks,globals,retained index,terminal boundary,ordered events,tail bytes/masks; no per-store Native trace or Swift instruction comparison.",
+    "orderedEvents": 3480,
+    "recordedExtendedWrites": 439,
+    "separateSourceFaultRejections": 4,
+    "additionalRollbackTrials": 5,
+    "missCountRechecksWithoutActorTokens": 3,
+    "sourceEnvironment": "Pinned EXE/bundled DLL, controlled Unicorn x87CW027f, declared500hexstride pool/420hexActor and explicit externalbacking; not Windows heap behavior.",
+    "boundaryProducerExitCode": "Not recovered; published terminal corpus and four fault records retained."
+  },
+  "catalog": {
+    "fixtures": [
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files.json",
+        "bytes": 13427294,
+        "sha256": "14aab2f9653c3c6a4cff550343ef5a3721899acdaf980d017672afdb4d135872",
+        "unpackedBytes": 95289959,
+        "unpackedSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+        "source": "build/original/loaded-catalog.json",
+        "scope": "Complete retained raw JSON, unchanged bytes including scans and all events"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files-raw-zero.json",
+        "bytes": 13423575,
+        "sha256": "714926a720803857b07489ed83609cb30afe1ffc3369cb8821ec909eed1643b4",
+        "unpackedBytes": 95252389,
+        "unpackedSHA256": "7c9c839ea3cea8733ddb4c4e8ec9218ee4b982dc1ca8df52632d381efa40dd40",
+        "source": "build/original/loaded-catalog-raw-zero.json",
+        "scope": "Complete retained raw JSON, unchanged bytes including scans and all events"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files-interleaved.json",
+        "bytes": 698137,
+        "sha256": "bf4b4011c73996ade2b6156eed24e2b6ac47c45fe4c57e554b2231b32811de8e",
+        "unpackedBytes": 5383412,
+        "unpackedSHA256": "57d71e09189e52254d03b78d0c2f66cdbc1011acadb0e389c88968a30ed8419c",
+        "source": "build/original/loaded-catalog-interleaved.json",
+        "scope": "Complete retained raw JSON, unchanged bytes including scans and all events"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-weapon-control.json",
+        "bytes": 27424,
+        "sha256": "0f3b2affd25e5619de4f6dca37d88c00630cae3b90ea2cb7f9ec67905d0856e1",
+        "unpackedBytes": 3400976,
+        "unpackedSHA256": "a55aa30fc50fafc885957c8682fb646820f12f4bf80db6cf493349917a4979de",
+        "source": "build/original/objects-probe.json",
+        "scope": "Complete retained raw JSON, unchanged bytes including scans and all events"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-first-object.json",
+        "bytes": 311031,
+        "sha256": "deb4f53911e692e0b9ae36d3d73ddf9bc51e20f01ee04c56d0cde94c0fa8d135",
+        "unpackedBytes": 698562,
+        "unpackedSHA256": "7f7873e9ae3a797e445e8030d475b72cd9b278931bb9688b225efe2732f8fbd9",
+        "source": "build/research/application-catalog-probe8-nominal-object.json",
+        "scope": "Declared file-only projection; source raw remains archived"
+      },
+      {
+        "path": "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-negative-close.json",
+        "bytes": 311258,
+        "sha256": "d078be39c92077ae3f56bc02960cae437834b8424a6e5e5fa9efe7af85b5323c",
+        "unpackedBytes": 699375,
+        "unpackedSHA256": "c53022ae08b279d4bea58e5cae1fb1c1dd696795f6e195f31d8751315ead9858",
+        "source": "build/research/application-catalog-file-close-negative1.json",
+        "scope": "Declared file-only projection; source raw remains archived"
+      }
+    ],
+    "sourcePins": [
+      {
+        "path": "build/original/loaded-catalog.json",
+        "bytes": 95289959,
+        "sha256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+      },
+      {
+        "path": "build/original/loaded-catalog-raw-zero.json",
+        "bytes": 95252389,
+        "sha256": "7c9c839ea3cea8733ddb4c4e8ec9218ee4b982dc1ca8df52632d381efa40dd40"
+      },
+      {
+        "path": "build/original/loaded-catalog-interleaved.json",
+        "bytes": 5383412,
+        "sha256": "57d71e09189e52254d03b78d0c2f66cdbc1011acadb0e389c88968a30ed8419c"
+      },
+      {
+        "path": "build/original/objects-probe.json",
+        "bytes": 3400976,
+        "sha256": "a55aa30fc50fafc885957c8682fb646820f12f4bf80db6cf493349917a4979de"
+      },
+      {
+        "path": "build/research/application-catalog-probe8-nominal-object.json",
+        "bytes": 37673163,
+        "sha256": "5e62f4828793afcf4c8a3de60de67392965d9d9894279349a873cee35b4a9692"
+      },
+      {
+        "path": "build/research/application-catalog-file-close-negative1.json",
+        "bytes": 37044483,
+        "sha256": "7d6ef2ce704e6716a7ffc6b873e21894bd8d951932bf797660dba52c7ae9f632"
+      }
+    ],
+    "wholeLegacyCatalogs": 3,
+    "gameBytesAndMasks": 306217431,
+    "fileEvents": 2534,
+    "bitmapMetadataEvents": 1684,
+    "firstObjectFileEventsRetainedPerProjection": 51,
+    "firstObjectFileEventsComparedPerLifecycle": 49,
+    "firstDATFileEventsCompared": 25,
+    "negativeCloseResponses": 4,
+    "negativeDATReturn": "ffffffff",
+    "cleanupBytes": 23,
+    "projectionBoundary": "Two file-only projections preserve5files,decoder,virtualFiles and28blobs each; parser/progress/WAV/output interleaving/privateCRT ABI remain outside this projection.",
+    "historicalOwnPrefix": "Separate already published guarded20 child evidence and prior firstObject work retained. These are not new current full own catalog comparisons.",
+    "historicalEvidence": {
+      "path": "docs/evidence/application-catalog-guarded20-completion.json",
+      "bytes": 9988,
+      "sha256": "b5474318111cad3a55944181ba99a8c4c4607b094a3306a309950eb0060faa3d"
+    },
+    "fileOpenNullBoundary": "Retained entry ends before feof(NULL); separate CRT control ends at unsupported TlsGetValue. Neither is a new source fault or Native match."
+  },
+  "review": {
+    "timeUTC": "2026-09-12T06:44:10.853014+00:00",
+    "method": "Separate read-only reviewers checked frozen source evidence, pending code, new tests and lossless/projection transport. Review did not execute original code or Native tests. Author-run deterministic comparisons remain separate.",
+    "catalog": {
+      "reviewer": "catalog_pending_review",
+      "implementationOwner": "catalog_test_completion for new tests/fixtures/packager only; prior pending Core unchanged",
+      "materialBlockers": [],
+      "resolvedFinding": "Promoted four declared -1 close responses and DAT ffffffff return into a permanent differential test using separately bound source closeResponses. All previous rollback assertions retained.",
+      "roundtrip": "Four complete raw JSON envelopes exact; each of two file-only projections preserves51 original-ordinal events,5files,decoder,virtualFiles and28referenced blobs; negative projection also preserves4closeResponses. Native comparison claims49 Object events, not51.",
+      "scope": "Current tests3legacywholecatalog+boundedDAT/Objectfile lifecycle, not current whole own startup or private CRT ABI."
+    },
+    "transform": {
+      "reviewer": "war_contract_review",
+      "implementationOwner": "root for new comparator/package; prior pending Core unchanged",
+      "materialBlockers": [],
+      "verifiedScope": "1688+72returned,2827+653ordered events,439retained write records,4distinct faults. Native compares final pools/masks/globals/retained/tail/events; no per-storeNative or Swiftinstruction claim.",
+      "resolvedDocumentationFindings": [
+        "Pristine897 compare field-for-field in decoded JSON, not serialization-byte equality.",
+        "Clarify plan.json is in parent task directory, not initial-pending backup directory."
+      ],
+      "scope": "Declared owned Actor/external backing and token provenance, not Windows heap rules or whole library-enabled loop."
+    }
+  },
+  "preservation": {
+    "verifiedUTC": "2026-09-12T06:50:03.719135+00:00",
+    "baseCommit": "fbfc3c079c97930a1fbec13fb875806e92272f9e",
+    "testedNativeFiles": 773,
+    "testedCandidateEqualsWorkingNative": true,
+    "protectedFixturesUnchanged": 325,
+    "currentFixtures": 333,
+    "initialPendingBackupsVerified": 22,
+    "originalPendingUnchanged": 21,
+    "changedPending": [
+      "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift"
+    ],
+    "sourceEvidencePinsUnchanged": {
+      "build/original/lib-transforms.json": {
+        "bytes": 1622913,
+        "sha256": "afbba6e63fcc3b94ba8453e332ace5659d0b0c50e6311eca0308a1cc35f19dd6"
+      },
+      "build/original/lib-transform-boundaries.json": {
+        "bytes": 107457,
+        "sha256": "cbfd623e3a64e0b6ac96ec7c71796e81b746bb6b316b984a7ea7282708d3427d"
+      },
+      "build/research/lib-transforms.json": {
+        "bytes": 1570,
+        "sha256": "d8b3e93a6dd70f10ef3ebaf0cdcfa40f9e61493a7a5c67df1e2c3da4ecb228df"
+      },
+      "build/research/lib-transform-boundaries.json": {
+        "bytes": 1034,
+        "sha256": "941abaabd67d2603f144b1c9f2f3a61977b1c339553bb5eeeebd525757291762"
+      },
+      "build/research/lib-transforms-native.log": {
+        "bytes": 2943,
+        "sha256": "97c0c74a195df2a73a1f517cecca89a724bf4970c76e6e8dc71f24482c14679b"
+      },
+      "build/research/application-catalog-work.json": {
+        "bytes": 471807,
+        "sha256": "c3a5d6319127c77c2f5a6a20a5d815a59b6604047bc19cc47fb1ae9b4048b709"
+      },
+      "build/original/loaded-catalog.json": {
+        "bytes": 95289959,
+        "sha256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+      },
+      "build/original/loaded-catalog-raw-zero.json": {
+        "bytes": 95252389,
+        "sha256": "7c9c839ea3cea8733ddb4c4e8ec9218ee4b982dc1ca8df52632d381efa40dd40"
+      },
+      "build/original/loaded-catalog-interleaved.json": {
+        "bytes": 5383412,
+        "sha256": "57d71e09189e52254d03b78d0c2f66cdbc1011acadb0e389c88968a30ed8419c"
+      },
+      "build/original/objects-probe.json": {
+        "bytes": 3400976,
+        "sha256": "a55aa30fc50fafc885957c8682fb646820f12f4bf80db6cf493349917a4979de"
+      },
+      "build/research/application-catalog-probe8-nominal-object.json": {
+        "bytes": 37673163,
+        "sha256": "5e62f4828793afcf4c8a3de60de67392965d9d9894279349a873cee35b4a9692"
+      },
+      "build/research/application-catalog-file-close-negative1.json": {
+        "bytes": 37044483,
+        "sha256": "7d6ef2ce704e6716a7ffc6b873e21894bd8d951932bf797660dba52c7ae9f632"
+      }
+    },
+    "agentsHistoryUnchanged": true,
+    "nativeArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/native-candidate2.tar",
+      "archive": {
+        "bytes": 3855267840,
+        "sha256": "0f6b779a9e6d708b2d5d61d5bb25335b61bb5a6e006017794238de3ce7abc73f"
+      },
+      "files": 773,
+      "contentBytes": 3853871774,
+      "allPathsAndBytesVerified": true,
+      "inventory": "native-candidate2-inventory.json"
+    },
+    "evidenceArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/pending-completion-20260912/completion-evidence.tar",
+      "archive": {
+        "bytes": 379607040,
+        "sha256": "2c978343a03fd6337f7504644e76fbf6eb1316cef8519707493edb2f522d8ae2"
+      },
+      "files": 88,
+      "contentBytes": 379448543,
+      "allPathsAndBytesVerified": true,
+      "inventory": "completion-evidence-inventory.json"
+    },
+    "originalExecuted": false,
+    "allStudyNativeJobsTerminal": true,
+    "allArchivesVerified": true
+  },
+  "limitations": [
+    "Declared resource responses/storage bindings are not host/Windows device behavior.",
+    "Four source transform memory faults are preserved and separately rejected, never counted as matches.",
+    "Full own catalog stopped historically at28Objects/storage limit; no source restarted.",
+    "War error contracts and whole match/application/device/cleanMac work remain open."
+  ],
+  "publication": "Shared tested composition of both bounded blocks; initial22versions, terminaljobs/logs,8newfixtures,fullNativepackage and retained source/failure evidence archived without overwriting older reports."
+}

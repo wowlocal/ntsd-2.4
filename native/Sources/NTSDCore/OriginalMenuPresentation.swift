@@ -160,10 +160,12 @@ public enum OriginalMenuPresentation {
     /// not read World or allocation ownership; only globals/DC are committed.
     public static func overlayWithLibrary(globals: inout OriginalStateRecord,
         libraryText: inout OriginalLibSurfaceText, input: OriginalMenuPresentationInput,
+        store: @escaping OriginalWindowInput.Store = { _,_ in },
         observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Overlay globals extent") }
         let unused = try OriginalStateRecord(bytes: [],defined: [])
         var execution = Execution(world: unused,globals: globals,memory: .init(replayPointers: unused),input: input,libraryText: libraryText)
+        execution.store = store
         try execution.overlay(observe)
         globals = execution.globals;libraryText = execution.libraryText!
     }

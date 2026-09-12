@@ -18,20 +18,22 @@ public struct OriginalStageLoader {
     /// Diagnostic callbacks may occur before a failure, but table changes commit
     /// only after the complete supported stream succeeds.
     public mutating func load(decoded: String,
+                              onRead: ((Int) throws -> Void)? = nil,
                               onCheckpoint: (_ kind: String, _ stage: Int, _ phase: Int?, _ record: OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
         var candidate = self
-        try candidate.consume(decoded: decoded, onCheckpoint: onCheckpoint)
+        try candidate.consume(decoded: decoded, onRead: onRead, onCheckpoint: onCheckpoint)
         self = candidate
     }
 
     private mutating func consume(decoded: String,
+                                  onRead: ((Int) throws -> Void)?,
                                   onCheckpoint: (String, Int, Int?, OriginalStateRecord) throws -> Void) throws {
         guard !decoded.unicodeScalars.contains(where: { $0.value == 0 || $0.value == 0x1a }) else { throw Self.error("NUL/DOS EOF in decoded stream") }
-        var scanner = try OriginalFrameScanner(decoded)
+        var scanner = try OriginalFrameScanner(decoded, observeRead: onRead)
         for index in records.indices { try records[index].write(Int32(-1), at: 0) }
         var stageID: Int?, nextPhase: Int?, token: String?
         while !scanner.eof {
-            if let next = scanner.optionalToken() { token = try Self.bounded(next, limit: 192) }
+            if let next = try scanner.observedToken() { token = try Self.bounded(next, limit: 192) }
             guard token != nil else { throw Self.error("Uninitialized outer token") }
             if token != "<stage>" { continue }
             repeat {

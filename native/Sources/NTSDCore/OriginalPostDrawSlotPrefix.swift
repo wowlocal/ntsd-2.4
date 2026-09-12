@@ -31,6 +31,28 @@ public enum OriginalPostDrawSlotPrefix {
             }, observe: observe)
     }
 
+    /// Whole installed-library prefix. Backing ownership commits together with
+    /// the pool and caller scratch; no Windows heap layout is inferred here.
+    @discardableResult
+    public static func applyUsingBundledLibrary(state: inout OriginalMatchPreparation, slot: Int,
+        retainedObjectIndex: inout Int32?, backing: inout OriginalLibTransformBacking,
+        observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
+        let catalog = state.catalog
+        guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
+              let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
+        var library: OriginalLibTransformBacking? = backing
+        let active = try apply(world: &state.world, actors: &state.actors, globals: &state.globals,
+            slot: slot, retainedObjectIndex: &retainedObjectIndex, objectCount: registry.integer(at: 0, as: Int32.self),
+            library: &library, header: { index in
+                guard catalog.objects.indices.contains(index) else { throw error("Object binding") }
+                return catalog.objects[index].header
+            }, frame: { index, number in
+                guard catalog.objects.indices.contains(index), catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
+                return catalog.objects[index].frameStorage[Int(number)]
+            }, observe: observe)
+        backing = library!; return active
+    }
+
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw slot prefix: " + text) }
 
     @discardableResult
@@ -38,14 +60,26 @@ public enum OriginalPostDrawSlotPrefix {
                       slot: Int, retainedObjectIndex: inout Int32?, objectCount: Int32,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
+        var library: OriginalLibTransformBacking?
+        return try apply(world: &world, actors: &actors, globals: &globals, slot: slot,
+            retainedObjectIndex: &retainedObjectIndex, objectCount: objectCount, library: &library,
+            header: header, frame: frame, observe: observe)
+    }
+
+    @discardableResult
+    static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
+                      slot: Int, retainedObjectIndex: inout Int32?, objectCount: Int32,
+                      library: inout OriginalLibTransformBacking?,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
                     var body = Body(world: world, actors: actors, globals: globals, retained: retainedObjectIndex,
-                                    slot: slot, objectCount: objectCount, header: headers, frame: frames, observe: observer)
+                                    slot: slot, objectCount: objectCount, library: library, header: headers, frame: frames, observe: observer)
                     let active = try body.run()
-                    world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained
+                    world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained; library = body.library
                     return active
                 }
             }
@@ -56,6 +90,7 @@ public enum OriginalPostDrawSlotPrefix {
         var world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord
         var retained: Int32?
         let slot: Int, objectCount: Int32
+        var library: OriginalLibTransformBacking?
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawSlotEvent) throws -> Void
         func active(_ slot: Int) throws -> UInt8 { try world.integer(at: 4+slot, as: UInt8.self) }
@@ -159,6 +194,16 @@ public enum OriginalPostDrawSlotPrefix {
             if (8000..<9000).contains(state) {
                 if let replacement = try find(state &- 8000) { try put(actorIndex, 0x368, replacement) }
                 try put(actorIndex, 0x70, 0); try put(actorIndex, 0x318, 140)
+            } else if var backing = library, (4000..<4999).contains(state) {
+                let replacement = try find(state &- 4000)
+                if let replacement { try put(actorIndex, 0x368, replacement) }
+                // On a match EAX was overwritten with the Actor pointer; on a
+                // miss it retains the scan count (zero when count <= zero).
+                try backing.write(actor: actorIndex, matched: replacement != nil,
+                    scanned: max(objectCount, 0), actors: &actors)
+                library = backing
+                // This branch retains current frame and318. It does not run
+                // the original8000-range reset path before the common tail.
             }
             if try type(actorIndex) == 0 && currentState(actorIndex) == 9996 && i(actorIndex, 0x88) == 1 {
                 try particles(actorIndex)

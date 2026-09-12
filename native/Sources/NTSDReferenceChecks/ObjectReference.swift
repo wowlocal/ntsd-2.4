@@ -102,7 +102,9 @@ public enum ObjectReference {
         }
         for item in corpus.cases {
             guard loader.checksum == item.initialChecksum else { throw OriginalStateError.invalidStorage("Wrong shared checksum input") }
+            let beforeLoad = loader
             var captured: [OriginalFrameRecord] = []
+            var mirrors: [OriginalBitmapMirrorRequest] = []
             var rawCaptured: [(Int, OriginalStateRecord)] = []
             var allocationIndex = 0
             let allocationStart = loader.frameAllocations.count
@@ -130,7 +132,36 @@ public enum ObjectReference {
                                          bitmapSource: { path in
                 guard let asset = assets[path] else { throw OriginalStateError.invalidStorage("Missing bitmap input \(path)") }
                 return asset
-            }, onFrame: { captured.append($0) }, onFrameStorage: { rawCaptured.append(($0, $1)) })
+            }, onMirror: { mirrors.append($0) }, onFrame: { captured.append($0) }, onFrameStorage: { rawCaptured.append(($0, $1)) })
+            let expectedMirrors = item.events.filter { $0.kind == "mirror-blit" }
+            guard mirrors.count == expectedMirrors.count else { throw OriginalStateError.invalidStorage("Mirror request count differs") }
+            for (actual, expected) in zip(mirrors, expectedMirrors) {
+                guard let normal = expected.normalAddress.flatMap({ bitmapAddresses.firstIndex(of: $0) }),
+                      actual.normalBitmap == normal, actual.mirrorBitmap == expected.bitmap,
+                      actual.destination == expected.destination, actual.source == expected.source,
+                      actual.flags == 0x1000800, let effects = expected.effects,
+                      actual.effects.bytes == (try hex(effects)), actual.effects.defined == Array(repeating: true, count: 100) else {
+                    throw OriginalStateError.invalidStorage("Complete mirror Blt caller fields differ")
+                }
+            }
+            if !mirrors.isEmpty {
+                enum Stop: Error { case mirror }
+                var trial = beforeLoad, reached = false
+                do {
+                    _ = try trial.load(decoded: source, id: item.id, type: item.type,
+                        headerBacking: hex(item.header.initial), tailBacking: hex(item.tail.initial), bitmapFill: corpus.bitmapFill,
+                        frameBacking: rawBacking, bitmapSource: { path in
+                            guard let asset = assets[path] else { throw OriginalStateError.invalidStorage("Missing mirror rollback asset") }
+                            return asset
+                        }, onMirror: { _ in reached = true; throw Stop.mirror })
+                    throw OriginalStateError.invalidStorage("Mirror observer failure did not propagate")
+                } catch Stop.mirror {}
+                guard reached, trial.checksum == beforeLoad.checksum, trial.soundBytes == beforeLoad.soundBytes,
+                      trial.soundCount == beforeLoad.soundCount, trial.bitmaps == beforeLoad.bitmaps,
+                      trial.frameAllocations == beforeLoad.frameAllocations else {
+                    throw OriginalStateError.invalidStorage("Mirror observer failure did not roll back Object resources")
+                }
+            }
             guard captured.count == item.frameOccurrences.count, result.frames.count == 400, item.frames.count == 400 else {
                 throw OriginalStateError.invalidStorage("\(item.path): frame counts differ")
             }

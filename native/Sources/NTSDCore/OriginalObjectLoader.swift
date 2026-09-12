@@ -9,6 +9,7 @@ public struct OriginalBitmapInput: Codable, Equatable, Sendable {
 }
 
 public struct OriginalLoadedBitmap: Equatable, Sendable {
+    public typealias Constructor = (_ path: String, _ optional: Bool, _ backing: [UInt8]) throws -> OriginalLoadedBitmap
     public let input: OriginalBitmapInput
     public let optional: Bool
     /// Original +0 is canonicalized to 1 for an opaque present surface, 0 for
@@ -46,12 +47,30 @@ public struct OriginalLoadedBitmap: Equatable, Sendable {
     }
 }
 
+/// Caller-owned Blt fields for the absent-mirror fallback. Bitmap indices bind
+/// to the loader's shared resource order; an adapter supplies actual surfaces.
+public struct OriginalBitmapMirrorRequest: Equatable, Sendable {
+    public let normalBitmap: Int, mirrorBitmap: Int
+    public let destination: [Int32], source: [Int32], flags: UInt32
+    public let effects: OriginalStateRecord
+}
+
+/// One complete strlen+1 weapon-path allocation. Bytes include the copied NUL.
+/// The optional token binds a supplied allocator response; nil leaves native
+/// storage unbound to a reference address. Earlier allocations remain owned
+/// when a later field replaces the path, until this Object is released.
+public struct OriginalWeaponSoundPathAllocation: Equatable, Sendable {
+    public typealias Allocate = (_ slot: Int, _ byteCount: Int) throws -> UInt32?
+    public let slot: Int, token: UInt32?, storage: OriginalStateRecord
+}
+
 public struct OriginalLoadedObject: Equatable, Sendable {
     public let header: OriginalStateRecord
     public let nameTail: OriginalStateRecord
     public let frames: [OriginalFrameRecord]
     public let frameStorage: [OriginalStateRecord]
     public let weaponSoundPaths: [Int: String]
+    public internal(set) var weaponSoundAllocations: [OriginalWeaponSoundPathAllocation] = []
 }
 
 /// Continuous decoded Object stream, EXE 40ef70, with shared sound registration.
@@ -84,34 +103,48 @@ public struct OriginalObjectLoader {
                               headerBacking: [UInt8], tailBacking: [UInt8], bitmapFill: UInt8 = 0xa5,
                               frameBacking: [UInt8]? = nil,
                               frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32? = { _, _ in nil },
+                              weaponSoundAllocation: OriginalWeaponSoundPathAllocation.Allocate = { _, _ in nil },
                               bitmapSource: (String) throws -> OriginalBitmapInput,
+                              constructBitmap: OriginalLoadedBitmap.Constructor? = nil,
+                              onMirror: (OriginalBitmapMirrorRequest) throws -> Void = { _ in },
                               onProgress: () throws -> Void = {},
+                              onRead: ((Int) throws -> Void)? = nil,
+                              onChecksum: (UInt32) throws -> Void = { _ in },
+                              onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in },
+                              onMessage: (_ checksum: UInt32) throws -> Void = { _ in },
                               onNewSound: (OriginalSoundRegistration) throws -> Void = { _ in },
                               onFrame: (OriginalFrameRecord) -> Void = { _ in },
                               onFrameStorage: (Int, OriginalStateRecord) -> Void = { _, _ in }) throws -> OriginalLoadedObject {
         var candidate = self
         let result = try candidate.consume(decoded: decoded, id: id, type: type, headerBacking: headerBacking,
-                                           tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation,
-                                           bitmapSource: bitmapSource, onProgress: onProgress, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
+                                           tailBacking: tailBacking, bitmapFill: bitmapFill, frameBacking: frameBacking, frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation,
+                                           bitmapSource: bitmapSource, constructBitmap: constructBitmap, onMirror: onMirror, onProgress: onProgress, onRead: onRead, onChecksum: onChecksum, onSoundCache: onSoundCache, onMessage: onMessage, onNewSound: onNewSound, onFrame: onFrame, onFrameStorage: onFrameStorage)
         self = candidate
         return result
     }
 
     private mutating func consume(decoded: String, id: Int32, type: Int32, headerBacking: [UInt8], tailBacking: [UInt8],
                                   bitmapFill: UInt8, frameBacking: [UInt8]?, frameAllocation: (OriginalFrameAllocationKind, Int) throws -> UInt32?,
+                                  weaponSoundAllocation: OriginalWeaponSoundPathAllocation.Allocate,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  constructBitmap: OriginalLoadedBitmap.Constructor?,
+                                  onMirror: (OriginalBitmapMirrorRequest) throws -> Void,
                                   onProgress: () throws -> Void,
+                                  onRead: ((Int) throws -> Void)?,
+                                  onChecksum: (UInt32) throws -> Void,
+                                  onSoundCache: ([UInt8], Int) throws -> Void,
+                                  onMessage: (UInt32) throws -> Void,
                                   onNewSound: (OriginalSoundRegistration) throws -> Void,
                                   onFrame: (OriginalFrameRecord) -> Void, onFrameStorage: (Int, OriginalStateRecord) -> Void) throws -> OriginalLoadedObject {
         guard headerBacking.count == 0x7a4, tailBacking.count == 0x3c else { throw Self.error("Object storage size") }
         guard frameBacking == nil || frameBacking?.count == 400*0x178 else { throw Self.error("Frame backing size") }
         guard !decoded.unicodeScalars.contains(where: { $0.value == 0 || $0.value == 0x1a }) else { throw Self.error("NUL/DOS EOF in decoded stream") }
-        var input = try OriginalFrameScanner(decoded)
+        var input = try OriginalFrameScanner(decoded, observeRead: onRead)
         var header = try OriginalStateRecord(bytes: headerBacking, defined: Array(repeating: false, count: 0x7a4))
         var tail = try OriginalStateRecord(bytes: tailBacking, defined: Array(repeating: false, count: 0x3c))
         var frames = OriginalFrameLoader(); frames.sounds = sounds
         frames.backing = frameBacking; frames.heap = frameHeap; frames.heap.fill = bitmapFill
-        var weaponPaths: [Int: String] = [:]
+        var weaponPaths: [Int: String] = [:], weaponAllocations: [OriginalWeaponSoundPathAllocation] = []
         for offset in stride(from: 0x90, through: 0xa0, by: 4) { try header.write(Int32(0), at: offset) }
         for offset in [0xa4, 0xa8, 0xac] { try header.write(Int32(-1), at: offset) }
         try Self.string("none", at: 0x700, limit: 40, in: &header)
@@ -120,12 +153,21 @@ public struct OriginalObjectLoader {
         try header.write(id, at: 0x6f4); try header.write(type, at: 0x6f8)
         for offset in stride(from: 0x62c, through: 0x650, by: 4) { try header.write(Int32(3000), at: offset) }
         for offset in stride(from: 0xb0, to: 0x3d0, by: 4) { try header.write(Int32(0), at: offset) }
-        var token: String?
+        var token: String?, messageCountdown = 10
         while !input.eof {
-            if let next = input.optionalToken() { token = next }
+            if let next = try input.observedToken() { token = next }
             guard let current = token else { throw Self.error("No initialized outer token") }
             for (index, scalar) in current.unicodeScalars.enumerated() {
                 checksum &+= UInt32(bitPattern: Int32(Int8(bitPattern: UInt8(scalar.value)))) &* UInt32(index)
+            }
+            try onChecksum(checksum)
+            //40f129 initializes ten;40f1ac decrements after the outer-token
+            //checksum, before interpreting that token. Inner field scans do
+            //not advance it.43d230 handles at most one queued message.
+            messageCountdown -= 1
+            if messageCountdown == 0 {
+                messageCountdown = 10
+                try onMessage(checksum)
             }
             if token == "<bmp_begin>" {
                 try onProgress() //40f1d8, before each BMP field read
@@ -134,7 +176,7 @@ public struct OriginalObjectLoader {
                     let tag = token!
                     if tag.hasPrefix("file") {
                         var count = try header.integer(at: 0x498, as: Int32.self)
-                        if count > 0 { try finishSheet(Int(count), header: &header, bitmapFill: bitmapFill, source: bitmapSource, onProgress: onProgress) }
+                        if count > 0 { try finishSheet(Int(count), header: &header, bitmapFill: bitmapFill, source: bitmapSource, constructBitmap: constructBitmap, onMirror: onMirror, onProgress: onProgress) }
                         count += 1
                         guard (1...10).contains(count) else { throw Self.error("Sprite sheet arrays outside verified storage") }
                         try header.write(count, at: 0x498)
@@ -143,7 +185,7 @@ public struct OriginalObjectLoader {
                     if tag == "head:" || tag == "small:" {
                         let path = try input.token(), offset = tag == "head:" ? 0x700 : 0x72c
                         try Self.string(path, at: offset, limit: tag == "head:" ? 40 : 36, in: &header)
-                        let bitmap = try appendBitmap(path, optional: false, fill: bitmapFill, source: bitmapSource)
+                        let bitmap = try appendBitmap(path, optional: false, fill: bitmapFill, source: bitmapSource, constructBitmap: constructBitmap)
                         try header.write(UInt32(bitmap + 1), at: tag == "head:" ? 0x6fc : 0x728)
                     }
                     if let offset = Self.integerFields[tag], let value = try input.integer() { try header.write(value, at: offset) }
@@ -156,18 +198,30 @@ public struct OriginalObjectLoader {
                     if let ordinal = ["weapon_hit_sound:": 0, "weapon_drop_sound:": 1, "weapon_broken_sound:": 2][tag] {
                         let path = try input.token(), indexOffset = 0xa4 + ordinal*4
                         guard path.unicodeScalars.count < 256 else { throw Self.error("Weapon sound scratch buffer") }
-                        weaponPaths[ordinal] = path
+                        let bytes = path.unicodeScalars.map { UInt8($0.value) } + [0]
+                        let token = try weaponSoundAllocation(ordinal, bytes.count)
+                        if let token {
+                            guard token != 0, !weaponAllocations.contains(where: { $0.token == token }) else {
+                                throw Self.error("NULL or reused weapon path allocation is outside the verified domain")
+                            }
+                        }
+                        //40fbe6/40fc65/40fce8: store the new pointer, copy every
+                        //byte through NUL, then enter40bd90. No preceding path
+                        //allocation is freed here, even on a repeated field.
                         try header.write(UInt32(ordinal + 1), at: 0x98 + ordinal*4)
+                        weaponAllocations.append(.init(slot: ordinal, token: token,
+                            storage: try .init(bytes: bytes, defined: Array(repeating: true, count: bytes.count))))
+                        weaponPaths[ordinal] = path
                         let previous = try header.integer(at: indexOffset, as: Int32.self)
                         _ = try frames.sounds.register(path, previous: previous, kind: .weapon,
-                            assignIndex: { try header.write($0, at: indexOffset) }, onNewSound: onNewSound)
+                            assignIndex: { try header.write($0, at: indexOffset) }, onNewSound: onNewSound, onCommit: onSoundCache)
                     }
                     try onProgress() //40fd23 returns to40f1d8
                     token = try input.token()
                 }
                 let index = Int(try header.integer(at: 0x498, as: Int32.self))
                 guard index > 0 else { throw Self.error("Header without initialized sprite sheet") }
-                try finishSheet(index, header: &header, bitmapFill: bitmapFill, source: bitmapSource, onProgress: onProgress)
+                try finishSheet(index, header: &header, bitmapFill: bitmapFill, source: bitmapSource, constructBitmap: constructBitmap, onMirror: onMirror, onProgress: onProgress)
             }
             if token == "<weapon_strength_list>" {
                 var index: Int32 = 0
@@ -185,7 +239,7 @@ public struct OriginalObjectLoader {
                 }
             }
             if token == "<frame>" {
-                let record = try frames.consumeFrameBody(&input, allocate: frameAllocation, onNewSound: onNewSound)
+                let record = try frames.consumeFrameBody(&input, allocate: frameAllocation, onNewSound: onNewSound, onSoundCache: onSoundCache)
                 onFrame(record)
                 onFrameStorage(record.number, try frames.storage(at: record.number))
                 token = "<frame_end>"
@@ -194,42 +248,62 @@ public struct OriginalObjectLoader {
         sounds = frames.sounds
         frameHeap = frames.heap
         let rawFrames = try (0..<400).map { try frames.storage(at: $0) }
-        return OriginalLoadedObject(header: header, nameTail: tail,
+        var object = OriginalLoadedObject(header: header, nameTail: tail,
                                     frames: try (0..<400).map { try frames.projected(at: $0, record: rawFrames[$0]) },
                                     frameStorage: rawFrames, weaponSoundPaths: weaponPaths)
+        object.weaponSoundAllocations = weaponAllocations
+        return object
     }
 
     private mutating func appendBitmap(_ path: String, optional: Bool, fill: UInt8,
-                                       source: (String) throws -> OriginalBitmapInput) throws -> Int {
-        let resource = try source(path)
-        guard resource.path == path else { throw Self.error("Bitmap provider returned a different path") }
-        let bitmap = try OriginalLoadedBitmap.construct(resource, optional: optional, fill: fill)
+                                       source: (String) throws -> OriginalBitmapInput,
+                                       constructBitmap: OriginalLoadedBitmap.Constructor?) throws -> Int {
+        let bitmap: OriginalLoadedBitmap
+        if let constructBitmap {
+            bitmap = try .checkedConstruction(constructBitmap(path, optional, Array(repeating: fill, count: 0x1f50)), path: path, optional: optional)
+        } else {
+            let resource = try source(path)
+            guard resource.path == path else { throw Self.error("Bitmap provider returned a different path") }
+            bitmap = try .construct(resource, optional: optional, fill: fill)
+        }
         let index = bitmaps.count
         bitmaps.append(bitmap)
         return index
     }
 
     private mutating func finishSheet(_ slot: Int, header: inout OriginalStateRecord, bitmapFill: UInt8,
-                                      source: (String) throws -> OriginalBitmapInput, onProgress: () throws -> Void) throws {
+                                      source: (String) throws -> OriginalBitmapInput,
+                                      constructBitmap: OriginalLoadedBitmap.Constructor?,
+                                      onMirror: (OriginalBitmapMirrorRequest) throws -> Void, onProgress: () throws -> Void) throws {
         var first: Int32 = 0
         for previous in 1..<slot {
             first &+= (try header.integer(at: 0x6a0 + previous*4, as: Int32.self)) &* (try header.integer(at: 0x6c8 + previous*4, as: Int32.self))
         }
         try header.write(first, at: 0x628 + slot*4)
         let path = try Self.readString(header, at: 0x474 + slot*40)
-        let normal = try appendBitmap(path, optional: false, fill: bitmapFill, source: source)
+        let normal = try appendBitmap(path, optional: false, fill: bitmapFill, source: source, constructBitmap: constructBitmap)
         try header.write(UInt32(normal + 1), at: 0x750 + slot*4)
         try onProgress() //40f314/40fdde
         guard path.unicodeScalars.count >= 4 else { throw Self.error("Bitmap filename shorter than mirror suffix replacement") }
         let mirrorPath = String(path.dropLast(4)) + "_mirror.bmp"
-        var mirror = try appendBitmap(mirrorPath, optional: true, fill: bitmapFill, source: source)
+        var mirror = try appendBitmap(mirrorPath, optional: true, fill: bitmapFill, source: source, constructBitmap: constructBitmap)
         try header.write(UInt32(mirror + 1), at: 0x778 + slot*4)
         try onProgress() //40f3d5/40fe9b, before testing the surface
-        if !bitmaps[mirror].input.present {
+        if try bitmaps[mirror].storage.integer(at: 0, as: UInt32.self) == 0 {
             // Original leaks the failed wrapper, allocates a fresh normal image,
             // then asks DirectDraw to mirror it. Pixels remain a device boundary.
-            mirror = try appendBitmap(path, optional: false, fill: bitmapFill, source: source)
+            mirror = try appendBitmap(path, optional: false, fill: bitmapFill, source: source, constructBitmap: constructBitmap)
             bitmaps[mirror].mirroredFrom = normal
+            guard try bitmaps[normal].storage.integer(at: 0, as: UInt32.self) != 0,
+                  try bitmaps[mirror].storage.integer(at: 0, as: UInt32.self) != 0 else {
+                throw Self.error("Mirror Blt reaches an unavailable surface")
+            }
+            //40f454/40ff1b memset100, then size100/DDFX2. Every effects byte
+            //and both rectangles have caller provenance; no retained stack input.
+            var effects = try OriginalStateRecord(bytes: Array(repeating: 0, count: 100), defined: Array(repeating: true, count: 100))
+            try effects.write(UInt32(100), at: 0); try effects.write(UInt32(2), at: 4)
+            let rectangle: [Int32] = try [0, 0, bitmaps[normal].storage.integer(at: 4, as: Int32.self), bitmaps[normal].storage.integer(at: 8, as: Int32.self)]
+            try onMirror(.init(normalBitmap: normal, mirrorBitmap: mirror, destination: rectangle, source: rectangle, flags: 0x1000800, effects: effects))
         }
         try header.write(UInt32(mirror + 1), at: 0x778 + slot*4)
         try onProgress() //40f500/40ffc3, also with an existing mirror

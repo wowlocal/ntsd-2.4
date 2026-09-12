@@ -12,6 +12,16 @@
 Полный прежний AGENTS сохранён в [архиве](../AGENTS_HISTORY_2026-09-12.md).
 Текст продолжения полной цели: [CONTINUE_GOAL](CONTINUE_GOAL.md).
 
+Завершены сохранённые Native-изменения
+[файлового слоя/каталога](research/APPLICATION_CATALOG_NATIVE_FILES.md) и
+[library transforms](research/LIB_TRANSFORMS.md): три legacy-каталога через
+собственные потоки, DAT/Object lifecycle и четыре отрицательных close responses;
+1 760 returned transform cases / 3 480 событий и четыре отдельных fault rejections.
+41 уникальный packaged release-тест прошёл; старые 325 fixtures сохранены.
+[Приёмка, состав и архивы](evidence/pending-native-completion-2026-09-12.json).
+Это не полный собственный каталог, library loop или приложение; новая исходная
+CPU-сессия не запускалась, прежние safety incidents не закрыты.
+
 **Следующая задача: [R02.1 — состояние полного такта](research/R02.1.md).**
 **Ближайший шаг: [изменения из bundled lib.dll](research/LIB_RUNTIME.md),
 затем полная инициализация, внешний цикл времени и подключение общего движка к приложению.**

@@ -37,6 +37,24 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
     public init(source: [UInt8], fileName: [UInt8], initialChecksum: UInt32,
                 backing: [Int: OriginalStateRecord],
                 beforeRead: () throws -> Void = {},
+                onRead: ((Int) throws -> Void)? = nil,
+                onChecksum: (UInt32) throws -> Void = { _ in },
+                onClose: () throws -> Void = {},
+                onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
+        try self.init(source: { source }, fileName: fileName, initialChecksum: initialChecksum,
+                      backing: backing, beforeRead: beforeRead, onRead: onRead,
+                      onChecksum: onChecksum, onClose: onClose, onLoad: onLoad)
+    }
+
+    /// The real parent constructs four embedded bitmaps and samples time before
+    /// opening its catalog file. A throwing provider preserves that call order;
+    /// callers stage external resource effects until the enclosing load commits.
+    public init(source: () throws -> [UInt8], fileName: [UInt8], initialChecksum: UInt32,
+                backing: [Int: OriginalStateRecord],
+                beforeRead: () throws -> Void = {},
+                onRead: ((Int) throws -> Void)? = nil,
+                onChecksum: (UInt32) throws -> Void = { _ in },
+                onClose: () throws -> Void = {},
                 onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
         guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.bytes.count == $0.value }) else {
             throw OriginalStateError.invalidStorage("Catalog parent region sizes differ")
@@ -44,7 +62,6 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         guard !fileName.isEmpty, fileName.count < 32, !fileName.contains(0) else {
             throw OriginalStateError.invalidStorage("Catalog filename exceeds the verified 31-byte domain")
         }
-        var scanner = try CatalogScanner(source)
         var records = backing, requests: [OriginalCatalogLoadRequest] = [], checksum = initialChecksum
         var parentChecksum = initialChecksum
         var outerTokens: [[UInt8]] = []
@@ -76,6 +93,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         try write(Int32(0), region: 0x4d82380, at: 4)
 
         try beforeRead() //412549: timeGetTime result is discarded before fopen
+        var scanner = try CatalogScanner(source(), observeRead: onRead)
         var token: [UInt8]?, objectCount = 0, backgroundCount = 0
         while !scanner.eof {
             // At outer EOF fscanf leaves the existing token unchanged. Inner
@@ -88,6 +106,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 checksum &+= contribution
                 parentChecksum &+= contribution
             }
+            try onChecksum(checksum)
             if token == Array("<object>".utf8) {
                 token = try scanner.requiredString()
                 while token != Array("<object_end>".utf8) {
@@ -125,7 +144,8 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 }
             }
         }
-        try request(.init(.stages)) // 4127c2 closes the registry before 4127cd.
+        try onClose() //4127c2 closes the registry before the Stage caller.
+        try request(.init(.stages))
         self.records = records; self.requests = requests
         self.parentChecksum = parentChecksum; self.checksum = checksum; self.outerTokens = outerTokens
     }
@@ -137,15 +157,17 @@ private struct CatalogScanner {
     private let bytes: [UInt8]
     private var position = 0
     private(set) var eof = false
+    private let observeRead: ((Int) throws -> Void)?
     private static let whitespace: Set<UInt8> = [9, 10, 11, 12, 13, 32]
     static func error(_ detail: String) -> OriginalStateError { .invalidStorage("Catalog registry: \(detail)") }
 
-    init(_ source: [UInt8]) throws {
+    init(_ source: [UInt8], observeRead: ((Int) throws -> Void)?) throws {
         guard !source.isEmpty, !source.contains(0), !source.contains(0x1a) else {
             throw Self.error("Empty/NUL/DOS-EOF source outside verified scanner domain")
         }
         // CRLF and LF both delimit tokens; no literal text-mode positions escape this scanner.
         bytes = source
+        self.observeRead = observeRead
     }
 
     private mutating func skipSpace() {
@@ -155,11 +177,12 @@ private struct CatalogScanner {
 
     mutating func string(limit: Int = 200) throws -> [UInt8]? {
         skipSpace()
-        guard !eof else { return nil }
+        guard !eof else { try observeRead?(position); return nil }
         let start = position
         while position < bytes.count, !Self.whitespace.contains(bytes[position]) { position += 1 }
         guard position - start < limit else { throw Self.error("Token exceeds the original scratch buffer") }
         if position == bytes.count { eof = true }
+        try observeRead?(position)
         return Array(bytes[start..<position])
     }
 
@@ -182,6 +205,7 @@ private struct CatalogScanner {
         }
         guard position != start else { throw Self.error("Integer matching failure outside verified entry domain") }
         if position == bytes.count { eof = true }
+        try observeRead?(position)
         return Int32(negative ? -number : number)
     }
 
