@@ -62,3 +62,47 @@ target types reject. It preserves auxiliary boxes, ascending unordered pairs,
 strict rectangle/depth boundaries, defender-indexed vrest, owned damage/kill
 credit, and the distinct type3 normal/guard frame10 reactions. The domain does
 not claim all OriginalHitDamage/OriginalHitGuard source-ID/weapon exceptions.
+
+`frame_projector.frames(sections)` consumes an ordered array of complete,
+well-formed original Frame sections and returns a numeric table keyed by
+original frame ID. Known constructor scalar zero and numerical redefinition
+inheritance are retained; interaction/body arrays reset per occurrence and keep
+auxiliary coordinates. This finite projector is not the complete stream loader:
+unclosed/nested sections, overflow, pointer aliases and arbitrary scanner errors
+are outside its contract. Only selected original Naruto/Sasuke/voice/shot inputs
+are used; malformed Kunai is not normalized or repaired.
+
+`World.new(config)` takes `headers[1..2]`, `definitions[1..2]` (each an ordered
+section array), `voiceDefinitions`, `projectileDefinitions[{id,definitions}]`,
+declared `random{table,index,counter,...}`, optional initial numeric patches
+`initial[1..2]`, and `localPlayer` 0/1. It owns all live state. `world:tick({mask1,
+mask2})` exports a full retained `MeleeState`; `world:snapshot()` exports the
+current state without advancing. Public export arrays use Lua indices 1..N,
+including all 400 `vrest` values; internal slots/vrest remain 0..399. Initial
+coordinates, render projection and defaults follow the controlled retained
+Practice initializer, not unknown original heap bytes.
+
+Optional `inputDefinitions[1..2]` supplies full original character sections for
+input-frame presence/cost/transfer fields. This separate immutable input catalog
+does not expand the executable frame set. Every successful transfer event to an
+unsupported executable frame rejects and rolls back the complete staged tick.
+Original failed affordability/availability events retain their source behavior.
+The default omitted optional catalog preserves the retained bounded caller;
+the interactive app supplies the full original input definitions.
+
+The pipeline orders input/control, physics, frozen contact collection, live
+attacker/frozen-target hit resolution, boundaries/camera, render snapshots,
+pending velocity and dynamic ascending post-schedule spawning. New later slots
+schedule immediately and appear in the next render pass. RNG consumes only the
+declared replay table; failures commit none of the RNG, input history, motion,
+HP/MP, ownership, projectiles, sound/event lists or scheduling changes.
+
+The native host is an L2DF Object subclass with Transform, pose-selected Frames
+and Render; a root SourceHost component invokes this pipeline after L2DF input
+refresh and before object traversal. Physics, States, Collision and Attributes
+from the candidate are absent in this mode. Source sounds go through the L2DF
+SoundManager. Actual acoustic mixing/latency and physical keys are separate
+device observations. The host's 33-ms accumulator is not the original strict
+elapsed>33-ms/100-ms lag-cap timer; the full-District viewport does not apply the
+computed original camera. Neither limitation changes the compared discrete
+state transition inputs.

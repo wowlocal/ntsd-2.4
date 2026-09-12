@@ -1,6 +1,6 @@
 {
   "createdAtUTC": "2026-09-12T07:28:12.431145+00:00",
-  "status": "ActorInput and bounded World accepted; native GUI integration in progress",
+  "status": "Bounded five-needle technique and native macOS Practice integration accepted; full NTSD port remains open",
   "baselineCommit": "a642bfa",
   "worktree": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
   "sourceExecution": false,
@@ -348,5 +348,637 @@
       "sha256": "9b8df1f9b911d828e795a6974f1046bbc2f53b34a73225b4b08f09b5495f8e63"
     },
     "reason": "Root changed check_actor_input.py during run; completed Lua result preserved, post-run pin audit rejected; fixed-input world-full-02 reran candidate only."
+  },
+  "updatedAtUTC": "2026-09-12T08:59:46.893628+00:00",
+  "finalAcceptance": {
+    "accepted": true,
+    "scope": "Retained two-fighter Practice composition, original input availability projection and Sasuke five-needle integration",
+    "sourceExecution": false,
+    "fullGameComplete": false,
+    "world": {
+      "cases": 575,
+      "ticks": 16685,
+      "elapsedSeconds": 15.123357167000002,
+      "exactNumericEquality": true,
+      "bitwiseABICompared": false,
+      "rollback": {
+        "ok": true,
+        "result": {
+          "configUnchanged": true,
+          "continuationEqual": true,
+          "error": "compat/fighter.lua:52: Unsupported jump attack",
+          "expectedBoundary": true,
+          "rejected": true,
+          "rngUnchanged": true,
+          "unchanged": true
+        }
+      },
+      "report": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-03/report.json",
+        "bytes": 244688,
+        "sha256": "31cc40de691ee8cdc542693f1b42777976fb8c11236ef323fef04fbc0dbbb1d3"
+      },
+      "configuration": "Retained full corpus config; same final kernel modules as app, app supplies optional full input catalog. Full GUI comparison covers the separate 70-tick case."
+    },
+    "inputCatalog": {
+      "groups": 585,
+      "occurrences": 586,
+      "knownInputFields": 12,
+      "nativeBoundaryTrials": [
+        {
+          "configUnchanged": true,
+          "failureTick": 13,
+          "finalMP": 0,
+          "insufficientMP": true,
+          "mp": 0,
+          "rejected": false,
+          "spentMP": 0
+        },
+        {
+          "configUnchanged": true,
+          "failureTick": 13,
+          "finalMP": 74,
+          "insufficientMP": true,
+          "mp": 74,
+          "rejected": false,
+          "spentMP": 0
+        },
+        {
+          "configUnchanged": true,
+          "correctBoundary": true,
+          "error": "compat/fighter.lua:23: Unsupported successful technique transfer 263",
+          "finalMP": 75,
+          "insufficientMP": false,
+          "mp": 75,
+          "rejected": true,
+          "spentMP": 0,
+          "tick": 13,
+          "unchanged": true
+        },
+        {
+          "configUnchanged": true,
+          "correctBoundary": true,
+          "error": "compat/fighter.lua:23: Unsupported successful technique transfer 263",
+          "finalMP": 500,
+          "insufficientMP": false,
+          "mp": 500,
+          "rejected": true,
+          "spentMP": 0,
+          "tick": 13,
+          "unchanged": true
+        }
+      ],
+      "nativeBoundaryTick": 13,
+      "originalWholeMoveTimingCompared": false,
+      "wholeLoaderOrOriginalUnsupportedMatch": false,
+      "frameCorpusSHA256": "5904de1b07b4c6011209d2e2fb30dd257827894a82c49ecb5584563b45d1499b"
+    },
+    "package": {
+      "accepted": true,
+      "observedAtUTC": "2026-09-12T08:49:44.137029+00:00",
+      "app": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app",
+      "zipSHA256": "64d97a4486169bf4bfdff174dc70a26004f04ab33c8378bb417c54792ef45c1b",
+      "zipMembers": 268,
+      "originalResources": 112,
+      "originalResourceBytes": 19544930,
+      "upstreamFilesUnchanged": 139,
+      "allPackageFilesCompared": 136,
+      "allZIPMembersCompared": true,
+      "kernelMatchesAcceptedWorldFull03": true,
+      "externalSymlinks": false,
+      "metadata": "Original downloaded LÖVE runtime unsigned; prototype not notarized",
+      "architectures": "x86_64 arm64"
+    },
+    "smoke": {
+      "packaged-smoke-01": {
+        "backend": "love",
+        "cadenceSeconds": 0.033,
+        "counts": {
+          "audioCalls": 20,
+          "audioPlaying": 20,
+          "damageEvents": 3,
+          "keyboardCallbacks": 10,
+          "projectiles": 5,
+          "spawned": 9
+        },
+        "domain": "retained two-fighter Practice",
+        "elapsed": 10.889999999999992,
+        "framesSeen": [
+          {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "5": true,
+            "6": true,
+            "7": true,
+            "8": true,
+            "66": true,
+            "67": true,
+            "68": true,
+            "180": true,
+            "181": true,
+            "182": true,
+            "183": true,
+            "185": true,
+            "219": true,
+            "230": true
+          },
+          {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "5": true,
+            "6": true,
+            "7": true,
+            "110": true,
+            "210": true,
+            "211": true,
+            "212": true,
+            "215": true,
+            "220": true,
+            "221": true,
+            "246": true,
+            "261": true,
+            "262": true,
+            "263": true,
+            "264": true,
+            "265": true,
+            "266": true
+          }
+        ],
+        "input": "synthetic love callbacks through L2DF Input/Controller",
+        "love": [
+          11,
+          5,
+          0,
+          "Mysterious Mysteries"
+        ],
+        "minHP": [
+          425,
+          480
+        ],
+        "mpSpent": [
+          0,
+          100
+        ],
+        "originalExecuted": false,
+        "screenshots": {
+          "fan": 215,
+          "hit": 74,
+          "idle": 2,
+          "projectile": 212
+        },
+        "ticks": 330,
+        "timerContract": "L2DF accumulator; original strict elapsed >33ms/100ms lag cap not implemented"
+      },
+      "packaged-retained-01": {
+        "backend": "love",
+        "cadenceSeconds": 0.033,
+        "case": "needles-0-400-guardFalse",
+        "counts": {
+          "audioCalls": 11,
+          "audioPlaying": 11,
+          "damageEvents": 1,
+          "keyboardCallbacks": 3,
+          "projectiles": 5,
+          "spawned": 6
+        },
+        "domain": "retained two-fighter Practice",
+        "elapsed": 2.3099999999999974,
+        "framesSeen": [
+          {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "180": true,
+            "181": true,
+            "182": true,
+            "183": true,
+            "185": true,
+            "230": true
+          },
+          {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "110": true,
+            "246": true,
+            "261": true,
+            "262": true,
+            "263": true,
+            "264": true,
+            "265": true,
+            "266": true
+          }
+        ],
+        "input": "synthetic love callbacks through L2DF Input/Controller",
+        "love": [
+          11,
+          5,
+          0,
+          "Mysterious Mysteries"
+        ],
+        "minHP": [
+          425,
+          500
+        ],
+        "mpSpent": [
+          0,
+          100
+        ],
+        "originalExecuted": false,
+        "screenshots": {
+          "fan": 26,
+          "hit": 27,
+          "idle": 2,
+          "projectile": 23
+        },
+        "ticks": 70,
+        "timerContract": "L2DF accumulator; original strict elapsed >33ms/100ms lag cap not implemented"
+      },
+      "packaged-reset-01": {
+        "counts": {
+          "audioCalls": 0,
+          "audioPlaying": 0,
+          "damageEvents": 0,
+          "keyboardCallbacks": 4,
+          "projectiles": 0,
+          "spawned": 0
+        },
+        "love": [
+          11,
+          5,
+          0,
+          "Mysterious Mysteries"
+        ],
+        "originalExecuted": false,
+        "passed": true,
+        "uiResetCheck": {
+          "boundaryCleared": true,
+          "boundaryRolledBack": true,
+          "continuationTicks": 1,
+          "entities": 2,
+          "inputClear": true,
+          "mpSpent": [
+            0,
+            0
+          ],
+          "paused": false,
+          "projectileCount": 0,
+          "randomRestored": true,
+          "rejectedTick": 13,
+          "resetCallback": "love.keypressed r",
+          "resetTick": 0
+        }
+      }
+    },
+    "guiComparison": {
+      "case": "needles-0-400-guardFalse",
+      "ticks": 70,
+      "wholeMeleeStateAndInputMasks": true,
+      "audioCallsAndIsPlaying": 11,
+      "originalFixtureSHA256": "42467b39267e4da268ed6e509777fc75d24fc9bf81c329200ad69cb15158d10c",
+      "independentReview": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-case-review.json",
+        "bytes": 14605,
+        "sha256": "d9b72228a2c58d02419b4abbc38ab320293bdd665026c85e7240e91e45182960"
+      }
+    },
+    "resetComparison": {
+      "nativeRejectedTick": 13,
+      "unsupportedTarget": 263,
+      "fullSerializedBoundaryUnchanged": true,
+      "resetAndOneNeutralContinuation": true,
+      "independentReview": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-reset-review.json",
+        "bytes": 8881,
+        "sha256": "9fa0cc32cbc0e982c140bbf30e296cc09f61f70531dc463bee4d538df63f708d"
+      }
+    },
+    "visualInspection": {
+      "method": "Root viewed LOVE captureScreenshot PNG outputs",
+      "images": [
+        {
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/fan.png",
+          "bytes": 216260,
+          "sha256": "72216b8401da67514430009e42db6bb9d4b765207c610ef8de55521472bfe386"
+        },
+        {
+          "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/interactive-13.png",
+          "bytes": 232705,
+          "sha256": "04895a9591a1bbdbd8fb3a762a8ac29612af0c04eecec317177b20d600af7250"
+        }
+      ],
+      "observations": [
+        "District, two fighters and five blue needles visible",
+        "Unsupported-move notice visible with unchanged HP/MP"
+      ],
+      "pixelMatchClaim": false
+    },
+    "nativeWindow": {
+      "observation": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-interactive-window.json",
+        "bytes": 1522,
+        "sha256": "6d858c00f5482cad72f69d7877459468fd165a2155cecb73a5f863c22aec14a9"
+      },
+      "pidAtObservation": 90477,
+      "bundleID": "local.ntsd.l2df-chidori",
+      "leftOpen": true,
+      "physicalKeyboardOrHeardAudioClaim": false
+    },
+    "comparatorReview": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/comparator-final-review.json",
+      "bytes": 1728,
+      "sha256": "86f47af4ccac86944b03a86d5e0af508cb23659bbdba6194a21dc7b23049d093"
+    },
+    "implementationPins": [
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/actor_input.lua",
+        "bytes": 5660,
+        "sha256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/fighter.lua",
+        "bytes": 8997,
+        "sha256": "868963f6d89e588eab2db6f1d61178bf5cbd210d1dbe3be812b82329c9f33035"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/frame_projector.lua",
+        "bytes": 2088,
+        "sha256": "fdf2eff382a2ae278ab30dda74b53928012bba7b1bfbb5ddcc0aa46f62996a26"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/projectile.lua",
+        "bytes": 3816,
+        "sha256": "cf9672180eb12ce2f78563815690d6256669839732a2b7300524479d768bc2e7"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/projectile_hits.lua",
+        "bytes": 5478,
+        "sha256": "6031a52edbbea278fc65dfec62c67aa2cc0b06cae27f4532a73c2d10424cadbb"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/spawn.lua",
+        "bytes": 2681,
+        "sha256": "a49539ba790c1da5d5fffea8719966b529ed5bf885f7cfaf5cb0a3f9b754d3e4"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/world.lua",
+        "bytes": 8083,
+        "sha256": "81861b7ba6ccf321f86aafa4e00f19012245d721a1b32dc4e6a140d3b987c9ae"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/main.lua",
+        "bytes": 17773,
+        "sha256": "2e931b64e04a71e8265e10239651c3c5756b46e04fe95b5d055f420e1b5228be"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/conf.lua",
+        "bytes": 277,
+        "sha256": "49a07fe31f945317cf76da05ce3442efb5f552a9a60e64c160a2278c5be303a3"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/prepare.py",
+        "bytes": 7656,
+        "sha256": "e1ddf1652dac543db305191bee0fe1cf0318d88efd7078cdfe7ab28bf049990b"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/run.py",
+        "bytes": 3482,
+        "sha256": "89bd4876f18f413703c311ac69fe8c0469397fe0288b55b5e6d44e5a55eeaeb1"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/package.py",
+        "bytes": 3262,
+        "sha256": "bbe7dcbee7cb2d7631c3c596c3d40cf2d5c78c0a3b42b452e248f500bbe431bd"
+      }
+    ],
+    "retainedIntegrationFailures": [
+      {
+        "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-01",
+        "reason": "L2DF Storage holes after removing components",
+        "jobs": [
+          {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-01/logs/smoke-01/job.json",
+            "bytes": 4436,
+            "sha256": "adb0d4ecd6432f9942dd79e711e5ed54a587975dd815410b92b7f9fe04c59259"
+          }
+        ]
+      },
+      {
+        "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-02",
+        "reason": "Frames superclass removed recursion",
+        "jobs": [
+          {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-02/logs/smoke-01/job.json",
+            "bytes": 4436,
+            "sha256": "787c45fc29bf22caa1244e64ba5b00a76b576c2b085f2ffbfc6f6eb92eb814e0"
+          }
+        ]
+      },
+      {
+        "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-05",
+        "reason": "Four-tick unsupported input trial did not reach tick13; incomplete stimulus",
+        "jobs": [
+          {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-05/logs/retained-needles-01/job.json",
+            "bytes": 4933,
+            "sha256": "c8136ac81e6c05f86b66c24b807fe34f2a979895e5a82256d324ce972679bd5d"
+          },
+          {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-05/logs/unsupported-01/job.json",
+            "bytes": 4922,
+            "sha256": "9ab4e0efbc01ccada37eee9c5ace6e90f0e0a5422b9a30c863c61a0c84427db6"
+          }
+        ]
+      },
+      {
+        "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-06",
+        "reason": "Extra L2DF catch-up update after quit rewrote reset summary with continuationTicks2",
+        "jobs": [
+          {
+            "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-06/logs/unsupported-reset-01/job.json",
+            "bytes": 4961,
+            "sha256": "91ebebf2805cf5a5bf905214abb1cb37a0c9c2146cb0e67010d0a60450a6e851"
+          }
+        ]
+      }
+    ],
+    "checkedArtifacts": [
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-03/report.json",
+        "bytes": 244688,
+        "sha256": "31cc40de691ee8cdc542693f1b42777976fb8c11236ef323fef04fbc0dbbb1d3"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-03/job.json",
+        "bytes": 10117,
+        "sha256": "f2ec56aa956dde61100752b0d0005934b7e5129459c2b8f944473f106b5217d1"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-03/actual.jsonl",
+        "bytes": 56104109,
+        "sha256": "fb0eaa23ab3496f134413e7353b44cefd46c2fa7a693ceb8a5d79fc78e0e3506"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/input-catalog-02/report.json",
+        "bytes": 9498,
+        "sha256": "eb37d0725d7ce5d714f01bccb2f96096fae99283a4d74b0a470e0f6065276db8"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/input-catalog-02/job.json",
+        "bytes": 7746,
+        "sha256": "4988df50048954ea9dc87973b27753012acbaa1454855c3b3b6694b69de44732"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/comparator-final-review.json",
+        "bytes": 1728,
+        "sha256": "86f47af4ccac86944b03a86d5e0af508cb23659bbdba6194a21dc7b23049d093"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-package-review.json",
+        "bytes": 716,
+        "sha256": "d6f1bc3b462cf8dad890611a5cd19f84e02ffe9d6ed9e3ec474c395711ec339b"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-case-review.json",
+        "bytes": 14605,
+        "sha256": "d9b72228a2c58d02419b4abbc38ab320293bdd665026c85e7240e91e45182960"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-reset-review.json",
+        "bytes": 8881,
+        "sha256": "9fa0cc32cbc0e982c140bbf30e296cc09f61f70531dc463bee4d538df63f708d"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/native-07-interactive-window.json",
+        "bytes": 1522,
+        "sha256": "6d858c00f5482cad72f69d7877459468fd165a2155cecb73a5f863c22aec14a9"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/final-preservation-01.json",
+        "bytes": 24008,
+        "sha256": "db7e16190f49f0706044d2330593b5932d3aeb0e187132df0240d9f08f18ce63"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/implementation-handoff.json",
+        "bytes": 8269,
+        "sha256": "91c6ca5f5ab22ede05865c994d042824fb28923aa0dfaa1104ad6b056b9e6ef2"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/resource-manifest.json",
+        "bytes": 53398,
+        "sha256": "30c28fd184e7b5b0d6b663c169a15b197ce8f788930a44773b5441112bf50e8b"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app.manifest.json",
+        "bytes": 30013,
+        "sha256": "954e8ffecef323fa59e8fc725112afc0bdb606ae0d415358cb5b0df5c9c7ea37"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-smoke-01/job.json",
+        "bytes": 4700,
+        "sha256": "17846d417b8a64f75e0002fe9b476c334a7dd671e3a39aebdf19482e157b7b04"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-smoke-01/summary.json",
+        "bytes": 988,
+        "sha256": "44fc7823a1e0a7298f1361f6f2f256e974870dcaee876769e0c4eef1b2ec07f5"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-smoke-01/world.jsonl",
+        "bytes": 1077087,
+        "sha256": "4ace6994eb8c08eae83fe81f4910ed671ba44cf176b7fb47f8ba795240f05676"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-smoke-01/inputs.jsonl",
+        "bytes": 9157,
+        "sha256": "5311af0c8e422c52a4a092ba3915ed80d619b186e8e261d3043145ef1707f49d"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-smoke-01/events.log",
+        "bytes": 1445,
+        "sha256": "8669c86527f6d3c4e8dc0ef3e7838b041c348ea114d9fa0d611d018bed72ed63"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/job.json",
+        "bytes": 5189,
+        "sha256": "90fdf5fc42a09e0e3d923887daaa7e8d30c00f5bee211ea9a7fcf9409c719d0b"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/summary.json",
+        "bytes": 848,
+        "sha256": "e4c92b7bc6db360ef5c56b6662d3d7d1df700a897e309700dc327ac2d688319a"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/world.jsonl",
+        "bytes": 292223,
+        "sha256": "a8db48c768e21f084c2811c23a2da0d8f6a7b40d7bc2848e035083a0af02a850"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/inputs.jsonl",
+        "bytes": 1881,
+        "sha256": "958586bd09f73c297893bcff1160e745b9e8b53aa3feb659dee8dec5d845ed6c"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/events.log",
+        "bytes": 1176,
+        "sha256": "2d7da3cd1ff25dde37578eec23336a9d6fbabfca4d279e9bcdf8f6ee4e206ff1"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/job.json",
+        "bytes": 5209,
+        "sha256": "8a7579e931bcf862793a1f14cf89e9978771558bcf3dfc3ae267de01636e9f72"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/summary.json",
+        "bytes": 449,
+        "sha256": "ebc717eb27473fb534c0d39838d35926553981d0af373571cdf4e92aff365a9d"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/world.jsonl",
+        "bytes": 42955,
+        "sha256": "76a49a4030d164851c4b8575b3a3232ecc342eef08df7d33233374cb02e70ea4"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/inputs.jsonl",
+        "bytes": 368,
+        "sha256": "7bfc4e58a7677b6438edcad94d2823902fa3831e15bea5bc0678843795d48532"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/events.log",
+        "bytes": 634,
+        "sha256": "428c66ff0d6025daae7560fbf1ccb878ae715bd6e937fe4f8b9dc0da4830892e"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-retained-01/fan.png",
+        "bytes": 216260,
+        "sha256": "72216b8401da67514430009e42db6bb9d4b765207c610ef8de55521472bfe386"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/native-07/logs/packaged-reset-01/interactive-13.png",
+        "bytes": 232705,
+        "sha256": "04895a9591a1bbdbd8fb3a762a8ac29612af0c04eecec317177b20d600af7250"
+      }
+    ],
+    "preservation": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/final-preservation-01.json",
+      "bytes": 24008,
+      "sha256": "db7e16190f49f0706044d2330593b5932d3aeb0e187132df0240d9f08f18ce63"
+    },
+    "limitations": [
+      "Original full tick/startup/match lifecycle and all branches unproved",
+      "Other techniques, weapons/grabs, AI, menus/modes, saves/replay/network open",
+      "Full stream-loader numeric/storage/alias behavior and separate 6500-draw RNG corpus not verified",
+      "L2DF33ms accumulator; original strict elapsed>33/100ms lag cap not implemented",
+      "Camera state compared but original camera viewport not applied",
+      "Practice excludes regeneration",
+      "Physical keyboard/heard audio, pixel rendering/audio mix, Windows, Intel runtime and clean Mac unverified"
+    ],
+    "next": "Expand executable airborne/running attack states with their frame/spawn/hit dependencies, then original timer/camera and full match lifecycle."
   }
 }

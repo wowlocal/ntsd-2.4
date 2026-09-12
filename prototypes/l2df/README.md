@@ -1,11 +1,12 @@
-# NTSD / L2DF macOS prototype
+# NTSD / L2DF Chidori Practice
 
-A local two-player feasibility prototype using real L2DF `wip-test` at
-`a20a16f2e8c9e889e33b3d762c94dc49498d0f83`, official native LÖVE 11.5
-(macOS bundle 11.5a), and unchanged NTSD DAT/BMP/WAV inputs. It is playable,
-but its mechanics are those of the candidate. It is **not an accepted NTSD port**.
+A native macOS two-player Practice scene using L2DF `wip-test`
+`a20a16f2e8c9e889e33b3d762c94dc49498d0f83`, native LÖVE 11.5
+(macOS bundle 11.5a), unchanged NTSD resources, and recovered NTSD components.
+The supported two-fighter/projectile sequences are compared with retained
+original evidence. This is **not a complete NTSD port or original match**.
 
-## Run the prepared app
+## Launch
 
 From this worktree:
 
@@ -13,87 +14,111 @@ From this worktree:
 ./prototypes/l2df/launch.command
 ```
 
-The standalone bundle is `build/l2df-prototype/NTSD L2DF Prototype.app`.
-It contains its own runtime, engine and resources. The build directory is a
-symlink to the allocated X5 folder; the `.app` itself has no external symlinks
-or dependencies on Python, the baseline folder, Windows, Wine, a browser, or
-an installed LÖVE. For inspection, run its `Contents/MacOS/love` executable.
-The original LÖVE download is unsigned; this prototype is not notarized.
-No OS protection, global installation or model setting was changed.
+App: `build/l2df-prototype/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app`.
+It contains the runtime, engine, owned compatibility modules and selected game
+resources. It does not need Python, the original distribution, Windows, Wine,
+a browser or an installed LÖVE. The task build directory resolves to X5; the
+app's framework symlinks are internal. Downloaded LÖVE is unsigned and this app
+is not notarized. No OS protections or global installations were changed.
 
 | Player | Move | Attack | Jump | Defend |
 | --- | --- | --- | --- | --- |
 | Naruto | W A S D | F | G | H |
 | Sasuke | Arrow keys | J | K | L |
 
-For Sasuke's needles, press **J + L + the direction he faces together** while
-standing. This is the candidate's simultaneous input rule; NTSD's sequential
-D→direction→A input does not work here. R restarts, Esc pauses, M mutes, Q quits.
-Focus loss pauses the interactive scene. F12 saves a screenshot when launched
-with the diagnostic runner below. The opponent is another local player, not AI.
+Sasuke's needles: **L, then left/right, then J**. These are three sequential
+button presses. The original buffers/history recognize the move, check frame
+availability and HP/MP, and charge **100 chakra** on a successful transfer.
+Five needles use the original Opoint fan, owner/team, aim and rest values.
+Up/down held at spawning aims the fan. R restarts, Esc pauses, M mutes, Q quits.
+Focus loss pauses. The second player is local; there is no AI.
 
-## Inspect / reproduce the checks
+A move outside the supported Practice set pauses with a restart notice. Its
+entire attempted tick is rolled back, including input history, RNG, HP/MP and
+live projectiles. Full Naruto/Sasuke input-frame availability is separate from
+the smaller executable catalog, so an available unsupported technique is not
+silently turned into an ordinary attack. Insufficient MP follows the original
+failed-transfer path. Regeneration is excluded from the compared Practice set.
+
+## Reproduce
+
+Existing source/runtime downloads remain in `build/l2df-prototype/{source,runtime}`.
+Preparation verifies all 850 pinned upstream Git blobs and original EXE identity,
+then copies selected DAT/BMP/WAV bytes into a **new** task-owned directory. It
+projects only declared DAT/header/replay RNG inputs from the pinned retained
+fixture. Expected states and fixture cases do not enter the game archive.
+Full input-frame sections come directly from the original Naruto/Sasuke DAT.
+Original BMP transparency is applied to owned LÖVE image buffers.
+
+```sh
+python3 prototypes/l2df/prepare.py \
+  --baseline '/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a' \
+  --reference-input '/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-projectiles.json' \
+  --build-name chidori-compat-20260912/my-new-build
+python3 prototypes/l2df/package.py \
+  --build-name chidori-compat-20260912/my-new-build \
+  --name 'NTSD L2DF Chidori.app'
+```
+
+Preparation refuses existing output directories; packaging refuses existing
+apps. Never rebuild a directory while its process runs. Old candidate app,
+`build/game`, archives and logs are preserved. Archive verification compares
+every ZIP member with its prepared file and rejects external framework links.
+
+## Run checks with logs
 
 ```sh
 python3 prototypes/l2df/run.py \
-  --app 'build/l2df-prototype/NTSD L2DF Prototype.app' \
-  --smoke --label my-unique-smoke
+  --build-name chidori-compat-20260912/native-07 \
+  --app 'build/l2df-prototype/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app' \
+  --smoke --label my-new-smoke
 ```
 
-Each label must be new: prior runs are retained. The runner pins its inputs,
-records PID/start/cwd/command, preserves stdout/errors and limits a smoke to
-90 seconds. The app runs 600 candidate ticks with synthetic keyboard callbacks,
-records both players' positions/frames/HP/MP, actual audio play state and dynamic
-objects, captures PNGs, then exits. These inputs are not physical keyboard input
-or Windows observations. Omit `--smoke` for interactive use with logs.
+The 330-tick smoke exercises movement, melee, a jump, sequential needles,
+HP/MP, and audio. It records full `world.jsonl` states and `inputs.jsonl` masks,
+CSV, events, resource/code pins, PID/start/cwd/command, screenshots and terminal
+status. Each run gets a unique label and a 90-second limit. The synthetic
+keyboard callbacks pass through L2DF Input/Controller; they do not establish
+physical keyboard or acoustic device behavior. Omit `--smoke` for interactive
+logging; F12 then captures a PNG through LÖVE.
 
-The accepted candidate run is `logs/packaged-smoke-01`: native launch, movement,
-a jump, melee damage, one Chidori projectile and audio sources playing.
-`logs/smoke-01` retains the initial missing Sync initialization error;
-`smoke-02` retains the black-background and insufficient projectile check.
-Those failures were not erased or counted as complete acceptance.
+`--case-input path.json` additionally accepts an external **input-only** object
+with `label, initial, inputs, localPlayer` during smoke. It copies the input into
+the unique log directory. This enables exact whole-state comparison of the
+actual GUI route with a retained case, without packaging expected states.
+For a declared unsupported-move case, add `--ui-reset-check` to capture the
+notice, invoke the same R callback, check reset state/input/RNG and execute a
+neutral continuation. `boundary-state.json` preserves the attempted tick's
+before/after snapshots; `reset-state.json` records recovery. This is a callback
+test, not an OS-generated keyboard observation.
+The independent reference tools are in `tests/reference/`; they never execute
+original EXE/DLL files. The parent-maintained study records their acceptance.
 
-## Prepare and package again
+## Architecture and limits
 
-The original resource directory is read-only. Existing pinned downloads and full
-upstream source are in `build/l2df-prototype/{downloads,source}`. Sources:
+L2DF owns the native host, event traversal, Object/Transform, Frames storage,
+Render/resource handling, Controller and SoundManager. The scene's SourceHost
+component runs `compat.world`: generic ActorInput, fighter/projectile motion,
+collision/guard/damage, pending velocity, dynamic slot allocation and scheduling.
+A subclass selects the recorded pre-schedule pose through L2DF Frames/Render.
+The candidate's automatic States/Physix/Collision/Attributes are not active in
+this mode. The earlier feasibility app remains available separately.
 
-- [Pinned L2DF archive](https://codeload.github.com/atom-tm/l2df-engine/tar.gz/a20a16f2e8c9e889e33b3d762c94dc49498d0f83)
-- [Official LÖVE 11.5 macOS ZIP](https://github.com/love2d/love/releases/download/11.5/love-11.5-macos.zip)
+The executable domain is retained two-fighter Practice: Naruto (2), Sasuke (11),
+voice (203), snake (224) and needles (440), with the recovered subset of frames.
+Full source DATs are used for visuals/input availability; that is not a claim
+of full loader storage/overflow/alias fidelity. Duplicate numerical fields are
+retained by the compatibility frame projection. Kunai's malformed import stays
+outside this phase. Auxiliary y=80000 boxes remain in the collision projection.
 
-The study's retained GitHub tree is checked against every upstream archive blob;
-this local preparer reads that existing evidence path. It copies 111 original
-resources and vendors engine files without modifying their bytes. Sprite black
-color-key transparency is applied to owned image buffers in LÖVE; source BMPs
-remain unchanged. Native runtime files are already in `runtime/love.app`.
-
-```sh
-python3 prototypes/l2df/prepare.py --baseline \
-  '/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a'
-python3 prototypes/l2df/package.py --name 'NTSD L2DF Prototype candidate2.app'
-```
-
-Use a new package name; the packaging script refuses to overwrite existing apps.
-Do not edit or rebuild the game while its directory-mode process is running.
-The fused app uses its immutable `.love` archive. Package verification compares
-every ZIP member with the prepared file and rejects external framework symlinks.
-
-## Compatibility limits
-
-The finite catalog is Naruto (2), Sasuke (11), charge/voice (203), snake (224),
-and Chidori (440). All 819 source frame definitions are parsed (818 unique IDs).
-This count does not validate numerical or loader fidelity: L2DF still replaces
-Naruto's repeated frame 123 instead of retaining omitted numerical fields.
-Kunai is excluded because its malformed frame import remains incompatible.
-
-Known discrepancies include a single Chidori object instead of NTSD's five,
-no 100-MP charge for that technique, simultaneous rather than sequential combos,
-and candidate timing/physics/damage/recovery/RNG rules. Most Naruto techniques
-refer to objects outside this catalog and are logged as unsupported. Menus,
-AI, saves/replays, networking, all content and a complete original match are
-not implemented by this scene. Networking is not registered or connected.
-Physical keyboard, audible device output, Windows visual/timing comparisons,
+The scene uses a 33-ms step in L2DF's accumulator. Original strict elapsed>33-ms
+and the 100-ms lag cap, physical-device timing, original camera presentation,
+full-match RNG initialization/regeneration, all techniques/content, AI, menus,
+saves, replays and networking remain open. The viewport shows the full District;
+original camera state is still computed and logged. The network manager is
+unregistered. Physical keyboard, audible output, Windows visual/timing,
 Intel and a clean second Mac remain unverified.
 
-See [the complete report](../../docs/research/L2DF_NATIVE_PROTOTYPE.md) and
-[compact evidence](../../docs/evidence/l2df-native-prototype.json).
+See [Chidori compatibility study](../../docs/research/L2DF_CHIDORI_COMPATIBILITY.md),
+[its evidence](../../docs/evidence/l2df-chidori-compatibility.json), and the
+[earlier feasibility report](../../docs/research/L2DF_NATIVE_PROTOTYPE.md).

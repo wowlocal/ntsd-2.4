@@ -19,7 +19,7 @@ local function random(w,range)
 end
 function World.new(config)
  assert(#config.headers==2 and #config.definitions==2,'Practice requires two fighters')
- local self=setmetatable({headers=copy(config.headers),catalog={},pool={},input={},random=copy(config.random),
+ local self=setmetatable({headers=copy(config.headers),catalog={},inputCatalog={},pool={},input={},random=copy(config.random),
   cameraX=0,cameraVelocity=0,sounds={},draws={},localPlayer=config.localPlayer or 0,events={}},World)
  assert(self.localPlayer==0 or self.localPlayer==1,'Local player outside two-fighter domain')
  assert(#self.random.table==3000 and self.random.index>=0 and self.random.index<3000 and self.random.counter>=0 and self.random.counter<1234,'Invalid declared RNG')
@@ -27,6 +27,7 @@ function World.new(config)
  for i=0,1 do
   local name=self.headers[i+1].name;assert(name==(i==0 and 'Naruto' or 'Sasuke'),'Practice catalog/order requires Naruto and Sasuke')
   local id=i==0 and 2 or 11;self.catalog[id]=Projector.frames(config.definitions[i+1])
+  self.inputCatalog[id]=config.inputDefinitions and Projector.frames(config.inputDefinitions[i+1]) or self.catalog[id]
   local m=Projectile.initial();m.x=450+i*35;m.facing=i;m.renderFacing=i
   for k,v in pairs((config.initial or {})[i+1] or {}) do assert(m[k]~=nil,'Unknown initial projection '..k);m[k]=copy(v) end
   m.ix=trunc(m.x);m.iy=trunc(m.y);m.iz=trunc(m.z);m.renderFrame=m.frame;m.renderX=m.ix;m.renderY=m.iy;m.renderZ=m.iz
@@ -56,7 +57,7 @@ function World:advance(masks)
  local held={[0]=Fighter.buttons(masks[1]),[1]=Fighter.buttons(masks[2])}
  for i=0,1 do
   local a=self.pool[i];local events
-  a.motion,self.input[i],events=Fighter.control(a.motion,self.input[i],masks[i+1],self.catalog[a.id],self.headers[i+1],function(n)return random(self,n)end)
+  a.motion,self.input[i],events=Fighter.control(a.motion,self.input[i],masks[i+1],self.catalog[a.id],self.headers[i+1],function(n)return random(self,n)end,self.inputCatalog[a.id])
   for _,event in ipairs(events) do event.actor=i;self.events[#self.events+1]=event end
  end
  for _,i in ipairs(slots(self.pool)) do if i>=50 then local a=self.pool[i];a.motion=Projectile.control(a.motion,self.catalog[a.id]) end end
@@ -108,7 +109,7 @@ function World:advance(masks)
 end
 function World:tick(masks)
  -- Keep immutable catalog/header inputs shared; all live state is owned copy.
- local nextWorld=setmetatable({catalog=self.catalog,headers=self.headers,pool=copy(self.pool),input=copy(self.input),
+ local nextWorld=setmetatable({catalog=self.catalog,inputCatalog=self.inputCatalog,headers=self.headers,pool=copy(self.pool),input=copy(self.input),
   random=copy(self.random),cameraX=self.cameraX,cameraVelocity=self.cameraVelocity,sounds=copy(self.sounds),
   draws=copy(self.draws),localPlayer=self.localPlayer,events=copy(self.events)},World)
  nextWorld:advance(masks)

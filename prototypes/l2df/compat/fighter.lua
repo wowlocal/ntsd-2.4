@@ -10,12 +10,18 @@ local function current(m,frames) return assert(frames[m.frame],'Unsupported figh
 local function fs(m,frames) return current(m,frames).state or 0 end
 local function sound(m,frames) local s=current(m,frames).sound;if s then m.sounds[#m.sounds+1]=s end end
 local function walk(m,p) local rate=tonumber(p.walking_frame_rate);m.phase=(m.phase+1)%(rate*6);m.frame=m.phase<rate*4 and trunc(m.phase/rate)+5 or 11-trunc(m.phase/rate) end
-function M.control(state,inputState,mask,frames,p,random)
+function M.control(state,inputState,mask,frames,p,random,inputFrames)
  local m,a=copy(state),copy(inputState);local held=M.buttons(mask);local prev=copy(a.previous)
  m.sounds={};a.frame=m.frame;a.facing=m.facing;a.hp=m.hp;a.mp=m.mp
  for k in pairs(bits) do a.current[k]=held[k] and 1 or 0;a.buffers[k]=m[k..'Buffer']%256 end
  a.buffers.defendCooldown=m.defendCooldown%256;a.progress=copy(m.combos)
- local oldCost=a.healthSpent;local events;a,events=Input.apply(a,frames,{costEnabled=true,flag458428=0})
+ local oldCost=a.healthSpent;local events;a,events=Input.apply(a,inputFrames or frames,{costEnabled=true,flag458428=0})
+ -- Availability and resource checks belong to the original Object, not the
+ -- executable Practice subset. Every successful unsupported transfer rejects
+ -- the whole staged tick, even if a later recognizer would transfer again.
+ for _,event in ipairs(events) do
+  assert(event.kind~='transfer' or frames[event.target], 'Unsupported successful technique transfer '..tostring(event.target))
+ end
  m.frame=a.frame;m.facing=a.facing;m.hp=a.hp;m.mp=a.mp;m.damageReceived=m.damageReceived+(a.healthSpent-oldCost)
  for k in pairs(bits) do local v=a.buffers[k];m[k..'Buffer']=v>=128 and v-256 or v end
  m.defendCooldown=a.buffers.defendCooldown;m.combos=copy(a.progress)

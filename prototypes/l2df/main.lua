@@ -1,124 +1,187 @@
--- Candidate feasibility scene. L2DF remains the simulation engine.
--- NTSD DAT/BMP/WAV are unchanged inputs; candidate mechanics are not NTSD evidence.
-local counts = {audioCalls=0, audioPlaying=0, damageEvents=0, spawned=0, missingOpoint=0, keyboardCallbacks=0}
+-- Native L2DF host with the retained NTSD bounded Practice components.
+-- L2DF owns events, objects, input/controller, frame storage, rendering and audio.
+-- compat.world owns input edges/history, motion, collision, spawn and scheduling.
+local counts={audioCalls=0,audioPlaying=0,damageEvents=0,spawned=0,projectiles=0,keyboardCallbacks=0}
 local nativeAudioPlay=love.audio.play
 love.audio.play=function(sources,...)
- local list=type(sources)=='table' and sources or {sources}
- counts.audioCalls=counts.audioCalls+#list
+ local list=type(sources)=='table' and sources or {sources};counts.audioCalls=counts.audioCalls+#list
  local result=nativeAudioPlay(sources,...)
  for _,source in ipairs(list) do if source:isPlaying() then counts.audioPlaying=counts.audioPlaying+1 end end
  return result
 end
-l2df = require 'l2df'
-data = { FPS = 60, players = {'Naruto','Sasuke'}, lf2_objects = {}, isplaying = true }
-helper = l2df.import 'helper'
-local catalog = require 'catalog'
-local Parser = l2df.import 'class.parser.lffs2'
-local Converter = require 'tools.lf2dat'
-local Factory = l2df.import 'manager.factory'
-local SceneManager = l2df.import 'manager.scene'
-local Scene = l2df.import 'class.entity.scene'
-local States = l2df.import 'manager.states'
-local Kinds = l2df.import 'manager.kinds'
-local Renderer = l2df.import 'manager.render'
-local Resources = l2df.import 'manager.resource'
-local Input = l2df.import 'manager.input'
-local Controller = l2df.import 'class.component.controller'
-local Sound = l2df.import 'class.component.sound'
-local Storage = l2df.import 'class.storage'
-local Sync = l2df.import 'manager.sync'
-local Attributes, objects, room, world, objectAPI
-local tick, smoke, paused, elapsed, screenshots = 0, false, false, 0, {}
-local logdir = os.getenv('NTSD_L2DF_LOG_DIR')
-local trace, events
-local bgimages, imagecache = {}, {}
-local minhp = {500,500}
-local screenshotRequested=false
-local seen, olddynamic, held = {{},{}}, {}, {}
-local mappings = {
+l2df=require 'l2df'
+data={FPS=1000/33,players={'Naruto','Sasuke'},lf2_objects={},isplaying=true}
+local catalog=require 'catalog'
+local config=require 'compat-data'
+local World=require 'compat.world'
+local copy=require('compat.actor_input').copy
+local Parser=l2df.import 'class.parser.lffs2'
+local Converter=require 'tools.lf2dat'
+local SceneManager=l2df.import 'manager.scene'
+local Scene=l2df.import 'class.entity.scene'
+local Object=l2df.import 'class.entity.object'
+local Component=l2df.import 'class.component'
+local Frames=l2df.import 'class.component.frames'
+local Render=l2df.import 'class.component.render'
+local Transform=l2df.import 'class.component.transform'
+local Renderer=l2df.import 'manager.render'
+local Resources=l2df.import 'manager.resource'
+local Input=l2df.import 'manager.input'
+local Controller=l2df.import 'class.component.controller'
+local SoundManager=l2df.import 'manager.sound'
+local Storage=l2df.import 'class.storage'
+local Sync=l2df.import 'manager.sync'
+local json=require 'l2df.external.json'
+local room,simulation,state,objects,caseInput
+local tick,smoke,paused,elapsed=0,false,false,0
+local logdir=os.getenv('NTSD_L2DF_LOG_DIR')
+local trace,eventFile,fullTrace,inputTrace
+local bgimages,imagecache,soundcache={},{},{}
+local minhp,seen,screenshots={500,500},{{},{}},{}
+local held={};local screenshotRequested=false;local boundary
+local uiResetCheck,resetReady,resetReport=false,false,nil
+local finished=false
+local mappings={
  {up='w',down='s',left='a',right='d',attack='f',jump='g',defend='h'},
  {up='up',down='down',left='left',right='right',attack='j',jump='k',defend='l'}
 }
-local function output(name, text)
+local bits={up=128,down=64,left=32,right=16,attack=8,jump=4,defend=2}
+local arrays={actors=true,sounds=true,projectiles=true,projectileDraws=true,mpSpent=true,vrest=true,combos=true,inputs=true}
+local function precise(v,key)
+ if type(v)=='number' then return json:asNumber(string.format('%.17g',v)) end
+ if type(v)~='table' then return v end
+ local r=arrays[key] and json:newArray({}) or {};for k,x in pairs(v) do r[k]=precise(x,k) end;return r
+end
+local function encode(v) return json:encode(precise(v)) end
+local function output(name,text)
  if logdir then local f=assert(io.open(logdir..'/'..name,'wb'));f:write(text);f:close() end
 end
 local function event(s)
  print('PROTOTYPE '..s)
- if events then events:write(tick..' '..s..'\n');events:flush() end
+ if eventFile then eventFile:write(tick..' '..s..'\n');eventFile:flush() end
 end
-function data.random(a,b) if not b then a,b=1,a end return math.random(a,b) end
-local function pngImage(path, key)
- local id=path..(key and '#black-key' or '#opaque')
- if imagecache[id] then return imagecache[id] end
+local function pngImage(path,key)
+ local id=path..(key and '#black-key' or '#opaque');if imagecache[id] then return imagecache[id] end
  local pixels=love.image.newImageData(path)
  if key then pixels:mapPixel(function(x,y,r,g,b,a) if r==0 and g==0 and b==0 then return r,g,b,0 end return r,g,b,a end) end
- local img=love.graphics.newImage(pixels);img:setFilter('nearest','nearest');imagecache[id]=img
- return img
+ local img=love.graphics.newImage(pixels);img:setFilter('nearest','nearest');imagecache[id]=img;return img
 end
 local function loadObject(entry)
- local raw=assert(love.filesystem.read(entry.file))
- local decoded=Converter.decrypt(raw)
+ local raw=assert(love.filesystem.read(entry.file));local decoded=Converter.decrypt(raw)
  assert(love.data.encode('string','hex',love.data.hash('sha256',decoded))==entry.decodedSHA256,'DAT decoder differs from prepared input')
- local text=Converter.convert_text(decoded,{type=entry.type})
- local parsed=assert(Parser:parse(text))
+ local parsed=assert(Parser:parse(Converter.convert_text(decoded,{type=entry.type})))
  parsed._lf2,parsed._lf2_type,parsed.lf2id=true,entry.type,entry.id
  local count,unique=0,{};for _,f in ipairs(parsed.frames or {}) do count=count+1;unique[f[1]]=true end
  local n=0;for _ in pairs(unique) do n=n+1 end
  event(('import id=%d definitions=%d unique=%d sourceMarkers=%d'):format(entry.id,count,n,entry.frameMarkers))
  assert(count==entry.frameMarkers,'candidate dropped/nested source frames')
  for _,s in ipairs(parsed.sprites or {}) do Resources:addById(s[1],pngImage(s[1],true)) end
- if parsed.small then Resources:addById(parsed.small,pngImage(parsed.small,true)) end
  data.objectdata:addById(parsed,entry.id,true)
- return parsed
+end
+-- Keep L2DF Frames:add/set and Render intact. SourceWorld selects the already
+-- captured render pose; candidate auto-animation/physics/collision cannot run.
+local PoseFrames=Frames:extend({unique=true})
+function PoseFrames:preupdate() end
+function PoseFrames:removed(obj)
+ -- Upstream Frames uses self.super, which resolves back to Frames on this
+ -- subclass. Invoke the base component cleanup directly when a pose expires.
+ Component.removed(self,obj);obj.C.frames=nil
+end
+local PresentationObject=Object:extend({name='source-presentation'})
+function PresentationObject:init(def)
+ self:addComponent(Transform);self:addComponent(PoseFrames,def);self:addComponent(Render,def)
+end
+local function entity(slot,id)
+ local def=data.objectdata:getById(id);local obj=PresentationObject(def)
+ obj.data.layer='GAME';obj.data.lf2id=id;obj.data.syncid='source-slot:'..slot
+ if slot<2 then obj:addComponent(Controller,slot+1) end
+ room:attach(obj);objects[slot]=obj;return obj
+end
+local function pose(slot,id,frame,facing,x,y,z)
+ local obj=objects[slot]
+ if obj and obj.data.lf2id~=id then room:detach(obj);obj:destroy();objects[slot]=nil;obj=nil end
+ obj=obj or entity(slot,id)
+ assert(obj.C.frames.data().list[frame],'Missing original display frame '..id..':'..frame)
+ obj.C.frames.set(frame)
+ local f=assert(simulation.catalog[id][frame]);local d=obj.data
+ d.pic=f.pic+1;d.centerx=f.centerx;d.centery=f.centery;d.x=x;d.y=-y;d.z=z;d.facing=1-facing*2;d.hidden=false
+ -- Rendered coordinates retain original integer projection; the native viewport
+ -- shows the full District here. Original camera values are logged, not applied.
+end
+local function project()
+ local keep={[0]=true,[1]=true}
+ for i,m in ipairs(state.actors) do pose(i-1,i==1 and 2 or 11,m.renderFrame,m.renderFacing,m.renderX,m.renderY,m.renderZ) end
+ for _,p in ipairs(state.projectileDraws) do keep[p.slot]=true;pose(p.slot,p.id,p.frame,p.facing,p.x,p.y,p.z) end
+ local remove={};for slot in pairs(objects) do if not keep[slot] then remove[#remove+1]=slot end end
+ for _,slot in ipairs(remove) do local obj=objects[slot];room:detach(obj);obj:destroy();objects[slot]=nil end
+end
+local builtins={['builtin:0']='001.wav',['builtin:1']='002.wav',['builtin:2']='006.wav',['builtin:6']='016.wav',['builtin:7']='017.wav',['builtin:11']='032.wav',['builtin:12']='033.wav'}
+local function playSounds(sounds)
+ for _,name in ipairs(sounds) do
+  local file=builtins[name] or name:gsub('\\','/'):match('([^/]+)$');local path='data/sounds/'..file
+  if not soundcache[path] then soundcache[path]=love.audio.newSource(path,'static');Resources:addById(path,soundcache[path]) end
+  SoundManager:play(soundcache[path],true)
+ end
 end
 local function reset()
- if world then room:detach(world);objectAPI.clearDynamic();world:destroy() end
- data.lf2_objects={};olddynamic={};objects={};math.randomseed(12564)
- world=Factory:create('map',{active=true,width=960,height=600,depth=600,layer='GAME',gravity=24.9,ground_friction=0.96,borders={x1=0,x2=960,y1=0,z1=450,z2=525}})
- room:attach(world)
- for i,id in ipairs({2,11}) do
-  local def=data.objectdata:getById(id)
-  local obj=Factory:create('object',def)
-  obj.data.index,obj.data.player,obj.data.team=i,i,i
-  obj.data.syncid='player:'..i
-  obj.data.x,obj.data.y,obj.data.z,obj.data.facing= i==1 and 410 or 475,0,490,i==1 and 1 or -1
-  obj:addComponent(Controller,i);obj:addComponent(Attributes,def);obj:addComponent(Sound,def)
-  world:attach(obj);objects[i]=obj
- end
- Input:reset(0);Input.delay=0
- paused=false;event('reset controlled_spawn=410,475 z=490 candidate_rng_seed=12564')
+ if objects then for _,obj in pairs(objects) do room:detach(obj);obj:destroy() end end
+ objects={};local cfg=copy(config)
+ cfg.initial=caseInput and caseInput.initial or {{x=410},{x=475}};cfg.localPlayer=caseInput and caseInput.localPlayer or 0
+ simulation=World.new(cfg);state=simulation:snapshot();tick=0;boundary=nil;paused=false;held={}
+ Input:reset(0);Input.delay=0;project();event('reset owned_world=retained-Practice no_regeneration=true')
 end
 local function desiredKeys(t)
  local k={}
- -- Deterministic callback stimulus. These are not OS or physical-key events.
- if t>=20 and t<30 then k.a=true end
- if t>=35 and t<45 then k.d=true end
- if t==65 or t==100 or t==140 then k.f=true end
- if t>=185 and t<193 then k.right=true end
- if t>=200 and t<208 then k.left=true end
- if t==235 then k.k=true end
- if t==330 then k.l=true;k.left=true;k.j=true end
- if t==430 or t==470 then k.j=true end
+ if resetReport then return k end
+ if caseInput then
+  for i,mask in ipairs(caseInput.inputs[t] or {0,0}) do for button,bit in pairs(bits) do if math.floor(mask/bit)%2==1 then k[mappings[i][button]]=true end end end
+  return k
+ end
+ if t>=10 and t<17 then k.a=true end
+ if t>=22 and t<29 then k.d=true end
+ if t==40 or t==70 then k.f=true end
+ if t>=95 and t<101 then k.right=true end
+ if t>=110 and t<116 then k.left=true end
+ if t==140 then k.k=true end
+ -- Three separate rising edges: defense, direction, attack.
+ if t==190 then k.l=true elseif t==191 then k.left=true elseif t==192 then k.j=true end
  return k
 end
 local function inject()
- local want=desiredKeys(tick)
+ local want=desiredKeys(tick+1)
  for k in pairs(held) do if not want[k] then love.keyreleased(k,k);held[k]=nil end end
  for k in pairs(want) do if not held[k] then love.keypressed(k,k,false);held[k]=true end end
 end
-local function observe()
- for i,o in ipairs(objects) do
-  local d,a=o.data,o.C.attr.data();seen[i][d.frame.id or -1]=true
-  if a.hp<minhp[i] then counts.damageEvents=counts.damageEvents+1;event(('damage player=%d hp=%.3f frame=%s'):format(i,a.hp,tostring(d.frame.id)));minhp[i]=a.hp end
-  if trace then trace:write(('%d,%d,%.9f,%.9f,%.9f,%s,%.6f,%.6f,%d\n'):format(tick,i,d.x,d.y,d.z,tostring(d.frame.id),a.hp,a.mp,d.facing)) end
+local function observe(masks)
+ for i,m in ipairs(state.actors) do
+  seen[i][m.frame]=true
+  if m.hp<minhp[i] then counts.damageEvents=counts.damageEvents+1;minhp[i]=m.hp end
+  if trace then trace:write(('%d,%d,%.17g,%.17g,%.17g,%d,%d,%d,%d\n'):format(tick-1,i,m.x,m.y,m.z,m.frame,m.hp,m.mp,m.facing)) end
  end
- for _,o in ipairs(data.lf2_objects) do if not olddynamic[o] then olddynamic[o]=true;counts.spawned=counts.spawned+1;if o.data.lf2id==440 or o.data.lf2id==224 then counts.projectiles=(counts.projectiles or 0)+1 end;event('spawn id='..tostring(o.data.lf2id)..' frame='..tostring(o.data.frame.id)) end end
+ for _,e in ipairs(simulation.events) do
+  if e.kind=='spawn' then counts.spawned=counts.spawned+1;if e.id==440 or e.id==224 then counts.projectiles=counts.projectiles+1 end end
+  event(encode(e))
+ end
+ if fullTrace then fullTrace:write(encode({tick=tick-1,state=state})..'\n');fullTrace:flush();inputTrace:write(encode({tick=tick-1,inputs=masks})..'\n');inputTrace:flush() end
+end
+local SourceHost=Component:extend({unique=true})
+function SourceHost:preupdate()
+ local masks={0,0}
+ for i=1,2 do for button,bit in pairs(bits) do if objects[i-1].C.controller.pressed(button) then masks[i]=masks[i]+bit end end end
+ local ok,result=pcall(simulation.tick,simulation,masks)
+ if not ok then
+  local message=tostring(result)
+  if not message:find('Unsupported',1,true) and not message:find('outside retained',1,true) then error(result) end
+  boundary=message;paused=true;screenshotRequested=true;event('unsupported_tick rolled_back=true '..boundary);output('boundary.txt',boundary)
+  output('boundary-state.json',encode({before=state,after=simulation:snapshot(),attemptedInputs=masks,unchanged=encode(state)==encode(simulation:snapshot())}))
+  return
+ end
+ state=result;tick=tick+1;project();playSounds(state.sounds);observe(masks)
 end
 local function drawBackground()
  love.graphics.push();love.graphics.scale(love.graphics.getWidth()/960,love.graphics.getHeight()/600)
- love.graphics.clear(0.08,0.10,0.14,1);love.graphics.setColor(1,1,1,1)
- for i,l in ipairs(catalog.district.layers) do
-  local phase=l.cc and math.floor(tick/2)%l.cc
+ love.graphics.clear(.08,.10,.14,1);love.graphics.setColor(1,1,1,1)
+ for i,l in ipairs(catalog.district.layers) do local phase=l.cc and tick%l.cc
   if not phase or (phase>=l.c1 and phase<=l.c2) then love.graphics.draw(bgimages[i],l.x,l.y) end
  end
  love.graphics.pop()
@@ -126,82 +189,104 @@ end
 local function drawHUD()
  local g=love.graphics;g.push();g.origin();g.scale(g.getWidth()/960,g.getHeight()/600)
  g.setColor(.04,.06,.10,1);g.rectangle('fill',0,0,960,100)
- for i,o in ipairs(objects) do
-  local x=i==1 and 24 or 520;local a=o.C.attr.data()
+ for i,m in ipairs(state.actors) do local x=i==1 and 24 or 520
   g.setColor(1,1,1,1);g.print(i==1 and 'NARUTO / P1' or 'SASUKE / P2',x,12)
   g.setColor(.20,.24,.30,1);g.rectangle('fill',x,37,390,10)
-  g.setColor(i==1 and .96 or .42,i==1 and .50 or .62,i==1 and .17 or 1,1);g.rectangle('fill',x,37,390*a.hp/500,10)
-  g.setColor(.3,.7,1,1);g.rectangle('fill',x,53,390*a.mp/1000,5)
-  g.setColor(.8,.85,.9,1);g.print(('HP %.0f  CHAKRA %.0f'):format(a.hp,a.mp),x,68)
+  g.setColor(i==1 and .96 or .42,i==1 and .50 or .62,i==1 and .17 or 1,1);g.rectangle('fill',x,37,390*math.max(0,m.hp)/500,10)
+  g.setColor(.3,.7,1,1);g.rectangle('fill',x,53,390*math.max(0,m.mp)/500,5)
+  g.setColor(.8,.85,.9,1);g.print(('HP %d  CHAKRA %d'):format(m.hp,m.mp),x,68)
  end
  g.setColor(.04,.06,.10,.94);g.rectangle('fill',0,553,960,47)
- g.setColor(.88,.91,.95,1);g.print('P1 WASD · F attack · G jump · H defend     P2 arrows · J attack · K jump · L defend',14,560)
- g.setColor(.65,.74,.83,1);g.print('Sasuke needles: J + L + facing direction together.    R restart · M mute · Esc pause · Q quit',14,580)
- g.setColor(.95,.85,.5,1);g.print('L2DF experimental rules | District | native macOS',310,109)
- if paused then g.setColor(0,0,0,.7);g.rectangle('fill',310,235,340,85);g.setColor(1,1,1,1);g.printf('PAUSED — Esc to resume',310,270,340,'center') end
- local a,b=objects[1].C.attr.data(),objects[2].C.attr.data()
- if a.hp<=0 or b.hp<=0 then g.setColor(1,.9,.5,1);g.printf((a.hp<=0 and 'SASUKE' or 'NARUTO')..' WINS — R to restart',260,220,440,'center') end
+ g.setColor(.88,.91,.95,1);g.print('P1 WASD / F attack / G jump / H defend     P2 arrows / J attack / K jump / L defend',14,560)
+ g.setColor(.65,.74,.83,1);g.print('Needles: L, then left/right, then J.  Cost: 100 chakra.   R restart / M mute / Esc pause / Q quit',14,580)
+ g.setColor(.95,.85,.5,1);g.print('NTSD · Training',420,109)
+ if paused then
+  g.setColor(0,0,0,.85);g.rectangle('fill',200,210,560,140);g.setColor(1,1,1,1)
+  g.printf(boundary and 'This move is not supported yet.\nPress R to restart.' or 'PAUSED / Esc to resume',210,255,540,'center')
+ end
+ if state.actors[1].hp<=0 or state.actors[2].hp<=0 then g.setColor(1,.9,.5,1);g.printf('Practice knockout / R to restart',260,190,440,'center') end
  g.pop()
 end
 function love.keypressed(key)
  counts.keyboardCallbacks=counts.keyboardCallbacks+1
- if key=='f12' then screenshotRequested=true elseif key=='q' then love.event.quit() elseif key=='escape' then paused=not paused elseif key=='r' then reset() elseif key=='m' then love.audio.setVolume(love.audio.getVolume()>0 and 0 or .7) end
+ if key=='f12' then screenshotRequested=true elseif key=='q' then love.event.quit() elseif key=='escape' then if not boundary then paused=not paused end elseif key=='r' then reset() elseif key=='m' then love.audio.setVolume(love.audio.getVolume()>0 and 0 or .7) end
 end
 function love.focus(focus) if not focus and not smoke then Input:reset(0);paused=true end end
 function love.load(args)
- for _,v in ipairs(args) do if v=='--smoke' then smoke=true end end
- if logdir then trace=assert(io.open(logdir..'/trace.csv','wb'));trace:write('tick,player,x,y,z,frame,hp,mp,facing\n');events=assert(io.open(logdir..'/events.log','wb')) end
- l2df:init{fps=60,datafps=30}
- Sync{size=60}
+ love.window.setTitle('NTSD · Training')
+ for _,v in ipairs(args) do if v=='--smoke' then smoke=true elseif v=='--ui-reset-check' then uiResetCheck=true end end
+ assert(not uiResetCheck or smoke,'Reset diagnostic requires smoke mode')
+ local casePath=os.getenv('NTSD_L2DF_CASE_INPUT')
+ if casePath then assert(smoke);local f=assert(io.open(casePath,'rb'));caseInput=json:decode(f:read('*a'));f:close();assert(not caseInput.states and caseInput.inputs,'Expected input-only smoke case') end
+ if logdir then
+  trace=assert(io.open(logdir..'/trace.csv','wb'));trace:write('tick,player,x,y,z,frame,hp,mp,facing\n')
+  eventFile=assert(io.open(logdir..'/events.log','wb'));fullTrace=assert(io.open(logdir..'/world.jsonl','wb'));inputTrace=assert(io.open(logdir..'/inputs.jsonl','wb'))
+ end
+ l2df:init{fps=1000/33,datafps=1000/33};Sync{size=60}
  Renderer{width=960,height=600,depth=600,vsync=true,ratio=true,filter='nearest',shadows=1,cellsize=1,background={0,0,0,0}}
  Renderer:addLayer('GAME',{index=1,width=960,height=600,background={0,0,0,0}})
- Input{keys={'up','down','left','right','attack','jump','defend'},mappings=mappings}
- Input.delay=0
+ Input{keys={'up','down','left','right','attack','jump','defend'},mappings=mappings};Input.delay=0
  data.objectdata=Storage()
- States:load('data/states');Kinds:load('data/kinds')
- Attributes=require 'data.scripts.component.attributes';objectAPI=require 'data.scripts.object'
- local actualSpawn=objectAPI.processOpoint
- objectAPI.processOpoint=function(o,d,...)
-  local p=d.opoint
-  if p and p.oid and not data.objectdata:getById(tonumber(p.oid)) then
-   counts.missingOpoint=counts.missingOpoint+1
-   if counts.missingOpoint<20 then event('unsupported_opoint id='..tostring(p.oid)) end
-  end
-  return actualSpawn(o,d,...)
- end
  for _,entry in ipairs(catalog.objects) do loadObject(entry) end
  for i,l in ipairs(catalog.district.layers) do bgimages[i]=pngImage(l.file,l.transparency~=0) end
- room=Scene{active=true};SceneManager:add(room,'prototype');SceneManager:set('prototype');reset()
+ room=Scene{active=true};room:addComponent(SourceHost);SceneManager:add(room,'prototype');SceneManager:set('prototype');reset()
  local engineUpdate,engineDraw=love.update,love.draw
  love.update=function(dt,islast)
+  if finished then return end -- L2DF may schedule another catch-up update before polling quit.
   elapsed=elapsed+dt
-  if not paused then
-   tick=tick+1;if smoke then inject() end
-   engineUpdate(dt,islast);observe()
+  if uiResetCheck and resetReady then
+   resetReady=false
+   local rejectedTick=tick;local unchanged=encode(state)==encode(simulation:snapshot())
+   love.keypressed('r','r',false)
+   local entityCount=0;for _ in pairs(objects) do entityCount=entityCount+1 end
+   local inputClear=true
+   for i=0,1 do
+    local a=simulation.input[i]
+    for _,fields in ipairs({a.buffers,a.previous,a.current,a.history,a.progress}) do for _,v in pairs(fields) do if v~=0 then inputClear=false end end end
+   end
+   resetReport={rejectedTick=rejectedTick,boundaryRolledBack=unchanged,resetTick=tick,entities=entityCount,
+    projectileCount=#state.projectiles,inputClear=inputClear,mpSpent=copy(state.mpSpent),
+    randomRestored=simulation.random.index==config.random.index and simulation.random.counter==config.random.counter,
+    resetCallback='love.keypressed r',paused=paused,boundaryCleared=boundary==nil}
+   output('reset-state.json',encode({report=resetReport,state=state}))
   end
-  if smoke and tick>=600 then
-   local json=l2df.import 'class.parser.json'
-   local summary={ticks=tick,counts=counts,minHP=minhp,framesSeen=seen,originalExecuted=false,nativeNTSDCompared=false,smokeInput='synthetic love keyboard callbacks',backend=l2df.api.BACKEND,love={love.getVersion()},screenshots=screenshots}
-   output('summary.json',json:dump(summary,true));event('smoke_complete');love.event.quit(counts.damageEvents>0 and counts.projectiles and counts.projectiles>0 and counts.audioPlaying>0 and 0 or 2)
+  if not paused then if smoke then inject() end;engineUpdate(dt,islast) end
+  if uiResetCheck and boundary then return end -- retain notice until its PNG callback completes
+  if uiResetCheck and resetReport then
+   resetReport.continuationTicks=tick
+   local r=resetReport;local passed=r.boundaryRolledBack and r.resetTick==0 and r.entities==2 and r.projectileCount==0 and r.inputClear and r.randomRestored and not r.paused and r.boundaryCleared and tick==1
+   output('summary.json',encode({uiResetCheck=r,passed=passed,counts=counts,love={love.getVersion()},originalExecuted=false}));event('reset_check_complete pass='..tostring(passed));finished=true;love.event.quit(passed and 0 or 2);return
+  end
+  if smoke and (boundary or tick>=(caseInput and #caseInput.inputs or 330)) then
+   output('summary.json',encode({ticks=tick,counts=counts,minHP=minhp,framesSeen=seen,screenshots=screenshots,mpSpent=state.mpSpent,
+    originalExecuted=false,domain='retained two-fighter Practice',input='synthetic love callbacks through L2DF Input/Controller',
+    backend=l2df.api.BACKEND,love={love.getVersion()},case=caseInput and caseInput.label,boundary=boundary,
+    cadenceSeconds=l2df.tickrate,timerContract='L2DF accumulator; original strict elapsed >33ms/100ms lag cap not implemented',elapsed=elapsed}))
+   local passed=not boundary and counts.damageEvents>0 and counts.projectiles>=5 and counts.audioPlaying>0
+   event('smoke_complete pass='..tostring(passed));finished=true;love.event.quit(passed and 0 or 2)
   end
  end
  love.draw=function()
   drawBackground();engineDraw();drawHUD()
   if screenshotRequested then
    screenshotRequested=false
-   love.graphics.captureScreenshot(function(img) output('interactive-'..tick..'.png',img:encode('png'):getString()) end)
+   love.graphics.captureScreenshot(function(img)
+    output('interactive-'..tick..'.png',img:encode('png'):getString())
+    if uiResetCheck and boundary then resetReady=true end
+   end)
   end
-  if smoke and (tick>=5 and not screenshots.idle or tick>=80 and not screenshots.melee or (counts.projectiles or 0)>0 and not screenshots.projectile) then
-   local name=not screenshots.idle and 'idle' or not screenshots.melee and 'melee' or 'projectile'
-   screenshots[name]=tick
-   love.graphics.captureScreenshot(function(img) local bytes=img:encode('png');output(name..'.png',bytes:getString()) end)
+  if smoke then
+   local name
+   if tick>=2 and not screenshots.idle then name='idle'
+   elseif #state.projectileDraws>=5 and not screenshots.projectile then name='projectile'
+   elseif #state.projectileDraws>=5 and screenshots.projectile and tick>=screenshots.projectile+3 and not screenshots.fan then name='fan'
+   elseif counts.damageEvents>0 and not screenshots.hit then name='hit' end
+   if name then screenshots[name]=tick;love.graphics.captureScreenshot(function(img) output(name..'.png',img:encode('png'):getString()) end) end
   end
  end
  love.audio.setVolume(.7)
- event('ready backend='..l2df.api.BACKEND..' native_window='..love.graphics.getWidth()..'x'..love.graphics.getHeight()..' networking=unregistered')
+ event('ready backend='..l2df.api.BACKEND..' native_window='..love.graphics.getWidth()..'x'..love.graphics.getHeight()..' networking=unregistered cadence=33ms')
 end
 love.run=l2df.gameloop
-function love.quit() if trace then trace:close() end;if events then events:close() end end
-function love.errorhandler(msg)
- local err=debug.traceback(tostring(msg),2);print(err);output('error.txt',err);return function() return 1 end
-end
+function love.quit() for _,f in ipairs({trace,eventFile,fullTrace,inputTrace}) do if f then f:close() end end end
+function love.errorhandler(msg) local err=debug.traceback(tostring(msg),2);print(err);output('error.txt',err);return function() return 1 end end
