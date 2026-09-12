@@ -5,15 +5,19 @@
 extern "C" {
 #endif
 
-/* ABI1 has only unbound Actor storage, never a loaded match. */
+/* ABI1 additive capabilities: no gameplay/tick is implemented. */
 #define NTSD_BRIDGE_ABI_VERSION 1u
 #define NTSD_BRIDGE_ACTOR_SIZE 1056u
 #define NTSD_BRIDGE_CAP_ACTOR_STORAGE 1u
+#define NTSD_BRIDGE_CAP_FRONT_SETTINGS 2u
 #define NTSD_BRIDGE_ACTOR_STORAGE 1u
+#define NTSD_BRIDGE_PRISTINE_BOOT 2u
+#define NTSD_BRIDGE_FRONT_SETTINGS_READY 3u
 enum ntsd_bridge_result {
     NTSD_BRIDGE_OK = 0, NTSD_BRIDGE_INVALID_ARGUMENT = 1,
     NTSD_BRIDGE_ABI_MISMATCH = 2, NTSD_BRIDGE_INVALID_HANDLE = 3,
     NTSD_BRIDGE_OUT_OF_BOUNDS = 4, NTSD_BRIDGE_UNDEFINED = 5,
+    NTSD_BRIDGE_UNSUPPORTED = 6,
     NTSD_BRIDGE_LIMIT = 7,
     NTSD_BRIDGE_INTERNAL_ERROR = 8
 };
@@ -35,6 +39,26 @@ int32_t ntsd_bridge_read_i32(uint64_t handle, uint32_t offset, int32_t *out_valu
    Arrays hold count elements. Commit all edits and one revision, or none. */
 int32_t ntsd_bridge_setup_apply_i32(uint64_t handle, const uint32_t *offsets,
                                    const int32_t *values, uint32_t count);
+
+/* Declared headless allocator/device profiles, never a native heap rule. */
+#define NTSD_BRIDGE_PROFILE_ASCENDING_A5 0u
+#define NTSD_BRIDGE_PROFILE_REVERSE_RAMP 1u
+/* Absolute UTF-8 resource-root bytes, no NUL. Own data is copied/verified.
+   Maximum4 pristine sessions, within the existing total64 registry limit. */
+int32_t ntsd_bridge_create_pristine(uint32_t abi, const uint8_t *root,
+                                   uint32_t count, uint32_t profile,
+                                   uint64_t *out_handle);
+/* Real front-resource and settings consumers; one commit or full rollback. */
+int32_t ntsd_bridge_load_front_settings(uint64_t handle);
+/* Developer test: execute the real consumers and reject at final commit.
+   Returns UNSUPPORTED; every owned byte, mask and revision stays unchanged. */
+int32_t ntsd_bridge_developer_front_rollback(uint64_t handle);
+/* Read-only JSON observation of actual owner, schema1, at most32MB.
+   bytes=NULL/capacity=0 queries size; short buffers write no outputs.
+   Each successful result includes revision; buffers may not overlap. */
+int32_t ntsd_bridge_loaded_snapshot(uint64_t handle, uint8_t *bytes,
+                                   uint32_t capacity, uint32_t *out_size,
+                                   uint64_t *out_revision);
 
 #ifdef __cplusplus
 }

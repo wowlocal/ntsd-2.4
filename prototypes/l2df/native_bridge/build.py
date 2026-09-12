@@ -52,6 +52,8 @@ def verify_package(root):
     manifest = json.loads((root / 'inputs.json').read_text())
     package = root / 'package'
     expected = {}
+    wrapper = root / 'wrapper-inputs'
+    pinned_wrapper_sources = set()
     copied_inputs = 0
     for pin in manifest['pins']:
         if 'copy' not in pin:
@@ -61,8 +63,14 @@ def verify_package(root):
         copied_inputs += 1
         if copied.is_relative_to(package):
             expected[copied] = pin['sha256']
-    for relative in ['Package.swift', 'Sources/NTSDNativeBridge/Bridge.swift']:
-        expected[package / relative] = sha(root / 'wrapper-inputs' / relative)
+        elif copied.is_relative_to(wrapper):
+            relative = copied.relative_to(wrapper)
+            if relative == Path('Package.swift') or relative.parts[:2] == ('Sources', 'NTSDNativeBridge'):
+                expected[package / relative] = pin['sha256']
+                pinned_wrapper_sources.add(copied)
+    observed_wrapper_sources = {p for p in (wrapper / 'Sources/NTSDNativeBridge').rglob('*') if p.is_file()}
+    observed_wrapper_sources.add(wrapper / 'Package.swift')
+    assert observed_wrapper_sources == pinned_wrapper_sources, 'Unpinned wrapper source/manifest file set'
     actual = {p for p in (package / 'Sources').rglob('*') if p.is_file()}
     actual.add(package / 'Package.swift')
     assert actual == set(expected), 'Actual compiled source/manifest file set differs'
@@ -119,10 +127,11 @@ def run_owned(command, cwd, output, timeout, env=None, size_root=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--label', required=True)
+    parser.add_argument('--study', choices=['native-bridge-20260912', 'loaded-session-20260912'], default='native-bridge-20260912')
     args = parser.parse_args()
     assert args.label and Path(args.label).name == args.label and args.label not in ('.', '..')
     storage, volume = storage_check()
-    root = storage / 'native-bridge-20260912' / args.label
+    root = storage / args.study / args.label
     root.mkdir(parents=True, exist_ok=False)
     package = root / 'package'
     package.mkdir()
@@ -160,14 +169,14 @@ def main():
         pins.append({'path': str(source), 'copy': str(target), 'bytes': source.stat().st_size, 'sha256': sha(source)})
     shutil.copy2(wrapper / 'Package.swift', package / 'Package.swift')
     shutil.copytree(wrapper / 'Sources/NTSDNativeBridge', package / 'Sources/NTSDNativeBridge')
-    plan = ROOT / 'docs/research/L2DF_NATIVE_BRIDGE.md'
+    plan = ROOT / 'docs/research' / ('L2DF_LOADED_SESSION.md' if args.study == 'loaded-session-20260912' else 'L2DF_NATIVE_BRIDGE.md')
     shutil.copy2(plan, root / 'plan.md')
     pins.append({'path': str(plan), 'copy': str(root / 'plan.md'), 'bytes': plan.stat().st_size, 'sha256': sha(plan)})
     manifest = {'createdAtUTC': now(), 'sourceRevision': REVISION, 'storage': volume, 'pins': pins,
                 'swiftVersion': subprocess.check_output(['swift', '--version'], text=True).strip(),
                 'macOS': subprocess.check_output(['sw_vers'], text=True).strip(),
                 'architecture': subprocess.check_output(['uname', '-m'], text=True).strip(),
-                'scope': 'Unbound constructor storage only; no match/tick; no original execution'}
+                'scope': 'Owned constructor/boot/front-settings; no match/tick; no original execution'}
     write_json(root / 'inputs.json', manifest)
     command = ['swift', 'build', '--package-path', str(package), '--scratch-path', str(root / 'swift-build'),
                '--cache-path', str(root / 'cache'), '--config-path', str(root / 'config'),

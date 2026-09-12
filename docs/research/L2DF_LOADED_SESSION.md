@@ -1,6 +1,9 @@
 # Owned loaded-session path
 
-Status: finite implementation plan, 2026-09-12; execution not yet accepted.
+Status: implementation, bounded comparison and independent review passed,
+2026-09-12. Published acceptance: [evidence](../evidence/l2df-loaded-session.json).
+The original finite plan is preserved in the
+build input snapshot.
 The next executable unit is pristine boot storage followed by the original
 front-resource/settings handoff. It starts the persistent owner needed by
 `OriginalLoadedGameplayCall`; it does not expose a tick or claim a loaded game.
@@ -147,3 +150,87 @@ external effects only after commit. Do not freeze the live clock to avoid the
 old no-draw loading-progress boundary: use accepted full progress composition
 when adding live loading. AI/unhandled World branches and complete game/device
 acceptance remain explicit dependencies.
+
+## Implementation and retained result
+
+The native session stores the constructed World, PE globals, BSS input regions,
+raw control file and 23 consumed original DIBs. `load_front_settings` invokes the
+two existing consumers in one staged transaction and retains their records and
+observations. Registry handles own either Actor storage or a pristine session;
+wrong-kind reads/setup/loading reject. ABI 1 adds front/settings capability 2 to
+Actor capability 1, with no gameplay bit or tick symbol. There are at most 4
+pristine sessions inside the 64-owner registry, at most 32 MB of consumed DIBs per
+session, and a 32 MB export limit. The static 8192-byte SHA is independently pinned
+as `b8eab0fcf4226195ff6ce9ed88800e220f3fa89c200718cd52c134b481406036`;
+runtime validates manifest schema/EXE identity/non-executable declaration,
+resource hashes/extents and contained paths before registering the owner.
+
+Independent pre-execution review checked the ownership/initialization contract,
+complete comparator and source/package gates. Required improvements covered
+manifest-derived exact compiled file sets, independent static hash, explicit
+surface mask, JSON types (bool is not numeric0/1), duplicate bitmap detection,
+complete boot inventory, frozen comparator loading and immutable input pins.
+Root separately matched the resource recipe to both retained initial globals;
+`resources-01/boot-input-provenance-01.json` is an input-provenance observation,
+not a Native execution. Its resource manifest SHA is
+`49b323e944d0cef672eae2d7b45d36c759c73c30b060d5faa34422c0813a144a`.
+
+One new build `session-01` returned 0 after 83.9007 s, PID 8856, start 2026-09-12
+13:10:14 Moscow. It used 94,311,105 bytes at completion and produced the arm64
+dylib 6,584,216 bytes, SHA
+`9d52465bce04da2606358dd2a253d5c54ed9da3278b0b74e76b2d00d2f6bb2a7`.
+The 186 compiled source/manifest files matched frozen inputs. The existing
+Core warning about inferred Void context remains in the unchanged source.
+Host: macOS 26.6.2/25G83, Apple Swift 6.3.3. Inspection found 13 C ABI exports,
+no tick symbol, and only Apple system/Swift frameworks including CryptoKit.
+`codesign --verify --strict` passed for the local dylib; this is not a signed
+release app. Details are retained in `session-01/artifact-inspection.json`.
+
+One native LÖVE 11.5/LuaJIT arm64 run `session-01/ffi/ffi-01` returned 0 in 2.009 s,
+PID 9215, start 13:11:50 Moscow. It passed 269 ABI assertions: the retained 201
+Actor-storage checks plus 68 additional session checks. Two whole constructor
+records/masks still match the independent Actor projection. For pristine
+owners, both the caller path buffer and a copied control file/DIB were changed
+after creation; the owner continued from its copied bytes. Only the declared
+test control copy and cursor DIB copy changed; original/resource pack bytes and
+all other input copies were checked unchanged. A deliberate failure after both
+consumers completed preserved the entire boot export, then the normal call
+committed exactly one revision and lifecycle 2→3. Repeat loading rejected;
+release and stale/wrong-kind calls behaved as declared.
+
+The first **external comparator** stopped with Python 3.9.6
+`TypeError: zip() takes no keyword arguments`. This was a harness error after
+Native returned successfully. No runtime/source behavior or expected data was
+changed. Two `strict=True` arguments were removed after independent review
+confirmed existing exact length guards prevent truncation. Original error,
+initial frozen checker and Native outputs remain unchanged. The corrected
+checker SHA is
+`128abe1b41b8c431633bf291bec5f620d4e255a7e259836d8aea2bc782c40c2e`.
+
+The separate read-only `session-01/comparison-01` job returned 0 in 1.002 s and
+compared those same actual outputs. Each of two profiles matched 144 record
+comparisons totaling 2,949,520 semantic bytes plus their masks, 6,892 front events,
+63 settings events and 24 retained wrappers. The source observes 53 globals and
+53 scratch checkpoints; all 53 pairs were compared. The Native export contains
+63 pairs, which does not create evidence for unobserved checkpoints. No full
+145/94-case rerun, original execution, Native rebuild or FFI repeat occurred.
+The inherited `ffi-01/result.json` lifecycle text remains `ACTOR_STORAGE` for
+the original suite; actual loaded exports and the external comparator establish
+the two new owners' lifecycle 2→3.
+
+Final verification is
+`build/l2df-prototype/loaded-session-20260912/session-01/comparison-01/verification.json`;
+its sibling `prior-error.json`/`prior-error.txt` preserve the failed comparator.
+Build and FFI jobs remain in their original directories. This is a verified
+headless startup handoff dependency; catalog/menu/gameplay and macOS device
+integration continue from the same owner in the next executable stage.
+
+Final independent read-only review passed. Root's separate
+`session-01/root-audit-01.json` verified 184 main Git inputs, 196 frozen copies,
+186 compiled inputs, 83 FFI pins and 15 comparator pins. The Native wrapper
+remained unchanged; only the two guarded zip keywords changed in the external
+comparator. `root-mutation-binding-01.json` independently binds the two permitted
+test mutations to the control copy and LF2_CURSOR `embedded/023.dib`, language
+1028. Earlier foundation library/Actor outputs and presentation artifacts remain
+unchanged. Each profile's `semanticBytesAndMasks` counter denotes 2,949,520
+record bytes **plus the same number of mask bytes**, not their combined sum.

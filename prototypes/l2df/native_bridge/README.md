@@ -1,6 +1,53 @@
-# Native bridge foundation
+# Native session bridge
 
-ABI 1 exposes **owned, unbound Actor storage** through
+The current library additionally creates an owned pristine session from the
+exported original resources and runs the original front-resource/settings
+handoff. `ntsd_bridge_create_pristine` reports `PRISTINE_BOOT`; only a successful
+`ntsd_bridge_load_front_settings` changes it to `FRONT_SETTINGS_READY`. The
+resource path is UTF-8 bytes plus a count. Profile 0 is the declared A5/ascending
+allocator input; profile 1 is ramp/reverse. These are headless device profiles,
+not Windows heap behavior or a playable game initializer.
+
+It owns PE-backed globals/BSS, its constructed World, 24 bitmap wrappers,
+settings scratch and consumed resource bytes. Complete rollback, read-only
+snapshot export and release work through the same opaque session handle.
+`ntsd_bridge_developer_front_rollback` is a test-only late failure; it reports
+`UNSUPPORTED` after running the real consumers, without committing their state.
+No tick or gameplay capability is exported. The original Actor-storage API
+below remains available; using its setup/read functions on a pristine owner
+returns `UNSUPPORTED`.
+
+Current arm64 library:
+
+```text
+build/l2df-prototype/loaded-session-20260912/session-01/swift-build/arm64-apple-macosx/release/libNTSDNativeBridge.dylib
+```
+
+SHA-256 `9d52465bce04da2606358dd2a253d5c54ed9da3278b0b74e76b2d00d2f6bb2a7`;
+6,584,216 bytes. Its data input root is
+`build/l2df-prototype/loaded-session-20260912/resources-01/resources`.
+The completed commands were:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 prototypes/l2df/native_bridge/build.py --study loaded-session-20260912 --label session-01
+PYTHONDONTWRITEBYTECODE=1 python3 prototypes/l2df/native_bridge/check_ffi.py --study loaded-session-20260912 --build-label session-01 --label ffi-01 --resources build/l2df-prototype/loaded-session-20260912/resources-01/resources
+```
+
+Those labels already exist and refuse overwrite. Build took 83.90 s; native
+LÖVE/FFI took 2.009 s and passed 269 assertions, including the retained Actor suite.
+The external comparator initially hit a Python 3.9 `zip(strict=True)` error.
+After the independently reviewed, equivalent length-guard correction,
+`session-01/comparison-01/verification.json` passed on the same saved outputs.
+No Native/FFI repetition or expected changes were needed. Each of two natural
+settings trajectories matched 144 records, all 6,892 front events, 63 settings
+events, 24 retained bitmap records and 53 globals/scratch checkpoint pairs.
+All 186 compiled package files matched their frozen pins. Original failure and
+both comparator versions are preserved. The full test adds no window or device
+claim. See [the session contract](../../../docs/research/L2DF_LOADED_SESSION.md).
+
+## Earlier Actor-storage foundation
+
+ABI 1 also exposes **owned, unbound Actor storage** through
 [ntsd_bridge.h](include/ntsd_bridge.h). It does not initialize a match and has no
 tick entry point. The developer/setup API is infrastructure for connecting the
 accepted Swift engine; it is not the game interface.

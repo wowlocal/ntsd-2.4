@@ -189,4 +189,19 @@ active корпус относится к pristine EXE; DLL-enabled join, пов
 независимого review закрыты до исполнения. Старые приложения не менялись.
 Ближайший исполняемый шаг уточнён: [собственная pristine boot-сессия и front
 resources/settings handoff](L2DF_LOADED_SESSION.md), затем каталог/меню/запуск
-и те же64 whole loaded calls. Код сессии ещё не принят; полный goal открыт.
+и те же64 whole loaded calls. На момент экспорта код сессии ещё не был принят.
+
+**Собственная boot/front-settings сессия принята:** два сохранённых natural
+профиля совпали по144 записям/2949520 байтам и стольким же маскам каждый,
+6892 front events,63 settings events,24 wrappers и53 наблюдавшимся парам
+globals/scratch. Один build/один Native FFI run terminal0;269 ABI checks,
+полное владение входами и rollback проверены. Ошибка внешнего Python3.9
+компаратора сохранена; две эквивалентные zip-правки проверены независимо,
+повторное сравнение читало прежние Native outputs.186 compiled inputs,
+83 FFI pins и15 comparison pins проверены. Приёмка:
+[карточка](L2DF_LOADED_SESSION.md), [evidence](../evidence/l2df-loaded-session.json).
+
+Сессия сохраняет собственное состояние от PRISTINE_BOOT до FRONT_SETTINGS_READY.
+Следом — настоящий front-screen/early-menu caller и загрузка каталога в том же
+owner. Текущий `.app` по-прежнему Practice; tick API, весь игровой цикл,
+устройства и остальные критерии полной цели открыты.

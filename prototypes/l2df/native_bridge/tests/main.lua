@@ -40,7 +40,7 @@ function love.errorhandler(message)
 end
 function love.load()
  check('ABI version',lib.ntsd_bridge_abi_version()==1)
- check('only Actor storage capability',lib.ntsd_bridge_capabilities()==1)
+ check('declared capabilities without gameplay',lib.ntsd_bridge_capabilities()==1 or lib.ntsd_bridge_capabilities()==3)
  check('initial registry empty',lib.ntsd_bridge_live_sessions()==0)
  local b=backing(0xa5);local original=ffi.string(b,1056)
  local sentinel=ffi.new('uint64_t[1]',0x112233)
@@ -113,11 +113,14 @@ function love.load()
  check('limit does not allocate',lib.ntsd_bridge_live_sessions()==64)
  for _,h in ipairs(owners) do status('destroy owner',lib.ntsd_bridge_destroy(h),C.NTSD_BRIDGE_OK) end
  check('registry empty after release',lib.ntsd_bridge_live_sessions()==0)
+ if os.getenv('NTSD_BRIDGE_RESOURCE_ROOT') then
+  dofile(love.filesystem.getSource()..'/loaded.lua')(ffi,lib,check,status)
+ end
  local out=assert(io.open(love.filesystem.getSource()..'/result.json','w'))
  local major,minor,revisionVersion,codename=love.getVersion()
  out:write('{"pass":true,"abi":1,"lifecycle":"ACTOR_STORAGE","gameplayCapability":false,"checks":'..#checks..',"love":['..major..','..minor..','..revisionVersion..'],"jitArch":"'..jit.arch..'","labels":[')
  for i,label in ipairs(checks) do if i>1 then out:write(',') end;out:write('"'..label..'"') end
  out:write(']}\n');out:close()
- print('Native bridge FFI PASS '..#checks..' checks; Actor storage only; no gameplay capability')
+ print('Native bridge FFI PASS '..#checks..' checks; no gameplay capability')
  love.event.quit(0)
 end
