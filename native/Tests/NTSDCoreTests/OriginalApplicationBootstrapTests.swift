@@ -33,6 +33,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         XCTAssertEqual(actual.state.screenBody,previous.state.screenBody)
         XCTAssertEqual(actual.state.settings,previous.state.settings)
         XCTAssertEqual(actual.state.bitmapInputs,previous.state.bitmapInputs)
+        XCTAssertEqual(actual.state.graphics,previous.state.graphics)
         XCTAssertEqual(actual.loop.message,previous.loop.message)
         XCTAssertEqual(actual.loop.counter,previous.loop.counter)
         XCTAssertEqual(actual.loop.timer.baseline,previous.loop.timer.baseline)
@@ -88,6 +89,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
             store:{ $0.store($1,$2) },beforeCommit:{ owner,menu,p in
                 try p.complete(owner,Self.context(menu.state).globals)
             })
+        var graphicsSeen = startupBatch.graphics
         func expectedStartupOperations() throws -> [OriginalApplicationStartupOperation] {
             XCTAssertEqual(parent.spec.label,"original-entry")
             let rawEvents = try XCTUnwrap(rawParent["events"] as? [[String:Any]])
@@ -246,6 +248,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         }
         func compareMenuEnd(_ loop: Session.Loop,_ owned: Session.State) throws {
             let a = try XCTUnwrap(menu)
+            try OriginalApplicationGraphicsTests.compareOwner(owned.graphics,kind:"menu",index:index)
             let bindings = try XCTUnwrap(owned.bitmapInputs)
             try OriginalSurfaceSourceColorsTests.compareOwned(bindings,frontIndex:fi)
             XCTAssertEqual(Set(bindings.images.keys),Set(try fc.images.keys.map { try XCTUnwrap(UInt32($0)) }))
@@ -290,7 +293,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         }
         for (iteration,step) in lc.iterations.enumerated() {
             p.stepIndex = iteration
-            let before = try XCTUnwrap(app.session),priorDelivered = delivered
+            let before = try XCTUnwrap(app.session),priorDelivered = delivered,graphicsStart = graphicsSeen.count
             try p.snapshot(Self.context(before.state),before.loop,step.before)
             let events = Array(lc.events[step.before.events..<step.after.events])
             let loopKinds: Set<String> = ["peek","get","translate","dispatchMessage","time","sleep"]
@@ -398,7 +401,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
                             let value = e.arguments[2]
                             p.store(Int(e.arguments[0]),(0..<Int(e.arguments[1])).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
                         }
-                    },checkpoint:{ point,full,result in
+                    },graphicsObserve:{ graphicsSeen.append($0) },checkpoint:{ point,full,result in
                         liveFull = full
                         switch point {
                         case .dispatch:
@@ -432,6 +435,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
                     })
                 guard case .committed(let batch) = outcome else { XCTFail("Bootstrap unexpectedly reached loading");throw B.Stop.late }
                 XCTAssertEqual(batch.effects,try expectedEffects(step))
+                XCTAssertEqual(batch.graphics,Array(graphicsSeen[graphicsStart...]))
                 delivered += batch.effects
                 let own = try XCTUnwrap(app.session)
                 try Self.sameStartup(XCTUnwrap(app.startup),startup)
@@ -457,6 +461,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         }
         XCTAssertEqual(p.index,lc.events.count);p.compareStores();XCTAssertEqual(callbackCount,1)
         XCTAssertEqual(committed,fail == nil && c.end == "iteration")
+        try OriginalApplicationGraphicsTests.compare(graphicsSeen,kind:"menu",index:index,prefix:fail != nil,inputs:app.session?.state.bitmapInputs)
         if fail == nil { XCTAssertTrue(menuReached);XCTAssertEqual(bodyCalls,bodyCase == nil ? 0 : 1) }
         _ = background
     }

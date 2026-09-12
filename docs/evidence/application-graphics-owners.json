@@ -1,0 +1,407 @@
+{
+  "schema": 1,
+  "status": "accepted_finite_native_graphics_ownership",
+  "createdUTC": "2026-09-12T20:22:39.994381+00:00",
+  "baseCommit": "2ab53a965c668838d9da62b29694570694765966",
+  "sourceExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "safetyIncidentsOpen": 3,
+  "scope": "Production Bootstrap/MenuSession display resources and immutable resolved commands; retained loading-prefix composition. No rasterizer, actual device conversion or new production loading session.",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved controlled reference API requests and packaged original DIB colors; new data-only reference and Native Swift tests",
+    "planInputPins": 144,
+    "aggregateCounts": {
+      "byRoot": {
+        "input": {
+          "bitmap": 21196,
+          "blit": 506,
+          "clear": 56,
+          "fill": 100,
+          "front": 2170,
+          "getDC": 294,
+          "method": 106,
+          "releaseDC": 291,
+          "setBackgroundMode": 291,
+          "setTextColor": 291,
+          "textOut": 291,
+          "window": 1308
+        },
+        "loading": {
+          "bitmap": 5100,
+          "blit": 156,
+          "clear": 36,
+          "fill": 24,
+          "front": 597,
+          "getDC": 72,
+          "method": 57,
+          "releaseDC": 72,
+          "setBackgroundMode": 72,
+          "setTextColor": 72,
+          "textOut": 72,
+          "window": 337
+        },
+        "menu": {
+          "bitmap": 20329,
+          "blit": 239,
+          "fill": 48,
+          "front": 1027,
+          "getDC": 141,
+          "method": 47,
+          "releaseDC": 138,
+          "setBackgroundMode": 138,
+          "setTextColor": 138,
+          "textOut": 138,
+          "window": 1201
+        }
+      },
+      "chains": 110,
+      "composed": {
+        "NULLDownstreamBltOccurrences": 18,
+        "activeUnresolvedTextAcquisitions": 6,
+        "blitOccurrences": 901,
+        "clearOccurrences": 92,
+        "explicitZeroDestinationRectOccurrences": 195,
+        "failedTextReleaseDCOccurrences": 6,
+        "fillOccurrences": 172,
+        "getDCOccurrences": 507,
+        "invalidateOccurrences": 4,
+        "laterBitmapReleaseOccurrences": 15,
+        "methodOccurrences": 210,
+        "negativeTextGetDCOccurrences": 6,
+        "releaseDCOccurrences": 501,
+        "setBackgroundModeOccurrences": 501,
+        "setTextColorOccurrences": 501,
+        "textAcquisitions": 501,
+        "textOutOccurrences": 501
+      },
+      "sourceEvents": 41658,
+      "stages": 224,
+      "uniqueCommands": {
+        "bitmap": 3465,
+        "front": 2061,
+        "window": 86
+      },
+      "uniqueFrontGraphics": {
+        "blit": 491,
+        "clear": 56,
+        "fill": 90,
+        "getDC": 276,
+        "method": 112,
+        "releaseDC": 273,
+        "setBackgroundMode": 273,
+        "setTextColor": 273,
+        "textOut": 273
+      }
+    },
+    "expectedBytesUnchanged": true,
+    "referenceSeconds": 1.474912959
+  },
+  "native": {
+    "candidate": 3,
+    "methods": 32,
+    "seconds": 166.551,
+    "buildSeconds": 309.09,
+    "rawOverrides": false,
+    "primaryRoutes": 48,
+    "primaryCommits": 47,
+    "primaryNullCursorRejections": 1,
+    "menuInputChains": 50,
+    "loadingPrefixChains": 12,
+    "distinctStages": 224,
+    "retainedEvents": 41658,
+    "distinctCommands": 5612,
+    "composedCommands": 53265,
+    "windowCommands": 86,
+    "bitmapCommands": 3465,
+    "frontCommands": 2061,
+    "supplementalControlGroups": 11,
+    "supplementalMethods": 3,
+    "nonnegativeTextAcquisitions": 501,
+    "negativeGetDC": 6,
+    "unresolvedTextReleases": 6,
+    "requestMaskBytes": 59912,
+    "wholeRollbackPreserved": true,
+    "exactReturnedBatchIntervals": true,
+    "requestedMetadataIncludesFailedReplies": true,
+    "changesAfterCandidateFreeze": false,
+    "NTSDNativeLinked": true
+  },
+  "preservedFailures": [
+    {
+      "candidate": 1,
+      "buildSeconds": 307.66,
+      "methods": 32,
+      "seconds": 55.954,
+      "failures": 32,
+      "unexpected": 14,
+      "reason": "New fixture decoder expected Int instead of typed Reference; whole-caller comparison prevented. Independent review also identified stale text sequence after negative GetDC and self-sized returned batch comparison."
+    },
+    {
+      "candidate": 2,
+      "buildSeconds": 310.73,
+      "methods": 32,
+      "seconds": 166.639,
+      "failures": 1,
+      "unexpected": 0,
+      "reason": "Loading test adapter supplied0 instead of existing parent input presentResult=-1. Candidate3 passes parent declared draw/presentation inputs; no Core or expected change."
+    }
+  ],
+  "preservation": {
+    "oldFixtures": 373,
+    "currentFixtures": 374,
+    "oldFixturesUnchanged": true,
+    "nativeFiles": 881,
+    "nativeBytes": 4103316312,
+    "packageFiles": 46,
+    "packageBytes": 29700372,
+    "packageUnchanged": true,
+    "nativeArchive": {
+      "NativeTestsExecuted": false,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "candidate": 3,
+      "inputManifest": {
+        "bytes": 338314,
+        "path": "build/research/application-graphics-owners-native-20260912/native-members1.json",
+        "sha256": "32829f951e73b82083691c28670910e694dbce6e2e30b6f46ada0bcd84f27b6b"
+      },
+      "members": 881,
+      "nativeFiles": 881,
+      "oldFixtures": 373,
+      "packageFiles": 46,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-graphics-owners-native-20260912/native-candidate3.tar",
+      "payloadBytes": 4103316312,
+      "readbackComparedEveryByteToSource": true,
+      "sourceExecuted": false,
+      "tar": {
+        "bytes": 4104908800,
+        "sha256": "57fded949098922037388b3f154ccd12449fc6c234d52ba446eefe72aa0ef31e"
+      },
+      "verifiedUTC": "2026-09-12T20:22:06.197128+00:00"
+    },
+    "evidenceArchive": {
+      "NativeTestsExecuted": false,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "allPlanPins": 144,
+      "baseCopies": 8,
+      "candidate1FailurePreserved": true,
+      "candidate1FullReconstructionVerifiedFiles": 881,
+      "candidate1OverlayMembers": [
+        "candidate1/native/Sources/NTSDCore/OriginalApplicationGraphics.swift",
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGraphicsTests.swift",
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift",
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift"
+      ],
+      "candidate2FailurePreserved": true,
+      "candidate2FullReconstructionVerifiedFiles": 881,
+      "candidate2OverlayMembers": [
+        "candidate2/native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift"
+      ],
+      "dependencyPins": 3,
+      "inputManifest": {
+        "bytes": 65756,
+        "path": "build/research/application-graphics-owners-native-20260912/evidence-members.json",
+        "sha256": "22452a54dbe75fe7f44e756cbe8f2fdf72c117f16b0d29c064dc9a69e6ab6251"
+      },
+      "memberGroups": {
+        "base-inputs": 8,
+        "candidate1": 5,
+        "candidate2": 1,
+        "inputs": 146,
+        "work": 49
+      },
+      "members": 209,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-graphics-owners-native-20260912/graphics-owners-evidence1.tar",
+      "payloadBytes": 603554855,
+      "readbackComparedEveryByteToSource": true,
+      "referenceAndFixtureBytesUnchanged": true,
+      "sourceExecuted": false,
+      "supersededBaseInputsPreserved": [
+        "docs/research/CURRENT_WORK.md",
+        "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+        "native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift"
+      ],
+      "tar": {
+        "bytes": 603934720,
+        "sha256": "5a30eec774480fcfe68c47958b4e124737795fe306e19a2ae907d4e3ca86d909"
+      },
+      "verifiedUTC": "2026-09-12T20:22:08.225232+00:00"
+    }
+  },
+  "pins": {
+    "build/research/application-graphics-owners-native-20260912/plan.json": {
+      "bytes": 32263,
+      "sha256": "6823a80b400e943fe8c3decccc80010a923538ee4c0c7780a166bda3aa50ec31"
+    },
+    "build/research/application-graphics-owners-native-20260912/initial-native.json": {
+      "bytes": 157450,
+      "sha256": "94deefb87574fc73aec73caffc452520d5b7e6ede0b9d698468c7852704c3bc2"
+    },
+    "build/research/application-graphics-owners-native-20260912/controls1.json": {
+      "bytes": 2611,
+      "sha256": "dcbeca5af21248f20d939480470e770eb689a45e10ead5028cc21bbf9d10d5f5"
+    },
+    "build/research/application-graphics-owners-native-20260912/amendment1-results.json": {
+      "bytes": 828,
+      "sha256": "f22b6d520c6438a77c80497e2c825872e9f2495c64138470fdb4a2f2305a53c8"
+    },
+    "build/research/application-graphics-owners-native-20260912/dependency-pins1.json": {
+      "bytes": 712,
+      "sha256": "bc0fb2b3b5aaa9eb383e9b8b0879c122b0152198e83293e3dd7fe13354e9f7b5"
+    },
+    "build/research/application-graphics-owners-native-20260912/reference1.py": {
+      "bytes": 31685,
+      "sha256": "a4f005366e6fe51c665abebc754971cf4ed36aab6695c8932c51c41f70ad4275"
+    },
+    "build/research/application-graphics-owners-native-20260912/reference1.json": {
+      "bytes": 8521977,
+      "sha256": "7ca8d341d5476f172b4df9439b77c1050c37c83a408f6a2526f7267d6379212a"
+    },
+    "build/research/application-graphics-owners-native-20260912/reference1.job.json": {
+      "bytes": 1306,
+      "sha256": "7b45aac29636ff9736ce5695d97436cebf245fa37ef7ddea839921e32f02ee24"
+    },
+    "build/research/application-graphics-owners-native-20260912/reference1.log": {
+      "bytes": 1579,
+      "sha256": "c01dc6bf72c85820387f70cac4929f810cda979642fcedc75d18b50904cb48a3"
+    },
+    "build/research/application-graphics-owners-native-20260912/expected-review1.json": {
+      "bytes": 5534,
+      "sha256": "830a43043f6aa47986c05d82aab991f7ead211013a7632f8041539cc99cc7da3"
+    },
+    "build/research/application-graphics-owners-native-20260912/review1-plan.json": {
+      "bytes": 15385,
+      "sha256": "fca8844602b39baeeebe1ab257f1c97f18f273e4ccfb64b60b66b384ea61540f"
+    },
+    "build/research/application-graphics-owners-native-20260912/review2-reference.json": {
+      "bytes": 15839,
+      "sha256": "475e87142f0469cd38269c49a55768b7964195bff9aee64ed7b08d9b06b2e99a"
+    },
+    "build/research/application-graphics-owners-native-20260912/review3-candidate1.json": {
+      "bytes": 14327,
+      "sha256": "a875f5db91c5cb5b5c8663217edee735acf5db2e478f8f9212159c8082c94c11"
+    },
+    "build/research/application-graphics-owners-native-20260912/review4-candidate2.json": {
+      "bytes": 8960,
+      "sha256": "908e7dbb66be9d63653af7ae8f7e9616a74bdf3fa8da56e2dd86d58a14448483"
+    },
+    "build/research/application-graphics-owners-native-20260912/review5-candidate3.json": {
+      "bytes": 18462,
+      "sha256": "3561845fcbf815a2fc83ad1d60a685c0eeebe4b396abafbeced04eb420beea47"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate1-inputs.json": {
+      "bytes": 157025,
+      "sha256": "96b153beafbc4c844037d7566c771ca69d4928c446f406991ee0af1040e91a91"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate2-inputs.json": {
+      "bytes": 157025,
+      "sha256": "d98b9af348e97d3427f70996a5c041277dbc86945d80ea36a10c60aeca9d1a94"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate3-inputs.json": {
+      "bytes": 157025,
+      "sha256": "f0dd3c844e0523b2ddcfb054404efd686c03cef4c40837197f13d4fb0cc89a84"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate2-changes.json": {
+      "bytes": 648,
+      "sha256": "c9bf2a6d5bba825bfcfc62f30861daca9a395a37703c563701a746f69511f715"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate2-batch-amendment.json": {
+      "bytes": 536,
+      "sha256": "a0df012277ad780f4644a53b78f14dffd5b9b6b4cf92c7c8cafe25cdadff7672"
+    },
+    "build/research/application-graphics-owners-native-20260912/candidate3-changes.json": {
+      "bytes": 639,
+      "sha256": "2a54e426e0d3847023c7a18660ea6d2c0df282a01e6947778af9b174fdcf9697"
+    },
+    "build/research/application-graphics-owners-native-20260912/preservation1.json": {
+      "bytes": 22147,
+      "sha256": "ada50363db910227882dcfebb3b250ce47aa824aef76daf670a55f477c0ba5c9"
+    },
+    "build/research/application-graphics-owners-native-20260912/preservation2.json": {
+      "bytes": 20669,
+      "sha256": "227a38fc46f4d9614ed880e0a625ef0b40907a183da6f71503661131eeac4a8a"
+    },
+    "build/research/application-graphics-owners-native-20260912/preservation3.json": {
+      "bytes": 25647,
+      "sha256": "17579136ae062854bc3bc1d1ab873ae40dede9bd201e2231e10f52e1a2c36f10"
+    },
+    "build/research/application-graphics-owners-native-20260912/native-archive-verification.json": {
+      "bytes": 865,
+      "sha256": "37eea1b471732aa91d3542f061b8e584bc44144fa3eb234883b040216f74e0c5"
+    },
+    "build/research/application-graphics-owners-native-20260912/evidence-archive-verification.json": {
+      "bytes": 2363,
+      "sha256": "637a9aaa4ba71f13726b969797001f6d8b3ab28c71c94cea925a24633e024a41"
+    },
+    "build/research/application-graphics-owners-native-20260912/evidence-members.json": {
+      "bytes": 65756,
+      "sha256": "22452a54dbe75fe7f44e756cbe8f2fdf72c117f16b0d29c064dc9a69e6ab6251"
+    },
+    "build/research/application-graphics-owners-native-20260912/archive-storage-verification.json": {
+      "bytes": 243,
+      "sha256": "ba06c9b6a528ac871c9645d71b494a62d4d67b0e9dab0b4f079a88857149b4db"
+    },
+    "build/research/application-graphics-owners-native-20260912/native1.config.json": {
+      "bytes": 1288,
+      "sha256": "a4db349e00aee5056f97f63655090827b67fef37bb6aa66d1a37d075f47b1144"
+    },
+    "build/research/application-graphics-owners-native-20260912/native1.job.json": {
+      "bytes": 1430,
+      "sha256": "689eef01957fade8576edcd6c01d2f3f13da9de4435cb253d9fc4481cdf98e1c"
+    },
+    "build/research/application-graphics-owners-native-20260912/native1.log": {
+      "bytes": 47506,
+      "sha256": "bfb8c08357f8aee31914367c8930e58ad8a1c18a3982b82c366e94b1b8b2b54e"
+    },
+    "build/research/application-graphics-owners-native-20260912/native2.config.json": {
+      "bytes": 1288,
+      "sha256": "a312df4b0e64db870b1d3ed29374421cf9bc3cfc40abe45f6bcb20a8af2aa015"
+    },
+    "build/research/application-graphics-owners-native-20260912/native2.job.json": {
+      "bytes": 1430,
+      "sha256": "67548ca8dc9cee84de5df9affb0833fe747061bf99c17a49454c6abb71731b98"
+    },
+    "build/research/application-graphics-owners-native-20260912/native2.log": {
+      "bytes": 33588,
+      "sha256": "dd830e7c5ee54abb422629c3665c0e587fdbc66003f93e4d744c75783af3c6e4"
+    },
+    "build/research/application-graphics-owners-native-20260912/native3.config.json": {
+      "bytes": 1288,
+      "sha256": "2c7466b8fab0572541392ac1aefc1e4b04db89438c122dc2f7295875104ac3cf"
+    },
+    "build/research/application-graphics-owners-native-20260912/native3.job.json": {
+      "bytes": 1430,
+      "sha256": "285e00a3b4874fd25cbe8979a8cc4a503676028b0749ac8b094e8e7c6368fbd7"
+    },
+    "build/research/application-graphics-owners-native-20260912/native3.log": {
+      "bytes": 33217,
+      "sha256": "73a00b027ef9a7f79e76495d46904489186c6a5ccaa446abb33e1c321fdb0553"
+    }
+  },
+  "openBoundaries": [
+    "primary/offscreen actual format",
+    "palette entries/realization",
+    "bitmap-to-device conversion",
+    "color key",
+    "font/glyph/codepage/DPI",
+    "clipper geometry",
+    "device errors and actual lease validity",
+    "initial pixels",
+    "clipping/scaling/Blt/text/presentation raster outcomes",
+    "146289 original DIB holes remain unknown",
+    "18 composed downstream NULL-source occurrences",
+    "full production loading/catalog, War gameplay, complete match/game/network",
+    "actual window, input/audio, Windows and clean-Mac acceptance",
+    "three existing safety incidents"
+  ],
+  "publication": "Archive review, prospective Git tree and final publication review are separate task records. Final archive jobs/reports and publication records are outside the evidence snapshot and pinned by those later records; commit-verification.json records actual commit/remote/clean status."
+}

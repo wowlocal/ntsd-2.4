@@ -10,6 +10,7 @@ public struct OriginalApplicationBootstrap {
     }
     public struct Started {
         public let operations: [OriginalApplicationStartupOperation]
+        public let graphics: [OriginalApplicationGraphics.Command]
     }
     public enum Stage: String { case resources, settings, prefix, body, menu }
     public struct Settings {
@@ -71,6 +72,7 @@ public struct OriginalApplicationBootstrap {
         surface: [OriginalWindowInitialization.Response],lifecycle: [OriginalWindowInitialization.Response],
         observe: @escaping (Observation) throws -> Void = { _ in },
         menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
+        graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
         checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
         beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in }) throws -> Session.Outcome {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
@@ -85,7 +87,7 @@ public struct OriginalApplicationBootstrap {
             let r = try take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
         },surface:{ q in
             let r = try take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
-        },observe:menuObserve,checkpoint:checkpoint,beforeCommit:{ loop,state in
+        },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,beforeCommit:{ loop,state in
             guard qi == queue.count,wi == windowDefault.count,si == surface.count,li == lifecycle.count else {
                 throw Session.Boundary.dependency("Unused bootstrap iteration responses")
             }
@@ -121,13 +123,14 @@ public struct OriginalApplicationBootstrap {
             mask.replaceSubrange(0..<globals.bytes.count,with:globals.defined)
             let full = try OriginalStateRecord(bytes:bytes,defined:mask)
             let memory = OriginalMenuPresentationMemory(replayPointers:try Session.State.slice(full,0xb8a8,8))
-            let state = try Session.State(full:full,memory:memory,front:.init(),frontSurfaces:[:],
+            var state = try Session.State(full:full,memory:memory,front:.init(),frontSurfaces:[:],
                 earlyScreen:.init(),libraryText:.init(),random:owner.random,screenBody:nil)
+            state.graphics = bridge.graphics
             let loop = try Session.Loop(baseline:owner.random.state,counter:full.integer(at:0xb580,as:UInt32.self))
             let menu = try Session(state:state,loop:loop)
             try beforeCommit(owner,menu,staged)
             startup = owner;session = menu;platform = staged
-            return .init(operations:bridge.operations)
+            return .init(operations:bridge.operations,graphics:bridge.graphicsCommands)
         } catch {
             failedAttempt(staged,error)
             throw error

@@ -104,6 +104,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             let responses = Session.Responses(draw:c.spec.drawResult,presentation:c.spec.presentResult,
                 sound:c.spec.soundResult,release:c.spec.releaseResult,dcResult:c.spec.dcResult,dc:0x12345678)
             var deliveredEffects: [Session.Effect] = []
+            var graphicsSeen: [OriginalApplicationGraphics.Command] = []
             // Independent projection of saved terminal requests. This does not
             // call the Core classifier or derive expected output from Native.
             func expectedEffects(_ start: Int,_ end: Int) throws -> [Session.Effect] {
@@ -137,7 +138,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         if e.arguments[1] == 8 { effects.append(.release(e,ignoredResult:c.spec.releaseResult)) }
                         else { XCTAssertEqual(e.arguments[1],0x14);effects.append(.present(e,result:c.spec.presentResult)) }
                     case "getDC":effects.append(.getDC(e,result:c.spec.dcResult,output:0x12345678))
-                    case "setBackgroundMode","setTextColor","textOut","releaseDC":effects.append(.graphics(e))
+                    case "setBackgroundMode","setTextColor","textOut","releaseDC":effects.append(.graphics(e,result:c.spec.drawResult))
                     case "free":effects.append(.free(try XCTUnwrap(e.arguments.first)))
                     case "write","writeLocal","read","clip","draw","text","stringLength","soundRequest","randomTable","panel","enter","leave":break
                     default:XCTFail("Unclassified source effect \(e.kind)");throw Stop.late
@@ -160,6 +161,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             func unchanged(_ prior: Session,_ oldEffects: [Session.Effect]) {
                 let own = session.state, before = prior.state
                 XCTAssertEqual(own.bitmapInputs,before.bitmapInputs)
+                XCTAssertEqual(own.graphics,before.graphics)
                 XCTAssertEqual(own.full,before.full)
                 XCTAssertEqual(own.memory.allocations,before.memory.allocations);XCTAssertEqual(own.memory.replayPointers,before.memory.replayPointers)
                 XCTAssertEqual(own.front.bitmaps,before.front.bitmaps);XCTAssertEqual(own.earlyScreen.bitmaps,before.earlyScreen.bitmaps)
@@ -171,7 +173,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             try snapshot(c.before,session.state,session.loop)
             for iteration in c.iterations {
                 try snapshot(iteration.before,session.state,session.loop)
-                let prior = session, oldEffects = deliveredEffects, eventStart = a.index
+                let prior = session, oldEffects = deliveredEffects, eventStart = a.index,graphicsStart = graphicsSeen.count
                 do {
                     let outcome = try session.step(responses:responses,queue:a.queue,windowDefault:{ q in
                         XCTAssertEqual(q.kind,.windowDefault);return try a.window(q.arguments)
@@ -185,7 +187,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                             XCTAssertEqual(check.state,e.arguments[1])
                         }
                         try a.front(e)
-                    },checkpoint:{ point,full,result in
+                    },graphicsObserve:{ graphicsSeen.append($0) },checkpoint:{ point,full,result in
                         let saved = try a.checkpoint(point.rawValue,full.bytes)
                         XCTAssertTrue(full.defined.allSatisfy { $0 })
                         if point == .dispatchReturn { XCTAssertEqual(UInt32(bitPattern:try XCTUnwrap(result)),saved.eax) }
@@ -203,6 +205,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         XCTAssertEqual(iteration.end,"continued");XCTAssertEqual(batch.result,.continued)
                         XCTAssertEqual(batch.effects,try expectedEffects(eventStart,iteration.eventEnd))
                         deliveredEffects += batch.effects
+                        XCTAssertEqual(batch.graphics,Array(graphicsSeen[graphicsStart...]))
                         try snapshot(iteration.after,session.state,session.loop)
                     case .loading(let pending):
                         XCTAssertEqual(iteration.end,"loading");XCTAssertNil(fail)
@@ -210,6 +213,8 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         XCTAssertTrue(pending.state.full.defined.allSatisfy { $0 })
                         XCTAssertEqual(iteration.after.pc,0x41bc90);XCTAssertEqual(iteration.after.sp,0x1000ea6c)
                         XCTAssertEqual(pending.stagedEffects,try expectedEffects(eventStart,iteration.eventEnd))
+                        XCTAssertEqual(pending.stagedGraphics,Array(graphicsSeen[graphicsStart...]))
+                        try OriginalApplicationGraphicsTests.compareOwner(pending.state.graphics,kind:"input",index:index)
                         try OriginalSurfaceSourceColorsTests.compareInput(pending.state.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
                         let loadingState = try initial.receivingMenuState(pending.state)
                         try OriginalSurfaceSourceColorsTests.compareInput(loadingState.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
@@ -221,7 +226,9 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                     XCTAssertNotNil(fail);failed = true;unchanged(prior,oldEffects);break
                 }
             }
+            try OriginalApplicationGraphicsTests.compare(graphicsSeen,kind:"input",index:index,stageKind:"input",prefix:fail != nil,inputs:session.state.bitmapInputs)
             if fail == nil {
+                if c.iterations.last?.end != "loading" { try OriginalApplicationGraphicsTests.compareOwner(session.state.graphics,kind:"input",index:index) }
                 let sound = deliveredEffects.compactMap { e -> Int32? in if case .soundMethod(_,let result) = e { return result };return nil }
                 let release = deliveredEffects.compactMap { e -> Int32? in if case .release(_,let result) = e { return result };return nil }
                 XCTAssertEqual(sound,Array(repeating:c.spec.soundResult,count:c.spec.label.hasPrefix("activate-") ? 3 : 0))

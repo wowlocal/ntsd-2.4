@@ -213,10 +213,23 @@ loading parents; prefix-aware comparison и whole rollback сохраняютс�
 [Приёмка](evidence/application-surface-colors.json). Device conversion,
 palette/raster, полная игра и три safety incidents остаются открытыми.
 
+Приняты [графические владельцы startup](research/APPLICATION_GRAPHICS_OWNERS.md):
+Bootstrap/Session связывают команды с собственными display/bitmap/DC generations
+и снимками source colors. Все48 primary attempts (47commits/1NULL rejection),
+50 input и12 loading chains сравнили53 265 команд из224 stages;5 612 команд
+уникальны. Сохранены501 nonnegative text acquisitions,6 negative GetDC и6 failed
+ReleaseDC, точные rectangles, ответы API и whole rollback. Loading пока остаётся
+композицией принятого production helper в тесте.32 bundled release-метода прошли
+за166.551с/build309.09с. Ошибки двух первых кандидатов, три замечания review
+и исправление hardcoded loading reply сохранены; expected неизменны.
+373 старых fixtures/46package неизменны;374current/881Native и оба архива
+проверены. [Приёмка](evidence/application-graphics-owners.json). Финальные pixels,
+реальное устройство, полная игра и три safety incidents остаются открытыми.
+
 Следующая карточка — конечный контракт raster-представления и следующего
 startup consumer по готовым доказательствам. Actual indexed conversion/палитра,
 146289 DIB holes,18 NULL-source occurrences и окончательный вывод окна остаются
-отдельными зависимостями. Завершённый inventory и source captures не повторять.
+отдельными зависимостями. Завершённые inventory, command binding и source captures не повторять.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

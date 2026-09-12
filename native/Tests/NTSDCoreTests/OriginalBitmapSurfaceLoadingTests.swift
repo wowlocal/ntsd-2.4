@@ -161,6 +161,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
     struct OwnContext {
         var bootstrap: OriginalApplicationBootstrap? = nil
         var bitmapInputs: OriginalApplicationBitmapInputs? = nil
+        var applicationGraphics: OriginalApplicationGraphics? = nil
         var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics()
         var settings: OriginalSettingsLoading.StartupResult? = nil, gameEntry: OriginalApplicationDispatchEntry.GameEntry? = nil
         var earlyScreen = OriginalFrontScreenPrelude()
@@ -202,6 +203,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
             result.base.local = try part(0xb440,0x140)
             result.outerAndWorldBytes = Array(state.full.bytes.dropFirst(0xb440))
             result.bitmapInputs = state.bitmapInputs
+            result.applicationGraphics = state.graphics
             result.base.memory = state.memory; result.front = state.front; result.earlyScreen = state.earlyScreen
             result.libraryText = state.libraryText; result.random = state.random; result.screenBody = state.screenBody
             return result

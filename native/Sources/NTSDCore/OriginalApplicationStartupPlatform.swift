@@ -50,6 +50,8 @@ public enum OriginalApplicationStartupOperation: Codable {
 final class OriginalApplicationStartupBridge<P: OriginalApplicationStartupPlatform>: OriginalWinMainStartupPlatform {
     let platform: P
     var operations: [OriginalApplicationStartupOperation] = []
+    var graphics = OriginalApplicationGraphics()
+    var graphicsCommands: [OriginalApplicationGraphics.Command] = []
     private var currentWave: OriginalWavePlatform?
     init(_ platform: P) { self.platform = platform }
     var panelIO: OriginalWinMainStartup.PanelIO { platform.panelIO }
@@ -65,7 +67,8 @@ final class OriginalApplicationStartupBridge<P: OriginalApplicationStartupPlatfo
         let r = try platform.initializeCOM();operations.append(.initializeCOM(r));return r
     }
     func window(_ q: OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response {
-        let r = try platform.window(q);operations.append(.window(q,r));return r
+        let r = try platform.window(q)
+        graphicsCommands.append(try graphics.window(q,r));operations.append(.window(q,r));return r
     }
     func file(_ path: String) throws -> [UInt8]? {
         let r = try platform.file(path);operations.append(.file(path,r));return r

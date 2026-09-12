@@ -263,13 +263,29 @@ palette/raster, полная игра и три safety incidents остаютс�
 это не снимает прежний incident. Полный transform/application и result-recording
 пути остаются с собственными границами и отказами; смена модели не закрывает их.
 
+Приняты [графические владельцы startup](APPLICATION_GRAPHICS_OWNERS.md):
+Bootstrap/Session связывают команды с собственными display/bitmap/DC generations
+и снимками source colors. Все48 primary attempts (47commits/1NULL rejection),
+50 input и12 loading chains сравнили53 265 команд из224 stages;5 612 команд
+уникальны. Сохранены501 nonnegative text acquisitions,6 negative GetDC и6 failed
+ReleaseDC, точные rectangles, ответы API и whole rollback. Loading пока остаётся
+композицией принятого production helper в тесте.32 bundled release-метода прошли
+за166.551с/build309.09с. Ошибки двух первых кандидатов, три замечания review
+и исправление hardcoded loading reply сохранены; expected неизменны.
+373 старых fixtures/46package неизменны;374current/881Native и оба архива
+проверены. [Приёмка](../evidence/application-graphics-owners.json). Финальные pixels,
+реальное устройство, полная игра и три safety incidents остаются открытыми.
+
 ## Следующая независимая карточка
 
 **Контракт raster-представления и следующего startup consumer.**
 
-Source-color owners уже приняты в [APPLICATION_SURFACE_COLORS](APPLICATION_SURFACE_COLORS.md).
+Source-color owners и привязка команд приняты в
+[APPLICATION_SURFACE_COLORS](APPLICATION_SURFACE_COLORS.md) и
+[APPLICATION_GRAPHICS_OWNERS](APPLICATION_GRAPHICS_OWNERS.md).
 Повторять полный inventory,40 lifetime assignments или завершённые тесты для
-нового оформления не нужно. Сохранённые 491 downstream Blt, графические события,
+нового оформления не нужно. Повторять command binding тоже не нужно.
+Сохранённые 491 downstream Blt, графические события,
 полные request flags и источники находятся в принятом inventory/event-catalog.
 Сначала определить конечный следующий consumer и доказанные входы его формата,
 палитры, color key, clipping, текста и назначения; неизвестные зависимости

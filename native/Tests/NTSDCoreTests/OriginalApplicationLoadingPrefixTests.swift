@@ -68,8 +68,12 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         }
     }
     @discardableResult
-    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
+    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,responses: I.Spec,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
         let retainedBitmapInputs = try XCTUnwrap(own.bitmapInputs)
+        let retainedGraphics = try XCTUnwrap(own.applicationGraphics)
+        var graphics = retainedGraphics,commands: [OriginalApplicationGraphics.Command] = []
+        var committedGraphics: OriginalApplicationGraphics?
+        let caseIndex = try XCTUnwrap(r.c.cases.firstIndex { $0.spec.label == c.spec.label })
         let full = own.base.globals.bytes+own.outerAndWorldBytes
         XCTAssertTrue(full == (try r.blob(c.before.globals)));XCTAssertEqual(own.random.state,c.before.random)
         XCTAssertEqual(own.libraryText.retainedDC,c.before.retainedDC);XCTAssertEqual(target,0x31003000)
@@ -84,7 +88,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             let surface = try b.storage.integer(at:0,as:UInt32.self);var canonical = b.storage
             try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
             let input = try OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:prior.integer(at:0x44d78c-0x44d000,as:Int32.self),viewportHeight:prior.integer(at:0x44d790-0x44d000,as:Int32.self))
-            _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ q in var e = OriginalFrontScreenEvent("read");e.read = q;try a.event(e) },observeClip:{ q in var e = OriginalFrontScreenEvent("clip");e.clip = q;try a.event(e) },perform:{ q in var e = OriginalFrontScreenEvent("blit");e.blit = q;try a.event(e);return 0 })
+            _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ q in var e = OriginalFrontScreenEvent("read");e.read = q;try a.event(e) },observeClip:{ q in var e = OriginalFrontScreenEvent("clip");e.clip = q;try a.event(e) },perform:{ q in var e = OriginalFrontScreenEvent("blit");e.blit = q;commands.append(try graphics.front(e,result:responses.drawResult,inputs:retainedBitmapInputs));try a.event(e);return responses.drawResult })
         }
         do {
             result = try OriginalInitialLoadingCommon.load(globals:prior,targetSurface:target,fileSource:{ path in
@@ -107,7 +111,10 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
                 if let wave = q.wave { try a.event(.init(wave.kind.rawValue,wave.arguments,wave.strings),"wave") }
                 if let presentation = q.presentation {
                     if presentation.kind == .bitmap { try a.event(.init("draw",presentation.arguments));try draw(presentation.arguments) }
-                    else { try a.event(.init(presentation.kind.rawValue,presentation.arguments,presentation.strings)) }
+                    else {
+                        let e = OriginalFrontScreenEvent(presentation.kind.rawValue,presentation.arguments,presentation.strings)
+                        commands.append(try graphics.front(e,result:responses.presentResult,inputs:retainedBitmapInputs));try a.event(e)
+                    }
                 }
             },beforeCommit:{ next in
                 reached = true;XCTAssertEqual(next.sounds.count,18)
@@ -115,6 +122,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
                 XCTAssertTrue(next.globals.bytes+own.outerAndWorldBytes == (try r.blob(c.after.globals)))
                 if fail == "commit" { throw Stop.late }
             })
+            committedGraphics = graphics
         } catch {
             if let fail { guard case Stop.late = error else { throw error };XCTAssertTrue(reached || fail != "commit") }
             else {
@@ -129,6 +137,10 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             XCTAssertNil(result)
         }
         XCTAssertEqual(own.bitmapInputs,retainedBitmapInputs)
+        XCTAssertEqual(own.applicationGraphics,retainedGraphics)
+        XCTAssertEqual(committedGraphics != nil,result != nil)
+        try OriginalApplicationGraphicsTests.compare(commands,kind:"loading",index:caseIndex,stageKind:"loading",prefix:fail != nil,inputs:retainedBitmapInputs)
+        if fail == nil { try OriginalApplicationGraphicsTests.compareOwner(graphics,kind:"loading",index:caseIndex) }
         XCTAssertEqual(own.base.globals,prior)
         if fail == nil {
             XCTAssertEqual(a.index,c.events.count);XCTAssertEqual(a.mask,try r.blob(c.after.mask))
@@ -142,7 +154,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             for fail in failures {
                 var called = false
                 try I().run(r.c.cases[i].spec.parentIndex,ir,mr,body,fr,br,er,loading:{ own,target in
-                    called = true;try self.check(r.c.cases[i],r,own,target,fail:fail)
+                    called = true;try self.check(r.c.cases[i],r,own,target,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail)
                 })
                 XCTAssertTrue(called)
             }
