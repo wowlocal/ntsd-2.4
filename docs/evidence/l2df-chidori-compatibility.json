@@ -1,0 +1,129 @@
+{
+  "createdAtUTC": "2026-09-12T07:28:12.431145+00:00",
+  "status": "actor-input accepted; projectile/game integration in progress",
+  "baselineCommit": "a642bfa",
+  "worktree": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+  "sourceExecution": false,
+  "actorInput": {
+    "accepted": true,
+    "cases": 14624,
+    "failures": 0,
+    "operations": {
+      "edges": 112,
+      "invalidates": 4608,
+      "transfer": 384,
+      "combos": 7484,
+      "actions": 500,
+      "prefix": 1536
+    },
+    "scalarsPerActor": 46,
+    "knownBytesPerActor": 88,
+    "wholeActorABICompared": false,
+    "sourceReexecuted": false,
+    "fixtureSHA256": "f1fcd6b045bf1dfac76f335ff881d7b7961927e4883e0e2ceee3401ddca21f7f",
+    "unpackedSHA256": "f91a5cdab5ad8e52f3522e8eead6c7979492353103a5f6742c1326c84d0fffda",
+    "moduleSHA256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a",
+    "unsupportedFrameRollback": {
+      "error": "actor_input.lua:20: Actor input frame outside Object: 400",
+      "inputUnchanged": true,
+      "rejected": true
+    },
+    "job": {
+      "command": [
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/runtime/love.app/Contents/MacOS/love",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-03"
+      ],
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-03",
+      "startUTC": "2026-09-12T07:27:18.002852+00:00",
+      "pins": [
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-actor-input.json",
+          "sha256": "f1fcd6b045bf1dfac76f335ff881d7b7961927e4883e0e2ceee3401ddca21f7f",
+          "bytes": 649048
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalStateRecord.swift",
+          "sha256": "bccf50f3ca9f57fa18a8b4eb8bc9630ff47ff7bbfaa2687f63019ef23e51b49b",
+          "bytes": 5595
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalActorInput.swift",
+          "sha256": "c906b7cbffd7c7c531ee028ba414d679912ea82940cbd48a4c0982123aa5085d",
+          "bytes": 9362
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/actor_input.lua",
+          "sha256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a",
+          "bytes": 5660
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/tests/reference/check_actor_input.py",
+          "sha256": "ff37fe39d63427b7bf3ee7b27cd8eda121b89afc5792bd505abd363c6aeb9447",
+          "bytes": 11787
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/game/l2df/external/json.lua",
+          "sha256": "4cdb07c34854fd3a4b47a43d9b91f2b4215c958ed4d960528faea05350e29fa3",
+          "bytes": 53104
+        }
+      ],
+      "executableSHA256": "0daa04d49e671e7d3649e54935a91e8dcbf0769bef8d1c3503c025842b680da2",
+      "timeoutSeconds": 90,
+      "sourceExecution": false,
+      "status": "terminal",
+      "pid": 75187,
+      "exitCode": 0,
+      "elapsedSeconds": 1.567143
+    },
+    "actualSHA256": "373db05d7f232bc5d1896f1c42a59b90b930cd8545397d99822f21ab0740318d",
+    "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-03"
+  },
+  "retainedHarnessFailure": {
+    "job": {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-01/job.json",
+      "bytes": 2165,
+      "sha256": "26c79b23be9abf8392f3ec9ef6efd0b17938f7d9f568ec27cd75a1277412d7d0"
+    },
+    "reason": "Reviewer selected fused prototype application; it ignored the external test project and ran the old game. Owned child reached 90-second limit and was killed. No module or expected was changed to pass."
+  },
+  "earlierSuccessfulRun": {
+    "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-02/report.json",
+    "bytes": 3062,
+    "sha256": "b789132d6cf14be68f521bdbf308bc33924cdd07b6dd0a80e995f8cea421cde1"
+  },
+  "checkedArtifacts": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/report.json",
+      "bytes": 3219,
+      "sha256": "c8b2613c423fe8a928d6be511679472a7b64b1f7c011fdf22f24ed11ba42b2b1"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/job.json",
+      "bytes": 2129,
+      "sha256": "ff3a5efda15dcd951cfbdae4c282272f35dab95446d4d7ab86207adc17d0034e"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/failures.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/rollback-result.json",
+      "bytes": 107,
+      "sha256": "34d7d599125bf7305f118b5f6e08f7dc742d585ccb1692b9dcbe2ca4d2ecba92"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/actual.jsonl",
+      "bytes": 7614774,
+      "sha256": "373db05d7f232bc5d1896f1c42a59b90b930cd8545397d99822f21ab0740318d"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/chidori-compat-20260912/actor-input-03/inputs.lua-lines",
+      "bytes": 18859418,
+      "sha256": "547a90eb67d2b27266bae50206b1eb8d3e68dd7f912f40a57d6a92511c8d8fac"
+    }
+  ],
+  "reviewer": "/root",
+  "implementationAuthor": "/root/l2df_prototype",
+  "wholeGameEquivalent": false
+}
