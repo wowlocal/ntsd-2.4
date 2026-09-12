@@ -132,8 +132,28 @@ aliases/masks; registry удерживает live/dead owners, библиоте�
 старых envelopes опускают финальный LF: payload+LF точно воспроизводит все
 276384592 raw bytes/SHA,JSON и16424 blob entries. Эталоны не менялись.
 Нового исполнения оригинала нет. [Приёмка](../evidence/application-menu-session.json).
-Bootstrap пока создаётся в Native test composer; приложение/устройства, полная
-загрузка/каталог/игра и три safety incidents остаются открытыми.
+На том этапе bootstrap ещё создавался в Native test composer; следующая
+принятая карточка ниже переносит его в Core. Приложение и игра остаются открытыми.
+
+Принят [production bootstrap от WinMain entry до первого меню](APPLICATION_BOOTSTRAP.md).
+OriginalApplicationBootstrap сохраняет весь startup owner (panel/calendar/music/
+пять WAV) и живую MenuSession. Core выполняет startup, resize,24 front resources,
+settings, background/body/menu и timer return. Прежние50 session chains и12
+LoadingPrefix cases получают этого собственного родителя.
+48 primary attempts содержат один distinct WinMain original-entry и перекрывающиеся
+43body/40front/19settings/7bitmap parents:47 menu commits и отдельный NULL-cursor
+rejection/rollback. Startup144 операции (7input/20own-memory/117platform) повторён
+48раз; early callbacks49 операций считаются отдельно. First-menu22623 committed
+операции и464 uncommitted NULL-операции сверены по сохранённому порядку и маскам.
+24 bundled release-метода прошли за149.107с, сборка293.60с, включая6 новых startup
+и17 first-menu late controls. Candidate1 timer-routing failure и две ошибки
+нового read-only projection verifier сохранены. Все370 fixtures неизменны,
+822 Native-файла и оба архива сверены; пять дополнительных raw/fixture пар
+воспроизводят205795824rawbytes и5443blobentries. Первые четыре пары используют
+прежнюю полную проверку после новой сверки pins. Нового исполнения оригинала нет.
+[Приёмка](../evidence/application-bootstrap.json). Это проверка declared inputs;
+file/package/AppKit/audio, полная загрузка/каталог/игра и три incidents открыты.
+
 
 ## Непринятая работа и отказ Codex
 
@@ -185,40 +205,37 @@ Bootstrap пока создаётся в Native test composer; приложен�
 
 ## Следующая независимая карточка
 
-**Production bootstrap от объявленного WinMain entry до первого committed menu.**
+**Регулярный пакет входов startup и неизменяемое Native представление файлов.**
 
-Read-only readiness:
-`build/research/application-menu-session-native-20260912/next-work-review.json`.
-Создать OriginalApplicationBootstrap, который владеет всем startup result и
-первой menu-итерацией, затем возвращает живую OriginalApplicationMenuSession.
-Сейчас этот upstream producer собран в B/S/F/Body/M XCTest closures.
+Read-only readiness и границы:
+`build/research/application-bootstrap-native-20260912/review4-results.json`.
+Следующая карточка приближает самостоятельный запуск через принятый Core bootstrap.
+Сначала закрепить конечный план для original-entry: объявленные PE initial bytes/
+masks, adinfo/ad-content/control, исходные изображения/пять WAV/music paths и
+их происхождение. Runtime загружает обычные ресурсы; research JSON, expected
+после вызова, EXE/DLL и эмулятор не являются runtime-источниками.
 
-Готовы48 saved menu-return chains:47 завершённых первых menu-итераций и один
-отдельный NULL-cursor stop. Вложенные43body/40front/19settings/7bitmap parents
-перекрываются и содержат одного WinMain original-entry родителя; числа нельзя
-складывать. Новый Core join не требует исполнения оригинала.
+Подготовить независимый Native snapshot/input provider для существующего
+Bootstrap: PE full/masks,15 исходных байтов adinfo, отсутствие ad0.txt, control
+с доказанным CRLF-to-LF преобразованием, пять WAV и конечный набор bitmap inputs.
+Clock/calendar/joystick/device responses остаются явными контролируемыми входами
+в тестовых адаптерах до отдельных host contracts. Panel default writes остаются
+выходом существующего Core, а не уже реализованным сохранением в host filesystem.
 
-Сохранить весь OriginalWinMainStartup owner: panel generations, calendar/music
-allocations и пять WAV results. Дальше — own loop/resize/dispatch,24 front bitmap
-constructors, settings, background/body/library text, main/tail и timer return.
-Canonical full record/masks и реальные aliases должны переживать весь путь.
-Начальные PE-backed bytes, translated control/file bytes, clock/calendar и
-platform replies — явные входы; expected after-state и oracle JSON не входят
-в runtime. Native startup и первая menu-итерация имеют разные commit boundaries:
-ошибка pending menu сохраняет уже завершённые startup и callbacks.
+Сначала использовать готовые исходные файлы и сохранённые доказательства. Новое
+исполнение оригинала, повтор capture/auditor или закрытие incidents не требуется.
+До реализации зафиксировать точные случаи/файлы/команды/лимиты и review provenance.
+Сравнить полученные входы побайтно с declared saved inputs, затем провести через
+Core startup/first menu и прежние MenuInput/LoadingPrefix chains; сохранить
+required rollback и все370 fixtures. Независимая проверка исключает импорт
+expected state и совместное использование изменяемых позиций чтения.
+Общий Windows CRT text mode, произвольные пути/read errors и реальные файловые
+сохранения не принимаются по этому ограниченному input contract.
 
-После нового producer выполнить прежние50 menu-session chains и LoadingPrefix.
-Обязательны48 MenuReturn outcomes/9 late controls, затронутые Settings/FrontScreen/
-ScreenBody rollback tests, отдельные WinMainStartup/MessageLoop regressions и
-review ownership/input provenance/effect batches. Закрепить фактические inputs
-и разрешённые файлы до следующей реализации; все370 fixtures неизменяемы.
-
-Самостоятельный запуск приложения требует следующих отдельных контрактов:
-regular bundled PE-global/mask/adinfo/control input package, Native file adapter,
-AppKit queue/key/mouse/clock и renderer/audio effect delivery. Старый Practice
-backend их не реализует. Эта карточка переносит готовую Core-композицию и не
-объявляет эти inputs/backend или окно готовыми. Полная загрузка/каталог,
-War43a860/матч/игра/Windows/cleanMac и три incidents остаются открытыми.
+Эта карточка не подключает Practice app и не заявляет готовность AppKit queue/
+key/mouse/clock, raster/audio delivery, более ранних PE/CRT/NLS, private capability
+backing или worker reentrancy. Полная загрузка/каталог, War43a860/матч/игра/
+Windows/cleanMac остаются отдельными продолжениями.
 
 ## Дальнейшая сквозная очередь
 
@@ -245,4 +262,4 @@ Native-карточкой выше: их исходные версии сохр�
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
 Исторический work JSON не переписывался. Новые принятые NULL/partial-surface/
-graphics/music-error/retained-scratch/fault-rejection и menu-session контракты описаны выше.
+graphics/music-error/retained-scratch/fault-rejection и menu-session/bootstrap контракты описаны выше.

@@ -70,10 +70,20 @@ final class OriginalWinMainStartupTests: XCTestCase {
         let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
         return (try JSONDecoder().decode(Corpus.self,from:data),try XCTUnwrap(raw["cases"] as? [[String:Any]]))
     }
-    final class Adapter: OriginalWinMainStartupPlatform {
+    final class Adapter: OriginalApplicationStartupPlatform {
         let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String],fail: String?
         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]
+        /// Every mutable member is a value. Blob's shared cache holds immutable
+        /// input bytes and is not a reply position or an external effect queue.
+        func stagedCopy() throws -> Adapter {
+            let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail)
+            copy.index = index;copy.storeIndex = storeIndex;copy.stageIndex = stageIndex
+            copy.calendarIndex = calendarIndex;copy.joyIndex = joyIndex;copy.capsIndex = capsIndex
+            copy.waves = waves;copy.childIndex = childIndex;copy.writes = writes
+            copy.expected = expected;copy.mask = mask
+            return copy
+        }
         init(_ c: Case,_ raw: [String:Any],sources: [String:String],blob: @escaping (String) throws -> [UInt8],initial: [UInt8],fail: String? = nil) throws {
             self.c = c;self.blob = blob;self.sources = sources;self.fail = fail;shadow = initial;expected = initial;mask = [UInt8](repeating:0,count:initial.count)
             rawEvents = try XCTUnwrap(raw["events"] as? [[String:Any]])

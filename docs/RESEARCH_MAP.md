@@ -137,16 +137,32 @@ aliases/masks; registry удерживает live/dead owners, библиоте�
 старых envelopes опускают финальный LF: payload+LF точно воспроизводит все
 276384592 raw bytes/SHA,JSON и16424 blob entries. Эталоны не менялись.
 Нового исполнения оригинала нет. [Приёмка](evidence/application-menu-session.json).
-Bootstrap пока создаётся в Native test composer; приложение/устройства, полная
-загрузка/каталог/игра и три safety incidents остаются открытыми.
+На том этапе bootstrap ещё создавался в Native test composer; принятый
+Core bootstrap описан ниже. Приложение и игра остаются открытыми.
 
-Следующая конечная карточка по CURRENT_WORK — production bootstrap owner от
-объявленного WinMain entry через первый menu return к живой MenuSession.
-Готовы48 saved menu-return chains:47 возвратов и отдельный NULL-cursor stop.
-Сохранить весь startup owner (panel/calendar/music/пять WAV), реальные aliases,
-Native inputs и разные commit boundaries startup/menu. Оригинал не требуется.
-AppKit/file/asset-package contracts, полная загрузка/каталог, War43a860,
-приложение/матч/игра/Windows/device остаются открытыми.
+Принят [production bootstrap от WinMain entry до первого меню](research/APPLICATION_BOOTSTRAP.md).
+OriginalApplicationBootstrap сохраняет весь startup owner (panel/calendar/music/
+пять WAV) и живую MenuSession. Core выполняет startup, resize,24 front resources,
+settings, background/body/menu и timer return. Прежние50 session chains и12
+LoadingPrefix cases получают этого собственного родителя.
+48 primary attempts содержат один distinct WinMain original-entry и перекрывающиеся
+43body/40front/19settings/7bitmap parents:47 menu commits и отдельный NULL-cursor
+rejection/rollback. Startup144 операции (7input/20own-memory/117platform) повторён
+48раз; early callbacks49 операций считаются отдельно. First-menu22623 committed
+операции и464 uncommitted NULL-операции сверены по сохранённому порядку и маскам.
+24 bundled release-метода прошли за149.107с, сборка293.60с, включая6 новых startup
+и17 first-menu late controls. Candidate1 timer-routing failure и две ошибки
+нового read-only projection verifier сохранены. Все370 fixtures неизменны,
+822 Native-файла и оба архива сверены; пять дополнительных raw/fixture пар
+воспроизводят205795824rawbytes и5443blobentries. Первые четыре пары используют
+прежнюю полную проверку после новой сверки pins. Нового исполнения оригинала нет.
+[Приёмка](evidence/application-bootstrap.json). Это проверка declared inputs;
+file/package/AppKit/audio, полная загрузка/каталог/игра и три incidents открыты.
+
+Следующая конечная карточка по CURRENT_WORK — регулярный пакет объявленных
+startup inputs и неизменяемый Native file snapshot/input provider. Источники
+пакета и translated bytes требуют точного provenance; research JSON/expected/EXE
+не входят в runtime. AppKit/renderer/audio и полная игра остаются открытыми.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

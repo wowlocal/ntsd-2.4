@@ -159,6 +159,7 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         print("BITMAP SURFACE 59 whole loader/copy matches;2 original returns require unknown private backing and are explicitly rejected with rollback")
     }
     struct OwnContext {
+        var bootstrap: OriginalApplicationBootstrap? = nil
         var base: Loop.Context,front = OriginalFrontMenuResources(),graphics = Graphics()
         var settings: OriginalSettingsLoading.StartupResult? = nil, gameEntry: OriginalApplicationDispatchEntry.GameEntry? = nil
         var earlyScreen = OriginalFrontScreenPrelude()
@@ -169,6 +170,10 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         var outerAndWorldBytes: [UInt8] = []
 
         func menuSessionState(counter: UInt32) throws -> OriginalApplicationMenuSession.State {
+            if let session = bootstrap?.session {
+                XCTAssertEqual(session.loop.counter,counter)
+                return session.state
+            }
             let bytes = base.globals.bytes + base.outerBytes(counter:counter) + outerAndWorldBytes.dropFirst(0x854)
             var outerMask = base.outer.defined
             outerMask.replaceSubrange(0..<0x140,with:base.local.defined)

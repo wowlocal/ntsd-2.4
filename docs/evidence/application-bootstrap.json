@@ -1,0 +1,725 @@
+{
+  "schema": 1,
+  "acceptedUTC": "2026-09-12T16:33:57.881265+00:00",
+  "status": "finite Native startup and first-menu bootstrap verified",
+  "baseCommit": "3163819df02c01c57bf0b8df12d26e5ac8a16c08",
+  "scope": {
+    "menuReturnChains": 48,
+    "completedFirstMenu": 47,
+    "separateNullCursorBoundary": 1,
+    "overlappingBodyParents": 43,
+    "overlappingFrontParents": 40,
+    "overlappingSettingsParents": 19,
+    "overlappingBitmapParents": 7,
+    "distinctNestedWinMainParents": 1,
+    "nestedWinMainLabel": "original-entry",
+    "menuReturnLateControls": 9,
+    "retainedMenuSessionChains": 50,
+    "retainedLoadingPrefixCases": 12,
+    "separateWinMainDomain": {
+      "cases": 35,
+      "wholeMatches": 23,
+      "sourceStops": 5,
+      "unknownProvenanceRejections": 7,
+      "lateControls": 6
+    }
+  },
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved Unicorn2.1.4 records, declared platform replies. Current task reads saved records and executes Native release on macOS only.",
+    "sourceExecution": false,
+    "producerImports": false,
+    "historicalAuditExecution": false
+  },
+  "implementation": {
+    "paths": {
+      "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift": {
+        "bytes": 8475,
+        "sha256": "714f7e744796722791e8537d5405ebaa50111f10abb32caf883f88b0f75fbff3"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+        "bytes": 33383,
+        "sha256": "a3750a1d8c7e87d3d9b72afbc8a1f29f6a2fb7eeafb7b65c470922a2e620ea53"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift": {
+        "bytes": 6863,
+        "sha256": "039e64a37ae1eb31fc76f64133446397288e8458eab3e32430b7d5975f9fe064"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift": {
+        "bytes": 36246,
+        "sha256": "cfb0948a9b78494b62d803dd588ca1a14fdc46df2588e3f74637c61a7c65d7c8"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift": {
+        "bytes": 5483,
+        "sha256": "da79f919c967f20d08c5541ad7dbfb131e5a96769693988f5b42a16074c7ac57"
+      },
+      "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift": {
+        "bytes": 24042,
+        "sha256": "8b35dddef2193daa2b6b7f53bfc0fb8a1f5f4b9a85b413c0eb8c81936f8aad14"
+      },
+      "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift": {
+        "bytes": 28356,
+        "sha256": "82ad8ae45de0572ac592e32033b9de6aae5358a589ab86a9bae427fd8543f050"
+      }
+    },
+    "startupOwner": "complete OriginalWinMainStartup retained beside live OriginalApplicationMenuSession",
+    "canonicalFullBytes": 50088,
+    "globalBase": "0x44d000",
+    "outer": "0x458440",
+    "world": "0x458b00",
+    "replayAliases": [
+      "0x4588a8",
+      "0x4588ac"
+    ],
+    "counter": "0x458580",
+    "runtimeExpectedImports": false,
+    "runtimeReferenceChecksDependency": false,
+    "startupMutablePlatformCursorStaged": true,
+    "menuReplyPacketsImmutable": true,
+    "startupAndIterationsCommitSeparately": true,
+    "hostDeliveryImplemented": false
+  },
+  "validation": {
+    "candidate": "candidate2",
+    "configuration": "release",
+    "bundledFixtures": true,
+    "rawOverrides": false,
+    "buildSeconds": 293.6,
+    "testSeconds": 149.107,
+    "methods": [
+      {
+        "name": "OriginalApplicationBootstrapTests testLateFirstMenuFailuresRetainStartupAndResize",
+        "seconds": 10.05
+      },
+      {
+        "name": "OriginalApplicationBootstrapTests testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+        "seconds": 0.356
+      },
+      {
+        "name": "OriginalApplicationFrontScreenTests testLateScreenFailuresRollBackCommittedStartupAndCallback",
+        "seconds": 3.358
+      },
+      {
+        "name": "OriginalApplicationFrontScreenTests testOwnScreenUsesWholeBackgroundLoaderAndPrivateFillMasks",
+        "seconds": 10.614
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+        "seconds": 7.297
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testOwnLoadingCommonSoundsAndOrdinaryFailures",
+        "seconds": 11.928
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 8.221
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 30.137
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 2.974
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testLateMenuReturnFailuresRollBackWholeIteration",
+        "seconds": 6.855
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+        "seconds": 26.345
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testLateFailureRollsBackContextMessageCounterAndBaseline",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+        "seconds": 0.086
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testWholeLoopAndOwnStartupCallbacks",
+        "seconds": 1.003
+      },
+      {
+        "name": "OriginalApplicationScreenBodyTests testLateBodyFailuresRollBackWholePendingIteration",
+        "seconds": 3.757
+      },
+      {
+        "name": "OriginalApplicationScreenBodyTests testOwnPanelAndBodyUseInstalledTextAndProducedLocalBytes",
+        "seconds": 14.231
+      },
+      {
+        "name": "OriginalApplicationSettingsTests testLateSettingsFailuresRollBackWholePendingLoop",
+        "seconds": 2.235
+      },
+      {
+        "name": "OriginalApplicationSettingsTests testOwnSettingsPreserveParentsAndUseProducedScratch",
+        "seconds": 4.7
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testLateResourceFailuresRetainCommittedStartupAndCallback",
+        "seconds": 1.322
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+        "seconds": 1.671
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testWholeLoaderAndCopyAtOwnedPlatformFields",
+        "seconds": 0.307
+      },
+      {
+        "name": "OriginalWinMainStartupTests testContinuousStartupOwnedStateAndExplicitBoundaries",
+        "seconds": 1.03
+      },
+      {
+        "name": "OriginalWinMainStartupTests testLateRollbackOfWholeStartup",
+        "seconds": 0.631
+      }
+    ],
+    "methodCount": 24,
+    "job": {
+      "scope": "Native-only release validation of declared startup and first-menu bootstrap extraction.\nSaved reference fixtures are read; no original, producer or historical auditor executes.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-bootstrap-native-20260912/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-bootstrap-native-20260912/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationBootstrapTests|OriginalWinMainStartupTests|OriginalBitmapSurfaceLoadingTests|OriginalApplicationSettingsTests|OriginalApplicationFrontScreenTests|OriginalApplicationScreenBodyTests|OriginalApplicationMenuReturnTests|OriginalApplicationMenuInputTests|OriginalApplicationMessageLoopTests|OriginalApplicationLoadingPrefixTests"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-bootstrap-native-20260912/candidate2-inputs.json",
+      "nativeFiles": 822,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-12T16:19:59.518132+00:00",
+      "pid": 86322,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 444.290211166,
+      "endedUTC": "2026-09-12T16:27:23.788104+00:00"
+    },
+    "allRequiredFamiliesPassed": true,
+    "newLateControls": {
+      "startup": 6,
+      "firstMenu": 17
+    },
+    "retainedMenuReturnLateControls": 9,
+    "firstCandidate": {
+      "status": "built; 24 tests executed with 20 failures including 2 unexpected",
+      "buildSeconds": 299.67,
+      "testSeconds": 72.823,
+      "cause": "Fresh background timer/allocate/construct observations absent from initial Session routing",
+      "correction": "Recognize first-background observations and preserve allocator/API effects; source inputs and expected unchanged"
+    },
+    "reviewCorrections": "review3-candidate2.json closes D1-D6; full operation projections, final raw registry/masks/RNG, startup owners, independent reply cursor, GetVolume and explicit domains"
+  },
+  "operationComparison": {
+    "startup": {
+      "label": "original-entry",
+      "sourceEvents": 174,
+      "count": 144,
+      "kinds": {
+        "calendarAllocation": 1,
+        "criticalSection": 1,
+        "cursor/loadCursor": 1,
+        "cursor/setCursor": 1,
+        "file": 7,
+        "filetime": 1,
+        "initializeCOM": 1,
+        "joystick/capabilities": 2,
+        "joystick/capture": 2,
+        "joystick/numberDevices": 1,
+        "joystick/position": 2,
+        "joystick/threshold": 2,
+        "milliseconds": 1,
+        "music/allocate": 1,
+        "music/audioVolumeRead": 1,
+        "music/closeHandle": 1,
+        "music/convert": 1,
+        "music/createFile": 1,
+        "music/createInstance": 1,
+        "music/method": 7,
+        "music/queryInterface": 4,
+        "panelClose": 1,
+        "panelWrite": 2,
+        "sound/cooperativeLevel": 1,
+        "sound/deviceCreate": 1,
+        "timezone": 1,
+        "wave/allocate": 5,
+        "wave/ascend": 5,
+        "wave/close": 5,
+        "wave/copy": 8,
+        "wave/create": 5,
+        "wave/descend": 15,
+        "wave/free": 5,
+        "wave/lock": 6,
+        "wave/open": 5,
+        "wave/read": 10,
+        "wave/restore": 1,
+        "wave/unlock": 5,
+        "window/clipperWindow": 1,
+        "window/cooperativeLevel": 1,
+        "window/createClipper": 1,
+        "window/createSurface": 2,
+        "window/createWindow": 1,
+        "window/cursor": 1,
+        "window/debug": 2,
+        "window/directDrawCreate": 1,
+        "window/icon": 1,
+        "window/metric": 4,
+        "window/registerClass": 1,
+        "window/release": 1,
+        "window/setClipper": 1,
+        "window/showWindow": 2,
+        "window/updateWindow": 1,
+        "zoneName": 2
+      },
+      "domains": {
+        "input": 7,
+        "ownedMemory": 20,
+        "platform": 117
+      },
+      "orderedKindDomainPayloadDigestSHA256": "260811428bf5ede70356669ab61a44fdcc0164df4e5b20e580ec249b08ee7f75",
+      "excludedObservations": {
+        "dateFormat": 2,
+        "music/format": 1,
+        "music/helper": 5,
+        "panel-content/format": 2,
+        "panel-defaults/close": 1,
+        "panel-defaults/format": 2,
+        "panel-defaults/open": 1,
+        "panel-defaults/print": 1,
+        "panel-defaults/write": 3,
+        "panel-info/close": 1,
+        "panel-info/format": 2,
+        "panel-info/open": 1,
+        "panel-info/scan": 2,
+        "panel-info/tokens": 1,
+        "panelCaller/call": 2,
+        "panelCaller/return": 3
+      },
+      "windowRequestMasks": {
+        "requests": 3,
+        "bytes": 256,
+        "definedBytes": 72,
+        "unknownBytes": 184
+      },
+      "scope": "One distinct nested original-entry startup; repeated once per each primary MenuReturn attempt. Domain follows the declared startup operation contract, not live host effects."
+    },
+    "overlappingParentCounts": {
+      "body": 43,
+      "front": 40,
+      "settings": 19,
+      "bitmap": 7,
+      "startup": 1
+    },
+    "firstMenu": {
+      "earlyCommitted": {
+        "count": 49,
+        "kinds": {
+          "lifecycle/invalidate": 1,
+          "translate": 48
+        },
+        "domains": {
+          "platform": 49
+        },
+        "orderedKindDomainPayloadDigestSHA256": "6ec0013eb25c44aead7a116642ea64e8692a497bf4ed62ff47c1594cb82578c1",
+        "requestMasks": {}
+      },
+      "menuCommitted": {
+        "count": 22623,
+        "kinds": {
+          "allocate": 47,
+          "allocateFront": 1128,
+          "bitmap/colorKey": 1169,
+          "bitmap/createDC": 1169,
+          "bitmap/createSurface": 1173,
+          "bitmap/debug": 8,
+          "bitmap/deleteDC": 1169,
+          "bitmap/deleteObject": 1169,
+          "bitmap/description": 1169,
+          "bitmap/getDC": 1169,
+          "bitmap/getObject": 2342,
+          "bitmap/image": 2350,
+          "bitmap/message": 8,
+          "bitmap/module": 2350,
+          "bitmap/release": 2,
+          "bitmap/releaseDC": 1168,
+          "bitmap/restore": 1169,
+          "bitmap/selectObject": 1169,
+          "bitmap/stretch": 1168,
+          "blit": 235,
+          "fill": 47,
+          "getDC": 138,
+          "present": 47,
+          "settings/close": 47,
+          "settings/open": 47,
+          "startupFront/createThread": 2,
+          "startupFront/enter": 94,
+          "startupFront/lastError": 1,
+          "startupFront/leave": 94,
+          "startupFront/timer": 47,
+          "startupGraphics/releaseDC": 135,
+          "startupGraphics/setBackgroundMode": 135,
+          "startupGraphics/setTextColor": 135,
+          "startupGraphics/textOut": 135,
+          "surface/blt": 94,
+          "surface/debug": 47,
+          "surface/pixelFormat": 47
+        },
+        "domains": {
+          "ownedMemory": 1175,
+          "platform": 21448
+        },
+        "orderedKindDomainPayloadDigestSHA256": "6608c1a2383e76af823349818ea31dca6cceab62538b3e89cde9e693f17a3550",
+        "requestMasks": {
+          "requests": 4825,
+          "bytes": 320048,
+          "definedBytes": 136976,
+          "unknownBytes": 183072,
+          "bitmapResponses": 19921,
+          "bitmapResponseWrites": 3511,
+          "bitmapResponseWriteBytes": 182460,
+          "fills": 47,
+          "fillBytes": 4700,
+          "fillDefinedBytes": 376,
+          "fillUnknownBytes": 4324
+        }
+      },
+      "nullCursorUncommitted": {
+        "count": 464,
+        "kinds": {
+          "allocate": 1,
+          "allocateFront": 24,
+          "bitmap/colorKey": 24,
+          "bitmap/createDC": 24,
+          "bitmap/createSurface": 24,
+          "bitmap/deleteDC": 24,
+          "bitmap/deleteObject": 24,
+          "bitmap/description": 24,
+          "bitmap/getDC": 24,
+          "bitmap/getObject": 48,
+          "bitmap/image": 48,
+          "bitmap/module": 48,
+          "bitmap/releaseDC": 24,
+          "bitmap/restore": 24,
+          "bitmap/selectObject": 24,
+          "bitmap/stretch": 24,
+          "blit": 4,
+          "fill": 1,
+          "getDC": 3,
+          "settings/close": 1,
+          "settings/open": 1,
+          "startupFront/enter": 2,
+          "startupFront/leave": 2,
+          "startupFront/timer": 1,
+          "startupGraphics/releaseDC": 3,
+          "startupGraphics/setBackgroundMode": 3,
+          "startupGraphics/setTextColor": 3,
+          "startupGraphics/textOut": 3,
+          "surface/blt": 2,
+          "surface/debug": 1,
+          "surface/pixelFormat": 1
+        },
+        "domains": {
+          "ownedMemory": 25,
+          "platform": 439
+        },
+        "orderedKindDomainPayloadDigestSHA256": "11d87c2e6a8d9a7c44128edd267fd51b441ea2ab8fb111f6e8d3904897f8fb8b",
+        "requestMasks": {
+          "requests": 99,
+          "bytes": 6568,
+          "definedBytes": 2804,
+          "unknownBytes": 3764,
+          "bitmapResponses": 408,
+          "bitmapResponseWrites": 72,
+          "bitmapResponseWriteBytes": 3744,
+          "fills": 1,
+          "fillBytes": 100,
+          "fillDefinedBytes": 8,
+          "fillUnknownBytes": 92
+        }
+      }
+    },
+    "startupRepeatedPrimaryAttempts": 48,
+    "startupRepeatedOperationCount": 6912,
+    "scope": "Startup is one distinct original-entry, repeated per primary attempt. Early callbacks commit separately. 47 first menus commit; NULL cursor has 464 attempted operations and no committed menu batch. Platform categories are declared modeled boundaries, not host execution."
+  },
+  "artifactVerification": {
+    "fiveAdditionalPairs": {
+      "pairs": 5,
+      "rawBytes": 205795824,
+      "fixtureBytes": 46327408,
+      "payloadBytes": 205795819,
+      "oneFinalLFReconstructionPairs": 5,
+      "blobEntries": 5443,
+      "decodedBlobBytes": 185692160,
+      "distinctBlobDigests": 2386,
+      "distinctDecodedBlobBytes": 74657964
+    },
+    "additionalRawAndFixturePins": [
+      {
+        "raw": {
+          "path": "build/research/winmain-startup-candidate2.json",
+          "bytes": 35021596,
+          "sha256": "0b8e2c61cac383b147a619ea0edd1e2f2f1ba85965f230e39f5cf9cf3c76ef4d"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-winmain-startup.json",
+          "bytes": 7434880,
+          "sha256": "e7801d29a96235ddbc0488b784b8c5764841d3c9414f62ebef85162f66708182"
+        }
+      },
+      {
+        "raw": {
+          "path": "build/research/bitmap-surface-loading-candidate2.json",
+          "bytes": 19573929,
+          "sha256": "1fd0fddd03875cf0a34e15d1dbea786e35cceafc786c7df99522d5d916dbfd6d"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-bitmap-surface-loading.json",
+          "bytes": 5571380,
+          "sha256": "6e88a23fca997cad390cad50c6b940f7ebbcc77f41bc6d4471e47462d70c8b14"
+        }
+      },
+      {
+        "raw": {
+          "path": "build/research/application-settings-candidate1.json",
+          "bytes": 38354477,
+          "sha256": "f5f3c58d2ac8aa3c2a37d2d220b2994eee02a312cdba80235b736bc8d13f1532"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-settings.json",
+          "bytes": 7826352,
+          "sha256": "73bbc8475c73f1d1c6752b9127f3019cd9222f757903bc7c9de52ab39658a06f"
+        }
+      },
+      {
+        "raw": {
+          "path": "build/research/application-front-screen-candidate1.json",
+          "bytes": 48603072,
+          "sha256": "7cde4e83c49a78e82cd02bf63c15d7e2e87aa8a04937ae196d1e9864f3d17632"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-front-screen.json",
+          "bytes": 12155724,
+          "sha256": "86e8deb50553406af7a12695487939a102a8ed4aa99917597780d7955ba2995f"
+        }
+      },
+      {
+        "raw": {
+          "path": "build/research/application-screen-body-candidate1.json",
+          "bytes": 64242750,
+          "sha256": "d9a56cf886174c1823985176be46387e42b203786d19f1f5c31ed6d6501d1279"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-screen-body.json",
+          "bytes": 13339072,
+          "sha256": "edd6f2e5a96d8e16c97dc7477e47dd5c845536e830994fd47668bf1adddc2d8e"
+        }
+      }
+    ],
+    "previousFourPairs": {
+      "verification": {
+        "path": "build/research/application-menu-session-native-20260912/fixture-verification1.json",
+        "bytes": 119052,
+        "sha256": "7d2e1c78f74ba015224b36453bb16d1cf556a26f2626dfea0151ece13dbbaaaf"
+      },
+      "pairCount": 4,
+      "pins": {
+        "build/research/application-menu-input-candidate1.json": {
+          "bytes": 132657719,
+          "sha256": "33292e107dface97563ea36a3d55e4108ce051d85352345c22e46a8ab898fc18"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json": {
+          "bytes": 37774137,
+          "sha256": "e1eb47c2d27dc5da54877dafa3471d03abc34cd608016252b5845634b4f8b6f0"
+        },
+        "build/research/application-menu-return-candidate1.json": {
+          "bytes": 67627503,
+          "sha256": "7723fdb6706e94a647e489e57e3729d1c81529ad474a02d936cb5038846e677d"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-return.json": {
+          "bytes": 14123660,
+          "sha256": "0fa998dbc893663030a57d146d9ac3959c7c02e283340efe30c6fd34d57becc7"
+        },
+        "build/research/application-loading-prefix-candidate1.json": {
+          "bytes": 71768199,
+          "sha256": "2bba3691974e5202add664270e8fc2f60d7a9b80cee5a1f6e7163732bf33c8a5"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-loading-prefix.json": {
+          "bytes": 37335552,
+          "sha256": "47704282bfa6080a71b795519d3ca486ea66928195fb2d936fcace5df4af8977"
+        },
+        "build/research/application-message-loop-candidate3.json": {
+          "bytes": 4331171,
+          "sha256": "f6ce8dff0efb9561521aa06a864cf0042fcc09e0fddb3ef64ee01fc6856e6cf9"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-message-loop.json": {
+          "bytes": 2536603,
+          "sha256": "b88ca033aaf17df68694d61d2c570890f7b8b620a96ceb22f43ef9a8d0133ebd"
+        }
+      },
+      "allPinsRechecked": true,
+      "fidelityReexecuted": false,
+      "boundary": "Previous full payload plus single LF reconstruction, complete JSON and all-blob verification is reused only after checking the report and all eight file pins."
+    },
+    "transportBoundary": "Historical envelopes omit exactly one final LF. Payload+0a equals pinned raw bytes/SHA, full JSON and all blob key/count/SHA checks. No source or fixture changed.",
+    "protectedFixtures": 370,
+    "currentFixtures": 370,
+    "currentNativeFiles": 822,
+    "archives": {
+      "native-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-bootstrap-native-20260912/native-candidate2.tar",
+        "members": 822,
+        "payloadBytes": 4015554451,
+        "tar": {
+          "bytes": 4017039360,
+          "sha256": "f05812c285f33396a7a7043ffbc333c7146a60a3920f83bae1361a57b1e9c17b"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T16:32:17.657256+00:00",
+        "protectedFixtures": 370,
+        "currentNativeFiles": 822,
+        "sourceExecuted": false
+      },
+      "evidence-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-bootstrap-native-20260912/bootstrap-evidence2.tar",
+        "members": 120,
+        "payloadBytes": 485121265,
+        "tar": {
+          "bytes": 485345280,
+          "sha256": "dce93cff937afe0aa8f4a7c47063d483ac624630d445e54ea6863e72a044a4a9"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T16:32:18.885342+00:00",
+        "allPlanPins": 69,
+        "initialCandidateFailurePreserved": true,
+        "sourceExecuted": false
+      }
+    }
+  },
+  "independentReview": {
+    "codeReviewer": "/root/catalog_pending_review",
+    "codeReport": "review3-candidate2.json",
+    "fixtureAndProjectionReviewer": "/root/catalog_test_completion",
+    "reports": [
+      "bootstrap-fixture-verification1.json",
+      "projection-review3.json"
+    ],
+    "phaseNote": "Code review preceded final Native2 result. Final publication review and prospective Git verification are separately named post-archive records; not asserted inside bootstrap-evidence2.tar."
+  },
+  "preservedDiagnostics": {
+    "native1": "immutable frozen candidate, job and complete log",
+    "projectionReview1": "new read-only Python verifier assumed optional row.kind was always present",
+    "projectionReview2": "new read-only Python verifier confused Window and Bitmap response schemas",
+    "projectionReview3": "fixes only verifier checks; candidate2 and source pins unchanged"
+  },
+  "artifacts": {
+    "build/research/application-bootstrap-native-20260912/plan.json": {
+      "bytes": 17959,
+      "sha256": "3b1a8cb8581a9650813854b1c955d42fe92dd189cf14754f3a485c0da2030d56"
+    },
+    "build/research/application-bootstrap-native-20260912/initial-native.json": {
+      "bytes": 145790,
+      "sha256": "232b71d6294778d5ca5246fc6fc1c23d78a5e952556cb0b22cc3f150dc481c52"
+    },
+    "build/research/application-bootstrap-native-20260912/candidate1-inputs.json": {
+      "bytes": 146317,
+      "sha256": "9de7eed52e4b168a24c4b000b17227b24c3b9d78b9b1a8a5c670c34cae994464"
+    },
+    "build/research/application-bootstrap-native-20260912/candidate2-inputs.json": {
+      "bytes": 146317,
+      "sha256": "3e70ec596c5c5648a7efbb876a7fe3506f835adcef0c106106587153e9390e43"
+    },
+    "build/research/application-bootstrap-native-20260912/candidate2-amendment.json": {
+      "bytes": 1304,
+      "sha256": "b87e07d712a8e28a24f13860a96ab192e8d009f8a5cfe87e3aea6f5d6e5aad64"
+    },
+    "build/research/application-bootstrap-native-20260912/native1.job.json": {
+      "bytes": 1363,
+      "sha256": "2fba95410c8906bd0eae055885acac5fb2f3c966e495e4843b21c2950faaa21e"
+    },
+    "build/research/application-bootstrap-native-20260912/native1.log": {
+      "bytes": 39607,
+      "sha256": "e20e24228e72315e56e9da1d141fd1708dd4d3b016ece437cdb01cb7f15d6d2d"
+    },
+    "build/research/application-bootstrap-native-20260912/native2.job.json": {
+      "bytes": 1363,
+      "sha256": "bc4532d12e2ecfa029135cf01c793d6a2a56ec367a86b542660e66cab32b7e66"
+    },
+    "build/research/application-bootstrap-native-20260912/native2.log": {
+      "bytes": 31355,
+      "sha256": "366129042431e84af8e7541252fce277aaa388eec23f45c70b52bfe0536d68b4"
+    },
+    "build/research/application-bootstrap-native-20260912/review1.json": {
+      "bytes": 18837,
+      "sha256": "27bea00f889c738f8cb3310a6c59a09d888e49e4ac0719ad9bc741bceb8d96a6"
+    },
+    "build/research/application-bootstrap-native-20260912/review2-draft.json": {
+      "bytes": 11352,
+      "sha256": "0c643eb40ce15497b2a69ae1cf8442cddf18fc8efefb0fe80865f0f6e8df6722"
+    },
+    "build/research/application-bootstrap-native-20260912/review3-candidate2.json": {
+      "bytes": 12068,
+      "sha256": "e5828383c37c15aac3a9cf0a501f6f3d3ce44774841b8d32ab189c8f98bb1ade"
+    },
+    "build/research/application-bootstrap-native-20260912/bootstrap-fixture-verification1.json": {
+      "bytes": 19480,
+      "sha256": "8544766e892773a646209c6fd83e709045197d0160fe2ea391e1357bc6be5bc7"
+    },
+    "build/research/application-bootstrap-native-20260912/projection-review1.json": {
+      "bytes": 36874,
+      "sha256": "383289bd350eb46eed60b7d1d5e5adfaea2e67c66006a98f342af26f5c4fa472"
+    },
+    "build/research/application-bootstrap-native-20260912/projection-review2.json": {
+      "bytes": 37700,
+      "sha256": "be89074e67998f45a48bb55c82d8f66a778d210999959b35e8d83debfbfb2717"
+    },
+    "build/research/application-bootstrap-native-20260912/projection-review3.json": {
+      "bytes": 189302,
+      "sha256": "6e15e137009624da1bfafb4922a062afd3fcbcace0462f07ff7af6ef4b2eeebf"
+    },
+    "build/research/application-bootstrap-native-20260912/evidence-members.json": {
+      "bytes": 19219,
+      "sha256": "e7235db75b9de7f29efdb2695aac1b6b2cb303d24e988ba1fd80a86483c2ce59"
+    },
+    "build/research/application-bootstrap-native-20260912/native-archive-verification.json": {
+      "bytes": 480,
+      "sha256": "3d7f8adf0b7d80a534d4e3cbfb77369b762ab08ebb8e5f0fbf448a2b16b260fa"
+    },
+    "build/research/application-bootstrap-native-20260912/evidence-archive-verification.json": {
+      "bytes": 488,
+      "sha256": "d378761e94e4bb2f4215891265bd58c3dc8fa55f81ad17320f74ca63661e8d4e"
+    }
+  },
+  "limits": [
+    "runtime bundled startup package and native file/translated text adapter",
+    "AppKit queue/clock/raster/audio/effect delivery",
+    "earlier PE/CRT/NLS and private fullscreen/capabilities backing",
+    "workers/reentrancy/unsupported dispatcher",
+    "full own loading/catalog return",
+    "War43a860/full match/all game/Windows/cleanMac",
+    "three safety incidents"
+  ],
+  "sourceFaultMatchesClaimed": false,
+  "sourceExecuted": false,
+  "windowsOrDeviceVerified": false,
+  "appWindowVerified": false,
+  "fullGameComplete": false,
+  "safetyIncidentsRemainOpen": 3
+}

@@ -21,6 +21,7 @@ public struct OriginalApplicationMenuSession {
         public var libraryText: OriginalLibSurfaceText
         public var random: OriginalCRTRandom
         public var screenBody: OriginalFrontScreenBody.StartupResult?
+        public internal(set) var settings: OriginalSettingsLoading.StartupResult?
 
         /// Adopt the already constructed menu parent exactly once. Surface
         /// tokens come from its own CreateSurface responses, never snapshots.
@@ -57,7 +58,7 @@ public struct OriginalApplicationMenuSession {
                 throw OriginalStateError.invalidStorage("Menu replay alias bytes or masks")
             }
         }
-        fileprivate static func slice(_ record: OriginalStateRecord,_ start: Int,_ count: Int) throws -> OriginalStateRecord {
+        static func slice(_ record: OriginalStateRecord,_ start: Int,_ count: Int) throws -> OriginalStateRecord {
             guard start >= 0, count >= 0, start <= record.bytes.count-count else {
                 throw OriginalStateError.invalidStorage("Menu record extent")
             }
@@ -101,6 +102,12 @@ public struct OriginalApplicationMenuSession {
         case free(UInt32)
         case translate(Loop.Request)
         case sleep(UInt32)
+        case bitmap(OriginalBitmapSurfaceLoading.Request,OriginalBitmapSurfaceLoading.Response)
+        case allocate(UInt32,[UInt8])
+        case settings(OriginalSettingsEvent)
+        case lifecycle(OriginalWindowInitialization.Request,OriginalWindowInitialization.Response)
+        case startupFront(OriginalFrontScreenEvent)
+        case startupGraphics(OriginalFrontScreenEvent,result: Int32)
     }
     public enum Checkpoint: String {
         case dispatch, world, prefix, panel, body, alternate, main, tail, worldReturn, dispatchReturn
@@ -138,33 +145,53 @@ public struct OriginalApplicationMenuSession {
         observe: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
-        beforeCommit: (Loop,State) throws -> Void = { _,_ in }) throws -> Outcome {
+        beforeCommit: (Loop,State) throws -> Void = { _,_ in },
+        initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
+        bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
+        lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
         try state.validateAliases()
         var next = self, effects: [Effect] = []
         let oldCounter = loop.counter
+        var stage: OriginalApplicationBootstrap.Stage = .menu
+        var drawResult: Int32 {
+            if let initialization {
+                if stage == .prefix { return initialization.prefix.drawResults.first ?? responses.draw }
+                if stage == .body { return initialization.body.drawResults.first ?? responses.draw }
+            }
+            return responses.draw
+        }
         func event(_ e: OriginalFrontScreenEvent) throws {
             switch e.kind {
             case "blit":
                 guard let b = e.blit else { throw Boundary.dependency("Missing bitmap Blt request") }
-                effects.append(.blit(b,result:responses.draw))
+                effects.append(.blit(b,result:drawResult))
             case "fill":
                 guard let f = e.fill else { throw Boundary.dependency("Missing fill request") }
-                effects.append(.fill(f,result:responses.draw))
+                effects.append(.fill(f,result:stage == .prefix ? initialization?.prefix.fillResult ?? responses.draw : responses.draw))
             case "soundMethod": effects.append(.soundMethod(e,ignoredResult:responses.sound))
             case "method":
                 guard e.arguments.count >= 2 else { throw Boundary.dependency("Menu COM request") }
                 if e.arguments[1] == 8 { effects.append(.release(e,ignoredResult:responses.release)) }
                 else if e.arguments[1] == 0x14 { effects.append(.present(e,result:responses.presentation)) }
                 else { throw Boundary.dependency("Menu COM continuation") }
-            case "getDC": effects.append(.getDC(e,result:responses.dcResult,output:responses.dc))
-            case "setBackgroundMode","setTextColor","textOut","releaseDC": effects.append(.graphics(e))
+            case "getDC": effects.append(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
+            case "setBackgroundMode","setTextColor","textOut","releaseDC":
+                if let input = initialization,stage == .body { effects.append(.startupGraphics(e,result:input.body.methodResult)) }
+                else { effects.append(.graphics(e)) }
             case "free":
                 guard e.arguments.count == 1 else { throw Boundary.dependency("Menu free request") }
                 effects.append(.free(e.arguments[0]))
-            case "write","writeLocal","read","clip","draw","text","stringLength","soundRequest","randomTable","panel","enter","leave": break
+            case "timer","createThread","lastError":
+                guard initialization != nil && stage == .prefix else { throw Boundary.dependency("Menu operation "+e.kind) }
+                effects.append(.startupFront(e))
+            case "format","allocate","construct":
+                guard initialization != nil && stage == .prefix else { throw Boundary.dependency("Menu format") }
+            case "enter","leave":if initialization != nil { effects.append(.startupFront(e)) }
+            case "write","writeLocal","read","clip","draw","text","stringLength","soundRequest","randomTable","panel": break
             default: throw Boundary.dependency("Menu operation "+e.kind)
             }
-            try observe(e)
+            if initialization != nil && stage != .menu { try bootstrapObserve(.front(stage,e)) }
+            else { try observe(e) }
         }
         func store(_ address: Int,_ bytes: [UInt8]) throws {
             guard [1,2,4].contains(bytes.count) else { throw Boundary.dependency("Menu store extent") }
@@ -184,6 +211,7 @@ public struct OriginalApplicationMenuSession {
                 perform:{ request, owned in
                     if request.kind != .gameDispatch {
                         guard request.kind != .recoverSurface else { throw Boundary.dependency("Application surface recovery") }
+                        if initialization != nil { try bootstrapObserve(.loopRequest(request,owned.full)) }
                         let response = try queue(request)
                         if request.kind == .translate { effects.append(.translate(request)) }
                         if request.kind == .sleep { effects.append(.sleep(request.arguments[0])) }
@@ -198,18 +226,27 @@ public struct OriginalApplicationMenuSession {
                         let input = try OriginalWindowInput.Message(window:msg.integer(at:0,as:UInt32.self),message:msg.integer(at:4,as:UInt32.self),wParam:msg.integer(at:8,as:UInt32.self),lParam:msg.integer(at:12,as:UInt32.self))
                         var g = try State.slice(owned.full,0,Self.globalCount)
                         var local = try State.slice(owned.full,Self.outerStart,0x140)
-                        let result = try OriginalWindowInput.receive(input,globals:&g,local:&local,memory:&owned.memory,request:{ q in
+                        let result: Int32
+                        if input.message == 5 {
+                            result = try OriginalWindowLifecycle.receive(input,globals:&g,memory:&owned.memory,
+                                backing:{ _,_ in throw Boundary.dependency("Initial resize backing") },perform:{ q in
+                                    let r = try lifecycle(q);effects.append(.lifecycle(q,r));return r
+                                },store:store)
+                        } else { result = try OriginalWindowInput.receive(input,globals:&g,local:&local,memory:&owned.memory,request:{ q in
                             guard q.kind == .windowDefault else { throw Boundary.dependency("Menu window "+q.kind.rawValue) }
                             return try windowDefault(q)
-                        },store:store)
+                        },store:store) }
                         try owned.replace(0,g); try owned.replace(Self.outerStart,local)
                         try owned.mergeAliases(counter:oldCounter)
+                        if initialization != nil { try bootstrapObserve(.callback(result,owned.full)) }
                         return .init(result:result)
                     }
+                    stage = .resources
                     try owned.mergeAliases(counter:oldCounter)
                     try point(.dispatch,owned.full)
-                    let game = try OriginalApplicationDispatchEntry.advance(incomingTarget:request.arguments[0],globals:&owned.full,perform:{ q,_ in
-                        guard q.kind == "blt" else { throw Boundary.dependency("Menu dispatcher "+q.kind) }
+                    let game = try OriginalApplicationDispatchEntry.advance(incomingTarget:request.arguments[0],globals:&owned.full,perform:{ q,full in
+                        guard q.kind == "blt" || (initialization != nil && ["pixelFormat","debug"].contains(q.kind)) else { throw Boundary.dependency("Menu dispatcher "+q.kind) }
+                        if initialization != nil { try bootstrapObserve(.dispatchSurface(full)) }
                         let response = try surface(q); effects.append(.surface(q,response)); return response
                     },store:store)
                     try point(.world,owned.full)
@@ -217,10 +254,43 @@ public struct OriginalApplicationMenuSession {
                     var g = try State.slice(owned.full,0,Self.globalCount)
                     var resources = owned.front, screen = owned.earlyScreen, library = owned.libraryText
                     var random = owned.random, memory = owned.memory, body = owned.screenBody
+                    var settings = owned.settings
+                    var frontSurfaces: [UInt32:UInt32] = [:]
+                    var frontAPIIndex = 0,backgroundAPIIndex = 0
                     // Drawing callbacks run while presentation borrows memory.
                     // Track its ordered frees separately to avoid an overlapping
                     // Swift access while preserving current ownership checks.
                     var drawing = memory.allocations
+                    func adopt(_ bitmaps: [UInt32:OriginalLoadedBitmap],_ surfaces: [UInt32:UInt32]) throws {
+                        guard Set(bitmaps.keys) == Set(surfaces.keys) else { throw Boundary.dependency("Bootstrap surface registry") }
+                        for (pointer,bitmap) in bitmaps {
+                            guard pointer != 0,memory.allocations[pointer] == nil,let surface = surfaces[pointer],
+                                  try bitmap.storage.integer(at:0,as:UInt32.self) == (surface == 0 ? 0 : 1) else { throw Boundary.bitmapOwnership(pointer) }
+                            var record = bitmap.storage;try record.write(surface,at:0)
+                            let allocation = OriginalMenuPresentationMemory.Allocation(storage:record)
+                            memory.allocations[pointer] = allocation;drawing[pointer] = allocation
+                        }
+                    }
+                    func construct(_ allocation: OriginalInterfaceAllocation,_ device: UInt32,_ path: String,
+                                   _ at: OriginalApplicationBootstrap.Stage) throws -> (OriginalLoadedBitmap,UInt32) {
+                        guard let input = initialization else { throw Boundary.dependency("Initial bitmap inputs") }
+                        var created: UInt32?
+                        let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:false,
+                            backing:allocation.backing,device:device,flags:0x40,context:&created,perform:{ q,cursor in
+                                let replies = at == .resources ? input.frontResponses : input.backgroundResponses
+                                let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
+                                guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
+                                let response = replies[index]
+                                if at == .resources { frontAPIIndex += 1 } else { backgroundAPIIndex += 1 }
+                                try bootstrapObserve(.bitmap(at,q,response))
+                                effects.append(.bitmap(q,response))
+                                if q.kind == "createSurface" && response.result == 0 { cursor = response.output }
+                                return response
+                            })
+                        let present = try bitmap.storage.integer(at:0,as:UInt32.self) != 0
+                        guard !present || created != nil else { throw Boundary.bitmapOwnership(allocation.address) }
+                        return (bitmap,present ? created! : 0)
+                    }
                     func combined(_ globals: OriginalStateRecord,_ w: OriginalStateRecord? = nil) throws -> OriginalStateRecord {
                         var snapshot = owned
                         try snapshot.replace(0,globals)
@@ -237,14 +307,44 @@ public struct OriginalApplicationMenuSession {
                         let bitmap = try liveBitmap(args[0]), surface = try bitmap.storage.integer(at:0,as:UInt32.self)
                         var canonical = bitmap.storage; try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
                         let input = OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:width,viewportHeight:height)
-                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return responses.draw })
+                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return drawResult })
                     }
                     let continuation = try OriginalFrontMenuLoop.run(world:&world,globals:&g,initialize:{ w,state in
-                        try resources.load(world:w,globals:&state,allocate:{ _ in throw Boundary.dependency("Menu resource allocation") },source:{ _,_ in throw Boundary.dependency("Menu resource source") },deviceResult:{ _ in throw Boundary.dependency("Menu resource device") },observe:{ e in
-                            guard e.kind == .write else { throw Boundary.dependency("Menu resource "+e.kind.rawValue) }
-                            try event(.init("write",[e.arguments[1],e.arguments[2],e.arguments[3]]))
+                        let result = try resources.load(world:w,globals:&state,allocate:{ index in
+                            guard let input = initialization else { throw Boundary.dependency("Menu resource allocation") }
+                            guard index < input.frontAllocations.count,settings == nil else { throw Boundary.dependency("Initial front allocation lifetime") }
+                            let allocation = input.frontAllocations[index]
+                            try bootstrapObserve(.allocateFront(index,allocation))
+                            effects.append(.allocate(allocation.address,allocation.backing));return allocation
+                        },source:{ _,_ in throw Boundary.dependency("Menu resource source") },deviceResult:{ _ in throw Boundary.dependency("Menu resource device") },constructBitmap:{ _,allocation,device,path in
+                            let (bitmap,surface) = try construct(allocation,device,path,.resources)
+                            frontSurfaces[allocation.address] = surface;return bitmap
+                        },observe:{ e in
+                            if initialization != nil { try bootstrapObserve(.resource(e)) }
+                            else {
+                                guard e.kind == .write else { throw Boundary.dependency("Menu resource "+e.kind.rawValue) }
+                                try event(.init("write",[e.arguments[1],e.arguments[2],e.arguments[3]]))
+                            }
                         })
+                        if let input = initialization,result.continuation != .ready {
+                            try bootstrapObserve(.resources(result,combined(state),resources,frontSurfaces))
+                            try adopt(resources.bitmaps,frontSurfaces)
+                            guard result.continuation == .settings else { return result }
+                            stage = .settings
+                            let file = input.settings
+                            let output = try OriginalSettingsLoading.loadOwnStartup(globals:&state,translatedBytes:file.bytes,
+                                file:file.file,scratchAddress:file.scratchAddress,target:game.target,closeResult:file.closeResult,observe:{ e,g,s in
+                                    if e.kind == .open || e.kind == .close { effects.append(.settings(e)) }
+                                    try bootstrapObserve(.settings(e,g,s))
+                                })
+                            settings = output
+                            try bootstrapObserve(.settingsReturn(output,combined(state)))
+                            guard output.continuation == .ready else { throw Boundary.dependency("Initial settings NULL FILE") }
+                            return .init(continuation:.ready,nullBitmapSlot:nil)
+                        }
+                        return result
                     },prefix:{ state in
+                        stage = .prefix
                         try point(.prefix,combined(state))
                         // Validate the live registry before the retained helper
                         // reads its historical constructor view of this bitmap.
@@ -257,15 +357,43 @@ public struct OriginalApplicationMenuSession {
                         }
                         // The zero fields below have no reply semantics: any
                         // timer/worker/allocation operation throws before use.
-                        return try screen.advance(globals:&state,input:.init(drawTarget:game.target,milliseconds:0,threadHandle:0,threadID:0,lastError:0,fillResult:responses.draw,drawResults:[responses.draw]),fillBacking:[UInt8](repeating:0,count:100),allocate:{ throw Boundary.dependency("Menu background allocation") },source:{ _ in throw Boundary.dependency("Menu background source") },observe:event)
+                        let input: OriginalFrontScreenInput
+                        if let first = initialization?.prefix {
+                            input = .init(drawTarget:game.target,milliseconds:first.milliseconds,threadHandle:first.threadHandle,
+                                threadID:first.threadID,lastError:first.lastError,fillResult:first.fillResult,drawResults:first.drawResults)
+                        } else {
+                            input = .init(drawTarget:game.target,milliseconds:0,threadHandle:0,threadID:0,lastError:0,fillResult:responses.draw,drawResults:[responses.draw])
+                        }
+                        let oldKeys = Set(screen.bitmaps.keys)
+                        let end = try screen.advance(globals:&state,input:input,fillBacking:[UInt8](repeating:0,count:100),allocate:{
+                            guard let first = initialization else { throw Boundary.dependency("Menu background allocation") }
+                            let allocation = first.backgroundAllocation
+                            try bootstrapObserve(.allocateBackground(allocation))
+                            guard allocation.address == 0 || memory.allocations[allocation.address] == nil else { throw Boundary.bitmapOwnership(allocation.address) }
+                            effects.append(.allocate(allocation.address,allocation.backing));return allocation
+                        },source:{ _ in throw Boundary.dependency("Menu background source") },constructBitmap:{ allocation,device,path in
+                            try construct(allocation,device,path,.prefix)
+                        },observe:event)
+                        if initialization != nil {
+                            let fresh = screen.bitmaps.filter { !oldKeys.contains($0.key) }
+                            try adopt(fresh,screen.surfaces.filter { fresh[$0.key] != nil })
+                            try bootstrapObserve(.prefixReturn(end,combined(state),screen))
+                        }
+                        return end
                     },update:{ state in
+                        stage = .body
                         try point(.panel,combined(state))
-                        return try OriginalMenuPanelUpdate.run(globals:&state,content:{ _ in throw Boundary.dependency("Menu panel content") },bitmap:{ _ in throw Boundary.dependency("Menu panel bitmap") },write:{ _,_ in throw Boundary.dependency("Menu panel write") },observe:{ e,_ in try event(.init(e.kind,e.arguments)) })
+                        let result = try OriginalMenuPanelUpdate.run(globals:&state,content:{ _ in throw Boundary.dependency("Menu panel content") },bitmap:{ _ in throw Boundary.dependency("Menu panel bitmap") },write:{ _,_ in throw Boundary.dependency("Menu panel write") },observe:{ e,_ in try event(.init(e.kind,e.arguments)) })
+                        if initialization != nil { try bootstrapObserve(.panelReturn(combined(state))) }
+                        return result
                     },body:{ state in
                         try point(.body,combined(state))
-                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:.init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,observe:event)
-                        try bodyProduced(output); body = output; return output.continuation
+                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:initialization?.body ?? .init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,observe:event)
+                        try bodyProduced(output); body = output
+                        if initialization != nil { try bootstrapObserve(.bodyReturn(output,combined(state),library)) }
+                        return output.continuation
                     },alternate:{ state,selector in
+                        stage = .menu
                         try point(.alternate,combined(state))
                         return try OriginalFrontScreenAlternate.advance(globals:&state,input:.init(selector:selector,drawTarget:game.target,timers:[],methodResult:0,drawResults:[responses.draw],fillResult:0,threadHandle:0,threadID:0,lastError:0),draw:draw,fill:{ _ in throw Boundary.dependency("Alternate fill") },writeSettings:{ _ in throw Boundary.dependency("Alternate settings write") },observe:event)
                     },completion:{ entry,w,state in
@@ -295,13 +423,13 @@ public struct OriginalApplicationMenuSession {
                     })
                     let resultRecord = try combined(g,world)
                     owned.full = resultRecord; owned.front = resources; owned.earlyScreen = screen
-                    owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body
+                    owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
                         throw Loading(pending:.init(state:owned,target:game.target,stagedEffects:effects))
                     }
                     guard continuation == .returned else { throw Boundary.dependency("Menu continuation "+continuation.rawValue) }
-                    try point(.worldReturn,owned.full)
+                    try point(.worldReturn,owned.full,initialization == nil ? nil : responses.presentation)
                     let result = try OriginalApplicationDispatchEntry.finishWorldCall(globals:owned.full)
                     try point(.dispatchReturn,owned.full,result)
                     return .init(result:result)
