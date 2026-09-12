@@ -201,6 +201,20 @@ Inventory1 raw-deflate failure, inventory2 DC-reuse assertion и отдельн�
 или нового Native теста нет;875Native/372fixtures/46package/90pins неизменны.
 [Результат и проверки](../evidence/application-bitmap-surface-inventory.json).
 
+Приняты [собственные source colors для startup surfaces](APPLICATION_SURFACE_COLORS.md).
+40 saved bitmap/front lifetimes (индексы0..34,36..40),16929 полных API operations,
+995 surfaces/992 copies/3 uncopied owners и993/992 поколения DC совпали с Native.
+Surface сохраняет исходные RGB/masks после DeleteObject; unknown не становится
+black. MenuSession учитывает3 поздних method8 Release до observer, включая12
+loading parents; prefix-aware comparison и whole rollback сохраняются.
+23 bundled release-метода за142.844с/build308.06с прошли без корректировок
+кандидата/expected; все48 primary routes (47commits/1NULL rejection),50 input
+и12 loading chains сохранены.17 supplemental controls дополняют source cases.
+372 старых fixtures/46package неизменны;373current/878Native и оба архива
+проверены. Две data-only reference ошибки сохранены; оригинал не исполнялся.
+[Приёмка](../evidence/application-surface-colors.json). Device conversion,
+palette/raster, полная игра и три safety incidents остаются открытыми.
+
 ## Непринятая работа и отказ Codex
 
 Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -251,36 +265,24 @@ Inventory1 raw-deflate failure, inventory2 DC-reuse assertion и отдельн�
 
 ## Следующая независимая карточка
 
-**Собственные logical RGB/masks для всех фактических startup bitmap surfaces.**
+**Контракт raster-представления и следующего startup consumer.**
 
-Полный saved-request inventory принят:
-[контракт и ограничения](APPLICATION_BITMAP_SURFACE_INVENTORY.md),
-`build/research/application-bitmap-surface-inventory-20260912/`:
-`inventory3.json`, `event-catalog4.json`, `downstream-ownership1.json`,
-`review1-contract.json`. Прежний DIB next-work-review2 остаётся историческим.
+Source-color owners уже приняты в [APPLICATION_SURFACE_COLORS](APPLICATION_SURFACE_COLORS.md).
+Повторять полный inventory,40 lifetime assignments или завершённые тесты для
+нового оформления не нужно. Сохранённые 491 downstream Blt, графические события,
+полные request flags и источники находятся в принятом inventory/event-catalog.
+Сначала определить конечный следующий consumer и доказанные входы его формата,
+палитры, color key, clipping, текста и назначения; неизвестные зависимости
+перечислить до реализации. Primary reply объявляет8-bit indexed, но actual
+offscreen conversion/палитра/инициализация устройства пока не установлены.
 
-Закрепить независимые expected assignments и Native-план для всех200 distinct
-stage copies,40 composed bitmap/front lifetimes и48/50/12 whole callers.
-1:1 теперь подтверждено для всего фактического bitmap-copy набора; errors,
-unused positive CreateSurface outputs и failed GetDC исключать нельзя.
-Surface владеет собственными исходными RGB/masks; initial storage unknown,
-source mask=false делает destination unknown, известный black остаётся отдельным.
-Не подставлять after-state/expected или источник unknown backing в Native.
-
-Сохранять поколения повторно используемых DC, selection/GetDC/ReleaseDC/DeleteDC,
-данные после DeleteObject и все Release requests. Подключить также3 поздних
-MenuSession method8 releases: текущий bitmapInputs их не записывает. Расширить
-comparison по сохранённым событиям, сохранив whole rollback и исходные эталоны.
-Независимые mask/owner/failed-operation controls дополняют полные48/50/12 regressions.
-
-Это lossless source-color representation для всех требуемых копий. Actual
-DirectDraw conversion остаётся отдельной зависимостью: primary reply объявляет
-8-bit indexed, palettes/offscreen format/исходные surface colors не измерены.
-Все146289 DIB holes,18 downstream NULL-source occurrences, window/backbuffer/
-text/presentation требуют своих доказательств; не принимать black/alpha0 или
-неизменность старого destination за доказанный эффект. Исторические producer/
-capture/auditor не перезапускать. AppKit input/clock/audio,full loading/catalog,
-War/матч/полная игра/Windows/cleanMac и три safety incidents остаются открытыми.
+Нельзя объявить source RGB финальными Windows pixels или незаметно заменить
+неизвестный цвет чёрным/alpha0. Все146289 DIB holes и18 downstream NULL-source
+occurrences сохраняют границы. Новую карточку ограничить готовыми доказательствами,
+целым вызывающим путём и late rollback; expected закрепить независимо от Core.
+Исторические producers/captures/auditors не перезапускать. AppKit input/clock/audio,
+full loading/catalog, War/матч/полная игра/Windows/cleanMac и три safety incidents
+остаются открытыми.
 
 ## Дальнейшая сквозная очередь
 

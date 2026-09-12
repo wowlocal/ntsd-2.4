@@ -199,10 +199,24 @@ Release (3input/12loading occurrences) сохранены. Declared primary8-bit
 и отдельно закрытый non-request event-catalog gap сохранены.875Native/372fixtures/
 46package/90pins неизменны; оригинал и Native тесты не перезапускались.
 [Проверки](evidence/application-bitmap-surface-inventory.json).
-Следующая карточка — logical source RGB/masks owners для всего доказанного
-набора копий, с поздними Release и whole48/50/12 rollback/comparison. Device
-conversion,146289 DIB holes,18 NULL-source occurrences и окончательная выдача
-окна остаются отдельными зависимостями; unknown не становится black/alpha0.
+Приняты [собственные source colors для startup surfaces](research/APPLICATION_SURFACE_COLORS.md).
+40 saved bitmap/front lifetimes (индексы0..34,36..40),16929 полных API operations,
+995 surfaces/992 copies/3 uncopied owners и993/992 поколения DC совпали с Native.
+Surface сохраняет исходные RGB/masks после DeleteObject; unknown не становится
+black. MenuSession учитывает3 поздних method8 Release до observer, включая12
+loading parents; prefix-aware comparison и whole rollback сохраняются.
+23 bundled release-метода за142.844с/build308.06с прошли без корректировок
+кандидата/expected; все48 primary routes (47commits/1NULL rejection),50 input
+и12 loading chains сохранены.17 supplemental controls дополняют source cases.
+372 старых fixtures/46package неизменны;373current/878Native и оба архива
+проверены. Две data-only reference ошибки сохранены; оригинал не исполнялся.
+[Приёмка](evidence/application-surface-colors.json). Device conversion,
+palette/raster, полная игра и три safety incidents остаются открытыми.
+
+Следующая карточка — конечный контракт raster-представления и следующего
+startup consumer по готовым доказательствам. Actual indexed conversion/палитра,
+146289 DIB holes,18 NULL-source occurrences и окончательный вывод окна остаются
+отдельными зависимостями. Завершённый inventory и source captures не повторять.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

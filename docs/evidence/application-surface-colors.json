@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "status": "accepted_finite_native_source_color_ownership",
+  "createdUTC": "2026-09-12T19:02:09.010140+00:00",
+  "baseCommit": "e3f95c68daa769483c99bf788dc9200fc123618e",
+  "sourceExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "safetyIncidentsOpen": 3,
+  "scope": "Logical lossless top-left RGB8/defined for the complete saved startup bitmap-copy set; not actual device conversion or final raster.",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved controlled Unicorn requests and original packaged DIB data; new data-only assignment and Native tests",
+    "all104InputPinsPreserved": true,
+    "aggregateCounts": {
+      "copies": 992,
+      "images": 997,
+      "inputCases": 50,
+      "inputPinsUnchanged": 104,
+      "lateReleaseEvents": 3,
+      "lateReleaseOccurrencesAcrossAll110Chains": 15,
+      "lifetimes": 40,
+      "memoryDCGenerations": 993,
+      "operation:colorKey": 993,
+      "operation:createDC": 993,
+      "operation:createSurface": 997,
+      "operation:debug": 8,
+      "operation:deleteDC": 993,
+      "operation:deleteObject": 993,
+      "operation:description": 993,
+      "operation:getDC": 993,
+      "operation:getObject": 1990,
+      "operation:image": 1998,
+      "operation:message": 8,
+      "operation:module": 1998,
+      "operation:release": 2,
+      "operation:releaseDC": 992,
+      "operation:restore": 993,
+      "operation:selectObject": 993,
+      "operation:stretch": 992,
+      "operations": 16929,
+      "originalDIBUnknownPixels": 146289,
+      "originalDIBWrittenPixels": 10037872,
+      "pixelRowsChecked": 14632,
+      "resourceNames": 36,
+      "resourceReleaseRequests": 2,
+      "reusedMemoryDCTokens": 37,
+      "reusedSurfaceDCTokens": 36,
+      "surfaceDCGenerations": 992,
+      "surfaces": 995,
+      "uncopiedSurfaces": 3,
+      "uniqueBitmapStageCopies": 200,
+      "uniqueBitmapStageOperations": 3465,
+      "uniqueRawSHA256": 28
+    },
+    "actualFrontIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      36,
+      37,
+      38,
+      39,
+      40
+    ],
+    "producerFailures": [
+      "reference1 final contiguous-index assertion",
+      "reference2 X5 path display relative_to repository"
+    ],
+    "expectedFieldsUnchanged": true
+  },
+  "native": {
+    "candidate": 1,
+    "methods": 23,
+    "seconds": 142.844,
+    "buildSeconds": 308.06,
+    "rawOverrides": false,
+    "wholePrimaryRoutes": 48,
+    "wholePrimaryCommits": 47,
+    "wholePrimaryNullCursorRejections": 1,
+    "menuInputChains": 50,
+    "loadingPrefixChains": 12,
+    "distinctStageCopies": 200,
+    "composedLifetimes": 40,
+    "composedCopies": 992,
+    "surfaces": 995,
+    "uncopiedSurfaces": 3,
+    "memoryDCGenerations": 993,
+    "surfaceDCGenerations": 992,
+    "supplementalControlGroups": 17,
+    "lateReleaseDistinctEvents": 3,
+    "lateReleaseComposedOccurrences": 15,
+    "lateReleaseEventIndex": 3247,
+    "prefixRule": "eventIndex < eventEnd",
+    "wholeRollbackPreserved": true,
+    "changesAfterCandidateFreeze": false,
+    "NTSDNativeLinked": true
+  },
+  "preservation": {
+    "oldFixtures": 372,
+    "currentFixtures": 373,
+    "oldFixturesUnchanged": true,
+    "nativeFiles": 878,
+    "nativeBytes": 4094752847,
+    "packageFiles": 46,
+    "packageBytes": 29700372,
+    "packageUnchanged": true,
+    "nonownedNativeUnchanged": 871,
+    "nativeArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-surface-colors-native-20260912/native-candidate1.tar",
+      "members": 878,
+      "payloadBytes": 4094752847,
+      "tar": {
+        "bytes": 4096337920,
+        "sha256": "baf2e4e4115e1ebe483fe1947108b38c43113fdeb24baf56d090f26113d304bb"
+      },
+      "allMembersVerified": true,
+      "verifiedUTC": "2026-09-12T19:01:50.425613+00:00",
+      "protectedFixtures": 372,
+      "currentNativeFiles": 878,
+      "sourceExecuted": false
+    },
+    "evidenceArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-surface-colors-native-20260912/surface-colors-evidence1.tar",
+      "members": 143,
+      "payloadBytes": 593614700,
+      "tar": {
+        "bytes": 593879040,
+        "sha256": "d2b407019fa370926e5076cd1fe826d7d66534420c18dfdd4c25f66591fb6018"
+      },
+      "allMembersVerified": true,
+      "verifiedUTC": "2026-09-12T19:01:52.056236+00:00",
+      "allPlanPins": 104,
+      "supersededBaseInputsPreserved": [
+        "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift",
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift"
+      ],
+      "referenceAssignmentDiagnosticsPreserved": true,
+      "originalPixelHolesPreserved": 146289,
+      "sourceExecuted": false
+    }
+  },
+  "pins": {
+    "build/research/application-surface-colors-native-20260912/plan.json": {
+      "bytes": 24574,
+      "sha256": "57f97de4a2e175ff6f7cf38fdddb8a75e0c86735b8d8f4277a8265e0b117e58d"
+    },
+    "build/research/application-surface-colors-native-20260912/plan-amendment1-allocation-selection.json": {
+      "bytes": 1081,
+      "sha256": "45d2644000008c7d7d8bd727c35153fab85ba8b8045fe5cab65e42de5e8b5d05"
+    },
+    "build/research/application-surface-colors-native-20260912/controls1.json": {
+      "bytes": 3444,
+      "sha256": "e6088ed4138a02a5a7fc6710115915bf03a251e1d9f8dfaea137cb0d8276b7a8"
+    },
+    "build/research/application-surface-colors-native-20260912/reference1.py": {
+      "bytes": 19953,
+      "sha256": "f51abdd9cc387bc74b22688df3f81166f7fba2902509bab53ca7703fed510906"
+    },
+    "build/research/application-surface-colors-native-20260912/reference1.job.json": {
+      "bytes": 1377,
+      "sha256": "7c0e590e36183a060d54e21e87875744228c961db7e4e768e3d8915bac24e13b"
+    },
+    "build/research/application-surface-colors-native-20260912/reference1.log": {
+      "bytes": 947,
+      "sha256": "f734017f8ef12eac456238acf7ee9da49420a00d1837f528c6697153d15a7ea8"
+    },
+    "build/research/application-surface-colors-native-20260912/reference2.py": {
+      "bytes": 20155,
+      "sha256": "1d1e457095cdf9e4ca6c4beaa93c22df6583fa10b8a68f7ffc6476b33d2d47bf"
+    },
+    "build/research/application-surface-colors-native-20260912/reference2.job.json": {
+      "bytes": 3603,
+      "sha256": "b9a4760272ffb6eacb43e73880922ad99b113a79dadfaa21a0f870f6e26d82cc"
+    },
+    "build/research/application-surface-colors-native-20260912/reference2.log": {
+      "bytes": 3249,
+      "sha256": "6ceb3820dc47ae525325ff3daf36cfbdb58b477e97566f8462079f7bc643a661"
+    },
+    "build/research/application-surface-colors-native-20260912/reference3.py": {
+      "bytes": 20375,
+      "sha256": "563529fdff711fcf274387b593974d44ea7afaf37275e135b5a940b296d76528"
+    },
+    "build/research/application-surface-colors-native-20260912/reference3.job.json": {
+      "bytes": 2467,
+      "sha256": "6c9b03b7f29d9f8f56a7babf59318e541ceb804025154f9030b801def8781233"
+    },
+    "build/research/application-surface-colors-native-20260912/reference3.log": {
+      "bytes": 1489,
+      "sha256": "4e05ac4e4929588922712f06e90a36d7e6dce65cb721ba4de7d628b9a1642931"
+    },
+    "build/research/application-surface-colors-native-20260912/reference3.json": {
+      "bytes": 4928696,
+      "sha256": "548c5eca70b02478404e56e10d49d57847d00062e1e9b9bcdbe10fcb39e58b35"
+    },
+    "build/research/application-surface-colors-native-20260912/expected-review3.json": {
+      "bytes": 21864,
+      "sha256": "4879b81629845deceb430ae966c5dc2dc773385355149dc1ddd9558557ee9623"
+    },
+    "build/research/application-surface-colors-native-20260912/review1-plan.json": {
+      "bytes": 14776,
+      "sha256": "af2803659f082c72d64585d4fe27fa9d635dc49ff94492a1a6bcb2fdffe1997a"
+    },
+    "build/research/application-surface-colors-native-20260912/review2-reference.json": {
+      "bytes": 13927,
+      "sha256": "f834143f0225cef4ae7fc4b2d7213119325d0f6860db7805c2a44256d9bc82d6"
+    },
+    "build/research/application-surface-colors-native-20260912/review3-candidate1.json": {
+      "bytes": 11810,
+      "sha256": "83828c0358d39cbc9d0e263c0752a821f519ea394ae9640c245c1956ec9116df"
+    },
+    "build/research/application-surface-colors-native-20260912/fixture-verification1.json": {
+      "bytes": 328,
+      "sha256": "3f88ad0aa4a48fe6e30be0c55bc4e0699466afeca8041cd0a4844b476c0546f1"
+    },
+    "build/research/application-surface-colors-native-20260912/preservation1.json": {
+      "bytes": 14729,
+      "sha256": "5836a76463443f678844e7de00fabc1375a1082761a2415d9a26b7b6e303406b"
+    },
+    "build/research/application-surface-colors-native-20260912/candidate1-inputs.json": {
+      "bytes": 156495,
+      "sha256": "64ae5e8291222e91b88ba97f734b3d66f873783700cf9467fa39c250ac5c2043"
+    },
+    "build/research/application-surface-colors-native-20260912/native1.config.json": {
+      "bytes": 1179,
+      "sha256": "eda8dd4f2399eaf7050e8cc2ffc45e6ad993069a0b5aa22788f29b5ba9a5b4a8"
+    },
+    "build/research/application-surface-colors-native-20260912/native1.job.json": {
+      "bytes": 1321,
+      "sha256": "e32037897485af20d03ca0cd7f3cbe72cbed66c13dc89287460a321e9a092675"
+    },
+    "build/research/application-surface-colors-native-20260912/native1.log": {
+      "bytes": 30230,
+      "sha256": "032bcbbb8f92a5d680e3446f3a411b8e3ccdc28c65410d15a2bbbf7e2792c01a"
+    },
+    "build/research/application-surface-colors-native-20260912/native-archive-verification.json": {
+      "bytes": 485,
+      "sha256": "a6e74b971ffd86a5801960ca299c45e7144694e138e74f85630dcb23c3f8b959"
+    },
+    "build/research/application-surface-colors-native-20260912/evidence-archive-verification.json": {
+      "bytes": 873,
+      "sha256": "d906300f0aa1e4361415d78a679242cd4869616eb67b102fcfa62ce2d613fd21"
+    },
+    "build/research/application-surface-colors-native-20260912/archive-storage-verification.json": {
+      "bytes": 242,
+      "sha256": "071beb462390ffa42c96ec1b1b8cddfc1a61be9960106efa8e32a3190f55edbb"
+    }
+  },
+  "openBoundaries": [
+    "146289 original DIB holes remain unknown",
+    "actual indexed DirectDraw conversion and palette realization",
+    "initial device pixels, color key and downstream Blt raster",
+    "18 downstream NULL-source occurrences",
+    "text/backbuffer/window/presentation/input/audio",
+    "full loading/catalog and War gameplay",
+    "complete match, network, Windows/clean-Mac game",
+    "three existing safety incidents"
+  ],
+  "publication": "Archive review, prospective Git tree verification and final publication review are separate task records; actual commit/remote/clean status in commit-verification.json."
+}

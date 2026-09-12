@@ -247,6 +247,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         func compareMenuEnd(_ loop: Session.Loop,_ owned: Session.State) throws {
             let a = try XCTUnwrap(menu)
             let bindings = try XCTUnwrap(owned.bitmapInputs)
+            try OriginalSurfaceSourceColorsTests.compareOwned(bindings,frontIndex:fi)
             XCTAssertEqual(Set(bindings.images.keys),Set(try fc.images.keys.map { try XCTUnwrap(UInt32($0)) }))
             XCTAssertEqual(Set(bindings.surfaces.keys),Set(try fc.surfaces.keys.map { try XCTUnwrap(UInt32($0)) }))
             let rawImages = try XCTUnwrap(front.rawCases[fi]["images"] as? [String:[String:Any]])

@@ -152,6 +152,7 @@ public struct OriginalApplicationMenuSession {
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
         try state.validateAliases()
         var next = self, effects: [Effect] = []
+        var bitmapInputs = state.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
         let oldCounter = loop.counter
         var stage: OriginalApplicationBootstrap.Stage = .menu
         var drawResult: Int32 {
@@ -172,7 +173,13 @@ public struct OriginalApplicationMenuSession {
             case "soundMethod": effects.append(.soundMethod(e,ignoredResult:responses.sound))
             case "method":
                 guard e.arguments.count >= 2 else { throw Boundary.dependency("Menu COM request") }
-                if e.arguments[1] == 8 { effects.append(.release(e,ignoredResult:responses.release)) }
+                if e.arguments[1] == 8 {
+                    if var bindings = bitmapInputs {
+                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:responses.release))
+                        bitmapInputs = bindings
+                    }
+                    effects.append(.release(e,ignoredResult:responses.release))
+                }
                 else if e.arguments[1] == 0x14 { effects.append(.present(e,result:responses.presentation)) }
                 else { throw Boundary.dependency("Menu COM continuation") }
             case "getDC": effects.append(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
@@ -256,7 +263,6 @@ public struct OriginalApplicationMenuSession {
                     var resources = owned.front, screen = owned.earlyScreen, library = owned.libraryText
                     var random = owned.random, memory = owned.memory, body = owned.screenBody
                     var settings = owned.settings
-                    var bitmapInputs = owned.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
                     var frontSurfaces: [UInt32:UInt32] = [:]
                     var frontAPIIndex = 0,backgroundAPIIndex = 0
                     // Drawing callbacks run while presentation borrows memory.
