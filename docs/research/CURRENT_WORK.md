@@ -181,3 +181,12 @@ ACTOR_STORAGE. Один build и один FFI run terminal/0; 201 ABI assertions
 Expected и private storage не должны становиться входами runtime. Принятый
 active корпус относится к pristine EXE; DLL-enabled join, повреждение HP/исход
 матча и все критерии полной игры остаются открытыми.
+
+**Входы собственной сессии готовы:** [native resource export](L2DF_NATIVE_RESOURCES.md)
+побайтно сохраняет 1593 исходных файла,64 встроенных DIB/BMP и8192 PE-data bytes.
+Всего1723 файла/885906167 байт, без EXE/DLL/symlink. Один export terminal0;
+все1595 исходных pins, точный состав и производные BMP проверены, замечания
+независимого review закрыты до исполнения. Старые приложения не менялись.
+Ближайший исполняемый шаг уточнён: [собственная pristine boot-сессия и front
+resources/settings handoff](L2DF_LOADED_SESSION.md), затем каталог/меню/запуск
+и те же64 whole loaded calls. Код сессии ещё не принят; полный goal открыт.

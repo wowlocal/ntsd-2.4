@@ -1,0 +1,115 @@
+{
+  "createdAtUTC": "2026-09-12T10:01:34.371797+00:00",
+  "status": "accepted static resource export only",
+  "baselineWorktreeCommit": "284d69dc1a4c1e74f45c81b8d7b6299cef549f11",
+  "mainReadOnlyRevision": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+  "originalEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "originalExecution": false,
+  "fullGameComplete": false,
+  "resourceRoot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources",
+  "counts": {
+    "filesVerified": 1723,
+    "originalFiles": 1593,
+    "originalBytes": 822767627,
+    "embeddedDIBs": 64,
+    "embeddedDIBBytes": 31382294,
+    "embeddedBMPs": 64,
+    "dataBytes": 8192,
+    "outputBytes": 885906167,
+    "toolsVerified": 4
+  },
+  "sourceFilesVerified": 1595,
+  "job": {
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/native_bridge/prepare_resources.py",
+      "--label",
+      "resources-01",
+      "--worker"
+    ],
+    "cwd": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+    "pid": 6444,
+    "processStart": "Sat Sep 12 12:58:39 2026",
+    "createdAtUTC": "2026-09-12T09:58:39.068831+00:00",
+    "state": "terminal",
+    "limitSeconds": 120,
+    "sizeLimitBytes": 2147483648,
+    "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/job",
+    "exitCode": 0,
+    "endedAtUTC": "2026-09-12T09:58:41.102589+00:00",
+    "elapsedSeconds": 2.033836125
+  },
+  "review": {
+    "reviewer": "/root/l2df_reference_review",
+    "sourceSHA256": "0441c771118dc88e5f9f8b718beaf15c0c65bddd4c55e0da210d023b0dd856f6",
+    "mode": "read-only preexecution code review",
+    "blockers": [],
+    "resolvedBeforeFirstExecution": [
+      "Repeat exact source file set and no-symlink check after worker",
+      "Verify schemaVersion, EXE hash and no-original-executable metadata"
+    ],
+    "scope": "Static resource copy and PE extraction only; no gameplay acceptance"
+  },
+  "code": {
+    "path": "prototypes/l2df/native_bridge/prepare_resources.py",
+    "bytes": 11873,
+    "sha256": "0441c771118dc88e5f9f8b718beaf15c0c65bddd4c55e0da210d023b0dd856f6"
+  },
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/inputs.json",
+      "bytes": 262638,
+      "sha256": "50cb46cdd9781ec3616d23ddb74b415b477e1c1cdb5c09f2838ecd61a3f858a0"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/plan.md",
+      "bytes": 927,
+      "sha256": "aa0b8143f0c89b572c24427bc719d09397c9042107700fe20b7bf421b9049a82"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/verification.json",
+      "bytes": 313,
+      "sha256": "4b707ab346e9835cf7d047bace877514ec546e829a70d9aa89b6d5a60b55c7e3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/job/job.json",
+      "bytes": 762,
+      "sha256": "7789b74b9206bc2f973040c223d4dc34aa620c6fd0ab9de9c77f5adae7e04b28"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/job/stdout.log",
+      "bytes": 245,
+      "sha256": "a2a08b632a335fc28c38531f9dcfa8872ec9d75880d7b8c661bb2635a77a01b8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/resources/manifest.json",
+      "bytes": 364864,
+      "sha256": "49b323e944d0cef672eae2d7b45d36c759c73c30b060d5faa34422c0813a144a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/loaded-session-20260912/resources-01/root-verification-01.json",
+      "bytes": 3524,
+      "sha256": "ceafa92501f7646ca65aa2ef68ee1eb5c588da89a22a95e7e3726deedc681df4"
+    }
+  ],
+  "runtimeComposition": {
+    "originalExecutable": false,
+    "originalDLL": false,
+    "symlinks": false,
+    "referenceAfterState": false,
+    "rawOriginalFiles": true,
+    "peDataAndBitmapsOnly": true
+  },
+  "limits": {
+    "seconds": 120,
+    "outputBytes": 2147483648,
+    "reserveBytes": 6442450944
+  },
+  "limitations": [
+    "Export is not a loaded catalog, session, gameplay or application comparison",
+    "Headless input package is not release/device acceptance",
+    "PE initialization data does not establish CRT/static World or bundled DLL startup",
+    "Existing incidents and historical source failures remain open"
+  ],
+  "next": "Owned pristine boot and front-resource/settings handoff; then own catalog/menu/launch and persistent loaded calls"
+}
