@@ -186,6 +186,21 @@ package files неизменны;372 текущих fixtures/875 Native-файл
 проверены. [Приёмка](../evidence/application-dib-pixels.json). Нового исполнения
 оригинала нет. Unknown colors, surface/raster/device и полная игра остаются открытыми.
 
+Принята [полная инвентаризация bitmap/surface startup](APPLICATION_BITMAP_SURFACE_INVENTORY.md).
+Все48 primary/50MenuInput/12LoadingPrefix цепочек связаны с224 stage identities
+и354 retained parent entries;41658 исходных событий сохранены целиком.
+200 StretchBlt в7 bitmap/40front stages — full-image1:1 SRCCOPY;36 имён ресурсов
+содержат28 разных DIB payloads. Отдельно491 downstream Blt также без scaling,
+но их flags/clipping/NULL sources и raster contract остаются отдельными.
+Все errors, повторное использование DC по поколениям и3 поздних Release
+(3input/12loading occurrences) сохранены. Source image deletion не решает
+срок хранения скопированных цветов; Release не доказывает уничтожение устройства.
+Declared primary8-bit indexed reply не задаёт palettes/конверсию offscreen.
+Inventory1 raw-deflate failure, inventory2 DC-reuse assertion и отдельно
+закрытый catalog4 publication gap сохранены. Никакого исполнения оригинала
+или нового Native теста нет;875Native/372fixtures/46package/90pins неизменны.
+[Результат и проверки](../evidence/application-bitmap-surface-inventory.json).
+
 ## Непринятая работа и отказ Codex
 
 Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -236,35 +251,36 @@ package files неизменны;372 текущих fixtures/875 Native-файл
 
 ## Следующая независимая карточка
 
-**Полный фактический startup bitmap → surface consumer.**
+**Собственные logical RGB/masks для всех фактических startup bitmap surfaces.**
 
-Read-only readiness и ограничения:
-`build/research/application-dib-pixels-native-20260912/next-work-review2.json`.
-Первое предложение next-work-review.json сохранено как предварительное;
-поддержку нельзя ограничить удобным1:1 subset реальных требуемых вызовов.
+Полный saved-request inventory принят:
+[контракт и ограничения](APPLICATION_BITMAP_SURFACE_INVENTORY.md),
+`build/research/application-bitmap-surface-inventory-20260912/`:
+`inventory3.json`, `event-catalog4.json`, `downstream-ownership1.json`,
+`review1-contract.json`. Прежний DIB next-work-review2 остаётся историческим.
 
-Первый gate — конечная инвентаризация сохранённых48/50/12 parent chains:
-createSurface/CreateDC/SelectObject/GetDC/StretchBlt/ReleaseDC/DeleteObject/Release,
-реальные source/destination dimensions, formats, DC/image/surface identities,
-начальные masks и сроки владения. Эта инвентаризация пока не выполнена;
-implementation-ready для полного consumer не заявляется. По её результатам
-закрепить весь фактический контракт и Native RGB/mask surface ownership.
-1:1 copy допустимо считать всем участком только если это подтверждено для всех
-его необходимых запросов; имеющиеся scaled calls исключать нельзя.
+Закрепить независимые expected assignments и Native-план для всех200 distinct
+stage copies,40 composed bitmap/front lifetimes и48/50/12 whole callers.
+1:1 теперь подтверждено для всего фактического bitmap-copy набора; errors,
+unused positive CreateSurface outputs и failed GetDC исключать нельзя.
+Surface владеет собственными исходными RGB/masks; initial storage unknown,
+source mask=false делает destination unknown, известный black остаётся отдельным.
+Не подставлять after-state/expected или источник unknown backing в Native.
 
-Copy записывает также неопределённость: source mask=false делает destination
-неизвестным. Сохранить старый известный цвет вместо такого copy значило бы
-выдумать прозрачность. Источник146289 RLE holes и начальные цвета поверхностей
-нуждаются в отдельном provenance; не заполнять их известным чёрным/alpha0.
-После удаления временного image уже скопированные surface pixels должны жить
-по собственному доказанному контракту, с отдельным учётом Release requests.
+Сохранять поколения повторно используемых DC, selection/GetDC/ReleaseDC/DeleteDC,
+данные после DeleteObject и все Release requests. Подключить также3 поздних
+MenuSession method8 releases: текущий bitmapInputs их не записывает. Расширить
+comparison по сохранённым событиям, сохранив whole rollback и исходные эталоны.
+Независимые mask/owner/failed-operation controls дополняют полные48/50/12 regressions.
 
-Использовать сохранённые исходные данные, decoded inputs и existing request
-evidence; исторические producer/capture/auditor не перезапускать. Сохранить
-whole startup/menu/loading regressions, metadata, owners и rollback, разделить
-перенос цветов/масок, реальную Windows/device и фактическую выдачу окна.
-AppKit input/clock/audio/text/presentation, full loading/catalog, War/матч/игра/
-Windows/cleanMac и три safety incidents остаются открытыми.
+Это lossless source-color representation для всех требуемых копий. Actual
+DirectDraw conversion остаётся отдельной зависимостью: primary reply объявляет
+8-bit indexed, palettes/offscreen format/исходные surface colors не измерены.
+Все146289 DIB holes,18 downstream NULL-source occurrences, window/backbuffer/
+text/presentation требуют своих доказательств; не принимать black/alpha0 или
+неизменность старого destination за доказанный эффект. Исторические producer/
+capture/auditor не перезапускать. AppKit input/clock/audio,full loading/catalog,
+War/матч/полная игра/Windows/cleanMac и три safety incidents остаются открытыми.
 
 ## Дальнейшая сквозная очередь
 

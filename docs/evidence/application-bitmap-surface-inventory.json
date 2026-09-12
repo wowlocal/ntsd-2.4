@@ -1,0 +1,392 @@
+{
+  "schema": 1,
+  "status": "Accepted complete saved-request inventory; Native logical source-color ownership is the next implementation, not a pixel/device match.",
+  "dateUTC": "2026-09-12T18:24:40.674321+00:00",
+  "base": "7012f2785779aea44838de5d190bb41ae3d1175f",
+  "previousGoalTurn": "progress",
+  "reference": {
+    "environment": "Read saved Unicorn game observations and original DIB data only; no original execution, no Windows or device calls. API return values and descriptors are declared harness outputs, not measured raster effects.",
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
+  },
+  "plan": "build/research/application-bitmap-surface-inventory-20260912/plan.json",
+  "summaries": {
+    "inventory": {
+      "assets": 28,
+      "distinctBitmapLifetimes": 40,
+      "distinctStageCounts": {
+        "bitmap": 7,
+        "body": 43,
+        "entry": 2,
+        "front": 40,
+        "input": 50,
+        "loading": 12,
+        "loop": 2,
+        "menu": 48,
+        "parent": 1,
+        "settings": 19
+      },
+      "occurrenceOperations": {
+        "input": {
+          "colorKey": 1244,
+          "createDC": 1244,
+          "createSurface": 1248,
+          "debug": 8,
+          "deleteDC": 1244,
+          "deleteObject": 1244,
+          "description": 1244,
+          "getDC": 1244,
+          "getObject": 2492,
+          "image": 2500,
+          "message": 8,
+          "module": 2500,
+          "release": 2,
+          "releaseDC": 1243,
+          "restore": 1244,
+          "selectObject": 1244,
+          "stretch": 1243
+        },
+        "loading": {
+          "colorKey": 300,
+          "createDC": 300,
+          "createSurface": 300,
+          "deleteDC": 300,
+          "deleteObject": 300,
+          "description": 300,
+          "getDC": 300,
+          "getObject": 600,
+          "image": 600,
+          "module": 600,
+          "releaseDC": 300,
+          "restore": 300,
+          "selectObject": 300,
+          "stretch": 300
+        },
+        "menu": {
+          "colorKey": 1193,
+          "createDC": 1193,
+          "createSurface": 1197,
+          "debug": 8,
+          "deleteDC": 1193,
+          "deleteObject": 1193,
+          "description": 1193,
+          "getDC": 1193,
+          "getObject": 2390,
+          "image": 2398,
+          "message": 8,
+          "module": 2398,
+          "release": 2,
+          "releaseDC": 1192,
+          "restore": 1193,
+          "selectObject": 1193,
+          "stretch": 1192
+        }
+      },
+      "rootCounts": {
+        "input": 50,
+        "loading": 12,
+        "menu": 48
+      },
+      "scaledCopiesInDistinctLifetimes": 0,
+      "uniqueBitmapStageRequests": {
+        "colorKey": 201,
+        "createDC": 201,
+        "createSurface": 205,
+        "debug": 8,
+        "deleteDC": 201,
+        "deleteObject": 201,
+        "description": 201,
+        "getDC": 201,
+        "getObject": 406,
+        "image": 414,
+        "message": 8,
+        "module": 414,
+        "release": 2,
+        "releaseDC": 200,
+        "restore": 201,
+        "selectObject": 201,
+        "stretch": 200
+      },
+      "uniqueLifetimeOperations": {
+        "colorKey": 993,
+        "createDC": 993,
+        "createSurface": 997,
+        "debug": 8,
+        "deleteDC": 993,
+        "deleteObject": 993,
+        "description": 993,
+        "getDC": 993,
+        "getObject": 1990,
+        "image": 1998,
+        "message": 8,
+        "module": 1998,
+        "release": 2,
+        "releaseDC": 992,
+        "restore": 993,
+        "selectObject": 993,
+        "stretch": 992
+      }
+    },
+    "eventCatalog": {
+      "distinctDIBPayloads": 28,
+      "events": 41658,
+      "frontBlits": 491,
+      "frontBlitsByStage": {
+        "body": 86,
+        "front": 40,
+        "input": 256,
+        "loading": 12,
+        "menu": 97
+      },
+      "frontGraphics": 2117,
+      "frontGraphicsKinds": {
+        "blit": 491,
+        "clear": 56,
+        "fill": 90,
+        "getDC": 276,
+        "method": 112,
+        "releaseDC": 273,
+        "setBackgroundMode": 273,
+        "setTextColor": 273,
+        "textOut": 273
+      },
+      "frontScaledBlits": 0,
+      "missingDeclaredReplies": 0,
+      "resourceNames": 36,
+      "stages": 224
+    },
+    "downstream": {
+      "chains": 110,
+      "distinctDownstreamReleases": 3,
+      "releaseOccurrencesByRoot": {
+        "input": 3,
+        "loading": 12,
+        "menu": 0
+      },
+      "sourceUseAfterReleaseOccurrences": 0,
+      "unboundSourceOccurrences": 18
+    }
+  },
+  "parentEntriesVerified": 354,
+  "artifacts": {
+    "build/research/application-bitmap-surface-inventory-20260912/archive-evidence1.log": {
+      "bytes": 706,
+      "sha256": "ea930c1bd212986b24d40748f72548540bdc79fa0292316ccf1f28c6be65bcf9"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/archive-evidence1.py": {
+      "bytes": 3154,
+      "sha256": "bf5915002118bc4db5e998f744725e3ecd42038e52d56df6a5b467f60bf3b540"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/archive-publication-note.json": {
+      "bytes": 826,
+      "sha256": "4c35d9087c91dbfdc838f8372418650a20a660a35dc386d94b73e9e201f1cc15"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/archive-verification1.json": {
+      "bytes": 25411,
+      "sha256": "f7b74d93d28b71c444c4ef5b2af1062811f0d1b029710e1063930d16ce3f1b5c"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/downstream-ownership1.json": {
+      "bytes": 1698565,
+      "sha256": "2a65b591e1b6e70ad8ba95f231fc6e299fa2b7709c714e22f8841573aa9e249b"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/downstream-ownership1.log": {
+      "bytes": 216,
+      "sha256": "08ff77c4da4d9b73365f10e16236ae0e6f65eef2cbf51c1d0e91f2d7514308f0"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/downstream-ownership1.py": {
+      "bytes": 3409,
+      "sha256": "4114ff203fc4415682cba884aa986bb1720e0526b335d3c10f8ba4ab119e12cb"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/event-catalog4.job.json": {
+      "bytes": 953,
+      "sha256": "2f2cc80107817d4dcfc011d2df990d891868283dcac8bdb262356970115c7e9d"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/event-catalog4.json": {
+      "bytes": 27243265,
+      "sha256": "afd03c8e7f0f85b06bd98b39b9ad9cc3d9002b18093f5e822cd0a72270d06fc8"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/event-catalog4.log": {
+      "bytes": 522,
+      "sha256": "7f754dfa15595188d3f5c6e6b07363f2af0e9a47e1a3bcd6f34abf774531fa03"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/event-catalog4.py": {
+      "bytes": 26451,
+      "sha256": "6c172ff97499b082c145713e34af5d8af2071a368d6d1543a7f3a0d3b563c7da"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/initial-environment.json": {
+      "bytes": 117713,
+      "sha256": "49583020a8a60944ec63031054f3ca6567a91510f6a9980456d21511a86779fa"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory-draft1-unexecuted.py": {
+      "bytes": 18201,
+      "sha256": "d01bc9f068709050823072c3d8c064f3dfacc1992692c53096ef0aded84ebb5e"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory1.failure.json": {
+      "bytes": 1127,
+      "sha256": "155b3622e6494ad2bfc7a84c3ff634c12b2426d4c85f5c9775759922e3b3070f"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory1.job.json": {
+      "bytes": 1204,
+      "sha256": "2dab5aa826415b91dc7d7a9ac8969a048826196b61bc1e004aaf9fc8b66ff80a"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory1.log": {
+      "bytes": 581,
+      "sha256": "6aecea5b1f6df0ca96df3cc07fe046f336c31fc75b266896aa58fd8143467435"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory1.py": {
+      "bytes": 18715,
+      "sha256": "1b4baeca568b4daed8e7262943696e28533d65b9bda6b94be8692deceafd8bc0"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory2.failure.json": {
+      "bytes": 1046,
+      "sha256": "46027b8fee034afc6ea5cfb98a02a1678332f2d20d2ce7bbef608ab3720dc101"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory2.job.json": {
+      "bytes": 1117,
+      "sha256": "a05d05981780f7ffe16ad2aff1cae0e1e7bc38361cde0d0dc236de9da7366109"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory2.log": {
+      "bytes": 500,
+      "sha256": "39e188aca8d046f7b0f76acb74b76803b36e7c16657c5a0563014d5a7f0d8738"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory2.py": {
+      "bytes": 18720,
+      "sha256": "67be26c8430aff6c2c3d74b5de1a0c9aa7f9b3dfbb0fb0062eecdb916d818a9d"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory3.job.json": {
+      "bytes": 846,
+      "sha256": "3e74eed8271378e9ef99fa6c2ced50c35fcab9a95abb6e2a5a0b8d59d07b6439"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory3.json": {
+      "bytes": 35627913,
+      "sha256": "c1856089b7b0e969c8065e5fd167dd45809d1a3477dc897bb65a0122be0af2fd"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory3.log": {
+      "bytes": 2381,
+      "sha256": "11e77530b2db09b9a5b5aeb48085edaf931c2cff51d464c9564a3f646e4a9a92"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/inventory3.py": {
+      "bytes": 19698,
+      "sha256": "7b25fd65a87e7712e333704ae601c3198b3e9d5767909e8eeaa05a76e54f25a1"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/plan-amendment1-event-catalog.json": {
+      "bytes": 1470,
+      "sha256": "b1a7e1c4a40c3b2e6ec4a5e6af680547865944e4d3f989abe8c2b0429a6c94ed"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/plan.json": {
+      "bytes": 20030,
+      "sha256": "0cb6411f3054adddacc5e22ac04a5b64184baca20527f52ef8f0beee92d6599d"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/preservation1.json": {
+      "bytes": 13607,
+      "sha256": "bba8c9397c13ba07be77e35d47cffbc53bc56ebe5ae975554b2f18af954dc665"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/preservation1.py": {
+      "bytes": 9334,
+      "sha256": "13bc031ea11a14bd0cda958588a8bd1d23cd6f3379c1295b0532abc4f9605e96"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/publish-inventory1.py": {
+      "bytes": 11600,
+      "sha256": "d55a343f38d262cfc9e8da87e08934c3fe27bafcb77191ae14d16de4badb93c5"
+    },
+    "build/research/application-bitmap-surface-inventory-20260912/review1-contract.json": {
+      "bytes": 17654,
+      "sha256": "000574802682a187e556410aa1ceade94c57b0b784a81e13fe2332693302c2fa"
+    }
+  },
+  "evidenceArchive": {
+    "archive": {
+      "bytes": 583403520,
+      "mode": 420,
+      "sha256": "ceb1c713a82fcf33b9d586a39df37f44c6e7772816c63a3076099390c630e691"
+    },
+    "inputPinsVerified": 90,
+    "internalFree": 101761839104,
+    "memberCount": 120,
+    "nativeArchiveRequired": false,
+    "nativeReason": "No Native changes; prior accepted875-file archive retained and current tree separately compared.",
+    "payloadBytes": 583178384,
+    "postArchive": "Publication docs, precommit and actual commit verification are separately pinned records and do not rewrite this archive.",
+    "taskBytes": 648283512,
+    "verifiedUTC": "2026-09-12T18:23:48.859360+00:00",
+    "x5Free": 527124713472,
+    "x5UUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548"
+  },
+  "native": {
+    "changed": false,
+    "testsRun": false,
+    "filesUnchanged": 875,
+    "fixturesUnchanged": 372,
+    "packageFilesUnchanged": 46,
+    "priorAcceptedCommit": "7012f27",
+    "priorReleaseMethods": 20,
+    "comparison": "Preservation1 compares all current/frozen bytes, modes and names; prior tests remain prior evidence."
+  },
+  "format": {
+    "bitmapDescriptorFlags": 7,
+    "explicitBitmapPixelFormatFlag": false,
+    "primaryDeclaredPixelFormatWords": [
+      32,
+      32,
+      0,
+      8,
+      0,
+      0,
+      0,
+      0
+    ],
+    "primaryToken": "0x31002000",
+    "measuredDeviceFormat": false,
+    "actualOffscreenConversion": "unknown",
+    "initialSurfaceColors": "unknown",
+    "sourceDIBHoles": 146289
+  },
+  "preservedFailures": [
+    "Unexecuted draft standalone-settings assumption",
+    "inventory1 raw-deflate wrapper decode failure",
+    "inventory2 DC token reuse assertion",
+    "inventory3 initial publication gap for non-request front payloads; separately completed catalog4"
+  ],
+  "ownership": {
+    "DCGenerations": true,
+    "selection": "Inferred from exact requests and declared success responses; not measured Windows DC state",
+    "bitmapReleaseRequests": 2,
+    "laterDistinctReleaseRequests": 3,
+    "laterReleaseResults": [
+      0,
+      0,
+      -1
+    ],
+    "laterReleaseOccurrences": 15,
+    "unboundDownstreamSources": "18 explicit NULL token occurrences, no missing nonzero source binding",
+    "actualDestruction": "not established"
+  },
+  "primaryDocumentation": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-stretchblt",
+    "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-selectobject",
+    "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-createcompatibledc"
+  ],
+  "nextCard": {
+    "title": "Own logical source RGB/masks for every actual startup bitmap surface copy and retained release",
+    "scope": "All200 unique bitmap-stage copies /40 composed resource lifetimes /48primary+50MenuInput+12LoadingPrefix chains; all existing errors remain.",
+    "requirements": [
+      "Own initially unknown logical surface RGB/masks; full copy from own decoded image includes false masks, never transparency",
+      "Retain each DC generation and source selection/acquisition/release request; reject unsupported missing owner/format/geometry as explicit boundaries",
+      "Retain copied data after source DeleteObject and surface Release requests; do not equate Release bookkeeping with Windows destruction",
+      "Connect later MenuSession method8 release bookkeeping and compare all3distinct/15occurrences without changing original expected bytes",
+      "Independently freeze expected source-color assignments and supplemental mask/owner/rollback controls before Native implementation",
+      "Whole startup/menu/loading regressions and late rollback; separate actual device conversion/palettes/window/backbuffer/text/presentation dependencies"
+    ],
+    "deviceRasterReady": false
+  },
+  "originalExecuted": false,
+  "historicalAuditorsExecuted": false,
+  "nativeCompared": false,
+  "windowsVerified": false,
+  "fullGameComplete": false,
+  "safetyIncidents": {
+    "register": "docs/evidence/codex-safety-incidents-2026-09-12.json",
+    "open": 3,
+    "affectedOperationRetried": false
+  },
+  "publication": "Archive is frozen before final navigation/evidence edits. Final docs, Git tree and remote commit are separate publication verification records."
+}

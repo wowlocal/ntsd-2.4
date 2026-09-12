@@ -190,10 +190,19 @@ package files неизменны;372 текущих fixtures/875 Native-файл
 проверены. [Приёмка](evidence/application-dib-pixels.json). Нового исполнения
 оригинала нет. Unknown colors, surface/raster/device и полная игра остаются открытыми.
 
-Следующая карточка по CURRENT_WORK — полный фактический bitmap→surface
-consumer startup. Inventory размеров/formats/DC/initial masks/lifetimes — первый
-непройденный gate;1:1 subset нельзя выдавать за весь контракт без доказательства.
-RLE holes и исходные surface colors не превращаются в известный чёрный/alpha0.
+Принята [полная инвентаризация bitmap/surface startup](research/APPLICATION_BITMAP_SURFACE_INVENTORY.md):
+48/50/12 цепочек,224 stage identities,354 parent entries и41658 exact events.
+Все200 distinct bitmap-stage StretchBlt — whole-image1:1 SRCCOPY;36 имён/28DIB
+payloads. Отдельно491 downstream Blt, все API errors, DC generations и3 поздних
+Release (3input/12loading occurrences) сохранены. Declared primary8-bit indexed
+не задаёт фактическую палитру/конверсию offscreen. Два первых inventory failures
+и отдельно закрытый non-request event-catalog gap сохранены.875Native/372fixtures/
+46package/90pins неизменны; оригинал и Native тесты не перезапускались.
+[Проверки](evidence/application-bitmap-surface-inventory.json).
+Следующая карточка — logical source RGB/masks owners для всего доказанного
+набора копий, с поздними Release и whole48/50/12 rollback/comparison. Device
+conversion,146289 DIB holes,18 NULL-source occurrences и окончательная выдача
+окна остаются отдельными зависимостями; unknown не становится black/alpha0.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
