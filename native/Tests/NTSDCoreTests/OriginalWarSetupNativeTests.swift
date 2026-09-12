@@ -64,7 +64,7 @@ final class OriginalWarSetupNativeTests: XCTestCase {
             fillBacking:[UInt8](repeating:0xa5,count:100),allocate:{ index,env in
                 env.allocations+=1
                 return .init(address:0x71000000+UInt32(index)*0x2000,backing:[UInt8](repeating:0xa5,count:0x1f50))
-            },construct:{ path,allocation,device,_ in
+            },construct:{ path,allocation,device,_,_ in
                 let result=try OriginalBitmapConstructor.construct(.init(path:path,present:true,width:705,height:487),optional:false,
                     backing:allocation.backing,device:device,flags:0x40,surface:1,colorKeyResult:0)
                 if failure=="secondResource" && path=="BATTLETROOPS" { reached=true;throw Trial.injected }

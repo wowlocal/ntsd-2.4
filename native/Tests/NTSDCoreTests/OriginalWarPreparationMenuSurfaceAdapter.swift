@@ -68,6 +68,12 @@ final class OriginalWarPreparationMenuSurfaceAdapter {
         XCTAssertEqual(shadow,try r.blob(XCTUnwrap(e.globals)),"War resource complete globals")
         var response=captured;context.requested.append(try XCTUnwrap(e.key))
         switch q.kind {
+        case "getDC":
+            // The controlled platform declares one output per GetDC request.
+            // Derive its ordinal from our retained request history, not source
+            // stack words or the expected dimensions consumed at a later depth.
+            let ordinal=context.requested.filter { $0.hasPrefix("getDC#") }.count
+            response = .init(result:0,output:0x37000000+UInt32(ordinal)*16)
         case "image":if captured.result != 0 {
             let path=String(decoding:q.strings[0],as:UTF8.self),image=UInt32(bitPattern:captured.result)
             _=try bitmapBytes(path);context.imagePaths[image]=path;context.imagesDeleted[image]=false

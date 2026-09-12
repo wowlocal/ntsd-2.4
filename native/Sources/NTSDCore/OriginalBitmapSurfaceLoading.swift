@@ -37,6 +37,7 @@ public enum OriginalBitmapSurfaceLoading {
     /// masks still describe writes since helper entry, independently of lifetime.
     struct CopyScratch {
         var dimensions: OriginalStateRecord
+        var acquiredDC: OriginalStateRecord?
         init() throws { dimensions = try unknown(8) }
         mutating func apply(_ response: Response) throws {
             for write in response.writes {
@@ -51,6 +52,7 @@ public enum OriginalBitmapSurfaceLoading {
     /// Later GetObject writes replace them. No captured stack is accepted.
     struct LoaderScratch {
         var dimensions: OriginalStateRecord
+        var descriptorTail: OriginalStateRecord?
         init() throws { dimensions = try unknown(8) }
         mutating func graphLog(_ bytes: [UInt8]) throws {
             for (i,byte) in (bytes+[0]).enumerated() where (4..<12).contains(i) {
@@ -109,6 +111,8 @@ public enum OriginalBitmapSurfaceLoading {
             for i in 1..<8 { try surfaceDescription.write(pixelFormat[i],at:72+i*4) }
             try surfaceDescription.write(UInt32(0x1007),at:4)
         }
+        loader.descriptorTail = try .init(bytes:Array(surfaceDescription.bytes[72..<80]),
+            defined:Array(surfaceDescription.defined[72..<80]))
         let created = try request(.init("createSurface",[device,0],structure:surfaceDescription))
         if created.result != 0 { context = candidate;loaderScratch = loader;return 0 } // No DeleteObject here.
         guard let surface = created.output else { throw Boundary.missingOutput("created surface") }
@@ -143,6 +147,10 @@ public enum OriginalBitmapSurfaceLoading {
         try apply(descriptionResult,&description)
         try scratch.apply(descriptionResult)
         let acquired = try request(.init("getDC",[surface]))
+        var acquiredStorage = try scratch.acquiredDC ?? unknown(8)
+        if let output = acquired.output { try acquiredStorage.write(output,at:0) }
+        try acquiredStorage.write(acquired.result,at:4)
+        scratch.acquiredDC = acquiredStorage
         if acquired.result == 0 {
             guard let targetDC = acquired.output else { throw Boundary.missingOutput("surface DC") }
             let dw = try field(scratch.dimensions,4,"surface width"),dh = try field(scratch.dimensions,0,"surface height")

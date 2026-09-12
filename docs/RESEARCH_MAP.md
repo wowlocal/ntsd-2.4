@@ -30,9 +30,8 @@ CPU-сессия не запускалась, прежние safety incidents н
 завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
 faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
 live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
-остаётся открытым за пределами NULL/partial/graphics/music-карточек ниже. Нужны
-собственный retained scratch в двух returned случаях и отдельные fault rollback
-проверки. Четыре поздних wrapper при первом NULL переживают следующий Start.
+остаётся открытым для девяти отдельных fault rejection/rollback проверок.
+Все28returned теперь приняты в границах NULL/partial/graphics/music/scratch-карточек ниже. Четыре поздних wrapper при первом NULL переживают следующий Start.
 Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
 
 [NULL bitmap при подготовке War](research/LIB_WAR_NULLABLE_BITMAP.md) принят для
@@ -87,11 +86,30 @@ Raw56.435с, bundled War6методов370.173с и shared15методов224.59
 21 уникальный bundled метод. Core только передаёт optional store observer,
 правила/expected не менялись. 350 прежних fixtures неизменны, 359 текущих/
 804 Native-файла, Git и оба архива проверены. Нового исполнения оригинала нет.
-[Приёмка](evidence/lib-war-music-errors.json). Всего принято26из28returned;
-девять source faults остаются отдельно. Для последних s10/s11 найдены предыдущие
-производители descriptor/GetDC bytes в bound0001 и их сохранность через0002..0009.
-Следующая карточка по CURRENT_WORK — собственный retained scratch между разными
-глубинами War menu и preparation с полным rollback; Native join ещё не принят.
+[Приёмка](evidence/lib-war-music-errors.json). Эта карточка довела принятый объём
+до26из28returned; два оставшихся вызова приняты следующей карточкой ниже.
+Девять source faults остаются отдельно.
+
+Приняты [сохранённые bitmap fields War](research/LIB_WAR_RETAINED_SCRATCH.md): два
+returned s10/s11/call-00, 2 638 событий, 150 graphics API requests, 32 numeric
+checkpoints и десять новых wrappers. Native получает поля от собственного menu
+descriptor/GetDC и сохраняет их через десять prefix calls и пять arena constructors
+в каждом случае. Actual music format завершает loader lifetime: поздние source
+ABI bytes остаются известными, но не импортируются как Native dimensions. Copy
+field сохраняется; следующий metadata consumer после music имеет отдельную границу.
+Проверены десять связанных откатов и семь Native guard controls. Raw
+17.523с/build281.21с; bundled War7 за 389.629с и shared10 за
+477.643с прошли, 17 уникальных bundled методов. Первый кандидат выявил
+60 поздних ABI comparison ошибок; он, поправки плана и второй кандидат сохранены.
+Expected не менялись, нового исполнения оригинала нет. Все 359 прежних fixtures,
+361 текущий/808 Native-файлов, Git и оба архива проверены.
+[Приёмка](evidence/lib-war-retained-scratch.json). Теперь приняты все 28 returned
+вызовов в их объявленных границах; девять source faults остаются отдельно.
+
+Следующая карточка по CURRENT_WORK — девять Native ownership/music/replay
+rejections с whole rollback, 97 returned parent invocations и девять отказов.
+s28 сравнивает 1316 front events и отдельный allocator result; исходный calloc0
+и fault snapshot не выдаются за Native match. Новое исполнение оригинала не нужно.
 Полный error corpus, игра, приложение, Windows/device и incidents остаются открыты.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)

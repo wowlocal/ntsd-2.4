@@ -1,6 +1,7 @@
 extension OriginalWarSetup {
     /// Uses the recovered43ee50 image/surface/copy helpers for both owned War
-    /// allocations. Their shared temporary backing remains local to this call.
+    /// allocations. Own descriptor and GetDC producers update the later arena
+    /// fields in the staged War owner; same-depth menu dimensions stay local.
     public static func advanceWithSurfaceLoading<Environment>(state: inout OriginalMatchPreparation,
         memory: inout OriginalWarMenuMemory,libraryText: inout OriginalLibSurfaceText?,
         environment: inout Environment,target: UInt32,input: OriginalFrontScreenBodyInput,fillBacking: [UInt8],
@@ -11,13 +12,20 @@ extension OriginalWarSetup {
         observe: (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in },
         resourceEvent: (OriginalInterfaceEvent,inout Environment) throws -> Void = { _,_ in },
         beforeResource: (Int,OriginalStateRecord,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in },
-        prepare: (inout OriginalMatchPreparation,inout Environment) throws -> Bool = { _,_ in false },
+        prepare: (inout OriginalMatchPreparation,inout OriginalWarBitmapScratch,inout Environment) throws -> Bool = { _,_,_ in false },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalCharacterScreenExit {
         var scratch=try OriginalBitmapSurfaceLoading.CopyScratch(),loader=try OriginalBitmapSurfaceLoading.LoaderScratch()
         return try advance(state:&state,memory:&memory,libraryText:&libraryText,environment:&environment,target:target,input:input,fillBacking:fillBacking,
-            allocate:allocate,construct:{ path,allocation,device,environment in
-                try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:false,backing:allocation.backing,device:device,flags:0x40,
+            allocate:allocate,construct:{ path,allocation,device,retained,environment in
+                scratch.acquiredDC=retained.copyDimensions
+                let bitmap=try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:false,backing:allocation.backing,device:device,flags:0x40,
                     context:&environment,copyScratch:&scratch,loaderScratch:&loader,perform:perform)
+                if let descriptor=loader.descriptorTail {
+                    retained.loaderDimensions=descriptor
+                    retained.loaderInvalidatedByPreparationMusicFormat=false
+                }
+                if let acquired=scratch.acquiredDC { retained.copyDimensions=acquired }
+                return bitmap
             },bitmapStorage:bitmapStorage,draw:draw,observe:observe,resourceEvent:resourceEvent,beforeResource:beforeResource,prepare:prepare,checkpoint:checkpoint)
     }
 }
@@ -31,7 +39,7 @@ extension OriginalCharacterMenuContinuation {
         memory: inout OriginalMenuPresentationMemory,music: inout OriginalMusicMemory,
         resources: inout OriginalMenuResourceLoading,war: inout OriginalWarMenuMemory,libraryText: inout OriginalLibSurfaceText,
         environment: inout Environment,target: UInt32,input: OriginalFrontScreenBodyInput,
-        warPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout OriginalMusicMemory,inout Environment) throws -> Void)? = nil,
+        warPreparation: ((inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,inout OriginalMusicMemory,inout OriginalWarBitmapScratch,inout Environment) throws -> Void)? = nil,
         outputInput: OriginalMenuPresentationInput,milliseconds: UInt32,
         musicRequest: (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
@@ -59,9 +67,9 @@ extension OriginalCharacterMenuContinuation {
             target:target,input:input,warStage:{ scene,text,presentation,audio,environment in
                 try OriginalWarSetup.advanceWithSurfaceLoading(state:&scene,memory:&owned,libraryText:&text,environment:&environment,
                     target:target,input:input,fillBacking:[UInt8](repeating:0,count:100),allocate:warAllocate,perform:warPerform,
-                    bitmapStorage:bitmapStorage,draw:warDraw,observe:observe,resourceEvent:warResourceEvent,beforeResource:warBeforeResource,prepare:{ value,context in
+                    bitmapStorage:bitmapStorage,draw:warDraw,observe:observe,resourceEvent:warResourceEvent,beforeResource:warBeforeResource,prepare:{ value,scratch,context in
                         guard let warPreparation else { return false }
-                        try warPreparation(&value,&presentation,&audio,&context);return true
+                        try warPreparation(&value,&presentation,&audio,&scratch,&context);return true
                     },checkpoint:warCheckpoint)
             },outputInput:outputInput,milliseconds:milliseconds,musicRequest:musicRequest,allocate:allocate,perform:perform,
             resourceEvent:resourceEvent,afterMusic:afterMusic,resourceCheckpoint:resourceCheckpoint,afterStartup:afterStartup,

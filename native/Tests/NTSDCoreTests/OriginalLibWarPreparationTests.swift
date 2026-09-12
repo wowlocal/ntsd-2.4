@@ -327,7 +327,8 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         return Retained(prepared:prepared,memory:memory,library:library)
     }
     @discardableResult
-    func run(_ item: Case,_ r: Resources,_ retained: inout Retained?,failure: String? = nil) throws -> Int {
+    func run(_ item: Case,_ r: Resources,_ retained: inout Retained?,failure: String? = nil,
+             compareRetainedScratch: Bool = false) throws -> Int {
         var initial=try retained ?? initialize(item,r)
         if item.spec.chain == true {
             if let inputs=item.spec.matrixInputs {
@@ -390,6 +391,47 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         var preparationAdapter: OriginalWarPreparationSurfaceAdapter?
         let warAdapter=item.warGraphics.map { OriginalWarPreparationMenuSurfaceAdapter($0,r,control:item.spec.control) }
         let firstFrontCount=committed.front.count
+        var scratchConstructors=0
+        var scratchMusicFormat=false
+        func compareScratch(_ scratch: OriginalWarBitmapScratch,_ records: [Record],throughStores: Int? = nil) throws {
+            guard compareRetainedScratch else { return }
+            var stack=try r.record(XCTUnwrap(records.first { $0.address==c.stackAddress }))
+            if let throughStores {
+                guard throughStores<=item.writes.count else { throw Stop.unexpected }
+                for write in item.writes.prefix(throughStores) {
+                    let count=write.bytes.utf8.count/2
+                    guard [UInt32(0x1000d358),0x1000d258].contains(where:{
+                        write.address<$0+8 && UInt64(write.address)+UInt64(count)>UInt64($0)
+                    }) else { continue }
+                    let text=Array(write.bytes.utf8)
+                    for i in 0..<count {
+                        let address=write.address+UInt32(i)
+                        if (0x1000d358..<0x1000d360).contains(address) || (0x1000d258..<0x1000d260).contains(address) {
+                            let byte=try XCTUnwrap(UInt8(String(decoding:text[i*2..<i*2+2],as:UTF8.self),radix:16))
+                            try stack.write(byte,at:Int(address-c.stackAddress))
+                        }
+                    }
+                }
+            }
+            // Source locations identify comparison evidence only. Native owns
+            // the two semantic records and receives none of these source bytes.
+            for (address,owned) in [(UInt32(0x1000d358),scratch.loaderDimensions),
+                                    (UInt32(0x1000d258),scratch.copyDimensions)] {
+                let offset=Int(address-c.stackAddress),mask=Array(stack.defined[offset..<offset+8])
+                if address==0x1000d358,scratchMusicFormat {
+                    XCTAssertTrue(scratch.loaderInvalidatedByPreparationMusicFormat)
+                    XCTAssertNil(owned,"Music call ABI cannot remain a bitmap dimension producer")
+                    XCTAssertTrue(mask.allSatisfy { $0 },"Source ABI bytes are known, not Native bitmap fields")
+                    continue
+                }
+                if address==0x1000d358 { XCTAssertFalse(scratch.loaderInvalidatedByPreparationMusicFormat) }
+                let actualMask=owned?.defined ?? [Bool](repeating:false,count:8)
+                XCTAssertEqual(actualMask,mask,"Retained field lifetime mask")
+                let expected=Array(stack.bytes[offset..<offset+8])
+                let actual=owned?.bytes ?? [UInt8](repeating:0,count:8)
+                for i in 0..<8 where mask[i] { XCTAssertEqual(actual[i],expected[i],"Retained field producer byte") }
+            }
+        }
         func compareMusic(_ records: [Base.Record],_ memory: OriginalMusicMemory) throws {
             XCTAssertEqual(records.count,memory.allocations.count)
             for record in records {
@@ -487,11 +529,12 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             },perform:{ blit in var e=OriginalFrontScreenEvent("blit");e.blit=blit;try event(e,&buffer);return -1 })
         }
         try compareState(prepared,item.before)
+        try compareScratch(war.bitmapScratch,item.before)
         XCTAssertEqual(library.retainedDC,try XCTUnwrap(before[c.libraryAddress]).integer(at:0x306e,as:UInt32.self))
         do {
             let end=try OriginalCharacterMenuContinuation.advanceWithWar(state:&prepared,memory:&memory,music:&music,resources:&resources,war:&war,libraryText:&library,environment:&committed,
                 target:c.target,input:.init(dcResult:item.spec.dcResult ?? 0,dc:item.spec.dc ?? 0x76543210,methodResult:item.spec.methodResult ?? -1,drawResults:[-1],shellResult:33),
-                warPreparation:{ scene,owned,audio,env in
+                warPreparation:{ scene,owned,audio,scratch,env in
                     let pg=try XCTUnwrap(item.preparationGraphics)
                     let adapter=OriginalWarPreparationSurfaceAdapter(pg,r,inputs:item.resourceFailureInput?.graphics);preparationAdapter=adapter
                     if (pg.allocationStart ?? 0)==0 { env.preparationGraphics=env.warGraphics }
@@ -500,10 +543,17 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         return .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7])
                     },constructBitmap:{ path,optional,backing in
                         var graphics=env.preparationGraphics
-                        let result=try adapter.construct(path,optional,backing,&graphics,afterRequest:{ key in
+                        let result=try adapter.construct(path,optional,backing,&graphics,scratch:&scratch,afterRequest:{ key in
                             if failure=="graphicsAPI:"+key { throw Stop.injected }
                         }) { try event(.init("preparationBitmap"),&env) }
                         env.preparationGraphics=graphics
+                        if compareRetainedScratch,result != nil {
+                            let constructors=item.helpers.filter { $0.entry==0x43ee50 }
+                            guard scratchConstructors<constructors.count else { throw Stop.unexpected }
+                            let count=try XCTUnwrap(constructors[scratchConstructors].lastStore)
+                            try compareScratch(scratch,item.before,throughStores:count)
+                            scratchConstructors += 1
+                        }
                         if failure=="bitmap" || failure=="nullBitmap" && result==nil ||
                             failure=="partialBitmap" && adapter.failedConstructionOrdinals.contains(adapter.allocation-1) {
                             throw Stop.injected
@@ -518,9 +568,12 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                     },resumeMusic:{ globals in
                         let musicAdapter=try OriginalWarPreparationMusicAdapter(item.resourceFailureInput?.music,control:item.spec.control,memory:audio)
                         var musicGlobals=globals
-                        try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&audio,store:{ address,bytes in
+                        try scratch.resumePreparationMusic(globals:&globals,memory:&audio,store:{ address,bytes in
                             for (i,byte) in bytes.enumerated() { try musicGlobals.write(byte,at:address-base+i) }
                         }) { request in
+                            if request.kind == .format,request.strings.first == Array("%s\\graph.log".utf8) {
+                                scratchMusicFormat=true
+                            }
                             let response=try musicAdapter.response(request)
                             if request.kind == .message {
                                 // The source graphics observer owns MessageBox; music
@@ -542,6 +595,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                                 try event(.init(request.kind.rawValue,request.arguments,request.strings),&env)
                             }
                             env.music.append(request)
+                            if failure=="scratchMusicFormat",request.kind == .format,request.strings.first == Array("%s\\graph.log".utf8) { throw Stop.injected }
                             if let key=OriginalWarPreparationMusicAdapter.rollbackKey(request),failure=="musicAPI:"+key { throw Stop.injected }
                             if failure=="music",request.kind == .method,request.arguments.count==4,request.arguments[1]==0x34,request.arguments[2]==0x2c020020 { throw Stop.injected }
                             return response
@@ -564,6 +618,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         let expected=points[preparationPoint];preparationPoint += 1
                         XCTAssertEqual(expected.kind,"war-preparation-0x"+String(pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                         try compareState(value,expected.records)
+                        try compareScratch(scratch,expected.records)
                         if pc != 0x43a21f {
                             let text=try XCTUnwrap(expected.name),pairs=Array(text.utf8)
                             let bytes=try stride(from:0,to:pairs.count,by:2).map { try XCTUnwrap(UInt8(String(decoding:pairs[$0..<$0+2],as:UTF8.self),radix:16)) }
@@ -674,6 +729,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                     }
                     try compareState(state,expected.records)
                     try XCTUnwrap(warAdapter).compareOwned(owned,expected.records,buffer.warGraphics)
+                    try compareScratch(owned.bitmapScratch,expected.records)
                     if failure=="secondResource",point.pc==0x438d2a { throw Stop.injected }
                     if failure=="latePreset",point.pc==0x439e76 { throw Stop.injected }
                     if failure=="lateFinalize",point.pc==0x43a21f { throw Stop.injected }
@@ -687,6 +743,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             XCTAssertEqual(item.endSP,item.end == "warMatchPreparation" ? try XCTUnwrap(item.warSP) : c.entrySP+8)
             XCTAssertEqual(characterPoint,item.points.filter { $0.kind.hasPrefix("character-") }.count)
             try compareState(prepared,item.after)
+            try compareScratch(war.bitmapScratch,item.after)
             try compare(memory.replayPointers,try XCTUnwrap(after[0x4588a8]),item.spec.label+" replay pointers")
             for record in item.after where record.live != nil && record.address < 0x2c000000 {
                 let allocation=try XCTUnwrap(memory.allocations[record.address]);XCTAssertEqual(allocation.live,record.live)
@@ -696,6 +753,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
             XCTAssertEqual(preparationPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-0x") }.count)
             XCTAssertEqual(numericPoint,item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }.count)
             if let adapter=preparationAdapter { try adapter.compare(prepared,committed.preparationGraphics) }
+            if compareRetainedScratch,preparationAdapter != nil { XCTAssertEqual(scratchConstructors,5) }
             for record in item.after where [UInt32(0x75000020),0x77000020,0x77640020].contains(record.address) {
                 let allocation=try XCTUnwrap(memory.allocations[record.address]);XCTAssertEqual(allocation.live,record.live)
                 try compare(allocation.storage,r.record(record),"retained recording bytes/mask")

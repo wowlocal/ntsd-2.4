@@ -5,6 +5,7 @@
 public struct OriginalWarMenuMemory: Equatable, Sendable {
     public internal(set) var bitmaps: [UInt32:OriginalLoadedBitmap] = [:]
     public internal(set) var unitObjects: [Int:Int] = [:]
+    public internal(set) var bitmapScratch = OriginalWarBitmapScratch()
     public init() {}
 }
 
@@ -22,13 +23,13 @@ public enum OriginalWarSetup {
         memory: inout OriginalWarMenuMemory,libraryText: inout OriginalLibSurfaceText?,
         environment: inout Environment,target: UInt32,input: OriginalFrontScreenBodyInput,fillBacking: [UInt8],
         allocate: (Int,inout Environment) throws -> OriginalInterfaceAllocation,
-        construct: (String,OriginalInterfaceAllocation,UInt32,inout Environment) throws -> OriginalLoadedBitmap,
+        construct: (String,OriginalInterfaceAllocation,UInt32,inout OriginalWarBitmapScratch,inout Environment) throws -> OriginalLoadedBitmap,
         bitmapStorage: (UInt32,inout Environment) throws -> OriginalStateRecord,
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord,OriginalWarMenuMemory,inout Environment) throws -> Void,
         observe: (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in },
         resourceEvent: (OriginalInterfaceEvent,inout Environment) throws -> Void = { _,_ in },
         beforeResource: (Int,OriginalStateRecord,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in },
-        prepare: (inout OriginalMatchPreparation,inout Environment) throws -> Bool = { _,_ in false },
+        prepare: (inout OriginalMatchPreparation,inout OriginalWarBitmapScratch,inout Environment) throws -> Bool = { _,_,_ in false },
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,OriginalWarMenuMemory,inout Environment) throws -> Void = { _,_,_,_ in }) throws -> OriginalCharacterScreenExit {
         var candidate=state,owned=memory,library=libraryText,context=environment
         var local: [Int:Int32]=[:]
@@ -122,7 +123,8 @@ public enum OriginalWarSetup {
                 if allocation.address != 0 {
                     guard owned.bitmaps[allocation.address]==nil else { throw error("Live War allocation reused") }
                     try resourceEvent(.init(.construct,[allocation.address,0x40,0],[Array(path.utf8)]),&context)
-                    owned.bitmaps[allocation.address]=try .checkedConstruction(construct(path,allocation,device,&context),path:path,optional:false)
+                    let bitmap=try construct(path,allocation,device,&owned.bitmapScratch,&context)
+                    owned.bitmaps[allocation.address]=try .checkedConstruction(bitmap,path:path,optional:false)
                 }
                 try write(index==0 ? 0x451bb0 : 0x451bac,Int32(bitPattern:allocation.address))
             }
@@ -346,7 +348,7 @@ public enum OriginalWarSetup {
             switch try word(0x451b84) {
             case 0:
                 try mark(0x43a21f)
-                guard try prepare(&candidate,&context) else { return finish(.warMatchPreparation) }
+                guard try prepare(&candidate,&owned.bitmapScratch,&context) else { return finish(.warMatchPreparation) }
                 return try returnMenu()
             case 1:try write(0x4512c8,0);try write(0x44d020,3);try write(0x44d024,100);try write(0x44d028,1)
             case 2:try write(0x44d020,201)

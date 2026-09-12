@@ -41,6 +41,7 @@ final class OriginalWarPreparationSurfaceAdapter {
         return bytes
     }
     func construct(_ path: String,_ optional: Bool,_ backing: [UInt8],_ context: inout Base.Context,
+                   scratch: inout OriginalWarBitmapScratch,
                    afterRequest: (String) throws -> Void = { _ in },
                    observe: () throws -> Void) throws -> OriginalLoadedBitmap? {
         let ordinal=allocation
@@ -62,7 +63,7 @@ final class OriginalWarPreparationSurfaceAdapter {
         let missingImage=inputs?.missingLoaderIndices?.contains(loaderOrdinal)==true
         allocation += 1;context.currentWrapper=token;context.allocations.append(token);try observe()
         let constructor=try next("construct");XCTAssertEqual(constructor.address,token);XCTAssertEqual(constructor.path,path);XCTAssertFalse(optional);try observe()
-        return try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,backing:backing,device:0x32001000,flags:0x40,context:&context) { q,g in
+        return try scratch.constructPreparationBitmap(path:path,optional:optional,backing:backing,device:0x32001000,flags:0x40,context:&context) { q,g in
             let e=try self.next(q.kind),expected=try XCTUnwrap(e.request),captured=try XCTUnwrap(e.response)
             XCTAssertEqual(q.words,expected.words);XCTAssertEqual(q.strings,expected.strings);XCTAssertEqual(q.defined,expected.defined)
             if let mask=q.defined {
@@ -80,7 +81,7 @@ final class OriginalWarPreparationSurfaceAdapter {
             if let result=self.inputs?.results?[key] {
                 let supported: [String:Int32]=["createSurface":-1,"colorKey":-1,"getDC":-1,
                     "restore":-1,"releaseDC":-1,"createDC":0,"selectObject":0,
-                    "stretch":0,"deleteDC":0,"deleteObject":0]
+                    "stretch":0,"deleteDC":0,"deleteObject":0,"getObject":0,"description":-1]
                 guard supported[q.kind]==result,self.appliedResultKeys.insert(key).inserted else { throw Test.Stop.unexpected }
                 response = .init(result:result)
                 if ["createSurface","colorKey"].contains(q.kind) { self.failedConstructionOrdinals.insert(ordinal) }
