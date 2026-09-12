@@ -102,7 +102,18 @@ and Render; a root SourceHost component invokes this pipeline after L2DF input
 refresh and before object traversal. Physics, States, Collision and Attributes
 from the candidate are absent in this mode. Source sounds go through the L2DF
 SoundManager. Actual acoustic mixing/latency and physical keys are separate
-device observations. The host's 33-ms accumulator is not the original strict
-elapsed>33-ms/100-ms lag-cap timer; the full-District viewport does not apply the
-computed original camera. Neither limitation changes the compared discrete
-state transition inputs.
+device observations. `application_timer.lua` now implements whole43d157..43d1ef
+with owned UInt32 baseline and fresh caller-supplied clock/target/dispatch/
+recovery/Sleep callbacks. It commits only its own baseline, not external effects.
+`host_loop.lua` binds monotonic LÖVE time and one update/render/present to each
+due decision; the L2DF accumulator is bypassed. Native event polling and focus/
+pause clock resets remain host behavior, not a Windows message-loop claim.
+
+`background.lua` implements nonloop bitmap layers with independent counters,
+signed arithmetic, truncating parallax and inclusive animation gates. `draw`
+with `advance=false` is a nonmutating native preview; only committed game ticks
+advance the current District background. General loops/fills/BG99 remain outside
+the120-list comparison. The host applies camera-relative X to sprite/shadow/shot
+input and uses794×550 gameplay pixels plus a54-pixel instruction panel.
+Presentation traces contain input poses before Transform/Render; exact source
+pixel/color/mixing and physical input/device latency remain separate checks.

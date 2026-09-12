@@ -152,3 +152,19 @@ native окно независимо наблюдалось. Все тестов
 и полный match lifecycle. Полный каталог/loader, AI/режимы/сеть, физические
 клавиши/слышимый звук, Windows/Intel/чистая macOS остаются открытыми. Этот
 результат не изменяет очередь основной NTSDCore-ветки и её safety dependencies.
+
+**Активная полная цель:** [семь критериев пользователя](L2DF_FULL_GAME_GOAL.md)
+сохранены целиком; ни одна отдельная Practice-веха не завершает её.
+[L2DF presentation](L2DF_PRESENTATION.md) переносит whole no-message timer:
+2025 решений/8163 requests, отдельные36 старых clock samples и120 District draw
+lists совпали. Пакет `presentation-20260912/native-01/NTSD L2DF Native.app`
+применяет cameraX к794×550 viewport и parallax фона; L2DF accumulator обойдён.
+Сохранилось точное70-tick сравнение,330-tick smoke и unsupported/R-reset.
+Pure numeric первый clock-chain comparator failure сохранён; исправлена
+жизнь baseline между18samples, исходные/игровые байты не менялись.
+
+Следующий этап полной цели — собственная сессия общего Swift NTSDCore через
+C ABI к LÖVE. Это позволяет сохранить OriginalExtended/400-slot ownership/
+межстадийный порядок вместо повторного упрощённого Lua-переноса. Foundation
+ведётся отдельно в [L2DF_NATIVE_BRIDGE](L2DF_NATIVE_BRIDGE.md); создание Actor
+storage не считается готовым match. Все остальные критерии полной игры открыты.

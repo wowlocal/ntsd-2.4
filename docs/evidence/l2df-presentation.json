@@ -1,0 +1,352 @@
+{
+  "createdAtUTC": "2026-09-12T09:35:20.444836+00:00",
+  "status": "Timer, District camera presentation and packaged integration accepted within declared scope; full game goal active",
+  "baselineCommit": "4778284",
+  "mainReadOnlyRevision": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+  "originalEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sourceExecution": false,
+  "fullGameComplete": false,
+  "numeric": {
+    "accepted": true,
+    "timerCases": 2025,
+    "timerEvents": 8163,
+    "legacyClockSamples": 36,
+    "districtDrawLists": 120,
+    "lateTimerRollback": true,
+    "failedRows": 0,
+    "actualSHA256": "2a6305241f9cfc66a3fc1f5392d1cf583c913f66dd106fe2ac5be362c448e915",
+    "sourceExecution": false,
+    "wholeGameOrDeviceClaim": false,
+    "comparison": "Exact baseline and ordered external requests, separate legacy aggregates and complete District lists; native-only rollback and nonadvancing preview."
+  },
+  "sourceExpectedPolicy": "Immutable sources/expected retained. First comparator initialized each legacy clock sample independently; fixed to retain baseline through two18-sample chains, per frozen oracle_presentation.py33..43. No timer/background algorithm or source expected changed.",
+  "retainedFailure": {
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/numeric-01/report.json",
+      "bytes": 6400,
+      "sha256": "be38a8cc0ffdcafde271efa45911a9e5b55b671a65355e9a0231719d368d3703"
+    },
+    "failedLegacyClockRows": 20,
+    "rollbackMetadataCorrection": "numeric01 lateTimerRollback=false reflected global failures; actual rollback row passed. numeric03 reports the specific rollback row."
+  },
+  "independentReviewer": "/root/l2df_reference_review (read-only)",
+  "reviewResolved": [
+    "legacy clock chain lifetime from actual source producer",
+    "snapshot layer inputs before constructor",
+    "describe counter lifetime indirect through source lists, not raw snapshots",
+    "report rollback separately",
+    "typed host ticks/viewport/background/counters and bounded camera0..166",
+    "host count correlation is aggregate; pre-Render positions are not actual raster calls"
+  ],
+  "codePins": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/application_timer.lua",
+      "bytes": 1402,
+      "sha256": "0405c87421ee0e5ced570954a09cd7706d0a5851263fffd4ca7eecdc6d9ca5b9"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/background.lua",
+      "bytes": 2157,
+      "sha256": "901990972c7e2992cd664ee2d771a6717ec63401243b44566981039f8583ccc1"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/host_loop.lua",
+      "bytes": 2250,
+      "sha256": "29e441e776385eb842173431756b00ce6e8ebf54e29f2014610745c70b9f476a"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/main.lua",
+      "bytes": 18694,
+      "sha256": "97e6192a0e45a1677cdb16f57a7350bbcc001eab8df452c0c502a184d3db85e5"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/tests/reference/check_presentation.py",
+      "bytes": 10116,
+      "sha256": "741799446e476749369faeff3b570c656cf254a36a96d392a0a139a3be446ea1"
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/tests/reference/check_host_logs.py",
+      "bytes": 6303,
+      "sha256": "1d7a7e5c9d8b0c20dfc1d17023465c33c48d7078d0252135bf01c50e63100502"
+    }
+  ],
+  "gui": {
+    "retainedSourceCase": {
+      "ticks": 70,
+      "fullStateAndMasks": true,
+      "audioCallsAndIsPlaying": 11
+    },
+    "nativeSmoke": {
+      "ticks": 330,
+      "audioCallsAndIsPlaying": 20,
+      "projectiles": 5,
+      "mpSpent": [
+        0,
+        100
+      ]
+    },
+    "timerObservations": [
+      {
+        "run": "retained-01",
+        "timerDecisions": 642,
+        "dispatches": 70,
+        "gameTicks": 70,
+        "backgroundRequests": 560,
+        "preRenderObjectPoses": 188
+      },
+      {
+        "run": "smoke-01",
+        "timerDecisions": 2706,
+        "dispatches": 330,
+        "gameTicks": 330,
+        "backgroundRequests": 2640,
+        "preRenderObjectPoses": 698
+      }
+    ],
+    "reset": {
+      "boundaryCleared": true,
+      "boundaryRolledBack": true,
+      "continuationTicks": 1,
+      "entities": 2,
+      "inputClear": true,
+      "mpSpent": [
+        0,
+        0
+      ],
+      "paused": false,
+      "projectileCount": 0,
+      "randomRestored": true,
+      "rejectedTick": 13,
+      "resetCallback": "love.keypressed r",
+      "resetTick": 0
+    },
+    "visualInspection": "Root viewed fan and unsupported-notice framebuffer PNGs; 794x550 gameplay viewport plus54px host panel and letterbox visible. No source pixel equivalence claim.",
+    "presentationTraceScope": "Object.data position/facing input before Transform/Render; pic/centerx/centery not compared by geometry gate",
+    "timeScope": "Actual callback clock samples/decisions; elapsed in summary is accumulated .033 callback time, not measured device latency."
+  },
+  "package": {
+    "accepted": true,
+    "reviewedAtUTC": "2026-09-12T09:28:44.470065+00:00",
+    "zip": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/NTSD L2DF Native.app/Contents/Resources/NTSD.love",
+      "bytes": 4400793,
+      "sha256": "3f125c7d1fcf6231aaf0cdee61cc17a64a32199ad874bc356006e5abfc88be26"
+    },
+    "uniqueMembersCompared": 271,
+    "internalSymlinks": 39,
+    "priorAcceptedKernelModulesUnchanged": true,
+    "app": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/NTSD L2DF Native.app",
+    "architectures": "x86_64 arm64"
+  },
+  "preservation": {
+    "accepted": true,
+    "reviewedAtUTC": "2026-09-12T09:30:55.855813+00:00",
+    "resources": 112,
+    "resourceBytes": 19544930,
+    "upstreamFiles": 139,
+    "packageFiles": 136,
+    "planInputsUnchanged": true,
+    "previousAppUnchanged": true,
+    "mainHead": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+    "mainClean": true
+  },
+  "nativeWindow": {
+    "pidAtObservation": 113,
+    "unifiedSession": 10657,
+    "windowID": 14419,
+    "onScreen": true,
+    "activeAtObservation": false,
+    "continuousDiagnosticLogging": false,
+    "leftOpen": true,
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/interactive-window-01.json",
+      "bytes": 1787,
+      "sha256": "4188d6c654edc90f7a5f6dd163ff7148656a3548ff4e733aca4009e02cca3a26"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/plan-inputs.json",
+      "bytes": 3213,
+      "sha256": "e1d3d455f523d845cea4b8ff277878d40ac7a6953d1e8cb42eab5ff033eec3cd"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/setup-errors.txt",
+      "bytes": 335,
+      "sha256": "7b8f6944ad56809882b3e4c46e51c37dcb8d63c1b65afe6fa513e1e7cb6eca47"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/numeric-01/report.json",
+      "bytes": 6400,
+      "sha256": "be38a8cc0ffdcafde271efa45911a9e5b55b671a65355e9a0231719d368d3703"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/numeric-01/failures.json",
+      "bytes": 2824,
+      "sha256": "a5726890467baba19dfbc7a45380a808f650b8d92d68ea411d494548b8a9903e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/numeric-02/report.json",
+      "bytes": 6792,
+      "sha256": "995d81fcb76d54297211bc1dc0b218eda65aab1a3bd62c7d46a70b3d7c46b13d"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/numeric-03/report.json",
+      "bytes": 6784,
+      "sha256": "7328a2a997ea30e318292219fc9b54dcf460bd6b9c9f9b706431665f246365da"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/retained-case-review.json",
+      "bytes": 16524,
+      "sha256": "018836e2d6932c9061f74355729fe8f23cf013db982e1af0420e6071d85f2b44"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/retained-host-review.json",
+      "bytes": 7645,
+      "sha256": "95ea9d4e240463b89a057fdf7d0f6c1fbc10e61989b24b500a7085d065a9ae3b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/smoke-host-review.json",
+      "bytes": 7307,
+      "sha256": "e55e362409da86b3c092a5462676c479f85239e1526eabe700a9d9eac206c4e3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/retained-host-review-02.json",
+      "bytes": 7942,
+      "sha256": "9c778c8972066fe3a258f69d31d9983090f89429d3079e58101a17807d0ce038"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/smoke-host-review-02.json",
+      "bytes": 7604,
+      "sha256": "1a72f2382a8208fcdcc24431d7f7d73b0e49ef2d83fbcbd00253a6bf33677d04"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/NTSD L2DF Native.app.manifest.json",
+      "bytes": 30010,
+      "sha256": "0662a5e132316367da7911366af4374eafbd9b2ab4dacf51990da02fdba9328e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/package-review-01.json",
+      "bytes": 707,
+      "sha256": "383c3b35ba248773532a5716e64939396051c4337bb7ab72ed755bec9d606b06"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/preservation-reset-review-01.json",
+      "bytes": 28384,
+      "sha256": "3d3ba13d9fedf06e593aaccd838dbaf778587e6d7343200531c9eeb3ab18306a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/interactive-window-01.json",
+      "bytes": 1787,
+      "sha256": "4188d6c654edc90f7a5f6dd163ff7148656a3548ff4e733aca4009e02cca3a26"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/job.json",
+      "bytes": 5929,
+      "sha256": "2f352a1f07c4ef15e49e66a4606ebc30428d0108d3bd1dd8a83e93082ffbd788"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/summary.json",
+      "bytes": 857,
+      "sha256": "ec9e91e1d66814df57040e728ac5dd339423996f2b95313ab5c5189ab269935a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/world.jsonl",
+      "bytes": 292223,
+      "sha256": "a8db48c768e21f084c2811c23a2da0d8f6a7b40d7bc2848e035083a0af02a850"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/inputs.jsonl",
+      "bytes": 1881,
+      "sha256": "958586bd09f73c297893bcff1160e745b9e8b53aa3feb659dee8dec5d845ed6c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/presentation.jsonl",
+      "bytes": 51176,
+      "sha256": "c0d6a242e6d637a18be9009909ff059176799a7203925855a83b1ef8bf361bff"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/timer.jsonl",
+      "bytes": 68690,
+      "sha256": "7a0ec254833cd661df6615628ddbbace468a7da0fadf9c172bedb353216a5ca3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/job.json",
+      "bytes": 5451,
+      "sha256": "a282d47cc9b759eed6e87c940018dd6d4e091aa31ecd511dd94d67fd24f13759"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/summary.json",
+      "bytes": 997,
+      "sha256": "34b3e814d885fab2069e50fb81430fcd7e24ee7bdb1fe41c5f45899dbe336a10"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/world.jsonl",
+      "bytes": 1077087,
+      "sha256": "4ace6994eb8c08eae83fe81f4910ed671ba44cf176b7fb47f8ba795240f05676"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/inputs.jsonl",
+      "bytes": 9157,
+      "sha256": "5311af0c8e422c52a4a092ba3915ed80d619b186e8e261d3043145ef1707f49d"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/presentation.jsonl",
+      "bytes": 224293,
+      "sha256": "4ef537e6e29bd5c64ceb44e81563d2901809c98890d9dafea00826bc30409488"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/smoke-01/timer.jsonl",
+      "bytes": 295455,
+      "sha256": "bd3058e845fb2e7dd38889956fc9012bd4b7b9a9709ce50791923d746c7986a1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/job.json",
+      "bytes": 5949,
+      "sha256": "4c0f022f4ab419d96338a904ed5610cb85fb34d2d32ed2a78984649c91f21440"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/summary.json",
+      "bytes": 449,
+      "sha256": "ebc717eb27473fb534c0d39838d35926553981d0af373571cdf4e92aff365a9d"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/world.jsonl",
+      "bytes": 42955,
+      "sha256": "76a49a4030d164851c4b8575b3a3232ecc342eef08df7d33233374cb02e70ea4"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/inputs.jsonl",
+      "bytes": 368,
+      "sha256": "7bfc4e58a7677b6438edcad94d2823902fa3831e15bea5bc0678843795d48532"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/presentation.jsonl",
+      "bytes": 9297,
+      "sha256": "7e6b7f9925fe98d5eb591e23a3b9cce4863cc122f7901734ab8fb6860695460e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/timer.jsonl",
+      "bytes": 20774,
+      "sha256": "cc563b29c7f2c5cc0a495e9b89c4702982fa8d367a339d3e809298a8489992a0"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/retained-01/fan.png",
+      "bytes": 187937,
+      "sha256": "fc660aed59858643bf4d071b2c34e797efe9a39196a52dda36017f52c13c1f9f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/presentation-20260912/native-01/logs/reset-01/interactive-13.png",
+      "bytes": 188318,
+      "sha256": "8479ed6291de2fa5c79429141254b399cc2bcaff3bd61d5841d15a57057edf9e"
+    }
+  ],
+  "limitations": [
+    "Full native app message/dispatcher/recovery/startup and match not established",
+    "General camera/all arenas/loops/fills/BG99 require common native core integration",
+    "Window resize/focus device acceptance remains open; letterbox inspected at1152x720 only",
+    "Physical input/heard audio, pixel/color/mix/latency, Windows, Intel runtime and clean Mac unverified",
+    "Whole combat catalog, AI, menus/modes/network and full seven-part goal remain open"
+  ],
+  "next": "Owned Swift NTSDCore C ABI/session, then actual initialized catalog/gameplay call and complete combat content/lifecycle."
+}

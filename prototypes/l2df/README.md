@@ -1,4 +1,4 @@
-# NTSD / L2DF Chidori Practice
+# NTSD / L2DF Native Practice
 
 A native macOS two-player Practice scene using L2DF `wip-test`
 `a20a16f2e8c9e889e33b3d762c94dc49498d0f83`, native LÖVE 11.5
@@ -14,7 +14,7 @@ From this worktree:
 ./prototypes/l2df/launch.command
 ```
 
-App: `build/l2df-prototype/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app`.
+App: `build/l2df-prototype/presentation-20260912/native-01/NTSD L2DF Native.app`.
 It contains the runtime, engine, owned compatibility modules and selected game
 resources. It does not need Python, the original distribution, Windows, Wine,
 a browser or an installed LÖVE. The task build directory resolves to X5; the
@@ -57,7 +57,7 @@ python3 prototypes/l2df/prepare.py \
   --build-name chidori-compat-20260912/my-new-build
 python3 prototypes/l2df/package.py \
   --build-name chidori-compat-20260912/my-new-build \
-  --name 'NTSD L2DF Chidori.app'
+  --name 'NTSD L2DF Native.app'
 ```
 
 Preparation refuses existing output directories; packaging refuses existing
@@ -69,8 +69,8 @@ every ZIP member with its prepared file and rejects external framework links.
 
 ```sh
 python3 prototypes/l2df/run.py \
-  --build-name chidori-compat-20260912/native-07 \
-  --app 'build/l2df-prototype/chidori-compat-20260912/native-07/NTSD L2DF Chidori.app' \
+  --build-name presentation-20260912/native-01 \
+  --app 'build/l2df-prototype/presentation-20260912/native-01/NTSD L2DF Native.app' \
   --smoke --label my-new-smoke
 ```
 
@@ -111,14 +111,27 @@ of full loader storage/overflow/alias fidelity. Duplicate numerical fields are
 retained by the compatibility frame projection. Kunai's malformed import stays
 outside this phase. Auxiliary y=80000 boxes remain in the collision projection.
 
-The scene uses a 33-ms step in L2DF's accumulator. Original strict elapsed>33-ms
-and the 100-ms lag cap, physical-device timing, original camera presentation,
-full-match RNG initialization/regeneration, all techniques/content, AI, menus,
-saves, replays and networking remain open. The viewport shows the full District;
-original camera state is still computed and logged. The network manager is
-unregistered. Physical keyboard, audible output, Windows visual/timing,
-Intel and a clean second Mac remain unverified.
+The recovered no-message timer now drives each native update/render/present,
+with fresh UInt32 clock reads, strict elapsed>33-ms, the 100-ms lag cap and the
+original Sleep decision. L2DF's separate accumulator is bypassed. Native event
+polling and pause/focus clock resets remain host adapters. The camera is applied
+to fighters, shadows and projectiles in a 794×550 game viewport; District layers
+retain individual counters and parallax. A separate 54-pixel instruction panel
+and the scene use the same resize/letterbox transform.
+
+`timer.jsonl` records actual host clock/dispatch/Sleep observations;
+`presentation.jsonl` records background requests and camera-relative Object.data
+poses before Transform/Render, not final raster calls. The timer passes 2,025
+retained decisions, the earlier clock passes 36 samples, and District passes
+120 draw lists. Packaged 70-tick original-case and 330-tick smoke checks pass.
+
+Full-match RNG initialization/regeneration, all techniques/content, AI, menus,
+saves, replays and networking remain open. The network manager is unregistered.
+Physical keyboard, audible output, exact pixels/device timing, Windows, Intel,
+automated resize/focus acceptance and a clean second Mac remain unverified.
 
 See [Chidori compatibility study](../../docs/research/L2DF_CHIDORI_COMPATIBILITY.md),
+[timer/camera integration](../../docs/research/L2DF_PRESENTATION.md),
+[the full-game goal](../../docs/research/L2DF_FULL_GAME_GOAL.md),
 [its evidence](../../docs/evidence/l2df-chidori-compatibility.json), and the
 [earlier feasibility report](../../docs/research/L2DF_NATIVE_PROTOTYPE.md).
