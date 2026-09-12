@@ -41,7 +41,9 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     struct Write: Decodable { let address: UInt32,bytes: String }
     struct Read: Decodable { let address: UInt32,count: Int,storeCount: Int }
     struct ResourceFailureInput: Decodable {
-        struct Graphics: Decodable { let nullAllocationOrdinal: Int? }
+        struct Graphics: Decodable {
+            let nullAllocationOrdinal: Int?,missingLoaderIndices: [Int]?,results: [String:Int32]?
+        }
         let graphics: Graphics
     }
     struct Case: Decodable {
@@ -490,7 +492,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 target:c.target,input:.init(dcResult:item.spec.dcResult ?? 0,dc:item.spec.dc ?? 0x76543210,methodResult:item.spec.methodResult ?? -1,drawResults:[-1],shellResult:33),
                 warPreparation:{ scene,owned,audio,env in
                     let pg=try XCTUnwrap(item.preparationGraphics)
-                    let adapter=OriginalWarPreparationSurfaceAdapter(pg,r,nullAllocationOrdinal:item.resourceFailureInput?.graphics.nullAllocationOrdinal);preparationAdapter=adapter
+                    let adapter=OriginalWarPreparationSurfaceAdapter(pg,r,inputs:item.resourceFailureInput?.graphics);preparationAdapter=adapter
                     if (pg.allocationStart ?? 0)==0 { env.preparationGraphics=env.warGraphics }
                     try OriginalWarPreparation.prepare(state:&scene,memory:&owned,localTime:{
                         let t=try XCTUnwrap(item.spec.localTime)
@@ -499,7 +501,10 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         var graphics=env.preparationGraphics
                         let result=try adapter.construct(path,optional,backing,&graphics) { try event(.init("preparationBitmap"),&env) }
                         env.preparationGraphics=graphics
-                        if failure=="bitmap" || failure=="nullBitmap" && result==nil { throw Stop.injected };return result
+                        if failure=="bitmap" || failure=="nullBitmap" && result==nil ||
+                            failure=="partialBitmap" && adapter.failedConstructionOrdinals.contains(adapter.allocation-1) {
+                            throw Stop.injected
+                        };return result
                     },releaseBitmap:{ index,bitmap in
                         var graphics=env.preparationGraphics
                         try adapter.release(index,bitmap,&graphics) { kind,_ in

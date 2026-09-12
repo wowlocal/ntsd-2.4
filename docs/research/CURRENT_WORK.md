@@ -44,6 +44,18 @@ Raw-тест прошёл за 19.231с; 17 bundled release-тестов за 51
 проверены. [Приёмка](../evidence/lib-war-nullable-bitmap.json).
 Отдельный s03/01 source fault и остальной error corpus этим не приняты.
 
+Приняты [частичные surfaces War](LIB_WAR_PARTIAL_SURFACES.md): шесть сохранённых
+returned s04..s09/call-00, 7 884 события, 96 numeric checkpoints, пять wrapper
+owners на вызов и 18 связанных откатов. Сохраняются неизвестные размеры при
+missing image, неудалённый image при CreateSurface failure и запись о Release
+при colorKey failure. Последняя не доказывает фактического уничтожения surface.
+Raw прошёл за 38.681с; девять bundled release-тестов за 268.324с, включая War
+matrix/preflight/nullable и общие BitmapSurfaceLoading/CharacterMenuSurface.
+Нового исполнения оригинала и изменения Core/expected не было. 336 прежних
+fixtures неизменны, 342 текущих/784 Native-файла, Git и три отдельных архива
+проверены. [Приёмка](../evidence/lib-war-partial-surfaces.json).
+Шесть следующих call-01 source faults сохранены отдельно и не приняты как matches.
+
 ## Непринятая работа и отказ Codex
 
 Текущий незакрытый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -64,8 +76,9 @@ Raw-тест прошёл за 19.231с; 17 bundled release-тестов за 51
   290 сохранённых producer proofs,37 переходов live-owner flags и9 failure
   sidecars. Это чтение готовых данных; новых исполнений оригинала нет.
 - В исторической сводке `nativeCompared=false`, `fullPreparationComplete=false`,
-  `fullGameComplete=false`. Новая приёмка трёх NULL-вызовов выше не переписывает
-  этот источник; полный Native error corpus ещё не принят.
+  `fullGameComplete=false`. Приёмки трёх NULL-вызовов и шести partial-surface
+  возвратов выше не переписывают этот источник; полный Native error corpus ещё
+  не принят.
 - Проверка процессов по командам War error capture/audit, transform boundaries
   и result recording не нашла соответствующих работающих процессов на момент
   чтения. Перед любым дальнейшим действием нужна новая проверка; это не инвентарь
@@ -91,22 +104,28 @@ Raw-тест прошёл за 19.231с; 17 bundled release-тестов за 51
 
 ## Следующая независимая карточка
 
-**Частично созданные bitmap: шесть сохранённых returned s04..s09/call-00.**
+**Ошибки графических API: восемь сохранённых returned s12..s19/call-00.**
 
 Инвентаризацию не начинать заново. По её результатам и readonly review в
-`build/research/lib-war-preparation/war-nullable-native-20260912/next-partial-surface-review.json`
-оформить конечный Native-план. Во всех шести случаях остаются пять ненулевых
-wrapper owners. Missing image сохраняет неизвестные dimensions; CreateSurface
-failure сохраняет известные размеры и неудалённый image; colorKey failure
-сохраняет wrapper и released surface record. При colorKey `input.present=true`
-означает ненулевой результат loader до ошибки, хотя итоговый marker равен нулю.
+`build/research/lib-war-preparation/war-partial-surfaces-native-20260912/next-graphics-errors-review.json`
+оформить конечный Native-план. Все восемь вызовов возвращаются с пятью wrapper
+и surface records. Объём: 10 550 whole-caller events, 128 numeric checkpoints,
+598 preparation API requests. Core уже содержит соответствующие ветви.
 
-Core уже содержит эти ветви; нужно расширить явные failure inputs и War adapter,
-сравнить целые вызывающие пути, storage/masks и platform owners. Проверить rollback
-после целевого неудачного constructor, включая последний слой, и поздний общий
-откат. Сохранить matrix 256, preflight 22, три NULL-вызова и подходящие
-BitmapSurfaceLoading/CharacterMenuSurface регрессии. Последующие s04..s09/call-01
-остаются отдельными source faults 40c118; они не являются successful matches.
+Расширить строгие declared result inputs для getDC/restore/releaseDC=-1 и
+createDC/selectObject/stretch/deleteDC/deleteObject=0; каждый целевой ключ должен
+исполниться. При GetDC failure пропускаются Stretch/ReleaseDC, остальные cleanup
+запросы продолжаются. CreateDC0 не отменяет SelectObject/Stretch/DeleteDC с DC0;
+`dcs[0]=true` — bookkeeping стенда, не реально созданный Windows owner.
+DeleteDC0 всё равно отмечает запрос, тогда как DeleteObject0 оставляет image
+с `deleted=false`. Не унифицировать семантику этих двух карт.
+
+Проверить все whole-caller records/masks/owners и 24 связанных отката: после
+точного целевого API response/event, после recording и перед outer return.
+`partialBitmap` после constructor не заменяет новый откат непосредственно после
+API. Сохранить matrix 256, preflight 22, nullable 3, partial surfaces 6 и подходящие
+BitmapSurfaceLoading/CharacterMenuSurface регрессии. Новое исполнение оригинала
+для этих восьми сохранённых возвратов не требуется.
 
 Это новая работа над Native по готовым данным, а не повтор исходного захвата.
 Она не разрешает затронутую отказом операцию и не закрывает incident. Остальные
@@ -140,5 +159,5 @@ Native-карточкой выше: их исходные версии сохр�
 `build/research/pending-completion-20260912/initial-pending/`, старые 325 fixtures
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
-Исторический work JSON не переписывался. Принятые новые NULL-контракты и следующая
-карточка частичных surfaces описаны выше.
+Исторический work JSON не переписывался. Новые принятые NULL/partial-surface
+контракты и следующая карточка графических API описаны выше.

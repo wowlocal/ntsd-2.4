@@ -1,0 +1,1494 @@
+{
+  "schema": 1,
+  "timeUTC": "2026-09-12T12:14:04.699922+00:00",
+  "scope": "Six saved whole War returns after first/last image, CreateSurface or colorKey failures, with five owned wrappers each. Native only; no new original execution. Full game goal remains active.",
+  "baseCommit": "8a05dc4791d82afc85db16b47bec022c1ea3a71f",
+  "study": "docs/research/LIB_WAR_PARTIAL_SURFACES.md",
+  "acceptance": {
+    "nativeCompared": true,
+    "wholeReturnedCases": 6,
+    "rawPassed": true,
+    "bundledPassed": true,
+    "regressionsPassed": true,
+    "independentContractReview": true,
+    "transportVerified": true,
+    "nativeArchiveVerified": true,
+    "evidenceArchiveVerified": true,
+    "separateFaultArchiveVerified": true,
+    "stagedNativeVerified": true
+  },
+  "cases": [
+    {
+      "scenario": 4,
+      "ordinal": 0,
+      "input": {
+        "label": "imageMissing-0",
+        "control": false,
+        "graphics": {
+          "kind": "imageMissing",
+          "layer": 0
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json",
+        "bytes": 35669702,
+        "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    },
+    {
+      "scenario": 5,
+      "ordinal": 0,
+      "input": {
+        "label": "imageMissing-4",
+        "control": false,
+        "graphics": {
+          "kind": "imageMissing",
+          "layer": 4
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json",
+        "bytes": 35670064,
+        "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    },
+    {
+      "scenario": 6,
+      "ordinal": 0,
+      "input": {
+        "label": "createSurface-0",
+        "control": false,
+        "graphics": {
+          "kind": "createSurface",
+          "layer": 0
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json",
+        "bytes": 35676576,
+        "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    },
+    {
+      "scenario": 7,
+      "ordinal": 0,
+      "input": {
+        "label": "createSurface-4",
+        "control": false,
+        "graphics": {
+          "kind": "createSurface",
+          "layer": 4
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json",
+        "bytes": 35677671,
+        "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    },
+    {
+      "scenario": 8,
+      "ordinal": 0,
+      "input": {
+        "label": "colorKey-0",
+        "control": false,
+        "graphics": {
+          "kind": "colorKey",
+          "layer": 0
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json",
+        "bytes": 35698247,
+        "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    },
+    {
+      "scenario": 9,
+      "ordinal": 0,
+      "input": {
+        "label": "colorKey-4",
+        "control": false,
+        "graphics": {
+          "kind": "colorKey",
+          "layer": 4
+        },
+        "release": true
+      },
+      "source": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json",
+        "bytes": 35698291,
+        "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd",
+        "end": "returned",
+        "endPC": 805306368,
+        "endSP": 268496904
+      },
+      "separateFault": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724",
+        "end": "sourceFault",
+        "endPC": 4243736,
+        "endSP": 268489856
+      }
+    }
+  ],
+  "comparison": {
+    "wholeReturnedCasesPerRun": 6,
+    "orderedFrontEventsPerRun": 7884,
+    "numericCheckpointsPerRun": 96,
+    "wrapperOwnersPerRun": 30,
+    "nativeRollbackTrialsPerRun": 18,
+    "nativePrefixCallsPerRun": 60,
+    "distinctPrefixReferenceCases": 10,
+    "testMethodExecutions": 10,
+    "uniqueTestMethods": 9,
+    "returnedCaseExecutionsAcrossRawAndBundled": 12,
+    "rollbackTrialExecutionsAcrossRawAndBundled": 36,
+    "prefixCallExecutionsAcrossRawAndBundled": 120,
+    "scope": "Whole existing War comparator: owned records/masks, ordered events, numeric intermediate values, recording bytes, wrappers and platform bookkeeping. Source after-state is never a Native input."
+  },
+  "contract": {
+    "missingImage": "Declared loader indices13/17 each make two image attempts with result0; no image/surface for the failed wrapper. Marker0 and only four defined bytes; dimensions remain unknown.",
+    "createSurface": "Declared result -1 at request14/18 preserves known BMP dimensions and leaves its image recorded without deletion; no surface for the wrapper.",
+    "colorKey": "Declared result -1 at request14/18 preserves dimensions and input.present=true from the nonzero loader result, requests Release17 and clears marker0. The surface record/binding remains with release flag true.",
+    "platformFlags": "Flags record controlled platform operations. They do not establish actual Windows device destruction, COM reference counts or heap behavior.",
+    "rollback": "Each scenario: after the actual failed constructor including message/debug/release effects, after recording, and before outer return. All prior prefix owners and coupled current-call state are checked by the existing enclosing transaction comparator.",
+    "core": "The accepted shared Core already implements these rules. This card extends explicit War adapter stimuli and whole-caller comparison without changing Core behavior."
+  },
+  "reference": {
+    "sha256": {
+      "exe": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "crt": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+      "lib": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba"
+    },
+    "environment": "Saved pinned EXE/lib/VC80, Unicorn2.1.4 CW023f C locale, explicit flat segments/FS and controlled allocation/API replies; not Windows/device behavior. No source execution or producer imports in this card.",
+    "inputPins": {
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.json": {
+        "bytes": 7951,
+        "sha256": "d32c4e172728e0f9a1b8a8ecbc5ef9deba89dd6c0974fab7e0d9d85d3a0a9aef"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "938bc848e7d5e2fbeab427d2fd5aeab4cbaf6d72fccbb60c9298ef8f996a5211"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "481fda3bb6d8895ffab9da052471877d439e1f28d6fd37ac2a14bee590c0427d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "bc1935867b04def856897063b41c9868bbbefeda434a35b7182f578a2a8c4fd9"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json": {
+        "bytes": 35669702,
+        "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json": {
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json": {
+        "bytes": 4491375,
+        "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.json": {
+        "bytes": 7951,
+        "sha256": "e31829e051b1301f944a081464f80ea57b51d8dedec2aacefa13d81cb1f4bce6"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.job.json": {
+        "bytes": 939,
+        "sha256": "37936eb191c778cd4bf6816fc1d2a360c0b5e3659c9dd5fa306578d7ed531946"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.config.json": {
+        "bytes": 65163,
+        "sha256": "7c5f4c834f3a46aaee6ed353b77bc8efce224af29c5c275a032a24a9d4f91efe"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "7815c7483dca6cca7df7b97eaf227b6e1d618c84273c88092c1f365badf1eab0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json": {
+        "bytes": 35670064,
+        "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json": {
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json": {
+        "bytes": 4497645,
+        "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.json": {
+        "bytes": 7953,
+        "sha256": "93fc3cc24e154f901d49051d4a96685c5b2ccc65cf09d7234aa9509a6218de62"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "9aadace7a2274a87bb04b1a4268d51ea9e84b340bdbd729dadeef4f52caf31cf"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "bb4a7f449f3fa54907aa7ae68c1f8e21bad602ea09f6b2cd40af5b341de4668d"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "c64dad614c04c4eaa6f768b770b8ff01e131aeb168bce748a1166ae05560fde6"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json": {
+        "bytes": 35676576,
+        "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json": {
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json": {
+        "bytes": 4491201,
+        "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.json": {
+        "bytes": 7953,
+        "sha256": "2ee9562810cb0272f9a20ec269ecda7cc59275a76709214bcd5d138de9c37cd0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.job.json": {
+        "bytes": 940,
+        "sha256": "f6c05932b72a91ff7a0b2f42a6a3152b22eac014d4180649ead6b44f8fbfe452"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.config.json": {
+        "bytes": 65164,
+        "sha256": "a54aca02d9f261f0edbbcbd4790091b821899eafad946d44e024365447dc5f2f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "6b955f4609ff63fe256df335678669aff37ae175b6ebdada8f8bf9159fce6f0f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json": {
+        "bytes": 35677671,
+        "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json": {
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json": {
+        "bytes": 4498271,
+        "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.json": {
+        "bytes": 7943,
+        "sha256": "1ff4c44d6f580da6a5a8cc7f792939a4c7b3343787fa338c27ca1bebf8313e19"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.job.json": {
+        "bytes": 935,
+        "sha256": "13952f73aad42bf4f5e8c982fd533b3379919cb76e9828a01ca01e3a196d9778"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.config.json": {
+        "bytes": 65159,
+        "sha256": "b3eecf1d400ad5e871d01aa10e3a83d202ea87ffdc088cf9783ea8174af98e12"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "7384aeececf37a97f88941d201f499979312fe42edc10c3c1816be9c23430cd0"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json": {
+        "bytes": 35698247,
+        "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json": {
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json": {
+        "bytes": 4491398,
+        "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.json": {
+        "bytes": 7943,
+        "sha256": "ececaf61c38a51aa7b62ff94b47c0e8894ac0e8ee1d092d6dd951ffe043a22e3"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.job.json": {
+        "bytes": 935,
+        "sha256": "0b7013949a30f16fe17d4904ffdc478dab615ec748c98575f9a60c2004913bef"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.config.json": {
+        "bytes": 65159,
+        "sha256": "455afa7eceb3cad2a605c5d0e16e64a09de8f8a464e7af9d7494fa845278deae"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.pins.json": {
+        "bytes": 110379,
+        "sha256": "a4da8b36589b7a0cc6b3e036e2af12c9e915ff4d5c301be7fd38e72bb33fc46f"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json": {
+        "bytes": 35698291,
+        "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json": {
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+      },
+      "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json": {
+        "bytes": 4497204,
+        "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+      },
+      "docs/evidence/lib-war-preparation-errors.json": {
+        "bytes": 76785,
+        "sha256": "34bc5a205882b19172947fc86e11063c20e1a06cc35318e5de50fd54ac0fe7ff"
+      },
+      "docs/evidence/lib-war-nullable-bitmap.json": {
+        "bytes": 32824,
+        "sha256": "8ac8232d1cbc37499d2cb3ca34b8434c2b1b47c3e475dca7f25d04bc0cd3db96"
+      },
+      "build/research/lib-war-preparation/war-errors-completion-20260912/inventory2.json": {
+        "bytes": 315652,
+        "sha256": "75a96b6e5eae6b2139de5c3d807d9c17b912a41c360e0c68880e3a7211c4f6f4"
+      },
+      "build/research/lib-war-preparation/war-nullable-native-20260912/next-partial-surface-review.json": {
+        "bytes": 1490,
+        "sha256": "2a120a59a1c95faa505fcb48079e43388e79a5397c1f98bbff5ee4cba66b3609"
+      }
+    },
+    "plan": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/plan.json",
+      "bytes": 85113,
+      "sha256": "b4af8cc9de32b828e6433998d9662318d494f7881b0c7498321f5b8980d53361"
+    }
+  },
+  "transport": {
+    "counts": {
+      "returnedCalls": 6,
+      "rawBytes": 214090551,
+      "packedBytes": 28695020,
+      "blobEntries": 4306,
+      "blobEntryBytes": 203426596,
+      "distinctBlobs": 896,
+      "distinctBlobBytes": 44319558,
+      "boundPrefixProofLinks": 60,
+      "distinctBoundPrefixes": 10,
+      "separateSourceFaults": 6,
+      "faultBlobEntries": 4378,
+      "faultBlobEntryBytes": 207292900,
+      "distinctFaultBlobs": 937,
+      "distinctFaultBlobBytes": 46864486,
+      "sidecarBlobEntriesEqualVerifiedFaultBlobs": 4378,
+      "sourceEvidencePinsUnchanged": 46,
+      "oldFixturesUnchanged": 336
+    },
+    "artifacts": [
+      {
+        "scenario": 4,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-00.json",
+          "bytes": 35669702,
+          "sha256": "d3c0825f0d854cd5f07b4541bf1724b920ad19aac37ded3e032c544f4cd4f36e"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s04-call-00.json",
+          "bytes": 4782988,
+          "sha256": "89ca6216b82eefb67e23e3b9d31cc576aa9a0f2e9e0c4e704ad2a73af3ea72d2"
+        },
+        "end": "returned",
+        "blobs": 718,
+        "blobBytes": 33909606,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 5,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-00.json",
+          "bytes": 35670064,
+          "sha256": "3fb890f433a2a441242cb5bc4c90f4e8c7f26f0ed837b82b475ccbd18e81d34b"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s05-call-00.json",
+          "bytes": 4783260,
+          "sha256": "a73d1f6c1866ea01c7e86324d3fa7ceff213d45652f8a6a77e8bf711e7de41b0"
+        },
+        "end": "returned",
+        "blobs": 718,
+        "blobBytes": 33909606,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 6,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-00.json",
+          "bytes": 35676576,
+          "sha256": "69bb9f8d5b4baf84571410f6dee2e74df8d5d6c597d8b6c9a63b40eb85d30977"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s06-call-00.json",
+          "bytes": 4781440,
+          "sha256": "dff70ac48c2b8994fbb251213a39790c3e0c1647d01ccd24ee3881141c978e5b"
+        },
+        "end": "returned",
+        "blobs": 717,
+        "blobBytes": 33901590,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 7,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-00.json",
+          "bytes": 35677671,
+          "sha256": "41cacc90f44579bd2be4a9c6c6f07cb74bb8e8b344e55878269f06466b3982ab"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s07-call-00.json",
+          "bytes": 4781940,
+          "sha256": "c690397148c217365a602b162843fe845892dc1d15d324fe3be6f1498622c93e"
+        },
+        "end": "returned",
+        "blobs": 717,
+        "blobBytes": 33901590,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 8,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-00.json",
+          "bytes": 35698247,
+          "sha256": "e1b3dec0f3fd59a39fcc77f3607b46aae8b92e45a8a337562b3ac2eec2fa120c"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s08-call-00.json",
+          "bytes": 4782692,
+          "sha256": "ee9c2379dd4de9be5633586beed9ae987965e8ba2cb8b34a6b4611945fe71044"
+        },
+        "end": "returned",
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      },
+      {
+        "scenario": 9,
+        "source": {
+          "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-00.json",
+          "bytes": 35698291,
+          "sha256": "e6ed43c9988301c61a1ccf22cebd54bcb4c06cb88c76e71d3b44151942799fdd"
+        },
+        "fixture": {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s09-call-00.json",
+          "bytes": 4782700,
+          "sha256": "6584349333192bb75344d8c7cae07ac5977709a5cd1ea8c48758cc178747c3e5"
+        },
+        "end": "returned",
+        "blobs": 718,
+        "blobBytes": 33902102,
+        "boundPrefixProofs": [
+          {
+            "index": 0,
+            "normalizedSHA256": "4777feae93bb31b46a6c97479ca8873d52eebe2776b63423f33d31a50a6fa386",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 0
+          },
+          {
+            "index": 1,
+            "normalizedSHA256": "cdd4b98ab9dd8a37617fcb35ba2531a7aec17ea2326c539a11b73d16e7eb956f",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 1
+          },
+          {
+            "index": 2,
+            "normalizedSHA256": "b1a1120cc949866a4acfedae591b6ec33b621b322c4872602a000a6b1e6901a8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 2
+          },
+          {
+            "index": 3,
+            "normalizedSHA256": "3d8d5950955da04a498ed7eac8439c862447b4aefc38395fb99494e279cd17fb",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 3
+          },
+          {
+            "index": 4,
+            "normalizedSHA256": "ee11b86d28b0c7f12622f92999b507b919e66d6d64e7a7ac52106e16ca538cb6",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 4
+          },
+          {
+            "index": 5,
+            "normalizedSHA256": "710524d04f4462eba8daa89f4f6c1d8e41e2db368509f60f3fc713ec370436d0",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 5
+          },
+          {
+            "index": 6,
+            "normalizedSHA256": "ff854c410d0683a1d633f45ab3c432d3f6ebacee51a1a8ab095487ffb7e3b554",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 6
+          },
+          {
+            "index": 7,
+            "normalizedSHA256": "0898ef19fe12783844778b2b4b34ef33ae0fefcd2c553ea3b2a0305ee32d252a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 7
+          },
+          {
+            "index": 8,
+            "normalizedSHA256": "725864cc96370b1a0aaf82a822f3df149bfd5d2cbca3cfd927254f954cf44bc8",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 8
+          },
+          {
+            "index": 9,
+            "normalizedSHA256": "ce4d53d1988aea8a29cbc42f4683c79c5433cbbe4bab411027e952e74d6b933a",
+            "boundFixture": "original-lib-war-preparation-bound-cases1.json",
+            "boundPosition": 9
+          }
+        ],
+        "wholeRawAndJSONRoundtripExact": true,
+        "allBlobRoundtripsExact": true
+      }
+    ],
+    "verification": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/package-verification1.json",
+      "bytes": 40899,
+      "sha256": "183418bdeffdf6c64b0f73137c5128780d446b59af978df988a9e26184a8c4ec"
+    },
+    "producer": {
+      "path": "tools/package_war_partial_surface_references.py",
+      "bytes": 12958,
+      "sha256": "3629e725921c88316596cc8febad40e8da7d80aa0eab7ffe9107057e8353326e"
+    }
+  },
+  "separateFaults": [
+    {
+      "scenario": 4,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json",
+        "bytes": 4491375,
+        "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 730,
+      "blobBytes": 34553990,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    },
+    {
+      "scenario": 5,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json",
+        "bytes": 4497645,
+        "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 730,
+      "blobBytes": 34553990,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    },
+    {
+      "scenario": 6,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json",
+        "bytes": 4491201,
+        "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 729,
+      "blobBytes": 34545974,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    },
+    {
+      "scenario": 7,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json",
+        "bytes": 4498271,
+        "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 729,
+      "blobBytes": 34545974,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    },
+    {
+      "scenario": 8,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json",
+        "bytes": 4491398,
+        "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 730,
+      "blobBytes": 34546486,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    },
+    {
+      "scenario": 9,
+      "call": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724"
+      },
+      "sidecar": {
+        "path": "build/research/lib-war-preparation/war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json",
+        "bytes": 4497204,
+        "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d"
+      },
+      "end": "sourceFault",
+      "endPC": 4243736,
+      "blobs": 730,
+      "blobBytes": 34546486,
+      "sidecarFieldsExact": [
+        "spec",
+        "before",
+        "after",
+        "events",
+        "writes",
+        "reads",
+        "apiReads",
+        "helpers",
+        "pending",
+        "instructions"
+      ],
+      "sidecarBlobsExactlyEqualVerifiedCallBlobs": true,
+      "nativeMatch": false
+    }
+  ],
+  "faultPreservation": {
+    "archive": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/fault-preservation1.tar.gz",
+      "bytes": 22997769,
+      "sha256": "f33888a935ffd97cfa9edea43c26d4cd61a0665069f36aaeeaa9f5d711043749"
+    },
+    "members": [
+      {
+        "name": "war-preparation-fs-errors-s04-capture2.parts/call-01.json",
+        "bytes": 16389111,
+        "sha256": "2ed8eddf4a36609e93b85493680a59420aa755eabededf7bdd4697cd0ac0e02a",
+        "mode": 420,
+        "mtime": 1789172889.6743593
+      },
+      {
+        "name": "war-preparation-fs-errors-s04-capture2.parts/call-01.failure.json",
+        "bytes": 4491375,
+        "sha256": "dd66362d1aea6aae8b1d83cc846ba4f9fc1c56cb16519ce1c40a43144ca43b61",
+        "mode": 420,
+        "mtime": 1789172889.1658406
+      },
+      {
+        "name": "war-preparation-fs-errors-s05-capture2.parts/call-01.json",
+        "bytes": 16397379,
+        "sha256": "80b11129381214fcc57762b452ba6698b22e0854d004944d272ffc1697326232",
+        "mode": 420,
+        "mtime": 1789172889.722795
+      },
+      {
+        "name": "war-preparation-fs-errors-s05-capture2.parts/call-01.failure.json",
+        "bytes": 4497645,
+        "sha256": "3630938a768752b3a574bc7ff8bc0e2aff42e406965fb7bddf3c67f5a99e19f3",
+        "mode": 420,
+        "mtime": 1789172889.2114592
+      },
+      {
+        "name": "war-preparation-fs-errors-s06-capture2.parts/call-01.json",
+        "bytes": 16389408,
+        "sha256": "4ff6f3383b86bd7b0ecb91eb0455f20ba27a6a58d4002c835827af9cf352b7db",
+        "mode": 420,
+        "mtime": 1789172911.440167
+      },
+      {
+        "name": "war-preparation-fs-errors-s06-capture2.parts/call-01.failure.json",
+        "bytes": 4491201,
+        "sha256": "4f909ab018a07ffd9cf90de8d956d784e1170959d8b1359ea4885f23d4c8a2a7",
+        "mode": 420,
+        "mtime": 1789172910.9048457
+      },
+      {
+        "name": "war-preparation-fs-errors-s07-capture2.parts/call-01.json",
+        "bytes": 16398469,
+        "sha256": "62b7ab8accb33326f2a9f75fedf6b6f6df0db7944d61c09635ca0fd3830d1fcf",
+        "mode": 420,
+        "mtime": 1789172911.436911
+      },
+      {
+        "name": "war-preparation-fs-errors-s07-capture2.parts/call-01.failure.json",
+        "bytes": 4498271,
+        "sha256": "289f66c4762ccd9ed744d9e9b3aa8ec6573626d55ddd07db198e21fae15444c7",
+        "mode": 420,
+        "mtime": 1789172910.8986263
+      },
+      {
+        "name": "war-preparation-fs-errors-s08-capture2.parts/call-01.json",
+        "bytes": 16390364,
+        "sha256": "4e7d45db5e68ba4a5b80b2ef9c91adbd86b955ade3d0fc5c71feccf3272db96c",
+        "mode": 420,
+        "mtime": 1789172933.3921201
+      },
+      {
+        "name": "war-preparation-fs-errors-s08-capture2.parts/call-01.failure.json",
+        "bytes": 4491398,
+        "sha256": "34008a10bb5f0f3d8f93d82a6d97dc1e9e2659dbcb80dd4ded3b8804f44affa4",
+        "mode": 420,
+        "mtime": 1789172932.856976
+      },
+      {
+        "name": "war-preparation-fs-errors-s09-capture2.parts/call-01.json",
+        "bytes": 16398157,
+        "sha256": "4e255a6b4fdf37e23009d61405f56a09333b33832b8cbdd60d2261a13aded724",
+        "mode": 420,
+        "mtime": 1789172933.411876
+      },
+      {
+        "name": "war-preparation-fs-errors-s09-capture2.parts/call-01.failure.json",
+        "bytes": 4497204,
+        "sha256": "361cf90968906a7e4b178ae29d715fc67b0fa33eb2a2cd5c78cdf45889c7694d",
+        "mode": 420,
+        "mtime": 1789172932.8935502
+      }
+    ],
+    "memberCount": 12,
+    "rawBytes": 125329982,
+    "allMemberBytesExact": true
+  },
+  "nativeRuns": [
+    {
+      "name": "native1",
+      "job": {
+        "scope": "Freeze and compare the partial-surface War Native candidate against saved raw data.\nNo original code, emulator, source producer or capture is invoked.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarPartialSurfaceTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/candidate1-inputs.json",
+        "nativeFiles": 784,
+        "rawOverride": {
+          "NTSD_WAR_PARTIAL_SURFACE_DIRECTORY": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation"
+        },
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T12:03:40.239730+00:00",
+        "pid": 34846,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 323.38826729100003,
+        "endedUTC": "2026-09-12T12:09:03.601162+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native1.job.json",
+        "bytes": 1220,
+        "sha256": "2ac2c1257ce49babb962742b7ebdb80c4f432154400e01ff8619548cb5b7e064"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native1.log",
+        "bytes": 23094,
+        "sha256": "8c0ba53f7142ca3a1e6c2c913e39746d29de6003a82e5b033c8ea765ed0b1969"
+      },
+      "buildSeconds": 281.93,
+      "testSeconds": 38.681,
+      "testCount": 1,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalLibWarPartialSurfaceTests",
+          "method": "testWholeReturnedPartialSurfacesAndCoupledRollback",
+          "seconds": 38.681
+        }
+      ]
+    },
+    {
+      "name": "native2",
+      "job": {
+        "scope": "Bundled partial-surface War comparison and shared preparation/resource regressions.\nNo original execution; all NTSD raw overrides are removed from the environment.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalLibWarPartialSurfaceTests|OriginalLibWarPreparationTests|OriginalLibWarNullableBitmapTests|OriginalBitmapSurfaceLoadingTests|OriginalCharacterMenuSurfaceTests"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/candidate1-inputs.json",
+        "nativeFiles": 784,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-12T12:09:23.160741+00:00",
+        "pid": 35897,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 269.683526541,
+        "endedUTC": "2026-09-12T12:13:52.843457+00:00"
+      },
+      "jobPin": {
+        "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native2.job.json",
+        "bytes": 1231,
+        "sha256": "744b4b0d3d328ae1680a359d78a988ba1273b17b49fa7ea1cf7b4d71bb2c3a85"
+      },
+      "logPin": {
+        "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native2.log",
+        "bytes": 20992,
+        "sha256": "4a3894084da0c608a199fc60a30d3d977ffb72803e45f47aef612a67d4a18976"
+      },
+      "buildSeconds": 0.32,
+      "testSeconds": 268.324,
+      "testCount": 9,
+      "failures": 0,
+      "methods": [
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testLateResourceFailuresRetainCommittedStartupAndCallback",
+          "seconds": 1.299
+        },
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+          "seconds": 1.846
+        },
+        {
+          "suite": "OriginalBitmapSurfaceLoadingTests",
+          "method": "testWholeLoaderAndCopyAtOwnedPlatformFields",
+          "seconds": 0.323
+        },
+        {
+          "suite": "OriginalCharacterMenuSurfaceTests",
+          "method": "testLateMenuSurfaceErrorsRollBackAllOwnedState",
+          "seconds": 0.63
+        },
+        {
+          "suite": "OriginalCharacterMenuSurfaceTests",
+          "method": "testWholeCharacterMenuSurfaceCallsAndUnavailableOperands",
+          "seconds": 2.233
+        },
+        {
+          "suite": "OriginalLibWarNullableBitmapTests",
+          "method": "testReturnedAllocationFailuresRetainOwnedLayersAndRollback",
+          "seconds": 19.035
+        },
+        {
+          "suite": "OriginalLibWarPartialSurfaceTests",
+          "method": "testWholeReturnedPartialSurfacesAndCoupledRollback",
+          "seconds": 39.395
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeBoundPreparationAndLateRollback",
+          "seconds": 16.672
+        },
+        {
+          "suite": "OriginalLibWarPreparationTests",
+          "method": "testWholeMatrixAndRetainedReleaseRollback",
+          "seconds": 186.892
+        }
+      ]
+    }
+  ],
+  "nativePackage": {
+    "verifiedUTC": "2026-09-12T12:09:30.620866+00:00",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/native-candidate1.tar",
+    "archivePin": {
+      "bytes": 3898449920,
+      "sha256": "a38c5211703c6373af3eafcba95717855b744ca0d62d93c167dedce1d24d6b46"
+    },
+    "nativeFiles": 784,
+    "nativeBytes": 3897033402,
+    "currentFixtures": 342,
+    "protectedFixturesUnchanged": 336,
+    "sourcePinsUnchanged": 46,
+    "candidateMatchesWorkingNative": true,
+    "allArchiveMembersAndBytesMatch": true,
+    "manifest": "candidate1-inputs.json",
+    "nativeRegressions": "Separate native2 job; archive equality is not its test result.",
+    "originalExecuted": false
+  },
+  "evidenceArchive": {
+    "verifiedUTC": "2026-09-12T12:14:04.597955+00:00",
+    "scope": "Six returned raw cases, retained source metadata, terminal Native verification and fault archive manifest/proof. Full Native package and twelve fault/sidecar files are in separate archives.",
+    "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/lib-war-preparation/war-partial-surfaces-native-20260912/partial-evidence1.tar",
+    "archivePin": {
+      "bytes": 216207360,
+      "sha256": "cf6c4b729ec121bcaab59d5b024768c0f9383b14f930ab2df351f6e8298e423b"
+    },
+    "members": 64,
+    "memberBytes": 216090454,
+    "manifest": "evidence-members.json",
+    "manifestPin": {
+      "bytes": 12686,
+      "sha256": "0c891d87e5c18b9c34854ec7b6289fba12ff60f66e18f5729d641945065dfbd4"
+    },
+    "allArchiveMembersAndBytesMatch": true,
+    "sourcePinsUnchanged": 46,
+    "nativeJobsTerminal": 2,
+    "nativeJobsExitCode": 0,
+    "volumeUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "internalFreeBytes": 9362165760,
+    "originalExecuted": false,
+    "faultComparedAsReturn": false,
+    "safetyIncidentResolved": false,
+    "fullGameComplete": false
+  },
+  "gitIndex": {
+    "verifiedUTC": "2026-09-12T12:10:12.192635+00:00",
+    "baseCommit": "8a05dc4791d82afc85db16b47bec022c1ea3a71f",
+    "nativeFiles": 784,
+    "nativeBytes": 3897033402,
+    "allStagedNativeBlobsMatchCandidate": true,
+    "candidateManifest": "candidate1-inputs.json",
+    "uncommittedNativeDiff": [],
+    "originalExecuted": false
+  },
+  "supportingPins": {
+    "review1.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/review1.json",
+      "bytes": 1019,
+      "sha256": "45effee025bf3fcc292cfcf5dfda2ec117bdf3e1ad6b78de64a21773bd434fd3"
+    },
+    "preservation1.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/preservation1.json",
+      "bytes": 263,
+      "sha256": "ce87a497da5124f6a92e95a331bcd1a35c6135d179925f237e8998d01c46038c"
+    },
+    "candidate1-inputs.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/candidate1-inputs.json",
+      "bytes": 138968,
+      "sha256": "54aec2b046f4e1c915a14fa7a61607309eca6c98146b361d98ffdb508b4130b5"
+    },
+    "native-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native-archive-verification.json",
+      "bytes": 731,
+      "sha256": "0184d311bca550c2c947889314998173d5779ee8f7fb484ee0867ad9bff5cbf9"
+    },
+    "native-git-index-verification.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/native-git-index-verification.json",
+      "bytes": 322,
+      "sha256": "40c697409e1b808453a6ce26e8c08d09a0bb5a439180ab47bcfd37b8230f39ec"
+    },
+    "evidence-archive-verification.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/evidence-archive-verification.json",
+      "bytes": 1102,
+      "sha256": "90d7a3cab2be7781e3db43752ab91774e13d4ee853fc7cdfa6fa096c742c1e33"
+    },
+    "evidence-members.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/evidence-members.json",
+      "bytes": 12686,
+      "sha256": "0c891d87e5c18b9c34854ec7b6289fba12ff60f66e18f5729d641945065dfbd4"
+    },
+    "next-graphics-errors-review.json": {
+      "path": "build/research/lib-war-preparation/war-partial-surfaces-native-20260912/next-graphics-errors-review.json",
+      "bytes": 2115,
+      "sha256": "459292405fb35dbf68ede3e68c060743309ca99f2b51afe987a932e27d674582"
+    }
+  },
+  "review": {
+    "timeUTC": "2026-09-12T12:03:34.859364+00:00",
+    "reviewer": "war_contract_review",
+    "scope": "Independent read-only contract, adapter/comparator/test and packaging review; no source or Native execution.",
+    "materialFindings": [],
+    "confirmed": [
+      "All six full returned contracts and explicit global loader indices/result keys.",
+      "Five live wrapper records; marker/masks and input.present follow actual loader/constructor semantics.",
+      "CreateSurface failure retains image; negative colorKey retains Release-request record, not a device destruction claim.",
+      "18 target-constructor/recording/beforeReturn rollbacks; six owned ten-call prefixes and full existing comparator with96numeric/7884events.",
+      "Full transport214090551raw ->28695020packed;4306blobs/896distinct;60prefixlinks/10distinct."
+    ],
+    "pendingAcceptance": [
+      "Native raw/bundled tests and regressions",
+      "Full tested package/archive/Git verification"
+    ],
+    "fullGameComplete": false,
+    "safetyIncidentResolved": false
+  },
+  "reviewPhaseNote": "The embedded immutable review predates tests; its pendingAcceptance field describes that phase. Current gates are in acceptance/nativeRuns/archive/Git proofs.",
+  "openBoundary": {
+    "followingSourceFaultsAcceptedAsNativeMatches": false,
+    "next": "Eight saved returned s12..s19 graphics API controls; no new source execution required.",
+    "privateDimensions": "s10/s11 are normal source returns whose owned private-dimension provenance remains unresolved.",
+    "otherDependencies": [
+      "Remaining music/replay errors and separate rejection/rollback of nine source faults.",
+      "Own catalog/startup/War gameplay/library/outer loop/application, full matches, all content/network and Windows/device/clean-Mac acceptance.",
+      "Three safety incidents stay open; no blocked-operation retry or incident resolution."
+    ]
+  },
+  "originalExecuted": false,
+  "sourceRuns": 0,
+  "windowsVerified": false,
+  "deviceVerified": false,
+  "safetyIncidentResolved": false,
+  "fullPreparationComplete": false,
+  "fullGameComplete": false
+}

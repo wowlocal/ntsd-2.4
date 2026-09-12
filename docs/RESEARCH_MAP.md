@@ -47,6 +47,19 @@ Start99 сохраняет все четыре. Сравнились 3 838 со�
 остаётся отдельно; далее шесть returned partial-surface cases s04..s09/call-00
 по CURRENT_WORK. Полный error corpus, игра и прежние incidents остаются открыты.
 
+[Частичные surfaces War](research/LIB_WAR_PARTIAL_SURFACES.md) приняты для шести
+returned s04..s09/call-00: 7 884 события, 96 numeric checkpoints, пять wrapper
+owners на вызов и 18 связанных откатов. Missing image сохраняет неизвестные
+размеры, CreateSurface failure — неудалённый image, colorKey failure — запись
+Release при marker0 и input.present=true; это не Windows/device destruction.
+Raw 38.681с, девять bundled release-тестов 268.324с; War matrix/preflight/nullable
+и общие bitmap/menu surface регрессии прошли. Все 336 прежних fixtures неизменны,
+342 текущих/784 Native-файла, Git и три отдельных архива проверены.
+[Приёмка](evidence/lib-war-partial-surfaces.json). Нового исполнения оригинала и
+изменения Core/expected нет. Шесть следующих source faults остаются отдельно.
+Далее восемь returned s12..s19 graphics API controls по CURRENT_WORK; полный
+error corpus, собственное приложение, игра и incidents остаются открыты.
+
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
 619 bitmap арены,302 пары Release/free и56 полных записей повторов. Проверены
