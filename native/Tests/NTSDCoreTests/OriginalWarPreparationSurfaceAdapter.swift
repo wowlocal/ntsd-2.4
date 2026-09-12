@@ -41,6 +41,7 @@ final class OriginalWarPreparationSurfaceAdapter {
         return bytes
     }
     func construct(_ path: String,_ optional: Bool,_ backing: [UInt8],_ context: inout Base.Context,
+                   afterRequest: (String) throws -> Void = { _ in },
                    observe: () throws -> Void) throws -> OriginalLoadedBitmap? {
         let ordinal=allocation
         // The allocator stimulus is declared separately from captured outputs.
@@ -77,9 +78,12 @@ final class OriginalWarPreparationSurfaceAdapter {
                 self.failedConstructionOrdinals.insert(ordinal)
             }
             if let result=self.inputs?.results?[key] {
-                guard ["createSurface","colorKey"].contains(q.kind),result == -1 else { throw Test.Stop.unexpected }
+                let supported: [String:Int32]=["createSurface":-1,"colorKey":-1,"getDC":-1,
+                    "restore":-1,"releaseDC":-1,"createDC":0,"selectObject":0,
+                    "stretch":0,"deleteDC":0,"deleteObject":0]
+                guard supported[q.kind]==result,self.appliedResultKeys.insert(key).inserted else { throw Test.Stop.unexpected }
                 response = .init(result:result)
-                self.appliedResultKeys.insert(key);self.failedConstructionOrdinals.insert(ordinal)
+                if ["createSurface","colorKey"].contains(q.kind) { self.failedConstructionOrdinals.insert(ordinal) }
             }
             switch q.kind {
             case "image":if response.result != 0 {
@@ -94,12 +98,13 @@ final class OriginalWarPreparationSurfaceAdapter {
             }
             case "description":if response.result>=0 { response = .init(result:response.result,writes:[.init(bytes:try XCTUnwrap(g.surfaceDescriptions[q.words[0]]))]) }
             case "release":g.surfacesReleased[q.words[0]]=true
-            case "createDC":g.dcs[UInt32(bitPattern:captured.result)]=false
+            case "createDC":g.dcs[UInt32(bitPattern:response.result)]=false
             case "deleteDC":g.dcs[q.words[0]]=true
-            case "deleteObject":g.imagesDeleted[q.words[0]]=captured.result != 0
+            case "deleteObject":g.imagesDeleted[q.words[0]]=response.result != 0
             default:break
             }
-            XCTAssertEqual(response,captured,"Owned platform output");try observe();return response
+            XCTAssertEqual(response,captured,"Owned platform output")
+            try observe();try afterRequest(key);return response
         }
     }
     func release(_ index: Int,_ bitmap: OriginalLoadedBitmap,_ context: inout Base.Context,

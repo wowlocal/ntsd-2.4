@@ -499,7 +499,9 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         return .init(year:t[0],month:t[1],dayOfWeek:t[2],day:t[3],hour:t[4],minute:t[5],second:t[6],milliseconds:t[7])
                     },constructBitmap:{ path,optional,backing in
                         var graphics=env.preparationGraphics
-                        let result=try adapter.construct(path,optional,backing,&graphics) { try event(.init("preparationBitmap"),&env) }
+                        let result=try adapter.construct(path,optional,backing,&graphics,afterRequest:{ key in
+                            if failure=="graphicsAPI:"+key { throw Stop.injected }
+                        }) { try event(.init("preparationBitmap"),&env) }
                         env.preparationGraphics=graphics
                         if failure=="bitmap" || failure=="nullBitmap" && result==nil ||
                             failure=="partialBitmap" && adapter.failedConstructionOrdinals.contains(adapter.allocation-1) {

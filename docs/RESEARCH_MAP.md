@@ -30,7 +30,7 @@ CPU-сессия не запускалась, прежние safety incidents н
 завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
 faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
 live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
-остаётся открытым за пределами отдельной NULL-карточки ниже. Нужны surface/music adapters,
+остаётся открытым за пределами NULL/partial/graphics-карточек ниже. Нужны music adapters,
 provenance private dimensions в двух returned случаях и отдельные fault rollback
 проверки. Четыре поздних wrapper при первом NULL переживают следующий Start.
 Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
@@ -59,6 +59,23 @@ Raw 38.681с, девять bundled release-тестов 268.324с; War matrix/pr
 изменения Core/expected нет. Шесть следующих source faults остаются отдельно.
 Далее восемь returned s12..s19 graphics API controls по CURRENT_WORK; полный
 error corpus, собственное приложение, игра и incidents остаются открыты.
+
+[Ошибки графических API War](research/LIB_WAR_GRAPHICS_ERRORS.md) приняты для
+восьми saved returned s12..s19/call-00: 10 550 событий, 598 API-запросов,
+128 numeric checkpoints, 40 новых wrapper owners и 24 связанных отката.
+GetDC failure пропускает Stretch/ReleaseDC только в первом constructor;
+CreateDC0 передаётся следующим запросам. DeleteDC0 сохраняет request flag,
+DeleteObject0 оставляет первый image с deleted=false; это controlled bookkeeping.
+Raw 50.264с и десять bundled release-тестов 317.460с прошли, включая War
+matrix/preflight/nullable/partial и общие bitmap/menu surface регрессии.
+342 прежних fixtures неизменны, 350 текущих/793 Native-файла, staged Git и оба
+архива проверены. [Приёмка](evidence/lib-war-graphics-errors.json).
+Core/expected не менялись, нового исполнения оригинала нет. Всего принято
+17 из 28 returned error-corpus вызовов; девять source faults остаются отдельно.
+Следующая карточка по CURRENT_WORK — девять saved returned controls/music cases
+s00/s01/s20/s21/s23/s24/s25/s26/s27 с готовой входной provenance, отдельным
+message bridge и 27 rollback trials. Она ещё не принята; s10/s11 dimensions,
+полный error corpus, игра, приложение и incidents остаются открыты.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

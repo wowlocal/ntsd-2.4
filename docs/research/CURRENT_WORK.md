@@ -56,6 +56,21 @@ fixtures неизменны, 342 текущих/784 Native-файла, Git и т
 проверены. [Приёмка](../evidence/lib-war-partial-surfaces.json).
 Шесть следующих call-01 source faults сохранены отдельно и не приняты как matches.
 
+Приняты [ошибки графических API War](LIB_WAR_GRAPHICS_ERRORS.md): восемь
+сохранённых returned s12..s19/call-00, 10 550 событий, 598 API-запросов,
+128 numeric checkpoints, 40 новых wrapper owners и 24 связанных отката.
+Проверены точные остановки после выбранного API, recording и перед outer return.
+При GetDC failure два запроса пропускаются только в первом constructor;
+CreateDC0 передаётся следующим операциям. DeleteDC фиксирует запрос даже при
+результате 0, а DeleteObject0 сохраняет image с deleted=false. Эти записи
+не доказывают реальное существование или уничтожение Windows/device объектов.
+Raw прошёл за 50.264с; десять bundled release-тестов за 317.460с, включая War
+matrix/preflight/nullable/partial и общие BitmapSurfaceLoading/CharacterMenuSurface.
+Нового исполнения оригинала и изменения Core/expected нет. 342 прежних fixtures
+неизменны, 350 текущих/793 Native-файла, staged Git и оба архива проверены.
+[Приёмка](../evidence/lib-war-graphics-errors.json). Девять source faults остаются
+отдельно; всего приняты 17 из 28 returned error-corpus вызовов.
+
 ## Непринятая работа и отказ Codex
 
 Текущий незакрытый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -76,9 +91,9 @@ fixtures неизменны, 342 текущих/784 Native-файла, Git и т
   290 сохранённых producer proofs,37 переходов live-owner flags и9 failure
   sidecars. Это чтение готовых данных; новых исполнений оригинала нет.
 - В исторической сводке `nativeCompared=false`, `fullPreparationComplete=false`,
-  `fullGameComplete=false`. Приёмки трёх NULL-вызовов и шести partial-surface
-  возвратов выше не переписывают этот источник; полный Native error corpus ещё
-  не принят.
+  `fullGameComplete=false`. Приёмки трёх NULL-вызовов, шести partial-surface
+  и восьми graphics-error возвратов выше не переписывают этот источник;
+  полный Native error corpus ещё не принят.
 - Проверка процессов по командам War error capture/audit, transform boundaries
   и result recording не нашла соответствующих работающих процессов на момент
   чтения. Перед любым дальнейшим действием нужна новая проверка; это не инвентарь
@@ -104,32 +119,44 @@ fixtures неизменны, 342 текущих/784 Native-файла, Git и т
 
 ## Следующая независимая карточка
 
-**Ошибки графических API: восемь сохранённых returned s12..s19/call-00.**
+**Музыкальные ошибки и два штатных контроля: девять saved returned
+s00/s01/s20/s21/s23/s24/s25/s26/s27, только call-00.**
 
-Инвентаризацию не начинать заново. По её результатам и readonly review в
-`build/research/lib-war-preparation/war-partial-surfaces-native-20260912/next-graphics-errors-review.json`
-оформить конечный Native-план. Все восемь вызовов возвращаются с пятью wrapper
-и surface records. Объём: 10 550 whole-caller events, 128 numeric checkpoints,
-598 preparation API requests. Core уже содержит соответствующие ветви.
+Инвентаризацию не начинать заново. По сохранённым результатам и readonly review в
+`build/research/lib-war-preparation/war-graphics-errors-native-20260912/next-music-errors-review.json`
+оформить конечный Native-план. Объём: 12 028 whole-caller events, 144 numeric
+checkpoints, 221 bodyMusic events, 827 preparationGraphics API requests, включая
+два сообщения, 55 новых wrapper owners и семь wide owners / 210 bytes.
+Девять Native-цепочек выполняют 90 prefix calls, перекрывающих двадцать прежних
+случаев: s01 требует bound 0011..0020 с firstCase11, остальные — 0000..0009.
 
-Расширить строгие declared result inputs для getDC/restore/releaseDC=-1 и
-createDC/selectObject/stretch/deleteDC/deleteObject=0; каждый целевой ключ должен
-исполниться. При GetDC failure пропускаются Stretch/ReleaseDC, остальные cleanup
-запросы продолжаются. CreateDC0 не отменяет SelectObject/Stretch/DeleteDC с DC0;
-`dcs[0]=true` — bookkeeping стенда, не реально созданный Windows owner.
-DeleteDC0 всё равно отмечает запрос, тогда как DeleteObject0 оставляет image
-с `deleted=false`. Не унифицировать семантику этих двух карт.
+Строить музыкальные responses независимо из `resourceFailureInput.music` и
+закреплённого producer contract, сохраняя различие nil output и явного 0.
+`spec.music` у этих девяти отсутствует. Expected responses остаются сравнением.
+В s20/s26 сообщение находится последним в preparationGraphics, а не bodyMusic;
+нужен мост `.message` → whole `.preparationBitmap` без увеличения musicIndex.
+Сравнивать его globals после музыкальных stores по собственному shadow.
+Минимальный возможный join — optional store callback у resumeMatch, переданный
+существующему play(store:); это не разрешение импортировать source after-state.
 
-Проверить все whole-caller records/masks/owners и 24 связанных отката: после
-точного целевого API response/event, после recording и перед outer return.
-`partialBitmap` после constructor не заменяет новый откат непосредственно после
-API. Сохранить matrix 256, preflight 22, nullable 3, partial surfaces 6 и подходящие
-BitmapSurfaceLoading/CharacterMenuSurface регрессии. Новое исполнение оригинала
-для этих восьми сохранённых возвратов не требуется.
+Для s27 producer явно объявляет собственный allocation 2c020020 с backing
+a5 × count, defined=false и live=true. Native самостоятельно создаёт 30 байтов
+с исходными unknown masks; conversion none/result0 ничего не записывает.
+Render получает собственный opaque buffer без UTF-16 decoding. s25 сохраняет
+NULL allocation, convert/Render с NULL и отсутствие wide owner. Это контроль
+синтетических API-ответов, не проверка Windows converter/codec.
+
+Проверить полные records/masks/owners и 27 связанных откатов: по одной точке
+после обработки целевого результата, затем recording и beforeReturn в каждом
+случае. Точные callback requests описаны в review; получение запроса и применение
+его возвращаемого ответа различаются. Сохранить matrix 256, preflight 22,
+nullable 3, partial 6, graphics 8; при изменении resumeMatch — также
+OriginalMusicPlaybackTests, OriginalGraphEventsTests и связанные music/menu callers.
+Новое исполнение оригинала для этих девяти сохранённых возвратов не требуется.
 
 Это новая работа над Native по готовым данным, а не повтор исходного захвата.
 Она не разрешает затронутую отказом операцию и не закрывает incident. Остальные
-зависимости перечислены в итоговом исследовании: partial surfaces/music adapters,
+зависимости перечислены в итоговом исследовании: music/replay contracts,
 whole-War сравнения, девять отдельных fault rejection trials и s10/s11 с
 неустановленным собственным происхождением private dimensions. Два последних
 нормально вернулись; объявлять их source faults или подставлять expected нельзя.
@@ -159,5 +186,5 @@ Native-карточкой выше: их исходные версии сохр�
 `build/research/pending-completion-20260912/initial-pending/`, старые 325 fixtures
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
-Исторический work JSON не переписывался. Новые принятые NULL/partial-surface
-контракты и следующая карточка графических API описаны выше.
+Исторический work JSON не переписывался. Новые принятые NULL/partial-surface/
+graphics-error контракты и следующая музыкальная карточка описаны выше.
