@@ -168,3 +168,16 @@ C ABI к LÖVE. Это позволяет сохранить OriginalExtended/40
 межстадийный порядок вместо повторного упрощённого Lua-переноса. Foundation
 ведётся отдельно в [L2DF_NATIVE_BRIDGE](L2DF_NATIVE_BRIDGE.md); создание Actor
 storage не считается готовым match. Все остальные критерии полной игры открыты.
+
+**Мост к Swift — принято основание:** native arm64 dylib предоставляет только
+ACTOR_STORAGE. Один build и один FFI run terminal/0; 201 ABI assertions,
+два независимых полных constructor bytes/masks сравнения, 185 compiled inputs
+и все девять FFI pins проверены. Независимый reviewer закрыл замечания; старый
+план и ранний checker сохранены, Core/ABI не менялись после build. Main и
+приложения неизменны. Приёмка: [evidence](../evidence/l2df-native-bridge.json).
+
+Следующая конкретная задача — вынести собственную initialized catalog/session
+для `OriginalLoadedGameplayCall` и проверить сохранённую 16+48-call active цепочку.
+Expected и private storage не должны становиться входами runtime. Принятый
+active корпус относится к pristine EXE; DLL-enabled join, повреждение HP/исход
+матча и все критерии полной игры остаются открытыми.

@@ -1,0 +1,257 @@
+{
+  "createdAtUTC": "2026-09-12T09:48:15.811303+00:00",
+  "status": "accepted within Actor storage/C ABI foundation",
+  "mainReadOnlyRevision": "ab0db06c6f0a6162f1935a1badbfc2a750822096",
+  "baselineWorktreeCommit": "79e0fa1",
+  "originalEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "sourceExecution": false,
+  "gameplayCapability": false,
+  "fullGameComplete": false,
+  "library": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/swift-build/arm64-apple-macosx/release/libNTSDNativeBridge.dylib",
+    "bytes": 6330776,
+    "sha256": "9a3cdc161f9ce4fe83c5d597cc40a228bf54d413054d55ee23d60d6390e6310b"
+  },
+  "architecture": "arm64",
+  "abiVersion": 1,
+  "capabilities": [
+    "ACTOR_STORAGE"
+  ],
+  "cExports": [
+    "ntsd_bridge_abi_version",
+    "ntsd_bridge_capabilities",
+    "ntsd_bridge_create",
+    "ntsd_bridge_destroy",
+    "ntsd_bridge_info",
+    "ntsd_bridge_live_sessions",
+    "ntsd_bridge_read_i32",
+    "ntsd_bridge_setup_apply_i32",
+    "ntsd_bridge_snapshot"
+  ],
+  "build": {
+    "jobs": [
+      {
+        "command": [
+          "swift",
+          "build",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/package",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/swift-build",
+          "--cache-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/cache",
+          "--config-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/config",
+          "--security-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/security",
+          "--manifest-cache",
+          "local",
+          "-c",
+          "release",
+          "--product",
+          "NTSDNativeBridge",
+          "-j",
+          "4"
+        ],
+        "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/package",
+        "pid": 99905,
+        "processStart": "Sat Sep 12 12:33:01 2026",
+        "createdAtUTC": "2026-09-12T09:33:01.105757+00:00",
+        "state": "terminal",
+        "limitSeconds": 300,
+        "sizeLimitBytes": 2147483648,
+        "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/build-job",
+        "exitCode": 0,
+        "endedAtUTC": "2026-09-12T09:34:22.020782+00:00",
+        "elapsedSeconds": 80.913569166
+      },
+      {
+        "command": [
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/runtime/love.app/Contents/MacOS/love",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01"
+        ],
+        "cwd": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+        "pid": 1225,
+        "processStart": "Sat Sep 12 12:37:10 2026",
+        "createdAtUTC": "2026-09-12T09:37:10.201379+00:00",
+        "state": "terminal",
+        "limitSeconds": 90,
+        "sizeLimitBytes": null,
+        "output": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/job",
+        "exitCode": 0,
+        "endedAtUTC": "2026-09-12T09:37:11.204137+00:00",
+        "elapsedSeconds": 1.002479583
+      }
+    ],
+    "totalBuildBytes": 92647005,
+    "systemOnlyDependencies": true,
+    "signature": "linker ad-hoc; codesign verify strict0; no release signing claim"
+  },
+  "verification": {
+    "ffiAssertions": 201,
+    "completeConstructorComparisons": 2,
+    "recordBytes": 1056,
+    "maskBytes": 1056,
+    "knownBytes": 913,
+    "unknownBytes": 143,
+    "mainGitFiles": 184,
+    "frozenCopies": 191,
+    "compiledFiles": 185,
+    "ffiPins": 9
+  },
+  "independentReviewer": "/root/l2df_reference_review",
+  "reviewResolved": [
+    "Complete 1056 bytes and 1056 mask bytes for both declared allocator backings, expected independent of C ABI output",
+    "Exact compiled package set and manifest:185 files; all nine FFI pins and copies",
+    "Int32 -1/min/max, partial word0x80, both committed edits, whole bytes/masks/revision rollback",
+    "Both jobs terminal0, Bridge/Header/Package unchanged"
+  ],
+  "codePins": [
+    {
+      "path": "prototypes/l2df/native_bridge/Package.swift",
+      "bytes": 623,
+      "sha256": "a9193cb87a0671f9827839d32732668ee78e470b8b2deea1c129665ca05ea928"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/README.md",
+      "bytes": 2640,
+      "sha256": "edab67c6950db1d4268d536a6d80dbab148e893a413623f6a1904fe36b36fa7e"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/Sources/NTSDNativeBridge/Bridge.swift",
+      "bytes": 5329,
+      "sha256": "d2de8644ba7df4be74411a4611c3d921810a356d00401b6a22e9cde3f71820b3"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/build.py",
+      "bytes": 9745,
+      "sha256": "eb2a1f414201da766e9d1678579fb74a89f7bbeb247e70e8a9ae3f5b45968ab9"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/check_ffi.py",
+      "bytes": 4742,
+      "sha256": "94f2b9ebe79ae4ba335b192d650e49721612ad04cd13bf34edcfb67b88fcfbac"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/include/ntsd_bridge.h",
+      "bytes": 1747,
+      "sha256": "26a1993ed8c25a3bb63ebb9dddb93230d6ddbad9f7ac0f2ee3a08310550b9e2c"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/tests/conf.lua",
+      "bytes": 203,
+      "sha256": "2fa3b8b3b484241d3e20c5335de61d6b01a09ead59c67ea140dddc7cc1fd3314"
+    },
+    {
+      "path": "prototypes/l2df/native_bridge/tests/main.lua",
+      "bytes": 7954,
+      "sha256": "5e1cb02c006a3ff8a3dd2840baf984933fe52435a8945d84ebb0012c0c6bb8b8"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/root-audit-01.json",
+      "bytes": 9743,
+      "sha256": "47f10163382e590bf025da8a0bfa4a66159b9ee2982aeaff2b2115dc24e963b1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/independent-review-01.json",
+      "bytes": 1057,
+      "sha256": "ccb0de1877d46950ad4e464b40901549a592ab57e0bd4273416d8892f0dbf7a6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/inputs.json",
+      "bytes": 94599,
+      "sha256": "a4e40069a3819b6ab7e65a502b4071a0daecb20070df112fa7cd6ac4e4cf7445"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/artifact.json",
+      "bytes": 414590,
+      "sha256": "da0734596e856b278708b84556bd904f3818a14786a2cd1bd260785d0547372c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/plan.md",
+      "bytes": 5152,
+      "sha256": "01baf088d1176816ed7357b79224b41c6926a607f64f30056801d2b13232b2db"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/build-job/job.json",
+      "bytes": 1684,
+      "sha256": "cdf82df5be63211cd8d64ec2efe6b9778010026b8a0173e4d67601ebdb6f941f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/build-job/stdout.log",
+      "bytes": 1449,
+      "sha256": "43d6d4bf7011056cef4d19218c08cdd88d2b0397224f3e67f86278bf189a16d5"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/inputs.json",
+      "bytes": 3834,
+      "sha256": "bdbe10532cedf45d2e3b42b240134be5153652b6fc5298b2225ebc3e97db87bd"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/verification.json",
+      "bytes": 925,
+      "sha256": "f5fef5403bd93c53e4e3df33c17648c23fd3bdf17597eafb6076fabc3c12e37e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/package-verification.json",
+      "bytes": 57030,
+      "sha256": "ecf0e27883c8065faec67389286445c437561494e3f8e52f407b5ba58254c819"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/result.json",
+      "bytes": 3266,
+      "sha256": "ad41b91607d12330fa2d64e47bd4d61a9a4d2a78ef18148dc1bf47d10840efa1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/job/job.json",
+      "bytes": 849,
+      "sha256": "6108c9242a0497709b12be1cf5d8be6db8e2b2fa729fd8a264489ec14f7f28fc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/job/stdout.log",
+      "bytes": 78,
+      "sha256": "d596e81d19624fae717ff44b5751d1fb82501bfb566da56f87079fc5cfefff39"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/constructor-a.bytes",
+      "bytes": 1056,
+      "sha256": "ddd362dbbdbe08a75bb66068a85455ddec908e4d7f0ae3a1742368d6ccc3e427"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/constructor-b.bytes",
+      "bytes": 1056,
+      "sha256": "3fda9454851f338d5e21aa482919efc9b59ba1e75910bea35fb4ba87354a0fe1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/constructor-a.mask",
+      "bytes": 1056,
+      "sha256": "002c6c6724c37a2cf4d7ce8909428578443af7098225c75393b9e15849c7bb71"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/native-bridge-20260912/foundation-01/ffi/ffi-01/constructor-b.mask",
+      "bytes": 1056,
+      "sha256": "002c6c6724c37a2cf4d7ce8909428578443af7098225c75393b9e15849c7bb71"
+    }
+  ],
+  "preservation": {
+    "mainClean": true,
+    "compiledCoreChanged": false,
+    "compiledBridgeChangedAfterBuild": false,
+    "originalBuildSnapshotsRetained": true,
+    "ffiRetried": false,
+    "buildRetried": false,
+    "appChanged": false
+  },
+  "limitations": [
+    "Unbound Actor constructor storage is not initialized match or game session",
+    "Setup writes are developer primitives limited to already-defined aligned words",
+    "No gameplay tick symbol exported",
+    "C callers must provide valid sized/aligned buffers and non-overlapping snapshot outputs",
+    "Only arm64 host FFI, no x86_64/universal or clean-Mac acceptance",
+    "No window, physical input, audio-device or actual Windows evidence",
+    "Independent work does not resolve existing safety incidents"
+  ],
+  "next": "Own initialized catalog/session feeding OriginalLoadedGameplayCall; existing active16+48 pristine EXE controls; DLL-enabled join remains open"
+}
