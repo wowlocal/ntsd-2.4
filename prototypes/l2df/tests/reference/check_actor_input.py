@@ -110,21 +110,21 @@ function love.load()
  local ops={edges=input.captureEdges,combos=input.recognizeCombos,actions=input.applyFrameInput,prefix=input.apply}
  for line in io.lines(love.filesystem.getSource()..'/inputs.lua-lines') do
   local c=assert(loadstring('return '..line))()
-  local before=json:encode(c.actor)
+  local before=json:encode(c)
   local ok,a,events=pcall(function()
    if c.operation=='invalidates' then return c.actor,input.invalidates(c.actor,c.key,c.advanced) end
    if c.operation=='transfer' then return input.transfer(c.actor,c.target,c.frames,c.globals) end
    return assert(ops[c.operation])(c.actor,c.frames,c.globals)
   end)
   out:write(json:encode({label=c.label,ok=ok,actor=ok and a or nil,error=not ok and tostring(a) or nil,
-    result=c.operation=='invalidates' and (events and 1 or 0) or nil,inputUnchanged=before==json:encode(c.actor)})..'\n')
+    result=c.operation=='invalidates' and (events and 1 or 0) or nil,inputUnchanged=before==json:encode(c)})..'\n')
  end
  out:close()
  local c=assert(loadfile(love.filesystem.getSource()..'/rollback.lua'))()
- local before=json:encode(c.actor)
+ local before=json:encode(c)
  local ok,message=pcall(input.apply,c.actor,c.frames,c.globals)
  local rollback=assert(io.open(love.filesystem.getSource()..'/rollback-result.json','w'))
- rollback:write(json:encode({rejected=not ok,error=not ok and tostring(message) or nil,inputUnchanged=before==json:encode(c.actor)}))
+ rollback:write(json:encode({rejected=not ok,error=not ok and tostring(message) or nil,inputUnchanged=before==json:encode(c)}))
  rollback:close();love.event.quit(0)
 end
 '''
@@ -148,12 +148,15 @@ def main():
               args.reference_root/'native/Sources/NTSDCore/OriginalStateRecord.swift',
               args.reference_root/'native/Sources/NTSDCore/OriginalActorInput.swift',
               ROOT/'prototypes/l2df/compat/actor_input.lua', Path(__file__),
-              build/'game/l2df/external/json.lua']
+              build/'game/l2df/external/json.lua',
+              args.reference_root/'native/Tests/NTSDCoreTests/OriginalActorInputTests.swift']
     pins = []
     for p in inputs:
-        raw = p.read_bytes(); (out/p.name).write_bytes(raw)
+        raw = p.read_bytes()
+        dest = out.parent/(args.label+'-'+p.name) if p.name == 'original-actor-input.json' else out/p.name
+        dest.write_bytes(raw)
         pins.append({'path': str(p), 'sha256': sha(raw), 'bytes': len(raw)})
-    envelope = json.loads(inputs[0].read_bytes())
+    envelope = json.loads((out.parent/(args.label+'-'+inputs[0].name)).read_bytes())
     raw = zlib.decompress(base64.b64decode(envelope['deflate']), -15)
     assert len(raw) == envelope['count'] and sha(raw) == envelope['sha256'] == RAW
     corpus = json.loads(raw); assert corpus['exeSHA256'] == EXE and len(corpus['cases']) == 14624
@@ -191,10 +194,15 @@ def main():
         assert got['label'] == c['label']
         expected = project(bytes.fromhex(c['after']), bytes.fromhex(c['defined']))
         expected['sourceID'] = c.get('sourceID', 2)
-        diffs = {'actor': {k: {'actual': got.get('actor', {}).get(k), 'expected': v} for k, v in expected.items() if got.get('actor', {}).get(k) != v}}
-        if not got['ok'] or not got['inputUnchanged'] or diffs['actor'] or (c['operation']=='invalidates' and got['result'] != c['result']):
+        def equal(a, b):
+            if isinstance(b, dict): return isinstance(a, dict) and a.keys() == b.keys() and all(equal(a[k], b[k]) for k in b)
+            if isinstance(b, list): return isinstance(a, list) and len(a) == len(b) and all(equal(x, y) for x, y in zip(a, b))
+            return not isinstance(a, bool) and isinstance(a, (int, float)) and a == b
+        diffs = {'actor': {k: {'actual': got.get('actor', {}).get(k), 'expected': v} for k, v in expected.items() if not equal(got.get('actor', {}).get(k), v)}}
+        extra = set(got.get('actor', {})) - set(expected)
+        if not got['ok'] or not got['inputUnchanged'] or diffs['actor'] or extra or (c['operation']=='invalidates' and not equal(got['result'], c['result'])):
             failures.append({'label': c['label'], 'ok': got['ok'], 'error': got.get('error'), 'inputUnchanged': got['inputUnchanged'],
-                             'result': got.get('result'), 'expectedResult': c.get('result'), **diffs})
+                             'result': got.get('result'), 'expectedResult': c.get('result'), 'extraActorFields': sorted(extra), **diffs})
     (out/'failures.json').write_text(json.dumps(failures, indent=2)+'\n')
     rollback = json.loads((out/'rollback-result.json').read_text())
     assert rollback['rejected'] and rollback['inputUnchanged'] and 'outside Object' in rollback['error'], rollback

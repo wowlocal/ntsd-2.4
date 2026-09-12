@@ -1,6 +1,6 @@
 {
   "createdAtUTC": "2026-09-12T07:28:12.431145+00:00",
-  "status": "paused by user; ActorInput accepted; projectile implementation WIP, not compared",
+  "status": "ActorInput and bounded World accepted; native GUI integration in progress",
   "baselineCommit": "a642bfa",
   "worktree": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
   "sourceExecution": false,
@@ -165,5 +165,188 @@
     ],
     "next": "Complete compat.world API and frame projector, then run the prepared independent 20-case/2010-tick comparator before GUI integration.",
     "mainReferenceRevalidation": "Last read-only check found main worktree clean and OriginalLibTransformTests.swift differing from original dispatch pin. No changes were made to main by this worktree task; revalidate current commits/pins before resuming."
+  },
+  "resume": {
+    "manifest": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/resume-01.json",
+    "sha256": "e5eb0b8e7af9b9914850636753dbedb5d30b858e3729f2b9b6b6d16008fad3a9"
+  },
+  "actorInputStrengthened": {
+    "accepted": true,
+    "cases": 14624,
+    "failures": 0,
+    "operations": {
+      "edges": 112,
+      "invalidates": 4608,
+      "transfer": 384,
+      "combos": 7484,
+      "actions": 500,
+      "prefix": 1536
+    },
+    "scalarsPerActor": 46,
+    "knownBytesPerActor": 88,
+    "wholeActorABICompared": false,
+    "sourceReexecuted": false,
+    "fixtureSHA256": "f1fcd6b045bf1dfac76f335ff881d7b7961927e4883e0e2ceee3401ddca21f7f",
+    "unpackedSHA256": "f91a5cdab5ad8e52f3522e8eead6c7979492353103a5f6742c1326c84d0fffda",
+    "moduleSHA256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a",
+    "unsupportedFrameRollback": {
+      "error": "actor_input.lua:20: Actor input frame outside Object: 400",
+      "inputUnchanged": true,
+      "rejected": true
+    },
+    "job": {
+      "command": [
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/runtime/love.app/Contents/MacOS/love",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-04"
+      ],
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-04",
+      "startUTC": "2026-09-12T08:29:44.929426+00:00",
+      "pins": [
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-actor-input.json",
+          "sha256": "f1fcd6b045bf1dfac76f335ff881d7b7961927e4883e0e2ceee3401ddca21f7f",
+          "bytes": 649048
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalStateRecord.swift",
+          "sha256": "bccf50f3ca9f57fa18a8b4eb8bc9630ff47ff7bbfaa2687f63019ef23e51b49b",
+          "bytes": 5595
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalActorInput.swift",
+          "sha256": "c906b7cbffd7c7c531ee028ba414d679912ea82940cbd48a4c0982123aa5085d",
+          "bytes": 9362
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/actor_input.lua",
+          "sha256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a",
+          "bytes": 5660
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/tests/reference/check_actor_input.py",
+          "sha256": "546bbf331b1ea8058d77a524a45532e2689aa753dbbc5cc2da4fae6af1d940a3",
+          "bytes": 12353
+        },
+        {
+          "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/build/l2df-prototype/game/l2df/external/json.lua",
+          "sha256": "4cdb07c34854fd3a4b47a43d9b91f2b4215c958ed4d960528faea05350e29fa3",
+          "bytes": 53104
+        }
+      ],
+      "executableSHA256": "0daa04d49e671e7d3649e54935a91e8dcbf0769bef8d1c3503c025842b680da2",
+      "timeoutSeconds": 90,
+      "sourceExecution": false,
+      "status": "terminal",
+      "pid": 85623,
+      "exitCode": 0,
+      "elapsedSeconds": 2.2562279589999994
+    },
+    "actualSHA256": "373db05d7f232bc5d1896f1c42a59b90b930cd8545397d99822f21ab0740318d",
+    "directory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/actor-input-04",
+    "laterProvenanceOnlyChanges": "Added NativeTests pin and decode from immutable snapshot; no comparison/implementation changes after run04."
+  },
+  "world": {
+    "accepted": true,
+    "cases": 575,
+    "ticks": 16685,
+    "elapsedSeconds": 15.214925041,
+    "exactNumericalEquality": true,
+    "bitwiseOrWholeMatchClaim": false,
+    "fullReport": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/report.json",
+      "bytes": 244682,
+      "sha256": "c7a95f8dd3e928eba2ba7b53545af4cd580d259989578f8c80cca03cbe0f5632"
+    },
+    "actual": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/actual.jsonl",
+      "bytes": 56104109,
+      "sha256": "fb0eaa23ab3496f134413e7353b44cefd46c2fa7a693ceb8a5d79fc78e0e3506"
+    },
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/job.json",
+      "bytes": 10111,
+      "sha256": "db4d108e05e87a4e5fdd95ad09218579c98f0bcbb4bb4cbd1ff9905a51d02c23"
+    },
+    "rollback": {
+      "ok": true,
+      "result": {
+        "configUnchanged": true,
+        "continuationEqual": true,
+        "error": "compat/fighter.lua:46: Unsupported jump attack",
+        "expectedBoundary": true,
+        "rejected": true,
+        "rngUnchanged": true,
+        "unchanged": true
+      }
+    },
+    "corpusSHA256": "8f3643331fb82cf7615a60fe8bc05f7c71250f0d50acdc84677a59764b7d27aa",
+    "standalone20CaseReport": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-01/report.json",
+      "bytes": 16100,
+      "sha256": "55d469ef3bbfd985e9eb5d297e800a53c163f9d9a4bc25641b540ab69adfd0ab"
+    },
+    "candidateModules": [
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/actor_input.lua",
+        "sha256": "43e1e92d49f240f602c61a5603dd86563fb8479e6763bb867d184fd14961bb1a",
+        "bytes": 5660,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/actor_input.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/fighter.lua",
+        "sha256": "bcd296fd0afef1ddefc9c51958c1ef6121ae4014610d15d3de66dbaa7f71db73",
+        "bytes": 8574,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/fighter.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/frame_projector.lua",
+        "sha256": "fdf2eff382a2ae278ab30dda74b53928012bba7b1bfbb5ddcc0aa46f62996a26",
+        "bytes": 2088,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/frame_projector.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/projectile.lua",
+        "sha256": "cf9672180eb12ce2f78563815690d6256669839732a2b7300524479d768bc2e7",
+        "bytes": 3816,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/projectile.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/projectile_hits.lua",
+        "sha256": "6031a52edbbea278fc65dfec62c67aa2cc0b06cae27f4532a73c2d10424cadbb",
+        "bytes": 5478,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/projectile_hits.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/spawn.lua",
+        "sha256": "a49539ba790c1da5d5fffea8719966b529ed5bf885f7cfaf5cb0a3f9b754d3e4",
+        "bytes": 2681,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/spawn.lua"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4-l2df-prototype/prototypes/l2df/compat/world.lua",
+        "sha256": "59c98c7c70b8fb2524937e04cda53bfd64155fedbb3a53bbeeb8c4a9cbe9baa5",
+        "bytes": 7893,
+        "snapshot": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-02/compat/world.lua"
+      }
+    ],
+    "review": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/review/comparator-review.json",
+      "bytes": 1042,
+      "sha256": "97194105ef07a0c00d7c3b5c8a51409ab758bc680651fff75b9d1af240602251"
+    }
+  },
+  "worldHarnessFailure": {
+    "accepted": false,
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-01/job.json",
+      "bytes": 10111,
+      "sha256": "27376dae1ef84d25c1f567d96264508df1a380bb34714bf2a4e63d736b1574c7"
+    },
+    "postFailureAnalysis": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/chidori-compat-20260912/world-full-01/post-failure-analysis.json",
+      "bytes": 10793,
+      "sha256": "9b8df1f9b911d828e795a6974f1046bbc2f53b34a73225b4b08f09b5495f8e63"
+    },
+    "reason": "Root changed check_actor_input.py during run; completed Lua result preserved, post-run pin audit rejected; fixed-input world-full-02 reran candidate only."
   }
 }

@@ -128,3 +128,9 @@ Lua ActorInput независимо совпал во всех14 624проекц
 в `cb8f723`. Незавершённые снаряды/Fighter и независимый whole-world comparator
 сохранены отдельным WIP checkpoint. World/GUI ещё не готовы. Продолжение и
 точные pins — в [карточке](L2DF_CHIDORI_COMPATIBILITY.md).
+
+**Возобновлено:** bounded SourceWorld для L2DF совпал с575сохранёнными
+сценариями/16685тактов (включая movement/melee), live-shot rollback проходит.
+Комбо ActorInput сохраняет14624-case acceptance. Независимый review компараторов
+завершён; новая GUI-интеграция и `.app` проверяются. Полный матч/игра остаются
+открыты; детали и сохранённый первый pin-audit отказ — в карточке.
