@@ -255,6 +255,9 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
                 XCTAssertEqual(actual.deleted,source.deleted)
                 let asset = try XCTUnwrap(rawImages[key]?["asset"] as? [String:Any])
                 XCTAssertEqual(actual.bitmap.dib,try front.blob(XCTUnwrap(asset["raw"] as? String)))
+                try OriginalDIBPixelsTests.compareOwned(actual.bitmap.pixels,rawDIB:actual.bitmap.dib)
+                if actual.deleted { XCTAssertThrowsError(try bindings.pixels(forImage:XCTUnwrap(UInt32(key)))) }
+                else { XCTAssertEqual(try bindings.pixels(forImage:XCTUnwrap(UInt32(key))),actual.bitmap.pixels) }
             }
             var releases: [UInt32:[Int32]] = [:]
             let operations = bc.events.compactMap { e in e.request.map { ($0,e.response) } } + fc.events.compactMap { e in e.request.map { ($0,e.response) } }

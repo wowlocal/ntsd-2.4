@@ -170,6 +170,22 @@ frozen candidate2 и исправленный candidate3 сохранены; exp
 Новое исполнение оригинала не требовалось. Это inputs/metadata, ещё не pixels,
 host graphics/audio, запуск приложения или полная игра; три incidents открыты.
 
+Приняты [Native colors/masks для36 startup DIB](APPLICATION_DIB_PIXELS.md).
+Два независимо закреплённых data decoder совпали по всем40736644 bytes:
+30552483 RGB +10184161 masks. Проверены14632 rows и все44980 RLE commands.
+10037872 пикселя записаны;146289 остаются неизвестными в cursor/SLOGAN/WORDS.
+OriginalDIBPixels хранит top-left RGB8/defined; Bitmap владеет ими до Core attempt,
+live image lookup отвергает удалённые handles, чтение unknown color — явная ошибка.
+Прежние48/50/12 parent chains сравнивают новые colors/masks actual image owners
+с сохранением всех records/events/rollback. 20 bundled release-методов прошли
+за135.303с, сборка297.09с;18 controls =3 returns/15 rejections.
+ImageIO отдельно совпал для29 ресурсов, разошёлся на567 written pixels в7;
+его данные/диагностика сохранены, expected под host не менялись. Два synthetic
+host controls не добавляют исходных ресурсов. Все370 прежних fixtures и46
+package files неизменны;372 текущих fixtures/875 Native-файлов и оба архива
+проверены. [Приёмка](../evidence/application-dib-pixels.json). Нового исполнения
+оригинала нет. Unknown colors, surface/raster/device и полная игра остаются открытыми.
+
 ## Непринятая работа и отказ Codex
 
 Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -220,29 +236,35 @@ host graphics/audio, запуск приложения или полная иг�
 
 ## Следующая независимая карточка
 
-**Декодирование 36 packaged DIB в собственные неизменяемые RGB pixels.**
+**Полный фактический startup bitmap → surface consumer.**
 
-Read-only readiness и границы:
-`build/research/application-startup-inputs-native-20260912/readiness4.json`.
-Следующий шаг приближает собственный renderer через уже принятый bitmap-input
-owner. Объём — 23 BI_RGB/24-bit и13 BI_RLE8/8-bit ресурса текущего пакета;
-байты пакета, metadata и прежние expected/masks остаются неизменными.
+Read-only readiness и ограничения:
+`build/research/application-dib-pixels-native-20260912/next-work-review2.json`.
+Первое предложение next-work-review.json сохранено как предварительное;
+поддержку нельзя ограничить удобным1:1 subset реальных требуемых вызовов.
 
-Первый gate — конечный план и независимый набор decoded pixels/defined masks
-с provenance, ориентацией/stride/palette и инвентарём встреченных RLE-команд.
-Такого принятого pixel golden пока нет: готовые metadata tests его не заменяют.
-После независимой проверки реализовать общий Native decoder, сравнить все36
-ресурсов побайтно и передать результат через собственные bitmap-input bindings.
-Незаписанные RLE-области не объявлять известными нулями без доказательства;
-color key/alpha и реальный surface raster остаются отдельными контрактами.
-Сохранить необходимые Bootstrap/MenuInput/LoadingPrefix и snapshot/rollback
-регрессии. Выполнение оригинала и перезапуск исторических производителей для
-этого преобразования данных не требуются.
+Первый gate — конечная инвентаризация сохранённых48/50/12 parent chains:
+createSurface/CreateDC/SelectObject/GetDC/StretchBlt/ReleaseDC/DeleteObject/Release,
+реальные source/destination dimensions, formats, DC/image/surface identities,
+начальные masks и сроки владения. Эта инвентаризация пока не выполнена;
+implementation-ready для полного consumer не заявляется. По её результатам
+закрепить весь фактический контракт и Native RGB/mask surface ownership.
+1:1 copy допустимо считать всем участком только если это подтверждено для всех
+его необходимых запросов; имеющиеся scaled calls исключать нельзя.
 
-Practice NSImage с общей прозрачностью чёрного не является эталоном этих pixels.
-Карточка не подключает AppKit window/input/clock/audio, не доказывает Windows
-GDI/DirectDraw поведение или полный кадр. Полная загрузка/каталог, War43a860,
-матч/игра/Windows/cleanMac и три safety incidents остаются открытыми.
+Copy записывает также неопределённость: source mask=false делает destination
+неизвестным. Сохранить старый известный цвет вместо такого copy значило бы
+выдумать прозрачность. Источник146289 RLE holes и начальные цвета поверхностей
+нуждаются в отдельном provenance; не заполнять их известным чёрным/alpha0.
+После удаления временного image уже скопированные surface pixels должны жить
+по собственному доказанному контракту, с отдельным учётом Release requests.
+
+Использовать сохранённые исходные данные, decoded inputs и existing request
+evidence; исторические producer/capture/auditor не перезапускать. Сохранить
+whole startup/menu/loading regressions, metadata, owners и rollback, разделить
+перенос цветов/масок, реальную Windows/device и фактическую выдачу окна.
+AppKit input/clock/audio/text/presentation, full loading/catalog, War/матч/игра/
+Windows/cleanMac и три safety incidents остаются открытыми.
 
 ## Дальнейшая сквозная очередь
 

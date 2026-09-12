@@ -10,6 +10,7 @@ public struct OriginalApplicationStartupInputs: Equatable {
     }
     public struct Bitmap: Equatable {
         public let dib: [UInt8]
+        public let pixels: OriginalDIBPixels
         public let width: Int32, height: Int32, rowBytes: Int32
         public let planes: UInt16, bitsPerPixel: UInt16
         init(_ dib: [UInt8]) throws {
@@ -24,9 +25,10 @@ public struct OriginalApplicationStartupInputs: Equatable {
             let stride = ((Int64(w)*Int64(bits)+31)/32)*4
             guard stride <= Int64(Int32.max) else { throw Boundary.invalid("DIB row extent") }
             self.dib = dib;width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
+            pixels = try OriginalDIBPixels(dib:dib)
         }
         /// Win32 BITMAP fields at the declared image boundary, not pixels or a
-        /// host graphics object. RLE DIB bytes remain raw for a future renderer.
+        /// host graphics object. Source colors/masks remain separate from surfaces.
         public func objectBytes() throws -> [UInt8] {
             var r = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:24),defined:[Bool](repeating:true,count:24))
             try r.write(width,at:4);try r.write(height,at:8);try r.write(rowBytes,at:12)

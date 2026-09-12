@@ -17,6 +17,13 @@ public struct OriginalApplicationBitmapInputs: Equatable {
     private let resources: [String:OriginalApplicationStartupInputs.Bitmap]
     public init(resources: [String:OriginalApplicationStartupInputs.Bitmap]) { self.resources = resources }
 
+    public func pixels(forImage handle: UInt32) throws -> OriginalDIBPixels {
+        guard let image = images[handle],!image.deleted else {
+            throw OriginalStateError.invalidStorage("Bitmap input live image pixels")
+        }
+        return image.bitmap.pixels
+    }
+
     public mutating func response(_ q: API.Request,control: API.Response) throws -> API.Response {
         var next = self
         let result = try next.perform(q,control:control)

@@ -1,0 +1,474 @@
+{
+  "schema": 1,
+  "acceptedUTC": "2026-09-12T17:54:41.700385+00:00",
+  "status": "finite original DIB format decoding and owned Native colors/masks verified",
+  "baseCommit": "401fdb03892f0f9c34991499a2a219312e220042",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Static original DIB bytes; new data-only Python reference and independent ImageIO or independent implementation cross-check on macOS; Native Swift. No Original/emulator/historical producer/auditor execution.",
+    "formatSources": [
+      "https://learn.microsoft.com/en-us/windows/win32/gdi/bitmap-compression",
+      "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader",
+      "https://learn.microsoft.com/en-us/windows/win32/gdi/device-independent-bitmaps"
+    ]
+  },
+  "scope": {
+    "resources": 36,
+    "uncompressed24": 23,
+    "RLE8": 13,
+    "rawBytes": 28986014,
+    "pixels": 10184161,
+    "RGBBytes": 30552483,
+    "maskBytes": 10184161,
+    "primaryAttempts": 48,
+    "retainedMenuInputChains": 50,
+    "retainedLoadingPrefixCases": 12
+  },
+  "implementation": {
+    "nativePaths": {
+      "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift": {
+        "bytes": 4109,
+        "sha256": "6948e9eca2553e932d7c0e1e33b6ac1f5df4aba5ef2bffe462687a54b1a90c39"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift": {
+        "bytes": 8429,
+        "sha256": "3ae0cfbc9a008076fbb1102b90bfca9d4a03051010186f6a6c2a523a0db92b1b"
+      },
+      "native/Sources/NTSDCore/OriginalDIBPixels.swift": {
+        "bytes": 5120,
+        "sha256": "809b89ce094dc9bc56cd72e975c8d7c94d9162b1baaca4884f709495a7802440"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin": {
+        "bytes": 40736644,
+        "sha256": "073ec805be01b535a2ad1a5ca78e63efcc8ba63d4367e53a5b773cbe555170f7"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.json": {
+        "bytes": 3764412,
+        "sha256": "03308dd91107e3007a5e62e809859f3f6809b80251c590fa6b6354f6ace45a0d"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift": {
+        "bytes": 38696,
+        "sha256": "ffb5c45a289e592efbc818e68762aefa520d250e910e3ca62ff8fd08db3d821c"
+      },
+      "native/Tests/NTSDCoreTests/OriginalDIBPixelsTests.swift": {
+        "bytes": 7628,
+        "sha256": "8177c357b7c907ddf4b633b146a6c2a05510a5a5be4d4769c05f498fe0f96f67"
+      }
+    },
+    "referenceTool": {
+      "path": "tools/reference_startup_dib_pixels.py",
+      "bytes": 7336,
+      "sha256": "1a47035be0a87ba5b8e7ff9c9437462e8661c927adf8522e291e07748cd24af9"
+    },
+    "initialization": "Eager immutable pixels beside each packaged Bitmap, before a Core attempt",
+    "liveImagePixels": "OriginalApplicationBitmapInputs.pixels(forImage:) rejects missing/deleted handles",
+    "unknownPixelRead": "color(x:y:) throws undefinedPixel; zero backing is placeholder only",
+    "surfacePixelsImplemented": false,
+    "referenceImportedAtRuntime": false,
+    "allocationPixelBudget": 16777216,
+    "budgetIsGameRule": false,
+    "gitAttributes": {
+      "path": ".gitattributes",
+      "bytes": 324,
+      "sha256": "dc4b61b500b45568f13c1f4063f622b57cbdd5908ea95dec972ae86142528866"
+    }
+  },
+  "pixelComparison": {
+    "resources": 36,
+    "RGBBytes": 30552483,
+    "maskBytes": 10184161,
+    "payloadBytes": 40736644,
+    "payloadSHA256": "073ec805be01b535a2ad1a5ca78e63efcc8ba63d4367e53a5b773cbe555170f7",
+    "writtenPixels": 10037872,
+    "unknownPixels": 146289,
+    "rows": 14632,
+    "rowChecks": "Full RGB and mask hash plus written count per row; full bytes separately compared",
+    "unknownByName": {
+      "LF2_CURSOR": 101,
+      "SLOGAN": 20998,
+      "WORDS0": 21187,
+      "WORDS1": 20800,
+      "WORDS2": 20800,
+      "WORDS3": 20801,
+      "WORDS4": 20801,
+      "WORDS5": 20801
+    },
+    "independentDataDecoders": 2,
+    "all36FullBytesAndMasksEqual": true,
+    "commandCounts": {
+      "run": 28738,
+      "absolute": 13400,
+      "delta": 792,
+      "eol": 2037,
+      "eob": 13
+    },
+    "allObservedAbsolutePaddingAndPaletteReservedZero": true,
+    "twoZeroBytesAfterEOB": [
+      "CS2",
+      "CS3",
+      "WORDS0",
+      "WORDS4",
+      "WORDS5"
+    ],
+    "unknownsAreNotKnownBlackOrTransparent": true
+  },
+  "hostCrossCheck": {
+    "implementation": "macOS ImageIO; direct CGImage provider bytes, RGBX/indexed RGB table normalization; no CGContext/color transform",
+    "originalWrittenPixelMatches": 29,
+    "originalResourcesWithDifferences": 7,
+    "differentWrittenPixels": 567,
+    "differenceByName": {
+      "LF2_CURSOR": 3,
+      "WORDS0": 99,
+      "WORDS1": 93,
+      "WORDS2": 93,
+      "WORDS3": 93,
+      "WORDS4": 93,
+      "WORDS5": 93
+    },
+    "syntheticControls": 2,
+    "syntheticRLEControlDifferentPixels": 2,
+    "interpretation": "Consistent with vertical-delta placement; internal host cause not proven. Host result is retained as a mismatch, not substituted for the reviewed independent reference.",
+    "WindowsOracle": false,
+    "all13HostPaletteTablesEqualOriginalRGB": true
+  },
+  "validation": {
+    "candidate": "candidate1",
+    "configuration": "release",
+    "bundledFixtures": true,
+    "rawOverrides": false,
+    "buildSeconds": 297.09,
+    "testSeconds": 135.303,
+    "methodCount": 20,
+    "methods": [
+      {
+        "name": "OriginalApplicationBootstrapTests testLateFirstMenuFailuresRetainStartupAndResize",
+        "seconds": 10.319
+      },
+      {
+        "name": "OriginalApplicationBootstrapTests testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+        "seconds": 0.364
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+        "seconds": 8.637
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testOwnLoadingCommonSoundsAndOrdinaryFailures",
+        "seconds": 14.523
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 9.687
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 41.52
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 3.158
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testLateMenuReturnFailuresRollBackWholeIteration",
+        "seconds": 6.841
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+        "seconds": 36.133
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testPackageRejectsMissingCorruptAndUnexpectedFiles",
+        "seconds": 0.208
+      },
+      {
+        "name": "OriginalApplicationStartupInputsTests testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+        "seconds": 0.137
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testLateResourceFailuresRetainCommittedStartupAndCallback",
+        "seconds": 1.208
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+        "seconds": 1.646
+      },
+      {
+        "name": "OriginalBitmapSurfaceLoadingTests testWholeLoaderAndCopyAtOwnedPlatformFields",
+        "seconds": 0.305
+      },
+      {
+        "name": "OriginalDIBPixelsTests testAllPackagedPixelsMatchIndependentBytesMasksAndRows",
+        "seconds": 0.616
+      },
+      {
+        "name": "OriginalDIBPixelsTests testDeclaredDecoderControlsAndTypedRejections",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalDIBPixelsTests testImagePixelsStayImmutableAndDeletedHandlesDoNotRevive",
+        "seconds": 0.0
+      }
+    ],
+    "job": {
+      "scope": "Native-only release validation of owned startup DIB pixels and image bindings.\nSaved reference fixtures are read; no original, producer or historical auditor executes.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-dib-pixels-native-20260912/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-dib-pixels-native-20260912/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalDIBPixelsTests|OriginalApplicationStartupInputsTests|OriginalApplicationBootstrapTests|OriginalApplicationMenuReturnTests|OriginalApplicationMenuInputTests|OriginalApplicationLoadingPrefixTests|OriginalBitmapSurfaceLoadingTests"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-dib-pixels-native-20260912/candidate1-inputs.json",
+      "nativeFiles": 875,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-12T17:45:34.838898+00:00",
+      "pid": 2090,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 434.7591605,
+      "endedUTC": "2026-09-12T17:52:49.599968+00:00"
+    },
+    "newPixelMethods": 3,
+    "syntheticControls": {
+      "total": 18,
+      "returned": 3,
+      "typedRejections": 15,
+      "tolerance": "Nonzero RGB row padding and palette reserved bytes are declared skip/non-alpha controls; original assets use zero padding/reserved bytes."
+    },
+    "wholeParentAttempts": 48,
+    "menuInputChains": 50,
+    "loadingPrefixCases": 12,
+    "existingEventsMasksAndRollbackRetained": true,
+    "actualImageOwnersComparedToPixelReference": true,
+    "deadBindingsRetainImmutableDataWithoutLiveLookup": true
+  },
+  "artifactVerification": {
+    "protectedFixtures": 370,
+    "currentFixtures": 372,
+    "packageFilesUnchanged": 46,
+    "currentNativeFiles": 875,
+    "planPins": 71,
+    "archives": {
+      "native-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-dib-pixels-native-20260912/native-candidate1.tar",
+        "members": 875,
+        "payloadBytes": 4089794699,
+        "tar": {
+          "bytes": 4091371520,
+          "sha256": "6f8baabd3d317e8d2ce406b7c16a5862ce55271b323227b2d948c5b6f0be2c39"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T17:54:26.365871+00:00",
+        "protectedFixtures": 370,
+        "currentNativeFiles": 875,
+        "sourceExecuted": false
+      },
+      "evidence-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-dib-pixels-native-20260912/dib-pixels-evidence1.tar",
+        "members": 253,
+        "payloadBytes": 245938234,
+        "tar": {
+          "bytes": 246394880,
+          "sha256": "e7a6ab40438ae378f5b03dfe98381a10fce57c2c6fe0a11c71a412b2667b1802"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T17:54:27.058506+00:00",
+        "allPlanPins": 71,
+        "supersededBaseInputsPreserved": [
+          "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift",
+          "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift",
+          "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift"
+        ],
+        "referenceAndHostDiagnosticsPreserved": true,
+        "originalPixelHolesPreserved": 146289,
+        "sourceExecuted": false
+      }
+    },
+    "prospectiveGitVerification": "Separate post-publication precommit-verification.json, required before commit",
+    "postArchiveMetadata": "Specific binary Git attribute and its initial whitespace diagnostic are post-archive records. The already verified Native/reference bytes remain unchanged."
+  },
+  "independentReview": {
+    "referenceAndNativeReviewer": "/root/catalog_pending_review",
+    "secondDecoderHostAndFixturesReviewer": "/root/catalog_test_completion",
+    "reports": [
+      "reference-review2.json",
+      "review3-candidate1.json",
+      "independent-reference-comparison1.json",
+      "imageio-discrepancy1.json",
+      "fixture-verification1.json",
+      "next-work-review2.json"
+    ],
+    "publicationReview": "Separate post-archive review5-publication.json required before commit"
+  },
+  "preservedDiagnostics": {
+    "ImageIOScript1": "Swift type-check failure before data decoding, exact script/job/log retained",
+    "ImageIOScript2": "Splits header-construction expression, then terminal0; all original provider bytes retained",
+    "IndependentChecker1": "Frozen but not executed before observed RGBX profile correction",
+    "IndependentChecker2": "Adds declared RGBX normalization only; independent decoder unchanged; retains 8 host mismatches including one synthetic control",
+    "Reference1": "Terminal0; never restarted; expected bytes/masks unchanged",
+    "precommit1": "Git heuristics treated leading non-NUL binary RGB/mask bytes as text; exact diff whitespace failure retained. Specific -text -diff declaration fixes Git handling, no Native/reference byte altered."
+  },
+  "artifacts": {
+    "build/research/application-dib-pixels-native-20260912/plan.json": {
+      "bytes": 18686,
+      "sha256": "c32edc5f9271b22eccf50466d3de9f763e562f3f6ec56a9656efb490907567d9"
+    },
+    "build/research/application-dib-pixels-native-20260912/plan-amendment1-format.json": {
+      "bytes": 1549,
+      "sha256": "c73d58227f1756418dfe0d0655acc4fe9ad5d662335a728669128df57ffa948d"
+    },
+    "build/research/application-dib-pixels-native-20260912/initial-native.json": {
+      "bytes": 155288,
+      "sha256": "d7ce76f99e9435ac95734612c8760fc570ade7f6859db8c6cff80674a00e8080"
+    },
+    "build/research/application-dib-pixels-native-20260912/candidate1-inputs.json": {
+      "bytes": 155966,
+      "sha256": "3eacea9499b08e6ab7a6e9aa3b58cbb398abcb88e8d4375738d0ddd164a68bfb"
+    },
+    "build/research/application-dib-pixels-native-20260912/native1.job.json": {
+      "bytes": 1247,
+      "sha256": "7a751346768ff9f1b135ec6896428be5775b88e29028f8501dccccc4170f5d43"
+    },
+    "build/research/application-dib-pixels-native-20260912/native1.log": {
+      "bytes": 29159,
+      "sha256": "c8cd89c7b6001383c2bc7a9a7621abbe5306ae9108479cf375f4db1e4a04d866"
+    },
+    "build/research/application-dib-pixels-native-20260912/controls1.json": {
+      "bytes": 17126,
+      "sha256": "5467db773c6642e5a285ff241c09285f9a4cb0ec282ad1ad0595b5674bb00b10"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1.py": {
+      "bytes": 7336,
+      "sha256": "1a47035be0a87ba5b8e7ff9c9437462e8661c927adf8522e291e07748cd24af9"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1.config.json": {
+      "bytes": 839,
+      "sha256": "490ea733e2abe893e3e9c11f3966aec127ad7f3c49dd18804df377e88e7d222c"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1.job.json": {
+      "bytes": 1031,
+      "sha256": "099ac375fbb41723a4f86b7a2d0b2632ac256cdde25951f3ef435057dcf3e67e"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1.log": {
+      "bytes": 201,
+      "sha256": "e3ecb4bbf323844df3b435d89381a9e14502f11e04361d09cede236679ad74f4"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1/startup-dib-pixels.json": {
+      "bytes": 3747341,
+      "sha256": "e3ee9281ca20fab6360f7b92a5f9328bf29ebe667ce8f8dd8b5794f2b77b7e2d"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1/startup-dib-pixels.bin": {
+      "bytes": 40736644,
+      "sha256": "073ec805be01b535a2ad1a5ca78e63efcc8ba63d4367e53a5b773cbe555170f7"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference1/stream-inventory.json": {
+      "bytes": 11389023,
+      "sha256": "cfc6f8ba9d84c174800e040e3f483a1122f0e4e1311a24e5cb74d830b0421774"
+    },
+    "build/research/application-dib-pixels-native-20260912/review1-design.json": {
+      "bytes": 11921,
+      "sha256": "3933753c822fb4233309d16c62a6790d680f84365543ea5ba18588fe1134e52b"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference-review2.json": {
+      "bytes": 16190,
+      "sha256": "d3d8042a327b5f9a195f65db272481304fb1c9cf8fea9ba0ec6d4c78289404c5"
+    },
+    "build/research/application-dib-pixels-native-20260912/reference-gate-root.json": {
+      "bytes": 13619,
+      "sha256": "eaa2e52979ed8d398860864fd37f875392eb5f34b3c7650f6269d538c821e7aa"
+    },
+    "build/research/application-dib-pixels-native-20260912/review3-candidate1.json": {
+      "bytes": 12352,
+      "sha256": "75ffbf171d48dd5c842b960288a0cf783ecf8591227f34ee257da95b333ee29d"
+    },
+    "build/research/application-dib-pixels-native-20260912/independent-dib-check1.json": {
+      "bytes": 2324684,
+      "sha256": "62f3758e84e4b89dcafa5d973ecf79cd1d49578f65c85fdbe4ba85f93c803075"
+    },
+    "build/research/application-dib-pixels-native-20260912/independent-reference-comparison1.json": {
+      "bytes": 102850,
+      "sha256": "2cfafdb7b811311dc575262746522d9591bc4174f7395f2a13c89a1a085f69bb"
+    },
+    "build/research/application-dib-pixels-native-20260912/imageio-discrepancy1.json": {
+      "bytes": 51689,
+      "sha256": "8194c3e31b7407ab54858169a5c3143ca2bd8dcb9b60af763156191f3f7204f8"
+    },
+    "build/research/application-dib-pixels-native-20260912/fixture-composition1.json": {
+      "bytes": 1070,
+      "sha256": "c760a82a6904e7aa69f806b0af6c1b3c607bfd73e1d26bcddf97b627f13d6f97"
+    },
+    "build/research/application-dib-pixels-native-20260912/fixture-verification1.json": {
+      "bytes": 8611,
+      "sha256": "1d6c8ea7bfffefb7509f94bbe3948dae15796a3408e0a7d1e8773b131bc0b61f"
+    },
+    "build/research/application-dib-pixels-native-20260912/next-work-review.json": {
+      "bytes": 13482,
+      "sha256": "a7bdcb096caf73a9a29390000dd3f8ceec5b8e06d96fe1fb976e6e952cbe1350"
+    },
+    "build/research/application-dib-pixels-native-20260912/next-work-review2.json": {
+      "bytes": 15150,
+      "sha256": "8f4c05dc576f698dd082930bf593d38feec6caa57624477582cdcfc50071968f"
+    },
+    "build/research/application-dib-pixels-native-20260912/evidence-members.json": {
+      "bytes": 41245,
+      "sha256": "007bd03588b4d618bf7a8f8f94b92878b532c288379712ab9f2383a4a1c995ef"
+    },
+    "build/research/application-dib-pixels-native-20260912/native-archive-verification.json": {
+      "bytes": 481,
+      "sha256": "c262059d480a18de467656c39e30ffb18b58386ce5fb17e28928770f22317009"
+    },
+    "build/research/application-dib-pixels-native-20260912/evidence-archive-verification.json": {
+      "bytes": 789,
+      "sha256": "86750b7788f72f044f32a0f018974ae02be90de3588ae5987525586d0f1be9ff"
+    },
+    "build/research/application-dib-pixels-native-20260912/archive-storage-verification.json": {
+      "bytes": 242,
+      "sha256": "d5d3f52c9bea46bbefa8b941f6b401430ae47e7400ed87e365976c09c503dddf"
+    },
+    "build/research/application-dib-pixels-native-20260912/plan-amendment2-git-binary.json": {
+      "bytes": 975,
+      "sha256": "df5241167079e918e169a908ba83cf5b29208038c599c87d7c20cf3eb14bc328"
+    },
+    "build/research/application-dib-pixels-native-20260912/precommit1-whitespace.log": {
+      "bytes": 4211304,
+      "sha256": "b8098e6c4fd0779507fd4b4b9d3724f6afcf55286a89f36795c0b09ed2dc52f5"
+    }
+  },
+  "limits": [
+    "surface pixels/copy/stretch/pixel format/color-key/palette realization/device lifetime",
+    "AppKit window/input/clock/audio/text/presentation",
+    "loading/full catalog/War43a860/full match/all game/Windows/cleanMac",
+    "three safety incidents",
+    "Unknown146289RLE colors need original platform initialization provenance before complete-color display acceptance",
+    "Surface ownership/copy/stretch/pixel format/color-key not implemented by cached image pixels",
+    "Finite positive-header BI_RGB24/BI_RLE8 decoder; not all BMP formats or all malformed inputs"
+  ],
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "sourceFaultMatchesClaimed": false,
+  "appWindowVerified": false,
+  "windowsOrDeviceVerified": false,
+  "fullGameComplete": false,
+  "safetyIncidentsRemainOpen": 3
+}

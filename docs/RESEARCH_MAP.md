@@ -174,10 +174,26 @@ frozen candidate2 и исправленный candidate3 сохранены; exp
 Новое исполнение оригинала не требовалось. Это inputs/metadata, ещё не pixels,
 host graphics/audio, запуск приложения или полная игра; три incidents открыты.
 
-Следующая конечная карточка по CURRENT_WORK — декодирование36 packaged DIB
-в Native RGB pixels с явными masks и передачей через bitmap-input owner.
-Независимые pixel goldens и RLE command coverage — первый gate следующей
-карточки; metadata acceptance их не подменяет. AppKit/renderer/audio открыты.
+Приняты [Native colors/masks для36 startup DIB](research/APPLICATION_DIB_PIXELS.md).
+Два независимо закреплённых data decoder совпали по всем40736644 bytes:
+30552483 RGB +10184161 masks. Проверены14632 rows и все44980 RLE commands.
+10037872 пикселя записаны;146289 остаются неизвестными в cursor/SLOGAN/WORDS.
+OriginalDIBPixels хранит top-left RGB8/defined; Bitmap владеет ими до Core attempt,
+live image lookup отвергает удалённые handles, чтение unknown color — явная ошибка.
+Прежние48/50/12 parent chains сравнивают новые colors/masks actual image owners
+с сохранением всех records/events/rollback. 20 bundled release-методов прошли
+за135.303с, сборка297.09с;18 controls =3 returns/15 rejections.
+ImageIO отдельно совпал для29 ресурсов, разошёлся на567 written pixels в7;
+его данные/диагностика сохранены, expected под host не менялись. Два synthetic
+host controls не добавляют исходных ресурсов. Все370 прежних fixtures и46
+package files неизменны;372 текущих fixtures/875 Native-файлов и оба архива
+проверены. [Приёмка](evidence/application-dib-pixels.json). Нового исполнения
+оригинала нет. Unknown colors, surface/raster/device и полная игра остаются открытыми.
+
+Следующая карточка по CURRENT_WORK — полный фактический bitmap→surface
+consumer startup. Inventory размеров/formats/DC/initial masks/lifetimes — первый
+непройденный gate;1:1 subset нельзя выдавать за весь контракт без доказательства.
+RLE holes и исходные surface colors не превращаются в известный чёрный/alpha0.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
