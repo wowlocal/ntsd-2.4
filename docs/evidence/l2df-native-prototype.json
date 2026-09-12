@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "asOfUTC": "2026-09-12T06:34:14.978512+00:00",
+  "title": "Isolated native macOS L2DF NTSD prototype",
+  "status": "candidate feasibility demonstrated; NTSD fidelity not accepted",
+  "worktree": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
+  "branch": "codex/l2df-native-prototype",
+  "baseRevision": "fbfc3c079c97930a1fbec13fb875806e92272f9e",
+  "candidate": {
+    "repository": "https://github.com/atom-tm/l2df-engine",
+    "branch": "wip-test",
+    "commit": "a20a16f2e8c9e889e33b3d762c94dc49498d0f83",
+    "fullArchiveGitBlobsVerified": 850,
+    "runtimeUpstreamFilesUnchanged": 139
+  },
+  "baselineExeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "originalResourcesVerifiedUnchanged": 111,
+  "originalResourceBytes": 19532782,
+  "catalog": [
+    {
+      "id": 2,
+      "type": 0,
+      "file": "original/chars/naruto.dat",
+      "decodedSHA256": "c13d2064032789573e09fd9e0bd1547e5cb87ee113e0f710983cba344712b61f",
+      "frameMarkers": 318
+    },
+    {
+      "id": 11,
+      "type": 0,
+      "file": "original/chars/sasuke.dat",
+      "decodedSHA256": "1b7d8d19d162cf8f93a2a3493a7ff016dc6494358a870bcbf6eacd9dcb28d392",
+      "frameMarkers": 268
+    },
+    {
+      "id": 203,
+      "type": 3,
+      "file": "original/chars/charge.dat",
+      "decodedSHA256": "e4d8a952576b37b3d5e6f0903c4a178fba98bb598c893fe48a46b180fe8e7a3b",
+      "frameMarkers": 109
+    },
+    {
+      "id": 224,
+      "type": 3,
+      "file": "original/chars/snake.dat",
+      "decodedSHA256": "a85d62890dccb2edb3e87052ef866d792833a43ae4132a14eb25cfc74396a1e0",
+      "frameMarkers": 47
+    },
+    {
+      "id": 440,
+      "type": 3,
+      "file": "original/chars/chidori.dat",
+      "decodedSHA256": "21aa1bbd98e021cc75d6aebeae0a55162e1bee01b08ebc9ce51e4b2b28b66ea7",
+      "frameMarkers": 77
+    }
+  ],
+  "runtime": {
+    "loveAPI": [
+      11,
+      5,
+      0,
+      "Mysterious Mysteries"
+    ],
+    "bundleVersion": "11.5a",
+    "host": "macOS 26.6.2 (25G83)",
+    "hostArchitecture": "arm64",
+    "binaryArchitectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "executableSHA256": "0daa04d49e671e7d3649e54935a91e8dcbf0769bef8d1c3503c025842b680da2",
+    "signature": "unsigned, not notarized",
+    "globalInstall": false,
+    "OSProtectionsChanged": false,
+    "browserOrWindowsRuntime": false
+  },
+  "delivery": {
+    "app": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build/NTSD L2DF Prototype.app",
+    "launchCommand": "./prototypes/l2df/launch.command",
+    "gameZIPBytes": 4343771,
+    "gameZIPSHA256": "bff25243ee578f5fa7608853f2e81f13354302e83091d40faae81ce113a31f68",
+    "gameZIPMembers": 259,
+    "everyZIPMemberCompared": true,
+    "externalSymlinks": false,
+    "selfContainedOnInspectedMac": true
+  },
+  "smoke": {
+    "backend": "love",
+    "counts": {
+      "audioCalls": 23,
+      "audioPlaying": 23,
+      "damageEvents": 5,
+      "keyboardCallbacks": 13,
+      "missingOpoint": 0,
+      "projectiles": 1,
+      "spawned": 7
+    },
+    "framesSeen": [
+      {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "5": true,
+        "6": true,
+        "7": true,
+        "60": true,
+        "61": true,
+        "62": true,
+        "63": true,
+        "65": true,
+        "66": true,
+        "67": true,
+        "68": true,
+        "180": true,
+        "184": true,
+        "185": true,
+        "219": true,
+        "220": true,
+        "221": true,
+        "230": true
+      },
+      {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": true,
+        "5": true,
+        "6": true,
+        "7": true,
+        "60": true,
+        "61": true,
+        "62": true,
+        "63": true,
+        "64": true,
+        "65": true,
+        "66": true,
+        "67": true,
+        "68": true,
+        "69": true,
+        "210": true,
+        "211": true,
+        "212": true,
+        "215": true,
+        "220": true,
+        "221": true,
+        "222": true,
+        "223": true,
+        "240": true,
+        "241": true,
+        "242": true,
+        "246": true,
+        "261": true,
+        "262": true,
+        "263": true,
+        "264": true,
+        "265": true,
+        "266": true
+      }
+    ],
+    "love": [
+      11,
+      5,
+      0,
+      "Mysterious Mysteries"
+    ],
+    "minHP": [
+      442.58333333333,
+      463.41666666667
+    ],
+    "nativeNTSDCompared": false,
+    "originalExecuted": false,
+    "screenshots": {
+      "idle": 5,
+      "melee": 80,
+      "projectile": 347
+    },
+    "smokeInput": "synthetic love keyboard callbacks",
+    "ticks": 600
+  },
+  "smokeExitCode": 0,
+  "independentReview": {
+    "reviewer": "parent/root agent, separate from implementation",
+    "files": [
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/review/packaged-smoke-01-review.json",
+        "sha256": "c99e3bceb7216664f50fe4aa2e524239f08ca754efee085db765046753937468"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/review/interactive-01-window-observation.json",
+        "sha256": "c843ccb5c869027fd2b503121f48aa964fb3d469f0163b43fab4f0017c30bf45"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/review/runtime-review.json",
+        "sha256": "659aac01f3a2e42938490d564ed9897e9ce537814821ce72f6679e45520c6f39"
+      },
+      {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/review/package-review.json",
+        "sha256": "13d8fe4023aabc49b05a9c8d610333a022744e3c46802be56ff60f0dfcbfd958"
+      }
+    ],
+    "resourceErrors": [],
+    "mainPendingFilesUnchanged": 22,
+    "window": {
+      "pid": 57969,
+      "startUTC": "2026-09-12T06:30:17.165974+00:00",
+      "windowID": 13983,
+      "bounds": [
+        1152,
+        748
+      ],
+      "clientPixels": [
+        1152,
+        720
+      ],
+      "nativeAppKitCGWindowObserved": true
+    }
+  },
+  "storage": {
+    "buildSymlink": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/l2df-native-prototype-20260912/build",
+    "uuid": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "reserveBytes": 6442450944,
+    "initialLimitBytes": 10737418240,
+    "localPlacementIncidentCorrectedAndRetained": true
+  },
+  "failuresRetained": [
+    {
+      "run": "smoke-01",
+      "outcome": "setup error; missing Sync initialization; exit1"
+    },
+    {
+      "run": "smoke-02",
+      "outcome": "District obscured by canvas; inadequate projectile gate; not accepted"
+    },
+    {
+      "kind": "storage",
+      "outcome": "local build copied with hash verification to declared X5; local original retained"
+    }
+  ],
+  "provenanceGap": "Early directory smoke variants lack separate snapshots of every wrapper version; final package/interactive inputs fully pinned.",
+  "knownDifferences": [
+    "Naruto repeated frame123 replacement instead of omitted numerical field retention",
+    "Kunai unmatched itr48 remains incompatible; excluded from finite catalog",
+    "Chidori facing50 creates one projectile rather than five",
+    "Chidori frame261 mp100 is not consumed",
+    "Simultaneous candidate input instead of sequential NTSD combo",
+    "Candidate timing/physics/guard/recovery/RNG not differentially accepted"
+  ],
+  "acceptance": {
+    "playableCandidate": true,
+    "L2DFCoreActuallyRuns": true,
+    "nativeWindowVerified": true,
+    "candidateKeyboardCallbackPathVerified": true,
+    "nativeAudioSourcePlayingObserved": true,
+    "physicalKeyboardVerified": false,
+    "acousticDeviceOutputVerified": false,
+    "NTSDDifferentialCompared": false,
+    "windowsVerified": false,
+    "cleanMacVerified": false,
+    "intelRuntimeTested": false,
+    "originalExecuted": false,
+    "wholeGameComplete": false,
+    "engineAdoptedForNTSDCore": false,
+    "networkRegistered": false,
+    "blockedDependenciesResolved": false,
+    "committed": false,
+    "pushed": false,
+    "merged": false
+  },
+  "artifacts": [
+    {
+      "path": "build/l2df-prototype/plan.json",
+      "sha256": "402862f90b8c9743e8be93a14f5c1a1bde9b9dc94f3714f70ff8ff149c62f89a"
+    },
+    {
+      "path": "build/l2df-prototype/resource-manifest.json",
+      "sha256": "975886c8d613aa4234aceef0f3088c4c03d3dd2d5150dbf81b2b7c35e48c3f96"
+    },
+    {
+      "path": "build/l2df-prototype/package-manifest.json",
+      "sha256": "c3c720b02499cb841f34f3cd7f2722cabd141922b4524c191280855bab681b31"
+    },
+    {
+      "path": "build/l2df-prototype/storage-correction.json",
+      "sha256": "280c3d07a38ad1842351aff76b9ead2d6a25dd0946662014078a5172450ce6ea"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/job.json",
+      "sha256": "0a571620fa57283f798e050e6e5659701802b865b190d6880564418dd20a7952"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/summary.json",
+      "sha256": "18e848d79cef3eda9e1a6100a919d943e45734553cab43be657a9c6f6ea1eba3"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/trace.csv",
+      "sha256": "17f4b38f56d046e7c93c4c9a4aaa9ccdc305e894819c499375f1ae99d2c03285"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/events.log",
+      "sha256": "7ad086e13dc4c3a923c2cc4bed36116e7a5df545885f131240f3472c1f9d0de8"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/idle.png",
+      "sha256": "86c57aeb8b6ed8304eec609ce3aa214471b85dbc0d0e172d396982f5cc049e0d"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/melee.png",
+      "sha256": "32e826bcddafc582cfb7990b9f0ab856c4e53a891c4fc9f1221e8990e95b6f43"
+    },
+    {
+      "path": "build/l2df-prototype/logs/packaged-smoke-01/projectile.png",
+      "sha256": "cea84bf153e69a4a6b63c21a121a44f224b7ef33efbd2ec4c68387852513bcc0"
+    }
+  ]
+}
