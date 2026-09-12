@@ -167,6 +167,38 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
         var random = OriginalCRTRandom(),dispatchResult: Int32? = nil
         var frontSurfaces: [UInt32:UInt32] = [:]
         var outerAndWorldBytes: [UInt8] = []
+
+        func menuSessionState(counter: UInt32) throws -> OriginalApplicationMenuSession.State {
+            let bytes = base.globals.bytes + base.outerBytes(counter:counter) + outerAndWorldBytes.dropFirst(0x854)
+            var outerMask = base.outer.defined
+            outerMask.replaceSubrange(0..<0x140,with:base.local.defined)
+            outerMask.replaceSubrange(0x140..<0x144,with:repeatElement(true,count:4))
+            outerMask.replaceSubrange(0x468..<0x470,with:base.memory.replayPointers.defined)
+            // This parent independently starts the extended PE-backed region
+            // known, then executes Native dispatch/menu writes (own(), below).
+            // No corpus after-state or private stack becomes session input.
+            let tailMask = [Bool](repeating:true,count:outerAndWorldBytes.count-0x854)
+            return try .init(full:.init(bytes:bytes,defined:base.globals.defined+outerMask+tailMask),memory:base.memory,
+                             front:front,frontSurfaces:frontSurfaces,earlyScreen:earlyScreen,
+                             libraryText:libraryText,random:random,screenBody:screenBody)
+        }
+
+        /// Compatibility bridge for the retained loading-prefix comparator.
+        /// All semantic state comes from Core's pending snapshot. Graphics and
+        /// constructor diagnostics remain this Native parent's historical data.
+        func receivingMenuState(_ state: OriginalApplicationMenuSession.State) throws -> Self {
+            var result = self
+            func part(_ start: Int,_ count: Int) throws -> OriginalStateRecord {
+                try .init(bytes:Array(state.full.bytes[start..<start+count]),defined:Array(state.full.defined[start..<start+count]))
+            }
+            result.base.globals = try part(0,0xb440)
+            result.base.outer = try part(0xb440,0x854)
+            result.base.local = try part(0xb440,0x140)
+            result.outerAndWorldBytes = Array(state.full.bytes.dropFirst(0xb440))
+            result.base.memory = state.memory; result.front = state.front; result.earlyScreen = state.earlyScreen
+            result.libraryText = state.libraryText; result.random = state.random; result.screenBody = state.screenBody
+            return result
+        }
     }
     struct LoopCompletion {
         let perform: (OriginalApplicationMessageLoop.Request,inout OwnContext) throws -> OriginalApplicationMessageLoop.Response

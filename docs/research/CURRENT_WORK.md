@@ -119,6 +119,22 @@ Raw56.029с/build278.35с; bundled War8 за443.553с
 faults проверены отдельные Native rejection/rollback contracts. Полная игра и
 три safety incidents остаются открытыми.
 
+Принята [собственная menu-session в production Core](APPLICATION_MENU_SESSION.md).
+OriginalApplicationMenuSession выполняет50 сохранённых цепочек:62 завершённые
+итерации и3 явные loading boundaries,18835 событий/869 checkpoints/9000 RNG.
+Сравниваются1171 committed platform operation и отдельно3 pending clear, а не
+повторное исполнение helper summaries. Canonical full record сохраняет реальные
+aliases/masks; registry удерживает live/dead owners, библиотеку/DC и RNG.
+Восемь поздних откатов и новые alias/unknown/owner/effect guards прошли вместе
+с MenuReturn/MenuInput/MessageLoop/LoadingPrefix:11 release-методов за68.560с,
+сборка283.55с. Первый compile setter failure и замечания review сохранены.
+370 прежних fixtures неизменны,819 Native-файлов и оба архива сверены. Четыре
+старых envelopes опускают финальный LF: payload+LF точно воспроизводит все
+276384592 raw bytes/SHA,JSON и16424 blob entries. Эталоны не менялись.
+Нового исполнения оригинала нет. [Приёмка](../evidence/application-menu-session.json).
+Bootstrap пока создаётся в Native test composer; приложение/устройства, полная
+загрузка/каталог/игра и три safety incidents остаются открытыми.
+
 ## Непринятая работа и отказ Codex
 
 Сохранённый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -169,36 +185,40 @@ faults проверены отдельные Native rejection/rollback contracts
 
 ## Следующая независимая карточка
 
-**Собственный coordinator menu/outer-loop в production Core.**
+**Production bootstrap от объявленного WinMain entry до первого committed menu.**
 
 Read-only readiness:
-`build/research/lib-war-preparation/war-fault-rejections-native-20260912/next-work-review.json`.
-Сейчас композиция находится в `OriginalApplicationMenuInputTests.run` и тестовом
-`OriginalBitmapSurfaceLoadingTests.OwnContext`; приложение запускает Practice.
-Вынести подтверждённую цепочку в `OriginalApplicationMenuSession.swift` с собственными
-владельцами состояния и объявленными platform responses.
+`build/research/application-menu-session-native-20260912/next-work-review.json`.
+Создать OriginalApplicationBootstrap, который владеет всем startup result и
+первой menu-итерацией, затем возвращает живую OriginalApplicationMenuSession.
+Сейчас этот upstream producer собран в B/S/F/Body/M XCTest closures.
 
-Конечный путь: доставленный ввод → Main World0→1 → confirmation sound и3000 RNG
-на активацию → освобождение фона → World2 с явной loading boundary. Готовы
-50 сохранённых цепочек:47 idle repeats и3 activation chains,62 completed iterations,
-3 loading boundaries,18835 событий,9000 RNG calls и869 полных checkpoints.
-Это собственные Native parents, а не загрузка их ожидаемого after-state.
-Восемь поздних rollback controls сохраняют предыдущие завершённые итерации.
+Готовы48 saved menu-return chains:47 завершённых первых menu-итераций и один
+отдельный NULL-cursor stop. Вложенные43body/40front/19settings/7bitmap parents
+перекрываются и содержат одного WinMain original-entry родителя; числа нельзя
+складывать. Новый Core join не требует исполнения оригинала.
 
-Перед изменениями закрепить фактические Core/test/fixture inputs и прочитать
-APPLICATION_MENU_INPUT, APPLICATION_MENU_RETURN, APPLICATION_LOADING_PREFIX,
-APPLICATION_MESSAGE_LOOP и соответствующие исторические ограничения.
-Сохранить все существующие сравнения bytes/masks/owners/RNG/DC/timer/counter;
-компаратор и JSON остаются в тестах. Loading request — явное production-продолжение,
-не XCTest Stop.loading и не успешный возврат загрузки. Проверить общий откат
-платформенных эффектов и pending-state handoff для LoadingPrefix.
+Сохранить весь OriginalWinMainStartup owner: panel generations, calendar/music
+allocations и пять WAV results. Дальше — own loop/resize/dispatch,24 front bitmap
+constructors, settings, background/body/library text, main/tail и timer return.
+Canonical full record/masks и реальные aliases должны переживать весь путь.
+Начальные PE-backed bytes, translated control/file bytes, clock/calendar и
+platform replies — явные входы; expected after-state и oracle JSON не входят
+в runtime. Native startup и первая menu-итерация имеют разные commit boundaries:
+ошибка pending menu сохраняет уже завершённые startup и callbacks.
 
-Обязательны прежние ApplicationMenuReturn, ApplicationMenuInput,
-ApplicationMessageLoop и ApplicationLoadingPrefix regressions плюс независимый
-review ownership/aliases/эффектов. Для этого конечного извлечения нового исполнения
-оригинала, source producer или исторического audit не требуется.
-Карточка готовит подключение цикла к приложению; окно, полный каталог/loading,
-War43a860 и сыгранный матч ею не проверяются. Три safety incidents остаются открыты.
+После нового producer выполнить прежние50 menu-session chains и LoadingPrefix.
+Обязательны48 MenuReturn outcomes/9 late controls, затронутые Settings/FrontScreen/
+ScreenBody rollback tests, отдельные WinMainStartup/MessageLoop regressions и
+review ownership/input provenance/effect batches. Закрепить фактические inputs
+и разрешённые файлы до следующей реализации; все370 fixtures неизменяемы.
+
+Самостоятельный запуск приложения требует следующих отдельных контрактов:
+regular bundled PE-global/mask/adinfo/control input package, Native file adapter,
+AppKit queue/key/mouse/clock и renderer/audio effect delivery. Старый Practice
+backend их не реализует. Эта карточка переносит готовую Core-композицию и не
+объявляет эти inputs/backend или окно готовыми. Полная загрузка/каталог,
+War43a860/матч/игра/Windows/cleanMac и три incidents остаются открытыми.
 
 ## Дальнейшая сквозная очередь
 
@@ -225,4 +245,4 @@ Native-карточкой выше: их исходные версии сохр�
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
 Исторический work JSON не переписывался. Новые принятые NULL/partial-surface/
-graphics/music-error/retained-scratch контракты и следующая карточка fault rejection описаны выше.
+graphics/music-error/retained-scratch/fault-rejection и menu-session контракты описаны выше.

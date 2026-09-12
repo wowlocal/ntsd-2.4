@@ -124,10 +124,29 @@ Raw56.029с/build278.35с; bundled War8 за443.553с
 faults проверены отдельные Native rejection/rollback contracts. Полная игра и
 три safety incidents остаются открытыми.
 
-Следующая конечная карточка по CURRENT_WORK — вынести собственную композицию
-menu/outer-loop из XCTest в production Core. Готовы50 saved chains/62 completed
-iterations/3 loading boundaries; новое исполнение оригинала не требуется.
-Полный каталог, War43a860, приложение, игра и Windows/device остаются открытыми.
+Принята [собственная menu-session в production Core](research/APPLICATION_MENU_SESSION.md).
+OriginalApplicationMenuSession выполняет50 сохранённых цепочек:62 завершённые
+итерации и3 явные loading boundaries,18835 событий/869 checkpoints/9000 RNG.
+Сравниваются1171 committed platform operation и отдельно3 pending clear, а не
+повторное исполнение helper summaries. Canonical full record сохраняет реальные
+aliases/masks; registry удерживает live/dead owners, библиотеку/DC и RNG.
+Восемь поздних откатов и новые alias/unknown/owner/effect guards прошли вместе
+с MenuReturn/MenuInput/MessageLoop/LoadingPrefix:11 release-методов за68.560с,
+сборка283.55с. Первый compile setter failure и замечания review сохранены.
+370 прежних fixtures неизменны,819 Native-файлов и оба архива сверены. Четыре
+старых envelopes опускают финальный LF: payload+LF точно воспроизводит все
+276384592 raw bytes/SHA,JSON и16424 blob entries. Эталоны не менялись.
+Нового исполнения оригинала нет. [Приёмка](evidence/application-menu-session.json).
+Bootstrap пока создаётся в Native test composer; приложение/устройства, полная
+загрузка/каталог/игра и три safety incidents остаются открытыми.
+
+Следующая конечная карточка по CURRENT_WORK — production bootstrap owner от
+объявленного WinMain entry через первый menu return к живой MenuSession.
+Готовы48 saved menu-return chains:47 возвратов и отдельный NULL-cursor stop.
+Сохранить весь startup owner (panel/calendar/music/пять WAV), реальные aliases,
+Native inputs и разные commit boundaries startup/menu. Оригинал не требуется.
+AppKit/file/asset-package contracts, полная загрузка/каталог, War43a860,
+приложение/матч/игра/Windows/device остаются открытыми.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

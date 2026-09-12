@@ -1,0 +1,460 @@
+{
+  "schema": 1,
+  "acceptedUTC": "2026-09-12T15:39:23.615644+00:00",
+  "status": "finite Native menu-session extraction verified",
+  "baseCommit": "af196a621bf344db73eaac1115ee76a7963aad7f",
+  "scope": {
+    "chains": 50,
+    "idle": 47,
+    "activation": 3,
+    "completedIterations": 62,
+    "pendingLoading": 3,
+    "events": 18835,
+    "checkpoints": 869,
+    "randomCalls": 9000,
+    "bitmapRecords": 21725,
+    "rollbackControls": [
+      "windowDefault#1",
+      "blit#3",
+      "soundMethod#3",
+      "write#1500",
+      "randomTable#1",
+      "free#1",
+      "method#3",
+      "commit"
+    ]
+  },
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved Unicorn2.1.4 records, declared platform replies. Current task reads saved records and executes Native release on macOS only.",
+    "sourceExecution": false,
+    "producerImports": false,
+    "historicalAuditExecution": false
+  },
+  "implementation": {
+    "paths": {
+      "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+        "bytes": 23045,
+        "sha256": "be1341fcbac1c276937ead560c5fd17b2c0ee8ed44ec4919c7be32fb0463c13d"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": {
+        "bytes": 25251,
+        "sha256": "2eb718e39b0abbed6dbb2befea12659eb7102c5bafacf17c7899303de28f9549"
+      },
+      "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift": {
+        "bytes": 23821,
+        "sha256": "994bc13f2e69d492370d1eb1378d081b7d677b84efc10e2e95ff2a4af55cc6d9"
+      }
+    },
+    "canonicalFullBytes": 50088,
+    "globalBase": "0x44d000",
+    "outer": "0x458440",
+    "world": "0x458b00",
+    "replayAliases": [
+      "0x4588a8",
+      "0x4588ac"
+    ],
+    "counter": "0x458580",
+    "runtimeExpectedImports": false,
+    "runtimeReferenceChecksDependency": false,
+    "bootstrapRemainsSeparate": true,
+    "loopAndResourcesOwnValueState": true,
+    "committedAndPendingTypesSeparate": true
+  },
+  "validation": {
+    "candidate": "candidate2",
+    "configuration": "release",
+    "bundledFixtures": true,
+    "rawOverrides": false,
+    "buildSeconds": 283.55,
+    "testSeconds": 68.56,
+    "methods": [
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+        "seconds": 6.335
+      },
+      {
+        "name": "OriginalApplicationLoadingPrefixTests testOwnLoadingCommonSoundsAndOrdinaryFailures",
+        "seconds": 9.959
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 6.567
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 20.175
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMenuInputTests testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 2.706
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testLateMenuReturnFailuresRollBackWholeIteration",
+        "seconds": 5.002
+      },
+      {
+        "name": "OriginalApplicationMenuReturnTests testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+        "seconds": 16.72
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testLateFailureRollsBackContextMessageCounterAndBaseline",
+        "seconds": 0.0
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+        "seconds": 0.087
+      },
+      {
+        "name": "OriginalApplicationMessageLoopTests testWholeLoopAndOwnStartupCallbacks",
+        "seconds": 1.009
+      }
+    ],
+    "methodCount": 11,
+    "job": {
+      "scope": "Native-only release validation of own menu-session extraction.\nSaved reference fixtures are read; no original, producer or historical auditor executes.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-menu-session-native-20260912/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-menu-session-native-20260912/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationMenuReturnTests|OriginalApplicationMenuInputTests|OriginalApplicationMessageLoopTests|OriginalApplicationLoadingPrefixTests"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-menu-session-native-20260912/candidate2-inputs.json",
+      "nativeFiles": 819,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-12T15:31:00.608198+00:00",
+      "pid": 76195,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 354.09257487499997,
+      "endedUTC": "2026-09-12T15:36:54.674962+00:00"
+    },
+    "allRequiredFamiliesPassed": true,
+    "firstCandidate": {
+      "status": "compile failure preserved; no test executed",
+      "elapsedSeconds": 5.518839583,
+      "cause": "Nested State.full setter inaccessible for same-file Session inout call",
+      "correction": "fileprivate setter; public setter remains unavailable"
+    },
+    "reviewCorrections": [
+      "All returned/pending terminal effect batches now compare independently with saved source requests",
+      "PE-known full masks explicitly asserted separately from store masks",
+      "GetDC result/output and ignored sound/release replies retained",
+      "Exact front surface key set and non-retrieval MSG-write guards"
+    ]
+  },
+  "effectComparison": {
+    "classification": {
+      "terminalBatchOperations": "Front terminal graphics/audio/release/free operations plus queue translate/sleep. Clear is the saved whole-surface Blt request; method slots 8 and 20 are release and present.",
+      "frontHelperObservations": "Draw/text/soundRequest wrappers and state/read/helper observations are retained and counted separately, not duplicate backend operations.",
+      "queueRequests": "All requests are retained separately, including peek/get/time input replies, nested dispatchMessage wrappers and nine windowDefault callbacks. These counts do not claim host queue rollback or actual platform execution.",
+      "continued": "Saved continued iterations: expected committed batches under this card, not a Native acceptance result.",
+      "loading": "Saved loading boundaries: expected staged pending batches, not delivered effects or completed loading returns."
+    },
+    "continued": {
+      "events": 18814,
+      "terminalBatchOperations": 1171,
+      "terminalBatchKinds": {
+        "front/blit": 256,
+        "front/clear": 53,
+        "front/fill": 50,
+        "front/free": 3,
+        "front/getDC": 147,
+        "front/method/present": 53,
+        "front/method/release": 3,
+        "front/releaseDC": 147,
+        "front/setBackgroundMode": 147,
+        "front/setTextColor": 147,
+        "front/soundMethod": 9,
+        "front/textOut": 147,
+        "queue/translate": 9
+      },
+      "frontHelperObservations": 17395,
+      "frontHelperKinds": {
+        "clip": 256,
+        "draw": 256,
+        "enter": 98,
+        "leave": 98,
+        "panel": 49,
+        "randomTable": 3,
+        "read": 1586,
+        "soundRequest": 3,
+        "stringLength": 147,
+        "text": 147,
+        "write": 9362,
+        "writeLocal": 5390
+      },
+      "queueRequestKinds": {
+        "dispatchMessage": 9,
+        "get": 9,
+        "peek": 62,
+        "time": 159,
+        "translate": 9,
+        "windowDefault": 9
+      },
+      "batchExcludedQueueRequests": 248,
+      "batchExcludedQueueKinds": {
+        "dispatchMessage": 9,
+        "get": 9,
+        "peek": 62,
+        "time": 159,
+        "windowDefault": 9
+      },
+      "sourceKinds": {
+        "front/blit": 256,
+        "front/clear": 53,
+        "front/clip": 256,
+        "front/draw": 256,
+        "front/enter": 98,
+        "front/fill": 50,
+        "front/free": 3,
+        "front/getDC": 147,
+        "front/leave": 98,
+        "front/method/slot-20": 53,
+        "front/method/slot-8": 3,
+        "front/panel": 49,
+        "front/randomTable": 3,
+        "front/read": 1586,
+        "front/releaseDC": 147,
+        "front/setBackgroundMode": 147,
+        "front/setTextColor": 147,
+        "front/soundMethod": 9,
+        "front/soundRequest": 3,
+        "front/stringLength": 147,
+        "front/text": 147,
+        "front/textOut": 147,
+        "front/write": 9362,
+        "front/writeLocal": 5390,
+        "queue/dispatchMessage": 9,
+        "queue/get": 9,
+        "queue/peek": 62,
+        "queue/time": 159,
+        "queue/translate": 9,
+        "queue/windowDefault": 9
+      }
+    },
+    "loading": {
+      "events": 21,
+      "terminalBatchOperations": 3,
+      "terminalBatchKinds": {
+        "front/clear": 3
+      },
+      "frontHelperObservations": 6,
+      "frontHelperKinds": {
+        "write": 6
+      },
+      "queueRequestKinds": {
+        "peek": 3,
+        "time": 9
+      },
+      "batchExcludedQueueRequests": 12,
+      "batchExcludedQueueKinds": {
+        "peek": 3,
+        "time": 9
+      },
+      "sourceKinds": {
+        "front/clear": 3,
+        "front/write": 6,
+        "queue/peek": 3,
+        "queue/time": 9
+      }
+    }
+  },
+  "artifactVerification": {
+    "totals": {
+      "rawFiles": 4,
+      "rawBytes": 276384592,
+      "envelopePayloadBytes": 276384588,
+      "reconstructedFinalLFBytes": 4,
+      "fixtureBytes": 91769952,
+      "blobEntries": 16424,
+      "decodedBlobBytes": 748703968,
+      "distinctBlobDigests": 8295,
+      "distinctDecodedBlobBytes": 365380098
+    },
+    "rawAndFixturePins": {
+      "build/research/application-menu-input-candidate1.json": {
+        "bytes": 132657719,
+        "sha256": "33292e107dface97563ea36a3d55e4108ce051d85352345c22e46a8ab898fc18"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json": {
+        "bytes": 37774137,
+        "sha256": "e1eb47c2d27dc5da54877dafa3471d03abc34cd608016252b5845634b4f8b6f0"
+      },
+      "build/research/application-menu-return-candidate1.json": {
+        "bytes": 67627503,
+        "sha256": "7723fdb6706e94a647e489e57e3729d1c81529ad474a02d936cb5038846e677d"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-return.json": {
+        "bytes": 14123660,
+        "sha256": "0fa998dbc893663030a57d146d9ac3959c7c02e283340efe30c6fd34d57becc7"
+      },
+      "build/research/application-loading-prefix-candidate1.json": {
+        "bytes": 71768199,
+        "sha256": "2bba3691974e5202add664270e8fc2f60d7a9b80cee5a1f6e7163732bf33c8a5"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/original-application-loading-prefix.json": {
+        "bytes": 37335552,
+        "sha256": "47704282bfa6080a71b795519d3ca486ea66928195fb2d936fcace5df4af8977"
+      },
+      "build/research/application-message-loop-candidate3.json": {
+        "bytes": 4331171,
+        "sha256": "f6ce8dff0efb9561521aa06a864cf0042fcc09e0fddb3ef64ee01fc6856e6cf9"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/original-application-message-loop.json": {
+        "bytes": 2536603,
+        "sha256": "b88ca033aaf17df68694d61d2c570890f7b8b620a96ceb22f43ef9a8d0133ebd"
+      }
+    },
+    "transportBoundary": "Each historical fixture payload omits exactly one final LF. Payload+0a equals complete pinned raw bytes/SHA; JSON/all blob counts and hashes verify. No trimming or repacking.",
+    "protectedFixtures": 370,
+    "currentFixtures": 370,
+    "currentNativeFiles": 819,
+    "archives": {
+      "native-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-menu-session-native-20260912/native-candidate2.tar",
+        "members": 819,
+        "payloadBytes": 4015501097,
+        "tar": {
+          "bytes": 4016977920,
+          "sha256": "30c7613a0d8955ade9a430fbf4a95261caa06460fffe5696c7649e92b4240960"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T15:37:56.833498+00:00",
+        "protectedFixtures": 370,
+        "currentNativeFiles": 819,
+        "sourceExecuted": false
+      },
+      "evidence-archive-verification.json": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-menu-session-native-20260912/menu-session-evidence2.tar",
+        "members": 67,
+        "payloadBytes": 278234112,
+        "tar": {
+          "bytes": 278353920,
+          "sha256": "eb6c7c6860b1bb8b3866e12355eba695db74dd258e138a1cca77e84c770248ac"
+        },
+        "allMembersVerified": true,
+        "verifiedUTC": "2026-09-12T15:37:57.453724+00:00",
+        "allPlanPins": 36,
+        "initialCandidateFailurePreserved": true,
+        "sourceExecuted": false
+      }
+    }
+  },
+  "independentReview": {
+    "reviewer": "/root/catalog_pending_review",
+    "codeReview": "review2.json plus review2-candidate2.json",
+    "fixtureReviewer": "/root/catalog_test_completion",
+    "phaseNote": "Code reviews preceded final Native result. Final publication/commit review is a separate post-archive artifact; not claimed inside evidence2."
+  },
+  "artifacts": {
+    "build/research/application-menu-session-native-20260912/plan.json": {
+      "bytes": 10118,
+      "sha256": "41db1b7bb1f5dbe956c9bf18ce6858a5110851c9d447abfe9ea6a411ae42314f"
+    },
+    "build/research/application-menu-session-native-20260912/initial-native.json": {
+      "bytes": 145616,
+      "sha256": "160d48b5f6d94a86b9ff45e094794fd839c528f9577e689070406bd900bf2789"
+    },
+    "build/research/application-menu-session-native-20260912/candidate1-inputs.json": {
+      "bytes": 145790,
+      "sha256": "268430f3118ca5f43563175f967d6822220ea939b32e183b8e0237a592f9adac"
+    },
+    "build/research/application-menu-session-native-20260912/candidate2-inputs.json": {
+      "bytes": 145790,
+      "sha256": "1c52566f13325a8d57007bcd84d9fd0b1f92da0faf40338ab21983711bfe5a0e"
+    },
+    "build/research/application-menu-session-native-20260912/native1.job.json": {
+      "bytes": 1145,
+      "sha256": "60b04998341e2a47c736e55f98047ea1bcd254a0c86588f3b8a10f455547bd69"
+    },
+    "build/research/application-menu-session-native-20260912/native1.log": {
+      "bytes": 2524,
+      "sha256": "e656013672e8550a9b4d078116226386ecca648bac96bdacf79e9ebb34cb270e"
+    },
+    "build/research/application-menu-session-native-20260912/native2.job.json": {
+      "bytes": 1152,
+      "sha256": "b2d0499cf30fdc0c039216582b1466d293e602d2b1e88ba6125acd8e363f6753"
+    },
+    "build/research/application-menu-session-native-20260912/native2.log": {
+      "bytes": 25761,
+      "sha256": "d4320dd96ad4bd289be1f71f001bdd5974eca55a32f46792245c13790eeac8c4"
+    },
+    "build/research/application-menu-session-native-20260912/review1.json": {
+      "bytes": 10003,
+      "sha256": "ad7094aecfb7a52001c2ec4fdb674cf7a23cc27c72e71e1d9d4d65d35d3531e2"
+    },
+    "build/research/application-menu-session-native-20260912/review2.json": {
+      "bytes": 7744,
+      "sha256": "a5d4d204144a125e5174c2854a2237bd87ef95f977d0a5f44d4c0d1b851ca851"
+    },
+    "build/research/application-menu-session-native-20260912/review2-candidate2.json": {
+      "bytes": 5083,
+      "sha256": "85b0e371bf0a80a919f6042fc25e99ecf9cf5fb1d6dbf19583ebb53648bd597f"
+    },
+    "build/research/application-menu-session-native-20260912/fixture-verification1.json": {
+      "bytes": 119052,
+      "sha256": "7d2e1c78f74ba015224b36453bb16d1cf556a26f2626dfea0151ece13dbbaaaf"
+    },
+    "build/research/application-menu-session-native-20260912/initial-plan-diagnostic.json": {
+      "bytes": 330,
+      "sha256": "5d47ad9616b477cfcfc7cf00a715fb410d88fe2c0ef6892812cdf7a03f7d28f8"
+    },
+    "build/research/application-menu-session-native-20260912/plan-amendment1.json": {
+      "bytes": 1765,
+      "sha256": "71ef330c641e1f28b0e2fa5dc14b56135f2db17dedc5e6222c7288d3f5c65402"
+    },
+    "build/research/application-menu-session-native-20260912/candidate2-review-corrections.json": {
+      "bytes": 778,
+      "sha256": "a10b258a29047cfbdbdb8ad6810a7aa41d748b6321c71c7786dfe8966db2ff4a"
+    },
+    "build/research/application-menu-session-native-20260912/evidence-members.json": {
+      "bytes": 10432,
+      "sha256": "d5b557965627a2695d396a9f4a1e67d26d25dd27544e5da6eb97fd96920f241f"
+    },
+    "build/research/application-menu-session-native-20260912/native-archive-verification.json": {
+      "bytes": 483,
+      "sha256": "d9837e383e18ec963b65ad4bc663b1275c099730753d6c3d39e350dc7289d760"
+    },
+    "build/research/application-menu-session-native-20260912/evidence-archive-verification.json": {
+      "bytes": 493,
+      "sha256": "d25be5221dafee7df22767446a76da097bb69246b09182d684d555d6819e0e70"
+    }
+  },
+  "limits": [
+    "full own loading/catalog return",
+    "menu window/input/audio integration",
+    "earlier CRT/NLS",
+    "workers/reentrancy/other dispatch modes",
+    "War43a860/gameplay",
+    "three prior safety incidents",
+    "full game/Windows/cleanMac"
+  ],
+  "sourceFaultMatchesClaimed": false,
+  "sourceExecuted": false,
+  "windowsOrDeviceVerified": false,
+  "appWindowVerified": false,
+  "fullGameComplete": false,
+  "safetyIncidentsRemainOpen": 3,
+  "nextWork": {
+    "task": "Production application bootstrap owner from declared WinMain entry through first committed menu iteration, returning the live OriginalApplicationMenuSession",
+    "readiness": "build/research/application-menu-session-native-20260912/next-work-review.json",
+    "bytes": 11861,
+    "sha256": "7562c3aa1751ce70c75dfa9208cf420784ce9f09fbf6bb161d131a306e38dea8",
+    "postArchiveArtifact": true,
+    "notNewNativeAcceptance": true
+  }
+}
