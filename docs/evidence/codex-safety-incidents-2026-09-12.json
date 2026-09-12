@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-12T05:38:59.071733+00:00",
+  "scope": "Historical Codex refusal records for this repository. Captured errors and preceding public tool operations, not classifier explanations or authorization to rerun them. No model reasoning content is included.",
+  "incidents": [
+    {
+      "id": "cyber-20260909T153443",
+      "researchSubject": "Round-result and replay recording: native result writer and original-instruction reference harness with memory read/write observations.",
+      "session": {
+        "id": "01a07b63-4c10-7961-b6ca-c40ba84878b5",
+        "cwd": "/Users/michael/Developer/ntsd-2.4",
+        "timestamp": "2026-09-07T10:21:40.280Z",
+        "cli_version": "0.153.4-fork.1",
+        "originator": "codex-tui",
+        "model_provider": "openai"
+      },
+      "sourceLog": {
+        "path": "/Users/michael/.codex/sessions/2026/09/07/rollout-2026-09-07T13-21-40-01a07b63-4c10-7961-b6ca-c40ba84878b5.jsonl",
+        "sha256": "5944c1b42ba1f11a46b3b6940400f491cff2dc15902e0829f0ccd5e88ba99646",
+        "bytes": 224228273
+      },
+      "requestId": null,
+      "exactBlockedOutputAvailable": false,
+      "exactTriggerKnown": false,
+      "automatedRetryAllowed": false,
+      "resolution": "open; preserve evidence and seek review; independent permitted work remains available",
+      "line": 35763,
+      "event": {
+        "timestamp": "2026-09-09T15:34:43.170Z",
+        "ordinal": 35762,
+        "type": "event_msg",
+        "payload": {
+          "type": "task_complete",
+          "turn_id": "01a086c3-e003-77e3-9962-c3e612b0570e",
+          "last_agent_message": null,
+          "error": {
+            "message": "This content was flagged for possible cybersecurity risk. If this seems wrong, try rephrasing your request. To get authorized for security work, join the Trusted Access for Cyber program: https://chatgpt.com/cyber",
+            "codex_error_info": "cyber_policy"
+          },
+          "started_at": 1788967378,
+          "completed_at": 1788968083,
+          "duration_ms": 704203,
+          "time_to_first_token_ms": 5673
+        }
+      },
+      "context": {
+        "turn_id": "01a086c3-e003-77e3-9962-c3e612b0570e",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "approval_policy": "never",
+        "sandbox_policy": {
+          "type": "danger-full-access"
+        }
+      },
+      "precedingToolCalls": [
+        {
+          "line": 35749,
+          "timestamp": "2026-09-09T15:34:14.852Z",
+          "callId": "call_JuJAfMhn6uFgVxg2BjdOcKWM",
+          "name": "exec",
+          "input": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Add File: /Users/michael/Developer/ntsd-2.4/tools/oracle_result_recording.py\\n+#!/usr/bin/env -S uv run --script\\n+# /// script\\n+# requires-python = \\\">=3.11\\\"\\n+# dependencies = [\\\"unicorn==2.1.4\\\", \\\"olefile==0.47\\\", \\\"capstone==5.0.6\\\"]\\n+# ///\\n+\\\"\\\"\\\"Whole421cdc..422218/422944 with real43df00,43dd60, codec and C++/CRT.\\n+\\n+Controlled400-slot pool, header prefixes, replay ownership and caller local.\\n+No helper success stub or expected compressed bytes enter the original CPU.\\n+Not an own initialized continuation, full tick, or actual Windows file run.\\n+\\\"\\\"\\\"\\n+import argparse\\n+import base64\\n+import itertools\\n+import json\\n+import struct\\n+import zlib\\n+from oracle_replay_writer import ReplayWriter, ROOT, EXE_SHA256, DLL_SHA256, CPP_SHA256, SOURCE, DESTINATION, SOURCE_COUNT, CAPACITY, GLOBAL, GLOBAL_COUNT, POINTER, NAME, ENTRY, digest, recording_inputs, signed\\n+from unicorn import UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE, UC_MEM_WRITE\\n+from unicorn.x86_const import UC_X86_REG_EIP, UC_X86_REG_ESP, UC_X86_REG_EBX, UC_X86_REG_EBP, UC_X86_REG_FPCW\\n+\\n+START, END, SKIP, ROOT_SP = 0x421cdc, 0x422218, 0x422944, 0x1000e000\\n+WORLD, POOL, HEADERS, PLAYBACK = 0x20000000, 0x21000000, 0x23000000, 0x2b000000\\n+SAVED, SAVED_COUNT = 0x458588, 0x320\\n+ACTOR_SIZE, WORLD_SIZE, HEADER_SIZE = 0x420, 0x7d8, 0x700\\n+\\n+\\n+class ResultRecording(ReplayWriter):\\n+    def __init__(self,**options):\\n+        super().__init__(writer_sp=ROOT_SP-4,track_helper_blocks=False,**options)\\n+        for address,size in ((WORLD,0x100000),(POOL,0x100000),(HEADERS,0x100000),(PLAYBACK,0x700000)):\\n+            self.uc.mem_map(address,size)\\n+        self.caller_pcs=set();self.caller_hooks={};self.restore_pcs=set();self.local_accesses=[]\\n+        self.input_regions=[];self.undefined_reads=[];self.record_writes=[];self.writer_entered=False\\n+        for ins in self.decoder.disasm(bytes(self.uc.mem_read(START,END-START)),START):\\n+            self.caller_hooks[ins.address]=self.uc.hook_add(UC_HOOK_CODE,self.caller_code,begin=ins.address,end=ins.address)\\n+        for pc in (END,SKIP,ENTRY,0x43df00,0x421fae):\\n+            self.uc.hook_add(UC_HOOK_CODE,self.caller_code,begin=pc,end=pc)\\n+        self.uc.hook_add(UC_HOOK_CODE,self.restore_code,begin=0x43df00,end=0x43e200)\\n+        for a,n in ((WORLD,WORLD_SIZE),(POOL,0x80000),(HEADERS,0x8000),(SOURCE,SOURCE_COUNT),\\n+                    (GLOBAL,GLOBAL_COUNT),(ROOT_SP+0x64,4)):\\n+            self.uc.hook_add(UC_HOOK_MEM_READ|UC_HOOK_MEM_WRITE,self.caller_access,begin=a,end=a+n-1)\\n+\\n+    def restore_code(self,uc,pc,size,data):\\n+        if getattr(self,'restoring',False):self.restore_pcs.add(pc)\\n+\\n+    def caller_code(self,uc,pc,size,data):\\n+        if pc in self.caller_hooks:\\n+            self.caller_pcs.add(pc);uc.hook_del(self.caller_hooks.pop(pc))\\n+        if pc in (END,SKIP):uc.emu_stop();return\\n+        if pc==ENTRY:\\n+            assert uc.reg_read(UC_X86_REG_ESP)==ROOT_SP-4\\n+            self.writer_entered=True\\n+            self.serialized=bytes(uc.mem_read(SOURCE,SOURCE_COUNT))\\n+            self.before_writer_globals=bytes(uc.mem_read(GLOBAL,GLOBAL_COUNT))\\n+        if pc==0x43df00:\\n+            self.restoring=True;self.restore_sp=uc.reg_read(UC_X86_REG_ESP)\\n+            self.writer_events.append(dict(kind='restorePlayback'))\\n+        if pc==0x421fae:\\n+            assert uc.reg_read(UC_X86_REG_ESP)==self.restore_sp+4\\n+            self.restoring=False\\n+\\n+    def caller_access(self,uc,access,address,size,value,data):\\n+        pc=uc.reg_read(UC_X86_REG_EIP)\\n+        if ROOT_SP+0x64<=address<ROOT_SP+0x68:\\n+            self.local_accesses.append(dict(pc=pc,address=address,size=size,write=access==UC_MEM_WRITE))\\n+        if SOURCE<=address<SOURCE+SOURCE_COUNT and access==UC_MEM_WRITE:\\n+            assert START<=pc<END and size==4\\n+            e=dict(kind='recordingWrite',address=SOURCE,offset=address-SOURCE,value=signed(value))\\n+            self.record_writes.append(e);self.writer_events.append(e)\\n+        if START<=pc<END and GLOBAL<=address<GLOBAL+GLOBAL_COUNT and access==UC_MEM_WRITE:\\n+            assert size==4\\n+            self.writer_events.append(dict(kind='globalWrite',address=address,value=signed(value)))\\n+        for a,raw,mask in self.input_regions:\\n+            if a<=address<a+len(raw):\\n+                assert address+size<=a+len(raw)\\n+                assert access!=UC_MEM_WRITE,('Read-only pool/header write',hex(pc),hex(address))\\n+                if not all(mask[address-a:address-a+size]):\\n+                    self.undefined_reads.append(dict(pc=pc,address=address,size=size))\\n+                break\\n+\\n+    def supplied(self,address,raw,mask):\\n+        self.uc.mem_write(address,raw)\\n+        self.input_regions.append((address,bytes(raw),bytes(mask)))\\n+\\n+    def probe(self,item,source):\\n+        item=dict(item);self.source_freed=False\\n+        self.uc.mem_write(ROOT_SP-0x1000,b'\\\\xa5'*0x1100)\\n+        flag=item.get('stageDefeated')\\n+        if flag is not None:self.put(ROOT_SP+0x64,flag)\\n+        world=bytearray(b'\\\\xa5'*WORLD_SIZE);world_mask=bytearray(WORLD_SIZE)\\n+        aliases=dict(item.get('aliases',[]));active=dict(item.get('active',[]))\\n+        def put(raw,mask,offset,value,size=4):\\n+            raw[offset:offset+size]=(value&((1<<(size*8))-1)).to_bytes(size,'little');mask[offset:offset+size]=b'\\\\1'*size\\n+        actor_patches=dict(item.get('actors',[]));actors=[]\\n+        for slot in range(400):\\n+            put(world,world_mask,4+slot,active.get(slot,0),1)\\n+            put(world,world_mask,0x194+4*slot,POOL+0x500*aliases.get(slot,slot))\\n+            raw=bytearray(b'\\\\xa5'*ACTOR_SIZE);mask=bytearray(ACTOR_SIZE)\\n+            for offset,value in [(0x2fc,500),(0x368,0),(0x364,1),(0x348,slot*3+1),(0x34c,slot*5+2),\\n+                                 (0x350,slot*7+3),(0x358,slot*11+4),(0x35c,slot*13+5),*actor_patches.get(slot,[])]:\\n+                put(raw,mask,offset,HEADERS+value*0x1000 if offset==0x368 else value)\\n+            self.supplied(POOL+slot*0x500,raw,mask);actors.append(dict(bytes=raw.hex(),defined=mask.hex()))\\n+        self.supplied(WORLD,world,world_mask)\\n+        headers=[]\\n+        for index in range(8):\\n+            raw=bytearray(b'\\\\xa5'*HEADER_SIZE);mask=bytearray(HEADER_SIZE)\\n+            put(raw,mask,0x6f4,[17,21,300,-1,2147483647,-2147483648,137,0][index])\\n+            put(raw,mask,0x6f8,[0,0,1,3,6,-1,0,0][index])\\n+            self.supplied(HEADERS+index*0x1000,raw,mask);headers.append(dict(bytes=raw.hex(),defined=mask.hex()))\\n+        defaults=[(0x450bdc,101),(0x450bbc,123),(0x451160,0),(0x450be4,1),(0x450b80,1),(0x450b84,0),\\n+            (0x450bf8,1),(0x450b88,0),(0x450b6c,-99),(0x450b70,-77),(0x44fb6c,0x12345678),\\n+            *[(0x450c18+4*i,(-2147483648,-1,2147483647,13)[i]) for i in range(4)],\\n+            *[(0x451b64+4*i,(-2147483648,-1,2147483647,99)[i]) for i in range(4)],\\n+            (0x44d758,109),(0x44d75c,-109),(0x44d380,7),(0x44d384,3),(0x451b74,9),(0x451b78,2)]\\n+        for a,v in defaults+item.get('globals',[]):self.put(a,v)\\n+        self.uc.mem_write(NAME,b'result-probe.lfr\\\\0')\\n+        self.put(POINTER,0 if item.get('nullRecording') else SOURCE)\\n+        playback=SOURCE if item.get('playbackAlias') else PLAYBACK if item.get('playback') else 0\\n+        self.put(POINTER+4,playback)\\n+        saved=bytearray(SAVED_COUNT)\\n+        if item.get('longSaved'):\\n+            saved[:640]=b'a'*640;saved[0x1f4]=0xff;saved[620:624]=b'\\\\x04\\\\x03\\\\x02\\\\x01'\\n+        for index in range(8):\\n+            raw=f'player{index}'.encode()+b'\\\\0';saved[0x2c8+11*index:0x2c8+11*index+len(raw)]=raw\\n+        self.uc.mem_write(SAVED,bytes(saved))\\n+        recording=bytearray(source)\\n+        for offset,value in item.get('recording',[]):struct.pack_into('<I',recording,offset,value&0xffffffff)\\n+        playback_bytes=bytearray(SOURCE_COUNT)\\n+        for offset,value in [(0x630bb8,0x11223344),(0x630bbc,0x55667788)]:\\n+            struct.pack_into('<I',recording if playback==SOURCE else playback_bytes,offset,value)\\n+        self.uc.mem_write(SOURCE,bytes(recording)+b'\\\\x96'*16)\\n+        self.uc.mem_write(PLAYBACK,bytes(playback_bytes)+b'\\\\x69'*16)\\n+        self.uc.mem_write(DESTINATION,b'\\\\xa5'*CAPACITY+b'\\\\x69'*16)\\n+        before_globals=bytes(self.uc.mem_read(GLOBAL,GLOBAL_COUNT));pointers=bytes(self.uc.mem_read(POINTER,8))\\n+        self.uc.reg_write(UC_X86_REG_ESP,ROOT_SP);self.uc.reg_write(UC_X86_REG_EBX,WORLD)\\n+        self.uc.reg_write(UC_X86_REG_EBP,0x12345678);self.uc.reg_write(UC_X86_REG_FPCW,0x23f)\\n+        self.uc.emu_start(START,0,count=2_000_000_000)\\n+        pc=self.uc.reg_read(UC_X86_REG_EIP)\\n+        assert pc in (END,SKIP) and self.uc.reg_read(UC_X86_REG_ESP)==ROOT_SP\\n+        assert not self.pending and not self.stream_pending and not self.fault and not self.undefined_reads\\n+        assert not any(e['write'] for e in self.local_accesses)\\n+        if flag is None:assert not self.local_accesses,'Unknown retained flag was read'\\n+        for address,raw,_ in self.input_regions:assert bytes(self.uc.mem_read(address,len(raw)))==raw\\n+        assert bytes(self.uc.mem_read(SOURCE+SOURCE_COUNT,16))==b'\\\\x96'*16\\n+        assert bytes(self.uc.mem_read(DESTINATION+CAPACITY,16))==b'\\\\x69'*16\\n+        assert bytes(self.uc.mem_read(PLAYBACK,SOURCE_COUNT+16))==bytes(playback_bytes)+b'\\\\x69'*16\\n+        assert bytes(self.uc.mem_read(SAVED,SAVED_COUNT))==saved\\n+        assert self.source_freed==self.writer_entered\\n+        return dict(label=item['label'],input=item,world=dict(bytes=world.hex(),defined=world_mask.hex()),actors=actors,headers=headers,\\n+            globals=before_globals.hex(),globalsAfter=bytes(self.uc.mem_read(GLOBAL,GLOBAL_COUNT)).hex(),\\n+            pointers=pointers.hex(),pointersAfter=bytes(self.uc.mem_read(POINTER,8)).hex(),saved=saved.hex(),\\n+            source=bytes(recording).hex(),recordingAfter=bytes(self.uc.mem_read(SOURCE,SOURCE_COUNT)).hex(),\\n+            playback=bytes(playback_bytes).hex(),serialized=getattr(self,'serialized',b'').hex(),\\n+            beforeWriterGlobals=getattr(self,'before_writer_globals',b'').hex(),\\n+            temporary=bytes(self.uc.mem_read(DESTINATION,CAPACITY)).hex(),compressed=self.compressed.hex() if self.compressed else None,\\n+            writerEntered=self.writer_entered,sourceFreed=self.source_freed,events=self.writer_events,allocations=self.writer_allocations,\\n+            codecStatus=self.codec_result,length=getattr(self,'length',None),codecWritten=self.rep_mask.hex(),\\n+            streams=self.stream_calls,helpers=self.helpers,processorSignatures=self.processor_signatures,longestMatchCalls=self.searches,\\n+            callerPCs=sorted(self.caller_pcs),writerPCs=sorted(self.writer_pcs),restorePCs=sorted(self.restore_pcs),\\n+            localAccesses=self.local_accesses,libraryPCs=self.instructions(),end=dict(pc=pc,sp=ROOT_SP))\\n+\\n+\\n+def probes():\\n+    for timer,elapsed in itertools.product((-2147483648,-1,0,99,100,102,349,350,2147483647),(0,2147483647)):\\n+        yield dict(label=f'timer-{timer}-{elapsed}',globals=[(0x450bdc,timer),(0x450bbc,elapsed)])\\n+    for flag,value in itertools.product((0x450be4,0x450b80,0x450b84),(0,1,-1)):\\n+        if (flag==0x450b84)==(value==0):continue\\n+        yield dict(label=f'gate-{flag:x}-{value}',globals=[(flag,value)])\\n+    mixed=[(0,1),(2,255),(3,1),(6,2),(8,1),(10,1),(11,255),(12,1),(14,1),(17,1),(399,1)]\\n+    actors=[(i,[(0x368,i%8),(0x364,(i%3)+1),(0x2fc,[-1,0,1,500][i%4]),(0x348,-2147483648),(0x34c,2147483647)]) for i in range(18)]\\n+    for mode,flag,winner in [(0,None,1),(0,None,-1),(0,None,-2147483648),(1,0,1),(1,1,1),(1,2,1),(1,0xffffffff,1),(2,None,0),(3,None,3),(4,None,1)]:\\n+        yield dict(label=f'mixed-{mode}-{flag}-{winner}',active=mixed,actors=actors,stageDefeated=flag,globals=[(0x451160,mode),(0x450bf8,winner)])\\n+    yield dict(label='empty-stage-with-unknown-local',globals=[(0x451160,1)])\\n+    for rotation in range(5):\\n+        entries=[(i,1 if i%2 else 255) for i in range(395,400)]\\n+        changes=[(i,[(0x368,2 if (i+rotation)%5==1 else 0),(0x364,1 if (i+rotation)%5==2 else 5),\\n+                     (0x2fc,-1 if (i+rotation)%5==3 else 0 if (i+rotation)%5==4 else 1)]) for i in range(395,400)]\\n+        yield dict(label=f'five-lane-enemies-{rotation}',active=entries,actors=changes,globals=[(0x451160,1)])\\n+    yield dict(label='all-400-aliases',active=[(i,255) for i in range(400)],aliases=[(i,0) for i in range(400)],actors=[(0,[(0x364,5)])],stageDefeated=0,globals=[(0x451160,1)])\\n+    for first,second in [(-2147483648,2147483647),(-101,99),(-99,-1),(0,0),(109,-109),(2147483647,-2147483648)]:\\n+        yield dict(label=f'packed-{first}-{second}',active=mixed,actors=actors,globals=[(0x451160,4),(0x44d758,first),(0x44d75c,second),\\n+            (0x44d380,-2147483648),(0x44d384,2147483647),(0x451b74,-1),(0x451b78,2147483647)])\\n+    for playback,alias,enabled,long in [(True,False,0,False),(True,False,1,False),(True,False,-1,True),(False,True,1,True)]:\\n+        yield dict(label=f'restore-{playback}-{alias}-{enabled}-{long}',playback=playback,playbackAlias=alias,longSaved=long,\\n+            active=mixed,actors=actors,globals=[(0x450b88,enabled)])\\n+    yield dict(label='io-open-failure',active=mixed,actors=actors,file=dict(open_failure=True))\\n+    yield dict(label='io-write-close-failure',active=mixed,actors=actors,file=dict(short_write=1,write_result=-1,close_failure=True))\\n+\\n+\\n+def main():\\n+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--case');parser.add_argument('--resume',action='store_true');args=parser.parse_args()\\n+    provenance,source=next(recording_inputs());cases=[];blobs={}\\n+    checkpoint=ROOT/'build/research/result-recording-progress.json'\\n+    def blob(raw):\\n+        key=digest(raw)\\n+        if key not in blobs:blobs[key]=dict(count=len(raw),deflate=base64.b64encode(zlib.compress(raw,9,wbits=-15)).decode())\\n+        return key\\n+    def transport(value):\\n+        if isinstance(value,dict):\\n+            return {k:blob(bytes.fromhex(v)) if k in ('bytes','defined','globals','globalsAfter','pointers','pointersAfter','saved','source',\\n+                'recordingAfter','playback','serialized','beforeWriterGlobals','temporary','compressed','codecWritten') and isinstance(v,str)\\n+                else transport(v) for k,v in value.items()}\\n+        if isinstance(value,list):return [transport(v) for v in value]\\n+        return value\\n+    def document():return dict(exeSHA256=EXE_SHA256,dllSHA256=DLL_SHA256,cppSHA256=CPP_SHA256,scope=__doc__,recordingInput=provenance,\\n+        worldAddress=WORLD,actorBase=POOL,headerBase=HEADERS,recordingAddress=SOURCE,temporaryAddress=DESTINATION,playbackAddress=PLAYBACK,\\n+        sourceCount=SOURCE_COUNT,capacity=CAPACITY,cases=cases,blobs=blobs)\\n+    selected=[p for p in probes() if not args.case or p['label']==args.case]\\n+    if args.resume:\\n+        assert not args.case\\n+        previous=json.loads(checkpoint.read_bytes());assert previous['recordingInput']==provenance\\n+        for k,v in previous['blobs'].items():\\n+            raw=zlib.decompress(base64.b64decode(v['deflate']),-15);assert len(raw)==v['count'] and digest(raw)==k\\n+        cases=previous['cases'];blobs=previous['blobs']\\n+        assert [c['input'] for c in cases]==json.loads(json.dumps(selected[:len(cases)]))\\n+    for item in selected[len(cases):]:\\n+        print('START',item['label'],flush=True)\\n+        vm=ResultRecording(**item.get('file',{}));case=vm.probe(item,source);cases.append(transport(case))\\n+        temporary=checkpoint.with_suffix('.tmp');temporary.write_text(json.dumps(document(),separators=(',',':'))+'\\\\n');temporary.replace(checkpoint)\\n+        print('DONE',item['label'],'writer',case['writerEntered'],'end',hex(case['end']['pc']),'stores',len(vm.record_writes),'length',case['length'],flush=True)\\n+        del vm\\n+    path=ROOT/'build/original'/('result-recording-single.json' if args.case else 'result-recording.json')\\n+    raw=(json.dumps(document(),separators=(',',':'))+'\\\\n').encode();path.write_bytes(raw)\\n+    print('CORPUS',len(cases),len(raw),digest(raw),len(blobs),flush=True)\\n+\\n+\\n+if __name__=='__main__':main()\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"uv run tools/oracle_result_recording.py --case mixed-0-None-1 > build/research/result-recording-single.log 2>&1\",\"yield_time_ms\":1000,\"max_output_tokens\":600}));\n"
+        },
+        {
+          "line": 35757,
+          "timestamp": "2026-09-09T15:34:21.487Z",
+          "callId": "call_irjkDZYBMyiWeQuV9EqsBX8X",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat build/research/result-recording-single.log && rg -n 'def __init__|UC_HOOK_MEM' tools/oracle_replay_writer.py | head -15\",\"max_output_tokens\":1600}));\n"
+        }
+      ],
+      "precedingPublicMessages": [
+        {
+          "line": 35718,
+          "timestamp": "2026-09-09T15:27:03.617Z",
+          "text": "В оригинале результаты формируются общим проходом по восьми местам: выбирается основной или резервный участник, затем записываются ID, команда, статистика и исход. После этого отдельно сканируются все 400 слотов для режима Stage. Перенесу эти правила общим механизмом, без условий для отдельных персонажей.\n"
+        }
+      ]
+    },
+    {
+      "id": "cyber-20260909T231002",
+      "researchSubject": "Installed-library transformations: Actor+0x7b4 write beyond the recovered 0x420 allocation, controlled aliases, and unmapped-write failure boundaries.",
+      "session": {
+        "id": "01a086e2-c001-7d50-ba6e-7fd76a1f342d",
+        "cwd": "/Users/michael/Developer/ntsd-2.4",
+        "timestamp": "2026-09-09T15:56:42.399Z",
+        "cli_version": "0.153.4-fork.1",
+        "originator": "codex-tui",
+        "model_provider": "openai"
+      },
+      "sourceLog": {
+        "path": "/Users/michael/.codex/sessions/2026/09/09/rollout-2026-09-09T18-56-42-01a086e2-c001-7d50-ba6e-7fd76a1f342d.jsonl",
+        "sha256": "b19e9e39bf6155b84bd750ae1335b20f690f45bb0f0ca86f32724dff4ab6b82f",
+        "bytes": 31255314
+      },
+      "requestId": null,
+      "exactBlockedOutputAvailable": false,
+      "exactTriggerKnown": false,
+      "automatedRetryAllowed": false,
+      "resolution": "open; preserve evidence and seek review; independent permitted work remains available",
+      "line": 5738,
+      "event": {
+        "timestamp": "2026-09-09T23:10:02.623Z",
+        "ordinal": 5737,
+        "type": "event_msg",
+        "payload": {
+          "type": "task_complete",
+          "turn_id": "01a08866-2153-7de1-bed2-5acf5ae90f81",
+          "last_agent_message": null,
+          "error": {
+            "message": "This content was flagged for possible cybersecurity risk. If this seems wrong, try rephrasing your request. To get authorized for security work, join the Trusted Access for Cyber program: https://chatgpt.com/cyber",
+            "codex_error_info": "cyber_policy"
+          },
+          "started_at": 1788994789,
+          "completed_at": 1788995402,
+          "duration_ms": 612923,
+          "time_to_first_token_ms": 2252
+        }
+      },
+      "context": {
+        "turn_id": "01a08866-2153-7de1-bed2-5acf5ae90f81",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "approval_policy": "never",
+        "sandbox_policy": {
+          "type": "danger-full-access"
+        }
+      },
+      "precedingToolCalls": [
+        {
+          "line": 5720,
+          "timestamp": "2026-09-09T23:08:10.211Z",
+          "callId": "call_LxOxbPQ27mpTwYhYUd4WLbNz",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\np='native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift';s=open('native/Tests/NTSDCoreTests/OriginalPostDrawSlotPrefixTests.swift').read();s=s[:s.index('    private func particleState()')]+ '}\\\\n'\\ns=s.replace('OriginalPostDrawSlotPrefixTests','OriginalLibTransformTests').replace('NTSD_POSTDRAW_PREFIX_DIRECTORY','NTSD_LIB_TRANSFORM_DIRECTORY').replace('postdraw-slot-prefix','lib-transforms').replace('POSTDRAW SLOT PREFIX','LIB TRANSFORMS')\\ns=s.replace('let label: String, fill:', 'let tailSHA256: String\\\\n        let label: String, fill:').replace('let exeSHA256: String, header:', 'let libSHA256: String, poolAddress: UInt32, actorStride: Int, actorSize: Int, tailCount: Int\\\\n        let exeSHA256: String, header:')\\ns=s.replace('c.cases.count, 897','c.cases.count, 1688').replace('Set(c.instructions).count, 714','Set(c.instructions).count, 744').replace('}.count, 329','}.count, 326').replace('totalEvents, 2334','totalEvents, 2827')\\ns=s.replace('        var headers: [OriginalStateRecord]', '''        XCTAssertEqual(c.libSHA256, \\\"28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba\\\")\\n        XCTAssertEqual(c.poolAddress, 0x70000020); XCTAssertEqual(c.actorStride, 0x500)\\n        XCTAssertEqual(c.actorSize, 0x420); XCTAssertEqual(c.tailCount, 0x1000)\\n        var headers: [OriginalStateRecord]''')\\ns=s.replace('            var retained: Int32? = Int32(bitPattern: item.retainedBefore)', '''            var retained: Int32? = Int32(bitPattern: item.retainedBefore)\\n            // Declared source allocation layout, independent of after-state.\\n            let destinations = Dictionary(uniqueKeysWithValues: (0..<400).map { i in\\n                (i, i == 399 ? OriginalLibTransformBacking.Destination.external(index: 0, offset: 0x2b4) : .actor(index: i+1, offset: 0x2b4))\\n            })\\n            let tokens = Dictionary(uniqueKeysWithValues: (0..<400).map { ($0, c.poolAddress+UInt32($0*c.actorStride)) })\\n            var library: OriginalLibTransformBacking? = .init(destinations: destinations, actorAddressTokens: tokens,\\n                externalRecords: [try .init(bytes: [UInt8](repeating: 0xa5, count: c.tailCount), defined: [Bool](repeating: false, count: c.tailCount))])''')\\ns=s.replace('objectCount: item.count ?? 4,\\\\n','objectCount: item.count ?? 4, library: &library,\\\\n')\\ns=s.replace('            let records = [world]+actors','            XCTAssertEqual(MatchPreparationReference.digest(Data(try XCTUnwrap(library).externalRecords[0].bytes)), item.tailSHA256, item.label)\\\\n            let records = [world]+actors')\\nopen(p,'w').write(s)\\nPY\\npython3 - <<'PY'\\nimport hashlib,io,json,pathlib,subprocess,tarfile\\nroot=pathlib.Path.cwd();dest=root/'build/lib-transforms-native';assert not dest.exists();dest.mkdir();commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();raw=subprocess.check_output(['git','archive','--format=tar',commit,'native']);files=[]\\nwith tarfile.open(fileobj=io.BytesIO(raw)) as t:\\n for m in t:\\n  if not m.isfile():continue\\n  p=pathlib.PurePosixPath(m.name);assert p.parts[0]=='native' and '..' not in p.parts\\n  data=t.extractfile(m).read();target=dest.joinpath(*p.parts[1:]);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data);files.append(dict(path=m.name,sha256=hashlib.sha256(data).hexdigest()))\\nowned=['native/Sources/NTSDCore/OriginalLibTransformBacking.swift','native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift','native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift'];overlays=[]\\nfor p in owned:\\n data=(root/p).read_bytes();(dest/p.removeprefix('native/')).write_bytes(data);overlays.append(dict(path=p,sha256=hashlib.sha256(data).hexdigest()))\\n(root/'build/research/lib-transforms-native-pins.json').write_text(json.dumps(dict(baseCommit=commit,verifiedFiles=files,overlays=overlays),indent=2)+'\\\\n')\\n(root/'build/research/lib-transforms-prior-pins.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (root/'native/Tests/NTSDCoreTests/Fixtures').glob('*.json')},indent=2)+'\\\\n')\\nprint('Isolated',len(files),'committed native files plus',len(overlays),'overlays from',commit)\\nPY\\nNTSD_LIB_TRANSFORM_DIRECTORY=\\\"$PWD/build/original\\\" swift test --package-path build/lib-transforms-native --scratch-path build/lib-transforms-swift -c release -Xswiftc -enable-testing --filter OriginalLibTransformTests > build/research/lib-transforms-native.log 2>&1\",yield_time_ms:1000,max_output_tokens:1000}));\n"
+        },
+        {
+          "line": 5730,
+          "timestamp": "2026-09-09T23:09:45.367Z",
+          "callId": "call_mGJzW6zTaRIlNtQGdh2k7hHl",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat > tools/oracle_lib_transform_boundaries.py <<'PY'\\n#!/usr/bin/env -S uv run --script\\n# /// script\\n# requires-python = \\\">=3.11\\\"\\n# dependencies = [\\\"unicorn==2.1.4\\\"]\\n# ///\\n\\\"\\\"\\\"Additional whole library-transform aliases and actual unmapped-write stops.\\n\\nThe controlled allocation layout is explicit research input, not Windows heap\\nprovenance. Exercise live aliased Actor ownership and later particle construction\\nwithout injecting expected bytes. Separate source-fault trials leave the page\\nbeyond the last recovered Actor allocation unmapped, observe the real DLL7b4\\nwrite failure and retain prior Object mutation. No host process or original\\nfile is modified. Faults are not successful returns or native equivalence.\\n\\\"\\\"\\\"\\nimport itertools,json,struct\\nfrom collections import Counter\\nfrom import_ntsd import ROOT,EXE_SHA256\\nfrom oracle_lib_transforms import LibTransforms,case,IDS,STATES,HEADERS,HEADER,d,b,POOL,WORLD,BODY_SP,BASE,LIB_SHA256,digest\\nfrom oracle_postdraw_slot_prefix import PostDrawSlotPrefix\\nfrom unicorn import UC_HOOK_MEM_WRITE_UNMAPPED,UC_MEM_WRITE,UcError,UC_ERR_WRITE_UNMAPPED\\nfrom unicorn.x86_const import UC_X86_REG_EIP,UC_X86_REG_EAX,UC_X86_REG_EDX,UC_X86_REG_ESP,UC_X86_REG_EDI\\n\\ndef probes():\\n    for slot,parent,state,next_state in itertools.product((0,50,399),(0,49,50,398,399),(4002,4050),(3,9996)):\\n        item=case('library-alias',(slot,parent,state,next_state),slot=slot,aliases=[[slot,parent]],frames=[[0,307,*d(8,state)],[1,307,*d(8,next_state)]])\\n        item['actors']=[[parent,[d(0x70,307),d(0x88,1),d(0x318,123)]]]\\n        yield item\\n    for slot,state,activity in itertools.product((0,399),(4002,4050),(0,128,255)):\\n        yield case('library-activity',(slot,state,activity),slot=slot,active=[[slot,activity]],actor=[d(0x70,307)],frames=[[0,307,*d(8,state)]])\\n\\nclass UnmappedTransform(LibTransforms):\\n    def __init__(self):\\n        super().__init__();self.invalid=[];self.uc.hook_add(UC_HOOK_MEM_WRITE_UNMAPPED,self.unmapped)\\n    def unmapped(self,u,access,address,size,value,data):\\n        self.invalid.append(dict(pc=u.reg_read(UC_X86_REG_EIP),address=address,size=size,value=value&0xffffffff));return False\\n    def access(self,u,access,address,size,value,data):\\n        if self.running and access==UC_MEM_WRITE and u.reg_read(UC_X86_REG_EIP)==BASE+0x1112 and address==POOL+399*0x500+0x7b4:\\n            # Do not perform a host read of absent backing before the actual\\n            # emulated write can reach its own unmapped-memory boundary.\\n            return PostDrawSlotPrefix.access(self,u,access,address,size,value,data)\\n        return super().access(u,access,address,size,value,data)\\n    def execute(self):\\n        self.extended_writes=[];self.uc.mem_unmap((POOL+400*0x500)&~4095,4096)\\n        return PostDrawSlotPrefix.execute(self)\\n\\ndef main():\\n    vm=LibTransforms();cases=[vm.probe(c,i) for i,c in enumerate(probes())];faults=[]\\n    for count,state in ((4,4050),(4,4998),(0,4050),(-1,4050)):\\n        fault=UnmappedTransform();item=case('unmapped',(count,state),slot=399,count=count,actor=[d(0x70,307)],frames=[[0,307,*d(8,state)]])\\n        try:fault.probe(item,0)\\n        except UcError as e:\\n            assert e.errno==UC_ERR_WRITE_UNMAPPED and len(fault.invalid)==1\\n            event=fault.invalid[0];assert event['pc']==BASE+0x1112 and event['address']==POOL+399*0x500+0x7b4 and event['size']==4\\n            actor=POOL+399*0x500;pointer=fault.u32(actor+0x368);assert pointer==0x50040000 if count==4 and state==4050 else pointer==0x50000000\\n            assert event['value']==(actor if count==4 and state==4050 else max(count,0))\\n            faults.append(dict(input=item,error=str(e),errno=e.errno,event=event,actorObjectAfter=pointer,frameAfter=fault.u32(actor+0x70),sp=fault.uc.reg_read(UC_X86_REG_ESP),edi=fault.uc.reg_read(UC_X86_REG_EDI),instructions=sorted(fault.instructions),nativeCompared=False))\\n        else:raise AssertionError('Expected actual source unmapped write')\\n    doc=dict(exeSHA256=EXE_SHA256,libSHA256=LIB_SHA256,scope=__doc__,installation=vm.installation,fpcw=0x27f,header=HEADER,headerPatches=HEADERS,ids=IDS,states=STATES,cases=cases,faults=faults,instructions=sorted(vm.instructions),poolAddress=POOL,actorStride=0x500,actorSize=0x420,tailInitial='a5',tailCount=0x1000,nativeCompared=False,windowsVerified=False)\\n    raw=(json.dumps(doc,separators=(',',':'))+'\\\\n').encode();out=ROOT/'build/original/lib-transform-boundaries.json';assert not out.exists();out.write_bytes(raw)\\n    report=dict(scope=__doc__,exeSHA256=EXE_SHA256,libSHA256=LIB_SHA256,corpus=out.name,bytes=len(raw),sha256=digest(raw),cases=len(cases),sourceFaults=len(faults),events=sum(len(c['events']) for c in cases),extendedWrites=sum(len(c['extendedWrites']) for c in cases),instructions=len(vm.instructions),nativeCompared=False,windowsVerified=False)\\n    (ROOT/'build/research/lib-transform-boundaries.json').write_text(json.dumps(report,indent=2)+'\\\\n');print(json.dumps(report,indent=2),flush=True)\\nif __name__=='__main__':main()\\nPY\\nuv run tools/oracle_lib_transform_boundaries.py > build/research/lib-transform-boundaries-source.log 2>&1\",yield_time_ms:1000,max_output_tokens:1500}));\n"
+        }
+      ],
+      "precedingPublicMessages": [
+        {
+          "line": 5699,
+          "timestamp": "2026-09-09T23:05:45.201Z",
+          "text": "The source run completed 1,688 whole slot-prefix calls and recorded 371 extended writes. In the declared test layout, those writes reach the next Actor or separate backing after the last Actor.\n\nThe catalog also contains 29 present frames in this state range, including Naruto and Sasuke frames. That establishes relevant game data, though it does not yet prove those frames’ natural execution paths."
+        }
+      ]
+    },
+    {
+      "id": "cyber-20260912T003032",
+      "researchSubject": "War preparation: ordinary resource/allocation failures, retained bitmap ownership, release ordering and actual NULL memory faults in Unicorn.",
+      "session": {
+        "id": "01a08766-6cdc-7b33-bb58-04076f1ec261",
+        "cwd": "/Users/michael/Developer/ntsd-2.4",
+        "timestamp": "2026-09-09T18:20:31.862Z",
+        "cli_version": "0.153.4-fork.1",
+        "originator": "codex-tui",
+        "model_provider": "openai"
+      },
+      "sourceLog": {
+        "path": "/Users/michael/.codex/sessions/2026/09/09/rollout-2026-09-09T21-20-31-01a08766-6cdc-7b33-bb58-04076f1ec261.jsonl",
+        "sha256": "646803ace19f7dd7c47ae7a2394f33170757749adb21f770a6ee36e71535f3c6",
+        "bytes": 253511021
+      },
+      "requestId": null,
+      "exactBlockedOutputAvailable": false,
+      "exactTriggerKnown": false,
+      "automatedRetryAllowed": false,
+      "resolution": "open; preserve evidence and seek review; independent permitted work remains available",
+      "line": 40441,
+      "event": {
+        "timestamp": "2026-09-12T00:30:32.397Z",
+        "ordinal": 40440,
+        "type": "event_msg",
+        "payload": {
+          "type": "task_complete",
+          "turn_id": "01a092ec-9aa9-7470-afec-71c033491ff1",
+          "last_agent_message": null,
+          "error": {
+            "message": "This content was flagged for possible cybersecurity risk. If this seems wrong, try rephrasing your request. To get authorized for security work, join the Trusted Access for Cyber program: https://chatgpt.com/cyber",
+            "codex_error_info": "cyber_policy"
+          },
+          "started_at": 1789171374,
+          "completed_at": 1789173032,
+          "duration_ms": 1657630,
+          "time_to_first_token_ms": 4166
+        }
+      },
+      "context": {
+        "turn_id": "01a092ec-9aa9-7470-afec-71c033491ff1",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "approval_policy": "never",
+        "sandbox_policy": {
+          "type": "danger-full-access"
+        }
+      },
+      "precedingToolCalls": [
+        {
+          "line": 40422,
+          "timestamp": "2026-09-12T00:29:48.824Z",
+          "callId": "call_x1Ag7x2u2MBvaxOejPt2nwQA",
+          "name": "exec",
+          "input": "const r=await Promise.allSettled([\ntools.exec_command({cmd:\"rg -n 'struct OriginalBitmap.*|private|unknown|retained|func load|input:' native/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift native/Sources/NTSDCore/OriginalBitmapConstructorSurface.swift\",max_output_tokens:3500}),\ntools.exec_command({cmd:\"cat native/Sources/NTSDCore/OriginalBitmapRelease.swift\",max_output_tokens:2200}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport json\\nb=Path('build/research/lib-war-preparation');items=[]\\nfor p in sorted(b.glob('war-preparation-fs-errors-s*-capture2.json')):\\n d=json.loads(p.read_text());items.append((d['scenarioIndex'],d['scenario']['label'],[(r['end'],hex(r['endPC'])) for r in d['calls']]))\\nprint(json.dumps(items,indent=2));print('reviewStop',(b/'war-errors-batch-review-stop1.txt').exists())\\nPY\",max_output_tokens:2800}),\ntools.exec_command({cmd:\"tail -5 build/research/lib-war-preparation/war-preparation-errors-audit2.log\",max_output_tokens:1400})\n]);for(let i=0;i<r.length;i++)text({i,result:r[i]});\n"
+        },
+        {
+          "line": 40432,
+          "timestamp": "2026-09-12T00:30:03.229Z",
+          "callId": "call_HrQqAFBoQoyWcx0V2ChfguRt",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cat native/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift\",max_output_tokens:5700}));\ntext(await tools.exec_command({cmd:\"rg -n 'Stack|backing|dimensions|GetObject|description' docs/research/CHARACTER_MENU_SURFACE* docs/research/BITMAP_SURFACE* | head -55\",max_output_tokens:2400}));\n"
+        }
+      ],
+      "precedingPublicMessages": [
+        {
+          "line": 40420,
+          "timestamp": "2026-09-12T00:29:39.999Z",
+          "text": "Подтвердилось различие по положению ошибки: отказ первого bitmap оставляет остальные четыре выделения живыми и пропускает их освобождение; отказ последнего приводит к чтению `NULL` после освобождения предыдущих четырёх. Отсутствующая картинка оставляет обёртку с нулевой поверхностью — следующий проход освобождения тоже достигает ошибки. Эти исходы учитываются отдельно от нормальных возвратов.\n"
+        }
+      ]
+    }
+  ]
+}
