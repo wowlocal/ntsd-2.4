@@ -18,6 +18,7 @@ public enum OriginalInitialSoundLoading {
                             fileSource: (String) throws -> [UInt8],
                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
         var candidate = globals
@@ -50,6 +51,7 @@ public enum OriginalInitialSoundLoading {
                 }) {
                     try observe(.init(wave: $0))
                 }
+            try attemptedWave(index,result,candidate)
             guard result.exit == .returned else { throw OriginalStateError.invalidStorage("Invalid original CreateSoundBuffer continuation") }
             try candidate.write(result.output, at: Int(destination)-base)
             try afterWave(index,result,candidate)

@@ -9,6 +9,19 @@ public struct OriginalWavePlatform: Codable, Sendable {
     public let firstCount: Int, secondCount: Int
     /// Explicit uninitialized allocator/stack backing, not game defaults.
     public let ramp: Bool
+    public init(destination: UInt32, device: UInt32, stream: UInt32,
+                buffer: UInt32, firstPointer: UInt32, secondPointer: UInt32,
+                descendResults: [Int32], formatReadResult: Int32, ascendResult: Int32,
+                dataReadResult: Int32, createResult: Int32, lockResults: [UInt32],
+                restoreResult: Int32, unlockResult: Int32, closeResult: Int32,
+                firstCount: Int, secondCount: Int, ramp: Bool) {
+        self.destination = destination; self.device = device; self.stream = stream
+        self.buffer = buffer; self.firstPointer = firstPointer; self.secondPointer = secondPointer
+        self.descendResults = descendResults; self.formatReadResult = formatReadResult; self.ascendResult = ascendResult
+        self.dataReadResult = dataReadResult; self.createResult = createResult; self.lockResults = lockResults
+        self.restoreResult = restoreResult; self.unlockResult = unlockResult; self.closeResult = closeResult
+        self.firstCount = firstCount; self.secondCount = secondCount; self.ramp = ramp
+    }
 }
 
 public struct OriginalWaveEvent: Codable, Equatable, Sendable {

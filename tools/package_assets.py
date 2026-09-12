@@ -20,3 +20,6 @@ shutil.copytree(ROOT / 'build/original/bitmaps', destination.parent / 'OriginalI
 # The production startup input reader uses this same ordinary package in an app.
 from package_startup_inputs import package as package_startup_inputs
 print(package_startup_inputs(destination.parent / "OriginalStartup"))
+
+from package_common_sounds import build_package as package_common_sounds, BASELINE as COMMON_SOURCE
+print(package_common_sounds(COMMON_SOURCE, destination.parent / "OriginalCommonSounds"))

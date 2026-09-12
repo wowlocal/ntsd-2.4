@@ -3,3 +3,4 @@ native/Sources/NTSDCore/Resources/OriginalStartup/** -text
 native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt -diff
 native/Sources/NTSDCore/Resources/OriginalStartup/data/adinfo.txt -diff
 native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin -text -diff
+native/Sources/NTSDCore/Resources/OriginalCommonSounds/** -text

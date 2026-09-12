@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "status": "accepted_finite_production_common_loading",
+  "createdUTC": "2026-09-12T21:06:35.497911+00:00",
+  "baseCommit": "7638dc02d6fcbd31cd7d5a35dd7af3f3bf1668c6",
+  "sourceExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "safetyIncidentsOpen": 3,
+  "separateWindowsDownloadRefusalOpen": true,
+  "scope": "Actual MenuSession.PendingLoading to production PendingCatalog: own common WAV loading, MENU_WAIT/presentation, canonical state and tentative batches. Not full loading/outer-loop return or device output.",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved controlled original Unicorn loading/input corpora; original baseline WAV bytes; new data-only verification and Native release tests",
+    "planAndAmendmentInputPins": 58,
+    "loadingCases": 12,
+    "catalogEntryBoundaries": 9,
+    "invalidCreateContinuationRejections": 3,
+    "waveAttempts": 190,
+    "returnedWaves": 187,
+    "trueReturns": 181,
+    "falseReturns": 6,
+    "liveShortReadTemporaries": 3,
+    "retainedRegionChecks": 456,
+    "events": 9251,
+    "writes": 29913,
+    "blobEntries": 14664,
+    "terminalWaveOperationsExcludingLoadHelpers": 2804,
+    "expectedBytesUnchanged": true,
+    "referenceSeconds": 8.343344125,
+    "preservedFailure": "reference1 used full commandCount(501/502) for sparse relation prefixes(76/77); reference2 checks sparse prefix by independent expected relation count and full command count by stage payloads"
+  },
+  "native": {
+    "candidate": 1,
+    "methods": 19,
+    "seconds": 155.354,
+    "buildSeconds": 316.59,
+    "rawOverrides": false,
+    "primaryMenuAttempts": 48,
+    "menuInputChains": 50,
+    "productionLoadingCases": 12,
+    "preparedCatalogEntries": 9,
+    "explicitRejectedPrefixes": 3,
+    "retainedLateFailures": 5,
+    "singleChildResultObservationBeforeGuard": true,
+    "rejectedChildTestRerunRemoved": true,
+    "wholeRollbackPreserved": true,
+    "canonicalRecordBytes": 50088,
+    "globalsSliceBytes": 46144,
+    "catalogAllocationBoundaryBytes": 81273768,
+    "preparedCatalogIsTentative": true,
+    "entireTerminalBatchCompared": true,
+    "entireGraphicsBatchCompared": true,
+    "oldCommittedMenuUnchanged": true,
+    "retainedWAVRecordsAndMasksCompared": true,
+    "duplicatePrepareRejected": true,
+    "newPackageTestMethods": 3,
+    "NTSDNativeLinked": true
+  },
+  "inputs": {
+    "package": "native/Sources/NTSDCore/Resources/OriginalCommonSounds",
+    "files": 19,
+    "bytes": 353249,
+    "waveNames": 18,
+    "waveBytes": 351078,
+    "distinctWavePayloads": 16,
+    "manifestSHA256": "b1a519e2db09f18aa0d2bbaf29aa44226fba6a04852f8a4062778ae7d8e8a2f3",
+    "allOriginalBytesUnchanged": true,
+    "ownedBeforeCoreAttempt": true,
+    "appBundleRequiresOwnPackage": true,
+    "researchJSONInRuntime": false,
+    "scopedGitTextNormalizationDisabled": true
+  },
+  "preservation": {
+    "oldFixtures": 374,
+    "currentFixtures": 374,
+    "oldFixturesUnchanged": true,
+    "nativeFiles": 903,
+    "nativeBytes": 4103688297,
+    "oldStartupPackageFiles": 46,
+    "oldStartupPackageUnchanged": true,
+    "nativeArchive": {
+      "NativeTestsExecuted": false,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "candidate": 1,
+      "commonSoundFiles": 19,
+      "inputManifest": {
+        "bytes": 346698,
+        "path": "build/research/application-loading-session-native-20260912/native-members1.json",
+        "sha256": "a8c8723227f7389f6b64ea33aa57a6075c6be0d784b977b732635eb868f534ad"
+      },
+      "members": 903,
+      "nativeFiles": 903,
+      "oldFixtures": 374,
+      "originalExecuted": false,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loading-session-native-20260912/native-candidate1.tar",
+      "payloadBytes": 4103688297,
+      "readbackComparedEveryByteToSource": true,
+      "startupFiles": 46,
+      "tar": {
+        "bytes": 4105318400,
+        "sha256": "adce4290abde311a0faa7d6bb7fd29f417cbf12cd41054fdac9dbf676d6f9d47"
+      },
+      "verifiedUTC": "2026-09-12T21:06:11.519812+00:00"
+    },
+    "evidenceArchive": {
+      "NativeTestsExecuted": false,
+      "additionalDependencyPins": 11,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "completeNativeCandidateInSeparateArchive": true,
+      "correctedReference2Preserved": true,
+      "distinctInputMembers": 69,
+      "failedReference1Preserved": true,
+      "inputManifest": {
+        "bytes": 35221,
+        "path": "build/research/application-loading-session-native-20260912/evidence-members.json",
+        "sha256": "275c3026d1d56bcd47d414610f1ed19f12a90f66c2b3ae168b9706f85a414970"
+      },
+      "memberGroups": {
+        "base-inputs": 10,
+        "candidate-publication": 3,
+        "inputs": 69,
+        "work": 34
+      },
+      "members": 116,
+      "noNativeScratchArchived": true,
+      "originalExecuted": false,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loading-session-native-20260912/loading-session-evidence1.tar",
+      "payloadBytes": 323048000,
+      "planAndAmendmentPins": 58,
+      "readbackComparedEveryByteToSource": true,
+      "sourceExpectedFieldsUnchanged": true,
+      "supersededBaseInputsPreserved": [
+        "docs/research/CURRENT_WORK.md",
+        "native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift",
+        "native/Sources/NTSDCore/OriginalInitialSoundLoading.swift",
+        "native/Sources/NTSDCore/OriginalWaveLoader.swift",
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift",
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+        "native/Package.swift",
+        "tools/package_assets.py",
+        ".gitattributes"
+      ],
+      "tar": {
+        "bytes": 323256320,
+        "sha256": "2f133e3960a0cc617346f7c91aa460953fe23c8e76a7f9bdf7d144ad5611c762"
+      },
+      "verifiedUTC": "2026-09-12T21:06:12.650601+00:00"
+    }
+  },
+  "pins": {
+    "build/research/application-loading-session-native-20260912/plan.json": {
+      "bytes": 10400,
+      "sha256": "18db880a391e62ab19bd98fe601bccee9b88070b9cb62b2d7fc39406d79a8290"
+    },
+    "build/research/application-loading-session-native-20260912/amendment1-inputs.json": {
+      "bytes": 6632,
+      "sha256": "29b1de25a2a82c22d3e2b9491fbbc4b573471ab09c5cec22b093d885d1fad6b6"
+    },
+    "build/research/application-loading-session-native-20260912/amendment2-git-bytes.json": {
+      "bytes": 538,
+      "sha256": "f1f5a380363c6b84c4b0dd5de8c4d36e57592ead9d53c9014efbf72db54ceb59"
+    },
+    "build/research/application-loading-session-native-20260912/initial-native.json": {
+      "bytes": 164150,
+      "sha256": "d57a429668431179fd3278048dd82dfaef234edf28acad5b41ce1238a880d553"
+    },
+    "build/research/application-loading-session-native-20260912/review1-plan.json": {
+      "bytes": 7988,
+      "sha256": "f9596a01408af23bc69b075a61cb88fef2cad856bc3553049cdc70fdde25059f"
+    },
+    "build/research/application-loading-session-native-20260912/review2-reference.json": {
+      "bytes": 11019,
+      "sha256": "f11253282adc604c6c2039a59c0139b3244a25c7e8578d67e65ce812814ce71e"
+    },
+    "build/research/application-loading-session-native-20260912/review2b-git-bytes.json": {
+      "bytes": 1068,
+      "sha256": "e4df15874f888cff775764a5f6659407e0dbd565ad385d75b98ab8a65aacbce7"
+    },
+    "build/research/application-loading-session-native-20260912/review3-candidate1.json": {
+      "bytes": 14392,
+      "sha256": "0ecc4a9566614ebd8b5ea454742acfdcddf67c4328564094f69ed168820f66c6"
+    },
+    "build/research/application-loading-session-native-20260912/reference1.py": {
+      "bytes": 20089,
+      "sha256": "9b82e3e9c551985687972a3ca8f41667280111b136972c4d730146035ef9f184"
+    },
+    "build/research/application-loading-session-native-20260912/reference1.job.json": {
+      "bytes": 2980,
+      "sha256": "e8c092ccb2c4e126e2e86304c105c3aae4a615615a799c36446e0797f9acee3f"
+    },
+    "build/research/application-loading-session-native-20260912/reference1.log": {
+      "bytes": 450,
+      "sha256": "3386fbebee8e85d39dfecae2baa2a3fdde19fc9ba053533fa354350377d27cf1"
+    },
+    "build/research/application-loading-session-native-20260912/reference2.py": {
+      "bytes": 20362,
+      "sha256": "2391550dce29cccd818e502ac56a75c58a7fcfc073ce706ed2f2be2462871895"
+    },
+    "build/research/application-loading-session-native-20260912/reference2.job.json": {
+      "bytes": 3248,
+      "sha256": "4910de92caad6d96fab576bebcaa735e7967afd20d3db160165a71a8edd01d24"
+    },
+    "build/research/application-loading-session-native-20260912/reference2.log": {
+      "bytes": 971,
+      "sha256": "0b2a8169bc961be731397e57336eb5c74821b8f47b90793811c9283de56c56c7"
+    },
+    "build/research/application-loading-session-native-20260912/reference2.json": {
+      "bytes": 418000,
+      "sha256": "53502ecacdbbeaeaa94a08d24691f60e9da0c76c9e35a283a39248f15375bc3c"
+    },
+    "build/research/application-loading-session-native-20260912/expected-review2.json": {
+      "bytes": 13906,
+      "sha256": "df00f235454f80d4b96cd52e286a33cf6e2dae15cb5d7646fffb4e6caef985fc"
+    },
+    "build/research/application-loading-session-native-20260912/package-verification1.json": {
+      "bytes": 3288,
+      "sha256": "211334c313583a1e55fbcd75c96fa39b592859bebadcdaeeea3531a7ff7127df"
+    },
+    "build/research/application-loading-session-native-20260912/candidate1-inputs.json": {
+      "bytes": 160905,
+      "sha256": "822e3eee057df0d4898fa6d6960ec77d611ab09540dfa0b1df953a9e154701cc"
+    },
+    "build/research/application-loading-session-native-20260912/native1.config.json": {
+      "bytes": 1219,
+      "sha256": "9de6701d8fd31e394d69b0f98bf640181aee91418076e2544e1db4945df8eb40"
+    },
+    "build/research/application-loading-session-native-20260912/native1.job.json": {
+      "bytes": 1366,
+      "sha256": "5e1c31a9d6644041fb5d9c0b5aae2b944ed917b2097d2183fb8da016d33fc1ad"
+    },
+    "build/research/application-loading-session-native-20260912/native1.log": {
+      "bytes": 28952,
+      "sha256": "170b8f74435c1338a1d7555d5b495feab95ce5ba9adb7faa197d559542c494e6"
+    },
+    "build/research/application-loading-session-native-20260912/preservation1.json": {
+      "bytes": 117150,
+      "sha256": "cd59f942eb0d193740ca8e0a7fb7c0319ca39cbcace4b0cbf2df817695a58604"
+    },
+    "build/research/application-loading-session-native-20260912/native-archive-verification.json": {
+      "bytes": 893,
+      "sha256": "8e1d055990141f8cf29bda6c484494b539395b55a43edcd94e2a2b4d8708b098"
+    },
+    "build/research/application-loading-session-native-20260912/evidence-archive-verification.json": {
+      "bytes": 1767,
+      "sha256": "8338394ab1835af0132f9f4686c164513efb34f602129b15909f6bf70585a944"
+    },
+    "build/research/application-loading-session-native-20260912/evidence-members.json": {
+      "bytes": 35221,
+      "sha256": "275c3026d1d56bcd47d414610f1ed19f12a90f66c2b3ae168b9706f85a414970"
+    },
+    "build/research/application-loading-session-native-20260912/archive-storage-verification.json": {
+      "bytes": 242,
+      "sha256": "3f8c0cba845f3f28023e198bf52747d30395a4a855bbbe9929b0146577e9af45"
+    }
+  },
+  "openBoundaries": [
+    "actual full catalog allocation/own constructor/bitmap/file/CRT bindings without overwriting live WAV storage",
+    "own pool/UI/loading return and held-input clear",
+    "whole pending menu/timer iteration return",
+    "actual raster/format/palette/clipper/text/device outcomes",
+    "AppKit queue/input/clock/audio and worker/reentrancy",
+    "War gameplay, first full match, full game/content/network",
+    "Windows/CRT/NLS and clean-Mac acceptance",
+    "three cyber_policy incidents and separate Windows download refusal"
+  ],
+  "publication": "Archive review, prospective Git tree and final publication review are later separate task records. Archive job/log/notes and publication records postdate evidence snapshot and are pinned separately; actual commit/remote/clean status in commit-verification.json."
+}

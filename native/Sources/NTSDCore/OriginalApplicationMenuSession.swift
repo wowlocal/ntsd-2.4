@@ -53,7 +53,7 @@ public struct OriginalApplicationMenuSession {
             }
         }
 
-        fileprivate func validateAliases() throws {
+        func validateAliases() throws {
             guard full.bytes.count == OriginalApplicationDispatchEntry.globalSize,
                   memory.replayPointers.bytes.count == 8,
                   try Self.slice(full,OriginalApplicationMenuSession.replayStart,8) == memory.replayPointers else {
@@ -66,7 +66,7 @@ public struct OriginalApplicationMenuSession {
             }
             return try .init(bytes:Array(record.bytes[start..<start+count]),defined:Array(record.defined[start..<start+count]))
         }
-        fileprivate mutating func replace(_ start: Int,_ record: OriginalStateRecord) throws {
+        mutating func replace(_ start: Int,_ record: OriginalStateRecord) throws {
             guard start >= 0, start <= full.bytes.count-record.bytes.count else {
                 throw OriginalStateError.invalidStorage("Menu replacement extent")
             }
@@ -125,6 +125,9 @@ public struct OriginalApplicationMenuSession {
         public let state: State, target: UInt32
         public let stagedEffects: [Effect]
         public let stagedGraphics: [OriginalApplicationGraphics.Command]
+        public func makeLoadingSession() throws -> OriginalApplicationLoadingSession {
+            try .init(pending:self)
+        }
     }
     public enum Outcome { case committed(Committed), loading(PendingLoading) }
     private struct Loading: Error { let pending: PendingLoading }

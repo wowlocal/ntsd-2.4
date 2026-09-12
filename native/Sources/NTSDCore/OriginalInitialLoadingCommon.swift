@@ -14,6 +14,7 @@ public struct OriginalInitialLoadingCommon {
                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
                             afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in },
                             beforeCommit: (Self) throws -> Void = { _ in }) throws -> Self {
@@ -23,7 +24,7 @@ public struct OriginalInitialLoadingCommon {
         try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,
             fileSource:fileSource,platform:platform,afterWave:{ i,wave,state in
                 sounds.append(wave);try afterWave(i,wave,state)
-            },store:store,observe:observe)
+            },attemptedWave:attemptedWave,store:store,observe:observe)
         let result = Self(globals:globals,sounds:sounds,paused:paused,
                           commands:[[UInt8](repeating:0,count:10),[UInt8](repeating:0,count:10)])
         try beforeCommit(result)

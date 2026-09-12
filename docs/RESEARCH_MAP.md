@@ -226,10 +226,28 @@ ReleaseDC, точные rectangles, ответы API и whole rollback. Loading 
 проверены. [Приёмка](evidence/application-graphics-owners.json). Финальные pixels,
 реальное устройство, полная игра и три safety incidents остаются открытыми.
 
-Следующая карточка — конечный контракт raster-представления и следующего
-startup consumer по готовым доказательствам. Actual indexed conversion/палитра,
-146289 DIB holes,18 NULL-source occurrences и окончательный вывод окна остаются
-отдельными зависимостями. Завершённые inventory, command binding и source captures не повторять.
+Принят [переход от меню к общей загрузке](research/APPLICATION_LOADING_SESSION.md). Собственный обработчик
+принимает PendingLoading, выполняет MENU_WAIT, загрузку общих WAV и presentation.
+Он сохраняет полный record 0xc3a8, PCM и маски, порядок операций и графические
+команды. Проверены все 12 случаев: девять доходят до PendingCatalog, три явно
+отвергают продолжение после ошибки CreateSoundBuffer. Результаты всех 190 WAV
+попыток наблюдаются однократно: 187 возвратов и три отказа. Пять поздних ошибок
+сохраняют прежнее состояние меню; незавершённая итерация таймера не фиксируется.
+
+Пакет из 19 файлов (353 249 байт) содержит 18 исходных WAV (351 078 байт).
+Все 19 release-тестов прошли за 155.354 с, сборка — 316.59 с. Прежние 374 fixtures
+и 46 файлов Startup неизменны; проверены 903 Native-файла, новый пакет и оба
+архива. Ошибка первой проверки размера sparse relations сохранена; после
+фиксации candidate1 код Core и ожидаемые результаты не менялись.
+[Приёмка](evidence/application-loading-session.json). Полный каталог, возврат из загрузки и внешнего цикла,
+вывод изображения/звук, матч/игра и прежние incidents остаются открытыми.
+
+Следующая карточка — собственный каталог из PendingCatalog: сохранить common
+WAV storage и bitmap/display owners, связать фактический allocation/constructor
+по имеющимся own captures и Native contracts. Legacy fixed60000020 нельзя
+накладывать на живые common WAV regions. Полный return candidate5 отсутствует.
+Actual raster/палитра/device остаются открытыми; source RGB их не заменяют.
+Завершённые captures, inventory и command binding не повторять.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

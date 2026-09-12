@@ -6,6 +6,8 @@ import NTSDCore
 final class OriginalApplicationLoadingPrefixTests: XCTestCase {
     typealias I = OriginalApplicationMenuInputTests
     typealias B = I.B
+    typealias Loading = OriginalApplicationLoadingSession
+    static let commonInputs = Result { try OriginalApplicationLoadingInputs.bundled() }
     struct Spec: Decodable { let label: String,parentIndex: Int }
     struct Record: Decodable { let bytes: String,defined: String }
     struct Wave: Decodable {
@@ -68,10 +70,13 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         }
     }
     @discardableResult
-    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ target: UInt32,responses: I.Spec,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
+    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ pending: OriginalApplicationMenuSession.PendingLoading,responses: I.Spec,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
         let retainedBitmapInputs = try XCTUnwrap(own.bitmapInputs)
         let retainedGraphics = try XCTUnwrap(own.applicationGraphics)
-        var graphics = retainedGraphics,commands: [OriginalApplicationGraphics.Command] = []
+        let target = pending.target
+        var loading = try pending.makeLoadingSession()
+        var commands: [OriginalApplicationGraphics.Command] = [],attempted = 0
+        var prepared: Loading.PendingCatalog?
         var committedGraphics: OriginalApplicationGraphics?
         let caseIndex = try XCTUnwrap(r.c.cases.firstIndex { $0.spec.label == c.spec.label })
         let full = own.base.globals.bytes+own.outerAndWorldBytes
@@ -82,57 +87,51 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             XCTAssertEqual(b.storage.bytes,try r.blob(record.bytes));XCTAssertEqual(b.storage.defined,try r.blob(record.mask).map { $0 != 0 })
         }
         let a = Adapter(c,r,full,fail),prior = own.base.globals
-        var result: OriginalInitialLoadingCommon?,attemptOutput: UInt32 = 0,reached = false
-        func draw(_ args: [UInt32]) throws {
-            let b = try XCTUnwrap(own.base.memory.allocations[args[0]]);XCTAssertTrue(b.live)
-            let surface = try b.storage.integer(at:0,as:UInt32.self);var canonical = b.storage
-            try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
-            let input = try OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:prior.integer(at:0x44d78c-0x44d000,as:Int32.self),viewportHeight:prior.integer(at:0x44d790-0x44d000,as:Int32.self))
-            _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ q in var e = OriginalFrontScreenEvent("read");e.read = q;try a.event(e) },observeClip:{ q in var e = OriginalFrontScreenEvent("clip");e.clip = q;try a.event(e) },perform:{ q in var e = OriginalFrontScreenEvent("blit");e.blit = q;commands.append(try graphics.front(e,result:responses.drawResult,inputs:retainedBitmapInputs));try a.event(e);return responses.drawResult })
+        var result: OriginalInitialLoadingCommon?,reached = false
+        let files = try Self.commonInputs.get()
+        for wave in c.loads {
+            XCTAssertEqual(try files.file(String(decoding:wave.path,as:UTF8.self)),try r.blob(wave.file))
         }
         do {
-            result = try OriginalInitialLoadingCommon.load(globals:prior,targetSurface:target,fileSource:{ path in
-                let index = try XCTUnwrap(OriginalInitialSoundLoading.paths.firstIndex(of:path));return try r.blob(c.loads[index].file)
-            },platform:{ i,path,destination in
-                let w = c.loads[i];XCTAssertEqual(w.path,Array(path.utf8));XCTAssertEqual(w.input.destination,destination)
-                let state = try OriginalStateRecord(bytes:a.shadow,defined:[Bool](repeating:true,count:a.shadow.count))
-                attemptOutput = try state.integer(at:Int(destination)-0x44d000,as:UInt32.self)
-                XCTAssertEqual(attemptOutput,w.outputBefore);XCTAssertEqual(w.input.device,try prior.integer(at:0x44eecc-0x44d000,as:UInt32.self))
-                return w.input
+            prepared = try loading.prepareCommon(inputs:files,waves:c.loads.map(\.input),
+                drawResult:responses.drawResult,presentationResult:responses.presentResult,store:a.store,
+                observe:{ event in
+                    switch event {
+                    case .front(let event):try a.event(event)
+                    case .wave(let event):try a.event(.init(event.kind.rawValue,event.arguments,event.strings),"wave")
+                    }
+                },graphicsObserve:{ commands.append($0) },beforeWave:{ i,path,destination,g in
+                    let wave = c.loads[i]
+                    XCTAssertEqual(wave.path,Array(path.utf8));XCTAssertEqual(wave.input.destination,destination)
+                    XCTAssertEqual(try g.integer(at:Int(destination)-0x44d000,as:UInt32.self),wave.outputBefore)
+                    XCTAssertEqual(wave.input.device,try g.integer(at:0x44eecc-0x44d000,as:UInt32.self))
             },afterPrologue:{ g,paused in
                 let checkpoint = c.states[0];XCTAssertEqual(checkpoint.kind,"prologue");XCTAssertEqual(a.index,checkpoint.eventIndex)
                 XCTAssertTrue(g.bytes+own.outerAndWorldBytes == (try r.blob(checkpoint.state.globals)));XCTAssertEqual(paused,c.paused == 1)
                 XCTAssertEqual(c.bodySP,0x1000e43c)
+            },attemptedWave:{ i,w,g in
+                XCTAssertEqual(i,attempted);attempted += 1;try r.wave(w,c.loads[i])
+                XCTAssertTrue(g.bytes == (try r.blob(c.loads[i].afterGlobals)))
             },afterWave:{ i,w,g in
-                try r.wave(w,c.loads[i]);XCTAssertTrue(g.bytes == (try r.blob(c.loads[i].afterGlobals)))
+                XCTAssertTrue(g.bytes == (try r.blob(c.loads[i].afterGlobals)))
                 let checkpoint = c.states[i+1];XCTAssertEqual(checkpoint.kind,"wave");XCTAssertEqual(a.index,checkpoint.eventIndex)
                 XCTAssertTrue(g.bytes+own.outerAndWorldBytes == (try r.blob(checkpoint.state.globals)))
-            },store:a.store,observe:{ q in
-                if let wave = q.wave { try a.event(.init(wave.kind.rawValue,wave.arguments,wave.strings),"wave") }
-                if let presentation = q.presentation {
-                    if presentation.kind == .bitmap { try a.event(.init("draw",presentation.arguments));try draw(presentation.arguments) }
-                    else {
-                        let e = OriginalFrontScreenEvent(presentation.kind.rawValue,presentation.arguments,presentation.strings)
-                        commands.append(try graphics.front(e,result:responses.presentResult,inputs:retainedBitmapInputs));try a.event(e)
-                    }
-                }
-            },beforeCommit:{ next in
+            },beforeCatalog:{ pendingCatalog in
+                let next = pendingCatalog.common
                 reached = true;XCTAssertEqual(next.sounds.count,18)
                 for i in 0..<2 { XCTAssertEqual(next.commands[i],try r.blob(c.commands[i])) }
                 XCTAssertTrue(next.globals.bytes+own.outerAndWorldBytes == (try r.blob(c.after.globals)))
                 if fail == "commit" { throw Stop.late }
             })
-            committedGraphics = graphics
+            result = try XCTUnwrap(prepared).common
+            committedGraphics = prepared?.state.graphics
         } catch {
             if let fail { guard case Stop.late = error else { throw error };XCTAssertTrue(reached || fail != "commit") }
             else {
                 XCTAssertEqual(c.end,"invalidCreateContinuation")
                 guard case OriginalStateError.invalidStorage("Invalid original CreateSoundBuffer continuation") = error else { throw error }
-                let w = try XCTUnwrap(c.loads.last)
-                // Re-run the same child with its own captured pre-attempt output,
-                // solely to inspect the rejected result and algorithm ownership.
-                let child = try OriginalWaveLoader.load(path:w.path,file:r.blob(w.file),output:attemptOutput,platform:w.input)
-                try r.wave(child,w);XCTAssertEqual(child.exit,.invalidCreateContinuation)
+                XCTAssertEqual(attempted,c.loads.count)
+                XCTAssertEqual(c.loads.last?.exit,.invalidCreateContinuation)
             }
             XCTAssertNil(result)
         }
@@ -140,9 +139,55 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         XCTAssertEqual(own.applicationGraphics,retainedGraphics)
         XCTAssertEqual(committedGraphics != nil,result != nil)
         try OriginalApplicationGraphicsTests.compare(commands,kind:"loading",index:caseIndex,stageKind:"loading",prefix:fail != nil,inputs:retainedBitmapInputs)
-        if fail == nil { try OriginalApplicationGraphicsTests.compareOwner(graphics,kind:"loading",index:caseIndex) }
+        if let prepared {
+            XCTAssertEqual(prepared.common.sounds.count,c.loads.count)
+            for (wave,expected) in zip(prepared.common.sounds,c.loads) { try r.wave(wave,expected) }
+            XCTAssertEqual(prepared.common.paused,c.paused == 1)
+            for i in 0..<2 { XCTAssertEqual(prepared.common.commands[i],try r.blob(c.commands[i])) }
+            let encoder = JSONEncoder();encoder.outputFormatting = .sortedKeys
+            XCTAssertEqual(try encoder.encode(prepared.waveInputs),try encoder.encode(c.loads.map(\.input)))
+            try OriginalApplicationGraphicsTests.compareOwner(prepared.state.graphics,kind:"loading",index:caseIndex)
+            XCTAssertEqual(prepared.stagedGraphics,pending.stagedGraphics+commands)
+            XCTAssertEqual(prepared.state.full.bytes,try r.blob(c.after.globals))
+            XCTAssertTrue(prepared.state.full.defined.allSatisfy { $0 })
+            XCTAssertEqual(prepared.state.memory.allocations,pending.state.memory.allocations)
+            XCTAssertEqual(prepared.state.memory.replayPointers,pending.state.memory.replayPointers)
+            XCTAssertEqual(prepared.state.bitmapInputs,pending.state.bitmapInputs)
+            XCTAssertEqual(prepared.state.libraryText,pending.state.libraryText)
+            XCTAssertEqual(prepared.state.random,pending.state.random)
+            XCTAssertEqual(prepared.state.front.bitmaps,pending.state.front.bitmaps)
+            XCTAssertEqual(prepared.state.earlyScreen.bitmaps,pending.state.earlyScreen.bitmaps)
+            XCTAssertEqual(prepared.state.earlyScreen.surfaces,pending.state.earlyScreen.surfaces)
+            XCTAssertEqual(prepared.state.earlyScreen.retainedOperation,pending.state.earlyScreen.retainedOperation)
+            XCTAssertEqual(prepared.state.screenBody,pending.state.screenBody)
+            XCTAssertEqual(prepared.state.settings,pending.state.settings)
+            XCTAssertEqual(prepared.target,pending.target);XCTAssertEqual(prepared.allocationBytes,81_273_768)
+            var expectedOperations = pending.stagedEffects.map(Loading.Operation.menu),waveIndex = -1
+            for saved in c.events {
+                let event = saved.event
+                if saved.kind == "wave" {
+                    if event.kind == "load" { waveIndex += 1 }
+                    else { expectedOperations.append(.wave(waveIndex,.init(try XCTUnwrap(OriginalWaveEvent.Kind(rawValue:event.kind)),event.arguments,event.strings))) }
+                } else if event.kind == "blit" {
+                    expectedOperations.append(.menu(.blit(try XCTUnwrap(event.blit),result:responses.drawResult)))
+                } else if event.kind == "method" {
+                    expectedOperations.append(.menu(.present(event,result:responses.presentResult)))
+                }
+            }
+            XCTAssertEqual(prepared.stagedOperations,expectedOperations)
+            var called = false
+            XCTAssertThrowsError(try loading.prepareCommon(inputs:files,waves:c.loads.map(\.input),drawResult:responses.drawResult,
+                presentationResult:responses.presentResult,observe:{ _ in called = true })) {
+                    XCTAssertEqual($0 as? Loading.Boundary,.alreadyPrepared)
+                }
+            XCTAssertFalse(called)
+            XCTAssertEqual(loading.pendingCatalog?.state.full,prepared.state.full)
+            XCTAssertEqual(loading.pendingCatalog?.stagedOperations,prepared.stagedOperations)
+            XCTAssertEqual(loading.pendingCatalog?.stagedGraphics,prepared.stagedGraphics)
+        } else { XCTAssertNil(loading.pendingCatalog) }
         XCTAssertEqual(own.base.globals,prior)
         if fail == nil {
+            XCTAssertEqual(attempted,c.loads.count)
             XCTAssertEqual(a.index,c.events.count);XCTAssertEqual(a.mask,try r.blob(c.after.mask))
             XCTAssertEqual(result != nil,c.end == "catalogAllocation")
         }
@@ -153,8 +198,8 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         for i in indices {
             for fail in failures {
                 var called = false
-                try I().run(r.c.cases[i].spec.parentIndex,ir,mr,body,fr,br,er,loading:{ own,target in
-                    called = true;try self.check(r.c.cases[i],r,own,target,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail)
+                try I().run(r.c.cases[i].spec.parentIndex,ir,mr,body,fr,br,er,loading:{ own,pending in
+                    called = true;try self.check(r.c.cases[i],r,own,pending,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail)
                 })
                 XCTAssertTrue(called)
             }
