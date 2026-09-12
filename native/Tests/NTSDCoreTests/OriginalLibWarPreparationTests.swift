@@ -40,7 +40,12 @@ final class OriginalLibWarPreparationTests: XCTestCase {
     struct Helper: Decodable { let entry: UInt32,firstStore: Int,lastStore: Int? }
     struct Write: Decodable { let address: UInt32,bytes: String }
     struct Read: Decodable { let address: UInt32,count: Int,storeCount: Int }
+    struct ResourceFailureInput: Decodable {
+        struct Graphics: Decodable { let nullAllocationOrdinal: Int? }
+        let graphics: Graphics
+    }
     struct Case: Decodable {
+        let resourceFailureInput: ResourceFailureInput?
         let helpers: [Helper],pending: [Helper],writes: [Write],reads: [Read],apiReads: [Read]
         let preparationGraphics: WarGraphics?,replayAddress: UInt32?
         let warGraphics: WarGraphics?
@@ -141,16 +146,19 @@ final class OriginalLibWarPreparationTests: XCTestCase {
         var decoded: [String:[UInt8]] = [:]
         let catalog: OriginalLoadedCatalog
         var bitmapAddresses: [Int:UInt32] = [:]
-        init(_ index: Index,_ number: Int,catalog: OriginalLoadedCatalog) throws {
+        convenience init(_ index: Index,_ number: Int,catalog: OriginalLoadedCatalog) throws {
             let entry=index.c.cases[number],part=try index.part(number)
             var document=index.metadata
             document["cases"]=[try XCTUnwrap(part["case"])];document["parents"]=part["parents"]
             document["assets"]=part["assets"];document["blobs"]=part["blobs"]
+            try self.init(document:document,expectedLabel:entry.label,catalog:catalog)
+        }
+        init(document: [String:Any],expectedLabel: String,catalog: OriginalLoadedCatalog) throws {
             corpus=try JSONDecoder().decode(Corpus.self,from:JSONSerialization.data(withJSONObject:document))
-            XCTAssertEqual(corpus.cases.count,1);XCTAssertEqual(corpus.cases[0].spec.label,entry.label)
+            XCTAssertEqual(corpus.cases.count,1);XCTAssertEqual(corpus.cases[0].spec.label,expectedLabel)
             var projected=document
-            projected["assets"]=(part["assets"] as! [String:Any]).filter { OriginalMenuResourceLoading.paths.contains($0.key) }
-            projected["cases"]=[(part["case"] as! [String:Any])["startup"]!]
+            projected["assets"]=(try XCTUnwrap(document["assets"] as? [String:Any])).filter { OriginalMenuResourceLoading.paths.contains($0.key) }
+            projected["cases"]=[try XCTUnwrap((try XCTUnwrap(document["cases"] as? [[String:Any]])).first?["startup"])]
             let temporary=FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-war-startup-"+UUID().uuidString+".json")
             try JSONSerialization.data(withJSONObject:projected).write(to:temporary)
             defer { try? FileManager.default.removeItem(at:temporary) }
@@ -426,7 +434,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 let ordinal=(pointer-0x68000020)/0x40000;XCTAssertLessThan(ordinal,137)
                 try expected.write(ordinal,at:0x368);try compare(value.actors[i],expected,item.spec.label+" Actor"+String(i))
             }
-            let bitmapPointers=c.catalogDependency.bitmapAddresses+(item.preparationGraphics?.allocations.compactMap(\.address) ?? [])
+            let bitmapPointers=c.catalogDependency.bitmapAddresses+(item.preparationGraphics?.allocations.compactMap(\.address).filter { $0 != 0 } ?? [])
             for i in 0..<101 {
                 let address: UInt32=0x60000020+0x4d45db0+UInt32(i*0x990)
                 var expected=try r.record(XCTUnwrap(records[address]))
@@ -482,7 +490,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                 target:c.target,input:.init(dcResult:item.spec.dcResult ?? 0,dc:item.spec.dc ?? 0x76543210,methodResult:item.spec.methodResult ?? -1,drawResults:[-1],shellResult:33),
                 warPreparation:{ scene,owned,audio,env in
                     let pg=try XCTUnwrap(item.preparationGraphics)
-                    let adapter=OriginalWarPreparationSurfaceAdapter(pg,r);preparationAdapter=adapter
+                    let adapter=OriginalWarPreparationSurfaceAdapter(pg,r,nullAllocationOrdinal:item.resourceFailureInput?.graphics.nullAllocationOrdinal);preparationAdapter=adapter
                     if (pg.allocationStart ?? 0)==0 { env.preparationGraphics=env.warGraphics }
                     try OriginalWarPreparation.prepare(state:&scene,memory:&owned,localTime:{
                         let t=try XCTUnwrap(item.spec.localTime)
@@ -491,7 +499,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         var graphics=env.preparationGraphics
                         let result=try adapter.construct(path,optional,backing,&graphics) { try event(.init("preparationBitmap"),&env) }
                         env.preparationGraphics=graphics
-                        if failure=="bitmap" { throw Stop.injected };return result
+                        if failure=="bitmap" || failure=="nullBitmap" && result==nil { throw Stop.injected };return result
                     },releaseBitmap:{ index,bitmap in
                         var graphics=env.preparationGraphics
                         try adapter.release(index,bitmap,&graphics) { kind,_ in
@@ -525,7 +533,7 @@ final class OriginalLibWarPreparationTests: XCTestCase {
                         return generation==0 ? 0x75000020 : 0x77000020+UInt32(generation-1)*0x640000
                     },observe:{ try event($0,&env) },numericCheckpoint:{ pc,seat,value in
                         let points=item.points.filter { $0.kind.hasPrefix("war-preparation-numeric-") }
-                        if item.spec.matrixOrdinal == nil { XCTAssertTrue(points.isEmpty);return }
+                        if item.spec.matrixOrdinal == nil && item.resourceFailureInput == nil { XCTAssertTrue(points.isEmpty);return }
                         guard numericPoint<points.count else { throw Stop.unexpected }
                         let expected=points[numericPoint];numericPoint += 1
                         XCTAssertEqual(expected.kind,"war-preparation-numeric-0x"+String(pc,radix:16));XCTAssertEqual(expected.seat,UInt32(seat))

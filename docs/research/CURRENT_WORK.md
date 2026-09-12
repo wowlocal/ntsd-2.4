@@ -32,6 +32,18 @@ Release: 40 тестов плюс четыре после добавления n
 архивы и границы: [evidence](../evidence/pending-native-completion-2026-09-12.json).
 Полные собственные каталог, library loop и приложение остаются открытыми.
 
+Принят [NULL bitmap при подготовке War](LIB_WAR_NULLABLE_BITMAP.md): три сохранённых
+returned вызова s02/00, s02/01 и s03/00 совпадают с Native по целому вызывающему
+пути, 3 838 событиям и 48 числовым checkpoints. При первом NULL четыре поздних
+owner сохраняются и переживают следующий Start99 без Release/free. Проверены
+11 связанных откатов; Native самостоятельно выполняет по десять принятых
+prefix calls для двух цепочек, без нового исполнения оригинала.
+Raw-тест прошёл за 19.231с; 17 bundled release-тестов за 510.590с, включая
+матрицу 256 вызовов, preflight 22 и общие Tournament/Team/resource регрессии.
+333 прежних fixtures неизменны, 336 текущих/777 Native-файлов, Git и оба архива
+проверены. [Приёмка](../evidence/lib-war-nullable-bitmap.json).
+Отдельный s03/01 source fault и остальной error corpus этим не приняты.
+
 ## Непринятая работа и отказ Codex
 
 Текущий незакрытый этап — [обычные ошибки ресурсов War](LIB_WAR_PREPARATION_ERRORS_PLAN.md).
@@ -51,8 +63,9 @@ Release: 40 тестов плюс четыре после добавления n
 - Дополнительная инвентаризация проверяет состав корпуса, input pins,
   290 сохранённых producer proofs,37 переходов live-owner flags и9 failure
   sidecars. Это чтение готовых данных; новых исполнений оригинала нет.
-- `nativeCompared=false`, `fullPreparationComplete=false`,
-  `fullGameComplete=false`. Native error corpus ещё не принят.
+- В исторической сводке `nativeCompared=false`, `fullPreparationComplete=false`,
+  `fullGameComplete=false`. Новая приёмка трёх NULL-вызовов выше не переписывает
+  этот источник; полный Native error corpus ещё не принят.
 - Проверка процессов по командам War error capture/audit, transform boundaries
   и result recording не нашла соответствующих работающих процессов на момент
   чтения. Перед любым дальнейшим действием нужна новая проверка; это не инвентарь
@@ -78,17 +91,22 @@ Release: 40 тестов плюс четыре после добавления n
 
 ## Следующая независимая карточка
 
-**Собственная Native-модель отказа выделения bitmap по сохранённым данным.**
+**Частично созданные bitmap: шесть сохранённых returned s04..s09/call-00.**
 
-Инвентаризацию не начинать заново. Прочитать её результаты, проверить доступность
-закреплённых входов и оформить конечный Native-план для трёх returned вызовов:
-s02/call-00, s02/call-01 и s03/call-00. Faulted s03/call-01 остаётся отдельно.
-`loadLayersWithSurface` сейчас требует непустой wrapper. Нужно представить
-обычный NULL без нового owner и сохранить четыре поздних wrapper при следующем
-Start s02: первый NULL заставляет оригинал пропустить весь release-loop.
-Использовать собственное состояние и существующие сырые case-файлы, скорректировать
-сравнение allocation requests/owners и проверить связанный rollback. Сохранить
-256-case matrix,22-case preflight и подходящие общие ресурсные регрессии.
+Инвентаризацию не начинать заново. По её результатам и readonly review в
+`build/research/lib-war-preparation/war-nullable-native-20260912/next-partial-surface-review.json`
+оформить конечный Native-план. Во всех шести случаях остаются пять ненулевых
+wrapper owners. Missing image сохраняет неизвестные dimensions; CreateSurface
+failure сохраняет известные размеры и неудалённый image; colorKey failure
+сохраняет wrapper и released surface record. При colorKey `input.present=true`
+означает ненулевой результат loader до ошибки, хотя итоговый marker равен нулю.
+
+Core уже содержит эти ветви; нужно расширить явные failure inputs и War adapter,
+сравнить целые вызывающие пути, storage/masks и platform owners. Проверить rollback
+после целевого неудачного constructor, включая последний слой, и поздний общий
+откат. Сохранить matrix 256, preflight 22, три NULL-вызова и подходящие
+BitmapSurfaceLoading/CharacterMenuSurface регрессии. Последующие s04..s09/call-01
+остаются отдельными source faults 40c118; они не являются successful matches.
 
 Это новая работа над Native по готовым данным, а не повтор исходного захвата.
 Она не разрешает затронутую отказом операцию и не закрывает incident. Остальные
@@ -122,4 +140,5 @@ Native-карточкой выше: их исходные версии сохр�
 `build/research/pending-completion-20260912/initial-pending/`, старые 325 fixtures
 неизменны. Из исходных pending изменён только расширенный transform test;
 добавлены постоянные проверки, восемь fixtures, упаковщики и итоговые документы.
-Исторический work JSON не переписывался. Следующая карточка War выше сохраняется.
+Исторический work JSON не переписывался. Принятые новые NULL-контракты и следующая
+карточка частичных surfaces описаны выше.

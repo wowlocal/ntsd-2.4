@@ -10,8 +10,15 @@ final class OriginalWarPreparationSurfaceAdapter {
     typealias Base = OriginalCharacterMenuSurfaceTests
     typealias API = OriginalBitmapSurfaceLoading
     let c: Test.WarGraphics,r: Test.Resources
+    let nullAllocationOrdinal: Int?
     var index=0,allocation=0,globalKeys: [String]=[]
-    init(_ c: Test.WarGraphics,_ r: Test.Resources) { self.c=c;self.r=r;self.allocation=c.allocationStart ?? 0 }
+    init(_ c: Test.WarGraphics,_ r: Test.Resources,nullAllocationOrdinal: Int? = nil) {
+        self.c=c;self.r=r;self.allocation=c.allocationStart ?? 0
+        self.nullAllocationOrdinal=nullAllocationOrdinal
+    }
+    func ownerAddresses() throws -> [UInt32] {
+        try c.allocations.map { try XCTUnwrap($0.address) }.filter { $0 != 0 }
+    }
     func next(_ kind: String) throws -> Base.Event {
         guard index<c.events.count else { throw Test.Stop.unexpected }
         let e=c.events[index];index += 1;XCTAssertEqual(e.kind ?? e.request?.kind,kind);return e
@@ -32,10 +39,19 @@ final class OriginalWarPreparationSurfaceAdapter {
         return bytes
     }
     func construct(_ path: String,_ optional: Bool,_ backing: [UInt8],_ context: inout Base.Context,
-                   observe: () throws -> Void) throws -> OriginalLoadedBitmap {
-        let token: UInt32=0x76004020+UInt32(allocation)*0x2000
+                   observe: () throws -> Void) throws -> OriginalLoadedBitmap? {
+        let ordinal=allocation
+        // The allocator stimulus is declared separately from captured outputs.
+        // Request ordinals advance even when no wrapper owner is produced.
+        let token: UInt32=ordinal==nullAllocationOrdinal ? 0 : 0x76004020+UInt32(ordinal)*0x2000
         let e=try next("allocate");XCTAssertEqual(e.index,allocation);XCTAssertEqual(e.address,token);XCTAssertEqual(e.count,0x1f50)
+        guard c.allocations.indices.contains(allocation) else { throw Test.Stop.unexpected }
         XCTAssertEqual(c.allocations[allocation].address,token)
+        XCTAssertFalse(optional)
+        if token==0 {
+            XCTAssertNil(c.allocations[allocation].backing)
+            allocation += 1;try observe();return nil
+        }
         XCTAssertEqual(backing,[UInt8](repeating:0xa5,count:0x1f50));XCTAssertEqual(backing,try r.blob(XCTUnwrap(c.allocations[allocation].backing)))
         allocation += 1;context.currentWrapper=token;context.allocations.append(token);try observe()
         let constructor=try next("construct");XCTAssertEqual(constructor.address,token);XCTAssertEqual(constructor.path,path);XCTAssertFalse(optional);try observe()
@@ -72,8 +88,11 @@ final class OriginalWarPreparationSurfaceAdapter {
     func release(_ index: Int,_ bitmap: OriginalLoadedBitmap,_ context: inout Base.Context,
                  observe: (String,UInt32) throws -> Void) throws {
         let ordinal=index-r.catalog.bitmaps.count
-        XCTAssertGreaterThanOrEqual(ordinal,0);XCTAssertLessThan(ordinal,c.allocationStart ?? 0)
-        let wrapper=try XCTUnwrap(c.allocations[ordinal].address)
+        let owners=try ownerAddresses()
+        guard owners.indices.contains(ordinal) else { throw Test.Stop.unexpected }
+        let wrapper=owners[ordinal]
+        let request=try XCTUnwrap(c.allocations.firstIndex { $0.address==wrapper })
+        XCTAssertLessThan(request,c.allocationStart ?? 0)
         let surface=try XCTUnwrap(context.surfaceForWrapper[wrapper])
         try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context) { q,g in
             let e=try self.next(q.kind),expected=try XCTUnwrap(e.request),response=try XCTUnwrap(e.response)
@@ -91,7 +110,9 @@ final class OriginalWarPreparationSurfaceAdapter {
     }
     func compare(_ state: OriginalMatchPreparation,_ context: Base.Context) throws {
         XCTAssertEqual(index,c.events.count);XCTAssertEqual(allocation,c.allocations.count)
-        XCTAssertEqual(state.bitmaps.count,r.catalog.bitmaps.count+allocation)
+        let owners=try ownerAddresses()
+        XCTAssertEqual(state.bitmaps.count,r.catalog.bitmaps.count+owners.count)
+        XCTAssertEqual(c.records.map(\.address),owners)
         let history=c.constructionHistory ?? c.helpers
         for (i,record) in c.records.enumerated() {
             let bitmap=state.bitmaps[r.catalog.bitmaps.count+i],surface=try XCTUnwrap(context.surfaceForWrapper[record.address])

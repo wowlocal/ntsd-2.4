@@ -19,10 +19,11 @@ extension OriginalBackgroundLoader {
     }
 
     /// Whole40c030 layer order with an actual bitmap-constructor continuation.
-    /// The caller stages platform requests and allocation ownership. This adds
-    /// the surface boundary without depending on pending catalog-loader changes.
+    /// The caller stages platform requests and allocation ownership. A nil
+    /// allocation stores the original NULL layer pointer without creating an
+    /// owner or stopping later layers; successful wrappers remain individually owned.
     public mutating func loadLayersWithSurface(in record: inout OriginalStateRecord,
-        constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap) throws {
+        constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?) throws {
         var candidate=self,storage=record
         guard storage.bytes.count==Self.recordSize else { throw OriginalStateError.invalidStorage("BG storage size") }
         let count=try storage.integer(at:0x1c,as:Int32.self)
@@ -35,7 +36,11 @@ extension OriginalBackgroundLoader {
             }
             guard terminated else { throw OriginalStateError.invalidStorage("BG layer path extent") }
             let path=String(String.UnicodeScalarView(bytes.map { UnicodeScalar($0) }))
-            let bitmap=try OriginalLoadedBitmap.checkedConstruction(constructBitmap(path,false,[UInt8](repeating:0xa5,count:0x1f50)),path:path,optional:false)
+            guard let constructed=try constructBitmap(path,false,[UInt8](repeating:0xa5,count:0x1f50)) else {
+                try storage.write(UInt32(0),at:0x914+index*4)
+                continue
+            }
+            let bitmap=try OriginalLoadedBitmap.checkedConstruction(constructed,path:path,optional:false)
             let slot=candidate.resources.bitmaps.count;candidate.resources.bitmaps.append(bitmap)
             try storage.write(UInt32(slot+1),at:0x914+index*4)
         }

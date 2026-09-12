@@ -6,7 +6,7 @@
 public enum OriginalWarPreparation {
     public static func prepare(state: inout OriginalMatchPreparation,
         memory: inout OriginalMenuPresentationMemory,localTime: () throws -> OriginalLocalTime,
-        constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap,
+        constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?,
         releaseBitmap: (Int,OriginalLoadedBitmap) throws -> Void = { _,_ in
             throw OriginalStateError.invalidStorage("Existing War BG release continuation was not supplied")
         },

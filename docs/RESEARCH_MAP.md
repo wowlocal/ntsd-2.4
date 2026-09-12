@@ -30,10 +30,22 @@ CPU-сессия не запускалась, прежние safety incidents н
 завершён аудит сохранённых29 сценариев /37 новых вызовов —28 returned и9 source
 faults. Проверены записи/маски,1 894 checkpoints,3 611 059 stores и37 переходов
 live-owner flags. Нового исполнения оригинала нет; Native-сравнение этого корпуса
-остаётся открытым. Нужны nullable bitmap owners, корректные surface/music adapters,
+остаётся открытым за пределами отдельной NULL-карточки ниже. Нужны surface/music adapters,
 provenance private dimensions в двух returned случаях и отдельные fault rollback
 проверки. Четыре поздних wrapper при первом NULL переживают следующий Start.
 Старые отказы и исправления стенда сохранены; эта передача не закрывает incident.
+
+[NULL bitmap при подготовке War](research/LIB_WAR_NULLABLE_BITMAP.md) принят для
+трёх сохранённых whole returned calls: s02/00, s02/01 и s03/00. Native разделяет
+пять allocation requests и четыре реальных owner; при первом NULL следующий
+Start99 сохраняет все четыре. Сравнились 3 838 событий и 48 numeric checkpoints,
+прошли 11 связанных откатов. Двадцать Native prefix calls перекрывают десять
+прежних случаев; нового исполнения оригинала нет. Raw 19.231с, bundled 17 тестов
+510.590с; matrix 256, preflight 22 и общие Tournament/Team/resource регрессии
+прошли. 333 прежних fixtures неизменны, 336 текущих/777 Native-файлов, Git и архивы
+сверены. [Приёмка](evidence/lib-war-nullable-bitmap.json). s03/01 source fault
+остаётся отдельно; далее шесть returned partial-surface cases s04..s09/call-00
+по CURRENT_WORK. Полный error corpus, игра и прежние incidents остаются открыты.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,
