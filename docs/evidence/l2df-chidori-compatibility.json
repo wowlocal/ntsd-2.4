@@ -1,6 +1,6 @@
 {
   "createdAtUTC": "2026-09-12T07:28:12.431145+00:00",
-  "status": "actor-input accepted; projectile/game integration in progress",
+  "status": "paused by user; ActorInput accepted; projectile implementation WIP, not compared",
   "baselineCommit": "a642bfa",
   "worktree": "/Users/michael/Developer/ntsd-2.4-l2df-prototype",
   "sourceExecution": false,
@@ -125,5 +125,45 @@
   ],
   "reviewer": "/root",
   "implementationAuthor": "/root/l2df_prototype",
-  "wholeGameEquivalent": false
+  "wholeGameEquivalent": false,
+  "pause": {
+    "atUTC": "2026-09-12T07:34:25.645774+00:00",
+    "requestedBy": "user",
+    "agent": "/root/l2df_prototype interrupted",
+    "allDeclaredTestJobsTerminal": true,
+    "unverifiedWork": [
+      {
+        "path": "prototypes/l2df/compat/CONTRACT.md",
+        "sha256": "ba96067ad985194e9c50ee7cb7a1bb47964baf049daa8f0dff1e1d7dea5d58a5",
+        "bytes": 4259
+      },
+      {
+        "path": "prototypes/l2df/compat/fighter.lua",
+        "sha256": "bcd296fd0afef1ddefc9c51958c1ef6121ae4014610d15d3de66dbaa7f71db73",
+        "bytes": 8574
+      },
+      {
+        "path": "prototypes/l2df/compat/projectile.lua",
+        "sha256": "cf9672180eb12ce2f78563815690d6256669839732a2b7300524479d768bc2e7",
+        "bytes": 3816
+      },
+      {
+        "path": "prototypes/l2df/compat/projectile_hits.lua",
+        "sha256": "6031a52edbbea278fc65dfec62c67aa2cc0b06cae27f4532a73c2d10424cadbb",
+        "bytes": 5478
+      },
+      {
+        "path": "prototypes/l2df/compat/spawn.lua",
+        "sha256": "a49539ba790c1da5d5fffea8719966b529ed5bf885f7cfaf5cb0a3f9b754d3e4",
+        "bytes": 2681
+      },
+      {
+        "path": "prototypes/l2df/tests/reference/check_world.py",
+        "sha256": "8133380a99d20ed6fca7b2aacda20adc8fca00114aeccab85ca95a78e3846b99",
+        "bytes": 11007
+      }
+    ],
+    "next": "Complete compat.world API and frame projector, then run the prepared independent 20-case/2010-tick comparator before GUI integration.",
+    "mainReferenceRevalidation": "Last read-only check found main worktree clean and OriginalLibTransformTests.swift differing from original dispatch pin. No changes were made to main by this worktree task; revalidate current commits/pins before resuming."
+  }
 }
