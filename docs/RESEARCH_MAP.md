@@ -242,6 +242,16 @@ ReleaseDC, точные rectangles, ответы API и whole rollback. Loading 
 [Приёмка](evidence/application-loading-session.json). Полный каталог, возврат из загрузки и внешнего цикла,
 вывод изображения/звук, матч/игра и прежние incidents остаются открытыми.
 
+Приняты [все 669 catalog image inputs](research/APPLICATION_CATALOG_DIB_INPUTS.md):
+BI_RGB4/8, RGB24 с таблицей цветов, сохранённые BMP header/offset и origin bindings.
+Все RGB/masks сравниваются, 2 765 RLE holes остаются неизвестными. Независимый
+ImageIO совпал на всех 85 новых форматах; его 34 отличия RLE сохранены отдельно.
+21 release-метод прошёл за 29.097 с/build 303.35 с; ошибки первого
+тестового транспорта сохранены. Core/expected неизменны между кандидатами.
+374 прежних fixtures и оба пакета сохранены; 905 Native-файлов и архивы проверены.
+[Приёмка](evidence/application-catalog-dib-inputs.json). Полный catalog session,
+реальное устройство и прежние safety incidents остаются открытыми.
+
 Следующая карточка — собственный каталог из PendingCatalog: сохранить common
 WAV storage и bitmap/display owners, связать фактический allocation/constructor
 по имеющимся own captures и Native contracts. Legacy fixed60000020 нельзя

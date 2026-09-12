@@ -40,10 +40,23 @@ public struct OriginalApplicationBitmapInputs: Equatable {
     public private(set) var surfaceDCs: [SurfaceDC] = []
     public private(set) var activeMemoryDCs: [UInt32:Int] = [:]
     public private(set) var activeSurfaceDCs: [UInt32:Int] = [:]
-    private let resources: [String:OriginalApplicationStartupInputs.Bitmap]
+    private var resources: [String:OriginalApplicationStartupInputs.Bitmap]
     private let maximumSurfacePixels: Int
     public init(resources: [String:OriginalApplicationStartupInputs.Bitmap],maximumSurfacePixels: Int = 16_777_216) {
         self.resources = resources;self.maximumSurfacePixels = maximumSurfacePixels
+    }
+
+    /// Extend the input set without replacing existing graphics owners. Equal
+    /// bindings are idempotent; differing bytes or origins reject the whole merge.
+    public mutating func addResources(_ additional: [String:OriginalApplicationStartupInputs.Bitmap]) throws {
+        var next = resources
+        for (name,bitmap) in additional {
+            guard next[name] == nil || next[name] == bitmap else {
+                throw OriginalStateError.invalidStorage("Bitmap input resource conflict: "+name)
+            }
+            next[name] = bitmap
+        }
+        resources = next
     }
 
     public func pixels(forImage handle: UInt32) throws -> OriginalDIBPixels {
@@ -71,7 +84,8 @@ public struct OriginalApplicationBitmapInputs: Equatable {
             guard q.words.count == 5,q.strings.count == 1 else { throw invalid("image request") }
             if control.result != 0 {
                 let name = String(decoding:q.strings[0],as:UTF8.self),handle = UInt32(bitPattern:control.result)
-                guard q.words[4] == 0x2000,let bitmap = resources[name],images[handle] == nil else { throw invalid("image binding") }
+                guard let bitmap = resources[name],images[handle] == nil,
+                      q.words[4] == (bitmap.bitmapFileHeader == nil ? 0x2000 : 0x2010) else { throw invalid("image binding") }
                 images[handle] = .init(bitmap:bitmap)
             }
         case "getObject":

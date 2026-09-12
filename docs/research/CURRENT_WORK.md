@@ -296,6 +296,17 @@ ReleaseDC, точные rectangles, ответы API и whole rollback. Loading 
 
 **Собственный каталог из PendingCatalog.**
 
+Начат [план production-продолжения](APPLICATION_CATALOG_SESSION_PLAN.md).
+Принята обязательная [поддержка всех 669 исходных изображений](APPLICATION_CATALOG_DIB_INPUTS.md),
+включая 85 прежде неподдерживаемых форматов и семь входов twenty-Object prefix.
+Полные RGB/masks, файловые заголовки/offset, merge старых owners и file→surface
+проверены; 2 765 неизвестных пикселей сохранены. Все 21 release-метод прошли за
+29.097 с/build 303.35 с. Ошибка компиляции первого теста и 34 отличия
+ImageIO сохранены; Core/expected между кандидатами неизменны. Прежние 374 fixtures
+и оба пакета неизменны; 905 Native-файлов, 375 fixtures и архивы проверены.
+[Приёмка](../evidence/application-catalog-dib-inputs.json). Полный каталог остаётся
+следующей задачей; его возврат и реальный raster ещё не приняты.
+
 Продолжить фактическую загрузку из принятого PendingCatalog: связать следующий
 catalog allocation/constructor с сохранёнными common WAV, bitmap/display owners
 и текущими globals. Сначала проверить существующие own catalog captures и

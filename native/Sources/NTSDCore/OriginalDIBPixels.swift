@@ -5,11 +5,12 @@ public struct OriginalDIBPixels: Equatable {
         case header, format, pixelLimit, extent, palette, paletteIndex, stream, output, undefinedPixel
     }
     public let width: Int, height: Int
+    public let pixelOffset: Int
     public let rgb: [UInt8]
     public let defined: [Bool]
 
     /// The pixel budget is a caller allocation boundary, not an original rule.
-    public init(dib: [UInt8], maximumPixels: Int = 16_777_216) throws {
+    public init(dib: [UInt8], maximumPixels: Int = 16_777_216, pixelOffset: Int? = nil) throws {
         guard dib.count >= 40 else { throw Boundary.header }
         func word(_ at: Int) -> UInt32 {
             UInt32(dib[at]) | UInt32(dib[at+1]) << 8 | UInt32(dib[at+2]) << 16 | UInt32(dib[at+3]) << 24
@@ -17,31 +18,38 @@ public struct OriginalDIBPixels: Equatable {
         let width = Int(Int32(bitPattern:word(4))),height = Int(Int32(bitPattern:word(8)))
         guard word(0) == 40,width > 0,height > 0,dib[12] == 1,dib[13] == 0 else { throw Boundary.header }
         let bits = Int(dib[14]) | Int(dib[15]) << 8,compression = word(16)
-        guard (bits == 24 && compression == 0) || (bits == 8 && compression == 1) else { throw Boundary.format }
+        guard ([4,8,24].contains(bits) && compression == 0) || (bits == 8 && compression == 1) else { throw Boundary.format }
         let (count,overflow) = width.multipliedReportingOverflow(by:height)
         let (byteCount,byteOverflow) = count.multipliedReportingOverflow(by:3)
         guard !overflow,!byteOverflow,maximumPixels > 0,count <= maximumPixels else { throw Boundary.pixelLimit }
         let imageSize = Int(word(20)),colors = Int(word(32))
+        let paletteCount = bits == 24 ? colors : (colors == 0 ? 1 << bits : colors)
+        guard (bits == 24 || paletteCount <= 1 << bits),
+              paletteCount <= (dib.count-40)/4 else { throw Boundary.palette }
+        let minimumOffset = 40+paletteCount*4,start = pixelOffset ?? minimumOffset
+        guard start >= minimumOffset,start <= dib.count else { throw Boundary.extent }
         var rgb = [UInt8](repeating:0,count:byteCount),defined = [Bool](repeating:false,count:count)
-        if bits == 24 {
-            guard colors == 0 else { throw Boundary.palette }
-            // The checked pixel extent above also bounds these positive products.
-            let stride = (width*3+3)/4*4
+        if compression == 0 {
+            // Width is positive Int32; these products fit Int on native macOS.
+            let stride = ((width*bits+31)/32)*4
             let (extent,extentOverflow) = stride.multipliedReportingOverflow(by:height)
-            guard !extentOverflow,extent <= dib.count-40,imageSize == 0 || imageSize == extent else { throw Boundary.extent }
+            guard !extentOverflow,extent <= dib.count-start,imageSize == 0 || imageSize == extent else { throw Boundary.extent }
             for row in 0..<height {
-                let source = 40+row*stride,destination = (height-1-row)*width
+                let source = start+row*stride,destination = (height-1-row)*width
                 for x in 0..<width {
-                    let input = source+x*3,output = (destination+x)*3
+                    let input: Int,output = (destination+x)*3
+                    if bits == 24 { input = source+x*3 }
+                    else {
+                        let value = Int(dib[source+(bits == 8 ? x : x/2)])
+                        let index = bits == 8 ? value : (x%2 == 0 ? value >> 4 : value & 15)
+                        guard index < paletteCount else { throw Boundary.paletteIndex }
+                        input = 40+index*4
+                    }
                     rgb[output] = dib[input+2];rgb[output+1] = dib[input+1];rgb[output+2] = dib[input]
                     defined[destination+x] = true
                 }
             }
         } else {
-            let paletteCount = colors == 0 ? 256 : colors
-            guard paletteCount <= 256 else { throw Boundary.palette }
-            let start = 40+paletteCount*4
-            guard start <= dib.count else { throw Boundary.palette }
             guard imageSize > 0,imageSize <= dib.count-start else { throw Boundary.extent }
             let end = start+imageSize
             var position = start,x = 0,y = 0,finished = false
@@ -82,7 +90,7 @@ public struct OriginalDIBPixels: Equatable {
             }
             // EOB ends decoding. Declared stream padding/tails remain raw DIB data.
         }
-        self.width = width;self.height = height;self.rgb = rgb;self.defined = defined
+        self.width = width;self.height = height;self.pixelOffset = start;self.rgb = rgb;self.defined = defined
     }
 
     public func color(x: Int,y: Int) throws -> [UInt8] {

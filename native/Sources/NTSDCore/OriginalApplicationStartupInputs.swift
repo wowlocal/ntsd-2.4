@@ -10,22 +10,49 @@ public struct OriginalApplicationStartupInputs: Equatable {
     }
     public struct Bitmap: Equatable {
         public let dib: [UInt8]
+        /// Exact file header distinguishes a file image from an embedded DIB.
+        public let bitmapFileHeader: [UInt8]?
+        public var pixelOffset: Int { pixels.pixelOffset }
         public let pixels: OriginalDIBPixels
         public let width: Int32, height: Int32, rowBytes: Int32
         public let planes: UInt16, bitsPerPixel: UInt16
-        init(_ dib: [UInt8]) throws {
+        init(_ dib: [UInt8]) throws { try self.init(dib:dib) }
+        public init(dib: [UInt8]) throws { try self.init(dib:dib,fileHeader:nil,pixelOffset:nil) }
+        public init(bitmapFile: [UInt8]) throws {
+            guard bitmapFile.count >= 54,bitmapFile[0] == 0x42,bitmapFile[1] == 0x4d else {
+                throw Boundary.invalid("BMP header")
+            }
+            func word(_ at: Int) -> UInt32 {
+                UInt32(bitmapFile[at]) | UInt32(bitmapFile[at+1]) << 8 |
+                    UInt32(bitmapFile[at+2]) << 16 | UInt32(bitmapFile[at+3]) << 24
+            }
+            let offset = Int(word(10))
+            guard Int(word(2)) == bitmapFile.count,word(6) == 0,offset >= 54,offset <= bitmapFile.count else {
+                throw Boundary.invalid("BMP file extent or reserved fields")
+            }
+            try self.init(dib:Array(bitmapFile.dropFirst(14)),fileHeader:Array(bitmapFile.prefix(14)),pixelOffset:offset-14)
+        }
+        private init(dib: [UInt8],fileHeader: [UInt8]?,pixelOffset: Int?) throws {
             guard dib.count >= 40 else { throw Boundary.invalid("DIB header") }
             let r = try OriginalStateRecord(bytes:dib,defined:[Bool](repeating:true,count:dib.count))
             let header: UInt32 = try r.integer(at:0,as:UInt32.self),w: Int32 = try r.integer(at:4,as:Int32.self),h: Int32 = try r.integer(at:8,as:Int32.self)
             let planes: UInt16 = try r.integer(at:12,as:UInt16.self),bits: UInt16 = try r.integer(at:14,as:UInt16.self),compression: UInt32 = try r.integer(at:16,as:UInt32.self)
             guard header == 40,w > 0,h > 0,planes == 1,
-                  (bits == 24 && compression == 0) || (bits == 8 && compression == 1) else {
+                  ([4,8,24].contains(bits) && compression == 0) || (bits == 8 && compression == 1) else {
                 throw Boundary.invalid("Declared DIB format")
             }
             let stride = ((Int64(w)*Int64(bits)+31)/32)*4
             guard stride <= Int64(Int32.max) else { throw Boundary.invalid("DIB row extent") }
             self.dib = dib;width = w;height = h;rowBytes = Int32(stride);self.planes = planes;bitsPerPixel = bits
-            pixels = try OriginalDIBPixels(dib:dib)
+            bitmapFileHeader = fileHeader
+            if let pixelOffset {
+                let colors = Int(try r.integer(at:32,as:UInt32.self))
+                let count = bits == 24 ? colors : (colors == 0 ? 1 << Int(bits) : colors)
+                guard count <= (dib.count-40)/4,pixelOffset >= 40+count*4 else {
+                    throw Boundary.invalid("BMP pixel offset or palette")
+                }
+            }
+            pixels = try OriginalDIBPixels(dib:dib,pixelOffset:pixelOffset)
         }
         /// Win32 BITMAP fields at the declared image boundary, not pixels or a
         /// host graphics object. Source colors/masks remain separate from surfaces.

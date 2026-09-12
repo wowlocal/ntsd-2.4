@@ -1,0 +1,361 @@
+{
+  "schema": 1,
+  "status": "accepted_finite_catalog_image_inputs",
+  "createdUTC": "2026-09-12T21:53:28.059115+00:00",
+  "baseCommit": "53f4fea13006fdead569456045b3ec3848c29ce4",
+  "scope": "Original catalog image data decoding and owned BMP-versus-embedded API provenance; prerequisite to the still-open production catalog session.",
+  "sourceExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "safetyIncidentsOpen": 3,
+  "separateWindowsDownloadRefusalOpen": true,
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Pinned original BMP/embedded DIB data; independent format decoder and raw ImageIO provider observations on macOS. No new original execution or Windows device measurement.",
+    "resources": 669,
+    "bitmapFiles": 665,
+    "embeddedDIBs": 4,
+    "inputBytes": 628035022,
+    "previouslyUnsupported": 85,
+    "newBI_RGB8": 40,
+    "newBI_RGB4": 3,
+    "newRGB24WithTable": 42,
+    "pixels": 227762176,
+    "definedPixels": 227759411,
+    "unknownPixels": 2765,
+    "rowHashesIndependentlyChecked": 298469,
+    "blobs": 1477,
+    "positiveControls": 6,
+    "negativeControls": 16,
+    "oldControlsUnchanged": 18,
+    "independentReferenceReviewBeforeCore": true,
+    "expectedBytesUnchanged": true
+  },
+  "hostCrosscheck": {
+    "allDefinedPixelMatches": 667,
+    "definedPixelDifferences": 34,
+    "imagesWithDifferences": 2,
+    "shadow1Differences": 13,
+    "back99_2Differences": 21,
+    "all85NewFormatInputsMatch": true,
+    "unknownPixelsExcluded": 2765,
+    "independentSparseRLEFullMatches": 5,
+    "handAuthoredHostRLEControlDifferences": 2,
+    "differencesPreserved": true,
+    "WindowsMatchClaim": false
+  },
+  "native": {
+    "candidate": 2,
+    "methods": 21,
+    "seconds": 29.097,
+    "buildSeconds": 303.35,
+    "passedMethods": [
+      "NTSDCoreTests.OriginalApplicationGraphicsTests testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+      "NTSDCoreTests.OriginalApplicationGraphicsTests testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+      "NTSDCoreTests.OriginalApplicationGraphicsTests testResolvedSourceSnapshotAndNullSourceBoundary",
+      "NTSDCoreTests.OriginalApplicationLoadingPrefixTests testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+      "NTSDCoreTests.OriginalApplicationLoadingPrefixTests testOwnLoadingCommonSoundsAndOrdinaryFailures",
+      "NTSDCoreTests.OriginalApplicationLoadingSessionTests testApplicationBundleRequiresItsOwnCommonSoundPackage",
+      "NTSDCoreTests.OriginalApplicationLoadingSessionTests testBundledCommonSoundsAreOwnedAndRetainDistinctNames",
+      "NTSDCoreTests.OriginalApplicationLoadingSessionTests testMissingCorruptExtraAndSymlinkPackagesAreDistinctNativeBoundaries",
+      "NTSDCoreTests.OriginalApplicationStartupInputsTests testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+      "NTSDCoreTests.OriginalApplicationStartupInputsTests testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+      "NTSDCoreTests.OriginalApplicationStartupInputsTests testPackageRejectsMissingCorruptAndUnexpectedFiles",
+      "NTSDCoreTests.OriginalApplicationStartupInputsTests testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+      "NTSDCoreTests.OriginalCatalogDIBPixelsTests testAddingFileInputsRetainsOwnersAndRejectsOriginConflictsAtomically",
+      "NTSDCoreTests.OriginalCatalogDIBPixelsTests testEveryOriginalCatalogImageMatchesAllColorsAndMasks",
+      "NTSDCoreTests.OriginalCatalogDIBPixelsTests testFixedIndexedPaletteAndFileOffsetControls",
+      "NTSDCoreTests.OriginalDIBPixelsTests testAllPackagedPixelsMatchIndependentBytesMasksAndRows",
+      "NTSDCoreTests.OriginalDIBPixelsTests testDeclaredDecoderControlsAndTypedRejections",
+      "NTSDCoreTests.OriginalDIBPixelsTests testImagePixelsStayImmutableAndDeletedHandlesDoNotRevive",
+      "NTSDCoreTests.OriginalSurfaceSourceColorsTests testAllSavedLifetimesOwnExactColorsMasksAndDCGenerations",
+      "NTSDCoreTests.OriginalSurfaceSourceColorsTests testKnownBlackUnknownPartialCopiesAndAtomicBounds",
+      "NTSDCoreTests.OriginalSurfaceSourceColorsTests testSelectionCleanupReuseAndReleaseControls"
+    ],
+    "rawOverrides": false,
+    "fullRGBAndMasksCompared": 669,
+    "exactFileHeaderAndPixelOffsetRetained": true,
+    "originBindings": "2010 bitmapFile;2000 embeddedDIB;NULL preserves unsuccessful lookup",
+    "actualSourceModuleWord": 4194304,
+    "atomicResourceMerge": true,
+    "existingOwnersAndHistoryPreserved": true,
+    "generatedGetObjectCompared": true,
+    "fileDCToSurfaceColorsCompared": true,
+    "lateInvalidCopyRollback": true,
+    "copiedSurfaceSurvivesImageDeletion": true,
+    "NTSDNativeLinked": true,
+    "coreChangesAfterCandidate1": false,
+    "candidate1Outcome": "compile-only failure: test invoked internal MatchPreparationReference.inflate; no tests ran. Candidate2 adds test-local Compression transport and independent review-requested file consumer checks."
+  },
+  "fixture": {
+    "path": "native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib",
+    "packed": {
+      "bytes": 48082802,
+      "sha256": "05c80127a13d8991ae9ca62a785bc416527ff8de52fc3e3630ab0f46ba174eb1"
+    },
+    "raw": {
+      "bytes": 66335316,
+      "sha256": "35c483a8fdf469670ac2ecfd758d088b8e526fcc4b95fc912f8bf099f718ae0d"
+    },
+    "blobs": 1477,
+    "testDataOnly": true,
+    "shippingRuntimeImportsExpected": false
+  },
+  "preservation": {
+    "oldFixtures": 374,
+    "currentFixtures": 375,
+    "nativeFiles": 905,
+    "oldStartupFiles": 46,
+    "oldCommonSoundFiles": 19,
+    "oldFixturesAndPackagesUnchanged": true,
+    "sourcePinUnion": 755,
+    "nativeArchive": {
+      "NativeTestsExecuted": false,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "candidate": 2,
+      "commonSoundFiles": 19,
+      "currentFixtures": 375,
+      "inputManifest": {
+        "bytes": 347484,
+        "path": "build/research/application-catalog-session-native-20260913/native-members2.json",
+        "sha256": "04de97eb3416a5f8a84de0e9944879e7beab192608b34fd30efab48d5cbd67a0"
+      },
+      "members": 905,
+      "nativeFiles": 905,
+      "oldFixtures": 374,
+      "originalExecuted": false,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-session-native-20260913/native-candidate2.tar",
+      "payloadBytes": 4151787153,
+      "readbackComparedEveryByteToSource": true,
+      "startupFiles": 46,
+      "tar": {
+        "bytes": 4153415680,
+        "sha256": "cc607ef7caa5b35feea83cb7270b412eef0af37a8d3586e298b2f6d0fee5643b"
+      },
+      "verifiedUTC": "2026-09-12T21:53:07.926940+00:00"
+    },
+    "evidenceArchive": {
+      "NativeTestsExecuted": false,
+      "additionalDependencyPins": 12,
+      "all669RawInputsPreserved": true,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "allMembersVerified": true,
+      "allPlanInputsArchived": true,
+      "candidate1FullReconstructionVerified": true,
+      "candidate1OverlayFiles": 1,
+      "completeNativeCandidateInSeparateArchive": true,
+      "distinctInputMembers": 767,
+      "expectedOutputFiles": 1338,
+      "failedNative1Preserved": true,
+      "failedPreservation1Preserved": true,
+      "fullRawFixtureAndControlsPreserved": true,
+      "hostOutputFiles": 679,
+      "inputManifest": {
+        "bytes": 893301,
+        "path": "build/research/application-catalog-session-native-20260913/evidence-members.json",
+        "sha256": "c3ed8ee6553c39d343c1da206ff78e063fea0202e644fc507c021b4d8afab6ef"
+      },
+      "memberGroups": {
+        "base-inputs": 5,
+        "candidate-publication": 4,
+        "candidate1-overlay": 1,
+        "inputs": 767,
+        "work": 2076
+      },
+      "members": 2853,
+      "noScratchOrModuleCacheArchived": true,
+      "originalExecuted": false,
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-session-native-20260913/catalog-dib-evidence1.tar",
+      "payloadBytes": 3222329945,
+      "planAndAmendmentPins": 755,
+      "readbackComparedEveryByteToSource": true,
+      "sourceExpectedFieldsUnchanged": true,
+      "supersededBaseInputs": [
+        ".gitattributes",
+        "docs/research/CURRENT_WORK.md",
+        "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift",
+        "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift",
+        "native/Sources/NTSDCore/OriginalDIBPixels.swift"
+      ],
+      "tar": {
+        "bytes": 3227351040,
+        "sha256": "3b46a774a69a376ab390e99ca8f6bd107984ada80a3bdb9a5e67a1065c0df086"
+      },
+      "verifiedUTC": "2026-09-12T21:53:15.862744+00:00"
+    },
+    "failure1": "Outer transport is raw DEFLATE; preservation1 incorrectly expected a zlib header and stopped. Its checker/job/log/report are preserved. Separate preservation2 changed only decoder framing; all packed/raw/expected/Native bytes remained unchanged.",
+    "additionalDependencyPins": 12,
+    "distinctArchiveInputMembers": 767
+  },
+  "openBoundaries": [
+    "Production catalog from PendingCatalog and correct twentieth-child-before-parent-store phase",
+    "Full catalog/pool/UI/loading and outer-loop return",
+    "Actual raster/conversion/palette/color-key/device behavior",
+    "AppKit input, clock, audio and clean-Mac acceptance",
+    "War gameplay, complete match/content/network and Windows comparison",
+    "Three cyber_policy incidents and separate Windows download refusal"
+  ],
+  "artifacts": {
+    "build/research/application-catalog-session-native-20260913/plan.json": {
+      "bytes": 17207,
+      "sha256": "9279ed986cc1e4a609d7b0f7f73e8f3fc40c9b3179ffc33f4223d081c4303a5c"
+    },
+    "build/research/application-catalog-session-native-20260913/amendment1-dib-inputs.json": {
+      "bytes": 5210,
+      "sha256": "9f7e5492a344bc49356c79e67a18b2aa37320446d65774f36c946ead92ebfe08"
+    },
+    "build/research/application-catalog-session-native-20260913/amendment2-pixel-input-pins.json": {
+      "bytes": 130503,
+      "sha256": "07e314f833afbbcb4106aca1c4805a4dd291add5247d22e6adbcd7130e9b3ee7"
+    },
+    "build/research/application-catalog-session-native-20260913/amendment3-regressions.json": {
+      "bytes": 962,
+      "sha256": "a444377ac908d7fec026ab1add335ca8c3ca9a0f1157c6e2c3e30e9f0afb4642"
+    },
+    "build/research/application-catalog-session-native-20260913/amendment4-consumer-test.json": {
+      "bytes": 568,
+      "sha256": "e7eca962928c552ef160c2043bfd3ec5fe94bb01ba771e7d72684824300113b9"
+    },
+    "build/research/application-catalog-session-native-20260913/amendment5-test-transport.json": {
+      "bytes": 779,
+      "sha256": "ecc5cf47e2c8559263ba03024a2962a847c5aee2a3847364143c429a7491c123"
+    },
+    "build/research/application-catalog-session-native-20260913/input-inventory1.json": {
+      "bytes": 960879,
+      "sha256": "631ec0f5be202de9a3dfe3a677f759b7390b022c30395ae6fd571044fe4b2698"
+    },
+    "build/research/application-catalog-session-native-20260913/pixel-inputs1.json": {
+      "bytes": 193273,
+      "sha256": "c4d32cd6f2c5a067af1751094d61655afee257c588f6483fc5258d1a723b5152"
+    },
+    "build/research/application-catalog-session-native-20260913/pixel-reference1.json": {
+      "bytes": 651,
+      "sha256": "917dab5af61cbdf189a16b5d737a4f64b6c5c81904eb32520264a459a4bd3459"
+    },
+    "build/research/application-catalog-session-native-20260913/pixel-reference1.job.json": {
+      "bytes": 717,
+      "sha256": "8bdce309a6d4f1513621cecaa63c9c2bc964e5232ba0ac071a16a6d6b23620c1"
+    },
+    "build/research/application-catalog-session-native-20260913/pixel-controls1.json": {
+      "bytes": 28521,
+      "sha256": "389c658f0c5574884b22af0f0c520cb2d9d9ba92a0100a8bb02d9f83ed5f20e3"
+    },
+    "build/research/application-catalog-session-native-20260913/pixel-statistics1.json": {
+      "bytes": 56836015,
+      "sha256": "7915a9ee4f494475b07d278c25522be9b14d05452f22b0694abd48e79e597865"
+    },
+    "build/research/application-catalog-session-native-20260913/imageio-comparison1.json": {
+      "bytes": 692147,
+      "sha256": "4d1af342f46ebac238e0043632e0c88ac6eb47c892b4dda0919470874c1a874d"
+    },
+    "build/research/application-catalog-session-native-20260913/imageio1.job.json": {
+      "bytes": 132647,
+      "sha256": "6c4cfd7d783982dd48c608d41977b1301c53bb0291c4fd4d077e27357f78236c"
+    },
+    "build/research/application-catalog-session-native-20260913/review1-plan.json": {
+      "bytes": 13791,
+      "sha256": "4e93ce094902f64eb9727787dc660c69643b2117fe7b23767971f72b535a1026"
+    },
+    "build/research/application-catalog-session-native-20260913/review1b-amendment.json": {
+      "bytes": 2425,
+      "sha256": "10a945cfd103b875649b1aa720649a60813ea7933a9059f4a6daf8efe5c4ea48"
+    },
+    "build/research/application-catalog-session-native-20260913/review2-reference.json": {
+      "bytes": 10369,
+      "sha256": "7339b5b46bae67310ff36bfabc7c5f4840b8b2d7a2c249ec52b31d56394e3a86"
+    },
+    "build/research/application-catalog-session-native-20260913/review3-native.json": {
+      "bytes": 6245,
+      "sha256": "3d87c4e36a57cfbd1357fa5bb383bbd3c043eaf86e0294cba53604c58db591ad"
+    },
+    "build/research/application-catalog-session-native-20260913/review3b-native.json": {
+      "bytes": 2344,
+      "sha256": "6e2485b855175c29d0e56a6a43bb76a9afb7789a8f15d2599fa1f4c02b9c8fca"
+    },
+    "build/research/application-catalog-session-native-20260913/review3c-native.json": {
+      "bytes": 4117,
+      "sha256": "9f4719606a1898c0f9f02cf2f40c49bed6c00af2f381dd17795df1d12f006a6e"
+    },
+    "build/research/application-catalog-session-native-20260913/initial-native.json": {
+      "bytes": 168206,
+      "sha256": "e7017efaa62e99baee0ed90d22ace71d763fccd3f49fe6533c2aadc098816e90"
+    },
+    "build/research/application-catalog-session-native-20260913/candidate1-inputs.json": {
+      "bytes": 161271,
+      "sha256": "a105da75af925733337e02e618f42d6d199ca4209f172b93b532eaf1a48dc34c"
+    },
+    "build/research/application-catalog-session-native-20260913/candidate2-inputs.json": {
+      "bytes": 161272,
+      "sha256": "d27501cd55bd90b88090d224e0e0d2bb8997fb97ee5d46d432beef5a86b94bab"
+    },
+    "build/research/application-catalog-session-native-20260913/native1.job.json": {
+      "bytes": 1321,
+      "sha256": "4240b1e29439082d13568266ed1af7b183099a6fc5fa2be73f623bc89e4ca581"
+    },
+    "build/research/application-catalog-session-native-20260913/native1.log": {
+      "bytes": 24479,
+      "sha256": "73815f64bde44bc6aba06f266c5d40e07f8213ac0c4d04ab550b1ccb5feb1469"
+    },
+    "build/research/application-catalog-session-native-20260913/native2.job.json": {
+      "bytes": 1329,
+      "sha256": "1a7cb2fd5c794965f36edbb169e8dcc61ba6522c082a501d5f378db3307266b3"
+    },
+    "build/research/application-catalog-session-native-20260913/native2.log": {
+      "bytes": 28924,
+      "sha256": "25cc23d8e56f250eda49d05a06235da549432d89291fd019efbf2ba4240b9684"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation1.job.json": {
+      "bytes": 3718,
+      "sha256": "f11c049665091dc7c16fd1836ca6c2811cfefa91d810f55fa45d7053e8fd4fcd"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation1.log": {
+      "bytes": 705,
+      "sha256": "707481fdfab852d31e172fd36fd83186c1d634ead3007462227424b33989109c"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation2.json": {
+      "bytes": 1015355,
+      "sha256": "f4ed1f577ec025c0bcb97a58b18a7a83633076645bba9383161ec97eb8038e45"
+    },
+    "build/research/application-catalog-session-native-20260913/native-archive-verification.json": {
+      "bytes": 919,
+      "sha256": "0c72be91700307074437534ca3ea1d3df4e7e6f4faabc2c4d79c912c27f84015"
+    },
+    "build/research/application-catalog-session-native-20260913/evidence-archive-verification.json": {
+      "bytes": 1774,
+      "sha256": "a63f0d6c0ada980805b08a8205f84d7838f0e560e9ad2adcc58e6c1fc60475e9"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation1.json": {
+      "bytes": 485223,
+      "sha256": "08287c9c6e94850516ed4b2ddf512a7f9cf179eb22a54e5c3a9e20d9f291c43b"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation2.job.json": {
+      "bytes": 4213,
+      "sha256": "23f3323e1e4b5f20276826b9e5a53c803ee409a556ec8ffd31f8984ebd2fd350"
+    },
+    "build/research/application-catalog-session-native-20260913/preservation2.log": {
+      "bytes": 86,
+      "sha256": "e5ea877a4957a7d3ac5731c1ef382219bfd84bc472fbd8cbcfbed7a4eddaf435"
+    },
+    "build/research/application-catalog-session-native-20260913/archive1.job.json": {
+      "bytes": 8804,
+      "sha256": "82f70752933e31a46ad4a2e39aa3bde66eacb9b036f0a3279e03a7daf078aecd"
+    },
+    "build/research/application-catalog-session-native-20260913/archive1.log": {
+      "bytes": 76,
+      "sha256": "12cc7d33415f69f1ddd0c999e3129f836e66e4700076c3313fd64637df24c571"
+    },
+    "build/research/application-catalog-session-native-20260913/archive-storage-verification.json": {
+      "bytes": 545,
+      "sha256": "b63b4a2e80c771dba4a1dbe92a35fc89a89f4538d149347a68c36c65ced30b0b"
+    },
+    "build/research/application-catalog-session-native-20260913/archive-publication-note1.json": {
+      "bytes": 3721,
+      "sha256": "9dc1f60e67eb92fda4c240b38f3962ce506f77bb27e42d6895140e460c840032"
+    },
+    "build/research/application-catalog-session-native-20260913/terminal-process-verification.json": {
+      "bytes": 1632,
+      "sha256": "42230c07fa819850de40b880a0ade946d3b6e362879ee4dda6b284a163871f22"
+    }
+  }
+}
