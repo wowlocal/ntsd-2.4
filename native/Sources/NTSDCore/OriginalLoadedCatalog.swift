@@ -11,6 +11,8 @@ public struct OriginalCatalogChildObservation {
     public let object: OriginalLoadedObject?
     public let bitmaps: [OriginalLoadedBitmap]
     public let frameAllocations: [OriginalFrameAllocation]
+    /// Actual completed file-session snapshot, before the parent stores the child.
+    public let files: OriginalLoadingFiles?
 }
 
 /// Actual child loaders composed at the original 4122f0 request boundaries.
@@ -43,6 +45,8 @@ public struct OriginalLoadedCatalog {
                 onChecksum: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
                 onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in },
                 onMessage: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
         try self.init(source: { source }, fileName: fileName, translation: translation,
@@ -51,7 +55,7 @@ public struct OriginalLoadedCatalog {
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
             frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation, onNewSound: onNewSound, onMirror: onMirror,
             onProgress: onProgress, onChecksum: onChecksum, onSoundCache: onSoundCache,
-            onMessage: onMessage, onChild: onChild, onStage: onStage)
+            onMessage: onMessage, onRequest: onRequest, onStore: onStore, onChild: onChild, onStage: onStage)
     }
 
     /// Deferred file delivery preserves the parent's built-in-resource/time/open
@@ -70,6 +74,8 @@ public struct OriginalLoadedCatalog {
                 onChecksum: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
                 onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in },
                 onMessage: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws {
         try self.init(source: source, fileName: fileName, translation: translation,
@@ -78,7 +84,7 @@ public struct OriginalLoadedCatalog {
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
             frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation, onNewSound: onNewSound, onMirror: onMirror,
             onProgress: onProgress, onChecksum: onChecksum, onSoundCache: onSoundCache,
-            onMessage: onMessage, onChild: onChild, onStage: onStage, fileSession: nil)
+            onMessage: onMessage, onRequest: onRequest, onStore: onStore, onChild: onChild, onStage: onStage, fileSession: nil)
     }
 
     /// Load all children from one owned file session. Every parser consumes the
@@ -102,6 +108,8 @@ public struct OriginalLoadedCatalog {
                 onChecksum: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
                 onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in },
                 onMessage: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }) throws -> (catalog: Self, files: OriginalLoadingFiles) {
         let session = FileSession(files: files, source: fileSource, allocate: fileAllocation, observe: onFile)
@@ -112,7 +120,7 @@ public struct OriginalLoadedCatalog {
             fileSource: fileSource, bitmapSource: bitmapSource, constructBitmap: constructBitmap,
             frameAllocation: frameAllocation, weaponSoundAllocation: weaponSoundAllocation, onNewSound: onNewSound, onMirror: onMirror,
             onProgress: onProgress, onChecksum: onChecksum, onSoundCache: onSoundCache,
-            onMessage: onMessage, onChild: onChild, onStage: onStage, fileSession: session)
+            onMessage: onMessage, onRequest: onRequest, onStore: onStore, onChild: onChild, onStage: onStage, fileSession: session)
         return (catalog, session.files)
     }
 
@@ -130,6 +138,8 @@ public struct OriginalLoadedCatalog {
                 onChecksum: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
                 onSoundCache: ([UInt8], Int) throws -> Void = { _, _ in },
                 onMessage: (_ path: String, _ checksum: UInt32) throws -> Void = { _, _ in },
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (OriginalCatalogRegistry.Store) throws -> Void = { _ in },
                 onChild: (OriginalCatalogChildObservation) throws -> Void = { _ in },
                 onStage: (String, Int, Int?, OriginalStateRecord) throws -> Void = { _, _, _, _ in }, fileSession: FileSession?) throws {
         guard fileName.unicodeScalars.allSatisfy({ $0.value <= 255 }), backgroundBacking.count == 101,
@@ -147,7 +157,8 @@ public struct OriginalLoadedCatalog {
                                                    beforeRead: { try onProgress(.catalogOpen) },
                                                    onRead: fileSession.map { session in { try session.readCatalog($0) } },
                                                    onChecksum: { try onChecksum(fileName, $0) },
-                                                   onClose: { try fileSession?.closeCatalog() }) { request, checksum in
+                                                   onClose: { try fileSession?.closeCatalog() },
+                                                   onRequest: onRequest, onStore: onStore) { request, checksum in
             resources.checksum = checksum
             var decoded: String?, occurrences = 0
             func parseFile(_ path: String, kind: OriginalCatalogLoadRequest.Kind,
@@ -214,7 +225,7 @@ public struct OriginalLoadedCatalog {
                                   bitmapCount: resources.bitmaps.count, soundCount: resources.sounds.count,
                                   frameOccurrences: occurrences, soundBytes: resources.sounds.bytes,
                                   object: request.kind == .object ? objects.last : nil,
-                                  bitmaps: resources.bitmaps, frameAllocations: resources.frameHeap.allocations))
+                                  bitmaps: resources.bitmaps, frameAllocations: resources.frameHeap.allocations, files: fileSession?.files))
             }
             return resources.checksum
         }

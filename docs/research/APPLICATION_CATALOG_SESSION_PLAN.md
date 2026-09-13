@@ -1,20 +1,19 @@
 # Production catalog continuation from PendingCatalog
 
-Status: input preflight; production catalog continuation is not yet accepted.
-The preceding goal turn made progress in commit `53f4fea`: the menu now produces
-an owned common-loading result. The complete native game remains the objective.
+Status: the owned continuation and three finite twenty-Object comparisons pass;
+final independent graphics-comparator review and the full application catalog
+return remain open. [Implementation and validation](APPLICATION_CATALOG_SESSION.md)
+record the precise boundary; this is progress toward the full native game.
 
-The next consumer must preserve that result's menu state, 18 common WAV owners,
-graphics, resource identities, masks and tentative operations while invoking the
-existing catalog, file, bitmap, sound and loading-progress routines. It must not
-commit the enclosing timer iteration before the real loading/outer return.
-
-The task packet is `build/research/application-catalog-session-native-20260913/`.
-Its initial plan pins 73 dependencies and all 903 Native files. New large work
-uses the verified X5 task directory, with a 24 GiB task budget and the existing
-6 GiB internal reserve. New reference and Native jobs have separate 900/2400
-second limits and a three-candidate correction budget. These limits do not
-redefine the full game objective.
+The image prerequisite was completed in commit `0d0c419`. The owner task packet is
+`build/research/application-catalog-owner-native-20260913/`, initially pinning 88
+dependencies and all 905 Native files. Six explicit amendments define transport,
+observed stores and test helpers. Its final union contains 425 dependency pins.
+New work uses the verified X5 task directory, a 24 GiB task budget and the existing
+6 GiB internal reserve. Reference/Native limits remain 900/2400 seconds and three
+candidate rounds. Only Native and read-only saved-data checks were executed.
+The predecessor image packet remains immutable in
+`build/research/application-catalog-session-native-20260913/`.
 
 ## Existing evidence and precise continuation boundary
 
@@ -70,13 +69,16 @@ govern that binding. Missing-file responses must retain the fallback behavior.
 Adding resource inputs must preserve existing image/surface/DC owners and reject
 conflicting bytes or origins atomically.
 
-## Remaining acceptance
+## Current finite result and remaining acceptance
 
-After the image prerequisite, continue the production owner through the actual
-shared loaders. Compare complete child records, frames, bitmap storage, WAVs,
-file state, globals and ordered effects at the retained caller phases. Preserve
-whole-candidate rollback and all prior common/menu owners. Unsupported helpers
-remain explicit dependencies, not silent successful output.
+The production owner now invokes the actual shared loaders from owned application
+state. Candidate2 passes all 21 release methods, including complete child/file/
+WAV/global/graphics comparisons at sixty retained caller boundaries and whole
+rollback. The twentieth child still precedes its parent slot/count store.
+Independent plan/reference/draft review is preserved; the final graphics checker
+has an explicit independent-review gap after reviewer quota exhaustion.
+See the [study](APPLICATION_CATALOG_SESSION.md) and
+[evidence](../evidence/application-catalog-session.json) for acceptance limits.
 
 Full catalog/pool/UI/loading and outer-loop returns, actual raster/device output,
 AppKit input/clock/audio, War gameplay, complete matches/content/network, Windows

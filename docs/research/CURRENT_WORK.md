@@ -292,28 +292,33 @@ ReleaseDC, точные rectangles, ответы API и whole rollback. Loading 
 [Приёмка](../evidence/application-loading-session.json). Полный каталог, возврат из загрузки и внешнего цикла,
 вывод изображения/звук, матч/игра и прежние incidents остаются открытыми.
 
-## Следующая независимая карточка
+## Текущая граница и следующая карточка
 
-**Собственный каталог из PendingCatalog.**
+[Поддержка всех 669 исходных изображений](APPLICATION_CATALOG_DIB_INPUTS.md)
+сохранена как отдельная принятая зависимость. Реализован
+[собственный catalog session из PendingCatalog](APPLICATION_CATALOG_SESSION.md).
+Три Native-цепочки из собственного bootstrap/menu/common состояния совпадают до
+20-го child return: по 194 bitmap, 4 995 malloc, 94 WAV и 51 510 событий.
+На всех 60 границах сверены полные records/masks, files, WAV, globals, allocations,
+операции и новые graphics/color owners. Parent остаётся с count19/188 known bytes:
+двадцатый slot ещё не записан. Native knowledge отделена от source-observed mask.
 
-Начат [план production-продолжения](APPLICATION_CATALOG_SESSION_PLAN.md).
-Принята обязательная [поддержка всех 669 исходных изображений](APPLICATION_CATALOG_DIB_INPUTS.md),
-включая 85 прежде неподдерживаемых форматов и семь входов twenty-Object prefix.
-Полные RGB/masks, файловые заголовки/offset, merge старых owners и file→surface
-проверены; 2 765 неизвестных пикселей сохранены. Все 21 release-метод прошли за
-29.097 с/build 303.35 с. Ошибка компиляции первого теста и 34 отличия
-ImageIO сохранены; Core/expected между кандидатами неизменны. Прежние 374 fixtures
-и оба пакета неизменны; 905 Native-файлов, 375 fixtures и архивы проверены.
-[Приёмка](../evidence/application-catalog-dib-inputs.json). Полный каталог остаётся
-следующей задачей; его возврат и реальный raster ещё не приняты.
+21 bundled release-метод прошёл за 136.426с/build307.11с, включая прежние полные
+каталоги и loading-регрессии. Проверены поздние откаты и запрет allocation overlap
+с живыми common PCM. Source/expected неизменны; нового исполнения оригинала нет.
+425 pins, 913 Native-файлов, 379 fixtures и оба пакета проверены; ошибки preflight,
+transport и первой компиляции сохранены. [Evidence](../evidence/application-catalog-session.json).
+Независимые plan/reference/draft review есть; финальный graphics comparator
+дописан автором после исчерпания квоты reviewer и требует независимой проверки.
+Это открытая проверка, не отказ платформенной безопасности.
 
-Продолжить фактическую загрузку из принятого PendingCatalog: связать следующий
-catalog allocation/constructor с сохранёнными common WAV, bitmap/display owners
-и текущими globals. Сначала проверить существующие own catalog captures и
-Native-каталожные контракты; завершённые captures не повторять. Не накладывать
-исторический fixed60000020 на живые WAV regions и не объявлять новый whole return
-по legacy-каталогу или незавершённому candidate5. Границы файлов/CRT/bitmap bindings
-должны быть явны перед реализацией следующего полного потребителя.
+Следующий шаг — независимый review финального comparator и продолжение полного
+каталога/pool/UI/loading/outer return по [плану](APPLICATION_CATALOG_SESSION_PLAN.md).
+Production owner не имеет лимита20; текущие тесты отменяют попытку на сохранённой
+границе и не доказывают его полный возврат. Legacy whole catalogs и terminal
+candidate5 после28 Objects этого пробела не закрывают. Завершённые captures
+не повторять. Nonempty sound cache, live/неустановленные WAV temporary owners,
+NULL allocations, fill/mirror/nonempty MSG остаются явными зависимостями.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся

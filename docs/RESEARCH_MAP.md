@@ -252,12 +252,21 @@ ImageIO совпал на всех 85 новых форматах; его 34 о�
 [Приёмка](evidence/application-catalog-dib-inputs.json). Полный catalog session,
 реальное устройство и прежние safety incidents остаются открытыми.
 
-Следующая карточка — собственный каталог из PendingCatalog: сохранить common
-WAV storage и bitmap/display owners, связать фактический allocation/constructor
-по имеющимся own captures и Native contracts. Legacy fixed60000020 нельзя
-накладывать на живые common WAV regions. Полный return candidate5 отсутствует.
-Actual raster/палитра/device остаются открытыми; source RGB их не заменяют.
-Завершённые captures, inventory и command binding не повторять.
+Реализован [собственный catalog session](research/APPLICATION_CATALOG_SESSION.md)
+из PendingCatalog: три own bootstrap/menu/common цепочки совпадают до20 child
+returns, по194 bitmap/4995 malloc/94 WAV/51510 events. На60 границах сравниваются
+records/masks/files/WAV/globals/allocations/graphics, включая source colors.
+Parent phase сохраняет count19/188 known bytes до записи двадцатого slot.
+21 bundled release-тест прошёл за136.426с/build307.11с; поздние отмены и overlap
+с живыми PCM откатываются целиком. 425 pins/913 Native/379 fixtures и пакеты
+сверены, старые375 fixtures неизменны; оригинал не исполнялся.
+[Evidence](evidence/application-catalog-session.json). Финальный независимый review
+нового graphics comparator открыт после исчерпания квоты reviewer; прежние
+plan/reference/draft review сохранены. Следующие зависимости — этот review,
+полный catalog/pool/UI/loading/outer return и объявленные resource boundaries.
+Текущие20-child тесты, legacy catalogs и storage-limit candidate5 не доказывают
+целый новый return. Завершённые captures не повторять. Actual raster/палитра/device
+и прежние safety incidents остаются открытыми.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

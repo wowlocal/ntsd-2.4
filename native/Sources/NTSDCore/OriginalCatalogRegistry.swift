@@ -21,6 +21,11 @@ public struct OriginalCatalogLoadRequest: Codable, Equatable, Sendable {
 /// the actual native children. A registry alone is not loaded or match state.
 /// The modeled CRT domain is C-locale %s and in-range %d with complete sections.
 public struct OriginalCatalogRegistry: Equatable, Sendable {
+    /// Pointer ordinals have an explicit binding: ordinal zero is non-null.
+    public struct Store: Equatable, Sendable {
+        public enum Binding: Equatable, Sendable { case raw, objectOrdinal(Int), bitmapOrdinal(Int) }
+        public let region: Int, offset: Int, bytes: [UInt8], binding: Binding
+    }
     public static let regionSizes = [0: 0x7d0, 0x4d81060: 0x990, 0x4d819f0: 0x990, 0x4d82380: 0x28]
     public let records: [Int: OriginalStateRecord]
     public let requests: [OriginalCatalogLoadRequest]
@@ -40,10 +45,12 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 onRead: ((Int) throws -> Void)? = nil,
                 onChecksum: (UInt32) throws -> Void = { _ in },
                 onClose: () throws -> Void = {},
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (Store) throws -> Void = { _ in },
                 onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
         try self.init(source: { source }, fileName: fileName, initialChecksum: initialChecksum,
                       backing: backing, beforeRead: beforeRead, onRead: onRead,
-                      onChecksum: onChecksum, onClose: onClose, onLoad: onLoad)
+                      onChecksum: onChecksum, onClose: onClose, onRequest: onRequest, onStore: onStore, onLoad: onLoad)
     }
 
     /// The real parent constructs four embedded bitmaps and samples time before
@@ -55,6 +62,8 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                 onRead: ((Int) throws -> Void)? = nil,
                 onChecksum: (UInt32) throws -> Void = { _ in },
                 onClose: () throws -> Void = {},
+                onRequest: (OriginalCatalogLoadRequest) throws -> Void = { _ in },
+                onStore: (Store) throws -> Void = { _ in },
                 onLoad: (OriginalCatalogLoadRequest, UInt32) throws -> UInt32 = { _, checksum in checksum }) throws {
         guard Set(backing.keys) == Set(Self.regionSizes.keys), Self.regionSizes.allSatisfy({ backing[$0.key]?.bytes.count == $0.value }) else {
             throw OriginalStateError.invalidStorage("Catalog parent region sizes differ")
@@ -67,10 +76,13 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
         var outerTokens: [[UInt8]] = []
         func request(_ item: OriginalCatalogLoadRequest) throws {
             requests.append(item)
+            try onRequest(item)
             checksum = try onLoad(item, checksum)
         }
-        func write<T: FixedWidthInteger>(_ value: T, region: Int, at offset: Int) throws {
+        func write<T: FixedWidthInteger>(_ value: T, region: Int, at offset: Int, binding: Store.Binding = .raw) throws {
             try records[region]!.write(value, at: offset)
+            try onStore(.init(region:region,offset:offset,
+                bytes:Array(records[region]!.bytes[offset..<offset+MemoryLayout<T>.size]),binding:binding))
         }
         func writeString(_ bytes: [UInt8], region: Int, at offset: Int) throws {
             for (i, byte) in (bytes + [0]).enumerated() { try write(byte, region: region, at: offset + i) }
@@ -85,7 +97,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                               ("back99_2", 0x3e, 0x918), ("back99_3", 0x5c, 0x91c)].enumerated() {
             try writeString(Array(item.0.utf8), region: builtIn, at: item.1)
             try request(.init(.bitmap, index: index, path: item.0))
-            try write(UInt32(index), region: builtIn, at: item.2)
+            try write(UInt32(index), region: builtIn, at: item.2, binding: .bitmapOrdinal(index))
         }
         try writeString(Array("Random".utf8), region: 0x4d819f0, at: 0x3cc)
         try writeString(fileName, region: 0x4d82380, at: 8)
@@ -120,7 +132,7 @@ public struct OriginalCatalogRegistry: Equatable, Sendable {
                         guard objectCount < 500 else { throw CatalogScanner.error("Object table capacity exceeded") }
                         try request(.init(.progress, path: path))
                         try request(.init(.object, index: objectCount, id: id, objectType: type, path: path))
-                        try write(UInt32(objectCount), region: 0, at: objectCount * 4)
+                        try write(UInt32(objectCount), region: 0, at: objectCount * 4, binding: .objectOrdinal(objectCount))
                         objectCount += 1
                         try write(Int32(objectCount), region: 0x4d82380, at: 0)
                     }

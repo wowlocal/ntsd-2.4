@@ -5,3 +5,4 @@ native/Sources/NTSDCore/Resources/OriginalStartup/data/adinfo.txt -diff
 native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin -text -diff
 native/Sources/NTSDCore/Resources/OriginalCommonSounds/** -text
 native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib -text -diff
+native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session*.zlib -text -diff

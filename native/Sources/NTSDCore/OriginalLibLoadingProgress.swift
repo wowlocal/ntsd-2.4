@@ -11,13 +11,17 @@ public enum OriginalLibLoadingProgress {
         draw: ([UInt32]) throws -> Void, fillBacking: () throws -> [UInt8],
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         message: (String,[UInt8]) throws -> MessageResponse,
+        store: @escaping (Int,[UInt8]) throws -> Void = { _,_ in },
         checkpoint: (OriginalStateRecord) throws -> Void = { _ in },
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Loading globals extent") }
         var state = globals, text = libraryText
         func word(_ p: Int) throws -> UInt32 { try state.integer(at: p-0x44d000,as: UInt32.self) }
         func signed(_ p: Int) throws -> Int32 { Int32(bitPattern: try word(p)) }
-        func put(_ p: Int,_ value: UInt32) throws { try state.write(value,at: p-0x44d000) }
+        func put(_ p: Int,_ value: UInt32) throws {
+            try state.write(value,at: p-0x44d000)
+            try store(p,(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
+        }
         func bits(_ n: Int32) -> UInt32 { UInt32(bitPattern: n) }
         func emit(_ kind: String,_ args: [UInt32] = [],_ strings: [[UInt8]] = []) throws { try checkpoint(state);try observe(.init(kind,args,strings)) }
         func now() throws -> UInt32 { let value = try time();try emit("timeGetTime",[value]);return value }
@@ -93,6 +97,7 @@ public enum OriginalLibLoadingProgress {
         var overlayState = state
         try OriginalMenuPresentation.overlayWithLibrary(globals: &overlayState,libraryText: &text,input: input,store: { address,bytes in
             for (i,byte) in bytes.enumerated() { try state.write(byte,at:address-0x44d000+i) }
+            try store(address,bytes)
         }) { try emit($0.kind.rawValue,$0.arguments,$0.strings) }
         state = overlayState
         try emit("stage",[0x43e940])

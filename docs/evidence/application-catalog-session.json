@@ -1,0 +1,443 @@
+{
+  "schema": 1,
+  "status": "finite_native_prefix_checks_pass_with_final_independent_review_open",
+  "createdUTC": "2026-09-13T05:58:18.525128+00:00",
+  "baseCommit": "0d0c41947cef06a1302965292315b183ff870c3c",
+  "scope": "Owned application catalog continuation from actual bootstrap/menu/common PendingCatalog; three saved twenty-child prefixes, no full new application catalog return.",
+  "sourceExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "safetyIncidentsOpen": 3,
+  "separateWindowsDownloadRefusalOpen": true,
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "environment": "Saved original NTSD/lib/VC80 controlled Unicorn captures and pinned original resources read as data; Native Swift release on macOS arm64. Logical tokens and API replies are controlled inputs, not Windows device measurements.",
+    "parents": [
+      "candidate4-guarded parent0",
+      "candidate2-nominal parent1",
+      "candidate3-nominal parent2"
+    ],
+    "rawCheckpointBytes": 437967602,
+    "recordTableParts": 18,
+    "globalStoreParts": 6,
+    "CPUStoreRows": 29094,
+    "allSixtyObservedGlobalMasksCompared": true,
+    "inputFileNames": 105,
+    "catalogImages": 139,
+    "originalExpectedBytesAndMasksUnchanged": true
+  },
+  "comparison": {
+    "parents": 3,
+    "childrenPerParent": 20,
+    "bitmapConstructorsPerParent": 194,
+    "mallocObservationsPerParent": 4995,
+    "registeredWAVReturnsPerParent": 94,
+    "savedEventsPerParent": 51510,
+    "fullRecordsFramesBitmapMasksFilesWAVGlobalsAllocationsOperationsGraphics": true,
+    "allAppendedGraphicsCommandsAndOwnedColorsCompared": true,
+    "parentRegions": 4,
+    "knownParentBytesPerParent": 188,
+    "parentCountAtLastChild": 19,
+    "twentiethSlotStillUnknown": true,
+    "finalObservedGlobalKnownBytesPerParent": 2003,
+    "NativeKnowledgeDistinctFromSourceObservedWrites": true,
+    "startupWAVOwnersRetainedPerParent": 5,
+    "commonWAVOwnersRetainedPerParent": 18,
+    "catalogAllocationToken": "70000020",
+    "catalogAllocationBytes": 81273768,
+    "sourceCPUABIImported": false,
+    "expectedAfterStateImported": false,
+    "bitmapAPIExpectedWritesUsedAsInputs": false,
+    "realWindowsRasterClaimed": false
+  },
+  "validation": {
+    "candidate": 2,
+    "job": {
+      "scope": "Native-only release catalog ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-owner-native-20260913/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-owner-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationCatalogSessionTests|OriginalCatalogTests|OriginalLoadedCatalogTests|OriginalLoadedCatalogFilesTests|OriginalCatalogSoundsTests|OriginalCatalogPrecisionTests|OriginalInitialLoadingTests|OriginalApplicationLoadingPrefixTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-owner-native-20260913/candidate2-inputs.json",
+      "nativeFiles": 913,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T05:43:21.299360+00:00",
+      "pid": 16163,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 446.41884770900003,
+      "endedUTC": "2026-09-13T05:50:47.720437+00:00"
+    },
+    "releaseMethods": 21,
+    "failures": 0,
+    "buildSeconds": 307.11,
+    "testSeconds": 136.426,
+    "rawOverrides": false,
+    "allThreeOwnPrefixesAndRollback": true,
+    "late94thVolumeRollback": true,
+    "changedTextDCObserverAndRollback": true,
+    "retainedPCMOverlapRejection": true,
+    "legacyFullCatalogObjects": 137,
+    "legacyFullCatalogBytesAndMasks": 112063739,
+    "legacyNumericScans": 863,
+    "legacyFullCatalogIsSeparateEvidence": true,
+    "NTSDNativeLinked": true
+  },
+  "review": {
+    "plan": "pass",
+    "referenceAndInputContract": "pass",
+    "candidate1": "four corrections identified and preserved",
+    "candidate2Corrections": [
+      "escaping store annotation",
+      "new bitmap/color comparison",
+      "complete appended graphics relations",
+      "exact four parent regions and188known bytes"
+    ],
+    "finalIndependentGraphicsComparatorReview": "open",
+    "reason": "Both existing helper/reviewer agents reported usage-limit errors. No retries; author completed the graphics checker and deterministic tests passed. Author self-review is not independent review."
+  },
+  "preservedFailures": [
+    "Preflight note1 path typo before execution",
+    "Input preflight1 source-mask seam assertion",
+    "Transport1 first packet exceeded50MiB before publication; exact packet reused under explicit under100000000-byte amendment",
+    "Native1 compile failure: escaping closure captured non-escaping store observer;0tests",
+    "Reviewer/helper quota errors; final independent graphics checker review remains open"
+  ],
+  "preservation": {
+    "sourcePinUnion": 425,
+    "nativeFiles": 913,
+    "nativeBytes": 4433322806,
+    "oldFixtures": 375,
+    "currentFixtures": 379,
+    "startupFiles": 46,
+    "commonSoundFiles": 19,
+    "oldFixturesAndPackagesUnchanged": true,
+    "rootAndFrozenCandidateBytesVerified": true,
+    "candidate1BytesVerified": true,
+    "SwiftPMFixtureBytesVerified": true,
+    "nativeArchive": {
+      "status": "verified",
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-owner-native-20260913/native-candidate2.tar",
+      "tar": {
+        "bytes": 4434974720,
+        "sha256": "789cec6ecde82ff7c7ccfea755132a2b21a54b015fe55a241eabf6cf350daf44"
+      },
+      "members": 913,
+      "payloadBytes": 4433322806,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "readbackComparedEveryByteToSource": true,
+      "originalExecuted": false,
+      "NativeExecuted": false,
+      "verifiedUTC": "2026-09-13T05:55:45.459173+00:00"
+    },
+    "evidenceArchive": {
+      "status": "verified",
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-owner-native-20260913/catalog-owner-evidence1.tar",
+      "tar": {
+        "bytes": 2540605440,
+        "sha256": "116f735ff6f0033cac45e662b3196c6b08c7092b862b20744e7c71cd660f237e"
+      },
+      "members": 499,
+      "payloadBytes": 2539695800,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "readbackComparedEveryByteToSource": true,
+      "originalExecuted": false,
+      "NativeExecuted": false,
+      "verifiedUTC": "2026-09-13T05:55:50.721570+00:00"
+    },
+    "archiveStorage": {
+      "verifiedUTC": "2026-09-13T05:55:50.753350+00:00",
+      "taskBytes": 22467207168,
+      "limitBytes": 25769803776,
+      "internalFreeBytes": 101281533952,
+      "X5FreeBytes": 490285830144
+    },
+    "candidate1Reconstruction": "candidate2 archive plus3 changed-file overlays and candidate1 manifest; new candidate2-only graphics file excluded",
+    "studyJobs": "all terminal, prior process IDs verified absent"
+  },
+  "fixtures": {
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0000.zlib": {
+      "bytes": 93334140,
+      "sha256": "8152e7854fa697b99c239565ba93d2a280e7529cf7f7563182b22e02867c1e44"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0001.zlib": {
+      "bytes": 94736243,
+      "sha256": "422a4da457593d894beb3eeb339cdbdecaf2ee9d3913c1db84f66975394a562c"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0002.zlib": {
+      "bytes": 93332305,
+      "sha256": "2bc6eef68912592572b9cf9e692ae92aa0adc4a40898cc70fac7eb774c884d69"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session.json.zlib": {
+      "bytes": 33079,
+      "sha256": "7daa37e67afe67f0512d1fa5f773057de21ddcab4dc59807a9163b790c4e288f"
+    }
+  },
+  "openBoundaries": [
+    "Independent final graphics comparator review",
+    "Full own catalog/pool/UI/loading/outer-loop return",
+    "Nonempty initial registered sound cache",
+    "Unestablished/live temporary WAV ownership and NULL allocations",
+    "Unsupported fill/mirror and nonempty message dispatch",
+    "Actual palette/conversion/raster/device output",
+    "AppKit input/clock/audio, complete game/content/network/War matches, Windows and clean-Mac acceptance",
+    "Three safety incidents and separate Windows download refusal; no affected operation retried"
+  ],
+  "artifacts": {
+    "build/research/application-catalog-owner-native-20260913/amendment1-transport.json": {
+      "bytes": 77612,
+      "sha256": "2855318047587ed601fc34e69d0b1aa419352d879e6ca93386f3b629d836c5dd"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment2-global-store-transport.json": {
+      "bytes": 6203,
+      "sha256": "69b4e0ded4d3b8b93dc2819d00a0eceb0ebd3142bfd2d61d8a33acafa57841e4"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment3-transport-size.json": {
+      "bytes": 3049,
+      "sha256": "91dec59bc9a063e0f543e142c3cf511e031aae4227e9fca1c4daef3a748afa23"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment4-global-stores.json": {
+      "bytes": 1381,
+      "sha256": "60a77f2e3a6a3019bac46c8de3e0621feb01213046ee99b7d3267b066abf50b9"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment5-reference-helper.json": {
+      "bytes": 5893,
+      "sha256": "abebc2a56f6fed8ca45a888c9ddaa474efac998e1b4cad2ef405c13680f0d4ea"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment6-graphics-comparison.json": {
+      "bytes": 2905,
+      "sha256": "d4e26bdbca45eb13b6fc8b208f45c8dcecfa2e80e55f1da02906700882b6f8af"
+    },
+    "build/research/application-catalog-owner-native-20260913/archive-final1-plan.json": {
+      "bytes": 228,
+      "sha256": "4ebe66aeb002e8b77ec22eb1a07555ec126fabb80f81baa433077a9f9c6419aa"
+    },
+    "build/research/application-catalog-owner-native-20260913/archive-final1-producer-pin.json": {
+      "bytes": 232,
+      "sha256": "563fe6b6fa509afb826806ab8c47343b3d911c796820c3ebd18ba1d96406fe7d"
+    },
+    "build/research/application-catalog-owner-native-20260913/archive-final1-storage.json": {
+      "bytes": 181,
+      "sha256": "9e733bb2132f7e937a5b356549029dd4e2e49549813c72b4607f9468a7afc1c1"
+    },
+    "build/research/application-catalog-owner-native-20260913/archive-final1.py": {
+      "bytes": 3931,
+      "sha256": "105d0576ea519ae0759b55b3deb5208f72a6301e73fe7014d41dcd48329096b4"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate1-inputs.json": {
+      "bytes": 162631,
+      "sha256": "b1a15408783295f53749024f0f350555427dab1da02c6ead5abc386253685d5a"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate2-author-notes.json": {
+      "bytes": 913,
+      "sha256": "548f6ceb182246042f8d717b8115b05c10624357c46e8b2f2778bd280f1f1de8"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate2-inputs.json": {
+      "bytes": 162822,
+      "sha256": "e22048d65483fe0e32abeae7e82725ca05fe870ef9f9d7d02ec62c9f4911cacc"
+    },
+    "build/research/application-catalog-owner-native-20260913/catalog-owner-evidence1-verification.json": {
+      "bytes": 553,
+      "sha256": "0354060cb9b2cc26530ff57f68aa1a7fac1107726b9f347ab394fea25354bf21"
+    },
+    "build/research/application-catalog-owner-native-20260913/close-control-provenance1.json": {
+      "bytes": 4541,
+      "sha256": "5d1ace745ac5a7c99f8ecc1dd776838fa16c79685da122ec0bbb4605b82e0311"
+    },
+    "build/research/application-catalog-owner-native-20260913/declared-range-audit1.json": {
+      "bytes": 930,
+      "sha256": "1ceaf48be66d9b472f0707f9241eaf0b977e0a5325db0e50143d04a733f6fe90"
+    },
+    "build/research/application-catalog-owner-native-20260913/design1.md": {
+      "bytes": 3170,
+      "sha256": "83a7e93cf538c13a4ae8b7b70fb1ea55331e6cdaf62981fc3513a47b48f4d670"
+    },
+    "build/research/application-catalog-owner-native-20260913/final-preservation-candidate2.json": {
+      "bytes": 194910,
+      "sha256": "dc73d0d2f2be572d1c81ec3bf5a00ff658b7a6d75742a76bdfcb1e98896323b3"
+    },
+    "build/research/application-catalog-owner-native-20260913/freeze-candidate1.py": {
+      "bytes": 2266,
+      "sha256": "2422adc7ac5806b06cf8b343a749ad8297bbf1efd53e83699808fbdb2c4f3961"
+    },
+    "build/research/application-catalog-owner-native-20260913/freeze-candidate2.py": {
+      "bytes": 2346,
+      "sha256": "cdc6c3530b6fa00af6ce438ff8c48c9132e0e7578a6aa5ce7decb7433f25f126"
+    },
+    "build/research/application-catalog-owner-native-20260913/initial-native.json": {
+      "bytes": 168589,
+      "sha256": "127088cd81911402608d03f1f43afe88e5cf2d1baedd1bdd41432961729d2b45"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight1-inputs.json": {
+      "bytes": 72827,
+      "sha256": "e6c5ca29ed755822dc3423ddb38d32130556369ecd2da89dbda1f71786b5df05"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight1.job.json": {
+      "bytes": 552,
+      "sha256": "840900e53964e4e7112e1926e49b9067d9c34f339e1ee46397fd53868935be08"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight1.json": {
+      "bytes": 755,
+      "sha256": "373243dcdc38b3d58ade9db4ca4ae14e029ce4b9fde3ca42329fbf8c03fee935"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight1.log": {
+      "bytes": 511,
+      "sha256": "5abb4d5de1fbc3e8960d7a20b1242e11f7f3c445ec291d13925f825371300244"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight1.py": {
+      "bytes": 15236,
+      "sha256": "0b75183985647de12d2457148649cfb1c4992a2f5fb8f59c34839f675e9648a1"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight2.job.json": {
+      "bytes": 850,
+      "sha256": "fc28a4f0e7ee30d61f2655c582ad1fe8e36fde83f4593152dc077ef270e60429"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight2.json": {
+      "bytes": 2285986,
+      "sha256": "5a2aa3d863f843393cb26a64564896cea80bc9fbde56b223de5e623fd0a0c6e1"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight2.log": {
+      "bytes": 38,
+      "sha256": "23542e23c2dc14efd055444c4b6a025041f339c70951283c00ebdd7d0c414936"
+    },
+    "build/research/application-catalog-owner-native-20260913/input-preflight2.py": {
+      "bytes": 15788,
+      "sha256": "32464f2f27e20598dd21da82a2268c57d9938135803f490e005038eb2471dfd6"
+    },
+    "build/research/application-catalog-owner-native-20260913/native-candidate2-verification.json": {
+      "bytes": 547,
+      "sha256": "e6accd8c9d27f52e275551fcd5b598c8f31e3de5317fb38697c9d0607f88877f"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1-producer-pins.json": {
+      "bytes": 798,
+      "sha256": "476ce3738540c8510b9d008aa80594bb723b8acf61a8744ddcaf53fe1ce7dd22"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1.config.json": {
+      "bytes": 1108,
+      "sha256": "31859bacaddcdfe260a73d6afa234b56325b669ae76a4b521a90a46c60a2c168"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1.job.json": {
+      "bytes": 1249,
+      "sha256": "6d327a63b49e12e09384c13afd2fbeba507798c9697230d46cd41bfeb5c6f413"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1.log": {
+      "bytes": 3972,
+      "sha256": "997117ecc0b2dafb8e9bf031102afd37db5a78d663bab34c90ebeac5d336d552"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2-producer-pins.json": {
+      "bytes": 810,
+      "sha256": "d9d5fd2935dccc27bf288e9a6a4738ca94dc4550eaf257ff4f5427599e9b74b2"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2.config.json": {
+      "bytes": 1108,
+      "sha256": "065a0a3714f4faf137c68ec4b7d7ee4db42c24f4a92e0e8929007e3a0f44b6c9"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2.job.json": {
+      "bytes": 1255,
+      "sha256": "ef8779fff3331b3ace37c861c2359c52cadc4bdccbba3d334751a32171a3a3b6"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2.log": {
+      "bytes": 29280,
+      "sha256": "9e3ada73dcd34d6f7cf84704a5b287dd6ac0dbfeb94cd928c41e592efc0f9713"
+    },
+    "build/research/application-catalog-owner-native-20260913/package-reference1.py": {
+      "bytes": 14974,
+      "sha256": "8246da9b5fcc29a0decc9992fc696cace133b492d805329b15661c95dfab7e31"
+    },
+    "build/research/application-catalog-owner-native-20260913/package-reference2.py": {
+      "bytes": 15694,
+      "sha256": "bc559ed45c745afbaf546d65f60f72fd75a9615778fd909bbe08f02db3993d79"
+    },
+    "build/research/application-catalog-owner-native-20260913/plan.json": {
+      "bytes": 19943,
+      "sha256": "fda369c3e71f37f7f17597ca77f3e0f9936b2bfd4f19eaf4a8dbb3a287e0ebbb"
+    },
+    "build/research/application-catalog-owner-native-20260913/preflight-note1.json": {
+      "bytes": 404,
+      "sha256": "1adc6f45d21a1e9a5d0258c03a87a88ce32b5e6e36cf747f4ba18b2852b1a258"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-helper-field-audit1-inputs.json": {
+      "bytes": 1285,
+      "sha256": "f3b83c3e165526a4b698f5b8655e808bb33ef371863962b7b221c41d21593c3b"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-helper-field-audit1.json": {
+      "bytes": 9163,
+      "sha256": "9beac3964863eba4f40328cd4daac5dec8ff1f8f83ae72426b60b3ca610295d6"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-helper-field-audit1.log": {
+      "bytes": 277,
+      "sha256": "5d629fd276b228e2c910f0e5bcc2b8cad1e58334bca2fc5284d0103ef5c03bfe"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-helper-field-audit1.py": {
+      "bytes": 5303,
+      "sha256": "1e3eec78d42c644f57227e53194b9a059b9e8c197181541db1ab85ea7fc0bdc3"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport1.job.json": {
+      "bytes": 905,
+      "sha256": "67827c70291e3ec126218a23ef65775a2bc4f99b6a2420cd9702a49e6e246ee8"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport1.json": {
+      "bytes": 6308,
+      "sha256": "e768b50994ca97f085d47b7cc9d9927aeb69787254a65fd98821b201cee8d204"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport1.log": {
+      "bytes": 1122,
+      "sha256": "f5b9890bc424ae5c31646c0c67070450dcde6c87c8f9a48424e5969fadab0c2b"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport2.job.json": {
+      "bytes": 983,
+      "sha256": "ab055d00814cec78088b2dc849b864ef3a087629a5badf89215efc912519ccde"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport2.json": {
+      "bytes": 110699,
+      "sha256": "836f606fc6727b6e1650dba222b87473e0546e3c25bea098d259aff79228e461"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport2.log": {
+      "bytes": 38,
+      "sha256": "23542e23c2dc14efd055444c4b6a025041f339c70951283c00ebdd7d0c414936"
+    },
+    "build/research/application-catalog-owner-native-20260913/review1-plan.json": {
+      "bytes": 12010,
+      "sha256": "dd1391dfc84cedad497c58bea001ce2a8923ba43fdb934e4f0e20fefc6d6b1b3"
+    },
+    "build/research/application-catalog-owner-native-20260913/review2-reference.json": {
+      "bytes": 21039,
+      "sha256": "d31548e626262cdb0c5f92cf54d0ab0a78c39318c33250765630ade7a8c603b4"
+    },
+    "build/research/application-catalog-owner-native-20260913/review3-candidate1.json": {
+      "bytes": 12193,
+      "sha256": "bef9b59903bab1e2a3a0de1e9f1188af68ddd079debff14f06f4efb7dd130f9e"
+    },
+    "build/research/application-catalog-owner-native-20260913/run-native1.py": {
+      "bytes": 2029,
+      "sha256": "a0eeb53585a5af9e9dcde27c9814f3a909fc52e01c94df2c8c075a5115152577"
+    },
+    "build/research/application-catalog-owner-native-20260913/run-native2.py": {
+      "bytes": 2029,
+      "sha256": "8c910e8ea95ea08757c6e42fc2034dd7944e35855791c01b96b8bb2628314bb0"
+    },
+    "build/research/application-catalog-owner-native-20260913/validation-plan1.json": {
+      "bytes": 2395,
+      "sha256": "809bb8e94007dddaebd959de876e2d10c324ac99ccc71a5f6ae4b6f9f7f4af4a"
+    },
+    "build/research/application-catalog-owner-native-20260913/verify-final1-producer-pin.json": {
+      "bytes": 237,
+      "sha256": "0f9d47ba431836197889016de00cfdfd27e32df571013f26f7066725c16ae515"
+    },
+    "build/research/application-catalog-owner-native-20260913/verify-final1.py": {
+      "bytes": 6273,
+      "sha256": "e91f754689c0bda45da84cd71736cc8fd3dd6c9ee3ffb4243226080c83674438"
+    }
+  }
+}
