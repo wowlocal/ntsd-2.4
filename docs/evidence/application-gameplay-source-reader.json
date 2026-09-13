@@ -1,0 +1,399 @@
+{
+  "schema": "application-gameplay-source-reader-v1",
+  "UTC": "2026-09-13T18:47:00.721314+00:00",
+  "base": "c3db73d404137f803ab5c4f5687190736ae1a614",
+  "scope": "Test-only saved-gameplay reader integrity checkpoint; own19-stage gameplay comparison remains open",
+  "readerIntegrityVerified": true,
+  "nativeLoadedGameplayAccepted": false,
+  "fullGoalComplete": false,
+  "originalExecuted": false,
+  "historicalProducerExecuted": false,
+  "sourceExpectedChanged": false,
+  "sequenceFixtures": 32,
+  "parentBridgeFixtures": 2,
+  "variants": 2,
+  "perVariant": {
+    "calls": 17,
+    "sections": 323,
+    "poolGlobalEndpoints": 646,
+    "orderedGlobalStores": 576
+  },
+  "distinctMergedBlobs": {
+    "primary": 2971,
+    "control": 2972
+  },
+  "currentTests": {
+    "job": {
+      "scope": "Native-only saved-gameplay reader integrity validation; no gameplay comparison acceptance.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationGameplaySourceTests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate3-inputs.json",
+      "nativeFiles": 985,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T18:40:35.047569+00:00",
+      "pid": 61924,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 351.974417667,
+      "endedUTC": "2026-09-13T18:46:27.024425+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationGameplaySourceTests",
+        "method": "testControlSavedSequence",
+        "seconds": 5.477
+      },
+      {
+        "suite": "OriginalApplicationGameplaySourceTests",
+        "method": "testPrimarySavedSequence",
+        "seconds": 5.478
+      }
+    ],
+    "testSeconds": 10.956,
+    "buildSeconds": 339.52,
+    "log": {
+      "bytes": 26927,
+      "sha256": "0ca306c1e872208de528a91316683eadeac8fff3c327fdfd5609c45b343264da",
+      "mode": 420
+    }
+  },
+  "priorMethodsRetainedNotRerun": 141,
+  "preservation": {
+    "nativeFiles": 985,
+    "priorNativeFilesUnchanged": 983,
+    "fixturesUnchanged": 383,
+    "runtimeResourcesUnchanged": 102,
+    "packagedFiles": 485
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/native-candidate3.tar",
+    "pin": {
+      "bytes": 4442050560,
+      "sha256": "5d1d5039d0ac6aec36ce54c34a56023a0f1f9433ce0e7872a9a4b26e7f3994c0",
+      "mode": 420
+    },
+    "members": 985,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "UTC": "2026-09-13T18:46:55.734321+00:00",
+    "archive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/reader-evidence3.tar",
+      "bytes": 1300480,
+      "sha256": "6cd5c97f5b9d0647566c2edcda7d26679586295c58b12b3c48cf7bd9abc993cd",
+      "mode": 420
+    },
+    "members": {
+      "archive-reader1.py": {
+        "bytes": 1463,
+        "sha256": "5a637db28950addf97b5aa86d8528d76aba5fcaa0b511f671dc6881db8ea932a",
+        "mode": 420
+      },
+      "archive-reader3.py": {
+        "bytes": 1831,
+        "sha256": "30c6610cb719ddaa07aa06e48dbac432417dc94a29c781295f4184eedc1cced4",
+        "mode": 420
+      },
+      "baseline.json": {
+        "bytes": 216497,
+        "sha256": "72d355e472eb5172a2d9391656198b7fcb9ce89da9ce756f589fef6e47a631ec",
+        "mode": 420
+      },
+      "candidate1-inputs.json": {
+        "bytes": 204583,
+        "sha256": "3adb8c261a678f19cc87c743a410b0a33ea425031f40a37dc3f01f24c8623e45",
+        "mode": 420
+      },
+      "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySource.swift": {
+        "bytes": 15958,
+        "sha256": "e2227439fbb86f75b37d37a35b4927143b7d654340797981ecd354b3ac44d00e",
+        "mode": 420
+      },
+      "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySourceTests.swift": {
+        "bytes": 4066,
+        "sha256": "350d5fb660e3b4da3ea56ab8e2fd68d9ace85478115e80c35ba2222daaefb528",
+        "mode": 420
+      },
+      "candidate2-correction.json": {
+        "bytes": 544,
+        "sha256": "8e918470eea7fe1ad06cd1ed3e9431d91f7cece4286947630e1f48321e716c33",
+        "mode": 420
+      },
+      "candidate2-inputs.json": {
+        "bytes": 204583,
+        "sha256": "4a045bd0a5ee287d0b54ace722c21bf42ef75a0c627435d740f9a03ef3393aa2",
+        "mode": 420
+      },
+      "candidate2/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySource.swift": {
+        "bytes": 16789,
+        "sha256": "84191e61e326362f6896f99999dffa27476674f10a9df67e92d49b6542b45d28",
+        "mode": 420
+      },
+      "candidate2/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySourceTests.swift": {
+        "bytes": 4103,
+        "sha256": "6160ae90a39698e3bd28e1742463d898e7a44c789b64c7c7d21e0b1838065fd9",
+        "mode": 420
+      },
+      "candidate3-correction.json": {
+        "bytes": 1522,
+        "sha256": "02ffa399c1d62c056927bd69d7e74a1bfb23a92d430a70fba09a8cd42fe1dcc8",
+        "mode": 420
+      },
+      "candidate3-diagnosis.json": {
+        "bytes": 630,
+        "sha256": "a790863a5f16f5f41f28d3d01371a7a82c4eeba509ebf35021e69c7d638e88af",
+        "mode": 420
+      },
+      "candidate3-inputs.json": {
+        "bytes": 204583,
+        "sha256": "c2333b45fe9885f941269531591ef536c62c44ba39177ed1550e0efdff9e461d",
+        "mode": 420
+      },
+      "environment3.json": {
+        "bytes": 465,
+        "sha256": "ec2e4fbcaae903884af55e655a35237906f327810a96e32df2adec19c0952f22",
+        "mode": 420
+      },
+      "publish-reader3.py": {
+        "bytes": 5119,
+        "sha256": "c8005ff89e52dd7c8029871a5606c30f8b05ce85c7fa2f5777d8f6298365a13c",
+        "mode": 420
+      },
+      "reader-checkpoint-plan.json": {
+        "bytes": 1393,
+        "sha256": "8d10fe0d895db491f400c8120e4cb9abfd7af7eb0ff9acaa168c0c9fb245f543",
+        "mode": 420
+      },
+      "reader-global-audit1.json": {
+        "bytes": 506,
+        "sha256": "2cfe8fe61f04cd1d5142a6ca69576bfb7e9a4cc2ca85c1d2a1c5f8f383b1e3f3",
+        "mode": 420
+      },
+      "reader1.config.json": {
+        "bytes": 960,
+        "sha256": "9e320bf5b4c39b6e60bb5993657716b8c2ca686fc92cbe98118dad108ed33fbb",
+        "mode": 420
+      },
+      "reader1.job.json": {
+        "bytes": 1102,
+        "sha256": "2d3d24924169cf59debd64306e741ff99f1b5acc14ee19f5c18766552659216b",
+        "mode": 420
+      },
+      "reader1.log": {
+        "bytes": 28259,
+        "sha256": "0ee6436b22691fb62b0833c050cd1e002dd459f58d685ef107ad2b3e244d01dc",
+        "mode": 420
+      },
+      "reader2.config.json": {
+        "bytes": 960,
+        "sha256": "5191d22625032b30aa1d3d5c6dd3ecc88cff3a628cf1ed2b245d27a41198867e",
+        "mode": 420
+      },
+      "reader2.job.json": {
+        "bytes": 1102,
+        "sha256": "28f1f62073b2e7722616837a09b02348bcdb5928b3eea2737b1f7771115823ce",
+        "mode": 420
+      },
+      "reader2.log": {
+        "bytes": 27295,
+        "sha256": "00d0cb8bdc88c3d19659ea32e8200a4e3b4e4b85f2aef62fded5a186863f30f2",
+        "mode": 420
+      },
+      "reader3.config.json": {
+        "bytes": 960,
+        "sha256": "31b2413dc40908730715bcdc83396ac0c08d3457b265c67ff94c0740b9db6d9c",
+        "mode": 420
+      },
+      "reader3.job.json": {
+        "bytes": 1102,
+        "sha256": "05c2caba4277c034d9b88936c11cbebd0b673b42cec3296948c909067f5f3d0a",
+        "mode": 420
+      },
+      "reader3.log": {
+        "bytes": 26927,
+        "sha256": "0ca306c1e872208de528a91316683eadeac8fff3c327fdfd5609c45b343264da",
+        "mode": 420
+      },
+      "review1-rendering-projection.json": {
+        "bytes": 84260,
+        "sha256": "228a6858aab6e985cb9fa63d6e6a55d6bcef347f07b854142269962c1c031b2a",
+        "mode": 420
+      },
+      "review2-reader-checkpoint.json": {
+        "bytes": 23297,
+        "sha256": "27343a8992839d2d8058ce1280175b88948bd449a47df1a6eb2b477453776cb3",
+        "mode": 420
+      },
+      "run-reader1.py": {
+        "bytes": 1963,
+        "sha256": "9664132ffa24c998a6f83a69cc66cae208aeed665f67017d488b3440068a38a0",
+        "mode": 420
+      },
+      "run-reader2.py": {
+        "bytes": 1963,
+        "sha256": "8571f8d1e9bf2eec6420c18192210c7ceaf3d82244573d73b3542a9add3bfe95",
+        "mode": 420
+      },
+      "run-reader3.py": {
+        "bytes": 1963,
+        "sha256": "49f2b40214301b7229343d46be5a014064c9add766987bddae5ebb78d249e547",
+        "mode": 420
+      },
+      "verification3.json": {
+        "bytes": 129131,
+        "sha256": "eef499bab0709699fa91f9533324fad304ff2b2dffe33440b079e96d1a786cbe",
+        "mode": 420
+      },
+      "verify-git3.py": {
+        "bytes": 2849,
+        "sha256": "10844638c9a4cb666fcbefa68c6363e14ee931b08213110cc84bba7a3f3597de",
+        "mode": 420
+      },
+      "verify-reader1.py": {
+        "bytes": 5892,
+        "sha256": "f38d19ec6badf3147cd3df13813df149bfaec0143b932aa5b76bc43ff197bf0b",
+        "mode": 420
+      },
+      "verify-reader2.py": {
+        "bytes": 5892,
+        "sha256": "c71e6a32d2db44a8955e3e58b03cb589c0dfd055707fc5a5658b7cdb1ac6275a",
+        "mode": 420
+      },
+      "verify-reader3.py": {
+        "bytes": 5892,
+        "sha256": "09b55236a5046894122bac4983a38b8b0d0b19a2d95a7412d674ec05fa59d758",
+        "mode": 420
+      }
+    },
+    "allBodiesAndModesVerified": true
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/verification3.json",
+    "bytes": 129131,
+    "sha256": "eef499bab0709699fa91f9533324fad304ff2b2dffe33440b079e96d1a786cbe"
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/reader-checkpoint-plan.json",
+    "bytes": 1393,
+    "sha256": "8d10fe0d895db491f400c8120e4cb9abfd7af7eb0ff9acaa168c0c9fb245f543"
+  },
+  "contractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/review2-reader-checkpoint.json",
+    "bytes": 23297,
+    "sha256": "27343a8992839d2d8058ce1280175b88948bd449a47df1a6eb2b477453776cb3"
+  },
+  "renderingResearch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/review1-rendering-projection.json",
+    "bytes": 84260,
+    "sha256": "228a6858aab6e985cb9fa63d6e6a55d6bcef347f07b854142269962c1c031b2a"
+  },
+  "environment": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/environment3.json",
+    "bytes": 465,
+    "sha256": "ec2e4fbcaae903884af55e655a35237906f327810a96e32df2adec19c0952f22"
+  },
+  "failures": [
+    {
+      "candidate": 1,
+      "outcome": "compile failure: missing testable reference-module import",
+      "job": {
+        "scope": "Native-only saved-gameplay reader integrity validation; no gameplay comparison acceptance.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalApplicationGameplaySourceTests/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate1-inputs.json",
+        "nativeFiles": 985,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T18:29:04.358939+00:00",
+        "pid": 59893,
+        "status": "terminal",
+        "exitCode": 1,
+        "elapsedSeconds": 188.127651583,
+        "endedUTC": "2026-09-13T18:32:12.472637+00:00"
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/reader1.log",
+        "bytes": 28259,
+        "sha256": "0ee6436b22691fb62b0833c050cd1e002dd459f58d685ef107ad2b3e244d01dc"
+      }
+    },
+    {
+      "candidate": 2,
+      "outcome": "two reader failures at lifecycle parent identity; direct predecessor assumption corrected with pinned initialized bridge",
+      "job": {
+        "scope": "Native-only saved-gameplay reader integrity validation; no gameplay comparison acceptance.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate2/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "OriginalApplicationGameplaySourceTests/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/candidate2-inputs.json",
+        "nativeFiles": 985,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T18:33:27.664028+00:00",
+        "pid": 60722,
+        "status": "terminal",
+        "exitCode": 1,
+        "elapsedSeconds": 344.016735208,
+        "endedUTC": "2026-09-13T18:39:11.683127+00:00"
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/reader2.log",
+        "bytes": 27295,
+        "sha256": "00d0cb8bdc88c3d19659ea32e8200a4e3b4e4b85f2aef62fded5a186863f30f2"
+      }
+    }
+  ],
+  "limits": [
+    "No own gameplay handler/state comparison in these two tests",
+    "Historical reported FPCW0 differs from initialized023f; both exact metadata values retained",
+    "Missing optional records remain unobserved; PC sets do not prove ordered complete stores",
+    "First launch parent and earlier Native successes remain inherited evidence",
+    "Full match/game/device/Windows/clean-Mac and historical safety/source-fault dependencies remain open"
+  ],
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/review3-reader-publication.json",
+    "bytes": 17716,
+    "sha256": "dc179b34215aa43f2ba90fc2517a0b0f1bbf095a62b12e3eb4efce4d134be281"
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-gameplay-projection-native-20260913/publication-before-final-review3.json",
+    "bytes": 15226,
+    "sha256": "6b6103f236fdb14bfa9c64dc197684e85797769e2c64e49757e8d8a27f7d5b68"
+  }
+}

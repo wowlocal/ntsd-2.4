@@ -497,6 +497,16 @@ Core/старые tests/383 fixtures/102 resources неизменны. Ошиб�
 Новые artifacts: `build/research/application-loaded-gameplay-comparison-native-20260913/`;
 старую папку gameplay и завершённые захваты не изменять/не перезапускать.
 
+Проверен [reader сохранённых gameplay-данных](APPLICATION_GAMEPLAY_SOURCE_READER.md):
+32 основных корпуса и два initialized bridges, по17 вызовов/323 стадии на вариант.
+Два release-теста прошли за10.956с/build339.52с. Проверены полные
+pool bytes/masks, связи снимков ввода, все distinct blob SHA и576 ordered global
+stores на вариант. Все983 прежних Native-файла неизменны; ошибки import/parent
+и различие FPCW0/023f сохранены. Это проверка reader, не совпадение собственного
+gameplay. Полный19-stage comparator остаётся следующим шагом по прежнему плану.
+[Evidence](../evidence/application-gameplay-source-reader.json); все три Native jobs
+в `build/research/application-loaded-gameplay-projection-native-20260913/` терминальны.
+
 Историческое ограничение предыдущего входа (countdown теперь пройден):
 Countdown147 и selection0 должны пройти собственный input/handler; не ставить
 selection1/countdown0 из expected. Далее preparation/gameplay. Current memory остаётся
