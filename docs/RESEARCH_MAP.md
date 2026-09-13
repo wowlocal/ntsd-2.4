@@ -272,7 +272,16 @@ Native environment; whole original application/device match не заявлен.
 24 bundled release-теста прошли за191.186с/build312.21с, включая два поздних
 rollback и fresh-factory retry. Все916 Native/379 fixtures/пакеты/архивы проверены;
 ошибки предыдущих кандидатов сохранены. [Evidence](evidence/application-catalog-full-native.json).
-Следующая композиция — собственный pool/UI/loading caller, затем outer loop.
+[Собственный pool/UI](research/APPLICATION_POOL_INTERFACE.md) теперь продолжает
+actual PendingPool до PendingInput перед41c581:400 Actors/408 constructors,
+две полные фазы,10 UI wrappers/170 API и11 исходных globals stores. Сохраняются
+current World/aliases, каталог/423 WAV owners/20 command bytes и полный rollback.
+10 новых DIB дают102933 pixels/6875 unknown; RGB/masks/313 rows независимы отCore.
+26 bundled release-тестов прошли190.426с/build313.61с;8late controls/19 guards.
+379 прежних fixtures неизменны,381 текущий/934 Native, пакеты и архивы проверены
+по manifests; [evidence](evidence/application-pool-interface.json). Compile-only
+ошибка Native2 и все frozen-кандидаты сохранены; правила Core/expected не менялись.
+Следующая композиция —41c581 input/loading caller, outer loop и backend publication.
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
@@ -284,7 +293,7 @@ provider ресурсов/platform controls, новыми проверенным
 новый Native environment не является whole original application match.
 1219 pins/1227 archive members и неизменные913Native/379fixtures сверены.
 [Evidence](evidence/application-catalog-full-inputs.json). Source return, новые
-surface consumers, pool/UI/loading/outer, actual device и safety incidents открыты.
+surface consumers, input/loading/outer, actual device и safety incidents открыты.
 Completed captures не повторять.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)

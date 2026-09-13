@@ -339,11 +339,22 @@ review закрыл существенные замечания. Все916 Nativ
 профиля XCTest и неисполненный frozen3 сохранены. [Evidence](../evidence/application-catalog-full-native.json).
 Полного original application return или новых Windows/device/raster наблюдений нет.
 
-**Следующая задача — соединить PendingPool с собственным pool/UI/loading caller**
-по сохранённым принятым входам и контрактам. Сохранить текущих владельцев, полные
-records/masks, операции и whole-attempt rollback; не подставлять expected after-state.
-Затем продолжить outer loop и backend publication. Недостающий full-source return
-и draw consumers новых catalog surfaces остаются открыты. Completed captures,
+Принято [соединение собственного каталога с pool/UI](APPLICATION_POOL_INTERFACE.md):
+400 Actors/408 constructor returns, две полные фазы пула,10 UI bitmaps/170 API
+и11 исходных global stores. PendingInput сохраняет actual World/globals/aliases,
+каталог,423 WAV owners и20 command bytes.10 DIB/40102 bytes дают102933 pixels:
+96058 known/6875 unknown; все RGB/masks/313 rows проверены независимо.
+26 bundled release-тестов прошли за190.426с/build313.61с, включая8 поздних
+откатов и19 guards.379 прежних fixtures неизменны,381 текущий/934 Native-файла,
+пакеты и архивы сверены по manifests; [evidence](../evidence/application-pool-interface.json).
+Native1 pass, неисполненный frozen2 и Native2 compile error сохранены;
+финальный candidate3 меняет лишь конфликтовавшее локальное имя теста.
+
+**Следующая задача — продолжить PendingInput с41c581 через input/loading caller
+к outer loop и backend publication.** Сохранить собственные pool/UI, текущий
+каталог, звуки, RNG, полные records/masks, aliases и whole-attempt rollback.
+Не подставлять expected after-state. Полный original application return и draw
+consumers новых catalog/UI surfaces остаются открыты. Completed captures,
 включая terminal candidate5 после28 Objects, не перезапускать.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в

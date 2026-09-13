@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "entries": [
+    {
+      "name": "PAUSE",
+      "path": "PAUSE.dib",
+      "count": 1134,
+      "sha256": "41ebe6af86437d5ced9d6e6288982c4f81443f88e5216a07f2df73401a39d20d"
+    },
+    {
+      "name": "DEMO",
+      "path": "DEMO.dib",
+      "count": 1182,
+      "sha256": "78839ea3448314c39f48b74ed6091abcd52a628a790e34b4deba0499a6936962"
+    },
+    {
+      "name": "SCORE_BOARD1",
+      "path": "SCORE_BOARD1.dib",
+      "count": 5862,
+      "sha256": "285d670a481a6fed0abf4181bf153224b892a11b29623f053de6fb3933fe6224"
+    },
+    {
+      "name": "SCORE_BOARD2",
+      "path": "SCORE_BOARD2.dib",
+      "count": 1034,
+      "sha256": "02a99941d7b2abcafbe6c4c4f62268ecf73712f6812c374f3bce02c0e77ece05"
+    },
+    {
+      "name": "SCORE_BOARD3",
+      "path": "SCORE_BOARD3.dib",
+      "count": 3262,
+      "sha256": "e4c42fc8efa11ce193ed4ed726869551a45f49c83cc578b566acd16c2c794e39"
+    },
+    {
+      "name": "SCORE_BOARD4",
+      "path": "SCORE_BOARD4.dib",
+      "count": 3210,
+      "sha256": "986141e4436f8b8ebc70107db9905cb093c405effe9441c79c9f1f6e10addfb5"
+    },
+    {
+      "name": "WIN_ALIVE",
+      "path": "WIN_ALIVE.dib",
+      "count": 442,
+      "sha256": "8ce9f349d8b7ee78f05b21ff59cc9747a42b30c568fca39ba0d72dc340b21ee9"
+    },
+    {
+      "name": "WIN_DEAD",
+      "path": "WIN_DEAD.dib",
+      "count": 442,
+      "sha256": "e491ed303a064376525128f88a0ec490adc5994117467e4ac0e7c06dc6f68c3f"
+    },
+    {
+      "name": "LOSE_DEAD",
+      "path": "LOSE_DEAD.dib",
+      "count": 442,
+      "sha256": "af95b0602a142eb031325d4ec7e9d7b126b2438ba873b480d1e95bcff01e5953"
+    },
+    {
+      "name": "BARS",
+      "path": "BARS.dib",
+      "count": 23092,
+      "sha256": "c59c4282b7c1a29bb970e750726422554c50ca74ec474baac965c89e9129981a"
+    }
+  ]
+}

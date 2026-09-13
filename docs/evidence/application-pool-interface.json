@@ -1,0 +1,1942 @@
+{
+  "schema": 1,
+  "status": "accepted-finite-Native-composition",
+  "UTC": "2026-09-13T08:00:41.379559+00:00",
+  "baseCommit": "35ac87ae56fa31151fc55a5bbe58e3ee406f4d31",
+  "scope": "Actual owned PendingPool ->400 Actors/8 staging reconstructions/10 UI bitmaps/loading clear ->PendingInput before41c581. No whole original application return, backend publication, Windows/device or game completion.",
+  "workDirectory": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913",
+  "environment": {
+    "originalExecuted": false,
+    "emulatorExecuted": false,
+    "historicalProducerExecuted": false,
+    "newDataOnlyReference": true,
+    "NativeSwiftRelease": true,
+    "rawOverrides": false,
+    "platform": "Declared logical Native inputs; saved controlled original evidence as comparison only"
+  },
+  "source": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "savedWholeUICases": 10,
+    "verifiedBlobs": 203,
+    "blobBytes": 4169710,
+    "DIBs": 10,
+    "DIBBytes": 40102,
+    "RLE8Resources": 9,
+    "RGB24Resources": 1,
+    "RLECommands": 4191,
+    "pixels": 102933,
+    "knownPixels": 96058,
+    "unknownPixels": 6875,
+    "rows": 313,
+    "pixelPayloadBytes": 411732,
+    "pixelPayloadSHA256": "5a14a0e7d0e7bdb9155195fa54c7d2217c3ed0f37639e61f1c8b6b748d0f7bc9",
+    "independentAudit": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review2-reference.json",
+      "bytes": 14187,
+      "sha256": "b79445a96d65985c21609a3376dde5e2830a64541dc3d7cb3070209e8e3b7233"
+    }
+  },
+  "comparison": {
+    "parent": "Actual own bootstrap/menu/common/full137Object catalog checked by retained full comparator",
+    "perCompletePool": {
+      "allocations": 400,
+      "constructorRecords": 408,
+      "complete400ActorPhases": 2,
+      "UIAllocations": 10,
+      "UIAPIRequestsAndResponses": 170,
+      "sourceGlobalStores": 11,
+      "sourceReplayStartsAtStore": 109
+    },
+    "typedBindings": "catalog/Actor/Object references, actual Object+90 word at eight proven +31c stores, UI wrapper/device/image/surface/DC operands only",
+    "currentEntryBackingRetained": true,
+    "canonicalAndBoundFinalPoolsCompared": true,
+    "oldAndNewGraphicsOwnersCompared": true,
+    "allPublicCatalogAndWAVFieldsRetained": true,
+    "completeCommandAndOperationStreamCompared": true,
+    "expectedAfterStateImported": false
+  },
+  "validation": {
+    "acceptedJob": {
+      "scope": "Native-only release pool/interface ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationPoolTests|OriginalApplicationInterfaceInputsTests|OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalInitialLoadingTests|OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate3-inputs.json",
+      "nativeFiles": 934,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T07:49:44.167367+00:00",
+      "pid": 37360,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 505.59038283399997,
+      "endedUTC": "2026-09-13T07:58:09.784971+00:00"
+    },
+    "candidate": "candidate3",
+    "uniqueBundledTests": 26,
+    "seconds": 190.426,
+    "buildSeconds": 313.61,
+    "tests": [
+      {
+        "suite": "OriginalApplicationCatalogFullTests",
+        "method": "testBeforePublicationCancellationAndFreshFactory",
+        "seconds": 27.065
+      },
+      {
+        "suite": "OriginalApplicationCatalogFullTests",
+        "method": "testCompleteCatalogFromOwnedApplication",
+        "seconds": 15.234
+      },
+      {
+        "suite": "OriginalApplicationCatalogFullTests",
+        "method": "testLateStageCancellationRollsBackEntireCatalog",
+        "seconds": 12.768
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testCatalogAllocationCannotOverlapRetainedCommonPCM",
+        "seconds": 5.992
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+        "seconds": 9.358
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+        "seconds": 37.411
+      },
+      {
+        "suite": "OriginalApplicationInterfaceInputsTests",
+        "method": "testMissingCorruptExtraAndSymlinkPackagesAreRejected",
+        "seconds": 0.043
+      },
+      {
+        "suite": "OriginalApplicationInterfaceInputsTests",
+        "method": "testOrdinaryAppPackageAndOwnedSnapshot",
+        "seconds": 0.009
+      },
+      {
+        "suite": "OriginalApplicationInterfaceInputsTests",
+        "method": "testTenOriginalDIBsFullPixelsMasksAndRows",
+        "seconds": 0.014
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "method": "testCompleteOwnedCatalogPoolAndInterface",
+        "seconds": 16.77
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "method": "testLateFailuresKeepWholeEntryAndFreshRetry",
+        "seconds": 15.26
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "method": "testOwnedRangeAndCapturedWriteBoundaries",
+        "seconds": 30.307
+      },
+      {
+        "suite": "OriginalBootstrapTests",
+        "method": "testCompleteAllocatedAndStagedPoolsAgainstOriginalInstructions",
+        "seconds": 0.056
+      },
+      {
+        "suite": "OriginalBootstrapTests",
+        "method": "testReconstructionPreservesPreviouslyInitializedOpaqueFields",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalInitialInterfaceSurfaceTests",
+        "method": "testLateSurfaceAndFinalStoreErrorsRollBackContext",
+        "seconds": 0.61
+      },
+      {
+        "suite": "OriginalInitialInterfaceSurfaceTests",
+        "method": "testWholeControlledPoolAndInterfaceSurfaceCalls",
+        "seconds": 1.08
+      },
+      {
+        "suite": "OriginalInitialInterfaceTests",
+        "method": "testInitialInterfaceAfterRealPoolAgainstEXE",
+        "seconds": 0.122
+      },
+      {
+        "suite": "OriginalInitialInterfaceTests",
+        "method": "testLateProvidedConstructorFailureKeepsCommittedInterface",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalInitialInterfaceTests",
+        "method": "testProvidedConstructorBindingFailuresRollBack",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalInitialInterfaceTests",
+        "method": "testProvidedConstructorRetainsWholeInterfaceCorpus",
+        "seconds": 0.103
+      },
+      {
+        "suite": "OriginalInitialInterfaceTests",
+        "method": "testWholeSurfaceFailureRetainsProducedDimensions",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalInitialLoadingTests",
+        "method": "testContinuousFirstLoadingFromRealPrologue",
+        "seconds": 6.568
+      },
+      {
+        "suite": "OriginalInitialLoadingTests",
+        "method": "testPhaseZeroPauseAndReversedActorAllocations",
+        "seconds": 6.487
+      },
+      {
+        "suite": "OriginalInitialPoolAndInterfaceTests",
+        "method": "testCompletePoolAndUIWithEveryOriginalConstructorReturn",
+        "seconds": 2.93
+      },
+      {
+        "suite": "OriginalInitialPoolAndInterfaceTests",
+        "method": "testLateAllocationConstructorAndUIFailuresRetainContext",
+        "seconds": 2.237
+      },
+      {
+        "suite": "OriginalInitialPoolAndInterfaceTests",
+        "method": "testLateStagingObserverRetainsPreviouslyConstructedPool",
+        "seconds": 0.001
+      }
+    ],
+    "lateNativeCancellations": 8,
+    "rangeAndInputGuards": 19,
+    "wholeCompletionsReachingBeforeCommit": 3,
+    "publishedPendingInputResults": 2,
+    "earlierNative1PassedButComparatorReviewStillOpen": true,
+    "candidate2NeverExecuted": true,
+    "Native2CompileFailedBeforeTests": true
+  },
+  "preservation": {
+    "status": "verified",
+    "UTC": "2026-09-13T07:59:41.775685+00:00",
+    "elapsedSeconds": 17.543141625,
+    "sourcePins": {
+      "count": 42,
+      "entries": {
+        "AGENTS.md": {
+          "pin": {
+            "bytes": 9743,
+            "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+          },
+          "origin": "unchanged"
+        },
+        "AGENTS_HISTORY_2026-09-12.md": {
+          "pin": {
+            "bytes": 364046,
+            "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/BARS_1028.bmp": {
+          "pin": {
+            "bytes": 23106,
+            "sha256": "3edaa3c20de2da2607e003456155fc6c1ffcb6f271b0c8602a661f4fded674b5"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/DEMO_1028.bmp": {
+          "pin": {
+            "bytes": 1196,
+            "sha256": "d9f0205e42e864eb5d992551af5c92e362b48dbb2a0af6a79c683af55eca5ba2"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/LOSE_DEAD_1028.bmp": {
+          "pin": {
+            "bytes": 456,
+            "sha256": "f01b81bb11df469b67294d3ffc3d94e0c4423ca1c0ac57f61617f7866d86e65d"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/PAUSE_1028.bmp": {
+          "pin": {
+            "bytes": 1148,
+            "sha256": "5262e8598193b3a2ececed143dcd3e7b91f2c3fd7411854b0ea49afd5266d021"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/SCORE_BOARD1_1028.bmp": {
+          "pin": {
+            "bytes": 5876,
+            "sha256": "bd5472dbdf65d5502cbf70c8ee292669b83f24bdd12f50a2ff7f65af80d591f5"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/SCORE_BOARD2_1028.bmp": {
+          "pin": {
+            "bytes": 1048,
+            "sha256": "81110ccf204f74e623aa16b084dedefad77894e3f078da3c78143bf8d263ff1a"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/SCORE_BOARD3_1028.bmp": {
+          "pin": {
+            "bytes": 3276,
+            "sha256": "7eea55f77d87b478e5b6bb59b2f29611c094e3863b9222684e56523c4f0c5f4a"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/SCORE_BOARD4_1028.bmp": {
+          "pin": {
+            "bytes": 3224,
+            "sha256": "ce28b43c2dee25bdc1900ea180a9526bddf60e7c6b892b6abe54a24a65dfd809"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/WIN_ALIVE_1028.bmp": {
+          "pin": {
+            "bytes": 456,
+            "sha256": "443264b1e161c99dc1ae5248e3af15ffc90bba113adf1f7196a60fe8c810c592"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/bitmaps/WIN_DEAD_1028.bmp": {
+          "pin": {
+            "bytes": 456,
+            "sha256": "9eac046c23ff60286356f281bc33f954a6b6caa7f11bc0658eb78554f249df9f"
+          },
+          "origin": "unchanged"
+        },
+        "build/original/executable.json": {
+          "pin": {
+            "bytes": 32332,
+            "sha256": "ddd98c37dc9e5d306e6c651a668297fec4fd4a6ab86fd467560de501ca754234"
+          },
+          "origin": "unchanged"
+        },
+        "docs/CONTINUE_GOAL.md": {
+          "pin": {
+            "bytes": 7743,
+            "sha256": "223ad1dca37505f844ca97dd1cfaa00db8131e8d54322a4800b72531578311c6"
+          },
+          "origin": "unchanged"
+        },
+        "docs/RESEARCH_MAP.md": {
+          "pin": {
+            "bytes": 252340,
+            "sha256": "fce416ef0a2efdeafd50d2aca8916c895521a613c164a525782ba3ff03558922"
+          },
+          "origin": "Git base 35ac87ae56fa31151fc55a5bbe58e3ee406f4d31",
+          "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/base-inputs/docs/RESEARCH_MAP.md",
+          "current": {
+            "bytes": 253270,
+            "sha256": "9f905a6f5afbf80e26d9f5ddee4c8e4327f738d3d904865f75c06a6c88981784"
+          }
+        },
+        "docs/evidence/application-catalog-full-native.json": {
+          "pin": {
+            "bytes": 33557,
+            "sha256": "c0e435c8ba1b5bbf4ad6dbf899aae6713ce16362e96877d943d7cd5b5fb32bf8"
+          },
+          "origin": "unchanged"
+        },
+        "docs/research/CURRENT_WORK.md": {
+          "pin": {
+            "bytes": 39044,
+            "sha256": "80f01158c8c9181eb43d63553e72a2fad6f4660cf25c585b07d064af9a071a99"
+          },
+          "origin": "Git base 35ac87ae56fa31151fc55a5bbe58e3ee406f4d31",
+          "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/base-inputs/docs/research/CURRENT_WORK.md",
+          "current": {
+            "bytes": 40023,
+            "sha256": "2cc762999b6625ee00975c6ef5107520689af4b355bbdc7ebd944888742f3a37"
+          }
+        },
+        "docs/research/INITIAL_INTERFACE_SURFACE.md": {
+          "pin": {
+            "bytes": 10257,
+            "sha256": "f6ffa91302df884541863efb6dae91621fc29ae054a1749b642ca32a0f97443e"
+          },
+          "origin": "unchanged"
+        },
+        "docs/research/INITIAL_LOADING.md": {
+          "pin": {
+            "bytes": 16002,
+            "sha256": "ae1780d45707a8b3ad327216555ff29deb47de503494ba77cce567a292e9dbf5"
+          },
+          "origin": "unchanged"
+        },
+        "docs/research/INITIAL_LOADING_CONTINUATION.md": {
+          "pin": {
+            "bytes": 6128,
+            "sha256": "545ade5e80dd662d2841b4bf61684480014a32a8a8002894808ec90d57dfa2d0"
+          },
+          "origin": "unchanged"
+        },
+        "docs/research/INITIAL_POOL_INTERFACE.md": {
+          "pin": {
+            "bytes": 6515,
+            "sha256": "50ac966a0e72e3c1e852f2d22545b0176db2eac675f699065761a1a068648f05"
+          },
+          "origin": "unchanged"
+        },
+        "docs/research/WORKFLOW.md": {
+          "pin": {
+            "bytes": 25142,
+            "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+          },
+          "origin": "unchanged"
+        },
+        "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe": {
+          "pin": {
+            "bytes": 31715328,
+            "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift": {
+          "pin": {
+            "bytes": 26650,
+            "sha256": "fa0a914dff91143ccea0a6effac1ec7b18bcf7080c1664d30313610286c1bf06"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+          "pin": {
+            "bytes": 35173,
+            "sha256": "63ecbab1a44bbbd7597e57650ff22d46bc9f1bc7067e5b0ceeec63737a25eb51"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift": {
+          "pin": {
+            "bytes": 6165,
+            "sha256": "8e51939a2318d6e211b6609d92a364fbb5e51b78743a1866272868e553bf8383"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialInterfaceSurfaceLoading.swift": {
+          "pin": {
+            "bytes": 1883,
+            "sha256": "e6ee3aa036222680c1b69096261befa1a6917513a6b09bfc699078810f7c82f3"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialLoading.swift": {
+          "pin": {
+            "bytes": 8303,
+            "sha256": "55d16e4efa816d5df7c8063414d378064c3500a7aee841d2239ec46401f133d4"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift": {
+          "pin": {
+            "bytes": 2062,
+            "sha256": "03e6ae671f8f07b6f424e5ef4e6e01f25db12fea5b2296c07498b46ddee3f6b6"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift": {
+          "pin": {
+            "bytes": 4773,
+            "sha256": "436c286dca7a638ed537767e00bf66449cea47d3a4a221939985209155731d3a"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialMatchEntry.swift": {
+          "pin": {
+            "bytes": 3644,
+            "sha256": "6fd28263c069f23ecef141926c910499d8e475cd50e7b2332d48df5c3e0b27ea"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialPoolAndInterface.swift": {
+          "pin": {
+            "bytes": 4867,
+            "sha256": "656098468e37a6816cc1c198f6bc8c1be5c20608ed28d0512937fb14a1f1f54a"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalInitialSoundLoading.swift": {
+          "pin": {
+            "bytes": 4242,
+            "sha256": "19b4feb61b6a3e1c96cd10b6742404a20226f7e3e669d15628d408ee70e50ee3"
+          },
+          "origin": "unchanged"
+        },
+        "native/Sources/NTSDCore/OriginalWorldBootstrap.swift": {
+          "pin": {
+            "bytes": 4825,
+            "sha256": "c3e246f8df16378c6006fd768bd6a427eead81e50cb13f2853966718c9ffbf22"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib": {
+          "pin": {
+            "bytes": 48082802,
+            "sha256": "05c80127a13d8991ae9ca62a785bc416527ff8de52fc3e3630ab0f46ba174eb1"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json": {
+          "pin": {
+            "bytes": 9086144,
+            "sha256": "7f739a9a72c7fc66c740a5dae8afaa4364219b5c11ce24d2962593b3c2fa7df3"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin": {
+          "pin": {
+            "bytes": 40736644,
+            "sha256": "073ec805be01b535a2ad1a5ca78e63efcc8ba63d4367e53a5b773cbe555170f7"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.json": {
+          "pin": {
+            "bytes": 3764412,
+            "sha256": "03308dd91107e3007a5e62e809859f3f6809b80251c590fa6b6354f6ace45a0d"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/OriginalInitialInterfaceSurfaceTests.swift": {
+          "pin": {
+            "bytes": 15368,
+            "sha256": "001ce0a53a13f25b2cfacc17864308369b124947bd78a992d4b5f47806a740d3"
+          },
+          "origin": "unchanged"
+        },
+        "native/Tests/NTSDCoreTests/OriginalInitialPoolAndInterfaceTests.swift": {
+          "pin": {
+            "bytes": 11904,
+            "sha256": "e628bf528af17e7002c088d9f4e4f606386e8bc64196ad1b202b7a52fb811469"
+          },
+          "origin": "unchanged"
+        },
+        "tools/package_assets.py": {
+          "pin": {
+            "bytes": 1319,
+            "sha256": "fb6c9d45299ba2aa230254c39ed880e401d511cf794c41d95cc99ddc4b51e005"
+          },
+          "origin": "Git base 35ac87ae56fa31151fc55a5bbe58e3ee406f4d31",
+          "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/base-inputs/tools/package_assets.py",
+          "current": {
+            "bytes": 1563,
+            "sha256": "13c7045e0163dd637a33ec16bd51edb92d3ac00ff73384d450412207db9ced4c"
+          }
+        },
+        "tools/reference_startup_dib_pixels.py": {
+          "pin": {
+            "bytes": 7336,
+            "sha256": "1a47035be0a87ba5b8e7ff9c9437462e8661c927adf8522e291e07748cd24af9"
+          },
+          "origin": "unchanged"
+        }
+      }
+    },
+    "native": {
+      "files": 934,
+      "initialFiles": 916,
+      "bytes": 4433954722,
+      "changed": {
+        "native/Package.swift": {
+          "before": {
+            "bytes": 2580,
+            "sha256": "4ebe975e55adc8197ceef8881daf7cb1ebe26a56d2cce3bdb4fda570377b319d"
+          },
+          "after": {
+            "bytes": 2625,
+            "sha256": "2fa63ec01570e695207c65454d96e7c2c1122633f5f14baeea3714bf0f2efdd6"
+          }
+        }
+      },
+      "added": {
+        "native/Sources/NTSDCore/OriginalApplicationInterfaceInputs.swift": {
+          "bytes": 3320,
+          "sha256": "9b97f9b49a1030289792dd68abfa50c4be4c0cebdb70f720b9800e69b1c516a3"
+        },
+        "native/Sources/NTSDCore/OriginalApplicationPoolSession.swift": {
+          "bytes": 11058,
+          "sha256": "8fb8072422f70a3eb3ee06e662f2d1d4998d9dfbef8d282640e01ad66f563195"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/BARS.dib": {
+          "bytes": 23092,
+          "sha256": "c59c4282b7c1a29bb970e750726422554c50ca74ec474baac965c89e9129981a"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/DEMO.dib": {
+          "bytes": 1182,
+          "sha256": "78839ea3448314c39f48b74ed6091abcd52a628a790e34b4deba0499a6936962"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/LOSE_DEAD.dib": {
+          "bytes": 442,
+          "sha256": "af95b0602a142eb031325d4ec7e9d7b126b2438ba873b480d1e95bcff01e5953"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/PAUSE.dib": {
+          "bytes": 1134,
+          "sha256": "41ebe6af86437d5ced9d6e6288982c4f81443f88e5216a07f2df73401a39d20d"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD1.dib": {
+          "bytes": 5862,
+          "sha256": "285d670a481a6fed0abf4181bf153224b892a11b29623f053de6fb3933fe6224"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD2.dib": {
+          "bytes": 1034,
+          "sha256": "02a99941d7b2abcafbe6c4c4f62268ecf73712f6812c374f3bce02c0e77ece05"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD3.dib": {
+          "bytes": 3262,
+          "sha256": "e4c42fc8efa11ce193ed4ed726869551a45f49c83cc578b566acd16c2c794e39"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD4.dib": {
+          "bytes": 3210,
+          "sha256": "986141e4436f8b8ebc70107db9905cb093c405effe9441c79c9f1f6e10addfb5"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/WIN_ALIVE.dib": {
+          "bytes": 442,
+          "sha256": "8ce9f349d8b7ee78f05b21ff59cc9747a42b30c568fca39ba0d72dc340b21ee9"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/WIN_DEAD.dib": {
+          "bytes": 442,
+          "sha256": "e491ed303a064376525128f88a0ec490adc5994117467e4ac0e7c06dc6f68c3f"
+        },
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/manifest.json": {
+          "bytes": 1863,
+          "sha256": "9f8cb29ac2546c0718e7c83541972b6e4589c64488ec057027b4fe4edd55af82"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/initial-interface-dib-pixels.bin": {
+          "bytes": 411732,
+          "sha256": "5a14a0e7d0e7bdb9155195fa54c7d2217c3ed0f37639e61f1c8b6b748d0f7bc9"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/initial-interface-dib-pixels.json": {
+          "bytes": 85240,
+          "sha256": "b667d0dc49c627811f2127f9d5e99d29e25defdae5ead0eb0786bafb589f8dd3"
+        },
+        "native/Tests/NTSDCoreTests/OriginalApplicationInterfaceInputsTests.swift": {
+          "bytes": 5392,
+          "sha256": "f265dd637c0b9bb795ca7316cf36493d48f8ed50b449ec06f9592a689cf7f8d9"
+        },
+        "native/Tests/NTSDCoreTests/OriginalApplicationPoolReference.swift": {
+          "bytes": 12527,
+          "sha256": "3880f40ab7839f92d844a9356dcd146a6de5a5899c8554d0bf98cfb2653fd332"
+        },
+        "native/Tests/NTSDCoreTests/OriginalApplicationPoolTests.swift": {
+          "bytes": 20315,
+          "sha256": "4ffe6b2f0126a3040f7260e860737b8ac7c61e693190b73c62a0048026e51793"
+        }
+      },
+      "modes": {
+        "native/Package.swift": 420,
+        "native/Sources/NTSDApp/Assets.swift": 420,
+        "native/Sources/NTSDApp/MeleeScene.swift": 420,
+        "native/Sources/NTSDApp/MovementScene.swift": 420,
+        "native/Sources/NTSDApp/OriginalScene.swift": 420,
+        "native/Sources/NTSDApp/main.swift": 420,
+        "native/Sources/NTSDBGCheck/main.swift": 420,
+        "native/Sources/NTSDBootstrapCheck/main.swift": 420,
+        "native/Sources/NTSDCatalogCheck/main.swift": 420,
+        "native/Sources/NTSDCombatCheck/main.swift": 420,
+        "native/Sources/NTSDCore/GameData.swift": 420,
+        "native/Sources/NTSDCore/OriginalActorControl.swift": 420,
+        "native/Sources/NTSDCore/OriginalActorHits.swift": 420,
+        "native/Sources/NTSDCore/OriginalActorInput.swift": 420,
+        "native/Sources/NTSDCore/OriginalActorPhysics.swift": 420,
+        "native/Sources/NTSDCore/OriginalActorScheduler.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationArtSetup.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationCatalogControls.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationDispatchEntry.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationGraphics.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationInterfaceInputs.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationKeyScan.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationLoadingInputs.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationMessageLoop.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationPoolSession.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationRecovery.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift": 420,
+        "native/Sources/NTSDCore/OriginalApplicationTimer.swift": 420,
+        "native/Sources/NTSDCore/OriginalArithmeticPrecision.swift": 420,
+        "native/Sources/NTSDCore/OriginalBackgroundDrawing.swift": 420,
+        "native/Sources/NTSDCore/OriginalBackgroundLoader.swift": 420,
+        "native/Sources/NTSDCore/OriginalBackgroundSurfaceLayers.swift": 420,
+        "native/Sources/NTSDCore/OriginalBitmapDrawing.swift": 420,
+        "native/Sources/NTSDCore/OriginalBitmapFont.swift": 420,
+        "native/Sources/NTSDCore/OriginalBitmapRelease.swift": 420,
+        "native/Sources/NTSDCore/OriginalBitmapSurfaceLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalCPointPlacement.swift": 420,
+        "native/Sources/NTSDCore/OriginalCRTRandom.swift": 420,
+        "native/Sources/NTSDCore/OriginalCalendarTime.swift": 420,
+        "native/Sources/NTSDCore/OriginalCatalogRegistry.swift": 420,
+        "native/Sources/NTSDCore/OriginalCharacterMenuContinuation.swift": 420,
+        "native/Sources/NTSDCore/OriginalCharacterMenuStartup.swift": 420,
+        "native/Sources/NTSDCore/OriginalCharacterScreen.swift": 420,
+        "native/Sources/NTSDCore/OriginalClock.swift": 420,
+        "native/Sources/NTSDCore/OriginalComputerSelection.swift": 420,
+        "native/Sources/NTSDCore/OriginalCoordinateConversion.swift": 420,
+        "native/Sources/NTSDCore/OriginalDATDecoder.swift": 420,
+        "native/Sources/NTSDCore/OriginalDIBPixels.swift": 420,
+        "native/Sources/NTSDCore/OriginalDiagnosticNumber.swift": 420,
+        "native/Sources/NTSDCore/OriginalDisplayDestruction.swift": 420,
+        "native/Sources/NTSDCore/OriginalExtended.swift": 420,
+        "native/Sources/NTSDCore/OriginalFighter.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrameLoader.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrameStorage.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontMenuLoop.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontMenuRectangles.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontMenuResources.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontScreenAlternate.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontScreenBody.swift": 420,
+        "native/Sources/NTSDCore/OriginalFrontScreenPrelude.swift": 420,
+        "native/Sources/NTSDCore/OriginalGameplayBody.swift": 420,
+        "native/Sources/NTSDCore/OriginalGameplayOutput.swift": 420,
+        "native/Sources/NTSDCore/OriginalGraphEvents.swift": 420,
+        "native/Sources/NTSDCore/OriginalHitDamage.swift": 420,
+        "native/Sources/NTSDCore/OriginalHitGuard.swift": 420,
+        "native/Sources/NTSDCore/OriginalHitSpecial.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialInterfaceLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialInterfaceSurfaceLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialMatchEntry.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialPoolAndInterface.swift": 420,
+        "native/Sources/NTSDCore/OriginalInitialSoundLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalInputControl.swift": 420,
+        "native/Sources/NTSDCore/OriginalInputStartup.swift": 420,
+        "native/Sources/NTSDCore/OriginalKeyName.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibActorControl.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibActorHits.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibLoadingProgress.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibStageCommands.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibSurfaceText.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibTransformBacking.swift": 420,
+        "native/Sources/NTSDCore/OriginalLibWorldContacts.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoadedCatalog.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoadedGameplayCall.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoadedMatchCycle.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoadedMatchEntry.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoaderResources.swift": 420,
+        "native/Sources/NTSDCore/OriginalLoadingFiles.swift": 420,
+        "native/Sources/NTSDCore/OriginalLocalInput.swift": 420,
+        "native/Sources/NTSDCore/OriginalMainMenu.swift": 420,
+        "native/Sources/NTSDCore/OriginalMatchContinuation.swift": 420,
+        "native/Sources/NTSDCore/OriginalMatchPrelude.swift": 420,
+        "native/Sources/NTSDCore/OriginalMatchPreparation.swift": 420,
+        "native/Sources/NTSDCore/OriginalMatchRound.swift": 420,
+        "native/Sources/NTSDCore/OriginalMatchSelection.swift": 420,
+        "native/Sources/NTSDCore/OriginalMelee.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuBackground.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuCharacter.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuContent.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuInfoReading.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuInfoWriting.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuInput.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuPanelBitmap.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuPanelDrawing.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuPanelUpdate.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuPresentation.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuResourceLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuResourceSurfaceLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuReturn.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuSoundStartup.swift": 420,
+        "native/Sources/NTSDCore/OriginalMenuWorkerRequest.swift": 420,
+        "native/Sources/NTSDCore/OriginalModeLabel.swift": 420,
+        "native/Sources/NTSDCore/OriginalModeMenuContinuation.swift": 420,
+        "native/Sources/NTSDCore/OriginalModeScreen.swift": 420,
+        "native/Sources/NTSDCore/OriginalModeSelection.swift": 420,
+        "native/Sources/NTSDCore/OriginalMovement.swift": 420,
+        "native/Sources/NTSDCore/OriginalMusicConfiguration.swift": 420,
+        "native/Sources/NTSDCore/OriginalMusicPlayback.swift": 420,
+        "native/Sources/NTSDCore/OriginalNetworkClient.swift": 420,
+        "native/Sources/NTSDCore/OriginalNetworkExit.swift": 420,
+        "native/Sources/NTSDCore/OriginalNetworkMenu.swift": 420,
+        "native/Sources/NTSDCore/OriginalNetworkNotification.swift": 420,
+        "native/Sources/NTSDCore/OriginalObjectDrawing.swift": 420,
+        "native/Sources/NTSDCore/OriginalObjectLoader.swift": 420,
+        "native/Sources/NTSDCore/OriginalPausedGameplay.swift": 420,
+        "native/Sources/NTSDCore/OriginalPlaybackInformation.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostDrawCommands.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostDrawImpulses.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostDrawLifecycle.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostDrawOpoint.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostDrawSlotPrefix.swift": 420,
+        "native/Sources/NTSDCore/OriginalPostHUDNotices.swift": 420,
+        "native/Sources/NTSDCore/OriginalProjectile.swift": 420,
+        "native/Sources/NTSDCore/OriginalQueuedSound.swift": 420,
+        "native/Sources/NTSDCore/OriginalRandom.swift": 420,
+        "native/Sources/NTSDCore/OriginalReceivedInput.swift": 420,
+        "native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalReplayCompression.swift": 420,
+        "native/Sources/NTSDCore/OriginalReplayFileOutput.swift": 420,
+        "native/Sources/NTSDCore/OriginalReplayRecording.swift": 420,
+        "native/Sources/NTSDCore/OriginalReplayTick.swift": 420,
+        "native/Sources/NTSDCore/OriginalReplayWriter.swift": 420,
+        "native/Sources/NTSDCore/OriginalResultLayout.swift": 420,
+        "native/Sources/NTSDCore/OriginalResultRecording.swift": 420,
+        "native/Sources/NTSDCore/OriginalSettingsLoading.swift": 420,
+        "native/Sources/NTSDCore/OriginalSettingsWriting.swift": 420,
+        "native/Sources/NTSDCore/OriginalStageLoader.swift": 420,
+        "native/Sources/NTSDCore/OriginalStartupOutput.swift": 420,
+        "native/Sources/NTSDCore/OriginalStartupPanel.swift": 420,
+        "native/Sources/NTSDCore/OriginalStartupStorage.swift": 420,
+        "native/Sources/NTSDCore/OriginalStateRecord.swift": 420,
+        "native/Sources/NTSDCore/OriginalSurfaceClearing.swift": 420,
+        "native/Sources/NTSDCore/OriginalSurfaceSourceColors.swift": 420,
+        "native/Sources/NTSDCore/OriginalSurfaceText.swift": 420,
+        "native/Sources/NTSDCore/OriginalTeamTournamentBracket.swift": 420,
+        "native/Sources/NTSDCore/OriginalTeamTournamentPreparation.swift": 420,
+        "native/Sources/NTSDCore/OriginalTeamTournamentSetup.swift": 420,
+        "native/Sources/NTSDCore/OriginalTournamentBracket.swift": 420,
+        "native/Sources/NTSDCore/OriginalTournamentLayout.swift": 420,
+        "native/Sources/NTSDCore/OriginalTournamentPreparation.swift": 420,
+        "native/Sources/NTSDCore/OriginalTournamentSetup.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarBitmapScratch.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarFrames.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarMenuContinuation.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarPreparation.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarSetup.swift": 420,
+        "native/Sources/NTSDCore/OriginalWarTroops.swift": 420,
+        "native/Sources/NTSDCore/OriginalWaveLoader.swift": 420,
+        "native/Sources/NTSDCore/OriginalWinMainStartup.swift": 420,
+        "native/Sources/NTSDCore/OriginalWindowInitialization.swift": 420,
+        "native/Sources/NTSDCore/OriginalWindowInput.swift": 420,
+        "native/Sources/NTSDCore/OriginalWindowLifecycle.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldBootstrap.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldCPoints.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldCamera.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldContacts.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldControl.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldDrawing.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldFusion.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldHUD.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldHits.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldImpulses.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldLinks.swift": 420,
+        "native/Sources/NTSDCore/OriginalWorldPhysics.swift": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/001.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/002.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/004.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/006.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/010.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/011.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/016.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/017.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/020.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/021.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/025.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/032.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/033.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/039.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/065.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/066.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/068.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/085.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalCommonSounds/manifest.json": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/BARS.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/DEMO.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/LOSE_DEAD.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/PAUSE.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD1.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD2.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD3.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/SCORE_BOARD4.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/WIN_ALIVE.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/WIN_DEAD.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalLoadingInterface/manifest.json": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS2.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS3.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS4.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS5.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/CS6.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/ENDING.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/FRAME.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/LF2_CURSOR.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK1.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK10.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK11.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK12.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK13.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK2.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK3.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK4.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK5.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK6.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK7.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK8.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_BACK9.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP2.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP3.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP4.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP5.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP6.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_CLIP7.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/MENU_WAIT.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/SLOGAN.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS0.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS1.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS2.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS3.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS4.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/bitmaps/WORDS5.dib": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/adinfo.txt": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/control.txt": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_cancel.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_end.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_join.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_ok.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/data/m_pass.wav": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/initial.bin": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/initial.mask": 420,
+        "native/Sources/NTSDCore/Resources/OriginalStartup/manifest.json": 420,
+        "native/Sources/NTSDFrameCheck/main.swift": 420,
+        "native/Sources/NTSDMovementCheck/main.swift": 420,
+        "native/Sources/NTSDObjectCheck/main.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ActiveGameplayReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/BackgroundReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/BitmapDrawingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/BootstrapReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/CatalogReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/CatalogSoundsReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/CharacterScreenReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ContinuousGameplayReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontMenuCompletionReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontMenuLoopReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontMenuResourcesReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontScreenAlternateReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontScreenBodyReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/FrontScreenPreludeReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayBodyReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayCameraReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayCommandsReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayDrawingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayHUDReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayImpulsesReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayLifecycleReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayNoticesReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayResultLayoutReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayResultRecordingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/GameplayReturnReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/InitialInterfaceReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/InitialLoadingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/InitializedGameplayReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/InputControlReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/LoadedCatalogReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/LocalInputReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MainMenuReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchContinuationReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchLaunchReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchPreludeReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchPreparationReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchRoundReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MatchSelectionReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuContentReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuCycleReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuInfoWritingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuLoadingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuPanelBitmapReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuPanelUpdateReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuPresentationReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuResourcesReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuReturnReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MenuStartupReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ModeScreenReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ModeSelectionReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/MusicPlaybackReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ObjectReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/PausedGameplayReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/RandomInitializationReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ReceivedInputReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ReplayInitializationReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/ReplayTickReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/SettingsLoadingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/SettingsWritingReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/StageReference.swift": 420,
+        "native/Sources/NTSDReferenceChecks/WaveLoaderReference.swift": 420,
+        "native/Sources/NTSDReplayCodec/NTSDReplayCodec.c": 420,
+        "native/Sources/NTSDReplayCodec/NTSDReplayCodecMemory.h": 420,
+        "native/Sources/NTSDReplayCodec/NTSDReplayCodecPrefix.h": 420,
+        "native/Sources/NTSDReplayCodec/README.md": 420,
+        "native/Sources/NTSDReplayCodec/include/NTSDReplayCodec.h": 420,
+        "native/Sources/NTSDReplayCodec/upstream.json": 420,
+        "native/Sources/NTSDReplayCodec/vendor/adler32.c": 420,
+        "native/Sources/NTSDReplayCodec/vendor/compress.c": 420,
+        "native/Sources/NTSDReplayCodec/vendor/deflate.c": 420,
+        "native/Sources/NTSDReplayCodec/vendor/deflate.h": 420,
+        "native/Sources/NTSDReplayCodec/vendor/trees.c": 420,
+        "native/Sources/NTSDReplayCodec/vendor/trees.h": 420,
+        "native/Sources/NTSDReplayCodec/vendor/zconf.h": 420,
+        "native/Sources/NTSDReplayCodec/vendor/zlib.h": 420,
+        "native/Sources/NTSDReplayCodec/vendor/zutil.c": 420,
+        "native/Sources/NTSDReplayCodec/vendor/zutil.h": 420,
+        "native/Sources/NTSDStageCheck/main.swift": 420,
+        "native/Sources/NTSDStateCheck/main.swift": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/initial-interface-dib-pixels.bin": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/initial-interface-dib-pixels.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-control-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-control-catalog53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-control-precision.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-control53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-input.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-physics-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-physics.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-physics53-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-physics53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-actor-scheduler.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-art-setup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0000.zlib": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0001.zlib": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0002.zlib": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session.json.zlib": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-dispatch-entry.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-dispatch-prefix.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-front-screen.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-loading-prefix.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-return.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-message-loop.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-recovery.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-screen-body.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-service-keys.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-settings.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-application-timer.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-arithmetic-precision.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-backgrounds.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-bitmap-drawing.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-bitmap-font.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-bitmap-surface-loading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-bootstrap.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-calendar-time.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-calendar-transitions.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-registry.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-sounds-interleaved.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-sounds.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-character-menu-music-surface.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-character-menu-surface.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-character-screen-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-character-screen.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-combat.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-coordinate-precision.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-crt-integers.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-crt-startup-prefix.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-dat-numeric53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-diagnostic-numbers.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-frames.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-fresh-character-menu.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-fresh-library-menu.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-completion-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-completion.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-loop-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-loop.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-resources-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-menu-resources.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-alternate-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-alternate.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-body-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-body.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-prelude-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-front-screen-prelude.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-camera-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-camera.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-commands-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-commands.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-contacts-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-contacts.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-control-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-cpoints-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-cpoints.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-drawing-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-drawing.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-hits-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-hits.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-hud-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-hud.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-impulses-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-impulses.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-lifecycle-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-lifecycle.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-links-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-links.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-notices-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-notices.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-output-controlled.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-physics-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-physics.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-layout-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-layout.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-recording-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-recording.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-return-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-return.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-graph-events.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-impulse-precision.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface-surface.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-interface.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-catalog-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-sounds-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading-sounds.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initial-loading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initialized-gameplay-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-initialized-gameplay.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-input-control-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-input-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-input-startup-success.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-input-startup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-actor-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-character-roster.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-hits-pristine-changes.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-initialization.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-loading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-match-preparation-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-match-preparation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-menu-continuation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-mode-screen.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-commands.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-stage-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-stage-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-selection-stage.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-stage-commands.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-stage-mode-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-stage-mode-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-stage-mode-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-stage-mode.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-surface-text.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-bracket-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-bracket-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-bracket-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-bracket-part3.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-bracket.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation-part3.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-preparation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-setup-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-setup-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-setup-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-team-tournament-setup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-arena-release.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-bracket-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-bracket-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-bracket-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-bracket.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-preparation-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-preparation-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-preparation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part0.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup-part2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-tournament-setup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-transform-boundaries.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-transforms.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-cells-cases1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-cells-cases2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-cells-cases3.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-cells-cases4.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-cells.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s03-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s04-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s05-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s06-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s07-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s08-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s09-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s22-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-fault-rejection-s28-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s12-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s13-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s14-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s15-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s16-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s17-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s18-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-graphics-error-s19-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-multiaction-cases1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-multiaction.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s00-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s01-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s20-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s21-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s23-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s24-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s25-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s26-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-music-error-s27-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-nullable-s02-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-nullable-s02-call-01.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-nullable-s03-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s04-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s05-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s06-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s07-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s08-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-partial-surface-s09-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-bound-cases1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-bound.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases3.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases4.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases5.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix-cases6.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-preparation-matrix.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-retained-scratch-s10-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-retained-scratch-s11-call-00.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases1.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases10.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases11.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases12.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases2.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases3.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases4.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases5.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases6.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases7.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases8.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup-cases9.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-war-setup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-world-contacts.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-lib-world-hits.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-audio-interleaved.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-audio.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files-interleaved.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files-raw-zero.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-interleaved.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-raw-zero.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-first-object.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-negative-close.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-loading-files-weapon-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-local-input-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-local-input.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-main-menu-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-main-menu.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-continuation-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-continuation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-launch-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-launch.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-prelude-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-prelude.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-preparation-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-preparation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-round-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-round.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-selection-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-match-selection.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-character.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-content-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-content.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-cycle-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-cycle.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-reading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-roundtrip.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-writing-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-info-writing.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-catalog-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-catalog.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-sounds-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-sounds.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-state-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading-state.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-loading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-bitmap-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-bitmap.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-draw.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-update-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-panel-update.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-presentation-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-presentation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-resources-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-resources.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-return-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-return.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-sound-startup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-startup-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-menu-startup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-label.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-panel-screen.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-screen-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-screen.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-selection-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-mode-selection.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-movement.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-music-playback-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-music-playback.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-client.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-exit.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-flags.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-greeting.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-names.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-sound-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-sound.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-menu.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-network-notification.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-objects-msvcr80.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-objects-raw.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-objects.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-paused-hud.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-playback-information.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-postdraw-commands.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-postdraw-lifecycle.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-postdraw-opoint.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-postdraw-slot-prefix.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-posthud-notices.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-presentation.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-projectiles.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-queued-sound.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-random-initialization-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-random-initialization.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-received-input-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-received-input.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-compression.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-initialization-ramp.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-initialization.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-stream.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-replay-writer.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-result-layout.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-result-recording.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-settings-loading-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-settings-loading.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-settings-writing-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-settings-writing.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-stages.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-startup-output.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-startup-panel.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-startup-storage.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-state-constructors.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-war-dependencies.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-wave-loader.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-window-initialization.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-window-input.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-window-lifecycle.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-winmain-startup.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-camera.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-camera53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-contacts.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-control-precision.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-control.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-control53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-cpoints.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-drawing.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-hits.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-hits53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-hud.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-impulses.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-links.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-links53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-physics.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/original-world-physics53.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/startup-graphics-owners.json": 420,
+        "native/Tests/NTSDCoreTests/Fixtures/startup-surface-colors.json": 420,
+        "native/Tests/NTSDCoreTests/OriginalActiveGameplayTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalActorControlTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalActorHitsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalActorInputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalActorPhysicsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalActorSchedulerTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationArtSetupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationCatalogGraphicsComparison.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionReference.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationDispatchEntryTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationDispatchPrefixTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationFrontScreenTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationGraphicsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationInterfaceInputsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationLoadingSessionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationMessageLoopTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationPoolReference.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationPoolTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationRecoveryTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationScreenBodyTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationServiceKeysTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationSettingsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationStartupInputsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalApplicationTimerTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalArithmeticPrecisionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalBackgroundTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalBitmapDrawingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalBitmapFontTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalBootstrapTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCRTTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCalendarTimeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCatalogDIBPixelsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCatalogPrecisionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCatalogSoundsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCatalogTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCharacterMenuMusicSurfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCharacterMenuSurfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCharacterScreenTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalContinuousGameplayTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalCoordinatePrecisionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalDIBPixelsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalDataTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalDiagnosticNumberTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrameLoaderTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFreshCharacterMenuTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFreshLibraryMenuTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontMenuCompletionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontMenuLoopTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontMenuResourcesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontScreenAlternateTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontScreenBodyTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalFrontScreenPreludeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayBodyTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayCPointsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayCameraTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayCommandsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayContactsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayControlTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayDrawingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayHUDTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayHitsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayImpulsesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayLifecycleTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayLinksTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayNoticesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayOutputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayPhysicsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayResultLayoutTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayResultRecordingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGameplayReturnTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalGraphEventsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInitialInterfaceSurfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInitialInterfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInitialLoadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInitialPoolAndInterfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInitializedGameplayTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInputControlTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalInputStartupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibActorControlTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibActorHitsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibCharacterRosterTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibLoadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibMatchPreparationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibMenuContinuationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibModeScreenTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibSelectionCommandsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibSelectionStageTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibStageCommandsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibStageModeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibSurfaceTextTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTeamTournamentBracketTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTeamTournamentPreparationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTeamTournamentSetupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTournamentArenaReleaseTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTournamentBracketTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTournamentPreparationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTournamentSetupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibTransformTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarFaultRejectionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarGraphicsErrorTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarMusicErrorTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarNullableBitmapTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarPartialSurfaceTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarPreparationMatrixTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarPreparationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarRetainedScratchTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWarSetupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLibWorldContactsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLoadedCatalogFilesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLoadedCatalogTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLoadingFilesFixture.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLoadingFilesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalLocalInputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMainMenuTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchContinuationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchLaunchTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchPreludeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchPreparationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchRoundTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMatchSelectionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMeleeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuCharacterTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuContentTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuCycleTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuInfoReadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuInfoWritingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuLoadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuPanelBitmapTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuPanelDrawingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuPanelUpdateTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuPresentationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuResourcesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuReturnTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuSoundStartupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMenuStartupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalModeLabelTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalModePanelScreenTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalModeScreenTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalModeSelectionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMovementTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalMusicPlaybackTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalNetworkClientTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalNetworkExitTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalNetworkMenuTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalNetworkNotificationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalObjectTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPausedGameplayTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPlaybackInformationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPostDrawCommandsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPostDrawLifecycleTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPostDrawOpointTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPostDrawSlotPrefixTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalPostHUDNoticesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalQueuedSoundTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalRandomInitializationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReceivedInputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReplayCompressionTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReplayFileOutputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReplayInitializationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReplayTickTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalReplayWriterTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalResultLayoutTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalResultRecordingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalSettingsLoadingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalSettingsWritingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalStageTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalStartupOutputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalStartupPanelTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalStartupStorageTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalStateTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalSurfaceSourceColorsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalTeamTournamentPreparationSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalTournamentArenaReleaseSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalTournamentPreparationSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarDependenciesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarOuterRollbackTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarPreparationMenuSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarPreparationMusicAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarPreparationSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarSetupNativeTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWarSetupSurfaceAdapter.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWaveLoaderTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWindowInitializationTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWindowInputTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWindowLifecycleTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldCPointsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldCameraTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldContactsTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldControlTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldDrawingTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldHUDTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldImpulsesTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldLinksTests.swift": 420,
+        "native/Tests/NTSDCoreTests/OriginalWorldPhysicsTests.swift": 420
+      },
+      "allRootAndFrozenCandidatesVerified": true
+    },
+    "protectedPackages": {
+      "fixtures": {
+        "files": 379,
+        "unchanged": true
+      },
+      "startup": {
+        "files": 46,
+        "unchanged": true
+      },
+      "commonSounds": {
+        "files": 19,
+        "unchanged": true
+      }
+    },
+    "allBundledResourcesVerified": true,
+    "jobs": {
+      "native1": {
+        "scope": "Native-only release catalog ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate1/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "(OriginalApplicationPoolTests|OriginalApplicationInterfaceInputsTests|OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalInitialLoadingTests|OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests)/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate1-inputs.json",
+        "nativeFiles": 934,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T07:32:24.628893+00:00",
+        "pid": 34328,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 512.7203258750001,
+        "endedUTC": "2026-09-13T07:40:57.318772+00:00"
+      },
+      "native2": {
+        "scope": "Native-only release pool/interface ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate2b/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "(OriginalApplicationPoolTests|OriginalApplicationInterfaceInputsTests|OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalInitialLoadingTests|OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests)/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate2b-inputs.json",
+        "nativeFiles": 934,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T07:44:27.559954+00:00",
+        "pid": 36399,
+        "status": "terminal",
+        "exitCode": 1,
+        "elapsedSeconds": 179.23260279099998,
+        "endedUTC": "2026-09-13T07:47:26.792625+00:00"
+      },
+      "native3": {
+        "scope": "Native-only release pool/interface ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate3/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "(OriginalApplicationPoolTests|OriginalApplicationInterfaceInputsTests|OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalInitialLoadingTests|OriginalInitialPoolAndInterfaceTests|OriginalBootstrapTests|OriginalInitialInterfaceTests|OriginalInitialInterfaceSurfaceTests)/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate3-inputs.json",
+        "nativeFiles": 934,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T07:49:44.167367+00:00",
+        "pid": 37360,
+        "status": "terminal",
+        "exitCode": 0,
+        "elapsedSeconds": 505.59038283399997,
+        "endedUTC": "2026-09-13T07:58:09.784971+00:00"
+      }
+    },
+    "allStudyJobPIDsAbsent": true,
+    "storage": {
+      "taskUsedBytes": 23229263872,
+      "limitBytes": 34359738368,
+      "internalFreeBytes": 100885016576,
+      "X5FreeBytes": 482769186816
+    },
+    "deliveryTool": {
+      "path": "tools/package_assets.py",
+      "bytes": 1563,
+      "sha256": "13c7045e0163dd637a33ec16bd51edb92d3ac00ff73384d450412207db9ced4c"
+    },
+    "reviewAndJobCandidateJoinsVerified": true,
+    "originalExecuted": false,
+    "NativeExecuted": false
+  },
+  "archives": {
+    "native-candidate3": {
+      "status": "verified",
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native-candidate3.tar",
+      "tar": {
+        "bytes": 4435640320,
+        "sha256": "967e5800ab4fd4dbd82a91706c4ce57b798ba91fb1d2d1c1ccdbb77f65a580ea"
+      },
+      "members": 934,
+      "payloadBytes": 4433954722,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "readbackComparedEveryByteToSource": true,
+      "originalExecuted": false,
+      "NativeExecuted": false,
+      "verifiedUTC": "2026-09-13T08:00:11.772401+00:00"
+    },
+    "pool-interface-evidence1": {
+      "status": "verified",
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/pool-interface-evidence1.tar",
+      "tar": {
+        "bytes": 137492480,
+        "sha256": "2a5234b620b071c0934a54566f480da8663c53615d5ad66bae9f17b3680f0d08"
+      },
+      "members": 124,
+      "payloadBytes": 137264856,
+      "allMemberNamesOrderBytesSHAModesVerified": true,
+      "readbackComparedEveryByteToSource": true,
+      "originalExecuted": false,
+      "NativeExecuted": false,
+      "verifiedUTC": "2026-09-13T08:00:12.176761+00:00"
+    }
+  },
+  "references": {
+    "plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/plan.json",
+      "bytes": 11192,
+      "sha256": "183c7bfb2d7c387420215386097d4f22233899ba4639fa2e13692c2b883771bf"
+    },
+    "validation-plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/validation-plan.json",
+      "bytes": 904,
+      "sha256": "27ffbde884a30001e44d68aa5ddfa66de500ec53d77b143611bdb919cbc570a0"
+    },
+    "initial-native.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/initial-native.json",
+      "bytes": 163367,
+      "sha256": "a2983a6883f9aa4ad3e2454a10f1b33fc92a07cf4c04ce268a6734037a1691b4"
+    },
+    "review1-plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review1-plan.json",
+      "bytes": 21689,
+      "sha256": "b6ffa8c168ff24b31b99a93097699ef0c0cd10007ac65bf2deadf7159c5989bd"
+    },
+    "review2-reference.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review2-reference.json",
+      "bytes": 14187,
+      "sha256": "b79445a96d65985c21609a3376dde5e2830a64541dc3d7cb3070209e8e3b7233"
+    },
+    "review3-core.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review3-core.json",
+      "bytes": 14495,
+      "sha256": "cc5de82d58ba568e6bf8c523569abbd9d4d498ee64f413ee4ead9375f0625513"
+    },
+    "review4-comparator.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review4-comparator.json",
+      "bytes": 21327,
+      "sha256": "758b998fd80c5c63005068143dc3e3121140f2b690e2eaec0ac7f6077668953d"
+    },
+    "reference1-error.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/reference1-error.json",
+      "bytes": 368,
+      "sha256": "f8e9fbcbe3d0c2da0cc52b5e60f6cb2f3025be0fc284ca99d7a03e31aafa780f"
+    },
+    "plan1-error.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/plan1-error.json",
+      "bytes": 291,
+      "sha256": "daac6788408c5e188ebe802a1422bfe5958b428dc6138afde04ac4f3fed0d773"
+    },
+    "reference2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/reference2.py",
+      "bytes": 9698,
+      "sha256": "451766b6a21e620984daa07db3410ce5b182d8267c1c6e06d6515ea8319b1de5"
+    },
+    "reference2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/reference2.json",
+      "bytes": 822,
+      "sha256": "8fa74c084e32002b5db4b24d7f071a884fed5911e70667d8708f803cf40ab4df"
+    },
+    "comparator-data-joins1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/comparator-data-joins1.json",
+      "bytes": 6760,
+      "sha256": "bc2936d5a526f1a5e96e4f368d294cc363c6c54aa72e64f5cd17d32ccfbafb11"
+    },
+    "amendment1-comparator-review.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/amendment1-comparator-review.json",
+      "bytes": 757,
+      "sha256": "249f40ba20c9cd236e73c3e43821b7ac7b699c80820cbb19f5bef70d3187aa87"
+    },
+    "amendment2-final-review-assertions.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/amendment2-final-review-assertions.json",
+      "bytes": 485,
+      "sha256": "f7c583a8e37e3377092876be2be30ac8d4f17abb470492ca7b71fcd01dd8d718"
+    },
+    "acceptance-plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/acceptance-plan.json",
+      "bytes": 325,
+      "sha256": "1ba73ed2cb2f80e751c30e3c3f28a73c02536ec4808b03a54f6592fa33b900a8"
+    },
+    "acceptance-plan2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/acceptance-plan2.json",
+      "bytes": 400,
+      "sha256": "dee46e6d91be6b2950168f3d9840217f7587f056e3f797c849f180d5e42bc22d"
+    },
+    "final-preservation2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/final-preservation2.json",
+      "bytes": 94205,
+      "sha256": "5ae47cc83b0d35e17d7be522f28ec82c449d807eafa2412504a5dab757915a43"
+    },
+    "archive-final2-storage.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/archive-final2-storage.json",
+      "bytes": 181,
+      "sha256": "fa6d1f99e8ddebd95715d41dc18662894d6a8097b1f898479fac31532846aba1"
+    },
+    "review5-preservation-plan.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review5-preservation-plan.json",
+      "bytes": 23747,
+      "sha256": "56320f7b09c8315214544b532a3656f9b569efd1e62c523807632b3e27506d6d"
+    },
+    "amendment3-compile-local-name.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/amendment3-compile-local-name.json",
+      "bytes": 521,
+      "sha256": "95921993c406820398df236d88ad2157bbc8a68c06f6663e975bf8185e48a84d"
+    },
+    "freeze2b-plan1-error.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/freeze2b-plan1-error.json",
+      "bytes": 415,
+      "sha256": "95bd2df4a4c0a324a20505977e321252402749a878e4b30a8467da8dadb0668c"
+    },
+    "candidate1-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate1-inputs.json",
+      "bytes": 166652,
+      "sha256": "e955fa7f0a7e546570d0f483bd40e70aa9abade8aa66fc50d9f9e1cbda41acf4"
+    },
+    "candidate2-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate2-inputs.json",
+      "bytes": 166653,
+      "sha256": "4d500a43936f40fdb374b23039be0ef056a028ea13f1168a6dbb177b03142bf4"
+    },
+    "candidate2b-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate2b-inputs.json",
+      "bytes": 166653,
+      "sha256": "6974ebd06981c844dce41f3742dd209249e6407eac8dfe4c8e66371b6a57a698"
+    },
+    "candidate3-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/candidate3-inputs.json",
+      "bytes": 166653,
+      "sha256": "65b71e635b90c432884281b9771110f650f6cdf85c8c1c42d00ee1ec923c1d4d"
+    },
+    "native1.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native1.job.json",
+      "bytes": 1314,
+      "sha256": "1104b39f775a2a805f63df816d77a9fe88079209b09cae457a7777dff70d1cc0"
+    },
+    "native1.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native1.config.json",
+      "bytes": 1168,
+      "sha256": "c61775478f4fbefdd481ec7f586b2f8878649a395ae931ff40d3402b5324017d"
+    },
+    "native1.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native1.log",
+      "bytes": 32082,
+      "sha256": "a20d0cc935be85d2e85b53e3a767b1b4db423970469b4cf4cda9d60b71a2e4d8"
+    },
+    "native2.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native2.job.json",
+      "bytes": 1324,
+      "sha256": "34cc2193129fcdf2c8dcc1b9a0b62d19c7b96ff0ac0f3bc62a6c8cf5e0ef2d94"
+    },
+    "native2.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native2.config.json",
+      "bytes": 1177,
+      "sha256": "32088666259419aaca59dc19da7688c88987e5591577c38184154ddbd3bcb3cb"
+    },
+    "native2.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native2.log",
+      "bytes": 22237,
+      "sha256": "32287c6a26bd68ac83ceb2f66717846783cb6ad3ec5a3d3e9976c35d8f625c6a"
+    },
+    "native3.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native3.job.json",
+      "bytes": 1322,
+      "sha256": "689183c1afe4aae68fd345f22b0855a3598fef6902bfea29041fe147eb575fcd"
+    },
+    "native3.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native3.config.json",
+      "bytes": 1175,
+      "sha256": "02ec8713a8c01e4e46083c7997f04540178b3d3f1a86247af2c5f787d67329af"
+    },
+    "native3.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/native3.log",
+      "bytes": 31930,
+      "sha256": "65af9ba0edf54d5f3b87671d1a7fb8620b732f5d48ab1a99623068b14559492c"
+    }
+  },
+  "review": {
+    "Core": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review3-core.json",
+      "bytes": 14495,
+      "sha256": "cc5de82d58ba568e6bf8c523569abbd9d4d498ee64f413ee4ead9375f0625513"
+    },
+    "comparator": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review4-comparator.json",
+      "bytes": 21327,
+      "sha256": "758b998fd80c5c63005068143dc3e3121140f2b690e2eaec0ac7f6077668953d"
+    },
+    "preservationAndCompileCorrection": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-pool-interface-native-20260913/review5-preservation-plan.json",
+      "bytes": 23747,
+      "sha256": "56320f7b09c8315214544b532a3656f9b569efd1e62c523807632b3e27506d6d"
+    },
+    "finalEvidenceReview": {
+      "status": "reviewed-no-material-blockers",
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-pool-interface-native-20260913/review6-final-evidence.json",
+      "bytes": 26697,
+      "sha256": "c7e4cb9c427a7f0aeba460a16f5b1d59d4640262a3e89f2828db6b6b2eebb78d",
+      "finiteNativeAcceptanceSupported": true,
+      "fullGoalComplete": false
+    },
+    "reviewedPublicationBeforeMetadata": {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-pool-interface-native-20260913/evidence-before-final-review-metadata.json",
+      "bytes": 119337,
+      "sha256": "4dc6367099b88733bf7cb515cf243a35ddc71aa925a638d362ee4d35f38af02e"
+    }
+  },
+  "failuresAndCorrections": {
+    "plan1": "Basename EXE path lookup failed before publication, resolved via declared baseline directory",
+    "reference1": "Wrapper-vs-raw DEFLATE assumption failed before reference outputs; corrected separate reference2",
+    "CoreReview": "Added canonical globals/outer/World interval to allocation exclusions before Native1",
+    "comparatorReview": "Source-derived11 global stores, final canonical and retained owners, complete graphics metadata and nil request bytes added before final candidate3; Native2 had a test-only local-name compile error, Native3 uses the identical assertions with the renamed local",
+    "Native2Compile": "Second local b renamed retainedCatalog only; zero tests ran in failed Native2",
+    "publicationPreparation": "Incorrect review status display-key lookup failed before freezer2b creation; actual schema and pins used afterward",
+    "oldExpectedUnchanged": true
+  },
+  "open": [
+    "41c581 input/loading caller/outer-loop/backend delivery",
+    "full original application return",
+    "draw consumers of new catalog/UI surfaces",
+    "actual Windows/device format/palette/raster/input/audio",
+    "full match/allcontent/network/cleanMac",
+    "three prior safety incidents; no blocked operation retried"
+  ]
+}

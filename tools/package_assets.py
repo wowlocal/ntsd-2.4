@@ -23,3 +23,7 @@ print(package_startup_inputs(destination.parent / "OriginalStartup"))
 
 from package_common_sounds import build_package as package_common_sounds, BASELINE as COMMON_SOURCE
 print(package_common_sounds(COMMON_SOURCE, destination.parent / "OriginalCommonSounds"))
+
+# Exact embedded DIB package consumed by the owned loading continuation.
+shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalLoadingInterface",
+                destination.parent / "OriginalLoadingInterface", dirs_exist_ok=True)
