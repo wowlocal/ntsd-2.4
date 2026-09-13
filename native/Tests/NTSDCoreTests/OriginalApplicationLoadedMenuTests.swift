@@ -28,7 +28,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
         }
         return try XCTUnwrap(parent)
     }
-    struct ResourcePoint: Equatable { let phase: OriginalMenuResourceCheckpoint,records: [UInt32:OriginalLoadedBitmap] }
+    struct ResourcePoint: Equatable { let phase: OriginalMenuResourceCheckpoint,globals: OriginalStateRecord,records: [UInt32:OriginalLoadedBitmap] }
     struct Environment: Equatable {
         var index = -1,api = 0,clock = 0
         var points: [String] = [],music: [OriginalMusicEvent] = [],front: [OriginalFrontScreenEvent] = []
@@ -87,16 +87,20 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
             "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":0x12345678,"postResult":0]))
     }
-    static func advance(_ session: inout S,_ env: inout Environment) throws -> S.PendingReturn {
+    static func advance(_ session: inout S,_ env: inout Environment,
+        character: @escaping (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in },
+        observeFront: @escaping (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in }) throws -> S.PendingReturn {
         let target = session.entry.loading.target
         return try session.advance(inputs:OriginalApplicationMenuInputsTests.inputs.get(),environment:&env,
             screenInput:.init(dcResult:0,dc:0x12345678,methodResult:0,drawResults:[0],shellResult:33),outputInput:output(target),
             allocate:{ try $2.allocate($0,$1) },bitmap:{ try $1.bitmap($0) },music:{ try $1.sound($0) },milliseconds:{ try $0.time() },
             observe:{ o,e in
                 switch o {
+                case .characterCheckpoint(let point,let state):try character(point,state,&e)
                 case .bitmap(let q,let r):e.bitmapOperations.append(.menu(.bitmap(q,r)));e.expectedOperations.append(.menu(.bitmap(q,r)))
                 case .front(let f):
                     e.front.append(f)
+                    try observeFront(f,&e)
                     switch f.kind {
                     case "blit":e.expectedOperations.append(.menu(.blit(try XCTUnwrap(f.blit),result:0)))
                     case "fill":e.expectedOperations.append(.menu(.fill(try XCTUnwrap(f.fill),result:0)))
@@ -115,7 +119,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
                     default:throw Stop.unexpected("uncompared front journal "+f.kind)
                     }
                 case .resourceCheckpoint(let p,let g,let records):
-                    e.resourcePoints.append(.init(phase:p,records:records))
+                    e.resourcePoints.append(.init(phase:p,globals:g,records:records))
                     if p.kind == .flag {
                         XCTAssertEqual(try g.integer(at:0x7c,as:UInt32.self),0)
                         let token = try g.integer(at:0x44f8fc-0x44d000,as:UInt32.self)

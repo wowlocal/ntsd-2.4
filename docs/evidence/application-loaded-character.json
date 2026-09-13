@@ -1,0 +1,1310 @@
+{
+  "schema": 1,
+  "UTC": "2026-09-13T12:51:58.943904+00:00",
+  "baseCommit": "11446d8d24faa3a1c965915e3eaddd7bbebd0903",
+  "status": "Finite Native human character/Bootstrap join accepted; full application card open",
+  "scope": "Two own34-screen human selection chains/68outer returns/66further loading entries beyond the fourth existing input ticket. Actual Bootstrap parent and own current catalog/resources; no new whole-original application capture.",
+  "nativeCodePins": {
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+      "bytes": 23429,
+      "sha256": "d6ae89a7d7ae71660624068f309262d0dc5908e267f19b420a4fead494ef847d"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift": {
+      "bytes": 16115,
+      "sha256": "9d2b70fda476c7ba4ed9be570938e1aea3673897771a38613c3d9797abbdc320"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterComparison.swift": {
+      "bytes": 14292,
+      "sha256": "2e6c3b2d038893f7a3f29349756b3e4594169a92bc39bcfb19e6a4f41571bd12"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift": {
+      "bytes": 23183,
+      "sha256": "2b456ff5a43784320226227cd5a1b0021a1b665c2eea92b7efc45cde6475af9b"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+      "bytes": 27974,
+      "sha256": "f535c3c1f5b33d7d1d9743bd76d71acc75dcc6cfc97198ee0e5a0ee01b5d5688"
+    }
+  },
+  "changedNativePins": {
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+      "bytes": 23429,
+      "sha256": "d6ae89a7d7ae71660624068f309262d0dc5908e267f19b420a4fead494ef847d"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterComparison.swift": {
+      "bytes": 14292,
+      "sha256": "2e6c3b2d038893f7a3f29349756b3e4594169a92bc39bcfb19e6a4f41571bd12"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift": {
+      "bytes": 16115,
+      "sha256": "9d2b70fda476c7ba4ed9be570938e1aea3673897771a38613c3d9797abbdc320"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift": {
+      "bytes": 23183,
+      "sha256": "2b456ff5a43784320226227cd5a1b0021a1b665c2eea92b7efc45cde6475af9b"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+      "bytes": 27974,
+      "sha256": "f535c3c1f5b33d7d1d9743bd76d71acc75dcc6cfc97198ee0e5a0ee01b5d5688"
+    }
+  },
+  "preservation": {
+    "UTC": "2026-09-13T12:50:18.638669+00:00",
+    "consumedPins": {
+      "native2.log": {
+        "bytes": 43951,
+        "sha256": "8b8a4a184fced50275992c6663ccfe52e2bfb6fa8667a0e6e3125f6f982e1edd"
+      },
+      "native2.job.json": {
+        "bytes": 1686,
+        "sha256": "e1bb411ed11855e52f7d4d8f82d3edc4eacd98fa9c48c600b3ff6c53613e207f"
+      },
+      "native2.config.json": {
+        "bytes": 1544,
+        "sha256": "e44f08111e7bbbc9903692881b295f20f661b81b9d64b21794ea9ee6a1c83201"
+      },
+      "candidate2-inputs.json": {
+        "bytes": 171297,
+        "sha256": "9d5a355e4fb6082c44e98d4fafe0b1715ad35281b387231798d649dbef5ca006"
+      },
+      "review1-contract.json": {
+        "bytes": 20120,
+        "sha256": "34be0472fe7b1705cc323aa6f2ffea8564ec89e2d57e8eb8c2831dece9d1d5a1"
+      },
+      "review4-return-projection.json": {
+        "bytes": 60509,
+        "sha256": "8ebb008b3e8ff002687b56f037e4a0c1b10df90ed3b9c5062a9d06b47ed8173a"
+      },
+      "validation-plan1.json": {
+        "bytes": 5966,
+        "sha256": "12997806c2443c5aadc299b735b6556e8c93c033681388424347ee37e293cee8"
+      },
+      "expected-test-methods1.json": {
+        "bytes": 4386,
+        "sha256": "aa23c134e1a22a444afe132163d45eaeb61e5239987aa964aada99675829f16c"
+      },
+      "plan1.json": {
+        "bytes": 6458,
+        "sha256": "71413be380b7580f77716650369d15b279843ae3e20b28a5a54d3a2def5b9f22"
+      },
+      "native-base-pins.json": {
+        "bytes": 170920,
+        "sha256": "d41062a8f26f7cf67bc3924dad6cce5491c058d57e5d63e03fd95fd2123bcb70"
+      },
+      "amendment1-comparison-contract.json": {
+        "bytes": 1647,
+        "sha256": "2f58ad129062ad0caf49d75cb3369f8578db5d72686cce9b04069f89a8a8e98d"
+      },
+      "freeze-candidate2.py": {
+        "bytes": 2357,
+        "sha256": "28f49cf3b2020745a705ac8701f527fb36bebdb8607667cdbc2fb976813d2c81"
+      },
+      "run-native2.py": {
+        "bytes": 2067,
+        "sha256": "2519cfb626270ffe117b8affadff11a29d48d6b99b18591327c211d18948e358"
+      },
+      "verify-stage2.py": {
+        "bytes": 9137,
+        "sha256": "441571dd1cceb9dd64ae0159a9f4ddbb29ca0afd341f51a1d37e8b969c5276dd"
+      },
+      "saved-data-reader-error1.json": {
+        "bytes": 339,
+        "sha256": "e979cd721e82606ab0da5d17f039fa0c746ccb172f6a39b794e2f8576c7ea511"
+      },
+      "review2-candidate.json": {
+        "bytes": 23546,
+        "sha256": "fdd603ad7ebd3bc7ca13f2c3069daf579369db128b88598347bf1d739bbf24cd"
+      },
+      "amendment2-source-return.json": {
+        "bytes": 1135,
+        "sha256": "6ec4cbe5e9935a24901a085f53534be69b4e1f0875195d1b1e45826c490385aa"
+      },
+      "native1-failure-review.json": {
+        "bytes": 25476,
+        "sha256": "e3c0cdc548c46392065d10e49e7b9c704613b871817d6929201e9bac012a08ba"
+      },
+      "native1.log": {
+        "bytes": 58953,
+        "sha256": "0c78aaba40372e64ea01f2990b852b1461983236df35d7b8aa7c5bce80b96759"
+      },
+      "native1.job.json": {
+        "bytes": 1684,
+        "sha256": "d9d2ba188cf659df0045741999144f0ef95b543bafc193cf793d8cfec00838a0"
+      },
+      "native1.config.json": {
+        "bytes": 1544,
+        "sha256": "14153a3852550bf409893ff8937b165595e85fd636c1844fa55bb99ddf20a609"
+      },
+      "candidate1-inputs.json": {
+        "bytes": 171297,
+        "sha256": "a1a84c117dbb519633cd5165878cb3134fb10773d32b9dfc2381db4d42dd84c3"
+      },
+      "freeze-candidate1.py": {
+        "bytes": 2255,
+        "sha256": "e099c25beb7b98ef282e0ee84b869f7fa1cd023c25c7e1e8219f8fa0842c670b"
+      },
+      "run-native1.py": {
+        "bytes": 2067,
+        "sha256": "67058cdbf5c8b89ff8c57e6c7f4531ffabbcee392bb824c1538a1a7f409c02a7"
+      }
+    },
+    "nativeFiles": 960,
+    "baseFiles": 958,
+    "nativeBytes": 4438113671,
+    "changed": {
+      "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+        "bytes": 23429,
+        "sha256": "d6ae89a7d7ae71660624068f309262d0dc5908e267f19b420a4fead494ef847d"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterComparison.swift": {
+        "bytes": 14292,
+        "sha256": "2e6c3b2d038893f7a3f29349756b3e4594169a92bc39bcfb19e6a4f41571bd12"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift": {
+        "bytes": 16115,
+        "sha256": "9d2b70fda476c7ba4ed9be570938e1aea3673897771a38613c3d9797abbdc320"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift": {
+        "bytes": 23183,
+        "sha256": "2b456ff5a43784320226227cd5a1b0021a1b665c2eea92b7efc45cde6475af9b"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+        "bytes": 27974,
+        "sha256": "f535c3c1f5b33d7d1d9743bd76d71acc75dcc6cfc97198ee0e5a0ee01b5d5688"
+      }
+    },
+    "fixturesUnchanged": 383,
+    "currentFixtures": 383,
+    "packagedFiles": 471,
+    "sourcePins": {
+      "AGENTS.md": {
+        "pin": {
+          "bytes": 9743,
+          "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/AGENTS.md",
+        "currentPin": {
+          "bytes": 9743,
+          "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+        }
+      },
+      "AGENTS_HISTORY_2026-09-12.md": {
+        "pin": {
+          "bytes": 364046,
+          "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/AGENTS_HISTORY_2026-09-12.md",
+        "currentPin": {
+          "bytes": 364046,
+          "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+        }
+      },
+      "docs/CONTINUE_GOAL.md": {
+        "pin": {
+          "bytes": 7743,
+          "sha256": "223ad1dca37505f844ca97dd1cfaa00db8131e8d54322a4800b72531578311c6"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/CONTINUE_GOAL.md",
+        "currentPin": {
+          "bytes": 7743,
+          "sha256": "223ad1dca37505f844ca97dd1cfaa00db8131e8d54322a4800b72531578311c6"
+        }
+      },
+      "docs/research/WORKFLOW.md": {
+        "pin": {
+          "bytes": 25142,
+          "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/WORKFLOW.md",
+        "currentPin": {
+          "bytes": 25142,
+          "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+        }
+      },
+      "docs/research/TASK_TEMPLATE.md": {
+        "pin": {
+          "bytes": 10500,
+          "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/TASK_TEMPLATE.md",
+        "currentPin": {
+          "bytes": 10500,
+          "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f"
+        }
+      },
+      "docs/research/CURRENT_WORK.md": {
+        "pin": {
+          "bytes": 45945,
+          "sha256": "9e3cb9c94f05df28df1ee4d80c81f8ff8b58b6d225231ad537221693456a81d6"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/CURRENT_WORK.md",
+        "currentPin": {
+          "bytes": 47560,
+          "sha256": "ae87ee4a32ed3ab225ff720e49aeed0bde415370cc43ee8f944dd84b60aefc06"
+        }
+      },
+      "docs/RESEARCH_MAP.md": {
+        "pin": {
+          "bytes": 257663,
+          "sha256": "646e283b51f3e1542591e5d9c48ac5f3f7b5b66f9deddfab03c1972b2173b492"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/RESEARCH_MAP.md",
+        "currentPin": {
+          "bytes": 258795,
+          "sha256": "a6c394563958b79a76a05aca6f8281f36d7db4ea378651706a93fb83b120ac69"
+        }
+      },
+      "docs/research/APPLICATION_LOADED_RETURN_PLAN.md": {
+        "pin": {
+          "bytes": 9611,
+          "sha256": "259adc64dbf274747d126047876938a35bd7e19979c8e5afd7a077bdff0e22a6"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/APPLICATION_LOADED_RETURN_PLAN.md",
+        "currentPin": {
+          "bytes": 11146,
+          "sha256": "6b21720e8b29a1943df27b8bc5c07d262741e4852a6619c88a77e2214e3eb424"
+        }
+      },
+      "docs/research/APPLICATION_LOADED_CYCLE.md": {
+        "pin": {
+          "bytes": 7284,
+          "sha256": "34d95bfbad15ef2ce58b706cbc39cec15f24c85462c69c46ff658ad2b1c23290"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/APPLICATION_LOADED_CYCLE.md",
+        "currentPin": {
+          "bytes": 7284,
+          "sha256": "34d95bfbad15ef2ce58b706cbc39cec15f24c85462c69c46ff658ad2b1c23290"
+        }
+      },
+      "docs/evidence/application-loaded-cycle.json": {
+        "pin": {
+          "bytes": 57793,
+          "sha256": "b3d65b6e9fec1e02d8b34e95273aa047652bb3c37e8fb4320c91727215de4edb"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/evidence/application-loaded-cycle.json",
+        "currentPin": {
+          "bytes": 57793,
+          "sha256": "b3d65b6e9fec1e02d8b34e95273aa047652bb3c37e8fb4320c91727215de4edb"
+        }
+      },
+      "docs/research/CHARACTER_SCREEN.md": {
+        "pin": {
+          "bytes": 15953,
+          "sha256": "83c4f712d3a7ef48716a17071c24834dc980f6cd4e35960b54c6b736ec9398aa"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/CHARACTER_SCREEN.md",
+        "currentPin": {
+          "bytes": 15953,
+          "sha256": "83c4f712d3a7ef48716a17071c24834dc980f6cd4e35960b54c6b736ec9398aa"
+        }
+      },
+      "docs/research/FRESH_CHARACTER_MENU.md": {
+        "pin": {
+          "bytes": 10969,
+          "sha256": "1bb828ffc95eb2b661cac7bf3c26d1f8d81cc542c5996a598464de52fbc034ec"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/FRESH_CHARACTER_MENU.md",
+        "currentPin": {
+          "bytes": 10969,
+          "sha256": "1bb828ffc95eb2b661cac7bf3c26d1f8d81cc542c5996a598464de52fbc034ec"
+        }
+      },
+      "docs/research/LIB_CHARACTER_ROSTER.md": {
+        "pin": {
+          "bytes": 10653,
+          "sha256": "0b141a6807bdb009f78add5ce3faa29940b437f14a8af658843c5e11a0e69b01"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/LIB_CHARACTER_ROSTER.md",
+        "currentPin": {
+          "bytes": 10653,
+          "sha256": "0b141a6807bdb009f78add5ce3faa29940b437f14a8af658843c5e11a0e69b01"
+        }
+      },
+      "docs/research/MENU_CYCLE.md": {
+        "pin": {
+          "bytes": 13597,
+          "sha256": "afe227029a680c0bc9cb9344711bff40d2cd641784b6161a9fa69fd02e3d843d"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/MENU_CYCLE.md",
+        "currentPin": {
+          "bytes": 13597,
+          "sha256": "afe227029a680c0bc9cb9344711bff40d2cd641784b6161a9fa69fd02e3d843d"
+        }
+      },
+      "docs/research/INPUT_CONTROL.md": {
+        "pin": {
+          "bytes": 17937,
+          "sha256": "4cbd91e321b4f922d4b67b2be333e3a4260a161355e8465c9459cd111dbb49ee"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/research/INPUT_CONTROL.md",
+        "currentPin": {
+          "bytes": 17937,
+          "sha256": "4cbd91e321b4f922d4b67b2be333e3a4260a161355e8465c9459cd111dbb49ee"
+        }
+      },
+      "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+        "pin": {
+          "bytes": 38476,
+          "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/base-inputs/docs/evidence/codex-safety-incidents-2026-09-12.json",
+        "currentPin": {
+          "bytes": 38476,
+          "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+        }
+      }
+    },
+    "testCount": 57,
+    "testSeconds": 365.385,
+    "buildSeconds": 319.31,
+    "tests": [
+      {
+        "suite": "OriginalApplicationBootstrapTests",
+        "name": "testLateFirstMenuFailuresRetainStartupAndResize",
+        "seconds": 10.487
+      },
+      {
+        "suite": "OriginalApplicationBootstrapTests",
+        "name": "testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+        "seconds": 0.363
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testCatalogAllocationCannotOverlapRetainedCommonPCM",
+        "seconds": 6.53
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+        "seconds": 9.915
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+        "seconds": 37.318
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testResolvedSourceSnapshotAndNullSourceBoundary",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testCurrentAliasesUnknownBytesAndReturnedResourceChanges",
+        "seconds": 18.417
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testEveryLateInputFailureKeepsParentAndEnvironment",
+        "seconds": 0.033
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testInvalidBindingAndConflictingWritersRejectAtomically",
+        "seconds": 0.001
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testOwnLoadedInputRetainsCurrentOwnersAtAllSixCheckpoints",
+        "seconds": 0.033
+      },
+      {
+        "suite": "OriginalApplicationLoadedCharacterTests",
+        "name": "testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits",
+        "seconds": 16.787
+      },
+      {
+        "suite": "OriginalApplicationLoadedCharacterTests",
+        "name": "testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns",
+        "seconds": 5.572
+      },
+      {
+        "suite": "OriginalApplicationLoadedCycleTests",
+        "name": "testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+        "seconds": 0.271
+      },
+      {
+        "suite": "OriginalApplicationLoadedCycleTests",
+        "name": "testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+        "seconds": 0.002
+      },
+      {
+        "suite": "OriginalApplicationLoadedCycleTests",
+        "name": "testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+        "seconds": 0.081
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+        "seconds": 16.76
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testForeignStaleAndOverlappingOwnersAreRejected",
+        "seconds": 0.052
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+        "seconds": 0.154
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+        "seconds": 0.241
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testOwnLoadingParentsRetainTheirActualLoopContinuation",
+        "seconds": 6.487
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testResumedCounterUsesSignedWrapRule",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testRetainedMessageAndEveryLateTailFailure",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testSuspendedTailAgainstAllSavedTimerDecisions",
+        "seconds": 0.043
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 9.903
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 41.847
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 3.241
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testElevenOriginalDIBsFullPixelsMasksAndRows",
+        "seconds": 0.055
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testMissingCorruptExtraAndSymlinkPackagesAreRejected",
+        "seconds": 0.061
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testOrdinaryAppPackageAndOwnedSnapshot",
+        "seconds": 0.012
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testCompleteOwnedCatalogPoolAndInterface",
+        "seconds": 1.759
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testLateFailuresKeepWholeEntryAndFreshRetry",
+        "seconds": 15.235
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testOwnedRangeAndCapturedWriteBoundaries",
+        "seconds": 33.441
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testPackageRejectsMissingCorruptAndUnexpectedFiles",
+        "seconds": 0.267
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+        "seconds": 0.159
+      },
+      {
+        "suite": "OriginalCharacterScreenTests",
+        "name": "testOwnKeyboardPhasesSelectNarutoAndSasukeAndConfirmTeams",
+        "seconds": 14.19
+      },
+      {
+        "suite": "OriginalCharacterScreenTests",
+        "name": "testSameSelectionWithRampBackingAndReverseActorAddresses",
+        "seconds": 14.185
+      },
+      {
+        "suite": "OriginalFreshCharacterMenuTests",
+        "name": "testFreshResourcesHumanCharacterBodyAndActualReturns",
+        "seconds": 6.018
+      },
+      {
+        "suite": "OriginalFreshCharacterMenuTests",
+        "name": "testLateFreshMenuFailuresRollBackEveryOwner",
+        "seconds": 2.818
+      },
+      {
+        "suite": "OriginalFreshLibraryMenuTests",
+        "name": "testFreshMusicResourcesScreenAndActualReturns",
+        "seconds": 3.288
+      },
+      {
+        "suite": "OriginalFreshLibraryMenuTests",
+        "name": "testLateFreshMenuFailuresRollBackEveryOwner",
+        "seconds": 1.197
+      },
+      {
+        "suite": "OriginalLibCharacterRosterTests",
+        "name": "testLateSelectedPortraitAndPresentRollBackCurrentCall",
+        "seconds": 9.934
+      },
+      {
+        "suite": "OriginalLibCharacterRosterTests",
+        "name": "testRetainedRosterTeamsAndReadyWithLibraryText",
+        "seconds": 12.367
+      },
+      {
+        "suite": "OriginalMenuCycleTests",
+        "name": "testOwnOuterCallsAcquireKeyboardOnOriginalPhaseAndConfirmVS",
+        "seconds": 12.064
+      },
+      {
+        "suite": "OriginalMenuCycleTests",
+        "name": "testSameSequenceWithRampBackingAndReverseActorAddresses",
+        "seconds": 12.047
+      },
+      {
+        "suite": "OriginalMenuReturnTests",
+        "name": "testOwnModeScreenReturnsThroughMenuMatchAndEarlyDispatcher",
+        "seconds": 11.732
+      },
+      {
+        "suite": "OriginalMenuReturnTests",
+        "name": "testSameReturnsWithRampBackingAndOriginalReverseAddresses",
+        "seconds": 12.003
+      },
+      {
+        "suite": "OriginalMenuStartupTests",
+        "name": "testOwnMenuLoadingContinuesThroughInputRoundAndCharacterMenuResources",
+        "seconds": 7.537
+      },
+      {
+        "suite": "OriginalMenuStartupTests",
+        "name": "testSameStartupWithRetainedRampResourcesAndReverseActorAddresses",
+        "seconds": 7.564
+      },
+      {
+        "suite": "OriginalWindowInputTests",
+        "name": "testLateCloseAndMissingReplayOwnershipRollBackWholeCallback",
+        "seconds": 0.204
+      },
+      {
+        "suite": "OriginalWindowInputTests",
+        "name": "testTextIndexAliasLateFailureAndUnknownStorageRollBack",
+        "seconds": 0.18
+      },
+      {
+        "suite": "OriginalWindowInputTests",
+        "name": "testWholeCallbacksOwnTextSequencesAndExactStoreOrder",
+        "seconds": 2.527
+      }
+    ],
+    "job": {
+      "scope": "Native-only release owned loaded-menu and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalWindowInputTests|OriginalApplicationLoadedCycleTests|OriginalApplicationBootstrapTests|OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests|OriginalCharacterScreenTests|OriginalLibCharacterRosterTests|OriginalApplicationLoadedCharacterTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate2-inputs.json",
+      "nativeFiles": 960,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T12:38:27.958268+00:00",
+      "pid": 85792,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 686.447261208,
+      "endedUTC": "2026-09-13T12:49:54.396163+00:00"
+    },
+    "exactJobConfigCandidateCommandAndFilterVerified": true,
+    "allRootFrozenAndPackageBytesVerified": true,
+    "originalExecuted": false,
+    "fullOriginalApplicationReturnMatched": false,
+    "backendPublished": false,
+    "fullGoalComplete": false
+  },
+  "nativeArchive": {
+    "UTC": "2026-09-13T12:50:25.834995+00:00",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native-candidate2.tar",
+    "pin": {
+      "bytes": 4439848960,
+      "sha256": "893baa82b4c674ea73b1cc2fc974f7743a274a4024360d4578f233396abc697a"
+    },
+    "members": 960,
+    "payloadBytes": 4438113671,
+    "namesTypesSizesModesAndAllBodiesVerified": true
+  },
+  "evidenceArchive": {
+    "UTC": "2026-09-13T12:51:42.110190+00:00",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/loaded-character-evidence2.tar",
+    "pin": {
+      "bytes": 2252800,
+      "sha256": "da703c47ae23fb99e7d1e763c015579fcba63d1bb326c9c836f85bc51e9916af"
+    },
+    "members": 58,
+    "payloadBytes": 2140385,
+    "namesTypesSizesModesAndAllBodiesVerified": true,
+    "originalExecuted": false,
+    "NativeExecuted": false,
+    "taskUsedBytes": 18845646848
+  },
+  "failedCandidate1": {
+    "UTC": "2026-09-13T12:29:43.012692+00:00",
+    "job": {
+      "scope": "Native-only release owned loaded-menu and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalWindowInputTests|OriginalApplicationLoadedCycleTests|OriginalApplicationBootstrapTests|OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests|OriginalCharacterScreenTests|OriginalLibCharacterRosterTests|OriginalApplicationLoadedCharacterTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1-inputs.json",
+      "nativeFiles": 960,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T12:17:14.930536+00:00",
+      "pid": 82297,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 694.7100325,
+      "endedUTC": "2026-09-13T12:28:49.668846+00:00"
+    },
+    "log": {
+      "bytes": 58953,
+      "sha256": "0c78aaba40372e64ea01f2990b852b1461983236df35d7b8aa7c5bce80b96759"
+    },
+    "reportedMethods": 57,
+    "passed": [
+      [
+        "OriginalApplicationBootstrapTests",
+        "testLateFirstMenuFailuresRetainStartupAndResize",
+        "10.265"
+      ],
+      [
+        "OriginalApplicationBootstrapTests",
+        "testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+        "0.363"
+      ],
+      [
+        "OriginalApplicationCatalogSessionTests",
+        "testCatalogAllocationCannotOverlapRetainedCommonPCM",
+        "6.494"
+      ],
+      [
+        "OriginalApplicationCatalogSessionTests",
+        "testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+        "9.761"
+      ],
+      [
+        "OriginalApplicationCatalogSessionTests",
+        "testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+        "37.298"
+      ],
+      [
+        "OriginalApplicationGraphicsTests",
+        "testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationGraphicsTests",
+        "testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationGraphicsTests",
+        "testResolvedSourceSnapshotAndNullSourceBoundary",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationInputTests",
+        "testCurrentAliasesUnknownBytesAndReturnedResourceChanges",
+        "18.638"
+      ],
+      [
+        "OriginalApplicationInputTests",
+        "testEveryLateInputFailureKeepsParentAndEnvironment",
+        "0.033"
+      ],
+      [
+        "OriginalApplicationInputTests",
+        "testInvalidBindingAndConflictingWritersRejectAtomically",
+        "0.001"
+      ],
+      [
+        "OriginalApplicationInputTests",
+        "testOwnLoadedInputRetainsCurrentOwnersAtAllSixCheckpoints",
+        "0.033"
+      ],
+      [
+        "OriginalApplicationLoadedCharacterTests",
+        "testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits",
+        "16.692"
+      ],
+      [
+        "OriginalApplicationLoadedCycleTests",
+        "testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+        "0.269"
+      ],
+      [
+        "OriginalApplicationLoadedCycleTests",
+        "testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+        "0.001"
+      ],
+      [
+        "OriginalApplicationLoadedCycleTests",
+        "testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+        "0.081"
+      ],
+      [
+        "OriginalApplicationLoadedMenuTests",
+        "testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+        "16.706"
+      ],
+      [
+        "OriginalApplicationLoadedMenuTests",
+        "testForeignStaleAndOverlappingOwnersAreRejected",
+        "0.051"
+      ],
+      [
+        "OriginalApplicationLoadedMenuTests",
+        "testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+        "0.149"
+      ],
+      [
+        "OriginalApplicationLoadedMenuTests",
+        "testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationLoadedMenuTests",
+        "testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+        "0.247"
+      ],
+      [
+        "OriginalApplicationLoopContinuationTests",
+        "testOwnLoadingParentsRetainTheirActualLoopContinuation",
+        "6.660"
+      ],
+      [
+        "OriginalApplicationLoopContinuationTests",
+        "testResumedCounterUsesSignedWrapRule",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationLoopContinuationTests",
+        "testRetainedMessageAndEveryLateTailFailure",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationLoopContinuationTests",
+        "testSuspendedTailAgainstAllSavedTimerDecisions",
+        "0.044"
+      ],
+      [
+        "OriginalApplicationMenuInputTests",
+        "testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "9.845"
+      ],
+      [
+        "OriginalApplicationMenuInputTests",
+        "testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "41.279"
+      ],
+      [
+        "OriginalApplicationMenuInputTests",
+        "testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationMenuInputTests",
+        "testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "3.181"
+      ],
+      [
+        "OriginalApplicationMenuInputsTests",
+        "testElevenOriginalDIBsFullPixelsMasksAndRows",
+        "0.057"
+      ],
+      [
+        "OriginalApplicationMenuInputsTests",
+        "testMissingCorruptExtraAndSymlinkPackagesAreRejected",
+        "0.058"
+      ],
+      [
+        "OriginalApplicationMenuInputsTests",
+        "testOrdinaryAppPackageAndOwnedSnapshot",
+        "0.013"
+      ],
+      [
+        "OriginalApplicationPoolTests",
+        "testCompleteOwnedCatalogPoolAndInterface",
+        "1.768"
+      ],
+      [
+        "OriginalApplicationPoolTests",
+        "testLateFailuresKeepWholeEntryAndFreshRetry",
+        "15.244"
+      ],
+      [
+        "OriginalApplicationPoolTests",
+        "testOwnedRangeAndCapturedWriteBoundaries",
+        "33.420"
+      ],
+      [
+        "OriginalApplicationStartupInputsTests",
+        "testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationStartupInputsTests",
+        "testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+        "0.000"
+      ],
+      [
+        "OriginalApplicationStartupInputsTests",
+        "testPackageRejectsMissingCorruptAndUnexpectedFiles",
+        "0.259"
+      ],
+      [
+        "OriginalApplicationStartupInputsTests",
+        "testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+        "0.153"
+      ],
+      [
+        "OriginalCharacterScreenTests",
+        "testOwnKeyboardPhasesSelectNarutoAndSasukeAndConfirmTeams",
+        "14.286"
+      ],
+      [
+        "OriginalCharacterScreenTests",
+        "testSameSelectionWithRampBackingAndReverseActorAddresses",
+        "14.192"
+      ],
+      [
+        "OriginalFreshCharacterMenuTests",
+        "testFreshResourcesHumanCharacterBodyAndActualReturns",
+        "5.871"
+      ],
+      [
+        "OriginalFreshCharacterMenuTests",
+        "testLateFreshMenuFailuresRollBackEveryOwner",
+        "2.737"
+      ],
+      [
+        "OriginalFreshLibraryMenuTests",
+        "testFreshMusicResourcesScreenAndActualReturns",
+        "3.071"
+      ],
+      [
+        "OriginalFreshLibraryMenuTests",
+        "testLateFreshMenuFailuresRollBackEveryOwner",
+        "1.168"
+      ],
+      [
+        "OriginalLibCharacterRosterTests",
+        "testLateSelectedPortraitAndPresentRollBackCurrentCall",
+        "9.885"
+      ],
+      [
+        "OriginalLibCharacterRosterTests",
+        "testRetainedRosterTeamsAndReadyWithLibraryText",
+        "12.466"
+      ],
+      [
+        "OriginalMenuCycleTests",
+        "testOwnOuterCallsAcquireKeyboardOnOriginalPhaseAndConfirmVS",
+        "12.114"
+      ],
+      [
+        "OriginalMenuCycleTests",
+        "testSameSequenceWithRampBackingAndReverseActorAddresses",
+        "12.093"
+      ],
+      [
+        "OriginalMenuReturnTests",
+        "testOwnModeScreenReturnsThroughMenuMatchAndEarlyDispatcher",
+        "11.966"
+      ],
+      [
+        "OriginalMenuReturnTests",
+        "testSameReturnsWithRampBackingAndOriginalReverseAddresses",
+        "12.025"
+      ],
+      [
+        "OriginalMenuStartupTests",
+        "testOwnMenuLoadingContinuesThroughInputRoundAndCharacterMenuResources",
+        "7.631"
+      ],
+      [
+        "OriginalMenuStartupTests",
+        "testSameStartupWithRetainedRampResourcesAndReverseActorAddresses",
+        "7.604"
+      ],
+      [
+        "OriginalWindowInputTests",
+        "testLateCloseAndMissingReplayOwnershipRollBackWholeCallback",
+        "0.198"
+      ],
+      [
+        "OriginalWindowInputTests",
+        "testTextIndexAliasLateFailureAndUnknownStorageRollBack",
+        "0.177"
+      ],
+      [
+        "OriginalWindowInputTests",
+        "testWholeCallbacksOwnTextSequencesAndExactStoreOrder",
+        "2.589"
+      ]
+    ],
+    "failed": [
+      [
+        "OriginalApplicationLoadedCharacterTests",
+        "testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns",
+        "6.179"
+      ]
+    ],
+    "failures": 34,
+    "seconds": 365.316,
+    "buildSeconds": 326.85,
+    "errors": [
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")",
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift:120: error: -[NTSDCoreTests.OriginalApplicationLoadedCharacterTests testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns] : XCTAssertEqual failed: (\"[20, 4537548, 671096864, 0, 16777216, 0]\") is not equal to (\"[44, 0, 1]\")"
+    ],
+    "meaningfulCharacterChainsExecuted": 2,
+    "qualification": "Both34-screen chains executed through diagnostics and final assertions;34 failed assertions are the fixed-source-flip expectation in the control chain. This run is not accepted. Other55 retained methods and the new rollback method passed; no cached unexecuted-pass claim.",
+    "reviewGap": "Pre-run author/reviewer missed differing source display modes. Read-only full68return audit confirms34mode1Flip and34mode3Blt; preserve oldtest/candidate/log.",
+    "native1Accepted": false,
+    "sourceFault": false,
+    "expectedChanged": false,
+    "coreChanged": false,
+    "originalExecuted": false
+  },
+  "independentReview": {
+    "stage": "Final contract, candidate, terminal tests, preservation and archive review complete",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review6-final.json",
+    "pin": {
+      "bytes": 28335,
+      "sha256": "b4ddc684bad1f8ceaeb6713e0b87060a07b65b19a143633e3b61894969013bb2"
+    },
+    "materialBlockers": []
+  },
+  "comparison": {
+    "parent": "Own Bootstrap/case47/common/full catalog/pool/input and first loaded menus; old source comparisons unchanged.",
+    "sequence": "Original acquired seat/button schedule through actual current controller config/WndProc/input cadence; two human joins, generic ordinal selection17/21, character/team confirmations, final readiness/countdown147.",
+    "state": "Cached startup previous-menu write verified separately. Whole source human World/400Actor/global deltas at12points percase plus full write-footprint entry equality and five semantic locals. Expected remains comparator-owned; unmodified own bytes/masks retained.",
+    "catalog": "137 ID/type/name/portrait input joins,42 known portrait references and95unknown fields,829bitmapordinal/path/fullrecord/mask joins. Current match supplies drawing storage; original pool parent supplies identity only.",
+    "rendering": "312draws perchain, currentrawreads+masks and sourceclip/Blt; explicit library SetBkMode1 and18currentWinMain sound methods perchain. All appended graphics/current owners/sourcecolors independently projected.",
+    "returning": "Full returned model/state compared to source-checked body plusheldclear; exact5returncheckpoints andactualdisplaymode present, complete journals and realBootstrap outertail.",
+    "rollback": "Body/lateportraitBlt/textOut/present/return/outertime/sleep/finalcommit; freshretry andpriorcommit retention. Currentportrait -7knownfield sentinel and controlled selectionStage rejection are Native-only controls."
+  },
+  "limits": [
+    "This is a finite Native application composition and declared projection of saved original evidence, not a new whole-original app trace.",
+    "Computer/arena selection, preparation/gameplay and played fullmatch remain required.",
+    "Declared fill backing/COM/GDI/socket/clock responses are not actual Windows/device behavior.",
+    "No backend publication, native-window/input/audio/latency/raster or clean-Mac acceptance.",
+    "Source faults and retained safety incidents remain open; no blocked operation retry or original execution.",
+    "Single host publication is still required for value-copied session effects."
+  ],
+  "workFiles": {
+    "amendment1-comparison-contract.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/amendment1-comparison-contract.json",
+      "bytes": 1647,
+      "sha256": "2f58ad129062ad0caf49d75cb3369f8578db5d72686cce9b04069f89a8a8e98d"
+    },
+    "amendment2-source-return.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/amendment2-source-return.json",
+      "bytes": 1135,
+      "sha256": "6ec4cbe5e9935a24901a085f53534be69b4e1f0875195d1b1e45826c490385aa"
+    },
+    "archive-evidence1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/archive-evidence1.py",
+      "bytes": 4195,
+      "sha256": "194a33089ae29306e186596bb5aff097f3c5526be1ef175ea3f0e12c9c34b134"
+    },
+    "archive-evidence2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/archive-evidence2.py",
+      "bytes": 4389,
+      "sha256": "ae50da3713cdcdb2df381e55f2e8e07e7b6cc6e66dad1ae413c7edf62385bb30"
+    },
+    "candidate1-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate1-inputs.json",
+      "bytes": 171297,
+      "sha256": "a1a84c117dbb519633cd5165878cb3134fb10773d32b9dfc2381db4d42dd84c3"
+    },
+    "candidate2-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/candidate2-inputs.json",
+      "bytes": 171297,
+      "sha256": "9d5a355e4fb6082c44e98d4fafe0b1715ad35281b387231798d649dbef5ca006"
+    },
+    "evidence-archive2-members.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/evidence-archive2-members.json",
+      "bytes": 18317,
+      "sha256": "294d01bb9685d8d5b69911bb4ee32f7ab3d833200f4977c3a473937c0c1c5331"
+    },
+    "evidence-archive2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/evidence-archive2.json",
+      "bytes": 507,
+      "sha256": "da305f8df0c6e03919cd98d0e36b3f4a829467511e6d6e324eb9ea9afe76f33a"
+    },
+    "expected-test-methods1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/expected-test-methods1.json",
+      "bytes": 4386,
+      "sha256": "aa23c134e1a22a444afe132163d45eaeb61e5239987aa964aada99675829f16c"
+    },
+    "freeze-candidate1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/freeze-candidate1.py",
+      "bytes": 2255,
+      "sha256": "e099c25beb7b98ef282e0ee84b869f7fa1cd023c25c7e1e8219f8fa0842c670b"
+    },
+    "freeze-candidate2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/freeze-candidate2.py",
+      "bytes": 2357,
+      "sha256": "28f49cf3b2020745a705ac8701f527fb36bebdb8607667cdbc2fb976813d2c81"
+    },
+    "native-archive2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native-archive2.json",
+      "bytes": 417,
+      "sha256": "2136c5bc8f6b2c653cba4d9f6dbb2aee25cadfefdc90dadb0697138d7d34a0f5"
+    },
+    "native-base-pins.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native-base-pins.json",
+      "bytes": 170920,
+      "sha256": "d41062a8f26f7cf67bc3924dad6cce5491c058d57e5d63e03fd95fd2123bcb70"
+    },
+    "native1-failure-review.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native1-failure-review.json",
+      "bytes": 25476,
+      "sha256": "e3c0cdc548c46392065d10e49e7b9c704613b871817d6929201e9bac012a08ba"
+    },
+    "native1-live1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native1-live1.json",
+      "bytes": 7514,
+      "sha256": "7e844f3536afbfc930fd5ce44e12b601e7751abb6a188443fd8c3757c67c8c9c"
+    },
+    "native1.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native1.config.json",
+      "bytes": 1544,
+      "sha256": "14153a3852550bf409893ff8937b165595e85fd636c1844fa55bb99ddf20a609"
+    },
+    "native1.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native1.job.json",
+      "bytes": 1684,
+      "sha256": "d9d2ba188cf659df0045741999144f0ef95b543bafc193cf793d8cfec00838a0"
+    },
+    "native1.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native1.log",
+      "bytes": 58953,
+      "sha256": "0c78aaba40372e64ea01f2990b852b1461983236df35d7b8aa7c5bce80b96759"
+    },
+    "native2.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native2.config.json",
+      "bytes": 1544,
+      "sha256": "e44f08111e7bbbc9903692881b295f20f661b81b9d64b21794ea9ee6a1c83201"
+    },
+    "native2.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native2.job.json",
+      "bytes": 1686,
+      "sha256": "e1bb411ed11855e52f7d4d8f82d3edc4eacd98fa9c48c600b3ff6c53613e207f"
+    },
+    "native2.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/native2.log",
+      "bytes": 43951,
+      "sha256": "8b8a4a184fced50275992c6663ccfe52e2bfb6fa8667a0e6e3125f6f982e1edd"
+    },
+    "plan1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/plan1.json",
+      "bytes": 6458,
+      "sha256": "71413be380b7580f77716650369d15b279843ae3e20b28a5a54d3a2def5b9f22"
+    },
+    "preservation2.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/preservation2.json",
+      "bytes": 23799,
+      "sha256": "38ac5d2aefd11ed285e2401bd95684a5c10a1647be74bc618277f8b77c095af4"
+    },
+    "publish-evidence1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/publish-evidence1.py",
+      "bytes": 5710,
+      "sha256": "93cc197368d064dd6e1531daa8d002ca74dfb90175ca7a8b4c61a6b2ea0e45a5"
+    },
+    "publish-evidence2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/publish-evidence2.py",
+      "bytes": 5827,
+      "sha256": "07356701e657c9052c8dc9c22d8a7cd6f678af10639443cd8f2b6b6720708825"
+    },
+    "review1-contract.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review1-contract.json",
+      "bytes": 20120,
+      "sha256": "34be0472fe7b1705cc323aa6f2ffea8564ec89e2d57e8eb8c2831dece9d1d5a1"
+    },
+    "review2-candidate.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review2-candidate.json",
+      "bytes": 23546,
+      "sha256": "fdd603ad7ebd3bc7ca13f2c3069daf579369db128b88598347bf1d739bbf24cd"
+    },
+    "review3-publication-precheck.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review3-publication-precheck.json",
+      "bytes": 10211,
+      "sha256": "85edd5f56f305965de9bc22d1509e9d6e5bad81d36332d666c5937da53b8b51e"
+    },
+    "review4-return-projection.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review4-return-projection.json",
+      "bytes": 60509,
+      "sha256": "8ebb008b3e8ff002687b56f037e4a0c1b10df90ed3b9c5062a9d06b47ed8173a"
+    },
+    "review5-publication-precheck.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/review5-publication-precheck.json",
+      "bytes": 20897,
+      "sha256": "41f978bda5f716ee9b62c726819847e6f44d848ce54fb18188ad4aba160d6669"
+    },
+    "run-native1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/run-native1.py",
+      "bytes": 2067,
+      "sha256": "67058cdbf5c8b89ff8c57e6c7f4531ffabbcee392bb824c1538a1a7f409c02a7"
+    },
+    "run-native2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/run-native2.py",
+      "bytes": 2067,
+      "sha256": "2519cfb626270ffe117b8affadff11a29d48d6b99b18591327c211d18948e358"
+    },
+    "saved-data-reader-error1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/saved-data-reader-error1.json",
+      "bytes": 339,
+      "sha256": "e979cd721e82606ab0da5d17f039fa0c746ccb172f6a39b794e2f8576c7ea511"
+    },
+    "validation-plan1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/validation-plan1.json",
+      "bytes": 5966,
+      "sha256": "12997806c2443c5aadc299b735b6556e8c93c033681388424347ee37e293cee8"
+    },
+    "verify-prospective-git1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/verify-prospective-git1.py",
+      "bytes": 4622,
+      "sha256": "9be4cb5315f0f30d26f071a8fbf1a8f5c99316192eee8cfd62fe458be9fd0484"
+    },
+    "verify-prospective-git2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/verify-prospective-git2.py",
+      "bytes": 4672,
+      "sha256": "d59ebbe9149a54410b1a44834be82a307a9a87a696e838cfe1a6a3c590f1d20b"
+    },
+    "verify-stage1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/verify-stage1.py",
+      "bytes": 7590,
+      "sha256": "f700044b797d6cbe1401be3de63f9762e44f9c4d5e1875a71ad7a6bae67c3ea4"
+    },
+    "verify-stage2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/verify-stage2.py",
+      "bytes": 9137,
+      "sha256": "441571dd1cceb9dd64ae0159a9f4ddbb29ca0afd341f51a1d37e8b969c5276dd"
+    }
+  },
+  "next": "Continue current human-ready state through selection/countdown/computer/arena and preparation via retained application owner.",
+  "nativeLoadedCharacterVerified": true,
+  "fullCardAccepted": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "backendPublished": false,
+  "originalExecuted": false,
+  "fullGoalComplete": false,
+  "nativeLoadedCharacterAccepted": true,
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-character-native-20260913/publication2-before-final-review.json",
+    "pin": {
+      "bytes": 68970,
+      "sha256": "0db888d3aa4ccd802b467c1e80e91e6dee0f9585deaa13a3731bb24e68629503"
+    }
+  }
+}

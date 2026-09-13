@@ -1,5 +1,5 @@
 /// Continue the owned loading/input menu child through fresh resources, the
-/// installed-library mode screen and the real loading/early return. Effects
+/// installed-library mode/human character screens and the loading/early return. Effects
 /// remain tentative until the retained enclosing session completes its loop.
 public struct OriginalApplicationLoadedMenuSession {
     public typealias Input = OriginalApplicationInputSession
@@ -20,6 +20,7 @@ public struct OriginalApplicationLoadedMenuSession {
         case music(OriginalMusicEvent,OriginalMusicResponse), bitmap(API.Request,API.Response)
         case resource(OriginalInterfaceEvent), front(OriginalFrontScreenEvent)
         case resourceCheckpoint(OriginalMenuResourceCheckpoint,OriginalStateRecord,[UInt32:OriginalLoadedBitmap])
+        case characterCheckpoint(OriginalCharacterScreenCheckpoint,OriginalMatchPreparation)
     }
     public struct Snapshot {
         public let state: State, match: OriginalMatchPreparation
@@ -209,11 +210,41 @@ public struct OriginalApplicationLoadedMenuSession {
             let q = try OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:globals.integer(at:0x78c,as:Int32.self),viewportHeight:globals.integer(at:0x790,as:Int32.self))
             _ = try OriginalBitmapDrawing.draw(q,bitmap:record,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try self.front(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try self.front(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try self.front(e);return self.outputPhase ? self.outputInput.methodResult : self.screenInput.drawResults.first ?? self.screenInput.methodResult })
         }
+        func characterDraw(_ request: OriginalCharacterScreenDraw,_ globals: OriginalStateRecord,
+                           _ memory: OriginalMenuPresentationMemory) throws {
+            switch request.bitmap {
+            case .menu(let token):
+                let args = [token,UInt32(bitPattern:request.x),UInt32(bitPattern:request.y),
+                            UInt32(bitPattern:request.frame),request.colorKey,0,request.target]
+                try front(.init("draw",args));try draw(args,globals,memory)
+            case .catalog(let index):
+                // The current match owns the bitmap bytes. The original pool
+                // parent supplies only the stable ordinal/token/surface binding.
+                let catalog = entry.entry.entry.snapshot
+                guard model.bitmaps.indices.contains(index),catalog.bitmapTokens.indices.contains(index),
+                      catalog.bitmapSurfaces.indices.contains(index) else { throw Boundary.dependency("Catalog bitmap binding") }
+                let bitmap = model.bitmaps[index].storage,token = catalog.bitmapTokens[index]
+                let surface = try bitmap.integer(at:0,as:UInt32.self) == 0 ? 0 : catalog.bitmapSurfaces[index]
+                guard surface == 0 || state.graphics?.currentResources[surface]?.kind == "bitmapSurface" else {
+                    throw Boundary.owner(surface)
+                }
+                let args = [token,UInt32(bitPattern:request.x),UInt32(bitPattern:request.y),
+                            UInt32(bitPattern:request.frame),request.colorKey,0,request.target]
+                try front(.init("draw",args))
+                let input = try OriginalBitmapDrawInput(x:request.x,y:request.y,frame:request.frame,colorKey:request.colorKey,
+                    mirrored:0,sourceSurface:surface,targetSurface:request.target,
+                    viewportWidth:globals.integer(at:0x78c,as:Int32.self),viewportHeight:globals.integer(at:0x790,as:Int32.self))
+                _ = try OriginalBitmapDrawing.draw(input,bitmap:bitmap,
+                    observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try self.front(e) },
+                    observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try self.front(e) },
+                    perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try self.front(e);return self.screenInput.drawResults[0] })
+            }
+        }
         func run() throws -> PendingReturn {
             var dummy: Void = ()
             var globals = model.globals,world = model.world,owned = state.memory,text = state.libraryText,scratch = local
             var musicOwner = audio,images = resources
-            _ = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals,music:&musicOwner,resources:&images,environment:&dummy,
+            let startup = try OriginalCharacterMenuStartup.runWithSurfaceLoading(globals:&globals,music:&musicOwner,resources:&images,environment:&dummy,
                 musicRequest:{ e,_ in try self.music(e) },allocate:{ i,_ in try self.allocate(.menu(i)) },perform:{ q,_ in try self.bitmap(q) },
                 afterMusic:{ _,g,_,_ in try self.checkpoint("music",g,&self.environment) },
                 checkpoint:{ p,g,b,_ in
@@ -223,10 +254,9 @@ public struct OriginalApplicationLoadedMenuSession {
             // Cached constructors are historical; current memory retains their live fields.
             try adopted(images.bitmaps.filter { surfaces[$0.key] != nil },in:&owned)
             try checkpoint("startup",globals,&environment)
-            guard try OriginalModeScreen.selectsModeScreen(globals:&globals) else {
-                throw Boundary.dependency("Selected character/game menu body")
-            }
-            let end = try OriginalModeScreen.advanceWithLibraryPanel(world:world,actors:model.actors,globals:&globals,memory:&owned,
+            let end: OriginalModeScreenExit
+            if try OriginalModeScreen.selectsModeScreen(globals:&globals) {
+                end = try OriginalModeScreen.advanceWithLibraryPanel(world:world,actors:model.actors,globals:&globals,memory:&owned,
                 local:&scratch,libraryText:&text,worldAddress:0x458b00,target:target,input:screenInput,fillBacking:[UInt8](repeating:0,count:100),
                 background:{ g,m in
                     let result = try OriginalMenuBackground.load(globals:&g,milliseconds:self.milliseconds(),allocate:{ try self.allocate(.background) },source:{ _ in throw Boundary.dependency("Background source") },constructBitmap:{ a,device,path in
@@ -239,6 +269,17 @@ public struct OriginalApplicationLoadedMenuSession {
                 },update:{ g in
                     _ = try OriginalMenuPanelUpdate.run(globals:&g,content:{ _ in throw Boundary.dependency("Panel content IO") },bitmap:{ _ in throw Boundary.dependency("Panel bitmap IO") },write:{ _,_ in throw Boundary.dependency("Panel write IO") },observe:{ e,_ in try self.front(.init(e.kind,e.arguments)) })
                 },milliseconds:milliseconds,draw:draw,observe:front)
+            } else {
+                var character = model
+                character.globals = globals;character.world = world
+                let result = try OriginalCharacterScreen.advanceWithLibrary(state:&character,libraryText:&text,
+                    selectionAtEntry:startup.resources.selectionAtEntry,target:target,input:screenInput,
+                    fillBacking:[UInt8](repeating:0,count:100),
+                    draw:{ request,g in try self.characterDraw(request,g,owned) },observe:front,
+                    checkpoint:{ point,current in try self.observe(.characterCheckpoint(point,current),&self.environment) })
+                guard result == .returned else { throw Boundary.dependency("Character continuation "+result.rawValue) }
+                model = character;world = character.world;globals = character.globals;end = .returned
+            }
             try checkpoint("screen",globals,&environment)
             var dispatcher: Int32?
             if end == .returned {

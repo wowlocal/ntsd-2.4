@@ -137,6 +137,34 @@ candidates and their test-only corrections remain preserved. Core and source
 expected did not change after the first candidate. Limits remain40GiB/3600seconds/
 three candidates with the unchanged6GiB internal reserve.
 
-Next connect the already recovered selected-character continuation to that own
-fourth input child and its enclosing return. No whole-original application trace,
-backend publication, device or full-game acceptance is implied.
+The next character stage below connects this fourth input child. No whole-original
+application trace, backend publication, device or full-game acceptance is implied.
+
+## Human character selection through the retained application
+
+The bounded stage after `11446d8` is
+[APPLICATION_LOADED_CHARACTER](APPLICATION_LOADED_CHARACTER.md). It uses the
+actual fourth input's retained attack, then current controller configuration and
+WndProc messages for two 34-screen chains through Naruto/Sasuke readiness. Each
+screen completes its enclosing Bootstrap ticket; the first ticket already exists,
+so the 68 returns include 66 further loading entries. Current catalog records
+supply portrait bytes while stable retained owners supply token/surface bindings.
+
+Saved original human state transitions, full write-footprint entry equality,
+12 body checkpoints per screen and declared library graphics/sound projections
+remain separate from the independently checked own return and outer tail.
+The first candidate exposed 34 incorrect test expectations that both source
+backings used Flip. The control source uses displayMode3/Blt. Its failure and
+the review gap are preserved; only the new test's return projection changed.
+The second frozen candidate passes all57 release methods in365.385s,
+build319.31s. All960 Native files,383 unchanged fixtures,471 packaged files and
+the full Native archive verify; the separate evidence archive retains the failed
+candidate and both terminal runs. See
+`../evidence/application-loaded-character.json` for the finite result and review.
+Work: `build/research/application-loaded-character-native-20260913/`.
+Limits remain 40 GiB/3600 seconds/three candidates and the 6 GiB internal reserve.
+
+This stage does not accept the whole card. Continue the human-ready state through
+selection/countdown/computer/arena and preparation using the same application
+owner. Complete original application correspondence, backend publication, real
+window/input/audio, Windows, clean-Mac and full-game acceptance remain open.

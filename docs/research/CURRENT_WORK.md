@@ -408,9 +408,27 @@ Candidate1 остановился на Int/Int32 compile error нового те
 Candidate3 исправляет только тестовый адаптер и добавляет3старые WindowInput
 регрессии к прежним48. [Evidence](../evidence/application-loaded-cycle.json).
 
-**Следующая задача — передать четвёртый own input child с retained Actor attack
-в уже восстановленный character-menu handler и завершить его новый outer ticket.**
-Далее собственные selection/arena/preparation/gameplay. Current memory остаётся
+Проверен [собственный character-menu join](APPLICATION_LOADED_CHARACTER.md):
+четвёртый input child с retained attack проходит общий human handler, затем
+собственные WndProc/input/Bootstrap cycles доводят Naruto17/Sasuke21 до
+status3/3, team0/0, selection0, countdown147. Две цепочки по34 экрана дают
+68 возвратов/66 дальнейших loading entries и816 body checkpoints. Полные
+write footprints/records/masks, live portraits, library text/current sound,
+current graphics owners, enclosing return и late rollback проверены.
+Native2 прошёл57 release-методов за365.385с/build319.31с. Все960 Native-файлов,
+383прежних fixtures,471package files и архивы сверены.
+Native1/56passed сохраняет34ошибки нового общего ожидания Flip вместо
+control/displayMode3/Blt. Исправлен только новый тест; обе source return
+проекции независимо проверены по display mode и полному rectangle.
+Core/expected не менялись; ошибки review/data-reader и первый кандидат сохранены.
+[Evidence](../evidence/application-loaded-character.json). Оба Native jobs
+терминальны; job/manifest находятся в
+`build/research/application-loaded-character-native-20260913/`. Не перезапускать.
+
+**Следующая задача — продолжить собственный human-ready state через
+selection/countdown/computer/arena и подготовку, сохраняя Bootstrap owner.**
+Countdown147 и selection0 должны пройти собственный input/handler; не ставить
+selection1/countdown0 из expected. Далее preparation/gameplay. Current memory остаётся
 источником live bitmap fields; constructor history и startup/earlyScreen нельзя
 публиковать заново. Other modes/playback/uncached music/panel IO/recovery/device
 остаются отдельными зависимостями. Whole-original application match, backend,

@@ -221,8 +221,10 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
                 if i == 3 {
                     XCTAssertEqual(try ready.match.globals.integer(at:0x20,as:Int32.self),3)
                     let old = env
-                    XCTAssertThrowsError(try M.advance(&menu,&env)) {
-                        XCTAssertEqual($0 as? M.S.Boundary,.dependency("Selected character/game menu body"))
+                    // The next study connects this child. Retain this test's input
+                    // frontier by injecting an observer stop at the first body checkpoint.
+                    XCTAssertThrowsError(try M.advance(&menu,&env,character:{ _,_,_ in throw Stop.injected("characterBoundary") })) {
+                        XCTAssertEqual($0 as? Stop,.injected("characterBoundary"))
                     }
                     XCTAssertNil(menu.pendingReturn);XCTAssertEqual(env,old);try Self.unchanged(app,before)
                     continue

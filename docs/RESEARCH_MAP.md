@@ -327,9 +327,23 @@ mutable frame/arena retention и late rollback проверены.51 bundled rel
 прошёл310.184с/build324.17с;958 Native-файлов,383прежних fixtures и471package
 files сверены. Compile failure candidate1, adapter failure candidate2 и исправленный
 candidate3 сохранены; Core/expected не менялись после первого кандидата.
-[Evidence](evidence/application-loaded-cycle.json). NEXT — join четвёртого input
-child к уже восстановленному character-menu handler и его outer return.
+[Evidence](evidence/application-loaded-cycle.json). Его четвёртый input child
+продолжает текущая character-menu карточка ниже.
 Whole-original app correspondence/backend/device/full game остаются открытыми.
+
+[Собственный human character-menu](research/APPLICATION_LOADED_CHARACTER.md)
+соединяет retained attack четвёртого input child с общим handler и последующими
+WndProc/input/Bootstrap returns до готовности Naruto17/Sasuke21. Две цепочки
+по34 экрана дают68 возвратов/66 дальнейших loading entries; сравниваются816
+body checkpoints, полные write footprints/records/masks, live portrait storage,
+library text/current sound owners и enclosing return с полным rollback.
+Native1:56 из57 методов прошли;34 ошибки нового теста вызваны неверным общим
+ожиданием Flip вместо control/displayMode3/Blt. Ошибка и review gap сохранены,
+Core/expected не менялись. Native2 прошёл57 release-методов за365.385с,
+build319.31с;960 Native-файлов,383прежних fixtures,471package files и архивы
+сверены. [Evidence](evidence/application-loaded-character.json).
+Далее selection/countdown/computer/arena/preparation через тех же владельцев;
+whole-original application/backend/device/full game этим не принимаются.
 
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
