@@ -511,6 +511,10 @@ release-метода прошли за148.355с/build356.77с;147 прежних
 [план](research/APPLICATION_ACTIVE_CONTACTS_PLAN.md). Оба Native jobs терминальны в
 `build/research/application-owned-active-contacts-native-20260914/`; не перезапускать.
 **Следующие10 body стадий, поздняя transient lifetime и полный active tick открыты.**
+Подготовлен [план камеры/рисования/импульсов](research/APPLICATION_ACTIVE_GRAPHICS_PLAN.md).
+Это сохранённая незавершённая карточка: нового Native-кандидата и приёмки этих
+трёх стадий пока нет. До реализации нужно определить наблюдение фактического
+списка graphics commands и закрепить соответствующие пути и проверки.
 NEXT — независимое сравнение камеры/рисования на текущих собственных позициях,
 кадрах и ресурсах, затем impulses/lifecycle/commands/HUD/notices/recording/layout/
 output по общему active body плану. Полные helper ABI/stores, damaging/held/cpoint/
