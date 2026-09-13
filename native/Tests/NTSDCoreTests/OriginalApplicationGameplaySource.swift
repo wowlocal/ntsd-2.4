@@ -38,6 +38,7 @@ final class OriginalApplicationGameplaySource {
         (.recording,"result-recording",0x422944),(.layout,"result-layout",0x422994),
         (.output,"gameplay-return",0x30000000)]
     private(set) var calls: [Call] = []
+    private(set) var continuousPlatform: C.Platform?
     private(set) var blobs: [String:InputControlReference.Blob] = [:]
     private var cache: [String:[UInt8]] = [:]
     private(set) var actorAddresses: [UInt32] = [],objectAddresses: [UInt32] = []
@@ -110,6 +111,7 @@ final class OriginalApplicationGameplaySource {
         calls.append(.init(sections:first,beforeInput:nil,writes:[],continued:nil))
         let data = try Self.fixture("original-continuous-gameplay"+(reverse ? "-control" : ""))
         let document = try C.Document(data),c = document.corpus
+        continuousPlatform = c.platform
         let raw = try MatchPreparationReference.unpack(data,maximumCount:256_000_000)
         let trace = try JSONDecoder().decode(Trace.self,from:raw)
         guard c.control == reverse,c.worldAddress == 0x22000020,c.parent.sha256 == previousSHA else { throw Self.error("Continuous parent identity") }

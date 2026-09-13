@@ -435,6 +435,24 @@ Frame-буферы, bitmap owners, CRT/replay и aliases. Четыре release-�
 Все jobs этой проверки терминальны в
 `build/research/application-owned-gameplay-comparison-native-20260913/`.
 
+Принято [полное сравнение нейтрального gameplay](research/APPLICATION_GAMEPLAY_EFFECTS.md):
+два собственных прохода по17 Bootstrap returns,646 стадий в сумме. Независимый
+расчёт сначала воспроизводит сохранённые source-события, затем проверяет собственные
+координаты/bitmap reads/masks/clipping/HUD/text/audio, весь журнал и владельцев
+графики/цветов/памяти.14 поздних body-отказов и12 внешних откатов сохраняют
+предыдущие commits. Четыре release-метода прошли за71.192с/build381.09с;
+141 прежний метод сохранён по неизменным pins.985 прежних Native-файлов,
+383 fixtures/102 resources и485 package-файлов неизменны; все989 Native-файлов
+и оба архива проверены. Первая прерванная сборка, ошибочный запрет bitmap alias
+и исправления review сохранены. Нового исполнения оригинала и изменения Core нет.
+[Evidence](evidence/application-gameplay-effects.json). Задача19×17×2 закрыта только
+для нейтральной последовательности; это не полный матч или готовая игра.
+Следующий шаг — собственный ввод и уже сохранённые active/paused gameplay ветви,
+с независимым сравнением состояния/эффектов и откатами. Device raster/audio,
+Windows/clean-Mac, другие режимы, сеть и полная цель остаются открытыми.
+Все jobs этой проверки завершены или явно отмечены interrupted/no-exit в
+`build/research/application-owned-gameplay-effects-native-20260913/`.
+
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
