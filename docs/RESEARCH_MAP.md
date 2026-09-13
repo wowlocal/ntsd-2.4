@@ -345,6 +345,21 @@ build319.31с;960 Native-файлов,383прежних fixtures,471package file
 Далее selection/countdown/computer/arena/preparation через тех же владельцев;
 whole-original application/backend/device/full game этим не принимаются.
 
+[Собственная selection/Start цепочка](research/APPLICATION_LOADED_SELECTION.md)
+продолжает human-ready147 через jump/count0, RNG неактивных мест, District и
+Start в тех же Bootstrap owners:98 новых returns, два pending children,1536
+body checkpoints. Own RNG table/choices/music path проверены отдельной
+независимой проекцией; pristine source results не подменяются.
+Native1/63passed сохраняет две ошибки привязки звука в компараторе; review4
+доказывает selection455610/human45560c. Core/expected неизменны. Исправленный
+Native3 прошёл65 методов за564.928с/build325.72с;962 Native-файла,383fixtures,
+471package files и архивы сверены. [Evidence](evidence/application-loaded-selection.json).
+Native2 остановлен по профилю XCTest; Bool-диагностика и неверное ожидание
+loopcounter61 вместо0 исправлены только в тестах, отказ сохранён.
+Start сохраняет незавершённый ticket и не считается возвратом. Далее настоящий
+prelude/music/preparation/replay/return и gameplay consumer; вся игра,
+whole-original app, backend и устройства остаются открытыми.
+
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.

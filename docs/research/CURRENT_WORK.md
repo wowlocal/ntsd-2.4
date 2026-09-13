@@ -425,8 +425,35 @@ Core/expected не менялись; ошибки review/data-reader и перв
 терминальны; job/manifest находятся в
 `build/research/application-loaded-character-native-20260913/`. Не перезапускать.
 
-**Следующая задача — продолжить собственный human-ready state через
-selection/countdown/computer/arena и подготовку, сохраняя Bootstrap owner.**
+Проверено [продолжение selection/Start](APPLICATION_LOADED_SELECTION.md) после
+`1747cdd`: две собственные50-кадровые цепочки дают98 новых Bootstrap returns,
+два retained pending Start и1536 body checkpoints. Сохраняются текущие
+владельцы, настройки, библиотечный DC, музыка и незавершённый ticket.
+Таблица RNG actual Bootstrap отличается от pristine reference: независимая
+проверка формулы/candidates/order проецирует собственные selected/music fields,
+не подменяя исходный эталон или собственное состояние.
+
+Native1 terminal1:63 из65 методов прошли, два новых остановились на frame21
+из-за ожидания human45560c вместо confirmation455610. Сохранённые call sites
+и review4 доказали ошибку компаратора и прежней рецензии. Core/expected
+не менялись; review5 проверил два исправленных компаратора. Native2 остановлен по профилю затратной диагностики; сохранён один
+сбой старого ожидания loopcounter61 вместо0. Bool-проверки присутствия и
+правильное ожидание сброса исправлены только в тестах; review7 проверен.
+Native3 прошёл
+все65 release-методов за564.928с/build325.72с. Все962 Native-файла,383
+неизменных fixtures,471package files и архивы сверены. Ошибки, все три кандидата
+и прежний draft сохранены. [Evidence](../evidence/application-loaded-selection.json).
+Все три Native jobs терминальны; manifests/reviews находятся в
+`build/research/application-loaded-selection-native-20260913/`. Не перезапускать.
+
+**Следующая задача — продолжить retained Start через prelude/music/District
+preparation/replay и настоящий enclosing return, затем следующий gameplay input.**
+Сохранять текущий Bootstrap owner, RNG, выбор и путь музыки; предыдущий menu
+body уже выполнен и не должен повторяться. Связь всего original приложения,
+положительные CPU/другие mode-цепочки, подготовка/матч, host backend, окно/ввод/
+звук/Windows/cleanMac и полная игра остаются открытыми.
+
+Историческое ограничение предыдущего входа (countdown теперь пройден):
 Countdown147 и selection0 должны пройти собственный input/handler; не ставить
 selection1/countdown0 из expected. Далее preparation/gameplay. Current memory остаётся
 источником live bitmap fields; constructor history и startup/earlyScreen нельзя

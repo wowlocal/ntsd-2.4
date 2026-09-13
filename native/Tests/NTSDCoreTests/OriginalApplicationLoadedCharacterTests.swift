@@ -44,7 +44,9 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
         }
     }
     func testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns() throws {
-        for reverse in [false,true] {
+        for reverse in [false,true] { _ = try characterChain(reverse) }
+    }
+    func characterChain(_ reverse: Bool) throws -> A {
             let r = try R(reverse)
             var (app,ready) = try Self.selected(reverse)
             let first = ready.match
@@ -69,6 +71,14 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
                 var session = try M.S(pending:ready),env = M.Environment(reverse:reverse),point = 0,screenEvents = 0
                 var body: OriginalMatchPreparation?
                 let returned = try M.advance(&session,&env,character:{ cp,model,e in
+                    if cp.pc == 0x42e0b6 {
+                        // Shared selection adds a pre-tail observation. These
+                        // old34 cases have no intervening tail store.
+                        let last = try XCTUnwrap(item.screen.checkpoints.last)
+                        XCTAssertEqual(cp.locals,last.locals.reduce(into:[:]) { $0[Int($1.key)!] = $1.value })
+                        try r.state(model,own,item.screen.before,last.state,"retained human pre-tail")
+                        return
+                    }
                     try r.checkpoint(cp,model,own,item,point);point += 1
                     if point == 12 { screenEvents = e.front.count;body = model }
                 })
@@ -110,7 +120,7 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
             XCTAssertTrue(portraitChecked)
             XCTAssertEqual(r.points,408);XCTAssertEqual(r.draws,312);XCTAssertEqual(r.sounds,6)
             print("Owned character: 34 Bootstrap returns / \(r.points) source semantic checkpoints / \(r.draws) draws / \(r.reads) current reads / \(r.blits) Blt / 18 sound methods; reverse=\(reverse)")
-        }
+            return app
     }
     func returning(_ returned: M.S.PendingReturn,body: OriginalMatchPreparation,environment: M.Environment,
                    screenEvents: Int,reference: R,item: CharacterScreenReference.Case) throws {
@@ -186,7 +196,7 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
     }
     func testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits() throws {
         let (parent,ready) = try Self.selected(false)
-        for stop in [0,1,5,11] {
+        for stop in [0,1,5,12] {
             var s = try M.S(pending:ready),env = M.Environment(),point = 0;let old = env
             XCTAssertThrowsError(try M.advance(&s,&env,character:{ _,_,_ in
                 defer { point += 1 }
@@ -213,8 +223,8 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
             XCTAssertThrowsError(try C.finish(&app,returned,stop:stop)) { XCTAssertEqual($0 as? Stop,.injected(stop)) }
             try C.unchanged(app,parent)
         }
-        // Explicit Native continuation guard, not an input-produced extra
-        // source case: menu1/selection1 demands the next computer/arena child.
+        // Retain the old controlled selection1 frontier with an observer
+        // stop now that its computer/arena continuation is connected.
         var model = ready.match,state = ready.state
         try model.globals.write(Int32(1),at:0x20)
         try model.globals.write(Int32(1),at:0x4512c8-0x44d000)
@@ -223,8 +233,10 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
             music:ready.music,commands:ready.commands,playbackCommands:ready.playbackCommands,paused:ready.paused,round:ready.round,
             operations:ready.operations,graphics:ready.graphics,loading:ready.loading,menuResources:ready.menuResources,menuBackgrounds:ready.menuBackgrounds)
         var blocked = try M.S(pending:next),boundaryEnv = M.Environment();let oldBoundary = boundaryEnv
-        XCTAssertThrowsError(try M.advance(&blocked,&boundaryEnv)) {
-            XCTAssertEqual($0 as? M.S.Boundary,.dependency("Character continuation selectionStage"))
+        XCTAssertThrowsError(try M.advance(&blocked,&boundaryEnv,character:{ cp,_,_ in
+            if cp.pc == 0x42b296 { throw Stop.injected("selectionBoundary") }
+        })) {
+            XCTAssertEqual($0 as? Stop,.injected("selectionBoundary"))
         }
         XCTAssertNil(blocked.pendingReturn);XCTAssertEqual(boundaryEnv,oldBoundary)
         var app = parent;try C.finish(&app,returned)

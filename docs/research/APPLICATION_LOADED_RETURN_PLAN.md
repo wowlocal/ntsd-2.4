@@ -168,3 +168,33 @@ This stage does not accept the whole card. Continue the human-ready state throug
 selection/countdown/computer/arena and preparation using the same application
 owner. Complete original application correspondence, backend publication, real
 window/input/audio, Windows, clean-Mac and full-game acceptance remain open.
+
+## Selection and retained Start child
+
+The stage after `1747cdd` continues the current human-ready state through the
+ordinary zero-computer route, District and Start. See
+[APPLICATION_LOADED_SELECTION](APPLICATION_LOADED_SELECTION.md) and
+`build/research/application-loaded-selection-native-20260913/plan1.json`.
+Two50-frame schedules require98 new returned children and two retained unreturned
+match-prelude children. No countdown, selection or RNG state is manually replaced.
+
+Independent input review found a different actual Bootstrap RNG table from the
+pristine reference. The comparator therefore verifies the original formula and
+candidate order, then independently projects the own table's dependent selected
+ordinals and full music-path prefix/tail. It does not claim equal source random
+results or a new whole-original application trace. Source atlas unknown padding
+also remains distinct from current owned padding; known fields and masks compare.
+
+The shared selection handler and typed pending Start retain current owners and
+the same suspended ticket. No held clear, presentation or enclosing return occurs
+at that boundary. Candidate1 freezes962 files;63 of65 release methods passed.
+Both new methods failed at frame21 because their expected sound bound human45560c
+instead of confirmation455610. Core/expected remain unchanged. Exact saved
+call-site evidence supports the separately reviewed test-only correction.
+Candidate3/Native3 passed all65 methods in564.928s/build325.72s. All962
+Native files,383 unchanged fixtures and471 package files are verified. Both
+failed1/interrupted2 and successful3 evidence remain preserved; final review and exact
+delivery are recorded in [evidence](../evidence/application-loaded-selection.json). The next consumer
+must execute prelude, enabled music, District preparation/replay and the actual
+return before another gameplay input, preserving this state. Limits and full
+application/device/game acceptance remain as declared above.

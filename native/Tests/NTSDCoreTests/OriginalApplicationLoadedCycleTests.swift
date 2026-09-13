@@ -133,7 +133,7 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
         XCTAssertEqual(current.state.earlyScreen.bitmaps,expected.earlyScreen.bitmaps)
         XCTAssertEqual(current.state.earlyScreen.surfaces,expected.earlyScreen.surfaces)
         XCTAssertEqual(current.state.earlyScreen.retainedOperation,expected.earlyScreen.retainedOperation)
-        XCTAssertEqual(current.loop.counter,counter)
+        XCTAssertEqual(current.loop.counter,counter > 60 ? UInt32(0) : counter)
         XCTAssertEqual(owners.match.world,pending.snapshot.match.world);XCTAssertEqual(owners.match.actors,pending.snapshot.match.actors)
         XCTAssertEqual(owners.match.globals,pending.snapshot.match.globals);XCTAssertEqual(owners.match.frameAllocations,pending.snapshot.match.frameAllocations)
         XCTAssertEqual(owners.match.backgrounds,pending.snapshot.match.backgrounds);XCTAssertEqual(owners.match.bitmaps,pending.snapshot.match.bitmaps)

@@ -90,8 +90,16 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
     static func advance(_ session: inout S,_ env: inout Environment,
         character: @escaping (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in },
         observeFront: @escaping (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in }) throws -> S.PendingReturn {
+        guard case .returned(let result) = try advanceUntilBoundary(&session,&env,allowPrelude:false,character:character,observeFront:observeFront) else {
+            throw Stop.unexpected("Unreturned menu")
+        }
+        return result
+    }
+    static func advanceUntilBoundary(_ session: inout S,_ env: inout Environment,allowPrelude: Bool = true,
+        character: @escaping (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in },
+        observeFront: @escaping (OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_ in }) throws -> S.Outcome {
         let target = session.entry.loading.target
-        return try session.advance(inputs:OriginalApplicationMenuInputsTests.inputs.get(),environment:&env,
+        return try session.advanceUntilBoundary(inputs:OriginalApplicationMenuInputsTests.inputs.get(),environment:&env,
             screenInput:.init(dcResult:0,dc:0x12345678,methodResult:0,drawResults:[0],shellResult:33),outputInput:output(target),
             allocate:{ try $2.allocate($0,$1) },bitmap:{ try $1.bitmap($0) },music:{ try $1.sound($0) },milliseconds:{ try $0.time() },
             observe:{ o,e in
@@ -110,12 +118,13 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
                         if f.arguments[1] == 8 { e.expectedOperations.append(.menu(.release(f,ignoredResult:0))) }
                         else { e.expectedOperations.append(.menu(.present(f,result:0))) }
                     case "soundMethod":e.expectedOperations.append(.menu(.soundMethod(f,ignoredResult:0)))
+                    case "musicMethod":e.expectedOperations.append(.front(f,0,nil))
                     case "enter","leave","sleep":e.expectedOperations.append(.front(f,0,nil))
                     case "shell":e.expectedOperations.append(.front(f,33,nil))
                     case "free":
                         e.expectedOperations.append(.menu(.free(f.arguments[0])))
                         if e.stop == "free" { throw Stop.injected("free") }
-                    case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct":break
+                    case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
                     default:throw Stop.unexpected("uncompared front journal "+f.kind)
                     }
                 case .resourceCheckpoint(let p,let g,let records):
@@ -132,7 +141,8 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
                 e.points.append(name)
                 if name == "heldCleared" { XCTAssertEqual(try g.integer(at:0x457580-0x44d000,as:UInt32.self),0) }
                 if name == e.stop { throw Stop.injected(name) }
-            },beforeCommit:{ _,e in
+            },beforeCommit:{ outcome,e in
+                if !allowPrelude,case .matchPrelude = outcome { throw S.Boundary.dependency("Match prelude requires retained continuation") }
                 if e.stop == "commit" { throw Stop.injected("commit") };e.committed = true
             })
     }
@@ -179,6 +189,10 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
         }
     }
     func compareGraphics(_ pending: S.PendingReturn,_ env: Environment) throws {
+        try compareGraphics(pending.entry,pending.snapshot,pending.graphics,env)
+    }
+    func compareGraphics(_ entry: S.Input.PendingContinuation,_ snapshot: S.Snapshot,
+                         _ graphics: [OriginalApplicationGraphics.Command],_ env: Environment) throws {
         typealias G = OriginalApplicationCatalogGraphicsComparison
         let startup = try OriginalApplicationStartupInputsTests.shared.get(),menu = try OriginalApplicationMenuInputsTests.inputs.get()
         var resources = startup.bitmaps;resources.merge(menu.bitmaps) { _,new in new }
@@ -189,10 +203,10 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
                 colors[r.name] = (Array(bytes[r.rgbOffset..<r.rgbOffset+r.rgbCount]),Array(bytes[r.maskOffset..<r.maskOffset+r.maskCount]).map { $0 != 0 },r.width,r.height)
             }
         }
-        XCTAssertEqual(Array(pending.snapshot.operations.dropFirst(pending.entry.operations.count)),env.expectedOperations)
-        let projection = try G(resources:resources,state:pending.entry.state,graphics:pending.entry.graphics,colors:colors)
+        XCTAssertEqual(Array(snapshot.operations.dropFirst(entry.operations.count)),env.expectedOperations)
+        let projection = try G(resources:resources,state:entry.state,graphics:entry.graphics,colors:colors)
         var events: [G.Event] = []
-        for operation in pending.snapshot.operations.dropFirst(pending.entry.operations.count) {
+        for operation in snapshot.operations.dropFirst(entry.operations.count) {
             guard case .menu(let e) = operation else { continue }
             switch e {
             case .bitmap(let q,let r):events.append(.init(request:q,response:r,kind:nil,event:nil))
@@ -206,7 +220,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
         }
         // Independent projection consumes declared terminal operations and saved
         // RGB/masks, never Core.consume or final owner fields to form expected.
-        try projection.compare(state:pending.snapshot.state,graphics:pending.graphics,events:events)
+        try projection.compare(state:snapshot.state,graphics:graphics,events:events)
         XCTAssertEqual(projection.images.count,env.index+1)
     }
     func testOwnMenuAndExactOuterIterationWithBothBitmapBackings() throws {

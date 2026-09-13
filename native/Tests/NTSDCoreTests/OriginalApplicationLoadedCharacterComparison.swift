@@ -18,18 +18,18 @@ final class OriginalApplicationLoadedCharacterComparison {
     let corpus: R.Corpus,menu: MenuStartupReference.Corpus,catalog: R.Catalog,sourceCatalog: SourceCatalog
     var blobs: [String:[UInt8]] = [:]
     var points = 0,draws = 0,reads = 0,blits = 0,sounds = 0
-    init(_ reverse: Bool) throws {
+    init(_ reverse: Bool,selection: Bool = false) throws {
         func fixture(_ name: String) throws -> Data {
             let url = try XCTUnwrap(Bundle.module.url(forResource:"original-"+name+(reverse ? "-control" : ""),withExtension:"json",subdirectory:"Fixtures"))
             return try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:192_000_000)
         }
-        corpus = try JSONDecoder().decode(R.Corpus.self,from:fixture("character-screen"))
+        corpus = try JSONDecoder().decode(R.Corpus.self,from:fixture(selection ? "match-selection" : "character-screen"))
         menu = try JSONDecoder().decode(MenuStartupReference.Corpus.self,from:fixture("menu-startup"))
         let data = try fixture("menu-loading-catalog")
         catalog = try JSONDecoder().decode(R.Catalog.self,from:data)
         sourceCatalog = try JSONDecoder().decode(SourceCatalog.self,from:data)
         XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
-        XCTAssertEqual(corpus.cases.count,34)
+        XCTAssertEqual(corpus.cases.count,selection ? 50 : 34)
     }
     func catalogInputs(_ own: OriginalMatchPreparation) throws {
         func blob(_ key: String) throws -> [UInt8] {
@@ -102,8 +102,10 @@ final class OriginalApplicationLoadedCharacterComparison {
     }
     // Equality over the full possible write footprint prevents idempotent
     // source stores from being hidden by a byte-delta comparison.
-    func entry(_ own: OriginalMatchPreparation,_ item: R.Case) throws {
-        let sourcePool = try pool(item.screen.before),ownPool = try pool(own),sourceGlobals = try globals(item.screen.before)
+    func entry(_ own: OriginalMatchPreparation,_ item: R.Case,
+               projectedPool: OriginalStateRecord? = nil,projectedGlobals: OriginalStateRecord? = nil) throws {
+        let sourcePool = try projectedPool ?? pool(item.screen.before),ownPool = try pool(own)
+        let sourceGlobals = try projectedGlobals ?? globals(item.screen.before)
         var poolOffsets = Array(4..<12)+Array(0x194..<(0x194+8*4))
         for i in 0..<400 { poolOffsets += Array((0x7d8+i*0x420+0x364)..<(0x7d8+i*0x420+0x36c)) }
         for i in 0..<8 { poolOffsets += Array((0x7d8+i*0x420+0xcd)..<(0x7d8+i*0x420+0xd4)) }
@@ -142,8 +144,11 @@ final class OriginalApplicationLoadedCharacterComparison {
         XCTAssertEqual(point.locals,expected.locals.reduce(into:[:]) { $0[Int($1.key)!] = $1.value })
         try self.state(state,own,item.screen.before,expected.state,item.label+" point\(index)");points += 1
     }
-    func events(_ actual: [OriginalFrontScreenEvent],_ ready: M.S.Input.PendingContinuation,_ item: R.Case) throws {
-        let model = ready.match,source = item.screen.events,bindings = ready.entry.entry.snapshot
+    func events(_ actual: [OriginalFrontScreenEvent],_ ready: M.S.Input.PendingContinuation,_ item: R.Case,
+                sourceEvents: [OriginalFrontScreenEvent]? = nil,
+                extraDraws: [UInt32:(UInt32,OriginalStateRecord,UInt32)] = [:],
+                confirmationSlot: Int = 0x45560c) throws {
+        let model = ready.match,source = sourceEvents ?? item.screen.events,bindings = ready.entry.entry.snapshot
         let target = ready.loading.target,textTarget = try model.globals.integer(at:0x455608-0x44d000,as:UInt32.self)
         var bitmap: OriginalStateRecord?,surface: UInt32 = 0,expected: [OriginalFrontScreenEvent] = []
         for event in source {
@@ -151,7 +156,9 @@ final class OriginalApplicationLoadedCharacterComparison {
             switch e.kind {
             case "draw":
                 let token: UInt32
-                if let i = menu.resources.allocations.firstIndex(where:{ $0.address == e.arguments[0] }) {
+                if let (ownedToken,record,ownedSurface) = extraDraws[e.arguments[0]] {
+                    token = ownedToken;bitmap = record;surface = ownedSurface
+                } else if let i = menu.resources.allocations.firstIndex(where:{ $0.address == e.arguments[0] }) {
                     token = try model.globals.integer(at:OriginalMenuResourceLoading.slots[i]-0x44d000,as:UInt32.self)
                     bitmap = try XCTUnwrap(ready.state.memory.allocations[token]).storage
                     surface = try bitmap!.integer(at:0,as:UInt32.self)
@@ -181,13 +188,14 @@ final class OriginalApplicationLoadedCharacterComparison {
             case "releaseDC":e.arguments = [textTarget,0x12345678]
             case "soundRequest":
                 expected.append(e);sounds += 1
-                // All six declared requests are join/character/team confirmation,
-                // the accepted45560c slot. Cancel/back controls are not this chain.
-                let token = try model.globals.integer(at:0x45560c-0x44d000,as:UInt32.self)
+                // Human selection uses45560c; count/arena confirmations use
+                //455610 at their independently identified401a30 callsites.
+                let token = try model.globals.integer(at:confirmationSlot-0x44d000,as:UInt32.self)
                 XCTAssertNotEqual(token,0);XCTAssertNotEqual(try model.globals.integer(at:0x44eecc-0x44d000,as:UInt32.self),0)
                 expected += [.init("soundMethod",[token,0x48]),.init("soundMethod",[token,0x34,0]),.init("soundMethod",[token,0x30,0,0,0])]
                 continue
-            case "clip","stringLength":break
+            case "musicConfiguration":e.arguments[3] = target
+            case "clip","stringLength","candidates","random","format":break
             default:throw M.Stop.unexpected("Unprojected source character event "+e.kind)
             }
             expected.append(e)

@@ -34,8 +34,20 @@ public struct OriginalApplicationLoadedMenuSession {
         public let graphics: [OriginalApplicationGraphics.Command]
         public var loading: Session.PendingLoading { entry.loading }
     }
+    /// Start has been selected, but preparation and the enclosing return have
+    /// not run. Retain current owners and the original suspended loop ticket.
+    public struct PendingMatchPrelude {
+        public let entry: Input.PendingContinuation, snapshot: Snapshot
+        public let locals: [Int:Int32]
+        public let graphics: [OriginalApplicationGraphics.Command]
+        public var loading: Session.PendingLoading { entry.loading }
+    }
+    public enum Outcome {
+        case returned(PendingReturn), matchPrelude(PendingMatchPrelude)
+    }
     public let entry: Input.PendingContinuation
     public private(set) var pendingReturn: PendingReturn?
+    public private(set) var pendingMatchPrelude: PendingMatchPrelude?
     public init(pending: Input.PendingContinuation) throws {
         try pending.state.validateAliases()
         guard pending.round.continuation == .menu else { throw Boundary.dependency("Selected input continuation") }
@@ -54,11 +66,33 @@ public struct OriginalApplicationLoadedMenuSession {
         observe: @escaping (Observation,inout Environment) throws -> Void = { _,_ in },
         checkpoint: @escaping (String,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_ in },
         beforeCommit: (PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> PendingReturn {
-        guard pendingReturn == nil else { throw Boundary.alreadyPrepared }
+        guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
+        let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint)
+        guard case .returned(let result) = try a.run() else { throw Boundary.dependency("Match prelude requires retained continuation") }
+        try beforeCommit(result,&a.environment)
+        pendingReturn = result;environment = a.environment;return result
+    }
+    /// Produce either a completed menu child or the still-pending Start child.
+    /// Neither outcome publishes effects to a host or completes the Bootstrap.
+    @discardableResult
+    public mutating func advanceUntilBoundary<Environment>(inputs: OriginalApplicationMenuInputs,environment: inout Environment,
+        screenInput: OriginalFrontScreenBodyInput,outputInput: OriginalMenuPresentationInput,
+        allocate: @escaping (AllocationKind,Int,inout Environment) throws -> OriginalInterfaceAllocation,
+        bitmap: @escaping (API.Request,inout Environment) throws -> API.Response,
+        music: @escaping (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse,
+        milliseconds: @escaping (inout Environment) throws -> UInt32,
+        observe: @escaping (Observation,inout Environment) throws -> Void = { _,_ in },
+        checkpoint: @escaping (String,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_ in },
+        beforeCommit: (Outcome,inout Environment) throws -> Void = { _,_ in }) throws -> Outcome {
+        guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
         let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint)
         let result = try a.run()
         try beforeCommit(result,&a.environment)
-        pendingReturn = result;environment = a.environment;return result
+        switch result {
+        case .returned(let value):pendingReturn = value
+        case .matchPrelude(let value):pendingMatchPrelude = value
+        }
+        environment = a.environment;return result
     }
     private final class Attempt<E> {
         let entry: Input.PendingContinuation,bindings: OriginalApplicationMatchBindings
@@ -191,6 +225,7 @@ public struct OriginalApplicationLoadedMenuSession {
                     operations.append(.front(e,result,nil))
                 }
             case "soundMethod":try emit(.soundMethod(e,ignoredResult:response))
+            case "musicMethod":operations.append(.front(e,response,nil))
             case "free":guard e.arguments.count == 1 else { throw Boundary.dependency("Free") };try emit(.free(e.arguments[0]))
             case "queryInterface":operations.append(.front(e,outputInput.queryResult,outputInput.queriedAudio))
             case "audioVolumeRead":operations.append(.front(e,outputInput.audioGetResult,UInt32(bitPattern:outputInput.audioVolume)))
@@ -198,7 +233,7 @@ public struct OriginalApplicationLoadedMenuSession {
             case "shell":operations.append(.front(e,Int32(bitPattern:screenInput.shellResult),nil))
             case "postMessage":operations.append(.front(e,outputInput.postResult,nil))
             case "enter","leave":operations.append(.front(e,0,nil))
-            case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct":break
+            case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
             try observe(.front(e),&environment)
@@ -240,7 +275,7 @@ public struct OriginalApplicationLoadedMenuSession {
                     perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try self.front(e);return self.screenInput.drawResults[0] })
             }
         }
-        func run() throws -> PendingReturn {
+        func run() throws -> Outcome {
             var dummy: Void = ()
             var globals = model.globals,world = model.world,owned = state.memory,text = state.libraryText,scratch = local
             var musicOwner = audio,images = resources
@@ -272,13 +307,24 @@ public struct OriginalApplicationLoadedMenuSession {
             } else {
                 var character = model
                 character.globals = globals;character.world = world
-                let result = try OriginalCharacterScreen.advanceWithLibrary(state:&character,libraryText:&text,
+                var selectionLocals: [Int:Int32] = [:]
+                let result = try OriginalMatchSelection.advanceWithLibrary(state:&character,libraryText:&text,
                     selectionAtEntry:startup.resources.selectionAtEntry,target:target,input:screenInput,
-                    fillBacking:[UInt8](repeating:0,count:100),
+                    fillBacking:{ [UInt8](repeating:0,count:100) },
                     draw:{ request,g in try self.characterDraw(request,g,owned) },observe:front,
-                    checkpoint:{ point,current in try self.observe(.characterCheckpoint(point,current),&self.environment) })
+                    checkpoint:{ point,current in
+                        selectionLocals = point.locals
+                        try self.observe(.characterCheckpoint(point,current),&self.environment)
+                    })
+                model = character;world = character.world;globals = character.globals
+                if result == .matchPrelude {
+                    state.memory = owned;state.libraryText = text
+                    local = scratch;audio = musicOwner;resources = images
+                    try checkpoint("matchPrelude",globals,&environment)
+                    return .matchPrelude(.init(entry:entry,snapshot:try snapshot(globals,audio,resources),locals:selectionLocals,graphics:graphics))
+                }
                 guard result == .returned else { throw Boundary.dependency("Character continuation "+result.rawValue) }
-                model = character;world = character.world;globals = character.globals;end = .returned
+                end = .returned
             }
             try checkpoint("screen",globals,&environment)
             var dispatcher: Int32?
@@ -295,7 +341,7 @@ public struct OriginalApplicationLoadedMenuSession {
             local = scratch;audio = musicOwner;resources = images
             let final = try snapshot(globals,audio,resources)
             if end == .returned { dispatcher = try OriginalApplicationDispatchEntry.finishWorldCall(globals:final.state.full) }
-            return .init(entry:entry,snapshot:final,exit:end,dispatcherResult:dispatcher,graphics:graphics)
+            return .returned(.init(entry:entry,snapshot:final,exit:end,dispatcherResult:dispatcher,graphics:graphics))
         }
     }
 }
