@@ -482,10 +482,26 @@ release-метода прошли за138.078с/build382.17с;145 прежних
 оригинал не исполнялся. [Evidence](evidence/application-active-body-control.json),
 [план](research/APPLICATION_ACTIVE_BODY_PLAN.md). Оба Native jobs терминальны в
 `build/research/application-owned-active-body-native-20260914/`; не перезапускать.
-**Остальные18 active body стадий, полный helper ABI и instruction-store
-сравнение открыты.** NEXT — независимая physics/lifetime проекция по этому плану,
-затем остальные body стадии на собственном состоянии. Полный матч/игра,
-device/Windows/clean-Mac и прежние safety incidents остаются открытыми.
+На этом входе остальные18 стадий оставались открытыми. Следующее
+принятое конечное сравнение физики описано ниже; полный body не принят.
+
+Принято [сравнение active physics](research/APPLICATION_ACTIVE_PHYSICS.md) из текущего
+собственного control snapshot:192 source Actor checkpoints/96 полных endpoints
+воспроизведены до96 собственных physics snapshots с полными владельцами и
+журналом. Восемь отрицательных проб сохраняют границы компаратора. Четыре
+release-метода прошли за148.355с/build356.77с;147 прежних методов
+сохранены по pins,993 старых Native-файла и485 package files неизменны.
+Все997 Native-файлов и оба архива проверены. Core/source expected не менялись,
+оригинал не исполнялся. [Evidence](evidence/application-active-physics.json),
+[план](research/APPLICATION_ACTIVE_PHYSICS_PLAN.md). Native job1 терминален в
+`build/research/application-owned-active-physics-native-20260914/`; не перезапускать.
+**Остальные17 body стадий и полный active tick открыты; physics landing/death/
+spawn/reversion и поздняя transient lifetime этим конечным проходом не приняты.**
+NEXT — независимое сравнение depth/contacts/hits/cpoint проходов на текущем
+собственном состоянии, затем последующих графики/lifecycle/вывода по общему
+active body плану. Full helper ABI/stores, полный матч/игра, device/Windows/
+clean-Mac и прежние safety incidents остаются открытыми.
+
 
 
 
