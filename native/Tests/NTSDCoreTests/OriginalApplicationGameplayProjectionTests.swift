@@ -38,7 +38,7 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
         try P.require(actual.loadedObjects == expected.objects,label+" Object/Frame retention")
         try P.require(actual.frameAllocations == expected.ownedFrames,label+" Mutable Frame allocation retention")
     }
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onComplete: ((C.A) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationGameplaySource(reverse)
         _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,onStart:{ origin,pending in
             let reference = try L.R(reverse,pending)
@@ -191,6 +191,7 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
             XCTAssertEqual(checkpoints,323)
             XCTAssertGreaterThan(heapEndpoints,0)
             print("Gameplay state/effects projection: control=\(reverse), 17 owned Bootstrap returns, \(checkpoints) source-first stages, \(sourceStores) source typed stores, \(ownStores) own typed stores, \(heapEndpoints) available source Frame endpoints; full front/non-front streams, journal, graphics owners/colors and rollback verified")
+            try onComplete?(app)
         })
     }
     func testPrimaryOwnedScalarSequence() throws { try sequence(false) }

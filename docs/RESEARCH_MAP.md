@@ -454,6 +454,26 @@ Windows/clean-Mac, другие режимы, сеть и полная цель 
 `build/research/application-owned-gameplay-effects-native-20260913/`.
 
 
+Проверено [собственное active48 input-продолжение](research/APPLICATION_ACTIVE_GAMEPLAY_INPUT.md)
+после17 принятых neutral returns: оба48-call schedules проходят настоящий
+Bootstrap/WndProc, включая retained text editor и joystick profiles неактивных
+мест.576 полных source input endpoints и96 prologues воспроизведены независимо;
+проверены собственные input state/masks, replay allocation, события и журнал.
+96 собственных body returns/1824 стадии,18 input/6 late-body/18 outer rollback
+и6 same-ticket retries прошли как Native preflight. **Полное active body
+differential-сравнение ещё не принято; per-instruction input stores также открыты.**
+Четыре release-метода прошли за114.261с/build380.85с;143 прежних
+метода сохранены по pins,988 прежних Native-файлов и485 package files неизменны.
+Все991 Native-файл и оба архива проверены. Четыре ошибки компаратора/сборки и
+пропуски review сохранены; Core/source expected не менялись. Нового исполнения
+оригинала нет. [Evidence](evidence/application-active-gameplay-input.json),
+[план](research/APPLICATION_ACTIVE_GAMEPLAY_PLAN.md). Все пять Native jobs терминальны в
+`build/research/application-owned-active-gameplay-native-20260913/`; не перезапускать.
+NEXT — независимое сравнение всех19 active body стадий на собственных позициях/RNG,
+installed hooks, transient Actors, graphics/audio и полном caller journal.
+Полный матч/игра, device/Windows/clean-Mac и прежние safety incidents открыты.
+
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных
