@@ -474,14 +474,28 @@ BG records/masks. Core и прежние expected при этой поправк
 **Эта интеграция ещё не принята по полному differential-сравнению.** Принятый
 frontier остаётся на собственном Start/следующем input. Следующая задача —
 закончить независимую проекцию всех19 стадий, records/masks/stores и graphics/audio
-на собственные позиции/RNG/installed hooks; отдельно проверить новые surface maps
-и включённые file/codec/music providers с поздним rollback. Новый Z-порядок Actor
+на собственные позиции/RNG/installed hooks. Новый Z-порядок Actor
 нельзя заменить переносом координат старого event stream. Native-only preflight
 и старые helper-регрессии не закрывают эти проверки. Все пять Native jobs этой
 карточки терминальны; кандидаты/логи находятся в
 `build/research/application-loaded-gameplay-native-20260913/`. Не перезапускать.
 Полный матч, другие modes/CPU/playback, backend, окно/ввод/звук, Windows/cleanMac,
 полная игра и прежние safety/source-fault зависимости остаются открытыми.
+
+Отдельно проверены [gameplay providers](APPLICATION_LOADED_GAMEPLAY_PROVIDERS.md):
+все829 catalog/15 arena bindings, семь class-wide owner rejections, music resume,
+file/codec callbacks, шесть returned-IO вариантов и поздний rollback с повторным
+успехом того же session/ticket. Три release-метода прошли за46.702с/build337.52с;
+четыре writer/recording регрессии — за53.406с/build0.36с. Прежние134 успешных
+метода сохранены через полное равенство982 исходных файлов; заново не запускались.
+Core/старые tests/383 fixtures/102 resources неизменны. Ошибки двух кандидатов
+и пропуски review сохранены; все четыре новых Native jobs терминальны.
+[Evidence](../evidence/application-loaded-gameplay-providers.json).
+Независимый saved-data review описывает idempotent stores и точное округление
+проекции, но не заменяет готовый comparator. NEXT — закончить все19 стадий и
+16 последующих вызовов по [плану](APPLICATION_LOADED_GAMEPLAY_COMPARISON_PLAN.md).
+Новые artifacts: `build/research/application-loaded-gameplay-comparison-native-20260913/`;
+старую папку gameplay и завершённые захваты не изменять/не перезапускать.
 
 Историческое ограничение предыдущего входа (countdown теперь пройден):
 Countdown147 и selection0 должны пройти собственный input/handler; не ставить

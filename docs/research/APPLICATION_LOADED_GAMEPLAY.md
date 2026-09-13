@@ -82,12 +82,17 @@ graphics and audio need an independent projection of those differences. In
 particular, own Actor Z order changes drawing order; translating coordinates
 in the old event stream is insufficient. Preserve every unaccounted mismatch.
 
-Direct exhaustive checks of the new catalog/arena surface maps, enabled result
-IO/music providers and late rollback after their mutations remain to be added.
+The separate [provider checkpoint](APPLICATION_LOADED_GAMEPLAY_PROVIDERS.md)
+checks all829 catalog/15 arena bindings, seven class-wide owner rejections,
+enabled result IO/music providers, returned IO errors and late rollback/retry.
+Seven release methods pass; previous134 successes remain backed by unchanged
+code/tests/fixtures. These controlled provider trials do not finish the full
+source-first comparison.
 The neutral path does not establish active combat, pause/menu alternatives,
 result recording, other modes/CPU/playback or unrecovered caller backing.
 Existing helper regressions do not substitute for these enclosing-call checks.
 
-Next: finish the bounded source-first projection and missing owner/provider
-trials before accepting this card. Backend/window/input/audio, Windows/clean-Mac,
+Next: finish the bounded source-first projection under the
+[comparison plan](APPLICATION_LOADED_GAMEPLAY_COMPARISON_PLAN.md) before accepting
+this card. Backend/window/input/audio, Windows/clean-Mac,
 full match, all original content/modes/networking and the full goal remain open.
