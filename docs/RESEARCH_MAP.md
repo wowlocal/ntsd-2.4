@@ -260,13 +260,22 @@ Parent phase сохраняет count19/188 known bytes до записи два
 21 bundled release-тест прошёл за136.426с/build307.11с; поздние отмены и overlap
 с живыми PCM откатываются целиком. 425 pins/913 Native/379 fixtures и пакеты
 сверены, старые375 fixtures неизменны; оригинал не исполнялся.
-[Evidence](evidence/application-catalog-session.json). Финальный независимый review
-нового graphics comparator открыт после исчерпания квоты reviewer; прежние
-plan/reference/draft review сохранены. Следующие зависимости — этот review,
-полный catalog/pool/UI/loading/outer return и объявленные resource boundaries.
-Текущие20-child тесты, legacy catalogs и storage-limit candidate5 не доказывают
-целый новый return. Завершённые captures не повторять. Actual raster/палитра/device
-и прежние safety incidents остаются открытыми.
+[Evidence](evidence/application-catalog-session.json). Независимый
+[review4](evidence/application-catalog-session-final-review.json) закрыл final
+comparator gap точногоf601614. Все12449 appended commands сверены;3177 Blt читают
+прежние поверхности, следующий draw новых catalog surfaces остаётся открытым.
+[Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
+156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
+Старый sameCPU audio adapter повторно использует PCM mappings для отдельных
+вызовов; их нельзя импортировать как одновременно живые own allocations.
+Следующая задача — полный owned Native137Objects/17BG/Stage→PendingPool с явным
+provider ресурсов/platform controls, новыми проверенными bindings и whole rollback.
+Полные catalog records не содержат полного clock/message/graphics потока приложения;
+новый Native environment не является whole original application match.
+1219 pins/1227 archive members и неизменные913Native/379fixtures сверены.
+[Evidence](evidence/application-catalog-full-inputs.json). Source return, новые
+surface consumers, pool/UI/loading/outer, actual device и safety incidents открыты.
+Completed captures не повторять.
 
 [Конечная матрица подготовки War](research/LIB_WAR_PREPARATION_MATRIX.md)
 совпала в256 внешних возвратах/236 возвратах War и56 подготовках:340 участников,

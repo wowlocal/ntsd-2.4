@@ -1,0 +1,214 @@
+{
+  "schema": 1,
+  "status": "verified_full_catalog_input_preflight",
+  "UTC": "2026-09-13T06:13:51.329152+00:00",
+  "baseCommit": "f6016148f1605da618928b75466601b241eec9a9",
+  "scope": "Original resource/control provenance for a future complete owned Native catalog. Full controlled catalogs remain separate from missing full original application return.",
+  "originalExecuted": false,
+  "NativeExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "originalInputCounts": {
+    "DATAndRegistry": 156,
+    "uniqueWAV": 365,
+    "images": 669,
+    "bytesFilesAndImages": 647179902
+  },
+  "envelopes": {
+    "original-loaded-catalog-files-raw-zero.json": {
+      "packed": {
+        "bytes": 13423575,
+        "sha256": "714926a720803857b07489ed83609cb30afe1ffc3369cb8821ec909eed1643b4"
+      },
+      "raw": {
+        "bytes": 95252389,
+        "sha256": "7c9c839ea3cea8733ddb4c4e8ec9218ee4b982dc1ca8df52632d381efa40dd40"
+      }
+    },
+    "original-loaded-catalog-files.json": {
+      "packed": {
+        "bytes": 13427294,
+        "sha256": "14aab2f9653c3c6a4cff550343ef5a3721899acdaf980d017672afdb4d135872"
+      },
+      "raw": {
+        "bytes": 95289959,
+        "sha256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+      }
+    },
+    "original-loaded-catalog-audio.json": {
+      "packed": {
+        "bytes": 4724375,
+        "sha256": "932f0e281a1db10c0e052f2911223b6fb446b19df2b41bd0efcd9778c7be6fcd"
+      },
+      "raw": {
+        "bytes": 9906570,
+        "sha256": "62f04131c02c3a890b697396dc1e407515646198f6ac6b709a64eaafc191a22d"
+      }
+    },
+    "original-catalog-sounds.json": {
+      "packed": {
+        "bytes": 45644744,
+        "sha256": "683d10ebec24300b0bd609a60b5bf92f64602a61d8617b41b33b46d14437f4f6"
+      },
+      "raw": {
+        "bytes": 47296738,
+        "sha256": "4283fc01113f09533428ca43ec1df25b1c80a2fbea2df58f1053cf44e3122e53"
+      }
+    }
+  },
+  "allBlobVerification": {
+    "original-loaded-catalog-files-raw-zero.json": {
+      "blobs": 3365,
+      "bytes": 95068236
+    },
+    "original-loaded-catalog-files.json": {
+      "blobs": 3366,
+      "bytes": 95070529
+    },
+    "original-loaded-catalog-audio.json": {
+      "blobs": 3367,
+      "bytes": 95072129
+    },
+    "original-catalog-sounds.json": {
+      "blobs": 4263,
+      "bytes": 113149416
+    }
+  },
+  "fullCatalog": {
+    "children": 155,
+    "requests": {
+      "bitmap": 4,
+      "progress": 137,
+      "object": 137,
+      "background": 17,
+      "stages": 1
+    },
+    "bitmaps": 829,
+    "allocations": 15545,
+    "eventKinds": {
+      "bitmap-load": 829,
+      "color-key": 829,
+      "open": 621,
+      "close": 621
+    },
+    "allImageMetadataPresent": true,
+    "mirrorEvents": 0,
+    "sameAllChildAndBitmapPathOrderAcrossThreeCatalogs": true,
+    "rawTranslation": "raw",
+    "textTranslation": "text",
+    "rawChecksum": 31461560,
+    "textChecksum": 31475378,
+    "audioChecksum": 31475378,
+    "rawInitialChecksum": 0
+  },
+  "soundControls": {
+    "calls": 400,
+    "uniqueFiles": 365,
+    "kinds": {
+      "frame": 386,
+      "weapon": 14
+    },
+    "allReturned1AndTemporaryNotLive": true,
+    "declaredPCMRegions": 666,
+    "declaredPCMBytes": 14635871,
+    "deviceTokens": [
+      603979808
+    ]
+  },
+  "reusedPCMMappings": {
+    "status": "verified_static_and_saved_data",
+    "UTC": "2026-09-13T06:09:33.789369+00:00",
+    "originalExecuted": false,
+    "sameCPU": true,
+    "sharedAdapterRegionsResetAtEach4014e0Entry": true,
+    "resetLine": 59,
+    "platformFunctionLine": 52,
+    "firstPointer": "27000020",
+    "secondPointer": "28000020 or NULL",
+    "bufferTokens": 400,
+    "PCMReturnRegions": 666,
+    "overlapPairs": 115045,
+    "scope": "400 distinct logical device buffers with separately saved call results, while the adapter reuses mapped PCM scratch at each call. This is not400disjoint simultaneously live PCM allocations and is not an original fault. Do not transplant these pointer controls into the persistent-range contract of the own application owner. New declared bindings need a separate Native composition test; do not modify historical controls/expected bytes."
+  },
+  "openBoundaries": [
+    "Full controlled catalogs have complete final game records,137Objects/17BG/Stage, original files and image metadata; no full current application return.",
+    "Raw full catalog events expose open/close/bitmap-load/color-key, not actual full bitmap COM/DC replies, live image/surface generations or animated application loading globals.",
+    "Audio fixture preserves400 whole WAV calls with400 explicit platform inputs and expected results; original device/PCM identities belong to its distinct controlled environment.",
+    "Full asset availability establishes no missing-mirror callback in these retained full catalogs; it does not prove all future error/fallback paths.",
+    "Before full own Native integration, define resource/control provider and collision-free logical identities against actual retained startup/common owners; do not copy expected after-state or blindly transplant old tokens.",
+    "Own loading clock/message/control sequence beyond saved prefixes is missing from these full catalogs. A new declared Native environment can exercise composition but is not a whole original application match.",
+    "Text versus raw source translation/checksum remain separate; identical child path order is not byte-identical decoded text or a common checksum.",
+    "All previous terminal own captures and safety incidents remain unchanged; no original retry or new original run."
+  ],
+  "preservation": {
+    "status": "verified",
+    "UTC": "2026-09-13T06:10:17.055887+00:00",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-inputs-20260913/full-catalog-inputs1.tar",
+    "tar": {
+      "bytes": 761221120,
+      "sha256": "847aa3dc7b8d9ba65630e9b107cd1be7182ee2037b4e40ef027f7fe2a839107d"
+    },
+    "members": 1227,
+    "distinctInputPins": 1219,
+    "allNamesBytesSHAModesVerified": true,
+    "readbackComparedToEverySourceByte": true,
+    "unchangedNativeFiles": 913,
+    "all379FixturesUnchanged": true,
+    "allRuntimePackagesUnchanged": true,
+    "taskBytes": 794124288,
+    "originalExecuted": false,
+    "NativeExecuted": false
+  },
+  "nextImplementation": "Complete owned catalog through actual PendingPool with an explicitly declared attempt-owned resource/control provider, new collision-checked logical bindings and full game record/mask/order/owner/rollback comparison. This Native environment must not be labelled a full original application match.",
+  "priorComparatorReview": {
+    "status": "independently_closed_no_material_blockers",
+    "path": "docs/evidence/application-catalog-session-final-review.json",
+    "pin": {
+      "bytes": 22011,
+      "sha256": "621e2f1107e7ee1aa93527cd56c836d827980b908f6f0af67370be0701d09b92"
+    },
+    "laterCatalogSurfaceDrawConsumerStillOpen": true
+  },
+  "artifacts": {
+    "build/research/application-catalog-full-inputs-20260913/amendment1-sound-provenance.json": {
+      "bytes": 667,
+      "sha256": "74ac20f22a8aea87c36e6bce442c1739a04fd3a7cd18ff67459c68257452a471"
+    },
+    "build/research/application-catalog-full-inputs-20260913/amendment2-final-review-publication.json": {
+      "bytes": 691,
+      "sha256": "996df2d51acb060709e3564f210aa8f3d6d582738bc8e2567b24b88b6611a2c3"
+    },
+    "build/research/application-catalog-full-inputs-20260913/archive1-producer-pin.json": {
+      "bytes": 180,
+      "sha256": "fc72aae351a1eaa5d707f6e11800424f6dcc5bf6a428f96af1941b28e12bb600"
+    },
+    "build/research/application-catalog-full-inputs-20260913/archive1-verification.json": {
+      "bytes": 660,
+      "sha256": "e59430ae1f1beccd674747f22cf1f810fb64f9674f4744a41b393f709f315e85"
+    },
+    "build/research/application-catalog-full-inputs-20260913/archive1.py": {
+      "bytes": 3179,
+      "sha256": "31a01f6eb8d052352c9f02b128aefb70b41b6ee751292e8cbd631c7865cc4476"
+    },
+    "build/research/application-catalog-full-inputs-20260913/inventory1-producer-pin.json": {
+      "bytes": 182,
+      "sha256": "3c7a9e2ef604ec4d6bde99f02f6f05fa96faf144dc45f0b555d3e592fd0bc8ce"
+    },
+    "build/research/application-catalog-full-inputs-20260913/inventory1.json": {
+      "bytes": 32466524,
+      "sha256": "f776b2a68ce93b3758709603c4ed6147703c635286a202d130598fafabd284e2"
+    },
+    "build/research/application-catalog-full-inputs-20260913/inventory1.py": {
+      "bytes": 7835,
+      "sha256": "0300e468af3e5c174729acb5057f209df3db86e94a3ab549dc89954e850d3942"
+    },
+    "build/research/application-catalog-full-inputs-20260913/plan.json": {
+      "bytes": 6675,
+      "sha256": "49a64bd82cbeb07010b97abe3d52a35d97601bbcf72a9b4ea1597cd9cfa25713"
+    },
+    "build/research/application-catalog-full-inputs-20260913/sound-mapping-provenance1.json": {
+      "bytes": 841,
+      "sha256": "aaf0a425ab917946ef39d6893db7862f0a24d8cf65d0b4c83bc22b655eed44a2"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 # Production catalog continuation from PendingCatalog
 
 Status: the owned continuation and three finite twenty-Object comparisons pass;
-final independent graphics-comparator review and the full application catalog
-return remain open. [Implementation and validation](APPLICATION_CATALOG_SESSION.md)
+independent final graphics-comparator review passes. The full application catalog
+return remains open. [Implementation and validation](APPLICATION_CATALOG_SESSION.md)
 record the precise boundary; this is progress toward the full native game.
 
 The image prerequisite was completed in commit `0d0c419`. The owner task packet is
@@ -75,10 +75,16 @@ The production owner now invokes the actual shared loaders from owned applicatio
 state. Candidate2 passes all 21 release methods, including complete child/file/
 WAV/global/graphics comparisons at sixty retained caller boundaries and whole
 rollback. The twentieth child still precedes its parent slot/count store.
-Independent plan/reference/draft review is preserved; the final graphics checker
-has an explicit independent-review gap after reviewer quota exhaustion.
+Independent plan/reference/draft review is preserved;
+[review4](../evidence/application-catalog-session-final-review.json) closes the
+subsequent final graphics-comparator gap for exact f601614.
 See the [study](APPLICATION_CATALOG_SESSION.md) and
 [evidence](../evidence/application-catalog-session.json) for acceptance limits.
+
+[Full input preflight](APPLICATION_CATALOG_FULL_INPUTS.md) now verifies the original
+156 DAT/registry files, 365 WAV and 669 images. The old full audio adapter reuses
+PCM mappings across calls; a future owned environment needs declared new bindings.
+Full caller clock/message/graphics replies remain missing from the older catalogs.
 
 Full catalog/pool/UI/loading and outer-loop returns, actual raster/device output,
 AppKit input/clock/audio, War gameplay, complete matches/content/network, Windows

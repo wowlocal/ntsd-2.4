@@ -1,8 +1,8 @@
 # Owned application catalog continuation
 
-Status: Native implementation and finite saved-prefix comparisons pass; final
-independent review of the new graphics comparator remains open. The complete
-application catalog/loading return and full game remain open.
+Status: Native implementation, finite saved-prefix comparisons and independent
+final comparator review pass. The complete application catalog/loading return
+and full game remain open.
 
 ## Behavior, reference and environment
 
@@ -103,10 +103,17 @@ expected results and masks were not changed to obtain a pass.
 Independent plan and reference/input reviews passed. Candidate1 review identified
 four corrections: compile annotation, new bitmap/colors comparison, all appended
 graphics relations and exact four parent regions. The author addressed all four
-and candidate2 passed the deterministic tests. Both helper/reviewer agents then
-reported a usage limit; the author completed the graphics checker locally. Its
-final independent code review is an explicit open check, not author self-review
-labelled as independent acceptance.
+and candidate2 passed the deterministic tests. Both initial helper/reviewer agents
+reported a usage limit, so the author completed the checker locally and recorded
+a review gap. A subsequently available independent reviewer closed that gap for
+exact commit f601614 in [review4](../evidence/application-catalog-session-final-review.json),
+without executing Native or original code. Earlier evidence remains unchanged.
+
+Review4 verifies 12,449 appended commands per chain (2,918 bitmap API plus 9,531
+front commands), 139 input-to-golden joins, 301 input/RGB/mask blobs, exact parent
+regions and all 21 passed methods. All 3,177 Blt per chain use three prior surfaces;
+new catalog surfaces are checked as owned state and colors but are not drawn by
+these prefixes. Their subsequent drawing consumer remains open.
 
 All 425 pinned dependencies are unchanged or have exact original versions
 preserved from the declared Git base. All 913 current Native files match the
@@ -121,9 +128,11 @@ and self-contained.
 
 ## Open continuation
 
-Review the final graphics comparator independently when a reviewer is available.
-Continue the real full catalog consumer, pool/UI/loading and outer-loop return
-using the existing immutable captures and declared missing dependencies. No new
+The final graphics comparator review is complete. The next
+[full-input study](APPLICATION_CATALOG_FULL_INPUTS.md) verifies all original
+resources and identifies the required new logical bindings and missing caller
+controls. Continue the real full catalog consumer, pool/UI/loading and outer-loop
+return with explicit evidence boundaries. No new
 whole return is inferred from candidate5's storage-limit stop after 28 Objects;
 never restart that or any completed capture.
 

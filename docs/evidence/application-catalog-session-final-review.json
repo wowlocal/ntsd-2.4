@@ -1,0 +1,428 @@
+{
+  "schema": 1,
+  "createdUTC": "2026-09-13T06:10:59.611033+00:00",
+  "reviewer": "/root/war_contract_review",
+  "commit": "f6016148f1605da618928b75466601b241eec9a9",
+  "candidate": 2,
+  "status": "pass-final-bounded-graphics-comparator-review",
+  "materialBlockers": [],
+  "conclusion": "The four candidate1 findings C0...C3 are addressed in the exact committed/tested candidate2. Final expected new graphics relations, bitmap/DC owners and source colors are derived independently from saved events, accepted prior owners and separately pinned image goldens. This post-commit review can close the specifically recorded final independent graphics-comparator review gap; it does not accept a complete catalog/loading/application return or full game. Historical documents/reviews remain unchanged by this artifact.",
+  "operations": {
+    "originalExecuted": false,
+    "emulatorExecuted": false,
+    "NativeExecutedByReviewer": false,
+    "historicalProducerAuditorExecuted": false,
+    "blockedOperationRetried": false,
+    "codeOrFixturesEdited": false,
+    "onlyWrittenPath": "build/research/application-catalog-owner-native-20260913/review4-final.json",
+    "archiveRehashPerformed": false,
+    "readScope": "Read final Swift, direct Core/helper types, study/current/history constraints, saved review/transport/preservation/job metadata. Verified selected working/frozen/Git inputs and source/fixture hashes. Decoded the three saved source JSONs, original catalog parent bytes/masks and selected accepted golden blobs as data; no game code or historical tool import/execution."
+  },
+  "resolvedFindings": [
+    {
+      "id": "C0",
+      "result": "closed",
+      "evidence": "LibLoadingProgress.swift:14 now declares the store observer @escaping; SessionTests.swift:28 declares the retained callback @escaping and CatalogSession.swift:230 has an explicit Void context. These are the observed candidate1-to-candidate2 corrections. Saved Native2 compiled and passed all21 planned methods."
+    },
+    {
+      "id": "C1",
+      "result": "closed for declared prefixes",
+      "evidence": "GraphicsComparison.swift:35-41 resolves name/input to pinned Golden RGB/mask blobs; it does not call the Core decoder or bitmap/graphics transitions to create expected pixels. Lines67-122 derive new identity, descriptor, selection/DC generation, copy and cleanup expectations from saved requests/replies. Lines175-223 compare exact public owner sets/fields, previous owners, source colors, copy history, cleanup and active generations."
+    },
+    {
+      "id": "C2",
+      "result": "closed for every appended command in selected prefixes",
+      "evidence": "GraphicsComparison.swift:59-173 advances only over saved event slices, constructs expected bindings/rectangles/results/source snapshots and verifies every Command field, then requires commandIndex == snapshot.graphics.count at each boundary. The old batch is also exactly preserved. SessionTests.swift:204 invokes this at all60 child boundaries."
+    },
+    {
+      "id": "C3",
+      "result": "closed",
+      "evidence": "SessionTests.swift:309-318 requires the exact four parent keys/extents and188 Native known bytes before all-region byte/mask comparison. Source mask verification independently confirms all188 known bytes lie in those four regions; count19 and unknown twentieth pointer match the saved callback-before-parent-store phase."
+    }
+  ],
+  "independentSavedDataFindings": {
+    "sourceCases": 3,
+    "sourceBytes": 437967602,
+    "childBoundaries": 60,
+    "perCase": {
+      "savedEvents": 51510,
+      "bitmapAPIs": 2918,
+      "frontGraphicsCommands": 9531,
+      "appendedGraphicsCommands": 12449,
+      "imageRequests": 198,
+      "successfulNewImages": 194,
+      "failedImageNames": [
+        "shadow1",
+        "back99_1",
+        "back99_2",
+        "back99_3"
+      ],
+      "newSurfaces": 194,
+      "memoryDCAcquisitions": 194,
+      "surfaceDCAcquisitions": 194,
+      "fullOneToOneSRCCopies": 194,
+      "textDCAcquisitions": 1059,
+      "loadingBlits": 3177,
+      "presentationMethods0x14": 1059
+    },
+    "sourceOrder": "All20 eventEnd boundaries are ordered and final eventEnd equals51510 in all3 source JSONs. Every memory DC, surface DC and newly acquired text DC is closed at each child boundary; the checker preserves the prior unresolved owners separately.",
+    "copyContract": "All194 copies per case have source/destination origin0, equal positive dimensions matching both source golden metadata and full destination descriptor, and ROP0x00cc0020. The plain row-copy expectation covers each complete selected surface, including RGB backing and defined masks. No scaling/mirroring/fill/raster rule is inferred.",
+    "goldenJoin": {
+      "catalogImageNames": 139,
+      "acceptedInventoryImages": 669,
+      "distinctVerifiedInputRGBMaskBlobs": 301,
+      "verification": "All acceptedResource decoded fields equal their golden resource counterpart and raw input SHA. Selected input/RGB/mask blobs decompress to their declared sizes and SHA; no Native pixel decoder was executed by this reviewer. Full golden packed/raw hashes match the Swift literals.",
+      "decodedGoldenRawSHA256": "35c483a8fdf469670ac2ecfd758d088b8e526fcc4b95fc912f8bf099f718ae0d"
+    },
+    "parentRegions": [
+      {
+        "offset": "0x0",
+        "bytes": 2000,
+        "knownBytes": 76
+      },
+      {
+        "offset": "0x4d81060",
+        "bytes": 2448,
+        "knownBytes": 83
+      },
+      {
+        "offset": "0x4d819f0",
+        "bytes": 2448,
+        "knownBytes": 7
+      },
+      {
+        "offset": "0x4d82380",
+        "bytes": 40,
+        "knownBytes": 22
+      }
+    ],
+    "totalKnownParentBytes": 188,
+    "parentCount": 19,
+    "twentiethSlot": "offset76 bytes A5A5A5A5 with four false known-mask bytes",
+    "newSurfaceConsumptionLimit": "All3177 loading Blt commands per case read prior source surfaces0x32010000/0x32017000/0x32018000. None consumes the newly created catalog surfaces. New catalog RGB/masks are fully checked as retained owners, but later rendering from those new surfaces remains a downstream obligation."
+  },
+  "inputIndependence": {
+    "allowedInputs": "Reference.swift builds files/images from pinned original bytes and obtains declared scalar/token controls without response structure writes; bitmapControls uses replyControl(result,output) only. Original expected records/global journals/API write payloads stay comparison-only.",
+    "priorOwnerBasis": "Checker seeds only from the same run own PendingCatalog whose startup/menu/common parents are exercised by withEntry and existing accepted parent comparisons. It never seeds new images/surfaces from current snapshot after-state. Previous colors/owners are retained baseline dependencies, not newly discovered Windows output.",
+    "expectedProjection": "Expected resource generations use saved event order and prior generation maxima. New colors use pinned goldens; command source-color snapshots read that independent expected map or prior owner map. Native requests used in the separate Operation equality have already passed saved request/known-byte comparison.",
+    "unknownBytes": "Defined masks remain explicit. Known API bytes compare against source; undefined request bytes retain the established canonical/unknown comparison boundary. All selected CreateSurface descriptors are fully known. Logical zero backing for unwritten source colors is distinct from device pixels."
+  },
+  "validation": {
+    "jobStatus": "terminal",
+    "exitCode": 0,
+    "plannedAndActualMethods": 21,
+    "newSessionMethods": 3,
+    "failures": 0,
+    "buildSeconds": 307.11,
+    "testSeconds": 136.426,
+    "elapsedSeconds": 446.41884770900003,
+    "endedUTC": "2026-09-13T05:50:47.720437+00:00",
+    "methodNamesExactlyMatchFrozenValidationPlan": true,
+    "rawOverrides": false,
+    "methods": [
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testCatalogAllocationCannotOverlapRetainedCommonPCM",
+        "seconds": 7.11
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+        "seconds": 9.831
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "method": "testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+        "seconds": 37.01
+      },
+      {
+        "suite": "OriginalApplicationLoadingPrefixTests",
+        "method": "testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+        "seconds": 8.422
+      },
+      {
+        "suite": "OriginalApplicationLoadingPrefixTests",
+        "method": "testOwnLoadingCommonSoundsAndOrdinaryFailures",
+        "seconds": 15.316
+      },
+      {
+        "suite": "OriginalCatalogPrecisionTests",
+        "method": "testCompleteOriginalCatalogAtExplicit53Bits",
+        "seconds": 5.827
+      },
+      {
+        "suite": "OriginalCatalogPrecisionTests",
+        "method": "testEveryActualDATDoubleScanAtExplicit53Bits",
+        "seconds": 5.779
+      },
+      {
+        "suite": "OriginalCatalogSoundsTests",
+        "method": "testCompleteSourceCatalogWithEnabledWaveLoading",
+        "seconds": 6.353
+      },
+      {
+        "suite": "OriginalCatalogSoundsTests",
+        "method": "testRepeatedObjectsUseTheLiveOriginalSoundCache",
+        "seconds": 0.658
+      },
+      {
+        "suite": "OriginalCatalogTests",
+        "method": "testCatalogParentAgainstOriginalInstructions",
+        "seconds": 0.016
+      },
+      {
+        "suite": "OriginalCatalogTests",
+        "method": "testUnsupportedRegistryInputsCannotBecomeLoadedState",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalInitialLoadingTests",
+        "method": "testContinuousFirstLoadingFromRealPrologue",
+        "seconds": 6.383
+      },
+      {
+        "suite": "OriginalInitialLoadingTests",
+        "method": "testPhaseZeroPauseAndReversedActorAllocations",
+        "seconds": 6.397
+      },
+      {
+        "suite": "OriginalLoadedCatalogFilesTests",
+        "method": "testFinalStageCleanupFailureDoesNotPublishCatalogOrFiles",
+        "seconds": 0.482
+      },
+      {
+        "suite": "OriginalLoadedCatalogFilesTests",
+        "method": "testInterleavedDuplicateSourcesThroughOwnedFiles",
+        "seconds": 0.68
+      },
+      {
+        "suite": "OriginalLoadedCatalogFilesTests",
+        "method": "testRepeatedWeaponPathAllocationsAndLateRollback",
+        "seconds": 0.047
+      },
+      {
+        "suite": "OriginalLoadedCatalogFilesTests",
+        "method": "testWholeRawCatalogThroughOwnedFiles",
+        "seconds": 6.933
+      },
+      {
+        "suite": "OriginalLoadedCatalogFilesTests",
+        "method": "testWholeTextCatalogThroughOwnedFiles",
+        "seconds": 7.124
+      },
+      {
+        "suite": "OriginalLoadedCatalogTests",
+        "method": "testCompleteOriginalCatalogWithRawFilesAndZeroBacking",
+        "seconds": 5.681
+      },
+      {
+        "suite": "OriginalLoadedCatalogTests",
+        "method": "testCompleteOriginalCatalogWithTextFiles",
+        "seconds": 5.751
+      },
+      {
+        "suite": "OriginalLoadedCatalogTests",
+        "method": "testInterleavedChildrenAndDuplicateSourceIDs",
+        "seconds": 0.627
+      }
+    ],
+    "meaning": "Saved deterministic test evidence was read, not rerun. Three main chains each cancel at child20; additional controls cancel at volume94 and changed text DC or reject overlapping retained PCM. No partial PendingPool is published."
+  },
+  "preservation": {
+    "focusedCodeFilesMatchWorkingFrozenAndCommitted": 12,
+    "NativeCandidateFilesFromSavedManifest": 913,
+    "unchangedReferenceHelper": "Candidate1 and candidate2 Reference.swift are identical. Input fixtures/source expected values remain pinned.",
+    "historicalFailures": "Original mask-seam preflight, transport size limit and candidate1 compilation failure remain separately preserved. Prior review remains immutable; C0...C3 resolution is recorded only here.",
+    "archiveScope": "Author-produced full archive/Git/preservation reports were read; no new all913-file/archive verification is claimed by this reviewer. Selected code and input pins were independently recomputed.",
+    "postCommitReview": "This new artifact postdates the existing archives and commit verification; it is not asserted to be inside those immutable archives."
+  },
+  "openLimits": [
+    "Complete current catalog/pool/UI/loading/outer-loop return remains open. Existing20-child cancellation and older full controlled catalogs do not establish that application return.",
+    "Subsequent draws of new catalog surfaces were not reached; Windows raster/palette/device output, rendering, input/audio/clock and clean-Mac acceptance remain open.",
+    "Comparator intentionally covers the selected positive API profile. Image fallback attempts are observed; broader graphics allocation/GetDC/cleanup failure profiles require separately declared expectations and ownership/rejection contracts.",
+    "Nonempty registered-sound cache, NULL child allocation, unresolved/live temporary WAV storage, mirror/fill/nonempty message dispatch and other declared boundaries remain open.",
+    "All recorded safety incidents and the separate Windows-download refusal remain open; no affected operation was retried or rerouted."
+  ],
+  "reviewDiagnostic": "An initial read-only golden metadata probe compared the full JSON resource dictionary to the narrower decoded acceptedResource projection and failed because the full resource also contains inputPath/expectedStem. It wrote nothing. A subsequent explicitly field-projected check verified all139 joins; source/expected/candidate bytes were never changed.",
+  "codePins": {
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogGraphicsComparison.swift": {
+      "bytes": 17385,
+      "sha256": "ba689527286933b5a039a0e5737a65e52a6dedf2e8bf472dd3f5e6cbd42cb9ab"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionTests.swift": {
+      "bytes": 26628,
+      "sha256": "7e67be7b2bec2bc428e5d4a197dc99e89f02229a31915a1a86b81cb1479b9e06"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionReference.swift": {
+      "bytes": 27524,
+      "sha256": "553f287a90f3e8b4958dfeeeb82245e281f5975ca98c3e5612613e5dcfefa9a4"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationGraphicsTests.swift": {
+      "bytes": 18470,
+      "sha256": "b8c39efa642cd00d4a8ac6b2d1e94748c6351b31bc0948ebbfa4e5dfe96d6177"
+    },
+    "native/Tests/NTSDCoreTests/OriginalCatalogDIBPixelsTests.swift": {
+      "bytes": 13142,
+      "sha256": "296c78e3b9ca80ea3aeaad03ef4bf3fbefe628843e47288a8b54d02e084f2ab5"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift": {
+      "bytes": 26171,
+      "sha256": "b41c9b3f2bf89810669ef9d1076c9e8ffcd6dd47457d0b4f43256f8a22fe9f22"
+    },
+    "native/Sources/NTSDCore/OriginalLibLoadingProgress.swift": {
+      "bytes": 8247,
+      "sha256": "e6fac017b2f372b5d968f9e39a14e03af0f8db04030ac381087a9d3c20cd6ac0"
+    },
+    "native/Sources/NTSDCore/OriginalLoadedCatalog.swift": {
+      "bytes": 20747,
+      "sha256": "51718f8807aaecde366cd89cd439c6c5642ff9f6d20963986d73dd1bb34c8e01"
+    },
+    "native/Sources/NTSDCore/OriginalCatalogRegistry.swift": {
+      "bytes": 12877,
+      "sha256": "2becf8d17e00fa0b7097cc578fddcdf9e7c3b24271b8d086f8fd6ef454fc7668"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationGraphics.swift": {
+      "bytes": 19052,
+      "sha256": "223c4becbcc564a4b0c6a333d91db487954c62425ad8c0e2bcc7fe68f8ce4247"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift": {
+      "bytes": 10830,
+      "sha256": "6b8772227bf11950bc91ef9713a75bd90646396cc895603817c5ed8060367ba0"
+    },
+    "native/Sources/NTSDCore/OriginalSurfaceSourceColors.swift": {
+      "bytes": 3537,
+      "sha256": "938189ce1234a9178f9cd1cd20f5779fd16bdd33e20f5cde995b7c29085b6f53"
+    }
+  },
+  "sourcePins": {
+    "build/research/application-catalog-candidate4-guarded.object-000020.json": {
+      "bytes": 146002564,
+      "sha256": "9589eca69b423f953a26d18916c116f203312ebfdb663a81684b2f017984c7f8"
+    },
+    "build/research/application-catalog-candidate2-nominal.object-000020.json": {
+      "bytes": 145953356,
+      "sha256": "c2aeb98dda92e9e01ed632c097d7866e0209015c6934498a541c3d88d5360c29"
+    },
+    "build/research/application-catalog-candidate3-nominal.object-000020.json": {
+      "bytes": 146011682,
+      "sha256": "9b0f81647d08ad4bafae9511526fec9181599b944cfb6636ddcb36fe3611c62b"
+    }
+  },
+  "fixturePins": {
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session.json.zlib": {
+      "bytes": 33079,
+      "sha256": "7daa37e67afe67f0512d1fa5f773057de21ddcab4dc59807a9163b790c4e288f"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0000.zlib": {
+      "bytes": 93334140,
+      "sha256": "8152e7854fa697b99c239565ba93d2a280e7529cf7f7563182b22e02867c1e44"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0001.zlib": {
+      "bytes": 94736243,
+      "sha256": "422a4da457593d894beb3eeb339cdbdecaf2ee9d3913c1db84f66975394a562c"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session-part-0002.zlib": {
+      "bytes": 93332305,
+      "sha256": "2bc6eef68912592572b9cf9e692ae92aa0adc4a40898cc70fac7eb774c884d69"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib": {
+      "bytes": 48082802,
+      "sha256": "05c80127a13d8991ae9ca62a785bc416527ff8de52fc3e3630ab0f46ba174eb1"
+    }
+  },
+  "supportingPins": {
+    "AGENTS.md": {
+      "bytes": 9743,
+      "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+    },
+    "AGENTS_HISTORY_2026-09-12.md": {
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+    },
+    "docs/research/WORKFLOW.md": {
+      "bytes": 25142,
+      "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+    },
+    "docs/research/CURRENT_WORK.md": {
+      "bytes": 36537,
+      "sha256": "a465f1008f780fc972a5c7ead8423589dcdadc286e26cc8e7cbaa13e1cdac48d"
+    },
+    "docs/research/APPLICATION_CATALOG_SESSION.md": {
+      "bytes": 8785,
+      "sha256": "0e20f7cf58e77aac771534a75f213f367ad932416dce79d9bcb8afdb5bd9ab5c"
+    },
+    "docs/evidence/application-catalog-session.json": {
+      "bytes": 21115,
+      "sha256": "2f5206c0ef5d6f425e3bee76b03ccf8224d5d5760b43ae4316bde4206a9e7ed4"
+    },
+    "build/research/application-catalog-owner-native-20260913/plan.json": {
+      "bytes": 19943,
+      "sha256": "fda369c3e71f37f7f17597ca77f3e0f9936b2bfd4f19eaf4a8dbb3a287e0ebbb"
+    },
+    "build/research/application-catalog-owner-native-20260913/review1-plan.json": {
+      "bytes": 12010,
+      "sha256": "dd1391dfc84cedad497c58bea001ce2a8923ba43fdb934e4f0e20fefc6d6b1b3"
+    },
+    "build/research/application-catalog-owner-native-20260913/review2-reference.json": {
+      "bytes": 21039,
+      "sha256": "d31548e626262cdb0c5f92cf54d0ab0a78c39318c33250765630ade7a8c603b4"
+    },
+    "build/research/application-catalog-owner-native-20260913/review3-candidate1.json": {
+      "bytes": 12193,
+      "sha256": "bef9b59903bab1e2a3a0de1e9f1188af68ddd079debff14f06f4efb7dd130f9e"
+    },
+    "build/research/application-catalog-owner-native-20260913/amendment6-graphics-comparison.json": {
+      "bytes": 2905,
+      "sha256": "d4e26bdbca45eb13b6fc8b208f45c8dcecfa2e80e55f1da02906700882b6f8af"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate2-author-notes.json": {
+      "bytes": 913,
+      "sha256": "548f6ceb182246042f8d717b8115b05c10624357c46e8b2f2778bd280f1f1de8"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate1-inputs.json": {
+      "bytes": 162631,
+      "sha256": "b1a15408783295f53749024f0f350555427dab1da02c6ead5abc386253685d5a"
+    },
+    "build/research/application-catalog-owner-native-20260913/candidate2-inputs.json": {
+      "bytes": 162822,
+      "sha256": "e22048d65483fe0e32abeae7e82725ca05fe870ef9f9d7d02ec62c9f4911cacc"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1.job.json": {
+      "bytes": 1249,
+      "sha256": "6d327a63b49e12e09384c13afd2fbeba507798c9697230d46cd41bfeb5c6f413"
+    },
+    "build/research/application-catalog-owner-native-20260913/native1.log": {
+      "bytes": 3972,
+      "sha256": "997117ecc0b2dafb8e9bf031102afd37db5a78d663bab34c90ebeac5d336d552"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2.job.json": {
+      "bytes": 1255,
+      "sha256": "ef8779fff3331b3ace37c861c2359c52cadc4bdccbba3d334751a32171a3a3b6"
+    },
+    "build/research/application-catalog-owner-native-20260913/native2.log": {
+      "bytes": 29280,
+      "sha256": "9e3ada73dcd34d6f7cf84704a5b287dd6ac0dbfeb94cd928c41e592efc0f9713"
+    },
+    "build/research/application-catalog-owner-native-20260913/validation-plan1.json": {
+      "bytes": 2395,
+      "sha256": "809bb8e94007dddaebd959de876e2d10c324ac99ccc71a5f6ae4b6f9f7f4af4a"
+    },
+    "build/research/application-catalog-owner-native-20260913/reference-transport2.json": {
+      "bytes": 110699,
+      "sha256": "836f606fc6727b6e1650dba222b87473e0546e3c25bea098d259aff79228e461"
+    },
+    "build/research/application-catalog-owner-native-20260913/final-preservation-candidate2.json": {
+      "bytes": 194910,
+      "sha256": "dc73d0d2f2be572d1c81ec3bf5a00ff658b7a6d75742a76bdfcb1e98896323b3"
+    },
+    "build/research/application-catalog-owner-native-20260913/publication-verification1.json": {
+      "bytes": 43976,
+      "sha256": "525a8238485f99a049f0d57c572c3a60d52b6452faf2a2648eb72c936750f39d"
+    },
+    "build/research/application-catalog-owner-native-20260913/commit-verification.json": {
+      "bytes": 754,
+      "sha256": "4f70af308c08fd432f496bf7ed699beaea4b67e15085cd450cb5adf020ca2c11"
+    }
+  },
+  "fullGameComplete": false
+}

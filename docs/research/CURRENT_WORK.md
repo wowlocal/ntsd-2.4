@@ -308,17 +308,32 @@ ReleaseDC, точные rectangles, ответы API и whole rollback. Loading 
 с живыми common PCM. Source/expected неизменны; нового исполнения оригинала нет.
 425 pins, 913 Native-файлов, 379 fixtures и оба пакета проверены; ошибки preflight,
 transport и первой компиляции сохранены. [Evidence](../evidence/application-catalog-session.json).
-Независимые plan/reference/draft review есть; финальный graphics comparator
-дописан автором после исчерпания квоты reviewer и требует независимой проверки.
-Это открытая проверка, не отказ платформенной безопасности.
+Независимые plan/reference/draft review сохранены. Доступный отдельный reviewer
+завершил [review4](../evidence/application-catalog-session-final-review.json) точного
+f601614 без существенных замечаний: gap финального comparator закрыт.
+12 449 appended graphics commands на цепочку сверены независимо. Все3 177 Blt
+читают прежние три surfaces;194 новых catalog surfaces проверены по owners/RGB/
+masks, а их последующий draw consumer ещё открыт.
 
-Следующий шаг — независимый review финального comparator и продолжение полного
-каталога/pool/UI/loading/outer return по [плану](APPLICATION_CATALOG_SESSION_PLAN.md).
-Production owner не имеет лимита20; текущие тесты отменяют попытку на сохранённой
-границе и не доказывают его полный возврат. Legacy whole catalogs и terminal
-candidate5 после28 Objects этого пробела не закрывают. Завершённые captures
-не повторять. Nonempty sound cache, live/неустановленные WAV temporary owners,
-NULL allocations, fill/mirror/nonempty MSG остаются явными зависимостями.
+[Полный input preflight](APPLICATION_CATALOG_FULL_INPUTS.md) подтвердил156 DAT/
+registry-файлов,365 WAV и669 изображений —647 179 902 исходных байта. Все400 WAV
+вызовов возвращаются1 без live temporary. Но старый audio adapter в одном CPU
+сбрасывает w.regions и переиспользует два PCM mapping:666 сохранённых областей
+не означают666 одновременно живых allocations. Полные записи и порядки каталогов
+есть; полного clock/message/COM/DC потока собственного приложения в них нет.
+[Evidence](../evidence/application-catalog-full-inputs.json):1219 pins/1227 archive
+members проверены; все913 Native/379 fixtures и пакеты неизменны, новых запусков нет.
+
+**Следующая задача — реальный полный Native catalog → PendingPool** с provider
+исходных ресурсов и явно объявленных platform controls на одну попытку. Проверить
+137 Objects/17 BG/Stage, полные records/masks, allocation/registration order,
+retained owners и поздний rollback. Новые логические bindings сверять с живыми
+startup/common regions; старые PCM pointers нельзя переносить как persistent
+storage. Повторно использовать существующие fixtures, не expected after-state.
+Сохранить20-child source comparisons как регрессии. Этот новый Native environment
+не считать полным оригинальным application match; недостающий source return,
+новые surface consumers и pool/UI/loading/outer остаются отдельными границами.
+Completed captures, включая terminal candidate5 после28 Objects, не перезапускать.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся
