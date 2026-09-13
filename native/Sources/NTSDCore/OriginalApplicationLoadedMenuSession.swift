@@ -9,18 +9,21 @@ public struct OriginalApplicationLoadedMenuSession {
     public enum Boundary: Error, Equatable {
         case alreadyPrepared, dependency(String), overlap(UInt32), owner(UInt32)
     }
-    public enum AllocationKind: Equatable { case menu(Int), background }
+    public enum AllocationKind: Equatable { case menu(Int), background, arena(Int) }
     public enum Operation: Equatable {
         case preceding(Input.Operation), menu(Session.Effect)
         case music(OriginalMusicEvent,OriginalMusicResponse)
         case front(OriginalFrontScreenEvent,Int32,UInt32?)
         case clock(UInt32), loop(Session.Loop.Request,Session.Loop.Response)
+        case localTime(OriginalLocalTime), recordingAllocation(UInt32,Int)
     }
     public enum Observation {
         case music(OriginalMusicEvent,OriginalMusicResponse), bitmap(API.Request,API.Response)
         case resource(OriginalInterfaceEvent), front(OriginalFrontScreenEvent)
         case resourceCheckpoint(OriginalMenuResourceCheckpoint,OriginalStateRecord,[UInt32:OriginalLoadedBitmap])
         case characterCheckpoint(OriginalCharacterScreenCheckpoint,OriginalMatchPreparation)
+        case prelude(OriginalMatchPreludeEvent), preparation(OriginalMatchPreparationEvent)
+        case launchCheckpoint(String,Snapshot)
     }
     public struct Snapshot {
         public let state: State, match: OriginalMatchPreparation
@@ -38,6 +41,7 @@ public struct OriginalApplicationLoadedMenuSession {
     /// not run. Retain current owners and the original suspended loop ticket.
     public struct PendingMatchPrelude {
         public let entry: Input.PendingContinuation, snapshot: Snapshot
+        public let confirmation: Int32
         public let locals: [Int:Int32]
         public let graphics: [OriginalApplicationGraphics.Command]
         public var loading: Session.PendingLoading { entry.loading }
@@ -94,7 +98,7 @@ public struct OriginalApplicationLoadedMenuSession {
         }
         environment = a.environment;return result
     }
-    private final class Attempt<E> {
+    final class Attempt<E> {
         let entry: Input.PendingContinuation,bindings: OriginalApplicationMatchBindings
         let screenInput: OriginalFrontScreenBodyInput,outputInput: OriginalMenuPresentationInput
         let allocation: (AllocationKind,Int,inout E) throws -> OriginalInterfaceAllocation
@@ -115,14 +119,18 @@ public struct OriginalApplicationLoadedMenuSession {
              _ music: @escaping (OriginalMusicEvent,inout E) throws -> OriginalMusicResponse,
              _ time: @escaping (inout E) throws -> UInt32,
              _ observe: @escaping (Observation,inout E) throws -> Void,
-             _ checkpoint: @escaping (String,OriginalStateRecord,inout E) throws -> Void) throws {
-            self.entry = entry;environment = env;state = entry.state;model = entry.match;audio = entry.music
-            resources = entry.menuResources;backgrounds = entry.menuBackgrounds
+             _ checkpoint: @escaping (String,OriginalStateRecord,inout E) throws -> Void,
+             resuming: PendingMatchPrelude? = nil) throws {
+            self.entry = entry;environment = env;state = resuming?.snapshot.state ?? entry.state
+            model = resuming?.snapshot.match ?? entry.match;audio = resuming?.snapshot.music ?? entry.music
+            resources = resuming?.snapshot.resources ?? entry.menuResources
+            backgrounds = resuming?.snapshot.backgrounds ?? entry.menuBackgrounds
             bindings = try .init(pending:entry.entry);screenInput = screen;outputInput = output
             allocation = allocate;bitmapReply = bitmap;musicReply = music;clock = time
             self.observe = observe;self.checkpoint = checkpoint
-            operations = entry.operations.map(Operation.preceding);graphics = entry.graphics
-            local = try .init(bytes:[UInt8](repeating:0,count:0x704),defined:[Bool](repeating:false,count:0x704))
+            operations = resuming?.snapshot.operations ?? entry.operations.map(Operation.preceding)
+            graphics = resuming?.graphics ?? entry.graphics
+            local = try resuming?.snapshot.local ?? .init(bytes:[UInt8](repeating:0,count:0x704),defined:[Bool](repeating:false,count:0x704))
             guard screen.drawResults.count == 1 else { throw Boundary.dependency("Single menu draw response") }
             guard output.targetSurface == entry.loading.target else { throw Boundary.dependency("Menu target") }
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
@@ -308,6 +316,7 @@ public struct OriginalApplicationLoadedMenuSession {
                 var character = model
                 character.globals = globals;character.world = world
                 var selectionLocals: [Int:Int32] = [:]
+                var confirmation: Int32?
                 let result = try OriginalMatchSelection.advanceWithLibrary(state:&character,libraryText:&text,
                     selectionAtEntry:startup.resources.selectionAtEntry,target:target,input:screenInput,
                     fillBacking:{ [UInt8](repeating:0,count:100) },
@@ -315,13 +324,14 @@ public struct OriginalApplicationLoadedMenuSession {
                     checkpoint:{ point,current in
                         selectionLocals = point.locals
                         try self.observe(.characterCheckpoint(point,current),&self.environment)
-                    })
+                    },matchPrelude:{ confirmation = $0 })
                 model = character;world = character.world;globals = character.globals
                 if result == .matchPrelude {
+                    guard let confirmation else { throw Boundary.dependency("Selection confirmation owner") }
                     state.memory = owned;state.libraryText = text
                     local = scratch;audio = musicOwner;resources = images
                     try checkpoint("matchPrelude",globals,&environment)
-                    return .matchPrelude(.init(entry:entry,snapshot:try snapshot(globals,audio,resources),locals:selectionLocals,graphics:graphics))
+                    return .matchPrelude(.init(entry:entry,snapshot:try snapshot(globals,audio,resources),confirmation:confirmation,locals:selectionLocals,graphics:graphics))
                 }
                 guard result == .returned else { throw Boundary.dependency("Character continuation "+result.rawValue) }
                 end = .returned

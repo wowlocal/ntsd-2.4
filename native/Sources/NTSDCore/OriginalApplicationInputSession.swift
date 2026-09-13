@@ -62,6 +62,10 @@ public struct OriginalApplicationInputSession {
         var state = entry.state,candidate = environment
         var match = try bindings.read(state,catalog:entry.loaded.catalog,interface:entry.loaded.interface,
                                       arithmeticPrecision:arithmeticPrecision)
+        // This application uses the bundled-library handlers. Its requested
+        // Object word has no established startup backing and is not known zero.
+        match.libraryCommands = .init()
+        match.bitmapOwners = Dictionary(uniqueKeysWithValues:entry.entry.snapshot.bitmapTokens.enumerated().map { ($0.offset,$0.element) })
         var context = try bindings.inputContext(state),commands = Array(entry.loaded.commands.prefix(10))
         let playback = Array(entry.loaded.commands.suffix(10)),original = state,binding = bindings
         var operations = entry.operations.map(Operation.preceding)

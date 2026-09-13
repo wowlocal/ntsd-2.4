@@ -11,7 +11,8 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
     typealias S = OriginalApplicationLoadedSelectionComparison
     typealias Stop = M.Stop
     struct Frontier { let application: A,input: M.S.Input.PendingContinuation }
-    func sequence(_ reverse: Bool) throws -> [Int:Frontier] {
+    func sequence(_ reverse: Bool,
+        onStart: (A,M.S.PendingMatchPrelude) throws -> Void = { _,_ in }) throws -> [Int:Frontier] {
         var app = try H().characterChain(reverse)
         let initial = try XCTUnwrap(app.session?.loadedOwners).match
         let r = try S(reverse,initial)
@@ -46,6 +47,7 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
                 XCTAssertThrowsError(try C.finish(&app,returned))
             case .matchPrelude(let pending):
                 XCTAssertEqual(index,49);XCTAssertEqual(item.screen.continuation,.matchPrelude);XCTAssertNil(item.returned)
+                XCTAssertEqual(pending.confirmation,1)
                 XCTAssertTrue(menu.pendingReturn == nil);XCTAssertTrue(menu.pendingMatchPrelude != nil)
                 XCTAssertEqual(last?.pc,0x42cf8a);XCTAssertEqual(pending.locals,last?.locals)
                 XCTAssertEqual(screenEvents,env.front.count);XCTAssertEqual(env.points.last,"matchPrelude")
@@ -83,6 +85,7 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
                 let oldEnvironment = env
                 XCTAssertThrowsError(try M.advanceUntilBoundary(&menu,&env)) { XCTAssertEqual($0 as? M.S.Boundary,.alreadyPrepared) }
                 XCTAssertEqual(env,oldEnvironment)
+                try onStart(app,pending)
             }
             XCTAssertEqual(snapshot.match.bitmaps,initial.bitmaps);XCTAssertEqual(snapshot.match.backgrounds,initial.backgrounds)
             XCTAssertEqual(snapshot.match.frameAllocations,initial.frameAllocations)

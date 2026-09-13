@@ -44,7 +44,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
         func pattern(_ count: Int) -> [UInt8] { (0..<count).map { reverse ? UInt8(truncatingIfNeeded:$0) : 0xa5 } }
         mutating func allocate(_ kind: S.AllocationKind,_ count: Int) throws -> OriginalInterfaceAllocation {
             let i: Int
-            switch kind { case .menu(let value):i = value;case .background:i = 11 }
+            switch kind { case .menu(let value):i = value;case .background:i = 11;case .arena:throw Stop.unexpected("Arena allocation in menu") }
             XCTAssertEqual(i,index+1);XCTAssertEqual(count,0x1f50);index = i
             if stop == "allocate10" && i == 10 { throw Stop.injected("allocate10") }
             if i == 0,let overlap { return .init(address:overlap,backing:pattern(count)) }
@@ -82,10 +82,10 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             clock += 1;let value = UInt32(12344+clock);expectedOperations.append(.clock(value));return value
         }
     }
-    static func output(_ target: UInt32) throws -> OriginalMenuPresentationInput {
+    static func output(_ target: UInt32,dc: UInt32 = 0x12345678) throws -> OriginalMenuPresentationInput {
         try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
             "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
-            "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":0x12345678,"postResult":0]))
+            "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":dc,"postResult":0]))
     }
     static func advance(_ session: inout S,_ env: inout Environment,
         character: @escaping (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in },

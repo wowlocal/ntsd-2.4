@@ -31,3 +31,7 @@ shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalLoadingInterfa
 # Original character-menu DIBs, consumed by the retained loaded menu.
 shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalCharacterMenu",
                 destination.parent / "OriginalCharacterMenu", dirs_exist_ok=True)
+
+# Deferred original arena images consumed by the owned match launch.
+shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalMatchArenas",
+                destination.parent / "OriginalMatchArenas", dirs_exist_ok=True)

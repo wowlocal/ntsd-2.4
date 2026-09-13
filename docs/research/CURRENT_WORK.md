@@ -446,12 +446,23 @@ Native3 прошёл
 Все три Native jobs терминальны; manifests/reviews находятся в
 `build/research/application-loaded-selection-native-20260913/`. Не перезапускать.
 
-**Следующая задача — продолжить retained Start через prelude/music/District
-preparation/replay и настоящий enclosing return, затем следующий gameplay input.**
-Сохранять текущий Bootstrap owner, RNG, выбор и путь музыки; предыдущий menu
-body уже выполнен и не должен повторяться. Связь всего original приложения,
-положительные CPU/другие mode-цепочки, подготовка/матч, host backend, окно/ввод/
-звук/Windows/cleanMac и полная игра остаются открытыми.
+Проверено [продолжение собственного Start](APPLICATION_LOADED_LAUNCH.md): две
+retained цепочки проходят prelude, installed-library подготовку District,
+stage5 music, запись повтора, настоящий Bootstrap return и следующий gameplay
+input до41e339. На цепочку:15 surfaces/225 bitmap API,382 Actor constructors,
+четыре собственных RNG draws и234 слова всех18 replay participants. Полные
+records/masks, journal/graphics/current owners, replay aliases и late rollback
+проверены; controlled live replacement/DC остаётся отдельной проверкой.
+Все93 release-метода прошли за732.971с/build0.37с;
+980 Native-файлов,383 прежних fixtures и485 package files сверены.
+[Evidence](../evidence/application-loaded-launch.json). Ошибки и кандидаты
+сохранены в `build/research/application-loaded-launch-native-20260913/`;
+терминальные исходные захваты не перезапускать.
+
+**Следующая задача — собственное gameplay body после41e339 через текущие
+installed-library command state, владельцев и полный rollback.** Полный матч,
+всё original приложение, другие modes/CPU/playback, backend, окно/ввод/звук,
+Windows/cleanMac и полная игра остаются открытыми.
 
 Историческое ограничение предыдущего входа (countdown теперь пройден):
 Countdown147 и selection0 должны пройти собственный input/handler; не ставить

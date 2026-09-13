@@ -234,4 +234,33 @@ final class OriginalLibStageCommandsTests: XCTestCase {
         }
         XCTAssertEqual(reads, 1)
     }
+
+    func testUndefinedRequestedIDRequiresItsFirstActualConsumerRead() throws {
+        var (world,actors,globals,header,frame,bg) = try prepared()
+        for slot in 0..<400 { try world.write(UInt8(0),at:4+slot) }
+        try globals.write(Int32(3),at:0x450bb8-0x44d000)
+        let beforeWorld = world,beforeActors = actors,beforeGlobals = globals
+        var retained: Int32?,reads = 0
+        let unknown = OriginalLibStageCommands()
+        XCTAssertNil(unknown.requestedObjectID)
+        for count: Int32 in [0,1] {
+            do {
+                try OriginalPostDrawCommands.apply(world:&world,actors:&actors,globals:&globals,
+                    retainedSpawnSlot:&retained,sse2:false,objectCount:count,library:unknown,
+                    header:{ _ in reads += 1;return header },frame:{ _,_ in frame },background:{ _ in bg })
+                XCTAssertEqual(count,0)
+            } catch {
+                XCTAssertEqual(count,1)
+                XCTAssertEqual(String(describing:error),"Original state storage: Post-draw commands: Library requested Object ID provenance")
+            }
+            XCTAssertEqual(world,beforeWorld);XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals)
+            XCTAssertNil(retained)
+        }
+        XCTAssertEqual(reads,1)
+        // Other command words never read the unknown library word.
+        try globals.write(Int32(0),at:0x450bb8-0x44d000)
+        try OriginalPostDrawCommands.apply(world:&world,actors:&actors,globals:&globals,
+            retainedSpawnSlot:&retained,sse2:false,objectCount:1,library:unknown,
+            header:{ _ in XCTFail("No command header read");return header },frame:{ _,_ in frame },background:{ _ in bg })
+    }
 }

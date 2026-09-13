@@ -198,3 +198,13 @@ delivery are recorded in [evidence](../evidence/application-loaded-selection.jso
 must execute prelude, enabled music, District preparation/replay and the actual
 return before another gameplay input, preserving this state. Limits and full
 application/device/game acceptance remain as declared above.
+
+## Actual retained Start launch and next gameplay input
+
+The own Start now continues through preparation/music/recording, the same
+suspended Bootstrap tail and next input to41e339. See
+[APPLICATION_LOADED_LAUNCH](APPLICATION_LOADED_LAUNCH.md). Two retained chains
+and controlled replacement/DC/rollback cases preserve current ownership.
+The finite machine suite passes all93 methods; full original-app correspondence,
+backend delivery, full gameplay/match/device/clean-Mac acceptance remain open.
+The next consumer is the actual own gameplay body, with installed command state.

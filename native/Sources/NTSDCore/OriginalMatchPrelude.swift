@@ -27,6 +27,14 @@ public enum OriginalMatchPrelude {
     @discardableResult
     public static func apply(globals: inout OriginalStateRecord, localTime: OriginalLocalTime,
                              observe: (OriginalMatchPreludeEvent) throws -> Void = { _ in }) throws -> String {
+        try apply(globals:&globals,readLocalTime:{ localTime },observe:observe)
+    }
+
+    /// Request platform time at its actual point in the prelude, after menu
+    /// state stores and before filename formatting. A failed provider rolls back.
+    @discardableResult
+    public static func apply(globals: inout OriginalStateRecord, readLocalTime: () throws -> OriginalLocalTime,
+                             observe: (OriginalMatchPreludeEvent) throws -> Void = { _ in }) throws -> String {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Global storage size") }
         var state = globals
         func read(_ address: Int) throws -> Int32 { try state.integer(at: address-OriginalMatchPreparation.globalBase, as: Int32.self) }
@@ -45,6 +53,7 @@ public enum OriginalMatchPrelude {
         }
         try write(0x44d020, 0)
         try observe(.localTime)
+        let localTime = try readLocalTime()
         // sprintf "%4d%02d%02d_%02d%02d%02d": year is SPACE padded,
         // widths are minima, and these are integers rather than calendar formats.
         func decimal(_ value: UInt16, width: Int, padding: Character) -> String {

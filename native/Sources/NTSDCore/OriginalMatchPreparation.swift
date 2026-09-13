@@ -23,6 +23,13 @@ public struct OriginalMatchPreparation {
     public var globals: OriginalStateRecord
     /// PAUSE/score/HUD resources constructed by the preceding initial loading.
     public var interface: OriginalInitialInterfaceLoading
+    /// Nil means the pristine EXE contract. An installed library may own an
+    /// as-yet undefined requested ID; that is distinct from no library.
+    public internal(set) var libraryCommands: OriginalLibStageCommands?
+    /// Logical application wrappers for catalog/arena bitmap ordinals. Pristine
+    /// controlled comparisons may leave this map empty; surfaces stay in the
+    /// application's owned memory and graphics inventories.
+    public internal(set) var bitmapOwners: [Int:UInt32] = [:]
     /// Live DAT allocations. Original hit processing can write a held weapon's
     /// raw ITR; those writes survive subsequent contacts and ticks.
     public internal(set) var frameAllocations: [OriginalFrameAllocation]
@@ -103,9 +110,26 @@ public struct OriginalMatchPreparation {
         self = candidate; library = nextLibrary!
     }
 
+    /// The same installed-library caller with real, caller-owned bitmap API
+    /// continuations. External effects must remain tentative until the enclosing
+    /// application transaction commits. Live releases cannot silently disappear.
+    public mutating func prepareUsingBundledLibrary(mode: Int32, library: inout OriginalLibStageCommands,
+        constructBitmap: @escaping (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?,
+        releaseBitmap: @escaping (Int,OriginalLoadedBitmap) throws -> Void,
+        music: (inout OriginalMatchPreparation) throws -> Void,
+        observe: (OriginalMatchPreparationEvent) throws -> Void = { _ in }) throws {
+        var candidate = self, nextLibrary: OriginalLibStageCommands? = library
+        try candidate.consume(mode:mode,library:&nextLibrary,uninitializedPerspective:nil,bitmapFill:0xa5,
+            bitmapSource:{ _ in throw Self.error("Missing surface constructor") },
+            constructBitmap:constructBitmap,releaseBitmap:releaseBitmap,music:music,observe:observe)
+        self = candidate;library = nextLibrary!
+    }
+
     private mutating func consume(mode: Int32, library: inout OriginalLibStageCommands?,
                                   uninitializedPerspective: ((Int32) throws -> Int32)?, bitmapFill: UInt8,
                                   bitmapSource: (String) throws -> OriginalBitmapInput,
+                                  constructBitmap: ((String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?)? = nil,
+                                  releaseBitmap: ((Int,OriginalLoadedBitmap) throws -> Void)? = nil,
                                   music: (inout OriginalMatchPreparation) throws -> Void,
                                   observe: (OriginalMatchPreparationEvent) throws -> Void) throws {
         guard world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
@@ -168,10 +192,11 @@ public struct OriginalMatchPreparation {
             }
             var randomX = try draw(status > 10 ? 0xdb : 0xdd, width/2)
             if status <= 10, library != nil {
-                library!.requestedObjectID = try perspective()
+                let requested = try perspective()
+                library!.requestedObjectID = requested
                 //10001b48 overwrites live ECX after the RNG result was saved
                 //there. The original42d483 therefore adds this ID, not randomX.
-                randomX = library!.requestedObjectID
+                randomX = requested
             }
             let x = randomX &+ (width/4)
             let z = try draw(status > 10 ? 0xdc : 0xde, upper &- lower) &+ lower
@@ -190,14 +215,25 @@ public struct OriginalMatchPreparation {
             }
         }
         for address in stride(from: 0x450c04, through: 0x450c28, by: 4) { try setGlobal(address, 0) }
-        if library != nil { try globals.write(UInt8(3), at: 0x450bb8-Self.globalBase) }
+        if library != nil {
+            try globals.write(UInt8(3), at: 0x450bb8-Self.globalBase)
+            libraryCommands = library
+        }
         for index in 0..<Int(backgroundCount) {
             try observe(.releaseLayers(index))
-            releasedBitmapOrder += try backgroundLoader.releaseLayers(in: &backgrounds[index])
+            if let releaseBitmap {
+                releasedBitmapOrder += try backgroundLoader.releaseLayersWithSurface(in:&backgrounds[index],releaseBitmap:releaseBitmap)
+            } else {
+                releasedBitmapOrder += try backgroundLoader.releaseLayers(in: &backgrounds[index])
+            }
         }
         if background != 99 {
             try observe(.loadLayers(Int(background)))
-            try backgroundLoader.loadLayers(in: &backgrounds[Int(background)], bitmapFill: bitmapFill, bitmapSource: bitmapSource)
+            if let constructBitmap {
+                try backgroundLoader.loadLayersWithSurface(in:&backgrounds[Int(background)],constructBitmap:constructBitmap)
+            } else {
+                try backgroundLoader.loadLayers(in: &backgrounds[Int(background)], bitmapFill: bitmapFill, bitmapSource: bitmapSource)
+            }
         }
         try setGlobal(0x44d034, 1)
         try setGlobal(0x450bbc, 0)

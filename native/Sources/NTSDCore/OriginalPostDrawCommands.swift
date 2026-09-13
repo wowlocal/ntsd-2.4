@@ -12,10 +12,11 @@ public enum OriginalPostDrawCommands {
                              sse2: Bool = false, library: OriginalLibStageCommands? = nil,
                              observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog, backgrounds = state.backgrounds
+        let installedLibrary = library ?? state.libraryCommands
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
         try apply(world: &state.world, actors: &state.actors, globals: &state.globals, retainedSpawnSlot: &retainedSpawnSlot,
-            sse2: sse2, objectCount: registry.integer(at: 0, as: Int32.self), library: library, header: { n in
+            sse2: sse2, objectCount: registry.integer(at: 0, as: Int32.self), library: installedLibrary, header: { n in
                 guard catalog.objects.indices.contains(n) else { throw error("Object binding") }; return catalog.objects[n].header
             }, frame: { n, f in
                 guard catalog.objects.indices.contains(n), catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw error("Frame binding") }
@@ -70,12 +71,15 @@ public enum OriginalPostDrawCommands {
             try globals.write(Int32(random.counter), at: 0x450c34-0x44d000)
             try observe(.random(stream: stream, range: range, result: result)); return result
         }
-        mutating func spawn(requestedObjectID: Int32? = nil) throws {
+        mutating func spawn(usingLibrary: OriginalLibStageCommands? = nil) throws {
             var candidates: [Int] = []
             if objectCount > 0 {
                 for n in 0..<Int(objectCount) {
                     let id = try header(n).integer(at: 0x6f4, as: Int32.self)
-                    if let requestedObjectID {
+                    if let usingLibrary {
+                        guard let requestedObjectID = usingLibrary.requestedObjectID else {
+                            throw error("Library requested Object ID provenance")
+                        }
                         // The DLL reads the first header ID before testing zero,
                         // accepts every exact match, and performs no208 draw.
                         if requestedObjectID == 0 { return }
@@ -155,7 +159,7 @@ public enum OriginalPostDrawCommands {
         }
         mutating func run() throws {
             if try global(0x450bb8) == 1 { try spawn() }
-            else if let library, try global(0x450bb8) == 3 { try spawn(requestedObjectID: library.requestedObjectID) }
+            else if let library, try global(0x450bb8) == 3 { try spawn(usingLibrary: library) }
             for slot in 0..<400 where try active(slot) != 0 { try recover(slot) }
         }
     }

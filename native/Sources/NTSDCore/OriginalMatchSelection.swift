@@ -7,9 +7,10 @@ public enum OriginalMatchSelection {
         input: OriginalFrontScreenBodyInput, fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
+        matchPrelude: (Int32) throws -> Void = { _ in }) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText?
-        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint)
+        return try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,matchPrelude:matchPrelude)
     }
 
     public static func advanceWithLibrary(state: inout OriginalMatchPreparation, libraryText: inout OriginalLibSurfaceText, selectionAtEntry: UInt32, target: UInt32,
@@ -19,9 +20,10 @@ public enum OriginalMatchSelection {
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void = { _,_ in },
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
-        warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
+        matchPrelude: (Int32) throws -> Void = { _ in }) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText? = libraryText
-        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage)
+        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage,matchPrelude:matchPrelude)
         libraryText = library!;return end
     }
 
@@ -32,11 +34,12 @@ public enum OriginalMatchSelection {
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
-        warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage }) throws -> OriginalCharacterScreenExit {
+        warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
+        matchPrelude: (Int32) throws -> Void = { _ in }) throws -> OriginalCharacterScreenExit {
         try OriginalCharacterScreen.advanceCommon(state: &state,libraryText:&libraryText,selectionAtEntry: selectionAtEntry,target: target,input: input,
             fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage,selectionStage: { candidate,local,library in
                 try continueSelection(state: &candidate,locals: &local,libraryText:&library,target: target,input: input,
-                    fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint)
+                    fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint,matchPrelude:matchPrelude)
             })
     }
 
@@ -44,7 +47,8 @@ public enum OriginalMatchSelection {
         input: OriginalFrontScreenBodyInput,fillBacking: () throws -> [UInt8],
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
-        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void) throws -> OriginalCharacterScreenExit {
+        checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
+        matchPrelude: (Int32) throws -> Void) throws -> OriginalCharacterScreenExit {
         var candidate = state,local = locals,library = libraryText
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Match selection: "+message) }
         func word(_ address: Int) throws -> Int32 { try candidate.global(address) }
@@ -198,7 +202,7 @@ public enum OriginalMatchSelection {
             try mark(0x42cf6c)
             let confirmation = local[0x18]!
             if try word(0x450b98) != 0 || (confirmation != 0 && word(0x44d06c) == 0) {
-                try mark(0x42cf8a);return finish(.matchPrelude)
+                try mark(0x42cf8a);try matchPrelude(confirmation);return finish(.matchPrelude)
             }
             try mark(confirmation == 0 ? 0x42d789 : 0x42d706)
             let action = try word(0x44d06c)

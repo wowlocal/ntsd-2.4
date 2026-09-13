@@ -361,6 +361,25 @@ prelude/music/preparation/replay/return и gameplay consumer; вся игра,
 whole-original app, backend и устройства остаются открытыми.
 
 
+Проверено [продолжение собственного Start](research/APPLICATION_LOADED_LAUNCH.md): две
+retained цепочки проходят prelude, installed-library подготовку District,
+stage5 music, запись повтора, настоящий Bootstrap return и следующий gameplay
+input до41e339. На цепочку:15 surfaces/225 bitmap API,382 Actor constructors,
+четыре собственных RNG draws и234 слова всех18 replay participants. Полные
+records/masks, journal/graphics/current owners, replay aliases и late rollback
+проверены; controlled live replacement/DC остаётся отдельной проверкой.
+Все93 release-метода прошли за732.971с/build0.37с;
+980 Native-файлов,383 прежних fixtures и485 package files сверены.
+[Evidence](evidence/application-loaded-launch.json). Ошибки и кандидаты
+сохранены в `build/research/application-loaded-launch-native-20260913/`;
+терминальные исходные захваты не перезапускать.
+
+**Следующая задача — собственное gameplay body после41e339 через текущие
+installed-library command state, владельцев и полный rollback.** Полный матч,
+всё original приложение, другие modes/CPU/playback, backend, окно/ввод/звук,
+Windows/cleanMac и полная игра остаются открытыми.
+
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных

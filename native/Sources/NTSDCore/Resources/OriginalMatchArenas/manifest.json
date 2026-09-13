@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "entries": [
+    {
+      "name": "bg\\sys\\District\\district.bmp",
+      "path": "bg/sys/District/district.bmp",
+      "bytes": 1476154,
+      "sha256": "4d9103e00bf889b49251b21798579ac487b14cb9f321271e3f5630a8586d2cd8",
+      "width": 966,
+      "height": 509,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\district2.bmp",
+      "path": "bg/sys/District/district2.bmp",
+      "bytes": 298070,
+      "sha256": "62a0c77c7275ad758691717ea964bd83ba7b9bd880880ec836b2f3d37062247e",
+      "width": 357,
+      "height": 278,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\district3.bmp",
+      "path": "bg/sys/District/district3.bmp",
+      "bytes": 159554,
+      "sha256": "293ca7041fea6d4831bded3ae7e86225bfb416c1d063237e0da41fc26eeeca9d",
+      "width": 966,
+      "height": 55,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\s.bmp",
+      "path": "bg/sys/District/s.bmp",
+      "bytes": 426,
+      "sha256": "9de4f8f8790c81d8650f12b915f5a9e95146e1f24eb204807e1a5b9c7f985b0d",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\shizune.bmp",
+      "path": "bg/sys/District/shizune.bmp",
+      "bytes": 7734,
+      "sha256": "835f18d3d8377e56c774ce0efeada022b3b2d529e788028d5346cd317df5bdd5",
+      "width": 40,
+      "height": 64,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\shizune2.bmp",
+      "path": "bg/sys/District/shizune2.bmp",
+      "bytes": 7734,
+      "sha256": "1396a20001d77bbdef8ae6a6310ff60321788992ab0243fc9371a53a79a51b9f",
+      "width": 40,
+      "height": 64,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\shizune3.bmp",
+      "path": "bg/sys/District/shizune3.bmp",
+      "bytes": 7734,
+      "sha256": "c41fe33970767afeca9dbff9bca3e3ace584100053602c9f30f34bb7ff0cee9c",
+      "width": 40,
+      "height": 64,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\shizune4.bmp",
+      "path": "bg/sys/District/shizune4.bmp",
+      "bytes": 8502,
+      "sha256": "07c63f9c8d34e8990aef70c5564d44bd1574fb3bf8514946337ca14c99d51a1c",
+      "width": 43,
+      "height": 64,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\shizune5.bmp",
+      "path": "bg/sys/District/shizune5.bmp",
+      "bytes": 7734,
+      "sha256": "cf210b784836a9dc9b80e735c802f2815c9286d3b76e48f49cae5c591248ee05",
+      "width": 40,
+      "height": 64,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\tonton.bmp",
+      "path": "bg/sys/District/tonton.bmp",
+      "bytes": 3534,
+      "sha256": "68b2676125c268de433effd66ce77eeb5a703a30d7277fdebaed2d4436f259ff",
+      "width": 40,
+      "height": 29,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\tonton2.bmp",
+      "path": "bg/sys/District/tonton2.bmp",
+      "bytes": 3534,
+      "sha256": "923f86466894e8fe1f20a0a5b695f4916991d1194c5be799b2ff9f0296291ea6",
+      "width": 40,
+      "height": 29,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\tonton3.bmp",
+      "path": "bg/sys/District/tonton3.bmp",
+      "bytes": 3534,
+      "sha256": "e4d1eda09b1820a85de618e1f69f7a34b5573dd79d46fc81d38e2cbf254b700d",
+      "width": 40,
+      "height": 29,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\District\\tonton4.bmp",
+      "path": "bg/sys/District/tonton4.bmp",
+      "bytes": 3534,
+      "sha256": "e32ed9a94b7cd761c23a9acb3e73ed01dbd1eb6351f383c84e8109535045cc8d",
+      "width": 40,
+      "height": 29,
+      "bits": 24,
+      "compression": 0
+    }
+  ]
+}

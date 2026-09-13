@@ -13,7 +13,7 @@ public enum OriginalMenuReturn {
         let original = state
         try execute(world:&world,globals:&globals,memory:&memory,libraryText:&text,
             input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,readMilliseconds:readMilliseconds,
-            draw:draw,observe:observe,checkpoint:{ name,world,globals in
+            draw:draw,observe:observe,checkpoint:{ name,world,globals,_,_ in
                 var candidate = original;candidate.world = world;candidate.globals = globals
                 try checkpoint(name,candidate)
             })
@@ -27,11 +27,15 @@ public enum OriginalMenuReturn {
         readMilliseconds: (() throws -> UInt32)? = nil,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
-        checkpoint: (String,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws {
+        checkpoint: (String,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in },
+        ownedCheckpoint: (String,OriginalStateRecord,OriginalStateRecord,OriginalMenuPresentationMemory,OriginalLibSurfaceText) throws -> Void = { _,_,_,_,_ in }) throws {
         var text: OriginalLibSurfaceText? = libraryText
         try execute(world:&world,globals:&globals,memory:&memory,libraryText:&text,
             input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,readMilliseconds:readMilliseconds,
-            draw:draw,observe:observe,checkpoint:checkpoint)
+            draw:draw,observe:observe,checkpoint:{ name,w,g,m,t in
+                try checkpoint(name,w,g)
+                try ownedCheckpoint(name,w,g,m,t!)
+            })
         libraryText = text!
     }
 
@@ -41,14 +45,14 @@ public enum OriginalMenuReturn {
         readMilliseconds: (() throws -> UInt32)? = nil,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
-        checkpoint: (String,OriginalStateRecord,OriginalStateRecord) throws -> Void) throws {
+        checkpoint: (String,OriginalStateRecord,OriginalStateRecord,OriginalMenuPresentationMemory,OriginalLibSurfaceText?) throws -> Void) throws {
         var candidateWorld = world,candidateGlobals = globals,owned = memory,text = libraryText
         let base = OriginalMatchPreparation.globalBase
         func word(_ address: Int) throws -> Int32 { try candidateGlobals.integer(at: address-base,as: Int32.self) }
         func bits(_ value: Int32) -> UInt32 { UInt32(bitPattern: value) }
         func write(_ address: Int,_ value: Int32) throws { try candidateGlobals.write(value,at: address-base) }
         func event(_ e: OriginalMenuPresentationEvent) throws { try observe(.init(e.kind.rawValue,e.arguments,e.strings)) }
-        try checkpoint("menuReturned",candidateWorld,candidateGlobals)
+        try checkpoint("menuReturned",candidateWorld,candidateGlobals,owned,text)
         if try word(0x44d058) > 0,try candidateGlobals.integer(at: 0x44f1af-base,as: Int8.self) > 0 {
             guard let backing = fillBacking else { throw OriginalStateError.invalidStorage("Network notice fill backing") }
             let target = try bits(word(0x455608))
@@ -80,12 +84,12 @@ public enum OriginalMenuReturn {
             try observe(.init("timer",[now]))
             try write(0x451154,Int32(bitPattern: now))
         }
-        try checkpoint("matchBeforeReturn",candidateWorld,candidateGlobals)
+        try checkpoint("matchBeforeReturn",candidateWorld,candidateGlobals,owned,text)
         if wholeEarlyReturn {
-            try checkpoint("loadingReturned",candidateWorld,candidateGlobals)
+            try checkpoint("loadingReturned",candidateWorld,candidateGlobals,owned,text)
             try write(0x457580,0)
-            try checkpoint("heldCleared",candidateWorld,candidateGlobals)
-            try checkpoint("earlyReturned",candidateWorld,candidateGlobals)
+            try checkpoint("heldCleared",candidateWorld,candidateGlobals,owned,text)
+            try checkpoint("earlyReturned",candidateWorld,candidateGlobals,owned,text)
         }
         world = candidateWorld;globals = candidateGlobals;memory = owned;libraryText = text
     }

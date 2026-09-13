@@ -1,0 +1,426 @@
+{
+  "UTC": "2026-09-13T16:06:16.584327+00:00",
+  "status": "accepted finite owned Native match launch; full game/application/device goals remain open",
+  "base": "7d9fd92da35a6d5f1abf6d049e98be0e28a3aafd",
+  "scope": "Actual owned retained Start through installed-library prelude/preparation/music/replay/menu/Bootstrap return and next gameplay input. Native and saved original data only.",
+  "referenceEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "work": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913",
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan1.json",
+    "pin": {
+      "bytes": 6633,
+      "sha256": "812f108cf0ba0c093e8737fe71d9660049e6ae69b4d35ff24422b51383a0e6de"
+    }
+  },
+  "amendments": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan-amendment1.json",
+      "pin": {
+        "bytes": 3604,
+        "sha256": "fa250001f63c79eb95d39574c4710772c65705b1b5924eb74f3679d3ff001d87"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan-amendment2.json",
+      "pin": {
+        "bytes": 5783,
+        "sha256": "7ee9cb245427e920f0c4ca8b369da4146dc8a35b96caec69b9bba19efccbd15b"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan-amendment3.json",
+      "pin": {
+        "bytes": 621,
+        "sha256": "1c51ba8e301e087320dcd20ede434c1e2e8d73890a6d95e9e8c95e8083a926dc"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan-amendment4-logical-allocations.json",
+      "pin": {
+        "bytes": 3236,
+        "sha256": "cfa90f28296d9252a74eb4332649b194b72d4135701abdf72f29d2276951fcce"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/plan-amendment5-native-preflight.json",
+      "pin": {
+        "bytes": 588,
+        "sha256": "0c8e9dadbca9245f9ff8f987a59169f5eca79a7c8cb195441fa4db84b6c229ff"
+      }
+    }
+  ],
+  "validationPlan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/validation-plan1.json",
+    "pin": {
+      "bytes": 11776,
+      "sha256": "15bab696d98fef6776fa74b310b680e2bf3971633e1fca0817241509b47f298b"
+    }
+  },
+  "candidateInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate2-inputs.json",
+    "pin": {
+      "bytes": 175109,
+      "sha256": "101cfbf0b0fabf71fbd2b60ff1f59c609a05c9046828e6e49ee974ac1941c5b8"
+    }
+  },
+  "preRunReviews": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/review1-contract.json",
+      "pin": {
+        "bytes": 33746,
+        "sha256": "4a5e52e6952690414fe5a3398b1e0072c66c0cf6c9118c631e6d9ac5859291e7"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/review2-candidate1.json",
+      "pin": {
+        "bytes": 51606,
+        "sha256": "2d04f5aa335562348b65280a0dd97d79818948185de09c8db313683daed44f76"
+      }
+    }
+  ],
+  "preservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/preservation2.json",
+    "pin": {
+      "bytes": 41969,
+      "sha256": "52ee9ab44eae7e96f699689069de5cd8e91457013e2ebe90bba2858febe2747d"
+    }
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/native-archive2.json",
+    "pin": {
+      "bytes": 324,
+      "sha256": "d413f86529e9b3f1d30429fc14b7e72153c891e42f63e99298e06e1f76925cde"
+    }
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/evidence-archive2-verification.json",
+    "pin": {
+      "bytes": 860,
+      "sha256": "8fc8d1826871c647bf3fd26aea7fe6e8ee0d3b5857692aa6755e62a0fa7986b4"
+    }
+  },
+  "codeAndPackagePins": {
+    "native/Package.swift": {
+      "bytes": 2707,
+      "sha256": "ea979efc40d48562fdf0225924fcfc7666c000c95ceda233c22cfcbbec0a85dd"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationArenaInputs.swift": {
+      "bytes": 2998,
+      "sha256": "ad7f761fd8846ce197bbd5e1d25db571519d6cbbdb048305dca77cf40150bd49"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationInputSession.swift": {
+      "bytes": 7156,
+      "sha256": "fe16d78d5db34e540f5eb2a62a29bc993beb1e6418036572719dff789b895e46"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+      "bytes": 27288,
+      "sha256": "d516ef39a390f90025389ef02eac32f6fb218a9a68fd0a848bdf19b403528d43"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMatchLaunchSession.swift": {
+      "bytes": 10212,
+      "sha256": "806b87086da5ad86ac708726de320aeb6059e08cf16e95fd67adf6082855cc55"
+    },
+    "native/Sources/NTSDCore/OriginalLibStageCommands.swift": {
+      "bytes": 587,
+      "sha256": "494c365d53afb41d7ff5ffe924bcf46c6aa7c208c017693790b3f9789542d7be"
+    },
+    "native/Sources/NTSDCore/OriginalMatchPrelude.swift": {
+      "bytes": 6310,
+      "sha256": "1df5f124d4625d584b0218a5033049f2176d0773b365cecdd86d49401bb33bbf"
+    },
+    "native/Sources/NTSDCore/OriginalMatchPreparation.swift": {
+      "bytes": 17756,
+      "sha256": "a81f345cca17f2eec5ca3a576f7966546038ae5243e896315fed8d0eb9c492fb"
+    },
+    "native/Sources/NTSDCore/OriginalMatchSelection.swift": {
+      "bytes": 16481,
+      "sha256": "16a72f7413e0d7f9170e023b829e5977b9c6b8b132a974e7ad9953a06207c0d8"
+    },
+    "native/Sources/NTSDCore/OriginalMenuReturn.swift": {
+      "bytes": 6559,
+      "sha256": "0dd8ca82c942f17e42e70661fa2f01062a76826ed05bd22e70a5a77060cb3bc3"
+    },
+    "native/Sources/NTSDCore/OriginalPostDrawCommands.swift": {
+      "bytes": 11205,
+      "sha256": "ec4c9d337934900d23173ce5c393f29c904e3624d2cdf7756063c53c615a9aa5"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/district.bmp": {
+      "bytes": 1476154,
+      "sha256": "4d9103e00bf889b49251b21798579ac487b14cb9f321271e3f5630a8586d2cd8"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/district2.bmp": {
+      "bytes": 298070,
+      "sha256": "62a0c77c7275ad758691717ea964bd83ba7b9bd880880ec836b2f3d37062247e"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/district3.bmp": {
+      "bytes": 159554,
+      "sha256": "293ca7041fea6d4831bded3ae7e86225bfb416c1d063237e0da41fc26eeeca9d"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/s.bmp": {
+      "bytes": 426,
+      "sha256": "9de4f8f8790c81d8650f12b915f5a9e95146e1f24eb204807e1a5b9c7f985b0d"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/shizune.bmp": {
+      "bytes": 7734,
+      "sha256": "835f18d3d8377e56c774ce0efeada022b3b2d529e788028d5346cd317df5bdd5"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/shizune2.bmp": {
+      "bytes": 7734,
+      "sha256": "1396a20001d77bbdef8ae6a6310ff60321788992ab0243fc9371a53a79a51b9f"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/shizune3.bmp": {
+      "bytes": 7734,
+      "sha256": "c41fe33970767afeca9dbff9bca3e3ace584100053602c9f30f34bb7ff0cee9c"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/shizune4.bmp": {
+      "bytes": 8502,
+      "sha256": "07c63f9c8d34e8990aef70c5564d44bd1574fb3bf8514946337ca14c99d51a1c"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/shizune5.bmp": {
+      "bytes": 7734,
+      "sha256": "cf210b784836a9dc9b80e735c802f2815c9286d3b76e48f49cae5c591248ee05"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/tonton.bmp": {
+      "bytes": 3534,
+      "sha256": "68b2676125c268de433effd66ce77eeb5a703a30d7277fdebaed2d4436f259ff"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/tonton2.bmp": {
+      "bytes": 3534,
+      "sha256": "923f86466894e8fe1f20a0a5b695f4916991d1194c5be799b2ff9f0296291ea6"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/tonton3.bmp": {
+      "bytes": 3534,
+      "sha256": "e4d1eda09b1820a85de618e1f69f7a34b5573dd79d46fc81d38e2cbf254b700d"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/sys/District/tonton4.bmp": {
+      "bytes": 3534,
+      "sha256": "e32ed9a94b7cd761c23a9acb3e73ed01dbd1eb6351f383c84e8109535045cc8d"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalMatchArenas/manifest.json": {
+      "bytes": 3917,
+      "sha256": "1e52d2fabb7eeedd9b9dd5ed3df1c70a8112091109107d98917e2b93144824fd"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchComparison.swift": {
+      "bytes": 22539,
+      "sha256": "29e09c568108829022b156f4c475f681038dbf3033abae83ed1b930a27c194c6"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchTests.swift": {
+      "bytes": 23966,
+      "sha256": "b214d59ad38b5c4f884bf57a0a53083338cef7a5d90575eab4822f3e3405b3a9"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+      "bytes": 29186,
+      "sha256": "b58cdf45c6fec4de9301819df049473ffe737498f4d5519a36a1f0429e1dde9d"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift": {
+      "bytes": 10654,
+      "sha256": "196bc32e05cc0684ce386307706984a2bead3e9c4f297e3b60d7e8e5e3c26a98"
+    },
+    "native/Tests/NTSDCoreTests/OriginalLibStageCommandsTests.swift": {
+      "bytes": 17661,
+      "sha256": "5bde6b6bc13f60737cfe301d948ef9ce2546afec5abe2b35ef8787c9a9686b36"
+    }
+  },
+  "nativeFiles": 980,
+  "fixturesUnchanged": 383,
+  "packagedFiles": 485,
+  "testCount": 93,
+  "preflight": {
+    "job": {
+      "scope": "Native-only release owned selection/Start and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationLoadedLaunchTests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate2-inputs.json",
+      "nativeFiles": 980,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T15:45:48.493599+00:00",
+      "pid": 26760,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 388.203585708,
+      "endedUTC": "2026-09-13T15:52:16.681667+00:00"
+    },
+    "methods": [
+      [
+        "OriginalApplicationLoadedLaunchTests",
+        "testLaunchFailuresPreserveTheRetainedStartAndAllEarlierCommits",
+        "28.943"
+      ],
+      [
+        "OriginalApplicationLoadedLaunchTests",
+        "testOwnStartPreparesDistrictRecordsAndReachesGameplay",
+        "18.037"
+      ]
+    ],
+    "executions": 2,
+    "uniqueMethodsIncludedInFinal93": true
+  },
+  "successfulCandidateExecutions": 95,
+  "testSeconds": 732.971,
+  "buildSeconds": 0.37,
+  "jobs": [
+    {
+      "scope": "Native-only release owned selection/Start and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalWindowInputTests|OriginalApplicationLoadedCycleTests|OriginalApplicationBootstrapTests|OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests|OriginalCharacterScreenTests|OriginalLibCharacterRosterTests|OriginalApplicationLoadedCharacterTests|OriginalMatchSelectionTests|OriginalLibSelectionStageTests|OriginalLibSelectionCommandsTests|OriginalApplicationLoadedSelectionTests|OriginalMatchPreludeTests|OriginalMatchPreparationTests|OriginalLibMatchPreparationTests|OriginalLibStageCommandsTests|OriginalReplayInitializationTests|OriginalMusicPlaybackTests|OriginalMatchLaunchTests|OriginalBitmapSurfaceLoadingTests|OriginalReplayTickTests|OriginalPostDrawCommandsTests|OriginalCatalogDIBPixelsTests|OriginalApplicationLoadedLaunchTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate1-inputs.json",
+      "nativeFiles": 980,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T15:26:50.415404+00:00",
+      "pid": 22245,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 1075.790528667,
+      "endedUTC": "2026-09-13T15:44:46.168667+00:00"
+    },
+    {
+      "scope": "Native-only release owned selection/Start and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalWindowInputTests|OriginalApplicationLoadedCycleTests|OriginalApplicationBootstrapTests|OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests|OriginalCharacterScreenTests|OriginalLibCharacterRosterTests|OriginalApplicationLoadedCharacterTests|OriginalMatchSelectionTests|OriginalLibSelectionStageTests|OriginalLibSelectionCommandsTests|OriginalApplicationLoadedSelectionTests|OriginalMatchPreludeTests|OriginalMatchPreparationTests|OriginalLibMatchPreparationTests|OriginalLibStageCommandsTests|OriginalReplayInitializationTests|OriginalMusicPlaybackTests|OriginalMatchLaunchTests|OriginalBitmapSurfaceLoadingTests|OriginalReplayTickTests|OriginalPostDrawCommandsTests|OriginalCatalogDIBPixelsTests|OriginalApplicationLoadedLaunchTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/candidate2-inputs.json",
+      "nativeFiles": 980,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T15:52:30.596288+00:00",
+      "pid": 28391,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 734.052175,
+      "endedUTC": "2026-09-13T16:04:44.644767+00:00"
+    }
+  ],
+  "diagnostics": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/prevalidation-diagnostics1.json",
+    "pin": {
+      "bytes": 1006,
+      "sha256": "5f1ed98535674ed2754e9f8c98a86d62bd9f039613c2e6f09c47a4ed0488202a"
+    }
+  },
+  "perRetainedChain": {
+    "arenaBitmapConstructors": 15,
+    "bitmapAPIRequests": 225,
+    "actorConstructors": 382,
+    "ownRNGDraws": [
+      177,
+      53,
+      189,
+      18
+    ],
+    "installedHumanX": [
+      240,
+      240
+    ],
+    "ownZ": [
+      503,
+      468
+    ],
+    "recordingBytes": 6491672,
+    "recordingArrayWords": 234,
+    "musicEvents": 27,
+    "musicTerminalOperations": 21,
+    "wholeReturnedFrontEvents": 13
+  },
+  "sourceColorInputs": {
+    "files": 13,
+    "fileBytes": 1987778,
+    "knownPixels": 662035,
+    "rgbBytes": 1986105,
+    "windowsRasterClaim": false
+  },
+  "retainedChains": 2,
+  "controlledRepeat": "Separate own returned-state entry; 15 live arena releases/frees, old replay replacement, changed text DC and Native observer-error rollback; not a played second match/source API-failure equivalence.",
+  "openDependencies": [
+    "Own gameplay body after41e339",
+    "Other modes/positive CPU/playback chains",
+    "Full original application correspondence",
+    "Full match/game content",
+    "Real backend/window/input/audio/Windows/cleanMac",
+    "Retained source faults and safety incidents"
+  ],
+  "nativeLoadedLaunchAccepted": true,
+  "fullCardAccepted": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "backendPublished": false,
+  "originalExecuted": false,
+  "historicalProducerExecuted": false,
+  "oldExpectedChanged": false,
+  "fullGoalComplete": false,
+  "additionalPreRunReviews": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/review3-candidate2.json",
+      "pin": {
+        "bytes": 51623,
+        "sha256": "484b208a54fb5cfbd0138f06c86fe0e000ff424b38f9d0875a6ad7f41244acf1"
+      }
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/reviewer-interim-machine-message.json",
+      "pin": {
+        "bytes": 811,
+        "sha256": "6a92de9a885cb53bc3f99c35aaa8d534534515720a3665153b588fd5a9c31e08"
+      }
+    }
+  ],
+  "failures": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/native1-failure.json",
+      "pin": {
+        "bytes": 22284,
+        "sha256": "2c10907623470e3f550e37aed0a98b5664445d1541949205b95ef933fe445ba8"
+      }
+    }
+  ],
+  "independentAcceptanceReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/review4-acceptance.json",
+    "pin": {
+      "bytes": 28860,
+      "sha256": "01230d251a8a14685f83e32f2797876c98c0450645f7dbbb74691d206a9b2a25"
+    }
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-launch-native-20260913/application-loaded-launch-before-final-review2.json",
+    "pin": {
+      "bytes": 19233,
+      "sha256": "d71b3b1e1e7e19890a98e24e01b02344c2629f8adacc84fe28696568ab6e4b13"
+    }
+  }
+}
