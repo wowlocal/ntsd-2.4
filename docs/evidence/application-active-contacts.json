@@ -1,0 +1,223 @@
+{
+  "schema": "owned-active-contacts-comparison-v1",
+  "base": "e01d234c0c34e816f62a44a696b086bb1d4d1c99",
+  "scope": "Seven contact/link/hit/cpoint stages from current own physics output in both48-call schedules",
+  "contactEndpointsCompared": true,
+  "physicsControlInputComparisonsRetained": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullGoalComplete": false,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "sourceExpectedChanged": false,
+  "coreChanged": false,
+  "sourceEndpoints": 672,
+  "sourceActorCheckpoints": 576,
+  "sourceHelperReturns": 1490,
+  "ownEndpoints": 672,
+  "ownItemRandomEvents": 96,
+  "ownSummaries": [
+    [
+      "true",
+      "336",
+      "336",
+      "0",
+      "0"
+    ],
+    [
+      "false",
+      "336",
+      "336",
+      "0",
+      "0"
+    ]
+  ],
+  "newNegativeComparatorTrials": 12,
+  "newPositiveComparatorTrials": 2,
+  "preflightRunsInSelectedMethods": 4,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 contacts comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-contacts-native-20260914/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-contacts-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplication(ActiveContacts|ActivePhysics)Tests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-contacts-native-20260914/candidate2-inputs.json",
+      "nativeFiles": 1000,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T23:24:07.232362+00:00",
+      "pid": 29235,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 525.0639071249999,
+      "endedUTC": "2026-09-13T23:32:52.299461+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveContactsTests",
+        "method": "testControlOwnedContactProjection",
+        "seconds": 61.735
+      },
+      {
+        "suite": "OriginalApplicationActiveContactsTests",
+        "method": "testPrimaryOwnedContactProjection",
+        "seconds": 41.246
+      },
+      {
+        "suite": "OriginalApplicationActivePhysicsTests",
+        "method": "testControlOwnedPhysicsProjection",
+        "seconds": 34.18
+      },
+      {
+        "suite": "OriginalApplicationActivePhysicsTests",
+        "method": "testPrimaryOwnedPhysicsProjection",
+        "seconds": 33.946
+      }
+    ],
+    "testSeconds": 171.106,
+    "buildSeconds": 352.34,
+    "stdout": {
+      "bytes": 80735,
+      "sha256": "488819a6be5ceaa3c5b50cfd4bb3b876d9076362ada0d3f331332cd8beb54095",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25114,
+      "sha256": "7bc7140e26d89b2e674268d7af601c3e2d8dabf32789239064154d38118b8d40",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1000,
+  "oldNativeFilesUnchanged": 996,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 4,
+  "inheritedMethodsNotRerun": 149,
+  "uniqueRetainedMethods": 153,
+  "verification": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/verification2.json",
+    "bytes": 149543,
+    "sha256": "42529c8e038ec1c662d64530bc01e50918de46470c5b4fb5763b2389c8492bb2",
+    "mode": 420
+  },
+  "sourceFormula": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/contacts-source-formula2.json",
+    "bytes": 8259,
+    "sha256": "60aeb03540fb20db6b2d2eff31897aa8e324aa38949046cb8c1aab2c605ae799",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/review1-contacts-contract.json",
+    "bytes": 75173,
+    "sha256": "386eb81f9dfb687837ccd72ca4078e37e80685abfd13a5ce6d2df0225bbd02fa",
+    "mode": 420
+  },
+  "rejectedCandidateReview": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/review2-contacts-candidate1.json",
+    "bytes": 17846,
+    "sha256": "32d3a20b0d58e9a96b2d9768b6ef09356c523160a3eb1b5bb33aecf1f2c1e875",
+    "mode": 420
+  },
+  "comparatorCorrection": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/comparator-issue1.json",
+    "bytes": 695,
+    "sha256": "2263776d0322b2ef2bf23e2e2eaad940828e4a9161f5be2c11aff4a1feb44258",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/review3-contacts-candidate2.json",
+    "bytes": 24110,
+    "sha256": "07135f24bc1605a99cf063d08ab95ce4108c8543137d1de3ab72952a8be9a3a3",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-contacts-native-20260914/native-candidate2.tar",
+    "pin": {
+      "bytes": 4442245120,
+      "sha256": "72a1d6fd9d7397f1543f475f78f1fcdfa1e28e3d75f4d7aacbca611f0e8b70b3",
+      "mode": 420
+    },
+    "members": 1000,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-contacts-native-20260914/contacts-evidence2.tar",
+    "pin": {
+      "bytes": 1740800,
+      "sha256": "bab985dc46f95e64e82b29bc092b857696cfd3cd868cfe65fc66006d69b13077",
+      "mode": 420
+    }
+  },
+  "evidenceArchiveVerification": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/evidence-archive2.json",
+    "bytes": 9268,
+    "sha256": "1f7ae46a8e0668c50184155f003290108e9fbd8d3e3e3898c4c2c07b62e60cf1",
+    "mode": 420
+  },
+  "remaining": [
+    "Ten following body stages and whole active tick",
+    "Actual damaging/held/cpoint/spawn paths beyond finite comparison and later transient lifetime",
+    "Middle source Object/heap snapshots not captured",
+    "Full helper ABI and per-instruction stores",
+    "Paused/round/full match and game",
+    "Application integration, device, Windows and clean-Mac",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "nextGraphicsInventory": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/next-graphics-inventory1.json",
+    "bytes": 4653,
+    "sha256": "d727f768b7067c5ad0a76c5e67ab6a4c49b96d4972c983cc4ebcc99d3dbec9f0",
+    "mode": 420
+  },
+  "nextGraphicsGroupedInventory": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/next-graphics-groups1.json",
+    "bytes": 266576,
+    "sha256": "ef7d95ff64a6ac9f076e4e95823e7bf22b47a210b877c0d0b4f3a3aa590130ec",
+    "mode": 420
+  },
+  "independentFinalReview": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/review4-contacts-publication.json",
+    "bytes": 20521,
+    "sha256": "b0b130cb8446cfddf1c780e5afc2e3d90a5c55601faa90e40cbce75a39f761ef",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/publication2.json",
+    "bytes": 956,
+    "sha256": "1944ac0314b25804d402f2faf348b933f1a2bf677c1d2820c07565d0ef2b903e",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/reviewed-evidence2.json",
+    "bytes": 7041,
+    "sha256": "f323630548638ddd2bfddceee322ae8a49398cbe6aded049cf9f3e9ddc0bb1fa",
+    "mode": 420
+  },
+  "publicationCorrection": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/publication-fix1.json",
+    "bytes": 1019,
+    "sha256": "670e280b0f18b82b71d5fc743ccc3178662fb9766dcb55e172fe429dc297a04f",
+    "mode": 420
+  },
+  "publicationCorrectionArchive": {
+    "path": "build/research/application-owned-active-contacts-native-20260914/publication-fix-archive1.json",
+    "bytes": 1647,
+    "sha256": "a726c4a5a3ff3d6f420a804100b90aef9b04cbf9203a1112781576e2829d74f3",
+    "mode": 420
+  }
+}

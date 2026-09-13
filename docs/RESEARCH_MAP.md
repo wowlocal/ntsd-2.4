@@ -495,11 +495,26 @@ release-метода прошли за148.355с/build356.77с;147 прежних
 оригинал не исполнялся. [Evidence](evidence/application-active-physics.json),
 [план](research/APPLICATION_ACTIVE_PHYSICS_PLAN.md). Native job1 терминален в
 `build/research/application-owned-active-physics-native-20260914/`; не перезапускать.
-**Остальные17 body стадий и полный active tick открыты; physics landing/death/
-spawn/reversion и поздняя transient lifetime этим конечным проходом не приняты.**
-NEXT — независимое сравнение depth/contacts/hits/cpoint проходов на текущем
-собственном состоянии, затем последующих графики/lifecycle/вывода по общему
-active body плану. Full helper ABI/stores, полный матч/игра, device/Windows/
+На этом входе остальные17 стадий оставались открытыми. Принятое конечное
+сравнение следующих семи стадий описано ниже; полный body ещё не принят.
+
+Принято [сравнение active contacts](research/APPLICATION_ACTIVE_CONTACTS.md):672 source и672
+собственных endpoints семи последовательных depth/contact/hit/cpoint стадий
+после текущей физики,96 собственных item RNG, полные records/masks/владельцы и
+журнал.12 отрицательных и2 положительных comparator controls. Четыре release-метода
+прошли за171.106с/build352.34с;149 прежних методов сохранены по pins.
+1000 Native-файлов и оба архива проверены;996 прежних файлов и485 package files
+неизменны. Independent review обнаружил неверное смещение ITR.effect в первом
+компараторе; ошибка/кандидат/лог сохранены, чтение+2c проверено различающими
+контролями. Core/source expected не менялись, оригинал не исполнялся.
+[Evidence](evidence/application-active-contacts.json),
+[план](research/APPLICATION_ACTIVE_CONTACTS_PLAN.md). Оба Native jobs терминальны в
+`build/research/application-owned-active-contacts-native-20260914/`; не перезапускать.
+**Следующие10 body стадий, поздняя transient lifetime и полный active tick открыты.**
+NEXT — независимое сравнение камеры/рисования на текущих собственных позициях,
+кадрах и ресурсах, затем impulses/lifecycle/commands/HUD/notices/recording/layout/
+output по общему active body плану. Полные helper ABI/stores, damaging/held/cpoint/
+spawn ветви за пределами этого конечного прохода, матч/игра, app/device/Windows/
 clean-Mac и прежние safety incidents остаются открытыми.
 
 

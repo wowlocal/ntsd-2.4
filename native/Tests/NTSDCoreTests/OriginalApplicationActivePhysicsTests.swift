@@ -9,7 +9,7 @@ final class OriginalApplicationActivePhysicsTests: XCTestCase {
     typealias S = Q.S
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActivePhysicsSource(reverse)
         let sourcePoints = try source.compare()
         var previous: M.Snapshot?,count = 0
@@ -66,6 +66,7 @@ final class OriginalApplicationActivePhysicsTests: XCTestCase {
                 previous = nil;count += 1
             default:break // Remaining17 stages retain their open comparison gate.
             }
+            try onBody?(call,ready,event)
         })
         try P.require(count == 48 && previous == nil,"Complete own physics sequence")
         print("Owned active physics comparison: control=\(reverse), \(sourcePoints) source Actor checkpoints, \(count) own full physics endpoints, no primitive effects; remaining17 body stages OPEN")
