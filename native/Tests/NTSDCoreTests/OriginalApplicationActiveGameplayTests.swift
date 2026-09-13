@@ -100,7 +100,7 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
         var events: [String] = []
         var fronts = 0
     }
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil) throws {
         let source = try I(reverse)
         var sourceHeld = Set<UInt32>()
         // Independent saved-data checks precede the application candidate.
@@ -128,6 +128,7 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
                 let presentation = OriginalMenuPresentationInput(targetSurface:ready.loading.target,methodResult:0,queryResult:0,audioGetResult:0,
                     audioSetResult:0,queriedAudio:0,audioVolume:0,dcResult:0,dc:0x12345678,postResult:0)
                 let result = try session.advance(environment:&env,outputInput:presentation,observe:{ event,e in
+                    try onBody?(call,ready,event)
                     switch event {
                     case .front:e.fronts += 1
                     case .gameplay(let value):

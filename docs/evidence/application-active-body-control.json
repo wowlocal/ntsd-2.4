@@ -1,0 +1,176 @@
+{
+  "schema": "owned-active-control-comparison-v1",
+  "base": "a5a7a7d14f7eef1594c1e4b5373126c8b017e91b",
+  "scope": "Finite control endpoints and retained owners in both own48-call schedules; other18 body stages open",
+  "controlEndpointComparisonPassed": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullGoalComplete": false,
+  "inputPerInstructionStoreComparisonAccepted": false,
+  "fullControlHelperABICompared": false,
+  "fullControlInstructionStoresCompared": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "sourceExpectedChanged": false,
+  "coreChanged": false,
+  "sourceControlEndpoints": 96,
+  "sourceActorCheckpoints": 960,
+  "ownControlEndpoints": 96,
+  "ownControlRNGEvents": 6,
+  "negativeComparatorTrials": 12,
+  "distinctOwnBodyReturnsInSchedules": 96,
+  "preflightRunsInSelectedMethods": 4,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 control comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-body-native-20260914/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-body-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplication(ActiveBody|ActiveGameplay)Tests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-body-native-20260914/candidate2-inputs.json",
+      "nativeFiles": 994,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T22:14:57.725440+00:00",
+      "pid": 14371,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 522.040236125,
+      "endedUTC": "2026-09-13T22:23:39.768554+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveBodyTests",
+        "method": "testControlOwnedControlProjection",
+        "seconds": 52.386
+      },
+      {
+        "suite": "OriginalApplicationActiveBodyTests",
+        "method": "testPrimaryOwnedControlProjection",
+        "seconds": 31.448
+      },
+      {
+        "suite": "OriginalApplicationActiveGameplayTests",
+        "method": "testControlOwnedActiveInputAndBodyPreflight",
+        "seconds": 27.201
+      },
+      {
+        "suite": "OriginalApplicationActiveGameplayTests",
+        "method": "testPrimaryOwnedActiveInputAndBodyPreflight",
+        "seconds": 27.043
+      }
+    ],
+    "testSeconds": 138.078,
+    "buildSeconds": 382.17,
+    "stdout": {
+      "bytes": 79437,
+      "sha256": "2b12ef704d4cb3c515924461f16e0d8d772261903e382939c15b8ba4e2cfab1f",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25022,
+      "sha256": "a3d61e32138a99fac36c872ba4552bb69cacac3ab0b3ccc62f694baf1fe15527",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 994,
+  "oldNativeFilesUnchanged": 990,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 4,
+  "inheritedMethodsNotRerun": 145,
+  "uniqueRetainedMethods": 149,
+  "verification": {
+    "path": "build/research/application-owned-active-body-native-20260914/verification2.json",
+    "bytes": 132538,
+    "sha256": "403fbca453e01a24bb7fbacdef5a5652eaf61f88f840c20e44f20c5934ac62c0",
+    "mode": 420
+  },
+  "sourceFormulaInventory": {
+    "path": "build/research/application-owned-active-body-native-20260914/control-source-formula1.json",
+    "bytes": 1411,
+    "sha256": "7da2b865b53afe23f991246edcc0c7c7ce6409b080b74a360a6aa385f7f8833f",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "build/research/application-owned-active-body-native-20260914/review1-control-contract.json",
+    "bytes": 289843,
+    "sha256": "ae17309802ad96ebafe0d419417ea93653d3a8d89a5eadad324094000c9a8b50",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "build/research/application-owned-active-body-native-20260914/review3-control-candidate.json",
+    "bytes": 22218,
+    "sha256": "7833a53e156cffc7b5022fbce965a5cae7057940ddc086f1d6cde702d325e471",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-body-native-20260914/native-candidate2.tar",
+    "pin": {
+      "bytes": 4442193920,
+      "sha256": "c0da4c5a37461169daaf75d6d0a734dd090135b7e76ce46108fe22cf8513f1b9",
+      "mode": 420
+    },
+    "members": 994,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-body-native-20260914/control-evidence2.tar",
+    "pin": {
+      "bytes": 1556480,
+      "sha256": "d6cabd64cecd5c8c71e7d141c01c28721a9b91531f77e8b24fe8d78c5124e1f1",
+      "mode": 420
+    }
+  },
+  "evidenceArchiveVerification": {
+    "path": "build/research/application-owned-active-body-native-20260914/evidence-archive2.json",
+    "bytes": 6085,
+    "sha256": "5e0db335349a081147f9bf9d2be340b1ae46c905cd1188de043ffd3dfa49b14a",
+    "mode": 420
+  },
+  "remaining": [
+    "Other18 body stage comparators and whole active-body equivalence",
+    "Source middle Object/Frame heap snapshots unavailable at control stage",
+    "Full control helper ABI and per-instruction stores",
+    "Observed own pre-hook checkpoint; formula rereads current Frame but callback is control endpoint",
+    "Paused/damaging/round/full match and game",
+    "Device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "firstCandidateFailure": {
+    "path": "build/research/application-owned-active-body-native-20260914/candidate1-early-global-correction.json",
+    "bytes": 1065,
+    "sha256": "577e5a5e6fc35caf5ae9def3b9ddb5be36cb4a5f5b4b1dbc444ce539de38305c",
+    "mode": 420
+  },
+  "independentFinalReview": {
+    "path": "build/research/application-owned-active-body-native-20260914/review4-control-publication.json",
+    "bytes": 20687,
+    "sha256": "3e212178223ab6f791f606f0e512bb04a84b0d506744abed25807320af56d6b3",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "build/research/application-owned-active-body-native-20260914/publication2.json",
+    "bytes": 960,
+    "sha256": "0d49197b977f3b47d090b9da089f52dc2627d8cf9430295027123acbeeb3f66f",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "build/research/application-owned-active-body-native-20260914/reviewed-evidence2.json",
+    "bytes": 6117,
+    "sha256": "21b22a083700b7c7e608d3cec5b857fbc2a7820d5fecc107fee85f6d310943c9",
+    "mode": 420
+  }
+}

@@ -469,9 +469,24 @@ differential-сравнение ещё не принято; per-instruction inpu
 оригинала нет. [Evidence](evidence/application-active-gameplay-input.json),
 [план](research/APPLICATION_ACTIVE_GAMEPLAY_PLAN.md). Все пять Native jobs терминальны в
 `build/research/application-owned-active-gameplay-native-20260913/`; не перезапускать.
-NEXT — независимое сравнение всех19 active body стадий на собственных позициях/RNG,
-installed hooks, transient Actors, graphics/audio и полном caller journal.
-Полный матч/игра, device/Windows/clean-Mac и прежние safety incidents открыты.
+На этом входе все19 active body стадий оставались открытыми;
+следующее принятое конечное сравнение управления описано ниже.
+
+Принято [сравнение конечной active control стадии](research/APPLICATION_ACTIVE_BODY_CONTROL.md):
+960 source Actor checkpoints/96 полных control endpoints воспроизведены до
+сравнения96 собственных checkpoints, шести RNG-событий и всех retained owners/
+caller journal.12 отрицательных проб проверяют границы компаратора. Четыре
+release-метода прошли за138.078с/build382.17с;145 прежних методов
+сохранены по pins,990 старых Native-файлов и485 package files неизменны.
+Все994 Native-файла и оба архива проверены. Core/source expected не менялись;
+оригинал не исполнялся. [Evidence](evidence/application-active-body-control.json),
+[план](research/APPLICATION_ACTIVE_BODY_PLAN.md). Оба Native jobs терминальны в
+`build/research/application-owned-active-body-native-20260914/`; не перезапускать.
+**Остальные18 active body стадий, полный helper ABI и instruction-store
+сравнение открыты.** NEXT — независимая physics/lifetime проекция по этому плану,
+затем остальные body стадии на собственном состоянии. Полный матч/игра,
+device/Windows/clean-Mac и прежние safety incidents остаются открытыми.
+
 
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
