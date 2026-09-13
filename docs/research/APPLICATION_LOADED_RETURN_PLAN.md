@@ -87,3 +87,19 @@ Windows/device raster inputs, macOS backend publication and full loaded-game
 execution remain separate required evidence. Do not treat original DIB colors
 as measured device pixels. This plan does not complete the first match, all
 content/modes/networking, input/audio/latency or clean-Mac acceptance.
+
+## Current input ownership stage
+
+After the loop prerequisite was committed as `3292f1b`, the next stage continues
+the same whole card with current World/Actor bindings, saved-playback/replay
+aliases, retained actual WinMain music and explicit arithmetic context. Its
+bounded plan and additional input pins are
+`build/research/application-loaded-input-native-20260913/plan1.json` and
+`implementation-plan2.json`; implementation/comparison limits are described in
+[APPLICATION_LOADED_INPUT](APPLICATION_LOADED_INPUT.md). This separate Native
+stage retains its own 40 GiB/3600-second/three-candidate budget and the unchanged
+6 GiB internal reserve. Earlier failed loop candidates remain immutable.
+
+The immediate previous turn made progress by committing and verifying delivery
+of the loop prerequisite. It did not accept the whole card. New input acceptance
+must preserve the menu and final enclosing-return requirements above.

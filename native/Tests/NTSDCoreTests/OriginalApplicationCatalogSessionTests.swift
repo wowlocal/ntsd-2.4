@@ -39,7 +39,8 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
             XCTAssertTrue(prepared.state.full.defined.allSatisfy { $0 })
             XCTAssertEqual(prepared.common.sounds.count,18)
             let startup = try XCTUnwrap(own.bootstrap?.startup?.input?.sounds)
-            try body(prepared,.init(owner:startup,platforms:r.startupWaveInputs))
+            let music = try XCTUnwrap(own.bootstrap?.startup?.output.music)
+            try body(prepared,.init(owner:startup,platforms:r.startupWaveInputs,music:music))
         })
         XCTAssertTrue(reached)
     }
@@ -369,12 +370,15 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
     func testCatalogAllocationCannotOverlapRetainedCommonPCM() throws {
         let r = try R(parentIndex:0)
         try withEntry(r) { entry,startup in
-            var tokens = r.allocationTokens; tokens[0] = 0x60000020
-            var session = try C(pending:entry,startup:startup)
-            XCTAssertThrowsError(try session.load(inputs:self.inputs(r,target:entry.target,tokens:tokens))) {
-                XCTAssertEqual($0 as? C.Boundary,.overlap(0x60000020))
+            let music = try XCTUnwrap(startup.music.allocations.keys.first)
+            for token in [UInt32(0x60000020),music] {
+                var tokens = r.allocationTokens; tokens[0] = token
+                var session = try C(pending:entry,startup:startup)
+                XCTAssertThrowsError(try session.load(inputs:self.inputs(r,target:entry.target,tokens:tokens))) {
+                    XCTAssertEqual($0 as? C.Boundary,.overlap(token))
+                }
+                XCTAssertNil(session.pendingPool); Self.retained(session.entry.state,entry.state)
             }
-            XCTAssertNil(session.pendingPool); Self.retained(session.entry.state,entry.state)
         }
     }
 }

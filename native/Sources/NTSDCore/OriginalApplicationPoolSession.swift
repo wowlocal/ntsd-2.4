@@ -80,6 +80,7 @@ public struct OriginalApplicationPoolSession {
             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }
             for (owner,p) in zip(entry.startup.owner.loads,entry.startup.platforms) { retain(owner,p) }
+            for (token,record) in entry.startup.music.allocations { reserve(token,record.bytes.count) }
             for (owner,p) in zip(entry.entry.common.sounds,entry.entry.waveInputs) { retain(owner,p) }
             for (i,p) in entry.snapshot.waveInputs.enumerated() {
                 guard let owner = entry.snapshot.sounds.buffers[i] else { throw Boundary.missingOwners };retain(owner,p)

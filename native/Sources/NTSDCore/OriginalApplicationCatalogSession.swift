@@ -13,9 +13,12 @@ public struct OriginalApplicationCatalogSession {
     /// registered WAV owners. Platforms give logical PCM identities, not bytes.
     public struct StartupSounds {
         public let owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]
-        public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]) throws {
+        /// The real WinMain output already owns its wide music allocation.
+        /// Retain it through catalog/pool/input until the next music consumer.
+        public let music: OriginalMusicMemory
+        public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform], music: OriginalMusicMemory) throws {
             guard owner.loads.count == platforms.count else { throw Boundary.input("Startup WAV owners") }
-            self.owner = owner; self.platforms = platforms
+            self.owner = owner; self.platforms = platforms; self.music = music
         }
     }
     public struct MessageInput {
@@ -153,6 +156,7 @@ public struct OriginalApplicationCatalogSession {
                       try word(Int(p.destination)) == owner.output else { throw Boundary.input("Startup WAV binding") }
                 try retainWave(owner,p)
             }
+            for (token,record) in startup.music.allocations { try range(token,record.bytes.count) }
             for (i,pair) in zip(entry.common.sounds,entry.waveInputs).enumerated() {
                 let (owner,p) = pair
                 guard p.destination == UInt32(0x451db0+4*i),p.device == device,

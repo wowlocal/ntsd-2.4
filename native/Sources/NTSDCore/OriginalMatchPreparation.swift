@@ -38,11 +38,24 @@ public struct OriginalMatchPreparation {
 
     public init(catalog: OriginalLoadedCatalog, bootstrap: OriginalWorldBootstrap, globals: OriginalStateRecord,
                 interface: OriginalInitialInterfaceLoading = .init(),arithmeticPrecision: OriginalArithmeticPrecision = .bits64) throws {
-        guard globals.bytes.count == Self.globalSize else { throw Self.error("Global storage size") }
+        try self.init(catalog:catalog,world:bootstrap.world,actors:bootstrap.actors,globals:globals,
+                      interface:interface,arithmeticPrecision:arithmeticPrecision)
+    }
+
+    /// Adopt current canonical records without executing constructors or copying
+    /// an earlier bootstrap snapshot. References retain their declared ordinals.
+    public init(catalog: OriginalLoadedCatalog, world: OriginalStateRecord, actors: [OriginalStateRecord],
+                globals: OriginalStateRecord, interface: OriginalInitialInterfaceLoading,
+                arithmeticPrecision: OriginalArithmeticPrecision) throws {
+        guard globals.bytes.count == Self.globalSize,
+              world.bytes.count == OriginalStateRecord.worldPrefixSize, actors.count == 400,
+              actors.allSatisfy({ $0.bytes.count == OriginalStateRecord.actorSize }) else {
+            throw Self.error("Current match record extents")
+        }
         self.arithmeticPrecision = arithmeticPrecision
         self.catalog = catalog
         frameAllocations = catalog.frameAllocations
-        world = bootstrap.world; actors = bootstrap.actors; self.globals = globals
+        self.world = world; self.actors = actors; self.globals = globals
         self.interface = interface
         backgrounds = catalog.backgrounds
         backgroundLoader = OriginalBackgroundLoader()

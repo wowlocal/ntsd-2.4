@@ -360,18 +360,33 @@ Resume выполняет только оставшийся tail после ре
 Неисполненный candidate1 и неуспешный Native1/candidate2 сохранены; candidate3
 исправляет только новый тест. Native2 terminal0; [evidence](../evidence/application-loaded-return.json).
 
-**Следующая задача — продолжить PendingInput с41c581 через input/loading caller
-к outer loop и backend publication.** Сохранить собственные pool/UI, текущий
-каталог, звуки, RNG, полные records/masks, aliases и whole-attempt rollback.
-Сначала связать текущие World/Actor tokens и savedPlayback800 bytes/0x320 с
-общим input handler; передать actual WinMain.output.music и явный arithmetic
-context. StartupSounds хранит только WAV; пустой music owner неверен. Сохранены
-11 menu DIB/1290322 bytes, но их runtime package и независимая проверка ещё нужны.
-После library menu/actual returns использовать сохранённый loopContinuation;
-enclosing owner должен проверить актуальность, counter alias и однократную публикацию.
-Не подставлять expected after-state. Полный original application return и draw
-consumers новых catalog/UI surfaces остаются открыты. Completed captures,
-включая terminal candidate5 после28 Objects, не перезапускать.
+Принято [соединение текущих владельцев с input/round](APPLICATION_LOADED_INPUT.md).
+OriginalApplicationInputSession продолжает собственный полный catalog/pool/UI
+через шесть input checkpoints до menu continuation. World/400 Actor/globals
+и masks переводятся из текущих logical tokens в ordinals и обратно; повторные
+ссылки, Object0 как живой владелец,800 saved-playback bytes и replay aliases
+сохраняются. Actual WinMain.output.music теперь проходит через catalog/pool;
+его wide allocation участвует в проверке пересечений. Arithmetic precision
+передаётся явно; Native53 не доказывает прежнюю CRT initialization.
+26 bundled release-методов прошли288.845с/build318.42с на первом кандидате:
+четыре новых метода,13binding guards,7late rollback/retry и22 прежние регрессии.
+Оба MENU_STARTUP сохраняют все прежние source comparisons; дополнительная
+binding-проверка не является новым whole-original application capture.
+938 Native-файлов/457 packaged files/381 прежний fixture и Native archive
+сверены. Наблюдатель optional Native profile не прошёл precheck перед terminal
+success; точный подпункт неизвестен, sample/сигнал/перезапуск не выполнялись.
+[evidence](../evidence/application-loaded-input.json) сохраняет результаты отдельно.
+
+**Следующая задача — продолжить PendingContinuation.menu через retained music,
+11 ресурсов, library screen/panel и actual loading/early returns к outer loop.**
+Подготовлены и независимо проверены11 menu DIB/1290322bytes,582632 известных
+pixels/1388rows: `build/research/application-loaded-input-native-20260913/menu-inputs1`.
+Пакет пока только рабочий: нужны runtime delivery и Native comparison, затем
+сохранённый loopContinuation, проверка актуальности, counter alias и однократная
+публикация. Полный original application return, широкие phase0/shutdown/replay/AI
+owner joins и draw consumers новых catalog/UI surfaces остаются открытыми.
+Не подставлять expected after-state. Completed captures, включая terminal
+candidate5 после28 Objects, не перезапускать.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся

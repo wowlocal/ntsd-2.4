@@ -294,6 +294,17 @@ Core/expected после первого запуска не менялись. [�
 всего input/menu/outer return остаётся открытым: actual music/precision/aliases,
 11 menu DIB и enclosing commit ещё требуют соединения. [Evidence](evidence/application-loaded-return.json).
 
+[Текущие input owners](research/APPLICATION_LOADED_INPUT.md) теперь соединены
+через OriginalApplicationInputSession: actual World/400Actor/global tokens,
+шесть coherent checkpoints,800 saved-playback bytes/replay aliases и retained
+WinMain music до menu continuation. Первый candidate938files прошёл26 bundled
+release-методов288.845с/build318.42с;13binding guards/7late rollback+retry,
+381oldfixtures/457package files и Native archive сверены. Оба старых MENU_STARTUP
+и дополнительный Native binding check сохранены; нового whole-original app
+match нет.11menuDIB подготовлены и независимо проверены как данные; runtime
+package/menu/outer-return/backend ещё открыты. [Evidence](evidence/application-loaded-input.json).
+
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных

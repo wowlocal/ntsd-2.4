@@ -15,6 +15,7 @@ final class OriginalMenuStartupTests: XCTestCase {
             loading: fixture("menu-loading-state"),catalog: fixture("menu-loading-catalog"),sounds: fixture("menu-loading-sounds"),
             onEntry: { loaded,input,entry in
                 try self.checkEntry(loaded,input,entry,rollback: !control)
+                try OriginalApplicationInputTests.compareSavedEntry(loaded,input,entry,reversed:control)
                 if !control { try self.checkMenuRollback(entry,platformCorpus: startup) }
             })
         XCTAssertEqual(result.parent.menu.cases,119)

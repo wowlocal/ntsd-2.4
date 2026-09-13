@@ -236,6 +236,7 @@ final class OriginalApplicationPoolTests: XCTestCase {
         let entry = try Self.parent.get(),inputs = try OriginalApplicationInterfaceInputsTests.inputs.get()
         let live = try XCTUnwrap(entry.snapshot.state.memory.allocations.filter { $0.value.live }.keys.min())
         let tokens: [UInt32] = [0x458b00,0x70000020,entry.snapshot.objectTokens[0],live,
+            try XCTUnwrap(entry.startup.music.allocations.keys.first),
             entry.startup.platforms[0].firstPointer,entry.entry.waveInputs[0].firstPointer,entry.snapshot.waveInputs[0].firstPointer,
             try XCTUnwrap(entry.files.streams.values.first).allocation.buffer]
         for kind in [P.Allocation.Kind.actor(0),.interface(0)] {
