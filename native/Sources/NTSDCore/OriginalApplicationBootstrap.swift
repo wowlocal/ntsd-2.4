@@ -137,3 +137,20 @@ public struct OriginalApplicationBootstrap {
         }
     }
 }
+
+extension OriginalApplicationBootstrap {
+    public func makeLoadedCycle(pending: Session.PendingLoading) throws -> OriginalApplicationLoadedCycleSession {
+        guard let session,startup != nil else { throw Boundary.notStarted }
+        return try session.makeLoadedCycle(pending:pending)
+    }
+    /// Keep the actual application Session and its current loaded owners in one
+    /// commit. The caller environment remains tentative through the final hook.
+    @discardableResult
+    public mutating func finishLoadedMenu<Environment>(_ pending: OriginalApplicationLoadedMenuSession.PendingReturn,
+        environment: inout Environment,perform: (Session.Loop.Request,inout Environment) throws -> Session.Loop.Response,
+        beforeCommit: (Session.Loop,Session.State,inout Environment) throws -> Void = { _,_,_ in }) throws -> Session.LoadedCommit {
+        guard var next = session,startup != nil else { throw Boundary.notStarted }
+        let result = try next.finishLoadedMenu(pending,environment:&environment,perform:perform,beforeCommit:beforeCommit)
+        session = next;return result
+    }
+}

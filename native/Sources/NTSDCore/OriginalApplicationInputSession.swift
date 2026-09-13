@@ -7,6 +7,7 @@ public struct OriginalApplicationInputSession {
     public enum Boundary: Error, Equatable { case alreadyPrepared, commandExtent }
     public enum Operation: Equatable {
         case preceding(Pool.Operation)
+        case menu(OriginalApplicationMenuSession.Effect)
         case control(OriginalInputControlRequest,OriginalInputControlResponse)
         case replayMessage(OriginalReplayTickEvent)
         case roundMethod(OriginalMatchRoundEvent)
@@ -17,6 +18,20 @@ public struct OriginalApplicationInputSession {
         public let commands: [UInt8], playbackCommands: [UInt8], paused: Bool
         public let round: OriginalMatchRoundResult, operations: [Operation]
         public let graphics: [OriginalApplicationGraphics.Command]
+        public let loading: OriginalApplicationMenuSession.PendingLoading
+        public let menuResources: OriginalMenuResourceLoading
+        public let menuBackgrounds: [UInt32:OriginalLoadedBitmap]
+        init(entry: Pool.PendingInput,state: State,match: OriginalMatchPreparation,
+             inputContext: OriginalInputControlContext,music: OriginalMusicMemory,
+             commands: [UInt8],playbackCommands: [UInt8],paused: Bool,
+             round: OriginalMatchRoundResult,operations: [Operation],graphics: [OriginalApplicationGraphics.Command],
+             loading: OriginalApplicationMenuSession.PendingLoading? = nil,
+             menuResources: OriginalMenuResourceLoading = .init(),menuBackgrounds: [UInt32:OriginalLoadedBitmap] = [:]) {
+            self.entry = entry;self.state = state;self.match = match;self.inputContext = inputContext;self.music = music
+            self.commands = commands;self.playbackCommands = playbackCommands;self.paused = paused;self.round = round
+            self.operations = operations;self.graphics = graphics;self.loading = loading ?? entry.entry.entry.entry
+            self.menuResources = menuResources;self.menuBackgrounds = menuBackgrounds
+        }
     }
     public let entry: Pool.PendingInput, bindings: OriginalApplicationMatchBindings
     public let arithmeticPrecision: OriginalArithmeticPrecision

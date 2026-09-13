@@ -391,14 +391,31 @@ Whole operation/graphics journal, все graphics owners и полный final S
 сверены. [Evidence](../evidence/application-loaded-menu.json). Full original
 application match/device/backend publication этим не заявлены.
 
-**Следующая задача — передать committed loaded result и текущих menu/music/
-background owners в следующую обычную итерацию и application consumer.**
-Latest music и fresh background удерживаются в returned Snapshot/current memory;
-startup/earlyScreen остаются историческими. Следующий prefix должен явно читать
-текущего владельца, без второго воспроизведения operation/graphics journal.
-Other menu/playback/uncached music/panel IO/recovery/gameplay остаются отдельными
-зависимостями. Не подставлять expected after-state и не перезапускать completed
-captures, включая terminal candidate5 после28 Objects.
+Принято [повторение загруженного цикла через Bootstrap](APPLICATION_LOADED_CYCLE.md).
+Текущие match/music/menu/background owners фиксируются вместе с Session.
+Следующий actual World2 step даёт новый ticket и повторяет prologue/input;
+ранний screen prefix в этой ветви не исполняется. Два own backing варианта
+дают phase0/1/0/1: neutral, keydown, held-confirmation и keyup. Первые три
+новых цикла на вариант возвращаются целиком; четвёртый сохраняет текущий
+Actor attack и доходит до явной границы selected character body. Cached меню
+не создаёт resources/bitmap API/music заново. Все appended graphics, Release/
+free/clear, full final State/operations и late rollback проверены.
+51 bundled release-метод прошёл310.184с/build324.17с на candidate3;
+958 Native-файлов, все383прежних fixtures и471package files сверены.
+Candidate1 остановился на Int/Int32 compile error нового теста; candidate2
+обнаружил ошибку нового parent adapter при разборе windowDefault replies.
+Оба failures и review gaps сохранены; Core/expected не менялись после candidate1.
+Candidate3 исправляет только тестовый адаптер и добавляет3старые WindowInput
+регрессии к прежним48. [Evidence](../evidence/application-loaded-cycle.json).
+
+**Следующая задача — передать четвёртый own input child с retained Actor attack
+в уже восстановленный character-menu handler и завершить его новый outer ticket.**
+Далее собственные selection/arena/preparation/gameplay. Current memory остаётся
+источником live bitmap fields; constructor history и startup/earlyScreen нельзя
+публиковать заново. Other modes/playback/uncached music/panel IO/recovery/device
+остаются отдельными зависимостями. Whole-original application match, backend,
+полный матч и полная игра остаются открытыми. Не подставлять expected after-state
+и не перезапускать completed captures, включая terminal candidate5 после28 Objects.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся

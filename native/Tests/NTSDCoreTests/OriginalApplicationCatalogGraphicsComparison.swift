@@ -29,6 +29,7 @@ final class OriginalApplicationCatalogGraphicsComparison {
     var keys: [G.Reference:(C.API.Request,Int32)] = [:],images: [UInt32:Image] = [:],surfaces: [UInt32:Surface] = [:]
     var memory: [Memory] = [],dcs: [DC] = [],lastMemory: [UInt32:Int] = [:],lastDC: [UInt32:Int] = [:]
     var textRef: G.Reference?,textOwner: G.Reference?
+    var priorReleases: [G.Reference:[Int32]] = [:]
     var colors: [String:([UInt8],[Bool],Int,Int)] = [:]
     convenience init(reference: R,entry: OriginalApplicationLoadingSession.PendingCatalog) throws {
         try self.init(reference:reference,resources:reference.bitmapResources,golden:OriginalCatalogDIBPixelsTests.golden.get(),entry:entry)
@@ -180,6 +181,10 @@ final class OriginalApplicationCatalogGraphicsComparison {
                         }
                         destinationRect = try rectangle(a[2]); sourceRect = try rectangle(a[4]); XCTAssertNil(bytes.next())
                     } else if a[1] == 0x2c { bindings.append(("target",owner)) }
+                    else if a[1] == 8 {
+                        guard oldGraphics.resources[owner] != nil,prior.surfaces[a[0]] != nil else { throw R.Boundary.invalid("Release requires an existing bitmap surface") }
+                        priorReleases[owner,default:[]].append(result)
+                    }
                     else { throw R.Boundary.invalid("Unclassified loading surface method") }
                 case "draw","read","clip","text","stringLength","panelRead","soundRequest","soundMethod":continue
                 default:throw R.Boundary.invalid("Unclassified loading graphics observation: "+e.kind)
@@ -206,7 +211,13 @@ final class OriginalApplicationCatalogGraphicsComparison {
         XCTAssertEqual(Set(a.images.keys),Set(prior.images.keys).union(images.keys))
         XCTAssertEqual(Set(a.surfaces.keys),Set(prior.surfaces.keys).union(surfaces.keys))
         for (token,image) in prior.images { XCTAssertEqual(a.images[token],image) }
-        for (token,surface) in prior.surfaces { XCTAssertEqual(a.surfaces[token],surface) }
+        for (token,surface) in prior.surfaces {
+            if let releases = priorReleases[try ref(token)] {
+                let current = try XCTUnwrap(a.surfaces[token])
+                XCTAssertEqual(current.descriptor,surface.descriptor);XCTAssertEqual(current.sourceColors,surface.sourceColors)
+                XCTAssertEqual(current.copies,surface.copies);XCTAssertEqual(current.releaseResults,surface.releaseResults+releases)
+            } else { XCTAssertEqual(a.surfaces[token],surface) }
+        }
         for (token,e) in images {
             let image = try XCTUnwrap(a.images[token]),input = try XCTUnwrap(bitmapResources[e.name]),p = try imageColors(e.name)
             XCTAssertEqual(image.deleted,e.deleted); XCTAssertEqual(image.bitmap.dib,input.dib)
@@ -241,7 +252,17 @@ final class OriginalApplicationCatalogGraphicsComparison {
         XCTAssertEqual(g.currentResources,refs); XCTAssertEqual(g.nextTextGeneration,textGeneration)
         XCTAssertEqual(g.textLeases,oldGraphics.textLeases); XCTAssertEqual(g.displayModes,oldGraphics.displayModes)
         XCTAssertEqual(Set(g.resources.keys),Set(oldGraphics.resources.keys).union(creations.keys))
-        for (ref,resource) in oldGraphics.resources { XCTAssertEqual(g.resources[ref],resource) }
+        for (ref,resource) in oldGraphics.resources {
+            if let releases = priorReleases[ref] {
+                let current = try XCTUnwrap(g.resources[ref])
+                XCTAssertEqual(current.ref,resource.ref);XCTAssertEqual(current.creation,resource.creation)
+                XCTAssertEqual(current.createResult,resource.createResult);XCTAssertEqual(current.releaseResults,resource.releaseResults+releases)
+                XCTAssertEqual(current.colorKey,resource.colorKey);XCTAssertEqual(current.colorKeyResult,resource.colorKeyResult)
+                XCTAssertEqual(current.clipper,resource.clipper);XCTAssertEqual(current.clipperResult,resource.clipperResult)
+                XCTAssertEqual(current.palette,resource.palette);XCTAssertEqual(current.paletteResult,resource.paletteResult)
+                XCTAssertEqual(current.pixelFormat,resource.pixelFormat)
+            } else { XCTAssertEqual(g.resources[ref],resource) }
+        }
         for (ref,e) in creations {
             let resource = try XCTUnwrap(g.resources[ref]); XCTAssertEqual(resource.ref,ref)
             OriginalApplicationGraphicsTests.request(resource.creation,e.0); XCTAssertEqual(resource.createResult,e.1)

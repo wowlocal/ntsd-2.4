@@ -31,7 +31,7 @@ public struct OriginalApplicationLoadedMenuSession {
         public let entry: Input.PendingContinuation, snapshot: Snapshot
         public let exit: OriginalModeScreenExit,dispatcherResult: Int32?
         public let graphics: [OriginalApplicationGraphics.Command]
-        public var loading: Session.PendingLoading { entry.entry.entry.entry.entry }
+        public var loading: Session.PendingLoading { entry.loading }
     }
     public let entry: Input.PendingContinuation
     public private(set) var pendingReturn: PendingReturn?
@@ -72,7 +72,7 @@ public struct OriginalApplicationLoadedMenuSession {
         var backgrounds: [UInt32:OriginalLoadedBitmap] = [:]
         var local: OriginalStateRecord,operations: [Operation],graphics: [OriginalApplicationGraphics.Command]
         var ranges: [(UInt64,UInt64)] = [],surfaces: [UInt32:UInt32] = [:],current: UInt32?,outputPhase = false
-        var target: UInt32 { entry.entry.entry.entry.target }
+        var target: UInt32 { entry.loading.target }
         init(_ entry: Input.PendingContinuation,_ inputs: OriginalApplicationMenuInputs,_ env: E,
              _ screen: OriginalFrontScreenBodyInput,_ output: OriginalMenuPresentationInput,
              _ allocate: @escaping (AllocationKind,Int,inout E) throws -> OriginalInterfaceAllocation,
@@ -82,13 +82,14 @@ public struct OriginalApplicationLoadedMenuSession {
              _ observe: @escaping (Observation,inout E) throws -> Void,
              _ checkpoint: @escaping (String,OriginalStateRecord,inout E) throws -> Void) throws {
             self.entry = entry;environment = env;state = entry.state;model = entry.match;audio = entry.music
+            resources = entry.menuResources;backgrounds = entry.menuBackgrounds
             bindings = try .init(pending:entry.entry);screenInput = screen;outputInput = output
             allocation = allocate;bitmapReply = bitmap;musicReply = music;clock = time
             self.observe = observe;self.checkpoint = checkpoint
             operations = entry.operations.map(Operation.preceding);graphics = entry.graphics
             local = try .init(bytes:[UInt8](repeating:0,count:0x704),defined:[Bool](repeating:false,count:0x704))
             guard screen.drawResults.count == 1 else { throw Boundary.dependency("Single menu draw response") }
-            guard output.targetSurface == entry.entry.entry.entry.target else { throw Boundary.dependency("Menu target") }
+            guard output.targetSurface == entry.loading.target else { throw Boundary.dependency("Menu target") }
             guard var images = state.bitmapInputs else { throw Boundary.dependency("Bitmap inputs") }
             try images.addResources(inputs.bitmaps);state.bitmapInputs = images
             reserve(0x44d000,state.full.bytes.count)
@@ -219,7 +220,8 @@ public struct OriginalApplicationLoadedMenuSession {
                     try self.observe(.resourceCheckpoint(p,g,b),&self.environment)
                     try self.checkpoint("resource.\(p.kind.rawValue).\(p.index)",g,&self.environment)
                 },observe:{ e,_ in try self.observe(.resource(e),&self.environment) })
-            try adopted(images.bitmaps,in:&owned)
+            // Cached constructors are historical; current memory retains their live fields.
+            try adopted(images.bitmaps.filter { surfaces[$0.key] != nil },in:&owned)
             try checkpoint("startup",globals,&environment)
             guard try OriginalModeScreen.selectsModeScreen(globals:&globals) else {
                 throw Boundary.dependency("Selected character/game menu body")

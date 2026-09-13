@@ -121,3 +121,22 @@ original application correspondence or backend publication. The following
 ordinary iteration/application consumer must retain current music and fresh
 background/menu owners, rather than read historical startup/earlyScreen owners.
 Other menu/gameplay/playback/IO/recovery branches and real devices remain open.
+
+## Repeated loaded cycle and owning application consumer
+
+The next bounded stage after `4f143d0` is
+[APPLICATION_LOADED_CYCLE](APPLICATION_LOADED_CYCLE.md), with evidence in
+`../evidence/application-loaded-cycle.json`. Current loaded owners now commit
+inside the actual Bootstrap Session. The following World2 iteration skips the
+early-screen prefix, obtains a fresh ticket and uses the repeated prologue/input
+and cached menu before completing that ticket. Two backing variants each return
+three new cycles; a fourth input continuation preserves held Actor attack at the
+selected-character body boundary. All51 release methods and exact current/frozen/
+package/archive bytes verify the finite Native composition. The first two failed
+candidates and their test-only corrections remain preserved. Core and source
+expected did not change after the first candidate. Limits remain40GiB/3600seconds/
+three candidates with the unchanged6GiB internal reserve.
+
+Next connect the already recovered selected-character continuation to that own
+fourth input child and its enclosing return. No whole-original application trace,
+backend publication, device or full-game acceptance is implied.

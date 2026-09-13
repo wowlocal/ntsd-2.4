@@ -138,6 +138,12 @@ public struct OriginalApplicationMenuSession {
 
     private let ownerID = UUID()
     private var revision: UInt64 = 0
+    public struct LoadedOwners {
+        public let entry: OriginalApplicationPoolSession.PendingInput
+        public let match: OriginalMatchPreparation,music: OriginalMusicMemory
+        public let resources: OriginalMenuResourceLoading,backgrounds: [UInt32:OriginalLoadedBitmap]
+    }
+    public private(set) var loadedOwners: LoadedOwners?
     public private(set) var state: State
     public private(set) var loop: Loop
     public init(state: State,loop: Loop) throws {
@@ -517,6 +523,19 @@ extension OriginalApplicationMenuSession {
         })
         try staged.mergeAliases(counter:complete.loop.counter)
         state = staged;loop = complete.loop;revision += 1;environment = candidate
+        loadedOwners = .init(entry:pending.entry.entry,match:pending.snapshot.match,music:pending.snapshot.music,
+                             resources:pending.snapshot.resources,backgrounds:pending.snapshot.backgrounds)
         return .init(result:complete.result,menu:pending,operations:operations,graphics:pending.graphics)
+    }
+}
+
+extension OriginalApplicationMenuSession {
+    /// Continue the fresh World2 suspension using the owners committed by this
+    /// Session. The first catalog/pool parent supplies identities only.
+    public func makeLoadedCycle(pending: PendingLoading) throws -> OriginalApplicationLoadedCycleSession {
+        guard ownerID == pending.ownerID,revision == pending.revision,let owners = loadedOwners else {
+            throw Boundary.dependency("Missing, stale or foreign loaded cycle")
+        }
+        return try .init(pending:pending,owners:owners)
     }
 }

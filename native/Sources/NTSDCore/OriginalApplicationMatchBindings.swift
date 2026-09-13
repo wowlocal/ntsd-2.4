@@ -57,6 +57,16 @@ public struct OriginalApplicationMatchBindings {
             interface:interface,arithmeticPrecision:arithmeticPrecision)
     }
 
+    /// Refresh current shared records while retaining mutable DAT frame,
+    /// arena and interface owners from the preceding committed match.
+    public func read(_ state: State,retaining match: OriginalMatchPreparation) throws -> OriginalMatchPreparation {
+        let records = try read(state,catalog:match.catalog,interface:match.interface,
+                               arithmeticPrecision:match.arithmeticPrecision)
+        var current = match
+        current.world = records.world;current.actors = records.actors;current.globals = records.globals
+        return current
+    }
+
     public func inputContext(_ state: State) throws -> OriginalInputControlContext {
         try state.validateAliases()
         return .init(savedPlayback:try State.slice(state.full,0xb588,0x320),memory:state.memory)

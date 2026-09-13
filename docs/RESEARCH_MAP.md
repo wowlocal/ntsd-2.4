@@ -314,8 +314,22 @@ whole appended graphics projection и полный final State сравнива�
 43 bundled release-метода прошли281.445с/build318.05с;956Native files,
 383fixtures/381old unchanged,471package files и архивы проверены.
 [Evidence](evidence/application-loaded-menu.json). Новый whole-original app match
-и backend/device не заявлены. NEXT — next ordinary iteration/application consumer
-с current music/background/menu owners; historical startup/earlyScreen не заменяют их.
+и backend/device не заявлены. Следующая Native-композиция описана ниже;
+historical startup/earlyScreen не заменяют текущих owners.
+
+[Повторный loaded cycle через Bootstrap](research/APPLICATION_LOADED_CYCLE.md)
+сохраняет current match/music/menu/background owners через новый World2 ticket.
+Два backing варианта дают по3 полных новых outer returns и четвёртый input
+boundary перед character body: phase0/1/0/1, собственный WndProc keydown/keyup,
+8 control API на вариант, cached menu без новых allocations/music/bitmap API.
+Полные итоговые State/operations, все graphics включая Release прежнего фона,
+mutable frame/arena retention и late rollback проверены.51 bundled release-метод
+прошёл310.184с/build324.17с;958 Native-файлов,383прежних fixtures и471package
+files сверены. Compile failure candidate1, adapter failure candidate2 и исправленный
+candidate3 сохранены; Core/expected не менялись после первого кандидата.
+[Evidence](evidence/application-loaded-cycle.json). NEXT — join четвёртого input
+child к уже восстановленному character-menu handler и его outer return.
+Whole-original app correspondence/backend/device/full game остаются открытыми.
 
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил

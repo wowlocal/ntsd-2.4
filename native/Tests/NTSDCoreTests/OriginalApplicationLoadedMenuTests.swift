@@ -88,7 +88,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":0x12345678,"postResult":0]))
     }
     static func advance(_ session: inout S,_ env: inout Environment) throws -> S.PendingReturn {
-        let target = session.entry.entry.entry.entry.target
+        let target = session.entry.loading.target
         return try session.advance(inputs:OriginalApplicationMenuInputsTests.inputs.get(),environment:&env,
             screenInput:.init(dcResult:0,dc:0x12345678,methodResult:0,drawResults:[0],shellResult:33),outputInput:output(target),
             allocate:{ try $2.allocate($0,$1) },bitmap:{ try $1.bitmap($0) },music:{ try $1.sound($0) },milliseconds:{ try $0.time() },
@@ -102,11 +102,15 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
                     case "fill":e.expectedOperations.append(.menu(.fill(try XCTUnwrap(f.fill),result:0)))
                     case "getDC":e.expectedOperations.append(.menu(.getDC(f,result:0,output:0x12345678)))
                     case "setBackgroundMode","setTextColor","textOut","releaseDC":e.expectedOperations.append(.menu(.graphics(f,result:0)))
-                    case "method":e.expectedOperations.append(.menu(.present(f,result:0)))
+                    case "method":
+                        if f.arguments[1] == 8 { e.expectedOperations.append(.menu(.release(f,ignoredResult:0))) }
+                        else { e.expectedOperations.append(.menu(.present(f,result:0))) }
                     case "soundMethod":e.expectedOperations.append(.menu(.soundMethod(f,ignoredResult:0)))
                     case "enter","leave","sleep":e.expectedOperations.append(.front(f,0,nil))
                     case "shell":e.expectedOperations.append(.front(f,33,nil))
-                    case "free":e.expectedOperations.append(.menu(.free(f.arguments[0])))
+                    case "free":
+                        e.expectedOperations.append(.menu(.free(f.arguments[0])))
+                        if e.stop == "free" { throw Stop.injected("free") }
                     case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct":break
                     default:throw Stop.unexpected("uncompared front journal "+f.kind)
                     }
@@ -191,8 +195,8 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
             case .blit(let b,let r):XCTAssertEqual(r,0);var e = OriginalFrontScreenEvent("blit");e.blit = b;events.append(.init(request:nil,response:nil,kind:"front",event:e))
             case .fill(let f,let r):XCTAssertEqual(r,0);var e = OriginalFrontScreenEvent("fill");e.fill = f;events.append(.init(request:nil,response:nil,kind:"front",event:e))
             case .getDC(let e,let r,let output):XCTAssertEqual(r,0);XCTAssertEqual(output,0x12345678);events.append(.init(request:nil,response:nil,kind:"front",event:e))
-            case .graphics(let e,let r),.present(let e,let r):XCTAssertEqual(r,0);events.append(.init(request:nil,response:nil,kind:"front",event:e))
-            case .allocate,.soundMethod:break
+            case .graphics(let e,let r),.present(let e,let r),.release(let e,let r):XCTAssertEqual(r,0);events.append(.init(request:nil,response:nil,kind:"front",event:e))
+            case .allocate,.soundMethod,.free:break
             default:throw Stop.unexpected("uncompared terminal menu effect")
             }
         }
