@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "UTC": "2026-09-13T19:27:43.609682+00:00",
+  "base": "8760981e5c64043710b3ad71192fb16a7818201a",
+  "status": "accepted finite scalar checkpoint; full gameplay comparison remains open",
+  "scope": {
+    "variants": 2,
+    "callsPerVariant": 17,
+    "stagesPerCall": 19,
+    "ownedStageCheckpoints": 646,
+    "ownedBootstrapReturns": 34,
+    "records": "Complete normalized World/400 Actors/globals/101 BG bytes and masks; own Object/Frame/mutable Frame allocations/bitmap owners/CRT/replay retention and aliases",
+    "inputOutput": "Saved ordered global-store footprint with independently computed values; trace-guided finite projection",
+    "exclusions": [
+      "Full independent graphics command generation and audio effect comparison",
+      "Full journal, all owners and new rollback acceptance",
+      "Whole original application/match/game/device/Windows/clean-Mac acceptance"
+    ],
+    "summaries": [
+      "Gameplay scalar projection: control=true, 17 owned Bootstrap returns, 323 source-first stages, 1534 source typed stores, 1534 own typed stores, 46 available source Frame endpoints; graphics/audio differential acceptance remains open",
+      "Gameplay scalar projection: control=false, 17 owned Bootstrap returns, 323 source-first stages, 1534 source typed stores, 1534 own typed stores, 46 available source Frame endpoints; graphics/audio differential acceptance remains open"
+    ]
+  },
+  "source": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+    "environment": "Saved Unicorn2.1.4 controlled observations, not Windows/device results",
+    "reader": "docs/evidence/application-gameplay-source-reader.json",
+    "originalExecuted": false,
+    "historicalProducerOrAuditorExecuted": false
+  },
+  "validation": {
+    "verification": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/verification2.json",
+      "bytes": 130007,
+      "sha256": "9c2e83eae46bf0e8b65c3ff0fa18dbd1ba4a10e43936c5c0a2bb517ca9fb296f"
+    },
+    "results": {
+      "scalar2": {
+        "job": {
+          "scope": "Native-only finite gameplay scalar projection and saved-reader integrity validation; full gameplay acceptance remains open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+          "command": [
+            "swift",
+            "test",
+            "--package-path",
+            "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/candidate2/native",
+            "--scratch-path",
+            "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/swift",
+            "--jobs",
+            "4",
+            "-c",
+            "release",
+            "--filter",
+            "OriginalApplicationGameplay(Source|Projection)Tests/"
+          ],
+          "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/candidate2-inputs.json",
+          "nativeFiles": 987,
+          "rawOverrides": false,
+          "originalExecuted": false,
+          "startedUTC": "2026-09-13T19:19:58.968419+00:00",
+          "pid": 70571,
+          "status": "terminal",
+          "exitCode": 0,
+          "elapsedSeconds": 407.45332741699997,
+          "endedUTC": "2026-09-13T19:26:46.427204+00:00"
+        },
+        "methods": [
+          {
+            "suite": "OriginalApplicationGameplayProjectionTests",
+            "method": "testControlOwnedScalarSequence",
+            "seconds": 35.477
+          },
+          {
+            "suite": "OriginalApplicationGameplayProjectionTests",
+            "method": "testPrimaryOwnedScalarSequence",
+            "seconds": 15.753
+          },
+          {
+            "suite": "OriginalApplicationGameplaySourceTests",
+            "method": "testControlSavedSequence",
+            "seconds": 5.388
+          },
+          {
+            "suite": "OriginalApplicationGameplaySourceTests",
+            "method": "testPrimarySavedSequence",
+            "seconds": 5.333
+          }
+        ],
+        "testSeconds": 61.951,
+        "buildSeconds": 343.98,
+        "log": {
+          "bytes": 28940,
+          "sha256": "f1f9f648531b8e32a694e536f07d19b14564b6591bd1e1dca33d2890c9994101",
+          "mode": 420
+        }
+      }
+    },
+    "testsRun": 4,
+    "inheritedTests": 141,
+    "inheritedRerun": false,
+    "unchangedPriorNativeFiles": 983,
+    "nativeFiles": 987,
+    "fixturesUnchanged": 383,
+    "resourcesUnchanged": 102,
+    "packagedFilesVerified": 485,
+    "nativeArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/native-candidate2.tar",
+      "pin": {
+        "bytes": 4442081280,
+        "sha256": "4f980703958b1dda058497218bd3c5c143d3ef3542410134132815554b3500a5",
+        "mode": 420
+      },
+      "members": 987,
+      "allBodiesAndModesVerified": true
+    },
+    "evidenceArchive": {
+      "UTC": "2026-09-13T19:27:27.467497+00:00",
+      "archive": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/scalar-evidence2.tar",
+      "pin": {
+        "bytes": 1024000,
+        "sha256": "06391ee0e17b0bd0e83bc2b9b354b168df6bbbd20f44d12b7c22acb9c9cf296e",
+        "mode": 420
+      },
+      "files": {
+        "archive-evidence.py": {
+          "bytes": 1736,
+          "sha256": "deeb7b0062913b5dd412982f22a41e4ca51f340f9e49b35761eb02b23ce7bbd3",
+          "mode": 420
+        },
+        "baseline.json": {
+          "bytes": 216900,
+          "sha256": "6b24fc3fe8a260ca5a52e99b63262c91baec0c319a071199d49770a53430a0a6",
+          "mode": 420
+        },
+        "candidate1-inputs.json": {
+          "bytes": 205018,
+          "sha256": "5c1c1e34346183244cfbf69e819854fb4d897e55c21784e72cdeedda865f7f9c",
+          "mode": 420
+        },
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift": {
+          "bytes": 6943,
+          "sha256": "02a22aeb570aab8ae96b87357a52c36d81b699fa85eb54f5133eec8c534c2c73",
+          "mode": 420
+        },
+        "candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplayStateProjection.swift": {
+          "bytes": 21518,
+          "sha256": "b6c40f17fed8b8873b33d7b0296d73933066f6f18ca23a1fbce5cb9d22ebd8bd",
+          "mode": 420
+        },
+        "candidate2-inputs.json": {
+          "bytes": 205018,
+          "sha256": "5a4c55d23a103c3faaacfdabc2bc631ca62dc751c31f160f013f7c869fc334f9",
+          "mode": 420
+        },
+        "diagnosis1-recording-guard.json": {
+          "bytes": 882,
+          "sha256": "8cd5503099507d55ee9b177c2228fb577f1768ffa7c066e6ff9ade6bf321c8f5",
+          "mode": 420
+        },
+        "environment.json": {
+          "bytes": 281,
+          "sha256": "d4b3df9a1d1a62411f3d939d93a87226bf5f0cdd3e0250d580d59c62ef7e8a1e",
+          "mode": 420
+        },
+        "freeze-candidate.py": {
+          "bytes": 1456,
+          "sha256": "ae218a0555524fe8ca269a7722f5e73ae682a69ff4df61c6fe29a39614200e2e",
+          "mode": 420
+        },
+        "plan1.md": {
+          "bytes": 3817,
+          "sha256": "c8e4e394bd9f7c2674a532e2e0488d8d749b502811c0a9d021b0e00156ca792b",
+          "mode": 420
+        },
+        "plan2.md": {
+          "bytes": 3817,
+          "sha256": "c8e4e394bd9f7c2674a532e2e0488d8d749b502811c0a9d021b0e00156ca792b",
+          "mode": 420
+        },
+        "publish-scalar.py": {
+          "bytes": 6811,
+          "sha256": "a6b70b511f98860ca01de074c93f90d28c3baa2b4caf0e232bc5925885407db1",
+          "mode": 420
+        },
+        "review1-neutral-state-projection.json": {
+          "bytes": 57443,
+          "sha256": "81e1097753f3cbd6473a9f296414c1a85536c9cd40c30b069384ed294968f715",
+          "mode": 420
+        },
+        "review2-scalar-candidate.json": {
+          "bytes": 38642,
+          "sha256": "ca0e70737bad58cd998389a38fb1b05722070f663746f01ee5673bd0cf86216e",
+          "mode": 420
+        },
+        "run-scalar1.py": {
+          "bytes": 2008,
+          "sha256": "c69a92c8728eaf358885243b0f03b5f6c11e14a413db9319fb7582b4004550fa",
+          "mode": 420
+        },
+        "run-scalar2.py": {
+          "bytes": 2008,
+          "sha256": "ee0c5d2f3d96b2f88e50255c39ed9c411f34f82abee41714b15fbe8545b0c469",
+          "mode": 420
+        },
+        "scalar1.config.json": {
+          "bytes": 1003,
+          "sha256": "bca45b03aff85ed50ce361800f4ee84d6333e24ab9859061737ec15ba704fd2f",
+          "mode": 420
+        },
+        "scalar1.job.json": {
+          "bytes": 1150,
+          "sha256": "2f894ecb4bb46bfb1a5645f93aec9576bef4d92ec1580548e8458779dfc1181f",
+          "mode": 420
+        },
+        "scalar1.log": {
+          "bytes": 29099,
+          "sha256": "207094d1d4c2dc55be88ece5d4fa645a6bb81865792190611b76296b429c401c",
+          "mode": 420
+        },
+        "scalar2.config.json": {
+          "bytes": 1003,
+          "sha256": "e1cfa33244ca72272fcb668e2ca84fea16e8db34ce285d008db4efc4c27381db",
+          "mode": 420
+        },
+        "scalar2.job.json": {
+          "bytes": 1150,
+          "sha256": "faec0729184c24a40a3652b101bec1a45629d87f4ff280c5050d544edc2b36f9",
+          "mode": 420
+        },
+        "scalar2.log": {
+          "bytes": 28940,
+          "sha256": "f1f9f648531b8e32a694e536f07d19b14564b6591bd1e1dca33d2890c9994101",
+          "mode": 420
+        },
+        "verification2.json": {
+          "bytes": 130007,
+          "sha256": "9c2e83eae46bf0e8b65c3ff0fa18dbd1ba4a10e43936c5c0a2bb517ca9fb296f",
+          "mode": 420
+        },
+        "verify-delivery.py": {
+          "bytes": 1276,
+          "sha256": "f86bd38d56956fea7fbd5b5f32ad509710455139b4716fea5ab537b8ffc333ba",
+          "mode": 420
+        },
+        "verify-git.py": {
+          "bytes": 2897,
+          "sha256": "78bc58e59aee52b3fe42f8f86fe1c36ca2bcbd5c676d96a2b6dfb68190bb0b10",
+          "mode": 420
+        },
+        "verify-scalar.py": {
+          "bytes": 6451,
+          "sha256": "f7bc562061c22e743786e8c288f867e2defdebfc8ead83646ae30db886f174de",
+          "mode": 420
+        }
+      },
+      "allBodiesAndModesVerified": true,
+      "exclusions": "Final publication docs and Git/delivery records are separately pinned after this evidence archive; not an all-repository archive."
+    }
+  },
+  "failures": {
+    "candidate1": {
+      "scope": "Native-only finite gameplay scalar projection and saved-reader integrity validation; full gameplay acceptance remains open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplicationGameplay(Source|Projection)Tests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/candidate1-inputs.json",
+      "nativeFiles": 987,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T19:11:48.428733+00:00",
+      "pid": 68197,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 401.29984266699995,
+      "endedUTC": "2026-09-13T19:18:29.740457+00:00"
+    },
+    "diagnosis": {
+      "originalExecuted": false,
+      "diagnosis": "candidate1 erroneously required unrelated44d02c==0; actual saved value1. Recording branch reads timer450bdc and increments450bbc when signed timer<100; no44d02c read here. Preserve failed candidate; remove unrelated assertion, retain exact timer0 guard and full after-state comparison.",
+      "rows": [
+        {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-recording.json",
+          "sha256": "4eb6c300d097caa0976672fea3421669d70a47fcf7e94929da7b0ce3dacf6f9e",
+          "values": {
+            "0x450bdc": 0,
+            "0x44d02c": 1
+          }
+        },
+        {
+          "path": "native/Tests/NTSDCoreTests/Fixtures/original-gameplay-result-recording-control.json",
+          "sha256": "b73b3a39266cb8830496ace238748ecc3f0bdc8be08f2ecbda5866b933be0db2",
+          "values": {
+            "0x450bdc": 0,
+            "0x44d02c": 1
+          }
+        }
+      ]
+    },
+    "reviewCorrections": "Typed idempotent links/attachments/commands stores, hits2e4, causal control guards, source/catalog and mutable Frame retention. Reviewer notice3 assertion corrected to saved1 before candidate2; old reports preserved."
+  },
+  "reviews": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/review1-neutral-state-projection.json",
+      "bytes": 57443,
+      "sha256": "81e1097753f3cbd6473a9f296414c1a85536c9cd40c30b069384ed294968f715"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-gameplay-comparison-native-20260913/review2-scalar-candidate.json",
+      "bytes": 38642,
+      "sha256": "ca0e70737bad58cd998389a38fb1b05722070f663746f01ee5673bd0cf86216e"
+    }
+  ],
+  "fullGameplayComparisonAccepted": false,
+  "fullGoalComplete": false,
+  "independentFinalReview": {
+    "path": "build/research/application-owned-gameplay-comparison-native-20260913/review3-scalar-publication.json",
+    "bytes": 15661,
+    "sha256": "3d36ab872b7bcf3a5ea76d7382ff837c1cb81ebbf95a684b742314b62d770415"
+  },
+  "reviewedPublication": {
+    "path": "build/research/application-owned-gameplay-comparison-native-20260913/publication2.json",
+    "bytes": 845,
+    "sha256": "8fd82fb09201b0585d7de239b646a822643b3a40bbf1907506b3abd96d86885a",
+    "finalAddition": "Only the final review and reviewed-publication references were added after independent review."
+  }
+}

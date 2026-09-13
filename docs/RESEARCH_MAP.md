@@ -422,6 +422,19 @@ gameplay. Полный19-stage comparator остаётся следующим ш
 [Evidence](evidence/application-gameplay-source-reader.json); все три Native jobs
 в `build/research/application-loaded-gameplay-projection-native-20260913/` терминальны.
 
+Проверен [ограниченный scalar comparator gameplay](research/APPLICATION_GAMEPLAY_SCALAR_PROJECTION.md):
+обе собственные цепочки по17 Bootstrap returns и323 source-first стадиям.
+Сравниваются полные World/400 Actors/globals/101 BG bytes/masks, собственные
+Frame-буферы, bitmap owners, CRT/replay и aliases. Четыре release-метода прошли
+за61.951с/build343.98с; восемь отрицательных comparator guards.
+983 прежних Native-файла неизменны;141 прежний метод не перезапускался.
+Первый ошибочный recording guard и замечания review сохранены. Input/output
+используют saved ordered store footprint с независимым расчётом значений.
+Полная graphics/audio/caller-journal проверка и acceptance gameplay остаются
+открытыми по прежнему плану. [Evidence](evidence/application-gameplay-scalar-projection.json). Нового исполнения оригинала нет.
+Все jobs этой проверки терминальны в
+`build/research/application-owned-gameplay-comparison-native-20260913/`.
+
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.

@@ -10,7 +10,7 @@ final class OriginalApplicationGameplaySource {
     typealias Stage = OriginalGameplayBody.Stage
     typealias C = ContinuousGameplayReference
     struct Write: Decodable { let pc: UInt32,address: UInt32,size: Int,value: UInt64 }
-    struct PCs: Decodable { let instructions: [UInt32] }
+    struct PCs: Decodable { let instructions: [UInt32],writes: [Write]? }
     struct FirstPCs: Decodable { let control: Bool,cases: [PCs] }
     struct Trace: Decodable {
         struct Call: Decodable { let globalsWrites: [Write],stages: [PCs],output: PCs }
@@ -20,6 +20,7 @@ final class OriginalApplicationGameplaySource {
         let stage: Stage,before: R.State,after: R.State,pcs: Set<UInt32>,end: UInt32
         let first: R.Control.Section?
         let continued: C.Section?,output: C.Output?
+        let writes: [Write]
     }
     struct Call {
         let sections: [Section],beforeInput: R.State?,writes: [Write]
@@ -101,7 +102,8 @@ final class OriginalApplicationGameplaySource {
                 let specification = try XCTUnwrap(Self.specifications.first { $0.1 == part.label })
                 guard part.end.pc == specification.2 else { throw Self.error("First stop "+part.label) }
                 first.append(.init(stage:specification.0,before:part.before,after:part.after,
-                    pcs:Set(pc.instructions),end:part.end.pc,first:part,continued:nil,output:nil))
+                    pcs:Set(pc.instructions),end:part.end.pc,first:part,continued:nil,output:nil,
+                    writes:part.gameplayReturn?.writes.map { .init(pc:$0.pc,address:$0.address,size:$0.size,value:UInt64($0.value)) } ?? []))
             }
         }
         guard first.map(\.stage) == Self.specifications.map(\.0) else { throw Self.error("First stage order") }
@@ -151,14 +153,14 @@ final class OriginalApplicationGameplaySource {
                 }
                 sections.append(.init(stage:expected.0,before:try document.snapshot(stage.before),
                     after:try document.snapshot(stage.after),pcs:Set(pc.stages[n].instructions),end:stage.end.pc,
-                    first:nil,continued:stage,output:nil))
+                    first:nil,continued:stage,output:nil,writes:[]))
             }
             guard part.output.label == "gameplay-return",part.output.end.pc == 0x30000000,
                   part.output.before == part.stages.last?.after,
                   part.output.after == part.after.filter({ !["frameHeap","objects","objectStrings"].contains($0.key) }) else { throw Self.error("Continuous return") }
             sections.append(.init(stage:.output,before:try document.snapshot(part.output.before),
                 after:try document.snapshot(part.after),pcs:Set(pc.output.instructions),end:part.output.end.pc,
-                first:nil,continued:nil,output:part.output))
+                first:nil,continued:nil,output:part.output,writes:try XCTUnwrap(pc.output.writes)))
             calls.append(.init(sections:sections,beforeInput:try document.snapshot(part.before),
                 writes:pc.globalsWrites,continued:part))
         }

@@ -13,7 +13,7 @@ final class OriginalApplicationGameplaySourceTests: XCTestCase {
         let source = try OriginalApplicationGameplaySource(reverse)
         XCTAssertEqual(source.calls.count,17)
         XCTAssertEqual(source.initializedImpulseControlWord,0x23f)
-        var endpoints = 0,writeCount = 0
+        var endpoints = 0,writeCount = 0,outputWriteCount = 0
         for (index,call) in source.calls.enumerated() {
             XCTAssertEqual(call.sections.map(\.stage),OriginalApplicationGameplaySource.specifications.map(\.0))
             for section in call.sections {
@@ -41,6 +41,20 @@ final class OriginalApplicationGameplaySourceTests: XCTestCase {
                     endpoints += 1
                 }
             }
+            let output = try XCTUnwrap(call.sections.last)
+            var projected = try source.globals(output.before)
+            XCTAssertEqual(output.writes.count,index == 0 ? 13 : 12)
+            for write in output.writes {
+                let offset = Int(write.address)-0x44d000
+                guard [1,4].contains(write.size),offset >= 0,offset <= projected.bytes.count-write.size else {
+                    throw OriginalApplicationGameplaySource.error("Output store extent")
+                }
+                XCTAssertTrue(output.pcs.contains(write.pc),"Output store PC")
+                if write.size == 1 { try projected.write(UInt8(truncatingIfNeeded:write.value),at:offset) }
+                else { try projected.write(UInt32(truncatingIfNeeded:write.value),at:offset) }
+                outputWriteCount += 1
+            }
+            XCTAssertTrue(try projected == source.globals(output.after),"Complete output stores")
             if let before = call.beforeInput {
                 var bytes = try source.globals(before).bytes
                 for write in call.writes {
@@ -63,6 +77,7 @@ final class OriginalApplicationGameplaySourceTests: XCTestCase {
         for key in source.blobs.keys.sorted() { _ = try source.bytes(key) }
         XCTAssertEqual(endpoints,646)
         XCTAssertEqual(writeCount,576)
+        XCTAssertEqual(outputWriteCount,205)
         print("Saved gameplay integrity: control=\(reverse), 16 fixtures + 1 parent bridge, 17 calls, 323 sections, \(endpoints) pool/global endpoints, \(writeCount) ordered global stores, \(source.blobs.count) distinct blobs; no Native gameplay comparison")
     }
 }
