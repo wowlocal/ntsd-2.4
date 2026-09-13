@@ -57,6 +57,7 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
         XCTAssertEqual(current.memory.replayPointers,old.memory.replayPointers)
         XCTAssertEqual(current.bitmapInputs,old.bitmapInputs); XCTAssertEqual(current.graphics,old.graphics)
         XCTAssertEqual(current.libraryText,old.libraryText); XCTAssertEqual(current.random,old.random)
+        XCTAssertEqual(current.libraryHits,old.libraryHits); XCTAssertEqual(current.libraryTransforms,old.libraryTransforms)
         XCTAssertEqual(current.front.bitmaps,old.front.bitmaps); XCTAssertEqual(current.screenBody,old.screenBody)
         XCTAssertEqual(current.settings,old.settings)
     }

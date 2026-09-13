@@ -374,10 +374,29 @@ records/masks, journal/graphics/current owners, replay aliases и late rollback
 сохранены в `build/research/application-loaded-launch-native-20260913/`;
 терминальные исходные захваты не перезапускать.
 
-**Следующая задача — собственное gameplay body после41e339 через текущие
-installed-library command state, владельцев и полный rollback.** Полный матч,
-всё original приложение, другие modes/CPU/playback, backend, окно/ввод/звук,
-Windows/cleanMac и полная игра остаются открытыми.
+Сохранена [промежуточная интеграция gameplay](research/APPLICATION_LOADED_GAMEPLAY.md)
+после41e339: библиотечные control/contact/hit/transform/text handlers, текущие
+bitmap/surface owners и возврат по тому же Bootstrap ticket. Две собственные
+цепочки по17 neutral calls прошли34 возврата и646 контрольных точек. Два новых
+release-теста прошли за39.496с/build334.31с;132 регрессионных метода —
+за1066.816с/build0.36с, включая все93 проверки предыдущего Start.
+Ошибки первых трёх кандидатов сохранены; независимая проверка подтверждает
+поправку ожидания девяти animation counters District по всем202 исходным
+BG records/masks. Core и прежние expected при этой поправке не менялись.
+[Evidence](evidence/application-loaded-gameplay.json),
+[план](research/APPLICATION_LOADED_GAMEPLAY_PLAN.md).
+
+**Эта интеграция ещё не принята по полному differential-сравнению.** Принятый
+frontier остаётся на собственном Start/следующем input. Следующая задача —
+закончить независимую проекцию всех19 стадий, records/masks/stores и graphics/audio
+на собственные позиции/RNG/installed hooks; отдельно проверить новые surface maps
+и включённые file/codec/music providers с поздним rollback. Новый Z-порядок Actor
+нельзя заменить переносом координат старого event stream. Native-only preflight
+и старые helper-регрессии не закрывают эти проверки. Все пять Native jobs этой
+карточки терминальны; кандидаты/логи находятся в
+`build/research/application-loaded-gameplay-native-20260913/`. Не перезапускать.
+Полный матч, другие modes/CPU/playback, backend, окно/ввод/звук, Windows/cleanMac,
+полная игра и прежние safety/source-fault зависимости остаются открытыми.
 
 
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил

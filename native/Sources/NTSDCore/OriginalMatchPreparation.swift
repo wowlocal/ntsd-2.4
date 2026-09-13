@@ -30,6 +30,9 @@ public struct OriginalMatchPreparation {
     /// controlled comparisons may leave this map empty; surfaces stay in the
     /// application's owned memory and graphics inventories.
     public internal(set) var bitmapOwners: [Int:UInt32] = [:]
+    /// Retained CreateSurface identities for catalog bitmaps owned by this model.
+    /// Catalog records need not be duplicated in the general memory allocator.
+    public internal(set) var bitmapSurfaceOwners: [Int:UInt32] = [:]
     /// Live DAT allocations. Original hit processing can write a held weapon's
     /// raw ITR; those writes survive subsequent contacts and ticks.
     public internal(set) var frameAllocations: [OriginalFrameAllocation]

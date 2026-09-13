@@ -137,8 +137,10 @@ public enum OriginalMenuPresentation {
     public static func apply(_ entry: OriginalMenuPresentationEntry, input: OriginalMenuPresentationInput,
                              world: inout OriginalStateRecord, globals: inout OriginalStateRecord,
                              memory: inout OriginalMenuPresentationMemory,
+                             textRenderer: OriginalSurfaceText.Renderer? = nil,
                              observe: (OriginalMenuPresentationEvent) throws -> Void = { _ in }) throws {
         var execution = Execution(world: world, globals: globals, memory: memory, input: input)
+        execution.textRenderer = textRenderer
         try execution.run(entry, observe)
         world = execution.world; globals = execution.globals; memory = execution.memory
     }
@@ -174,6 +176,7 @@ public enum OriginalMenuPresentation {
         var world: OriginalStateRecord, globals: OriginalStateRecord, memory: OriginalMenuPresentationMemory
         let input: OriginalMenuPresentationInput
         var libraryText: OriginalLibSurfaceText? = nil
+        var textRenderer: OriginalSurfaceText.Renderer? = nil
         var store: OriginalWindowInput.Store = { _,_ in }
         var worldStored: (Int,UInt32) throws -> Void = { _,_ in }
         typealias Observer = (OriginalMenuPresentationEvent) throws -> Void
@@ -241,7 +244,7 @@ public enum OriginalMenuPresentation {
                 return
             }
             try OriginalSurfaceText.draw(bytes,target: word(0x455608),background: 0,color: color,
-                                         x: 3,y: 531,dcResult: input.dcResult,dc: input.dc,observe: observe)
+                                         x: 3,y: 531,dcResult: input.dcResult,dc: input.dc,renderer: textRenderer,observe: observe)
         }
         mutating func formatted(_ format: String, _ bytes: [UInt8], color: UInt32, _ observe: Observer) throws {
             // Recording strings start at local+18 and the cookie is at+20c:

@@ -20,13 +20,14 @@ public struct OriginalPostDrawScratch: Equatable {
 /// opoint and the selected creation/lifetime continuation before the next slot.
 /// All state and scratch commit together; observers must buffer external effects.
 public enum OriginalPostDrawLifecycle {
+    @discardableResult
     public static func apply(state: inout OriginalMatchPreparation, scratch: inout OriginalPostDrawScratch,
-                             sse2: Bool = false, observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws {
+                             sse2: Bool = false, library: OriginalLibTransformBacking? = nil, observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws -> OriginalLibTransformBacking? {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
-        try apply(world: &state.world, actors: &state.actors, globals: &state.globals, scratch: &scratch,
-            wholeLoop: true, slot: 0, precision: state.arithmeticPrecision, sse2: sse2,
+        return try apply(world: &state.world, actors: &state.actors, globals: &state.globals, scratch: &scratch,
+            wholeLoop: true, slot: 0, library: library, precision: state.arithmeticPrecision, sse2: sse2,
             objectCount: registry.integer(at: 0, as: Int32.self), header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") }; return catalog.objects[index].header
             }, frame: { index, number in
@@ -35,22 +36,25 @@ public enum OriginalPostDrawLifecycle {
             }, observe: observe)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Post-draw lifecycle: " + text) }
+    @discardableResult
     static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
                       scratch: inout OriginalPostDrawScratch, wholeLoop: Bool, slot: Int,
+                      library: OriginalLibTransformBacking? = nil,
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
-                      observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws {
+                      observe: (OriginalPostDrawLifecycleEvent) throws -> Void = { _ in }) throws -> OriginalLibTransformBacking? {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
-        try withoutActuallyEscaping(header) { headers in
-            try withoutActuallyEscaping(frame) { frames in
-                try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(world: world, actors: actors, globals: globals, scratch: scratch, slot: slot,
+        return try withoutActuallyEscaping(header) { headers in
+            return try withoutActuallyEscaping(frame) { frames in
+                return try withoutActuallyEscaping(observe) { observer in
+                    var body = Body(world: world, actors: actors, globals: globals, scratch: scratch, slot: slot, library: library,
                                     precision: precision, sse2: sse2, objectCount: objectCount, header: headers, frame: frames, observe: observer)
                     for selected in wholeLoop ? 0..<400 : slot..<slot+1 {
                         body.slot = selected
                         try body.run(prefix: wholeLoop)
                     }
                     world = body.world; actors = body.actors; globals = body.globals; scratch = body.scratch
+                    return body.library
                 }
             }
         }
@@ -58,6 +62,7 @@ public enum OriginalPostDrawLifecycle {
     private struct Body {
         var world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord
         var scratch: OriginalPostDrawScratch, slot: Int
+        var library: OriginalLibTransformBacking?
         let precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawLifecycleEvent) throws -> Void
@@ -248,7 +253,7 @@ public enum OriginalPostDrawLifecycle {
             }
             if prefix {
                 let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: slot,
-                    retainedObjectIndex: &scratch.particleObject, objectCount: objectCount, header: header, frame: frame, observe: converted)
+                    retainedObjectIndex: &scratch.particleObject, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)
                 if !active { return }
             }
             let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,

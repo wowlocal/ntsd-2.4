@@ -10,11 +10,12 @@ public enum OriginalGameplayOutput {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
         try apply(world: &stagedWorld, globals: &stagedGlobals, memory: &stagedMemory,
             input: input, resourceBitmap: resourceBitmap, performBlit: performBlit,
-            soundRequest: soundRequest, observe: observe)
+            soundRequest: soundRequest, textRenderer: textRenderer, observe: observe)
         try stagedGlobals.write(UInt32(0), at: 0x457580-0x44d000)
         try observe(.init("dispatcherWrite", [0x457580, 0]))
         world = stagedWorld; globals = stagedGlobals; memory = stagedMemory
@@ -25,6 +26,7 @@ public enum OriginalGameplayOutput {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         var stagedWorld = world, stagedGlobals = globals, stagedMemory = memory
         let alternate = try stagedGlobals.integer(at: 0x450b84-0x44d000, as: UInt32.self)
@@ -34,7 +36,7 @@ public enum OriginalGameplayOutput {
             resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
         try observe(.init("stage", [0x4028a0]))
         try OriginalMenuPresentation.apply(.overlay, input: input, world: &stagedWorld,
-            globals: &stagedGlobals, memory: &stagedMemory) {
+            globals: &stagedGlobals, memory: &stagedMemory, textRenderer: textRenderer) {
                 try observe(.init($0.kind.rawValue, $0.arguments, $0.strings))
             }
         try observe(.init("stage", [0x43e940]))

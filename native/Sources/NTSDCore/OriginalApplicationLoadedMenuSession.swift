@@ -16,6 +16,11 @@ public struct OriginalApplicationLoadedMenuSession {
         case front(OriginalFrontScreenEvent,Int32,UInt32?)
         case clock(UInt32), loop(Session.Loop.Request,Session.Loop.Response)
         case localTime(OriginalLocalTime), recordingAllocation(UInt32,Int)
+        case gameplayRecording(OriginalResultRecording.Event)
+        case gameplayAllocate(UInt32,Int), gameplayProcessor(UInt32)
+        case gameplayOpen(OriginalReplayFileOutput.OpenRequest,Bool)
+        case gameplayWrite([UInt8],Int32), gameplayClose(Int32)
+        case gameplayResume(UInt32,Int32)
     }
     public enum Observation {
         case music(OriginalMusicEvent,OriginalMusicResponse), bitmap(API.Request,API.Response)
@@ -24,6 +29,8 @@ public struct OriginalApplicationLoadedMenuSession {
         case characterCheckpoint(OriginalCharacterScreenCheckpoint,OriginalMatchPreparation)
         case prelude(OriginalMatchPreludeEvent), preparation(OriginalMatchPreparationEvent)
         case launchCheckpoint(String,Snapshot)
+        case gameplay(OriginalGameplayBody.Event)
+        case gameplayCheckpoint(OriginalGameplayBody.Stage,Snapshot)
     }
     public struct Snapshot {
         public let state: State, match: OriginalMatchPreparation
@@ -241,7 +248,7 @@ public struct OriginalApplicationLoadedMenuSession {
             case "shell":operations.append(.front(e,Int32(bitPattern:screenInput.shellResult),nil))
             case "postMessage":operations.append(.front(e,outputInput.postResult,nil))
             case "enter","leave":operations.append(.front(e,0,nil))
-            case "write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
+            case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
             try observe(.front(e),&environment)
@@ -261,13 +268,13 @@ public struct OriginalApplicationLoadedMenuSession {
                             UInt32(bitPattern:request.frame),request.colorKey,0,request.target]
                 try front(.init("draw",args));try draw(args,globals,memory)
             case .catalog(let index):
-                // The current match owns the bitmap bytes. The original pool
-                // parent supplies only the stable ordinal/token/surface binding.
-                let catalog = entry.entry.entry.snapshot
-                guard model.bitmaps.indices.contains(index),catalog.bitmapTokens.indices.contains(index),
-                      catalog.bitmapSurfaces.indices.contains(index) else { throw Boundary.dependency("Catalog bitmap binding") }
-                let bitmap = model.bitmaps[index].storage,token = catalog.bitmapTokens[index]
-                let surface = try bitmap.integer(at:0,as:UInt32.self) == 0 ? 0 : catalog.bitmapSurfaces[index]
+                // Bytes and identities belong to the retained current match.
+                guard model.bitmaps.indices.contains(index),!model.releasedBitmaps.contains(index),
+                      let token = model.bitmapOwners[index],let liveSurface = model.bitmapSurfaceOwners[index] else {
+                    throw Boundary.dependency("Catalog bitmap binding")
+                }
+                let bitmap = model.bitmaps[index].storage
+                let surface = try bitmap.integer(at:0,as:UInt32.self) == 0 ? 0 : liveSurface
                 guard surface == 0 || state.graphics?.currentResources[surface]?.kind == "bitmapSurface" else {
                     throw Boundary.owner(surface)
                 }

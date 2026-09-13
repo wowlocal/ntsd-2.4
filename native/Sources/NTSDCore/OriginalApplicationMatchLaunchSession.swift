@@ -74,6 +74,7 @@ extension OriginalApplicationLoadedMenuSession.Attempt {
         model.globals = globals;try launchPoint("prelude")
 
         var prepared = model,library = model.libraryCommands!
+        var surfaceOwners = model.bitmapSurfaceOwners
         var owners = model.bitmapOwners,nextOrdinal = model.bitmaps.count,layer = 0
         let mode = try model.globals.integer(at:0x451160-0x44d000,as:Int32.self)
         try prepared.prepareUsingBundledLibrary(mode:mode,library:&library,
@@ -85,7 +86,7 @@ extension OriginalApplicationLoadedMenuSession.Attempt {
                     backing:allocation.backing,device:self.model.globals.integer(at:0x457578-0x44d000,as:UInt32.self),
                     flags:0x40,context:&context,perform:{ q,_ in try self.bitmap(q) })
                 try self.adopted([allocation.address:bitmap],in:&self.state.memory)
-                owners[nextOrdinal] = allocation.address;nextOrdinal += 1
+                owners[nextOrdinal] = allocation.address;surfaceOwners[nextOrdinal] = self.surfaces[allocation.address];nextOrdinal += 1
                 return bitmap
             },releaseBitmap:{ ordinal,bitmap in
                 guard let wrapper = owners[ordinal],var allocation = self.state.memory.allocations[wrapper],allocation.live else {
@@ -101,14 +102,14 @@ extension OriginalApplicationLoadedMenuSession.Attempt {
                 })
                 allocation.live = false;self.state.memory.allocations[wrapper] = allocation
             },music:{ scene in
-                scene.bitmapOwners = owners;self.model = scene
+                scene.bitmapOwners = owners;scene.bitmapSurfaceOwners = surfaceOwners;self.model = scene
                 try self.launchPoint("preparation")
                 var musicGlobals = scene.globals,memory = self.audio
                 try OriginalMusicPlayback.resumeMatch(globals:&musicGlobals,memory:&memory,request:self.music)
                 scene.globals = musicGlobals;self.model = scene;self.audio = memory
                 try self.launchPoint("music")
             },observe:{ event in try self.observe(.preparation(event),&self.environment) })
-        prepared.libraryCommands = library;prepared.bitmapOwners = owners;model = prepared
+        prepared.libraryCommands = library;prepared.bitmapOwners = owners;prepared.bitmapSurfaceOwners = surfaceOwners;model = prepared
         try launchPoint("tail")
 
         // Recording replaces only4588a8. Playback and every other allocation

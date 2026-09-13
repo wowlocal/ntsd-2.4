@@ -12,10 +12,11 @@ public enum OriginalPostHUDNotices {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         try draw(world: state.world, actors: state.actors, globals: state.globals, local: &local,
             dcResult: dcResult, dc: dc, fillBacking: fillBacking, resourceBitmap: resourceBitmap,
-            performFill: performFill, performBlit: performBlit, observe: observe)
+            performFill: performFill, performBlit: performBlit, textRenderer: textRenderer, observe: observe)
     }
 
     /// A retained caller may not yet own this stack backing. Keep nil while
@@ -26,10 +27,11 @@ public enum OriginalPostHUDNotices {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         try advance(world: state.world, actors: state.actors, globals: state.globals, local: &local,
             dcResult: dcResult, dc: dc, fillBacking: fillBacking, resourceBitmap: resourceBitmap,
-            performFill: performFill, performBlit: performBlit, observe: observe)
+            performFill: performFill, performBlit: performBlit, textRenderer: textRenderer, observe: observe)
     }
 
     static func draw(world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord,
@@ -37,12 +39,13 @@ public enum OriginalPostHUDNotices {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         observeFormatStorage: (OriginalStateRecord) throws -> Void = { _ in }) throws {
         var candidate: OriginalStateRecord? = local
         try advance(world: world, actors: actors, globals: globals, local: &candidate,
             dcResult: dcResult, dc: dc, fillBacking: fillBacking, resourceBitmap: resourceBitmap,
-            performFill: performFill, performBlit: performBlit, observe: observe, observeFormatStorage: observeFormatStorage)
+            performFill: performFill, performBlit: performBlit, textRenderer: textRenderer, observe: observe, observeFormatStorage: observeFormatStorage)
         guard let candidate else { throw error("Lost caller storage") }; local = candidate
     }
 
@@ -51,6 +54,7 @@ public enum OriginalPostHUDNotices {
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performFill: (OriginalSurfaceFillRequest) throws -> Int32,
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         observeFormatStorage: (OriginalStateRecord) throws -> Void = { _ in }) throws {
         guard (local == nil || local?.bytes.count == localSize), globals.bytes.count == OriginalMatchPreparation.globalSize else {
@@ -79,7 +83,7 @@ public enum OriginalPostHUDNotices {
         func text(_ bytes: [UInt8], x: Int32 = 0, y: Int32, color: UInt32 = 0xffffff) throws {
             let target = try token(0x455608)
             try observe(.init("text", [target, 0, color, UInt32(bitPattern: x), UInt32(bitPattern: y)], [bytes]))
-            try OriginalSurfaceText.draw(bytes, target: target, background: 0, color: color, x: x, y: y, dcResult: dcResult, dc: dc) {
+            try OriginalSurfaceText.draw(bytes, target: target, background: 0, color: color, x: x, y: y, dcResult: dcResult, dc: dc, renderer: textRenderer) {
                 try observe(.init($0.kind.rawValue, $0.arguments, $0.strings))
             }
         }

@@ -10,6 +10,7 @@ public enum OriginalResultLayout {
         dcResult: Int32, dc: UInt32, surface: (Int) throws -> UInt32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog, bitmaps = state.bitmaps, released = state.releasedBitmaps
         try draw(world: state.world, actors: state.actors, globals: &state.globals,
@@ -24,7 +25,7 @@ public enum OriginalResultLayout {
                 let pointer = try context.memory.replayPointers.integer(at: 4, as: UInt32.self)
                 guard pointer != 0, let allocation = context.memory.allocations[pointer], allocation.live else { throw error("Playback ownership") }
                 return try allocation.storage.integer(at: 0x144, as: Int32.self)
-            }, resourceBitmap: resourceBitmap, performBlit: performBlit, observe: observe)
+            }, resourceBitmap: resourceBitmap, performBlit: performBlit, textRenderer: textRenderer, observe: observe)
     }
 
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Result layout: "+text) }
@@ -36,6 +37,7 @@ public enum OriginalResultLayout {
         catalogBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32), playbackTicks: () throws -> Int32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         performBlit: (OriginalBitmapBlit) throws -> Int32,
+        textRenderer: OriginalSurfaceText.Renderer? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws {
         guard local == nil || local?.bytes.count == localSize else { throw error("Caller string extent") }
         var next = globals, scratch = local
@@ -85,7 +87,7 @@ public enum OriginalResultLayout {
             let target = try token(0x455608)
             try observe(.init("text", [target, 0, color, UInt32(bitPattern: x), UInt32(bitPattern: y)], [bytes]))
             try OriginalSurfaceText.draw(bytes, target: target, background: 0, color: color,
-                x: x, y: y, dcResult: dcResult, dc: dc) {
+                x: x, y: y, dcResult: dcResult, dc: dc, renderer: textRenderer) {
                 try observe(.init($0.kind.rawValue, $0.arguments, $0.strings))
             }
         }

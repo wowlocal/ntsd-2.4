@@ -66,6 +66,7 @@ public struct OriginalApplicationInputSession {
         // Object word has no established startup backing and is not known zero.
         match.libraryCommands = .init()
         match.bitmapOwners = Dictionary(uniqueKeysWithValues:entry.entry.snapshot.bitmapTokens.enumerated().map { ($0.offset,$0.element) })
+        match.bitmapSurfaceOwners = Dictionary(uniqueKeysWithValues:entry.entry.snapshot.bitmapSurfaces.enumerated().map { ($0.offset,$0.element) })
         var context = try bindings.inputContext(state),commands = Array(entry.loaded.commands.prefix(10))
         let playback = Array(entry.loaded.commands.suffix(10)),original = state,binding = bindings
         var operations = entry.operations.map(Operation.preceding)

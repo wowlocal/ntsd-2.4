@@ -3,6 +3,18 @@
 /// to the enclosing loaded call. This operation never selects a continuation
 /// from expected state and never executes reference EXE/DLL code.
 public enum OriginalGameplayBody {
+    /// Persistent installed-library owners, distinct from call-local scratch.
+    /// Hit storage must come from declared installation/allocation provenance;
+    /// empty transform destinations keep unrecovered extended writes explicit.
+    public struct Library: Equatable {
+        public var text: OriginalLibSurfaceText
+        public var hits: OriginalLibHitState
+        public var transforms: OriginalLibTransformBacking
+        public init(text: OriginalLibSurfaceText, hits: OriginalLibHitState,
+                    transforms: OriginalLibTransformBacking = .init()) {
+            self.text = text;self.hits = hits;self.transforms = transforms
+        }
+    }
     public enum Stage: String, CaseIterable {
         case control, physics, links, contacts, hits
         case cpointActions, cpointPlacement, cpointCleanup, attachments
@@ -40,10 +52,12 @@ public enum OriginalGameplayBody {
     /// until this operation AND its enclosing loaded call have committed.
     /// Unsupported mode1/4 children and unresolved caller reads remain explicit
     /// errors; no game branch is skipped to obtain a successful return.
+    @discardableResult
     public static func apply(state: inout OriginalMatchPreparation,
         context: inout OriginalInputControlContext, crt: inout OriginalCRTRandom,
         round: OriginalMatchRoundResult, caller: inout Caller,
         target: UInt32, presentation: OriginalMenuPresentationInput, sse2: Bool = false,
+        library: Library? = nil,
         surface: (Int) throws -> UInt32,
         resourceBitmap: (UInt32) throws -> (OriginalStateRecord, UInt32),
         fillBacking: () throws -> [UInt8],
@@ -54,26 +68,43 @@ public enum OriginalGameplayBody {
         write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
         observe: (Event) throws -> Void = { _ in },
-        checkpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in }) throws {
+        checkpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in },
+        ownedCheckpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom, Library?) throws -> Void = { _,_,_,_,_ in }) throws -> Library? {
         guard round.continuation == .gameplay else {
             throw OriginalStateError.invalidStorage("Gameplay body requires the own gameplay continuation")
         }
         guard caller.formatter == nil || caller.formatter?.bytes.count == OriginalResultLayout.localSize else {
             throw OriginalStateError.invalidStorage("Gameplay body caller formatter extent")
         }
-        var next = state, owned = context, random = crt, retained = caller
-        try OriginalWorldControl.apply(state: &next, observe: { try observe(.control(slot: $0, $1)) })
-        try checkpoint(.control, next, owned, random)
+        guard (library != nil) == (state.libraryCommands != nil) else {
+            throw OriginalStateError.invalidStorage("Installed gameplay requires retained library owners")
+        }
+        var next = state, owned = context, random = crt, retained = caller, installed = library
+        let textRenderer: OriginalSurfaceText.Renderer? = library == nil ? nil : { bytes,target,background,color,x,y,result,dc,observer in
+            try installed!.text.draw(bytes,target:target,background:background,color:color,
+                                     x:x,y:y,dcResult:result,dc:dc,observe:observer)
+        }
+        func emitCheckpoint(_ stage: Stage,_ match: OriginalMatchPreparation,_ input: OriginalInputControlContext,_ crt: OriginalCRTRandom) throws {
+            try checkpoint(stage,match,input,crt)
+            try ownedCheckpoint(stage,match,input,crt,installed)
+        }
+        try OriginalWorldControl.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
+        try emitCheckpoint(.control, next, owned, random)
         try OriginalWorldPhysics.apply(state: &next, observe: { try observe(.physics($0)) })
-        try checkpoint(.physics, next, owned, random)
+        try emitCheckpoint(.physics, next, owned, random)
         try OriginalWorldLinks.apply(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
-        try checkpoint(.links, next, owned, random)
-        try OriginalWorldContacts.apply(state: &next, observe: { try observe(.contacts($0)) })
-        try checkpoint(.contacts, next, owned, random)
+        try emitCheckpoint(.links, next, owned, random)
+        try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) })
+        try emitCheckpoint(.contacts, next, owned, random)
         // The full-pool item's root4c and incoming cpoint partner currently
         // have no whole-body native producer. Children retain nil until used.
-        try OriginalWorldHits.apply(state: &next, crt: &random, sse2: sse2, observe: { try observe(.hits($0)) })
-        try checkpoint(.hits, next, owned, random)
+        if installed != nil {
+            try OriginalLibWorldHits.apply(state:&next,crt:&random,library:&installed!.hits,sse2:sse2,
+                                          observe:{ try observe(.hits($0)) })
+        } else {
+            try OriginalWorldHits.apply(state: &next, crt: &random, sse2: sse2, observe: { try observe(.hits($0)) })
+        }
+        try emitCheckpoint(.hits, next, owned, random)
         try OriginalWorldCPoints.apply(state: &next, sse2Conversion: sse2,
             observe: { try observe(.links(.attachments, $0)) }, afterStage: { stage, value in
                 let point: Stage
@@ -83,19 +114,19 @@ public enum OriginalGameplayBody {
                 case .cleanup: point = .cpointCleanup
                 case .attachments: point = .attachments
                 }
-                try checkpoint(point, value, owned, random)
+                try emitCheckpoint(point, value, owned, random)
             })
         let mode = try next.globals.integer(at: 0x451160-0x44d000, as: Int32.self)
         try OriginalWorldCamera.apply(state: &next, mode: mode, target: target,
             sse2Conversion: sse2, surface: surface, fillBacking: fillBacking,
             performFill: performFill, performBlit: performBlit, observe: { try observe(.drawing(.camera, $0)) })
-        try checkpoint(.camera, next, owned, random)
+        try emitCheckpoint(.camera, next, owned, random)
         let phase = try next.globals.integer(at: 0x450bd8-0x44d000, as: Int32.self)
         try OriginalWorldDrawing.apply(state: &next, target: target, phase: phase,
             surface: surface, resourceBitmap: resourceBitmap, performBlit: performBlit,
             observe: { try observe(.drawing(.drawing, $0)) })
-        try checkpoint(.drawing, next, owned, random)
-        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, observe: { event in
+        try emitCheckpoint(.drawing, next, owned, random)
+        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, observe: { event in
             // This original diagnostic sprintf writes root48c. If full backing
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.
@@ -108,47 +139,49 @@ public enum OriginalGameplayBody {
             }
             try observe(.impulses(event))
         })
-        try checkpoint(.impulses, next, owned, random)
+        try emitCheckpoint(.impulses, next, owned, random)
         // Keep each live slot's known producers inside the same original loop.
         // Earlier caller words whose complete lifetimes are unrecovered remain
         // nil; these are not seeded or carried between separate match calls.
         var scratch = OriginalPostDrawScratch()
-        try OriginalPostDrawLifecycle.apply(state: &next, scratch: &scratch, sse2: sse2,
+        let transforms = try OriginalPostDrawLifecycle.apply(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
             observe: { try observe(.lifecycle($0)) })
-        try checkpoint(.lifecycle, next, owned, random)
+        if let transforms { installed!.transforms = transforms }
+        try emitCheckpoint(.lifecycle, next, owned, random)
         var spawn: Int32?
         try OriginalPostDrawCommands.apply(state: &next, retainedSpawnSlot: &spawn, sse2: sse2,
             observe: { try observe(.commands($0)) })
-        try checkpoint(.commands, next, owned, random)
+        try emitCheckpoint(.commands, next, owned, random)
         try OriginalWorldHUD.apply(state: &next, surface: surface, resourceBitmap: resourceBitmap,
             performBlit: performBlit, observe: { try observe(.drawing(.hud, $0)) })
-        try checkpoint(.hud, next, owned, random)
+        try emitCheckpoint(.hud, next, owned, random)
         var notice: OriginalStateRecord?
         if let storage = retained.formatter {
             notice = try .init(bytes: Array(storage.bytes[0x20...]), defined: Array(storage.defined[0x20...]))
         }
         try OriginalPostHUDNotices.apply(state: next, local: &notice,
             dcResult: presentation.dcResult, dc: presentation.dc, fillBacking: fillBacking,
-            resourceBitmap: resourceBitmap, performFill: performFill, performBlit: performBlit,
+            resourceBitmap: resourceBitmap, performFill: performFill, performBlit: performBlit, textRenderer: textRenderer,
             observe: { try observe(.drawing(.notices, $0)) })
         if let notice, let original = retained.formatter {
             retained.formatter = try .init(bytes: Array(original.bytes[..<0x20])+notice.bytes,
                 defined: Array(original.defined[..<0x20])+notice.defined)
         }
-        try checkpoint(.notices, next, owned, random)
+        try emitCheckpoint(.notices, next, owned, random)
         let result = try OriginalResultRecording.apply(state: &next, context: &owned,
             stageDefeated: round.stageDefeated, allocate: allocate, processorSignature: processorSignature,
             open: open, write: write, close: close, observe: { try observe(.recording($0)) })
-        try checkpoint(.recording, next, owned, random)
+        try emitCheckpoint(.recording, next, owned, random)
         try OriginalResultLayout.apply(state: &next, context: owned, continuation: result.continuation,
             stageDefeated: round.stageDefeated, indicatorTarget: retained.indicatorTarget, local: &retained.formatter,
             dcResult: presentation.dcResult, dc: presentation.dc, surface: surface, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, observe: { try observe(.drawing(.layout, $0)) })
-        try checkpoint(.layout, next, owned, random)
+            performBlit: performBlit, textRenderer: textRenderer, observe: { try observe(.drawing(.layout, $0)) })
+        try emitCheckpoint(.layout, next, owned, random)
         try OriginalGameplayOutput.returnFromDispatcher(world: &next.world, globals: &next.globals,
             memory: &owned.memory, input: presentation, resourceBitmap: resourceBitmap,
-            performBlit: performBlit, soundRequest: soundRequest, observe: { try observe(.drawing(.output, $0)) })
-        try checkpoint(.output, next, owned, random)
+            performBlit: performBlit, soundRequest: soundRequest, textRenderer: textRenderer, observe: { try observe(.drawing(.output, $0)) })
+        try emitCheckpoint(.output, next, owned, random)
         state = next; context = owned; crt = random; caller = retained
+        return installed
     }
 }

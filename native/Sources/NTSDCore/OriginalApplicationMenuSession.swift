@@ -20,6 +20,10 @@ public struct OriginalApplicationMenuSession {
         public var memory: OriginalMenuPresentationMemory
         public var front: OriginalFrontMenuResources
         public var earlyScreen: OriginalFrontScreenPrelude
+        // Declared process-attach VirtualAlloc pages, retained across all calls.
+        // The accepted application loader supplies20000 known-zero bytes once.
+        public var libraryHits = OriginalLibHitState()
+        public var libraryTransforms = OriginalLibTransformBacking()
         public var libraryText: OriginalLibSurfaceText
         public var random: OriginalCRTRandom
         public var screenBody: OriginalFrontScreenBody.StartupResult?
