@@ -264,11 +264,21 @@ Parent phase сохраняет count19/188 known bytes до записи два
 [review4](evidence/application-catalog-session-final-review.json) закрыл final
 comparator gap точногоf601614. Все12449 appended commands сверены;3177 Blt читают
 прежние поверхности, следующий draw новых catalog surfaces остаётся открытым.
+[Полный собственный Native catalog](research/APPLICATION_CATALOG_FULL_NATIVE.md)
+теперь возвращает PendingPool из actual bootstrap/menu/common:137 Objects/17 BG/
+Stage,829 bitmap owners/400 WAV/15 683 allocation tuples. Полные records/masks,
+retained cache backing и callbacks→operations→graphics сравниваются в объявленном
+Native environment; whole original application/device match не заявлен.
+24 bundled release-теста прошли за191.186с/build312.21с, включая два поздних
+rollback и fresh-factory retry. Все916 Native/379 fixtures/пакеты/архивы проверены;
+ошибки предыдущих кандидатов сохранены. [Evidence](evidence/application-catalog-full-native.json).
+Следующая композиция — собственный pool/UI/loading caller, затем outer loop.
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных
 вызовов; их нельзя импортировать как одновременно живые own allocations.
-Следующая задача — полный owned Native137Objects/17BG/Stage→PendingPool с явным
+Этот preflight подготовил полный owned Native catalog, принятый выше с явным
 provider ресурсов/platform controls, новыми проверенными bindings и whole rollback.
 Полные catalog records не содержат полного clock/message/graphics потока приложения;
 новый Native environment не является whole original application match.

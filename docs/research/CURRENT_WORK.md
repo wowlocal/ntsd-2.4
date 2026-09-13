@@ -324,16 +324,27 @@ registry-файлов,365 WAV и669 изображений —647 179 902 исх
 [Evidence](../evidence/application-catalog-full-inputs.json):1219 pins/1227 archive
 members проверены; все913 Native/379 fixtures и пакеты неизменны, новых запусков нет.
 
-**Следующая задача — реальный полный Native catalog → PendingPool** с provider
-исходных ресурсов и явно объявленных platform controls на одну попытку. Проверить
-137 Objects/17 BG/Stage, полные records/masks, allocation/registration order,
-retained owners и поздний rollback. Новые логические bindings сверять с живыми
-startup/common regions; старые PCM pointers нельзя переносить как persistent
-storage. Повторно использовать существующие fixtures, не expected after-state.
-Сохранить20-child source comparisons как регрессии. Этот новый Native environment
-не считать полным оригинальным application match; недостающий source return,
-новые surface consumers и pool/UI/loading/outer остаются отдельными границами.
-Completed captures, включая terminal candidate5 после28 Objects, не перезапускать.
+Принят [полный собственный Native catalog → PendingPool](APPLICATION_CATALOG_FULL_NATIVE.md)
+в явно объявленном platform environment:137 Objects/17 BG/Stage,155 child returns,
+829 bitmap owners,400 WAV и15 683 allocation tuples. Сверены полные Object/101 BG/
+60 Stage records/masks, файлы, retained cache backing, новые bindings и цепочка
+callbacks → operations → graphics. Исходный stride20/full-path cache воспроизведён
+независимо:7412 записанных offsets/4364 retained, включая588 внутри первых8000.
+Expected и Core game rules не менялись; все379 fixtures сохранены.
+
+24 bundled release-теста прошли за191.186с/build312.21с; поздний Stage rollback,
+before-publication rollback и новая попытка с fresh provider проверены. Independent
+review закрыл существенные замечания. Все916 Native-файлов, пакеты и оба архива
+проверены. Native1 compile failure, Native2 cache mismatch/явная остановка после
+профиля XCTest и неисполненный frozen3 сохранены. [Evidence](../evidence/application-catalog-full-native.json).
+Полного original application return или новых Windows/device/raster наблюдений нет.
+
+**Следующая задача — соединить PendingPool с собственным pool/UI/loading caller**
+по сохранённым принятым входам и контрактам. Сохранить текущих владельцев, полные
+records/masks, операции и whole-attempt rollback; не подставлять expected after-state.
+Затем продолжить outer loop и backend publication. Недостающий full-source return
+и draw consumers новых catalog surfaces остаются открыты. Completed captures,
+включая terminal candidate5 после28 Objects, не перезапускать.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся

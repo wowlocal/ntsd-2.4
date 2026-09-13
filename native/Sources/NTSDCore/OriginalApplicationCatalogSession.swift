@@ -97,8 +97,20 @@ public struct OriginalApplicationCatalogSession {
         observe: @escaping (Observation,Session.State) throws -> Void = { _,_ in },
         afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void = { _,_ in },
         beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
+        let resources = try Resources(files:inputs.files,bitmaps:inputs.bitmaps,presentation:inputs.presentation,
+            drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill)
+        return try load(resources:resources,makeControls:{ Self.fixedControls(inputs) },
+                        observe:observe,afterChild:afterChild,beforeCommit:beforeCommit)
+    }
+    /// The factory creates fresh logical reply/cursor ownership for each attempt.
+    /// No provider, catalog or enclosing timer iteration is published on error.
+    @discardableResult
+    public mutating func load(resources: Resources,makeControls: () throws -> Controls,
+        observe: @escaping (Observation,Session.State) throws -> Void = { _,_ in },
+        afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void = { _,_ in },
+        beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
         guard pendingPool == nil else { throw Boundary.alreadyPrepared }
-        let attempt = try Attempt(entry:entry,startup:startup,inputs:inputs,observe:observe,afterChild:afterChild)
+        let attempt = try Attempt(entry:entry,startup:startup,inputs:resources,controls:makeControls(),observe:observe,afterChild:afterChild)
         let loaded = try attempt.run()
         let result = PendingPool(entry:entry,startup:startup,snapshot:attempt.snapshot(),catalog:loaded.catalog,files:loaded.files)
         try beforeCommit(result)
@@ -107,7 +119,8 @@ public struct OriginalApplicationCatalogSession {
     }
 
     private final class Attempt {
-        let entry: Loading.PendingCatalog, inputs: Inputs
+        let entry: Loading.PendingCatalog, inputs: Resources
+        let controls: Controls
         let observe: (Observation,Session.State) throws -> Void
         let afterChild: (OriginalCatalogChildObservation,Snapshot) throws -> Void
         var state: Session.State, parent: [Int:OriginalStateRecord] = [:], allocations: [Allocation] = []
@@ -116,12 +129,11 @@ public struct OriginalApplicationCatalogSession {
         var globalStores: [GlobalStore] = [], observedGlobalWrites: [Bool]
         var operations: [Operation], graphics: [OriginalApplicationGraphics.Command]
         var ranges: [(UInt64,UInt64)] = []
-        var ai = 0, bi = 0, fi = 0, wi = 0, vi = 0, ti = 0, mi = 0
         var pendingSound: OriginalSoundRegistration?
-        init(entry: Loading.PendingCatalog,startup: StartupSounds,inputs: Inputs,
+        init(entry: Loading.PendingCatalog,startup: StartupSounds,inputs: Resources,controls: Controls,
             observe: @escaping (Observation,Session.State) throws -> Void,
             afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void) throws {
-            self.entry = entry; self.inputs = inputs; self.observe = observe; self.afterChild = afterChild
+            self.entry = entry; self.inputs = inputs; self.controls = controls; self.observe = observe; self.afterChild = afterChild
             state = entry.state; observedGlobalWrites = [Bool](repeating:false,count:state.full.bytes.count)
             operations = entry.stagedOperations.map(Operation.preceding); graphics = entry.stagedGraphics
             guard inputs.presentation.targetSurface == entry.target else { throw Boundary.input("Catalog presentation target") }
@@ -153,10 +165,6 @@ public struct OriginalApplicationCatalogSession {
             .init(state:state,parent:parent,allocations:allocations,objectTokens:objectTokens,bitmapTokens:bitmapTokens,
                 bitmapSurfaces:bitmapSurfaces,sounds:sounds,waveInputs:waveInputs,globalStores:globalStores,
                 observedGlobalWrites:observedGlobalWrites,operations:operations,graphics:graphics)
-        }
-        func take<T>(_ values: [T],_ index: inout Int,_ label: String) throws -> T {
-            guard index < values.count else { throw Boundary.exhausted(label) }
-            defer { index += 1 }; return values[index]
         }
         func backing(_ count: Int) throws -> OriginalStateRecord {
             try .init(bytes:[UInt8](repeating:inputs.allocationFill,count:count),defined:[Bool](repeating:false,count:count))
@@ -201,7 +209,7 @@ public struct OriginalApplicationCatalogSession {
             if let second = owner.second { try range(p.secondPointer,second.bytes.count) }
         }
         func allocate(_ kind: Allocation.Kind,_ count: Int) throws -> UInt32 {
-            let token = try take(inputs.allocationTokens,&ai,"allocation")
+            let token = try controls.allocate(kind,count)
             let a = Allocation(kind:kind,token:token,count:count)
             operations.append(.allocation(a)); allocations.append(a); try emit(.allocation(a))
             guard token != 0 else { throw Boundary.dependency("NULL catalog child allocation") }
@@ -230,7 +238,8 @@ public struct OriginalApplicationCatalogSession {
             var context: Void = (), surface: UInt32 = 0
             let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,backing:bytes,
                 device:word(0x457578),flags:0x40,context:&context) { q,_ in
-                let control = try self.take(self.inputs.bitmapReplies,&self.bi,"bitmap reply")
+                let control = try self.controls.bitmap(q)
+                guard control.writes.isEmpty else { throw Boundary.input("Captured bitmap writes") }
                 guard var owner = self.state.bitmapInputs else { throw Boundary.missingOwners }
                 let r = try owner.response(q,control:control); self.state.bitmapInputs = owner
                 if q.kind == "createSurface",let output = r.output { surface = output }
@@ -239,9 +248,9 @@ public struct OriginalApplicationCatalogSession {
             bitmapSurfaces.append(try bitmap.storage.integer(at:0,as:UInt32.self) == 0 ? 0 : surface)
             return bitmap
         }
-        func time() throws -> UInt32 { try take(inputs.times,&ti,"clock") }
+        func time() throws -> UInt32 { try controls.time() }
         func message(_ name: String,_ bytes: [UInt8]) throws -> OriginalLibLoadingProgress.MessageResponse {
-            let value = try take(inputs.messages,&mi,"message")
+            let value = try controls.message(name,bytes)
             guard value.name == name else { throw Boundary.input("Message response order") }
             guard name == "PeekMessageA",value.response.result == 0,value.response.bytes.isEmpty else {
                 throw Boundary.dependency("Nonempty loading message dispatch")
@@ -315,7 +324,7 @@ public struct OriginalApplicationCatalogSession {
             pendingSound = request
             let device = try word(0x44eecc)
             guard device != 0 else { return }
-            let p = try take(inputs.waves,&wi,"registered WAV"),index = request.index
+            let p = try controls.wave(request,device),index = request.index
             let address = 0x452948+index*4,outputBefore = try word(address)
             try emit(.wave(index,.init(.load,[p.destination],[request.path.unicodeScalars.map { UInt8($0.value) }])))
             var candidate = sounds
@@ -323,7 +332,7 @@ public struct OriginalApplicationCatalogSession {
                 outputStored:{ try self.put(address,$0) },onWave:{ e in
                     if e.kind != .load { self.operations.append(.wave(index,e)) }; try self.emit(.wave(index,e))
                 },onVolume:{ args in
-                    let result = try self.take(self.inputs.volumeReplies,&self.vi,"volume reply")
+                    let result = try self.controls.volume(args)
                     self.operations.append(.volume(args,ignoredResult:result)); try self.emit(.volume(args,ignoredResult:result))
                 })
             guard let owner = candidate.buffers[index] else { throw Boundary.missingOwners }
@@ -345,8 +354,8 @@ public struct OriginalApplicationCatalogSession {
             let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text),fileName:name,
                 initialChecksum:word(0x44f620),initialSoundBytes:Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]),
                 fill:inputs.allocationFill,parentBacking:parent,backgroundBacking:Array(repeating:bg,count:101),stageBacking:Array(repeating:stage,count:60),
-                fileSource:file,fileAllocation:{ _,_ in
-                    let a = try self.take(self.inputs.fileAllocations,&self.fi,"file allocation")
+                fileSource:file,fileAllocation:{ path,mode in
+                    let a = try self.controls.file(path,mode)
                     try self.range(a.buffer,a.capacity); return a
                 },
                 onFile:{ e in self.operations.append(.file(e)); try self.emit(.file(e)) },
@@ -364,11 +373,8 @@ public struct OriginalApplicationCatalogSession {
                         self.objectTokens.append(try self.allocate(.object,0x25360))
                     }
                 },onStore:parentStore,onChild:{ try self.afterChild($0,self.snapshot()) })
-            guard ai == inputs.allocationTokens.count,bi == inputs.bitmapReplies.count,fi == inputs.fileAllocations.count,
-                  wi == inputs.waves.count,vi == inputs.volumeReplies.count,ti == inputs.times.count,
-                  mi == inputs.messages.count,pendingSound == nil else {
-                throw Boundary.input("Unused catalog controls")
-            }
+            guard pendingSound == nil else { throw Boundary.input("Unfinished catalog sound") }
+            try controls.finish()
             try state.validateAliases(); return result
         }
     }

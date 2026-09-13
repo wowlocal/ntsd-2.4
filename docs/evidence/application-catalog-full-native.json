@@ -1,0 +1,733 @@
+{
+  "schema": 1,
+  "status": "verified_finite_full_native_catalog_composition",
+  "UTC": "2026-09-13T07:01:42.798062+00:00",
+  "baseCommit": "060b085f29541619d57cdf7d87eee48a551c1440",
+  "scope": "Real full owned Native137Object/17BG/Stage catalog return toPendingPool from actual bootstrap/menu/common, using an explicitly declared new platform environment and complete original catalog/400WAV game records. Not a full original application match.",
+  "originalExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "fullGameComplete": false,
+  "referenceInputs": "docs/evidence/application-catalog-full-inputs.json",
+  "counts": {
+    "objects": 137,
+    "loadedBackgrounds": 17,
+    "children": 155,
+    "backgroundRecords": 101,
+    "stageRecords": 60,
+    "bitmaps": 829,
+    "allocationTuples": 15683,
+    "frameAllocations": 14586,
+    "weaponAllocations": 130,
+    "fileStreams": 621,
+    "WAVCalls": 400,
+    "PCMRegions": 666
+  },
+  "cacheComposition": {
+    "sourceBeforeCases": 400,
+    "sourceChildCases": 155,
+    "sourceFinalCases": 1,
+    "bytesWrittenWithOverlap": 8032,
+    "distinctWrittenOffsets": 7412,
+    "retainedOffsets": 4364,
+    "retainedWithinFirst8000": 588,
+    "lastWriteEnd": 7993,
+    "originalExpectedUnchanged": true,
+    "entryBackingComposedByExactSourcePathWrites": true,
+    "review": {
+      "schema": 1,
+      "UTC": "2026-09-13T06:49:33.616456+00:00",
+      "reviewer": "war_contract_review",
+      "type": "independent-read-only-saved-data-cache-provenance",
+      "scope": "Bounded independent review of sound-path cache composition for full owned Native catalog in its declared new platform environment; no whole original application globals match.",
+      "operations": {
+        "performed": [
+          "Read immutable stored JSON fixture envelopes, decode raw DEFLATE as data, verify declared raw byte counts/SHA-256 and selected cache blob counts/SHA-256.",
+          "Independently compose original full path plus NUL writes at index*20 into the original first cacheBefore, checking every saved boundary.",
+          "Read historical source contract and existing shared Native implementation.",
+          "Pin files and write only this new review JSON."
+        ],
+        "notPerformed": [
+          "No original EXE/DLL execution",
+          "No emulator or source producer imports/execution",
+          "No Native tests, build or reference execution",
+          "No historical auditor execution",
+          "No fixture/code/earlier review mutation"
+        ],
+        "parserNote": "An initial read-only decoding attempt used zlib wrapper mode and failed before producing results. Corrected data decoding uses raw DEFLATE wbits=-15 matching the existing fixture format; no input bytes changed."
+      },
+      "inputPins": {
+        "native/Tests/NTSDCoreTests/Fixtures/original-catalog-sounds.json": {
+          "bytes": 45644744,
+          "sha256": "683d10ebec24300b0bd609a60b5bf92f64602a61d8617b41b33b46d14437f4f6"
+        },
+        "native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files.json": {
+          "bytes": 13427294,
+          "sha256": "14aab2f9653c3c6a4cff550343ef5a3721899acdaf980d017672afdb4d135872"
+        },
+        "docs/research/CATALOG_SOUNDS.md": {
+          "bytes": 14465,
+          "sha256": "00291b07e9adde79daf17f005eb92e6690e3bc53172b43051f5f7f6d1df32d31"
+        },
+        "AGENTS_HISTORY_2026-09-12.md": {
+          "bytes": 364046,
+          "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+        },
+        "native/Sources/NTSDCore/OriginalFrameLoader.swift": {
+          "bytes": 18924,
+          "sha256": "f0a8b2fb5695c1c34b70030c1893f5691f05bcee9acef318d68d8d9e437cedb6"
+        },
+        "native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift": {
+          "bytes": 2020,
+          "sha256": "f40d8bfc6e47f01f0b580e6eed051e7603eb00f0ff922df486cb9816426c2fb8"
+        },
+        "build/research/application-catalog-full-native-20260913/plan.json": {
+          "bytes": 7703,
+          "sha256": "8e5d2b1acabf22fc026adbcacb9276f1c944b160483351d62a4ae74d406ab309"
+        },
+        "build/research/application-catalog-full-native-20260913/amendment3-publication-and-cache.json": {
+          "bytes": 1020,
+          "sha256": "9657b904d9ceb71b5ebab63c8e1d639b6cb70a17c0a9c6904faf4758aea297d2"
+        },
+        "build/research/application-catalog-full-native-20260913/review3-candidate2.json": {
+          "bytes": 11170,
+          "sha256": "f75c92c78d033265029aed929bfdde018a1fc218f3a8877c7cec1bce2447f7a4"
+        }
+      },
+      "rawSourcePins": {
+        "original-catalog-sounds": {
+          "bytes": 47296738,
+          "sha256": "4283fc01113f09533428ca43ec1df25b1c80a2fbea2df58f1053cf44e3122e53"
+        },
+        "original-loaded-catalog-files": {
+          "bytes": 95289959,
+          "sha256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee"
+        }
+      },
+      "establishedContract": {
+        "history": "AGENTS_HISTORY_2026-09-12.md:3434-3436 explicitly requires preserving existing bytes at globals 0x457578 and 0x458348 within sound cache 0x455638..<0x458438; initialSoundBytes must not be reset to zero.",
+        "sourceStudy": "docs/research/CATALOG_SOUNDS.md:23-29: count at0x458438, path cache at0x455638, stride20; assign index, WAV/SetVolume when enabled, copy complete path including NUL, then increment count. No stride padding clear.",
+        "nativeReference": "OriginalFrameLoader.swift OriginalSoundRegistry register preserves backing and copies incoming full path + NUL; code was read as implementation under review, not executed to produce the independent expected results."
+      },
+      "independentCalculation": {
+        "cacheBase": "0x455638",
+        "cacheEndExclusive": "0x458438",
+        "cacheBytes": 11776,
+        "initialSourceNonzeroBytes": 0,
+        "sourceCalls": 400,
+        "matchedSourceCacheBefore": 400,
+        "matchedSourceChildCaches": 155,
+        "matchedSourceFinalCaches": 1,
+        "totalPathStoreBytesIncludingNULAndOverlaps": 8032,
+        "uniqueWrittenBytes": 7412,
+        "preservedEntryBytes": 4364,
+        "unwrittenBytesWithinFirst8000": 588,
+        "lastWrittenEndExclusive": 7993,
+        "pathsWithNULBeyondStride20": 310,
+        "maximumPathBytesIncludingNUL": 22,
+        "lastPath": "data\\093.wav",
+        "method": "Start with the immutable first source cacheBefore. For each source call in order require index == ordinal and complete cache equality with that call cacheBefore. Replace only [20*ordinal ..< 20*ordinal + path.count + 1] with exact recorded path bytes plus NUL, record coverage, and retain all other bytes. Save resulting cache after each registration. Require each of155 source child caches equals the snapshot indexed by its recorded soundCount and final cache equals saved catalog.soundBytes.",
+        "allBlobChecksPassed": true
+      },
+      "requiredNewEnvironmentComparison": [
+        "Derive expected cache from the actual owned entry bytes, followed only by the same independently validated source path+NUL writes for each completed registration; never import Native after-state into expected.",
+        "Compare the whole11776-byte per-call request.cacheBefore at count=index, each child cache at recorded soundCount, final catalog soundBytes, and final owned global cache at count400 against that composition.",
+        "Preserve all bytes outside actual write intervals, including588 unwritten bytes within the first8000 and the tail beginning at7993. Do not replace a contiguous first8000-byte prefix from the old source cache and do not mask a differing tail.",
+        "Keep original source cacheBefore/child/final blobs immutable and validate the independent formula on their original all-zero initial backing first.",
+        "Retain original child order, path/index/kind/source checks so a changed lookup/registration sequence cannot be accepted merely because final cache composition is internally consistent."
+      ],
+      "conclusion": {
+        "compositionSupported": true,
+        "materialBlockersToExactPerPathCacheComposition": [],
+        "notNativeAcceptance": true,
+        "limits": [
+          "This calculation proves the declared path-store composition against saved original controls. It is not a new original execution or full original animation/global trace for the new owned entry.",
+          "It does not establish general sound-cache overflow/full-capacity or arbitrary initial nonempty cache continuation.",
+          "Candidate2 failure and candidate3 execution results are separate gates; this review does not claim a successful Native run."
+        ]
+      }
+    }
+  },
+  "validation": {
+    "bundledReleaseMethods": 24,
+    "priorMethods": 21,
+    "newMethods": 3,
+    "testSeconds": 191.186,
+    "buildSeconds": 312.21,
+    "job": {
+      "scope": "Native-only release catalog ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate3b/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalLoadedCatalogTests|OriginalLoadedCatalogFilesTests|OriginalCatalogSoundsTests|OriginalApplicationLoadingPrefixTests|OriginalCatalogTests|OriginalCatalogPrecisionTests|OriginalInitialLoadingTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate3b-inputs.json",
+      "nativeFiles": 916,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T06:51:06.425507+00:00",
+      "pid": 27486,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 505.711063125,
+      "endedUTC": "2026-09-13T06:59:32.139350+00:00"
+    },
+    "rawOverrides": false,
+    "NTSDNativeLinked": true,
+    "rollback": [
+      "after last Stage child",
+      "before publication, then successful fresh-provider attempt using same factory"
+    ],
+    "dedicatedFinishThrowTested": false,
+    "fullContentAttempts": 4,
+    "beforeCommitSnapshots": 3,
+    "successfulPendingPoolPublications": 2,
+    "stageCancellationBeforeWholeReturn": true
+  },
+  "independentReview": {
+    "status": "no_material_code_comparator_blockers",
+    "path": "build/research/application-catalog-full-native-20260913/review5-candidate3b.json",
+    "pin": {
+      "bytes": 14062,
+      "sha256": "f83b8deeccff50c7f70b6d4119f8d0f266878c8db35ad18943da9c32ec54a774"
+    }
+  },
+  "preservation": {
+    "nativeFiles": 916,
+    "nativeBytes": 4433363128,
+    "allFourFrozenCandidatesVerified": true,
+    "protectedPackages": {
+      "fixtures": {
+        "files": 379,
+        "unchanged": true
+      },
+      "startup": {
+        "files": 46,
+        "unchanged": true
+      },
+      "commonSounds": {
+        "files": 19,
+        "unchanged": true
+      }
+    },
+    "bundlesVerified": true,
+    "sourcePins": 24,
+    "archives": {
+      "native-candidate3b": {
+        "status": "verified",
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/native-candidate3b.tar",
+        "tar": {
+          "bytes": 4435015680,
+          "sha256": "eccb3494ced4e170921a86aaad059ad10f44a0e18bb1c0484162b16590a29f64"
+        },
+        "members": 916,
+        "payloadBytes": 4433363128,
+        "allMemberNamesOrderBytesSHAModesVerified": true,
+        "readbackComparedEveryByteToSource": true,
+        "originalExecuted": false,
+        "NativeExecuted": false,
+        "verifiedUTC": "2026-09-13T07:00:36.673490+00:00"
+      },
+      "full-catalog-evidence1": {
+        "status": "verified",
+        "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/full-catalog-evidence1.tar",
+        "tar": {
+          "bytes": 125890560,
+          "sha256": "29760b703db961f0ebbcd7be8112ea7779298ef7fac8f1195f51b7bb8aaecba0"
+        },
+        "members": 85,
+        "payloadBytes": 125725199,
+        "allMemberNamesOrderBytesSHAModesVerified": true,
+        "readbackComparedEveryByteToSource": true,
+        "originalExecuted": false,
+        "NativeExecuted": false,
+        "verifiedUTC": "2026-09-13T07:00:36.964357+00:00"
+      }
+    },
+    "storage": {
+      "verifiedUTC": "2026-09-13T07:00:37.001399+00:00",
+      "taskBytes": 27887489024,
+      "limitBytes": 34359738368,
+      "internalFreeBytes": 100869160960,
+      "X5FreeBytes": 483791044608
+    }
+  },
+  "failures": {
+    "freezer1": "Wrong review key before publication; preserved original and corrected separate producer.",
+    "native1": {
+      "scope": "Native-only release catalog ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalLoadedCatalogTests|OriginalLoadedCatalogFilesTests|OriginalCatalogSoundsTests|OriginalApplicationLoadingPrefixTests|OriginalCatalogTests|OriginalCatalogPrecisionTests|OriginalInitialLoadingTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate1-inputs.json",
+      "nativeFiles": 916,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T06:30:35.796558+00:00",
+      "pid": 23943,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 179.795376,
+      "endedUTC": "2026-09-13T06:33:35.596786+00:00"
+    },
+    "native2": {
+      "UTC": "2026-09-13T06:54:53.170925+00:00",
+      "scope": "Read preserved failed Native2 log only; no original or Native execution. First cache mismatch details plus full error-line counts; not a successful match or completed24-test run.",
+      "errorLines": 1114,
+      "locations": {
+        "NTSDCoreTests/OriginalApplicationCatalogFullTests.swift:97: error: -[NTSDCoreTests.OriginalApplicationCatalogFullTests testBeforePublicationCancellationAndFreshFactory]": 800,
+        "NTSDCoreTests/OriginalApplicationCatalogFullReference.swift:98: error: -[NTSDCoreTests.OriginalApplicationCatalogFullTests testBeforePublicationCancellationAndFreshFactory]": 310,
+        "NTSDCoreTests/OriginalApplicationCatalogFullReference.swift:130: error: -[NTSDCoreTests.OriginalApplicationCatalogFullTests testBeforePublicationCancellationAndFreshFactory]": 2,
+        "NTSDCoreTests/OriginalApplicationCatalogFullTests.swift:172: error: -[NTSDCoreTests.OriginalApplicationCatalogFullTests testBeforePublicationCancellationAndFreshFactory]": 2
+      },
+      "firstCacheMismatch": {
+        "actualLength": 11776,
+        "expectedLength": 11776,
+        "differentBytes": [
+          {
+            "offset": 8001,
+            "actual": 16,
+            "expected": 0
+          },
+          {
+            "offset": 8003,
+            "actual": 49,
+            "expected": 0
+          },
+          {
+            "offset": 8013,
+            "actual": 64,
+            "expected": 0
+          },
+          {
+            "offset": 8015,
+            "actual": 49,
+            "expected": 0
+          },
+          {
+            "offset": 11536,
+            "actual": 3,
+            "expected": 0
+          },
+          {
+            "offset": 11544,
+            "actual": 50,
+            "expected": 0
+          },
+          {
+            "offset": 11545,
+            "actual": 48,
+            "expected": 0
+          },
+          {
+            "offset": 11546,
+            "actual": 50,
+            "expected": 0
+          },
+          {
+            "offset": 11547,
+            "actual": 54,
+            "expected": 0
+          },
+          {
+            "offset": 11548,
+            "actual": 47,
+            "expected": 0
+          },
+          {
+            "offset": 11549,
+            "actual": 48,
+            "expected": 0
+          },
+          {
+            "offset": 11550,
+            "actual": 57,
+            "expected": 0
+          },
+          {
+            "offset": 11551,
+            "actual": 47,
+            "expected": 0
+          },
+          {
+            "offset": 11552,
+            "actual": 49,
+            "expected": 0
+          },
+          {
+            "offset": 11553,
+            "actual": 52,
+            "expected": 0
+          },
+          {
+            "offset": 11554,
+            "actual": 47,
+            "expected": 0
+          },
+          {
+            "offset": 11555,
+            "actual": 49,
+            "expected": 0
+          },
+          {
+            "offset": 11556,
+            "actual": 49,
+            "expected": 0
+          },
+          {
+            "offset": 11557,
+            "actual": 47,
+            "expected": 0
+          },
+          {
+            "offset": 11558,
+            "actual": 48,
+            "expected": 0
+          },
+          {
+            "offset": 11559,
+            "actual": 48,
+            "expected": 0
+          },
+          {
+            "offset": 11560,
+            "actual": 47,
+            "expected": 0
+          },
+          {
+            "offset": 11561,
+            "actual": 48,
+            "expected": 0
+          },
+          {
+            "offset": 11562,
+            "actual": 48,
+            "expected": 0
+          }
+        ]
+      },
+      "log": {
+        "bytes": 90425623,
+        "sha256": "464742a1b336d1d7a5b022910469d5ac9f6b6e4950ff992bd248a34fd41f73a3"
+      },
+      "terminal": {
+        "scope": "Native-only release catalog ownership validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+        "command": [
+          "swift",
+          "test",
+          "--package-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate2/native",
+          "--scratch-path",
+          "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/swift",
+          "--jobs",
+          "4",
+          "-c",
+          "release",
+          "--filter",
+          "(OriginalApplicationCatalogFullTests|OriginalApplicationCatalogSessionTests|OriginalLoadedCatalogTests|OriginalLoadedCatalogFilesTests|OriginalCatalogSoundsTests|OriginalApplicationLoadingPrefixTests|OriginalCatalogTests|OriginalCatalogPrecisionTests|OriginalInitialLoadingTests)/"
+        ],
+        "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-catalog-full-native-20260913/candidate2-inputs.json",
+        "nativeFiles": 916,
+        "rawOverrides": false,
+        "originalExecuted": false,
+        "startedUTC": "2026-09-13T06:38:03.916641+00:00",
+        "pid": 25234,
+        "status": "terminal",
+        "exitCode": 1,
+        "elapsedSeconds": 778.8225497499999,
+        "endedUTC": "2026-09-13T06:51:02.733984+00:00"
+      },
+      "explicitStop": "native2-stop-request.json",
+      "independentCorrectionProof": "review4-cache-provenance.json"
+    },
+    "candidate3": "Frozen but never executed; candidate3b uses equivalent Boolean presence diagnostics."
+  },
+  "openBoundaries": [
+    "No full original application clock/message/animation/global trace for this entry; declared Native callback-operation-command consistency is not original event completeness.",
+    "Pool/UI/loading/outer-loop/backend publication and subsequent new-catalog-surface draw consumer remain open.",
+    "Actual Windows/device/raster, played match and full game remain open.",
+    "All prior safety incidents remain open; no affected operation retried.",
+    "Existing resource/message/fill/mirror failure boundaries remain."
+  ],
+  "artifacts": {
+    "build/research/application-catalog-full-native-20260913/amendment1-regressions.json": {
+      "bytes": 947,
+      "sha256": "5d6b29a70132843edf9daeee2fa2603ca349600f9ef107565c029397c35abb49"
+    },
+    "build/research/application-catalog-full-native-20260913/amendment2-full-comparison.json": {
+      "bytes": 1069,
+      "sha256": "3b1f2876517a4e5cf2c627e9aa268c00a2c4a65d01e5408883f53d3a5a69bc1a"
+    },
+    "build/research/application-catalog-full-native-20260913/amendment3-publication-and-cache.json": {
+      "bytes": 1020,
+      "sha256": "9657b904d9ceb71b5ebab63c8e1d639b6cb70a17c0a9c6904faf4758aea297d2"
+    },
+    "build/research/application-catalog-full-native-20260913/amendment4-assertion-diagnostics.json": {
+      "bytes": 648,
+      "sha256": "9a79d20993291fcbe1428b4b06ae0ca43da64571a9b6083b4396b2ee84ddaa96"
+    },
+    "build/research/application-catalog-full-native-20260913/amendment5-preservation-budget.json": {
+      "bytes": 393,
+      "sha256": "f67ba8abbc44b725a4121d683cdf8f90fdff87ebca5b145c2e81dbc21d0bf799"
+    },
+    "build/research/application-catalog-full-native-20260913/archive-final1-plan.json": {
+      "bytes": 233,
+      "sha256": "33c1d4bd203698d3b78ff82e82895b62ff08560e88efa7992cea78a43ba912aa"
+    },
+    "build/research/application-catalog-full-native-20260913/archive-final1-producer-pin.json": {
+      "bytes": 100,
+      "sha256": "628a6ccb3b83b7901b011332816595abcf8157daba337228a0c4f849bbb5a679"
+    },
+    "build/research/application-catalog-full-native-20260913/archive-final1-storage.json": {
+      "bytes": 181,
+      "sha256": "0a4cc3ceb400cb5bc40c41acb3aa265985a7e9c4b619aac294bf0ebc86bf625e"
+    },
+    "build/research/application-catalog-full-native-20260913/archive-final1.py": {
+      "bytes": 4047,
+      "sha256": "379a4794d70733b89883b281afdf4396a0016d79ba565e33a8a9c4845f060899"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate1-inputs.json": {
+      "bytes": 163367,
+      "sha256": "d9fccc6710f51dc13743b7fe38a05fd89c72e0a06dbd064c56fbdc2bc4457129"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate1-producer-pins.json": {
+      "bytes": 755,
+      "sha256": "2be758197eabf1129479e4f3e2c95c4df71fcb1431cf3f7810ae9bc0bc6ce302"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate2-inputs.json": {
+      "bytes": 163367,
+      "sha256": "17a2f83a6dd1b0a438c7f9d5ca590669bb59f74bcd4ee09abca26612677f6fbf"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate2-producer-pins.json": {
+      "bytes": 636,
+      "sha256": "63eee1cad883a3e61afb1e1d687ad6dbf81eac5c4210a8c2678cc440be3a96f8"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate3-inputs.json": {
+      "bytes": 163367,
+      "sha256": "be9ced33fbe213bc5724f2dec55251caeaf21d94292a5ca503dc59077fed23c1"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate3-producer-pins.json": {
+      "bytes": 263,
+      "sha256": "887683a651abab4ea377bd3e989039deb574eaf4a794df533205f706d1beb61a"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate3b-inputs.json": {
+      "bytes": 163367,
+      "sha256": "a2983a6883f9aa4ad3e2454a10f1b33fc92a07cf4c04ce268a6734037a1691b4"
+    },
+    "build/research/application-catalog-full-native-20260913/candidate3b-producer-pins.json": {
+      "bytes": 265,
+      "sha256": "96c9070cd71575e97067c2857e6392e7b5945977add973e205d93136ed2665e4"
+    },
+    "build/research/application-catalog-full-native-20260913/commit-message.txt": {
+      "bytes": 519,
+      "sha256": "d6da9efdfc7d497a60466739ad1e9f55694ef84979faadfd6d29a09244784630"
+    },
+    "build/research/application-catalog-full-native-20260913/final-preservation1.json": {
+      "bytes": 85595,
+      "sha256": "d9312e31c059fb75db0a98210901b6458b86a3db3e5b37b94af4a07d0df4dde5"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate1-error.json": {
+      "bytes": 483,
+      "sha256": "8c0c9482cfcad1e2184b7f1f8f94b0443c7cadef8f61573084b46fcec772f87e"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate1.py": {
+      "bytes": 2099,
+      "sha256": "9060eb99e31cf34e2e5ebc03f42bb52365f42751939b138778d4803776020573"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate1b.py": {
+      "bytes": 2119,
+      "sha256": "9ace8a8ac44bf3db44d591bd55c0a7e5855c837ad9f2ef6e893bd72cfc71b51d"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate2.py": {
+      "bytes": 2247,
+      "sha256": "08913d5a4a60e763f3b709c61960bbf1ae8b0e3fc7eaf1649d1bea420416c96a"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate3.py": {
+      "bytes": 2247,
+      "sha256": "32027067b44a9ed8e7645c04a7af59be95e51b4bdcf988009c17133cb9ac003d"
+    },
+    "build/research/application-catalog-full-native-20260913/freeze-candidate3b.py": {
+      "bytes": 2250,
+      "sha256": "4dce323457fc0803f0f81f3f2663fe76ff45afcacfd18307f66f5f5da1e72b36"
+    },
+    "build/research/application-catalog-full-native-20260913/full-catalog-evidence1-members.json": {
+      "bytes": 27067,
+      "sha256": "628f1feb0a200120bf2db0dd3849e0baf2b374f41511a0e2fc7608d51ba44597"
+    },
+    "build/research/application-catalog-full-native-20260913/full-catalog-evidence1-verification.json": {
+      "bytes": 548,
+      "sha256": "e7f17387c339fec12966cc0287b7f1813a84ffb186f887041acd31fd9b78d698"
+    },
+    "build/research/application-catalog-full-native-20260913/initial-native.json": {
+      "bytes": 162822,
+      "sha256": "e22048d65483fe0e32abeae7e82725ca05fe870ef9f9d7d02ec62c9f4911cacc"
+    },
+    "build/research/application-catalog-full-native-20260913/native-candidate3b-members.json": {
+      "bytes": 362050,
+      "sha256": "6dc20dcafcd87489ceed5390441640bedf3d6d227c8221a5e9781b8209fb7218"
+    },
+    "build/research/application-catalog-full-native-20260913/native-candidate3b-verification.json": {
+      "bytes": 547,
+      "sha256": "f2edb14f72e7d0015b2a112af1ceece09131c7add0d9c6b9c4cd7736c1c1bcf0"
+    },
+    "build/research/application-catalog-full-native-20260913/native1.config.json": {
+      "bytes": 1141,
+      "sha256": "11550ea4aa5854b04ea164db055b9301da68cf4e799f22140440ba4ee0212291"
+    },
+    "build/research/application-catalog-full-native-20260913/native1.job.json": {
+      "bytes": 1280,
+      "sha256": "10ccf996392c6011bd15470b51b26515520d2df2921c49cb246fa5ab949052c7"
+    },
+    "build/research/application-catalog-full-native-20260913/native1.log": {
+      "bytes": 23493,
+      "sha256": "b3fc45601cab69283ff927dc635b9915d35a3a81b0f1f4323ed219b80d986fd7"
+    },
+    "build/research/application-catalog-full-native-20260913/native2-failure-summary.json": {
+      "bytes": 4775,
+      "sha256": "1b36c7c27e17a04774380b221de7f25779ac283db747ab8b4cc2193a66408d1f"
+    },
+    "build/research/application-catalog-full-native-20260913/native2-profile1.txt": {
+      "bytes": 377919,
+      "sha256": "63276a4704ecf204f903b59a1bda8ae698cefd9b6e9fca5f53a5ace8bfd15c21"
+    },
+    "build/research/application-catalog-full-native-20260913/native2-stop-request.json": {
+      "bytes": 3734,
+      "sha256": "b0f5e7bc2b11d54053deb8a68e519ede9c0eee1019de303d5951a025021daf76"
+    },
+    "build/research/application-catalog-full-native-20260913/native2.config.json": {
+      "bytes": 1141,
+      "sha256": "28afcc597c334ee59ab4044c435a795b538f289f2faca6ecfbca504e7981bcf2"
+    },
+    "build/research/application-catalog-full-native-20260913/native2.job.json": {
+      "bytes": 1287,
+      "sha256": "b2f851362b13f5cf06e4379eef1a177cfa37a8fc1105b5b2d4a0c992d17ed49a"
+    },
+    "build/research/application-catalog-full-native-20260913/native2.log": {
+      "bytes": 90425623,
+      "sha256": "464742a1b336d1d7a5b022910469d5ac9f6b6e4950ff992bd248a34fd41f73a3"
+    },
+    "build/research/application-catalog-full-native-20260913/native3.config.json": {
+      "bytes": 1143,
+      "sha256": "223cfd135554143de0526a01ecfb35d6cb58481a664bf69c2f1bbbdd658e617e"
+    },
+    "build/research/application-catalog-full-native-20260913/native3.job.json": {
+      "bytes": 1285,
+      "sha256": "7d605e9edcbf7250ed2b104932715670c90f471c345005858a6dd7b8a91d8af6"
+    },
+    "build/research/application-catalog-full-native-20260913/native3.log": {
+      "bytes": 30441,
+      "sha256": "9017067d07cfe9aa012971af044402dd5e4b858917f27432c2ca26d4dabd6b4c"
+    },
+    "build/research/application-catalog-full-native-20260913/plan.json": {
+      "bytes": 7703,
+      "sha256": "8e5d2b1acabf22fc026adbcacb9276f1c944b160483351d62a4ae74d406ab309"
+    },
+    "build/research/application-catalog-full-native-20260913/publish-docs1-producer-pin.json": {
+      "bytes": 100,
+      "sha256": "626ec44c1ef822191b4d6398e8b3deda4b7d812284518cb664ba4f3d5f6d3221"
+    },
+    "build/research/application-catalog-full-native-20260913/publish-docs1.py": {
+      "bytes": 8822,
+      "sha256": "e78f572f6e9158642a0acd12aeeae90a2196bb5f199d61801be785c10fdec810"
+    },
+    "build/research/application-catalog-full-native-20260913/review1-plan.json": {
+      "bytes": 16744,
+      "sha256": "7959737a5f574cba8d6956ba5239fd9737ca445493d3bdaa8a7a59b7414e7148"
+    },
+    "build/research/application-catalog-full-native-20260913/review2-candidate1.json": {
+      "bytes": 13397,
+      "sha256": "ec055b27a3f1a032c9fa4590d2c623efd07cad56fa407b657d54b51142f7baca"
+    },
+    "build/research/application-catalog-full-native-20260913/review3-candidate2.json": {
+      "bytes": 11170,
+      "sha256": "f75c92c78d033265029aed929bfdde018a1fc218f3a8877c7cec1bce2447f7a4"
+    },
+    "build/research/application-catalog-full-native-20260913/review4-cache-provenance.json": {
+      "bytes": 6919,
+      "sha256": "d064441bddb8d283eab597885af139f3ab03364108c58d5f83b66aa154737408"
+    },
+    "build/research/application-catalog-full-native-20260913/review5-candidate3b.json": {
+      "bytes": 14062,
+      "sha256": "f83b8deeccff50c7f70b6d4119f8d0f266878c8db35ad18943da9c32ec54a774"
+    },
+    "build/research/application-catalog-full-native-20260913/run-native1.py": {
+      "bytes": 2044,
+      "sha256": "2efb561e450550063c6b8cb042231c706255ff478e1ddd35fec885c45930cccc"
+    },
+    "build/research/application-catalog-full-native-20260913/run-native2.py": {
+      "bytes": 2044,
+      "sha256": "7f36261f2540fd4614dbe16a10c8e0c7cad51ba800f2a5fc83c2a4a206f299a8"
+    },
+    "build/research/application-catalog-full-native-20260913/run-native3.py": {
+      "bytes": 2044,
+      "sha256": "25844914930eddf522feb89282ef66efba0e3dad7ba5843eaa319a32c4006856"
+    },
+    "build/research/application-catalog-full-native-20260913/run-native3b.py": {
+      "bytes": 2047,
+      "sha256": "6ce26c1083f95432a47a6a44ac27190e74b295cc500b8f3ebec20cd7b9acd743"
+    },
+    "build/research/application-catalog-full-native-20260913/study-draft.md": {
+      "bytes": 7071,
+      "sha256": "30b5d5c66e2743f2bfc87b98cd3392d50341580deaf0ddb0ea3f8da3a248a07a"
+    },
+    "build/research/application-catalog-full-native-20260913/verify-final1-producer-pin.json": {
+      "bytes": 100,
+      "sha256": "75cf5f4e53c3649e135520664184bd94909165dceac21bf7aaa60f7ce3462e3b"
+    },
+    "build/research/application-catalog-full-native-20260913/verify-final1.py": {
+      "bytes": 4996,
+      "sha256": "28ec987a9b45730156922ba80a2b9d30f24128f41c74e4f9aa6bf946b24bbbb6"
+    },
+    "build/research/application-catalog-full-native-20260913/verify-publication1-producer-pin.json": {
+      "bytes": 100,
+      "sha256": "3a21d06a38d1b56e0986c078639414f05ac2c917673fdd83cd4ce6f593bac5b2"
+    },
+    "build/research/application-catalog-full-native-20260913/verify-publication1.py": {
+      "bytes": 4009,
+      "sha256": "2a9607799c3030bfadd6b8e8b1f50115992b0f5db43ad68da1e85de84aa912ae"
+    },
+    "build/research/application-catalog-full-native-20260913/publication-count-correction1.json": {
+      "bytes": 488,
+      "sha256": "adc4efe4f1c7f3d81eb9191877fac3e6a917a9698a97069efead3f534378c612"
+    },
+    "build/research/application-catalog-full-native-20260913/terminal-review-metadata1-error.json": {
+      "bytes": 288,
+      "sha256": "12f5b2b0e286ee1f10d97a90f1442f55097ea51bd6af872f7a7ccde8de447645"
+    }
+  },
+  "terminalIndependentReview": {
+    "status": "finite_acceptance_supported_no_material_blockers",
+    "path": "build/research/application-catalog-full-native-20260913/review6-final-evidence.json",
+    "pin": {
+      "bytes": 21884,
+      "sha256": "210962da3477fb5d11bf8d65c2f908293d5cec291098fc2d25e06da62775bc95"
+    },
+    "reviewedEvidenceBeforeMetadata": {
+      "path": "build/research/application-catalog-full-native-20260913/reviewed-evidence-before-terminal-metadata.json",
+      "pin": {
+        "bytes": 32463,
+        "sha256": "f0765aa36ef4b6cd8063561e1809936df37c97ef796151ab37787c59a91d39f3"
+      }
+    },
+    "metadataOnlyAdditionAfterReview": true
+  }
+}
