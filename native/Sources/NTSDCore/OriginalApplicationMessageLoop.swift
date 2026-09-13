@@ -22,6 +22,40 @@ public struct OriginalApplicationMessageLoop {
     public private(set) var timer: OriginalApplicationTimer
     public private(set) var counter: UInt32
     public private(set) var message: OriginalStateRecord
+    /// Suspended43e9a0 game-dispatch call. The enclosing owner must retain the
+    /// same staged Context and operation journal. This is not a committed tick.
+    public struct PendingDispatch {
+        private let loop: OriginalApplicationMessageLoop
+        private let prepared: OriginalApplicationTimer.Prepared
+        public let target: UInt32
+        fileprivate init(loop: OriginalApplicationMessageLoop,prepared: OriginalApplicationTimer.Prepared,target: UInt32) {
+            self.loop = loop;self.prepared = prepared;self.target = target
+        }
+        /// Continue after the actual child result. Only recovery, the final
+        /// clock/sleep and counter tail run; no queue or dispatch prefix repeats.
+        /// Value-semantic Context and external effects remain staged through
+        /// beforeCommit. Install the returned loop together with that Context.
+        public func resume<Context>(dispatchResult: Int32,context: inout Context,
+            perform: (Request,inout Context) throws -> Response,
+            counterWritten: (UInt32) throws -> Void = { _ in },
+            beforeCommit: (OriginalApplicationMessageLoop,Context,Result) throws -> Void = { _,_,_ in }) throws -> Completion {
+            var next = loop,staged = context
+            func call(_ kind: Request.Kind,_ args: [UInt32] = []) throws -> Response {
+                let response = try perform(.init(kind,args),&staged)
+                guard response.writes.isEmpty else { throw OriginalStateError.invalidStorage("Only message retrieval owns MSG output writes") }
+                return response
+            }
+            try next.timer.finish(prepared,dispatchResult:dispatchResult,
+                time:{ UInt32(bitPattern:try call(.time).result) },
+                recoverSurface:{ _ = try call(.recoverSurface) },sleep:{ _ = try call(.sleep,[$0]) })
+            try next.finishIteration(context:staged,counterWritten:counterWritten,beforeCommit:beforeCommit)
+            context = staged
+            return .init(loop:next,result:.continued)
+        }
+    }
+    public struct Completion {
+        public let loop: OriginalApplicationMessageLoop,result: Result
+    }
     /// Baseline comes from own startup's timeGetTime/srand result. Counter is the
     /// separately owned458580 word. Native stack backing is initially unknown.
     public init(baseline: UInt32,counter: UInt32) throws {
@@ -33,6 +67,7 @@ public struct OriginalApplicationMessageLoop {
     /// MSG bytes. Zero reads wParam before the epilogue and skips counter update.
     public mutating func step<Context>(context: inout Context,
         speed: (Context) throws -> Int32,target: (Context) throws -> UInt32,
+        beforeGameDispatch: (PendingDispatch,Context) throws -> Void = { _,_ in },
         perform: (Request,inout Context) throws -> Response,
         counterWritten: (UInt32) throws -> Void = { _ in },
         beforeCommit: (Self,Context,Result) throws -> Void = { _,_,_ in }) throws -> Result {
@@ -61,12 +96,26 @@ public struct OriginalApplicationMessageLoop {
             _ = try call(.translate,message:next.message)
             _ = try call(.dispatchMessage,message:next.message)
         } else {
-            try next.timer.iterate(speedFlag:speed(staged),time:{ UInt32(bitPattern:try call(.time).result) },target:{ try target(staged) },
-                dispatch:{ try call(.gameDispatch,[$0]).result },recoverSurface:{ _ = try call(.recoverSurface) },sleep:{ _ = try call(.sleep,[$0]) })
+            let prepared = try next.timer.prepare(speedFlag:speed(staged),time:{ UInt32(bitPattern:try call(.time).result) },target:{ try target(staged) })
+            if let target = prepared.target {
+                let pending = PendingDispatch(loop:next,prepared:prepared,target:target)
+                try beforeGameDispatch(pending,staged)
+                let response = try call(.gameDispatch,[target])
+                let completed = try pending.resume(dispatchResult:response.result,context:&staged,
+                    perform:perform,counterWritten:counterWritten,beforeCommit:beforeCommit)
+                self = completed.loop;context = staged;return completed.result
+            }
+            try next.timer.finish(prepared,dispatchResult:nil,time:{ UInt32(bitPattern:try call(.time).result) },
+                recoverSurface:{ _ = try call(.recoverSurface) },sleep:{ _ = try call(.sleep,[$0]) })
         }
-        next.counter &+= 1;try counterWritten(next.counter)
-        if Int32(bitPattern:next.counter) > 60 { next.counter = 0;try counterWritten(0) }
         result = .continued
-        try beforeCommit(next,staged,result);self = next;context = staged;return result
+        try next.finishIteration(context:staged,counterWritten:counterWritten,beforeCommit:beforeCommit)
+        self = next;context = staged;return result
+    }
+    private mutating func finishIteration<Context>(context: Context,counterWritten: (UInt32) throws -> Void,
+        beforeCommit: (Self,Context,Result) throws -> Void) throws {
+        counter &+= 1;try counterWritten(counter)
+        if Int32(bitPattern:counter) > 60 { counter = 0;try counterWritten(0) }
+        try beforeCommit(self,context,.continued)
     }
 }

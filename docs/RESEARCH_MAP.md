@@ -283,6 +283,17 @@ current World/aliases, каталог/423 WAV owners/20 command bytes и пол�
 ошибка Native2 и все frozen-кандидаты сохранены; правила Core/expected не менялись.
 Следующая композиция —41c581 input/loading caller, outer loop и backend publication.
 
+[Сохранение внешнего цикла при загрузке](research/APPLICATION_LOADED_RETURN.md)
+закрывает одну необходимую связь: PendingLoading теперь удерживает MSG/masks,
+prepared timer и counter. Его resume продолжает только tail после dispatcher.
+16 release-тестов прошли64.236с/build313.44с; сохранённые2025 timer cases/8163
+events проверены также через1215 suspensions, три собственных loading parent
+сохраняют правильный outer baseline. Их подставленный Native-only return не
+является новым original loaded return. Неуспешные варианты теста сохранены,
+Core/expected после первого запуска не менялись. [План](research/APPLICATION_LOADED_RETURN_PLAN.md)
+всего input/menu/outer return остаётся открытым: actual music/precision/aliases,
+11 menu DIB и enclosing commit ещё требуют соединения. [Evidence](evidence/application-loaded-return.json).
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных

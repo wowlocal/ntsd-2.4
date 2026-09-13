@@ -350,9 +350,25 @@ review закрыл существенные замечания. Все916 Nativ
 Native1 pass, неисполненный frozen2 и Native2 compile error сохранены;
 финальный candidate3 меняет лишь конфликтовавшее локальное имя теста.
 
+Открыта [карточка собственного loaded return](APPLICATION_LOADED_RETURN_PLAN.md).
+Её [промежуточная зависимость](APPLICATION_LOADED_RETURN.md) теперь сохраняет
+PendingLoading.loopContinuation: текущие MSG/masks, prepared timer и counter.
+Resume выполняет только оставшийся tail после результата dispatcher, без
+повторных queue/time-prefix/dispatch.16 release-тестов прошли64.236с/build313.44с:
+2025 сохранённых timer cases/8163 events,1215 suspended continuations и три
+собственных loading parent. Native-only tail не считается original loaded return.
+Неисполненный candidate1 и неуспешный Native1/candidate2 сохранены; candidate3
+исправляет только новый тест. Native2 terminal0; [evidence](../evidence/application-loaded-return.json).
+
 **Следующая задача — продолжить PendingInput с41c581 через input/loading caller
 к outer loop и backend publication.** Сохранить собственные pool/UI, текущий
 каталог, звуки, RNG, полные records/masks, aliases и whole-attempt rollback.
+Сначала связать текущие World/Actor tokens и savedPlayback800 bytes/0x320 с
+общим input handler; передать actual WinMain.output.music и явный arithmetic
+context. StartupSounds хранит только WAV; пустой music owner неверен. Сохранены
+11 menu DIB/1290322 bytes, но их runtime package и независимая проверка ещё нужны.
+После library menu/actual returns использовать сохранённый loopContinuation;
+enclosing owner должен проверить актуальность, counter alias и однократную публикацию.
 Не подставлять expected after-state. Полный original application return и draw
 consumers новых catalog/UI surfaces остаются открыты. Completed captures,
 включая terminal candidate5 после28 Objects, не перезапускать.

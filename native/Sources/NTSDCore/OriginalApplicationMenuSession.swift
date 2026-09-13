@@ -123,6 +123,7 @@ public struct OriginalApplicationMenuSession {
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {
         public let state: State, target: UInt32
+        public let loopContinuation: Loop.PendingDispatch
         public let stagedEffects: [Effect]
         public let stagedGraphics: [OriginalApplicationGraphics.Command]
         public func makeLoadingSession() throws -> OriginalApplicationLoadingSession {
@@ -159,6 +160,7 @@ public struct OriginalApplicationMenuSession {
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
         try state.validateAliases()
         var next = self, effects: [Effect] = []
+        var loopContinuation: Loop.PendingDispatch?
         var bitmapInputs = state.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
         var graphics = state.graphics, graphicsCommands: [OriginalApplicationGraphics.Command] = []
         func emit(_ effect: Effect) throws {
@@ -231,6 +233,7 @@ public struct OriginalApplicationMenuSession {
             let result = try next.loop.step(context:&next.state,
                 speed:{ try $0.full.integer(at:0x2c,as:Int32.self) },
                 target:{ try $0.full.integer(at:0x4dac,as:UInt32.self) },
+                beforeGameDispatch:{ pending,_ in loopContinuation = pending },
                 perform:{ request, owned in
                     if request.kind != .gameDispatch {
                         guard request.kind != .recoverSurface else { throw Boundary.dependency("Application surface recovery") }
@@ -454,7 +457,8 @@ public struct OriginalApplicationMenuSession {
                     owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings;owned.bitmapInputs = bitmapInputs;owned.graphics = graphics
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
-                        throw Loading(pending:.init(state:owned,target:game.target,stagedEffects:effects,stagedGraphics:graphicsCommands))
+                        guard let loopContinuation else { throw Boundary.dependency("Missing loading loop continuation") }
+                        throw Loading(pending:.init(state:owned,target:game.target,loopContinuation:loopContinuation,stagedEffects:effects,stagedGraphics:graphicsCommands))
                     }
                     guard continuation == .returned else { throw Boundary.dependency("Menu continuation "+continuation.rawValue) }
                     try point(.worldReturn,owned.full,initialization == nil ? nil : responses.presentation)
