@@ -5,13 +5,14 @@ import Foundation
 public enum OriginalMenuReturn {
     public static func advance(state: inout OriginalMatchPreparation,memory: inout OriginalMenuPresentationMemory,
         input: OriginalMenuPresentationInput,milliseconds: UInt32,fillBacking: [UInt8]?,wholeEarlyReturn: Bool,
+        readMilliseconds: (() throws -> UInt32)? = nil,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (String,OriginalMatchPreparation) throws -> Void = { _,_ in }) throws {
         var world = state.world,globals = state.globals,text: OriginalLibSurfaceText?
         let original = state
         try execute(world:&world,globals:&globals,memory:&memory,libraryText:&text,
-            input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,
+            input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,readMilliseconds:readMilliseconds,
             draw:draw,observe:observe,checkpoint:{ name,world,globals in
                 var candidate = original;candidate.world = world;candidate.globals = globals
                 try checkpoint(name,candidate)
@@ -23,12 +24,13 @@ public enum OriginalMenuReturn {
     public static func advanceWithLibrary(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
         memory: inout OriginalMenuPresentationMemory,libraryText: inout OriginalLibSurfaceText,
         input: OriginalMenuPresentationInput,milliseconds: UInt32,fillBacking: [UInt8]?,wholeEarlyReturn: Bool,
+        readMilliseconds: (() throws -> UInt32)? = nil,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in },
         checkpoint: (String,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws {
         var text: OriginalLibSurfaceText? = libraryText
         try execute(world:&world,globals:&globals,memory:&memory,libraryText:&text,
-            input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,
+            input:input,milliseconds:milliseconds,fillBacking:fillBacking,wholeEarlyReturn:wholeEarlyReturn,readMilliseconds:readMilliseconds,
             draw:draw,observe:observe,checkpoint:checkpoint)
         libraryText = text!
     }
@@ -36,6 +38,7 @@ public enum OriginalMenuReturn {
     private static func execute(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
         memory: inout OriginalMenuPresentationMemory,libraryText: inout OriginalLibSurfaceText?,
         input: OriginalMenuPresentationInput,milliseconds: UInt32,fillBacking: [UInt8]?,wholeEarlyReturn: Bool,
+        readMilliseconds: (() throws -> UInt32)? = nil,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (String,OriginalStateRecord,OriginalStateRecord) throws -> Void) throws {
@@ -73,8 +76,9 @@ public enum OriginalMenuReturn {
         try OriginalMenuPresentation.presentSurface(globals: candidateGlobals,observe: event)
         if try word(0x44d020) == 0 {
             try write(0x451158,0)
-            try observe(.init("timer",[milliseconds]))
-            try write(0x451154,Int32(bitPattern: milliseconds))
+            let now = try readMilliseconds?() ?? milliseconds
+            try observe(.init("timer",[now]))
+            try write(0x451154,Int32(bitPattern: now))
         }
         try checkpoint("matchBeforeReturn",candidateWorld,candidateGlobals)
         if wholeEarlyReturn {

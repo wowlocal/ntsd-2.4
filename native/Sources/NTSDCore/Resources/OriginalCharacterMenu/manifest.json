@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "entries": [
+    {
+      "name": "CHARMENU",
+      "path": "CHARMENU.dib",
+      "count": 1030532,
+      "sha256": "a6b67a1d5e115a0fbe2c89396b5f0b752d811853eca8b3f2417642dc89677676"
+    },
+    {
+      "name": "CM1",
+      "path": "CM1.dib",
+      "count": 9088,
+      "sha256": "41faf88412cffb35293d30386c4ad68992decd7e5c861db9a158669545384258"
+    },
+    {
+      "name": "CM2",
+      "path": "CM2.dib",
+      "count": 9088,
+      "sha256": "51c5a89f1fa4b8f261043a3fbe09d8dd993ab47db49c301269cece6f6b3c35d0"
+    },
+    {
+      "name": "CM3",
+      "path": "CM3.dib",
+      "count": 9088,
+      "sha256": "4835cda2eb6bd2b52a3b259914289dd70313998c9148098c768eb76f8e9640df"
+    },
+    {
+      "name": "CM4",
+      "path": "CM4.dib",
+      "count": 9088,
+      "sha256": "0b1509f1c03d27cc69326bacf51afd5f1d9ac7a910f045295b9d6c3b8345146e"
+    },
+    {
+      "name": "CM5",
+      "path": "CM5.dib",
+      "count": 9088,
+      "sha256": "dbb9c0ee8aef96b633dbd182867c7bb0b50527dc745b637bdea1aa6f6ef4c599"
+    },
+    {
+      "name": "CMA",
+      "path": "CMA.dib",
+      "count": 23800,
+      "sha256": "bd4f9e975913a6e1565c64bdffdf445052a9b3e8af80d85e7c382905256ca078"
+    },
+    {
+      "name": "CMA2",
+      "path": "CMA2.dib",
+      "count": 23800,
+      "sha256": "2c89096ea6d3d29a6beb26a7fff4e25ce38fc4a168706263bfe8e78a1e61e72f"
+    },
+    {
+      "name": "CMC",
+      "path": "CMC.dib",
+      "count": 112928,
+      "sha256": "79f31d2cdb43608fcc36027d72d31f03a9cd041345f3152fc7d05405e9bcb3ab"
+    },
+    {
+      "name": "RFACE",
+      "path": "RFACE.dib",
+      "count": 43240,
+      "sha256": "9ce6ddc0be8052baedc418fd0458a4be19c8d76bd740771ba377a2fe2666ebfc"
+    },
+    {
+      "name": "SPARK",
+      "path": "SPARK.dib",
+      "count": 10582,
+      "sha256": "b9fed1eb667e7f12ad5e2a871c1f0ec92ddad8a91824db11e56c4f0669e1a69d"
+    }
+  ]
+}

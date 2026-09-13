@@ -305,6 +305,19 @@ match нет.11menuDIB подготовлены и независимо пров
 package/menu/outer-return/backend ещё открыты. [Evidence](evidence/application-loaded-input.json).
 
 
+[Загруженное меню и его enclosing iteration](research/APPLICATION_LOADED_MENU.md)
+продолжают actual input child с retained music,11fresh bitmap owners и shared
+library screen/panel/loading/early return. UUID/revision связывают результат с
+исходной Session; outer tail завершается один раз, все aliases/owners сохраняются.
+Два backing варианта сверяют15resource checkpoints/99bitmaprecords+11finals;
+whole appended graphics projection и полный final State сравниваются отдельно.
+43 bundled release-метода прошли281.445с/build318.05с;956Native files,
+383fixtures/381old unchanged,471package files и архивы проверены.
+[Evidence](evidence/application-loaded-menu.json). Новый whole-original app match
+и backend/device не заявлены. NEXT — next ordinary iteration/application consumer
+с current music/background/menu owners; historical startup/earlyScreen не заменяют их.
+
+
 [Полный input preflight](research/APPLICATION_CATALOG_FULL_INPUTS.md) проверил
 156 DAT/registry+365 WAV+669 images/647179902bytes и400returned WAV controls.
 Старый sameCPU audio adapter повторно использует PCM mappings для отдельных

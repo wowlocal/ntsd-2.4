@@ -1,0 +1,1346 @@
+{
+  "schema": 1,
+  "UTC": "2026-09-13T10:43:49.427459+00:00",
+  "baseCommit": "c53d409f5ddf9c7850eaf7ece767d1037ab1eb41",
+  "status": "Native owned loaded menu and enclosing iteration verified and independently accepted within declared boundary; full loaded-return card open",
+  "scope": "Actual input menu child through retained music,11fresh resources, installed-library screen/panel/loading/early return and originating outer timer tail. No original execution or new whole-original application match.",
+  "nativeCodePins": {
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+      "bytes": 19903,
+      "sha256": "1fc91f836ce283dae9b3618f56e0ff36fa71796fe20702c01a86203c6f569115"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMenuInputs.swift": {
+      "bytes": 3302,
+      "sha256": "f83f7df891181de6b8509f958321945ea3aa4ea2b0cfdb70e2273111da013515"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift": {
+      "bytes": 6967,
+      "sha256": "db2d7723fbf24ff5a41abf93b66bd7713cfa3e306195b4f699d617c2f3fa2b5e"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+      "bytes": 38123,
+      "sha256": "b0ea7ae54681d3541e5ade3fa676061d3a066e565042a015700016c9d874e69d"
+    },
+    "native/Sources/NTSDCore/OriginalMenuReturn.swift": {
+      "bytes": 6169,
+      "sha256": "644361d957aeaf9817e1f93859a12a4d8c031358112b193190a51f8de6361356"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionTests.swift": {
+      "bytes": 26977,
+      "sha256": "0b3d92c993ed61dd1f48388e955561795a30231c144e385b54154527d9d3f8ec"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": {
+      "bytes": 26964,
+      "sha256": "c7b894922364efa6b73b4ac7cbfa5e49512423366feb8421e8416cdf0d86342e"
+    },
+    "native/Package.swift": {
+      "bytes": 2667,
+      "sha256": "657b12719f42e4bba14ab8e12ed0665ee6225ecdfab537fff61ced585f8c8237"
+    },
+    "tools/package_assets.py": {
+      "bytes": 1798,
+      "sha256": "30fbd2aae591342013de3337b3cbb7ce72a338afebb90bfe1d8ce843a6d4cdaa"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+      "bytes": 27286,
+      "sha256": "468f609626d3cb55998fcf574b6f95bdb616e9d48fd771c4f89d848ac80b040c"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputsTests.swift": {
+      "bytes": 5333,
+      "sha256": "040567c98779e6ed9fd24756cb7ed96cd87d14910be4198886d70caf2190e5bc"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogGraphicsComparison.swift": {
+      "bytes": 19156,
+      "sha256": "c373f031b2723a36a7f1a06b238853e0c5564fa4c9686a4f3a008402d689a249"
+    }
+  },
+  "changedNativePins": {
+    "native/Package.swift": {
+      "bytes": 2667,
+      "sha256": "657b12719f42e4bba14ab8e12ed0665ee6225ecdfab537fff61ced585f8c8237"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+      "bytes": 19903,
+      "sha256": "1fc91f836ce283dae9b3618f56e0ff36fa71796fe20702c01a86203c6f569115"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift": {
+      "bytes": 6967,
+      "sha256": "db2d7723fbf24ff5a41abf93b66bd7713cfa3e306195b4f699d617c2f3fa2b5e"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMenuInputs.swift": {
+      "bytes": 3302,
+      "sha256": "f83f7df891181de6b8509f958321945ea3aa4ea2b0cfdb70e2273111da013515"
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+      "bytes": 38123,
+      "sha256": "b0ea7ae54681d3541e5ade3fa676061d3a066e565042a015700016c9d874e69d"
+    },
+    "native/Sources/NTSDCore/OriginalMenuReturn.swift": {
+      "bytes": 6169,
+      "sha256": "644361d957aeaf9817e1f93859a12a4d8c031358112b193190a51f8de6361356"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CHARMENU.dib": {
+      "bytes": 1030532,
+      "sha256": "a6b67a1d5e115a0fbe2c89396b5f0b752d811853eca8b3f2417642dc89677676"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM1.dib": {
+      "bytes": 9088,
+      "sha256": "41faf88412cffb35293d30386c4ad68992decd7e5c861db9a158669545384258"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM2.dib": {
+      "bytes": 9088,
+      "sha256": "51c5a89f1fa4b8f261043a3fbe09d8dd993ab47db49c301269cece6f6b3c35d0"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM3.dib": {
+      "bytes": 9088,
+      "sha256": "4835cda2eb6bd2b52a3b259914289dd70313998c9148098c768eb76f8e9640df"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM4.dib": {
+      "bytes": 9088,
+      "sha256": "0b1509f1c03d27cc69326bacf51afd5f1d9ac7a910f045295b9d6c3b8345146e"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM5.dib": {
+      "bytes": 9088,
+      "sha256": "dbb9c0ee8aef96b633dbd182867c7bb0b50527dc745b637bdea1aa6f6ef4c599"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMA.dib": {
+      "bytes": 23800,
+      "sha256": "bd4f9e975913a6e1565c64bdffdf445052a9b3e8af80d85e7c382905256ca078"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMA2.dib": {
+      "bytes": 23800,
+      "sha256": "2c89096ea6d3d29a6beb26a7fff4e25ce38fc4a168706263bfe8e78a1e61e72f"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMC.dib": {
+      "bytes": 112928,
+      "sha256": "79f31d2cdb43608fcc36027d72d31f03a9cd041345f3152fc7d05405e9bcb3ab"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/RFACE.dib": {
+      "bytes": 43240,
+      "sha256": "9ce6ddc0be8052baedc418fd0458a4be19c8d76bd740771ba377a2fe2666ebfc"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/SPARK.dib": {
+      "bytes": 10582,
+      "sha256": "b9fed1eb667e7f12ad5e2a871c1f0ec92ddad8a91824db11e56c4f0669e1a69d"
+    },
+    "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/manifest.json": {
+      "bytes": 1943,
+      "sha256": "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/menu-dib-pixels.bin": {
+      "bytes": 2330528,
+      "sha256": "ef6bd3187239f5de0f2affd7900103623ec7e4360b57fbe56fa7fe96126ab84d"
+    },
+    "native/Tests/NTSDCoreTests/Fixtures/menu-dib-pixels.json": {
+      "bytes": 360730,
+      "sha256": "d3a7a06c2c0625c239ca340b29e20c1ef835c5f8591dd41b6eb084dd32006679"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogGraphicsComparison.swift": {
+      "bytes": 19156,
+      "sha256": "c373f031b2723a36a7f1a06b238853e0c5564fa4c9686a4f3a008402d689a249"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionTests.swift": {
+      "bytes": 26977,
+      "sha256": "0b3d92c993ed61dd1f48388e955561795a30231c144e385b54154527d9d3f8ec"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+      "bytes": 27286,
+      "sha256": "468f609626d3cb55998fcf574b6f95bdb616e9d48fd771c4f89d848ac80b040c"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": {
+      "bytes": 26964,
+      "sha256": "c7b894922364efa6b73b4ac7cbfa5e49512423366feb8421e8416cdf0d86342e"
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputsTests.swift": {
+      "bytes": 5333,
+      "sha256": "040567c98779e6ed9fd24756cb7ed96cd87d14910be4198886d70caf2190e5bc"
+    }
+  },
+  "preservation": {
+    "UTC": "2026-09-13T10:38:38.516633+00:00",
+    "consumedPins": {
+      "native2.log": {
+        "bytes": 38756,
+        "sha256": "b30aa36b01ae26bd166087be431c5599e7d0434fe566c9a2759d91d07d320f80"
+      },
+      "native2.job.json": {
+        "bytes": 1475,
+        "sha256": "45d176df63950d5c2e6f1cec5bae4d986fe52488dbb33fba19291bedf8489fd8"
+      },
+      "native2.config.json": {
+        "bytes": 1333,
+        "sha256": "c72aec97208c688e64ab4a1af11c9638f1305431df02a5eae8ee492d10c4361a"
+      },
+      "candidate2-inputs.json": {
+        "bytes": 170557,
+        "sha256": "d0b7f1df4ce300eb68fe1f3137267fe6b69947adc99baa85bd548dfe027e0c3e"
+      },
+      "review5-provider.json": {
+        "bytes": 27151,
+        "sha256": "eb2b83e28e7fc7ebe1a59e627846e58236b337d451cb3db6b722282d1eb272fd"
+      },
+      "review6-publication-precheck.json": {
+        "bytes": 21443,
+        "sha256": "d53b2ee6f33c9e10649cd4f6757f156fd63b7888cf83549a592ade00330aac21"
+      },
+      "amendment7-background-count.json": {
+        "bytes": 690,
+        "sha256": "12c44b21c6c573f2b43ce6b1f951f7e40595631031966d22e0b7c6d821e7144e"
+      },
+      "native1.log": {
+        "bytes": 43366,
+        "sha256": "e50bdfca9e45287ed446fe37618841fd34f0d3d2b9af192705d4b9dc3a72af9c"
+      },
+      "native1.job.json": {
+        "bytes": 1475,
+        "sha256": "9454a4a4a562446331d93d79432a13291d217c6b40c091217da080ac20e6c89c"
+      },
+      "native1.config.json": {
+        "bytes": 1333,
+        "sha256": "af113dd26fb8e7e84b3caeadc29ad3be233b2a9d5a749db4ab4e3d7b394b4053"
+      },
+      "candidate1-inputs.json": {
+        "bytes": 170557,
+        "sha256": "4bbe7aba4d9d6afa54ef2895a38597234a4087b9e676c6683ab1e0e0fb6a0f0a"
+      },
+      "review3-tests.json": {
+        "bytes": 20436,
+        "sha256": "c2e6a449bcc064a91a2fb917258fd09cb4fbe5b8875e2bfa2c99768d895151c4"
+      },
+      "review4-publication-precheck.json": {
+        "bytes": 13719,
+        "sha256": "30bb09809a6d687ef7dfe710b3801db73267afb027388ca4d238763320a41ff4"
+      },
+      "amendment6-native-provider.json": {
+        "bytes": 683,
+        "sha256": "dc5e9c6dee6a473f824d24937fda571e5872de5bf408e144ea696408c7c1cead"
+      },
+      "native3.log": {
+        "bytes": 38056,
+        "sha256": "e8d0d2065f4d07803290a7d9266deff7b64962f1f07ed9a0b50304c0ad483892"
+      },
+      "native3.job.json": {
+        "bytes": 1473,
+        "sha256": "1fbd3d15224c3b632847ec5283b09afe3f9deef0475f0a50165e2a5280656ae3"
+      },
+      "native3.config.json": {
+        "bytes": 1333,
+        "sha256": "5f11fa1acb3ac92b7b0d7d58da2b8b89756e395347c287f44b253ecf4507d90d"
+      },
+      "candidate3-inputs.json": {
+        "bytes": 170557,
+        "sha256": "5616a4402a161da4581bb618141a5141abddfa3add949312645ea782385a3f96"
+      },
+      "review7-background.json": {
+        "bytes": 27375,
+        "sha256": "77f00097e820ec1eec5a5f84addd796a90b201bd11fdca9c3e64a9a600239d61"
+      },
+      "validation-plan1.json": {
+        "bytes": 1191,
+        "sha256": "8687c4fc516dd18f95f0f0e715c22da8b1c0157dbd2fd250cc7d06c21dbfec48"
+      },
+      "expected-test-methods1.json": {
+        "bytes": 3213,
+        "sha256": "12859838c356cd01244260eba6838fb24423111d305b74e4586537be156df72a"
+      },
+      "plan1.json": {
+        "bytes": 7464,
+        "sha256": "da1c116191521ce67397fef9384b20d26e78a83de165e306ef8bc23065b0d5b6"
+      },
+      "native-base-pins.json": {
+        "bytes": 167365,
+        "sha256": "b7cd412e82ba7055db6e46e603cfb98cf9a992b5175271a7c059b870f536a9d4"
+      },
+      "verify-stage3.py": {
+        "bytes": 9411,
+        "sha256": "51241eafe60b4feb025a7a25b09b9bb8cf96bcb331f2c6f9290956b8c8574328"
+      }
+    },
+    "nativeFiles": 956,
+    "baseFiles": 938,
+    "nativeBytes": 4438045745,
+    "changed": {
+      "native/Package.swift": {
+        "bytes": 2667,
+        "sha256": "657b12719f42e4bba14ab8e12ed0665ee6225ecdfab537fff61ced585f8c8237"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": {
+        "bytes": 19903,
+        "sha256": "1fc91f836ce283dae9b3618f56e0ff36fa71796fe20702c01a86203c6f569115"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift": {
+        "bytes": 6967,
+        "sha256": "db2d7723fbf24ff5a41abf93b66bd7713cfa3e306195b4f699d617c2f3fa2b5e"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationMenuInputs.swift": {
+        "bytes": 3302,
+        "sha256": "f83f7df891181de6b8509f958321945ea3aa4ea2b0cfdb70e2273111da013515"
+      },
+      "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+        "bytes": 38123,
+        "sha256": "b0ea7ae54681d3541e5ade3fa676061d3a066e565042a015700016c9d874e69d"
+      },
+      "native/Sources/NTSDCore/OriginalMenuReturn.swift": {
+        "bytes": 6169,
+        "sha256": "644361d957aeaf9817e1f93859a12a4d8c031358112b193190a51f8de6361356"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CHARMENU.dib": {
+        "bytes": 1030532,
+        "sha256": "a6b67a1d5e115a0fbe2c89396b5f0b752d811853eca8b3f2417642dc89677676"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM1.dib": {
+        "bytes": 9088,
+        "sha256": "41faf88412cffb35293d30386c4ad68992decd7e5c861db9a158669545384258"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM2.dib": {
+        "bytes": 9088,
+        "sha256": "51c5a89f1fa4b8f261043a3fbe09d8dd993ab47db49c301269cece6f6b3c35d0"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM3.dib": {
+        "bytes": 9088,
+        "sha256": "4835cda2eb6bd2b52a3b259914289dd70313998c9148098c768eb76f8e9640df"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM4.dib": {
+        "bytes": 9088,
+        "sha256": "0b1509f1c03d27cc69326bacf51afd5f1d9ac7a910f045295b9d6c3b8345146e"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CM5.dib": {
+        "bytes": 9088,
+        "sha256": "dbb9c0ee8aef96b633dbd182867c7bb0b50527dc745b637bdea1aa6f6ef4c599"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMA.dib": {
+        "bytes": 23800,
+        "sha256": "bd4f9e975913a6e1565c64bdffdf445052a9b3e8af80d85e7c382905256ca078"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMA2.dib": {
+        "bytes": 23800,
+        "sha256": "2c89096ea6d3d29a6beb26a7fff4e25ce38fc4a168706263bfe8e78a1e61e72f"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/CMC.dib": {
+        "bytes": 112928,
+        "sha256": "79f31d2cdb43608fcc36027d72d31f03a9cd041345f3152fc7d05405e9bcb3ab"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/RFACE.dib": {
+        "bytes": 43240,
+        "sha256": "9ce6ddc0be8052baedc418fd0458a4be19c8d76bd740771ba377a2fe2666ebfc"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/SPARK.dib": {
+        "bytes": 10582,
+        "sha256": "b9fed1eb667e7f12ad5e2a871c1f0ec92ddad8a91824db11e56c4f0669e1a69d"
+      },
+      "native/Sources/NTSDCore/Resources/OriginalCharacterMenu/manifest.json": {
+        "bytes": 1943,
+        "sha256": "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/menu-dib-pixels.bin": {
+        "bytes": 2330528,
+        "sha256": "ef6bd3187239f5de0f2affd7900103623ec7e4360b57fbe56fa7fe96126ab84d"
+      },
+      "native/Tests/NTSDCoreTests/Fixtures/menu-dib-pixels.json": {
+        "bytes": 360730,
+        "sha256": "d3a7a06c2c0625c239ca340b29e20c1ef835c5f8591dd41b6eb084dd32006679"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationCatalogGraphicsComparison.swift": {
+        "bytes": 19156,
+        "sha256": "c373f031b2723a36a7f1a06b238853e0c5564fa4c9686a4f3a008402d689a249"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionTests.swift": {
+        "bytes": 26977,
+        "sha256": "0b3d92c993ed61dd1f48388e955561795a30231c144e385b54154527d9d3f8ec"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift": {
+        "bytes": 27286,
+        "sha256": "468f609626d3cb55998fcf574b6f95bdb616e9d48fd771c4f89d848ac80b040c"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift": {
+        "bytes": 26964,
+        "sha256": "c7b894922364efa6b73b4ac7cbfa5e49512423366feb8421e8416cdf0d86342e"
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputsTests.swift": {
+        "bytes": 5333,
+        "sha256": "040567c98779e6ed9fd24756cb7ed96cd87d14910be4198886d70caf2190e5bc"
+      }
+    },
+    "fixturesUnchanged": 381,
+    "currentFixtures": 383,
+    "packagedFiles": 471,
+    "sourcePins": {
+      "AGENTS.md": {
+        "pin": {
+          "bytes": 9743,
+          "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/AGENTS.md",
+        "currentPin": {
+          "bytes": 9743,
+          "sha256": "534b8d2b6f25c6661f3f501962ca22cdec4cd04b94030c63ebd4493f772c22f0"
+        }
+      },
+      "AGENTS_HISTORY_2026-09-12.md": {
+        "pin": {
+          "bytes": 364046,
+          "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/AGENTS_HISTORY_2026-09-12.md",
+        "currentPin": {
+          "bytes": 364046,
+          "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+        }
+      },
+      "docs/CONTINUE_GOAL.md": {
+        "pin": {
+          "bytes": 7743,
+          "sha256": "223ad1dca37505f844ca97dd1cfaa00db8131e8d54322a4800b72531578311c6"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/CONTINUE_GOAL.md",
+        "currentPin": {
+          "bytes": 7743,
+          "sha256": "223ad1dca37505f844ca97dd1cfaa00db8131e8d54322a4800b72531578311c6"
+        }
+      },
+      "docs/research/WORKFLOW.md": {
+        "pin": {
+          "bytes": 25142,
+          "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/WORKFLOW.md",
+        "currentPin": {
+          "bytes": 25142,
+          "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395"
+        }
+      },
+      "docs/research/TASK_TEMPLATE.md": {
+        "pin": {
+          "bytes": 10500,
+          "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/TASK_TEMPLATE.md",
+        "currentPin": {
+          "bytes": 10500,
+          "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f"
+        }
+      },
+      "docs/research/CURRENT_WORK.md": {
+        "pin": {
+          "bytes": 43114,
+          "sha256": "4d7a223999281e9ad06b46d23c9a2a496ef99d61fc4c57e00d469c13c6d83309"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/CURRENT_WORK.md",
+        "currentPin": {
+          "bytes": 43114,
+          "sha256": "4d7a223999281e9ad06b46d23c9a2a496ef99d61fc4c57e00d469c13c6d83309"
+        }
+      },
+      "docs/RESEARCH_MAP.md": {
+        "pin": {
+          "bytes": 255295,
+          "sha256": "33e628c9eec1631505a2d8400cbcc1be17b0fee20c1ea335c087c72d9362655b"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/RESEARCH_MAP.md",
+        "currentPin": {
+          "bytes": 255295,
+          "sha256": "33e628c9eec1631505a2d8400cbcc1be17b0fee20c1ea335c087c72d9362655b"
+        }
+      },
+      "docs/research/APPLICATION_LOADED_RETURN_PLAN.md": {
+        "pin": {
+          "bytes": 7401,
+          "sha256": "de6404cda3b9b8eeca03f9ca7cfc9fd1eebca08814dce39502ade6fcdb989046"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/APPLICATION_LOADED_RETURN_PLAN.md",
+        "currentPin": {
+          "bytes": 7401,
+          "sha256": "de6404cda3b9b8eeca03f9ca7cfc9fd1eebca08814dce39502ade6fcdb989046"
+        }
+      },
+      "docs/research/APPLICATION_LOADED_INPUT.md": {
+        "pin": {
+          "bytes": 6703,
+          "sha256": "1cfc2ed613d32ba955c30adfa59b80f24005a71022edb9527fca8438c212dd33"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/APPLICATION_LOADED_INPUT.md",
+        "currentPin": {
+          "bytes": 6703,
+          "sha256": "1cfc2ed613d32ba955c30adfa59b80f24005a71022edb9527fca8438c212dd33"
+        }
+      },
+      "docs/research/FRESH_LIBRARY_MENU.md": {
+        "pin": {
+          "bytes": 10141,
+          "sha256": "84cba8ae91c295d4dd47a6266b8fae137bcf98db321d016d194925b8bd223250"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/FRESH_LIBRARY_MENU.md",
+        "currentPin": {
+          "bytes": 10141,
+          "sha256": "84cba8ae91c295d4dd47a6266b8fae137bcf98db321d016d194925b8bd223250"
+        }
+      },
+      "docs/research/LIB_MENU_CONTINUATION.md": {
+        "pin": {
+          "bytes": 10069,
+          "sha256": "fc7ff10315520c21aa333e0387a7653c784009eab561a09cca43eeb4d4747157"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/LIB_MENU_CONTINUATION.md",
+        "currentPin": {
+          "bytes": 10069,
+          "sha256": "fc7ff10315520c21aa333e0387a7653c784009eab561a09cca43eeb4d4747157"
+        }
+      },
+      "docs/research/MENU_RETURN.md": {
+        "pin": {
+          "bytes": 10957,
+          "sha256": "6c8834212bcabf7b58d025ed43a84795ff2792e39a0fbc12636f920bb0b09711"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/MENU_RETURN.md",
+        "currentPin": {
+          "bytes": 10957,
+          "sha256": "6c8834212bcabf7b58d025ed43a84795ff2792e39a0fbc12636f920bb0b09711"
+        }
+      },
+      "docs/research/MENU_STARTUP.md": {
+        "pin": {
+          "bytes": 11585,
+          "sha256": "f7fa9b0f2c727341b4701d3e581cc9b80a56981f7be4208e16e2382342acca1a"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/MENU_STARTUP.md",
+        "currentPin": {
+          "bytes": 11585,
+          "sha256": "f7fa9b0f2c727341b4701d3e581cc9b80a56981f7be4208e16e2382342acca1a"
+        }
+      },
+      "docs/research/CHARACTER_MENU_MUSIC_SURFACE.md": {
+        "pin": {
+          "bytes": 8137,
+          "sha256": "617e0e3cb0b1df54f95bbaef463240e620b667e8681b5b573b0df833ab1b19a4"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/CHARACTER_MENU_MUSIC_SURFACE.md",
+        "currentPin": {
+          "bytes": 8137,
+          "sha256": "617e0e3cb0b1df54f95bbaef463240e620b667e8681b5b573b0df833ab1b19a4"
+        }
+      },
+      "docs/research/MENU_RESOURCES.md": {
+        "pin": {
+          "bytes": 14075,
+          "sha256": "ad1afec71b3a46ef67191ab62eaf6b040cfd5756bc2811096ca6a17c945fc8f2"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/MENU_RESOURCES.md",
+        "currentPin": {
+          "bytes": 14075,
+          "sha256": "ad1afec71b3a46ef67191ab62eaf6b040cfd5756bc2811096ca6a17c945fc8f2"
+        }
+      },
+      "docs/research/MODE_PANEL_SCREEN.md": {
+        "pin": {
+          "bytes": 8028,
+          "sha256": "72230fa8003dcc53457643b4100fa6e33174beea3b1f42785696eb2c9b06c741"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/research/MODE_PANEL_SCREEN.md",
+        "currentPin": {
+          "bytes": 8028,
+          "sha256": "72230fa8003dcc53457643b4100fa6e33174beea3b1f42785696eb2c9b06c741"
+        }
+      },
+      "docs/evidence/application-loaded-input.json": {
+        "pin": {
+          "bytes": 35061,
+          "sha256": "8455faffdc5e5e7fd214d1bc636f33f207d953a61a22e4744117c81447e98ab6"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/evidence/application-loaded-input.json",
+        "currentPin": {
+          "bytes": 35061,
+          "sha256": "8455faffdc5e5e7fd214d1bc636f33f207d953a61a22e4744117c81447e98ab6"
+        }
+      },
+      "docs/evidence/fresh-library-menu.json": {
+        "pin": {
+          "bytes": 27442,
+          "sha256": "207bb6cd09e9ac5c355236c62fed8a302140095a4aa123d8b0dd1bc965712c4d"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/evidence/fresh-library-menu.json",
+        "currentPin": {
+          "bytes": 27442,
+          "sha256": "207bb6cd09e9ac5c355236c62fed8a302140095a4aa123d8b0dd1bc965712c4d"
+        }
+      },
+      "docs/evidence/menu-return.json": {
+        "pin": {
+          "bytes": 1410,
+          "sha256": "a099cfc8ae2e69d8f7a9295f09dac234e70c14a0419e791e83420b364afe45e3"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/evidence/menu-return.json",
+        "currentPin": {
+          "bytes": 1410,
+          "sha256": "a099cfc8ae2e69d8f7a9295f09dac234e70c14a0419e791e83420b364afe45e3"
+        }
+      },
+      "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+        "pin": {
+          "bytes": 38476,
+          "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/base-inputs/docs/evidence/codex-safety-incidents-2026-09-12.json",
+        "currentPin": {
+          "bytes": 38476,
+          "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a"
+        }
+      },
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs-review1.json": {
+        "pin": {
+          "bytes": 17696,
+          "sha256": "b1a938a0ca47cad5fac491243720f7654e1f5bb8e5579f4a02beef116ab3d476"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs-review1.json",
+        "currentPin": {
+          "bytes": 17696,
+          "sha256": "b1a938a0ca47cad5fac491243720f7654e1f5bb8e5579f4a02beef116ab3d476"
+        }
+      },
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1.json": {
+        "pin": {
+          "bytes": 445,
+          "sha256": "8f817ee31cc32ec47f668b2d70ef3d91edbf64d09884dd3daba98b043382231d"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1.json",
+        "currentPin": {
+          "bytes": 445,
+          "sha256": "8f817ee31cc32ec47f668b2d70ef3d91edbf64d09884dd3daba98b043382231d"
+        }
+      },
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/package/manifest.json": {
+        "pin": {
+          "bytes": 1943,
+          "sha256": "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/package/manifest.json",
+        "currentPin": {
+          "bytes": 1943,
+          "sha256": "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161"
+        }
+      },
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/menu-dib-pixels.json": {
+        "pin": {
+          "bytes": 360730,
+          "sha256": "d3a7a06c2c0625c239ca340b29e20c1ef835c5f8591dd41b6eb084dd32006679"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/menu-dib-pixels.json",
+        "currentPin": {
+          "bytes": 360730,
+          "sha256": "d3a7a06c2c0625c239ca340b29e20c1ef835c5f8591dd41b6eb084dd32006679"
+        }
+      },
+      "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/menu-dib-pixels.bin": {
+        "pin": {
+          "bytes": 2330528,
+          "sha256": "ef6bd3187239f5de0f2affd7900103623ec7e4360b57fbe56fa7fe96126ab84d"
+        },
+        "preservedPath": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-input-native-20260913/menu-inputs1/menu-dib-pixels.bin",
+        "currentPin": {
+          "bytes": 2330528,
+          "sha256": "ef6bd3187239f5de0f2affd7900103623ec7e4360b57fbe56fa7fe96126ab84d"
+        }
+      }
+    },
+    "testCount": 43,
+    "testSeconds": 281.445,
+    "buildSeconds": 318.05,
+    "tests": [
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testCatalogAllocationCannotOverlapRetainedCommonPCM",
+        "seconds": 6.973
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+        "seconds": 9.826
+      },
+      {
+        "suite": "OriginalApplicationCatalogSessionTests",
+        "name": "testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+        "seconds": 37.491
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationGraphicsTests",
+        "name": "testResolvedSourceSnapshotAndNullSourceBoundary",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testCurrentAliasesUnknownBytesAndReturnedResourceChanges",
+        "seconds": 18.642
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testEveryLateInputFailureKeepsParentAndEnvironment",
+        "seconds": 0.034
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testInvalidBindingAndConflictingWritersRejectAtomically",
+        "seconds": 0.001
+      },
+      {
+        "suite": "OriginalApplicationInputTests",
+        "name": "testOwnLoadedInputRetainsCurrentOwnersAtAllSixCheckpoints",
+        "seconds": 0.034
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+        "seconds": 16.776
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testForeignStaleAndOverlappingOwnersAreRejected",
+        "seconds": 0.051
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+        "seconds": 0.15
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoadedMenuTests",
+        "name": "testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+        "seconds": 0.234
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testOwnLoadingParentsRetainTheirActualLoopContinuation",
+        "seconds": 6.595
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testResumedCounterUsesSignedWrapRule",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testRetainedMessageAndEveryLateTailFailure",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationLoopContinuationTests",
+        "name": "testSuspendedTailAgainstAllSavedTimerDecisions",
+        "seconds": 0.043
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "seconds": 10.398
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "seconds": 42.816
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationMenuInputTests",
+        "name": "testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "seconds": 3.239
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testElevenOriginalDIBsFullPixelsMasksAndRows",
+        "seconds": 0.057
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testMissingCorruptExtraAndSymlinkPackagesAreRejected",
+        "seconds": 0.059
+      },
+      {
+        "suite": "OriginalApplicationMenuInputsTests",
+        "name": "testOrdinaryAppPackageAndOwnedSnapshot",
+        "seconds": 0.012
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testCompleteOwnedCatalogPoolAndInterface",
+        "seconds": 1.756
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testLateFailuresKeepWholeEntryAndFreshRetry",
+        "seconds": 15.353
+      },
+      {
+        "suite": "OriginalApplicationPoolTests",
+        "name": "testOwnedRangeAndCapturedWriteBoundaries",
+        "seconds": 33.732
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testPackageRejectsMissingCorruptAndUnexpectedFiles",
+        "seconds": 0.263
+      },
+      {
+        "suite": "OriginalApplicationStartupInputsTests",
+        "name": "testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+        "seconds": 0.156
+      },
+      {
+        "suite": "OriginalFreshCharacterMenuTests",
+        "name": "testFreshResourcesHumanCharacterBodyAndActualReturns",
+        "seconds": 5.843
+      },
+      {
+        "suite": "OriginalFreshCharacterMenuTests",
+        "name": "testLateFreshMenuFailuresRollBackEveryOwner",
+        "seconds": 2.812
+      },
+      {
+        "suite": "OriginalFreshLibraryMenuTests",
+        "name": "testFreshMusicResourcesScreenAndActualReturns",
+        "seconds": 3.205
+      },
+      {
+        "suite": "OriginalFreshLibraryMenuTests",
+        "name": "testLateFreshMenuFailuresRollBackEveryOwner",
+        "seconds": 1.166
+      },
+      {
+        "suite": "OriginalMenuCycleTests",
+        "name": "testOwnOuterCallsAcquireKeyboardOnOriginalPhaseAndConfirmVS",
+        "seconds": 12.27
+      },
+      {
+        "suite": "OriginalMenuCycleTests",
+        "name": "testSameSequenceWithRampBackingAndReverseActorAddresses",
+        "seconds": 12.228
+      },
+      {
+        "suite": "OriginalMenuReturnTests",
+        "name": "testOwnModeScreenReturnsThroughMenuMatchAndEarlyDispatcher",
+        "seconds": 11.945
+      },
+      {
+        "suite": "OriginalMenuReturnTests",
+        "name": "testSameReturnsWithRampBackingAndOriginalReverseAddresses",
+        "seconds": 12.027
+      },
+      {
+        "suite": "OriginalMenuStartupTests",
+        "name": "testOwnMenuLoadingContinuesThroughInputRoundAndCharacterMenuResources",
+        "seconds": 7.652
+      },
+      {
+        "suite": "OriginalMenuStartupTests",
+        "name": "testSameStartupWithRetainedRampResourcesAndReverseActorAddresses",
+        "seconds": 7.602
+      }
+    ],
+    "job": {
+      "scope": "Native-only release owned loaded-menu and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate3-inputs.json",
+      "nativeFiles": 956,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T10:28:04.967305+00:00",
+      "pid": 64023,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 601.0669685,
+      "endedUTC": "2026-09-13T10:38:06.045056+00:00"
+    },
+    "exactJobConfigCandidateCommandAndFilterVerified": true,
+    "allRootFrozenAndPackageBytesVerified": true,
+    "originalExecuted": false,
+    "fullOriginalApplicationReturnMatched": false,
+    "backendPublished": false,
+    "fullGoalComplete": false
+  },
+  "failedCandidate1": {
+    "job": {
+      "scope": "Native-only release owned loaded-menu and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate1-inputs.json",
+      "nativeFiles": 956,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T10:00:05.022305+00:00",
+      "pid": 59131,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 609.744130917,
+      "endedUTC": "2026-09-13T10:10:14.772534+00:00"
+    },
+    "methods": 43,
+    "passedMethods": 39,
+    "failedMethods": 4,
+    "failures": 13,
+    "unexpected": 4,
+    "testSeconds": 281.771,
+    "buildSeconds": 324.86,
+    "reason": "Test provider incorrectly returned success for2010fileimage againstembeddedDIB; Core rejected image binding. Candidate2 corrects only4testlines; independent saved API pairs establish2010->0 then2000->handle.",
+    "coreChanged": false,
+    "expectedChanged": false
+  },
+  "failedCandidate2": {
+    "job": {
+      "scope": "Native-only release owned loaded-menu and enclosing outer-loop validation against saved fixtures.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationLoadedMenuTests|OriginalApplicationMenuInputsTests|OriginalApplicationInputTests|OriginalApplicationPoolTests|OriginalApplicationCatalogSessionTests|OriginalApplicationLoopContinuationTests|OriginalApplicationMenuInputTests|OriginalMenuStartupTests|OriginalMenuReturnTests|OriginalMenuCycleTests|OriginalFreshLibraryMenuTests|OriginalFreshCharacterMenuTests|OriginalApplicationStartupInputsTests|OriginalApplicationGraphicsTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate2-inputs.json",
+      "nativeFiles": 956,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-13T10:13:35.322830+00:00",
+      "pid": 61550,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 604.392985208,
+      "endedUTC": "2026-09-13T10:23:39.732311+00:00"
+    },
+    "methods": 43,
+    "passedMethods": 42,
+    "failedMethods": 1,
+    "failures": 2,
+    "unexpected": 0,
+    "testSeconds": 281.74,
+    "buildSeconds": 320.93,
+    "reason": "New test expected index10 but actual parent background slot alreadyzero and sharedscreen loads12thbitmap. Candidate3 strengthens parentzero/background checks and corrects index11. Saved priorRelease/free/clear establishes provenance; Core/source expected unchanged."
+  },
+  "nativeArchive": {
+    "UTC": "2026-09-13T10:38:45.538711+00:00",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native-candidate3.tar",
+    "pin": {
+      "bytes": 4439767040,
+      "sha256": "e707d7242c10e5a0d8783ef5ee2d13ca0be4087ee7b335422ca4c61b3ea6331c"
+    },
+    "members": 956,
+    "payloadBytes": 4438045745,
+    "namesTypesSizesModesAndAllBodiesVerified": true
+  },
+  "evidenceArchive": {
+    "UTC": "2026-09-13T10:39:04.002487+00:00",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/menu-join-evidence3.tar",
+    "pin": {
+      "bytes": 43315200,
+      "sha256": "5b4a2328abd88543d48ab3f6e6e3b1e279c0f416b2940177832835442d05babc"
+    },
+    "members": 124,
+    "payloadBytes": 43082728,
+    "namesTypesSizesModesAndAllBodiesVerified": true,
+    "originalExecuted": false,
+    "NativeExecuted": false,
+    "taskUsedBytes": 23315464192
+  },
+  "independentReview": {
+    "stage": "Final code, Native results, package/archive and evidence review complete",
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review9-final.json",
+    "pin": {
+      "bytes": 32655,
+      "sha256": "542e9656193851aaa309a2ff0ca0f031ad1e65f5ba5176cc6a384ee2ef989a3d"
+    },
+    "materialBlockers": [],
+    "nativeLoadedMenuAccepted": true,
+    "fullCardAccepted": false
+  },
+  "comparison": {
+    "ownNative": "Full retained catalog/pool/input parent; two allocation backings; actual music; all current owners, operation/graphics journal and full outer final State",
+    "savedResources": "Per backing:15checkpoints,99checkpointbitmaprecords,11finalrecords,full bytes/masks; prior source fixtures unchanged",
+    "graphics": "Independent terminal-operation projection and pinned RGB/masks compare all appended commands and complete graphics owners for declared success replies",
+    "nativeControls": "9menu failures,outer time/sleep/observer rollback/retry,stale/foreign/repeated completion,overlaps,NULLSPARK rejection,idempotentzero-background and lazyclock",
+    "package": "11DIB/1290322bytes,582632knownpixels/1388rows; strict12file package; ordinary temporary app reader checked; tools/package_assets.py copy addition reviewed/syntax checked but full packager not executed"
+  },
+  "limits": [
+    "Full original application correspondence remains open.",
+    "No backend publication, window, device raster, audio or clean-Mac claim.",
+    "Global-only internal checkpoints; coherent full final State, not every internal API mirror.",
+    "Latest music and background owners must pass to next ordinary/application consumer; historical startup/earlyScreen are retained unchanged.",
+    "Other menu, uncached music, playback, panel IO, recovery and gameplay dependencies remain explicit.",
+    "Session value copies require host to publish only one continuation.",
+    "Journals and graphics are views of one effect batch.",
+    "Three safety incidents and source faults remain open; no refused retry."
+  ],
+  "workFiles": {
+    "amendment1-enclosing-owner.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment1-enclosing-owner.json",
+      "bytes": 1233,
+      "sha256": "eae818048942a8af1c18d2c377af1cb7854a6051572b967738eee223c6f3821a"
+    },
+    "amendment2-parent-comparison.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment2-parent-comparison.json",
+      "bytes": 573,
+      "sha256": "210cfe9bfccc3bf56bae159dfb88494c732695f759744826815bd3fda068e3bf"
+    },
+    "amendment3-package-background.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment3-package-background.json",
+      "bytes": 677,
+      "sha256": "6fbdd1fb5a2c7d423faf874f2d2635731b4ea4b17c043c2a7aabfe5ce11c9d8e"
+    },
+    "amendment4-graphics-comparison.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment4-graphics-comparison.json",
+      "bytes": 786,
+      "sha256": "18e0c62d2dd54a69b33f4be0777097128f8bb47a76d150d80306658b89dd8c89"
+    },
+    "amendment5-case-counts.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment5-case-counts.json",
+      "bytes": 793,
+      "sha256": "934170e192232ebf7c3ae69e83556f85b52007fefec0a92182edea7786af856b"
+    },
+    "amendment6-native-provider.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment6-native-provider.json",
+      "bytes": 683,
+      "sha256": "dc5e9c6dee6a473f824d24937fda571e5872de5bf408e144ea696408c7c1cead"
+    },
+    "amendment7-background-count.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/amendment7-background-count.json",
+      "bytes": 690,
+      "sha256": "12c44b21c6c573f2b43ce6b1f951f7e40595631031966d22e0b7c6d821e7144e"
+    },
+    "archive-evidence1.draft-before-review4.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/archive-evidence1.draft-before-review4.py",
+      "bytes": 4869,
+      "sha256": "790ba52198fe5101fb72a301d38b4252746702682098ca38645289e931b5754a"
+    },
+    "archive-evidence1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/archive-evidence1.py",
+      "bytes": 5164,
+      "sha256": "a3a21b243e20cde953ec306e137e847189000ba0dae44f1af3096092ad1424e7"
+    },
+    "archive-evidence2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/archive-evidence2.py",
+      "bytes": 5769,
+      "sha256": "bf63a78adcd955a707019061b204d3bca6a89e34cb04e0fb3708eae5105f1660"
+    },
+    "archive-evidence3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/archive-evidence3.py",
+      "bytes": 6128,
+      "sha256": "af21fa2f05d732ecb90c0b6a4ebaf37379111d7e20d102f90eebb2722fd977ae"
+    },
+    "candidate1-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate1-inputs.json",
+      "bytes": 170557,
+      "sha256": "4bbe7aba4d9d6afa54ef2895a38597234a4087b9e676c6683ab1e0e0fb6a0f0a"
+    },
+    "candidate2-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate2-inputs.json",
+      "bytes": 170557,
+      "sha256": "d0b7f1df4ce300eb68fe1f3137267fe6b69947adc99baa85bd548dfe027e0c3e"
+    },
+    "candidate3-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/candidate3-inputs.json",
+      "bytes": 170557,
+      "sha256": "5616a4402a161da4581bb618141a5141abddfa3add949312645ea782385a3f96"
+    },
+    "evidence-archive3-members.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/evidence-archive3-members.json",
+      "bytes": 38593,
+      "sha256": "8f5bc99965fc648815d3f9215ae7334b79e97276e66a650df1ba68dbd8f353a9"
+    },
+    "evidence-archive3.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/evidence-archive3.json",
+      "bytes": 498,
+      "sha256": "5b8999ea8400f9521be5a10389f47cbcd62df5dd754e71da102df4fd3588ff5a"
+    },
+    "expected-test-methods1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/expected-test-methods1.json",
+      "bytes": 3213,
+      "sha256": "12859838c356cd01244260eba6838fb24423111d305b74e4586537be156df72a"
+    },
+    "freeze-candidate1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/freeze-candidate1.py",
+      "bytes": 2333,
+      "sha256": "52b11ed10eb7b277e62a5d1a8ca03ca167273860fc8f4bba7c3851c6151eb83b"
+    },
+    "freeze-candidate2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/freeze-candidate2.py",
+      "bytes": 2278,
+      "sha256": "383e4fe18f81440a4ccdee0c40813d8b1836500f667755344613922bc03ffe10"
+    },
+    "freeze-candidate3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/freeze-candidate3.py",
+      "bytes": 2280,
+      "sha256": "ec33c8f525a51c0310abce77070e702c095480cb815b3f5cdc16055fbec16880"
+    },
+    "native-archive3.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native-archive3.json",
+      "bytes": 412,
+      "sha256": "6c9a6b7855e9bd535634a76a49b4ffb99707dd56f0c3dbb9a69ac720703e330a"
+    },
+    "native-base-pins.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native-base-pins.json",
+      "bytes": 167365,
+      "sha256": "b7cd412e82ba7055db6e46e603cfb98cf9a992b5175271a7c059b870f536a9d4"
+    },
+    "native1.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native1.config.json",
+      "bytes": 1333,
+      "sha256": "af113dd26fb8e7e84b3caeadc29ad3be233b2a9d5a749db4ab4e3d7b394b4053"
+    },
+    "native1.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native1.job.json",
+      "bytes": 1475,
+      "sha256": "9454a4a4a562446331d93d79432a13291d217c6b40c091217da080ac20e6c89c"
+    },
+    "native1.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native1.log",
+      "bytes": 43366,
+      "sha256": "e50bdfca9e45287ed446fe37618841fd34f0d3d2b9af192705d4b9dc3a72af9c"
+    },
+    "native2.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native2.config.json",
+      "bytes": 1333,
+      "sha256": "c72aec97208c688e64ab4a1af11c9638f1305431df02a5eae8ee492d10c4361a"
+    },
+    "native2.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native2.job.json",
+      "bytes": 1475,
+      "sha256": "45d176df63950d5c2e6f1cec5bae4d986fe52488dbb33fba19291bedf8489fd8"
+    },
+    "native2.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native2.log",
+      "bytes": 38756,
+      "sha256": "b30aa36b01ae26bd166087be431c5599e7d0434fe566c9a2759d91d07d320f80"
+    },
+    "native3.config.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native3.config.json",
+      "bytes": 1333,
+      "sha256": "5f11fa1acb3ac92b7b0d7d58da2b8b89756e395347c287f44b253ecf4507d90d"
+    },
+    "native3.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native3.job.json",
+      "bytes": 1473,
+      "sha256": "1fbd3d15224c3b632847ec5283b09afe3f9deef0475f0a50165e2a5280656ae3"
+    },
+    "native3.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/native3.log",
+      "bytes": 38056,
+      "sha256": "e8d0d2065f4d07803290a7d9266deff7b64962f1f07ed9a0b50304c0ad483892"
+    },
+    "package_assets.base.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/package_assets.base.py",
+      "bytes": 1563,
+      "sha256": "13c7045e0163dd637a33ec16bd51edb92d3ac00ff73384d450412207db9ced4c"
+    },
+    "plan1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/plan1.json",
+      "bytes": 7464,
+      "sha256": "da1c116191521ce67397fef9384b20d26e78a83de165e306ef8bc23065b0d5b6"
+    },
+    "preservation3.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/preservation3.json",
+      "bytes": 29836,
+      "sha256": "06a12f8cae284e0a778f16ff5d64cfdb40a42151ce9baaeea7b2822ce7a97dea"
+    },
+    "publish-evidence1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/publish-evidence1.py",
+      "bytes": 3754,
+      "sha256": "c436169845b9f07fcce89f5484fc270ce280defcff66ebb03bc38ff3ff3607e4"
+    },
+    "publish-evidence2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/publish-evidence2.py",
+      "bytes": 5249,
+      "sha256": "68c45a84add0e11988e19781942eba61db5a4223dfc3649b2d5819a127705baf"
+    },
+    "publish-evidence3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/publish-evidence3.py",
+      "bytes": 5698,
+      "sha256": "9fcffa122351fd208bb1cbd54023a637212044425256955c5dcc7744b8a39d76"
+    },
+    "read-format-error1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/read-format-error1.json",
+      "bytes": 408,
+      "sha256": "f115adc6f5ed38e1ee7dffa7267c5e8f44355463e99665fae8791a3ec54207b1"
+    },
+    "review1-menu-contract.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review1-menu-contract.json",
+      "bytes": 17143,
+      "sha256": "cae648fcf3dd467c242278fd8afe9f7541adaf11f5dacd0339df99a4a123ab77"
+    },
+    "review2-core.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review2-core.json",
+      "bytes": 16614,
+      "sha256": "ed9985b4372978b2dfffd6d497116382bfe8b173c9fb083082308d711010d75a"
+    },
+    "review3-tests.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review3-tests.json",
+      "bytes": 20436,
+      "sha256": "c2e6a449bcc064a91a2fb917258fd09cb4fbe5b8875e2bfa2c99768d895151c4"
+    },
+    "review4-publication-precheck.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review4-publication-precheck.json",
+      "bytes": 13719,
+      "sha256": "30bb09809a6d687ef7dfe710b3801db73267afb027388ca4d238763320a41ff4"
+    },
+    "review5-provider.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review5-provider.json",
+      "bytes": 27151,
+      "sha256": "eb2b83e28e7fc7ebe1a59e627846e58236b337d451cb3db6b722282d1eb272fd"
+    },
+    "review6-publication-precheck.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review6-publication-precheck.json",
+      "bytes": 21443,
+      "sha256": "d53b2ee6f33c9e10649cd4f6757f156fd63b7888cf83549a592ade00330aac21"
+    },
+    "review7-background.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review7-background.json",
+      "bytes": 27375,
+      "sha256": "77f00097e820ec1eec5a5f84addd796a90b201bd11fdca9c3e64a9a600239d61"
+    },
+    "review8-publication-precheck.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/review8-publication-precheck.json",
+      "bytes": 22081,
+      "sha256": "7a305266d693da93c2495f8e611fc8a3ff5fb3f34e402b389f8ab1e97bc883d7"
+    },
+    "run-native1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/run-native1.py",
+      "bytes": 2062,
+      "sha256": "c2cab155f8932d882ef0d2341755150acae82660872c5d0c0cb896749c70dbcf"
+    },
+    "run-native2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/run-native2.py",
+      "bytes": 2062,
+      "sha256": "239117a4ed264999a30c392d2d698f0787b0cfb24358a7d008bb3aedf8efdef4"
+    },
+    "run-native3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/run-native3.py",
+      "bytes": 2062,
+      "sha256": "6853928401079626bc01ca4c809d16402c69d0d5ea31158298af202ba08d51eb"
+    },
+    "update-docs1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/update-docs1.py",
+      "bytes": 5927,
+      "sha256": "231420e463e57462259244676d30964c7b6810c85671fe68bfeb0b69cc8e31c1"
+    },
+    "update-docs2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/update-docs2.py",
+      "bytes": 6257,
+      "sha256": "a4dc9ee1903fc7e1fc085b64a3702e5b96fce058b058a016736b22094aa05faa"
+    },
+    "update-docs3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/update-docs3.py",
+      "bytes": 6393,
+      "sha256": "1f653a3bf33867738cde1dab4e60e91ee4f08b8d92231a2295ef4ab3a68542c1"
+    },
+    "validation-plan1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/validation-plan1.json",
+      "bytes": 1191,
+      "sha256": "8687c4fc516dd18f95f0f0e715c22da8b1c0157dbd2fd250cc7d06c21dbfec48"
+    },
+    "verify-prospective-git1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-prospective-git1.py",
+      "bytes": 3621,
+      "sha256": "1f9b1de586350be8900137e1b18b5ef141bc99a14dfefc3e59a22770a76306b6"
+    },
+    "verify-prospective-git2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-prospective-git2.py",
+      "bytes": 3621,
+      "sha256": "7e457724e27c45c1c122f81bcfe3ba5962c610cb814affb91a9de9e5eb76a99f"
+    },
+    "verify-prospective-git3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-prospective-git3.py",
+      "bytes": 3621,
+      "sha256": "ab5efd3e15f3c186e422d7fc8a31098a4bbc50176246df4c233359072b5f2a83"
+    },
+    "verify-stage1.draft-before-review4.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-stage1.draft-before-review4.py",
+      "bytes": 5129,
+      "sha256": "7f9a37d0375bce117f19a44141a0c4da7a55737b63be64e2ebef489ed7afdffa"
+    },
+    "verify-stage1.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-stage1.py",
+      "bytes": 6975,
+      "sha256": "108268eba4eb37d1099734dab6017682dfc760fb3efb6029f18d3995db9a14bd"
+    },
+    "verify-stage2.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-stage2.py",
+      "bytes": 8353,
+      "sha256": "c0d5ca4e784edd17d64395d8bf008b6396911afb5257ec73f9d3e8a5e444d3db"
+    },
+    "verify-stage3.py": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/verify-stage3.py",
+      "bytes": 9411,
+      "sha256": "51241eafe60b4feb025a7a25b09b9bb8cf96bcb331f2c6f9290956b8c8574328"
+    }
+  },
+  "next": "Join committed loaded result/current music/background/menu owners to the next ordinary iteration and application consumer.",
+  "nativeLoadedMenuVerified": true,
+  "fullCardAccepted": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "backendPublished": false,
+  "originalExecuted": false,
+  "fullGoalComplete": false,
+  "publicationHistory": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-loaded-menu-native-20260913/evidence-publication3.json",
+      "pin": {
+        "bytes": 63543,
+        "sha256": "fd72f712a7490166800c20bce258c1f968073c03d5bd43ccabe61c747e7a19a7"
+      },
+      "reason": "Exact independently reviewed pre-final JSON retained; final change is only UTC/status/review linkage and this history, with no code/data/test change. Final review was produced after evidence archive3 and is pinned separately."
+    }
+  ]
+}

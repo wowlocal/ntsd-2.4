@@ -27,3 +27,7 @@ print(package_common_sounds(COMMON_SOURCE, destination.parent / "OriginalCommonS
 # Exact embedded DIB package consumed by the owned loading continuation.
 shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalLoadingInterface",
                 destination.parent / "OriginalLoadingInterface", dirs_exist_ok=True)
+
+# Original character-menu DIBs, consumed by the retained loaded menu.
+shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalCharacterMenu",
+                destination.parent / "OriginalCharacterMenu", dirs_exist_ok=True)

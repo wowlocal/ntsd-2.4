@@ -377,16 +377,28 @@ binding-проверка не является новым whole-original applica
 success; точный подпункт неизвестен, sample/сигнал/перезапуск не выполнялись.
 [evidence](../evidence/application-loaded-input.json) сохраняет результаты отдельно.
 
-**Следующая задача — продолжить PendingContinuation.menu через retained music,
-11 ресурсов, library screen/panel и actual loading/early returns к outer loop.**
-Подготовлены и независимо проверены11 menu DIB/1290322bytes,582632 известных
-pixels/1388rows: `build/research/application-loaded-input-native-20260913/menu-inputs1`.
-Пакет пока только рабочий: нужны runtime delivery и Native comparison, затем
-сохранённый loopContinuation, проверка актуальности, counter alias и однократная
-публикация. Полный original application return, широкие phase0/shutdown/replay/AI
-owner joins и draw consumers новых catalog/UI surfaces остаются открытыми.
-Не подставлять expected after-state. Completed captures, включая terminal
-candidate5 после28 Objects, не перезапускать.
+Принято [продолжение загруженного меню и его внешней итерации](APPLICATION_LOADED_MENU.md).
+Actual input/menu parent сохраняет WinMain music и создаёт11 bitmap owners,
+проходит shared library screen/panel/loading/early return. Исходная Session
+завершает именно свой suspended loop, проверяет UUID/revision и counter alias;
+чужой, устаревший или повторный результат отклоняется до outer IO.
+Два собственных backing варианта сравнивают по15 saved resource checkpoints:
+99 bitmap records и11 final records на вариант; полные masks и selected load flag.
+Whole operation/graphics journal, все graphics owners и полный final State
+сверены;9menu/3outer rollback points, retry, overlaps и lazy clocks проверены.
+43 bundled release-метода прошли281.445с/build318.05с на candidate3:
+956 Native-файлов,383fixtures/381прежний неизменен,471package files и архив
+сверены. [Evidence](../evidence/application-loaded-menu.json). Full original
+application match/device/backend publication этим не заявлены.
+
+**Следующая задача — передать committed loaded result и текущих menu/music/
+background owners в следующую обычную итерацию и application consumer.**
+Latest music и fresh background удерживаются в returned Snapshot/current memory;
+startup/earlyScreen остаются историческими. Следующий prefix должен явно читать
+текущего владельца, без второго воспроизведения operation/graphics journal.
+Other menu/playback/uncached music/panel IO/recovery/gameplay остаются отдельными
+зависимостями. Не подставлять expected after-state и не перезапускать completed
+captures, включая terminal candidate5 после28 Objects.
 
 Actual raster всё ещё не имеет достаточных format/palette/device inputs в
 проверенных зависимостях. Эта граница открыта; исходные RGB не становятся

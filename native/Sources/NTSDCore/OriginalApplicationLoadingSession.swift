@@ -14,6 +14,7 @@ public struct OriginalApplicationLoadingSession {
         case wave(Int,OriginalWaveEvent)
     }
     public struct PendingCatalog {
+        public let entry: Session.PendingLoading
         public let state: Session.State,target: UInt32,common: OriginalInitialLoadingCommon
         public let waveInputs: [OriginalWavePlatform]
         public let stagedOperations: [Operation],stagedGraphics: [OriginalApplicationGraphics.Command]
@@ -95,7 +96,7 @@ public struct OriginalApplicationLoadingSession {
             })
         guard consumed == waves.count else { throw Boundary.unusedReplies }
         try state.replace(0,common.globals);try state.validateAliases()
-        let prepared = PendingCatalog(state:state,target:entry.target,common:common,waveInputs:waves,
+        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,
             stagedOperations:operations,stagedGraphics:graphics)
         try beforeCatalog(prepared)
         pendingCatalog = prepared

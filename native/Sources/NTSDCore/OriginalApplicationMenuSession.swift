@@ -1,3 +1,5 @@
+import Foundation
+
 /// The retained menu path through one whole message-loop iteration. The caller
 /// supplies Native-produced parent state and declared platform replies. This
 /// core neither consumes a host queue nor performs graphics/audio/file IO.
@@ -122,6 +124,7 @@ public struct OriginalApplicationMenuSession {
     /// Child-entry evidence only. The tentative timer work in the caller has
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {
+        fileprivate let ownerID: UUID,revision: UInt64
         public let state: State, target: UInt32
         public let loopContinuation: Loop.PendingDispatch
         public let stagedEffects: [Effect]
@@ -133,6 +136,8 @@ public struct OriginalApplicationMenuSession {
     public enum Outcome { case committed(Committed), loading(PendingLoading) }
     private struct Loading: Error { let pending: PendingLoading }
 
+    private let ownerID = UUID()
+    private var revision: UInt64 = 0
     public private(set) var state: State
     public private(set) var loop: Loop
     public init(state: State,loop: Loop) throws {
@@ -159,6 +164,7 @@ public struct OriginalApplicationMenuSession {
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
         try state.validateAliases()
+        guard revision < UInt64.max else { throw Boundary.dependency("Session revision extent") }
         var next = self, effects: [Effect] = []
         var loopContinuation: Loop.PendingDispatch?
         var bitmapInputs = state.bitmapInputs ?? initialization?.bitmapResources.map { OriginalApplicationBitmapInputs(resources:$0) }
@@ -458,7 +464,7 @@ public struct OriginalApplicationMenuSession {
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
                         guard let loopContinuation else { throw Boundary.dependency("Missing loading loop continuation") }
-                        throw Loading(pending:.init(state:owned,target:game.target,loopContinuation:loopContinuation,stagedEffects:effects,stagedGraphics:graphicsCommands))
+                        throw Loading(pending:.init(ownerID:ownerID,revision:revision,state:owned,target:game.target,loopContinuation:loopContinuation,stagedEffects:effects,stagedGraphics:graphicsCommands))
                     }
                     guard continuation == .returned else { throw Boundary.dependency("Menu continuation "+continuation.rawValue) }
                     try point(.worldReturn,owned.full,initialization == nil ? nil : responses.presentation)
@@ -470,10 +476,47 @@ public struct OriginalApplicationMenuSession {
                     try beforeCommit(timer,coherent)
                 })
             try next.state.mergeAliases(counter:next.loop.counter)
-            self = next
+            next.revision += 1;self = next
             return .committed(.init(result:result,effects:effects,graphics:graphicsCommands))
         } catch let loading as Loading {
             return .loading(loading.pending)
         }
+    }
+}
+
+
+extension OriginalApplicationMenuSession {
+    public struct LoadedCommit {
+        public let result: Loop.Result
+        public let menu: OriginalApplicationLoadedMenuSession.PendingReturn
+        public let operations: [OriginalApplicationLoadedMenuSession.Operation]
+        public let graphics: [OriginalApplicationGraphics.Command]
+    }
+    /// Complete the exact suspended iteration once. A different session or any
+    /// intervening committed iteration invalidates this child before platform
+    /// work. The immutable parent remains available for diagnosis and retry.
+    @discardableResult
+    public mutating func finishLoadedMenu<Environment>(_ pending: OriginalApplicationLoadedMenuSession.PendingReturn,
+        environment: inout Environment,
+        perform: (Loop.Request,inout Environment) throws -> Loop.Response,
+        beforeCommit: (Loop,State,inout Environment) throws -> Void = { _,_,_ in }) throws -> LoadedCommit {
+        let origin = pending.loading
+        guard ownerID == origin.ownerID,revision == origin.revision,revision < UInt64.max else {
+            throw Boundary.dependency("Stale or foreign loaded continuation")
+        }
+        guard pending.exit == .returned,let result = pending.dispatcherResult else { throw Boundary.dependency("Unreturned loaded menu") }
+        try pending.snapshot.state.validateAliases()
+        var candidate = environment,staged = pending.snapshot.state,operations = pending.snapshot.operations
+        let complete = try origin.loopContinuation.resume(dispatchResult:result,context:&staged,perform:{ request,_ in
+            guard request.kind == .time || request.kind == .sleep else { throw Boundary.dependency("Loaded outer surface recovery") }
+            let response = try perform(request,&candidate)
+            operations.append(.loop(request,response));return response
+        },beforeCommit:{ timer,context,_ in
+            var coherent = context;try coherent.mergeAliases(counter:timer.counter)
+            try beforeCommit(timer,coherent,&candidate)
+        })
+        try staged.mergeAliases(counter:complete.loop.counter)
+        state = staged;loop = complete.loop;revision += 1;environment = candidate
+        return .init(result:complete.result,menu:pending,operations:operations,graphics:pending.graphics)
     }
 }

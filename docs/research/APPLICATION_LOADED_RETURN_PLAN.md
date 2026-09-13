@@ -103,3 +103,21 @@ stage retains its own 40 GiB/3600-second/three-candidate budget and the unchange
 The immediate previous turn made progress by committing and verifying delivery
 of the loop prerequisite. It did not accept the whole card. New input acceptance
 must preserve the menu and final enclosing-return requirements above.
+
+
+## Loaded menu and enclosing iteration stage
+
+The next frozen stage after `c53d409` is documented in
+[APPLICATION_LOADED_MENU](APPLICATION_LOADED_MENU.md), with evidence at
+`../evidence/application-loaded-menu.json` and bounded work under
+`build/research/application-loaded-menu-native-20260913/`. It joins the actual
+input menu child through music, resources, installed-library screen/panel and
+loading/early return to its originating outer-loop ticket. Forty-three bundled
+release methods passed; current/frozen/package bytes and archives were checked.
+The 40 GiB/3600-second/three-candidate limits and 6 GiB internal reserve remain.
+
+This accepts the declared Native menu/outer composition, not the complete card's
+original application correspondence or backend publication. The following
+ordinary iteration/application consumer must retain current music and fresh
+background/menu owners, rather than read historical startup/earlyScreen owners.
+Other menu/gameplay/playback/IO/recovery branches and real devices remain open.

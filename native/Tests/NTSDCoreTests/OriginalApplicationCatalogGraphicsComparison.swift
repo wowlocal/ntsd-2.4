@@ -22,8 +22,8 @@ final class OriginalApplicationCatalogGraphicsComparison {
         let request: C.API.Request?,response: C.API.Response?,kind: String?,event: OriginalFrontScreenEvent?
     }
     let reference: R?,bitmapResources: [String:OriginalApplicationStartupInputs.Bitmap]
-    let entry: OriginalApplicationLoadingSession.PendingCatalog
-    let prior: OriginalApplicationBitmapInputs, oldGraphics: G, golden: OriginalCatalogDIBPixelsTests.Golden
+    let priorCommands: [G.Command]
+    let prior: OriginalApplicationBitmapInputs, oldGraphics: G, golden: OriginalCatalogDIBPixelsTests.Golden?
     var eventIndex = 0,commandIndex: Int,textGeneration: Int
     var refs: [UInt32:G.Reference],next: [String:Int] = [:],creations: [G.Reference:(C.API.Request,Int32)] = [:]
     var keys: [G.Reference:(C.API.Request,Int32)] = [:],images: [UInt32:Image] = [:],surfaces: [UInt32:Surface] = [:]
@@ -33,15 +33,21 @@ final class OriginalApplicationCatalogGraphicsComparison {
     convenience init(reference: R,entry: OriginalApplicationLoadingSession.PendingCatalog) throws {
         try self.init(reference:reference,resources:reference.bitmapResources,golden:OriginalCatalogDIBPixelsTests.golden.get(),entry:entry)
     }
-    init(reference: R? = nil,resources: [String:OriginalApplicationStartupInputs.Bitmap],
+    convenience init(reference: R? = nil,resources: [String:OriginalApplicationStartupInputs.Bitmap],
          golden: OriginalCatalogDIBPixelsTests.Golden,entry: OriginalApplicationLoadingSession.PendingCatalog) throws {
-        self.reference = reference;bitmapResources = resources;self.entry = entry;self.golden = golden
-        prior = try XCTUnwrap(entry.state.bitmapInputs);oldGraphics = try XCTUnwrap(entry.state.graphics)
-        refs = oldGraphics.currentResources; textGeneration = oldGraphics.nextTextGeneration; commandIndex = entry.stagedGraphics.count
+        try self.init(reference:reference,resources:resources,golden:golden,state:entry.state,graphics:entry.stagedGraphics)
+    }
+    init(reference: R? = nil,resources: [String:OriginalApplicationStartupInputs.Bitmap],
+         golden: OriginalCatalogDIBPixelsTests.Golden? = nil,state: OriginalApplicationMenuSession.State,graphics: [G.Command],
+         colors: [String:([UInt8],[Bool],Int,Int)] = [:]) throws {
+        self.reference = reference;bitmapResources = resources;self.golden = golden;priorCommands = graphics;self.colors = colors
+        prior = try XCTUnwrap(state.bitmapInputs);oldGraphics = try XCTUnwrap(state.graphics)
+        refs = oldGraphics.currentResources;textGeneration = oldGraphics.nextTextGeneration;commandIndex = graphics.count
         for ref in oldGraphics.resources.keys { next[ref.kind] = max(next[ref.kind,default:0],ref.generation+1) }
     }
     func imageColors(_ name: String) throws -> ([UInt8],[Bool],Int,Int) {
         if let value = colors[name] { return value }
+        let golden = try XCTUnwrap(golden)
         let resource = try XCTUnwrap(golden.resources.first { $0.name == name })
         if reference != nil {
             let binding = try XCTUnwrap(R.index.get().inputs.catalogImages.first { $0.gameName == name })
@@ -75,7 +81,10 @@ final class OriginalApplicationCatalogGraphicsComparison {
         try compare(snapshot:snapshot,events:events);eventIndex = sourceEventEnd
     }
     func compare(snapshot: C.Snapshot,events: [Event]) throws {
-        XCTAssertEqual(Array(snapshot.graphics.prefix(entry.stagedGraphics.count)),entry.stagedGraphics)
+        try compare(state:snapshot.state,graphics:snapshot.graphics,events:events)
+    }
+    func compare(state: OriginalApplicationMenuSession.State,graphics: [G.Command],events: [Event]) throws {
+        XCTAssertEqual(Array(graphics.prefix(priorCommands.count)),priorCommands)
         for event in events {
             var bindings: [(String,G.Reference?)] = [],sourceRect: [Int32]?,destinationRect: [Int32]?,colorToken: UInt32?
             var dependencies: [String] = [],result: Int32 = 0,output: UInt32?,family = "bitmap"
@@ -149,6 +158,8 @@ final class OriginalApplicationCatalogGraphicsComparison {
                     sourceRect = b.source; destinationRect = b.destination
                     if source?.kind == "bitmapSurface" { colorToken = b.sourceSurface }
                     if source == nil { dependencies = ["nullSource"] }
+                case "fill":
+                    let f = try XCTUnwrap(e.fill);bindings = [("target",try ref(f.target))];destinationRect = f.rectangle
                 case "getDC":
                     output = 0x12345678; textOwner = try ref(e.arguments[0])
                     textRef = .init(kind:"textDC",token:0x12345678,generation:textGeneration); textGeneration += 1
@@ -174,8 +185,8 @@ final class OriginalApplicationCatalogGraphicsComparison {
                 default:throw R.Boundary.invalid("Unclassified loading graphics observation: "+e.kind)
                 }
             } else { continue }
-            guard commandIndex < snapshot.graphics.count else { throw R.Boundary.invalid("Missing appended graphics command") }
-            let a = snapshot.graphics[commandIndex]; commandIndex += 1
+            guard commandIndex < graphics.count else { throw R.Boundary.invalid("Missing appended graphics command") }
+            let a = graphics[commandIndex]; commandIndex += 1
             XCTAssertEqual(a.family,family); XCTAssertEqual(a.result,result); XCTAssertEqual(a.output,output)
             XCTAssertEqual(a.bindings.map(\.role),bindings.map(\.0)); XCTAssertEqual(a.bindings.map(\.ref),bindings.map(\.1))
             XCTAssertEqual(a.dependencies,dependencies); XCTAssertTrue(a.opaqueReferences.isEmpty)
@@ -187,11 +198,11 @@ final class OriginalApplicationCatalogGraphicsComparison {
             } else { XCTAssertEqual(a.event,event.event); XCTAssertNil(a.request); XCTAssertNil(a.bitmapResponse) }
             try color(a.sourceColors,colorToken)
         }
-        XCTAssertEqual(commandIndex,snapshot.graphics.count)
-        try owners(snapshot)
+        XCTAssertEqual(commandIndex,graphics.count)
+        try owners(state)
     }
-    func owners(_ snapshot: C.Snapshot) throws {
-        let a = try XCTUnwrap(snapshot.state.bitmapInputs),g = try XCTUnwrap(snapshot.state.graphics)
+    func owners(_ state: OriginalApplicationMenuSession.State) throws {
+        let a = try XCTUnwrap(state.bitmapInputs),g = try XCTUnwrap(state.graphics)
         XCTAssertEqual(Set(a.images.keys),Set(prior.images.keys).union(images.keys))
         XCTAssertEqual(Set(a.surfaces.keys),Set(prior.surfaces.keys).union(surfaces.keys))
         for (token,image) in prior.images { XCTAssertEqual(a.images[token],image) }

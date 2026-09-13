@@ -25,7 +25,7 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
                 return .init(name:"PeekMessageA",response:.init(result:try XCTUnwrap(e.result)))
             },presentation:presentation,drawResult:0,graphicsResult:0,allocationFill:0xa5)
     }
-    func withEntry(_ r: R,_ body: @escaping (OriginalApplicationLoadingSession.PendingCatalog,C.StartupSounds) throws -> Void) throws {
+    func withEntry(_ r: R,ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil,_ body: @escaping (OriginalApplicationLoadingSession.PendingCatalog,C.StartupSounds) throws -> Void) throws {
         let fr = try I.F.Resources(),br = try I.Body.Resources(fr),mr = try I.M.Resources(br,fr),ir = try I.Resources(mr)
         let bitmap = try P.B.Resources(),entry = try P.B.Entry.Resources()
         var reached = false
@@ -41,7 +41,7 @@ final class OriginalApplicationCatalogSessionTests: XCTestCase {
             let startup = try XCTUnwrap(own.bootstrap?.startup?.input?.sounds)
             let music = try XCTUnwrap(own.bootstrap?.startup?.output.music)
             try body(prepared,.init(owner:startup,platforms:r.startupWaveInputs,music:music))
-        })
+        },ownerAtLoading:ownerAtLoading)
         XCTAssertTrue(reached)
     }
     static func same(_ actual: OriginalStateRecord,_ expected: OriginalStateRecord,_ label: String) throws {

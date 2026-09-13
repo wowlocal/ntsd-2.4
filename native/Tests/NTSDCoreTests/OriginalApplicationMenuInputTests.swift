@@ -92,7 +92,8 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
         }
     }
     func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,
-             loading: ((B.OwnContext, OriginalApplicationMenuSession.PendingLoading) throws -> Void)? = nil) throws {
+             loading: ((B.OwnContext, OriginalApplicationMenuSession.PendingLoading) throws -> Void)? = nil,
+             ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil) throws {
         let c = r.c.cases[index];var reached = false,failed = false
         try M().run(r.indices[index],mr,body,front,br,er,continuation:{ initialLoop,initial in
             reached = true
@@ -218,6 +219,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         try OriginalSurfaceSourceColorsTests.compareInput(pending.state.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
                         let loadingState = try initial.receivingMenuState(pending.state)
                         try OriginalSurfaceSourceColorsTests.compareInput(loadingState.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
+                        try ownerAtLoading?(session)
                         try loading?(loadingState,pending)
                         XCTAssertEqual(a.index,iteration.eventEnd);unchanged(prior,oldEffects)
                     }
