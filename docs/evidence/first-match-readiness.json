@@ -1,0 +1,236 @@
+{
+  "schema": "first-match-readiness-v1",
+  "base": "62565b86a23a8ab66aca7f26d2d50d9cfc9342e5",
+  "scope": "Read-only milestone dependency analysis; no new Native or original acceptance",
+  "previousGoalTurn": "progress",
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "fullMatchAccepted": false,
+  "analysisOnly": true,
+  "sourceProof": {
+    "variants": 2,
+    "callsPerVariant": 48,
+    "selectedBoundariesPerCall": 5,
+    "liveActorsPerBoundary": 2,
+    "initialProtection": 58,
+    "finalProtection": 10,
+    "hpAtAllSelectedBoundaries": 500,
+    "allContactEndpointsPositiveProtection": true,
+    "allContactCountsZero": true,
+    "knownOrdinaryKind0ProtectionGate": true,
+    "soleCauseOfAllRejectionsClaimed": false,
+    "reader": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/read-active-protection2.py",
+      "bytes": 2785,
+      "sha256": "5f514a0c04ac2b37026b7014679d8927529faad166cf59f260fef963a6e107be",
+      "mode": 420
+    },
+    "result": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/active-protection2.json",
+      "bytes": 157372,
+      "sha256": "aade4925a603a0ac3c9a0708f4d83ce64f0aed6ee2245535905798ccb6468463",
+      "mode": 420
+    },
+    "failure": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/reader1-failure.json",
+      "bytes": 570,
+      "sha256": "08e2c475b504a29e5c87d5ae677c08bd117c6af2f324a0a87a5bbfcab251623f",
+      "mode": 420
+    }
+  },
+  "implementation": {
+    "genericInstalledContactCalls": 10661,
+    "genericInstalledHitCalls": 18137,
+    "currentApplicationDamageComparison": false,
+    "actualAppUses": "MeleeScene / OriginalMelee.tick",
+    "productionStartupAdapterObserved": false,
+    "onlyInspectedConcreteStartupAdapter": "OriginalWinMainStartupTests.Adapter",
+    "rasterOrAudioDeviceAcceptance": false
+  },
+  "next": {
+    "task": "Bounded Native-only first-damage diagnostic from current own Bootstrap after neutral parent",
+    "maxScenarios": 2,
+    "maxAdditionalCallsPerScenario": 160,
+    "sourceExecutionAllowedByThisCard": false,
+    "preExecutionPlanRequired": true,
+    "inputs": "Acquired directions/ordinary attack from current bindings; no Actor/HP/position/RNG/protection assignment",
+    "stop": "First complete outer return with hit-stage damage, first precise unsupported dependency or call limit; protection expiry is intermediate",
+    "acceptance": "Diagnostic outcome and preserved own state/rollback; not original equivalence",
+    "independentBranch": "Production persistent session/input/commit adapter after pinning actual platform inputs"
+  },
+  "protectedReferencePins": {
+    "docs/research/ACTOR_INPUT.md": {
+      "bytes": 13964,
+      "sha256": "3fcca09e92b43a092d7793964118179cfb6bd31db31e064fc8c0150cfe478e24",
+      "mode": 420
+    },
+    "docs/research/LIB_WORLD_CONTACTS.md": {
+      "bytes": 10165,
+      "sha256": "37a401b2c15e35978cfe20ba8235b43a78d537a3d22b576eac2326bbf5f435a4",
+      "mode": 420
+    },
+    "docs/research/LIB_WORLD_HITS.md": {
+      "bytes": 12528,
+      "sha256": "3b8566cc46d8daff620872fa7e08788b9a4b9005e7028d2a1258669018c98db2",
+      "mode": 420
+    },
+    "docs/research/APPLICATION_ACTIVE_CONTACTS.md": {
+      "bytes": 5255,
+      "sha256": "c14b2c467ed9c0917f96863783f94fb98070e8db78b8953bf6027257448f2c99",
+      "mode": 420
+    },
+    "docs/research/APPLICATION_ACTIVE_OUTPUT.md": {
+      "bytes": 6004,
+      "sha256": "8fca96a37e36c9b45553ab3b73e0ecbba67d06d5388de4ff5baa754a7d54922d",
+      "mode": 420
+    },
+    "docs/research/APPLICATION_STARTUP_INPUTS.md": {
+      "bytes": 9678,
+      "sha256": "b38a27ac0603fa9a31a5a753a8fc780794c79fa5c23c90bab403057b18db89bf",
+      "mode": 420
+    },
+    "docs/research/APPLICATION_GRAPHICS_OWNERS.md": {
+      "bytes": 9334,
+      "sha256": "26b8ee3c50a6cfcd30cd6c80b6feb48946593e0a4ac5c6d7aa467c1e4c8bf6de",
+      "mode": 420
+    },
+    "docs/research/WINDOW_INPUT.md": {
+      "bytes": 12958,
+      "sha256": "de13d4f7b585dbd22ce08df787436dbf695332dfada87433fb69b38dec124f9b",
+      "mode": 420
+    },
+    "docs/research/WINDOWS_REFERENCE_PREPARATION.md": {
+      "bytes": 4176,
+      "sha256": "f52c8f6ef997ff5a72e28b5a866d9cd310b99b525c4601e7d8f3f7d95e50db9c",
+      "mode": 420
+    },
+    "docs/research/MATCH_PREPARATION.md": {
+      "bytes": 15889,
+      "sha256": "ae63986cd78270f74c9894ac80ea6a104b91df9f710991586f81e765dea4809e",
+      "mode": 420
+    },
+    "docs/research/POSTDRAW_SLOT_PREFIX.md": {
+      "bytes": 9016,
+      "sha256": "ebe51a8b74a6704d045d8f411961de6bd182d76ba635a107c7fa6affaa0d9d3f",
+      "mode": 420
+    },
+    "docs/COMBAT.md": {
+      "bytes": 11296,
+      "sha256": "2e0ed914d5fdea9c677d0bb4499652c076888938c900ebb56b9d83bddeef52ea",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalMatchPreparation.swift": {
+      "bytes": 17988,
+      "sha256": "0f7d3790ac5033833c741545c2bb8156c537826782ab0c065166ddde8a32b5e2",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalActorScheduler.swift": {
+      "bytes": 9025,
+      "sha256": "5b8148198c2a86c861028027e5ce89291ca644c5853c1d814cd69f0e9f28cdc4",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift": {
+      "bytes": 7039,
+      "sha256": "5ab1ccb1579e2ff81ff9b7c4b6317c20252dc316ee622bc814198311e9dd1c42",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalApplicationInputSession.swift": {
+      "bytes": 7305,
+      "sha256": "e945a186c2d7205ae50bc1d21f71162de72c02180782b0a35e767ca69aa9238f",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift": {
+      "bytes": 10071,
+      "sha256": "2a77ec7f2846dc1aebc4aef3847226f7c0c06f7210dbec728b889cd42a7a76c8",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift": {
+      "bytes": 39536,
+      "sha256": "e2623e7e32c80c0875a92c0d50ebf753ffb9596ca4def04e873eb38c169138a1",
+      "mode": 420
+    },
+    "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift": {
+      "bytes": 28836,
+      "sha256": "59da36ec520cab31491a5af77b02b8f510f02327b5aa7306e3d80e345876ff2f",
+      "mode": 420
+    },
+    "docs/evidence/lib-world-hits.json": {
+      "bytes": 4280,
+      "sha256": "4fe7c76051910f7ee3f7ae1d65b1b433c5388588007fd644e544da6513d7e3a4",
+      "mode": 420
+    },
+    "docs/evidence/lib-world-contacts.json": {
+      "bytes": 5421,
+      "sha256": "44f4ce09a5f739755c7c3c9977d878896da7e8b3aa804dfac02da0dc96911bdc",
+      "mode": 420
+    },
+    "docs/evidence/application-active-contacts.json": {
+      "bytes": 8325,
+      "sha256": "fb0a4729804b298cf85adcb968966e3c378f0797106c5bac2609fe65cb3046ff",
+      "mode": 420
+    },
+    "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420
+    }
+  },
+  "initial": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/initial1.json",
+    "bytes": 3052,
+    "sha256": "c6fb0f0e204a4384cb604bfd1f99cb886e42ba32c9f385bccc57fa63d24609ac",
+    "mode": 420
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/plan1.md",
+    "bytes": 2526,
+    "sha256": "fe863bf3452c567a4bfd9b1a0dcf78000cd4f68ed791c75aa694cdfec54bb856",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/readiness-evidence1.tar",
+    "bytes": 972800,
+    "sha256": "cf30089be095e7efccd3d5c0bcbec2b9e321b8a4d55455f74b37f37c034edc7e",
+    "mode": 420,
+    "members": 12,
+    "allBodiesAndModesReadBack": true
+  },
+  "archiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/archive1.json",
+    "bytes": 2317,
+    "sha256": "7b84f40810e56bbbb54ba02c1907beec587732b16384b9d7d1a5037062df4831",
+    "mode": 420
+  },
+  "nativeUnchangedFromBase": true,
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "remaining": [
+    "Unprotected damaging whole application comparison",
+    "Lethal/round/menu/epilogue and complete match",
+    "Production app startup/platform/session/input/commit adapter",
+    "Raster/audio/Windows/device/clean-Mac acceptance",
+    "Complete content/modes/AI/network/replays",
+    "Existing safety incidents"
+  ],
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/review1-readiness-publication.json",
+    "bytes": 57546,
+    "sha256": "f9e720acfcf26542b9db72fb522c172bd76a1b1896256b00543c4666005f2a63",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/publication1.json",
+    "bytes": 765,
+    "sha256": "22b4b2e678fe4baeee3932900507faf12531597a5e973cdcb652f4cb6dd97fa3",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-match-readiness-20260914/reviewed-evidence1.json",
+    "bytes": 8714,
+    "sha256": "639db5053975f4c874c64bdb90daa4863ef7f86e3f7596bcfab1808966c0b6d1",
+    "mode": 420
+  }
+}
