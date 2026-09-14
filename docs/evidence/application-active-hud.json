@@ -1,0 +1,217 @@
+{
+  "schema": "owned-active-hud-comparison-v1",
+  "base": "0c1e6d4344e9c13a0de58108119281d0b1f67b5f",
+  "scope": "Complete finite HUD from current commands output on both retained48-call schedules",
+  "finiteHUDStageCompared": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullCardScope": "whole active body",
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 96,
+  "ownEndpoints": 96,
+  "sourceEvents": [
+    5952,
+    8640
+  ],
+  "sourceUnknownBitmapReads": [
+    960,
+    2496
+  ],
+  "savedSourceSnapshotsUnchanged": true,
+  "sourceCommandStoresCompared": 192,
+  "controlledHUDCasesRevalidated": 1753,
+  "controlledPausedHUDCasesRevalidated": 1789,
+  "newOwnedLateRollbacks": 6,
+  "newSameSessionRetries": 2,
+  "parentLateRollbacksRetained": true,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNativeFPUComparison": false,
+  "wholeCommandExtentAndOwnerRelationsCompared": true,
+  "laterStageEffectSemanticsAccepted": false,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 HUD comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplication(ActiveHUD|ActiveCommands)Tests|OriginalWorldHUDTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/candidate3-inputs.json",
+      "nativeFiles": 1012,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T03:34:44.695324+00:00",
+      "pid": 78687,
+      "status": "terminal",
+      "processIdentity": "78687 Mon Sep 14 06:34:44 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/candidate3/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/swift --jobs 4 -c release --filter (OriginalApplication(ActiveHUD|ActiveCommands)Tests|OriginalWorldHUDTests)/",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/candidate3/native",
+      "exitCode": 0,
+      "elapsedSeconds": 627.865773084,
+      "endedUTC": "2026-09-14T03:45:12.566097+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveCommandsTests",
+        "method": "testControlOwnedCommandsProjection",
+        "seconds": 77.542
+      },
+      {
+        "suite": "OriginalApplicationActiveCommandsTests",
+        "method": "testPrimaryOwnedCommandsProjection",
+        "seconds": 56.492
+      },
+      {
+        "suite": "OriginalApplicationActiveHUDTests",
+        "method": "testControlOwnedHUDProjection",
+        "seconds": 60.9
+      },
+      {
+        "suite": "OriginalApplicationActiveHUDTests",
+        "method": "testPrimaryOwnedHUDProjection",
+        "seconds": 60.923
+      },
+      {
+        "suite": "OriginalWorldHUDTests",
+        "method": "testEntireHUDCallerWithOriginalBitmapChildren",
+        "seconds": 7.361
+      },
+      {
+        "suite": "OriginalWorldHUDTests",
+        "method": "testHUDCalleePreservesPausedCommands",
+        "seconds": 7.503
+      },
+      {
+        "suite": "OriginalWorldHUDTests",
+        "method": "testLaterObserverFailureRestoresCommandFlags",
+        "seconds": 0.001
+      },
+      {
+        "suite": "OriginalWorldHUDTests",
+        "method": "testLaterResourceFailureRestoresCommandFlags",
+        "seconds": 0.001
+      }
+    ],
+    "testSeconds": 270.723,
+    "buildSeconds": 354.74,
+    "stdout": {
+      "bytes": 176998,
+      "sha256": "1b2be9985af1f9632ed7fe1cf3d9f0c2a4ea0f922b94c5849eea760591a0a4a5",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 24999,
+      "sha256": "cc112b14f2a6a9d0196944b9f14737fe1cc6b90327d27a741dd16bf6b6223145",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1012,
+  "oldNativeFilesUnchanged": 1008,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 8,
+  "inheritedMethodsNotRerun": 151,
+  "uniqueRetainedMethods": 159,
+  "changedHelperPathsExercisedTransitively": [
+    "ActiveCommands callback forwarding through full parent chain"
+  ],
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/verification3.json",
+    "bytes": 150911,
+    "sha256": "31c76881573972cc0a339a3cfe1908e1b04ee891ceec15ba1b9fcff2eed169b8",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/review4-hud-candidate3.json",
+    "bytes": 39820,
+    "sha256": "36410f67f64af04f4fd826ba1ccff7ad12f0fab32298e609dad8cd28c2425d70",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/review1-hud-contract.json",
+    "bytes": 128286,
+    "sha256": "d2e42a34350e588a878728fb7d37cdd2bae18c1674bf9eb0a0bb07a8f16bdb4c",
+    "mode": 420
+  },
+  "savedInputInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/inventory2.json",
+    "bytes": 819868,
+    "sha256": "3f3561d16d1e761d4c8a06679bcfbad1c6a5aa11fa272c06841f2e0d5f70d66b",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/native-candidate3.tar",
+    "pin": {
+      "bytes": 4442378240,
+      "sha256": "f98c7a83a27c22ac19114cba0a1a4fd719e933d40d1aee03689d5551c37ec820",
+      "mode": 420
+    },
+    "members": 1012,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/hud-evidence1.tar",
+    "bytes": 3328000,
+    "sha256": "1f116efb565a5a9a386e6ff6728cab36f3a40e9bb7fd271dc1b62bf55e789217",
+    "mode": 420,
+    "members": 66,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/evidence-archive1.json",
+    "bytes": 11631,
+    "sha256": "a5c315a569d9bfc918af4421bd9de64b6bc0e930d3e0e36e4d3845319641a14b",
+    "mode": 420
+  },
+  "rejectedCandidateRestoration": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/rejected-restoration1.json",
+    "bytes": 5101,
+    "sha256": "ca7d2174073af9f37104ee4132199ad114a84b64f47be8c58c2f8c968a37acff",
+    "mode": 420
+  },
+  "next": "Compare complete active notices from current owned HUD output, then recording/layout/output.",
+  "remaining": [
+    "Four later body stages and whole active tick",
+    "Broader gameplay branches beyond this finite active schedule",
+    "Unavailable middle source Object/Frame heap snapshots",
+    "Full helper ABI, Native FPU context and all instruction stores",
+    "Full match/game and app/window/input/audio integration",
+    "Actual device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/review5-hud-publication.json",
+    "bytes": 39718,
+    "sha256": "0a2bbc3789dbcc3edb3a44e6b794098b1f96db3716b21b84e59860ade39c43c1",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/publication1.json",
+    "bytes": 1835,
+    "sha256": "03f5dd476fdeaa5afb72423d3622c31e9231191861d212cb04ba4549413b171e",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-hud-native-20260914/reviewed-evidence1.json",
+    "bytes": 8131,
+    "sha256": "f1ba063a10a9472551507e0ce3e87e1fd2d0fbea621bb557c1000e7995e2c5f2",
+    "mode": 420
+  }
+}

@@ -8,7 +8,7 @@ final class OriginalApplicationActiveCommandsTests: XCTestCase {
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let sourceCount = try OriginalApplicationActiveCommandsSource(reverse).compare()
         var predecessor: M.Snapshot?,endpoint: M.Snapshot?,count = 0
         try OriginalApplicationActiveLifecycleTests().sequence(reverse,onBody:{ call,ready,event in
@@ -48,6 +48,7 @@ final class OriginalApplicationActiveCommandsTests: XCTestCase {
                 predecessor = nil;endpoint = snapshot;count += 1
             default:break
             }
+            try onBody?(call,ready,event)
         },onReturn:{ call,ready,result in
             let snapshot = try XCTUnwrap(endpoint)
             for slot in 0..<400 where try snapshot.match.world.integer(at:4+slot,as:UInt8.self) == 0 {
@@ -57,6 +58,7 @@ final class OriginalApplicationActiveCommandsTests: XCTestCase {
             }
             print("Owned active commands: control=\(reverse), call=\(call.index), complete stage records/owners/journal; later5 semantics OPEN")
             endpoint = nil
+            try onReturn?(call,ready,result)
         })
         try P.require(count == 48 && predecessor == nil && endpoint == nil,"Own complete commands sequence")
         print("Owned active commands comparison: control=\(reverse), \(sourceCount) source endpoints, \(count) own endpoints, no primitive effects; full tick/match/game OPEN")

@@ -557,11 +557,29 @@ Reader FPSW/export ошибки и уточнение scope отчёта сох�
 терминален в `build/research/application-owned-active-commands-native-20260914/`;
 не перезапускать. [Evidence](evidence/application-active-commands.json),
 [план](research/APPLICATION_ACTIVE_COMMANDS_PLAN.md).
-**Остальные пять стадий и полный active tick остаются открытыми.**
-NEXT — полное сравнение HUD из текущего собственного commands output по saved
-active48; затем notices/recording/layout/output. До реализации закрепить полный
-контракт HUD, включая command flag resets, текущие bars/text/bitmap reads,
-владельцев и журнал, по его прямым зависимостям.
+После commands пять стадий оставались открытыми. Принято
+[сравнение active HUD](research/APPLICATION_ACTIVE_HUD.md):96 source и96 собственных
+endpoints из текущего commands output, полные records/masks, ordered bitmap/
+read/clip/rectangle/Blt events, владельцы и journal. Source primary5952events/
+960unknown reads, control8640/2496; обе собственные последовательности5952/960
+вычислены отдельно из собственных текущих записей. Сравнены192 source command
+stores; stack argument не импортируется какtarget. Шесть новых поздних откатов
+и два повтора в той же сессии прошли.
+Восемь release-методов прошли за270.723с/build354.74с, включая1753 controlled
+active HUD и1789 paused cases;151 остальных методов сохранены по pins.
+Все1012 Native-файлов и485 package files сверены,1008 старых файлов неизменны.
+Core/expected не менялись, оригинал не исполнялся. Candidate1 отклонён до запуска
+из-за пропущенного HUD event-scope guard; candidate2 завершился с двумя XCTest
+ошибками отрицательного Object-token control. Исправлен только порядок throwing
+read передXCTUnwrap; оба прежних кандидата и ошибки сохранены. Native job3
+терминален в `build/research/application-owned-active-hud-native-20260914/`;
+не перезапускать. [Evidence](evidence/application-active-hud.json),
+[план](research/APPLICATION_ACTIVE_HUD_PLAN.md).
+**Остальные четыре стадии и полный active tick остаются открытыми.**
+NEXT — полное сравнение post-HUD notices из текущего собственного HUD output
+по saved active48, с текущими flags, caller-local provenance, ordered effects,
+владельцами и журналом; затем recording/layout/output. Перед расширением читать
+POSTHUD_NOTICES/GAMEPLAY_NOTICES и соответствующие ограничения архива.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.
