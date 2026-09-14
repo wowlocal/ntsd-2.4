@@ -644,11 +644,17 @@ Object/Frame snapshots и другие явно перечисленные за�
 Native job1 терминален в `build/research/application-owned-active-output-native-20260914/`;
 не перезапускать. [Evidence](evidence/application-active-output.json),
 [план](research/APPLICATION_ACTIVE_OUTPUT_PLAN.md).
-NEXT — по saved application/active48 evidence составить карту оставшихся условий
-full application equivalence: происхождение текущих source/own входов, отличия
-library-моделей и отсутствующие snapshots. Выбрать первый ограниченный caller,
-для которого зависимости готовы; не заполнять пробелы из expected и не повторять
-терминальные producers. Полный original active tick/матч/игра ещё не приняты.
+[Карта оставшихся условий application equivalence](research/APPLICATION_EQUIVALENCE_FRONTIER.md)
+проверена по текущему коду и saved evidence. Новый reader сверил28 pause calls,
+их cached phase/latches, удержание counters/notice timer, пять rendering checkpoints
+и оба возврата;1024 Native-файла неизменны. Это анализ, не новая Native-приёмка.
+Полный installed source application run и middle Object/Frame evidence отсутствуют.
+NEXT — связать собственный non-playback pause/F2-step/resume с текущим Bootstrap
+по двум saved14-call schedules после нейтрального родителя. Продолжать уже полученный
+PendingContinuation без повторного input/round, сохранить library text/DC,
+paused HUD flags и таймер уведомления, проверить whole output/owners/journal,
+late rollback и retry. Пауза ещё не подключена и не принята в application session.
+Полный original active tick/матч/игра ещё не приняты.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.

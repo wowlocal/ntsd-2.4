@@ -1,0 +1,295 @@
+{
+  "schema": "application-equivalence-frontier-v1",
+  "UTC": "2026-09-14T06:34:05.598136+00:00",
+  "base": "28a89d596f893db83f77d8a3b8a3bc68fbba9ae9",
+  "scope": "Saved-data dependency analysis after finite active output; first ready new application continuation is pause/step/resume",
+  "status": "saved dependency analysis independently reviewed",
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "newNativeAcceptance": false,
+  "fullOriginalApplicationMatched": false,
+  "fullGoalComplete": false,
+  "previousGoalTurn": "progress: accepted active output committed and pushed as28a89d5",
+  "protectedNativeFilesUnchanged": 1024,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "newNativeTests": 0,
+  "acceptedParentUniqueMethodCount": 172,
+  "exeEnvelopeRecalculated": false,
+  "inventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/inventory2.json",
+    "bytes": 80593,
+    "sha256": "5437bbad4b43153fa88d3ba206a8750640b116add90c002ce4a2f4aad452c532",
+    "mode": 420
+  },
+  "reader": {
+    "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-equivalence-frontier-20260914/inventory-frontier2.py",
+    "bytes": 8171,
+    "sha256": "15f1a61b2f99781ea40ae78e4a347b23e46ded65377fdd777b9ea2c4e14ade5b",
+    "mode": 420
+  },
+  "sharedReader": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/inventory_active_lifecycle_provenance.py",
+    "bytes": 14759,
+    "sha256": "4adb6431695d9ef9eaa15132ceda61d7bb205d0955f13ad083d4d2471b9dccb9",
+    "mode": 420
+  },
+  "inputPins": {
+    "docs/evidence/paused-gameplay.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/paused-gameplay.json",
+      "bytes": 18259,
+      "sha256": "072012c371c0ee219509391900f261be863f3baa50beeb1172528cfca7c5fcdf",
+      "mode": 420
+    },
+    "build/original/paused-gameplay.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/original/paused-gameplay.json",
+      "bytes": 14074938,
+      "sha256": "b8cc04f6b0442fb70de30b2b9dcb11430655b63bfc855a9faddf862c5890c98c",
+      "mode": 420
+    },
+    "docs/evidence/paused-gameplay-control.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/paused-gameplay-control.json",
+      "bytes": 18285,
+      "sha256": "bc238149ce3593d5a1fa48ecc8b85734e2e4a09b953c67f1e4b985026edf91d3",
+      "mode": 420
+    },
+    "build/original/paused-gameplay-control.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/original/paused-gameplay-control.json",
+      "bytes": 14300406,
+      "sha256": "a4eb441ae0e0c9b1760d7ecd8c25f4b870ffe9762e44dc7c7d485e3e49f62f14",
+      "mode": 420
+    },
+    "docs/evidence/application-active-output.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-active-output.json",
+      "bytes": 9540,
+      "sha256": "cf551a26bf03bfd1369a57cf41916c70b086ef498aad25413a9cbc7708668e55",
+      "mode": 420
+    },
+    "docs/evidence/application-loaded-selection.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-selection.json",
+      "bytes": 124871,
+      "sha256": "d18aa0312692a7feaf93b4aff3b2f7cff81701fab24c4aaf65a8a87b9921fee0",
+      "mode": 420
+    },
+    "docs/evidence/application-loaded-launch.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-launch.json",
+      "bytes": 19903,
+      "sha256": "7f64a765918ec4b3c76c6085418de9ba0c0b0a1a47adafd9e5b3f3a1f0a11515",
+      "mode": 420
+    },
+    "docs/evidence/application-bootstrap.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-bootstrap.json",
+      "bytes": 28330,
+      "sha256": "7a4c1bd26d7af7b91363f464bd0a6cec24f03db685266e6d3d8441ed6f369dc8",
+      "mode": 420
+    },
+    "docs/evidence/active-lib-impact.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/active-lib-impact.json",
+      "bytes": 164680,
+      "sha256": "ac5384c6d6768c67963b1f746c884d6f1d642ace296e742c168ad89a1eeed538",
+      "mode": 420
+    },
+    "docs/evidence/codex-safety-incidents-2026-09-12.json": {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift",
+      "bytes": 10124,
+      "sha256": "dc9fbb70b071889c0c32f83317428f28114998a83eccee8fef898a362f1ce34c",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalPausedGameplay.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalPausedGameplay.swift",
+      "bytes": 5366,
+      "sha256": "bf6d0e2c45aa422f257859e2207496d4a2ecfc744e0a31a25ea041f9481ef263",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalLoadedGameplayCall.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalLoadedGameplayCall.swift",
+      "bytes": 4713,
+      "sha256": "b1b44a386ff0b5327134037787d9847886d6e5044153ea8d83f67658af591ea3",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalLoadedMatchCycle.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalLoadedMatchCycle.swift",
+      "bytes": 2215,
+      "sha256": "1aa6e988a71551ddd73e0214c467b25cd89fa3a91317f29472b61b0080fd4b99",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalLoadedMatchEntry.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalLoadedMatchEntry.swift",
+      "bytes": 2602,
+      "sha256": "3ecdbe109a5ff259a6bca994799813e1b4c3bc683351a2605c78e01035856276",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalInitialLoading.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalInitialLoading.swift",
+      "bytes": 8303,
+      "sha256": "55d16e4efa816d5df7c8063414d378064c3500a7aee841d2239ec46401f133d4",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalInputControl.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalInputControl.swift",
+      "bytes": 16031,
+      "sha256": "2d9c7214382fc0a52a8ee15ab0bd427f7680ea8ac3d06d4a198317e1acd0cd78",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalWorldHUD.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalWorldHUD.swift",
+      "bytes": 7625,
+      "sha256": "e984bf4879bfa2f000c4b60c38bff4eda3ebfa638cc78c1988aafc5773d530ac",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalGameplayOutput.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalGameplayOutput.swift",
+      "bytes": 3429,
+      "sha256": "300107d0143974db25c45ad94d2afa4299bf4e5278328a6b96b258e1d23a665e",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalResultLayout.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalResultLayout.swift",
+      "bytes": 11766,
+      "sha256": "0821a80e9a048313dd3bd8f8e4ecf3d7a8883d7e29018fd8cc16021a08388235",
+      "mode": 420
+    },
+    "native/Sources/NTSDCore/OriginalLibSurfaceText.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalLibSurfaceText.swift",
+      "bytes": 1938,
+      "sha256": "ecdf2f6922c9b4267806e1ac9fd9a0da78fa8b8ac4216634d6d6c8aab85c8ef5",
+      "mode": 420
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift",
+      "bytes": 23290,
+      "sha256": "82447c7594559580382ea7d9227daae776cabd6b29a0e46b3e8c2e43374201fa",
+      "mode": 420
+    },
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputProjection.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputProjection.swift",
+      "bytes": 7831,
+      "sha256": "7eb8eef79110a6b221ecfa3eac63098144fd5f0d81793f70b9218f06c0b95f92",
+      "mode": 420
+    },
+    "native/Sources/NTSDApp/MeleeScene.swift": {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/MeleeScene.swift",
+      "bytes": 16618,
+      "sha256": "c249a07e30d89395e993665634f612d1c9fe0f324fc7dc23568ad676b08a76e4",
+      "mode": 420
+    }
+  },
+  "priorNativeManifest": {
+    "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-owned-active-output-native-20260914/candidate1-inputs.json",
+    "bytes": 212948,
+    "sha256": "bcf7ba53221c69634ac25b2c9f857022e2ac667b27e9455eb5a880c2a34a586b",
+    "mode": 420
+  },
+  "reference": [
+    {
+      "control": false,
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay.json",
+        "bytes": 2064088,
+        "sha256": "0c2e53bbe82ab643161f0f336142920d9eac3f56f0852ec7c63bd97c0ef51889",
+        "mode": 420
+      },
+      "raw": {
+        "bytes": 14074937,
+        "sha256": "a5104c03446b6e422e1845f4b89476d07d6ed69903b625d7fdfa321e06454a94"
+      },
+      "parentFixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json",
+        "bytes": 3072348,
+        "sha256": "2e4184b1617ab41d31a502f407a5fa296a57664e8f8e60e0ebef6ec58efe4471",
+        "mode": 420
+      },
+      "calls": 14,
+      "pausedCalls": 8,
+      "unpausedCalls": 6,
+      "sourceChangedKeyBytes": 3,
+      "blobs": 2861,
+      "components": 107
+    },
+    {
+      "control": true,
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay-control.json",
+        "bytes": 2062640,
+        "sha256": "be991d1fe0001ffbe5098da526782034d66791e47a225470a497c8e560b7094c",
+        "mode": 420
+      },
+      "raw": {
+        "bytes": 14300405,
+        "sha256": "986850ec010b40a360a0530fab0c6920da30ad19a4288a536d5114b69182d90e"
+      },
+      "parentFixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json",
+        "bytes": 2759528,
+        "sha256": "24a1fe4f91da3491df12076c827e01214a4329a8aa65d7aaf8b7dfd28ca50f2c",
+        "mode": 420
+      },
+      "calls": 14,
+      "pausedCalls": 8,
+      "unpausedCalls": 6,
+      "sourceChangedKeyBytes": 3,
+      "blobs": 2862,
+      "components": 107
+    }
+  ],
+  "findings": [
+    "Current source and own application have distinct declared startup/RNG/library contexts; finite endpoint comparisons do not create a full same-input original application trace",
+    "Middle Object/Frame and private formatter/ABI/FPU evidence gaps remain",
+    "Current application gameplay adapter rejects pausedRendering",
+    "Shared paused body lacks installed text/DC state propagation",
+    "Paused background skips camera bounds; HUD preserves command flags; notice timer holds while text draws",
+    "Pause input has5checkpoints versus6unpaused, with cached phase/latches; source direct keyboard writes differ from WndProc message iterations",
+    "Saved pause source parent is neutral16, not active48"
+  ],
+  "firstReadyTask": "Own non-playback pause/F2-step/resume from current neutral application through the existing pending input continuation and Bootstrap return",
+  "nextTaskRequiresNewOriginalExecution": false,
+  "nextTaskNativeImplemented": false,
+  "nextTaskAccepted": false,
+  "existingSafetyIncidentsRemainOpen": true,
+  "readerFailure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/inventory1-failure.json",
+    "bytes": 816,
+    "sha256": "fd04e23eb68be1c57c1de7248729f39c0094776b82bf8dd02b4b263ab8bbb1b7",
+    "mode": 420
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/frontier-evidence1.tar",
+    "bytes": 522240,
+    "sha256": "44337c2cb8f0f755493e5a8f5f17c484e8406df668bfe2e5594a9105d64e6e93",
+    "mode": 420,
+    "memberCount": 14,
+    "allBodiesAndModesVerified": true
+  },
+  "archiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/archive-verification1.json",
+    "bytes": 2602,
+    "sha256": "f0cc7ec6a38b35f36eefa78b22739f0d92505585f8a095ece3b5f33d5143f9c8",
+    "mode": 420
+  },
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/review1-frontier-publication.json",
+    "bytes": 33751,
+    "sha256": "e4c783ddab0bddfab9a07697a081d5968561a2ccba6d6f6f73dcc83e16f7c492",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/publication1.json",
+    "bytes": 787,
+    "sha256": "bfbb61ba078f5b091f148e954d48d85aa76a087af66b63949c7655197530bceb",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-equivalence-frontier-20260914/reviewed-evidence1.json",
+    "bytes": 12806,
+    "sha256": "1a9ba71b99eb65998bbbc76a34083f35d7101b99a2dd1ccd479d56b4ff26140b",
+    "mode": 420
+  }
+}
