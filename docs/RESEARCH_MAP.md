@@ -527,9 +527,14 @@ Core/expected не менялись, оригинал не исполнялся.
 запуска candidate1, ошибка читателя candidate2 и поправка разбора журнала.
 [Evidence](evidence/application-active-graphics.json), [план](research/APPLICATION_ACTIVE_GRAPHICS_PLAN.md). Оба Native jobs терминальны в
 `build/research/application-owned-active-graphics-native-20260914/`; не перезапускать.
-**Семь следующих стадий и полный active tick остаются открытыми.** NEXT —
-сравнение lifecycle из текущего собственного impulse output, начиная с
-происхождения Actor50/reconstruct в сохранённом call17 и его полного lifetime.
+**Семь следующих стадий и полный active tick остаются открытыми.**
+[Provenance Actor50](research/APPLICATION_ACTIVE_LIFECYCLE_PROVENANCE.md) проверяет96 saved
+calls: создание из текущего Frame61, планирование/звук/удаление в том же проходе,
+сохранение полного inactive record/mask доcall48 и отсутствие доступа к шести
+retained scratch words. Это prerequisite, не новое Native-сравнение стадии.
+NEXT — [полное сравнение lifecycle](research/APPLICATION_ACTIVE_LIFECYCLE_PLAN.md) из
+текущего собственного impulse output, с независимым расчётом создания, lifetime,
+звука, полных records/owners/journal и поздними откатами после transient creation.
 Далее commands/HUD/notices/recording/layout/output. Полные helper ABI/stores,
 damaging/held/cpoint/spawn ветви вне конечного пути, матч/игра, app/device/Windows/
 clean-Mac и прежние safety incidents остаются открытыми. EXE envelope не пересчитан.

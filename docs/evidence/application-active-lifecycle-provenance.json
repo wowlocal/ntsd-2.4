@@ -1,0 +1,221 @@
+{
+  "schema": "application-active-lifecycle-prerequisite-v1",
+  "UTC": "2026-09-14T01:12:02.154010+00:00",
+  "baseCommit": "6c4af220209e1744b4a072b11a6e20ce5fac2167",
+  "scope": "Saved-data prerequisite for complete active lifecycle comparison; no new Native stage acceptance.",
+  "plan": "docs/research/APPLICATION_ACTIVE_LIFECYCLE_PLAN.md",
+  "study": "docs/research/APPLICATION_ACTIVE_LIFECYCLE_PROVENANCE.md",
+  "initial": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/initial.json",
+    "bytes": 2635,
+    "sha256": "71ae469c65820e0b0bb9a169104a75fc0383978e23e2f40768dee1a695497698",
+    "mode": 420
+  },
+  "declaredScope": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/scope1.md",
+    "bytes": 2346,
+    "sha256": "fb311d2a649b6519360ca448160f8523eb801a242de7217d7930c1d11b4c63d0",
+    "mode": 420
+  },
+  "reader": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/inventory_active_lifecycle_provenance.py",
+    "bytes": 14759,
+    "sha256": "4adb6431695d9ef9eaa15132ceda61d7bb205d0955f13ad083d4d2471b9dccb9",
+    "mode": 420
+  },
+  "sourceReport": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/provenance4.json",
+    "bytes": 112935,
+    "sha256": "86d015509fecda55329b09176491a5a76252b0ab0d8fead6f6e8d233ef163ef6",
+    "mode": 420
+  },
+  "independentReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/review1-lifecycle-provenance.json",
+    "bytes": 163181,
+    "sha256": "200fc9b39d9d2d37cffa3632d13b55c42f09f3a70914e3e33d0a0e24096c75e6",
+    "mode": 420
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/verification1.json",
+    "bytes": 926,
+    "sha256": "a0b9b347ad465b952b7ebfb1c75991b909a752b5c1e8808eae8ba70f119b1cdc",
+    "mode": 420
+  },
+  "archiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/evidence-archive1.json",
+    "bytes": 4640,
+    "sha256": "66c72393f7288144d14b13fd43e9e314eeab650fd0c96dc605632c7d593c05e8",
+    "mode": 420
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/lifecycle-prerequisite1.tar",
+    "bytes": 634880,
+    "sha256": "c4b0131ac02c502c8238912f275dc6472c1e7007e741c0a387e182c739c5f811",
+    "mode": 420
+  },
+  "archivedMembers": 26,
+  "ownDiagnosticJoin": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/owned-diagnostic-join1.json",
+    "bytes": 6198,
+    "sha256": "e1580132f9bca9809c03666d81a3dda8cce144985a0ca19dcb7b7211174a8c5b",
+    "mode": 420
+  },
+  "fixtures": [
+    {
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay.json",
+        "bytes": 8569152,
+        "sha256": "3b074ff960538fde6e13b1b65bda4f833b22bbc9cafcef990de12f71aaed511c",
+        "mode": 420
+      },
+      "rawEnvelope": {
+        "bytes": 51835712,
+        "sha256": "f2f5f884f94c8cf9cccfb9356b4ff016c94b1505841d95f4750be365abe93784"
+      },
+      "parent": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json",
+        "bytes": 3072348,
+        "sha256": "2e4184b1617ab41d31a502f407a5fa296a57664e8f8e60e0ebef6ec58efe4471",
+        "mode": 420
+      }
+    },
+    {
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay-control.json",
+        "bytes": 8585744,
+        "sha256": "d3abb578f36ac74716fa6e71eb12091c6f0eed5adb02f1b59a550275c73fc0b3",
+        "mode": 420
+      },
+      "rawEnvelope": {
+        "bytes": 52421598,
+        "sha256": "a272156a0c094bf7dbdfc80b1477b5ba15fef659bee468c1f54ded9e029b82f6"
+      },
+      "parent": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json",
+        "bytes": 2759528,
+        "sha256": "24a1fe4f91da3491df12076c827e01214a4329a8aa65d7aaf8b7dfd28ca50f2c",
+        "mode": 420
+      }
+    }
+  ],
+  "counts": {
+    "calls": 96,
+    "parentComponentsPerVariant": 8,
+    "verifiedComponentManifests": 1314,
+    "authorVerifiedConsumedBlobs": 906,
+    "schedulerReturns": 194,
+    "constructorReturns": 2,
+    "conversionReturns": 6,
+    "catalogSoundReturns": 14,
+    "independentActor50Endpoints": 3744,
+    "independentWholeLifecycleGlobals": 96,
+    "retainedScratchWords": 6,
+    "retainedScratchOverlaps": 0
+  },
+  "transient": {
+    "sourceCall": 17,
+    "sourceParentObjectOrdinal": 17,
+    "sourceParentID": 2,
+    "initialFrame": 60,
+    "scheduledFrame": 61,
+    "opointObjectID": 203,
+    "firstMatchingObjectOrdinal": 64,
+    "createdSlot": 50,
+    "childFrame": 200,
+    "childState": 3005,
+    "childNext": 1000,
+    "sourceIntegerPosition": [
+      370,
+      2,
+      505
+    ],
+    "sourceBinary64Z": 505.1,
+    "sourceSoundOrder": [
+      109,
+      366
+    ],
+    "samePassScheduling": true,
+    "allocationRetainedThroughCall": 48,
+    "actor31cBeforeDefined": false,
+    "actor31cAfterDefined": true,
+    "knownMaskTransition": "Actor+31c..<320 only",
+    "remainingUnknownBytesPerVariant": 135,
+    "intermediateStateEvidence": "Input-derived inference plus helper observations and pinned EXE static bytes; no complete mid-slot snapshot."
+  },
+  "ownDiagnostics": {
+    "source": "Accepted graphics-parent saved Native rows, no new execution or lifecycle comparison",
+    "ownCall17SoundX": [
+      308,
+      168
+    ],
+    "ownSound11Call": 32,
+    "sourceSound10Call": 33,
+    "useAsExpected": false
+  },
+  "preservedIssues": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/reader-issue1.json",
+      "bytes": 850,
+      "sha256": "b683cfe11f56d5ba2738b53d2eee6eea28e9c9aa2e1ae39ca0954d41f9608010",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/doc-review-issue1.json",
+      "bytes": 381,
+      "sha256": "89d8e49af68ef12b91e31bf2a3f162730d7187f966ad6ec4897bda5ff1746ee3",
+      "mode": 420
+    }
+  ],
+  "successfulPriorReaders": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/provenance2.json",
+      "bytes": 108999,
+      "sha256": "ca3944dafedd639d603ac4d33ded8d7b63fc0c508352612f448f71cfd36b59bd",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/provenance3.json",
+      "bytes": 108999,
+      "sha256": "2a398afb12bdda15e5ae60c7b22dbff280a6dbe4774d74fbb27a2dd0d7df96d7",
+      "mode": 420
+    }
+  ],
+  "prerequisiteReady": true,
+  "readyForLifecycleProjection": true,
+  "publicationReviewPending": false,
+  "lifecycleNativeAccepted": false,
+  "activeBodyDifferentialAccepted": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "fullGoalComplete": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "nativeExecuted": false,
+  "nativeTreeUnchanged": true,
+  "exeEnvelopeRecalculated": false,
+  "openDependencies": [
+    "Independent source-first and current-owned full lifecycle projection and release tests, retained owners/journal/command binding and transient late rollback.",
+    "Seven remaining active stage semantics, whole tick/match/game and complete native runtime integration.",
+    "General damaging/held/cpoint/spawn/transformation/alias and numeric boundaries beyond this finite path.",
+    "Full helper ABI/instruction stores and unavailable middle Object/Frame-heap snapshots.",
+    "Actual window/input/audio/device/Windows/clean-Mac validation.",
+    "Three existing safety incidents remain open; this prerequisite does not authorize refused operations."
+  ],
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/review2-lifecycle-publication.json",
+    "bytes": 15523,
+    "sha256": "6c1a6ef30939e4afaed2f6ff051e047743a03c7d6ec9921ed42a6767eb07afae",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/publication1.json",
+    "bytes": 1282,
+    "sha256": "9ec6388162dadecdc2a394264877eb627ab70e12034a7dff6a7753f25d330304",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-lifecycle-native-20260914/reviewed-evidence1.json",
+    "bytes": 8408,
+    "sha256": "fb669f807ca00073cfdbae0ef5a0ed716e619a6bbfdf388ff65f9f304611c719",
+    "mode": 420
+  }
+}
