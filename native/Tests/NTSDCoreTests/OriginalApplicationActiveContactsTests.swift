@@ -8,7 +8,7 @@ final class OriginalApplicationActiveContactsTests: XCTestCase {
     typealias S = Q.S
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveContactsSource(reverse)
         let sourceEndpoints = try source.compare()
         var previous: M.Snapshot?,next = 0,count = 0,pairs = 0,itrs = 0
@@ -95,7 +95,8 @@ final class OriginalApplicationActiveContactsTests: XCTestCase {
                 else { previous = snapshot }
             default:break // The ten following body stages retain their open gate.
             }
-        })
+            try onBody?(call,ready,event)
+        },onReturn:onReturn)
         try P.require(count == 48 && previous == nil && next == 0 && draws.isEmpty,"Complete own contact sequence")
         print("Owned active contacts comparison: control=\(reverse), \(sourceEndpoints) source endpoints, \(count*7) own endpoints, \(pairs) own broad pairs/\(itrs) rejected ITRs, 48 item RNG effects; remaining10 body stages OPEN")
     }

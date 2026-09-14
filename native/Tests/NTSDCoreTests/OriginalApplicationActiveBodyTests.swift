@@ -8,7 +8,7 @@ final class OriginalApplicationActiveBodyTests: XCTestCase {
     typealias P = I.P
     typealias S = OriginalApplicationActiveBodyControl
     typealias M = OriginalApplicationLoadedMenuSession
-    func control(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil) throws {
+    func control(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveBodySource(reverse)
         let sourcePoints = try source.compareControl()
         for n in [Double.leastNonzeroMagnitude,Double.infinity,1e-101] {
@@ -70,7 +70,7 @@ final class OriginalApplicationActiveBodyTests: XCTestCase {
             default:break // The remaining18 body stages keep their explicit open comparator gate.
             }
             try onBody?(call,ready,event)
-        })
+        },onReturn:onReturn)
         try P.require(controls == 48 && draws.isEmpty,"Own complete active control sequence")
         print("Owned active control comparison: control=\(reverse), \(sourcePoints) source Actor checkpoints, \(controls) own complete control endpoints, \(primitiveDraws) own control RNG events; remaining18 body stages OPEN")
     }

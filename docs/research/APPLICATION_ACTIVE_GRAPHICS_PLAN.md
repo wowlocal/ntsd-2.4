@@ -1,15 +1,16 @@
 # Independent active camera, drawing and impulse comparison
 
-Status: investigation. Parent ddf339f accepts seven contact stages after control
+Status: finite comparison verified; see [results](APPLICATION_ACTIVE_GRAPHICS.md).
+Parent ddf339f accepts seven contact stages after control
 and physics. This extends the [whole active body plan](APPLICATION_ACTIVE_BODY_PLAN.md)
 through camera-background, world-drawing and post-draw-impulses. Consumer: current
 own attachments output and the subsequent lifecycle/commands/HUD/output, on the
 path to a complete match and standalone native game.
 
-Planning checkpoint, 2026-09-14: only this plan and navigation are being committed.
-No active graphics comparison implementation or Native candidate has been run
-for this card. All ten remaining body stages are still unaccepted. Counts below
-describe saved evidence and required future checks, not new Native acceptance.
+At the planning checkpoint a201cef, only this plan and navigation were committed;
+no graphics candidate had run and all ten stages remained unaccepted. The frozen
+candidate plans preserve that state. The required checks below have now passed
+for three finite stages; seven later stages and whole-body acceptance remain open.
 
 ## Question and evidence
 
@@ -98,5 +99,25 @@ be frozen before execution; this planning checkpoint is not an execution record.
 
 Existing safety incidents remain open without retries or rerouting. After future
 acceptance of these three stages, seven further body stages would remain open.
-Currently all ten, later transient lifetime, full tick/match/game and actual app/
+At plan entry all ten remained open. Later transient lifetime, full tick/match/game and actual app/
 device/Windows/clean-Mac acceptance remain open. EXE envelope is not recalculated.
+
+## Implementation amendment, 2026-09-14
+
+Continue from planning commit a201cefd4f2b4a14ea451e9eb739161011e633cd.
+Add optional onReturn test callbacks in ActiveGameplayTests, ActiveBodyTests,
+ActivePhysicsTests and ActiveContactsTests, plus the planned contact onBody hook.
+They forward actual PendingReturn unchanged, after existing body checks. No Core
+observer or graphics comparator is changed. At return, compare the actual command
+prefix through each selected stage against its independently computed events and
+saved own checkpoint state; later commands remain outside this card's acceptance.
+Verify the complete prefix from the input boundary, including absence of graphics
+commands in the preceding control/physics/contact stages. Two graphics and two
+contact methods traverse all four modified helpers and their existing rollback
+checks. Exclude methods in changed files from unchanged-pin inheritance; their
+shared paths are exercised transitively, without counting them as extra methods.
+Also verify the full command extent and ownership relations at return: the three
+selected stages use independently calculated effects; later stages use observed
+Native effects only to check their command bindings. This extra relation check
+prevents an extra command from hiding beyond a selected prefix. It does not
+establish later-stage animation/effect semantics or source equivalence.

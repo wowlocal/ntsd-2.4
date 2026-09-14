@@ -100,7 +100,7 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
         var events: [String] = []
         var fronts = 0
     }
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try I(reverse)
         var sourceHeld = Set<UInt32>()
         // Independent saved-data checks precede the application candidate.
@@ -163,6 +163,7 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
                         try I.unchanged(app,acquired)
                     }
                 }
+                try onReturn?(call,ready,result)
                 try C.finish(&app,result);stages += env.stages.count
                 let p = try P(result.snapshot.match)
                 let actors = try (0..<400).filter { try p.pool.integer(at:4+$0,as:UInt8.self) != 0 }

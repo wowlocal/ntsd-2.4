@@ -594,16 +594,29 @@ release-метода прошли за148.355с/build356.77с;147 прежних
 [Evidence](../evidence/application-active-contacts.json),
 [план](APPLICATION_ACTIVE_CONTACTS_PLAN.md). Оба Native jobs терминальны в
 `build/research/application-owned-active-contacts-native-20260914/`; не перезапускать.
-**Следующие10 body стадий, поздняя transient lifetime и полный active tick открыты.**
-Подготовлен [план камеры/рисования/импульсов](APPLICATION_ACTIVE_GRAPHICS_PLAN.md).
-Это сохранённая незавершённая карточка: нового Native-кандидата и приёмки этих
-трёх стадий пока нет. До реализации нужно определить наблюдение фактического
-списка graphics commands и закрепить соответствующие пути и проверки.
-NEXT — независимое сравнение камеры/рисования на текущих собственных позициях,
-кадрах и ресурсах, затем impulses/lifecycle/commands/HUD/notices/recording/layout/
-output по общему active body плану. Полные helper ABI/stores, damaging/held/cpoint/
-spawn ветви за пределами этого конечного прохода, матч/игра, app/device/Windows/
-clean-Mac и прежние safety incidents остаются открытыми.
+После контактов оставались открытыми десять body стадий. Принятое сравнение
+следующих трёх описано ниже; полный active tick ещё не принят.
+
+Принято [сравнение active camera/drawing/impulses](APPLICATION_ACTIVE_GRAPHICS.md):288 source и288
+собственных endpoints на текущих позициях, кадрах и ресурсах после контактов.
+Сравнены10560 событий и1728 чтений bitmap с undefined masks на каждой стороне,
+220 source camera stores,3600 helper returns, полные владельцы и журнал.
+20 отрицательных и4 положительных comparator controls прошли. Четыре release-
+метода прошли за198.941с/build359.54с;145 прежних методов сохранены по pins,
+изменённые input/control/physics helpers проверены внутри выбранных цепочек.
+1003 Native-файла и оба архива сверены;996 прежних файлов и485 package files
+неизменны. Prefix фактических graphics commands сравнивается на каждой стадии;
+для поздних стадий проверена только связь их событий с командами и владельцами.
+Core/expected не менялись, оригинал не исполнялся. Сохранены отклонённый до
+запуска candidate1, ошибка читателя candidate2 и поправка разбора журнала.
+[Evidence](../evidence/application-active-graphics.json), [план](APPLICATION_ACTIVE_GRAPHICS_PLAN.md). Оба Native jobs терминальны в
+`build/research/application-owned-active-graphics-native-20260914/`; не перезапускать.
+**Семь следующих стадий и полный active tick остаются открытыми.** NEXT —
+сравнение lifecycle из текущего собственного impulse output, начиная с
+происхождения Actor50/reconstruct в сохранённом call17 и его полного lifetime.
+Далее commands/HUD/notices/recording/layout/output. Полные helper ABI/stores,
+damaging/held/cpoint/spawn ветви вне конечного пути, матч/игра, app/device/Windows/
+clean-Mac и прежние safety incidents остаются открытыми. EXE envelope не пересчитан.
 
 
 

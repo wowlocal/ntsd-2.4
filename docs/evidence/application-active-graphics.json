@@ -1,0 +1,258 @@
+{
+  "schema": "owned-active-graphics-comparison-v1",
+  "base": "a201cefd4f2b4a14ea451e9eb739161011e633cd",
+  "scope": "Camera/background, World drawing and post-draw impulses from current owned contact output, both48-call schedules",
+  "finiteGraphicsStagesCompared": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullCardScope": "whole active body",
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 288,
+  "ownEndpoints": 288,
+  "sourceEvents": 10560,
+  "ownEvents": 10560,
+  "sourceUndefinedBitmapReads": 1728,
+  "ownUndefinedBitmapReads": 1728,
+  "sourceCameraGlobalStores": 220,
+  "sourceHelperReturns": 3600,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNegativeComparatorTrials": 20,
+  "newPositiveComparatorTrials": 4,
+  "graphicsSummaries": [
+    [
+      "true",
+      "144",
+      "144",
+      "5280",
+      "864"
+    ],
+    [
+      "false",
+      "144",
+      "144",
+      "5280",
+      "864"
+    ]
+  ],
+  "wholeCommandExtentAndOwnerRelationsCompared": true,
+  "laterStageEffectSemanticsAccepted": false,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 graphics comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate3/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "OriginalApplication(ActiveGraphics|ActiveContacts)Tests/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate3-inputs.json",
+      "nativeFiles": 1003,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T00:20:31.585701+00:00",
+      "pid": 41504,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 560.2214864580001,
+      "endedUTC": "2026-09-14T00:29:51.789531+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveContactsTests",
+        "method": "testControlOwnedContactProjection",
+        "seconds": 61.84
+      },
+      {
+        "suite": "OriginalApplicationActiveContactsTests",
+        "method": "testPrimaryOwnedContactProjection",
+        "seconds": 41.248
+      },
+      {
+        "suite": "OriginalApplicationActiveGraphicsTests",
+        "method": "testControlOwnedGraphicsProjection",
+        "seconds": 48.087
+      },
+      {
+        "suite": "OriginalApplicationActiveGraphicsTests",
+        "method": "testPrimaryOwnedGraphicsProjection",
+        "seconds": 47.766
+      }
+    ],
+    "testSeconds": 198.941,
+    "buildSeconds": 359.54,
+    "stdout": {
+      "bytes": 94707,
+      "sha256": "49279492190321e325be5d29e2219f2d3573e4cea22daf4be816b1405d434e60",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25115,
+      "sha256": "1a920cdd82f163514eac02f65117298958e682cc053781c0460105f5b694d380",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1003,
+  "oldNativeFilesUnchanged": 996,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 4,
+  "inheritedMethodsNotRerun": 145,
+  "uniqueRetainedMethods": 149,
+  "changedHelperPathsExercisedTransitively": [
+    "active input/body preflight",
+    "active control",
+    "active physics"
+  ],
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/verification3.json",
+    "bytes": 149646,
+    "sha256": "892f232f1be753d38e186c08c05504e6d5ce9bcd72692231330d0e50c67eb482",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review4-graphics-candidate3.json",
+    "bytes": 25991,
+    "sha256": "9f27430f67c6b8642a5833d8042082e50bf543ad19268511528b53ff6e728899",
+    "mode": 420
+  },
+  "initialContractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review1-graphics-plan.json",
+    "bytes": 16255,
+    "sha256": "1dd29fb31b70fc7949ef6c6866f2477aa65bf9f045da48a811b92becb2a06a58",
+    "mode": 420
+  },
+  "independentSavedDataAudit": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review1a-saved-data-audit.json",
+    "bytes": 40986,
+    "sha256": "1a0c4c05a7bef78f35a4467e954a4f2b27e66f7e171ec31eb78e44dcebb9a77f",
+    "mode": 420
+  },
+  "rejectedCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review2-graphics-candidate1.json",
+    "bytes": 11975,
+    "sha256": "646db49a616f4e99cf897f0e5c53fc58f3fa29b698302e401c61a7f5c48a6cd8",
+    "mode": 420
+  },
+  "priorStructuralReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review3-graphics-candidate2.json",
+    "bytes": 24906,
+    "sha256": "bab6c3c52ae32524034a538abb87ba327ab814d40bcc0f53a4fc4901bd3d6704",
+    "mode": 420
+  },
+  "preservedIssues": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate1-rejection.json",
+      "bytes": 749,
+      "sha256": "b673b77e9a556654e71d2e212b050e2eb0fc468560e93a213d707d4002b52161",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate1-control-issue.json",
+      "bytes": 428,
+      "sha256": "4ecda4504ab5a4e483e94c4788300f731936ceae1d06980bb9e5f408c00de860",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate2-reader-issue.json",
+      "bytes": 2029,
+      "sha256": "2afb071d4f59ad4e7a1c73b44ac26d854534cad80b998e55bf84890d1a4a63f4",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/verifier-issue1.json",
+      "bytes": 766,
+      "sha256": "80f30d9ca1a690429e9e973b4c89e403c1b3425b92a20690362d2e140176bbd3",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/verification3-attempt1.stderr.log",
+      "bytes": 345,
+      "sha256": "6a93ad0d417823c386832ea32936776ba2cf0e1633772723aa421d50644f951a",
+      "mode": 420
+    }
+  ],
+  "candidateRestoration": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/candidate-restoration3.json",
+    "bytes": 2153,
+    "sha256": "974becf21011eafa5c4ab7d781803e93e8937a1b72f944cb7e819c327258439b",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/native-candidate3.tar",
+    "pin": {
+      "bytes": 4442286080,
+      "sha256": "44379f880f349e772b9a7d3d49d97e0ca9aa8750d020935e67b3a7a619d09e24",
+      "mode": 420
+    },
+    "members": 1003,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/graphics-evidence3.tar",
+    "pin": {
+      "bytes": 1679360,
+      "sha256": "bf31b0038a201bfe70c1e0ccd1bafb52aadfa200b3985f60051eb64467f697a1",
+      "mode": 420
+    },
+    "members": 46,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/evidence-archive3.json",
+    "bytes": 8125,
+    "sha256": "762920265f4a6458ee2d20d3c49147c303e5fd9003e45fb3af60968dd90df894",
+    "mode": 420
+  },
+  "nextLifecycleInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/next-lifecycle-inventory1.json",
+    "bytes": 8671,
+    "sha256": "9f43482ec1017bd0ba45fd90c6e690bcd68d3bd25862a00ea74cfa47428d1530",
+    "mode": 420
+  },
+  "next": "Determine Actor50 reconstruct provenance in saved call17 and compare full lifecycle state/effects/ownership from current owned impulse output.",
+  "remaining": [
+    "Seven later body stages and whole active tick",
+    "Later transient lifetime, including Actor50 reconstruction provenance",
+    "Damaging/held/cpoint/spawn and other branches beyond this finite path",
+    "Unavailable middle source Object/Frame heap snapshots",
+    "Full helper ABI and per-instruction stores",
+    "Full match/game and app/window/input/audio integration",
+    "Actual device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/review5-graphics-publication.json",
+    "bytes": 35727,
+    "sha256": "b880c571fd5caf87d2d625443fa31e2570343b12449b5b06dda23bb5c5252af3",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/publication3.json",
+    "bytes": 2395,
+    "sha256": "62290ef2c4ea8c8c8f12e54fa9d87bdc05dfdf2bfe13b55f7c097de4abecb467",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-graphics-native-20260914/reviewed-evidence3.json",
+    "bytes": 9722,
+    "sha256": "894724518ffc2f0a4fdeca877448329498f8380074b98a9acb28cc26c9e39862",
+    "mode": 420
+  }
+}
