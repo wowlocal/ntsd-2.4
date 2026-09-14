@@ -659,11 +659,30 @@ read передXCTUnwrap; оба прежних кандидата и ошибк
 терминален в `build/research/application-owned-active-hud-native-20260914/`;
 не перезапускать. [Evidence](../evidence/application-active-hud.json),
 [план](APPLICATION_ACTIVE_HUD_PLAN.md).
-**Остальные четыре стадии и полный active tick остаются открытыми.**
-NEXT — полное сравнение post-HUD notices из текущего собственного HUD output
-по saved active48, с текущими flags, caller-local provenance, ordered effects,
-владельцами и журналом; затем recording/layout/output. Перед расширением читать
-POSTHUD_NOTICES/GAMEPLAY_NOTICES и соответствующие ограничения архива.
+После HUD четыре стадии оставались открытыми. Принято
+[сравнение active notices](APPLICATION_ACTIVE_NOTICES.md):96 source и96 собственных
+endpoints из текущего HUD output. Текущие ветвления независимо подтверждают
+отсутствие вывода; полные records/masks, владельцы, graphics и journal сохранены.
+Source не обращается к наблюдаемой caller-stack области. Menu-local snapshot
+не является gameplay formatter: его checkpoint/lifetime остаётся отдельным
+ограничением, nil/opaque340 проверены дополнительными public-handler controls.
+Четыре поздних отката и два same-session retries прошли.
+Семь release-методов прошли за269.509с/build363.95с, включая819
+прямых notices comparisons,8 явных sNaN расхождений с QNaN companions,4 отдельных
+cookie-overwrite rejections и74424 numeric controls.157 других методов сохранены
+по pins;164 unique total. Все1015 Native-файлов и485 package files сверены;
+все1012 старых файла неизменны. Core/expected не менялись, оригинал не исполнялся.
+Ошибка HUD-prefix в draft verifier и замечания к publication gates выявлены
+review до исполнения; прежние варианты и причины исправлений сохранены.
+После успешного Native job первый log reader не распознал служебное `1 test`
+внутри buffered JSON; точное исправление проверено отдельно, raw/error сохранены.
+Native job1 терминален в `build/research/application-owned-active-notices-native-20260914/`;
+не перезапускать. [Evidence](../evidence/application-active-notices.json),
+[план](APPLICATION_ACTIVE_NOTICES_PLAN.md).
+**Остальные три стадии и полный active tick остаются открытыми.**
+NEXT — полное сравнение result recording из текущего собственного notices output
+по saved active48, с текущими globals, round result, replay owners и ordered IO;
+затем layout/output. Читать RESULT_RECORDING/GAMEPLAY_RESULT_RECORDING и архив.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.

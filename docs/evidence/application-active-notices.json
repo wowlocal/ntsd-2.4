@@ -1,0 +1,210 @@
+{
+  "schema": "owned-active-notices-comparison-v1",
+  "base": "e638817aa23837b6f83f07212cf3887b188c4417",
+  "scope": "Complete finite disabled notices from current HUD output on both retained48-call schedules",
+  "finiteNoticesStageCompared": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullCardScope": "whole active body",
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 96,
+  "ownEndpoints": 96,
+  "sourceEvents": 0,
+  "ownEvents": 0,
+  "sourceCallerStackAccesses": 0,
+  "savedSourceSnapshotsUnchanged": true,
+  "sourceLocalBackingCaptured": false,
+  "bodyFormatterCheckpointExposed": false,
+  "menuLocalIsNotBodyFormatter": true,
+  "directUnusedLocalControls": "nil and own opaque340 bytes/masks on current and nonselecting flags",
+  "controlledDirectNoticeMatches": 819,
+  "controlledSNaNDiscrepanciesWithSeparateQNaNCompanions": 8,
+  "controlledCookieOverwriteRejections": 4,
+  "numericCases": 74424,
+  "newOwnedLateRollbacks": 4,
+  "newSameSessionRetries": 2,
+  "parentLateRollbacksRetained": true,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNativeFPUComparison": false,
+  "wholeCommandExtentAndOwnerRelationsCompared": true,
+  "laterStageEffectSemanticsAccepted": false,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 notices comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplication(ActiveNotices|ActiveHUD)Tests|OriginalPostHUDNoticesTests|OriginalDiagnosticNumberTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/candidate1-inputs.json",
+      "nativeFiles": 1015,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T04:15:15.389821+00:00",
+      "pid": 86279,
+      "status": "terminal",
+      "processIdentity": "86279 Mon Sep 14 07:15:15 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/candidate1/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/swift --jobs 4 -c release --filter (OriginalApplication(ActiveNotices|ActiveHUD)Tests|OriginalPostHUDNoticesTests|OriginalDiagnosticNumberTests)/",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/candidate1/native",
+      "exitCode": 0,
+      "elapsedSeconds": 636.381651708,
+      "endedUTC": "2026-09-14T04:25:51.788358+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveHUDTests",
+        "method": "testControlOwnedHUDProjection",
+        "seconds": 82.38
+      },
+      {
+        "suite": "OriginalApplicationActiveHUDTests",
+        "method": "testPrimaryOwnedHUDProjection",
+        "seconds": 60.96
+      },
+      {
+        "suite": "OriginalApplicationActiveNoticesTests",
+        "method": "testControlOwnedNoticesProjection",
+        "seconds": 62.465
+      },
+      {
+        "suite": "OriginalApplicationActiveNoticesTests",
+        "method": "testPrimaryOwnedNoticesProjection",
+        "seconds": 62.261
+      },
+      {
+        "suite": "OriginalDiagnosticNumberTests",
+        "method": "testOriginalFixedDiagnosticFormatsAndDecimalIntermediate",
+        "seconds": 0.345
+      },
+      {
+        "suite": "OriginalPostHUDNoticesTests",
+        "method": "testLateBitmapFailureRollsBackCallerStrings",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalPostHUDNoticesTests",
+        "method": "testWholeCallerWithExplicitSignalingNaNOracleDifferences",
+        "seconds": 1.097
+      }
+    ],
+    "testSeconds": 269.509,
+    "buildSeconds": 363.95,
+    "stdout": {
+      "bytes": 199877,
+      "sha256": "1230b39beb5043559edc75f0128a12a6b29ce2b171776c154f264b6e4f62ab84",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25293,
+      "sha256": "363a4f015d625816f3be01859489e1e092b55ad8ce2771ab6b2994f17ddb8510",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1015,
+  "oldNativeFilesUnchanged": 1012,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 7,
+  "inheritedMethodsNotRerun": 157,
+  "uniqueRetainedMethods": 164,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/verification1.json",
+    "bytes": 153035,
+    "sha256": "90f13b1c251cf4fe465f9390c3c266f31774ea3eb38635e714b573efecd48f89",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/review2-notices-candidate1.json",
+    "bytes": 24558,
+    "sha256": "ba278391a2a5ce4caf235f1cac3017a7ddcc3d4efdaa2fd2a4452bdd1b6be11a",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/review1-notices-contract.json",
+    "bytes": 124123,
+    "sha256": "bac138a49985489b570f2248630737612ef7c04f3ddd89fa36a08793ecc5a565",
+    "mode": 420
+  },
+  "independentLogReaderReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/review3-notices-log-reader.json",
+    "bytes": 28736,
+    "sha256": "a600481af5bf1a0f0fd26fb73a1bb053d4c58a12b8e20888a0c8255b5db4be6f",
+    "mode": 420
+  },
+  "savedInputInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/inventory1.json",
+    "bytes": 262522,
+    "sha256": "28c6c2b1eebab3727e2aa39e74464fe7ac0259eabff4fc3140d13800799385f0",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/native-candidate1.tar",
+    "pin": {
+      "bytes": 4442388480,
+      "sha256": "449b6b6d5d82c0c1d95d60c973777bf3192728f603e8f959466697730322dd96",
+      "mode": 420
+    },
+    "members": 1015,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/notices-evidence1.tar",
+    "bytes": 1996800,
+    "sha256": "e7a6a483fd617134f5e02d707e723b6ae605317d035f81396ac556d7647dc1b1",
+    "mode": 420,
+    "members": 40,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/evidence-archive1.json",
+    "bytes": 6922,
+    "sha256": "3d5802252b4f8b18aed824674d68d86d1dde0ae94ded968135111fc515f67cc0",
+    "mode": 420
+  },
+  "next": "Compare complete active recording from current owned notices output, then layout/output.",
+  "remaining": [
+    "Three later body stages and whole active tick",
+    "Broader gameplay branches beyond this finite active schedule",
+    "Enabled own notice/formatter lifetime and checkpoint observability",
+    "Unavailable middle source Object/Frame heap snapshots",
+    "Full helper ABI, Native FPU context and all instruction stores",
+    "Full match/game and app/window/input/audio integration",
+    "Actual device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/review4-notices-publication.json",
+    "bytes": 37983,
+    "sha256": "4cb40b310464f4c93706d2edee3a1677d2d4ff5fd666bf8e85a8abfed7746a9b",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/publication1.json",
+    "bytes": 1647,
+    "sha256": "cb13efb5412adc01dddfb925467abd29500ab97df29829a88ba91080da985471",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-notices-native-20260914/reviewed-evidence1.json",
+    "bytes": 8380,
+    "sha256": "c831990e332b9cf2ea6a538c7cc44ba9ea6c2c219aac09a85a890cca29ca150b",
+    "mode": 420
+  }
+}
