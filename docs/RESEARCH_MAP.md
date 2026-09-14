@@ -649,11 +649,28 @@ Native job1 терминален в `build/research/application-owned-active-out
 их cached phase/latches, удержание counters/notice timer, пять rendering checkpoints
 и оба возврата;1024 Native-файла неизменны. Это анализ, не новая Native-приёмка.
 Полный installed source application run и middle Object/Frame evidence отсутствуют.
-NEXT — связать собственный non-playback pause/F2-step/resume с текущим Bootstrap
-по двум saved14-call schedules после нейтрального родителя. Продолжать уже полученный
-PendingContinuation без повторного input/round, сохранить library text/DC,
-paused HUD flags и таймер уведомления, проверить whole output/owners/journal,
-late rollback и retry. Пауза ещё не подключена и не принята в application session.
+Принято [сравнение application pause/step/resume](research/APPLICATION_PAUSED_GAMEPLAY.md)
+по двум сохранённым14-call schedules после собственного нейтрального родителя.
+Текущий PendingContinuation проходит paused body и output с сохранением installed
+text/DC, владельцев, HUD flags, таймера notice1 и исходного Bootstrap ticket;
+input/round повторно не выполняется. Сравнены324 source и324 own endpoints,
+28576 own events и28 возвратов;16 paused calls,12 явно заданных WndProc messages,
+36 late rollback и8 same-session retries. Все19 active stages сохранены на
+неприостановленных вызовах. Это конечная композиция при объявленных входах;
+полная original application equivalence не установлена.
+Девять release-методов прошли за299.767с/build382.75с;
+167 других сохранены по pins,176 unique. Проверены1028 Native и485 package files;
+1020 старых файлов,383 fixtures и102 resources неизменны. Четыре Native-файла
+изменены и четыре добавлены. Candidate1 не исполнялся; замечания и исправления
+сохранены. Candidate2 прошёл сравнение, упаковку и независимые review.
+Native job2 терминален в `build/research/application-owned-paused-gameplay-native-20260914/`;
+не перезапускать. [Evidence](evidence/application-paused-gameplay.json),
+[план](research/APPLICATION_PAUSED_GAMEPLAY_PLAN.md). Оригинал не исполнялся.
+NEXT — read-only карточка готовности command/damage continuation к первому
+Naruto/Sasuke District match: сопоставить существующие actor-input/combat/active
+доказательства с текущими владельцами application, выбрать целый caller с готовыми
+зависимостями и закрепить конечный план. Недостающие зависимости перечислить;
+не подменять целый бой isolated helpers и не повторять terminal/refused операции.
 Полный original active tick/матч/игра ещё не приняты.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety

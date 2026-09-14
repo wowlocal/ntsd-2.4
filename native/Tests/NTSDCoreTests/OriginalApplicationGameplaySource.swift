@@ -44,6 +44,18 @@ final class OriginalApplicationGameplaySource {
     private(set) var actorAddresses: [UInt32] = [],objectAddresses: [UInt32] = []
     private(set) var initializedImpulseControlWord: UInt32?
     let reverse: Bool
+    /// A saved pause document reuses the same hash-checked record decoder and
+    /// address normalization. The pause caller separately verifies its schedule,
+    /// transitions and endpoints; this initializer does not accept a body result.
+    init(paused document: PausedGameplayReference.Document,reverse: Bool) throws {
+        self.reverse = reverse
+        let c = document.corpus,p = c.platform
+        guard c.control == reverse,c.worldAddress == 0x22000020 else { throw Self.error("Paused source identity") }
+        try identity(c.exeSHA256,c.dllSHA256,c.actorAddresses,c.objectAddresses)
+        try merge(c.blobs)
+        continuousPlatform = .init(input:p.input,drawResults:p.drawResults,
+            loadedSoundBuffers:p.loadedSoundBuffers,resourceSurfaces:p.resourceSurfaces)
+    }
     init(_ reverse: Bool) throws {
         self.reverse = reverse
         var first: [Section] = []
@@ -219,7 +231,10 @@ final class OriginalApplicationGameplaySource {
         return try .init(bytes:b,defined:[Bool](repeating:true,count:b.count))
     }
     func pool(_ value: R.State) throws -> OriginalStateRecord {
-        var record = try record(value.state.poolBytes,value.state.poolMask)
+        try normalizedPool(record(value.state.poolBytes,value.state.poolMask))
+    }
+    func normalizedPool(_ raw: OriginalStateRecord) throws -> OriginalStateRecord {
+        var record = raw
         guard record.bytes.count == 0x7d8+400*0x420 else { throw Self.error("Pool extent") }
         let actors = Dictionary(uniqueKeysWithValues:actorAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })
         let objects = Dictionary(uniqueKeysWithValues:objectAddresses.enumerated().map { ($0.element,UInt32($0.offset)) })

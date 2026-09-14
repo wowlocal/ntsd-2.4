@@ -27,6 +27,14 @@ struct OriginalApplicationActiveOutputProjection {
         writes.append(.init(address:UInt32(address),pc:pc,size:size,value:value))
     }
     mutating func advance(_ installed: Bool) throws {
+        try noticeOne(installed,paused:false)
+    }
+    /// Separately bounded paused consumer: notice1 still draws but the first
+    /// overlay timer store at402967 is skipped. Notice3 has a different contract.
+    mutating func advancePausedNoticeOne(_ installed: Bool) throws {
+        try noticeOne(installed,paused:true)
+    }
+    private mutating func noticeOne(_ installed: Bool,paused: Bool) throws {
         drawing.events = [];writes = []
         try P.require(globals.bytes.count == 0xb440 && g(0x44d78c) == 794 && g(0x44d790) == 550,"Output complete globals/viewport")
         try P.require(g(0x451160) == 0 && g(0x450c30) == 0 && g(0x450b84) == 0,"Finite VS Difficult label")
@@ -51,7 +59,7 @@ struct OriginalApplicationActiveOutputProjection {
             drawing.events.append(.init("stringWrite",[UInt32(label.count),0]))
         }
         drawing.events.append(.init("stage",[0x4028a0]))
-        try P.require(g(0x450b70) == 1 && (1..<240).contains(g(0x450b6c)) && g(0x450bfc) == 0,"Finite retained recording notice")
+        try P.require(g(0x450b70) == 1 && (1..<240).contains(g(0x450b6c)) && g(0x450bfc) == (paused ? 1 : 0),"Finite retained recording notice and declared pause branch")
         for at in [0x4553f2,0x4553f3] { try P.require(globals.integer(at:at-0x44d000,as:UInt8.self) != 100,"Finite no volume hotkey") }
         var filename: [UInt8] = []
         for offset in 0..<478 {
@@ -62,7 +70,7 @@ struct OriginalApplicationActiveOutputProjection {
         let text = Array("Start recording '".utf8)+filename+Array("'...".utf8)
         drawing.events.append(.init("format",[UInt32(text.count)],[Array("Start recording '%s'...".utf8),text]))
         try drawing.surfaceText(text,target,3,531,0xff7800,installed)
-        try store(0x450b6c,UInt32(bitPattern:g(0x450b6c) &+ 1),4,0x402967)
+        if !paused { try store(0x450b6c,UInt32(bitPattern:g(0x450b6c) &+ 1),4,0x402967) }
         drawing.events.append(.init("stage",[0x43e940]))
         drawing.events.append(try OriginalApplicationLoadedCharacterTests.present(globals))
         drawing.events.append(.init("stage",[0x419e60]))

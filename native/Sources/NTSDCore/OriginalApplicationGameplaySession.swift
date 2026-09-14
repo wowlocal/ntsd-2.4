@@ -1,4 +1,4 @@
-/// Complete the actual retained41e339 child with the installed library and
+/// Complete the actual retained gameplay or paused child with the installed library and
 /// current application owners. The original Bootstrap ticket remains pending
 /// until finishLoadedMenu commits the whole enclosing iteration.
 public struct OriginalApplicationGameplaySession {
@@ -8,7 +8,8 @@ public struct OriginalApplicationGameplaySession {
 
     public init(pending: OriginalApplicationInputSession.PendingContinuation) throws {
         try pending.state.validateAliases()
-        guard pending.round.continuation == .gameplay, pending.match.libraryCommands != nil else {
+        guard pending.round.continuation == .gameplay || pending.round.continuation == .pausedRendering,
+              pending.match.libraryCommands != nil else {
             throw Menu.Boundary.dependency("Installed gameplay continuation")
         }
         entry = pending
@@ -43,6 +44,8 @@ public struct OriginalApplicationGameplaySession {
             throw Menu.Boundary.dependency("Gameplay command music resume")
         },
         observe: @escaping (Menu.Observation,inout Environment) throws -> Void = { _,_ in },
+        pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
+        pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
         beforeCommit: (Menu.PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> Menu.PendingReturn {
         guard pendingReturn == nil else { throw Menu.Boundary.alreadyPrepared }
         let a = try Menu.Attempt(entry,.init(bitmaps:[:]),environment,
@@ -79,15 +82,55 @@ public struct OriginalApplicationGameplaySession {
             try record.write(UInt32(surface == 0 ? 0 : 1),at:0)
             return (record,surface)
         }
-        let installed = try OriginalGameplayBody.apply(state:&model,context:&context,crt:&random,
-            round:entry.round,caller:&local,target:entry.loading.target,presentation:outputInput,library:library,
-            surface:{ ordinal in
+        func surface(_ ordinal: Int) throws -> UInt32 {
                 guard !a.model.releasedBitmaps.contains(ordinal),let token = a.model.bitmapOwners[ordinal],
                       a.model.bitmaps.indices.contains(ordinal) else { throw Menu.Boundary.dependency("Gameplay bitmap ordinal") }
                 let (record,surface) = try resource(token)
                 guard record == a.model.bitmaps[ordinal].storage else { throw Menu.Boundary.owner(token) }
                 return surface
-            },resourceBitmap:resource,fillBacking:fillBacking,
+        }
+        func sound(_ request: OriginalQueuedSound.Event) throws -> Int32 {
+            if request.kind == .method {
+                guard let token = request.arguments.first,soundBuffers.contains(token) else {
+                    throw Menu.Boundary.dependency("Gameplay current WAV buffer owner")
+                }
+                try a.emit(.soundMethod(.init("soundMethod",request.arguments),ignoredResult:outputInput.methodResult))
+            }
+            return outputInput.methodResult
+        }
+        func front(_ event: OriginalFrontScreenEvent,_ output: Bool) throws {
+            if output,event.kind == "stage",event.arguments == [0x419e60] { drainingSound = true }
+            if drainingSound,event.kind == "method" {
+                // sound() stages this method exactly once after checking its owner.
+                try observe(.front(event),&a.environment)
+            } else { try a.front(event) }
+        }
+        func checkpoint(_ match: OriginalMatchPreparation,_ input: OriginalInputControlContext,
+                        _ crt: OriginalCRTRandom,_ library: OriginalGameplayBody.Library?) throws -> Menu.Snapshot {
+            var snapshot = a.state
+            try a.bindings.store(match,context:input,in:&snapshot);snapshot.random = crt
+            guard let library else { throw Menu.Boundary.dependency("Missing checkpoint library owners") }
+            snapshot.libraryText = library.text;snapshot.libraryHits = library.hits
+            snapshot.libraryTransforms = library.transforms
+            return Menu.Snapshot(state:snapshot,match:match,music:a.audio,resources:a.resources,
+                backgrounds:a.backgrounds,local:a.local,operations:a.operations)
+        }
+        let installed: OriginalGameplayBody.Library?
+        if entry.round.continuation == .pausedRendering {
+            installed = try OriginalPausedGameplay.apply(state:&model,context:&context,
+                round:entry.round,caller:&local,target:entry.loading.target,presentation:outputInput,library:library,
+                surface:surface,resourceBitmap:resource,fillBacking:fillBacking,
+                performFill:{ _ in outputInput.methodResult },performBlit:{ _ in outputInput.methodResult },
+                soundRequest:sound,observe:{ stage,event in
+                    try front(event,stage == .output)
+                    try pausedObserve(stage,event,&a.environment)
+                },ownedCheckpoint:{ stage,match,input,library in
+                    try pausedCheckpoint(stage,checkpoint(match,input,random,library),&a.environment)
+                })
+        } else {
+        installed = try OriginalGameplayBody.apply(state:&model,context:&context,crt:&random,
+            round:entry.round,caller:&local,target:entry.loading.target,presentation:outputInput,library:library,
+            surface:surface,resourceBitmap:resource,fillBacking:fillBacking,
             performFill:{ _ in outputInput.methodResult },performBlit:{ _ in outputInput.methodResult },
             allocate:{
                 let token = try allocate(&a.environment)
@@ -102,23 +145,10 @@ public struct OriginalApplicationGameplaySession {
             },close:{
                 let value = try close(&a.environment);a.operations.append(.gameplayClose(value));return value
             },
-            soundRequest:{ request in
-                if request.kind == .method {
-                    guard let token = request.arguments.first,soundBuffers.contains(token) else {
-                        throw Menu.Boundary.dependency("Gameplay current WAV buffer owner")
-                    }
-                    try a.emit(.soundMethod(.init("soundMethod",request.arguments),ignoredResult:outputInput.methodResult))
-                }
-                return outputInput.methodResult
-            },observe:{ event in
+            soundRequest:sound,observe:{ event in
                 switch event {
                 case .drawing(let stage,let e):
-                    if stage == .output,e.kind == "stage",e.arguments == [0x419e60] { drainingSound = true }
-                    if drainingSound,e.kind == "method" {
-                        // The sound callback below stages this terminal method
-                        // exactly once after validating the loaded WAV owner.
-                        try observe(.front(e),&a.environment)
-                    } else { try a.front(e) }
+                    try front(e,stage == .output)
                 case .impulses(let e):try a.front(.init(e.kind.rawValue,e.arguments,e.strings))
                 case .recording(let e):a.operations.append(.gameplayRecording(e))
                 case .commands(.resumeMusic(_,let control)):
@@ -128,15 +158,9 @@ public struct OriginalApplicationGameplaySession {
                 }
                 try observe(.gameplay(event),&a.environment)
             },ownedCheckpoint:{ stage,match,input,crt,library in
-                var snapshot = a.state
-                try a.bindings.store(match,context:input,in:&snapshot);snapshot.random = crt
-                guard let library else { throw Menu.Boundary.dependency("Missing checkpoint library owners") }
-                snapshot.libraryText = library.text;snapshot.libraryHits = library.hits
-                snapshot.libraryTransforms = library.transforms
-                let value = Menu.Snapshot(state:snapshot,match:match,music:a.audio,resources:a.resources,
-                    backgrounds:a.backgrounds,local:a.local,operations:a.operations)
-                try observe(.gameplayCheckpoint(stage,value),&a.environment)
+                try observe(.gameplayCheckpoint(stage,checkpoint(match,input,crt,library)),&a.environment)
             })
+        }
         guard let installed else { throw Menu.Boundary.dependency("Lost gameplay library owners") }
         var state = a.state
         try a.bindings.store(model,context:context,in:&state)

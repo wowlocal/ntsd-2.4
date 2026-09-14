@@ -1,0 +1,237 @@
+{
+  "schema": "owned-paused-gameplay-comparison-v1",
+  "base": "06569929b92deeff35234bbf098136845f0438b3",
+  "scope": "Finite application-owned non-playback pause/F2-step/resume after own first+16 neutral calls; two14-call schedules",
+  "finitePauseCompositionPassed": true,
+  "fullOriginalApplicationReturnMatched": false,
+  "fullGoalComplete": false,
+  "publicationReviewPending": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": true,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 324,
+  "ownEndpoints": 324,
+  "ownEvents": 28576,
+  "bootstrapReturns": 28,
+  "pausedCalls": 16,
+  "unpausedCalls": 12,
+  "explicitNativeWndProcMessages": 12,
+  "changedSourceKeyboardBytes": 6,
+  "newOwnedRollbackChecks": 36,
+  "newSameSessionRetries": 8,
+  "retainedActiveStagesPerUnpausedCall": 19,
+  "sourceAvailableSnapshotsReadOnlyChecked": 658,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNativeFPUComparison": false,
+  "pausedGlobalStoreSuffixCompared": true,
+  "pausedGlobalStoreSuffixStartPC": "41d742",
+  "unobservedIntermediateBackgroundStoreOrderCompared": false,
+  "fullStateMasksOwnersAndJournalCompared": true,
+  "sourceEnvironment": "Saved pinned EXE/VC80 with declared synthetic platform responses and direct keyboard writes",
+  "ownEnvironment": "Current Bootstrap and installed-library owners with explicit WndProc input; not identical pristine initialization",
+  "missingSourceComponents": [
+    "whole objects",
+    "whole objectStrings",
+    "middle frameHeap where absent"
+  ],
+  "validation": {
+    "job": {
+      "scope": "Native-only own pause/step/resume comparison; full original application and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationPausedGameplayTests/testPrimaryOwnedPauseStepResume|OriginalApplicationPausedGameplayTests/testControlOwnedPauseStepResume|OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection|OriginalApplicationActiveOutputTests/testControlOwnedOutputProjection|OriginalPausedGameplayTests/testOwnPauseSingleStepAndResume|OriginalPausedGameplayTests/testOwnPauseSingleStepAndResumeWithControlBacking|OriginalLibSurfaceTextTests/testActualInstalledReplacementAndRetainedDC|OriginalLibSurfaceTextTests/testLateObserverFailurePreservesRetainedDC|OriginalWorldHUDTests/testHUDCalleePreservesPausedCommands)$"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate2-inputs.json",
+      "nativeFiles": 1028,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T07:16:59.133322+00:00",
+      "pid": 21136,
+      "status": "terminal",
+      "processIdentity": "21136 Mon Sep 14 10:16:59 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate2/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/swift --jobs 4 -c release --filter (OriginalApplicationPausedGameplayTests/testPrimaryOwnedPauseStepResume|OriginalApplicationPausedGameplayTests/testControlOwnedPauseStepResume|OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection|OriginalApplicationActiveOutputTests/testControlOwnedOutputProjection|OriginalPausedGameplayTests/testOwnPauseSingleStepAndResume|OriginalPausedGameplayTests/testOwnPauseSingleStepAndResumeWithControlBacking|OriginalLibSurfaceTextTests/testActualInstalledReplacementAndRetainedDC|OriginalLibSurfaceTextTests/testLateObserverFailurePreservesRetainedDC|OriginalWorldHUDTests/testHUDCalleePreservesPausedCommands)$",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate2/native",
+      "exitCode": 0,
+      "elapsedSeconds": 686.3083203340001,
+      "endedUTC": "2026-09-14T07:28:25.424798+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveOutputTests",
+        "method": "testControlOwnedOutputProjection",
+        "seconds": 91.498
+      },
+      {
+        "suite": "OriginalApplicationActiveOutputTests",
+        "method": "testPrimaryOwnedOutputProjection",
+        "seconds": 69.926
+      },
+      {
+        "suite": "OriginalApplicationPausedGameplayTests",
+        "method": "testControlOwnedPauseStepResume",
+        "seconds": 23.874
+      },
+      {
+        "suite": "OriginalApplicationPausedGameplayTests",
+        "method": "testPrimaryOwnedPauseStepResume",
+        "seconds": 23.849
+      },
+      {
+        "suite": "OriginalLibSurfaceTextTests",
+        "method": "testActualInstalledReplacementAndRetainedDC",
+        "seconds": 0.096
+      },
+      {
+        "suite": "OriginalLibSurfaceTextTests",
+        "method": "testLateObserverFailurePreservesRetainedDC",
+        "seconds": 0.0
+      },
+      {
+        "suite": "OriginalPausedGameplayTests",
+        "method": "testOwnPauseSingleStepAndResume",
+        "seconds": 41.448
+      },
+      {
+        "suite": "OriginalPausedGameplayTests",
+        "method": "testOwnPauseSingleStepAndResumeWithControlBacking",
+        "seconds": 41.484
+      },
+      {
+        "suite": "OriginalWorldHUDTests",
+        "method": "testHUDCalleePreservesPausedCommands",
+        "seconds": 7.591
+      }
+    ],
+    "testSeconds": 299.767,
+    "buildSeconds": 382.75,
+    "stdout": {
+      "bytes": 150045,
+      "sha256": "78eb2c3ec9803c5498231f941b2116c7a7d43987d7a27b66ffe20d53756cef7a",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25273,
+      "sha256": "8d7d17bea7043775fedeffd3e628bc3232247e85f1ecbe383be0e75896bd6641",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1028,
+  "oldNativeFilesUnchanged": 1020,
+  "oldNativeFilesChanged": 4,
+  "newNativeFiles": 4,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 9,
+  "newAuthoredMethods": 2,
+  "inheritedMethodsNotRerun": 167,
+  "uniqueRetainedMethods": 176,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/verification2.json",
+    "bytes": 157525,
+    "sha256": "5bfd32e0c75b558d1a1e807bca3e08536711d1c466fccb404b2ff47dac4ba2a9",
+    "mode": 420
+  },
+  "independentPlanReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/review1-paused-plan.json",
+    "bytes": 28158,
+    "sha256": "45e3cd210168b1d2004d8372f7f0c0938b5f6eb6158fb7470434639673a2e0b3",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/review3-paused-candidate2.json",
+    "bytes": 28635,
+    "sha256": "f78b00e5218367a4856defd6b872e96fa0df2bfe231036ce658160274f8577e3",
+    "mode": 420
+  },
+  "independentVerifierReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/review4-paused-verifier.json",
+    "bytes": 27358,
+    "sha256": "fa4f2f1c87aa604e23e435e927fd9e98b2af5e2514167363a7bc7bccd2d6db62",
+    "mode": 420
+  },
+  "retainedSourceCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/retained-source1.json",
+    "bytes": 562,
+    "sha256": "14e8e528abb849145648eda4a5cb79ec8f6f675d0248adabbd77366913eb03a3",
+    "mode": 420
+  },
+  "candidate1Findings": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate1-findings.json",
+    "bytes": 1651,
+    "sha256": "5bce05168c168dbc318e867cfced3da88d5dee7f0ecbf098da01d03cfdf55e4d",
+    "mode": 420
+  },
+  "candidate2Corrections": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/candidate2-corrections.json",
+    "bytes": 2145,
+    "sha256": "45fcfe6aa3ddb26fc4ad36205116238cfc5a8b3497445de6b49fb25063f53d25",
+    "mode": 420
+  },
+  "candidate1Executed": false,
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/native-candidate2.tar",
+    "pin": {
+      "bytes": 4442531840,
+      "sha256": "0cf445f0c600e4fa36b1d41c7628b17c1460abe9d5bdbab74089dc6516fd0387",
+      "mode": 420
+    },
+    "members": 1028,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/paused-evidence1.tar",
+    "bytes": 1925120,
+    "sha256": "29bbab995c0cafc96342a48db0a82cd580f1339fba5e2af7a133298c90170452",
+    "mode": 420,
+    "members": 48,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/evidence-archive1.json",
+    "bytes": 8798,
+    "sha256": "abd7146faf0e04a7db98330d5d7fbd2e88fa2863ab9907885734cf191826f1b0",
+    "mode": 420
+  },
+  "next": "Read-only command/damage continuation readiness card: map existing actor-input/combat/active evidence to current application owners, select an evidenced whole caller and declare missing dependencies before new execution.",
+  "remaining": [
+    "Same-input installed source startup-to-match trajectory",
+    "Missing whole Object/objectStrings and middle Frame evidence",
+    "Full Native helper ABI/FPU and unobserved instruction/store ordering",
+    "Other notice/playback/indicator and active command/refill/healing/state1700 branches beyond finite schedules",
+    "Damaging fight/round/match, content/modes/AI/network/playback",
+    "Recovered engine AppKit integration and actual window/input/audio",
+    "Windows/device and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/review5-paused-publication.json",
+    "bytes": 53288,
+    "sha256": "82c70752e7e51354ffffbd59b44f013a49ba23e4a36b474feebf80c2380ca07d",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/publication1.json",
+    "bytes": 2661,
+    "sha256": "eca1d6876ea83fbd75a6ca42630823ed0c9404c61ebefb93dadc76661e6a4ebd",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-paused-gameplay-native-20260914/reviewed-evidence1.json",
+    "bytes": 10714,
+    "sha256": "0cbb73c63bb267c8688e42a91678a3d96e08246056c206207f1d9b3d9b222d47",
+    "mode": 420
+  }
+}
