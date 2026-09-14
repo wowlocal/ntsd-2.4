@@ -595,10 +595,29 @@ review до исполнения; прежние варианты и причи�
 Native job1 терминален в `build/research/application-owned-active-notices-native-20260914/`;
 не перезапускать. [Evidence](evidence/application-active-notices.json),
 [план](research/APPLICATION_ACTIVE_NOTICES_PLAN.md).
-**Остальные три стадии и полный active tick остаются открытыми.**
-NEXT — полное сравнение result recording из текущего собственного notices output
-по saved active48, с текущими globals, round result, replay owners и ordered IO;
-затем layout/output. Читать RESULT_RECORDING/GAMEPLAY_RESULT_RECORDING и архив.
+После notices три стадии оставались открытыми. Принято
+[сравнение active recording](research/APPLICATION_ACTIVE_RECORDING.md):96 source и96
+собственных endpoints из текущего notices output. Счётчик450bbc вычислен по
+текущему signed450bdc и wrap32; все остальные records/masks, replay/memory/
+graphics owners и journal сохранены. Сравнены96 исходных stores421ce6; ранний
+снимок globals является alias того же record. IO и watched stack accesses нет.
+Публичный control проверяет continuation422944 с nil stageDefeated и неизвестными
+неиспользуемыми flags. Сам checkpoint continuation не содержит; Body передаёт
+фактический result.continuation в layout. Четыре новых late rollback и два
+same-session retries прошли; полный layout/output ещё не принят.
+Пять release-методов прошли за283.095с/build361.77с, включая95
+контролируемых result callers/82writers/12restores,13no-writer gates,76codec successes,
+5allocation(-4)/1no-temporary(-2),18322writes/33219692bytes и прежние rollback.
+161 другой метод сохранён по pins;166 unique total. Все1018 Native-файлов и485
+package files сверены; все1015 старых файлов неизменны. Core/expected не менялись,
+оригинал не исполнялся. Native job1 терминален в
+`build/research/application-owned-active-recording-native-20260914/`; не перезапускать.
+[Evidence](evidence/application-active-recording.json), [план](research/APPLICATION_ACTIVE_RECORDING_PLAN.md).
+**Остальные две стадии и полный active tick остаются открытыми.**
+NEXT — полное сравнение result layout из текущего собственного recording output
+и фактического continuation по saved active48, с текущими flags, round result,
+владельцами и journal; затем output. Читать RESULT_LAYOUT/GAMEPLAY_RESULT_LAYOUT
+и соответствующие ограничения архива.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.
@@ -2137,7 +2156,7 @@ Swift-кода, число кадров или количество совпав
 | Собственный initialized проход через HUD R02/R13 | Dоба свежих пути до421a2d/SP1000e9bc: каждый449269 records/771514704 bytes+masks/59state/1603FPU;536/544helpers | [GAMEPLAY_HUD.md](research/GAMEPLAY_HUD.md), [основной](evidence/gameplay-hud.json), [контрольный](evidence/gameplay-hud-control.json);124/180events, undefined backing сохранён; первый такт ещё не вернулся |
 | Диагностика и сообщения после HUD R02/R15 | D819 прямых совпадений,8 отдельно отмеченных sNaN/Unicorn расхождений с QNaN-парами,4 cookie-overwrite отклонены Native;195/198callerPC,19802events | [POSTHUD_NOTICES.md](research/POSTHUD_NOTICES.md), [эталон](evidence/posthud-notices.json); полный caller/globals/pool/local bytes+masks, actual CRT/GDI/bitmap; Windows/FPU статус отдельно |
 | Собственный initialized проход после HUD R02/R15 | Dоба свежих пути до421cdc/SP1000e9bc: каждый481245records/806849858bytes+masks/61state/1604FPU;536/544helpers | [GAMEPLAY_NOTICES.md](research/GAMEPLAY_NOTICES.md), [основной](evidence/gameplay-notices.json), [контрольный](evidence/gameplay-notices-control.json);10 actualPC+stop, исходные flags0/no local access; nil backing не импортирован. Полный такт ещё открыт |
-| Следующий result writer R02/R15/R16 | S296caller/117writer; whole replay, prefix key, stream/cleanup и собственный producer stageDefeated | [RESULT_RECORDING_PLAN.md](research/RESULT_RECORDING_PLAN.md); writer/caller пока статические, отдельный проверенный компрессор описан ниже |
+| Запись результатов R02/R15/R16 | D95 controlled callers/82writers/12playback restores,18322writes/33219692bytes; active96 source/96 own no-writer endpoints,96 elapsed stores | [RESULT_RECORDING.md](research/RESULT_RECORDING.md), [active comparison](research/APPLICATION_ACTIVE_RECORDING.md), [evidence](evidence/application-active-recording.json); исходный [static plan](research/RESULT_RECORDING_PLAN.md) сохранён. Полный tick/матч/Windows и более широкие ветви открыты |
 | Сжатие повторов R02/R16 | D815 полных43f4b0/43f400, все51+11 wrapper starts,3208EXE/0DLL PC;31390143bytes/masks и11388helper returns | [REPLAY_COMPRESSION.md](research/REPLAY_COMPRESSION.md), [эталон](evidence/replay-compression.json); native C1.1.4, частичный выход/ошибки, исходные REP masks при неполных raw hooks. Разные private ABI/heap cleanup явно отмечены; whole writer/own/Windows открыты |
 | Поток записи повтора R02/R16 | D66 последовательностей/330 returns и ios states,1772 descriptor writes/6664690bytes;1626MSVCP+1324CRT actualPC | [REPLAY_STREAM.md](research/REPLAY_STREAM.md), [эталон](evidence/replay-stream.json); Native сравнивает path/mode/share, буферизацию и отказы. Open/descriptor/thread/allocator ответы заданы; private ABI/heap pressure, whole writer/own/Windows открыты |
 | Общая подготовка матча R02.1 | D против Swift: загруженный каталог → bootstrap → 50 последовательных подготовок; 52102 записи, 79596336 байт/масок, 720 RNG calls, 796 bitmap / 766 releases | [MATCH_PREPARATION.md](research/MATCH_PREPARATION.md), [a5](evidence/match-preparation.json), [ramp](evidence/match-preparation-ramp.json); menu/RNG inputs supplied, music disabled, остановка до replay init; не весь запуск/такт/W |

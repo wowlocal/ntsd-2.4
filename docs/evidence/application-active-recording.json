@@ -1,0 +1,208 @@
+{
+  "schema": "owned-active-recording-comparison-v1",
+  "base": "b93c09524c2dcc2e129daf1f3bc78f71ca0d635a",
+  "scope": "Complete finite result-recording gate from current notices output on both retained48-call schedules",
+  "finiteRecordingStageCompared": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullCardScope": "whole active body",
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 96,
+  "ownEndpoints": 96,
+  "sourceEvents": 0,
+  "ownEvents": 0,
+  "sourceCounterStores": 96,
+  "sourceElapsedBefore": [
+    17,
+    64
+  ],
+  "sourceElapsedAfter": [
+    18,
+    65
+  ],
+  "sourceCallerStackAccesses": 0,
+  "sourceStateChangedOnlyElapsed": true,
+  "sourceEarlyGlobalsIsAlias": true,
+  "resultContinuationCheckpointExposed": false,
+  "publicContinuationChecked": 4335940,
+  "bodyContinuationForwarding": "Actual Result.continuation passed directly to ResultLayout; snapshot equality alone does not expose it",
+  "newOwnedLateRollbacks": 4,
+  "newSameSessionRetries": 2,
+  "parentLateRollbacksRetained": true,
+  "controlledResultCalls": 95,
+  "controlledWriters": 82,
+  "controlledPlaybackRestores": 12,
+  "controlledNoWriterGates": 13,
+  "controlledCodecSuccesses": 76,
+  "controlledAllocationErrorReturns": 5,
+  "controlledNoTemporaryReturns": 1,
+  "controlledWrites": 18322,
+  "controlledWriteBytes": 33219692,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNativeFPUComparison": false,
+  "wholeCommandExtentAndOwnerRelationsCompared": true,
+  "laterStageEffectSemanticsAccepted": false,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 recording comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplication(ActiveRecording|ActiveNotices)Tests|OriginalResultRecordingTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/candidate1-inputs.json",
+      "nativeFiles": 1018,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T04:50:13.075065+00:00",
+      "pid": 92988,
+      "status": "terminal",
+      "processIdentity": "92988 Mon Sep 14 07:50:13 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/candidate1/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/swift --jobs 4 -c release --filter (OriginalApplication(ActiveRecording|ActiveNotices)Tests|OriginalResultRecordingTests)/",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/candidate1/native",
+      "exitCode": 0,
+      "elapsedSeconds": 647.850019,
+      "endedUTC": "2026-09-14T05:01:00.908708+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveNoticesTests",
+        "method": "testControlOwnedNoticesProjection",
+        "seconds": 83.243
+      },
+      {
+        "suite": "OriginalApplicationActiveNoticesTests",
+        "method": "testPrimaryOwnedNoticesProjection",
+        "seconds": 62.094
+      },
+      {
+        "suite": "OriginalApplicationActiveRecordingTests",
+        "method": "testControlOwnedRecordingProjection",
+        "seconds": 63.502
+      },
+      {
+        "suite": "OriginalApplicationActiveRecordingTests",
+        "method": "testPrimaryOwnedRecordingProjection",
+        "seconds": 63.301
+      },
+      {
+        "suite": "OriginalResultRecordingTests",
+        "method": "testWholeOriginalResultRecordingAndWriter",
+        "seconds": 10.956
+      }
+    ],
+    "testSeconds": 283.095,
+    "buildSeconds": 361.77,
+    "stdout": {
+      "bytes": 222451,
+      "sha256": "4d263c77ba8eba767a846f75f9fad3c391646b3df0c045baf51cff54a26fd88a",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25319,
+      "sha256": "4e98c65dad0948f2d5f8c0aa08533ec0334036da3277d8fb043e5ec21e2b7b5e",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1018,
+  "oldNativeFilesUnchanged": 1015,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 5,
+  "inheritedMethodsNotRerun": 161,
+  "uniqueRetainedMethods": 166,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/verification1.json",
+    "bytes": 149404,
+    "sha256": "9bb804821a1c592414c1917315d372d0b6fcd7db34f6ecdee1b86376abb96707",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/review2-recording-candidate1.json",
+    "bytes": 23080,
+    "sha256": "8e02c8404458c7ea17e05aa8e9efeebb02acb992a6ff7dcb5b1cf577d3685337",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/review1-recording-contract.json",
+    "bytes": 36179,
+    "sha256": "b3b2e504a9716bd8f3c3c62295742c421a5f867d6407de184b9317870fe3e887",
+    "mode": 420
+  },
+  "savedInputInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/inventory1.json",
+    "bytes": 264881,
+    "sha256": "4e9af5c6a8e4a7c6a90c076b58cdd0ac12d09aeb01b77a83e04bb4ab272083db",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/native-candidate1.tar",
+    "pin": {
+      "bytes": 4442408960,
+      "sha256": "42299248700a2cd11c5177c631b4ede2a0ae9b65d60a8b4d17bc5f62c1f2224c",
+      "mode": 420
+    },
+    "members": 1018,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/recording-evidence1.tar",
+    "bytes": 1832960,
+    "sha256": "59f9a2d557d3df06c37e1089b281d18f058705d229225eb6bc2107eb21b8dcaa",
+    "mode": 420,
+    "members": 28,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/evidence-archive1.json",
+    "bytes": 4990,
+    "sha256": "e5dd87e3c6131f614a33c7ca60443131bef63b39b02b03c491dd48a8ba1627b7",
+    "mode": 420
+  },
+  "next": "Compare complete active result layout from current owned recording output and actual continuation, then output.",
+  "remaining": [
+    "Two later body stages and whole active tick",
+    "Active result-table/writer branches outside this finite schedule",
+    "Enabled formatter lifetime and checkpoint observability",
+    "Unavailable middle source Object/Frame heap snapshots",
+    "Full helper ABI, Native FPU context and all instruction stores",
+    "Full match/game and app/window/input/audio integration",
+    "Actual device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/review3-recording-publication.json",
+    "bytes": 35278,
+    "sha256": "a2c37995f105d5ab96e83dceb7920224ce01f5ab5ae2f56bc39a2fecc95bae4c",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/publication1.json",
+    "bytes": 1658,
+    "sha256": "e3dbc84145a6fedeb3a48b0668dc5a65a855eb317b0f340150a4380fb9f01281",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-recording-native-20260914/reviewed-evidence1.json",
+    "bytes": 8056,
+    "sha256": "d89bb17e9cbf99cb997f77b55fc04a9d7669fdbec7724f1da3606858b1724809",
+    "mode": 420
+  }
+}

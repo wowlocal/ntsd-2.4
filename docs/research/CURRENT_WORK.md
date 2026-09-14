@@ -679,10 +679,29 @@ review до исполнения; прежние варианты и причи�
 Native job1 терминален в `build/research/application-owned-active-notices-native-20260914/`;
 не перезапускать. [Evidence](../evidence/application-active-notices.json),
 [план](APPLICATION_ACTIVE_NOTICES_PLAN.md).
-**Остальные три стадии и полный active tick остаются открытыми.**
-NEXT — полное сравнение result recording из текущего собственного notices output
-по saved active48, с текущими globals, round result, replay owners и ordered IO;
-затем layout/output. Читать RESULT_RECORDING/GAMEPLAY_RESULT_RECORDING и архив.
+После notices три стадии оставались открытыми. Принято
+[сравнение active recording](APPLICATION_ACTIVE_RECORDING.md):96 source и96
+собственных endpoints из текущего notices output. Счётчик450bbc вычислен по
+текущему signed450bdc и wrap32; все остальные records/masks, replay/memory/
+graphics owners и journal сохранены. Сравнены96 исходных stores421ce6; ранний
+снимок globals является alias того же record. IO и watched stack accesses нет.
+Публичный control проверяет continuation422944 с nil stageDefeated и неизвестными
+неиспользуемыми flags. Сам checkpoint continuation не содержит; Body передаёт
+фактический result.continuation в layout. Четыре новых late rollback и два
+same-session retries прошли; полный layout/output ещё не принят.
+Пять release-методов прошли за283.095с/build361.77с, включая95
+контролируемых result callers/82writers/12restores,13no-writer gates,76codec successes,
+5allocation(-4)/1no-temporary(-2),18322writes/33219692bytes и прежние rollback.
+161 другой метод сохранён по pins;166 unique total. Все1018 Native-файлов и485
+package files сверены; все1015 старых файлов неизменны. Core/expected не менялись,
+оригинал не исполнялся. Native job1 терминален в
+`build/research/application-owned-active-recording-native-20260914/`; не перезапускать.
+[Evidence](../evidence/application-active-recording.json), [план](APPLICATION_ACTIVE_RECORDING_PLAN.md).
+**Остальные две стадии и полный active tick остаются открытыми.**
+NEXT — полное сравнение result layout из текущего собственного recording output
+и фактического continuation по saved active48, с текущими flags, round result,
+владельцами и journal; затем output. Читать RESULT_LAYOUT/GAMEPLAY_RESULT_LAYOUT
+и соответствующие ограничения архива.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.
