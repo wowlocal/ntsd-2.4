@@ -13,7 +13,7 @@ final class OriginalApplicationActiveGraphicsTests: XCTestCase {
         let state: OriginalApplicationMenuSession.State
         let events: [G.Event]
     }
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveGraphicsSource(reverse),sourceCount = try source.compare()
         var previous: M.Snapshot?,front: [OriginalFrontScreenEvent] = [],endpoints: [Endpoint] = []
         var computedGraphics: [G.Event] = [],wholeRelations: [G.Event] = []
@@ -68,6 +68,7 @@ final class OriginalApplicationActiveGraphicsTests: XCTestCase {
                 wholeRelations += relations.graphics;front = []
             default:break
             }
+            try onBody?(call,ready,observation)
         },onReturn:{ call,ready,result in
             try P.require(stageIndex == 3 && endpoints.count == 3 && front.isEmpty,"Whole graphics observation boundaries")
             for endpoint in endpoints {
@@ -83,6 +84,7 @@ final class OriginalApplicationActiveGraphicsTests: XCTestCase {
             try relations.compare(state:result.snapshot.state,graphics:result.graphics,events:wholeRelations)
             count += 1;previous = nil;stageIndex = 0;endpoints = [];computedGraphics = [];wholeRelations = []
             print("Owned active graphics: control=\(reverse), call=\(call.index), 3 independent endpoints, complete command extent and retained owners; later7 semantics OPEN")
+            try onReturn?(call,ready,result)
         })
         try P.require(count == 48 && stageIndex == 0 && previous == nil && endpoints.isEmpty && front.isEmpty,"Complete own active graphics schedule")
         print("Owned active graphics comparison: control=\(reverse), \(sourceCount) source endpoints, \(count*3) own endpoints, \(events) own events, \(unknown) undefined bitmap observations; full tick/match/game OPEN")

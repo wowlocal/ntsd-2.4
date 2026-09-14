@@ -1,7 +1,8 @@
 # Active post-draw lifecycle comparison
 
-Status: saved-input/transient-lifetime prerequisite independently verified;
-new Native lifecycle comparison is not yet implemented or accepted.
+Status: implemented and accepted for both finite48-call schedules; see
+[results and remaining scope](APPLICATION_ACTIVE_LIFECYCLE.md). The frozen
+prerequisite/candidate plans remain unchanged in their evidence archives.
 Parent: `6c4af220209e1744b4a072b11a6e20ce5fac2167`, clean working tree before
 this prerequisite. Follow [WORKFLOW](WORKFLOW.md) and [CURRENT_WORK](CURRENT_WORK.md).
 The consumer is the remaining active body, then a complete Naruto/Sasuke District
@@ -105,7 +106,7 @@ remain open. Stop affected operations on refusal; do not retry or reroute them.
 Neither this plan nor a new goal clears those incidents.
 
 After acceptance, continue with commands/HUD/notices/recording/layout/output.
-All seven remaining active stages, the complete tick/match/game, application
+The six subsequent active stages, the complete tick/match/game, application
 integration, actual window/input/audio, Windows/device/clean-Mac and broader
 uncovered gameplay remain open until their own criteria pass.
-The EXE envelope is not recalculated by this prerequisite.
+The EXE envelope is not recalculated by this comparison.

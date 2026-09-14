@@ -527,17 +527,27 @@ Core/expected не менялись, оригинал не исполнялся.
 запуска candidate1, ошибка читателя candidate2 и поправка разбора журнала.
 [Evidence](evidence/application-active-graphics.json), [план](research/APPLICATION_ACTIVE_GRAPHICS_PLAN.md). Оба Native jobs терминальны в
 `build/research/application-owned-active-graphics-native-20260914/`; не перезапускать.
-**Семь следующих стадий и полный active tick остаются открытыми.**
-[Provenance Actor50](research/APPLICATION_ACTIVE_LIFECYCLE_PROVENANCE.md) проверяет96 saved
-calls: создание из текущего Frame61, планирование/звук/удаление в том же проходе,
-сохранение полного inactive record/mask доcall48 и отсутствие доступа к шести
-retained scratch words. Это prerequisite, не новое Native-сравнение стадии.
-NEXT — [полное сравнение lifecycle](research/APPLICATION_ACTIVE_LIFECYCLE_PLAN.md) из
-текущего собственного impulse output, с независимым расчётом создания, lifetime,
-звука, полных records/owners/journal и поздними откатами после transient creation.
-Далее commands/HUD/notices/recording/layout/output. Полные helper ABI/stores,
-damaging/held/cpoint/spawn ветви вне конечного пути, матч/игра, app/device/Windows/
-clean-Mac и прежние safety incidents остаются открытыми. EXE envelope не пересчитан.
+На этом входе семь следующих стадий оставались открытыми. Принятое
+[сравнение active lifecycle](research/APPLICATION_ACTIVE_LIFECYCLE.md) продолжает
+текущий собственный impulse output:96 source и96 own endpoints,216 helper
+returns,14 sounds и2 transient lifetime на каждой стороне. Сравнены полные
+records/masks, текущие владельцы, ordered effects и journal;8 поздних откатов
+и2 повтора в той же сессии прошли. [Provenance Actor50](research/APPLICATION_ACTIVE_LIFECYCLE_PROVENANCE.md)
+остаётся отдельным prerequisite сохранения inactive storage доcall48.
+Четыре release-метода прошли за220.779с/build356.75с;147 прежних методов
+сохранены по pins и не перезапускались. Все1006 Native-файлов и архивы сверены;
+1002 старых файла и485 package files неизменны. Core/expected не менялись,
+оригинал не исполнялся. Candidate1 отклонён до запуска: пропуски helper results
+и дополнительных gameplay families исправлены в candidate2. Ошибки инструментов
+публикации также сохранены; успешный Native job2 терминален, не перезапускать.
+[Evidence](evidence/application-active-lifecycle.json), [план](research/APPLICATION_ACTIVE_LIFECYCLE_PLAN.md).
+**Остальные шесть стадий и полный active tick остаются открытыми.**
+NEXT — полное сравнение commands/recovery из текущего собственного lifecycle
+output по saved active48; затем HUD/notices/recording/layout/output. Сначала
+закрепить конечный контракт следующей стадии и его прямые зависимости.
+Полные helper ABI/stores, damaging/held/cpoint/alternate-spawn ветви вне конечного
+пути, матч/игра, app/device/Windows/clean-Mac и прежние safety incidents остаются
+открытыми. EXE envelope не пересчитан.
 
 
 
