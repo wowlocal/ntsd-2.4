@@ -1,0 +1,222 @@
+{
+  "schema": "application-first-damage-diagnostic-v1",
+  "base": "3de9cc9e007e5d16d63d9038584c35f4e19fc897",
+  "scope": "Two bounded Native-only ordinary attack scenarios from own Bootstrap after own first+16 neutral parent; maximum160 new complete calls each",
+  "diagnosticVerified": true,
+  "publicationReviewPending": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEquivalenceAccepted": false,
+  "fullMatchAccepted": false,
+  "fullGoalComplete": false,
+  "outcomes": [
+    {
+      "attacker": 0,
+      "attemptedCalls": 91,
+      "committedCalls": 91,
+      "control": false,
+      "fullMatchAccepted": false,
+      "kind": "outcome",
+      "lateRollbacks": 4,
+      "messages": 8,
+      "originalCompared": false,
+      "outcome": "committed-hit-damage",
+      "protectionExpiredAt": 58,
+      "sameSessionRetries": 4
+    },
+    {
+      "attacker": 1,
+      "attemptedCalls": 93,
+      "committedCalls": 93,
+      "control": true,
+      "fullMatchAccepted": false,
+      "kind": "outcome",
+      "lateRollbacks": 4,
+      "messages": 8,
+      "originalCompared": false,
+      "outcome": "committed-hit-damage",
+      "protectionExpiredAt": 58,
+      "sameSessionRetries": 4
+    }
+  ],
+  "validation": {
+    "job": {
+      "scope": "Native-only first-damage diagnostic; full original application and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate2/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplicationFirstDamageTests/testNarutoFirstDamageDiagnostic|OriginalApplicationFirstDamageTests/testSasukeFirstDamageDiagnostic)$"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate2-inputs.json",
+      "nativeFiles": 1030,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T08:27:16.375422+00:00",
+      "pid": 36570,
+      "status": "terminal",
+      "processIdentity": "36570 Mon Sep 14 11:27:16 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate2/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/swift --jobs 4 -c release --filter (OriginalApplicationFirstDamageTests/testNarutoFirstDamageDiagnostic|OriginalApplicationFirstDamageTests/testSasukeFirstDamageDiagnostic)$",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate2/native",
+      "exitCode": 0,
+      "elapsedSeconds": 1689.0203818339999,
+      "endedUTC": "2026-09-14T08:55:25.434351+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationFirstDamageTests",
+        "method": "testNarutoFirstDamageDiagnostic",
+        "seconds": 653.642
+      },
+      {
+        "suite": "OriginalApplicationFirstDamageTests",
+        "method": "testSasukeFirstDamageDiagnostic",
+        "seconds": 644.479
+      }
+    ],
+    "buildSeconds": 387.25,
+    "testSeconds": 1298.121
+  },
+  "nativeFiles": 1030,
+  "oldNativeFilesUnchanged": 1028,
+  "newNativeFiles": 2,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/verification2.json",
+    "bytes": 111446,
+    "sha256": "05642cc38c9497b0b0ed5a35a170d2ec434e0a42c5944a3ca55371a09625c07e",
+    "mode": 420
+  },
+  "independentPlanReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review1-plan.json",
+    "bytes": 20129,
+    "sha256": "647b4b65144d8384d64b7d1c6e4634371a6fbea35975dcd2e1a1274365dc8f5d",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review3-candidate2.json",
+    "bytes": 11813,
+    "sha256": "ebe175a63a9268033c2c45a4633e861fa198c99706d66b468ff6d271baebc4e0",
+    "mode": 420
+  },
+  "independentVerifierReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review4-verifier.json",
+    "bytes": 8124,
+    "sha256": "7e3c5bda0801da40ff729d22ca0eedc404430094533dc4598c25d247199e3961",
+    "mode": 420
+  },
+  "rejectedCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review2-candidate1.json",
+    "bytes": 16303,
+    "sha256": "4905e7af2cd19df1202b13adba6f11551aa5e6d6a9266f4c0acacbea873330d6",
+    "mode": 420
+  },
+  "candidate1Executed": false,
+  "rejectedCandidateRestoration": {
+    "baseArchive": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/native-candidate2.tar",
+      "pin": {
+        "bytes": 4442562560,
+        "sha256": "310ac91f327af1a0c4c593a5b2be4b6b821764b44d9087c08ac973a82ea90902",
+        "mode": 420
+      },
+      "members": 1030,
+      "allBodiesAndModesVerified": true
+    },
+    "candidate1Manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate1-inputs.json",
+      "bytes": 214211,
+      "sha256": "fd71118ece0650dded04dd8c624f21e9bb9baf38e9c639d03425060a3753896a",
+      "mode": 420
+    },
+    "candidate1Review": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review2-candidate1.json",
+      "bytes": 16303,
+      "sha256": "4905e7af2cd19df1202b13adba6f11551aa5e6d6a9266f4c0acacbea873330d6",
+      "mode": 420
+    },
+    "commonFiles": 1028,
+    "replacements": {
+      "native/Tests/NTSDCoreTests/OriginalApplicationFirstDamageDiagnostic.swift": {
+        "archiveMember": "rejected-candidate1/native/Tests/NTSDCoreTests/OriginalApplicationFirstDamageDiagnostic.swift",
+        "bytes": 10625,
+        "sha256": "f2670f604816acc4054bdb28297de470e6c1c755e62399a8a6b37e4ac7e287e7",
+        "mode": 420
+      },
+      "native/Tests/NTSDCoreTests/OriginalApplicationFirstDamageTests.swift": {
+        "archiveMember": "rejected-candidate1/native/Tests/NTSDCoreTests/OriginalApplicationFirstDamageTests.swift",
+        "bytes": 12445,
+        "sha256": "9c000ce906ae3505e459e65db30afd62207b7660c72d8aed14462fb23c27fcf5",
+        "mode": 420
+      }
+    },
+    "instruction": "Restore native candidate2 archive then replace exactly these two files from evidence archive; resulting1030 bytes/modes match candidate1 manifest."
+  },
+  "candidate2Corrections": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/candidate2-corrections.json",
+    "bytes": 503,
+    "sha256": "e99bc0be984d769bfbd519dd1b94a354bc9cab66f083e094a4d150a06ffbe4b7",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/native-candidate2.tar",
+    "pin": {
+      "bytes": 4442562560,
+      "sha256": "310ac91f327af1a0c4c593a5b2be4b6b821764b44d9087c08ac973a82ea90902",
+      "mode": 420
+    },
+    "members": 1030,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/damage-evidence1.tar",
+    "bytes": 188508160,
+    "sha256": "c6adf5f939418ab397dc97640f1b7498b88b313180f68e24b395cb7321eda83e",
+    "mode": 420,
+    "members": 36,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/evidence-archive1.json",
+    "bytes": 6541,
+    "sha256": "e2a0849711076ffd2e473590c482f2475087c71007a7bcddf33ea0b42c9a6828",
+    "mode": 420
+  },
+  "remaining": [
+    "Damaging whole-call equivalence with same-input original trajectory",
+    "Full fight/round/match and remaining content/modes/AI/network/replays",
+    "Production app session/input/commit adapter and actual raster/audio/window",
+    "Windows/device and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/review5-publication.json",
+    "bytes": 67417,
+    "sha256": "7e7d243efcc0c16cda0c27f85f2be9b0a563cd923bb18a3b457910e15ddbef86",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/publication1.json",
+    "bytes": 1425,
+    "sha256": "047272146f266bd6542d30beb7c356ab9fb2dcdcb7841b266c7c5a77c7d73fff",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/first-damage-native-20260914/reviewed-evidence1.json",
+    "bytes": 8757,
+    "sha256": "a7347439407db85923bb7ed2194990e26c94f71d938cbd16fad9a87b71955547",
+    "mode": 420
+  }
+}

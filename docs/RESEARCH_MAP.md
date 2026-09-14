@@ -1,15 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
-
-Актуальная [готовность первого Naruto/Sasuke District match](research/FIRST_MATCH_READINESS.md)
-после62565b8: active48 остаётся внутри стартовой защиты Actor+8 (58→10),
-хотя общие library contact/hit handlers реализованы. NEXT — объявленная
-Native-only диагностика обычной атаки после истечения защиты до первого
-полного damaging return/unsupported boundary/лимита, затем независимое сравнение
-реально достигнутых ветвей. Это не новое source execution или принятие матча.
-Production app session/input/commit adapter, raster/audio/Windows/device/clean-Mac
-остаются отдельными препятствиями. Краткая передача — [CURRENT_WORK](research/CURRENT_WORK.md).
-
+Актуальная [диагностика первого урона](research/FIRST_DAMAGE_DIAGNOSTIC.md)
+продолжила собственный Bootstrap после истечения защиты обычными вводами.
+Она фиксирует Native outcome, но не принимает новые damaging calls как эквивалент
+оригинала. NEXT — независимое сравнение целого достигнутого damaging caller,
+его lifecycle/graphics/sound/outer return; недостающие source inputs определить
+по сохранённым доказательствам до нового исполнения. Production app adapter,
+raster/audio/Windows/device/clean-Mac остаются открытыми.
+Краткая передача — [CURRENT_WORK](research/CURRENT_WORK.md), исходная
+[карта препятствий](research/FIRST_MATCH_READINESS.md) сохраняется.
 
 Дата исходного среза: 2026-09-07. Код этого среза: `a9f2cfe`, приложение 0.4.0.
 Это рабочая очередь исследования **механизмов оригинального движка**.
