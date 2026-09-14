@@ -713,12 +713,26 @@ controlled layout matches и1 отдельный source-fault rejection,386781ev
 Core/expected не менялись, оригинал не исполнялся. Native job1 терминален в
 `build/research/application-owned-active-layout-native-20260914/`; не перезапускать.
 [Evidence](../evidence/application-active-layout.json), [план](APPLICATION_ACTIVE_LAYOUT_PLAN.md).
-**Output и полный active tick остаются открытыми.**
-NEXT — полное сравнение output из текущего собственного layout output по saved
-active48: mode label, notice/volume, presentation, queued sound, actual return
-и сохранённые владельцы/journal. Читать GAMEPLAY_OUTPUT/GAMEPLAY_RETURN и архив.
-Планировочные данные следующего output и сохранённая ошибка первого читателя:
-`build/research/application-owned-active-layout-native-20260914/next-output-findings1.md`.
+Принято [сравнение active output/return](APPLICATION_ACTIVE_OUTPUT.md):96 source
+и96 own endpoints из текущего layout, по75650 событий,1166 source stores,
+14plays и15950 source helper returns. Сравнены полные records/masks, владельцы,
+ordered graphics/audio journal и конечный PendingReturn. Восемь новых поздних
+rollback и четыре same-session retries прошли. Все19 конечных stage contracts
+составлены в фактическом порядке с полным графическим журналом до возврата.
+Это конечная композиция для текущих входов; full original application equivalence
+не заявлена: pristine-source и own installed-library среды различаются, middle
+Object/Frame snapshots и другие явно перечисленные зависимости остаются открытыми.
+Семь release-методов прошли за285.671с/build365.32с;
+165 других сохранены по pins,172 unique. Проверены1024 Native и485 package files,
+1021 прежний Native-файл неизменен. Core/expected не менялись, оригинал не исполнялся.
+Native job1 терминален в `build/research/application-owned-active-output-native-20260914/`;
+не перезапускать. [Evidence](../evidence/application-active-output.json),
+[план](APPLICATION_ACTIVE_OUTPUT_PLAN.md).
+NEXT — по saved application/active48 evidence составить карту оставшихся условий
+full application equivalence: происхождение текущих source/own входов, отличия
+library-моделей и отсутствующие snapshots. Выбрать первый ограниченный caller,
+для которого зависимости готовы; не заполнять пробелы из expected и не повторять
+терминальные producers. Полный original active tick/матч/игра ещё не приняты.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.
