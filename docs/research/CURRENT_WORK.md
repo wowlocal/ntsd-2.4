@@ -697,11 +697,28 @@ package files сверены; все1015 старых файлов неизме�
 оригинал не исполнялся. Native job1 терминален в
 `build/research/application-owned-active-recording-native-20260914/`; не перезапускать.
 [Evidence](../evidence/application-active-recording.json), [план](APPLICATION_ACTIVE_RECORDING_PLAN.md).
-**Остальные две стадии и полный active tick остаются открытыми.**
-NEXT — полное сравнение result layout из текущего собственного recording output
-и фактического continuation по saved active48, с текущими flags, round result,
-владельцами и journal; затем output. Читать RESULT_LAYOUT/GAMEPLAY_RESULT_LAYOUT
-и соответствующие ограничения архива.
+После recording две стадии оставались открытыми. Принято
+[сравнение active layout](APPLICATION_ACTIVE_LAYOUT.md):96 source и96 собственных
+endpoints от recording до422994. Indicator450b84=0 пропускает вложенный playback,
+хотя исходный44d030=1. Полные records/masks, владельцы, journal и отсутствие
+events/stores/watched stack accesses сравнены. Прямой public recorder→layout
+control передаёт фактический continuation; checkpoint его не раскрывает.
+Nil и opaque372 formatter сохранены отдельно от menu-local; неизвестные
+неиспользуемые flags/backing не заполняются. Четыре поздних rollback и два
+same-session retries прошли; полный output ещё не принят.
+Пять release-методов прошли за280.916с/build362.24с, включая599
+controlled layout matches и1 отдельный source-fault rejection,386781events/
+25661Blts и4 прежних rollback.163 других метода сохранены по pins;168 unique total.
+Все1021 Native-файл и485 package files сверены;1018 старых файлов неизменны.
+Core/expected не менялись, оригинал не исполнялся. Native job1 терминален в
+`build/research/application-owned-active-layout-native-20260914/`; не перезапускать.
+[Evidence](../evidence/application-active-layout.json), [план](APPLICATION_ACTIVE_LAYOUT_PLAN.md).
+**Output и полный active tick остаются открытыми.**
+NEXT — полное сравнение output из текущего собственного layout output по saved
+active48: mode label, notice/volume, presentation, queued sound, actual return
+и сохранённые владельцы/journal. Читать GAMEPLAY_OUTPUT/GAMEPLAY_RETURN и архив.
+Планировочные данные следующего output и сохранённая ошибка первого читателя:
+`build/research/application-owned-active-layout-native-20260914/next-output-findings1.md`.
 Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
 ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
 incidents остаются открытыми. EXE envelope не пересчитан.

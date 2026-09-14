@@ -1,0 +1,200 @@
+{
+  "schema": "owned-active-layout-comparison-v1",
+  "base": "47bd85476ae598d46ca97054c215936521577835",
+  "scope": "Complete finite result-layout gate from current recording output on both retained48-call schedules",
+  "finiteLayoutStageCompared": true,
+  "activeBodyDifferentialAccepted": false,
+  "fullCardAccepted": false,
+  "fullCardScope": "whole active body",
+  "fullGoalComplete": false,
+  "fullOriginalApplicationReturnMatched": false,
+  "originalExecuted": false,
+  "historicalProducerOrAuditorExecuted": false,
+  "coreChanged": false,
+  "sourceExpectedChanged": false,
+  "sourceEndpoints": 96,
+  "ownEndpoints": 96,
+  "sourceEvents": 0,
+  "ownEvents": 0,
+  "sourceIndicatorFlag": 0,
+  "sourcePlaybackFlag": 1,
+  "sourceGlobalStores": 0,
+  "sourceCallerStackAccesses": 0,
+  "sourceFullStateUnchanged": true,
+  "resultContinuationCheckpointExposed": false,
+  "publicRecorderToLayoutContinuationChecked": 4335940,
+  "sourceEndpoint": 4336020,
+  "bodyContinuationForwarding": "Actual recorder result is passed to layout in Body and direct public control; checkpoint does not expose it",
+  "newOwnedLateRollbacks": 4,
+  "newSameSessionRetries": 2,
+  "parentLateRollbacksRetained": true,
+  "controlledLayoutMatches": 599,
+  "controlledSourceFaultRejections": 1,
+  "controlledEvents": 386781,
+  "controlledBlts": 25661,
+  "controlledRollbackTrials": 4,
+  "fullHelperABICompared": false,
+  "fullInstructionStoresCompared": false,
+  "newNativeFPUComparison": false,
+  "wholeCommandExtentAndOwnerRelationsCompared": true,
+  "formatterCheckpointExposed": false,
+  "publicNilAndOpaque372Retained": true,
+  "laterStageEffectSemanticsAccepted": false,
+  "validation": {
+    "job": {
+      "scope": "Native-only own active48 layout comparison and body preflight; body differential and full game remain open.\nNo original game code, emulator, historical producer or auditor is executed.\n",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/candidate1/native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/swift",
+        "--jobs",
+        "4",
+        "-c",
+        "release",
+        "--filter",
+        "(OriginalApplication(ActiveLayout|ActiveRecording)Tests|OriginalResultLayoutTests)/"
+      ],
+      "inputPins": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/candidate1-inputs.json",
+      "nativeFiles": 1021,
+      "rawOverrides": false,
+      "originalExecuted": false,
+      "startedUTC": "2026-09-14T05:19:28.180608+00:00",
+      "pid": 98818,
+      "status": "terminal",
+      "processIdentity": "98818 Mon Sep 14 08:19:28 2026     swift test --package-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/candidate1/native --scratch-path /Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/swift --jobs 4 -c release --filter (OriginalApplication(ActiveLayout|ActiveRecording)Tests|OriginalResultLayoutTests)/",
+      "cwd": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/candidate1/native",
+      "exitCode": 0,
+      "elapsedSeconds": 646.134134,
+      "endedUTC": "2026-09-14T05:30:14.323574+00:00"
+    },
+    "methods": [
+      {
+        "suite": "OriginalApplicationActiveLayoutTests",
+        "method": "testControlOwnedLayoutProjection",
+        "seconds": 86.599
+      },
+      {
+        "suite": "OriginalApplicationActiveLayoutTests",
+        "method": "testPrimaryOwnedLayoutProjection",
+        "seconds": 64.958
+      },
+      {
+        "suite": "OriginalApplicationActiveRecordingTests",
+        "method": "testControlOwnedRecordingProjection",
+        "seconds": 63.737
+      },
+      {
+        "suite": "OriginalApplicationActiveRecordingTests",
+        "method": "testPrimaryOwnedRecordingProjection",
+        "seconds": 63.564
+      },
+      {
+        "suite": "OriginalResultLayoutTests",
+        "method": "testWholeOriginalResultLayoutAndIndicators",
+        "seconds": 2.057
+      }
+    ],
+    "testSeconds": 280.916,
+    "buildSeconds": 362.24,
+    "stdout": {
+      "bytes": 245767,
+      "sha256": "6cc806da8ed9b1cfa1eeccf7a9a892c21f11c42469deb83c6bae979e3f638aaa",
+      "mode": 420
+    },
+    "stderr": {
+      "bytes": 25225,
+      "sha256": "d1be9647e709bc4630aedf5163634975b8e849a74f5da7b76f3a46ac97c52e61",
+      "mode": 420
+    }
+  },
+  "nativeFiles": 1021,
+  "oldNativeFilesUnchanged": 1018,
+  "fixturesUnchanged": 383,
+  "resourcesUnchanged": 102,
+  "packagedFiles": 485,
+  "selectedMethods": 5,
+  "inheritedMethodsNotRerun": 163,
+  "uniqueRetainedMethods": 168,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/verification1.json",
+    "bytes": 148104,
+    "sha256": "7f89192234b235f818d85b90250dceefbd54e2993edddd29f56df3ca4a052f78",
+    "mode": 420
+  },
+  "independentCandidateReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/review2-layout-candidate1.json",
+    "bytes": 20425,
+    "sha256": "64de3b7e9edfea3a6163abdece1db0176fb005b24e59ce3c8f14c6e614f3e769",
+    "mode": 420
+  },
+  "independentContractReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/review1-layout-contract.json",
+    "bytes": 23731,
+    "sha256": "7e2e215802ac80459591538c1430c884de63edce9e73da1a97b354d0d56ce74a",
+    "mode": 420
+  },
+  "savedInputInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/inventory1.json",
+    "bytes": 237035,
+    "sha256": "9e2bce63693bbd5c9fc56e2516bd1ff1e5a136ea24bf8904ee45c9c8669c210a",
+    "mode": 420
+  },
+  "nativeArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/native-candidate1.tar",
+    "pin": {
+      "bytes": 4442439680,
+      "sha256": "51c4282672c07286a96770326b36b50983f9a9ce89c182054f8bfe5ff06d03d8",
+      "mode": 420
+    },
+    "members": 1021,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/layout-evidence1.tar",
+    "bytes": 2150400,
+    "sha256": "b79fe6411159fb0ae28e6265ea8028acfb10de43bc989b315403d036f24abc30",
+    "mode": 420,
+    "members": 34,
+    "allBodiesAndModesVerified": true
+  },
+  "evidenceArchiveVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/evidence-archive1.json",
+    "bytes": 5917,
+    "sha256": "73c6902e82b24f3842b1265551250b9f6189ac7c1f6266dd0efb371f886df903",
+    "mode": 420
+  },
+  "next": "Compare complete active output from current owned layout state through actual return.",
+  "remaining": [
+    "Whole output and complete active tick",
+    "Enabled result-table/indicator branches outside this finite schedule",
+    "Enabled formatter lifetime and checkpoint observability",
+    "Unavailable middle source Object/Frame heap snapshots",
+    "Full helper ABI, Native FPU context and all instruction stores",
+    "Full match/game and app/window/input/audio integration",
+    "Actual device, Windows and clean-Mac acceptance",
+    "Existing safety incidents"
+  ],
+  "estimatesRecalculated": false,
+  "publicationReviewPending": false,
+  "independentFinalReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/review3-layout-publication.json",
+    "bytes": 34290,
+    "sha256": "c8bd036f97d33fd33b8ee16bcb1724b3bc907dfdfa4093ffb03c4249fc870569",
+    "mode": 420
+  },
+  "reviewedPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/publication1.json",
+    "bytes": 1642,
+    "sha256": "9717e629beaa53748dd32adef9c1754a3afe32c0f9bc4d6f2470fde986a461a4",
+    "mode": 420
+  },
+  "reviewedEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a08766-6cdc-7b33-bb58-04076f1ec261/application-owned-active-layout-native-20260914/reviewed-evidence1.json",
+    "bytes": 7863,
+    "sha256": "b511c103908d3f9fcf5f89055e3b28490470ba8ade0f4681dfb8984eb0486690",
+    "mode": 420
+  }
+}
