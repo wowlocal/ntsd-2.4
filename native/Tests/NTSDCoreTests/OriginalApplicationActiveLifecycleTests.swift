@@ -9,7 +9,7 @@ final class OriginalApplicationActiveLifecycleTests: XCTestCase {
     typealias M = OriginalApplicationLoadedMenuSession
     typealias G = OriginalApplicationGameplaySession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveLifecycleSource(reverse),sourceCount = try source.compare()
         var predecessor: M.Snapshot?,endpoint: M.Snapshot?,computed: Q?
         var events: [Q.Event] = [],fronts = 0,count = 0,constructors = 0,sounds = 0,rollback = 0
@@ -60,6 +60,7 @@ final class OriginalApplicationActiveLifecycleTests: XCTestCase {
                 count += 1;constructors += model.created.count;sounds += model.events.filter { $0.kind == "catalogSound" }.count
             default:break
             }
+            try onBody?(call,ready,event)
         },onReturn:{ call,ready,result in
             let snapshot = try XCTUnwrap(endpoint),model = try XCTUnwrap(computed)
             if !model.created.isEmpty {
@@ -73,6 +74,7 @@ final class OriginalApplicationActiveLifecycleTests: XCTestCase {
             }
             print("Owned active lifecycle: control=\(reverse), call=\(call.index), scheduled=\(model.scheduled), created=\(model.created), removed=\(model.removed), events=\(model.events); complete stage records/owners/journal, later6 semantics OPEN")
             endpoint = nil;computed = nil
+            try onReturn?(call,ready,result)
         })
         try P.require(count == 48 && constructors == 1 && sounds == 7 && rollback == 4 && predecessor == nil && endpoint == nil && computed == nil && events.isEmpty,"Own complete lifecycle sequence")
         print("Owned active lifecycle comparison: control=\(reverse), \(sourceCount) source endpoints, \(count) own endpoints, \(constructors) transient, \(sounds) sounds, \(rollback) late rollbacks and 1 same-session retry; full tick/match/game OPEN")

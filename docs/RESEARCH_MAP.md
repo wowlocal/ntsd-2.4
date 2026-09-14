@@ -541,13 +541,30 @@ records/masks, текущие владельцы, ordered effects и journal;8 �
 и дополнительных gameplay families исправлены в candidate2. Ошибки инструментов
 публикации также сохранены; успешный Native job2 терминален, не перезапускать.
 [Evidence](evidence/application-active-lifecycle.json), [план](research/APPLICATION_ACTIVE_LIFECYCLE_PLAN.md).
-**Остальные шесть стадий и полный active tick остаются открытыми.**
-NEXT — полное сравнение commands/recovery из текущего собственного lifecycle
-output по saved active48; затем HUD/notices/recording/layout/output. Сначала
-закрепить конечный контракт следующей стадии и его прямые зависимости.
-Полные helper ABI/stores, damaging/held/cpoint/alternate-spawn ветви вне конечного
-пути, матч/игра, app/device/Windows/clean-Mac и прежние safety incidents остаются
-открытыми. EXE envelope не пересчитан.
+После lifecycle шесть стадий оставались открытыми. Принято
+[сравнение active commands/recovery](research/APPLICATION_ACTIVE_COMMANDS.md):96 source
+и96 собственных endpoints из текущего lifecycle output, полные records/masks,
+владельцы, отсутствие primitive effects и journal. Сохранённый source имеет
+равные снимки до/после, но компаратор явно вычисляет пять cleanup stores на
+каждый active Actor и проверяет write-only masks, соседние байты и inactive
+storage. Собственная неизменность не предполагается. Source SP34 не используется;
+новое Native ABI/FPU/per-instruction-store совпадение не заявлено.
+Восемь release-методов прошли за240.707с/build361.23с, включая3898 сохранённых
+контролируемых command cases и прежние rollback tests.145 остальных методов
+сохранены по pins. Все1009 Native-файлов и архивы сверены;1005 старых файлов
+и485 package files неизменны. Core/expected не менялись, оригинал не исполнялся.
+Reader FPSW/export ошибки и уточнение scope отчёта сохранены. Native job1
+терминален в `build/research/application-owned-active-commands-native-20260914/`;
+не перезапускать. [Evidence](evidence/application-active-commands.json),
+[план](research/APPLICATION_ACTIVE_COMMANDS_PLAN.md).
+**Остальные пять стадий и полный active tick остаются открытыми.**
+NEXT — полное сравнение HUD из текущего собственного commands output по saved
+active48; затем notices/recording/layout/output. До реализации закрепить полный
+контракт HUD, включая command flag resets, текущие bars/text/bitmap reads,
+владельцев и журнал, по его прямым зависимостям.
+Полные helper ABI/FPU/stores, active command/refill/healing/state1700 и другие
+ветви вне конечного пути, матч/игра, app/device/Windows/clean-Mac и прежние safety
+incidents остаются открытыми. EXE envelope не пересчитан.
 
 
 
