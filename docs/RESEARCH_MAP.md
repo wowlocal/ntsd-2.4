@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host Start/launch preflight](research/APPLICATION_HOST_MATCH_PREFLIGHT.md) traces
+the actual candidate's ticket/platform through PendingMatchPrelude and the existing
+launch/outer-return consumer. Four saved envelopes verified,34,579,061 decoded
+bytes; no source or Native execution. Typed retention/retry contract and exact50
+existing +3 proposed host methods selected. Root1034/candidate1037/source55
+preserved; review/root/device/full-game gates stay open. Next: isolated typed
+host candidate with actual human/selection parents and whole launch comparisons.
+[Evidence](evidence/application-host-match-preflight.json). Source remains live;
+prior failures and the42-method loading result are unchanged.
+
 [Host loading regressions complete](research/APPLICATION_HOST_LOADING_REGRESSIONS.md):
 all42 selected methods verified on the unchanged round3 binary (34 retained +8 new).
 Package/prior2482-file artifact and51-member metadata archive pass; root1034/

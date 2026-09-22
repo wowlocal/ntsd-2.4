@@ -1,0 +1,432 @@
+{
+  "schema": "ntsd-host-match-preflight-fixtures-v1",
+  "UTC": "2026-09-22T17:21:00.623213+00:00",
+  "operation": "Read four saved raw-DEFLATE envelopes; full declared outer payload lengths and SHA verified; scalar inventory only. Inner blobs and Native/source behavior not re-executed.",
+  "totalDecodedBytes": 34579061,
+  "fixtures": [
+    {
+      "name": "selection",
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-selection.json",
+        "bytes": 3734192,
+        "sha256": "88a768435ba70d5ba313a8f1da89c6eacf863072197ddb1482ff759a1e65bac0",
+        "mode": 420
+      },
+      "decodedBytes": 13368530,
+      "decodedSHA256": "2399718eb0b715494aedc782c85c113c1da2dcc20724ddda15110d255bac7186",
+      "caseCount": 50,
+      "blobCount": 428,
+      "selectedCases": [
+        {
+          "index": 0,
+          "acquired": [
+            {
+              "seat": 0,
+              "button": 5,
+              "pressed": true,
+              "address": 4543427,
+              "bytes": "64"
+            }
+          ],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 13,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 8,
+            "40": 6,
+            "52": 0,
+            "56": 2,
+            "60": 0
+          }
+        },
+        {
+          "index": 21,
+          "acquired": [],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 18,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 1
+          }
+        },
+        {
+          "index": 29,
+          "acquired": [],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 17,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 3
+          }
+        },
+        {
+          "index": 49,
+          "acquired": [],
+          "continuation": "matchPrelude",
+          "returned": false,
+          "checkpointCount": 15,
+          "lastCheckpointPC": 4378506,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 3
+          }
+        }
+      ],
+      "returnedCases": 49,
+      "bodyCheckpoints": 768
+    },
+    {
+      "name": "selection-control",
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-selection-control.json",
+        "bytes": 3809652,
+        "sha256": "493c6c18911e708c7174034657c901d1bd6e5980c140bb1a9ecd959423bffeab",
+        "mode": 420
+      },
+      "decodedBytes": 13576177,
+      "decodedSHA256": "fcae76eec7249866141d8f49b43ffe07f58ab8912a0fac108afc3822adfbaa02",
+      "caseCount": 50,
+      "blobCount": 428,
+      "selectedCases": [
+        {
+          "index": 0,
+          "acquired": [
+            {
+              "seat": 0,
+              "button": 5,
+              "pressed": true,
+              "address": 4543427,
+              "bytes": "64"
+            }
+          ],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 13,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 8,
+            "40": 6,
+            "52": 0,
+            "56": 2,
+            "60": 0
+          }
+        },
+        {
+          "index": 21,
+          "acquired": [],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 18,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 1
+          }
+        },
+        {
+          "index": 29,
+          "acquired": [],
+          "continuation": "returned",
+          "returned": true,
+          "checkpointCount": 17,
+          "lastCheckpointPC": 4382930,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 3
+          }
+        },
+        {
+          "index": 49,
+          "acquired": [],
+          "continuation": "matchPrelude",
+          "returned": false,
+          "checkpointCount": 15,
+          "lastCheckpointPC": 4378506,
+          "lastLocals": {
+            "32": 0,
+            "40": 0,
+            "52": 0,
+            "56": 0,
+            "60": 3
+          }
+        }
+      ],
+      "returnedCases": 49,
+      "bodyCheckpoints": 768
+    },
+    {
+      "name": "launch",
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-launch.json",
+        "bytes": 694711,
+        "sha256": "dc84f98a28b5e96aa691584ccd0389c62217f57dfd64f496a8e1f4d1341a4dda",
+        "mode": 420
+      },
+      "decodedBytes": 3810524,
+      "decodedSHA256": "faf5a745811385b53a6dc143c0f6b8e702cb6fe20caddd6b436db04d878e0c0d",
+      "caseCount": 8,
+      "blobCount": 507,
+      "sections": [
+        {
+          "label": "prelude",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 4
+        },
+        {
+          "label": "preparation",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 24
+        },
+        {
+          "label": "music",
+          "keys": [
+            "label",
+            "music",
+            "after"
+          ],
+          "events": 0
+        },
+        {
+          "label": "preparation-tail",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 381
+        },
+        {
+          "label": "recording",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 2
+        },
+        {
+          "label": "menu-continuation",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 0
+        },
+        {
+          "label": "returned",
+          "keys": [
+            "label",
+            "returned",
+            "after"
+          ],
+          "events": 0
+        },
+        {
+          "label": "gameplay-entry",
+          "keys": [
+            "label",
+            "cycle",
+            "after"
+          ],
+          "events": 0
+        }
+      ],
+      "localTime": [
+        2026,
+        9,
+        3,
+        9,
+        12,
+        34,
+        56,
+        789
+      ]
+    },
+    {
+      "name": "launch-control",
+      "fixture": {
+        "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-launch-control.json",
+        "bytes": 711387,
+        "sha256": "b7f7fd598116ad21bb5e6874d39409ec19f701aea2221d33580c1a0eb0b7efad",
+        "mode": 420
+      },
+      "decodedBytes": 3823830,
+      "decodedSHA256": "98a4cf3d4d6b468d1bbc0cc3866eb4b7f9454268feef8226443b47b1779a6a26",
+      "caseCount": 8,
+      "blobCount": 507,
+      "sections": [
+        {
+          "label": "prelude",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 4
+        },
+        {
+          "label": "preparation",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 24
+        },
+        {
+          "label": "music",
+          "keys": [
+            "label",
+            "music",
+            "after"
+          ],
+          "events": 0
+        },
+        {
+          "label": "preparation-tail",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 381
+        },
+        {
+          "label": "recording",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 2
+        },
+        {
+          "label": "menu-continuation",
+          "keys": [
+            "label",
+            "before",
+            "after",
+            "events",
+            "helpers",
+            "readsBeforeWrites",
+            "bitmapEvents",
+            "newBitmaps",
+            "end"
+          ],
+          "events": 0
+        },
+        {
+          "label": "returned",
+          "keys": [
+            "label",
+            "returned",
+            "after"
+          ],
+          "events": 0
+        },
+        {
+          "label": "gameplay-entry",
+          "keys": [
+            "label",
+            "cycle",
+            "after"
+          ],
+          "events": 0
+        }
+      ],
+      "localTime": [
+        2026,
+        9,
+        3,
+        9,
+        12,
+        34,
+        56,
+        789
+      ]
+    }
+  ]
+}

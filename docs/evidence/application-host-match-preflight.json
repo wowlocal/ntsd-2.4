@@ -1,0 +1,97 @@
+{
+  "schema": "ntsd-host-match-preflight-verification-v1",
+  "UTC": "2026-09-22T17:25:38.598153+00:00",
+  "status": "bounded read-only preflight complete",
+  "baseHead": "c65662191bf7a587e059b88f619057d7ab561c40",
+  "context": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-preflight-context.json",
+    "bytes": 21898,
+    "sha256": "ad99df5a3992dbfb85e23e4694d3d1e7897a522a768f6455f93b016f290ba6bd",
+    "mode": 420
+  },
+  "outputs": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-preflight-diagnostics.json",
+      "bytes": 676,
+      "sha256": "36267178a2d80e9268b5cde598dfe211dd0c22ebaf2f3273a78b19690fd70b25",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-preflight-fixtures.json",
+      "bytes": 10254,
+      "sha256": "df78f6e2b4d19fad90f2193069115f3f08d26844739526b73988b3be3058e779",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-preflight-observations.json",
+      "bytes": 9207,
+      "sha256": "280f8f067dab9adaf9372d84164fb3350bc258f5ae4c9f5d2f56e32f0c80a7c1",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_PREFLIGHT.md",
+      "bytes": 12965,
+      "sha256": "a17c13ad707ba74055ad32f06fa22033f37aa39e6c69e4d813d0f28c7c1c99d8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_PREFLIGHT_PLAN.md",
+      "bytes": 4145,
+      "sha256": "472c0a661c0acb41191245abc1a534280caedc308b816ea577d2b17055dbb0b7",
+      "mode": 420
+    }
+  ],
+  "consultedPinsUnchanged": 70,
+  "rootNativeFilesUnchanged": 1034,
+  "candidateFilesUnchanged": 1037,
+  "sourcePinsUnchanged": 55,
+  "membershipBodiesHashesModesVerified": true,
+  "savedEnvelopes": 4,
+  "decodedBytes": 34579061,
+  "existingMethodsSelected": 50,
+  "newMethodsProposed": 3,
+  "proposedMethodsExecuted": 0,
+  "localLinksChecked": 737,
+  "elapsedSincePlanSeconds": 557.9507930278778,
+  "source": {
+    "identity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+    "cwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "job": {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-catalog53-source-20260922/capture1/source.job.json",
+      "bytes": 2254,
+      "sha256": "ff0b6b159a6fb305c28cc7d4ca62f6368378a078767d97ee1351b78c68d4d43c",
+      "mode": 420
+    },
+    "lastLine": "{'chunks': 2791, 'pc': '0x7817832d', 'scans': 1881719, 'decoders': 19, 'objects': 19, 'catalogChildren': 0, 'stores': 684419756, 'seconds': 24804.13}",
+    "status": "running",
+    "action": "read-only; no restart or signals"
+  },
+  "storage": {
+    "uuid": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "externalFree": 161594368000,
+    "internalFree": 66576494592,
+    "metadataBytesBeforeReceipt": 59145,
+    "limit": 1048576,
+    "originalExternalReserve": 42949672960,
+    "originalInternalReserve": 6442450944
+  },
+  "gates": {
+    "readOnlyPreflight": true,
+    "newNativeImplementation": false,
+    "newNativeComparison": false,
+    "newSourceExecution": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "No new source or Native execution",
+    "No independent review",
+    "No actual device/platform backend",
+    "No EXE envelope recalculation",
+    "No root promotion",
+    "Whole Catalog53 source remains live and incomplete",
+    "Replay initialization is separate from blocked round-result/replay-writer path"
+  ]
+}

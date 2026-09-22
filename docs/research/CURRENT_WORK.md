@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host Start/launch preflight](APPLICATION_HOST_MATCH_PREFLIGHT.md) complete as
+read-only analysis: actual candidate1037 traced through typed PendingMatchPrelude,
+existing launch child and final Bootstrap tail. Four saved envelopes verified
+(34,579,061 decoded bytes); no new source/Native execution. Proposed isolated
+extension retains Start/platform, then returned child/platform, with retry at each
+stage and one outer publication. Exact50 existing +3 proposed new methods selected;
+none of those proposed runs is claimed here. Root1034/candidate1037/source55
+preserved; independent review/root promotion/devices/full game remain open.
+[Evidence](../evidence/application-host-match-preflight.json). The same source
+process59727 remains live, now19 Objects; no restart. NEXT: freeze and implement
+the isolated typed host candidate described in the preflight, retaining all old
+comparisons and failures. This supersedes the preflight NEXT below.
+
 [Host loading regressions complete](APPLICATION_HOST_LOADING_REGRESSIONS.md): all42
 methods verified on the unchanged round3 binary (34 retained +8 new, new queue
 exit0/131.274s). Native comparison/package/archive gates pass; independent review,

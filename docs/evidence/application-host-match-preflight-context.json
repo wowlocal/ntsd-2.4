@@ -1,0 +1,492 @@
+{
+  "schema": "ntsd-host-match-preflight-context-v1",
+  "UTC": "2026-09-22T17:20:28.300755+00:00",
+  "head": "c65662191bf7a587e059b88f619057d7ab561c40",
+  "operation": "Read-only current owner/code and saved evidence inspection; no original or Native execution",
+  "pins": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS.md",
+      "bytes": 10290,
+      "sha256": "b0c28d56ce53df5b45f288e5cb44ccfc28eb138809598785aace1947483d8032",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS_HISTORY_2026-09-12.md",
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/WORKFLOW.md",
+      "bytes": 28181,
+      "sha256": "a83bf4d46c33eff73df15f9a6917014736d2c39cbd835d43fd04c2a8d7ff8a14",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/TASK_TEMPLATE.md",
+      "bytes": 10500,
+      "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/CONTINUE_GOAL.md",
+      "bytes": 14545,
+      "sha256": "c2a6c434aa1e739d754d72f5f0f6f22e9a59c6625a4708ec549459e800f274f7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-preflight-diagnostics.json",
+      "bytes": 676,
+      "sha256": "36267178a2d80e9268b5cde598dfe211dd0c22ebaf2f3273a78b19690fd70b25",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_PREFLIGHT_PLAN.md",
+      "bytes": 4145,
+      "sha256": "472c0a661c0acb41191245abc1a534280caedc308b816ea577d2b17055dbb0b7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_PREFLIGHT.md",
+      "bytes": 12127,
+      "sha256": "228b1bb9e2cbb8574904e6e297427cb5bb4ad1228a9970921001d1ea17e4ae33",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_PREFLIGHT_PLAN.md",
+      "bytes": 3756,
+      "sha256": "9b171ee0cc193d19461b9459f1da90781218a1c50a88723855f20398d57372a0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_CANDIDATE.md",
+      "bytes": 9007,
+      "sha256": "5176db1fe3b3ca3baad02e412852ef287959b19f931c27e9e0c9679b5c239340",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_CORRECTION3.md",
+      "bytes": 6556,
+      "sha256": "b617001f860ad08e3d8965c01e66d454cc22fff34b6c359f592268823eee0d06",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_REGRESSIONS.md",
+      "bytes": 5529,
+      "sha256": "660b02659b673058ffc73496eaad53d760cdd376ba8982fd9bda0cc1acdd2351",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_CHARACTER.md",
+      "bytes": 7571,
+      "sha256": "1b5c02b28dd7a95f4d09127de9e4e308861caf9c0fee96b3e860cd9e47ec9f7f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_SELECTION.md",
+      "bytes": 6777,
+      "sha256": "a75d308bf1bbdb4d010ddec6b26bfc45572431c639709844f5bf4e9654a9b3b6",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_LAUNCH.md",
+      "bytes": 6163,
+      "sha256": "3ce746b7dce2ce26d0bf0f5bc09e7cd1769604fb10f52d78ecef03cc85891553",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_MENU.md",
+      "bytes": 7113,
+      "sha256": "806d25a47a1b5a224438aa6a636376944bd2a9bc42475a04aca67405f7da51b7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_CYCLE.md",
+      "bytes": 7284,
+      "sha256": "34d95bfbad15ef2ce58b706cbc39cec15f24c85462c69c46ff658ad2b1c23290",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_BOOTSTRAP.md",
+      "bytes": 10028,
+      "sha256": "c5a03cde5f2e2545fd97794cc057b01a5c7bc2d12fa178bc9542bbd8fd40168c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/MATCH_PRELUDE.md",
+      "bytes": 12336,
+      "sha256": "d47b1aaea1baf9f1934f4da45513fc10ae81f938c8e1529d5b3d1f42067eef80",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/MATCH_PREPARATION.md",
+      "bytes": 15889,
+      "sha256": "ae63986cd78270f74c9894ac80ea6a104b91df9f710991586f81e765dea4809e",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/MATCH_LAUNCH.md",
+      "bytes": 15950,
+      "sha256": "856863986645a645ba3c3a3a58b1b6a0d81e381263bf5e5764affeefcb364247",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/MATCH_SELECTION.md",
+      "bytes": 17962,
+      "sha256": "aca0519447b90efecb5d66b8de2f3b0a4448e97be7c35f3398dca3313583c283",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/REPLAY_INITIALIZATION.md",
+      "bytes": 14830,
+      "sha256": "b2021efca4ff051d0b2277bcd65b125feb8c543eb69d54f221e6c3623db88e47",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/MUSIC_PLAYBACK.md",
+      "bytes": 14643,
+      "sha256": "a6dc99791e5ff8d098beaa75a6e8de43e9a42aa5659aead831dd764ee6ee15fe",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/LIB_STAGE_COMMANDS.md",
+      "bytes": 13251,
+      "sha256": "e9e2cccef07ce867eb7a05ed5f255aa66a4c5cf6fef9e4f5c0e73fcdf9f950f6",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_RETURN_PLAN.md",
+      "bytes": 13980,
+      "sha256": "a42aaa2d536e2289f2c557bf8aff16b70404148d4c6d1d5ead09921598dac976",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-character.json",
+      "bytes": 69291,
+      "sha256": "334cebcb52a925bb86cc12bacd2c346859bff53f5e83b7cca2fb84649b607172",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-selection.json",
+      "bytes": 124871,
+      "sha256": "d18aa0312692a7feaf93b4aff3b2f7cff81701fab24c4aaf65a8a87b9921fee0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-launch.json",
+      "bytes": 19903,
+      "sha256": "7f64a765918ec4b3c76c6085418de9ba0c0b0a1a47adafd9e5b3f3a1f0a11515",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/match-prelude.json",
+      "bytes": 55343,
+      "sha256": "f951f9035bef11021111a520cc25b5bb7d8c9e266012e42e60ed751a2cb4b929",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/match-launch.json",
+      "bytes": 1415,
+      "sha256": "a7941b92ead339a85c5cab34337d8231076337291c22d501065666cf0c127c14",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/match-launch-control.json",
+      "bytes": 1439,
+      "sha256": "16b042bd1b8b99487c2ecb8b55725260de805bf6ca44ab9beaa2a133c291a259",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-loading-regressions.json",
+      "bytes": 4700,
+      "sha256": "4db3f6b51896592b953ad391868760afa294803a91b974e6c3f983ccdde6118a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-loading-regressions-close.json",
+      "bytes": 880,
+      "sha256": "4c33f1ce6fb2b0cb1e6e40a77a8c64f5c706cc9ba4d1bf2f7ddba3143f3a66b4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 11445,
+      "sha256": "add62b54c3c3a7b68ed2838e4f134b85eba9c6a8ff1ec911fce719a133b115f3",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 10339,
+      "sha256": "d05284a094fe119bb8ee7da3122684517c618d1843f6bcc72ff57cde44aba6b0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+      "bytes": 40357,
+      "sha256": "b7d4a4640ef9403336c20a8ba34104f70aef745c6194a2c18bffa81727720158",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+      "bytes": 27746,
+      "sha256": "788ed047b01bd613a4f0df3fcb8800bfb9df96f1683e59a3f7c30da6b53a9f15",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMatchLaunchSession.swift",
+      "bytes": 10416,
+      "sha256": "24332deab00743b682334a33244aecf520bc4b77547615590781b6e9d274d15b",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift",
+      "bytes": 4406,
+      "sha256": "481d6cba0ba4be000fbdf85faa2281ee48b1837be9b45b24d912afef40c625b9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationInputSession.swift",
+      "bytes": 7305,
+      "sha256": "e945a186c2d7205ae50bc1d21f71162de72c02180782b0a35e767ca69aa9238f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMatchBindings.swift",
+      "bytes": 6417,
+      "sha256": "9054281bf446ab5674e53737d2f5b2822d2ba6f1e56f29d6caa508a49983faa6",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift",
+      "bytes": 20791,
+      "sha256": "d8a1c9e9f20c578207f98bb6047a09c6b380c3544f9cb58bf5a808f90e0e2584",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift",
+      "bytes": 11888,
+      "sha256": "9b4d95bf2b252dc3bc2781bf1debe2889f907c6f4ec6321da2badd0a9ea333a7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+      "bytes": 31394,
+      "sha256": "349302d70f716872364168e454ade7c9e8f7426ffb6b8bec778ef2ace3e1e13c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift",
+      "bytes": 29186,
+      "sha256": "b58cdf45c6fec4de9301819df049473ffe737498f4d5519a36a1f0429e1dde9d",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift",
+      "bytes": 23610,
+      "sha256": "afef0c5c8de9887eeac415d93c0c9254f74020261b06c046570db51bd80f8327",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift",
+      "bytes": 16832,
+      "sha256": "62c8873e98069590e06c8a838e2f1005b9a6b1e1b5e4bac14ddec592dcfcec69",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift",
+      "bytes": 10654,
+      "sha256": "196bc32e05cc0684ce386307706984a2bead3e9c4f297e3b60d7e8e5e3c26a98",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchTests.swift",
+      "bytes": 23966,
+      "sha256": "b214d59ad38b5c4f884bf57a0a53083338cef7a5d90575eab4822f3e3405b3a9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterComparison.swift",
+      "bytes": 14986,
+      "sha256": "0382a5dabe579e28a080e42db6b5e06711e5ddaaf0f93f28feb38c94b3f48408",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionComparison.swift",
+      "bytes": 12392,
+      "sha256": "b92b1b8b500dd4187c157f04c26e3fb7340fccbfb436a012fcec725388bfa810",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchComparison.swift",
+      "bytes": 22539,
+      "sha256": "29e09c568108829022b156f4c475f681038dbf3033abae83ed1b930a27c194c6",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalMatchLaunchTests.swift",
+      "bytes": 1467,
+      "sha256": "8db32409dee05a86811f12031c8f5dc26a26cd6b233eea040880d8f0141c8ebd",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalMatchSelectionTests.swift",
+      "bytes": 1364,
+      "sha256": "f513788415a68eab54db2bf690e993abe217d79e73cb66c515490d5bcaebd931",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalLibSelectionStageTests.swift",
+      "bytes": 30558,
+      "sha256": "7ec0b0c7c97bb4409f61943c5297cf2fcbf7c15992609ae83a6c2df11e9f6d56",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalLibSelectionCommandsTests.swift",
+      "bytes": 31052,
+      "sha256": "d1e7154dc358dfb26b6c1e55b304d60996712cb35cb9a67705b0dad6711e4991",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-loading53-native-20260922/candidate1-inputs.json",
+      "bytes": 215074,
+      "sha256": "e72bd9374bca792f7d7defb8653b13fc1b7ac6fc48b5751b2001bb6ffbe5d240",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-correction3-20260922/candidate1-inputs.json",
+      "bytes": 215699,
+      "sha256": "810291eb6ed800a38b8eceb907ce50b9a17ad9aeaa23462c7b484b3b4b482a2f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-catalog53-source-20260922/launch1.json",
+      "bytes": 26753,
+      "sha256": "009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-regressions-20260922/publication1.json",
+      "bytes": 4700,
+      "sha256": "4db3f6b51896592b953ad391868760afa294803a91b974e6c3f983ccdde6118a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-regressions-20260922/verification1.json",
+      "bytes": 56160,
+      "sha256": "ba73bafd1f7740b66e120f68b20626613e72e7a904eb465e155286b948b668fb",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-regressions-20260922/external-close1.json",
+      "bytes": 880,
+      "sha256": "4c33f1ce6fb2b0cb1e6e40a77a8c64f5c706cc9ba4d1bf2f7ddba3143f3a66b4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-selection.json",
+      "bytes": 3734192,
+      "sha256": "88a768435ba70d5ba313a8f1da89c6eacf863072197ddb1482ff759a1e65bac0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-selection-control.json",
+      "bytes": 3809652,
+      "sha256": "493c6c18911e708c7174034657c901d1bd6e5980c140bb1a9ecd959423bffeab",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-launch.json",
+      "bytes": 694711,
+      "sha256": "dc84f98a28b5e96aa691584ccd0389c62217f57dfd64f496a8e1f4d1341a4dda",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-match-launch-control.json",
+      "bytes": 711387,
+      "sha256": "b7f7fd598116ad21bb5e6874d39409ec19f701aea2221d33580c1a0eb0b7efad",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "bytes": 31715328,
+      "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/lib.dll",
+      "bytes": 6144,
+      "sha256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+      "mode": 420
+    }
+  ],
+  "preservation": {
+    "rootFiles": 1034,
+    "candidateFiles": 1037,
+    "sourcePins": 55,
+    "membershipAndBodiesVerified": true,
+    "verificationRun": "exec session48989, before closure path error"
+  },
+  "priorValidation": {
+    "all42Passed": true,
+    "verifiedMethods": 42,
+    "remaining": []
+  },
+  "initialNavigation": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 116093,
+      "sha256": "f01d6560c5560fd6ceb95d87ceeaab0edcabd81fb3df446fe6f7fc34cea1aed8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 311004,
+      "sha256": "2db9793d623d70c21736daaef229099f9c8890990380a48c60d8a251bd4ce863",
+      "mode": 420
+    }
+  ],
+  "source": {
+    "job": {
+      "path": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-catalog53-source-20260922/capture1/source.job.json",
+      "bytes": 2254,
+      "sha256": "ff0b6b159a6fb305c28cc7d4ca62f6368378a078767d97ee1351b78c68d4d43c",
+      "mode": 420
+    },
+    "identity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+    "cwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "lastLine": "{'chunks': 2757, 'pc': '0x7817b99c', 'scans': 1859713, 'decoders': 19, 'objects': 19, 'catalogChildren': 0, 'stores': 676057287, 'seconds': 24490.43}",
+    "action": "read-only; left running"
+  },
+  "storage": {
+    "uuid": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "externalFree": 161691025408,
+    "internalFree": 66579689472,
+    "originalExternalReserve": 42949672960,
+    "originalInternalReserve": 6442450944,
+    "sourceGrossBudget": 18253611008
+  },
+  "diagnostics": [
+    {
+      "operation": "Initial path lookup only",
+      "error": "sed: native/Sources/NTSDReferenceChecks/OriginalApplicationLoadedLaunchComparison.swift: No such file or directory; likewise OriginalApplicationLoadedSelectionComparison.swift",
+      "resolution": "rg --files found both under native/Tests/NTSDCoreTests; no producer or model execution attempted"
+    },
+    {
+      "operation": "Manifest path inventory",
+      "observed": "root-native-inputs.json and publication.json absent",
+      "resolution": "Read nativeInputs from live launch manifest and actual publication1.json"
+    },
+    {
+      "operation": "Context assembly",
+      "evidence": "docs/evidence/application-host-match-preflight-diagnostics.json",
+      "resolution": "Actual closure is external-close1.json; full initial file checks were not repeated"
+    }
+  ],
+  "review": "author inspection only; independent review unavailable"
+}

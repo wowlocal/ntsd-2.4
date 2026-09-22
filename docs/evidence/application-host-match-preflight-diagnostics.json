@@ -1,0 +1,9 @@
+{
+  "schema": "ntsd-host-match-preflight-diagnostics-v1",
+  "operation": "Read-only context inventory and preservation; no original or Native execution",
+  "completedBeforeFailure": "Root1034/candidate1037 membership, bytes/hash/mode and55 source pins checked before the missing close path was opened",
+  "failedExecSession": 48989,
+  "exitCode": 1,
+  "error": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/michael/Developer/ntsd-2.4/build/research/application-host-loading-regressions-20260922/close1.json'",
+  "effect": "No context file or mutation was reached; resolve actual frozen closure path, then finish context without redoing full file checks."
+}
