@@ -1,0 +1,26 @@
+{
+  "schema": "ntsd-host-match-validation-close-v1",
+  "UTC": "2026-09-22T17:58:01.839898+00:00",
+  "largePhaseClosed": true,
+  "taskFrozen": true,
+  "originalExternalReserve": 42949672960,
+  "originalInternalReserve": 6442450944,
+  "initialExternalFree": 161113677824,
+  "externalFree": 160954785792,
+  "internalFree": 66484240384,
+  "observedFreeDecrease": 158892032,
+  "allowance": 25769803776,
+  "includesConcurrentSourceGrowth": true,
+  "publication": {
+    "bytes": 9511,
+    "sha256": "5b5ac6cee7e7fda26cf37ec54662e123991153c3b524b71959a14566d60923fa",
+    "mode": 420,
+    "mtime_ns": 1790099881839302895
+  },
+  "metadataArchive": {
+    "bytes": 1116160,
+    "sha256": "ca1df23e6a1335fda712721978bce389440eb9a2f83ce0b2e11b0c1520c6024a",
+    "mode": 420,
+    "mtime_ns": 1790099881830675899
+  }
+}

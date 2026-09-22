@@ -1,0 +1,160 @@
+{
+  "schema": "ntsd-host-match-validation-v1",
+  "UTC": "2026-09-22T17:58:01.838040+00:00",
+  "status": "compiler-failure-before-tests",
+  "baseHead": "a77db6602338ee208f87a97ac74948a77ced4ef7",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/context1.json",
+    "bytes": 23000,
+    "sha256": "c6f7dea72005115f5033c7e66e46d59567e5d0f6db2534c48eba1f767e0a6669",
+    "mode": 420,
+    "mtime_ns": 1790099492897733177
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/candidate1-inputs.json",
+    "bytes": 216124,
+    "sha256": "b6dd9bde5dc50d1e039b7df9381f56703f06b5b89a3af47f08902fbf6f29e310",
+    "mode": 420,
+    "mtime_ns": 1790098987385467292
+  },
+  "build": {
+    "pid": 57019,
+    "exitCode": 1,
+    "seconds": 4.191552292,
+    "sampledTreeRSS": 217628672,
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/build1.job.json",
+      "bytes": 13266,
+      "sha256": "0f2cde9cb41de13a3cda83ca03dc0ee2705c4252a91f229e34231c777ec61b95",
+      "mode": 420,
+      "mtime_ns": 1790099567066964640
+    },
+    "log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/build1.log",
+      "bytes": 16904,
+      "sha256": "838649ae5af16a62268dfbd64562b030925d4fa0720380b982fe19a8bdfeeb31",
+      "mode": 420,
+      "mtime_ns": 1790099566516763231
+    }
+  },
+  "compilerReportedSignal": 6,
+  "compiledSourceCounts": null,
+  "binary": null,
+  "packageCheck": null,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/verification1.json",
+    "bytes": 206290,
+    "sha256": "d3d46aaabe98139528498714ca8d00f2337d55cd815a8c1b6d6dc19988ffe318",
+    "mode": 420,
+    "mtime_ns": 1790099881762644681
+  },
+  "passedMethods": 0,
+  "unstartedMethods": [
+    "OriginalApplicationHostSessionTests/testWholeFirstMenuParentsUseHostCommitHandoff",
+    "OriginalApplicationHostSessionTests/testFirstMenuLateFailuresRetainEarlierHostCommits",
+    "OriginalApplicationHostSessionTests/testSamePreparedAttemptsRetryWithIndependentHostState",
+    "OriginalApplicationHostSessionTests/testWholeInputChainsRetainActualHostLoadingTicket",
+    "OriginalApplicationHostSessionTests/testStartupLateFailuresAndSharedCopyRejection",
+    "OriginalApplicationBootstrapTests/testLateFirstMenuFailuresRetainStartupAndResize",
+    "OriginalApplicationBootstrapTests/testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+    "OriginalApplicationMenuReturnTests/testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+    "OriginalApplicationMenuReturnTests/testLateMenuReturnFailuresRollBackWholeIteration",
+    "OriginalApplicationMenuInputTests/testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+    "OriginalApplicationMenuInputTests/testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+    "OriginalApplicationMenuInputTests/testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+    "OriginalApplicationMenuInputTests/testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+    "OriginalApplicationStartupInputsTests/testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+    "OriginalApplicationStartupInputsTests/testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+    "OriginalApplicationStartupInputsTests/testPackageRejectsMissingCorruptAndUnexpectedFiles",
+    "OriginalApplicationStartupInputsTests/testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+    "OriginalApplicationGraphicsTests/testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+    "OriginalApplicationGraphicsTests/testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+    "OriginalApplicationGraphicsTests/testResolvedSourceSnapshotAndNullSourceBoundary",
+    "OriginalApplicationMessageLoopTests/testWholeLoopAndOwnStartupCallbacks",
+    "OriginalApplicationMessageLoopTests/testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+    "OriginalApplicationMessageLoopTests/testLateFailureRollsBackContextMessageCounterAndBaseline",
+    "OriginalWinMainStartupTests/testContinuousStartupOwnedStateAndExplicitBoundaries",
+    "OriginalWinMainStartupTests/testLateRollbackOfWholeStartup",
+    "OriginalApplicationHostLoadingTests/testOwnFreshLoadingAndThreeCachedCyclesUseHostHandoff",
+    "OriginalApplicationHostLoadingTests/testPreparedChildAndPlatformSurviveLateFailuresAndRetry",
+    "OriginalApplicationHostLoadingTests/testDifferentSameRevisionTicketsAndRepeatedCompletionAreRejected",
+    "OriginalApplicationHostLoadingTests/testLoadingPrefixRequiresExactlyItsPreparedReplies",
+    "OriginalApplicationLoadedMenuTests/testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+    "OriginalApplicationLoadedMenuTests/testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+    "OriginalApplicationLoadedMenuTests/testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+    "OriginalApplicationLoadedMenuTests/testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+    "OriginalApplicationLoadedMenuTests/testForeignStaleAndOverlappingOwnersAreRejected",
+    "OriginalApplicationLoadedCycleTests/testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+    "OriginalApplicationLoadedCycleTests/testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+    "OriginalApplicationLoadedCycleTests/testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+    "OriginalApplicationInitializedMenuTests/testInitializedSourceMatchesOwnBootstrapAndWholeMenu",
+    "OriginalApplicationInitializedMenuTests/testInitializedMenuLateFailuresRetainCommittedStartupAndResize",
+    "OriginalApplicationInitializedLoadingTests/testInitializedBootstrapActivationAndCommonSoundsMatchSource",
+    "OriginalApplicationInitializedLoadingTests/testInitializedActivationFailuresPreservePriorCommittedIterations",
+    "OriginalApplicationInitializedLoadingTests/testInitializedCommonLoadingFailuresPreservePendingOwners",
+    "OriginalApplicationLoadedCharacterTests/testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns",
+    "OriginalApplicationLoadedCharacterTests/testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits",
+    "OriginalApplicationLoadedSelectionTests/testOwnCountdownDistrictAndStartRetainTheActualApplication",
+    "OriginalApplicationLoadedSelectionTests/testSelectionAndPendingStartFailuresPreserveEarlierCommits",
+    "OriginalApplicationLoadedLaunchTests/testOwnStartPreparesDistrictRecordsAndReachesGameplay",
+    "OriginalApplicationLoadedLaunchTests/testLaunchFailuresPreserveTheRetainedStartAndAllEarlierCommits",
+    "OriginalMatchLaunchTests/testOwnStartThroughEnabledMusicAndRecordingToFirstGameplayEntry",
+    "OriginalMatchLaunchTests/testSameWholeLaunchWithRampAndReverseActorAddresses",
+    "OriginalApplicationHostMatchLaunchTests/testActualHostStartLaunchAndNextInputRetainWholeOwners",
+    "OriginalApplicationHostMatchLaunchTests/testStartLaunchAndOuterTailFailuresRetainHostStages",
+    "OriginalApplicationHostMatchLaunchTests/testMatchPreludeRejectsDifferentTicketsAndReentry"
+  ],
+  "copiedResourceFiles": 487,
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/source-live1.json",
+    "bytes": 753,
+    "sha256": "10e1634760354d2525f98b9df58fc3d6accdd058a76c383a500a361cee57b9af",
+    "mode": 420,
+    "mtime_ns": 1790099881783929587
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/artifact-archive1",
+    "files": 1645,
+    "sourceTraversalDirectories": 72,
+    "implicitParentDirectories": 2,
+    "totalDirectories": 74,
+    "bytes": 8961888416,
+    "manifest": {
+      "bytes": 460349,
+      "sha256": "a9d6436f4030647109e957db755bd4f1d21df274e4f3b2a8daab371d029ee502",
+      "mode": 420,
+      "mtime_ns": 1790099881761085098
+    }
+  },
+  "metadataArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/metadata1.tar",
+    "members": 25,
+    "bytes": 1116160,
+    "sha256": "ca1df23e6a1335fda712721978bce389440eb9a2f83ce0b2e11b0c1520c6024a",
+    "mode": 420,
+    "mtime_ns": 1790099881830675899
+  },
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/failure-diagnosis1.json",
+    "bytes": 7753,
+    "sha256": "9e9e80da3f5ddf6c0d104ca4808644612199272d1926f4f31336f9578f6346a3",
+    "mode": 420,
+    "mtime_ns": 1790099652325123701
+  },
+  "gates": {
+    "nativeComparison": false,
+    "packageBytes": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "Compiler assertion does not establish Native runtime behavior; all53 methods unstarted.",
+    "Copied resource verification is not a complete built package.",
+    "Source capture remains independent and incomplete; no source or device execution in this task."
+  ]
+}

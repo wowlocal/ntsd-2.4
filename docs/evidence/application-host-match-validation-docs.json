@@ -1,0 +1,96 @@
+{
+  "schema": "ntsd-host-match-validation-docs-v1",
+  "UTC": "2026-09-22T18:00:27.956247+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-validation-20260922/publication1.json",
+    "bytes": 9511,
+    "sha256": "5b5ac6cee7e7fda26cf37ec54662e123991153c3b524b71959a14566d60923fa",
+    "mode": 420,
+    "mtime_ns": 1790099881839302895
+  },
+  "checkedFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-validation-close.json",
+      "bytes": 804,
+      "sha256": "e3c166df952b6f22276241ca3bc0ab7a9290759f1899523944f93dedc0889746",
+      "mode": 420,
+      "mtime_ns": 1790099881840616061
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-validation.json",
+      "bytes": 9511,
+      "sha256": "5b5ac6cee7e7fda26cf37ec54662e123991153c3b524b71959a14566d60923fa",
+      "mode": 420,
+      "mtime_ns": 1790099881839868978
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_VALIDATION.md",
+      "bytes": 5743,
+      "sha256": "85ada15d98534f3a420664317c6f9b644ebd45e0485b914f41f86642a3448d97",
+      "mode": 420,
+      "mtime_ns": 1790099964878090579
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_VALIDATION_PLAN.md",
+      "bytes": 5286,
+      "sha256": "4dfd61164270cd5e059d642bc5407a0d15d9dedfa12e40530941e24621014b90",
+      "mode": 420,
+      "mtime_ns": 1790099485745889861
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_match_validation.py",
+      "bytes": 14201,
+      "sha256": "246b880658ceee8909e410e1d35447ee4e1b22900596302ccb0cb15f7feaa72a",
+      "mode": 420,
+      "mtime_ns": 1790099741197641278
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_match_validation.py",
+      "bytes": 7743,
+      "sha256": "f31dbeeae65e6a2b040ae7544791ec35d27af46d5eeef1512567fe500ad189ad",
+      "mode": 420,
+      "mtime_ns": 1790099485800702085
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_tests.py",
+      "bytes": 4934,
+      "sha256": "ec6741f2f94f5817e1bd3acdd81aa7b757efc4cf371562055dcb8482bdf04b17",
+      "mode": 420,
+      "mtime_ns": 1790099485801097460
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_validation.py",
+      "bytes": 14231,
+      "sha256": "2f39f87537d8e133c802b7c6b0ab4b9e9d63874d92336a8a437a47cdb9e1d248",
+      "mode": 420,
+      "mtime_ns": 1790099485800845127
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_host_match_package.py",
+      "bytes": 5544,
+      "sha256": "97471db28b7b3808845ee97fbc1920780ad8f1cb7540058e4a295a322dbbe652",
+      "mode": 420,
+      "mtime_ns": 1790099485800971127
+    }
+  ],
+  "localLinksVerified": 735,
+  "helperASTAndFrozenBytesVerified": 5,
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    56746,
+    57019,
+    57553
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 3013, 'pc': '0x4149b7', 'scans': 2031425, 'decoders': 20, 'objects': 20, 'catalogChildren': 0, 'stores': 738829694, 'seconds': 26896.39}",
+  "unrelatedNavigationBytesPreserved": true,
+  "testsRun": 0,
+  "remainingMethods": 53,
+  "independentReview": false,
+  "observationDiagnostic": {
+    "operation": "Read-only ps of finalizer57553 during closure",
+    "error": "CalledProcessError: Command '['ps', '-p', '57553', '-o', 'pid=,lstart=,etime=,rss=,command=']' returned non-zero exit status 1.",
+    "resolution": "Reaped the same exec session52439; terminal finalizer exit0/140.598553542s, absent. No restart or signal."
+  }
+}

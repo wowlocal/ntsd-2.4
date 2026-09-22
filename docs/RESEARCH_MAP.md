@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Typed host compiler failure](research/APPLICATION_HOST_MATCH_VALIDATION.md):
+fresh build exits1/4.192s, Swift signal6 at finishLoadedMenu's local platform;
+static inspection finds host-property shadowing in final assignment. All53 methods
+unstarted. Full failed candidate/log and1645-file/74-directory partial artifact,
+25-member metadata archives preserved/verified. Root1034/candidate1039/source55
+unchanged. Next: separate preparedPlatform/self.platform correction and fresh
+build, preserving all failed bytes and53 names. Native/package/review/root/device/
+full-game gates remain open. [Evidence](evidence/application-host-match-validation.json).
+
 [Typed host Start/launch candidate](research/APPLICATION_HOST_MATCH_CANDIDATE.md):
 five changed Swift files in isolated1039-file tree parse; compilation/tests pending.
 Mutually exclusive Start/returned retention and staged platform retries use the

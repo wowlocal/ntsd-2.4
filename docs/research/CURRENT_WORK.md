@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Typed host validation failed at compile](APPLICATION_HOST_MATCH_VALIDATION.md):
+fresh build57019 exited1/4.192s; Swift6.4 reports signal6 at HostSession.finishLoadedMenu
+local platform binding. Static defect: that binding shadows the host property at
+the final assignment. All53 tests unstarted; Native/package gates remain open.
+Failure/log/candidate preserved;1645-file/74-directory partial artifact and25-member
+metadata archives verified, root1034/candidate1039/source55 unchanged. Finalizer57553
+terminal0/absent; task frozen. [Evidence](../evidence/application-host-match-validation.json).
+NEXT separate correction: rename the returned-case binding preparedPlatform,
+copy it, and explicitly assign self.platform at commit; retain the failed tree and
+all53 names, then fresh build. Source59727 remains live (17:58:01 UTC:2997 chunks/
+20 Objects). No original restart, root promotion or device/full-game acceptance.
+This supersedes the initial-validation NEXT below.
+
 [Typed host Start/launch candidate](APPLICATION_HOST_MATCH_CANDIDATE.md) implemented
 in isolated1039-file tree: five changed Swift files parse successfully; no compile
 or XCTest yet. Host retains Start/platform, resumes existing launch, then commits
