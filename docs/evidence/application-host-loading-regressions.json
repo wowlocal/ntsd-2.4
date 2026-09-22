@@ -1,0 +1,102 @@
+{
+  "schema": "ntsd-host-loading-completion-v1",
+  "UTC": "2026-09-22T17:07:07.391351+00:00",
+  "status": "all42-passed-review-open",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922",
+  "baseHead": "93df1ddce3ec9bdde4eb99c6a08221b216ad0e14",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/context1.json",
+    "bytes": 51870,
+    "sha256": "4217d2ff6ca2ebe9aa6f4ea4623f2bad6052d9506990d218ca3ab441e6f63581",
+    "mode": 420,
+    "mtime_ns": 1790096626340745138
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/verification1.json",
+    "bytes": 56160,
+    "sha256": "ba73bafd1f7740b66e120f68b20626613e72e7a904eb465e155286b948b668fb",
+    "mode": 420,
+    "mtime_ns": 1790096827368852909
+  },
+  "resourceContract": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/resource-contract1.json",
+    "bytes": 1622,
+    "sha256": "de924385479474ef5c35547a3b09a69e18cca44394b472f778869a9c874c35f4",
+    "mode": 420,
+    "mtime_ns": 1790096626340091180
+  },
+  "priorPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922/publication1.json",
+    "bytes": 19892,
+    "sha256": "6bdc44c9a49aae012e1c13c44e2277bf1c33dedf0f0d3402091c03ed62e1b5bd",
+    "mode": 420,
+    "mtime_ns": 1790096359909361369
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922/candidate1-inputs.json",
+    "bytes": 215699,
+    "sha256": "810291eb6ed800a38b8eceb907ce50b9a17ad9aeaa23462c7b484b3b4b482a2f",
+    "mode": 420,
+    "mtime_ns": 1790095070035778213
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 62536136,
+    "sha256": "a5c0a113fcb3df49709965c3fb154d8ba4b03bd336714559356dd533efa0bf4e",
+    "mode": 493,
+    "mtime_ns": 1790095397916693490
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922/package-check1.json",
+    "bytes": 939723,
+    "sha256": "c4c6ea8b734e5a86556fc15775059ff6a5de164f0487723847215b9c57223af0",
+    "mode": 420,
+    "mtime_ns": 1790095412049801546
+  },
+  "priorArtifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction3-20260922/artifact-archive1.json",
+    "bytes": 693895,
+    "sha256": "ffb2de66fd82e8178a5974f298ba0370c698f7223e5f0558fd5cbdd51383af09",
+    "mode": 420,
+    "mtime_ns": 1790096358179645273
+  },
+  "all42Passed": true,
+  "verifiedMethods": 42,
+  "newMethods": 8,
+  "remaining": [],
+  "newQueueSeconds": 131.27355,
+  "newTestSeconds": 94.51721995699997,
+  "sampledNewTestPeakRSS": 8716664832,
+  "metadataArchive": {
+    "members": 51,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/metadata1.tar",
+    "bytes": 409600,
+    "sha256": "dd72df4047308cff2faf078fec15644275bf25615d5baba3c4612d1ac77b5696",
+    "mode": 420,
+    "mtime_ns": 1790096827387131483
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/source-live1.json",
+    "bytes": 749,
+    "sha256": "d07319f10bf73b7442bb428e9aec66f5a60076c0fd00a7b6caba0efc464bd219",
+    "mode": 420,
+    "mtime_ns": 1790096827367550618
+  },
+  "gates": {
+    "nativeComparison": true,
+    "packageBytes": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "Earlier test corrections has not received independent review.",
+    "Old assertion failure and old resident-guard termination remain immutable outcomes.",
+    "Controlled Native composition and an injected fourth input stop do not establish another returned iteration or whole Catalog53 source.",
+    "Actual providers/timing/devices and later typed child retention remain open."
+  ]
+}

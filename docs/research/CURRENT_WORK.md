@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading regressions complete](APPLICATION_HOST_LOADING_REGRESSIONS.md): all42
+methods verified on the unchanged round3 binary (34 retained +8 new, new queue
+exit0/131.274s). Native comparison/package/archive gates pass; independent review,
+root promotion and devices remain open. Root1034/candidate1037/package487/source55/
+prior2482-file archive unchanged;51-member metadata archive fully verified.
+External task frozen within1GiB; finalizer48699 terminal0/absent. Earlier assertion,
+RSS and timeout outcomes remain immutable. [Evidence](../evidence/application-host-loading-regressions.json).
+Source revalidated17:07:07 UTC:2670 chunks/18 Objects/654717456 stores, still live.
+NEXT independent task: bounded read-only preflight of actual host ticket/platform
+through LoadedMenu.Outcome.matchPrelude/PendingMatchPrelude and its consumers;
+select saved whole-caller/rollback evidence before extending the API. No source
+restart or root promotion. This supersedes the remaining-method NEXT below.
+
 [Host loading round3](APPLICATION_HOST_LOADING_CORRECTION3.md): Bool presence
 assertion preserves semantics; fresh build/package and34 methods passed. All four
 new host-loading methods pass, including ticket identity97.395s/9.587GB RSS.

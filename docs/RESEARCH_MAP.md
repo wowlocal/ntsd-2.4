@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading regressions complete](research/APPLICATION_HOST_LOADING_REGRESSIONS.md):
+all42 selected methods verified on the unchanged round3 binary (34 retained +8 new).
+Package/prior2482-file artifact and51-member metadata archive pass; root1034/
+candidate1037/package487/source55 preserved. All earlier failures stay immutable.
+Native comparison gate passes; independent review/root/device/full-game remain open.
+Next bounded read-only preflight: real host loading owners through typed matchPrelude
+and its consumers, with saved whole-caller/rollback evidence before API extension.
+Supersedes unfinished-method NEXT below; original source capture remains live.
+
 [Host loading round3](research/APPLICATION_HOST_LOADING_CORRECTION3.md) passed fresh
 build/package and34 methods, including all four HostLoading and five LoadedMenu.
 Method35 exceeded8GiB RSS, no result; seven later unstarted. Three correction rounds

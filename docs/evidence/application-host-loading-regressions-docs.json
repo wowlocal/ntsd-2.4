@@ -1,0 +1,114 @@
+{
+  "schema": "ntsd-host-loading-regressions-documentation-v1",
+  "UTC": "2026-09-22T17:09:43.303258+00:00",
+  "head": "93df1ddce3ec9bdde4eb99c6a08221b216ad0e14",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/publication1.json",
+    "bytes": 4700,
+    "sha256": "4db3f6b51896592b953ad391868760afa294803a91b974e6c3f983ccdde6118a",
+    "mode": 420,
+    "mtime_ns": 1790096827395093188
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/external-close1.json",
+    "bytes": 880,
+    "sha256": "4c33f1ce6fb2b0cb1e6e40a77a8c64f5c706cc9ba4d1bf2f7ddba3143f3a66b4",
+    "mode": 420,
+    "mtime_ns": 1790096827395750646
+  },
+  "finalizerTerminal": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-regressions-20260922/finalize1.job.json",
+    "bytes": 691,
+    "sha256": "bba352541802bc7c50220697c1becfe707149231d4e44c7e89b8d9296b7ab2f4",
+    "mode": 420,
+    "mtime_ns": 1790096827395924812
+  },
+  "documents": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_REGRESSIONS_PLAN.md",
+      "bytes": 5524,
+      "sha256": "57068e467a738aac63a6fe7e762019734ba73ae66bd97d3e58dabaa65f6622ee",
+      "mode": 420,
+      "mtime_ns": 1790096557141435150
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_REGRESSIONS.md",
+      "bytes": 5529,
+      "sha256": "660b02659b673058ffc73496eaad53d760cdd376ba8982fd9bda0cc1acdd2351",
+      "mode": 420,
+      "mtime_ns": 1790096920518528909
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 116093,
+      "sha256": "f01d6560c5560fd6ceb95d87ceeaab0edcabd81fb3df446fe6f7fc34cea1aed8",
+      "mode": 420,
+      "mtime_ns": 1790096920518859701
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 311004,
+      "sha256": "2db9793d623d70c21736daaef229099f9c8890990380a48c60d8a251bd4ce863",
+      "mode": 420,
+      "mtime_ns": 1790096920519701992
+    }
+  ],
+  "helpers": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_loading_regressions.py",
+      "bytes": 9441,
+      "sha256": "6465985e1ad80facccd5fff806138a3ef0c92b71bec8ae8e6f73127bcfc2724d",
+      "mode": 420,
+      "mtime_ns": 1790096618892032511
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_loading_validation5.py",
+      "bytes": 14305,
+      "sha256": "cf2f9fc1e1a09f00cad9874bb3ed1c20f298c97ae059962477e18de8f032ba61",
+      "mode": 420,
+      "mtime_ns": 1790096557167776803
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_loading_tests5.py",
+      "bytes": 4949,
+      "sha256": "52f04001e523a2806b261a56cf906c799016d4ab0e1cb24534a65ca008d38792",
+      "mode": 420,
+      "mtime_ns": 1790096557168509094
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_loading_regressions.py",
+      "bytes": 12582,
+      "sha256": "befaee77840420c88e32e5ca3942d32c84d35c2366e6ea94b45b678311d0bb3c",
+      "mode": 420,
+      "mtime_ns": 1790096557170431594
+    }
+  ],
+  "localLinksChecked": 722,
+  "receiptSelfLinkCheckedAfterWrite": true,
+  "pythonSyntax": true,
+  "frozenHelpersIdentical": true,
+  "gitDiffCheck": true,
+  "indexEmptyBeforeStaging": true,
+  "taskPIDsAbsent": true,
+  "sourcePID": 59727,
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceJobStatus": "running",
+  "sourceCodePinsVerified": 55,
+  "rootNativeFilesPreserved": 1034,
+  "externalTaskNotModified": true,
+  "independentReview": false,
+  "commitScope": [
+    "docs/research/APPLICATION_HOST_LOADING_REGRESSIONS_PLAN.md",
+    "docs/research/APPLICATION_HOST_LOADING_REGRESSIONS.md",
+    "docs/research/CURRENT_WORK.md",
+    "docs/RESEARCH_MAP.md",
+    "docs/evidence/application-host-loading-regressions.json",
+    "docs/evidence/application-host-loading-regressions-close.json",
+    "docs/evidence/application-host-loading-regressions-docs.json",
+    "tools/prepare_application_host_loading_regressions.py",
+    "tools/run_application_host_loading_validation5.py",
+    "tools/run_application_host_loading_tests5.py",
+    "tools/finalize_application_host_loading_regressions.py"
+  ]
+}
