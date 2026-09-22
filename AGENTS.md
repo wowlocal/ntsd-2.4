@@ -117,6 +117,13 @@ outputs and partial/failure records; do not modify pinned running producers.
 
 ## Working files, storage and delivery
 
+- User update, 2026-09-22: make iterative Git commits after each coherent,
+  checked increment, before starting the next independent task. No additional
+  confirmation is needed. This supersedes earlier study-plan instructions such
+  as "Do not commit automatically"; preserve frozen plans and evidence verbatim.
+  A commit records progress, not full acceptance: state checks and open review,
+  comparison or integration gates honestly. Stage only the increment's files;
+  preserve unrelated work and live producer pins. See WORKFLOW for details.
 - Preserve unrelated pending files and pin the actual working inputs, including
   relevant uncommitted changes. A HEAD-only worktree may omit required code.
 - Reuse existing study manifests, job files, capture/audit tools and comparators.
