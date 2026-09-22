@@ -1,0 +1,15 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-docs-v1",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "9d1a62ce4b0325b5952c8b4943ab27128ed511a91388b715f65d3fc3ace402c7",
+      "insertion": "[Host gameplay preflight](APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): traced current\ninput ownership through normal/paused GameplaySession and the outer return on\nactual candidate1039. Proposed common preparation retains one acquired Ready,\nthen its returned body/platform, with exact tickets and retries before one final\npublication. Six saved envelopes verified;304,819,130 cumulative decoded bytes\nincluding four repeated reads. No Native/original execution. Exact63 existing +6\nproposed methods selected, preserving both17/48/14-call schedules and whole owners.\nOriginal1MiB metadata gate failed; oversized keyboard report preserved under a\nseparate3MiB delivery amendment. Root1034/candidate1039/source55 preserved.\n[Evidence](../evidence/application-host-gameplay-preflight.json).\nNEXT: separately plan and implement the isolated host gameplay candidate, retaining\nall69 selected methods, then fresh build/comparison/package/archive gates. Source59727\ncontinues without restart. Independent review/root promotion/installed trajectory/\napp devices/full catalog/full match/full game remain open. This supersedes the\nread-only preflight NEXT below; no new Native acceptance is claimed.\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "437cfa0bf2521617f7944efa45ee8328f876c9d121a0a31a55efdd436c917452",
+      "insertion": "[Host gameplay preflight](research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): actual\ncandidate1039 ownership traced from one acquired Ready through gameplay/paused\nbody and outer return. Common host outcome, private retention and retry contract\nproposed;63 existing +6 new methods selected with both17/48/14-call schedules.\nSix saved envelopes verified, no new Native/original execution. Original1MiB\nmetadata overrun preserved with separate3MiB delivery amendment. Root1034/\ncandidate1039/source55 unchanged. Next: isolated host gameplay candidate under a\nnew bounded plan; review/root/app devices/installed trajectory/full catalog/match/\ngame remain open. [Evidence](evidence/application-host-gameplay-preflight.json).\n\n"
+    }
+  ]
+}

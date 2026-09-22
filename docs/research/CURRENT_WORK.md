@@ -2,6 +2,22 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host gameplay preflight](APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): traced current
+input ownership through normal/paused GameplaySession and the outer return on
+actual candidate1039. Proposed common preparation retains one acquired Ready,
+then its returned body/platform, with exact tickets and retries before one final
+publication. Six saved envelopes verified;304,819,130 cumulative decoded bytes
+including four repeated reads. No Native/original execution. Exact63 existing +6
+proposed methods selected, preserving both17/48/14-call schedules and whole owners.
+Original1MiB metadata gate failed; oversized keyboard report preserved under a
+separate3MiB delivery amendment. Root1034/candidate1039/source55 preserved.
+[Evidence](../evidence/application-host-gameplay-preflight.json).
+NEXT: separately plan and implement the isolated host gameplay candidate, retaining
+all69 selected methods, then fresh build/comparison/package/archive gates. Source59727
+continues without restart. Independent review/root promotion/installed trajectory/
+app devices/full catalog/full match/full game remain open. This supersedes the
+read-only preflight NEXT below; no new Native acceptance is claimed.
+
 [Typed host comparison complete](APPLICATION_HOST_MATCH_COMPLETION.md): all53
 selected methods pass on the unchanged correction1 binary (25 retained +28 new).
 Actual host Start/platform retention, whole launch/outer commit, late rollback,

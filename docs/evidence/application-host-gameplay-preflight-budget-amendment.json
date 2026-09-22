@@ -1,0 +1,71 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-budget-amendment-v1",
+  "UTC": "2026-09-22T19:07:48.548114+00:00",
+  "originalPlan": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT_PLAN.md",
+    "bytes": 4976,
+    "sha256": "22060dd8a97ca0f1ce48f1ee37b97f727bcd8c4e4f2c8d86ed6f80641794e68b",
+    "mode": 420,
+    "mtime_ns": 1790103631462743440
+  },
+  "outcome": "Preflight metadata-budget overrun; original1MiB gate failed",
+  "operation": "Saved-data acquisition/schedule supplement serialized full319-byte before/after keyboard arrays for124 cases with indentation.",
+  "oversizedReport": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-schedules.json",
+    "bytes": 1608843,
+    "sha256": "684b0f30ed34320ee8cb13d0338223e5c8b97dd5fa197cd3d314fe7cf5d94d43",
+    "mode": 420,
+    "mtime_ns": 1790103989479070475
+  },
+  "observedMetadataBytes": 2178107,
+  "originalMetadataLimit": 1048576,
+  "newMetadataLimit": 3145728,
+  "reason": "Preserve the exact already-written schedule report and complete the remaining static contract/documentation within one bounded metadata correction. No report is reduced or deleted to convert the prior overrun into success.",
+  "remainingScope": "No more envelope decoding, new cases, original or Native execution. Only compact derived scalar observations, contract/method selection, study/navigation, verification and commit.",
+  "frozenPreAmendmentFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT_PLAN.md",
+      "bytes": 4976,
+      "sha256": "22060dd8a97ca0f1ce48f1ee37b97f727bcd8c4e4f2c8d86ed6f80641794e68b",
+      "mode": 420,
+      "mtime_ns": 1790103631462743440
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-context.json",
+      "bytes": 43431,
+      "sha256": "20ed294339f263d4155745faeb1ad96151c58dac8c8916e89c39fbd8fe997e17",
+      "mode": 420,
+      "mtime_ns": 1790103777222423903
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-diagnostics.json",
+      "bytes": 1187,
+      "sha256": "10c4e77782254669d7bafe89cdb06fb884a986b9e62d5fbba0df1c632faae8f7",
+      "mode": 420,
+      "mtime_ns": 1790103777222545403
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-fixtures.json",
+      "bytes": 519670,
+      "sha256": "72db9a3703b0dbe9d26c102aceacd52477272d1d7f1b19ef3a192ff18cd381b6",
+      "mode": 420,
+      "mtime_ns": 1790103846566580053
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-schedules.json",
+      "bytes": 1608843,
+      "sha256": "684b0f30ed34320ee8cb13d0338223e5c8b97dd5fa197cd3d314fe7cf5d94d43",
+      "mode": 420,
+      "mtime_ns": 1790103989479070475
+    }
+  ],
+  "cumulativeDecodedBytes": 304819130,
+  "decodedLimit": 402653184,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "externalFree": 158570504192,
+  "internalFree": 66439147520,
+  "safetyRefusal": false,
+  "sourceOrNativeFailure": false,
+  "independentReview": false
+}

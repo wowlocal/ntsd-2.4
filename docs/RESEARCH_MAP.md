@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay preflight](research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): actual
+candidate1039 ownership traced from one acquired Ready through gameplay/paused
+body and outer return. Common host outcome, private retention and retry contract
+proposed;63 existing +6 new methods selected with both17/48/14-call schedules.
+Six saved envelopes verified, no new Native/original execution. Original1MiB
+metadata overrun preserved with separate3MiB delivery amendment. Root1034/
+candidate1039/source55 unchanged. Next: isolated host gameplay candidate under a
+new bounded plan; review/root/app devices/installed trajectory/full catalog/match/
+game remain open. [Evidence](evidence/application-host-gameplay-preflight.json).
+
 [Typed host comparison complete](research/APPLICATION_HOST_MATCH_COMPLETION.md):
 all53 methods verified on the unchanged binary (25 preserved +28 new), including
 actual host Start/launch/outer return, failure retries and ticket/reentry controls.

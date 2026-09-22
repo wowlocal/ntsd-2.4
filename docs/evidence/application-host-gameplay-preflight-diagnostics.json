@@ -1,0 +1,23 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-diagnostics-v1",
+  "UTC": "2026-09-22T19:02:57.175392+00:00",
+  "readErrors": [
+    {
+      "operation": "sed -n 1,100p docs/research/APPLICATION_ACTIVE_GAMEPLAY_OUTPUT.md",
+      "error": "sed: docs/research/APPLICATION_ACTIVE_GAMEPLAY_OUTPUT.md: No such file or directory",
+      "resolution": "rg --files located APPLICATION_ACTIVE_OUTPUT.md; read the actual existing study. No execution retry."
+    }
+  ],
+  "nativeRootDifferences": [
+    "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+    "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostMatchLaunchTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift"
+  ],
+  "originalExecuted": false
+}

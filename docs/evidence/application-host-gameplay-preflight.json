@@ -1,0 +1,145 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-verification-v1",
+  "UTC": "2026-09-22T19:19:24.267364+00:00",
+  "baseHEAD": "d1e37997e42d854581e2ee2a2bae086d078886da",
+  "result": "Static preflight complete under explicit delivery amendment; no new Native acceptance",
+  "allFourQuestionsAnswered": true,
+  "consultedPinsVerified": 79,
+  "frozenPreAmendmentFilesVerified": 5,
+  "rootFilesVerified": 1034,
+  "candidateFilesVerified": 1039,
+  "sourcePinsVerified": 55,
+  "membershipVerified": true,
+  "previous53MethodPublicationPreserved": true,
+  "distinctEnvelopes": 6,
+  "decodeOperations": 10,
+  "distinctDecodedBytes": 172186478,
+  "actualDecodedBytes": 304819130,
+  "decodedLimit": 402653184,
+  "noAdditionalDecodingAfterAmendment": true,
+  "innerBlobsDecoded": false,
+  "existingMethodsSelected": 63,
+  "proposedMethods": 6,
+  "totalMethodsProposed": 69,
+  "nativeMethodsExecuted": 0,
+  "localLinksVerified": 754,
+  "unrelatedNavigationBytesPreserved": true,
+  "checkedNewFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-budget-amendment.json",
+      "bytes": 3238,
+      "sha256": "d313b02328ea125722d43bb104c14fbf514b8a9ec88f971842ba45ce402353ea",
+      "mode": 420,
+      "mtime_ns": 1790104068550589659
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-context.json",
+      "bytes": 43431,
+      "sha256": "20ed294339f263d4155745faeb1ad96151c58dac8c8916e89c39fbd8fe997e17",
+      "mode": 420,
+      "mtime_ns": 1790103777222423903
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-diagnostics.json",
+      "bytes": 1187,
+      "sha256": "10c4e77782254669d7bafe89cdb06fb884a986b9e62d5fbba0df1c632faae8f7",
+      "mode": 420,
+      "mtime_ns": 1790103777222545403
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-docs.json",
+      "bytes": 2345,
+      "sha256": "1717f139a8d17e1e26832f44e25dc961e829cb05b091173e085b1f6c5593dfad",
+      "mode": 420,
+      "mtime_ns": 1790104674936900872
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-fixtures.json",
+      "bytes": 519670,
+      "sha256": "72db9a3703b0dbe9d26c102aceacd52477272d1d7f1b19ef3a192ff18cd381b6",
+      "mode": 420,
+      "mtime_ns": 1790103846566580053
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-observations.json",
+      "bytes": 15455,
+      "sha256": "444445bbb037396db3c52c0d2296c683c1d65c876e2940eba50df199d8d41488",
+      "mode": 420,
+      "mtime_ns": 1790104169514027133
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-preflight-schedules.json",
+      "bytes": 1608843,
+      "sha256": "684b0f30ed34320ee8cb13d0338223e5c8b97dd5fa197cd3d314fe7cf5d94d43",
+      "mode": 420,
+      "mtime_ns": 1790103989479070475
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT_PLAN.md",
+      "bytes": 4976,
+      "sha256": "22060dd8a97ca0f1ce48f1ee37b97f727bcd8c4e4f2c8d86ed6f80641794e68b",
+      "mode": 420,
+      "mtime_ns": 1790103631462743440
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md",
+      "bytes": 15420,
+      "sha256": "080f47fe12ed9704ca38d718c5d621768139fb5a95d56ddcc3a284dd2b2d7efc",
+      "mode": 420,
+      "mtime_ns": 1790104674932666708
+    }
+  ],
+  "originalMetadataBudgetMet": false,
+  "originalMetadataLimit": 1048576,
+  "amendedMetadataLimit": 3145728,
+  "metadataAccounting": "All owned plan/study/JSON files including this receipt, plus only own navigation insertion bytes; unchanged surrounding navigation excluded",
+  "metadataBytes": 2222850,
+  "amendedMetadataBudgetMet": true,
+  "disk": {
+    "volumeUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "externalFree": 158357684224,
+    "internalFree": 66437054464,
+    "externalOriginalReserve": 42949672960,
+    "internalOriginalReserve": 6442450944,
+    "sourceGrossCommitment": 18253611008
+  },
+  "source": {
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/capture1/source.job.json",
+      "bytes": 2254,
+      "sha256": "ff0b6b159a6fb305c28cc7d4ca62f6368378a078767d97ee1351b78c68d4d43c",
+      "mode": 420,
+      "mtime_ns": 1790073123864381006
+    },
+    "identity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+    "cwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "lastLine": "{'chunks': 3508, 'pc': '0x78141880', 'scans': 2366281, 'decoders': 23, 'objects': 23, 'catalogChildren': 0, 'stores': 860105524, 'seconds': 31633.8}",
+    "restarted": false,
+    "signaled": false
+  },
+  "diagnostics": [
+    {
+      "operation": "Read-only JSON schema inspection of context manifests and sourceCodePins",
+      "toolChunk": "42bed7",
+      "exitCode": 1,
+      "exactError": "TypeError: list indices must be integers or slices, not str",
+      "cause": "The inspection loop treated sourceCodePins, an inline list, as a path record. The preceding candidate/root manifest reads succeeded.",
+      "effect": "No file mutation, original execution or Native execution; continued with direct schema-aware reads."
+    },
+    {
+      "operation": "Narrow code reads before compaction",
+      "exactAvailableOutput": "Output exceeded the available model context and was truncated",
+      "effect": "No mutation; missing displayed text was re-read narrowly."
+    }
+  ],
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false,
+  "rootPromoted": false,
+  "deviceAcceptance": false,
+  "fullGameAccepted": false,
+  "verificationSeconds": 4.688564,
+  "linkVerificationUTC": "2026-09-22T19:20:11.356730+00:00",
+  "preflightElapsedSincePlanSeconds": 1179.894,
+  "preflightTimeLimit": 1800
+}

@@ -1,0 +1,976 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-context-v1",
+  "UTC": "2026-09-22T19:02:57.175392+00:00",
+  "head": "d1e37997e42d854581e2ee2a2bae086d078886da",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1-inputs.json",
+    "bytes": 216124,
+    "sha256": "72f80bb1989084c80ffb23b6727aefd3d0d5862256f8ce5419bf7a9ae3d12d2f",
+    "mode": 420,
+    "mtime_ns": 1790100265756608969
+  },
+  "rootManifest": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-loading53-native-20260922/candidate1-inputs.json",
+  "sourceTask": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922",
+  "sourceCodePins": [
+    {
+      "path": "tools/check_first_damage_catalog53_driver.py",
+      "bytes": 24240,
+      "sha256": "b2e37a99597d28e61976a6a560bcee24b8cdd55497cc3a6fcba3228e863409c9",
+      "mode": 420
+    },
+    {
+      "path": "tools/check_first_damage_catalog53_launch.py",
+      "bytes": 15967,
+      "sha256": "2c0c667e5d2231be38fe7758c542e25aa7365750367da8bec773a87834b37475",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_launch_support.py",
+      "bytes": 10526,
+      "sha256": "a614638aef1c81949c9d0385c1f6f2d7d151b20afb01adce0c4ae4fe595c544c",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_platform.py",
+      "bytes": 10868,
+      "sha256": "fb04feae04dd8cc8561d5451685717b9253d40f14ee74188765002b00e72143e",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_storage.py",
+      "bytes": 9146,
+      "sha256": "d4a86bcdda65017d6e702b8a58cf4bec6d48f9de0f60984d5403aeec6bc563ed",
+      "mode": 420
+    },
+    {
+      "path": "tools/import_ntsd.py",
+      "bytes": 9771,
+      "sha256": "5c5fee71607c2752b8d1a79e7f569588fe0c6b43f551cf1e99a63e7d51c9aede",
+      "mode": 493
+    },
+    {
+      "path": "tools/inspect_original.py",
+      "bytes": 5894,
+      "sha256": "f0c09d227f61086f1e6a0aa2ade59daee1c438eb4bb9a5a1bb6430ad02c6c4f5",
+      "mode": 420
+    },
+    {
+      "path": "tools/launch_first_damage_catalog53.py",
+      "bytes": 17552,
+      "sha256": "4b2e37213b0dd11d2cfecf291208de4d8afe3b146fa3037e53a66fd6b89b097a",
+      "mode": 420
+    },
+    {
+      "path": "tools/lib_runtime_loader.py",
+      "bytes": 4673,
+      "sha256": "5c036c5e10cb41cce43e03c7757edb7646388674e84ce842f50e987ff041fbe9",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_catalog_guarded.py",
+      "bytes": 35616,
+      "sha256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_dispatch_entry.py",
+      "bytes": 8638,
+      "sha256": "f8605f9d796e68661a25fdec0ae18cef2057c64e5e9f776d390bd4e95dfd8198",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_front_screen.py",
+      "bytes": 13960,
+      "sha256": "128ec384553ffc1f73da27e294cd66a96f4ede579c230bda3833e31a63a030e8",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_loading_prefix.py",
+      "bytes": 11152,
+      "sha256": "572f771fa774f1b637b8c4ca45c3f0a3fa13353c85ea421333f123e22effc047",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_menu_input.py",
+      "bytes": 16328,
+      "sha256": "5db0403f3e152759dcf890ab01d512572bbd1ed345143ae81363050e5271793b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_menu_return.py",
+      "bytes": 10055,
+      "sha256": "4f62471d3581c3cccb3cd0ebcfbe0e616669b0022f74525352a41719a9b5e17b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_message_loop.py",
+      "bytes": 13512,
+      "sha256": "ce6263ebcabcda9f3ae719c1cfbb19ada9ef14e1cc2a2a1ae33889bca2e37a4a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_screen_body.py",
+      "bytes": 11860,
+      "sha256": "0dd955be46ce44e8212862575ba1ef149b52f71e5dcb8a0aeb04ba8c9c74fe74",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_settings.py",
+      "bytes": 10816,
+      "sha256": "5d9317c8d47ac39c98c73742ceae5a3b94d77cda9a33b1e90a77694212e8da76",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bitmap_drawing.py",
+      "bytes": 17956,
+      "sha256": "8f71793204bd1b3aa22bb14d2f9d2737d2f406740f1ea3c4afeff61c484888a7",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bitmap_surface_loading.py",
+      "bytes": 18515,
+      "sha256": "512a2e10f48b3ce3ccb126c95e3c2afc38df1c1e4087c07fb08099d486e0d532",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bootstrap.py",
+      "bytes": 9852,
+      "sha256": "953a060c6c78f5fef5c03c484c11071e5c8512e7c33f6983e6637b51508f9968",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_calendar_time.py",
+      "bytes": 13279,
+      "sha256": "18c529d18ba360f550ee559e75238b52467cec47133f8555fd289072623aec35",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_catalog_sounds.py",
+      "bytes": 9476,
+      "sha256": "5f195bd6a5043a2e03cd5624ead64d13ace6c6d9eee7272097a6855c29514f6a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_crt.py",
+      "bytes": 14334,
+      "sha256": "bb8eade431bf8e89d8ebc4020427e0f8109d5b0a0f0b9633b5594f4c0cb4012f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_crt_startup.py",
+      "bytes": 12145,
+      "sha256": "ae5e447ead7ab626d8f301c51d51b7c9de4a27343cdcecaea35c6deffb5eed8a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_catalog53.py",
+      "bytes": 15369,
+      "sha256": "4b603e867c1ced1201e18ea30127f38e31822867fa02688beac79586093e7b77",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_loading53.py",
+      "bytes": 11580,
+      "sha256": "664c025a00775ecafc544798c42dda18300c80219ebbdfa66f93dec70efc1629",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_winmain53.py",
+      "bytes": 10443,
+      "sha256": "0aefcdb2e9b76d2d818026996c8ddc48285af2fb5e76b64d3efb8e3a0da35f38",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_front_menu_resources.py",
+      "bytes": 16275,
+      "sha256": "a9661f50dcae9943abdddd72347202f2f8ec8569d7c0b6d6e730f409b9909d75",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_initial_interface.py",
+      "bytes": 12664,
+      "sha256": "13800eebb2aa768b35ced37fe85f2b4dfb8e0a62b473af34697f7d5426b0a9a4",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_initial_loading.py",
+      "bytes": 15060,
+      "sha256": "7a9c84279a396f4a071416955b8656073505ac6db9f5069833bb24edacebaff3",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_input_control.py",
+      "bytes": 26333,
+      "sha256": "9952721c9fc0ef38ea0f11e163cd6cadbe22b2aa7764a1ff24c8d17b7cb1ac81",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_input_startup.py",
+      "bytes": 14401,
+      "sha256": "f8e88c8cd8666f590ed9d746913f24e501ec6a0e5cc258bc0509066c9b3e0676",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_lib_initialization.py",
+      "bytes": 10066,
+      "sha256": "6e2485b8813748df7a51dd07abc320c7544f4c3b18f2dcf2b0c4ff3c488c0126",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_loaded_catalog.py",
+      "bytes": 18177,
+      "sha256": "0c8c6c8fff51007e901b94cfe420e32b592108ec3eb31b056a70015c9913694f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_local_input.py",
+      "bytes": 12901,
+      "sha256": "9b17163030b8c52a52f5da3dd7e9fd1407faf94f22cbbd23cab19a2a9865c4bd",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_match_preparation.py",
+      "bytes": 24263,
+      "sha256": "2713588502f37641fb1b76c55ab561f317d8d96ebf6a90385aa81b51d50734b5",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_match_round.py",
+      "bytes": 18713,
+      "sha256": "af6f9040efd07da048a8ffe0641176d6f2b801e2e56c3a16bfdf2308b507cd14",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_content.py",
+      "bytes": 10715,
+      "sha256": "13693f39762045489e398c2248a19ef15b1c77f149cadccd6d45ddfb6d9cce31",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_info_reading.py",
+      "bytes": 11339,
+      "sha256": "72967b094dc397eb1fb1fefe9ce736fd4207a392012634275ae7bff58a7182ca",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_info_writing.py",
+      "bytes": 10367,
+      "sha256": "6d10dfc6b9b59ed1ee010741b773d728d7f99fc3cfb9b836ced1d115c2591571",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_panel_bitmap.py",
+      "bytes": 11782,
+      "sha256": "d5930b089137ce37ebf0abcac16d8cd88e09b0920e173380eaadaa787303c163",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_sound_startup.py",
+      "bytes": 13956,
+      "sha256": "83cb09c2b8491780648f94bbc1a48ee516aa156035f9efeadb2c1fa3d0a01b9b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_music_playback.py",
+      "bytes": 18935,
+      "sha256": "6b6d9e410c7321427b45217d4522fb3bf26d29e50ef4d00c2357b3cfc7c74d96",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_objects.py",
+      "bytes": 37717,
+      "sha256": "a37dd2510db0997b4b15be77baf0d062d505ebb1df9ee234ca6718e5de444dbc",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_replay_initialization.py",
+      "bytes": 15449,
+      "sha256": "9bbfe16bc399b1653b68f8e9e02ce46940f07d1b5af20f09b4283119ece3e442",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_replay_tick.py",
+      "bytes": 18599,
+      "sha256": "783c464a2b473519945e000e2802e2c886cf30e389d79e0860d000254d79ac4f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_settings_loading.py",
+      "bytes": 15451,
+      "sha256": "5105eacc1f630778c9245588e41400ffde38832cecf91611de11083d60784856",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_startup_output.py",
+      "bytes": 14970,
+      "sha256": "0776362355223cb3ab0923a2ee61fdc8380b24e6aeb50ed9cb4f62eba03962e9",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_startup_panel.py",
+      "bytes": 17214,
+      "sha256": "f254ad5277e397d8f9149db971d96c8749733ee84c3343928181f160b9a8655a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_state.py",
+      "bytes": 7195,
+      "sha256": "704229e023414622bfdbe4fe3fe6cf862f38bc315ab397f7ecee80753966efc6",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_wave_loader.py",
+      "bytes": 23226,
+      "sha256": "6e50feb5be4ea87a5d4c215d4df0aafad056e96a4d73e49284c210faa3073d6b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_window_initialization.py",
+      "bytes": 14889,
+      "sha256": "88118a54983d4fbfcba6ca004b48752b107e26ff9468cc0e30f65c9cec96d1ff",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_winmain_startup.py",
+      "bytes": 23708,
+      "sha256": "1f3a8862eddc2573f97609f9e6c0ae59ac6801064ae2ba85bb3eb757de7b1f55",
+      "mode": 420
+    },
+    {
+      "path": "tools/original_replay.py",
+      "bytes": 1383,
+      "sha256": "5c82b5b787e6a6b8e52f0318cea81ab0791b491f53a0ca02434b067320a43b81",
+      "mode": 420
+    }
+  ],
+  "rootFilesVerified": 1034,
+  "candidateFilesVerified": 1039,
+  "pins": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS.md",
+      "bytes": 10290,
+      "sha256": "b0c28d56ce53df5b45f288e5cb44ccfc28eb138809598785aace1947483d8032",
+      "mode": 420,
+      "mtime_ns": 1790084213568528887
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS_HISTORY_2026-09-12.md",
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+      "mode": 420,
+      "mtime_ns": 1789191537898499666
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-active-output.json",
+      "bytes": 9540,
+      "sha256": "cf551a26bf03bfd1369a57cf41916c70b086ef498aad25413a9cbc7708668e55",
+      "mode": 420,
+      "mtime_ns": 1789366950000449024
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-gameplay-effects.json",
+      "bytes": 176258,
+      "sha256": "11beeda5a75d81b3e848f46bd66e3d01df909e70bd8761b5bfff56070270e778",
+      "mode": 420,
+      "mtime_ns": 1789330830197205414
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-paused-gameplay.json",
+      "bytes": 11634,
+      "sha256": "a8bc76308cb4452503d158b48d45c79feb512c938c06f5105ec98097a9c523ac",
+      "mode": 420,
+      "mtime_ns": 1789371804956432092
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420,
+      "mtime_ns": 1789191539072168000
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_ACTIVE_GAMEPLAY_INPUT.md",
+      "bytes": 5241,
+      "sha256": "fbfb6ad9f356e0e2f83617db5fe854364c5d4b7dd65ff0c1c99f80d40c6e19ec",
+      "mode": 420,
+      "mtime_ns": 1789335428732676342
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_ACTIVE_OUTPUT.md",
+      "bytes": 6004,
+      "sha256": "8fca96a37e36c9b45553ab3b73e0ecbba67d06d5388de4ff5baa754a7d54922d",
+      "mode": 420,
+      "mtime_ns": 1789366593415370591
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_EQUIVALENCE_FRONTIER.md",
+      "bytes": 9230,
+      "sha256": "52b1479685c034e60bce506052aa77e6914650b8e140a0f4f5f28241387755af",
+      "mode": 420,
+      "mtime_ns": 1789367587149568637
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_GAMEPLAY_EFFECTS.md",
+      "bytes": 3700,
+      "sha256": "e61b5c82dd2f06b499bcb2d4f51d13f52ccf500a7e99ced6589411a5a7b0a332",
+      "mode": 420,
+      "mtime_ns": 1789330581226999064
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_GAMEPLAY_SOURCE_READER.md",
+      "bytes": 4983,
+      "sha256": "464a3b8ff920efc05f38439888ab3e3bd6fab4f00c88852b488a852cff1dcc0d",
+      "mode": 420,
+      "mtime_ns": 1789325220723017293
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT_PLAN.md",
+      "bytes": 4976,
+      "sha256": "22060dd8a97ca0f1ce48f1ee37b97f727bcd8c4e4f2c8d86ed6f80641794e68b",
+      "mode": 420,
+      "mtime_ns": 1790103631462743440
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_COMPLETION.md",
+      "bytes": 6457,
+      "sha256": "287f39793fddf677bfd050bc84085ebb60db7b2257cc362f97050fe3ca596ada",
+      "mode": 420,
+      "mtime_ns": 1790103228208942634
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_COMPLETION_PLAN.md",
+      "bytes": 5663,
+      "sha256": "846574efe57fbec10352656b1d73cf3f0509ce6e2f55352c9f3fdef997d34099",
+      "mode": 420,
+      "mtime_ns": 1790101664045711547
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_CORRECTION1.md",
+      "bytes": 5855,
+      "sha256": "c90771dfe5b9a289e8ade7154ec1cc2cdb86c8b9bfe0ceb26ebd33c09df69958",
+      "mode": 420,
+      "mtime_ns": 1790101425639910810
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_PREFLIGHT.md",
+      "bytes": 12965,
+      "sha256": "a17c13ad707ba74055ad32f06fa22033f37aa39e6c69e4d813d0f28c7c1c99d8",
+      "mode": 420,
+      "mtime_ns": 1790097842528325332
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_PREFLIGHT_PLAN.md",
+      "bytes": 4145,
+      "sha256": "472c0a661c0acb41191245abc1a534280caedc308b816ea577d2b17055dbb0b7",
+      "mode": 420,
+      "mtime_ns": 1790097380647360199
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_GAMEPLAY.md",
+      "bytes": 5947,
+      "sha256": "5dc84b10ecfb005baa253a67bc3d2dd68d956fdb8df3076be6bdea43b9a42644",
+      "mode": 420,
+      "mtime_ns": 1789322610156650186
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_GAMEPLAY_PROVIDERS.md",
+      "bytes": 5868,
+      "sha256": "bab7f0a4a25284cd538d3566520453bf96bd0b789f77a12db6e02ae93c750d33",
+      "mode": 420,
+      "mtime_ns": 1789322610156154889
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_PAUSED_GAMEPLAY.md",
+      "bytes": 5970,
+      "sha256": "8bd19b11365c4d519d81ea89f07f96d19fa02b874fa7e86190cae42a1c3c404b",
+      "mode": 420,
+      "mtime_ns": 1789371192084444964
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/TASK_TEMPLATE.md",
+      "bytes": 10500,
+      "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f",
+      "mode": 420,
+      "mtime_ns": 1789191914472828972
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/WORKFLOW.md",
+      "bytes": 28181,
+      "sha256": "a83bf4d46c33eff73df15f9a6917014736d2c39cbd835d43fd04c2a8d7ff8a14",
+      "mode": 420,
+      "mtime_ns": 1790084213568932637
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "bytes": 31715328,
+      "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+      "mode": 420,
+      "mtime_ns": 1788776842581673240
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/archive_catalog53_storage.py",
+      "bytes": 17445,
+      "sha256": "8d7f632753fee83b26c9b543b8414498092fcb647e19c3d529c6ca7e1d74a65e",
+      "mode": 420,
+      "mtime_ns": 1790067489868062800
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-completion-20260922/external-close1.json",
+      "bytes": 879,
+      "sha256": "875466e64b3b4a4c0f5aac489c7d78e42f71b8dc0ef7a255472ee855a9e85ccb",
+      "mode": 420,
+      "mtime_ns": 1790103173365651380
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-completion-20260922/publication1.json",
+      "bytes": 4726,
+      "sha256": "c12685fbb64d6e26c50b6516f741c56db995df1ca8a20a3d086fe25baf4c1a98",
+      "mode": 420,
+      "mtime_ns": 1790103173364765213
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-completion-20260922/verification1.json",
+      "bytes": 70445,
+      "sha256": "e2c13933f7352fd2cc6e5cbe330e3a3e39e8fba485a45d9937b2108019681076",
+      "mode": 420,
+      "mtime_ns": 1790103173231196922
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 10339,
+      "sha256": "d05284a094fe119bb8ee7da3122684517c618d1843f6bcc72ff57cde44aba6b0",
+      "mode": 420,
+      "mtime_ns": 1790090215440987920
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift",
+      "bytes": 11710,
+      "sha256": "6ef265dc305e9363c884bc612493d7d3f84fa89810e68662aff918ad37dd970a",
+      "mode": 420,
+      "mtime_ns": 1789368386519464798
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 14831,
+      "sha256": "dc203ae0b864b774ca059eb8c3a433679d552de5c5d2e29a4b54b2d1c0981c48",
+      "mode": 420,
+      "mtime_ns": 1790100262276980034
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationInputSession.swift",
+      "bytes": 7305,
+      "sha256": "e945a186c2d7205ae50bc1d21f71162de72c02180782b0a35e767ca69aa9238f",
+      "mode": 420,
+      "mtime_ns": 1789317387220808022
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift",
+      "bytes": 4406,
+      "sha256": "481d6cba0ba4be000fbdf85faa2281ee48b1837be9b45b24d912afef40c625b9",
+      "mode": 420,
+      "mtime_ns": 1789296715599364755
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+      "bytes": 27746,
+      "sha256": "788ed047b01bd613a4f0df3fcb8800bfb9df96f1683e59a3f7c30da6b53a9f15",
+      "mode": 420,
+      "mtime_ns": 1789317419472135963
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMatchBindings.swift",
+      "bytes": 6417,
+      "sha256": "9054281bf446ab5674e53737d2f5b2822d2ba6f1e56f29d6caa508a49983faa6",
+      "mode": 420,
+      "mtime_ns": 1789296672338247710
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMatchLaunchSession.swift",
+      "bytes": 10416,
+      "sha256": "24332deab00743b682334a33244aecf520bc4b77547615590781b6e9d274d15b",
+      "mode": 420,
+      "mtime_ns": 1789317387221101604
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+      "bytes": 40357,
+      "sha256": "b7d4a4640ef9403336c20a8ba34104f70aef745c6194a2c18bffa81727720158",
+      "mode": 420,
+      "mtime_ns": 1790090293476743213
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalGameplayBody.swift",
+      "bytes": 12276,
+      "sha256": "de7035ad55009905967a602fbaa6427b3a89c2aa9f83bf98cc4c37d1c7b49983",
+      "mode": 420,
+      "mtime_ns": 1789317173181168631
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalLoadedMatchCycle.swift",
+      "bytes": 2215,
+      "sha256": "1aa6e988a71551ddd73e0214c467b25cd89fa3a91317f29472b61b0080fd4b99",
+      "mode": 420,
+      "mtime_ns": 1788897007188045699
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Sources/NTSDCore/OriginalPausedGameplay.swift",
+      "bytes": 6517,
+      "sha256": "e0f93e7d84912058554c2472f4a7c6cc83ca7c5bd594d88fbceecb5c6c70a640",
+      "mode": 420,
+      "mtime_ns": 1789368337442750412
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay-control.json",
+      "bytes": 8585744,
+      "sha256": "d3abb578f36ac74716fa6e71eb12091c6f0eed5adb02f1b59a550275c73fc0b3",
+      "mode": 420,
+      "mtime_ns": 1788992273254464592
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay.json",
+      "bytes": 8569152,
+      "sha256": "3b074ff960538fde6e13b1b65bda4f833b22bbc9cafcef990de12f71aaed511c",
+      "mode": 420,
+      "mtime_ns": 1788992272455437960
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json",
+      "bytes": 2759528,
+      "sha256": "24a1fe4f91da3491df12076c827e01214a4329a8aa65d7aaf8b7dfd28ca50f2c",
+      "mode": 420,
+      "mtime_ns": 1788983777434940061
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json",
+      "bytes": 3072348,
+      "sha256": "2e4184b1617ab41d31a502f407a5fa296a57664e8f8e60e0ebef6ec58efe4471",
+      "mode": 420,
+      "mtime_ns": 1788983777168852924
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay-control.json",
+      "bytes": 2062640,
+      "sha256": "be991d1fe0001ffbe5098da526782034d66791e47a225470a497c8e560b7094c",
+      "mode": 420,
+      "mtime_ns": 1788988512063633406
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay.json",
+      "bytes": 2064088,
+      "sha256": "0c2e53bbe82ab643161f0f336142920d9eac3f56f0852ec7c63bd97c0ef51889",
+      "mode": 420,
+      "mtime_ns": 1788988511892263329
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveBodyTests.swift",
+      "bytes": 5539,
+      "sha256": "f8d5a9e2f9e490207cbc1bda2a5ecdf47e3c821b2c658393c9c87419bc47ce04",
+      "mode": 420,
+      "mtime_ns": 1789343680362623337
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveCommandsTests.swift",
+      "bytes": 8675,
+      "sha256": "b204dfac18bfdca80db22f7f2be39528e70dd6c1bd335e61e0f5bb755e013cee",
+      "mode": 420,
+      "mtime_ns": 1789354902122204058
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveContactsTests.swift",
+      "bytes": 7870,
+      "sha256": "857f52caa38b3b828fbdd67184b2ad95d6717f31e250a9fcc87653279f3b6195",
+      "mode": 420,
+      "mtime_ns": 1789343680362836377
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift",
+      "bytes": 23290,
+      "sha256": "82447c7594559580382ea7d9227daae776cabd6b29a0e46b3e8c2e43374201fa",
+      "mode": 420,
+      "mtime_ns": 1789334603557764900
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayTests.swift",
+      "bytes": 13765,
+      "sha256": "28ea37477d3a1d7db5f5964aff6228f01720c17c53dc56ca2344916893cc9f56",
+      "mode": 420,
+      "mtime_ns": 1789343680362476004
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveGraphicsTests.swift",
+      "bytes": 11599,
+      "sha256": "9788213ce10e1e1699b388cdb1dbdc691bae3766f0fc8a28dbaa74ed22a8e355",
+      "mode": 420,
+      "mtime_ns": 1789349269505012341
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveHUDTests.swift",
+      "bytes": 11099,
+      "sha256": "c69bc0c290011bbd592a90ef42da8bacfcb2e273bdee08a3f91f719a6b64f0fc",
+      "mode": 420,
+      "mtime_ns": 1789355348144589541
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveLayoutTests.swift",
+      "bytes": 10031,
+      "sha256": "e13edbd10321f3378c2d23c8441a67c2103d55a365abc6cb80678cf785b6c13b",
+      "mode": 420,
+      "mtime_ns": 1789362753426942886
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveLifecycleTests.swift",
+      "bytes": 12560,
+      "sha256": "6061daf8af2dd97c35c40c4de9fefe239d65d2a08f01c22eed285ca751265d05",
+      "mode": 420,
+      "mtime_ns": 1789351959003658841
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveNoticesTests.swift",
+      "bytes": 7373,
+      "sha256": "24b66f872cca8c602e6fabbeedb9b3ccbb2e6269747636c791a2566a65f2b0ed",
+      "mode": 420,
+      "mtime_ns": 1789358884742795594
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift",
+      "bytes": 12163,
+      "sha256": "91c863d791307bcf81a70807df61ebdc019559955662d77e9ab4dfd2cd505b31",
+      "mode": 420,
+      "mtime_ns": 1789365418586684319
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActivePhysicsTests.swift",
+      "bytes": 5210,
+      "sha256": "a0909b873b2b3b44c9caca2c8e19aafe86f2e1e169c1d7878685354c7258c9a4",
+      "mode": 420,
+      "mtime_ns": 1789343680362733586
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationActiveRecordingTests.swift",
+      "bytes": 8838,
+      "sha256": "435a3c24e9b729b9f43e1d072dea156fd19f453f9280b7df426e1700d6bfa003",
+      "mode": 420,
+      "mtime_ns": 1789361050178849166
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift",
+      "bytes": 16946,
+      "sha256": "48f1a646aa46948207b02ed27aef4fffaf50cee74be08465aa15f88f8f7573ed",
+      "mode": 420,
+      "mtime_ns": 1789331730634180392
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplayProviderTests.swift",
+      "bytes": 20829,
+      "sha256": "e7d208dad154a4bbed6dceda0fee18bf975cc5f149b8501a346e4fc71f0a8a9e",
+      "mode": 420,
+      "mtime_ns": 1789322073329058240
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySource.swift",
+      "bytes": 20818,
+      "sha256": "8fd444efc01a3726b0e37d871c19bceb976743bda761f263c36bc5a9962b04ec",
+      "mode": 420,
+      "mtime_ns": 1789368824659205426
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplaySourceTests.swift",
+      "bytes": 5192,
+      "sha256": "3c0df9f896a880e93799d76fafddc678a78e40f221c5daf41961f63526674766",
+      "mode": 420,
+      "mtime_ns": 1789326631262459632
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationGameplayTests.swift",
+      "bytes": 10814,
+      "sha256": "875512607f30ea71c47ac6fa23fb8deda079b1288935767226b4ec6b404352ea",
+      "mode": 420,
+      "mtime_ns": 1789317999388812872
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift",
+      "bytes": 20791,
+      "sha256": "d8a1c9e9f20c578207f98bb6047a09c6b380c3544f9cb58bf5a808f90e0e2584",
+      "mode": 420,
+      "mtime_ns": 1790095066570646651
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationHostMatchLaunchTests.swift",
+      "bytes": 18005,
+      "sha256": "348d2dd9ab809d52a92b20ac913546925d8c50e5743d2340d37c436f333ef01e",
+      "mode": 420,
+      "mtime_ns": 1790098791849690522
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift",
+      "bytes": 17076,
+      "sha256": "8c3b883fa1ae7a84a3b89e6505fffcb3cb330017790bfcdd448a3335232d701c",
+      "mode": 420,
+      "mtime_ns": 1790098409035068290
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift",
+      "bytes": 23610,
+      "sha256": "afef0c5c8de9887eeac415d93c0c9254f74020261b06c046570db51bd80f8327",
+      "mode": 420,
+      "mtime_ns": 1790090372669793382
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchTests.swift",
+      "bytes": 23966,
+      "sha256": "b214d59ad38b5c4f884bf57a0a53083338cef7a5d90575eab4822f3e3405b3a9",
+      "mode": 420,
+      "mtime_ns": 1789313825914940280
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift",
+      "bytes": 11068,
+      "sha256": "dfd051856304d68267912ce904d5036cfb2c7f13416e9f15920cd191697ababe",
+      "mode": 420,
+      "mtime_ns": 1790098527437446839
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift",
+      "bytes": 8129,
+      "sha256": "08f3b7002888cbd387f52b5a661d781fabfc30ee0157548293534bc4a6fb021d",
+      "mode": 420,
+      "mtime_ns": 1790098791849783188
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationPausedGameplayTests.swift",
+      "bytes": 14566,
+      "sha256": "0a36945a9d177803d6b70220886336be34204639a742bc00134d989de62f62a2",
+      "mode": 420,
+      "mtime_ns": 1789369683864784377
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationPausedInput.swift",
+      "bytes": 7523,
+      "sha256": "e894a29bc9ea81b96af2cd9d44dd82e7d5e189388c71f1095dedfac237b2811e",
+      "mode": 420,
+      "mtime_ns": 1789369096282546766
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift",
+      "bytes": 7867,
+      "sha256": "887a6cd1d9537556eac28d0b8d93ef745837f4518b721fbecc54d247a8a7b052",
+      "mode": 420,
+      "mtime_ns": 1789369611314989781
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationPausedSource.swift",
+      "bytes": 17835,
+      "sha256": "05ad68f778c4aaddeeea2fac975825894cc02838c4cfd5f570735591b7e902e7",
+      "mode": 420,
+      "mtime_ns": 1789369611390099299
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1-inputs.json",
+      "bytes": 216124,
+      "sha256": "72f80bb1989084c80ffb23b6727aefd3d0d5862256f8ce5419bf7a9ae3d12d2f",
+      "mode": 420,
+      "mtime_ns": 1790100265756608969
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/context1.json",
+      "bytes": 24739,
+      "sha256": "1081850e36cd2c19d7f3990f4c8a51049b04b2cbc5b459656afc54679cb9579b",
+      "mode": 420,
+      "mtime_ns": 1790100265947513454
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/external-close1.json",
+      "bytes": 807,
+      "sha256": "d1c0e0043cf4abf241e09a4edc3ece5da52749829438595f2938aa3c030a0288",
+      "mode": 420,
+      "mtime_ns": 1790101390005885747
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/package-check1.json",
+      "bytes": 936257,
+      "sha256": "b2dc18deb9ff28df637665b81e937ce7bea9f12f0ce844f5c90afa7eef536ca0",
+      "mode": 420,
+      "mtime_ns": 1790100841534443747
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/publication1.json",
+      "bytes": 19270,
+      "sha256": "5f1aedcbd20d0753ae7f5b19b2b44033abc9a5a32084380894af7855eb7331ee",
+      "mode": 420,
+      "mtime_ns": 1790101390004109788
+    }
+  ],
+  "consultedNativeRootEquivalent": [
+    "native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationInputSession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationMatchBindings.swift",
+    "native/Sources/NTSDCore/OriginalApplicationMatchLaunchSession.swift",
+    "native/Sources/NTSDCore/OriginalGameplayBody.swift",
+    "native/Sources/NTSDCore/OriginalLoadedMatchCycle.swift",
+    "native/Sources/NTSDCore/OriginalPausedGameplay.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveBodyTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveCommandsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveContactsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGraphicsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveHUDTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveLayoutTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveLifecycleTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveNoticesTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActivePhysicsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveRecordingTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplayProviderTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplaySource.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplaySourceTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedLaunchTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedInput.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedSource.swift"
+  ],
+  "consultedNativeRootDifferent": [
+    "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+    "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+    "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostMatchLaunchTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift"
+  ],
+  "fixtureFiles": [
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay.json",
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-continuous-gameplay-control.json",
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay.json",
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-active-gameplay-control.json",
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay.json",
+    "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-paused-gameplay-control.json"
+  ],
+  "initialNavigation": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 121198,
+      "sha256": "9d1a62ce4b0325b5952c8b4943ab27128ed511a91388b715f65d3fc3ace402c7",
+      "mode": 420,
+      "mtime_ns": 1790103228266733343
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 314433,
+      "sha256": "437cfa0bf2521617f7944efa45ee8328f876c9d121a0a31a55efdd436c917452",
+      "mode": 420,
+      "mtime_ns": 1790103330927614117
+    }
+  ],
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false
+}

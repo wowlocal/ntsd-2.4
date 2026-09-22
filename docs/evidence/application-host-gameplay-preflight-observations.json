@@ -1,0 +1,437 @@
+{
+  "schema": "ntsd-host-gameplay-preflight-observations-v1",
+  "UTC": "2026-09-22T19:09:29.513507+00:00",
+  "status": "static contract and saved-data inventory; no new Native comparison",
+  "inventories": [
+    {
+      "fixture": "original-continuous-gameplay.json",
+      "cases": 16,
+      "unpaused": 16,
+      "paused": 0,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    },
+    {
+      "fixture": "original-continuous-gameplay-control.json",
+      "cases": 16,
+      "unpaused": 16,
+      "paused": 0,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    },
+    {
+      "fixture": "original-active-gameplay.json",
+      "cases": 48,
+      "unpaused": 48,
+      "paused": 0,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    },
+    {
+      "fixture": "original-active-gameplay-control.json",
+      "cases": 48,
+      "unpaused": 48,
+      "paused": 0,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    },
+    {
+      "fixture": "original-paused-gameplay.json",
+      "cases": 14,
+      "unpaused": 6,
+      "paused": 8,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    },
+    {
+      "fixture": "original-paused-gameplay-control.json",
+      "cases": 14,
+      "unpaused": 6,
+      "paused": 8,
+      "bodyStageCount": 18,
+      "outputStageAdditional": true,
+      "returnPC": "0x30000000",
+      "returnSP": "0x1000f42c",
+      "allReturned": true
+    }
+  ],
+  "schedules": [
+    {
+      "fixture": "original-active-gameplay.json",
+      "sourceChangedKeyBytes": 20,
+      "segments": [
+        {
+          "name": "approach",
+          "first": 1,
+          "last": 16,
+          "buttons": [
+            [
+              "left"
+            ],
+            [
+              "right"
+            ]
+          ]
+        },
+        {
+          "name": "moving-attacks",
+          "first": 17,
+          "last": 24,
+          "buttons": [
+            [
+              "left",
+              "attack"
+            ],
+            [
+              "right",
+              "attack"
+            ]
+          ]
+        },
+        {
+          "name": "release",
+          "first": 25,
+          "last": 28,
+          "buttons": [
+            [],
+            []
+          ]
+        },
+        {
+          "name": "guard-and-attack",
+          "first": 29,
+          "last": 36,
+          "buttons": [
+            [
+              "defend"
+            ],
+            [
+              "attack"
+            ]
+          ]
+        },
+        {
+          "name": "jump",
+          "first": 37,
+          "last": 40,
+          "buttons": [
+            [
+              "jump"
+            ],
+            [
+              "jump"
+            ]
+          ]
+        },
+        {
+          "name": "depth-movement",
+          "first": 41,
+          "last": 44,
+          "buttons": [
+            [
+              "up"
+            ],
+            [
+              "down"
+            ]
+          ]
+        },
+        {
+          "name": "release-final",
+          "first": 45,
+          "last": 48,
+          "buttons": [
+            [],
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "original-active-gameplay-control.json",
+      "sourceChangedKeyBytes": 20,
+      "segments": [
+        {
+          "name": "approach",
+          "first": 1,
+          "last": 16,
+          "buttons": [
+            [
+              "left"
+            ],
+            [
+              "right"
+            ]
+          ]
+        },
+        {
+          "name": "moving-attacks",
+          "first": 17,
+          "last": 24,
+          "buttons": [
+            [
+              "left",
+              "attack"
+            ],
+            [
+              "right",
+              "attack"
+            ]
+          ]
+        },
+        {
+          "name": "release",
+          "first": 25,
+          "last": 28,
+          "buttons": [
+            [],
+            []
+          ]
+        },
+        {
+          "name": "guard-and-attack",
+          "first": 29,
+          "last": 36,
+          "buttons": [
+            [
+              "defend"
+            ],
+            [
+              "attack"
+            ]
+          ]
+        },
+        {
+          "name": "jump",
+          "first": 37,
+          "last": 40,
+          "buttons": [
+            [
+              "jump"
+            ],
+            [
+              "jump"
+            ]
+          ]
+        },
+        {
+          "name": "depth-movement",
+          "first": 41,
+          "last": 44,
+          "buttons": [
+            [
+              "up"
+            ],
+            [
+              "down"
+            ]
+          ]
+        },
+        {
+          "name": "release-final",
+          "first": 45,
+          "last": 48,
+          "buttons": [
+            [],
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "original-paused-gameplay.json",
+      "sourceChangedKeyBytes": 3,
+      "pauseCalls": [
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sourceKeyPlan": [
+        {
+          "index": 1,
+          "keys": [
+            4543464
+          ]
+        },
+        {
+          "index": 5,
+          "keys": [
+            4543465
+          ]
+        },
+        {
+          "index": 11,
+          "keys": [
+            4543464
+          ]
+        }
+      ],
+      "pausedCheckpointPCs": [
+        "0x41d74d",
+        "0x41d762",
+        "0x41d76a",
+        "0x41d78b",
+        "0x422994"
+      ],
+      "nativeWndProcMessages": "Explicit key down/up at1/2,5/6,11/12; source table writes are not observed Windows messages."
+    },
+    {
+      "fixture": "original-paused-gameplay-control.json",
+      "sourceChangedKeyBytes": 3,
+      "pauseCalls": [
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sourceKeyPlan": [
+        {
+          "index": 1,
+          "keys": [
+            4543464
+          ]
+        },
+        {
+          "index": 5,
+          "keys": [
+            4543465
+          ]
+        },
+        {
+          "index": 11,
+          "keys": [
+            4543464
+          ]
+        }
+      ],
+      "pausedCheckpointPCs": [
+        "0x41d74d",
+        "0x41d762",
+        "0x41d76a",
+        "0x41d78b",
+        "0x422994"
+      ],
+      "nativeWndProcMessages": "Explicit key down/up at1/2,5/6,11/12; source table writes are not observed Windows messages."
+    }
+  ],
+  "distinctDecodedBytes": 172186478,
+  "actualDecodedBytesIncludingSecondRead": 304819130,
+  "existingMethods": [
+    "OriginalApplicationHostSessionTests/testWholeFirstMenuParentsUseHostCommitHandoff",
+    "OriginalApplicationHostSessionTests/testFirstMenuLateFailuresRetainEarlierHostCommits",
+    "OriginalApplicationHostSessionTests/testSamePreparedAttemptsRetryWithIndependentHostState",
+    "OriginalApplicationHostSessionTests/testWholeInputChainsRetainActualHostLoadingTicket",
+    "OriginalApplicationHostSessionTests/testStartupLateFailuresAndSharedCopyRejection",
+    "OriginalApplicationBootstrapTests/testLateFirstMenuFailuresRetainStartupAndResize",
+    "OriginalApplicationBootstrapTests/testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+    "OriginalApplicationMenuReturnTests/testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+    "OriginalApplicationMenuReturnTests/testLateMenuReturnFailuresRollBackWholeIteration",
+    "OriginalApplicationMenuInputTests/testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+    "OriginalApplicationMenuInputTests/testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+    "OriginalApplicationMenuInputTests/testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+    "OriginalApplicationMenuInputTests/testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+    "OriginalApplicationStartupInputsTests/testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+    "OriginalApplicationStartupInputsTests/testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+    "OriginalApplicationStartupInputsTests/testPackageRejectsMissingCorruptAndUnexpectedFiles",
+    "OriginalApplicationStartupInputsTests/testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+    "OriginalApplicationGraphicsTests/testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+    "OriginalApplicationGraphicsTests/testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+    "OriginalApplicationGraphicsTests/testResolvedSourceSnapshotAndNullSourceBoundary",
+    "OriginalApplicationMessageLoopTests/testWholeLoopAndOwnStartupCallbacks",
+    "OriginalApplicationMessageLoopTests/testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+    "OriginalApplicationMessageLoopTests/testLateFailureRollsBackContextMessageCounterAndBaseline",
+    "OriginalWinMainStartupTests/testContinuousStartupOwnedStateAndExplicitBoundaries",
+    "OriginalWinMainStartupTests/testLateRollbackOfWholeStartup",
+    "OriginalApplicationHostLoadingTests/testOwnFreshLoadingAndThreeCachedCyclesUseHostHandoff",
+    "OriginalApplicationHostLoadingTests/testPreparedChildAndPlatformSurviveLateFailuresAndRetry",
+    "OriginalApplicationHostLoadingTests/testDifferentSameRevisionTicketsAndRepeatedCompletionAreRejected",
+    "OriginalApplicationHostLoadingTests/testLoadingPrefixRequiresExactlyItsPreparedReplies",
+    "OriginalApplicationLoadedMenuTests/testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+    "OriginalApplicationLoadedMenuTests/testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+    "OriginalApplicationLoadedMenuTests/testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+    "OriginalApplicationLoadedMenuTests/testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+    "OriginalApplicationLoadedMenuTests/testForeignStaleAndOverlappingOwnersAreRejected",
+    "OriginalApplicationLoadedCycleTests/testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+    "OriginalApplicationLoadedCycleTests/testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+    "OriginalApplicationLoadedCycleTests/testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+    "OriginalApplicationInitializedMenuTests/testInitializedSourceMatchesOwnBootstrapAndWholeMenu",
+    "OriginalApplicationInitializedMenuTests/testInitializedMenuLateFailuresRetainCommittedStartupAndResize",
+    "OriginalApplicationInitializedLoadingTests/testInitializedBootstrapActivationAndCommonSoundsMatchSource",
+    "OriginalApplicationInitializedLoadingTests/testInitializedActivationFailuresPreservePriorCommittedIterations",
+    "OriginalApplicationInitializedLoadingTests/testInitializedCommonLoadingFailuresPreservePendingOwners",
+    "OriginalApplicationLoadedCharacterTests/testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns",
+    "OriginalApplicationLoadedCharacterTests/testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits",
+    "OriginalApplicationLoadedSelectionTests/testOwnCountdownDistrictAndStartRetainTheActualApplication",
+    "OriginalApplicationLoadedSelectionTests/testSelectionAndPendingStartFailuresPreserveEarlierCommits",
+    "OriginalApplicationLoadedLaunchTests/testOwnStartPreparesDistrictRecordsAndReachesGameplay",
+    "OriginalApplicationLoadedLaunchTests/testLaunchFailuresPreserveTheRetainedStartAndAllEarlierCommits",
+    "OriginalMatchLaunchTests/testOwnStartThroughEnabledMusicAndRecordingToFirstGameplayEntry",
+    "OriginalMatchLaunchTests/testSameWholeLaunchWithRampAndReverseActorAddresses",
+    "OriginalApplicationHostMatchLaunchTests/testActualHostStartLaunchAndNextInputRetainWholeOwners",
+    "OriginalApplicationHostMatchLaunchTests/testStartLaunchAndOuterTailFailuresRetainHostStages",
+    "OriginalApplicationHostMatchLaunchTests/testMatchPreludeRejectsDifferentTicketsAndReentry",
+    "OriginalApplicationGameplaySourceTests/testPrimarySavedSequence",
+    "OriginalApplicationGameplaySourceTests/testControlSavedSequence",
+    "OriginalApplicationGameplayProjectionTests/testPrimaryOwnedScalarSequence",
+    "OriginalApplicationGameplayProjectionTests/testControlOwnedScalarSequence",
+    "OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection",
+    "OriginalApplicationActiveOutputTests/testControlOwnedOutputProjection",
+    "OriginalApplicationPausedGameplayTests/testPrimaryOwnedPauseStepResume",
+    "OriginalApplicationPausedGameplayTests/testControlOwnedPauseStepResume",
+    "OriginalApplicationGameplayProviderTests/testRetainedSurfaceMapsAndActualOwnerRejections",
+    "OriginalApplicationGameplayProviderTests/testMusicRecoveryProviderAndLateRollback"
+  ],
+  "proposedMethods": [
+    "OriginalApplicationHostGameplayTests/testHostNeutralGameplayRetainsSeventeenWholeReturns",
+    "OriginalApplicationHostGameplayTests/testHostActiveGameplayRetainsBothFortyEightCallSchedules",
+    "OriginalApplicationHostGameplayTests/testHostPauseStepResumeRetainsBothFourteenCallSchedules",
+    "OriginalApplicationHostGameplayTests/testGameplayInputPreparationFailuresPreserveHostOwners",
+    "OriginalApplicationHostGameplayTests/testGameplayBodyAndOuterFailuresRetainStagesAndRetry",
+    "OriginalApplicationHostGameplayTests/testGameplayTicketsAndReentryRejectForeignSiblingAndConsumedInputs"
+  ],
+  "proposedTotal": 69,
+  "proposedBoundary": [
+    "One input acquisition chooses returned-menu/Start or gameplay/paused Ready inside a common host preparation callback.",
+    "Ready.loading is the current exact attempt; Ready.entry remains the historical pool owner and cannot substitute as identity.",
+    "Privately retain Ready and a staged platform; resume only that Ready through GameplaySession, without reacquiring input.",
+    "Validate returned same-attempt/aliases/returned outcome before storing returned child; final outer tail alone publishes one loaded batch.",
+    "Legacy menu/Start APIs and all53 current methods retain their contracts."
+  ],
+  "requiredFailures": [
+    "input provider/local/replay/round/final-observer failures",
+    "late unpaused and paused body/graphics/sound/dispatcher/child-commit failures",
+    "host preparation observer failures before every retained-stage installation",
+    "outer time/Sleep/commit failures and successful retry without repeating input/body",
+    "foreign/same-revision sibling/stale/consumed Ready and returned child, wrong stage and reentry",
+    "independent platform inspection, full earlier batches and all retained state owners"
+  ],
+  "testTransport": "Explicit driver parameter through existing neutral and active wrapper chain and paused sequence; share complete comparison bodies and preserve legacy defaults. No global test owner, imported Bootstrap snapshot or expected after-state.",
+  "resultFileCompatibility": "Required compatibility remains open where affected by existing incidents. No new result-file provider or original writer execution is selected; this bounded host trajectory does not resolve that dependency.",
+  "nativeExecuted": false,
+  "originalExecuted": false,
+  "independentReview": false
+}
