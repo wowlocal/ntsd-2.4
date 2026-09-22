@@ -1,0 +1,77 @@
+{
+  "schema": "ntsd-host-match-candidate-docs-v1",
+  "UTC": "2026-09-22T17:46:47.536041+00:00",
+  "publication": {
+    "path": "docs/evidence/application-host-match-candidate.json",
+    "bytes": 3257,
+    "sha256": "0ba2b3f6eed9a57eecbc9cea027f753132e4093a9fa6e545a986e1a1a9d53229",
+    "mode": 420
+  },
+  "checkedFiles": [
+    {
+      "path": "docs/evidence/application-host-match-candidate-close.json",
+      "bytes": 969,
+      "sha256": "dbb66899d5cfe5ee15896239f36c34a7d81c9b0efd28dd1b2077ca04b1a61595",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/application-host-match-candidate.json",
+      "bytes": 3257,
+      "sha256": "0ba2b3f6eed9a57eecbc9cea027f753132e4093a9fa6e545a986e1a1a9d53229",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/application-host-match-candidate.patch",
+      "bytes": 44304,
+      "sha256": "62e786e288f2b581e616acb086ab4fc749c2b432a734e53e02ea0770509df3a9",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_MATCH_CANDIDATE.md",
+      "bytes": 8760,
+      "sha256": "5bb43d8ac6488a9fc0b2de8fcc9422a3f877740e0f3fe1d13c5fceeeed2f2a4b",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_MATCH_CANDIDATE_PLAN.md",
+      "bytes": 4713,
+      "sha256": "7a918de8b675a74353e3d59b3349ec03da61475b7da7125c21dec511ff9bfc58",
+      "mode": 420
+    },
+    {
+      "path": "tools/finalize_application_host_match_candidate.py",
+      "bytes": 12572,
+      "sha256": "f23e2c21861a165ddae40f4b6b5deee02c44cf3cf3e2111688b48f4aca1f1ede",
+      "mode": 420
+    },
+    {
+      "path": "tools/prepare_application_host_match_candidate.py",
+      "bytes": 5844,
+      "sha256": "1198df6160f02ff179f3e083bf017dc80789ff02142edff5f5c58d20a124f618",
+      "mode": 420
+    }
+  ],
+  "localLinksVerified": 732,
+  "helperASTAndFrozenBodiesVerified": 2,
+  "rootPreservation": "Full1034 body/mode/membership check by finalizer; root Native untouched by documentation",
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    53039,
+    54978,
+    55198
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 2928, 'pc': '0x78141444', 'scans': 1976409, 'decoders': 20, 'objects': 20, 'catalogChildren': 0, 'stores': 717923568, 'seconds': 26070.46}",
+  "unrelatedNavigationBytesPreserved": true,
+  "independentReview": false,
+  "compiled": false,
+  "testsRun": 0,
+  "readDiagnostic": {
+    "toolChunk": "aa75e3",
+    "exitCode": 1,
+    "error": "File \"<stdin>\", line 21\n    links=0\n    ^\nSyntaxError: invalid syntax",
+    "cause": "Missing closing parenthesis in inline docs-check file inventory; Python rejected before any statement executed",
+    "resolution": "Closed file inventory expression; no candidate or frozen task change, no original/Native execution"
+  }
+}

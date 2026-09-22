@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Typed host Start/launch candidate](research/APPLICATION_HOST_MATCH_CANDIDATE.md):
+five changed Swift files in isolated1039-file tree parse; compilation/tests pending.
+Mutually exclusive Start/returned retention and staged platform retries use the
+existing children; actual host shares the whole character/selection comparisons.
+53 methods selected, patch round-trip and24-member candidate archive verified.
+Root1034/prior1037/fixtures/resources/source55 unchanged. Next: separately bounded
+fresh build,53 methods, package and archive verification. Independent review/root/
+device/full-game gates remain open; original capture stays live at20 Objects.
+[Evidence](evidence/application-host-match-candidate.json).
+
 [Host Start/launch preflight](research/APPLICATION_HOST_MATCH_PREFLIGHT.md) traces
 the actual candidate's ticket/platform through PendingMatchPrelude and the existing
 launch/outer-return consumer. Four saved envelopes verified,34,579,061 decoded

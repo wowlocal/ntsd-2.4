@@ -1,0 +1,25 @@
+{
+  "schema": "ntsd-host-match-candidate-close-v1",
+  "UTC": "2026-09-22T17:43:07.430550+00:00",
+  "candidateFrozen": true,
+  "taskFrozen": true,
+  "observedFreeDecrease": 236072960,
+  "allowance": 1073741824,
+  "includesConcurrentSourceGrowth": true,
+  "externalFree": 161269678080,
+  "internalFree": 66567090176,
+  "originalExternalReserve": 42949672960,
+  "originalInternalReserve": 6442450944,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/publication1.json",
+    "bytes": 3257,
+    "sha256": "0ba2b3f6eed9a57eecbc9cea027f753132e4093a9fa6e545a986e1a1a9d53229",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/candidate-metadata1.tar",
+    "bytes": 686080,
+    "sha256": "f13b35491bcb0d6f3d0645443a37c0a95dbe7a37822fcc0742a4c10c05948ae2",
+    "mode": 420
+  }
+}

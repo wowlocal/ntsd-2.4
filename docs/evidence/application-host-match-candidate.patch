@@ -1,0 +1,679 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -7,9 +7,11 @@
+ public final class OriginalApplicationHostSession<Platform: OriginalApplicationStartupPlatform> {
+     public typealias Application = OriginalApplicationBootstrap
+     public typealias Session = OriginalApplicationMenuSession
++    public typealias LoadedMenu = OriginalApplicationLoadedMenuSession
+     public enum Boundary: Error, Equatable {
+         case reentrantAttempt, sharedPlatform, pendingLoading, publicationExtent
+         case noPendingLoading, alreadyPreparedLoading, noPreparedLoading, differentLoadingAttempt, unreturnedLoading
++        case noPreparedMatchPrelude
+     }
+     public struct Inputs {
+         public let initialization: Application.MenuInputs?
+@@ -50,8 +52,18 @@
+         public let entry: Session.PendingLoading, startup: OriginalWinMainStartup
+         public let cycle: OriginalApplicationLoadedCycleSession?
+     }
+-    private struct Prepared {
+-        let child: OriginalApplicationLoadedMenuSession.PendingReturn, platform: Platform
++    private enum Prepared {
++        case returned(LoadedMenu.PendingReturn, Platform)
++        case matchPrelude(LoadedMenu.PendingMatchPrelude, Platform)
++        var platform: Platform {
++            switch self { case .returned(_,let p),.matchPrelude(_,let p):return p }
++        }
++        var returned: LoadedMenu.PendingReturn? {
++            if case .returned(let child,_) = self { return child };return nil
++        }
++        var matchPrelude: LoadedMenu.PendingMatchPrelude? {
++            if case .matchPrelude(let child,_) = self { return child };return nil
++        }
+     }
+     private let lock = NSRecursiveLock()
+     private var inFlight = false
+@@ -91,7 +103,8 @@
+     /// attempt see this same committed state, never the tentative child state.
+     public var snapshot: Application { locked { application } }
+     public var pendingLoading: Session.PendingLoading? { locked { pending?.loading } }
+-    public var preparedLoadedMenu: OriginalApplicationLoadedMenuSession.PendingReturn? { locked { prepared?.child } }
++    public var preparedLoadedMenu: LoadedMenu.PendingReturn? { locked { prepared?.returned } }
++    public var preparedMatchPrelude: LoadedMenu.PendingMatchPrelude? { locked { prepared?.matchPrelude } }
+     public var pendingBatchCount: Int { locked { batches.count } }
+     /// Inspection returns another independent copy, never our mutable platform.
+     public func platformSnapshot() throws -> Platform { try attempt { try Self.copy(platform) } }
+@@ -164,18 +177,68 @@
+         beforePrepared: (OriginalApplicationLoadedMenuSession.PendingReturn, Platform) throws -> Void = { _,_ in }
+     ) throws -> OriginalApplicationLoadedMenuSession.PendingReturn {
+         try attempt {
++            let result = try prepareBoundary(prepare:{ .returned(try prepare($0,$1)) },beforePrepared:{ outcome,p in
++                if case .returned(let child) = outcome { try beforePrepared(child,p) }
++            })
++            guard case .returned(let child) = result else { throw Boundary.unreturnedLoading }
++            return child
++        }
++    }
++
++    /// Start is a retained child, not an outer return. Its effects/platform stay
++    /// private until launch and the enclosing loop both finish successfully.
++    @discardableResult
++    public func prepareLoadedMenuUntilBoundary(
++        prepare: (LoadingContext, Platform) throws -> LoadedMenu.Outcome,
++        beforePrepared: (LoadedMenu.Outcome, Platform) throws -> Void = { _,_ in }
++    ) throws -> LoadedMenu.Outcome {
++        try attempt { try prepareBoundary(prepare:prepare,beforePrepared:beforePrepared) }
++    }
++
++    private func validate(_ child: LoadedMenu.PendingReturn,for loading: Session.PendingLoading) throws {
++        guard child.loading.isSameAttempt(as:loading) else { throw Boundary.differentLoadingAttempt }
++        guard child.exit == .returned,child.dispatcherResult != nil else { throw Boundary.unreturnedLoading }
++        try child.snapshot.state.validateAliases()
++    }
++    private func prepareBoundary(
++        prepare: (LoadingContext, Platform) throws -> LoadedMenu.Outcome,
++        beforePrepared: (LoadedMenu.Outcome, Platform) throws -> Void
++    ) throws -> LoadedMenu.Outcome {
++        guard let pending else { throw Boundary.noPendingLoading }
++        guard prepared == nil else { throw Boundary.alreadyPreparedLoading }
++        guard let startup = application.startup, let session = application.session else { throw Application.Boundary.notStarted }
++        let candidate = try Self.copy(pending.platform)
++        let cycle = try session.loadedOwners.map { _ in try application.makeLoadedCycle(pending:pending.loading) }
++        let outcome = try prepare(.init(entry:pending.loading,startup:startup,cycle:cycle),candidate)
++        let next: Prepared
++        switch outcome {
++        case .returned(let child):
++            try validate(child,for:pending.loading);next = .returned(child,candidate)
++        case .matchPrelude(let child):
++            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
++            try child.snapshot.state.validateAliases();next = .matchPrelude(child,candidate)
++        }
++        try beforePrepared(outcome,candidate)
++        prepared = next;return outcome
++    }
++
++    /// Resume only our retained Start. Failure keeps this child/platform; once
++    /// successful, only the final outer tail remains retryable. The provider
++    /// runs the existing MatchLaunchSession using the supplied actual child.
++    @discardableResult
++    public func resumeMatchLaunch(
++        prepare: (LoadedMenu.PendingMatchPrelude, Platform) throws -> LoadedMenu.PendingReturn,
++        beforePrepared: (LoadedMenu.PendingReturn, Platform) throws -> Void = { _,_ in }
++    ) throws -> LoadedMenu.PendingReturn {
++        try attempt {
+             guard let pending else { throw Boundary.noPendingLoading }
+-            guard prepared == nil else { throw Boundary.alreadyPreparedLoading }
+-            guard let startup = application.startup, let session = application.session else { throw Application.Boundary.notStarted }
+-            let candidate = try Self.copy(pending.platform)
+-            let cycle = try session.loadedOwners.map { _ in try application.makeLoadedCycle(pending:pending.loading) }
+-            let child = try prepare(.init(entry:pending.loading,startup:startup,cycle:cycle),candidate)
++            guard let prepared,case .matchPrelude(let child,let platform) = prepared else { throw Boundary.noPreparedMatchPrelude }
+             guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
+-            guard child.exit == .returned,child.dispatcherResult != nil else { throw Boundary.unreturnedLoading }
+-            try child.snapshot.state.validateAliases()
+-            try beforePrepared(child,candidate)
+-            prepared = .init(child:child,platform:candidate)
+-            return child
++            let candidate = try Self.copy(platform)
++            let returned = try prepare(child,candidate)
++            try validate(returned,for:pending.loading)
++            try beforePrepared(returned,candidate)
++            self.prepared = .returned(returned,candidate);return returned
+         }
+     }
+ 
+@@ -189,11 +252,11 @@
+     ) throws -> Outcome {
+         try attempt {
+             guard let pending else { throw Boundary.noPendingLoading }
+-            guard let prepared else { throw Boundary.noPreparedLoading }
+-            guard prepared.child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
++            guard let prepared,case .returned(let child,let platform) = prepared else { throw Boundary.noPreparedLoading }
++            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
+             guard sequence < UInt64.max else { throw Boundary.publicationExtent }
+-            var candidate = try Self.copy(prepared.platform), next = application
+-            let result = try next.finishLoadedMenu(prepared.child,environment:&candidate,
++            var candidate = try Self.copy(platform), next = application
++            let result = try next.finishLoadedMenu(child,environment:&candidate,
+                 perform:{ request,platform in try perform(request,platform) },
+                 beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) })
+             application = next;platform = candidate;self.prepared = nil;self.pending = nil
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostMatchLaunchTests.swift
+@@ -0,0 +1,252 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++@testable import NTSDReferenceChecks
++
++final class OriginalApplicationHostMatchLaunchTests: XCTestCase {
++    typealias H = OriginalApplicationHostLoadingTests
++    typealias Host = H.Host
++    typealias D = OriginalApplicationLoadedTestDriver
++    typealias C = OriginalApplicationLoadedCycleTests
++    typealias M = OriginalApplicationLoadedMenuTests
++    typealias S = OriginalApplicationLoadedSelectionTests
++    typealias L = OriginalApplicationLoadedLaunchTests
++    typealias R = OriginalApplicationLoadedLaunchComparison
++    typealias Start = M.S.PendingMatchPrelude
++    typealias Returned = M.S.PendingReturn
++    typealias Stop = M.Stop
++
++    func sameSnapshot(_ a: M.S.Snapshot,_ b: M.S.Snapshot) {
++        OriginalApplicationCatalogSessionTests.retained(a.state,b.state)
++        XCTAssertEqual(a.state.earlyScreen.bitmaps,b.state.earlyScreen.bitmaps)
++        XCTAssertEqual(a.state.earlyScreen.surfaces,b.state.earlyScreen.surfaces)
++        XCTAssertEqual(a.state.earlyScreen.retainedOperation,b.state.earlyScreen.retainedOperation)
++        XCTAssertEqual(a.match.globals,b.match.globals);XCTAssertEqual(a.match.world,b.match.world)
++        XCTAssertEqual(a.match.actors,b.match.actors);XCTAssertEqual(a.match.arithmeticPrecision,b.match.arithmeticPrecision)
++        XCTAssertTrue(a.match.loadedObjects == b.match.loadedObjects)
++        XCTAssertEqual(a.match.frameAllocations,b.match.frameAllocations)
++        XCTAssertEqual(a.match.backgrounds,b.match.backgrounds);XCTAssertEqual(a.match.bitmaps,b.match.bitmaps)
++        XCTAssertEqual(a.match.bitmapOwners,b.match.bitmapOwners);XCTAssertEqual(a.match.bitmapSurfaceOwners,b.match.bitmapSurfaceOwners)
++        XCTAssertEqual(a.match.interface.bitmaps,b.match.interface.bitmaps);XCTAssertEqual(a.match.libraryCommands,b.match.libraryCommands)
++        XCTAssertEqual(a.match.releasedBitmaps,b.match.releasedBitmaps);XCTAssertEqual(a.match.releasedBitmapOrder,b.match.releasedBitmapOrder)
++        XCTAssertEqual(a.music.allocations,b.music.allocations);XCTAssertEqual(a.resources.bitmaps,b.resources.bitmaps)
++        XCTAssertEqual(a.backgrounds,b.backgrounds);XCTAssertEqual(a.local,b.local);XCTAssertEqual(a.operations,b.operations)
++    }
++    func sameStart(_ a: Start,_ b: Start) {
++        XCTAssertTrue(a.loading.isSameAttempt(as:b.loading));sameSnapshot(a.snapshot,b.snapshot)
++        XCTAssertEqual(a.confirmation,b.confirmation);XCTAssertEqual(a.locals,b.locals);XCTAssertEqual(a.graphics,b.graphics)
++    }
++    func reentry(_ host: Host) {
++        H().reentry(host)
++        XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ _,_ in throw Stop.unexpected("Reentrant preparation") })) {
++            XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt)
++        }
++        XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ _,_ in throw Stop.unexpected("Reentrant launch") })) {
++            XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt)
++        }
++        XCTAssertThrowsError(try host.preparedPlatformSnapshot()) { XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt) }
++    }
++    func unlaunched(_ host: Host,_ pending: Start) throws {
++        sameStart(try XCTUnwrap(host.preparedMatchPrelude),pending)
++        XCTAssertTrue(host.preparedLoadedMenu == nil)
++        XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ _,_ in XCTFail("Unreturned Start tail");return .init() })) {
++            XCTAssertEqual($0 as? Host.Boundary,.noPreparedLoading)
++        }
++        XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ _,_ in XCTFail("Repeated Start");return .matchPrelude(pending) })) {
++            XCTAssertEqual($0 as? Host.Boundary,.alreadyPreparedLoading)
++        }
++    }
++    func launch(_ host: Host,_ r: R,stop: String? = nil,failPrepared: Bool = false) throws -> Returned {
++        var observed: L.Environment?
++        let result = try host.resumeMatchLaunch(prepare:{ pending,p in
++            self.sameStart(pending,r.initial);self.reentry(host)
++            p.hostReservations.append(-500);p.hostQueuePosition += 1
++            var session = try L.L(pending:pending),env = L.Environment(stop:stop)
++            let returned = try L().launch(&session,&env,r)
++            p.hostReservations += [env.layers,env.api,env.music,env.recordings,env.clocks]
++            observed = env;return returned
++        },beforePrepared:{ _,p in
++            self.reentry(host);p.hostReservations.append(-501)
++            if failPrepared { throw Stop.injected("hostPrepared") }
++        })
++        try L().compare(result,XCTUnwrap(observed),r)
++        XCTAssertTrue(host.preparedMatchPrelude == nil)
++        XCTAssertTrue(try XCTUnwrap(host.preparedLoadedMenu).loading.isSameAttempt(as:r.initial.loading))
++        return result
++    }
++    func nextInput(_ driver: D,_ returned: Returned,_ r: R) throws {
++        let host = try XCTUnwrap(driver.host)
++        try driver.next()
++        let before = host.snapshot,platform = try XCTUnwrap(host.pendingPlatformSnapshot())
++        var checked = false
++        // Inspect the actual next input inside its host context. Gameplay body
++        // retention is a later API; this injected stop is not a completed tick.
++        XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ context,p in
++            var cycle = try XCTUnwrap(context.cycle),input = C.InputEnvironment()
++            let next = try C.input(&cycle,&input)
++            let snapshot = M.S.Snapshot(state:next.state,match:next.match,music:next.music,resources:next.menuResources,
++                backgrounds:next.menuBackgrounds,local:returned.snapshot.local,operations:[])
++            try r.state(7,snapshot)
++            XCTAssertEqual(next.round.continuation,.gameplay);XCTAssertFalse(next.paused)
++            XCTAssertEqual(input.phases,[Int32](repeating:1,count:6));XCTAssertTrue(input.requests.isEmpty)
++            XCTAssertEqual(next.commands,[UInt8](repeating:0,count:10));XCTAssertEqual(next.match.libraryCommands?.requestedObjectID,0)
++            XCTAssertEqual(next.match.bitmapOwners,returned.snapshot.match.bitmapOwners)
++            XCTAssertEqual(next.match.backgrounds,returned.snapshot.match.backgrounds);XCTAssertEqual(next.match.bitmaps,returned.snapshot.match.bitmaps)
++            XCTAssertEqual(next.music.allocations,returned.snapshot.music.allocations)
++            let recording = try XCTUnwrap(next.state.memory.allocations[R.replay]).storage
++            var expected = try XCTUnwrap(returned.snapshot.state.memory.allocations[R.replay]).storage
++            try expected.write(Int32(1000),at:0x14b8);try r.equal(recording,expected,"host first gameplay recording")
++            XCTAssertEqual(try next.match.globals.integer(at:0x450bd0-0x44d000,as:Int32.self),1)
++            p.hostReservations.append(-600);checked = true;throw Stop.injected("next gameplay input")
++        })) { XCTAssertEqual($0 as? Stop,.injected("next gameplay input")) }
++        XCTAssertTrue(checked);try C.unchanged(host.snapshot,before)
++        H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),platform)
++        XCTAssertTrue(host.preparedMatchPrelude == nil);XCTAssertTrue(host.preparedLoadedMenu == nil)
++        XCTAssertEqual(host.pendingBatchCount,0)
++    }
++    func testActualHostStartLaunchAndNextInputRetainWholeOwners() throws {
++        for reverse in [false,true] {
++            let driver = try D.selectedHost(reverse),host = try XCTUnwrap(driver.host)
++            driver.beforePrepared = { _,_ in self.reentry(host) }
++            _ = try S().sequence(reverse,driver:driver,onStart:{ before,pending in
++                try self.unlaunched(host,pending);try C.unchanged(host.snapshot,before)
++                let platform = try host.platformSnapshot(),count = host.pendingBatchCount,r = try R(reverse,pending)
++                let returned = try self.launch(host,r)
++                try C.unchanged(host.snapshot,before);H().samePlatform(try host.platformSnapshot(),platform)
++                XCTAssertEqual(host.pendingBatchCount,count)
++                try driver.finish(returned);try driver.rejectConsumed(returned)
++                try self.nextInput(driver,returned,r)
++            })
++        }
++    }
++    func testStartLaunchAndOuterTailFailuresRetainHostStages() throws {
++        let driver = try D.selectedHost(false),host = try XCTUnwrap(driver.host)
++        driver.retainSelectionBatch = true
++        _ = try S().sequence(false,driver:driver,atStartLoading:{ _ in
++            let before = host.snapshot,platform = try host.platformSnapshot()
++            let prefix = try XCTUnwrap(host.pendingPlatformSnapshot()),ticket = try XCTUnwrap(host.pendingLoading)
++            XCTAssertEqual(host.pendingBatchCount,1)
++            for stop in ["provider","matchPrelude","commit","hostPrepared"] {
++                XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ context,p in
++                    p.hostReservations.append(-700)
++                    if stop == "provider" { throw Stop.injected(stop) }
++                    var cycle = try XCTUnwrap(context.cycle),input = C.InputEnvironment()
++                    let ready = try C.input(&cycle,&input)
++                    var menu = try M.S(pending:ready),env = M.Environment(stop:stop)
++                    return try M.advanceUntilBoundary(&menu,&env)
++                },beforePrepared:{ _,p in p.hostReservations.append(-701);throw Stop.injected("hostPrepared") })) {
++                    XCTAssertEqual($0 as? Stop,.injected(stop))
++                }
++                try C.unchanged(host.snapshot,before);H().samePlatform(try host.platformSnapshot(),platform)
++                H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),prefix)
++                XCTAssertTrue(try XCTUnwrap(host.pendingLoading).isSameAttempt(as:ticket))
++                XCTAssertTrue(host.preparedMatchPrelude == nil);XCTAssertTrue(host.preparedLoadedMenu == nil)
++                XCTAssertTrue(try host.preparedPlatformSnapshot() == nil);XCTAssertEqual(host.pendingBatchCount,1)
++            }
++        },onStart:{ before,pending in
++            let r = try R(false,pending),platform = try host.platformSnapshot()
++            let prefix = try XCTUnwrap(host.pendingPlatformSnapshot()),startPlatform = try XCTUnwrap(host.preparedPlatformSnapshot())
++            startPlatform.hostReservations.append(-999)
++            XCTAssertFalse(try XCTUnwrap(host.preparedPlatformSnapshot()).hostReservations.contains(-999))
++            let staged = try XCTUnwrap(host.preparedPlatformSnapshot())
++            for stop in ["localTime","soundMethod","allocate14","createSurface14","colorKey14","music2","music7","music18","music19","resetInput","calloc","recording","method","clock","heldCleared","commit","hostPrepared"] {
++                XCTAssertThrowsError(try self.launch(host,r,stop:stop,failPrepared:stop == "hostPrepared")) {
++                    XCTAssertEqual($0 as? Stop,.injected(stop))
++                }
++                try self.unlaunched(host,pending);try C.unchanged(host.snapshot,before)
++                H().samePlatform(try host.platformSnapshot(),platform);H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),prefix)
++                H().samePlatform(try XCTUnwrap(host.preparedPlatformSnapshot()),staged);XCTAssertEqual(host.pendingBatchCount,1)
++            }
++            let returned = try self.launch(host,r),prepared = try XCTUnwrap(host.preparedPlatformSnapshot())
++            XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ _,_ in XCTFail("Repeated successful launch");return returned })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedMatchPrelude)
++            }
++            let commitTime = Int32(bitPattern:try XCTUnwrap(before.session).loop.timer.baseline &+ 1000)
++            for stop in ["time","sleep","commit"] {
++                var calls: [String] = []
++                XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ q,p in
++                    self.reentry(host);calls.append(q.kind.rawValue);p.hostQueuePosition += 1;p.hostReservations.append(-800)
++                    if q.kind == .sleep { XCTAssertEqual(q.arguments,[5]);throw Stop.injected("sleep") }
++                    if stop == "time" { throw Stop.injected("time") }
++                    return .init(result:stop == "sleep" ? 1_000_000 : commitTime)
++                },beforeCommit:{ _,_,p in self.reentry(host);p.hostReservations.append(-801);throw Stop.injected("commit") })) {
++                    XCTAssertEqual($0 as? Stop,.injected(stop))
++                }
++                XCTAssertEqual(calls,stop == "sleep" ? ["time","sleep"] : ["time"])
++                let retained = try XCTUnwrap(host.preparedLoadedMenu)
++                self.sameSnapshot(retained.snapshot,returned.snapshot);XCTAssertEqual(retained.graphics,returned.graphics)
++                XCTAssertTrue(host.preparedMatchPrelude == nil);try C.unchanged(host.snapshot,before)
++                H().samePlatform(try host.platformSnapshot(),platform);H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),prefix)
++                H().samePlatform(try XCTUnwrap(host.preparedPlatformSnapshot()),prepared);XCTAssertEqual(host.pendingBatchCount,1)
++            }
++            try driver.finish(returned);try driver.rejectConsumed(returned)
++            XCTAssertEqual(host.pendingBatchCount,0)
++        })
++    }
++    func testMatchPreludeRejectsDifferentTicketsAndReentry() throws {
++        var foreign: Start?
++        _ = try S().sequence(true,onStart:{ _,pending in foreign = pending })
++        let other = try XCTUnwrap(foreign),foreignReference = try R(true,other)
++        var foreignLaunch = try L.L(pending:other),foreignEnvironment = L.Environment()
++        let foreignReturn = try L().launch(&foreignLaunch,&foreignEnvironment,foreignReference)
++        try L().compare(foreignReturn,foreignEnvironment,foreignReference)
++        let driver = try D.selectedHost(false),host = try XCTUnwrap(driver.host)
++        var sibling: Start?,siblingReturn: Returned?
++        driver.beforePrepared = { _,_ in self.reentry(host) }
++        _ = try S().sequence(false,driver:driver,atStartLoading:{ _ in
++            var copy = host.snapshot
++            let ticket = try C.next(&copy)
++            XCTAssertFalse(ticket.isSameAttempt(as:try XCTUnwrap(host.pendingLoading)))
++            var cycle = try copy.makeLoadedCycle(pending:ticket),input = C.InputEnvironment()
++            let ready = try C.input(&cycle,&input)
++            var menu = try M.S(pending:ready),env = M.Environment()
++            guard case .matchPrelude(let alternate) = try M.advanceUntilBoundary(&menu,&env) else { throw Stop.unexpected("Sibling Start") }
++            sibling = alternate
++            let r = try R(false,alternate);var launch = try L.L(pending:alternate),e = L.Environment()
++            siblingReturn = try L().launch(&launch,&e,r);try L().compare(XCTUnwrap(siblingReturn),e,r)
++            let before = host.snapshot,prefix = try XCTUnwrap(host.pendingPlatformSnapshot())
++            let outcomes: [M.S.Outcome] = [.matchPrelude(other),.matchPrelude(alternate),.returned(foreignReturn),.returned(try XCTUnwrap(siblingReturn))]
++            for outcome in outcomes {
++                XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ _,p in p.hostReservations.append(-900);return outcome },
++                    beforePrepared:{ _,_ in XCTFail("Different ticket reached observer") })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++                try C.unchanged(host.snapshot,before);H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),prefix)
++                XCTAssertTrue(host.preparedMatchPrelude == nil);XCTAssertTrue(host.preparedLoadedMenu == nil)
++            }
++        },onStart:{ before,pending in
++            XCTAssertTrue(sibling != nil);try self.unlaunched(host,pending)
++            let staged = try XCTUnwrap(host.preparedPlatformSnapshot())
++            for wrong in [foreignReturn,try XCTUnwrap(siblingReturn)] {
++                XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ actual,p in
++                    self.sameStart(actual,pending);p.hostReservations.append(-901);return wrong
++                },beforePrepared:{ _,_ in XCTFail("Different launch ticket reached observer") })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++                self.sameStart(try XCTUnwrap(host.preparedMatchPrelude),pending)
++                H().samePlatform(try XCTUnwrap(host.preparedPlatformSnapshot()),staged);try C.unchanged(host.snapshot,before)
++            }
++            let returned = try self.launch(host,R(false,pending));try driver.finish(returned)
++            XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ _,_ in .matchPrelude(pending) })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPendingLoading)
++            }
++            XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ _,_ in returned })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPendingLoading)
++            }
++            try driver.rejectConsumed(returned);try driver.next()
++            let fresh = try XCTUnwrap(host.pendingLoading)
++            let staleOutcomes: [M.S.Outcome] = [.matchPrelude(pending),.returned(returned)]
++            for stale in staleOutcomes {
++                XCTAssertThrowsError(try host.prepareLoadedMenuUntilBoundary(prepare:{ _,_ in stale })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++            }
++            XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ _,_ in returned })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedMatchPrelude)
++            }
++            XCTAssertTrue(try XCTUnwrap(host.pendingLoading).isSameAttempt(as:fresh))
++            XCTAssertTrue(host.preparedMatchPrelude == nil);XCTAssertTrue(host.preparedLoadedMenu == nil)
++            XCTAssertEqual(host.pendingBatchCount,0)
++        })
++    }
++}
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift
+@@ -46,22 +46,21 @@
+     func testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns() throws {
+         for reverse in [false,true] { _ = try characterChain(reverse) }
+     }
+-    func characterChain(_ reverse: Bool) throws -> A {
++    func characterChain(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil) throws -> A {
+             let r = try R(reverse)
+-            var (app,ready) = try Self.selected(reverse)
+-            let first = ready.match
+-            try r.catalogInputs(first)
++            let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
++            var first: OriginalMatchPreparation?
+             var portraitChecked = false
+             for (index,item) in r.corpus.cases.enumerated() {
+                 if index == 0 { XCTAssertTrue(item.acquired.isEmpty);XCTAssertNil(item.cycle) }
+                 else {
+-                    try Self.acquire(&app,item.acquired)
+-                    let entry = try C.next(&app)
+-                    var cycle = try app.makeLoadedCycle(pending:entry),env = C.InputEnvironment()
+-                    ready = try C.input(&cycle,&env)
+-                    XCTAssertEqual(env.phases,[Int32](repeating:Int32((index+1)%2),count:6))
++                    try driver.acquire(item.acquired)
++                    try driver.next()
+                 }
+-                let before = app
++                let before = driver.core
++                let outcome = try driver.prepare(phase:Int32((index+1)%2)) { ready in
++                if first == nil { first = ready.match;try r.catalogInputs(ready.match) }
++                let first = try XCTUnwrap(first)
+                 var own = ready.match
+                 XCTAssertEqual(try own.globals.integer(at:0x7c,as:UInt32.self),0)
+                 // Cached resource prefix unconditionally stores the current menu
+@@ -101,14 +100,17 @@
+                     e.kind == "draw" && r.catalog.bitmaps.contains { $0.address == e.arguments[0] }
+                 }) {
+                     let bitmapIndex = try XCTUnwrap(r.catalog.bitmaps.firstIndex { $0.address == sourceDraw.arguments[0] })
+-                    try self.portrait(ready,parent:app,index:bitmapIndex)
++                    try self.portrait(ready,parent:before,index:bitmapIndex)
+                     portraitChecked = true
+                 }
+-                try C.unchanged(app,before);try C.finish(&app,returned)
+-                XCTAssertThrowsError(try C.finish(&app,returned))
+-                try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(app.startup),XCTUnwrap(before.startup))
+-            }
+-            let final = try XCTUnwrap(app.session?.loadedOwners).match
++                return .returned(returned)
++                }
++                guard case .returned(let returned) = outcome else { throw Stop.unexpected("Human Start boundary") }
++                try C.unchanged(driver.core,before);try driver.finish(returned)
++                try driver.rejectConsumed(returned)
++                try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(driver.core.startup),XCTUnwrap(before.startup))
++            }
++            let final = try XCTUnwrap(driver.core.session?.loadedOwners).match
+             for (seat,ordinal) in [(0,17),(1,21)] {
+                 XCTAssertEqual(try final.globals.integer(at:0x451248-0x44d000+seat*4,as:Int32.self),Int32(ordinal))
+                 XCTAssertEqual(try final.globals.integer(at:0x451288-0x44d000+seat*4,as:Int32.self),3)
+@@ -120,7 +122,7 @@
+             XCTAssertTrue(portraitChecked)
+             XCTAssertEqual(r.points,408);XCTAssertEqual(r.draws,312);XCTAssertEqual(r.sounds,6)
+             print("Owned character: 34 Bootstrap returns / \(r.points) source semantic checkpoints / \(r.draws) draws / \(r.reads) current reads / \(r.blits) Blt / 18 sound methods; reverse=\(reverse)")
+-            return app
++            return driver.core
+     }
+     func returning(_ returned: M.S.PendingReturn,body: OriginalMatchPreparation,environment: M.Environment,
+                    screenEvents: Int,reference: R,item: CharacterScreenReference.Case) throws {
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift
+@@ -11,19 +11,21 @@
+     typealias S = OriginalApplicationLoadedSelectionComparison
+     typealias Stop = M.Stop
+     struct Frontier { let application: A,input: M.S.Input.PendingContinuation }
+-    func sequence(_ reverse: Bool,
++    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,
++        atStartLoading: (OriginalApplicationLoadedTestDriver) throws -> Void = { _ in },
+         onStart: (A,M.S.PendingMatchPrelude) throws -> Void = { _,_ in }) throws -> [Int:Frontier] {
+-        var app = try H().characterChain(reverse)
+-        let initial = try XCTUnwrap(app.session?.loadedOwners).match
++        let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
++        _ = try H().characterChain(reverse,driver:driver)
++        let initial = try XCTUnwrap(driver.core.session?.loadedOwners).match
+         let r = try S(reverse,initial)
+         var frontiers: [Int:Frontier] = [:],returns = 0
+         for (index,item) in r.human.corpus.cases.enumerated() {
+-            try H.acquire(&app,item.acquired)
+-            let entry = try C.next(&app)
+-            var cycle = try app.makeLoadedCycle(pending:entry),input = C.InputEnvironment()
+-            let ready = try C.input(&cycle,&input),before = app
+-            XCTAssertEqual(input.phases,[Int32](repeating:Int32((index+1)%2),count:6))
+-            if [21,29,49].contains(index) { frontiers[index] = .init(application:app,input:ready) }
++            try driver.acquire(item.acquired)
++            try driver.next()
++            if index == 49 { try atStartLoading(driver) }
++            let before = driver.core
++            let outcome = try driver.prepare(phase:Int32((index+1)%2)) { ready in
++            if [21,29,49].contains(index) { frontiers[index] = .init(application:before,input:ready) }
+             var own = ready.match
+             try own.globals.write(own.globals.integer(at:0x20,as:UInt32.self),at:0x4512cc-0x44d000)
+             try r.entry(own,item)
+@@ -43,8 +45,7 @@
+                 XCTAssertEqual(item.screen.continuation,.returned);XCTAssertNotNil(item.returned)
+                 try H().returning(returned,body:XCTUnwrap(body),environment:env,screenEvents:screenEvents,reference:r.human,item:item)
+                 snapshot = returned.snapshot;graphics = returned.graphics
+-                try C.unchanged(app,before);try C.finish(&app,returned);returns += 1
+-                XCTAssertThrowsError(try C.finish(&app,returned))
++
+             case .matchPrelude(let pending):
+                 XCTAssertEqual(index,49);XCTAssertEqual(item.screen.continuation,.matchPrelude);XCTAssertNil(item.returned)
+                 XCTAssertEqual(pending.confirmation,1)
+@@ -81,11 +82,10 @@
+                 let path = Array(checked.globals.bytes[(0x44eed0-0x44d000)...].prefix { $0 != 0 })
+                 XCTAssertEqual(path,Array("bgm\\stage5.wma".utf8))
+                 snapshot = pending.snapshot;graphics = pending.graphics
+-                try C.unchanged(app,before)
++                try C.unchanged(driver.core,before)
+                 let oldEnvironment = env
+                 XCTAssertThrowsError(try M.advanceUntilBoundary(&menu,&env)) { XCTAssertEqual($0 as? M.S.Boundary,.alreadyPrepared) }
+                 XCTAssertEqual(env,oldEnvironment)
+-                try onStart(app,pending)
+             }
+             XCTAssertEqual(snapshot.match.bitmaps,initial.bitmaps);XCTAssertEqual(snapshot.match.backgrounds,initial.backgrounds)
+             XCTAssertEqual(snapshot.match.frameAllocations,initial.frameAllocations)
+@@ -94,6 +94,15 @@
+             XCTAssertEqual(snapshot.state.random,ready.state.random)
+             XCTAssertEqual(env.index,-1);XCTAssertEqual(env.api,0);XCTAssertTrue(env.music.isEmpty)
+             try M().compareGraphics(ready,snapshot,graphics,env)
++            return outcome
++            }
++            try C.unchanged(driver.core,before)
++            switch outcome {
++            case .returned(let returned):
++                try driver.finish(returned,retainBatch:driver.retainSelectionBatch && index == 48)
++                returns += 1;try driver.rejectConsumed(returned)
++            case .matchPrelude(let pending):try onStart(driver.core,pending)
++            }
+         }
+         XCTAssertEqual(returns,49);XCTAssertEqual(r.points,768)
+         XCTAssertEqual(r.human.draws,349);XCTAssertEqual(r.human.sounds,3)
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift
+@@ -0,0 +1,142 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++@testable import NTSDReferenceChecks
++
++/// Test transport only. The existing character/selection comparators run inside
++/// the actual host preparation. No Bootstrap snapshot is installed into a host.
++final class OriginalApplicationLoadedTestDriver {
++    typealias H = OriginalApplicationHostLoadingTests
++    typealias C = OriginalApplicationLoadedCycleTests
++    typealias M = OriginalApplicationLoadedMenuTests
++    typealias A = OriginalApplicationBootstrap
++    typealias Ready = M.S.Input.PendingContinuation
++    let host: H.Host?
++    private var original: A
++    private var initial: Ready?
++    private var loading: C.Session.PendingLoading?
++    var beforePrepared: ((M.S.Outcome,H.P) throws -> Void)?
++    var retainSelectionBatch = false
++    private var batchChecks: [(UInt64,(H.Host.Batch) throws -> Void)] = []
++    var core: A { host?.snapshot ?? original }
++
++    init(application: A,initial: Ready? = nil) { host = nil;original = application;self.initial = initial }
++    init(host: H.Host) { self.host = host;original = A() }
++    static func selected(_ reverse: Bool) throws -> OriginalApplicationLoadedTestDriver {
++        let (app,ready) = try OriginalApplicationLoadedCharacterTests.selected(reverse)
++        return .init(application:app,initial:ready)
++    }
++    static func selectedHost(_ reverse: Bool) throws -> OriginalApplicationLoadedTestDriver {
++        let checks = H(),host = try checks.atLoading()
++        try checks.prepare(host,reverse:reverse);try checks.finish(host)
++        for index in 0..<4 {
++            if index == 1 { try checks.key(host,0x100) }
++            if index == 3 { try checks.key(host,0x101) }
++            try checks.next(host)
++            if index < 3 { try checks.prepare(host,reverse:reverse,cycleIndex:index);try checks.finish(host) }
++        }
++        return .init(host:host)
++    }
++    func next() throws {
++        if let host { try H().next(host) }
++        else { loading = try C.next(&original) }
++    }
++    @discardableResult
++    func key(_ message: UInt32,_ key: UInt32,drain: Bool = true) throws -> UInt64? {
++        guard let host else { try C.key(&original,message,key);return nil }
++        let state = try XCTUnwrap(core.session).state
++        var bytes = [UInt8](repeating:0,count:28)
++        for (offset,value) in [(0,try state.full.integer(at:0x4546f4-0x44d000,as:UInt32.self)),(4,message),(8,key)] {
++            for i in 0..<4 { bytes[offset+i] = UInt8(truncatingIfNeeded:value >> (8*i)) }
++        }
++        var windowCalls = 0
++        let result = try host.step(prepare:{ p,_ in
++            p.hostQueuePosition += 4
++            return .init(responses:C.responses,queue:[.init(result:1),.init(result:1,writes:[.init(offset:0,bytes:bytes)]),.init(),.init()],windowDefault:[0])
++        },observe:{ event in
++            if case .windowResponse(let q,let r) = event {
++                windowCalls += 1;XCTAssertEqual(q.kind,.windowDefault)
++                XCTAssertEqual(q.arguments,[try state.full.integer(at:0x4546f4-0x44d000,as:UInt32.self),message,key,0])
++                XCTAssertEqual(r,0)
++            }
++        })
++        XCTAssertEqual(windowCalls,1)
++        guard case .committed(let sequence,_) = result else { throw M.Stop.unexpected("Host key not committed") }
++        XCTAssertEqual(try host.snapshot.session?.state.full.integer(at:0x455378-0x44d000+Int(key),as:UInt8.self),message == 0x100 ? 100 : 117)
++        if drain {
++            let batch = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(batch.sequence,sequence)
++            guard case .iteration(let value) = batch.contents else { throw M.Stop.unexpected("Host key batch") }
++            XCTAssertEqual(value.effects.count,1);XCTAssertTrue(try host.takeCommitted() == nil)
++        }
++        return sequence
++    }
++    func acquire(_ acquired: [CharacterScreenReference.Acquired]) throws {
++        for input in acquired {
++            let state = try XCTUnwrap(core.session).state.full
++            let status = try state.integer(at:0x450b4c-0x44d000+input.seat*4,as:UInt32.self)
++            let config = 0x44fb20-0x44d000+Int(status)*80
++            XCTAssertEqual(try state.integer(at:config,as:UInt32.self),0)
++            let key = try state.integer(at:config+4+input.button*4,as:UInt32.self)
++            XCTAssertEqual(input.address,0x455378+key);XCTAssertEqual(input.bytes,input.pressed ? "64" : "75")
++            try self.key(input.pressed ? 0x100 : 0x101,key)
++        }
++    }
++    func prepare(phase: Int32,_ body: (Ready) throws -> M.S.Outcome) throws -> M.S.Outcome {
++        if let host {
++            return try host.prepareLoadedMenuUntilBoundary(prepare:{ context,p in
++                var cycle = try XCTUnwrap(context.cycle),input = C.InputEnvironment()
++                let ready = try C.input(&cycle,&input)
++                XCTAssertEqual(input.phases,[Int32](repeating:phase,count:6))
++                XCTAssertTrue(ready.loading.isSameAttempt(as:context.entry))
++                p.hostQueuePosition += input.requests.count;p.hostReservations.append(-400)
++                return try body(ready)
++            },beforePrepared:{ outcome,p in try self.beforePrepared?(outcome,p) })
++        }
++        let ready: Ready
++        if let initial { ready = initial;self.initial = nil }
++        else {
++            var cycle = try original.makeLoadedCycle(pending:XCTUnwrap(loading)),input = C.InputEnvironment()
++            ready = try C.input(&cycle,&input)
++            XCTAssertEqual(input.phases,[Int32](repeating:phase,count:6))
++        }
++        return try body(ready)
++    }
++    func finish(_ returned: M.S.PendingReturn,retainBatch: Bool = false) throws {
++        if let host {
++            XCTAssertTrue(try XCTUnwrap(host.preparedLoadedMenu).loading.isSameAttempt(as:returned.loading))
++            let before = host.snapshot,prepared = try XCTUnwrap(host.preparedPlatformSnapshot())
++            let time = try XCTUnwrap(before.session).loop.timer.baseline &+ 1000
++            let count = host.pendingBatchCount
++            let outcome = try host.finishLoadedMenu(perform:{ q,p in
++                XCTAssertEqual(q.kind,.time);p.hostQueuePosition += 1
++                return .init(result:Int32(bitPattern:time))
++            },beforeCommit:{ _,_,p in p.hostReservations.append(-200) })
++            guard case .committed(let sequence,let result) = outcome else { throw M.Stop.unexpected("Loaded host commit") }
++            XCTAssertEqual(result,.continued);XCTAssertEqual(host.pendingBatchCount,count+1)
++            let committed = host.snapshot
++            batchChecks.append((sequence,{ batch in
++                XCTAssertEqual(batch.sequence,sequence)
++                guard case .loaded(let value) = batch.contents else { throw M.Stop.unexpected("Loaded host batch") }
++                try C.checkFinished(committed,returned,value,time:time)
++            }))
++            let platform = try host.platformSnapshot()
++            XCTAssertEqual(platform.hostQueuePosition,prepared.hostQueuePosition+1)
++            XCTAssertEqual(platform.hostReservations,prepared.hostReservations+[-200])
++            XCTAssertTrue(host.pendingLoading == nil);XCTAssertTrue(host.preparedLoadedMenu == nil)
++            XCTAssertTrue(host.preparedMatchPrelude == nil)
++            XCTAssertTrue(try host.pendingPlatformSnapshot() == nil);XCTAssertTrue(try host.preparedPlatformSnapshot() == nil)
++            try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(committed.startup),XCTUnwrap(before.startup))
++            if !retainBatch {
++                for (_,check) in batchChecks { try check(XCTUnwrap(host.takeCommitted())) }
++                batchChecks.removeAll();XCTAssertTrue(try host.takeCommitted() == nil)
++            }
++        } else { try C.finish(&original,returned) }
++    }
++    func rejectConsumed(_ returned: M.S.PendingReturn) throws {
++        if let host {
++            XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ _,_ in XCTFail("Consumed tail ran");return .init() })) {
++                XCTAssertEqual($0 as? H.Host.Boundary,.noPendingLoading)
++            }
++        } else { XCTAssertThrowsError(try C.finish(&original,returned)) }
++    }
++}

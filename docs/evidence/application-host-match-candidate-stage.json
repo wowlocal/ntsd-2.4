@@ -1,0 +1,42 @@
+{
+  "schema": "ntsd-host-match-candidate-stage-v1",
+  "UTC": "2026-09-22T17:47:56.032041+00:00",
+  "initialCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "toolChunk": "ce53d8",
+    "gitExitCode": 2,
+    "error": "docs/evidence/application-host-match-candidate.patch:124: trailing whitespace.\n+ ",
+    "classification": "The exact generated unified diff contains one blank context line (single space), not a candidate Swift whitespace edit."
+  },
+  "patch": {
+    "path": "docs/evidence/application-host-match-candidate.patch",
+    "sha256": "62e786e288f2b581e616acb086ab4fc749c2b432a734e53e02ea0770509df3a9",
+    "bytes": 44304,
+    "frozenBytesRetained": true,
+    "trailingWhitespaceLines": [
+      [
+        124,
+        " "
+      ]
+    ],
+    "semanticCheck": "Full patch round-trip and archived bodies verified by candidate finalizer; preserved unchanged"
+  },
+  "otherStagedFiles": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/evidence/application-host-match-candidate.patch"
+    ],
+    "exitCode": 0
+  },
+  "settingsChanged": false
+}

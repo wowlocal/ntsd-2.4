@@ -1,0 +1,71 @@
+{
+  "schema": "ntsd-host-match-candidate-v1",
+  "UTC": "2026-09-22T17:43:07.429670+00:00",
+  "status": "implemented; five-file syntax parse passed; not compiled or tested",
+  "baseHead": "a8725aa28491256eaa9efc4307a22c1a8bd68b64",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/context1.json",
+    "bytes": 22084,
+    "sha256": "19b8a7c9fc9825f0c7df159374fc226b23a2229188d4ffcd65a895c26569b382",
+    "mode": 420
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/plan1.md",
+    "bytes": 4713,
+    "sha256": "7a918de8b675a74353e3d59b3349ec03da61475b7da7125c21dec511ff9bfc58",
+    "mode": 420
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/candidate1-inputs.json",
+    "bytes": 216124,
+    "sha256": "b6dd9bde5dc50d1e039b7df9381f56703f06b5b89a3af47f08902fbf6f29e310",
+    "mode": 420
+  },
+  "changedFiles": [
+    "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostMatchLaunchTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedCharacterTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedSelectionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift"
+  ],
+  "candidateFiles": 1039,
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/candidate1.patch",
+    "bytes": 44304,
+    "sha256": "62e786e288f2b581e616acb086ab4fc749c2b432a734e53e02ea0770509df3a9",
+    "mode": 420
+  },
+  "selectedMethods": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/selected-methods1.json",
+    "bytes": 5487,
+    "sha256": "79eabe005e3491f7907706d488a296d5a5da733b7f445469d694da72982337dd",
+    "mode": 420
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/verification1.json",
+    "bytes": 761,
+    "sha256": "07bef3f4564fb03c2ad68251298648144bde1d16cf671dc845bab391d353a737",
+    "mode": 420
+  },
+  "parseJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/parse1.job.json",
+    "bytes": 2794,
+    "sha256": "be55b211b95e1980bf8bea1fa15e43e5df3851d47ae606cf1cd7b31563509705",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-candidate-20260922/candidate-metadata1.tar",
+    "bytes": 686080,
+    "sha256": "f13b35491bcb0d6f3d0645443a37c0a95dbe7a37822fcc0742a4c10c05948ae2",
+    "mode": 420,
+    "members": 24,
+    "fullBodiesModesMtimesMembershipVerified": true
+  },
+  "independentReview": false,
+  "compiled": false,
+  "testsRun": 0,
+  "rootPromoted": false,
+  "actualDevices": false,
+  "fullGame": false
+}

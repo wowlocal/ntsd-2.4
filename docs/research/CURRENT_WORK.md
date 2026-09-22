@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Typed host Start/launch candidate](APPLICATION_HOST_MATCH_CANDIDATE.md) implemented
+in isolated1039-file tree: five changed Swift files parse successfully; no compile
+or XCTest yet. Host retains Start/platform, resumes existing launch, then commits
+returned child/platform once. Existing character/selection comparisons are shared
+through the actual host;53 exact methods selected. Patch round-trip and24-member
+metadata/changed-file archive verified. Root1034/prior1037/385fixtures/102resources/
+source55 unchanged. [Evidence](../evidence/application-host-match-candidate.json).
+Task frozen within1GiB; finalizer55198 terminal0. Source59727 revalidated17:43:07 UTC,
+2905 chunks/20 Objects, still live. NEXT: freeze fresh build/53-method/package/archive
+validation and resource bounds informed by prior whole-parent RSS; stop first
+nonpass. Independent review/root promotion/devices/full game stay open. This
+supersedes the implementation NEXT below; no original restart.
+
 [Host Start/launch preflight](APPLICATION_HOST_MATCH_PREFLIGHT.md) complete as
 read-only analysis: actual candidate1037 traced through typed PendingMatchPrelude,
 existing launch child and final Bootstrap tail. Four saved envelopes verified
