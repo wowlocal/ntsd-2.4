@@ -1,0 +1,139 @@
+{
+  "schema": "ntsd-host-validation-documentation-v1",
+  "UTC": "2026-09-22T14:57:06.576447+00:00",
+  "head": "14cad6bd9a6b14e86a04bd39d9de64b7b3faf6e5",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/publication1.json",
+    "bytes": 12988,
+    "sha256": "1f252885c85bc71d546f3f4a65aa0aea6155784733288218ed7160d48fe1b683",
+    "mode": 420
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/external-close1.json",
+    "bytes": 800,
+    "sha256": "d14e83edbf7006edb110ace7175b55023f6605919ae4eef677b66e210943b4fe",
+    "mode": 420
+  },
+  "finalizerTerminal": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/finalize1.job.json",
+    "bytes": 662,
+    "sha256": "613ebb127277be81191383b9f13485e2a72b073818ad0f7e7e98a24431f20992",
+    "mode": 420
+  },
+  "documents": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_VALIDATION_PLAN.md",
+      "bytes": 6285,
+      "sha256": "66fdd296fee9e6ceb1ce2f72d64f9ce0bc1a6cd704e8d99f180e2c2b81b4577c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_VALIDATION.md",
+      "bytes": 9862,
+      "sha256": "decb7098961e8b503a75e10bb7fa3c2e0d9108f01127dd70a0ebe278bf7126b9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 109305,
+      "sha256": "e99ee44eddae0b1fe3460e781bc6b09c1e026694bb1d5f8a0b44538ff995ad07",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 306741,
+      "sha256": "f627d73b5d45ac6ebb823d77440ffc16ea29e93f5c1c63cf3f7c98e59fd24d41",
+      "mode": 420
+    }
+  ],
+  "helpers": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_validation.py",
+      "bytes": 7230,
+      "sha256": "6db90578f222b6722ac8aeb49d2ea4afeeb0f91fb8897fefe58ab73ee8e161d1",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_validation.py",
+      "bytes": 14168,
+      "sha256": "293106dd5e999577c824bb344f5709beb9f3a2b58a242d26e6a1fbc68ef3136a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_validation2.py",
+      "bytes": 14233,
+      "sha256": "a0454b719bc95e4262b1f9207637121e9dc45f90ba56f232f0f891d186bb10e7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_host_validation_package.py",
+      "bytes": 5443,
+      "sha256": "c70767a3a45a45b0dec18a520e6232ea47df859c2c0ae2d4b5646427387c0399",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_host_validation_package2.py",
+      "bytes": 6230,
+      "sha256": "65b62626bb869e097c41d792dbe5d5910e7b2e89a6ac8d830de102ab39a60ec1",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_tests.py",
+      "bytes": 4706,
+      "sha256": "a85f343d745bbc8d82f64a08cbbb28698248f984e6f48e0fe07871c98c50b9ce",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_validation.py",
+      "bytes": 14137,
+      "sha256": "92310ea7968ec800afd0e54112ba946cf2ca7c922f92c8cd77eeaafcb0ecc037",
+      "mode": 420
+    }
+  ],
+  "localLinksChecked": 702,
+  "receiptSelfLinkCheckedAfterWrite": true,
+  "pythonSyntax": true,
+  "frozenHelpersIdentical": true,
+  "gitDiffCheck": true,
+  "indexEmptyBeforeStaging": true,
+  "taskPIDsAbsent": [
+    2734,
+    3374,
+    5629,
+    9493,
+    12164,
+    9509,
+    9690,
+    9749,
+    9785,
+    9986,
+    10010,
+    10066,
+    10088,
+    10273,
+    10319,
+    10517,
+    10587,
+    10607,
+    10644,
+    10667,
+    10691,
+    10714,
+    10737,
+    10758,
+    10779,
+    10803,
+    10826,
+    10849,
+    10869,
+    10894
+  ],
+  "sourcePID": 59727,
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceJobStatus": "running",
+  "sourceCodePinsVerified": 55,
+  "externalTaskNotModified": true,
+  "independentReview": false,
+  "commitScope": "Only this validation plan/report/publication/closure/docs receipt/seven helpers and two new navigation paragraphs. Earlier pending work is not staged."
+}

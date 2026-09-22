@@ -2,6 +2,21 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host transaction validation](APPLICATION_HOST_TRANSACTION_VALIDATION.md): unchanged
+candidate freshly compiled and all25 declared methods passed, with complete named
+XCTest results/exit0. Build1 testability failure and first package-check timestamp
+failure retained; separately identified corrections, no candidate/expected edit.
+Core191/ReferenceChecks61/Tests266 sources,487 packaged resources,2480-file regular
+archive and137-member metadata archive verified. Root1034/candidate1036/55 live pins
+unchanged; task frozen within24GiB, finalizer12164 terminal0/absent. Independent
+review, root promotion and actual devices remain open. [Evidence](../evidence/application-host-transaction-validation.json).
+Source revalidated14:48:59 UTC:1768 chunks/12 Objects/433556355 stores, still live.
+NEXT independent task: bounded read-only preflight of the retained host loading
+ticket/platform through existing loading/cycle owners to Bootstrap.finishLoadedMenu;
+identify saved whole-caller cases and failure/commit boundaries before extending.
+This result supersedes the candidate's syntax-only status and compile/test NEXT
+below; do not rebuild the successful frozen candidate or restart the source.
+
 [Host transaction candidate](APPLICATION_HOST_TRANSACTION_CANDIDATE.md) implemented
 in an isolated1036-file tree: persistent Bootstrap/platform owner, staged input
 preparation, committed-batch handoff and retained loading ticket. Bootstrap forwards

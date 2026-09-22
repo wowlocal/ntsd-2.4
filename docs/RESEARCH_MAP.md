@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host transaction validation](research/APPLICATION_HOST_TRANSACTION_VALIDATION.md)
+freshly compiled the unchanged candidate; all25 selected methods passed with named
+XCTest results and actual exit0. Preserved build1 testability/package-check failures;
+separate corrections changed no Native input or expected value.487 package files,
+2480-file artifact archive/137 metadata members and root1034/candidate1036/55 live
+pins verified; external task frozen within24GiB. Supersedes syntax-only/build NEXT
+below. Next: bounded host pending-loading ownership/finishLoadedMenu preflight using
+saved whole-caller evidence. Independent review, promotion, live providers/device
+behavior, whole catalog and full game remain open.
+
 [Host transaction candidate](research/APPLICATION_HOST_TRANSACTION_CANDIDATE.md)
 adds an isolated persistent Bootstrap/platform owner, staged host inputs, retained
 pending ticket and one-time committed-batch handoff. Seven changed Swift files
