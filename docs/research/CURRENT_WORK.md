@@ -2,6 +2,20 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading candidate](APPLICATION_HOST_LOADING_CANDIDATE.md) implemented in a
+new isolated1037-file tree: exact suspension identity, prefix reply exhaustion,
+retained actual child/platform and retryable final outer commit with one loaded
+batch. Six changed Swift files parse (PID18895 exit0/0.055s); compilation/tests
+remain open. Four new methods plus38 regressions frozen for42-method validation.
+Root1034/baseline1036/385fixtures/102resources/55 live pins preserved; patch
+round-trip and22-member archive fully verified. External task frozen within1GiB;
+finalizer19435 terminal0. [Evidence](../evidence/application-host-loading-candidate.json).
+NEXT: separately bounded fresh Core/dependent build and all42 methods, package
+and archive gates; no old binary or edits in the frozen candidate. Independent
+review/root promotion/devices/later typed child retention remain open. Source
+revalidated15:29:37 UTC:2039 chunks/14 Objects/500022617 stores, still live.
+This supersedes the implementation NEXT below; source capture is not restarted.
+
 [Host loading preflight](APPLICATION_HOST_LOADING_PREFLIGHT.md) completed from
 current code and three hash-verified saved envelopes (134093766 decoded bytes).
 Mapped actual pending/platform through first loading and cached cycles to the

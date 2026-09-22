@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading candidate](research/APPLICATION_HOST_LOADING_CANDIDATE.md) adds
+exact suspension identity, loading-prefix reply exhaustion and a privately
+prepared child/platform followed by a retryable single loaded outer commit.
+Six changed Swift files parse; four new methods plus38 regressions selected,
+not compiled/tested.1037-file candidate, unchanged root1034/baseline1036/resources/
+55 source pins and22-member patch/metadata archive verified; external task frozen.
+Next: separate fresh Core/dependent compilation and all42 methods with package/
+archive checks. Independent review, root promotion, later typed child retention,
+real providers/devices and whole catalog/game remain open.
+
 [Host loading preflight](research/APPLICATION_HOST_LOADING_PREFLIGHT.md) maps the
 retained loading ticket/platform through existing first-loading and cached-cycle
 owners to one loaded outer commit. Three saved envelopes fully hash-verified;

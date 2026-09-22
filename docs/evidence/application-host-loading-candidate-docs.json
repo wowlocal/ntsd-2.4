@@ -1,0 +1,97 @@
+{
+  "schema": "ntsd-host-loading-candidate-documentation-v1",
+  "UTC": "2026-09-22T15:33:01.095166+00:00",
+  "head": "6bef0d1bf4e068274dc8f6d90b2b29e879420eea",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-candidate-20260922/publication1.json",
+    "bytes": 3320,
+    "sha256": "21dba6c90087b520e14832cd24377d361d46444b801d73526b148260931aacc4",
+    "mode": 420
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-candidate-20260922/external-close1.json",
+    "bytes": 975,
+    "sha256": "fee42d0591ac0218a3b6e68460dd633adf7baa1c893d8032271d28353caa106d",
+    "mode": 420
+  },
+  "finalizerTerminal": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-candidate-20260922/finalize1.job.json",
+    "bytes": 653,
+    "sha256": "a94f427af53105709fd2b585b6ea83241016c82179bb1255131bd936ea786d4f",
+    "mode": 420
+  },
+  "documents": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_CANDIDATE_PLAN.md",
+      "bytes": 5799,
+      "sha256": "26992049c99e01d42f2a41953f84a79444da2aa25e2bada01e66962ec4082a07",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_CANDIDATE.md",
+      "bytes": 9007,
+      "sha256": "5176db1fe3b3ca3baad02e412852ef287959b19f931c27e9e0c9679b5c239340",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 111388,
+      "sha256": "d0524ce444b4e22ca97627537b72dfc0a62426651a9bdc775a61a31a8fe2954f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 308165,
+      "sha256": "bb3e048cf5aa137f4c7e73f61acdaa404be02b351260415314570775bacb1fa2",
+      "mode": 420
+    }
+  ],
+  "helpers": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_loading_candidate.py",
+      "bytes": 5822,
+      "sha256": "e6871198eecb457c6d9b9d9f365d016340dc514d0aa04e92711bbd01d408d568",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_loading_candidate.py",
+      "bytes": 11132,
+      "sha256": "8c868df72949f1833d5a7db2d4704b974d311a3f6237b4483b5d27ac5f276e26",
+      "mode": 420
+    }
+  ],
+  "localLinksChecked": 709,
+  "receiptSelfLinkCheckedAfterWrite": true,
+  "pythonSyntax": true,
+  "taskPIDsAbsent": [
+    17143,
+    18895,
+    19435
+  ],
+  "externalTaskUnchanged": true,
+  "sourcePID": 59727,
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceCodePinsVerified": 55,
+  "gitDiffCheckExceptRawPatch": true,
+  "rawPatchWhitespace": {
+    "command": [
+      "git",
+      "diff",
+      "--no-index",
+      "--check",
+      "--",
+      "/dev/null",
+      "docs/evidence/application-host-loading-candidate.patch"
+    ],
+    "exitCode": 3,
+    "stdout": "docs/evidence/application-host-loading-candidate.patch:34: trailing whitespace.\n+ \ndocs/evidence/application-host-loading-candidate.patch:75: trailing whitespace.\n+ \n",
+    "stderr": "",
+    "reason": "Two exact unified-diff blank context markers; no added Swift line has trailing whitespace; round-trip passed; patch kept byte-identical"
+  },
+  "indexEmptyBeforeStaging": true,
+  "independentReview": false,
+  "compiled": false,
+  "testsRun": 0,
+  "commitScope": "Only candidate plan/report, two helpers, exact patch/publication/closure/docs receipt and two new navigation paragraphs; unrelated pending work preserved"
+}
