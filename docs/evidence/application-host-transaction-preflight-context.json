@@ -1,0 +1,279 @@
+{
+  "schema": "ntsd-host-transaction-preflight-context-v1",
+  "UTC": "2026-09-22T13:34:56.856317+00:00",
+  "head": "be3d407b2037e24bc6006c06ba1fca1db5512558",
+  "nativeManifest": {
+    "path": "build/research/first-damage-loading53-native-20260922/candidate1-inputs.json",
+    "bytes": 215074,
+    "sha256": "e72bd9374bca792f7d7defb8653b13fc1b7ac6fc48b5751b2001bb6ffbe5d240",
+    "mode": 420
+  },
+  "nativeFilesVerified": 1034,
+  "membershipVerified": true,
+  "excludesHistoricalBuildCaches": true,
+  "sourceLaunch": {
+    "path": "build/research/first-damage-catalog53-source-20260922/launch1.json",
+    "bytes": 26753,
+    "sha256": "009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079",
+    "mode": 420
+  },
+  "sourceCodePinsVerified": 55,
+  "protected": [
+    {
+      "path": "docs/research/APPLICATION_HOST_TRANSACTION_PREFLIGHT_PLAN.md",
+      "bytes": 3916,
+      "sha256": "84add47e772f777bbed2289198983c97cc7466dd2f73600fa4f679a45468598a",
+      "mode": 420
+    },
+    {
+      "path": "AGENTS_HISTORY_2026-09-12.md",
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDApp/main.swift",
+      "bytes": 18757,
+      "sha256": "9cb5c126977e24ec6bc9a2ff5e933e692a3641088cdd571ff1fe3e4921770954",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDApp/Assets.swift",
+      "bytes": 3839,
+      "sha256": "f39b54171ff46e4d662f4b32a1580f4f70a0dc13effa9c08f86988a5f53466ef",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 10071,
+      "sha256": "2a77ec7f2846dc1aebc4aef3847226f7c0c06f7210dbec728b889cd42a7a76c8",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+      "bytes": 39536,
+      "sha256": "e2623e7e32c80c0875a92c0d50ebf753ffb9596ca4def04e873eb38c169138a1",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift",
+      "bytes": 7039,
+      "sha256": "5ab1ccb1579e2ff81ff9b7c4b6317c20252dc316ee622bc814198311e9dd1c42",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalWinMainStartup.swift",
+      "bytes": 7203,
+      "sha256": "811eb0287502c563488fbcd48c47dd0e9a42cf8b4ca85f04f9c3ea493ff1186c",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationStartupInputs.swift",
+      "bytes": 10080,
+      "sha256": "c6ee7e310769280b2b88adfe01a5e41316b17a72a0ae6abf22c99d12390b7fa4",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationBitmapInputs.swift",
+      "bytes": 10830,
+      "sha256": "6b8772227bf11950bc91ef9713a75bd90646396cc895603817c5ed8060367ba0",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationGraphics.swift",
+      "bytes": 19052,
+      "sha256": "223c4becbcc564a4b0c6a333d91db487954c62425ad8c0e2bcc7fe68f8ce4247",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationMessageLoop.swift",
+      "bytes": 7672,
+      "sha256": "1431fe54180a36131f9693c025b33e30670b6eab887c5fc29d970956a8ccb972",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationInputSession.swift",
+      "bytes": 7305,
+      "sha256": "e945a186c2d7205ae50bc1d21f71162de72c02180782b0a35e767ca69aa9238f",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+      "bytes": 27746,
+      "sha256": "788ed047b01bd613a4f0df3fcb8800bfb9df96f1683e59a3f7c30da6b53a9f15",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift",
+      "bytes": 4406,
+      "sha256": "481d6cba0ba4be000fbdf85faa2281ee48b1837be9b45b24d912afef40c625b9",
+      "mode": 420
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationMenuInputs.swift",
+      "bytes": 3302,
+      "sha256": "f83f7df891181de6b8509f958321945ea3aa4ea2b0cfdb70e2273111da013515",
+      "mode": 420
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+      "bytes": 39330,
+      "sha256": "6b729ea3123fb0f96981df1623195d7d6f74d992ebe22f7728121e7efe1d610b",
+      "mode": 420
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift",
+      "bytes": 28836,
+      "sha256": "59da36ec520cab31491a5af77b02b8f510f02327b5aa7306e3d80e345876ff2f",
+      "mode": 420
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift",
+      "bytes": 5941,
+      "sha256": "0344ef60833f6b002ec889f9cf1f9c67438783455f98e2c59707e903920c6e6d",
+      "mode": 420
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalApplicationStartupInputsTests.swift",
+      "bytes": 9081,
+      "sha256": "253b1d8360b4c8b5a9517509cad4f68eddd37e1b11cdc362cd92a3a9e9cbc6e3",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/WORKFLOW.md",
+      "bytes": 25142,
+      "sha256": "5fc4becd80ff75a5e8f6628205d683ab6b9f6048695e213e9d10e838ad86f395",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/TASK_TEMPLATE.md",
+      "bytes": 10500,
+      "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_BOOTSTRAP.md",
+      "bytes": 10028,
+      "sha256": "c5a03cde5f2e2545fd97794cc057b01a5c7bc2d12fa178bc9542bbd8fd40168c",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_MENU_SESSION.md",
+      "bytes": 7299,
+      "sha256": "34d86b2498bfc1dda01326dc0127381901c29428ec210522d73d900ebc328f0d",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_STARTUP_INPUTS.md",
+      "bytes": 9678,
+      "sha256": "b38a27ac0603fa9a31a5a753a8fc780794c79fa5c23c90bab403057b18db89bf",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_GRAPHICS_OWNERS.md",
+      "bytes": 9334,
+      "sha256": "26b8ee3c50a6cfcd30cd6c80b6feb48946593e0a4ac5c6d7aa467c1e4c8bf6de",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_MESSAGE_LOOP.md",
+      "bytes": 12454,
+      "sha256": "d5a659b5870ccdc53c6af371b40b538b116463683f544467d3287ca21ac1ba86",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/APPLICATION_LOADED_CYCLE.md",
+      "bytes": 7284,
+      "sha256": "34d95bfbad15ef2ce58b706cbc39cec15f24c85462c69c46ff658ad2b1c23290",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/FIRST_MATCH_READINESS.md",
+      "bytes": 10175,
+      "sha256": "7b972577d86f66545b0b0f80c1ef4516ab09424fd29b86eb03356bfbddc43417",
+      "mode": 420
+    },
+    {
+      "path": "docs/research/FIRST_DAMAGE_CATALOG53_REGRESSIONS.md",
+      "bytes": 6958,
+      "sha256": "1a2b49a70f7bfa01310ee3cd13982f77a369d26637c289d231eb6618fe655854",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/application-bootstrap.json",
+      "bytes": 28330,
+      "sha256": "7a4c1bd26d7af7b91363f464bd0a6cec24f03db685266e6d3d8441ed6f369dc8",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/application-startup-inputs.json",
+      "bytes": 42866,
+      "sha256": "578ffb854870bd74696364a15046b376bc384ea8c3a11473e3cdf651661f1ac3",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/application-graphics-owners.json",
+      "bytes": 16889,
+      "sha256": "826d1a2ab4ecbf0ff7ca5aba95c66e32d6c1875daf8569a14e1a82783442b4b1",
+      "mode": 420
+    },
+    {
+      "path": "docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420
+    }
+  ],
+  "fixture": {
+    "path": "native/Tests/NTSDCoreTests/Fixtures/original-application-menu-return.json",
+    "bytes": 14123660,
+    "sha256": "0fa998dbc893663030a57d146d9ac3959c7c02e283340efe30c6fd34d57becc7",
+    "mode": 420
+  },
+  "fixtureTransport": {
+    "bytes": 67627502,
+    "sha256": "5bff3c201a20820812d6859fb46f78f846774ec5cd16d2ba5400a1e663de2747",
+    "verified": true
+  },
+  "selectedCase": {
+    "index": 0,
+    "spec": {
+      "label": "body-front-settings-own-resource-0",
+      "drawResult": 0,
+      "presentResult": 0,
+      "time": 123456901
+    },
+    "parent": "b630e4a6d5a287d78436da71c6b6e88eda8441b74d1de170e50ca6ae9f4b63e7",
+    "parentKind": "body",
+    "end": "iteration",
+    "after": {
+      "pc": 4444432,
+      "sp": 268496892,
+      "cw": 895,
+      "baseline": 123456822,
+      "counter": 2
+    }
+  },
+  "sourceObservation": {
+    "job": "build/research/first-damage-catalog53-source-20260922/capture1/source.job.json",
+    "identity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+    "cwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "status": "running",
+    "startedUTC": "2026-09-22T10:32:03.863631+00:00",
+    "lastLog": "{'chunks': 1274, 'pc': '0x78141710', 'scans': 857777, 'decoders': 8, 'objects': 8, 'catalogChildren': 0, 'stores': 312464419, 'seconds': 10960.36}"
+  },
+  "storage": {
+    "uuid": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "externalFree": 60123836416,
+    "internalFree": 67617988608
+  },
+  "gitStatus": " M docs/RESEARCH_MAP.md\n M docs/research/CURRENT_WORK.md\n M native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationDispatchEntryTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationFrontScreenTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationScreenBodyTests.swift\n M native/Tests/NTSDCoreTests/OriginalApplicationSettingsTests.swift\n M native/Tests/NTSDCoreTests/OriginalBitmapSurfaceLoadingTests.swift\n?? .build/\n?? docs/evidence/first-damage-catalog53-alignment.json\n?? docs/evidence/first-damage-catalog53-checkpoint.json\n?? docs/evidence/first-damage-catalog53-driver.json\n?? docs/evidence/first-damage-catalog53-launch.json\n?? docs/evidence/first-damage-catalog53-native-cache.json\n?? docs/evidence/first-damage-catalog53-native-candidate-docs.json\n?? docs/evidence/first-damage-catalog53-native-candidate.json\n?? docs/evidence/first-damage-catalog53-native-preflight.json\n?? docs/evidence/first-damage-catalog53-preflight.json\n?? docs/evidence/first-damage-catalog53-regressions-close.json\n?? docs/evidence/first-damage-catalog53-regressions-docs.json\n?? docs/evidence/first-damage-catalog53-regressions.json\n?? docs/evidence/first-damage-catalog53-source-live.json\n?? docs/evidence/first-damage-catalog53-source-live3.json\n?? docs/evidence/first-damage-catalog53-source-live4.json\n?? docs/evidence/first-damage-catalog53-source-live5.json\n?? docs/evidence/first-damage-catalog53-source-live6.json\n?? docs/evidence/first-damage-catalog53-source-live7.json\n?? docs/evidence/first-damage-catalog53-source-live8.json\n?? docs/evidence/first-damage-catalog53-source-live9.json\n?? docs/evidence/first-damage-catalog53-storage.json\n?? docs/evidence/first-damage-catalog53-transport.json\n?? docs/evidence/first-damage-catalog53-validation-close.json\n?? docs/evidence/first-damage-catalog53-validation-docs.json\n?? docs/evidence/first-damage-catalog53-validation.json\n?? docs/evidence/first-damage-comparison-inputs.json\n?? docs/evidence/first-damage-loading53-native.json\n?? docs/evidence/first-damage-loading53.json\n?? docs/evidence/first-damage-menu53-native.json\n?? docs/evidence/first-damage-menu53-preflight.json\n?? docs/evidence/first-damage-menu53.json\n?? docs/evidence/first-damage-source-preflight.json\n?? docs/evidence/first-damage-winmain53.json\n?? docs/research/APPLICATION_HOST_TRANSACTION_PREFLIGHT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_ALIGNMENT.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_ALIGNMENT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_CHECKPOINT.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_CHECKPOINT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_DRIVER.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_DRIVER_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_DRIVER_REVIEW1.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_LAUNCH.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_LAUNCH_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_CACHE.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_CACHE_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_CANDIDATE.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_PREFLIGHT.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_NATIVE_PREFLIGHT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_PREFLIGHT.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_PREFLIGHT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_REGRESSIONS.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_REGRESSIONS_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_SOURCE_LIVE.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_SOURCE_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_STORAGE.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_STORAGE_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_TRANSPORT.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_TRANSPORT_PLAN.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_VALIDATION.md\n?? docs/research/FIRST_DAMAGE_CATALOG53_VALIDATION_PLAN.md\n?? docs/research/FIRST_DAMAGE_COMPARISON_INPUTS.md\n?? docs/research/FIRST_DAMAGE_COMPARISON_INPUTS_PLAN.md\n?? docs/research/FIRST_DAMAGE_LOADING53.md\n?? docs/research/FIRST_DAMAGE_LOADING53_NATIVE.md\n?? docs/research/FIRST_DAMAGE_LOADING53_NATIVE_PLAN.md\n?? docs/research/FIRST_DAMAGE_LOADING53_PLAN.md\n?? docs/research/FIRST_DAMAGE_MENU53.md\n?? docs/research/FIRST_DAMAGE_MENU53_NATIVE.md\n?? docs/research/FIRST_DAMAGE_MENU53_NATIVE_PLAN.md\n?? docs/research/FIRST_DAMAGE_MENU53_PLAN.md\n?? docs/research/FIRST_DAMAGE_MENU53_PREFLIGHT.md\n?? docs/research/FIRST_DAMAGE_SOURCE_PREFLIGHT.md\n?? docs/research/FIRST_DAMAGE_WINMAIN53.md\n?? docs/research/FIRST_DAMAGE_WINMAIN53_PLAN.md\n?? native/Tests/NTSDCoreTests/Fixtures/original-first-damage-loading53.json\n?? native/Tests/NTSDCoreTests/Fixtures/original-first-damage-menu53.json\n?? native/Tests/NTSDCoreTests/OriginalApplicationInitializedLoadingTests.swift\n?? native/Tests/NTSDCoreTests/OriginalApplicationInitializedMenuTests.swift\n?? tools/archive_catalog53_storage.py\n?? tools/catalog_trace_reader.py\n?? tools/check_catalog53_trace_reader.py\n?? tools/check_first_damage_catalog53_alignment.py\n?? tools/check_first_damage_catalog53_driver.py\n?? tools/check_first_damage_catalog53_launch.py\n?? tools/continue_catalog53_regressions.py\n?? tools/derive_catalog53_checkpoint_audits.py\n?? tools/finalize_catalog53_validation.py\n?? tools/finish_catalog53_validation_preparation.py\n?? tools/first_damage_catalog53_launch_support.py\n?? tools/first_damage_catalog53_platform.py\n?? tools/first_damage_catalog53_storage.py\n?? tools/inspect_catalog53_native_checkpoint.py\n?? tools/inspect_first_damage_catalog53_inputs.py\n?? tools/inspect_first_damage_comparison_inputs.py\n?? tools/launch_first_damage_catalog53.py\n?? tools/oracle_first_damage_catalog53.py\n?? tools/oracle_first_damage_loading53.py\n?? tools/oracle_first_damage_menu53.py\n?? tools/oracle_first_damage_winmain53.py\n?? tools/pack_first_damage_loading53.py\n?? tools/pack_first_damage_menu53.py\n?? tools/prepare_catalog53_native_cache.py\n?? tools/prepare_catalog53_validation.py\n?? tools/run_catalog53_remaining_tests.py\n?? tools/run_catalog53_validation.py\n?? tools/verify_catalog53_checkpoint.py\n?? tools/verify_catalog53_validation_package.py\n?? tools/verify_first_damage_loading53.py\n?? tools/verify_first_damage_menu53.py\n?? tools/verify_first_damage_winmain53.py\n",
+  "preservedAuthorReadError": {
+    "error": "AttributeError: 'list' object has no attribute 'get'",
+    "operation": "Read-only JSON shape inspection treated the Native manifest array as an object; also printed an excessive list and output was truncated.",
+    "exactTimestampUnavailable": true,
+    "toolExit": 1,
+    "sourceExecution": false,
+    "correctedBy": "Inspect known list schema and bounded summaries; no source or Native producer changed."
+  }
+}

@@ -1,6 +1,19 @@
 # Текущая передача работы
 
-## Актуальный срез — 2026-09-14
+## Актуальный срез — 2026-09-22
+
+[Production host transaction preflight](APPLICATION_HOST_TRANSACTION_PREFLIGHT.md)
+completed as read-only analysis: selected saved case0 reaches the whole ordinary
+first-menu return through `Bootstrap.step`; `finishLoadedMenu` belongs to later
+pending children. Package inputs, host response gaps, staged owners and ordered
+commit delivery are inventoried. Next independent task: freeze an isolated
+candidate and implement the bounded transaction driver with explicit providers,
+six finite acceptance groups and retained pending tickets. No runtime edit,
+build/test, device acceptance or independent review is claimed.1034 Native files/
+55 live code pins unchanged; saved67,627,502-byte payload transport verified.
+[Receipt](../evidence/application-host-transaction-preflight.json).
+Same source PID59727 identity/job revalidated13:34:56 UTC:1274 chunks/eight Objects/
+312464419 stores; remains running, no whole return. [Observation](../evidence/application-host-transaction-preflight-context.json).
 
 Завершена [диагностика первого урона](FIRST_DAMAGE_DIAGNOSTIC.md) из собственного
 Bootstrap: два сценария обычной атаки, 184 новых полных вызовов/3496

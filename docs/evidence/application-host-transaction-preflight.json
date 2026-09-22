@@ -1,0 +1,103 @@
+{
+  "schema": "ntsd-host-transaction-preflight-v1",
+  "UTC": "2026-09-22T13:42:35.831139+00:00",
+  "status": "bounded-read-only-analysis-complete",
+  "originalHead": "be3d407b2037e24bc6006c06ba1fca1db5512558",
+  "publicationBaseHead": "5b7e63dc0fc2ec2bf9c359143ca04ed17fdea82b",
+  "plan": {
+    "path": "docs/research/APPLICATION_HOST_TRANSACTION_PREFLIGHT_PLAN.md",
+    "bytes": 3916,
+    "sha256": "84add47e772f777bbed2289198983c97cc7466dd2f73600fa4f679a45468598a",
+    "mode": 420
+  },
+  "report": {
+    "path": "docs/research/APPLICATION_HOST_TRANSACTION_PREFLIGHT.md",
+    "bytes": 16146,
+    "sha256": "245a81c3c98c016daaa2fd49aa77b8fe5d849b9295e9cf44ef3cc0a3e90bb064",
+    "mode": 420
+  },
+  "context": {
+    "path": "docs/evidence/application-host-transaction-preflight-context.json",
+    "bytes": 16678,
+    "sha256": "45a5c2101900375f81d3abc45d36c3b6fddee84299e9a6c2ec4860b354b57289",
+    "mode": 420
+  },
+  "contextAmendment": {
+    "path": "docs/evidence/application-host-transaction-preflight-amendment.json",
+    "bytes": 18373,
+    "sha256": "8fc15135eab1f62904a5493bf15aa4df1cb4226afd6932ede16cdac16d70ed27",
+    "mode": 420
+  },
+  "navigationWorkingFiles": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "bytes": 107051,
+      "sha256": "2664903893269340f4b6f796f0b28f1be3916525e8ed72b8503a96213f5b00c8",
+      "mode": 420
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "bytes": 305285,
+      "sha256": "b4c2500750b3174f361a12099628a4eee2dddac12c336211e123fa897d81ea75",
+      "mode": 420
+    }
+  ],
+  "verification": {
+    "protectedConsultedFiles": 34,
+    "instructionChange": "WORKFLOW changed externally; separately pinned amendment, original preserved in Git",
+    "nativeFiles": 1034,
+    "nativeBytes": 4464957733,
+    "nativeHashesModesMembershipUnchanged": true,
+    "sourceCodePins": 55,
+    "sourceCodePinsUnchanged": true,
+    "savedMenuPayloadBytes": 67627502,
+    "savedMenuPayloadCountSHA256Verified": true,
+    "immutableInstructionsSHA256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+    "localLinksChecked": 702,
+    "gitDiffCheckPassed": true,
+    "unrelatedGitStatusUnchanged": true,
+    "newDocumentationReceiptBytesBeforePublication": 55113,
+    "noWritesToClosedX5Tasks": true
+  },
+  "authorCorrections": [
+    {
+      "kind": "read-only shape/missing-path errors",
+      "records": [
+        "docs/evidence/application-host-transaction-preflight-context.json",
+        "docs/evidence/application-host-transaction-preflight-amendment.json"
+      ]
+    },
+    {
+      "kind": "draft input-provenance correction",
+      "field": "prefix.drawTarget",
+      "resolution": "Session replaces supplied value with own game.target."
+    },
+    {
+      "kind": "publication context update",
+      "reason": "new external instruction commit",
+      "record": "docs/evidence/application-host-transaction-preflight-amendment.json"
+    }
+  ],
+  "gates": {
+    "analysis": true,
+    "independentReview": false,
+    "nativeImplementation": false,
+    "nativeBuildOrTest": false,
+    "newOriginalExecution": false,
+    "wholeSourceAccepted": false,
+    "deviceOrWindowOrAudioValidated": false,
+    "newPackageOrArtifactArchive": false,
+    "fullGameComplete": false
+  },
+  "nextTask": "Freeze separate isolated candidate and implement explicit-provider transaction owner for startup, resize and first-menu commit; retain pending ticket and complete ordered batches; six acceptance groups in report.",
+  "commitScope": "Only new preflight files and own CURRENT_WORK/RESEARCH_MAP additions; navigation hashes above describe working files, not partially staged versions. Earlier uncommitted research inputs remain separate.",
+  "remaining": [
+    "production host response providers",
+    "actual input/clock/reentrancy",
+    "raster/audio/backend failure behavior",
+    "full catalog/source comparison",
+    "independent review",
+    "registered safety incidents",
+    "complete game/app/clean-Mac acceptance"
+  ]
+}

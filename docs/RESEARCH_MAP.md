@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host transaction preflight](research/APPLICATION_HOST_TRANSACTION_PREFLIGHT.md)
+maps the saved ordinary first-menu case0 to Bootstrap.start, committed resize and
+Bootstrap.step's committed result. It inventories package-backed inputs versus
+host response gaps, mutable owners, pending-ticket retention and ordered effect
+delivery; later finishLoadedMenu is a distinct boundary.1034 Native files and55
+live source pins unchanged;67,627,502-byte saved payload transport verified.
+Next: separately frozen isolated transaction-driver implementation with explicit
+providers and six finite acceptance groups. This is author analysis, not Native
+execution, independent review, physical IO or app acceptance.
+
 Актуальная [диагностика первого урона](research/FIRST_DAMAGE_DIAGNOSTIC.md)
 продолжила собственный Bootstrap после истечения защиты обычными вводами.
 Она фиксирует Native outcome, но не принимает новые damaging calls как эквивалент
