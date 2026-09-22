@@ -1,0 +1,98 @@
+{
+  "schema": "ntsd-host-match-completion-docs-v1",
+  "startedUTC": "2026-09-22T18:53:08.105271+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "1279760a518c7ae46d2370c46e33a5e74afec450b333de3893fc957dc1531e5a",
+      "insertion": "[Typed host comparison complete](APPLICATION_HOST_MATCH_COMPLETION.md): all53\nselected methods pass on the unchanged correction1 binary (25 retained +28 new).\nActual host Start/platform retention, whole launch/outer commit, late rollback,\nforeign/sibling/stale ticket and reentry checks pass. First gameplay input is\ncompared inside the host then deliberately rolled back; no completed tick claimed.\nQueue66967 terminal0/1233.194s; no new failure/guard. Prior compiler and RSS failures\nremain preserved. Finalizer73241 terminal0/absent; prior2486-file archive and\nnew132-member metadata archive verified. Task frozen; root1034/candidate1039/\npackage487/source55 unchanged. Source59727 live (18:52:53 UTC:3338 chunks/22 Objects).\n[Evidence](../evidence/application-host-match-completion.json).\nNEXT bounded read-only preflight: actual host gameplay-entry/input retention and\nits next consumer, with saved whole-caller evidence/owners/rollback before API\nextension. Full catalog source, independent review, root promotion, actual app/\ndevices/retained gameplay/full game remain open. No original restart or code edit.\nThis supersedes the unfinished-method NEXT below.\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "1265e25162a9dbb79e8e31fa74db45ec7493bcec32f66d425cf1a9611f0c4768",
+      "insertion": "[Typed host comparison complete](research/APPLICATION_HOST_MATCH_COMPLETION.md):\nall53 methods verified on the unchanged binary (25 preserved +28 new), including\nactual host Start/launch/outer return, failure retries and ticket/reentry controls.\nPrior2486-file artifact and132-member metadata archives verified; root1034/\ncandidate1039/source55 unchanged, task frozen. Next gameplay input is inspected\nwith declared rollback; retained gameplay and a complete tick remain open. Previous compiler/RSS failures preserved. Next: bounded\nread-only preflight for the host gameplay child and following consumer; review/\nroot promotion/providers/devices/full catalog/full game stay open.\n[Evidence](evidence/application-host-match-completion.json).\n\n"
+    }
+  ],
+  "UTC": "2026-09-22T18:54:40.297169+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-completion-20260922/publication1.json",
+    "bytes": 4726,
+    "sha256": "c12685fbb64d6e26c50b6516f741c56db995df1ca8a20a3d086fe25baf4c1a98",
+    "mode": 420,
+    "mtime_ns": 1790103173364765213
+  },
+  "checkedFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_match_completion.py",
+      "bytes": 10125,
+      "sha256": "c736ef78c0fc99a6317d2d89f15ce5ccf390a9907bb8dabc94704844c1c71f60",
+      "mode": 420,
+      "mtime_ns": 1790101756414202160
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_validation3.py",
+      "bytes": 14426,
+      "sha256": "81405681f6242053e0af0d4795678dddf04317b9534b39413b0b82b5696ed023",
+      "mode": 420,
+      "mtime_ns": 1790101729979605046
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_tests3.py",
+      "bytes": 5094,
+      "sha256": "b20bd2f42678fb25ea4bdab1fd7abc6612f6661078d9c1290241f4c57e0fc2ec",
+      "mode": 420,
+      "mtime_ns": 1790101729980355171
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_match_completion.py",
+      "bytes": 13117,
+      "sha256": "df9fb68f81fe1e5e5849114751d52b8b8b158481b88384c6b7082ee065a3d301",
+      "mode": 420,
+      "mtime_ns": 1790101824971186531
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_COMPLETION.md",
+      "bytes": 6457,
+      "sha256": "287f39793fddf677bfd050bc84085ebb60db7b2257cc362f97050fe3ca596ada",
+      "mode": 420,
+      "mtime_ns": 1790103228208942634
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_COMPLETION_PLAN.md",
+      "bytes": 5663,
+      "sha256": "846574efe57fbec10352656b1d73cf3f0509ce6e2f55352c9f3fdef997d34099",
+      "mode": 420,
+      "mtime_ns": 1790101664045711547
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-completion.json",
+      "bytes": 4726,
+      "sha256": "c12685fbb64d6e26c50b6516f741c56db995df1ca8a20a3d086fe25baf4c1a98",
+      "mode": 420,
+      "mtime_ns": 1790103173365108255
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-completion-close.json",
+      "bytes": 879,
+      "sha256": "875466e64b3b4a4c0f5aac489c7d78e42f71b8dc0ef7a255472ee855a9e85ccb",
+      "mode": 420,
+      "mtime_ns": 1790103173365844713
+    }
+  ],
+  "localLinksVerified": 743,
+  "helperASTAndFrozenBytesVerified": 4,
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    66887,
+    66967,
+    73241
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 3350, 'pc': '0x781782c0', 'scans': 2259357, 'decoders': 22, 'objects': 22, 'catalogChildren': 0, 'stores': 821380873, 'seconds': 30149.76}",
+  "unrelatedNavigationBytesPreserved": true,
+  "all53MethodsVerified": true,
+  "retainedPasses": 25,
+  "newPasses": 28,
+  "independentReview": false
+}

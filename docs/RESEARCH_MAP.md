@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Typed host comparison complete](research/APPLICATION_HOST_MATCH_COMPLETION.md):
+all53 methods verified on the unchanged binary (25 preserved +28 new), including
+actual host Start/launch/outer return, failure retries and ticket/reentry controls.
+Prior2486-file artifact and132-member metadata archives verified; root1034/
+candidate1039/source55 unchanged, task frozen. Next gameplay input is inspected
+with declared rollback; retained gameplay and a complete tick remain open. Previous compiler/RSS failures preserved. Next: bounded
+read-only preflight for the host gameplay child and following consumer; review/
+root promotion/providers/devices/full catalog/full game stay open.
+[Evidence](evidence/application-host-match-completion.json).
+
 [Typed host correction1](research/APPLICATION_HOST_MATCH_CORRECTION1.md): the
 one-file platform-assignment fix passes fresh build/package and25 methods.
 Method26 hits8GiB RSS guard (8,894,627,840 bytes), no completed result;27 unstarted.

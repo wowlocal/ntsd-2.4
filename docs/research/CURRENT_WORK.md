@@ -2,6 +2,22 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Typed host comparison complete](APPLICATION_HOST_MATCH_COMPLETION.md): all53
+selected methods pass on the unchanged correction1 binary (25 retained +28 new).
+Actual host Start/platform retention, whole launch/outer commit, late rollback,
+foreign/sibling/stale ticket and reentry checks pass. First gameplay input is
+compared inside the host then deliberately rolled back; no completed tick claimed.
+Queue66967 terminal0/1233.194s; no new failure/guard. Prior compiler and RSS failures
+remain preserved. Finalizer73241 terminal0/absent; prior2486-file archive and
+new132-member metadata archive verified. Task frozen; root1034/candidate1039/
+package487/source55 unchanged. Source59727 live (18:52:53 UTC:3338 chunks/22 Objects).
+[Evidence](../evidence/application-host-match-completion.json).
+NEXT bounded read-only preflight: actual host gameplay-entry/input retention and
+its next consumer, with saved whole-caller evidence/owners/rollback before API
+extension. Full catalog source, independent review, root promotion, actual app/
+devices/retained gameplay/full game remain open. No original restart or code edit.
+This supersedes the unfinished-method NEXT below.
+
 [Typed host correction1](APPLICATION_HOST_MATCH_CORRECTION1.md): one Core
 platform-assignment correction builds successfully; fresh191/61/269 source targets,
 62,637,720-byte binary and487 resource payloads verified.25 methods passed.
