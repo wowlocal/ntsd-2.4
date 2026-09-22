@@ -2,6 +2,22 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host gameplay candidate](APPLICATION_HOST_GAMEPLAY_CANDIDATE.md) implemented in
+isolated1040-file tree: common input outcome, private Ready/body/platform retention,
+existing normal/paused child, and one final outer publication. Nineteen Swift paths
+parse successfully; compilation and all69 selected methods remain unexecuted.
+Existing full17/48/14 sequences and keyboard comparisons share actual host transport;
+two acquisition-helper paths were explicitly added before edits.446 comparison
+lines retained; patch round-trip and58-member candidate/draft/metadata archive pass.
+Root1034/prior1039/385fixtures/102resources/source55 unchanged. Task frozen;
+finalizer82133 terminal0/absent. Source59727 live at19:39:12 UTC:3634 chunks/24 Objects.
+[Evidence](../evidence/application-host-gameplay-candidate.json).
+NEXT: freeze fresh build/all69-method/package/archive validation for this exact
+candidate, with declared whole-parent memory/time limits and stop on first nonpass.
+No old binary pass validates this changed Core. Independent review/root promotion/
+installed trajectory/app devices/full catalog/full match/full game remain open.
+This supersedes the implementation NEXT below; no original restart.
+
 [Host gameplay preflight](APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): traced current
 input ownership through normal/paused GameplaySession and the outer return on
 actual candidate1039. Proposed common preparation retains one acquired Ready,

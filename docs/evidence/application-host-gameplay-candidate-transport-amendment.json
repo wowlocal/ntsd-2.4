@@ -1,0 +1,16 @@
+{
+  "schema": "ntsd-host-gameplay-candidate-transport-amendment-v1",
+  "UTC": "2026-09-22T19:25:42.746698+00:00",
+  "plan": {
+    "path": "docs/research/APPLICATION_HOST_GAMEPLAY_CANDIDATE_PLAN.md",
+    "sha256": "6c8b2ab2c99cac98844da019b19ca2fd216c21cad34a445fc96792d198b083cd"
+  },
+  "reason": "The existing active and paused acquisition helpers contain independent full-state keyboard/text/recognizer/outer-loop expectations around a hard-coded Bootstrap C.key call. Preserving those exact comparisons against actual Host.step requires an optional driver at that call site. Copying those expectations or comparing only a shadow Bootstrap would weaken provenance.",
+  "additionalCandidatePaths": [
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift"
+  ],
+  "candidateMutablePathCount": 19,
+  "scope": "Transport only: optional explicit driver; unchanged independent expected computations, requests and full comparisons; Bootstrap default preserved. No new case, reference, Core rule, test execution or additional storage/time allowance.",
+  "independentReview": false
+}

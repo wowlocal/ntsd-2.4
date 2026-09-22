@@ -1,0 +1,85 @@
+{
+  "schema": "ntsd-host-gameplay-candidate-v1",
+  "UTC": "2026-09-22T19:39:12.232498+00:00",
+  "status": "implemented; 19-file syntax parse passed; not compiled or tested",
+  "baseHead": "3e4f0d9a485568f55307d4d129aa01b297db682f",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/context1.json",
+    "bytes": 23067,
+    "sha256": "ba45379d619810383050ea96f4634f74afec24a3377111dc78b5cca8dcdbaa97",
+    "mode": 420
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/plan1.md",
+    "bytes": 7407,
+    "sha256": "6c8b2ab2c99cac98844da019b19ca2fd216c21cad34a445fc96792d198b083cd",
+    "mode": 420
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/candidate1-inputs.json",
+    "bytes": 216337,
+    "sha256": "4deadc3ce77d2151662b41df365e9ca2c9c4c6ab1da7f8eb0161ec11a0b282cc",
+    "mode": 420
+  },
+  "changedFiles": [
+    "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveBodyTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveCommandsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveContactsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveGraphicsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveHUDTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveLayoutTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveLifecycleTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveNoticesTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActivePhysicsTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveRecordingTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedGameplayTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift"
+  ],
+  "candidateFiles": 1040,
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/candidate1.patch",
+    "bytes": 50151,
+    "sha256": "9fbbadd521f0b7afb123e7f6b350cfeac14016ea11de1fb2d215c0890b867fef",
+    "mode": 420
+  },
+  "selectedMethods": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/selected-methods1.json",
+    "bytes": 6710,
+    "sha256": "7c9ba92ae3fd3ea3ea777d8fa2e036bc4fa5228f989a843d03a7d5d19bfd3bdf",
+    "mode": 420
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/verification1.json",
+    "bytes": 1851,
+    "sha256": "9112c33098283057f59ab3e0aa9c4b464c76f16c4961feb627ca4ae5bdf6def1",
+    "mode": 420
+  },
+  "parseJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/parse1.job.json",
+    "bytes": 8765,
+    "sha256": "71b6341a8f4da7bfe5b529dc3ccf53498e58eff96b2b4cae9cb0e3e7215a767f",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/candidate-metadata1.tar",
+    "bytes": 1136640,
+    "sha256": "c707d3260005e243caa5c6f0622836377cbf80ac5e79b5bbb8acc5a547597377",
+    "mode": 420,
+    "members": 58,
+    "fullBodiesModesMtimesMembershipVerified": true
+  },
+  "independentReview": false,
+  "compiled": false,
+  "testsRun": 0,
+  "rootPromoted": false,
+  "actualDevices": false,
+  "fullGame": false
+}

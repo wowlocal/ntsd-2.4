@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay candidate](research/APPLICATION_HOST_GAMEPLAY_CANDIDATE.md): common
+input outcome and private gameplay/paused Ready/body/platform retention implemented
+in isolated1040-file tree.19 files parse; no compile/XCTest yet.69 methods selected,
+full existing17/48/14 schedules and acquisition comparisons retained through actual
+host transport. Explicit two-path amendment; patch round-trip and58-member archive
+verified. Root1034/prior1039/source55 unchanged; task frozen. Next: fresh bounded
+build/all69/package/archive validation, then assess remaining app/match dependencies.
+Independent review/root promotion/devices/installed trajectory/catalog/full game open.
+[Evidence](evidence/application-host-gameplay-candidate.json).
+
 [Host gameplay preflight](research/APPLICATION_HOST_GAMEPLAY_PREFLIGHT.md): actual
 candidate1039 ownership traced from one acquired Ready through gameplay/paused
 body and outer return. Common host outcome, private retention and retry contract

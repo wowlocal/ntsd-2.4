@@ -1,0 +1,92 @@
+{
+  "schema": "ntsd-host-gameplay-candidate-docs-v1",
+  "startedUTC": "2026-09-22T19:41:26.880591+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "ed55d7081ff12e6d2899bd21695635826b8d01badfe7f9641b8f4893eab95662",
+      "insertion": "[Host gameplay candidate](APPLICATION_HOST_GAMEPLAY_CANDIDATE.md) implemented in\nisolated1040-file tree: common input outcome, private Ready/body/platform retention,\nexisting normal/paused child, and one final outer publication. Nineteen Swift paths\nparse successfully; compilation and all69 selected methods remain unexecuted.\nExisting full17/48/14 sequences and keyboard comparisons share actual host transport;\ntwo acquisition-helper paths were explicitly added before edits.446 comparison\nlines retained; patch round-trip and58-member candidate/draft/metadata archive pass.\nRoot1034/prior1039/385fixtures/102resources/source55 unchanged. Task frozen;\nfinalizer82133 terminal0/absent. Source59727 live at19:39:12 UTC:3634 chunks/24 Objects.\n[Evidence](../evidence/application-host-gameplay-candidate.json).\nNEXT: freeze fresh build/all69-method/package/archive validation for this exact\ncandidate, with declared whole-parent memory/time limits and stop on first nonpass.\nNo old binary pass validates this changed Core. Independent review/root promotion/\ninstalled trajectory/app devices/full catalog/full match/full game remain open.\nThis supersedes the implementation NEXT below; no original restart.\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "80c784bb418e398ea2bc9c431eab616a127ad95f43efe77d8eda26db86d38194",
+      "insertion": "[Host gameplay candidate](research/APPLICATION_HOST_GAMEPLAY_CANDIDATE.md): common\ninput outcome and private gameplay/paused Ready/body/platform retention implemented\nin isolated1040-file tree.19 files parse; no compile/XCTest yet.69 methods selected,\nfull existing17/48/14 schedules and acquisition comparisons retained through actual\nhost transport. Explicit two-path amendment; patch round-trip and58-member archive\nverified. Root1034/prior1039/source55 unchanged; task frozen. Next: fresh bounded\nbuild/all69/package/archive validation, then assess remaining app/match dependencies.\nIndependent review/root promotion/devices/installed trajectory/catalog/full game open.\n[Evidence](evidence/application-host-gameplay-candidate.json).\n\n"
+    }
+  ],
+  "UTC": "2026-09-22T19:42:16.822599+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-candidate-20260922/publication1.json",
+    "bytes": 4376,
+    "sha256": "14757858d73a6aaac2c3922768ce1991d6e073dcb483fb3711398dd9e450d46c",
+    "mode": 420
+  },
+  "checkedFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_CANDIDATE_PLAN.md",
+      "bytes": 7407,
+      "sha256": "6c8b2ab2c99cac98844da019b19ca2fd216c21cad34a445fc96792d198b083cd",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_CANDIDATE.md",
+      "bytes": 11356,
+      "sha256": "7d1a66e7f609488b9a410428c032d4d1d8cf0d8b4e1b0bc8f345ba17de5470e0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_gameplay_candidate.py",
+      "bytes": 6151,
+      "sha256": "fb3d9efb563aa2e7d592966912ecaae0fb5016fe18522271b1fb2c262c575272",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_gameplay_candidate.py",
+      "bytes": 13910,
+      "sha256": "6b32f8594fc4e427119e95cfe4b0d99e92b1114a30d0e392a0bc98d444847cd8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-candidate.patch",
+      "bytes": 50151,
+      "sha256": "9fbbadd521f0b7afb123e7f6b350cfeac14016ea11de1fb2d215c0890b867fef",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-candidate-transport-amendment.json",
+      "bytes": 1175,
+      "sha256": "486a1c7e44ed270de9a9656ae50b9e83eb3653ebf12ab1554d9510571b3cd3a1",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-candidate-close.json",
+      "bytes": 979,
+      "sha256": "123552f70748bb71f1cf9a6ad9b85447d7204f78058c39a663c89409e3bfbb4b",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-candidate.json",
+      "bytes": 4376,
+      "sha256": "14757858d73a6aaac2c3922768ce1991d6e073dcb483fb3711398dd9e450d46c",
+      "mode": 420
+    }
+  ],
+  "localLinksVerified": 754,
+  "helperASTAndFrozenBytesVerified": 2,
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    79277,
+    81822,
+    82133
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 3652, 'pc': '0x78141418', 'scans': 2463962, 'decoders': 24, 'objects': 24, 'catalogChildren': 0, 'stores': 895356303, 'seconds': 32997.99}",
+  "unrelatedNavigationBytesPreserved": true,
+  "candidateFiles": 1040,
+  "parsedFiles": 19,
+  "selectedMethods": 69,
+  "methodsRun": 0,
+  "independentReview": false,
+  "rootPromoted": false,
+  "implementationElapsedSincePlanSeconds": 1101.752
+}

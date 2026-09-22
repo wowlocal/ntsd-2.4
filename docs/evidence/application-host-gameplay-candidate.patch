@@ -1,0 +1,706 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -10,0 +11 @@
++    public typealias GameplayInput = OriginalApplicationInputSession.PendingContinuation
+@@ -14 +15 @@
+-        case noPreparedMatchPrelude
++        case noPreparedMatchPrelude, noPreparedGameplayInput
+@@ -54,0 +56,13 @@
++    /// A single acquisition selects the next consumer. Gameplay includes the
++    /// existing paused-rendering continuation; it is not an outer return.
++    public enum LoadedOutcome {
++        case returned(LoadedMenu.PendingReturn)
++        case matchPrelude(LoadedMenu.PendingMatchPrelude)
++        case gameplayInput(GameplayInput)
++        public init(menu: LoadedMenu.Outcome) {
++            switch menu {
++            case .returned(let child):self = .returned(child)
++            case .matchPrelude(let child):self = .matchPrelude(child)
++            }
++        }
++    }
+@@ -57,0 +72 @@
++        case gameplayInput(GameplayInput, Platform)
+@@ -59 +74 @@
+-            switch self { case .returned(_,let p),.matchPrelude(_,let p):return p }
++            switch self { case .returned(_,let p),.matchPrelude(_,let p),.gameplayInput(_,let p):return p }
+@@ -62,0 +78,3 @@
++        }
++        var gameplayInput: GameplayInput? {
++            if case .gameplayInput(let child,_) = self { return child };return nil
+@@ -107,0 +126 @@
++    public var preparedGameplayInput: GameplayInput? { locked { prepared?.gameplayInput } }
+@@ -194,0 +214,20 @@
++        try attempt {
++            func menu(_ outcome: LoadedOutcome) throws -> LoadedMenu.Outcome {
++                switch outcome {
++                case .returned(let child):return .returned(child)
++                case .matchPrelude(let child):return .matchPrelude(child)
++                case .gameplayInput:throw Boundary.unreturnedLoading
++                }
++            }
++            return try menu(prepareBoundary(prepare:{ .init(menu:try prepare($0,$1)) },
++                beforePrepared:{ try beforePrepared(menu($0),$1) }))
++        }
++    }
++
++    /// Retain one outcome selected from actual input, without requiring the
++    /// caller to guess menu versus gameplay or repeat acquisition to choose an API.
++    @discardableResult
++    public func prepareLoadedUntilBoundary(
++        prepare: (LoadingContext, Platform) throws -> LoadedOutcome,
++        beforePrepared: (LoadedOutcome, Platform) throws -> Void = { _,_ in }
++    ) throws -> LoadedOutcome {
+@@ -204,3 +243,3 @@
+-        prepare: (LoadingContext, Platform) throws -> LoadedMenu.Outcome,
+-        beforePrepared: (LoadedMenu.Outcome, Platform) throws -> Void
+-    ) throws -> LoadedMenu.Outcome {
++        prepare: (LoadingContext, Platform) throws -> LoadedOutcome,
++        beforePrepared: (LoadedOutcome, Platform) throws -> Void
++    ) throws -> LoadedOutcome {
+@@ -219,0 +259,5 @@
++        case .gameplayInput(let child):
++            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
++            // Reuse the existing branch, alias and installed-library contract.
++            _ = try OriginalApplicationGameplaySession(pending:child)
++            next = .gameplayInput(child,candidate)
+@@ -237,0 +282,19 @@
++            let returned = try prepare(child,candidate)
++            try validate(returned,for:pending.loading)
++            try beforePrepared(returned,candidate)
++            self.prepared = .returned(returned,candidate);return returned
++        }
++    }
++
++    /// Resume only our acquired input. Body failure leaves Ready/platform intact;
++    /// success retains the returned body for the separately retryable outer tail.
++    @discardableResult
++    public func resumeGameplay(
++        prepare: (GameplayInput, Platform) throws -> LoadedMenu.PendingReturn,
++        beforePrepared: (LoadedMenu.PendingReturn, Platform) throws -> Void = { _,_ in }
++    ) throws -> LoadedMenu.PendingReturn {
++        try attempt {
++            guard let pending else { throw Boundary.noPendingLoading }
++            guard let prepared,case .gameplayInput(let child,let preparedPlatform) = prepared else { throw Boundary.noPreparedGameplayInput }
++            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
++            let candidate = try Self.copy(preparedPlatform)
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveBodyTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveBodyTests.swift
+@@ -11 +11 @@
+-    func control(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
++    func control(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+@@ -18 +18 @@
+-        try OriginalApplicationActiveGameplayTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveGameplayTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveCommandsTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveCommandsTests.swift
+@@ -11 +11 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -14 +14 @@
+-        try OriginalApplicationActiveLifecycleTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveLifecycleTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveContactsTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveContactsTests.swift
+@@ -11 +11 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+@@ -16 +16 @@
+-        try OriginalApplicationActivePhysicsTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActivePhysicsTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayInput.swift
+@@ -120 +120 @@
+-    static func acquire(_ app: inout C.A,_ plan: A.Plan,_ held: inout Set<UInt32>) throws -> Int {
++    static func acquire(_ app: inout C.A,_ plan: A.Plan,_ held: inout Set<UInt32>,driver: OriginalApplicationLoadedTestDriver? = nil) throws -> Int {
+@@ -175 +175,2 @@
+-                try C.key(&app,down ? 0x100 : 0x101,key)
++                if let driver { try driver.key(down ? 0x100 : 0x101,key);app = driver.core }
++                else { try C.key(&app,down ? 0x100 : 0x101,key) }
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveGameplayTests.swift
+@@ -103 +103 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+@@ -110,2 +110,3 @@
+-        try N().sequence(reverse,onComplete:{ origin in
+-            var app = origin,held = Set<UInt32>(),messages = 0,stages = 0
++        try N().sequence(reverse,driver:supplied,onComplete:{ origin in
++            let driver = supplied ?? OriginalApplicationLoadedTestDriver(application:origin)
++            var app = driver.core,held = Set<UInt32>(),messages = 0,stages = 0
+@@ -114,3 +115,2 @@
+-                messages += try I.acquire(&app,I.A.schedule[index],&held)
+-                let acquired = app,loading = try C.next(&app)
+-                var cycle = try app.makeLoadedCycle(pending:loading)
++                messages += try I.acquire(&app,I.A.schedule[index],&held,driver:driver)
++                let acquired = app,loading = try driver.next()
+@@ -126,2 +126,2 @@
+-                let ready = try Self.input(&cycle,call)
+-                var session = try G(pending:ready),env = BodyEnvironment()
++                let ready = try driver.prepareGameplay { try Self.input(&$0,call) }
++                var env = BodyEnvironment()
+@@ -130 +130,3 @@
+-                let result = try session.advance(environment:&env,outputInput:presentation,observe:{ event,e in
++                let result = try driver.gameplay(ready) { ready in
++                var session = try G(pending:ready)
++                return try session.advance(environment:&env,outputInput:presentation,observe:{ event,e in
+@@ -147,0 +150 @@
++                }
+@@ -154 +157 @@
+-                    try I.unchanged(app,acquired)
++                    try I.unchanged(driver.core,acquired)
+@@ -161,3 +164,3 @@
+-                        XCTAssertThrowsError(try C.finish(&app,result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
+-                        try I.unchanged(app,parent)
+-                        try I.unchanged(app,acquired)
++                        XCTAssertThrowsError(try driver.finish(result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
++                        try I.unchanged(driver.core,parent)
++                        try I.unchanged(driver.core,acquired)
+@@ -167 +170 @@
+-                try C.finish(&app,result);stages += env.stages.count
++                try driver.finish(result);app = driver.core;stages += env.stages.count
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveGraphicsTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveGraphicsTests.swift
+@@ -16 +16 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+@@ -21 +21 @@
+-        try OriginalApplicationActiveContactsTests().sequence(reverse,onBody:{ call,ready,observation in
++        try OriginalApplicationActiveContactsTests().sequence(reverse,driver:driver,onBody:{ call,ready,observation in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveHUDTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveHUDTests.swift
+@@ -13 +13 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -18 +18 @@
+-        try OriginalApplicationActiveCommandsTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveCommandsTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveLayoutTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveLayoutTests.swift
+@@ -11 +11 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -15 +15 @@
+-        try OriginalApplicationActiveRecordingTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveRecordingTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveLifecycleTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveLifecycleTests.swift
+@@ -12 +12 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -16 +16 @@
+-        try OriginalApplicationActiveGraphicsTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveGraphicsTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveNoticesTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveNoticesTests.swift
+@@ -11 +11 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -15 +15 @@
+-        try OriginalApplicationActiveHUDTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveHUDTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift
+@@ -20 +20 @@
+-        try OriginalApplicationActiveLayoutTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveLayoutTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActivePhysicsTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActivePhysicsTests.swift
+@@ -12 +12 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+@@ -16 +16 @@
+-        try OriginalApplicationActiveBodyTests().control(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveBodyTests().control(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationActiveRecordingTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationActiveRecordingTests.swift
+@@ -11 +11 @@
+-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+@@ -15 +15 @@
+-        try OriginalApplicationActiveNoticesTests().sequence(reverse,onBody:{ call,ready,event in
++        try OriginalApplicationActiveNoticesTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationGameplayProjectionTests.swift
+@@ -41 +41 @@
+-    func sequence(_ reverse: Bool,onComplete: ((C.A) throws -> Void)? = nil) throws {
++    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,onComplete: ((C.A) throws -> Void)? = nil) throws {
+@@ -43 +43,2 @@
+-        _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,onStart:{ origin,pending in
++        let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
++        _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,driver:driver,onStart:{ origin,pending in
+@@ -45,3 +46,8 @@
+-            var app = origin,launch = try L.L(pending:pending),launchEnv = L.Environment()
+-            let started = try L().launch(&launch,&launchEnv,reference)
+-            try C.finish(&app,started)
++            func launch(_ pending: M.S.PendingMatchPrelude) throws -> M.S.PendingReturn {
++                var launch = try L.L(pending:pending),launchEnv = L.Environment()
++                return try L().launch(&launch,&launchEnv,reference)
++            }
++            let started: M.S.PendingReturn
++            if let host = driver.host { started = try host.resumeMatchLaunch(prepare:{ retained,_ in try launch(retained) }) }
++            else { started = try launch(pending) }
++            try driver.finish(started,retainBatch:driver.retainGameplayParentBatch)
+@@ -55,3 +61,4 @@
+-                let loading = try C.next(&app)
+-                var cycle = try app.makeLoadedCycle(pending:loading),input = C.InputEnvironment()
+-                let ready = try C.input(&cycle,&input)
++                try driver.next()
++                let ready = try driver.prepareGameplay { cycle in
++                    var input = C.InputEnvironment();return try C.input(&cycle,&input)
++                }
+@@ -116 +123 @@
+-                var session = try G(pending:ready),env = Environment(expected:retained,sections:call.sections)
++                var env = Environment(expected:retained,sections:call.sections)
+@@ -123 +130,3 @@
+-                let result = try session.advance(environment:&env,outputInput:output,observe:{ observation,e in
++                let result = try driver.gameplay(ready) { ready in
++                var session = try G(pending:ready)
++                return try session.advance(environment:&env,outputInput:output,observe:{ observation,e in
+@@ -159,0 +169 @@
++                }
+@@ -182,3 +192,3 @@
+-                        let parent = app
+-                        XCTAssertThrowsError(try C.finish(&app,result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
+-                        try C.unchanged(app,parent)
++                        let parent = driver.core
++                        XCTAssertThrowsError(try driver.finish(result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
++                        try C.unchanged(driver.core,parent)
+@@ -189 +199 @@
+-                try C.finish(&app,result)
++                try driver.finish(result)
+@@ -194 +204 @@
+-            try onComplete?(app)
++            try onComplete?(driver.core)
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostGameplayTests.swift
+@@ -0,0 +1,292 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++@testable import NTSDReferenceChecks
++
++final class OriginalApplicationHostGameplayTests: XCTestCase {
++    typealias H = OriginalApplicationHostLoadingTests
++    typealias Host = H.Host
++    typealias D = OriginalApplicationLoadedTestDriver
++    typealias C = OriginalApplicationLoadedCycleTests
++    typealias I = OriginalApplicationActiveGameplayInput
++    typealias N = OriginalApplicationGameplayProjectionTests
++    typealias Q = OriginalApplicationPausedGameplayTests
++    typealias M = OriginalApplicationLoadedMenuSession
++    typealias G = OriginalApplicationGameplaySession
++    typealias Ready = OriginalApplicationInputSession.PendingContinuation
++
++    func sameReady(_ a: Ready,_ b: Ready) throws {
++        XCTAssertTrue(a.loading.isSameAttempt(as:b.loading))
++        try I.sameState(a.loading.state,b.loading.state);try I.sameState(a.entry.state,b.entry.state)
++        try I.sameState(a.state,b.state);try I.sameMatch(a.match,b.match)
++        XCTAssertEqual(a.commands,b.commands);XCTAssertEqual(a.playbackCommands,b.playbackCommands)
++        XCTAssertEqual(a.paused,b.paused);XCTAssertEqual(a.round.continuation,b.round.continuation)
++        XCTAssertEqual(a.round.stageDefeated,b.round.stageDefeated)
++        XCTAssertEqual(a.inputContext.savedPlayback,b.inputContext.savedPlayback)
++        XCTAssertEqual(a.inputContext.memory.allocations,b.inputContext.memory.allocations)
++        XCTAssertEqual(a.inputContext.memory.replayPointers,b.inputContext.memory.replayPointers)
++        XCTAssertEqual(a.music.allocations,b.music.allocations);XCTAssertEqual(a.operations,b.operations)
++        XCTAssertEqual(a.graphics,b.graphics);XCTAssertEqual(a.menuResources.bitmaps,b.menuResources.bitmaps)
++        XCTAssertEqual(a.menuBackgrounds,b.menuBackgrounds)
++    }
++    struct Saved {
++        let core: C.A,platform: H.P,prefix: H.P,prepared: H.P?
++        let loading: C.Session.PendingLoading,ready: Ready?,returned: M.PendingReturn?
++        let batches: Int
++        init(_ host: Host) throws {
++            core = host.snapshot;platform = try host.platformSnapshot()
++            prefix = try XCTUnwrap(host.pendingPlatformSnapshot());prepared = try host.preparedPlatformSnapshot()
++            loading = try XCTUnwrap(host.pendingLoading);ready = host.preparedGameplayInput
++            returned = host.preparedLoadedMenu;batches = host.pendingBatchCount
++        }
++    }
++    func unchanged(_ host: Host,_ old: Saved) throws {
++        try I.unchanged(host.snapshot,old.core)
++        try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(host.snapshot.startup),XCTUnwrap(old.core.startup))
++        H().samePlatform(try host.platformSnapshot(),old.platform)
++        H().samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),old.prefix)
++        XCTAssertTrue(try XCTUnwrap(host.pendingLoading).isSameAttempt(as:old.loading))
++        XCTAssertEqual(host.pendingBatchCount,old.batches);XCTAssertNil(host.preparedMatchPrelude)
++        if let p = old.prepared { H().samePlatform(try XCTUnwrap(host.preparedPlatformSnapshot()),p) }
++        else { XCTAssertNil(try host.preparedPlatformSnapshot()) }
++        if let ready = old.ready { try sameReady(XCTUnwrap(host.preparedGameplayInput),ready) }
++        else { XCTAssertNil(host.preparedGameplayInput) }
++        if let returned = old.returned {
++            let actual = try XCTUnwrap(host.preparedLoadedMenu)
++            try OriginalApplicationActiveLayoutTests.same(actual.snapshot,returned.snapshot)
++            try sameReady(actual.entry,returned.entry)
++            XCTAssertEqual(actual.graphics,returned.graphics);XCTAssertEqual(actual.exit,returned.exit)
++            XCTAssertEqual(actual.dispatcherResult,returned.dispatcherResult)
++        } else { XCTAssertNil(host.preparedLoadedMenu) }
++    }
++    func reentry(_ host: Host) {
++        OriginalApplicationHostMatchLaunchTests().reentry(host)
++        XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,_ in
++            XCTFail("Reentrant input provider ran");throw C.Stop.unexpected("reentry")
++        })) { XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt) }
++        XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,_ in
++            XCTFail("Reentrant gameplay provider ran");throw C.Stop.unexpected("reentry")
++        })) { XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt) }
++    }
++    func counts(_ driver: D,_ calls: Int) throws {
++        XCTAssertEqual(driver.gameplayInputs,calls);XCTAssertEqual(driver.gameplayBodies,calls)
++        XCTAssertEqual(driver.gameplayReturns,calls)
++        let host = try XCTUnwrap(driver.host)
++        XCTAssertNil(host.pendingLoading);XCTAssertNil(host.preparedGameplayInput)
++        XCTAssertNil(host.preparedLoadedMenu);XCTAssertNil(host.preparedMatchPrelude)
++        XCTAssertEqual(host.pendingBatchCount,0);XCTAssertNil(try host.takeCommitted())
++    }
++    func testHostNeutralGameplayRetainsSeventeenWholeReturns() throws {
++        for reverse in [false,true] {
++            let driver = try D.selectedHost(reverse)
++            try N().sequence(reverse,driver:driver);try counts(driver,17)
++        }
++    }
++    func testHostActiveGameplayRetainsBothFortyEightCallSchedules() throws {
++        for reverse in [false,true] {
++            let driver = try D.selectedHost(reverse)
++            try OriginalApplicationActiveOutputTests().sequence(reverse,driver:driver)
++            try counts(driver,65)
++        }
++    }
++    func testHostPauseStepResumeRetainsBothFourteenCallSchedules() throws {
++        for reverse in [false,true] {
++            let driver = try D.selectedHost(reverse)
++            try Q().sequence(reverse,driver:driver);try counts(driver,31)
++        }
++    }
++    func testGameplayInputPreparationFailuresPreserveHostOwners() throws {
++        let driver = try D.selectedHost(false)
++        driver.retainGameplayParentBatch = true
++        var failures = 0
++        driver.atGameplayLoading = { d in
++            guard d.gameplayInputs < 2 else { return }
++            let host = try XCTUnwrap(d.host),old = try Saved(host)
++            if d.gameplayInputs == 0 { XCTAssertEqual(old.batches,1) }
++            let stops = d.gameplayInputs == 0 ? ["provider","prologue","local","replay","round","commit","hostPrepared"] : ["control0"]
++            for stop in stops {
++                XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ context,p in
++                    self.reentry(host);p.hostReservations.append(-700);p.hostQueuePosition += 17
++                    if stop == "provider" { throw C.Stop.injected(stop) }
++                    var cycle = try XCTUnwrap(context.cycle),env = C.InputEnvironment(stop:stop)
++                    return .gameplayInput(try C.input(&cycle,&env))
++                },beforePrepared:{ _,p in
++                    self.reentry(host);p.hostReservations.append(-701)
++                    throw C.Stop.injected("hostPrepared")
++                })) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
++                try self.unchanged(host,old);failures += 1
++            }
++        }
++        try N().sequence(false,driver:driver);try counts(driver,17)
++        XCTAssertEqual(failures,8)
++    }
++    func body(_ ready: Ready,stop: String? = nil) throws -> M.PendingReturn {
++        var child = try G(pending:ready),environment = 0
++        do {
++            return try child.advance(environment:&environment,outputInput:Q.output(ready),observe:{ event,n in
++                n += 1
++                if case .front(let value) = event {
++                    if value.kind == stop || (stop == "sound" && value.kind == "method" && value.arguments.count > 1 && value.arguments[1] == 0x30) || (stop == "dispatcher" && value.kind == "dispatcherWrite") { throw C.Stop.injected(try XCTUnwrap(stop)) }
++                }
++                if case .gameplayCheckpoint(.output,_) = event,stop == "checkpoint" { throw C.Stop.injected("checkpoint") }
++            },pausedCheckpoint:{ stage,_,n in
++                n += 1;if stage == .output && stop == "checkpoint" { throw C.Stop.injected("checkpoint") }
++            },beforeCommit:{ _,_ in if stop == "commit" { throw C.Stop.injected("commit") } })
++        } catch {
++            XCTAssertEqual(environment,0);XCTAssertNil(child.pendingReturn)
++            try sameReady(child.entry,ready);throw error
++        }
++    }
++    func testGameplayBodyAndOuterFailuresRetainStagesAndRetry() throws {
++        let driver = try D.selectedHost(false)
++        driver.retainGameplayParentBatch = true
++        var bodyFailures = 0,tailFailures = 0,pausedSeen = 0
++        driver.atGameplayReady = { d,ready in
++            guard d.gameplayInputs == 1 || d.gameplayInputs == 20 else { return }
++            let host = try XCTUnwrap(d.host),old = try Saved(host)
++            XCTAssertEqual(ready.paused,d.gameplayInputs == 20)
++            if ready.paused { pausedSeen += 1 } else { XCTAssertEqual(old.batches,1) }
++            let inspection = try XCTUnwrap(host.preparedPlatformSnapshot())
++            inspection.hostReservations.append(-999);inspection.hostQueuePosition += 99
++            try self.unchanged(host,old)
++            let stops = ready.paused ? ["blit","dispatcher","checkpoint","commit","hostPrepared"] : ["blit","textOut","sound","dispatcher","checkpoint","commit","hostPrepared"]
++            for stop in stops {
++                XCTAssertThrowsError(try host.resumeGameplay(prepare:{ retained,p in
++                    self.reentry(host);try self.sameReady(retained,ready)
++                    p.hostReservations.append(-710);p.hostQueuePosition += 21
++                    return try self.body(retained,stop:stop)
++                },beforePrepared:{ _,p in
++                    self.reentry(host);p.hostReservations.append(-711);throw C.Stop.injected("hostPrepared")
++                })) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
++                try self.unchanged(host,old);bodyFailures += 1
++            }
++            // The complete existing comparison immediately retries from this Ready.
++        }
++        driver.atGameplayReturn = { d,returned in
++            guard d.gameplayInputs == 1 || d.gameplayInputs == 20 else { return }
++            let host = try XCTUnwrap(d.host),old = try Saved(host)
++            let time = Int32(bitPattern:try XCTUnwrap(host.snapshot.session).loop.timer.baseline &+ 1000)
++            XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,_ in XCTFail("Repeated body");return returned })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedGameplayInput)
++            }
++            for stop in ["time","sleep","commit"] {
++                var calls: [String] = []
++                XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ q,p in
++                    self.reentry(host);p.hostQueuePosition += 1;p.hostReservations.append(-720)
++                    calls.append(q.kind.rawValue)
++                    if q.kind == .sleep { XCTAssertEqual(q.arguments,[5]);throw C.Stop.injected("sleep") }
++                    if stop == "time" { throw C.Stop.injected("time") }
++                    return .init(result:stop == "sleep" ? 1_000_000 : time)
++                },beforeCommit:{ _,_,p in self.reentry(host);p.hostReservations.append(-721);throw C.Stop.injected("commit") })) {
++                    XCTAssertEqual($0 as? C.Stop,.injected(stop))
++                }
++                XCTAssertEqual(calls,stop == "sleep" ? ["time","sleep"] : ["time"])
++                try self.unchanged(host,old);tailFailures += 1
++            }
++            // The driver retries only this tail and compares its complete batch.
++        }
++        try Q().sequence(false,driver:driver);try counts(driver,31)
++        XCTAssertEqual(bodyFailures,12);XCTAssertEqual(tailFailures,6);XCTAssertEqual(pausedSeen,1)
++    }
++    func firstLoading(_ reverse: Bool) throws -> D {
++        let driver = try D.selectedHost(reverse),host = try XCTUnwrap(driver.host)
++        _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,driver:driver,onStart:{ _,pending in
++            let reference = try OriginalApplicationLoadedLaunchComparison(reverse,pending)
++            let returned = try OriginalApplicationHostMatchLaunchTests().launch(host,reference)
++            try driver.finish(returned)
++        })
++        try driver.next();return driver
++    }
++    // Controlled negative inputs derive from an actual acquired Ready. These are
++    // not natural host entries and never initialize a success trajectory.
++    func changedReady(_ ready: Ready,match: OriginalMatchPreparation? = nil,
++                      round: OriginalMatchRoundResult? = nil,historical: Bool = false) -> Ready {
++        .init(entry:ready.entry,state:ready.state,match:match ?? ready.match,inputContext:ready.inputContext,
++            music:ready.music,commands:ready.commands,playbackCommands:ready.playbackCommands,
++            paused:ready.paused,round:round ?? ready.round,operations:ready.operations,graphics:ready.graphics,
++            loading:historical ? nil : ready.loading,menuResources:ready.menuResources,menuBackgrounds:ready.menuBackgrounds)
++    }
++    func testGameplayTicketsAndReentryRejectForeignSiblingAndConsumedInputs() throws {
++        let foreign = try firstLoading(true)
++        let foreignReady = try foreign.prepareGameplay { cycle in var e = C.InputEnvironment();return try C.input(&cycle,&e) }
++        let foreignReturn = try foreign.gameplay(foreignReady) { try self.body($0) }
++        let driver = try D.selectedHost(false),host = try XCTUnwrap(driver.host)
++        var previous: Ready?,sibling: M.PendingReturn?,preparations = 0,bodies = 0,controls = 0
++        driver.beforeGameplayInput = { _,_ in self.reentry(host);preparations += 1 }
++        driver.beforeGameplayBody = { _,_ in self.reentry(host);bodies += 1 }
++        driver.atGameplayLoading = { d in
++            guard d.gameplayInputs < 2 else { return }
++            let old = try Saved(host)
++            XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,_ in XCTFail("Body before Ready");return foreignReturn })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedGameplayInput)
++            }
++            var copy = host.snapshot
++            let ticket = try C.next(&copy)
++            XCTAssertFalse(ticket.isSameAttempt(as:old.loading))
++            var cycle = try copy.makeLoadedCycle(pending:ticket),e = C.InputEnvironment()
++            let alternate = try C.input(&cycle,&e)
++            var bad = [foreignReady,alternate]
++            if let previous { bad.append(previous) }
++            for value in bad {
++                XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,p in p.hostReservations.append(-730);return .gameplayInput(value) })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++                try self.unchanged(host,old);controls += 1
++            }
++            if d.gameplayInputs == 0 {
++                sibling = try self.body(alternate)
++                var actualCycle = try host.snapshot.makeLoadedCycle(pending:old.loading),actualEnv = C.InputEnvironment()
++                let actual = try C.input(&actualCycle,&actualEnv)
++                let historical = self.changedReady(actual,historical:true)
++                XCTAssertFalse(historical.loading.isSameAttempt(as:old.loading))
++                XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,_ in .gameplayInput(historical) })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++                var missingLibrary = actual.match;missingLibrary.libraryCommands = nil
++                for value in [self.changedReady(actual,match:missingLibrary),self.changedReady(actual,round:.init(continuation:.menu,stageDefeated:actual.round.stageDefeated))] {
++                    XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,_ in .gameplayInput(value) })) {
++                        XCTAssertEqual($0 as? M.Boundary,.dependency("Installed gameplay continuation"))
++                    }
++                    try self.unchanged(host,old);controls += 1
++                }
++            }
++        }
++        driver.atGameplayReady = { d,ready in
++            previous = ready
++            guard d.gameplayInputs == 1 else { return }
++            let old = try Saved(host)
++            XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,_ in XCTFail("Repeated acquisition");return .gameplayInput(ready) })) {
++                XCTAssertEqual($0 as? Host.Boundary,.alreadyPreparedLoading)
++            }
++            XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ _,_ in XCTFail("Tail before body");return .init() })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedLoading)
++            }
++            XCTAssertThrowsError(try host.resumeMatchLaunch(prepare:{ _,_ in XCTFail("Start consumer for Ready");return foreignReturn })) {
++                XCTAssertEqual($0 as? Host.Boundary,.noPreparedMatchPrelude)
++            }
++            for value in [foreignReturn,try XCTUnwrap(sibling)] {
++                XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,p in p.hostReservations.append(-731);return value })) {
++                    XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt)
++                }
++                try self.unchanged(host,old);controls += 1
++            }
++            let actual = try self.body(ready)
++            let unreturned = M.PendingReturn(entry:actual.entry,snapshot:actual.snapshot,exit:actual.exit,dispatcherResult:nil,graphics:actual.graphics)
++            XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,_ in unreturned })) {
++                XCTAssertEqual($0 as? Host.Boundary,.unreturnedLoading)
++            }
++            try self.unchanged(host,old)
++        }
++        try N().sequence(false,driver:driver);try counts(driver,17)
++        XCTAssertEqual(preparations,17);XCTAssertEqual(bodies,17);XCTAssertEqual(controls,9)
++        XCTAssertThrowsError(try host.prepareLoadedUntilBoundary(prepare:{ _,_ in XCTFail("Consumed acquisition");return .gameplayInput(foreignReady) })) {
++            XCTAssertEqual($0 as? Host.Boundary,.noPendingLoading)
++        }
++        XCTAssertThrowsError(try host.resumeGameplay(prepare:{ _,_ in XCTFail("Consumed body");return foreignReturn })) {
++            XCTAssertEqual($0 as? Host.Boundary,.noPendingLoading)
++        }
++        XCTAssertThrowsError(try host.finishLoadedMenu(perform:{ _,_ in XCTFail("Consumed tail");return .init() })) {
++            XCTAssertEqual($0 as? Host.Boundary,.noPendingLoading)
++        }
++    }
++}
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift
+@@ -19,0 +20,8 @@
++    var retainGameplayParentBatch = false
++    var atGameplayLoading: ((OriginalApplicationLoadedTestDriver) throws -> Void)?
++    var atGameplayReady: ((OriginalApplicationLoadedTestDriver,Ready) throws -> Void)?
++    var atGameplayReturn: ((OriginalApplicationLoadedTestDriver,M.S.PendingReturn) throws -> Void)?
++    var beforeGameplayInput: ((Ready,H.P) throws -> Void)?
++    var beforeGameplayBody: ((M.S.PendingReturn,H.P) throws -> Void)?
++    var gameplayInputs = 0,gameplayBodies = 0,gameplayReturns = 0
++
+@@ -40,3 +48,43 @@
+-    func next() throws {
+-        if let host { try H().next(host) }
+-        else { loading = try C.next(&original) }
++    @discardableResult
++    func next() throws -> C.Session.PendingLoading {
++        if let host { try H().next(host);return try XCTUnwrap(host.pendingLoading) }
++        loading = try C.next(&original);return try XCTUnwrap(loading)
++    }
++    func prepareGameplay(_ input: (inout OriginalApplicationLoadedCycleSession) throws -> Ready) throws -> Ready {
++        try atGameplayLoading?(self)
++        let ready: Ready
++        if let host {
++            let result = try host.prepareLoadedUntilBoundary(prepare:{ context,p in
++                var cycle = try XCTUnwrap(context.cycle)
++                let value = try input(&cycle)
++                XCTAssertTrue(value.loading.isSameAttempt(as:context.entry))
++                p.hostReservations.append(-600)
++                return .gameplayInput(value)
++            },beforePrepared:{ outcome,p in
++                guard case .gameplayInput(let value) = outcome else { throw M.Stop.unexpected("Gameplay Ready outcome") }
++                try self.beforeGameplayInput?(value,p)
++            })
++            guard case .gameplayInput(let value) = result else { throw M.Stop.unexpected("Gameplay not retained") }
++            ready = value
++            XCTAssertTrue(host.preparedLoadedMenu == nil && host.preparedMatchPrelude == nil)
++            XCTAssertTrue(try XCTUnwrap(host.preparedGameplayInput).loading.isSameAttempt(as:ready.loading))
++        } else {
++            var cycle = try original.makeLoadedCycle(pending:XCTUnwrap(loading))
++            ready = try input(&cycle)
++        }
++        gameplayInputs += 1;return ready
++    }
++    func gameplay(_ ready: Ready,_ body: (Ready) throws -> M.S.PendingReturn) throws -> M.S.PendingReturn {
++        try atGameplayReady?(self,ready)
++        let result: M.S.PendingReturn
++        if let host {
++            result = try host.resumeGameplay(prepare:{ retained,p in
++                XCTAssertTrue(retained.loading.isSameAttempt(as:ready.loading))
++                p.hostReservations.append(-601)
++                return try body(retained)
++            },beforePrepared:{ returned,p in try self.beforeGameplayBody?(returned,p) })
++            XCTAssertTrue(host.preparedGameplayInput == nil && host.preparedMatchPrelude == nil)
++        } else { result = try body(ready) }
++        gameplayBodies += 1
++        try atGameplayReturn?(self,result)
++        return result
+@@ -104 +152 @@
+-    func finish(_ returned: M.S.PendingReturn,retainBatch: Bool = false) throws {
++    func finish(_ returned: M.S.PendingReturn,stop: String? = nil,retainBatch: Bool = false) throws {
+@@ -109,0 +158,9 @@
++            if let stop {
++                _ = try host.finishLoadedMenu(perform:{ q,p in
++                    p.hostQueuePosition += 1;p.hostReservations.append(-602)
++                    if q.kind.rawValue == stop { throw C.Stop.injected(stop) }
++                    guard q.kind == .time || q.kind == .sleep else { throw C.Stop.unexpected("Outer gameplay tail") }
++                    return .init(result:stop == "sleep" ? 1_000_000 : Int32(bitPattern:time))
++                },beforeCommit:{ _,_,p in p.hostReservations.append(-603);if stop == "commit" { throw C.Stop.injected(stop) } })
++                throw C.Stop.unexpected("Requested outer failure did not occur")
++            }
+@@ -126 +183 @@
+-            XCTAssertTrue(host.preparedMatchPrelude == nil)
++            XCTAssertTrue(host.preparedMatchPrelude == nil);XCTAssertTrue(host.preparedGameplayInput == nil)
+@@ -133 +190,2 @@
+-        } else { try C.finish(&original,returned) }
++        } else { try C.finish(&original,returned,stop:stop) }
++        if returned.entry.round.continuation == .gameplay || returned.entry.round.continuation == .pausedRendering { gameplayReturns += 1 }
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationPausedGameplayTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationPausedGameplayTests.swift
+@@ -56 +56 @@
+-    static func next(_ app: inout C.A) throws -> C.Session.PendingLoading {
++    static func next(_ app: inout C.A,driver: OriginalApplicationLoadedTestDriver? = nil) throws -> C.Session.PendingLoading {
+@@ -63 +63,3 @@
+-        let pending = try C.next(&app)
++        let pending: C.Session.PendingLoading
++        if let driver { pending = try driver.next();app = driver.core }
++        else { pending = try C.next(&app) }
+@@ -68 +70 @@
+-    func sequence(_ reverse: Bool) throws {
++    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil) throws {
+@@ -70 +72,2 @@
+-        try N().sequence(reverse,onComplete:{ origin in
++        try N().sequence(reverse,driver:supplied,onComplete:{ origin in
++            let driver = supplied ?? OriginalApplicationLoadedTestDriver(application:origin)
+@@ -73 +76 @@
+-            var app = origin,messages = 0,paused = 0,stages = 0,events = 0,rollbacks = 0,retries = 0
++            var app = driver.core,messages = 0,paused = 0,stages = 0,events = 0,rollbacks = 0,retries = 0
+@@ -76,2 +79,2 @@
+-                messages += try X.acquire(&app,index+1)
+-                let acquired = app,loading = try Self.next(&app)
++                messages += try X.acquire(&app,index+1,driver:driver)
++                let acquired = app,loading = try Self.next(&app,driver:driver)
+@@ -84 +87 @@
+-                        try I.sameState(failed.entry.state,loading.state);try I.unchanged(app,acquired)
++                        try I.sameState(failed.entry.state,loading.state);try I.unchanged(driver.core,acquired)
+@@ -90,2 +93 @@
+-                var cycle = try app.makeLoadedCycle(pending:loading)
+-                let ready = try OriginalApplicationPausedInput.advance(&cycle,index+1)
++                let ready = try driver.prepareGameplay { try OriginalApplicationPausedInput.advance(&$0,index+1) }
+@@ -98 +100 @@
+-                    try I.unchanged(app,acquired)
++                    try I.unchanged(driver.core,acquired)
+@@ -103,0 +106 @@
++                let result = try driver.gameplay(ready) { ready in
+@@ -105 +108 @@
+-                let result = try session.advance(environment:&e,outputInput:Self.output(ready),observe:{ observation,e in
++                return try session.advance(environment:&e,outputInput:Self.output(ready),observe:{ observation,e in
+@@ -145,0 +149 @@
++                }
+@@ -154,2 +158,2 @@
+-                        XCTAssertThrowsError(try C.finish(&app,result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
+-                        try I.unchanged(app,acquired);rollbacks += 1
++                        XCTAssertThrowsError(try driver.finish(result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
++                        try I.unchanged(driver.core,acquired);rollbacks += 1
+@@ -158 +162 @@
+-                try C.finish(&app,result)
++                try driver.finish(result);app = driver.core
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationPausedProjection.swift
+@@ -103 +103 @@
+-    static func acquire(_ app: inout I.C.A,_ call: Int) throws -> Int {
++    static func acquire(_ app: inout I.C.A,_ call: Int,driver: OriginalApplicationLoadedTestDriver? = nil) throws -> Int {
+@@ -119 +119,2 @@
+-        try I.C.key(&app,message,key)
++        if let driver { try driver.key(message,key);app = driver.core }
++        else { try I.C.key(&app,message,key) }
