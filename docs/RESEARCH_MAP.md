@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading completion attempt](research/APPLICATION_HOST_LOADING_COMPLETION.md)
+kept27 prior passes; method28 timed out at600s under12GiB RSS,14 later unstarted.
+One bounded stack sample locates recursive XCTest formatting at the retained-child
+presence check; it does not establish a pass or whole-runtime attribution.
+Next round3: isolated Bool presence assertion, unchanged semantic controls,
+fresh candidate compilation and full42 selection. Both guards and old assertion
+failure stay archived. Native comparison/review/root/device gates remain open.
+
 [Host loading correction1](research/APPLICATION_HOST_LOADING_CORRECTION1.md) preserves
 both full operation-wrapper forms in one corrected test; no Core/resource change.
 Fresh build/package passed and27 methods passed. Method28 hit its8GiB RSS guard,

@@ -1,0 +1,118 @@
+{
+  "schema": "ntsd-host-loading-completion-v1",
+  "UTC": "2026-09-22T16:33:30.822820+00:00",
+  "status": "partial-validation-open",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922",
+  "baseHead": "90fd80c1f3e592a06b860988cd0ebe999c3f2d19",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922/context1.json",
+    "bytes": 46024,
+    "sha256": "c4fe5a59373d91d1987c87f7e89c8098400a0a33ce63a94c5a815768a3aebdd8",
+    "mode": 420,
+    "mtime_ns": 1790094153847390591
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922/verification1.json",
+    "bytes": 39692,
+    "sha256": "5d70c372b4419c412b3335220d794452580e3b15ae1acbf6ef4c1e3556145408",
+    "mode": 420,
+    "mtime_ns": 1790094810801181124
+  },
+  "diagnostic": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922/formatting-diagnosis1.json",
+    "bytes": 2486,
+    "sha256": "5f8243aafe50c3dd5c3a5c25a86b901c6ddb2f823b2e4508fd8976b7a5d4a190",
+    "mode": 420,
+    "mtime_ns": 1790094718973510038
+  },
+  "priorPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922/publication1.json",
+    "bytes": 17735,
+    "sha256": "504f1ea58f6b5543fd5500216b92fe7589945aa1a62ac991f656ec0e5f983b64",
+    "mode": 420,
+    "mtime_ns": 1790093819829524826
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922/candidate1-inputs.json",
+    "bytes": 215699,
+    "sha256": "c951db10194d2595b1bf28b462f9fa6278a4799c4174a5aaa0a47bbdd78a5559",
+    "mode": 420,
+    "mtime_ns": 1790092804447602247
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 62536360,
+    "sha256": "66611784cb9e2c4d34d1d3a5b0d93e19ea66d3819d037bb60340c26e4a000f6c",
+    "mode": 493,
+    "mtime_ns": 1790093122370183845
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922/package-check1.json",
+    "bytes": 939723,
+    "sha256": "ca56c321ac1d19ece0ecb2c64ea2faa7f67b22d233026c4e696e7b2c0f44ce00",
+    "mode": 420,
+    "mtime_ns": 1790093138723419285
+  },
+  "priorArtifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-correction1-20260922/artifact-archive1.json",
+    "bytes": 693787,
+    "sha256": "abcfa559f351f20871147a6a3f5b7976ce2cf526ba20b3b5f4e3bc019e8ec2d5",
+    "mode": 420,
+    "mtime_ns": 1790093819593482995
+  },
+  "all42Passed": false,
+  "verifiedMethods": 27,
+  "newMethods": 1,
+  "remaining": [
+    "OriginalApplicationHostLoadingTests/testDifferentSameRevisionTicketsAndRepeatedCompletionAreRejected",
+    "OriginalApplicationHostLoadingTests/testLoadingPrefixRequiresExactlyItsPreparedReplies",
+    "OriginalApplicationLoadedMenuTests/testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+    "OriginalApplicationLoadedMenuTests/testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+    "OriginalApplicationLoadedMenuTests/testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+    "OriginalApplicationLoadedMenuTests/testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+    "OriginalApplicationLoadedMenuTests/testForeignStaleAndOverlappingOwnersAreRejected",
+    "OriginalApplicationLoadedCycleTests/testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+    "OriginalApplicationLoadedCycleTests/testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+    "OriginalApplicationLoadedCycleTests/testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+    "OriginalApplicationInitializedMenuTests/testInitializedSourceMatchesOwnBootstrapAndWholeMenu",
+    "OriginalApplicationInitializedMenuTests/testInitializedMenuLateFailuresRetainCommittedStartupAndResize",
+    "OriginalApplicationInitializedLoadingTests/testInitializedBootstrapActivationAndCommonSoundsMatchSource",
+    "OriginalApplicationInitializedLoadingTests/testInitializedActivationFailuresPreservePriorCommittedIterations",
+    "OriginalApplicationInitializedLoadingTests/testInitializedCommonLoadingFailuresPreservePendingOwners"
+  ],
+  "newQueueSeconds": 606.5084276670001,
+  "newTestSeconds": 600.747715458,
+  "sampledNewTestPeakRSS": 7676477440,
+  "metadataArchive": {
+    "members": 42,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922/metadata1.tar",
+    "bytes": 737280,
+    "sha256": "5ecc53a400a656e49b6897536cdcca9412143ba9188f2c71c01a6092aa49662c",
+    "mode": 420,
+    "mtime_ns": 1790094810818056077
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-loading-completion-20260922/source-live1.json",
+    "bytes": 749,
+    "sha256": "72c0766955bd4688ab8e9fc53639716cdd3146ea9cb1633a6b16d499f5ee0b6b",
+    "mode": 420,
+    "mtime_ns": 1790094810800271624
+  },
+  "gates": {
+    "nativeComparison": false,
+    "packageBytes": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "Round1 comparator correction has not received independent review.",
+    "Old assertion failure and old resident-guard termination remain immutable outcomes.",
+    "Controlled Native composition and an injected fourth input stop do not establish another returned iteration or whole Catalog53 source.",
+    "Actual providers/timing/devices and later typed child retention remain open."
+  ]
+}

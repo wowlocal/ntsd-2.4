@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading completion attempt](APPLICATION_HOST_LOADING_COMPLETION.md): same
+binary/candidate retained27 passes; whole method28 timed out at600.748s, reaped-15,
+no XCTest result;14 later methods unstarted. Native comparison remains incomplete.
+One declared1s/5ms stack sample places144 main-thread samples in line275
+XCTAssertNotNil recursively printing the large retained child. This observation
+does not establish the whole runtime or assertion outcome; sample/guards preserved.
+NEXT round3: separate test-only presence check `XCTAssertTrue(alternate != nil)`,
+retain all semantic checks and run full42 on newly compiled candidate. No source
+rerun, expectation edit or broader limit. Root1034/candidate1037/package487/source55
+and prior2482-file archive reverified. Independent review/root/devices remain open.
+[Evidence](../evidence/application-host-loading-completion.json). Supersedes same-
+binary continuation NEXT below; earlier failures remain immutable.
+
 [Host loading correction1](APPLICATION_HOST_LOADING_CORRECTION1.md): one new test
 assertion corrected in a separate1037-file tree; all Core/fixtures/resources unchanged.
 Fresh build/package passed.27 methods passed, including corrected loading/cycles
