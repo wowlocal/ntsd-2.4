@@ -2,6 +2,21 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Typed host correction1](APPLICATION_HOST_MATCH_CORRECTION1.md): one Core
+platform-assignment correction builds successfully; fresh191/61/269 source targets,
+62,637,720-byte binary and487 resource payloads verified.25 methods passed.
+Method26 hit8GiB RSS at8,894,627,840 bytes/86.344s, exit-15; no completed result,
+27 later methods unstarted. Queue62872 terminal1; guard and partial log preserved.
+Finalizer65026 terminal0/absent;2486-file/156-directory artifact and164-member
+metadata archives verified. Task frozen; root1034/candidate1039/source55 preserved.
+[Evidence](../evidence/application-host-match-correction1.json).
+NEXT separate continuation on this unchanged binary: retain25 passes, run whole26
+at12GiB/600s, then27–53 with unchanged limits/7200s queue. No candidate/root/source
+change or repeat of this closed attempt. Independent review/full53 comparison,
+root promotion/devices/full game remain open. Original source59727 stays live
+(18:23:09 UTC:3155 chunks/21 Objects).
+This supersedes the compiler-correction NEXT below.
+
 [Typed host validation failed at compile](APPLICATION_HOST_MATCH_VALIDATION.md):
 fresh build57019 exited1/4.192s; Swift6.4 reports signal6 at HostSession.finishLoadedMenu
 local platform binding. Static defect: that binding shadows the host property at

@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Typed host correction1](research/APPLICATION_HOST_MATCH_CORRECTION1.md): the
+one-file platform-assignment fix passes fresh build/package and25 methods.
+Method26 hits8GiB RSS guard (8,894,627,840 bytes), no completed result;27 unstarted.
+Original compiler failure and current partial test log are preserved;2486-file
+artifact/164-member metadata archives verified, task frozen. Next:
+same verified binary/25 retained passes, whole26 at12GiB/600s then unchanged27–53.
+No code/expected/root/source change; full comparison/review/device/game stay open.
+[Evidence](evidence/application-host-match-correction1.json).
+
 [Typed host compiler failure](research/APPLICATION_HOST_MATCH_VALIDATION.md):
 fresh build exits1/4.192s, Swift signal6 at finishLoadedMenu's local platform;
 static inspection finds host-property shadowing in final assignment. All53 methods

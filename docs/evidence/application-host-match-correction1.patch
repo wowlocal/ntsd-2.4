@@ -1,0 +1,20 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -252,14 +252,14 @@
+     ) throws -> Outcome {
+         try attempt {
+             guard let pending else { throw Boundary.noPendingLoading }
+-            guard let prepared,case .returned(let child,let platform) = prepared else { throw Boundary.noPreparedLoading }
++            guard let prepared,case .returned(let child,let preparedPlatform) = prepared else { throw Boundary.noPreparedLoading }
+             guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }
+             guard sequence < UInt64.max else { throw Boundary.publicationExtent }
+-            var candidate = try Self.copy(platform), next = application
++            var candidate = try Self.copy(preparedPlatform), next = application
+             let result = try next.finishLoadedMenu(child,environment:&candidate,
+                 perform:{ request,platform in try perform(request,platform) },
+                 beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) })
+-            application = next;platform = candidate;self.prepared = nil;self.pending = nil
++            application = next;self.platform = candidate;self.prepared = nil;self.pending = nil
+             return .committed(sequence:publish(.loaded(result)),result:result.result)
+         }
+     }

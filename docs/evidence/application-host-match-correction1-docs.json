@@ -1,0 +1,113 @@
+{
+  "schema": "ntsd-host-match-correction1-docs-v1",
+  "startedUTC": "2026-09-22T18:23:01.135480+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "505ce895401913f862dd29182f4ab44c85f54899f69f8a707e8e3879b65195a8",
+      "insertion": "[Typed host correction1](APPLICATION_HOST_MATCH_CORRECTION1.md): one Core\nplatform-assignment correction builds successfully; fresh191/61/269 source targets,\n62,637,720-byte binary and487 resource payloads verified.25 methods passed.\nMethod26 hit8GiB RSS at8,894,627,840 bytes/86.344s, exit-15; no completed result,\n27 later methods unstarted. Queue62872 terminal1; guard and partial log preserved.\nFinalizer65026 terminal0/absent;2486-file/156-directory artifact and164-member\nmetadata archives verified. Task frozen; root1034/candidate1039/source55 preserved.\n[Evidence](../evidence/application-host-match-correction1.json).\nNEXT separate continuation on this unchanged binary: retain25 passes, run whole26\nat12GiB/600s, then27\u201353 with unchanged limits/7200s queue. No candidate/root/source\nchange or repeat of this closed attempt. Independent review/full53 comparison,\nroot promotion/devices/full game remain open. Original source59727 stays live\n(18:23:09 UTC:3155 chunks/21 Objects).\nThis supersedes the compiler-correction NEXT below.\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "14706d016cf7cbdcf88ba3f94313a8d6427f072ce63a231ebbb29af50b660900",
+      "insertion": "[Typed host correction1](research/APPLICATION_HOST_MATCH_CORRECTION1.md): the\none-file platform-assignment fix passes fresh build/package and25 methods.\nMethod26 hits8GiB RSS guard (8,894,627,840 bytes), no completed result;27 unstarted.\nOriginal compiler failure and current partial test log are preserved;2486-file\nartifact/164-member metadata archives verified, task frozen. Next:\nsame verified binary/25 retained passes, whole26 at12GiB/600s then unchanged27\u201353.\nNo code/expected/root/source change; full comparison/review/device/game stay open.\n[Evidence](evidence/application-host-match-correction1.json).\n\n"
+    }
+  ],
+  "UTC": "2026-09-22T18:24:45.741742+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-match-correction1-20260922/publication1.json",
+    "bytes": 19270,
+    "sha256": "5f1aedcbd20d0753ae7f5b19b2b44033abc9a5a32084380894af7855eb7331ee",
+    "mode": 420,
+    "mtime_ns": 1790101390004109788
+  },
+  "checkedFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_match_validation2.py",
+      "bytes": 10346,
+      "sha256": "a562c37db962d26920281553da1f0c73a7a4ed66e2818314c4775780b8969cf4",
+      "mode": 420,
+      "mtime_ns": 1790100254645735155
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_validation2.py",
+      "bytes": 14232,
+      "sha256": "ae068eb838400df3097ec153c5ead1916e524194d42dc1918817ce227eee86d9",
+      "mode": 420,
+      "mtime_ns": 1790100254645916488
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_host_match_package2.py",
+      "bytes": 5545,
+      "sha256": "3d32caa2e8ded3a1463b14f2cb67e2b2f0da637a5ab53d14146c435e0a355cd4",
+      "mode": 420,
+      "mtime_ns": 1790100254646257738
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_match_tests2.py",
+      "bytes": 4936,
+      "sha256": "34c56bd11f1ed8e11328dcb09a02eea1179a896431e542710a813a5d2ebc463e",
+      "mode": 420,
+      "mtime_ns": 1790100254646363988
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_match_validation2.py",
+      "bytes": 18199,
+      "sha256": "e95725ba3db0ff4db39d03de73ad975c8e427c0d11ef6638f8e28552c621a98d",
+      "mode": 420,
+      "mtime_ns": 1790100977780683135
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_CORRECTION1.md",
+      "bytes": 5855,
+      "sha256": "c90771dfe5b9a289e8ade7154ec1cc2cdb86c8b9bfe0ceb26ebd33c09df69958",
+      "mode": 420,
+      "mtime_ns": 1790101425639910810
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_MATCH_CORRECTION1_PLAN.md",
+      "bytes": 4633,
+      "sha256": "d740c2299a6bd243d96683e7e6aaddd4827623e7667f598e5c69a41b08e26333",
+      "mode": 420,
+      "mtime_ns": 1790100254590010088
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-correction1.json",
+      "bytes": 19270,
+      "sha256": "5f1aedcbd20d0753ae7f5b19b2b44033abc9a5a32084380894af7855eb7331ee",
+      "mode": 420,
+      "mtime_ns": 1790101390004389497
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-correction1-close.json",
+      "bytes": 807,
+      "sha256": "d1c0e0043cf4abf241e09a4edc3ece5da52749829438595f2938aa3c030a0288",
+      "mode": 420,
+      "mtime_ns": 1790101390006077164
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-match-correction1.patch",
+      "bytes": 1438,
+      "sha256": "db002ade2d4cc4bedc0e1fa1c09feaebd7299a5c68fdfa7d9a6ddb46db806793",
+      "mode": 420,
+      "mtime_ns": 1790101292971892570
+    }
+  ],
+  "localLinksVerified": 740,
+  "helperASTAndFrozenBytesVerified": 5,
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    59149,
+    59931,
+    62872,
+    65026
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 3165, 'pc': '0x4149ad', 'scans': 2134850, 'decoders': 21, 'objects': 21, 'catalogChildren': 0, 'stores': 776054091, 'seconds': 28349.88}",
+  "unrelatedNavigationBytesPreserved": true,
+  "passedMethods": 25,
+  "guardedMethods": 1,
+  "unstartedMethods": 27,
+  "independentReview": false
+}
