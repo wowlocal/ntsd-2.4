@@ -1,0 +1,15 @@
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift
+@@ -63,7 +63,11 @@
+             ready = try C.firstInput(context.entry,context.startup)
+         }
+         XCTAssertTrue(ready.loading.isSameAttempt(as:context.entry))
+-        XCTAssertEqual(Array(ready.operations.prefix(context.entry.stagedEffects.count)),context.entry.stagedEffects.map(M.S.Input.Operation.menu))
++        let prefix = context.entry.stagedEffects.map { effect -> M.S.Input.Operation in
++            if context.cycle != nil { return .menu(effect) }
++            return .preceding(.preceding(.preceding(.menu(effect))))
++        }
++        XCTAssertEqual(Array(ready.operations.prefix(context.entry.stagedEffects.count)),prefix)
+         var menu = try M.S(pending:ready),env = M.Environment(reverse:reverse)
+         if cycleIndex == 3 {
+             XCTAssertEqual(try ready.match.globals.integer(at:0x20,as:Int32.self),3)

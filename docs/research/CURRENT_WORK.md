@@ -2,6 +2,18 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading correction1](APPLICATION_HOST_LOADING_CORRECTION1.md): one new test
+assertion corrected in a separate1037-file tree; all Core/fixtures/resources unchanged.
+Fresh build/package passed.27 methods passed, including corrected loading/cycles
+and late retry; method28 exceeded8GiB sampled RSS (8786558976 bytes), received
+revalidated SIGTERM and reaped-15 without a complete XCTest result.14 unstarted.
+Candidate/products/guard archived; Native comparison stays false, review open.
+NEXT: separate bounded continuation, same verified binary and27 retained passes;
+whole method28 with12GiB RSS ceiling and fourteen unstarted methods. Host has24GiB
+physical memory; keep original space reserves and old guard. No method splitting,
+source restart or expected edit. [Evidence](../evidence/application-host-loading-correction1.json).
+This supersedes the correction NEXT below while preserving the failed original.
+
 [Host loading validation](APPLICATION_HOST_LOADING_VALIDATION.md): fresh Core/
 dependent build and487 package files verified;25 methods passed, method26 failed
 with two operation-wrapper assertions;16 methods unstarted. Exact failed candidate,

@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading correction1](research/APPLICATION_HOST_LOADING_CORRECTION1.md) preserves
+both full operation-wrapper forms in one corrected test; no Core/resource change.
+Fresh build/package passed and27 methods passed. Method28 hit its8GiB RSS guard,
+exit-15, no XCTest result;14 unstarted. Exact candidate/products/guard archived.
+Next: unchanged verified binary,27 retained passes, bounded whole method28 retry
+with12GiB ceiling and14 remaining methods. Native comparison/review remain open.
+Supersedes correction NEXT below; original failed assertion remains immutable.
+
 [Host loading validation](research/APPLICATION_HOST_LOADING_VALIDATION.md): fresh
 Core/dependent build and487 resource files verified.25 methods passed; method26
 failed twice on a new fresh/cached operation-wrapper assertion;16 methods remain
