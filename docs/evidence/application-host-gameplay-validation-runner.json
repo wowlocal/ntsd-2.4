@@ -1,0 +1,16 @@
+{
+  "schema": "ntsd-host-gameplay-validation-runner-controls-v1",
+  "UTC": "2026-09-22T19:46:19.412048+00:00",
+  "monitorEqualsPreviousExceptTaskAndFinitePhase": true,
+  "cwdPositive": 1,
+  "cwdNegative": 4,
+  "compilerTransitionPositive": 1,
+  "compilerTransitionNegative": 2,
+  "transientExitPositive": 1,
+  "transientExitNegative": 1,
+  "phasePositive": 72,
+  "phaseNegative": 8,
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false
+}

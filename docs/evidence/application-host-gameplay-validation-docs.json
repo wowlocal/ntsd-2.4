@@ -1,0 +1,110 @@
+{
+  "schema": "ntsd-host-gameplay-validation-docs-v1",
+  "startedUTC": "2026-09-22T19:55:55.192524+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "3d8ce1969aaa86e92f0bae4f4808f0460e126392d4d2d1823cd7da741b6fcd99",
+      "insertion": "[Host gameplay validation failed at compile](APPLICATION_HOST_GAMEPLAY_VALIDATION.md):\nfresh build83817 exited1/154.046s in the test target. ActiveOutputTests.sequence\nforwards driver but lacks the optional parameter; its HostGameplayTests caller\nalso reports an extra argument. One declaration correction is identified.\nAll69 methods unstarted; no test binary or complete package accepted. Failed tree,\nlog and diagnosis preserved;2180-file/145-directory artifact and22-member metadata\narchives verified. Root1034/both1040 candidates/source55 unchanged. Finalizer86322\nterminal0/absent; task frozen. Source59727 live at19:53:23 UTC:3719 chunks/24 Objects.\n[Evidence](../evidence/application-host-gameplay-validation.json).\nNEXT: separate one-file correction adding the optional driver to ActiveOutputTests.\nsequence; retain every other file/all69 methods/current limits, then fresh build,\ncomparison/package/archive gates. No retry in the closed failed task or source\nrestart. Independent review/root promotion/installed trajectory/devices/catalog/\nfull match/full game remain open. This supersedes the initial-validation NEXT below.\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "16e7309a27774693d322924b53150d9a280373c18ab246608d728daba0206229",
+      "insertion": "[Host gameplay compile failure](research/APPLICATION_HOST_GAMEPLAY_VALIDATION.md):\nbuild83817 terminal1/154.046s; ActiveOutputTests.sequence lacks the driver parameter\nalready used by its forwarding call and caller. All69 methods unstarted; package/\nNative gates open. Candidate/root/source pins preserved;2180-file artifact and\n22-member metadata archives verified; task frozen. Next: one-signature correction\nin a separate candidate, unchanged69 methods/limits, then fresh build and complete\nvalidation. Independent review/root/devices/installed trajectory/catalog/full game\nremain open; no original restart.\n[Evidence](evidence/application-host-gameplay-validation.json).\n\n"
+    }
+  ],
+  "UTC": "2026-09-22T19:56:42.463156+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-validation-20260922/publication1.json",
+    "bytes": 219755,
+    "sha256": "62b4a711922a6f0093eb6ce0fb52883981eba367c69321fc9404a18e83df5fd2",
+    "mode": 420
+  },
+  "checkedFiles": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_VALIDATION.md",
+      "bytes": 7739,
+      "sha256": "27aa27f2810d15c11de4107ee044c3ed888cbfe22b8a92a0e621ddf41e4260f4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_GAMEPLAY_VALIDATION_PLAN.md",
+      "bytes": 6924,
+      "sha256": "04c4a2016970a12d088797a791e1c0c219add6ddb07a8e2e3ed18b1bdb2a405a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_gameplay_validation.py",
+      "bytes": 8094,
+      "sha256": "54913393be9bd4d12dd1a3ecf0b0457d6b4b3eb447ac7050c8f8d964a0ad9380",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_gameplay_validation.py",
+      "bytes": 14227,
+      "sha256": "8e0da92c25091612b825a8f00d4e5cde1391d3acc8a60bc9459eabe2f0cf60a4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_host_gameplay_package.py",
+      "bytes": 5678,
+      "sha256": "91ca0f41502de6f39891abc4e2376e7b0756824eca608a5d829e5376f338eeaf",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/run_application_host_gameplay_tests.py",
+      "bytes": 4977,
+      "sha256": "49c683fbf1cbf0dd4b9773666d9e71a16c17b2a9cf0d91a9571014bee93148af",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_host_gameplay_validation.py",
+      "bytes": 19259,
+      "sha256": "d2c22a7174b6eaaaad14112498f4961ec2f9e989c846e1db38039138c3a03336",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-validation-close.json",
+      "bytes": 809,
+      "sha256": "7aa89e7203be665ea7111e047d6b45405d0cdd2c27cf02c5191c26c7dfd99303",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-validation-runner.json",
+      "bytes": 470,
+      "sha256": "2e47409826a1c4537e66d293321da064417a54a23335bad1797e928419404a2e",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-validation.json",
+      "bytes": 219755,
+      "sha256": "62b4a711922a6f0093eb6ce0fb52883981eba367c69321fc9404a18e83df5fd2",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-gameplay-validation-diagnostic-note.json",
+      "bytes": 1455,
+      "sha256": "a535733b4bf5d05a54600c1511fe1c51557332c41e4626e4b18122ef2ae1d2eb",
+      "mode": 420
+    }
+  ],
+  "localLinksVerified": 757,
+  "helperASTAndFrozenBytesVerified": 5,
+  "sourcePinsUnchanged": 55,
+  "terminalProcessesAbsent": [
+    83704,
+    83817,
+    86322
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceLastLine": "{'chunks': 3740, 'pc': '0x78175de4', 'scans': 2520919, 'decoders': 24, 'objects': 24, 'catalogChildren': 0, 'stores': 917000323, 'seconds': 33871.6}",
+  "unrelatedNavigationBytesPreserved": true,
+  "candidateFiles": 1040,
+  "methodsRun": 0,
+  "unstartedMethods": 69,
+  "packageAccepted": false,
+  "nativeCompared": false,
+  "independentReview": false,
+  "rootPromoted": false
+}

@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay compile failure](research/APPLICATION_HOST_GAMEPLAY_VALIDATION.md):
+build83817 terminal1/154.046s; ActiveOutputTests.sequence lacks the driver parameter
+already used by its forwarding call and caller. All69 methods unstarted; package/
+Native gates open. Candidate/root/source pins preserved;2180-file artifact and
+22-member metadata archives verified; task frozen. Next: one-signature correction
+in a separate candidate, unchanged69 methods/limits, then fresh build and complete
+validation. Independent review/root/devices/installed trajectory/catalog/full game
+remain open; no original restart.
+[Evidence](evidence/application-host-gameplay-validation.json).
+
 [Host gameplay candidate](research/APPLICATION_HOST_GAMEPLAY_CANDIDATE.md): common
 input outcome and private gameplay/paused Ready/body/platform retention implemented
 in isolated1040-file tree.19 files parse; no compile/XCTest yet.69 methods selected,

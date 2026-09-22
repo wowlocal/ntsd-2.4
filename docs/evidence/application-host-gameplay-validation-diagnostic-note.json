@@ -1,0 +1,23 @@
+{
+  "schema": "ntsd-host-gameplay-validation-diagnostic-note-v1",
+  "UTC": "2026-09-22T19:55:18.697168+00:00",
+  "preservedDiagnostic": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-validation-20260922/tool-diagnostic1.json",
+    "bytes": 392,
+    "sha256": "1f5108f5ca43bf2aa03cd868c2639bb44c696a1bcaf399d14c4180ed006f73a0",
+    "mode": 420
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-gameplay-validation-20260922/build1.job.json",
+    "bytes": 84383,
+    "sha256": "42121ba5b394e866e4b8925ff887d9cc1eb8c5c11c1397633e3ab0a96767d1a6",
+    "mode": 420
+  },
+  "correction": "The archived tool-diagnostic1 outcome ends with an unverified statement that the build is live. That statement is inaccurate at its recorded UTC: the build job was already terminal1 at19:49:25.232157+00:00, before the diagnostic record at19:50:01.062730+00:00. The JavaScript syntax rejection still occurred before shell execution and did not alter or restart the independent build.",
+  "originalDiagnosticUnchanged": true,
+  "buildEndedUTC": "2026-09-22T19:49:25.232157+00:00",
+  "diagnosticRecordedUTC": "2026-09-22T19:50:01.062730+00:00",
+  "exactRejectedAction": "JavaScript orchestration string for preparing the finalizer; no nested shell command executed from that rejected cell.",
+  "nativeMethodsExecuted": 0,
+  "safetyRefusal": false
+}

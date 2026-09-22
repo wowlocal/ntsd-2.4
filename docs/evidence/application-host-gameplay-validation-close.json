@@ -1,0 +1,26 @@
+{
+  "schema": "ntsd-host-gameplay-validation-close-v1",
+  "UTC": "2026-09-22T19:53:23.350747+00:00",
+  "largePhaseClosed": true,
+  "taskFrozen": true,
+  "originalExternalReserve": 42949672960,
+  "originalInternalReserve": 6442450944,
+  "initialExternalFree": 157864878080,
+  "externalFree": 156937142272,
+  "internalFree": 66446749696,
+  "observedFreeDecrease": 927735808,
+  "allowance": 25769803776,
+  "includesConcurrentSourceGrowth": true,
+  "publication": {
+    "bytes": 219755,
+    "sha256": "62b4a711922a6f0093eb6ce0fb52883981eba367c69321fc9404a18e83df5fd2",
+    "mode": 420,
+    "mtime_ns": 1790106803348999191
+  },
+  "metadataArchive": {
+    "bytes": 1331200,
+    "sha256": "e564a4f3beace0709b7dd2e87e9396c62697d53a50291b4bcc9b26824351be40",
+    "mode": 420,
+    "mtime_ns": 1790106803336780174
+  }
+}

@@ -2,6 +2,21 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host gameplay validation failed at compile](APPLICATION_HOST_GAMEPLAY_VALIDATION.md):
+fresh build83817 exited1/154.046s in the test target. ActiveOutputTests.sequence
+forwards driver but lacks the optional parameter; its HostGameplayTests caller
+also reports an extra argument. One declaration correction is identified.
+All69 methods unstarted; no test binary or complete package accepted. Failed tree,
+log and diagnosis preserved;2180-file/145-directory artifact and22-member metadata
+archives verified. Root1034/both1040 candidates/source55 unchanged. Finalizer86322
+terminal0/absent; task frozen. Source59727 live at19:53:23 UTC:3719 chunks/24 Objects.
+[Evidence](../evidence/application-host-gameplay-validation.json).
+NEXT: separate one-file correction adding the optional driver to ActiveOutputTests.
+sequence; retain every other file/all69 methods/current limits, then fresh build,
+comparison/package/archive gates. No retry in the closed failed task or source
+restart. Independent review/root promotion/installed trajectory/devices/catalog/
+full match/full game remain open. This supersedes the initial-validation NEXT below.
+
 [Host gameplay candidate](APPLICATION_HOST_GAMEPLAY_CANDIDATE.md) implemented in
 isolated1040-file tree: common input outcome, private Ready/body/platform retention,
 existing normal/paused child, and one final outer publication. Nineteen Swift paths
