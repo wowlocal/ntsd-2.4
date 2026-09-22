@@ -2,6 +2,19 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading round3](APPLICATION_HOST_LOADING_CORRECTION3.md): Bool presence
+assertion preserves semantics; fresh build/package and34 methods passed. All four
+new host-loading methods pass, including ticket identity97.395s/9.587GB RSS.
+Whole LoadedCycle method35 hit8GiB RSS guard at8,712,486,912 bytes/18.722s, reaped-15;
+seven later methods unstarted. Exact candidate/results archived; comparison incomplete.
+Three correction rounds complete; static diagnosis finds no NotNil in cycle test
+and does not attribute its peak. Revised NEXT contract: same binary,34 retained
+passes, whole35–42;12GiB for three LoadedCycle methods and8GiB for five initialized,
+600s unchanged, stop first nonpass. No automatic fourth candidate edit/source retry.
+Root1034/candidate1037/package487/source55 preserved; independent review/devices open.
+[Evidence](../evidence/application-host-loading-correction3.json). Supersedes round3
+NEXT below while retaining all earlier failures.
+
 [Host loading completion attempt](APPLICATION_HOST_LOADING_COMPLETION.md): same
 binary/candidate retained27 passes; whole method28 timed out at600.748s, reaped-15,
 no XCTest result;14 later methods unstarted. Native comparison remains incomplete.

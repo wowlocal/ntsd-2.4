@@ -1,0 +1,11 @@
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostLoadingTests.swift
+@@ -272,7 +272,7 @@
+             var menu = try M.S(pending:ready),env = M.Environment()
+             let child = try M.advance(&menu,&env);alternate = child;return child
+         })) { XCTAssertEqual($0 as? Host.Boundary,.differentLoadingAttempt) }
+-        XCTAssertNotNil(alternate);XCTAssertNil(host.preparedLoadedMenu)
++        XCTAssertTrue(alternate != nil);XCTAssertNil(host.preparedLoadedMenu)
+         try C.unchanged(host.snapshot,before);samePlatform(try XCTUnwrap(host.pendingPlatformSnapshot()),staged)
+         let child = try prepare(host)
+         XCTAssertTrue(child.loading.isSameAttempt(as:entry))

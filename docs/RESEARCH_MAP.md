@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading round3](research/APPLICATION_HOST_LOADING_CORRECTION3.md) passed fresh
+build/package and34 methods, including all four HostLoading and five LoadedMenu.
+Method35 exceeded8GiB RSS, no result; seven later unstarted. Three correction rounds
+complete; guard/diagnosis archived. Revised continuation: same binary/34 passes,
+whole35–42,12GiB for three cycle methods/8GiB initialized, unchanged600s limits.
+No code/expected/body edit or automatic fourth correction; comparison/review open.
+
 [Host loading completion attempt](research/APPLICATION_HOST_LOADING_COMPLETION.md)
 kept27 prior passes; method28 timed out at600s under12GiB RSS,14 later unstarted.
 One bounded stack sample locates recursive XCTest formatting at the retained-child
