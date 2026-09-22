@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host transaction candidate](research/APPLICATION_HOST_TRANSACTION_CANDIDATE.md)
+adds an isolated persistent Bootstrap/platform owner, staged host inputs, retained
+pending ticket and one-time committed-batch handoff. Seven changed Swift files
+parse; five new tests route existing full-parent comparators through this owner.
+25 methods/eight families selected, not yet compiled or run.1036-file candidate,
+unchanged root/baseline1034/385fixtures/102resources/55source pins, verified patch
+round-trip and22-member changed-file archive; external task frozen within256MiB.
+Next: separately bounded fresh Core/dependent compilation and selected validation.
+Independent review, root promotion, providers, actual devices and game remain open.
+
 [Host transaction preflight](research/APPLICATION_HOST_TRANSACTION_PREFLIGHT.md)
 maps the saved ordinary first-menu case0 to Bootstrap.start, committed resize and
 Bootstrap.step's committed result. It inventories package-backed inputs versus

@@ -1,0 +1,22 @@
+{
+  "schema": "ntsd-host-candidate-commit-check-v1",
+  "UTC": "2026-09-22T14:08:07.175134+00:00",
+  "preservedStagingFailure": {
+    "exitCode": 2,
+    "stdout": "docs/evidence/application-host-transaction-candidate.patch:5: trailing whitespace.\n+ \n",
+    "stderr": "",
+    "wrapperError": "subprocess.CalledProcessError: Command '['git', 'diff', '--cached', '--check']' returned non-zero exit status 2."
+  },
+  "finding": "Exactly one unchanged blank unified-diff context line carries its required single-space prefix. No added patch line has trailing whitespace. Patch bytes remain frozen and all seven reproduced Swift files equal candidate.",
+  "patch": {
+    "path": "docs/evidence/application-host-transaction-candidate.patch",
+    "bytes": 34157,
+    "sha256": "bc6c7d7f2916a71d57bb23c50f8dfae7a79416280d142ab83199275f369bb165"
+  },
+  "allOtherStagedFilesWhitespaceCheckPassed": true,
+  "patchRoundTripStillVerified": true,
+  "repositoryWhitespaceSettingsChanged": false,
+  "hookBypass": false,
+  "externalTaskModified": false,
+  "correction": "Classify this one structural data-artifact warning separately; preserve full failed check and do not rewrite the pinned patch."
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "ntsd-host-transaction-candidate-v1",
+  "UTC": "2026-09-22T14:03:02.601308+00:00",
+  "status": "implemented-and-syntax-parsed-validation-open",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922",
+  "baseHead": "e898b97117a73f2aeebc7b4cbc75579e6ac42ca3",
+  "plan": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_CANDIDATE_PLAN.md",
+    "bytes": 5799,
+    "sha256": "19fc026dd3553f5ddea8fdbb53b9e1cc6c84fd43d270854ca1e13ac54151a970",
+    "mode": 420
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/context1.json",
+    "bytes": 18520,
+    "sha256": "078b595516b92d1e6f61870cc1aa5715ce522515a780c7b03b2f72e5376a6163",
+    "mode": 420
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1-inputs.json",
+    "bytes": 215487,
+    "sha256": "3456db189b31cb9914bcecfcd7beab2a5a53cb6562f649374168404798a904e0",
+    "mode": 420
+  },
+  "patch": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-transaction-candidate.patch",
+    "bytes": 34157,
+    "sha256": "bc6c7d7f2916a71d57bb23c50f8dfae7a79416280d142ab83199275f369bb165",
+    "mode": 420
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/verification1.json",
+    "bytes": 1045,
+    "sha256": "df5745832d4cc7b489a8e4a931d7850b7cbf63ed543f91671656a657dad96d77",
+    "mode": 420
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/source-live1.json",
+    "bytes": 746,
+    "sha256": "ecae62d6152e89c69eec593cd00dfc59fc3d961982aec885e2a97a1441342f43",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate-metadata1.tar",
+    "bytes": 716800,
+    "sha256": "8643f9a5dd44e9c1c73ea3672f1dd4defe3af8616b60d2d9606303e03b1b7b02",
+    "mode": 420,
+    "members": 22,
+    "fullBodyModeMtimeMembershipVerified": true,
+    "scope": "changed Swift files and candidate metadata; full baseline/candidate payload remains in pinned regular trees"
+  },
+  "candidateFiles": 1036,
+  "changes": [
+    "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+    "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift",
+    "native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift"
+  ],
+  "syntax": {
+    "pid": 99133,
+    "exitCode": 0,
+    "seconds": 0.2623566249999998,
+    "typeChecking": false,
+    "stdoutBytes": 0
+  },
+  "selectedValidationMethods": {
+    "families": 8,
+    "methods": 25,
+    "newHostMethods": 5
+  },
+  "gates": {
+    "implementation": true,
+    "syntax": true,
+    "compiled": false,
+    "tests": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "device": false,
+    "fullGame": false
+  },
+  "authorCorrection": "Initial input-packet kind filter corrected from saved schema before syntax parse; prior draft retained.",
+  "limitations": [
+    "Core and dependent targets must be freshly compiled; old binaries do not validate this candidate.",
+    "Host providers, physical IO order/failure recovery, actual input/raster/audio/device behavior remain open.",
+    "Recursive-lock synchronization is implemented but concurrent-thread/device reentrancy is not tested.",
+    "Whole catalog source and registered safety incident dependencies remain open."
+  ]
+}

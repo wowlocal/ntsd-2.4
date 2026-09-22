@@ -1,0 +1,500 @@
+diff --git a/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift b/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
+--- a/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
+@@ -67,13 +67,14 @@
+ 
+     /// Every message/timer iteration commits independently. Failed first-menu
+     /// work leaves startup and all previously delivered callbacks intact.
+-    public mutating func step(inputs: MenuInputs,responses: Session.Responses,
++    public mutating func step(inputs: MenuInputs? = nil,responses: Session.Responses,
+         queue: [Session.Loop.Response],windowDefault: [Int32],
+         surface: [OriginalWindowInitialization.Response],lifecycle: [OriginalWindowInitialization.Response],
+         observe: @escaping (Observation) throws -> Void = { _ in },
+         menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
+         graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
+         checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
++        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+         beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in }) throws -> Session.Outcome {
+         guard var next = session,startup != nil else { throw Boundary.notStarted }
+         var qi = 0,wi = 0,si = 0,li = 0
+@@ -87,7 +88,7 @@
+             let r = try take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
+         },surface:{ q in
+             let r = try take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
+-        },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,beforeCommit:{ loop,state in
++        },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in
+             guard qi == queue.count,wi == windowDefault.count,si == surface.count,li == lifecycle.count else {
+                 throw Session.Boundary.dependency("Unused bootstrap iteration responses")
+             }
+diff --git a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+new file mode 100644
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -0,0 +1,141 @@
++import Foundation
++
++/// In-process owner of recovered application transactions. Platform preparation
++/// must use only staged, independently owned mutable state and immutable inputs.
++/// It cannot perform host IO or supply an expected Core after-state. Committed
++/// batches still need a backend with its own actual device/failure contract.
++public final class OriginalApplicationHostSession<Platform: OriginalApplicationStartupPlatform> {
++    public typealias Application = OriginalApplicationBootstrap
++    public typealias Session = OriginalApplicationMenuSession
++    public enum Boundary: Error, Equatable {
++        case reentrantAttempt, sharedPlatform, pendingLoading, publicationExtent
++    }
++    public struct Inputs {
++        public let initialization: Application.MenuInputs?
++        public let responses: Session.Responses
++        public let queue: [Session.Loop.Response], windowDefault: [Int32]
++        public let surface: [OriginalWindowInitialization.Response]
++        public let lifecycle: [OriginalWindowInitialization.Response]
++        public init(initialization: Application.MenuInputs? = nil, responses: Session.Responses,
++            queue: [Session.Loop.Response], windowDefault: [Int32] = [],
++            surface: [OriginalWindowInitialization.Response] = [],
++            lifecycle: [OriginalWindowInitialization.Response] = []) {
++            self.initialization = initialization; self.responses = responses
++            self.queue = queue; self.windowDefault = windowDefault
++            self.surface = surface; self.lifecycle = lifecycle
++        }
++    }
++    /// These are overlapping views of the same ordered work, not two lists to
++    /// execute. The consumer must retain original cross-domain operation order.
++    public struct Batch {
++        public enum Contents {
++            case startup(Application.Started)
++            case iteration(Session.Committed)
++        }
++        /// Host handoff ordinal only; never a game timer/counter or resource ID.
++        public let sequence: UInt64, contents: Contents
++    }
++    public enum Outcome {
++        case committed(sequence: UInt64, result: Session.Loop.Result)
++        case loading
++    }
++    private struct Pending {
++        let loading: Session.PendingLoading, inputs: Inputs, platform: Platform
++    }
++    private let lock = NSRecursiveLock()
++    private var inFlight = false
++    private var application = Application()
++    private var platform: Platform
++    private var pending: Pending?
++    private var batches: [Batch] = []
++    private var sequence: UInt64 = 0
++
++    public init(platform: Platform) throws { self.platform = try Self.copy(platform) }
++    private static func copy(_ platform: Platform) throws -> Platform {
++        let staged = try platform.stagedCopy()
++        guard staged !== platform else { throw Boundary.sharedPlatform }
++        return staged
++    }
++    private func locked<T>(_ body: () throws -> T) rethrows -> T {
++        lock.lock(); defer { lock.unlock() }; return try body()
++    }
++    private func attempt<T>(_ body: () throws -> T) throws -> T {
++        try locked {
++            guard !inFlight else { throw Boundary.reentrantAttempt }
++            inFlight = true; defer { inFlight = false }
++            return try body()
++        }
++    }
++    private func requirePublication() throws {
++        guard pending == nil else { throw Boundary.pendingLoading }
++        guard sequence < UInt64.max else { throw Boundary.publicationExtent }
++    }
++    private func publish(_ contents: Batch.Contents) -> UInt64 {
++        sequence += 1; batches.append(.init(sequence: sequence, contents: contents))
++        return sequence
++    }
++
++    /// A value snapshot of the last committed Core owner. Observers during an
++    /// attempt see this same committed state, never the tentative child state.
++    public var snapshot: Application { locked { application } }
++    public var pendingLoading: Session.PendingLoading? { locked { pending?.loading } }
++    public var pendingBatchCount: Int { locked { batches.count } }
++    /// Inspection returns another independent copy, never our mutable platform.
++    public func platformSnapshot() throws -> Platform { try attempt { try Self.copy(platform) } }
++    public func pendingPlatformSnapshot() throws -> Platform? {
++        try attempt { try pending.map { try Self.copy($0.platform) } }
++    }
++    /// One destructive in-process handoff. This neither executes IO nor promises
++    /// physical exactly-once delivery/recovery after a backend failure or crash.
++    public func takeCommitted() throws -> Batch? {
++        try attempt { batches.isEmpty ? nil : batches.removeFirst() }
++    }
++
++    @discardableResult
++    public func start(instance: UInt32, show: Int32, initial: OriginalStateRecord,
++        store: (Platform, Int, [UInt8]) throws -> Void = { _,_,_ in },
++        beforeCommit: (OriginalWinMainStartup, Session, Platform) throws -> Void = { _,_,_ in },
++        failedAttempt: (Platform, Error) -> Void = { _,_ in }) throws -> UInt64 {
++        try attempt {
++            try requirePublication()
++            var next = application, candidate = platform
++            let value = try next.start(instance: instance, show: show, initial: initial,
++                platform: &candidate, store: store, beforeCommit: beforeCommit, failedAttempt: failedAttempt)
++            application = next; platform = candidate
++            return publish(.startup(value))
++        }
++    }
++
++    /// Preparation may reserve queue positions/resource identities only on its
++    /// supplied staged platform. It must not mutate captured/shared host state.
++    /// All callbacks are observations, not effect consumers. Existing Core owns
++    /// queue/timer decisions, masks and aliases. A failed attempt commits nothing.
++    public func step(prepare: (Platform, Session.State) throws -> Inputs,
++        observe: @escaping (Application.Observation) throws -> Void = { _ in },
++        menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
++        graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
++        checkpoint: (Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
++        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
++        beforeCommit: (Session.Loop, Session.State) throws -> Void = { _,_ in }) throws -> Outcome {
++        try attempt {
++            try requirePublication()
++            guard let session = application.session else { throw Application.Boundary.notStarted }
++            let candidate = try Self.copy(platform)
++            let inputs = try prepare(candidate, session.state)
++            var next = application
++            let result = try next.step(inputs: inputs.initialization, responses: inputs.responses,
++                queue: inputs.queue, windowDefault: inputs.windowDefault, surface: inputs.surface,
++                lifecycle: inputs.lifecycle, observe: observe, menuObserve: menuObserve,
++                graphicsObserve: graphicsObserve, checkpoint: checkpoint, bodyProduced: bodyProduced,
++                beforeCommit: beforeCommit)
++            switch result {
++            case .committed(let value):
++                application = next; platform = candidate
++                return .committed(sequence: publish(.iteration(value)), result: value.result)
++            case .loading(let loading):
++                pending = .init(loading: loading, inputs: inputs, platform: candidate)
++                return .loading
++            }
++        }
++    }
++}
+diff --git a/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift b/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift
+@@ -65,7 +65,8 @@
+     /// These adapters compare saved observations. Only Core chooses and calls
+     /// the startup/loop/World/resources/settings/screen/menu continuations.
+     func runMenu(_ index: Int,_ r: M.Resources,_ body: Body.Resources,_ front: F.Resources,
+-        _ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,
++        _ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,useHost: Bool = false,hostControls: Bool = false,
++        hostReady: ((OriginalApplicationHostSessionTests.Application) throws -> Void)? = nil,
+         continuation: ((Session.Loop,B.OwnContext) throws -> Void)? = nil) throws {
+         let c = r.c.cases[index]
+         let bodyCase = c.parentKind == "body" ? body.c.cases[r.indices[index]] : nil
+@@ -84,7 +85,7 @@
+         let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(parent.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
+         var platform = try Parent.Adapter(parent,rawParent,sources:sources,blob:br.blob,initial:initialGlobals,startupInputs:package)
+         let oldPlatform = platform
+-        var app = A()
++        let app = OriginalApplicationHostSessionTests.Application(useHost:useHost,controls:hostControls)
+         let startupBatch = try app.start(instance:0x400000,show:10,initial:initial,platform:&platform,
+             store:{ $0.store($1,$2) },beforeCommit:{ owner,menu,p in
+                 try p.complete(owner,Self.context(menu.state).globals)
+@@ -444,7 +445,8 @@
+                     var context = B.OwnContext(base:try Self.context(own.state))
+                     context = try context.receivingMenuState(own.state)
+                     context.graphics = graphics;context.settings = own.state.settings
+-                    context.frontSurfaces = rawSurfaces;context.dispatchResult = 1;context.bootstrap = app
++                    context.frontSurfaces = rawSurfaces;context.dispatchResult = 1;context.bootstrap = app.core
++                    try hostReady?(app)
+                     try continuation?(own.loop,context)
+                 } else { try p.snapshot(Self.context(own.state),own.loop,step.after) }
+             } catch {
+diff --git a/native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift b/native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift
+new file mode 100644
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift
+@@ -0,0 +1,178 @@
++import Foundation
++import XCTest
++import NTSDCore
++
++final class OriginalApplicationHostSessionTests: XCTestCase {
++    typealias Parent = OriginalWinMainStartupTests
++    typealias Bootstrap = OriginalApplicationBootstrapTests
++    typealias A = OriginalApplicationBootstrap
++    typealias S = OriginalApplicationMenuSession
++    typealias Host = OriginalApplicationHostSession<Parent.Adapter>
++    enum Stop: Error { case injected }
++
++    /// Optional transport through the production owner. Source expectations and
++    /// all whole-parent comparators remain in their original test composers.
++    final class Application {
++        let useHost: Bool, controls: Bool
++        private var original = A()
++        private(set) var host: Host?
++        init(useHost: Bool, controls: Bool = false) { self.useHost = useHost; self.controls = controls }
++        var core: A { host?.snapshot ?? original }
++        var session: S? { core.session }
++        var startup: OriginalWinMainStartup? { core.startup }
++        func start(instance: UInt32, show: Int32, initial: OriginalStateRecord,
++            platform: inout Parent.Adapter,
++            store: (Parent.Adapter, Int, [UInt8]) throws -> Void = { _,_,_ in },
++            beforeCommit: (OriginalWinMainStartup, S, Parent.Adapter) throws -> Void = { _,_,_ in },
++            failedAttempt: (Parent.Adapter, Error) -> Void = { _,_ in }) throws -> A.Started {
++            guard useHost else {
++                return try original.start(instance:instance,show:show,initial:initial,platform:&platform,
++                    store:store,beforeCommit:beforeCommit,failedAttempt:failedAttempt)
++            }
++            if host == nil { host = try Host(platform:platform) }
++            let driver = try XCTUnwrap(host)
++            if controls {
++                XCTAssertThrowsError(try driver.start(instance:instance,show:show,initial:initial,store:store,
++                    beforeCommit:{ _,_,_ in throw Stop.injected })) { XCTAssertTrue($0 is Stop) }
++                XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session)
++                XCTAssertEqual(driver.pendingBatchCount,0); XCTAssertNil(try driver.takeCommitted())
++                let snapshot = try driver.platformSnapshot()
++                XCTAssertEqual(snapshot.index,0); XCTAssertEqual(snapshot.waves,0)
++                // Caller and inspection copies cannot mutate the retained owner.
++                snapshot.hostReservations.append(-1)
++                XCTAssertTrue(try driver.platformSnapshot().hostReservations.isEmpty)
++            }
++            let sequence = try driver.start(instance:instance,show:show,initial:initial,store:store,
++                beforeCommit:{ owner,session,p in
++                    try self.reentry(driver)
++                    try beforeCommit(owner,session,p)
++                },failedAttempt:failedAttempt)
++            let batch = try XCTUnwrap(driver.takeCommitted())
++            XCTAssertEqual(batch.sequence,sequence); XCTAssertEqual(sequence,1)
++            XCTAssertNil(try driver.takeCommitted())
++            guard case .startup(let started) = batch.contents else { throw Stop.injected }
++            platform = try driver.platformSnapshot()
++            return started
++        }
++        private func reentry(_ driver: Host) throws {
++            XCTAssertThrowsError(try driver.takeCommitted()) { XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt) }
++            XCTAssertThrowsError(try driver.step(prepare:{ _,_ in XCTFail("Reentrant preparation ran"); throw Stop.injected })) {
++                XCTAssertEqual($0 as? Host.Boundary,.reentrantAttempt)
++            }
++        }
++        func step(inputs: A.MenuInputs? = nil, responses: S.Responses,
++            queue: [S.Loop.Response], windowDefault: [Int32],
++            surface: [OriginalWindowInitialization.Response], lifecycle: [OriginalWindowInitialization.Response],
++            observe: @escaping (A.Observation) throws -> Void = { _ in },
++            menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
++            graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
++            checkpoint: (S.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
++            bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
++            beforeCommit: (S.Loop, S.State) throws -> Void = { _,_ in }) throws -> S.Outcome {
++            guard let driver = host else {
++                return try original.step(inputs:inputs,responses:responses,queue:queue,windowDefault:windowDefault,
++                    surface:surface,lifecycle:lifecycle,observe:observe,menuObserve:menuObserve,
++                    graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit)
++            }
++            let old = try XCTUnwrap(driver.snapshot.session), platform = try driver.platformSnapshot()
++            let oldBatches = driver.pendingBatchCount
++            func prepare(_ p: Parent.Adapter,_ state: S.State) throws -> Host.Inputs {
++                XCTAssertEqual(state.full,old.state.full)
++                p.hostQueuePosition += queue.count
++                p.hostReservations.append(p.hostQueuePosition)
++                return .init(initialization:inputs,responses:responses,queue:queue,windowDefault:windowDefault,
++                    surface:surface,lifecycle:lifecycle)
++            }
++            func unchanged() throws {
++                Bootstrap.same(try XCTUnwrap(driver.snapshot.session),old)
++                let after = try driver.platformSnapshot()
++                XCTAssertEqual(after.hostQueuePosition,platform.hostQueuePosition)
++                XCTAssertEqual(after.hostReservations,platform.hostReservations)
++                XCTAssertEqual(driver.pendingBatchCount,oldBatches)
++            }
++            if controls {
++                // Same immutable packet and actual Core state. No diagnostic
++                // comparator cursor is consumed by this failed first attempt.
++                XCTAssertThrowsError(try driver.step(prepare:prepare,beforeCommit:{ _,_ in throw Stop.injected })) {
++                    XCTAssertTrue($0 is Stop)
++                }
++                try unchanged()
++            }
++            do {
++                let outcome = try driver.step(prepare:prepare,observe:observe,menuObserve:menuObserve,
++                    graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,
++                    beforeCommit:{ timer,state in try self.reentry(driver); try beforeCommit(timer,state) })
++                switch outcome {
++                case .committed(let sequence,let result):
++                    let batch = try XCTUnwrap(driver.takeCommitted())
++                    XCTAssertEqual(batch.sequence,sequence); XCTAssertNil(try driver.takeCommitted())
++                    guard case .iteration(let committed) = batch.contents else { throw Stop.injected }
++                    XCTAssertEqual(committed.result,result)
++                    let after = try driver.platformSnapshot()
++                    XCTAssertEqual(after.hostQueuePosition,platform.hostQueuePosition+queue.count)
++                    XCTAssertEqual(after.hostReservations,platform.hostReservations+[after.hostQueuePosition])
++                    return .committed(committed)
++                case .loading:
++                    try unchanged()
++                    let pending = try XCTUnwrap(driver.pendingLoading)
++                    let staged = try XCTUnwrap(driver.pendingPlatformSnapshot())
++                    XCTAssertEqual(staged.hostQueuePosition,platform.hostQueuePosition+queue.count)
++                    XCTAssertEqual(staged.hostReservations,platform.hostReservations+[staged.hostQueuePosition])
++                    XCTAssertThrowsError(try driver.step(prepare:{ _,_ in XCTFail("Pending prefix repeated"); throw Stop.injected })) {
++                        XCTAssertEqual($0 as? Host.Boundary,.pendingLoading)
++                    }
++                    XCTAssertEqual(driver.pendingLoading?.state.full,pending.state.full)
++                    XCTAssertNil(try driver.takeCommitted())
++                    return .loading(pending)
++                }
++            } catch { try unchanged(); throw error }
++        }
++    }
++
++    func testWholeFirstMenuParentsUseHostCommitHandoff() throws {
++        let f = try Bootstrap.F.Resources(),b = try Bootstrap.Body.Resources(f)
++        let r = try Bootstrap.M.Resources(b,f),br = try Bootstrap.B.Resources(),er = try Bootstrap.Entry.Resources()
++        for index in r.c.cases.indices { try Bootstrap().runMenu(index,r,b,f,br,er,useHost:true) }
++    }
++    func testFirstMenuLateFailuresRetainEarlierHostCommits() throws {
++        let f = try Bootstrap.F.Resources(),b = try Bootstrap.Body.Resources(f)
++        let r = try Bootstrap.M.Resources(b,f),br = try Bootstrap.B.Resources(),er = try Bootstrap.Entry.Resources()
++        for failure in ["settings:scan#47","settings:gets#3","settings:eof#2","settings:close#1","settings:settingsReturn#1",
++            "prefix:fill","prefix:format","prefix:createSurface#1","prefix:deleteObject#1","prefix:backgroundStore","prefix:blit",
++            "body:enter#1","body:leave#1","body:writeLocal#50","body:setBackgroundMode#2","body:releaseDC#3","body:blit#2"] {
++            try Bootstrap().runMenu(0,r,b,f,br,er,fail:failure,useHost:true)
++        }
++    }
++    func testSamePreparedAttemptsRetryWithIndependentHostState() throws {
++        let f = try Bootstrap.F.Resources(),b = try Bootstrap.Body.Resources(f)
++        let r = try Bootstrap.M.Resources(b,f),br = try Bootstrap.B.Resources(),er = try Bootstrap.Entry.Resources()
++        try Bootstrap().runMenu(0,r,b,f,br,er,useHost:true,hostControls:true)
++    }
++    func testWholeInputChainsRetainActualHostLoadingTicket() throws {
++        typealias Input = OriginalApplicationMenuInputTests
++        let f = try Bootstrap.F.Resources(),b = try Bootstrap.Body.Resources(f),m = try Bootstrap.M.Resources(b,f)
++        let r = try Input.Resources(m),br = try Bootstrap.B.Resources(),er = try Bootstrap.Entry.Resources()
++        for index in r.c.cases.indices { try Input().run(index,r,m,b,f,br,er,useHost:true) }
++    }
++    func testStartupLateFailuresAndSharedCopyRejection() throws {
++        let br = try Bootstrap.B.Resources(),c = try XCTUnwrap(br.c.cases[61].parents).parent
++        let raw = try XCTUnwrap((br.rawCases[61]["parents"] as? [String:Any])?["parent"] as? [String:Any])
++        let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(c.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
++        let package = try OriginalApplicationStartupInputsTests.shared.get(),initial = package.initial
++        for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
++            let p = try Parent.Adapter(c,raw,sources:sources,blob:br.blob,initial:Array(initial.bytes[..<0xb440]),fail:phase,startupInputs:package)
++            let driver = try Host(platform:p)
++            XCTAssertThrowsError(try driver.start(instance:0x400000,show:10,initial:initial,store:{ $0.store($1,$2) },
++                beforeCommit:{ _,_,_ in if phase == "after" { throw Parent.Trial.late } })) {
++                XCTAssertTrue($0 is Parent.Trial)
++            }
++            XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session)
++            XCTAssertNil(try driver.takeCommitted()); XCTAssertNil(driver.pendingLoading)
++            let snapshot = try driver.platformSnapshot()
++            XCTAssertEqual(snapshot.index,0); XCTAssertEqual(snapshot.waves,0); XCTAssertEqual(snapshot.shadow,Array(initial.bytes[..<0xb440]))
++            XCTAssertEqual(p.index,0); XCTAssertEqual(p.waves,0)
++            p.hostShareCopies = true
++            XCTAssertThrowsError(try Host(platform:p)) { XCTAssertEqual($0 as? Host.Boundary,.sharedPlatform) }
++        }
++    }
++}
+diff --git a/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift b/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift
+@@ -98,14 +98,19 @@
+             XCTAssertTrue(full == (try r.blob(s.state.globals)),c.spec.label+" checkpoint "+name);return s.state
+         }
+     }
+-    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,
++    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,useHost: Bool = false,
+              loading: ((B.OwnContext, OriginalApplicationMenuSession.PendingLoading) throws -> Void)? = nil,
+              ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil) throws {
+         let c = r.c.cases[index],referenceIndex = r.referenceIndices[index];var reached = false,failed = false
+-        try M().run(r.indices[index],mr,body,front,br,er,continuation:{ initialLoop,initial in
++        var hostApplication: OriginalApplicationHostSessionTests.Application?
++        try M().run(r.indices[index],mr,body,front,br,er,useHost:useHost,hostReady:{ if useHost { hostApplication = $0 } },continuation:{ initialLoop,initial in
+             reached = true
+             typealias Session = OriginalApplicationMenuSession
+             var session = try Session(state:initial.menuSessionState(counter:initialLoop.counter),loop:initialLoop)
++            if let app = hostApplication {
++                OriginalApplicationBootstrapTests.same(try XCTUnwrap(app.session),session)
++                session = try XCTUnwrap(app.session)
++            }
+             let parentBindings = try XCTUnwrap(session.state.bitmapInputs)
+             let ownExtras = r.extras[index]
+             let a = Adapter(c,r,ownExtras,session.state.full.bytes,fail)
+@@ -182,10 +187,44 @@
+             for iteration in c.iterations {
+                 try snapshot(iteration.before,session.state,session.loop)
+                 let prior = session, oldEffects = deliveredEffects, eventStart = a.index,graphicsStart = graphicsSeen.count
++                func advance(observe: @escaping (OriginalFrontScreenEvent) throws -> Void,
++                    graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void,
++                    checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void,
++                    bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void,
++                    beforeCommit: (Session.Loop,Session.State) throws -> Void) throws -> Session.Outcome {
++                    guard let app = hostApplication else {
++                        return try session.step(responses:responses,queue:a.queue,windowDefault:{ q in
++                            XCTAssertEqual(q.kind,.windowDefault);return try a.window(q.arguments)
++                        },surface:a.clear,observe:observe,graphicsObserve:graphicsObserve,checkpoint:checkpoint,
++                            bodyProduced:bodyProduced,beforeCommit:beforeCommit)
++                    }
++                    // Declared API replies only. Existing callbacks still compare
++                    // every actual request/event; no source state initializes Core.
++                    let events = c.events[eventStart..<iteration.eventEnd]
++                    let loopKinds: Set<String> = ["peek","get","translate","dispatchMessage","time","sleep"]
++                    let queue = try events.filter { $0.kind == "queue" && loopKinds.contains($0.request?.kind ?? "") }.map { e -> Loop.Response in
++                        if let response = e.response { return response }
++                        let kind = try XCTUnwrap(e.request).kind
++                        guard kind == "translate" || kind == "dispatchMessage" else { throw Stop.late }
++                        return .init()
++                    }
++                    let window = try events.filter { $0.kind == "queue" && $0.request?.kind == "windowDefault" }.map { try XCTUnwrap($0.response).result }
++                    let surface = events.filter { $0.kind == "front" && $0.event?.kind == "clear" }.map { _ in OriginalWindowInitialization.Response(result:c.spec.drawResult) }
++                    let outcome = try app.step(responses:responses,queue:queue,windowDefault:window,surface:surface,lifecycle:[],observe:{ event in
++                        switch event {
++                        case .queueResponse(let q,let reply):XCTAssertEqual(reply,try a.queue(q))
++                        case .windowResponse(let q,let reply):
++                            XCTAssertEqual(q.kind,.windowDefault);XCTAssertEqual(reply,try a.window(q.arguments))
++                        case .surfaceResponse(let q,let reply):XCTAssertEqual(reply,try a.clear(q))
++                        default:XCTFail("Unexpected host input observation");throw Stop.late
++                        }
++                    },menuObserve:observe,graphicsObserve:graphicsObserve,checkpoint:checkpoint,
++                        bodyProduced:bodyProduced,beforeCommit:beforeCommit)
++                    session = try XCTUnwrap(app.session)
++                    return outcome
++                }
+                 do {
+-                    let outcome = try session.step(responses:responses,queue:a.queue,windowDefault:{ q in
+-                        XCTAssertEqual(q.kind,.windowDefault);return try a.window(q.arguments)
+-                    },surface:a.clear,observe:{ e in
++                    let outcome = try advance(observe:{ e in
+                         if e.kind == "randomTable" {
+                             var check = OriginalCRTRandom(state:e.arguments[0])
+                             for _ in 0..<3000 {
+diff --git a/native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift b/native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationMenuReturnTests.swift
+@@ -69,8 +69,10 @@
+             try observe(.init("write",[UInt32(address),UInt32(bytes.count),v]))
+         }
+     }
+-    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,continuation: ((OriginalApplicationMessageLoop,B.OwnContext) throws -> Void)? = nil) throws {
+-        try OriginalApplicationBootstrapTests().runMenu(index,r,body,front,br,er,fail:fail,continuation:continuation)
++    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,
++        useHost: Bool = false,hostReady: ((OriginalApplicationHostSessionTests.Application) throws -> Void)? = nil,
++        continuation: ((OriginalApplicationMessageLoop,B.OwnContext) throws -> Void)? = nil) throws {
++        try OriginalApplicationBootstrapTests().runMenu(index,r,body,front,br,er,fail:fail,useHost:useHost,hostReady:hostReady,continuation:continuation)
+     }
+     func testOwnMenusReturnDispatcherAndCommitFirstDueIteration() throws {
+         let front = try F.Resources(),body = try Body.Resources(front),r = try Resources(body,front),br = try B.Resources(),er = try Entry.Resources()
+diff --git a/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift b/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
+--- a/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
+@@ -75,14 +75,18 @@
+         let startupInputs: OriginalApplicationStartupInputs?
+         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
+         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]
++        // Host-owner test sentinels only, never original state or expectations.
++        var hostQueuePosition = 0,hostReservations: [Int] = [],hostShareCopies = false
+         /// Every mutable member is a value. Blob's shared cache holds immutable
+         /// input bytes and is not a reply position or an external effect queue.
+         func stagedCopy() throws -> Adapter {
++            if hostShareCopies { return self }
+             let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail,startupInputs:startupInputs)
+             copy.index = index;copy.storeIndex = storeIndex;copy.stageIndex = stageIndex
+             copy.calendarIndex = calendarIndex;copy.joyIndex = joyIndex;copy.capsIndex = capsIndex
+             copy.waves = waves;copy.childIndex = childIndex;copy.writes = writes
+             copy.expected = expected;copy.mask = mask
++            copy.hostQueuePosition = hostQueuePosition;copy.hostReservations = hostReservations
+             return copy
+         }
+         init(_ c: Case,_ raw: [String:Any],sources: [String:String],blob: @escaping (String) throws -> [UInt8],initial: [UInt8],fail: String? = nil,startupInputs: OriginalApplicationStartupInputs? = nil) throws {

@@ -1,0 +1,69 @@
+{
+  "schema": "ntsd-host-candidate-documentation-v1",
+  "UTC": "2026-09-22T14:06:45.010846+00:00",
+  "head": "e898b97117a73f2aeebc7b4cbc75579e6ac42ca3",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/publication1.json",
+    "bytes": 4048,
+    "sha256": "1a758c9e6fd66ce4cefe33ea10f6017b3c77bde50e3afdb498b1c599ae1445b2",
+    "mode": 420
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/external-close1.json",
+    "bytes": 936,
+    "sha256": "038778b47c1c1a21c1a424082786802027ea24c6816829664f52e3ee7a6cce9b",
+    "mode": 420
+  },
+  "finalizerTerminal": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/finalize1.job.json",
+    "bytes": 501,
+    "sha256": "25275629ab69ee9fc2bcda1bafe994dc43f96a22996879f8e2414d681cb04f24",
+    "mode": 420
+  },
+  "documents": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_CANDIDATE_PLAN.md",
+      "bytes": 5799,
+      "sha256": "19fc026dd3553f5ddea8fdbb53b9e1cc6c84fd43d270854ca1e13ac54151a970",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_CANDIDATE.md",
+      "bytes": 9013,
+      "sha256": "54b38d99ba9482239508c292dea18b583db6cd0094a200f756bb734e56d6d74f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 108110,
+      "sha256": "48c8fd231ab1010b8a5fa47f52d6d7f6319aec12b858dab12f166042bd8d4757",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 306022,
+      "sha256": "04828eb5039ee1686b82d9bed761f174d706ce4dc42854c85e2f3de4c5cc28fe",
+      "mode": 420
+    }
+  ],
+  "helper": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_host_candidate.py",
+    "bytes": 5480,
+    "sha256": "d4046260e458ab0ef5d3abdadac083f642c15dbb6ba63f1873c7e4cf294db280",
+    "mode": 420
+  },
+  "localLinksChecked": 700,
+  "pythonSyntax": true,
+  "gitDiffCheck": true,
+  "indexEmptyBeforeStaging": true,
+  "unrelatedStatusPreserved": true,
+  "taskPIDsAbsent": [
+    97801,
+    99133,
+    99726
+  ],
+  "externalTaskNotModified": true,
+  "independentReview": false,
+  "compiledOrTested": false,
+  "commitScope": "Only candidate plan/report/helper/patch/publication/closure/docs receipt and new navigation paragraphs. Prior pending changes remain uncommitted."
+}

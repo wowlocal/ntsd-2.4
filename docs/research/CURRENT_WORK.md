@@ -2,6 +2,20 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host transaction candidate](APPLICATION_HOST_TRANSACTION_CANDIDATE.md) implemented
+in an isolated1036-file tree: persistent Bootstrap/platform owner, staged input
+preparation, committed-batch handoff and retained loading ticket. Bootstrap forwards
+nil initialization/body diagnostics; five new tests retain whole-parent comparators.
+Seven changed files pass syntax parse (PID99133 exit0/0.262s), not typecheck/tests.
+25 methods/eight families frozen for fresh validation. Root/baseline1034,385fixtures,
+102resources and55 live code pins unchanged; patch round-trip and22-member archive
+fully verified. Finalizer99726 exit0; external candidate frozen within256MiB.
+One inspected packet-filter correction/draft preserved. Independent review and
+root promotion remain open. [Evidence](../evidence/application-host-transaction-candidate.json).
+Same source revalidated14:03 UTC:1462 chunks/ten Objects/358498342 stores, still live.
+NEXT independent task: separate bounded fresh Core/dependent-target compilation
+and the25-method validation; never use the old binary to validate changed Core.
+
 [Production host transaction preflight](APPLICATION_HOST_TRANSACTION_PREFLIGHT.md)
 completed as read-only analysis: selected saved case0 reaches the whole ordinary
 first-menu return through `Bootstrap.step`; `finishLoadedMenu` belongs to later
