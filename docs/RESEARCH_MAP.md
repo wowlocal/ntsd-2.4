@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading preflight](research/APPLICATION_HOST_LOADING_PREFLIGHT.md) maps the
+retained loading ticket/platform through existing first-loading and cached-cycle
+owners to one loaded outer commit. Three saved envelopes fully hash-verified;
+no new source/Native execution. Static gaps: exact suspension identity and unused
+prefix replies on loading. Keep retained timer preparation; source ESI at loading
+is not its baseline. Next isolated candidate prepares the actual child, retains
+its platform, retries only the final tail and publishes one loaded batch. Existing
+loaded-menu/cycle and five initialized regressions are required. Independent
+review, later child retention, providers/devices/whole catalog/full game stay open.
+
 [Host transaction validation](research/APPLICATION_HOST_TRANSACTION_VALIDATION.md)
 freshly compiled the unchanged candidate; all25 selected methods passed with named
 XCTest results and actual exit0. Preserved build1 testability/package-check failures;

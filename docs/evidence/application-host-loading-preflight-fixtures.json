@@ -1,0 +1,1634 @@
+{
+  "schema": "ntsd-host-loading-preflight-fixture-inspection-v1",
+  "UTC": "2026-09-22T15:03:40.736161+00:00",
+  "operation": "Read exactly three pinned regular JSON envelopes; bounded raw-DEFLATE, verify full declared count and SHA256, parse JSON and select data; no original or Native execution",
+  "pid": 15017,
+  "identity": "15017 Tue Sep 22 18:03:39 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -",
+  "cwd": "/Users/michael/Developer/ntsd-2.4",
+  "cumulativeDecodedBytes": 134093766,
+  "records": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json",
+      "packedBytes": 37774137,
+      "packedSHA256": "e1eb47c2d27dc5da54877dafa3471d03abc34cd608016252b5845634b4f8b6f0",
+      "payloadBytes": 132657718,
+      "payloadSHA256": "fe07f09e23b23b96b92a1d13acb4e407bb91a37c4c019b1752d9fd176033187e",
+      "keys": [
+        "scope",
+        "exeSHA256",
+        "crtSHA256",
+        "libSHA256",
+        "installation",
+        "libraryInitial",
+        "libraryAllocations",
+        "cases",
+        "menuParents",
+        "bodyParents",
+        "frontParents",
+        "settingsParents",
+        "bitmapParents",
+        "blobs",
+        "assets",
+        "stackAddress",
+        "stackCount",
+        "nativeCompared",
+        "windowsVerified"
+      ],
+      "caseCount": 50,
+      "parentCount": 47,
+      "selected": [
+        {
+          "index": 47,
+          "spec": {
+            "label": "activate-parent-0",
+            "parentIndex": 0,
+            "steps": [
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456910,
+                  123456910,
+                  123456910,
+                  123456910
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456950,
+                  123456950,
+                  123456950,
+                  123456950
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456990,
+                  123456990,
+                  123456990,
+                  123456990
+                ],
+                "dispatch": 1
+              }
+            ],
+            "drawResult": 0,
+            "presentResult": 0,
+            "soundResult": 0,
+            "releaseResult": 0,
+            "dcResult": 0
+          },
+          "end": "loading",
+          "before": {
+            "pc": 4444432,
+            "sp": 268496892,
+            "counter": 7,
+            "baseline": 123456888
+          },
+          "after": {
+            "pc": 4308112,
+            "sp": 268495468,
+            "counter": 7,
+            "baseline": 4557568
+          },
+          "lastIterationEnd": "loading",
+          "lastIterationEvents": [
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "peek",
+                "arguments": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "message": [
+                  1,
+                  0,
+                  0,
+                  115,
+                  2,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  210,
+                  4,
+                  0,
+                  0,
+                  240,
+                  255,
+                  255,
+                  255,
+                  17,
+                  0,
+                  0,
+                  0
+                ],
+                "defined": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              },
+              "response": {
+                "result": 0,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            }
+          ],
+          "iterationCount": 6
+        },
+        {
+          "index": 48,
+          "spec": {
+            "label": "activate-parent-1",
+            "parentIndex": 1,
+            "steps": [
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456910,
+                  123456910,
+                  123456910,
+                  123456910
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456950,
+                  123456950,
+                  123456950,
+                  123456950
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456990,
+                  123456990,
+                  123456990,
+                  123456990
+                ],
+                "dispatch": 1
+              }
+            ],
+            "drawResult": 0,
+            "presentResult": 0,
+            "soundResult": 0,
+            "releaseResult": 0,
+            "dcResult": 0
+          },
+          "end": "loading",
+          "before": {
+            "pc": 4444432,
+            "sp": 268496892,
+            "counter": 7,
+            "baseline": 123456888
+          },
+          "after": {
+            "pc": 4308112,
+            "sp": 268495468,
+            "counter": 7,
+            "baseline": 4557568
+          },
+          "lastIterationEnd": "loading",
+          "lastIterationEvents": [
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "peek",
+                "arguments": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "message": [
+                  1,
+                  0,
+                  0,
+                  115,
+                  2,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  210,
+                  4,
+                  0,
+                  0,
+                  240,
+                  255,
+                  255,
+                  255,
+                  17,
+                  0,
+                  0,
+                  0
+                ],
+                "defined": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              },
+              "response": {
+                "result": 0,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            }
+          ],
+          "iterationCount": 6
+        },
+        {
+          "index": 49,
+          "spec": {
+            "label": "activate-parent-46",
+            "parentIndex": 46,
+            "steps": [
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        0,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        94,
+                        1,
+                        230,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456910,
+                  123456910,
+                  123456910,
+                  123456910
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "get": {
+                  "result": 1,
+                  "writes": [
+                    {
+                      "offset": 0,
+                      "bytes": [
+                        1,
+                        0,
+                        0,
+                        115,
+                        2,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        210,
+                        4,
+                        0,
+                        0,
+                        240,
+                        255,
+                        255,
+                        255,
+                        17,
+                        0,
+                        0,
+                        0
+                      ]
+                    }
+                  ]
+                },
+                "bridge": true
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456950,
+                  123456950,
+                  123456950,
+                  123456950
+                ],
+                "dispatch": 1
+              },
+              {
+                "peek": {
+                  "result": 0,
+                  "writes": []
+                },
+                "times": [
+                  123456990,
+                  123456990,
+                  123456990,
+                  123456990
+                ],
+                "dispatch": 1
+              }
+            ],
+            "drawResult": 0,
+            "presentResult": -1,
+            "soundResult": -1,
+            "releaseResult": -1,
+            "dcResult": 0
+          },
+          "end": "loading",
+          "before": {
+            "pc": 4444432,
+            "sp": 268496892,
+            "counter": 7,
+            "baseline": 123456888
+          },
+          "after": {
+            "pc": 4308112,
+            "sp": 268495468,
+            "counter": 7,
+            "baseline": 4557568
+          },
+          "lastIterationEnd": "loading",
+          "lastIterationEvents": [
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "peek",
+                "arguments": [
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "message": [
+                  1,
+                  0,
+                  0,
+                  115,
+                  2,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  210,
+                  4,
+                  0,
+                  0,
+                  240,
+                  255,
+                  255,
+                  255,
+                  17,
+                  0,
+                  0,
+                  0
+                ],
+                "defined": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              },
+              "response": {
+                "result": 0,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "queue",
+              "request": {
+                "kind": "time",
+                "arguments": [],
+                "message": null,
+                "defined": null
+              },
+              "response": {
+                "result": 123456990,
+                "writes": []
+              }
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            },
+            {
+              "kind": "front"
+            }
+          ],
+          "iterationCount": 6
+        }
+      ]
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-menu-startup.json",
+      "packedBytes": 346002,
+      "packedSHA256": "73ea816b774cd0cef9bfffac44811b3c0106052347dc4d412ac3397d05551194",
+      "payloadBytes": 546494,
+      "payloadSHA256": "6d5bd63867556cc76df916bbe7f9de4ecabfa7043758e66876d64757682ff7be",
+      "keys": [
+        "exeSHA256",
+        "dllSHA256",
+        "scope",
+        "control",
+        "entry",
+        "end",
+        "worldAddress",
+        "objectAddresses",
+        "actorAddresses",
+        "initialContext",
+        "local",
+        "inputControl",
+        "replay",
+        "round",
+        "music",
+        "resources",
+        "sources",
+        "messages",
+        "after",
+        "retainedBefore",
+        "retainedAfter",
+        "blobs",
+        "parents",
+        "savedAtFirstMenu"
+      ],
+      "shape": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+        "scope": "Own fresh early menus/loading -> local/control/replay/round -> music/resources.\nSame CPU/World/stack throughout the natural first phase1 path to429e5a.\nNo post-loading game-state stimuli, replay buffers, paused-entry jump or new\nWorld. Platform/CRT/allocator boundaries remain explicit; no Windows/UI claim.\n",
+        "control": false,
+        "entry": {
+          "keys": [
+            "pc",
+            "sp"
+          ]
+        },
+        "end": {
+          "keys": [
+            "pc",
+            "sp"
+          ]
+        },
+        "worldAddress": 570425376,
+        "objectAddresses": {
+          "count": 137,
+          "firstKeys": null
+        },
+        "actorAddresses": {
+          "count": 400,
+          "firstKeys": null
+        },
+        "initialContext": {
+          "keys": [
+            "poolBytes",
+            "poolMask",
+            "globals",
+            "saved",
+            "pointers",
+            "memory"
+          ]
+        },
+        "local": {
+          "keys": [
+            "label",
+            "stimulus",
+            "parent",
+            "natural",
+            "paused",
+            "phase",
+            "mode",
+            "commandsBefore",
+            "commandsAfter",
+            "call",
+            "beforeDispatch",
+            "dispatch",
+            "after",
+            "stackAfter",
+            "endPC"
+          ]
+        },
+        "inputControl": {
+          "keys": [
+            "label",
+            "stimulus",
+            "platform",
+            "paused",
+            "inherited",
+            "stackBefore",
+            "stackAfter",
+            "scratchBefore",
+            "scratchAfter",
+            "events",
+            "helperCalls",
+            "receiveCalls",
+            "control",
+            "controlCommands",
+            "menuRegister",
+            "after",
+            "endPC"
+          ]
+        },
+        "replay": {
+          "keys": [
+            "label",
+            "kind",
+            "entry",
+            "paused",
+            "inherited",
+            "stimulus",
+            "stackBefore",
+            "stackAfter",
+            "scratchBefore",
+            "scratchAfter",
+            "prefix",
+            "control",
+            "events",
+            "calls",
+            "localCall",
+            "messageResult",
+            "menuRegister",
+            "after",
+            "endPC"
+          ]
+        },
+        "round": {
+          "keys": [
+            "label",
+            "stimulus",
+            "paused",
+            "inherited",
+            "methodResult",
+            "events",
+            "calls",
+            "stackBefore",
+            "stackAfter",
+            "stageDefeated",
+            "continuation",
+            "endPC",
+            "after"
+          ]
+        },
+        "music": {
+          "keys": [
+            "label",
+            "path",
+            "kind",
+            "inherited",
+            "stimulus",
+            "events",
+            "calls",
+            "formats",
+            "afterGlobals",
+            "allocations",
+            "endPC",
+            "endSP"
+          ]
+        },
+        "resources": {
+          "keys": [
+            "label",
+            "stimulus",
+            "inherited",
+            "allocations",
+            "inputs",
+            "events",
+            "calls",
+            "checkpoints",
+            "continuation",
+            "selectionAtEntry",
+            "endPC",
+            "endSP",
+            "globals",
+            "records"
+          ]
+        },
+        "sources": {
+          "count": 11,
+          "firstKeys": [
+            "path",
+            "resourcePath",
+            "width",
+            "height",
+            "dib"
+          ]
+        },
+        "messages": {
+          "keys": []
+        },
+        "after": {
+          "keys": [
+            "poolBytes",
+            "poolMask",
+            "globals",
+            "saved",
+            "pointers",
+            "memory"
+          ]
+        },
+        "retainedBefore": {
+          "keys": [
+            "globals",
+            "world",
+            "crtState",
+            "pointers",
+            "records"
+          ]
+        },
+        "retainedAfter": {
+          "keys": [
+            "globals",
+            "world",
+            "crtState",
+            "pointers",
+            "records"
+          ]
+        },
+        "parents": {
+          "keys": [
+            "menu-loading",
+            "menu-loading-state",
+            "menu-loading-catalog",
+            "menu-loading-sounds"
+          ]
+        },
+        "savedAtFirstMenu": {
+          "count": 800,
+          "firstKeys": null
+        }
+      }
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-menu-cycle.json",
+      "packedBytes": 194638,
+      "packedSHA256": "eec5226d5a0c104e8f14718c6665f4d0e2081f4f52b998a73665736228688f4b",
+      "payloadBytes": 889554,
+      "payloadSHA256": "ac4ad2f36bcb240c95e499214435a7d4033649a9fc3611a6e3a6003214f3cb5f",
+      "keys": [
+        "exeSHA256",
+        "dllSHA256",
+        "scope",
+        "control",
+        "parent",
+        "worldAddress",
+        "actorAddresses",
+        "objectAddresses",
+        "cases",
+        "blobs"
+      ],
+      "shape": {
+        "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+        "dllSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+        "scope": "Research in progress: repeat whole4246b0 from the own first menu return.\nFresh early/loading/startup/first mode and return are reproved on one CPU.\nOnly outer caller ABI and acquired keyboard bytes are supplied afterwards.\nNo Actor/phase/menu/loaded-state replacement. Stop before character selection.\nNative comparison, window input acquisition and Windows validation remain open.\n",
+        "control": false,
+        "parent": {
+          "keys": [
+            "fixture",
+            "sha256"
+          ]
+        },
+        "worldAddress": 570425376,
+        "actorAddresses": {
+          "count": 400,
+          "firstKeys": null
+        },
+        "objectAddresses": {
+          "count": 137,
+          "firstKeys": null
+        },
+        "cases": {
+          "count": 4,
+          "firstKeys": [
+            "label",
+            "stimulus",
+            "before",
+            "earlyBefore",
+            "prefix",
+            "local",
+            "inputControl",
+            "replay",
+            "round",
+            "music",
+            "resources",
+            "mode",
+            "returned",
+            "after",
+            "earlyAfter",
+            "end"
+          ]
+        }
+      }
+    }
+  ]
+}

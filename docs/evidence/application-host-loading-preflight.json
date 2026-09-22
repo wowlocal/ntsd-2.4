@@ -1,0 +1,104 @@
+{
+  "schema": "ntsd-host-loading-preflight-publication-v1",
+  "UTC": "2026-09-22T15:10:38.415217+00:00",
+  "baseHead": "12d80fcb4da9eb68088e7be97aa61113519474c5",
+  "status": "bounded author preflight complete; no implementation or new Native/source execution",
+  "context": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-loading-preflight-context.json",
+    "bytes": 26797,
+    "sha256": "2b49cdf63979fc771ff2f01e2b80222f43a8f8d887a20010383dd69d992fcdaa",
+    "mode": 420
+  },
+  "fixtureInspection": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-loading-preflight-fixtures.json",
+    "bytes": 42542,
+    "sha256": "456805e472505e8449c6e14f79ee0ac7cf5ff66f333b97ee42bc71bb484aa1d6",
+    "mode": 420
+  },
+  "observations": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-loading-preflight-observations.json",
+    "bytes": 5808,
+    "sha256": "20671d4590682d2495b445133619357b48eaefadb8c2bb83fd053bf71f6f9db5",
+    "mode": 420
+  },
+  "additionalConsultedPin": {
+    "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationMatchBindings.swift",
+    "bytes": 6417,
+    "sha256": "9054281bf446ab5674e53737d2f5b2822d2ba6f1e56f29d6caa508a49983faa6",
+    "mode": 420
+  },
+  "documents": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_PREFLIGHT_PLAN.md",
+      "bytes": 3756,
+      "sha256": "9b171ee0cc193d19461b9459f1da90781218a1c50a88723855f20398d57372a0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_PREFLIGHT.md",
+      "bytes": 12127,
+      "sha256": "228b1bb9e2cbb8574904e6e297427cb5bb4ad1228a9970921001d1ea17e4ae33",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/CURRENT_WORK.md",
+      "bytes": 110343,
+      "sha256": "e3e8228cf580894a13f7fd49b77fc01a0475753547064077edb124cae867bfe9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/RESEARCH_MAP.md",
+      "bytes": 307471,
+      "sha256": "c0ffca3155e509c59573d2644e35cbc206202c44c53905ee16068e67f4e16008",
+      "mode": 420
+    }
+  ],
+  "rootNativeFilesVerified": 1034,
+  "candidateFilesVerified": 1036,
+  "sourceCodePinsVerified": 55,
+  "contextPinsVerified": 57,
+  "supplementalPinsVerified": 5,
+  "decodedFixtureBytes": 134093766,
+  "localLinksChecked": 705,
+  "selfLinksResolvedOnPublication": 2,
+  "gitDiffCheck": true,
+  "indexEmptyBeforeStaging": true,
+  "sourceObservation": {
+    "pid": 59727,
+    "identity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+    "cwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "jobStatus": "running",
+    "lastLog": "{'chunks': 1912, 'pc': '0x7817b3ca', 'scans': 1289762, 'decoders': 13, 'objects': 13, 'catalogChildren': 0, 'stores': 468878224, 'seconds': 16699.8}"
+  },
+  "findings": [
+    {
+      "name": "Different same-revision pending attempts need distinct host identity",
+      "status": "static inference; requires new regression"
+    },
+    {
+      "name": "Loading path needs prefix reply exhaustion check",
+      "status": "static inference; requires new regression"
+    },
+    {
+      "name": "Keep retained prepared timer; source loading baseline field is ESI",
+      "status": "saved scalar observation plus producer/Core inspection; no new numeric rule"
+    }
+  ],
+  "nextImplementation": "Isolated host prepared-child and final-tail transaction with exact ticket, deep staged platform and one loaded batch; preserve existing child owners and regression comparators",
+  "gates": {
+    "analysis": true,
+    "fixturePayloadIdentity": true,
+    "preservation": true,
+    "implementation": false,
+    "nativeComparison": false,
+    "independentReview": false,
+    "actualDevices": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "Prior loaded-menu/cycle comparison evidence keeps its original declared Native scope; no new whole original correspondence.",
+    "Generic environment assignment does not deep-copy host class state.",
+    "Later typed child retention, actual clock/input/resource providers and physical IO remain open.",
+    "Existing safety incidents remain open; no affected operation retried."
+  ]
+}

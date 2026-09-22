@@ -1,0 +1,179 @@
+{
+  "schema": "ntsd-host-loading-preflight-observations-v1",
+  "UTC": "2026-09-22T15:05:48.150025+00:00",
+  "supplementalPins": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationTimer.swift",
+      "bytes": 2489,
+      "sha256": "05ffd65c973661548062cd1fa24083c5d028c759f7522787506fa1fb1142ed31",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/oracle_application_menu_return.py",
+      "bytes": 10055,
+      "sha256": "4f62471d3581c3cccb3cd0ebcfbe0e616669b0022f74525352a41719a9b5e17b",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/oracle_application_menu_input.py",
+      "bytes": 16328,
+      "sha256": "5db0403f3e152759dcf890ab01d512572bbd1ed345143ae81363050e5271793b",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationInitializedMenuTests.swift",
+      "bytes": 7430,
+      "sha256": "c517f4cd40f441b3842a1ffa3266dbf6bec5abb520ddedd277004007817443d4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationInitializedLoadingTests.swift",
+      "bytes": 9943,
+      "sha256": "993f85b454f98a9bd2af87268c6fe8e1b5dcfd789500984c38a6240a8068e421",
+      "mode": 420
+    }
+  ],
+  "operation": "Read the same three previously verified envelopes again for bounded scalar/record-index extraction; each complete declared length/SHA verified; producers read only, never imported/executed",
+  "observations": [
+    {
+      "name": "original-application-menu-input",
+      "case": 47,
+      "label": "activate-parent-0",
+      "checkpoints": [
+        {
+          "kind": "dispatch",
+          "eventIndex": 3266,
+          "pc": 4450720,
+          "sp": 268496884,
+          "recordedESI": 123456923,
+          "counter": 7
+        },
+        {
+          "kind": "world",
+          "eventIndex": 3269,
+          "pc": 4343472,
+          "sp": 268496536,
+          "recordedESI": 0,
+          "counter": 7
+        }
+      ],
+      "lastBefore": 123456888,
+      "lastAfterRecordedESI": 4557568,
+      "prefixQueueKinds": [
+        "peek",
+        "time",
+        "time",
+        "time"
+      ],
+      "prefixTimeReplies": [
+        123456990,
+        123456990,
+        123456990
+      ],
+      "preparedBaselineCalculation": {
+        "before": 123456888,
+        "interval": 33,
+        "lag": 102,
+        "reset": 123456890,
+        "after": 123456923
+      },
+      "interpretation": "baseline field snapshots ESI via menu_state; at 41bc90 ESI=0x458b00 is not active timer baseline. Preserve Loop.PendingDispatch.Prepared; do not seed timer from after.baseline."
+    },
+    {
+      "name": "original-menu-startup",
+      "entry": {
+        "pc": 4310401,
+        "sp": 268495292
+      },
+      "end": {
+        "pc": 4365914,
+        "sp": 268492552
+      },
+      "control": false,
+      "resourceEndPC": 4365914,
+      "resourceEndSP": 268492552,
+      "resourceCheckpoints": 15,
+      "resourceRecords": 11,
+      "resourceAllocations": 11,
+      "roundContinuation": "menu",
+      "observationalLimit": "Saved source reaches menu resources, not new host or whole application return"
+    },
+    {
+      "name": "original-menu-cycle",
+      "control": false,
+      "parent": {
+        "fixture": "original-menu-return.json",
+        "sha256": "8b91b58361fc7da90270c64fd8b71d2387a0a8d8c9d3def47a0fcb3f09881672"
+      },
+      "cases": [
+        {
+          "index": 0,
+          "label": "own-idle-phase-zero",
+          "end": {
+            "pc": 805306368,
+            "sp": 268497964
+          },
+          "roundContinuation": "menu",
+          "hasReturned": true,
+          "hasResources": true
+        },
+        {
+          "index": 1,
+          "label": "attack-acquired-phase-one",
+          "end": {
+            "pc": 805306368,
+            "sp": 268497964
+          },
+          "roundContinuation": "menu",
+          "hasReturned": true,
+          "hasResources": true
+        },
+        {
+          "index": 2,
+          "label": "held-attack-phase-zero",
+          "end": {
+            "pc": 805306368,
+            "sp": 268497964
+          },
+          "roundContinuation": "menu",
+          "hasReturned": true,
+          "hasResources": true
+        },
+        {
+          "index": 3,
+          "label": "release-next-selection",
+          "end": {
+            "pc": 4365914,
+            "sp": 268492552
+          },
+          "roundContinuation": "menu",
+          "hasReturned": false,
+          "hasResources": true
+        }
+      ],
+      "observationalLimit": "Saved own controlled repeat after first menu; supplied outer ABI/keyboard bytes; no actual Windows input"
+    }
+  ],
+  "codeFindings": [
+    {
+      "kind": "exact-pending-attempt identity gap",
+      "files": [
+        "OriginalApplicationMenuSession.swift:130",
+        "OriginalApplicationMenuSession.swift:514",
+        "OriginalApplicationHostSession.swift:41"
+      ],
+      "evidence": "PendingLoading stores fileprivate ownerID/revision, no per-suspension identity. A copied committed Session retains both; a separate step before either commit can create another ticket at that same revision.",
+      "status": "static code inference; no Native reproduction run"
+    },
+    {
+      "kind": "unused prefix response gap",
+      "files": [
+        "OriginalApplicationBootstrap.swift:90",
+        "OriginalApplicationBootstrap.swift:98"
+      ],
+      "evidence": "Packet exhaustion only checked in beforeCommit; loading suspends before that hook. A loading packet can retain unread extra entries without a completed-branch check.",
+      "status": "static code inference; no Native reproduction run"
+    }
+  ],
+  "independentReview": false
+}

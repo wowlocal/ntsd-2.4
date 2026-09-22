@@ -1,0 +1,703 @@
+{
+  "schema": "ntsd-host-loading-preflight-context-v1",
+  "UTC": "2026-09-22T15:02:48.424654+00:00",
+  "head": "12d80fcb4da9eb68088e7be97aa61113519474c5",
+  "previousGoalTurn": "progress: fresh host build/25 methods/package/archive and commit12d80fc",
+  "pins": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS.md",
+      "bytes": 10290,
+      "sha256": "b0c28d56ce53df5b45f288e5cb44ccfc28eb138809598785aace1947483d8032",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/AGENTS_HISTORY_2026-09-12.md",
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/WORKFLOW.md",
+      "bytes": 28181,
+      "sha256": "a83bf4d46c33eff73df15f9a6917014736d2c39cbd835d43fd04c2a8d7ff8a14",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/TASK_TEMPLATE.md",
+      "bytes": 10500,
+      "sha256": "43d23bce0e1c58b3e4abdff1650ed4e0768dc3ef222fe9a5dedbe6ba1308140f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_LOADING_PREFLIGHT_PLAN.md",
+      "bytes": 3756,
+      "sha256": "9b171ee0cc193d19461b9459f1da90781218a1c50a88723855f20398d57372a0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/codex-safety-incidents-2026-09-12.json",
+      "bytes": 38476,
+      "sha256": "e21ffb54fc8b4512e52355ed55bf021cc9caeb56033a19b5986d9db2c34f8c9a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_PREFLIGHT.md",
+      "bytes": 16146,
+      "sha256": "245a81c3c98c016daaa2fd49aa77b8fe5d849b9295e9cf44ef3cc0a3e90bb064",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_CANDIDATE.md",
+      "bytes": 9013,
+      "sha256": "54b38d99ba9482239508c292dea18b583db6cd0094a200f756bb734e56d6d74f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_HOST_TRANSACTION_VALIDATION.md",
+      "bytes": 9862,
+      "sha256": "decb7098961e8b503a75e10bb7fa3c2e0d9108f01127dd70a0ebe278bf7126b9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_BOOTSTRAP.md",
+      "bytes": 10028,
+      "sha256": "c5a03cde5f2e2545fd97794cc057b01a5c7bc2d12fa178bc9542bbd8fd40168c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_MENU.md",
+      "bytes": 7113,
+      "sha256": "806d25a47a1b5a224438aa6a636376944bd2a9bc42475a04aca67405f7da51b7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_CYCLE.md",
+      "bytes": 7284,
+      "sha256": "34d95bfbad15ef2ce58b706cbc39cec15f24c85462c69c46ff658ad2b1c23290",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_INPUT.md",
+      "bytes": 6703,
+      "sha256": "1cfc2ed613d32ba955c30adfa59b80f24005a71022edb9527fca8438c212dd33",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_PREFIX.md",
+      "bytes": 8013,
+      "sha256": "16ed0ebabb54f5065ff860c04bc8a4bb3dd15bd80e04df00feacfb80cefd777f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/INITIAL_LOADING_CONTINUATION.md",
+      "bytes": 6128,
+      "sha256": "545ade5e80dd662d2841b4bf61684480014a32a8a8002894808ec90d57dfa2d0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_CATALOG_FULL_NATIVE.md",
+      "bytes": 8024,
+      "sha256": "3f56c416076d17d3b8fee7f4da9a92989fae5ac31b051c7dabdecb28f621915d",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADED_RETURN_PLAN.md",
+      "bytes": 13980,
+      "sha256": "a42aaa2d536e2289f2c557bf8aff16b70404148d4c6d1d5ead09921598dac976",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-host-transaction-validation.json",
+      "bytes": 12988,
+      "sha256": "1f252885c85bc71d546f3f4a65aa0aea6155784733288218ed7160d48fe1b683",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-menu.json",
+      "bytes": 64209,
+      "sha256": "cebe57ef3669ccce832aec5f9a13628f82dbf675691b48fd7db2c1331625fbb3",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loaded-cycle.json",
+      "bytes": 57793,
+      "sha256": "b3d65b6e9fec1e02d8b34e95273aa047652bb3c37e8fb4320c91727215de4edb",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-bootstrap.json",
+      "bytes": 28330,
+      "sha256": "7a4c1bd26d7af7b91363f464bd0a6cec24f03db685266e6d3d8441ed6f369dc8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-catalog-full-native.json",
+      "bytes": 33557,
+      "sha256": "c0e435c8ba1b5bbf4ad6dbf899aae6713ce16362e96877d943d7cd5b5fb32bf8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 10071,
+      "sha256": "2a77ec7f2846dc1aebc4aef3847226f7c0c06f7210dbec728b889cd42a7a76c8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift",
+      "bytes": 39536,
+      "sha256": "e2623e7e32c80c0875a92c0d50ebf753ffb9596ca4def04e873eb38c169138a1",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationMessageLoop.swift",
+      "bytes": 7672,
+      "sha256": "1431fe54180a36131f9693c025b33e30670b6eab887c5fc29d970956a8ccb972",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift",
+      "bytes": 6967,
+      "sha256": "db2d7723fbf24ff5a41abf93b66bd7713cfa3e306195b4f699d617c2f3fa2b5e",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift",
+      "bytes": 27000,
+      "sha256": "40a0433b7a451b87b5e3951c15d621d481d0c38753e367d81c7844d83ff54d4c",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationPoolSession.swift",
+      "bytes": 11162,
+      "sha256": "cf17a10abc2553300dd8131d524abc8b2e73ce6b6a7e450a55cc0c6ce1977938",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationInputSession.swift",
+      "bytes": 7305,
+      "sha256": "e945a186c2d7205ae50bc1d21f71162de72c02180782b0a35e767ca69aa9238f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+      "bytes": 27746,
+      "sha256": "788ed047b01bd613a4f0df3fcb8800bfb9df96f1683e59a3f7c30da6b53a9f15",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift",
+      "bytes": 4406,
+      "sha256": "481d6cba0ba4be000fbdf85faa2281ee48b1837be9b45b24d912afef40c625b9",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift",
+      "bytes": 7039,
+      "sha256": "5ab1ccb1579e2ff81ff9b7c4b6317c20252dc316ee622bc814198311e9dd1c42",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDCore/OriginalInitialLoadingContinuation.swift",
+      "bytes": 4773,
+      "sha256": "436c286dca7a638ed537767e00bf66449cea47d3a4a221939985209155731d3a",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationLoadedMenuTests.swift",
+      "bytes": 29186,
+      "sha256": "b58cdf45c6fec4de9301819df049473ffe737498f4d5519a36a1f0429e1dde9d",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationLoadedCycleTests.swift",
+      "bytes": 23210,
+      "sha256": "7a1404ebbaab2d6627de850f496913a55ac48df9d8416c5787c6379a460b4ba8",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationMenuInputTests.swift",
+      "bytes": 27575,
+      "sha256": "c17ebbb0296687d6dc21247a4457b3bbf0428aaedf4ddd773de04114ed9d5428",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationLoadingSessionTests.swift",
+      "bytes": 4051,
+      "sha256": "2f3f6a0829f114bbe7ed8f226b57162010f90de5e4ee1f28ebfa5ffab1653723",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationCatalogSessionReference.swift",
+      "bytes": 27524,
+      "sha256": "553f287a90f3e8b4958dfeeeb82245e281f5975ca98c3e5612613e5dcfefa9a4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift",
+      "bytes": 14536,
+      "sha256": "29435c11edc6ab172b2bbffb8b1afe7439359434b5b95ee8352f946e25796d16",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullTests.swift",
+      "bytes": 19990,
+      "sha256": "6451a9fc19047dfa1fe72c55d8cac90c47a6085c1aaf359d37f27e51861ab7df",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift",
+      "bytes": 14730,
+      "sha256": "bef78b5ba7dbe83da4377c368271b28785490cebba9d8c06572eaf95de430d71",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationPoolTests.swift",
+      "bytes": 20386,
+      "sha256": "7895fd4f321840bf619c684433ad6097a4a4c3ad149b12bdf24a4dd8b1e1eae3",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationInputTests.swift",
+      "bytes": 16482,
+      "sha256": "81794ddcef93e08c239bdcfddca2f1b42d49a250b1f1beb52cb36fb9d65041fe",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalApplicationBootstrapTests.swift",
+      "bytes": 39330,
+      "sha256": "6b729ea3123fb0f96981df1623195d7d6f74d992ebe22f7728121e7efe1d610b",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDReferenceChecks/MenuStartupReference.swift",
+      "bytes": 25173,
+      "sha256": "805d0591e5290df952dccd05506ddd46b1a027aa0ce893150fe4be57de9e4aa7",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDReferenceChecks/MenuCycleReference.swift",
+      "bytes": 24023,
+      "sha256": "6b0084aebbe5d13102da54dd8ab91e11f19b33dbd7f76dfb8c055d48b0053b5f",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDReferenceChecks/MatchPreparationReference.swift",
+      "bytes": 20603,
+      "sha256": "911bdb35706ae6e12cf540a02b8da3af4b545d598658f5dc746983d27a0bfca4",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-application-menu-input.json",
+      "bytes": 37774137,
+      "sha256": "e1eb47c2d27dc5da54877dafa3471d03abc34cd608016252b5845634b4f8b6f0",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-menu-startup.json",
+      "bytes": 346002,
+      "sha256": "73ea816b774cd0cef9bfffac44811b3c0106052347dc4d412ac3397d05551194",
+      "mode": 420
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-menu-cycle.json",
+      "bytes": 194638,
+      "sha256": "eec5226d5a0c104e8f14718c6665f4d0e2081f4f52b998a73665736228688f4b",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 7500,
+      "sha256": "987920431e18519270f0fdfb8afd5c029a8bdf2a154ee255a362610ffd96650e",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 10193,
+      "sha256": "c2ec3f9d183c4852af80c66444357d63455e0f729838e5884235685ff508e1e5",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationHostSessionTests.swift",
+      "bytes": 11888,
+      "sha256": "9b4d95bf2b252dc3bc2781bf1debe2889f907c6f4ec6321da2badd0a9ea333a7",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1-inputs.json",
+      "bytes": 215487,
+      "sha256": "3456db189b31cb9914bcecfcd7beab2a5a53cb6562f649374168404798a904e0",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/publication1.json",
+      "bytes": 12988,
+      "sha256": "1f252885c85bc71d546f3f4a65aa0aea6155784733288218ed7160d48fe1b683",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/external-close1.json",
+      "bytes": 800,
+      "sha256": "d14e83edbf7006edb110ace7175b55023f6605919ae4eef677b66e210943b4fe",
+      "mode": 420
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922/finalize1.job.json",
+      "bytes": 662,
+      "sha256": "613ebb127277be81191383b9f13485e2a72b073818ad0f7e7e98a24431f20992",
+      "mode": 420
+    }
+  ],
+  "rootManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-loading53-native-20260922/candidate1-inputs.json",
+    "bytes": 215074,
+    "sha256": "e72bd9374bca792f7d7defb8653b13fc1b7ac6fc48b5751b2001bb6ffbe5d240",
+    "mode": 420
+  },
+  "rootFilesVerified": 1034,
+  "sourceCodePins": [
+    {
+      "path": "tools/check_first_damage_catalog53_driver.py",
+      "bytes": 24240,
+      "sha256": "b2e37a99597d28e61976a6a560bcee24b8cdd55497cc3a6fcba3228e863409c9",
+      "mode": 420
+    },
+    {
+      "path": "tools/check_first_damage_catalog53_launch.py",
+      "bytes": 15967,
+      "sha256": "2c0c667e5d2231be38fe7758c542e25aa7365750367da8bec773a87834b37475",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_launch_support.py",
+      "bytes": 10526,
+      "sha256": "a614638aef1c81949c9d0385c1f6f2d7d151b20afb01adce0c4ae4fe595c544c",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_platform.py",
+      "bytes": 10868,
+      "sha256": "fb04feae04dd8cc8561d5451685717b9253d40f14ee74188765002b00e72143e",
+      "mode": 420
+    },
+    {
+      "path": "tools/first_damage_catalog53_storage.py",
+      "bytes": 9146,
+      "sha256": "d4a86bcdda65017d6e702b8a58cf4bec6d48f9de0f60984d5403aeec6bc563ed",
+      "mode": 420
+    },
+    {
+      "path": "tools/import_ntsd.py",
+      "bytes": 9771,
+      "sha256": "5c5fee71607c2752b8d1a79e7f569588fe0c6b43f551cf1e99a63e7d51c9aede",
+      "mode": 493
+    },
+    {
+      "path": "tools/inspect_original.py",
+      "bytes": 5894,
+      "sha256": "f0c09d227f61086f1e6a0aa2ade59daee1c438eb4bb9a5a1bb6430ad02c6c4f5",
+      "mode": 420
+    },
+    {
+      "path": "tools/launch_first_damage_catalog53.py",
+      "bytes": 17552,
+      "sha256": "4b2e37213b0dd11d2cfecf291208de4d8afe3b146fa3037e53a66fd6b89b097a",
+      "mode": 420
+    },
+    {
+      "path": "tools/lib_runtime_loader.py",
+      "bytes": 4673,
+      "sha256": "5c036c5e10cb41cce43e03c7757edb7646388674e84ce842f50e987ff041fbe9",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_catalog_guarded.py",
+      "bytes": 35616,
+      "sha256": "69b07f75bac554d13874d73767456f298d2940946be2207538da1934b49a9ce4",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_dispatch_entry.py",
+      "bytes": 8638,
+      "sha256": "f8605f9d796e68661a25fdec0ae18cef2057c64e5e9f776d390bd4e95dfd8198",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_front_screen.py",
+      "bytes": 13960,
+      "sha256": "128ec384553ffc1f73da27e294cd66a96f4ede579c230bda3833e31a63a030e8",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_loading_prefix.py",
+      "bytes": 11152,
+      "sha256": "572f771fa774f1b637b8c4ca45c3f0a3fa13353c85ea421333f123e22effc047",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_menu_input.py",
+      "bytes": 16328,
+      "sha256": "5db0403f3e152759dcf890ab01d512572bbd1ed345143ae81363050e5271793b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_menu_return.py",
+      "bytes": 10055,
+      "sha256": "4f62471d3581c3cccb3cd0ebcfbe0e616669b0022f74525352a41719a9b5e17b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_message_loop.py",
+      "bytes": 13512,
+      "sha256": "ce6263ebcabcda9f3ae719c1cfbb19ada9ef14e1cc2a2a1ae33889bca2e37a4a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_screen_body.py",
+      "bytes": 11860,
+      "sha256": "0dd955be46ce44e8212862575ba1ef149b52f71e5dcb8a0aeb04ba8c9c74fe74",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_application_settings.py",
+      "bytes": 10816,
+      "sha256": "5d9317c8d47ac39c98c73742ceae5a3b94d77cda9a33b1e90a77694212e8da76",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bitmap_drawing.py",
+      "bytes": 17956,
+      "sha256": "8f71793204bd1b3aa22bb14d2f9d2737d2f406740f1ea3c4afeff61c484888a7",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bitmap_surface_loading.py",
+      "bytes": 18515,
+      "sha256": "512a2e10f48b3ce3ccb126c95e3c2afc38df1c1e4087c07fb08099d486e0d532",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_bootstrap.py",
+      "bytes": 9852,
+      "sha256": "953a060c6c78f5fef5c03c484c11071e5c8512e7c33f6983e6637b51508f9968",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_calendar_time.py",
+      "bytes": 13279,
+      "sha256": "18c529d18ba360f550ee559e75238b52467cec47133f8555fd289072623aec35",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_catalog_sounds.py",
+      "bytes": 9476,
+      "sha256": "5f195bd6a5043a2e03cd5624ead64d13ace6c6d9eee7272097a6855c29514f6a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_crt.py",
+      "bytes": 14334,
+      "sha256": "bb8eade431bf8e89d8ebc4020427e0f8109d5b0a0f0b9633b5594f4c0cb4012f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_crt_startup.py",
+      "bytes": 12145,
+      "sha256": "ae5e447ead7ab626d8f301c51d51b7c9de4a27343cdcecaea35c6deffb5eed8a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_catalog53.py",
+      "bytes": 15369,
+      "sha256": "4b603e867c1ced1201e18ea30127f38e31822867fa02688beac79586093e7b77",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_loading53.py",
+      "bytes": 11580,
+      "sha256": "664c025a00775ecafc544798c42dda18300c80219ebbdfa66f93dec70efc1629",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_first_damage_winmain53.py",
+      "bytes": 10443,
+      "sha256": "0aefcdb2e9b76d2d818026996c8ddc48285af2fb5e76b64d3efb8e3a0da35f38",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_front_menu_resources.py",
+      "bytes": 16275,
+      "sha256": "a9661f50dcae9943abdddd72347202f2f8ec8569d7c0b6d6e730f409b9909d75",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_initial_interface.py",
+      "bytes": 12664,
+      "sha256": "13800eebb2aa768b35ced37fe85f2b4dfb8e0a62b473af34697f7d5426b0a9a4",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_initial_loading.py",
+      "bytes": 15060,
+      "sha256": "7a9c84279a396f4a071416955b8656073505ac6db9f5069833bb24edacebaff3",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_input_control.py",
+      "bytes": 26333,
+      "sha256": "9952721c9fc0ef38ea0f11e163cd6cadbe22b2aa7764a1ff24c8d17b7cb1ac81",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_input_startup.py",
+      "bytes": 14401,
+      "sha256": "f8e88c8cd8666f590ed9d746913f24e501ec6a0e5cc258bc0509066c9b3e0676",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_lib_initialization.py",
+      "bytes": 10066,
+      "sha256": "6e2485b8813748df7a51dd07abc320c7544f4c3b18f2dcf2b0c4ff3c488c0126",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_loaded_catalog.py",
+      "bytes": 18177,
+      "sha256": "0c8c6c8fff51007e901b94cfe420e32b592108ec3eb31b056a70015c9913694f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_local_input.py",
+      "bytes": 12901,
+      "sha256": "9b17163030b8c52a52f5da3dd7e9fd1407faf94f22cbbd23cab19a2a9865c4bd",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_match_preparation.py",
+      "bytes": 24263,
+      "sha256": "2713588502f37641fb1b76c55ab561f317d8d96ebf6a90385aa81b51d50734b5",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_match_round.py",
+      "bytes": 18713,
+      "sha256": "af6f9040efd07da048a8ffe0641176d6f2b801e2e56c3a16bfdf2308b507cd14",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_content.py",
+      "bytes": 10715,
+      "sha256": "13693f39762045489e398c2248a19ef15b1c77f149cadccd6d45ddfb6d9cce31",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_info_reading.py",
+      "bytes": 11339,
+      "sha256": "72967b094dc397eb1fb1fefe9ce736fd4207a392012634275ae7bff58a7182ca",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_info_writing.py",
+      "bytes": 10367,
+      "sha256": "6d10dfc6b9b59ed1ee010741b773d728d7f99fc3cfb9b836ced1d115c2591571",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_panel_bitmap.py",
+      "bytes": 11782,
+      "sha256": "d5930b089137ce37ebf0abcac16d8cd88e09b0920e173380eaadaa787303c163",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_menu_sound_startup.py",
+      "bytes": 13956,
+      "sha256": "83cb09c2b8491780648f94bbc1a48ee516aa156035f9efeadb2c1fa3d0a01b9b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_music_playback.py",
+      "bytes": 18935,
+      "sha256": "6b6d9e410c7321427b45217d4522fb3bf26d29e50ef4d00c2357b3cfc7c74d96",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_objects.py",
+      "bytes": 37717,
+      "sha256": "a37dd2510db0997b4b15be77baf0d062d505ebb1df9ee234ca6718e5de444dbc",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_replay_initialization.py",
+      "bytes": 15449,
+      "sha256": "9bbfe16bc399b1653b68f8e9e02ce46940f07d1b5af20f09b4283119ece3e442",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_replay_tick.py",
+      "bytes": 18599,
+      "sha256": "783c464a2b473519945e000e2802e2c886cf30e389d79e0860d000254d79ac4f",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_settings_loading.py",
+      "bytes": 15451,
+      "sha256": "5105eacc1f630778c9245588e41400ffde38832cecf91611de11083d60784856",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_startup_output.py",
+      "bytes": 14970,
+      "sha256": "0776362355223cb3ab0923a2ee61fdc8380b24e6aeb50ed9cb4f62eba03962e9",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_startup_panel.py",
+      "bytes": 17214,
+      "sha256": "f254ad5277e397d8f9149db971d96c8749733ee84c3343928181f160b9a8655a",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_state.py",
+      "bytes": 7195,
+      "sha256": "704229e023414622bfdbe4fe3fe6cf862f38bc315ab397f7ecee80753966efc6",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_wave_loader.py",
+      "bytes": 23226,
+      "sha256": "6e50feb5be4ea87a5d4c215d4df0aafad056e96a4d73e49284c210faa3073d6b",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_window_initialization.py",
+      "bytes": 14889,
+      "sha256": "88118a54983d4fbfcba6ca004b48752b107e26ff9468cc0e30f65c9cec96d1ff",
+      "mode": 420
+    },
+    {
+      "path": "tools/oracle_winmain_startup.py",
+      "bytes": 23708,
+      "sha256": "1f3a8862eddc2573f97609f9e6c0ae59ac6801064ae2ba85bb3eb757de7b1f55",
+      "mode": 420
+    },
+    {
+      "path": "tools/original_replay.py",
+      "bytes": 1383,
+      "sha256": "5c82b5b787e6a6b8e52f0318cea81ab0791b491f53a0ca02434b067320a43b81",
+      "mode": 420
+    }
+  ],
+  "sourceIdentity": "59727 Tue Sep 22 13:32:00 2026     /Users/michael/.cache/uv/environments-v2/oracle-first-damage-loading53-77fa3758118092c2/bin/python tools/launch_first_damage_catalog53.py --launch-manifest /Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/first-damage-catalog53-source-20260922/launch1.json --manifest-sha256 009dd56ae9e6160ac074794b9177d8d8d48cb96ba1895d4e966bf973a6794079 --execute",
+  "sourceCwd": "p59727\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "sourceJobStatus": "running",
+  "candidateRoot": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-candidate-20260922/candidate1",
+  "validationTask": "/Volumes/X5/ntsd-2.4-research/01a0c7b2-a956-7760-950e-ecf7dceaaa20/application-host-transaction-validation-20260922",
+  "independentReview": false,
+  "newOriginalExecution": false,
+  "nativeExecution": false,
+  "preparationCorrection": {
+    "firstAttempt": "AssertionError before writing context: two assumed filenames absent",
+    "exactOutput": "missing ['docs/research/APPLICATION_CATALOG_FULL.md', 'native/Tests/NTSDCoreTests/OriginalApplicationMenuInputReference.swift']\nTraceback (most recent call last):\n  File \"<stdin>\", line 25, in <module>\nAssertionError\n",
+    "resolvedBy": "rg --files; actual APPLICATION_CATALOG_FULL_NATIVE.md and reference structs nested in OriginalApplicationMenuInputTests.swift; no missing reference invented",
+    "firstAttemptExit": 1
+  }
+}

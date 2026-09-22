@@ -2,6 +2,20 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading preflight](APPLICATION_HOST_LOADING_PREFLIGHT.md) completed from
+current code and three hash-verified saved envelopes (134093766 decoded bytes).
+Mapped actual pending/platform through first loading and cached cycles to the
+single Bootstrap loaded commit. Two static host gaps identified: per-suspension
+identity (same-owner/revision sibling tickets) and prefix packet exhaustion on
+loading. Preserve the loop continuation's prepared baseline123456923; the source
+loading record's baseline field is current ESI0x458b00, not timer state.
+NEXT: new isolated host continuation candidate with retained prepared child,
+staged platform and retryable final time/Sleep/commit, one loaded batch, whole
+loaded-menu/cycle checks plus five initialized regressions. No code/test/device
+execution or new whole-source equivalence here; independent review stays open.
+[Verification](../evidence/application-host-loading-preflight.json). Root1034 and
+55 source pins preserved; same source process continues. Supersedes preflight NEXT below.
+
 [Host transaction validation](APPLICATION_HOST_TRANSACTION_VALIDATION.md): unchanged
 candidate freshly compiled and all25 declared methods passed, with complete named
 XCTest results/exit0. Build1 testability failure and first package-check timestamp
