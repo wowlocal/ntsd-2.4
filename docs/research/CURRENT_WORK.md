@@ -2,6 +2,17 @@
 
 ## Актуальный срез — 2026-09-22
 
+[Host loading validation](APPLICATION_HOST_LOADING_VALIDATION.md): fresh Core/
+dependent build and487 package files verified;25 methods passed, method26 failed
+with two operation-wrapper assertions;16 methods unstarted. Exact failed candidate,
+logs and products preserved; Native comparison remains false. Author diagnosis:
+fresh loading retains Loading→Catalog→Pool→Input wrappers, whereas cached cycles
+use direct Input.menu. No source expected/mask or candidate change in this task.
+NEXT: separate correction round with both complete prefix types and the same42
+methods. Independent comparator/contract review remains open. Root1034/candidate1037/
+55 source pins preserved; original source remains live. This supersedes the build
+NEXT below, without changing frozen evidence. [Receipt](../evidence/application-host-loading-validation.json).
+
 [Host loading candidate](APPLICATION_HOST_LOADING_CANDIDATE.md) implemented in a
 new isolated1037-file tree: exact suspension identity, prefix reply exhaustion,
 retained actual child/platform and retryable final outer commit with one loaded

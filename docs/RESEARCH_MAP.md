@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host loading validation](research/APPLICATION_HOST_LOADING_VALIDATION.md): fresh
+Core/dependent build and487 resource files verified.25 methods passed; method26
+failed twice on a new fresh/cached operation-wrapper assertion;16 methods remain
+unstarted. Failed candidate/logs/products retained; Native comparison false.
+Next separate correction preserves complete wrappers, all42 methods and original
+expectations. Independent review, promotion and app/device/game gates remain open.
+This supersedes the candidate's compile/test NEXT below.
+
 [Host loading candidate](research/APPLICATION_HOST_LOADING_CANDIDATE.md) adds
 exact suspension identity, loading-prefix reply exhaustion and a privately
 prepared child/platform followed by a retryable single loaded outer commit.
