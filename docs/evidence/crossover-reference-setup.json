@@ -1,0 +1,173 @@
+{
+  "UTC": "2026-09-26T18:36:05.822599+00:00",
+  "status": "official-trial-build-installed-Rosetta-consent-pending-game-not-launched",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926",
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/plan1.md",
+    "bytes": 2785,
+    "sha256": "fd4142c6bf88503f7dd7eb27cb58e11115fd98ff0ca642df3d09def799ba8ec9"
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/context1.json",
+    "bytes": 392,
+    "sha256": "9b4362863189503f9bea68cfa4c054d5f686957f9c8aaf6858a8bf2b10d63b94"
+  },
+  "trialAuthorization": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/trial-authorization1.json",
+    "bytes": 211,
+    "sha256": "dd8e4d204acce8f46d8d851052436adf1b7d488efa1d12cac07b3a4a7ceefc7f"
+  },
+  "download": {
+    "status": "terminal",
+    "pid": 8439,
+    "startedUTC": "2026-09-26T18:25:41.521908+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "8439 Sat Sep 26 21:25:41 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/download2.py",
+    "command": [
+      "python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/download2.py"
+    ],
+    "totalBytes": 387192026,
+    "chunkBytes": 1048576,
+    "concurrency": 8,
+    "completedRanges": 352,
+    "completedBytes": 387192026,
+    "maxSeconds": 1800,
+    "output": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/crossover-26.3.0-complete.zip",
+    "sha256": "8688e0848c4e5f79f1cc351cb52d32447da00c6c00cfd3b4bb2d164d44589a26",
+    "vendorHashMatched": null,
+    "zipMembers": 8332,
+    "zipCRCVerified": true,
+    "signatureVerificationPending": true,
+    "endedUTC": "2026-09-26T18:31:34.150597+00:00",
+    "elapsedSeconds": 352.627486125,
+    "exitCode": 0,
+    "failures": []
+  },
+  "firstTransfer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/download1.job.json",
+    "bytes": 1151,
+    "sha256": "a595f0f2786b9381dbc9f13cde2c42a085ca6fabacd0564ceb06574aa0dd5df5"
+  },
+  "rangeProbe": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/range-probe1.json",
+    "bytes": 1068,
+    "sha256": "7b0b284774ec376172dc15904856876b2169860f639f5ba4ee02b88e6668e9d3"
+  },
+  "transportCorrection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/download2-plan.md",
+    "bytes": 553,
+    "sha256": "10e49f63c349edca9970700c23247fec2518ec7f326cb1996f5257597769d85e"
+  },
+  "failedInstaller": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/install1.job.json",
+    "bytes": 658,
+    "sha256": "de358d2171a22df5132f7e663b70f0b10790e229cdd15b145d4c059cc2b03b73"
+  },
+  "installerDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/install1-diagnosis.json",
+    "bytes": 450,
+    "sha256": "05792e33f65da7637647631467660cf762efd7e44b1d7fe20867790c5c160054"
+  },
+  "installer": {
+    "status": "terminal",
+    "pid": 20066,
+    "startedUTC": "2026-09-26T18:32:30.651012+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "producerSHA256": "a4eda51b359039e19c6ad8874bee373274cfd749b836a9510dfdd4e6d074b3ff",
+    "identity": "20066 Sat Sep 26 21:32:30 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/install2.py",
+    "exitCode": 0,
+    "appPath": "/Applications/CrossOver.app",
+    "shortVersion": "26.3",
+    "version": "26.3.0.39832",
+    "CodeWeaversSignatureVerified": true,
+    "GatekeeperAccepted": true,
+    "installedSignatureVerified": true,
+    "appLaunched": false,
+    "gameExecuted": false,
+    "endedUTC": "2026-09-26T18:32:34.644798+00:00",
+    "elapsedSeconds": 3.993793458
+  },
+  "signatureChecks": [
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=2",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.\n--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Python.framework/Versions/Current/.\n--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate\n--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app\n--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc\n--prepared:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.\n--validated:/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/Frameworks/Python.framework/Versions/Current/.\n/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app: valid on disk\n/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app: satisfies its Designated Requirement\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "-dv",
+        "--verbose=4",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Executable=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app/Contents/MacOS/CrossOver\nIdentifier=com.codeweavers.CrossOver\nFormat=app bundle with Mach-O universal (x86_64 arm64)\nCodeDirectory v=20500 size=9861 flags=0x10000(runtime) hashes=297+7 location=embedded\nVersionPlatform=1\nVersionMin=720896\nVersionSDK=983296\nHash type=sha256 size=32\nCandidateCDHash sha256=0699ce2a34d08a8337b7e015b89b416c4945f948\nCandidateCDHashFull sha256=0699ce2a34d08a8337b7e015b89b416c4945f948ba0c92158b976af8545eb4c4\nHash choices=sha256\nCMSDigest=0699ce2a34d08a8337b7e015b89b416c4945f948ba0c92158b976af8545eb4c4\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=655360\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=0699ce2a34d08a8337b7e015b89b416c4945f948\nSignature size=8982\nAuthority=Developer ID Application: CodeWeavers Inc. (9C6B7X7Z8E)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Jul 15, 2026 at 2:20:45\u202fPM\nNotarization Ticket=stapled\nInfo.plist entries=38\nTeamIdentifier=9C6B7X7Z8E\nRuntime Version=15.1.0\nSealed Resources version=2 rules=13 files=6632\nInternal requirements count=1 size=188\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "command": [
+        "spctl",
+        "--assess",
+        "--type",
+        "execute",
+        "--verbose=4",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/extracted1/CrossOver.app: accepted\nsource=Notarized Developer ID\n"
+    }
+  ],
+  "gameCopyManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game-copy1.json",
+    "bytes": 254912,
+    "sha256": "14ce3e11f9942454fd27626b3d19fbce1cf76442703300dcdba2a43ecf721a8d"
+  },
+  "gameFiles": 1595,
+  "gameEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "gameDLLSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "gamePath": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a",
+  "RosettaPending": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/rosetta-pending1.json",
+    "bytes": 640,
+    "sha256": "1c3d7a6f91aa34224171b42450f5dfa3a7c0b7ee59c2576101c37ce81ae62f0a"
+  },
+  "RosettaInstallClicked": false,
+  "trialActivated": false,
+  "gameExecuted": false,
+  "WindowsObserved": false,
+  "NativeChanged": false,
+  "independentReview": false,
+  "UTMDownloadAtObservation": {
+    "status": "running",
+    "pid": 94629,
+    "startedUTC": "2026-09-26T18:18:06.137970+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "94629 Sat Sep 26 21:18:06 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py",
+    "command": [
+      "python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py"
+    ],
+    "totalBytes": 7994415104,
+    "chunkBytes": 8388608,
+    "concurrency": 8,
+    "completedRanges": 152,
+    "completedBytes": 1291845632,
+    "maxSeconds": 7200
+  },
+  "UTMDownloadIdentityRevalidated": true,
+  "UTMGuestToolsDownloadedObserved": true,
+  "UTMGuestNotBooted": true,
+  "archiveAGENTSSHA256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+  "X5Free": 153103794176,
+  "internalFree": 68429725696
+}

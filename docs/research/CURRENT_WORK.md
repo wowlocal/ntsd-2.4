@@ -1,5 +1,15 @@
 # Текущая передача работы
 
+[CrossOver trial build installed; Rosetta confirmation pending](CROSSOVER_REFERENCE_SETUP.md):
+official26.3.0.39832, ZIP CRC/CodeWeavers signatures/Gatekeeper pass. Separate
+1595-file original game copy verified. Transport/wrapper failures preserved;
+install20066 terminal0. App requires Rosetta and explicitly accepts Apple SLA;
+user confirmation requested, Install not clicked, no trial activation/game run.
+[Publication](../evidence/crossover-reference-setup.json). NEXT after reply: install Rosetta/start trial/create
+NTSD24XP and launch task-owned copy with existing launcher. Windows download94629
+continues independently, revalidated live; guest tools downloaded, no guest boot.
+No Windows/Native comparison or full-game acceptance. Keep all prior gates open.
+
 [UTM reference VM configured; Windows ISO download live](WINDOWS_UTM_REFERENCE_SETUP.md):
 UTM4.7.5, ARM64/4CPU/8GiB/thin64GiB on X5, no NIC/shares/clipboard; stopped.
 Microsoft retail ISO download2 PID94629 identity-verified live on T7; first

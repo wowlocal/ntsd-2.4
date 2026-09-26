@@ -1,0 +1,38 @@
+{
+  "UTC": "2026-09-26T18:36:05.978565+00:00",
+  "baseHead": "d638ad589616b07de4d10454d51a63f6d5c7f97d",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "4cc949e8f6c84bec083f5b2458ccb5c466ad2b2d37de56df548690f6d3fc0965",
+      "headSHA256": "1c22b680d62e7d22f78fd5751e3e1d605cc60cc107d87830148798712ca1b0da",
+      "workingAfterSHA256": "9cae2123ac8ad7515ee35a4904f9b8a388297c4a25ce63ccb2ec4f43acb042fd",
+      "stagedSHA256": "4f6b75d47643f1787841e4482212ee204c3eb4b93799a67ad72f44d533f6645e",
+      "onlyOwnBlockStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "9f420ad53daa4c2b097c9265d494e9276f6cda329e9ce8149bc19ee6a7988bb4",
+      "headSHA256": "04e2f042c4e3251b86ff0678750ccdf4ae2836d460745b3d5ae21f14d4255dd6",
+      "workingAfterSHA256": "78d13dc0c2d644ba1e2e203aea4d7278b4fc8c292563f50fec611bf42734661c",
+      "stagedSHA256": "4de882110f729a60096378534f2e24290b1908de197bc7a1db09e8efca5cf5fc",
+      "onlyOwnBlockStaged": true
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/research/CROSSOVER_REFERENCE_SETUP_PLAN.md",
+      "sha256": "fd4142c6bf88503f7dd7eb27cb58e11115fd98ff0ca642df3d09def799ba8ec9"
+    },
+    {
+      "path": "docs/research/CROSSOVER_REFERENCE_SETUP.md",
+      "sha256": "f1f2db6df8431d2c0743223cc205dcfbb56e4092cffa72a5313b51640c8f363e"
+    },
+    {
+      "path": "docs/evidence/crossover-reference-setup.json",
+      "sha256": "d2e4e5dc10f33d05ab84a4f761245042401cc0d7334278a5bc864607ad8aa1e6"
+    }
+  ],
+  "RosettaConfirmationPending": true,
+  "gameExecuted": false
+}
