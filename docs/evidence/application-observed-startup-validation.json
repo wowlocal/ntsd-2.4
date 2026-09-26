@@ -1,0 +1,101 @@
+{
+  "schema": "ntsd-observed-startup-validation-v1",
+  "UTC": "2026-09-26T13:38:34.282265+00:00",
+  "status": "build-failed-before-tests",
+  "baseHead": "1580322d49ed2fea3c232a456d173ee272c54307",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/candidate1-inputs.json",
+    "bytes": 569145,
+    "sha256": "c47909457f499bd3253f9b74d1806269e8b3226e791da2ed21b18fdba78124f5",
+    "mode": 420,
+    "mtime_ns": 1790429386193338786
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/context1.json",
+    "bytes": 26911,
+    "sha256": "9cc81aaeb5f8e3fcb4809aebaa71c5fcf60b78f4e9016ff70d3fd7ba854700cc",
+    "mode": 420,
+    "mtime_ns": 1790429552215856780
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/build1.job.json",
+    "bytes": 79216,
+    "sha256": "4569f6e93fc27ad58876d0a4ce75ce56fa93d41cb0b5931bfcacc3be6c703f2a",
+    "mode": 420,
+    "mtime_ns": 1790429750910874740
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/failure-diagnosis1.json",
+    "bytes": 1535,
+    "sha256": "15b4c0a4ae02a46506f6e4e97590ff39ea504785765d83ae2fa4523aca342997",
+    "mode": 420,
+    "mtime_ns": 1790429857069511987
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/verification1.json",
+    "bytes": 3032,
+    "sha256": "99d1558776069de7b4858d02d9ecb7bc4e874569ed21d5189c0495f9a0cee418",
+    "mode": 420,
+    "mtime_ns": 1790429911661770025
+  },
+  "passedMethods": 0,
+  "selectedMethods": 25,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/artifact-archive1",
+    "files": 4601,
+    "directories": 199,
+    "links": 0,
+    "bytes": 11060588753,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/artifact-archive1.json",
+      "bytes": 2426976,
+      "sha256": "148d0148cd05c2a92698240d9e8475caee8f01f46ed8b3a822e3d73604e6487c",
+      "mode": 420,
+      "mtime_ns": 1790429911653625702
+    }
+  },
+  "metadataArchive": {
+    "members": 28,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/metadata1.tar",
+    "bytes": 4014080,
+    "sha256": "f79a4deccf32d00121286586c5bb6f1f8bd1a363c9edc7f7ad19fe962b124fa6",
+    "mode": 420,
+    "mtime_ns": 1790429914171364455
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "1a7acfbf18be964e78311f9f421c2b16925b00806c200e3ea5cbd0bf38f12c35",
+    "mode": 420,
+    "mtime_ns": 1790429911661619608
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2249,
+  "candidateUnchanged": 2254,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Unified startup is tested with declared responses plus a separate actual Mac clock whole-caller control if its exact method passes. Window/resource mapping, callbacks, audio/input and backend remain open; AppKit still uses practice. Retained inspection controls are finite scheduler observations.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

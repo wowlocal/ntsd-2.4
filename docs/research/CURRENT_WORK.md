@@ -1,5 +1,17 @@
 # Текущая передача работы
 
+[Observed startup build failure preserved](APPLICATION_OBSERVED_STARTUP_VALIDATION.md):
+fresh build84305 terminal1/absent: new test imports nonexistent NTSDReference instead
+of NTSDReferenceChecks. No XCTest/package acceptance; all25 methods unstarted.
+Failed2254 candidate/Core and partial build preserved;4601-file artifact/28-member
+metadata verified, finalizer92639 terminal0/absent, task frozen. Root/prior/source
+unchanged. [Publication](../evidence/application-observed-startup-validation.json).
+NEXT: separately cloned test-import correction, then fresh build/package and exact
+same25 methods/limits. No Core/assertion/expected change; preserve failed candidate.
+Independent review/root promotion/actual clocks/window/input/audio/full match/game
+remain open; EXE envelope not recalculated. Supersedes fresh25 NEXT below.
+
+
 [Resumable startup candidate](APPLICATION_OBSERVED_STARTUP.md): one typed exchange
 now covers window plus16 throwing nonwindow families; production provider and same
 Host retain actual answers/resources across retries. External macOS integer clock
