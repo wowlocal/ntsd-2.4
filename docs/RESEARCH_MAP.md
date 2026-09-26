@@ -1,5 +1,21 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Display correction2 passes all35 methods](research/APPLICATION_MAC_DISPLAY_CORRECTION2.md):
+explicit sRGB native window backing and owned profile-aware capture pass the new
+32-sample pattern test, previously failing whole-clear readback, resource/protocol/
+late-retry checks and all34 unchanged methods, including420 original clear cases.
+Fresh build/package verifies199Core/61Reference/6MacPlatform/280tests and1686 resources.
+Queue13876/finalizer20982 terminal0/absent;4944-file artifact/173-member metadata and
+three-file patch verified, task frozen. Root/prior/source preserved; old failures
+remain nonpassing history. [Publication](evidence/application-mac-display-correction2.json).
+NEXT: concrete native bitmap/DIB acquisition and surface-copy provider for the
+whole startup/front-screen loader on this display owner, using recovered loader/
+source-color/graphics ownership and finite whole-caller/error/lifetime checks.
+Keep unknown masks and zero presentation rectangles exact; callback/rectangle
+provenance/presentation remain required. Independent review/root promotion/general
+graphics/providers/loading/Windows/input/audio/clean-Mac/full match/game remain open.
+NTSDApp still Practice; EXE envelope not recalculated. Supersedes correction2 NEXT below.
+
 [Profile-aware capture exposes a further window-color mismatch](research/APPLICATION_MAC_VIEW_CAPTURE.md):
 owned snapshot agrees with separate ICC calculation on128 opaque samples, but four
 pure-blue monitor-profile samples differ from input by7/255 red; original2/255

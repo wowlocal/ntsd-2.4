@@ -1,0 +1,28 @@
+{
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-correction2-20260926/finalize1.job.json",
+    "bytes": 832,
+    "sha256": "c24b0c24d408232c434a71f11328feb54190b0aa3c631ba21cc76780414ccdf4",
+    "mode": 420,
+    "mtime_ns": 1790437574421635192
+  },
+  "finalizerAbsent": true,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "priorWorkingSHA256": "1df69d82e62a7086ca933337133b3d5d6cc170b9deb873d0aa4553489b5efd1a",
+      "newWorkingSHA256": "1c14fabc452d83bfed2c98ef11080274190418fca227e9003f622805d08579ec",
+      "indexSHA256": "684b502162054e3b6fab5e32679817d1a5f2b5e4e226c0413aeefa2f52c62f3b",
+      "unrelatedDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "priorWorkingSHA256": "74565882c92648f46f7200ee4760bd8fbeb7739ead652ed7e65e03b53cb0507a",
+      "newWorkingSHA256": "d8204a3837519b758ae436ec80cc6959cc24d35f583dd4ada202a3f581bcfb6c",
+      "indexSHA256": "c095d2fdb3489419eb7644568dc89a8f1fa539c1d7a3db6ccefec9578043c4a9",
+      "unrelatedDiffPreserved": true
+    }
+  ],
+  "all35Passed": true,
+  "independentReview": false
+}
