@@ -1,5 +1,16 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Reference environment: OS access boundary](research/REFERENCE_ENVIRONMENT_ACCESS.md):
+AppleScript authorized; current NTSD33492 identified, but macOS denies assistive
+access. Ghostty's Device Control and Data Access switch is off; action-time
+confirmation pending, no permission change/OK/game restart. Separate CUA Ghostty
+safety refusal retained; no retry or alternate Ghostty UI access. ISO60299 verified
+live,3.048GB at checkpoint; VM stopped/no NIC/shares. Guest-tools bytes unverified.
+[Checkpoint](evidence/reference-environment-access.json). NEXT: observe existing ISO and resolve actual permission/dialog;
+full vendor hash required before guest boot. Native geometry76 methods remains the
+latest checked candidate; root promotion/raster/Windows/review/match/game open.
+EXE envelope not recalculated. Supersedes earlier AppleScript-pending status.
+
 [Reference environment: visible media error; ISO continuation](research/REFERENCE_ENVIRONMENT_CONTINUATION.md):
 Agent-operated full-screen capture confirms NTSD's filter-graph error. No menu
 acceptance; game33492 preserved. CUA cannot bind Wine; explicit alternative UI

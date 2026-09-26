@@ -1,0 +1,89 @@
+{
+  "UTC": "2026-09-26T19:08:00.461550+00:00",
+  "previousGoalTurnClassification": "progress: committed ed5c0d8 and launched verified missing-range continuation; current wait is independently verified live",
+  "userApprovalAppleScript": "received: \u0414\u0430, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0439 AppleScript",
+  "systemPermission": {
+    "uiObserved": "Ghostty switch off in Privacy & Security > Device Control and Data Access",
+    "exactError": "osascript is not allowed assistive access. (-1728)",
+    "changePerformed": false,
+    "actionTimeConfirmation": "pending",
+    "scope": "broad OS permission; distinct from CUA Ghostty app safety refusal, which remains open"
+  },
+  "crossEvidence": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog1-inspect.applescript",
+      "bytes": 205,
+      "sha256": "79a9f2fa56b0a84a39c36aa04606accc8ed61e45c752ff8ab5e086ed9ccf9e81"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog1-inspect-result.json",
+      "bytes": 744,
+      "sha256": "5f5507b77bcd769b2778b931cd9ea4804e56999c4c85e828eb041af461726e7c"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog1-service-check.applescript",
+      "bytes": 90,
+      "sha256": "933bf7288a120840e9bec3e194b3fd89ad894708cf6dfb8475a6f05d7777d72f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog1-service-check.json",
+      "bytes": 175,
+      "sha256": "11fff5be662c0cf5b4351d277e70a1effe1b7cbdc58f6e515599c32c76a40a52"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog2-process-inspect.applescript",
+      "bytes": 236,
+      "sha256": "1d5b46b3e0b634d436b54d1762db5c744a2642cc00a0fdcadc5df3eff483e04f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog2-process-inspect.json",
+      "bytes": 254,
+      "sha256": "f0830e886fd961be80380be4d962d92055f9ba7195df5c9522e9d0f9c5803f22"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog2-window-inspect.applescript",
+      "bytes": 178,
+      "sha256": "83106004b83af9eb429bfe6f82ae2b6eb003260b8679ab17e6472ac6fed2160e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog2-window-inspect.json",
+      "bytes": 334,
+      "sha256": "148237edbd22eb6ec6e9de1d24f1ce262985358036a166198c7b4b45b3c5a564"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/cua-ghostty-refusal1.json",
+      "bytes": 1119,
+      "sha256": "0f8020daf39864fd56d378be82786abd8249924bffde3ca64eb7dff592952ccb"
+    }
+  ],
+  "windowsDownload": {
+    "status": "running",
+    "pid": 60299,
+    "startedUTC": "2026-09-26T18:56:02.538717+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+    "totalBytes": 7994415104,
+    "chunkBytes": 1048576,
+    "concurrency": 8,
+    "maxSeconds": 7200,
+    "completedBytes": 3048210432,
+    "completedRanges": 1491,
+    "retainedRanges": 176,
+    "missingRanges": 6209
+  },
+  "downloadProcessIdentity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+  "downloadCwd": "p60299\nfcwd\nn/Users/michael/Developer/ntsd-2.4\n",
+  "vm": {
+    "config": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/config.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    "state": "UUID                                 Status   Name\n98DFE348-2BA4-426E-9E40-7214229E8E45 stopped  NTSD Windows 11 ARM Reference\n",
+    "guestTools": "UI CD2 utm-guest-tools-latest.iso; contents/hash not verified",
+    "privateContainerRead": "rg reported Operation not permitted; no alternate filesystem access attempted"
+  },
+  "gameRestarted": false,
+  "OKPressed": false,
+  "nativeChanges": false
+}

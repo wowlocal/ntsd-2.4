@@ -1,0 +1,15 @@
+{
+  "recordedUTC": "2026-09-26T19:03:40.747920+00:00",
+  "timezone": "Europe/Moscow UTC+03:00",
+  "eventTimeUTC": "between 2026-09-26T19:02:26Z and 2026-09-26T19:02:56Z; exact event timestamp unavailable in tool response",
+  "sessionId": "01a0dc49-738f-7972-8fb0-e98fb2f34408",
+  "turnId": null,
+  "requestId": null,
+  "model": "gpt-6-astra; runtime identifier from current session context",
+  "operation": "mcp__cua_repl.js: var terminalApp = await cua.getApp('com.mitchellh.ghostty');",
+  "purpose": "Check whether a macOS AppleScript automation permission prompt appeared; no terminal command entry through UI requested",
+  "exactError": "Computer Use is not allowed to use the app 'com.mitchellh.ghostty' for safety reasons.",
+  "classification": "tool safety refusal specific to Ghostty app access; not AppleScript timeout and not cyber_policy output",
+  "affectedOperationStatus": "stopped; do not retry Ghostty UI access through other technology",
+  "independentWork": "Existing authorized Wine-only AppleScript returned -1712; Microsoft ISO download remains a separate live job. Neither clears this refusal."
+}
