@@ -1,0 +1,139 @@
+{
+  "schema": "ntsd-host-window-startup-docs-v1",
+  "UTC": "2026-09-26T11:54:39.054717+00:00",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-20260926/finalize1.job.json",
+    "bytes": 778,
+    "sha256": "c21505d8f0624bdff8ac59ae101abaae584fc86c338d1dfd3215ac2ee480b02c",
+    "mode": 420,
+    "mtime_ns": 1790423619643673286
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-20260926/finalize1.log",
+    "bytes": 740,
+    "sha256": "181234cc4dbead5929c63c0e28fc53bef108801abffadea6df92cdb453b7b63e",
+    "mode": 420,
+    "mtime_ns": 1790423619643720661
+  },
+  "finalizerAbsent": true,
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 6126,
+    "startedUTC": "2026-09-26T11:53:13.644414+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Users/michael/Developer/ntsd-2.4/build/research/application-host-window-startup-20260926/finalize1.py"
+    ],
+    "identity": "6126 Sat Sep 26 14:53:13 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-window-startup-20260926/finalize1.py",
+    "cwd": "p6126\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "files": 2246,
+    "directories": 59,
+    "metadataMembers": 49,
+    "endedUTC": "2026-09-26T11:53:39.643594+00:00",
+    "elapsedSeconds": 26.102369333000002
+  },
+  "rootFiles": [
+    {
+      "path": "tools/prepare_application_host_window_startup.py",
+      "bytes": 5591,
+      "sha256": "872e6761849e7e03b9cbae7a25cee2d388699f14f0a8aae7a93721e603311cef",
+      "mode": 420,
+      "mtime_ns": 1790423084128051800
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_STARTUP_PLAN.md",
+      "bytes": 8360,
+      "sha256": "f5f15b165e025805845bf73819a1272da06b09f54a92bc9fb5a52e09f0caf7b0",
+      "mode": 420,
+      "mtime_ns": 1790423068777083127
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_STARTUP.md",
+      "bytes": 7839,
+      "sha256": "cc63708663b6df84e319a9ada2150c864b2ce5e85cf402124f50ad79a557cfc1",
+      "mode": 420,
+      "mtime_ns": 1790423678983817696
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup.patch",
+      "bytes": 29446,
+      "sha256": "9ee7aed9c15fe459317c1b4f07cd99292de3dc2c731b2b96cb3a6b86259dc262",
+      "mode": 420,
+      "mtime_ns": 1790423604379108869
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup.json",
+      "bytes": 3905,
+      "sha256": "b904480ab0fde5df421691f5ea5069c69c299e8aacc871d01bf2bb7100136206",
+      "mode": 420,
+      "mtime_ns": 1790423619643486536
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup-close.json",
+      "bytes": 1422,
+      "sha256": "3657b2155509c52b30537fd021273543b29531632395bf5156bfc6539f56a54b",
+      "mode": 420,
+      "mtime_ns": 1790423619643583328
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "c8a62da480d5a8fa07dac185882cf237f25666d52b198a2723e189e11b58a95c",
+      "workingAfter": {
+        "bytes": 143589,
+        "sha256": "cbceefb5870e141bd83f1073f6882cefd92ee7f9e6826ed42384ab6f4c586982",
+        "mode": 420,
+        "mtime_ns": 1790423678997305270
+      },
+      "indexedBlob": "e66f547c7a3bf5397129bb26893ed13ac46e9613",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "05c9fbd1e7b363fe64b51f47bce384a0a765185643dc33d90310153fcbc1e356",
+      "workingAfter": {
+        "bytes": 327313,
+        "sha256": "9129602ad49cf6895e09de863ab3d5617f803eba56834a95b3a418bb4309e6c7",
+        "mode": 420,
+        "mtime_ns": 1790423679031036560
+      },
+      "indexedBlob": "b7be38bf7fae428d44042c9366559671e2f8a0b6",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "metadataArchive": {
+    "members": 49,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-20260926/metadata1.tar",
+    "bytes": 2181120,
+    "sha256": "3ff3183ecd73b7ab805bd3c071ba325d8c04dab616d0ff6571bb4e3683a00a46",
+    "mode": 420,
+    "mtime_ns": 1790423617258764534
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-20260926/artifact-archive1",
+    "files": 2246,
+    "directories": 59,
+    "bytes": 5127062512,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-20260926/artifact-archive1.json",
+      "bytes": 632305,
+      "sha256": "ebf72aff2f101bf8b65233b4a0ceff4185effcc047fd4f714a57e4cf76856145",
+      "mode": 420,
+      "mtime_ns": 1790423617153540987
+    }
+  },
+  "buildPassed": false,
+  "nativeComparison": false,
+  "independentReview": false,
+  "rootNativeChanged": false,
+  "patchCheck": {
+    "exitCode": 2,
+    "stdout": "docs/evidence/application-host-window-startup.patch:24: trailing whitespace.\n+ \n",
+    "stderr": "",
+    "classification": "Only the immutable unified-diff blank context marker at patch line24. Patch roundtrip verified; all changed Swift files and all other staged content have no trailing whitespace.",
+    "otherStagedCheckExitCode": 0,
+    "patchRoundtrip": true
+  }
+}

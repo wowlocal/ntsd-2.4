@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Same-Host window startup candidate](APPLICATION_HOST_WINDOW_STARTUP.md): one
+retained Host now receives fresh prepared window cursors between startup attempts.
+Receipt completion follows the fallible delivery-context copy and precedes Host
+publication. Five Swift files parse; all old test bodies/comparators remain exact.
+Five new and23 retained methods (28 total) are selected, not executed. Root1034/
+base2244/source55 preserved;2246-file archive, five-file patch roundtrip and49-member
+metadata archive verified. Finalizer6126 terminal0/absent; task frozen.
+[Publication](../evidence/application-host-window-startup.json).
+NEXT: fresh bounded build/package and all28 complete methods on this exact candidate,
+including whole WinMain outcomes, late failures and retained Host/context consumers.
+Independent review/root promotion, production providers/physical backend/devices,
+full catalog source/Windows/clean-Mac/full match/game remain open. EXE envelope not
+recalculated. Supersedes the Host startup implementation NEXT below.
+
 [Window exchange validation complete](APPLICATION_WINDOW_EXCHANGE_VALIDATION.md):
 all 10 selected methods passed on the unchanged 2244-file candidate. The 280
 whole-window cases fulfilled 4574 requests once each; WinMain retained 23 complete

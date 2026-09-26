@@ -1,0 +1,431 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
+@@ -110,6 +110,7 @@
+     /// globals nor operations. A later menu failure cannot undo this commit.
+     public mutating func start<P: OriginalApplicationStartupPlatform>(
+         instance: UInt32,show: Int32,initial: OriginalStateRecord,platform: inout P,
++        prepare: (P) throws -> Void = { _ in },
+         store: (P,Int,[UInt8]) throws -> Void = { _,_,_ in },
+         beforeCommit: (OriginalWinMainStartup,Session,P) throws -> Void = { _,_,_ in },
+         failedAttempt: (P,Error) -> Void = { _,_ in }) throws -> Started {
+@@ -121,6 +122,9 @@
+         guard staged !== platform else { throw Boundary.sharedStartupAttempt }
+         let bridge = OriginalApplicationStartupBridge(staged)
+         do {
++            // Only independent staged state and immutable prepared observations.
++            // No host IO or shared allocator/queue mutation is permitted here.
++            try prepare(staged)
+             var owner = OriginalWinMainStartup()
+             var globals = try Session.State.slice(initial,0,OriginalMatchPreparation.globalSize)
+             try owner.run(instance:instance,show:show,globals:&globals,platform:bridge,
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -159,18 +159,24 @@
+ 
+     @discardableResult
+     public func start(instance: UInt32, show: Int32, initial: OriginalStateRecord,
++        prepare: (Platform) throws -> Void = { _ in },
+         store: (Platform, Int, [UInt8]) throws -> Void = { _,_,_ in },
+         beforeCommit: (OriginalWinMainStartup, Session, Platform) throws -> Void = { _,_,_ in },
++        beforePublication: (Platform) throws -> Void = { _ in },
+         failedAttempt: (Platform, Error) -> Void = { _,_ in }) throws -> UInt64 {
+         try attempt {
+             try requirePublication()
+             var next = application, candidate = platform
+             let value = try next.start(instance: instance, show: show, initial: initial,
+-                platform: &candidate, store: store, beforeCommit: beforeCommit, failedAttempt: failedAttempt)
+-            // Bootstrap failures already invoke its failure hook. Only this
+-            // new late preparation failure is reported here, exactly once.
++                platform: &candidate, prepare: prepare, store: store, beforeCommit: beforeCommit, failedAttempt: failedAttempt)
++            // Bootstrap reports its own failures. Context preparation and final
++            // validation failures are reported here exactly once. The final hook
++            // validates ownership only: no IO or mutation of the candidate.
+             let context: DeliveryContext
+-            do { context = try .init(application: next, platform: candidate) }
++            do {
++                context = try .init(application: next, platform: candidate)
++                try beforePublication(candidate)
++            }
+             catch { failedAttempt(candidate, error); throw error }
+             application = next; platform = candidate
+             return publish(.startup(value), context: context)
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationWindowStartup.swift
+@@ -0,0 +1,79 @@
++import Foundation
++
++/// The window consumer reads this value cursor; stagedCopy must copy its position
++/// independently. Other startup observations remain fixed prepared inputs. Neither
++/// the provider nor Core may perform host IO inside an attempted transaction.
++public protocol OriginalApplicationWindowStartupPlatform: OriginalApplicationStartupPlatform {
++    var windowExchange: OriginalWindowRequestExchange.Cursor? { get set }
++}
++
++/// Owns one Host from declared initial state through startup suspension and commit.
++/// Returned requests must be served outside resume; an answer records the actual
++/// outcome, not a promise that a later Core rollback can undo physical work.
++public final class OriginalApplicationWindowStartup<Platform: OriginalApplicationWindowStartupPlatform> {
++    public typealias Host = OriginalApplicationHostSession<Platform>
++    public typealias Exchange = OriginalWindowRequestExchange
++    public enum Boundary: Error, Equatable { case reentrantAttempt, missingCursor }
++    public enum Outcome {
++        case request(Exchange.Permit)
++        /// The same retained Host is now available for its normal menu/input API.
++        case started(sequence: UInt64, host: Host)
++    }
++    private let host: Host, exchange = Exchange(), lock = NSRecursiveLock()
++    private let initial: OriginalStateRecord, instance: UInt32, show: Int32
++    private var inFlight = false
++
++    public init(platform: Platform, instance: UInt32, show: Int32, initial: OriginalStateRecord) throws {
++        host = try Host(platform: platform)
++        self.instance = instance; self.show = show; self.initial = initial
++    }
++    private func locked<T>(_ body: () throws -> T) rethrows -> T {
++        lock.lock(); defer { lock.unlock() }; return try body()
++    }
++    private func attempt<T>(_ body: () throws -> T) throws -> T {
++        try locked {
++            guard !inFlight else { throw Boundary.reentrantAttempt }
++            inFlight = true; defer { inFlight = false }; return try body()
++        }
++    }
++    public var snapshot: Host.Application { locked { host.snapshot } }
++    public var exchangeSnapshot: Exchange.Snapshot { locked { exchange.snapshot } }
++    public var pendingBatchCount: Int { locked { host.pendingBatchCount } }
++    public func platformSnapshot() throws -> Platform { try attempt { try host.platformSnapshot() } }
++
++    /// Preparation/observers mutate only attempted state; they must retain the
++    /// same nonwindow inputs across retries. No callback is a device consumer.
++    public func resume(prepare: (Platform) throws -> Void = { _ in },
++        store: (Platform, Int, [UInt8]) throws -> Void = { _,_,_ in },
++        beforeCommit: (OriginalWinMainStartup, Host.Session, Platform) throws -> Void = { _,_,_ in },
++        failedAttempt: (Platform, Error) -> Void = { _,_ in }) throws -> Outcome {
++        try attempt {
++            let cursor = try exchange.snapshot.cursor()
++            do {
++                let sequence = try host.start(instance: instance, show: show, initial: initial,
++                    prepare: { candidate in candidate.windowExchange = cursor; try prepare(candidate) },
++                    store: store, beforeCommit: beforeCommit,
++                    beforePublication: { candidate in
++                        guard let consumed = candidate.windowExchange else { throw Boundary.missingCursor }
++                        // This is after the last fallible context copy. The private
++                        // exchange cannot change concurrently/reentrantly; only
++                        // nonthrowing Host publication follows a successful finish.
++                        _ = try self.exchange.finish(consumed)
++                    }, failedAttempt: failedAttempt)
++                return .started(sequence: sequence, host: host)
++            } catch let needed as Exchange.RequestNeeded {
++                // The Core/Host stack has fully unwound before issuing a permit.
++                return .request(try exchange.claim(needed))
++            }
++        }
++    }
++    public func answer(_ permit: Exchange.Permit, response: Exchange.Response,
++        retaining resources: [any OriginalWindowResponseResource] = []) throws {
++        try attempt { try exchange.answer(permit, response: response, retaining: resources) }
++    }
++    public func fail(_ permit: Exchange.Permit, diagnostic: String,
++        retaining resources: [any OriginalWindowResponseResource] = []) throws {
++        try attempt { try exchange.fail(permit, diagnostic: diagnostic, retaining: resources) }
++    }
++    public func cancel() throws { try attempt { exchange.cancel() } }
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationWindowStartupTests.swift
+@@ -0,0 +1,283 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++@testable import NTSDReferenceChecks
++
++extension OriginalWinMainStartupTests.Adapter: OriginalApplicationWindowStartupPlatform {}
++
++final class OriginalApplicationWindowStartupTests: XCTestCase {
++    typealias P = OriginalWinMainStartupTests
++    typealias B = OriginalApplicationBootstrapTests
++    typealias D = OriginalApplicationHostDeliveryContextTests
++    typealias E = OriginalWindowRequestExchange
++    typealias Driver = OriginalApplicationWindowStartup<P.Adapter>
++    typealias Host = Driver.Host
++    enum Stop: Error { case injected, missingOutcome }
++    final class Resource: OriginalWindowResponseResource {}
++
++    func fresh() throws -> (Driver,P.Adapter,OriginalStateRecord) {
++        let (p,initial) = try D().inputs()
++        return (try Driver(platform:p,instance:0x400000,show:10,initial:initial),p,initial)
++    }
++    func globals(_ session: Host.Session) throws -> OriginalStateRecord {
++        try .init(bytes:Array(session.state.full.bytes[..<0xb440]),defined:Array(session.state.full.defined[..<0xb440]))
++    }
++    func unchanged(_ driver: Driver,_ p: P.Adapter) throws {
++        XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session)
++        XCTAssertEqual(driver.pendingBatchCount,0)
++        let saved = try driver.platformSnapshot()
++        XCTAssertEqual(saved.index,0); XCTAssertEqual(saved.waves,0); XCTAssertEqual(saved.shadow,p.shadow)
++        XCTAssertNil(saved.windowExchange); XCTAssertEqual(saved.hostReservations,[])
++    }
++    func reply(_ p: P.Adapter,_ permit: E.Permit) throws -> E.Response {
++        let events = p.c.events.filter { $0.kind == "window" }
++        guard events.indices.contains(permit.ordinal) else { throw Stop.missingOutcome }
++        return try XCTUnwrap(events[permit.ordinal].event?.response)
++    }
++    @discardableResult
++    func drive(_ driver: Driver,_ p: P.Adapter,
++        prepare: (P.Adapter) throws -> Void = { _ in },
++        before: (OriginalWinMainStartup,Host.Session,P.Adapter) throws -> Void = { _,_,_ in },
++        failed: (P.Adapter,Error) -> Void = { _,_ in },
++        retaining resources: [any OriginalWindowResponseResource] = []) throws -> Host {
++        let count = p.c.events.filter { $0.kind == "window" }.count
++        for _ in 0...count {
++            let outcome = try driver.resume(prepare:prepare,store:{ $0.store($1,$2) },beforeCommit:before,failedAttempt:failed)
++            switch outcome {
++            case .request(let permit):
++                try unchanged(driver,p)
++                XCTAssertEqual(permit.ordinal,driver.exchangeSnapshot.receipts.count)
++                try driver.answer(permit,response:reply(p,permit),retaining:resources)
++            case .started(let sequence,let host):
++                XCTAssertEqual(sequence,1); XCTAssertEqual(driver.exchangeSnapshot.status,.finished)
++                XCTAssertEqual(host.pendingBatchCount,1); return host
++            }
++        }
++        XCTFail("Whole startup did not terminate within its declared requests"); throw Stop.missingOutcome
++    }
++    func testAllWholeWinMainOutcomesSuspendOnOneHostAndComparePublication() throws {
++        let (corpus,raw) = try P().read(), package = try OriginalApplicationStartupInputsTests.shared.get()
++        var cache: [String:[UInt8]] = [:]
++        func blob(_ h: String) throws -> [UInt8] {
++            if let value = cache[h] { return value }
++            let b = try XCTUnwrap(corpus.blobs[h])
++            let value = try MatchPreparationReference.inflate(b.deflate,count:b.count,maximumCount:10_000_000)
++            XCTAssertEqual(MatchPreparationReference.digest(Data(value)),h); cache[h] = value; return value
++        }
++        XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
++        XCTAssertEqual(corpus.dllSHA256,"c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
++        let sources = Dictionary(uniqueKeysWithValues:corpus.sources.map { ($0.path,$0.sha256) })
++        var whole = 0,stops = 0,unknown = 0,events = 0,waves = 0,served = 0
++        for (c,r) in zip(corpus.cases,raw) {
++            var before = try OriginalStateRecord(bytes:blob(c.initialGlobals),defined:[Bool](repeating:true,count:0xb440))
++            for w in c.stimulus { for (i,b) in P.hex(w.bytes).enumerated() { try before.write(b,at:w.address-OriginalMatchPreparation.globalBase+i) } }
++            XCTAssertEqual(before.bytes,try blob(c.beforeGlobals))
++            var bytes = package.initial.bytes,mask = package.initial.defined
++            bytes.replaceSubrange(0..<0xb440,with:before.bytes); mask.replaceSubrange(0..<0xb440,with:before.defined)
++            let initial = try OriginalStateRecord(bytes:bytes,defined:mask)
++            let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
++            let driver = try Driver(platform:p,instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial)
++            try p.calendar(OriginalWinMainStartup().output.calendar,c.before)
++            var attempted: P.Adapter?
++            do {
++                let host = try drive(driver,p,before:{ owner,session,candidate in
++                    try candidate.complete(owner,self.globals(session))
++                },failed:{ candidate,_ in attempted = candidate })
++                let committed = try host.platformSnapshot(); attempted = committed
++                XCTAssertEqual(c.end,"startupBoundary"); XCTAssertEqual(c.endPC,0x43d100); XCTAssertEqual(c.endSP,0x1000effc)
++                let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
++                XCTAssertNil(try host.takeCommitted())
++                guard case .startup(let value) = batch.contents else { throw Stop.missingOutcome }
++                var reference = OriginalApplicationBootstrap(), referencePlatform = try p.stagedCopy()
++                let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,
++                    initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) },beforeCommit:{ owner,session,candidate in
++                        try candidate.complete(owner,self.globals(session))
++                    })
++                try B.sameStartup(XCTUnwrap(host.snapshot.startup),XCTUnwrap(reference.startup))
++                B.same(try XCTUnwrap(host.snapshot.session),try XCTUnwrap(reference.session))
++                B.same(try XCTUnwrap(batch.context.application.session),try XCTUnwrap(reference.session))
++                XCTAssertEqual(try D().encoded(value.operations),try D().encoded(expected.operations))
++                XCTAssertEqual(value.graphics,expected.graphics)
++                let cursor = try XCTUnwrap(committed.windowExchange)
++                XCTAssertEqual(cursor.position,driver.exchangeSnapshot.receipts.count); XCTAssertFalse(cursor.isSuspended)
++                XCTAssertThrowsError(try driver.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.finished)) }
++                XCTAssertEqual(host.pendingBatchCount,0); whole += 1
++            } catch let error as OriginalWinMainStartup.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(error,.unknownFullscreenCursor)
++                let next = try XCTUnwrap(c.events[a.index].event),q = try XCTUnwrap(next.request)
++                XCTAssertEqual(q.kind,"registerClass"); XCTAssertEqual(q.defined.map { Array($0[24..<28]) },[false,false,false,false])
++                XCTAssertTrue(c.stackStores.prefix(try XCTUnwrap(next.stackStoreCount)).allSatisfy {
++                    $0.address >= 0x1000efd8+4 || $0.address+P.hex($0.bytes).count <= 0x1000efd8
++                })
++                a.compareStores(count:try XCTUnwrap(next.globalStoreCount)); unknown += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch OriginalStateError.undefinedBytes(let offset,let length) {
++                let a = try XCTUnwrap(attempted),b = try XCTUnwrap(c.panel.ownBoundary ?? c.input?.ownBoundary)
++                XCTAssertEqual(offset,b.offset); XCTAssertEqual(length,b.count); XCTAssertEqual(a.index,b.rootEventCount)
++                a.compareStores(count:b.globalStoreCount); XCTAssertEqual(a.shadow,try blob(b.rootGlobals)); unknown += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch let error as OriginalStartupOutput.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(c.end,"nullCalendarRead"); XCTAssertEqual(error,.nullCalendarRead(address:try XCTUnwrap(c.boundaryPC)))
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch let error as OriginalCalendarTime.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(c.end,"invalidParameter"); XCTAssertEqual(error,.invalidParameter)
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch OriginalStateError.invalidStorage(let message) {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(message,"Original menu wave reaches invalid CreateSoundBuffer continuation")
++                XCTAssertEqual(c.end,"invalidCreateContinuation"); XCTAssertEqual(c.boundaryPC,0x40187a)
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            }
++            let a = try XCTUnwrap(attempted)
++            XCTAssertEqual(c.controlWord,0x37f); events += a.index; waves += a.waves; served += driver.exchangeSnapshot.receipts.count
++            XCTAssertEqual(p.index,0); XCTAssertEqual(p.waves,0); XCTAssertNil(p.windowExchange)
++        }
++        XCTAssertEqual(corpus.cases.count,35); XCTAssertEqual(whole,23); XCTAssertEqual(stops,5); XCTAssertEqual(unknown,7)
++        XCTAssertEqual(events,6325); XCTAssertEqual(waves,119); XCTAssertEqual(served,650)
++        print("Host window startup:",whole,"whole",stops,"source stops",unknown,"provenance rejections",served,"once-served replies")
++    }
++
++    func testSixLateStartupFailuresRetrySameOwnerWithoutServingWindowAgain() throws {
++        for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after"] {
++            let (driver,p,_) = try fresh(); var finalFailure = 0
++            XCTAssertThrowsError(try drive(driver,p,prepare:{ $0.fail = phase },before:{ _,_,_ in
++                if phase == "after" { throw P.Trial.late }
++            },failed:{ _,error in if error is P.Trial { finalFailure += 1 } })) { XCTAssertTrue($0 is P.Trial) }
++            XCTAssertEqual(finalFailure,1); try unchanged(driver,p)
++            let saved = driver.exchangeSnapshot
++            XCTAssertEqual(saved.status,.open); XCTAssertNil(saved.outstandingRequest)
++            XCTAssertEqual(saved.receipts.count,p.c.events.filter { $0.kind == "window" }.count)
++            let host = try drive(driver,p,before:{ owner,session,candidate in try candidate.complete(owner,self.globals(session)) })
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.request),saved.receipts.map(\.request))
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.response),saved.receipts.map(\.response))
++            XCTAssertEqual(try host.takeCommitted()?.sequence,1); XCTAssertNil(try host.takeCommitted())
++        }
++    }
++
++    func testPreparationPublicationCopiesAndConsumptionFailuresKeepAnswersRetryable() throws {
++        let (early,p,_) = try fresh(); var failures = 0
++        XCTAssertThrowsError(try early.resume(prepare:{ candidate in
++            candidate.hostReservations.append(7); throw Stop.injected
++        },failedAttempt:{ candidate,_ in failures += 1; XCTAssertEqual(candidate.hostReservations,[7]); XCTAssertEqual(candidate.index,0) })) {
++            XCTAssertTrue($0 is Stop)
++        }
++        XCTAssertEqual(failures,1); try unchanged(early,p); XCTAssertTrue(early.exchangeSnapshot.receipts.isEmpty)
++        _ = try drive(early,p)
++        for mode in ["throw-copy","shared-copy","missing","foreign","stale","unused","suspended"] {
++            let (driver,p,_) = try fresh(), oldCursor = try driver.exchangeSnapshot.cursor()
++            var failures = 0,reached = false
++            XCTAssertThrowsError(try drive(driver,p,before:{ owner,_,candidate in
++                reached = true; XCTAssertEqual(owner.input?.sounds.loads.count,5)
++                switch mode {
++                case "throw-copy":candidate.hostFailCopies = true
++                case "shared-copy":candidate.hostShareCopies = true
++                case "missing":candidate.windowExchange = nil
++                case "foreign":candidate.windowExchange = try E().snapshot.cursor()
++                case "stale":candidate.windowExchange = oldCursor
++                case "unused":candidate.windowExchange = try driver.exchangeSnapshot.cursor()
++                case "suspended":
++                    var cursor = try XCTUnwrap(candidate.windowExchange)
++                    do { _ = try cursor.response(for:.init("metric",[999])); XCTFail("Missing suspension") }
++                    catch is E.RequestNeeded {}
++                    candidate.windowExchange = cursor
++                default:throw Stop.missingOutcome
++                }
++            },failed:{ _,error in if !(error is E.RequestNeeded) { failures += 1 } })) { error in
++                switch mode {
++                case "throw-copy":XCTAssertTrue(error is P.Trial)
++                case "shared-copy":XCTAssertEqual(error as? Host.Boundary,.sharedPlatform)
++                case "missing":XCTAssertEqual(error as? Driver.Boundary,.missingCursor)
++                case "foreign":XCTAssertEqual(error as? E.Boundary,.foreignOwner)
++                case "stale":XCTAssertEqual(error as? E.Boundary,.staleRevision)
++                case "unused":XCTAssertEqual(error as? E.Boundary,.unconsumedReplies)
++                case "suspended":XCTAssertEqual(error as? E.Boundary,.suspendedCursor)
++                default:XCTFail("Undeclared control")
++                }
++            }
++            XCTAssertTrue(reached); XCTAssertEqual(failures,1); try unchanged(driver,p)
++            let saved = driver.exchangeSnapshot; XCTAssertEqual(saved.status,.open)
++            let host = try drive(driver,p,before:{ owner,session,candidate in try candidate.complete(owner,self.globals(session)) })
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.request),saved.receipts.map(\.request))
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.response),saved.receipts.map(\.response))
++            XCTAssertEqual(try host.takeCommitted()?.sequence,1); XCTAssertNil(try host.takeCommitted())
++        }
++    }
++
++    func testPermitsReentryCancellationAndIndeterminateOutcomesStayDistinct() throws {
++        let (a,p,_) = try fresh(), (b,_,_) = try fresh()
++        func request(_ d: Driver) throws -> E.Permit {
++            guard case .request(let permit) = try d.resume(store:{ $0.store($1,$2) }) else { throw Stop.missingOutcome }; return permit
++        }
++        let first = try request(a), foreign = try request(b)
++        XCTAssertThrowsError(try a.resume()) { XCTAssertEqual($0 as? E.Boundary,.requestInFlight) }
++        XCTAssertThrowsError(try a.answer(foreign,response:.init(result:0))) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        try a.answer(first,response:reply(p,first)); let second = try request(a)
++        XCTAssertThrowsError(try a.answer(first,response:.init(result:0))) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
++        XCTAssertThrowsError(try a.fail(first,diagnostic:"stale")) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
++        try a.answer(second,response:reply(p,second))
++        func reenter() {
++            XCTAssertThrowsError(try a.resume()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            XCTAssertThrowsError(try a.cancel()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            XCTAssertThrowsError(try a.answer(first,response:.init(result:0))) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            XCTAssertThrowsError(try a.fail(first,diagnostic:"reentrant")) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            XCTAssertThrowsError(try a.platformSnapshot()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            XCTAssertNil(a.snapshot.startup); XCTAssertEqual(a.pendingBatchCount,0)
++        }
++        var final = false
++        _ = try drive(a,p,prepare:{ _ in reenter() },before:{ _,_,_ in reenter(); final = true })
++        XCTAssertTrue(final)
++        try b.cancel(); try b.answer(foreign,response:reply(p,foreign))
++        XCTAssertEqual(b.exchangeSnapshot.status,.cancelled); XCTAssertEqual(b.exchangeSnapshot.receipts.count,1)
++        XCTAssertThrowsError(try b.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        for afterCancel in [false,true] {
++            let (d,_,_) = try fresh(),permit = try request(d)
++            if afterCancel { try d.cancel() }
++            try d.fail(permit,diagnostic:"unknown actual outcome")
++            XCTAssertEqual(d.exchangeSnapshot.status,.indeterminate); XCTAssertTrue(d.exchangeSnapshot.receipts.isEmpty)
++            XCTAssertEqual(d.exchangeSnapshot.failure?.afterCancellation,afterCancel)
++            XCTAssertThrowsError(try d.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.indeterminate)) }
++            XCTAssertThrowsError(try d.answer(permit,response:.init(result:0))) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
++        }
++        let (cancelled,_,_) = try fresh(); try cancelled.cancel()
++        XCTAssertThrowsError(try cancelled.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        XCTAssertTrue(cancelled.exchangeSnapshot.receipts.isEmpty)
++    }
++
++    func testReturnedHostRunsInputAndRetainsStartupResourcesAfterCoordinatorDeath() throws {
++        let (p,initial) = try D().inputs()
++        weak var weakResource: Resource?
++        func completed() throws -> Host.Batch {
++            var driver: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial)
++            var resource: Resource? = Resource(); weakResource = resource
++            let host = try drive(XCTUnwrap(driver),p,retaining:[try XCTUnwrap(resource)])
++            let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
++            let old = try XCTUnwrap(batch.context.application.session)
++            driver = nil; resource = nil; XCTAssertNotNil(weakResource)
++            let helper = D(),down = try helper.key(host,0x100),up = try helper.key(host,0x101)
++            XCTAssertEqual(down.0,2); XCTAssertEqual(up.0,3)
++            try helper.iteration(XCTUnwrap(host.takeCommitted()),input:down.1,key:100,queue:4,reservations:[0x100])
++            try helper.iteration(XCTUnwrap(host.takeCommitted()),input:up.1,key:117,queue:8,reservations:[0x100,0x101])
++            XCTAssertNil(try host.takeCommitted())
++            B.same(try XCTUnwrap(batch.context.application.session),old)
++            return batch
++        }
++        var batch: Host.Batch? = try completed()
++        XCTAssertNotNil(weakResource)
++        XCTAssertEqual(try batch?.context.platformSnapshot().windowExchange?.position,p.c.events.filter { $0.kind == "window" }.count)
++        batch = nil; XCTAssertNil(weakResource)
++
++        var cancelled: Driver? = try Driver(platform:p,instance:0x400000,show:10,initial:initial)
++        guard case .request(let permit) = try XCTUnwrap(cancelled).resume(store:{ $0.store($1,$2) }) else { throw Stop.missingOutcome }
++        var late: Resource? = Resource(); weak var weakLate = late
++        try cancelled?.cancel(); try cancelled?.answer(permit,response:reply(p,permit),retaining:[try XCTUnwrap(late)])
++        var receipt = cancelled?.exchangeSnapshot
++        cancelled = nil; late = nil; XCTAssertNotNil(weakLate)
++        XCTAssertEqual(receipt?.status,.cancelled); receipt = nil; XCTAssertNil(weakLate)
++    }
++}
+--- a/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
+@@ -71,7 +71,8 @@
+         return (try JSONDecoder().decode(Corpus.self,from:data),try XCTUnwrap(raw["cases"] as? [[String:Any]]))
+     }
+     final class Adapter: OriginalApplicationStartupPlatform {
+-        let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String],fail: String?
++        let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String]
++        var fail: String?
+         let startupInputs: OriginalApplicationStartupInputs?
+         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
+         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]

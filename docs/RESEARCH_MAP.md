@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Same-Host window startup candidate](research/APPLICATION_HOST_WINDOW_STARTUP.md):
+prepared startup and a private request/response coordinator now retain one Host
+through suspension and finish receipt consumption immediately before publication.
+Five files parse;28 complete methods selected, build/comparison still open. Old
+comparators/root/base/source preserved;2246-file artifact, five-file patch roundtrip
+and49-member metadata archive verified. Finalizer6126 terminal0/absent, task frozen.
+Next: fresh build/package and all28 methods; production providers/backend, independent
+review/root promotion/devices/full match/game remain open.
+[Publication](evidence/application-host-window-startup.json).
+
 [Window exchange validation complete](research/APPLICATION_WINDOW_EXCHANGE_VALIDATION.md):
 all 10 methods passed, including 280 whole-window cases/4574 once-served requests
 and WinMain's distinct 23 complete/5 stopped/7 provenance outcomes. Fresh build,
