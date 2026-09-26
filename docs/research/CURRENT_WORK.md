@@ -1,5 +1,22 @@
 # Текущая передача работы
 
+[Startup audio request boundary mapped](APPLICATION_STARTUP_AUDIO_PREFLIGHT.md):
+Music already has per-call replies; DirectSound and WAV still rely on aggregate
+future outputs. Native PCM copy events omit payload, and early-return backing
+must remain distinct from later Lock replies. [Publication](../evidence/application-startup-audio-preflight.json),
+[anchors](../evidence/application-startup-audio-preflight-observations.json),
+[next comparisons](../evidence/application-startup-audio-preflight-next-comparison.json).
+28 Native/16 study inputs and84 anchor patterns verified;77-member archive checks
+names/bytes/modes/ns mtimes. Publisher64549 terminal0/absent, task frozen.
+Root1034/prior2257/base2278/source55 unchanged. No source/Native/device execution;
+prior all95 raster candidate remains checked. NEXT: one request-driven common
+sound/WAV implementation through InputStartup/WinMain and the retained startup
+journal;100 retained methods plus5 new groups, exact plan/limits before build.
+Keep prepared file/backing inputs, unknown bytes/masks and failed Create stops.
+Windows installer resumes after host unlock with approvals already given.
+Review/root promotion/audio/Windows/full match/game and incidents remain open;
+EXE envelope not recalculated. Supersedes the audio-preflight NEXT below.
+
 [Native front raster and diagnostic delivery: all95 checked](APPLICATION_MAC_FRONT_RASTER_CORRECTION2.md):
 Owned fill/keyed-mirrored copy/Release/windowed presentation and explicit raw
 Window diagnostics share the retained journal. Whole-menu known pixels/masks,

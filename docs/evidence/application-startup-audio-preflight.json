@@ -1,0 +1,83 @@
+{
+  "schema": "ntsd-startup-audio-preflight-v1",
+  "UTC": "2026-09-26T23:37:21.788448+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927",
+  "status": "static-preflight-complete",
+  "head": "6bf406d48b562b2b819c22b4679e12578fc83e11",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1-inputs.json",
+    "bytes": 575018,
+    "sha256": "eb462e3c418407b6bb467129b03f50e8c069c4adf6e9d019fd52b2f9f4d0bc9d",
+    "mode": 420,
+    "mtime_ns": 1790463561414390004
+  },
+  "plan": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_STARTUP_AUDIO_PREFLIGHT_PLAN.md",
+    "bytes": 4446,
+    "sha256": "703de567966a8aae58c9fcbfe479bad1b2ea317e14a18f392046606613890aaa",
+    "mode": 420,
+    "mtime_ns": 1790465206694475309
+  },
+  "study": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_STARTUP_AUDIO_PREFLIGHT.md",
+    "bytes": 14020,
+    "sha256": "1c300ecb52d191328df2fbac7369ef1fbf83d8f4c494ea139c34135c1b8f0f39",
+    "mode": 420,
+    "mtime_ns": 1790465657239542971
+  },
+  "consultedInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/consulted-inputs1.json",
+    "bytes": 22882,
+    "sha256": "9fcf709ed40819148010bdf07d56826d59bb6dde5a2d80952cd7c8e56c14970e",
+    "mode": 420,
+    "mtime_ns": 1790465832087451943
+  },
+  "observations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/observations1.json",
+    "bytes": 32419,
+    "sha256": "20933c66074ee5cd035b7516868bb93a9b3aa1491dbc83b0c4ff3d097205ecc0",
+    "mode": 420,
+    "mtime_ns": 1790465832089382365
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/verification1.json",
+    "bytes": 751,
+    "sha256": "7097f06f8946865f9cccdc342422c660b0bf5555269de0a6a052804be0689f78",
+    "mode": 420,
+    "mtime_ns": 1790465841717778334
+  },
+  "validationObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/validation-observation1.json",
+    "bytes": 950,
+    "sha256": "f03fe682c0ba6fa5f777514b557fdb1b780d452ef907a336e6850363ffb2e5aa",
+    "mode": 420,
+    "mtime_ns": 1790465841709521436
+  },
+  "metadataArchive": {
+    "members": 77,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/metadata1.tar",
+    "bytes": 2252800,
+    "sha256": "2d13cb2419d322765b971b129124ba54168444d80b860700adccc3f99cca4e42",
+    "mode": 420,
+    "mtime_ns": 1790465841778728459
+  },
+  "publisher": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/publish1.py",
+    "bytes": 14978,
+    "sha256": "2484f6b10adbc1bb9c8572f20373d9d33e3f6c10965271dcec0e375e5ae6a5cd",
+    "mode": 420,
+    "mtime_ns": 1790465778019612470
+  },
+  "nextContract": "Per-call DirectSound initialization and WAV device/copy through whole WinMain; explicit file/backing inputs, complete retained comparisons, no physical rollback claim",
+  "gates": {
+    "staticAnalysis": true,
+    "implementation": false,
+    "independentReview": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false
+}

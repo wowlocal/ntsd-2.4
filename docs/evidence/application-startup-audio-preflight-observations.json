@@ -1,0 +1,982 @@
+{
+  "UTC": "2026-09-26T23:37:12.088843+00:00",
+  "classification": "static Native source and saved contract inspection; no new D/W/device result",
+  "sources": [
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalMenuSoundStartup.swift",
+        "bytes": 5712,
+        "sha256": "040f93aa6b028267dad1cb1f3199c17fe7794f397678365de373df63cbb6a13f",
+        "mode": 420,
+        "mtime_ns": 1789030293711475340
+      },
+      "anchors": [
+        {
+          "anchor": "public struct Platform",
+          "matches": [
+            {
+              "line": 4,
+              "text": "    public struct Platform: Codable {"
+            }
+          ]
+        },
+        {
+          "anchor": "try observe(.init(\"deviceCreate\"",
+          "matches": [
+            {
+              "line": 41,
+              "text": "        try observe(.init(\"deviceCreate\", [0, 0x44eecc, 0]), candidate)"
+            }
+          ]
+        },
+        {
+          "anchor": "if let output = platform.createdDevice",
+          "matches": [
+            {
+              "line": 42,
+              "text": "        if let output = platform.createdDevice { try put(output) }"
+            }
+          ]
+        },
+        {
+          "anchor": "if platform.createResult != 0",
+          "matches": [
+            {
+              "line": 43,
+              "text": "        if platform.createResult != 0 {"
+            }
+          ]
+        },
+        {
+          "anchor": "try observe(.init(\"cooperativeLevel\"",
+          "matches": [
+            {
+              "line": 50,
+              "text": "        try observe(.init(\"cooperativeLevel\", [device, window, 1]), candidate)"
+            }
+          ]
+        },
+        {
+          "anchor": "let p = try wavePlatform",
+          "matches": [
+            {
+              "line": 73,
+              "text": "            let p = try wavePlatform(index, path, destination, device)"
+            }
+          ]
+        },
+        {
+          "anchor": "let file = try device == 0",
+          "matches": [
+            {
+              "line": 82,
+              "text": "            let file = try device == 0 || p.stream == 0 ? [] : fileSource(path)"
+            }
+          ]
+        },
+        {
+          "anchor": "guard result.exit == .returned",
+          "matches": [
+            {
+              "line": 86,
+              "text": "            guard result.exit == .returned else {"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalWaveLoader.swift",
+        "bytes": 12065,
+        "sha256": "f03a36964f667b0763134139a65e2efd0c3cb018540bd3bcca9ab4ee2c907768",
+        "mode": 420,
+        "mtime_ns": 1789246387096072007
+      },
+      "anchors": [
+        {
+          "anchor": "public struct OriginalWavePlatform",
+          "matches": [
+            {
+              "line": 5,
+              "text": "public struct OriginalWavePlatform: Codable, Sendable {"
+            }
+          ]
+        },
+        {
+          "anchor": "public struct OriginalWaveLoadResult",
+          "matches": [
+            {
+              "line": 41,
+              "text": "public struct OriginalWaveLoadResult {"
+            }
+          ]
+        },
+        {
+          "anchor": "var result = try OriginalWaveLoadResult",
+          "matches": [
+            {
+              "line": 87,
+              "text": "        var result = try OriginalWaveLoadResult(output: output, first: backing(p.firstCount),"
+            }
+          ]
+        },
+        {
+          "anchor": "if p.device == 0",
+          "matches": [
+            {
+              "line": 94,
+              "text": "        if p.device == 0 { result.returned = 1; return result } // output is untouched"
+            }
+          ]
+        },
+        {
+          "anchor": "try event(.read, [p.stream, 18",
+          "matches": [
+            {
+              "line": 123,
+              "text": "        try event(.read, [p.stream, 18, UInt32(position)])"
+            }
+          ]
+        },
+        {
+          "anchor": "try format.write(UInt16(truncatingIfNeeded: p.destination)",
+          "matches": [
+            {
+              "line": 164,
+              "text": "        try format.write(UInt16(truncatingIfNeeded: p.destination), at: 16)"
+            }
+          ]
+        },
+        {
+          "anchor": "try event(.create",
+          "matches": [
+            {
+              "line": 172,
+              "text": "        try event(.create, [p.device, 0], [descriptor.bytes, format.bytes])"
+            }
+          ]
+        },
+        {
+          "anchor": "result.exit = .invalidCreateContinuation",
+          "matches": [
+            {
+              "line": 176,
+              "text": "            result.exit = .invalidCreateContinuation; result.returned = nil"
+            }
+          ]
+        },
+        {
+          "anchor": "if p.lockResults[0] == 0x88780096",
+          "matches": [
+            {
+              "line": 183,
+              "text": "        if p.lockResults[0] == 0x88780096 {"
+            }
+          ]
+        },
+        {
+          "anchor": "try event(.copy",
+          "matches": [
+            {
+              "line": 190,
+              "text": "        try event(.copy, [0, 0, UInt32(p.firstCount)])"
+            },
+            {
+              "line": 193,
+              "text": "            try event(.copy, [1, UInt32(p.firstCount), UInt32(p.secondCount)])"
+            }
+          ]
+        },
+        {
+          "anchor": "try event(.unlock",
+          "matches": [
+            {
+              "line": 196,
+              "text": "        try event(.unlock, [p.buffer, p.firstPointer, UInt32(p.firstCount), p.secondPointer, UInt32(p.secondCount)])"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift",
+        "bytes": 7039,
+        "sha256": "5ab1ccb1579e2ff81ff9b7c4b6317c20252dc316ee622bc814198311e9dd1c42",
+        "mode": 420,
+        "mtime_ns": 1789242632744146188
+      },
+      "anchors": [
+        {
+          "anchor": "Neither copy may perform host IO",
+          "matches": [
+            {
+              "line": 4,
+              "text": "/// shared. Neither copy may perform host IO while the Core transaction runs."
+            }
+          ]
+        },
+        {
+          "anchor": "case let .wave(event,_)",
+          "matches": [
+            {
+              "line": 42,
+              "text": "        case let .wave(event,_):return [.allocate,.copy,.free].contains(event.kind) ? .ownedMemory : .platform"
+            }
+          ]
+        },
+        {
+          "anchor": "private var currentWave",
+          "matches": [
+            {
+              "line": 55,
+              "text": "    private var currentWave: OriginalWavePlatform?"
+            }
+          ]
+        },
+        {
+          "anchor": "var sound:",
+          "matches": [
+            {
+              "line": 59,
+              "text": "    var sound: OriginalMenuSoundStartup.Platform { platform.sound }"
+            }
+          ]
+        },
+        {
+          "anchor": "func wave(_ index:",
+          "matches": [
+            {
+              "line": 117,
+              "text": "    func wave(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWavePlatform {"
+            }
+          ]
+        },
+        {
+          "anchor": "operations.append(.wave(wave,input))",
+          "matches": [
+            {
+              "line": 124,
+              "text": "                if wave.kind != .load { operations.append(.wave(wave,input)) }"
+            }
+          ]
+        },
+        {
+          "anchor": "operations.append(.sound(event,sound))",
+          "matches": [
+            {
+              "line": 126,
+              "text": "                operations.append(.sound(event,sound))"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalWinMainStartup.swift",
+        "bytes": 7203,
+        "sha256": "811eb0287502c563488fbcd48c47dd0e9a42cf8b4ca85f04f9c3ea493ff1186c",
+        "mode": 420,
+        "mtime_ns": 1789042409244543141
+      },
+      "anchors": [
+        {
+          "anchor": "var sound:",
+          "matches": [
+            {
+              "line": 8,
+              "text": "    var sound: OriginalMenuSoundStartup.Platform { get }"
+            }
+          ]
+        },
+        {
+          "anchor": "func wave(_ index:",
+          "matches": [
+            {
+              "line": 26,
+              "text": "    func wave(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWavePlatform"
+            }
+          ]
+        },
+        {
+          "anchor": "candidate.dates = try",
+          "matches": [
+            {
+              "line": 99,
+              "text": "        candidate.dates = try candidate.output.run(globals:&state,filetime:p.filetime,environmentTZ:p.environmentTZ,"
+            }
+          ]
+        },
+        {
+          "anchor": "candidate.input = try",
+          "matches": [
+            {
+              "line": 105,
+              "text": "        candidate.input = try OriginalInputStartup.load(globals:&state,request:p.joystick,soundPlatform:p.sound,"
+            }
+          ]
+        },
+        {
+          "anchor": "afterWave:",
+          "matches": [
+            {
+              "line": 110,
+              "text": "            afterWave:{ try p.observe(.wave($0,$1,$2)) },observeSound:{ try p.observe(.sound($0,$1)) })"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalStartupOutput.swift",
+        "bytes": 4790,
+        "sha256": "4f1194267eb75c7893227254c66fc97c4aaf04b781db17ffda88c636dee96373",
+        "mode": 420,
+        "mtime_ns": 1789040170131211838
+      },
+      "anchors": [
+        {
+          "anchor": "try OriginalMusicPlayback.play",
+          "matches": [
+            {
+              "line": 67,
+              "text": "        try OriginalMusicPlayback.play(Array(\"bgm\\\\main.wma\".utf8),globals:&state,memory:&candidate.music,request:requestMusic,store:store)"
+            }
+          ]
+        },
+        {
+          "anchor": "let cursor = try requestCursor",
+          "matches": [
+            {
+              "line": 68,
+              "text": "        let cursor = try requestCursor(true,[0,0x7f00])"
+            }
+          ]
+        },
+        {
+          "anchor": "self = candidate;globals = state",
+          "matches": [
+            {
+              "line": 71,
+              "text": "        self = candidate;globals = state"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalMusicPlayback.swift",
+        "bytes": 11860,
+        "sha256": "e683d260fcc67df5a3d50293d4b8d627193eb1e78bbd45b81591b9718189bdd0",
+        "mode": 420,
+        "mtime_ns": 1789217540655042387
+      },
+      "anchors": [
+        {
+          "anchor": "public struct OriginalMusicResponse",
+          "matches": [
+            {
+              "line": 17,
+              "text": "public struct OriginalMusicResponse: Codable, Equatable, Sendable {"
+            }
+          ]
+        },
+        {
+          "anchor": "public var allocations:",
+          "matches": [
+            {
+              "line": 27,
+              "text": "    public var allocations: [UInt32: OriginalStateRecord] = [:]"
+            }
+          ]
+        },
+        {
+          "anchor": "if query.result < 0",
+          "matches": [
+            {
+              "line": 97,
+              "text": "        if query.result < 0 { return 0 }"
+            }
+          ]
+        },
+        {
+          "anchor": "let level: Int32",
+          "matches": [
+            {
+              "line": 103,
+              "text": "            let level: Int32 = volume == 0 ? -10000 : (volume &* 34) &- 3900"
+            }
+          ]
+        },
+        {
+          "anchor": "public static func initializeGraph",
+          "matches": [
+            {
+              "line": 125,
+              "text": "    public static func initializeGraph(globals: inout OriginalStateRecord,request: Request,"
+            }
+          ]
+        },
+        {
+          "anchor": "let converted = try request",
+          "matches": [
+            {
+              "line": 185,
+              "text": "            let converted = try request(.init(.convert,[0,0,UInt32.max,pointer,UInt32(path.count+1)],[path]))"
+            }
+          ]
+        },
+        {
+          "anchor": "let render = try method",
+          "matches": [
+            {
+              "line": 191,
+              "text": "            let render = try method(word(state,0x44f040),0x34,[pointer,0],"
+            }
+          ]
+        },
+        {
+          "anchor": "if render < 0",
+          "matches": [
+            {
+              "line": 194,
+              "text": "            if render < 0 {"
+            }
+          ]
+        },
+        {
+          "anchor": "Could not create a filter graph",
+          "matches": [
+            {
+              "line": 195,
+              "text": "                _ = try request(.init(.message,[0,0],[Array(\"Could not create a filter graph for this file!\".utf8),Array(\"ERROR\".utf8)]))"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalInputStartup.swift",
+        "bytes": 6211,
+        "sha256": "2d8e02fdca5cdf4a1c912631b1333cd87a67bbfe2c5b4da658ee73ccb86ed829",
+        "mode": 420,
+        "mtime_ns": 1789031630868218552
+      },
+      "anchors": [
+        {
+          "anchor": "public static func load",
+          "matches": [
+            {
+              "line": 84,
+              "text": "    public static func load(globals: inout OriginalStateRecord,"
+            }
+          ]
+        },
+        {
+          "anchor": "let joystickReturn = try",
+          "matches": [
+            {
+              "line": 97,
+              "text": "        let joystickReturn = try initializeJoysticks(globals:&state,request:request,store:store,capabilities:capabilities)"
+            }
+          ]
+        },
+        {
+          "anchor": "let sounds = try OriginalMenuSoundStartup.load",
+          "matches": [
+            {
+              "line": 98,
+              "text": "        let sounds = try OriginalMenuSoundStartup.load(globals:&state,platform:soundPlatform,wavePlatform:wavePlatform,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalStartupRequestExchange.swift",
+        "bytes": 2286,
+        "sha256": "355a1a8b5ae6d77a14f5b29d40815fe00375745ed9185aa427bcc173658865e3",
+        "mode": 420,
+        "mtime_ns": 1790429042161583742
+      },
+      "anchors": [
+        {
+          "anchor": "case music(",
+          "matches": [
+            {
+              "line": 10,
+              "text": "    case music(OriginalMusicEvent), cursor(Bool,[UInt32])"
+            }
+          ]
+        },
+        {
+          "anchor": "case wave(",
+          "matches": [
+            {
+              "line": 12,
+              "text": "    case wave(OriginalApplicationPreparedStartupPlatform.Wave)"
+            }
+          ]
+        },
+        {
+          "anchor": "case cursor(UInt32)",
+          "matches": [
+            {
+              "line": 33,
+              "text": "    case cursor(UInt32), joystick(OriginalInputStartup.Response), wave(OriginalWavePlatform)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift",
+        "bytes": 13699,
+        "sha256": "5c0a6d9d488d71b7f000ceabb0afdcb40962ffe22ce246697e576a759f6147c1",
+        "mode": 420,
+        "mtime_ns": 1790459267912798634
+      },
+      "anchors": [
+        {
+          "anchor": "public var sound:",
+          "matches": [
+            {
+              "line": 52,
+              "text": "        public var sound: OriginalMenuSoundStartup.Platform"
+            },
+            {
+              "line": 93,
+              "text": "    public var sound: OriginalMenuSoundStartup.Platform { prepared.sound }"
+            }
+          ]
+        },
+        {
+          "anchor": "public var waves:",
+          "matches": [
+            {
+              "line": 69,
+              "text": "        public var waves: [Reply<Wave,OriginalWavePlatform>] = []"
+            }
+          ]
+        },
+        {
+          "anchor": "copy.state = state",
+          "matches": [
+            {
+              "line": 100,
+              "text": "        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery; copy.graphicsDelivery = graphicsDelivery"
+            }
+          ]
+        },
+        {
+          "anchor": "guard var cursor = startupExchange",
+          "matches": [
+            {
+              "line": 118,
+              "text": "        guard var cursor = startupExchange else { return try fallback() }"
+            }
+          ]
+        },
+        {
+          "anchor": "event.kind == .helper",
+          "matches": [
+            {
+              "line": 186,
+              "text": "        if event.kind == .helper || event.kind == .format { return .init() }"
+            }
+          ]
+        },
+        {
+          "anchor": "return try response(.music(event)",
+          "matches": [
+            {
+              "line": 187,
+              "text": "        return try response(.music(event), { if case .music(let v) = $0 { return v }; return nil }, otherwise: take(.music,prepared.music,event))"
+            }
+          ]
+        },
+        {
+          "anchor": "try response(.wave(Wave",
+          "matches": [
+            {
+              "line": 196,
+              "text": "        try response(.wave(Wave(index,path,destination,device)), { if case .wave(let v) = $0 { return v }; return nil }, otherwise: take(.wave,prepared.waves,Wave(index,path,destination,device)))"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationObservedStartup.swift",
+        "bytes": 5430,
+        "sha256": "a660114cad4013551e1085ad2daf6cc25dd1c5183b27deb1efa4fabafd447e18",
+        "mode": 420,
+        "mtime_ns": 1790431317537989285
+      },
+      "anchors": [
+        {
+          "anchor": "Returned requests must be served outside resume",
+          "matches": [
+            {
+              "line": 11,
+              "text": "/// Returned requests must be served outside resume; an answer records the actual"
+            }
+          ]
+        },
+        {
+          "anchor": "let cursor = try exchange.snapshot.cursor()",
+          "matches": [
+            {
+              "line": 61,
+              "text": "            let cursor = try exchange.snapshot.cursor()"
+            }
+          ]
+        },
+        {
+          "anchor": "self.exchange.finish(consumed)",
+          "matches": [
+            {
+              "line": 71,
+              "text": "                        _ = try self.exchange.finish(consumed)"
+            }
+          ]
+        },
+        {
+          "anchor": "public func beginService",
+          "matches": [
+            {
+              "line": 82,
+              "text": "    public func beginService(_ permit: Exchange.Permit) throws {"
+            }
+          ]
+        },
+        {
+          "anchor": "public func fail",
+          "matches": [
+            {
+              "line": 89,
+              "text": "    public func fail(_ permit: Exchange.Permit, diagnostic: String,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalRequestExchange.swift",
+        "bytes": 7685,
+        "sha256": "0608f09a263772929bbbbbf6bbd56729104262c06df42048acf8aea70de29a94",
+        "mode": 420,
+        "mtime_ns": 1790431317537185532
+      },
+      "anchors": [
+        {
+          "anchor": "public func beginService",
+          "matches": [
+            {
+              "line": 106,
+              "text": "    public func beginService(_ permit: Permit) throws {"
+            }
+          ]
+        },
+        {
+          "anchor": "public func answer",
+          "matches": [
+            {
+              "line": 116,
+              "text": "    public func answer(_ permit: Permit, response: Response,"
+            }
+          ]
+        },
+        {
+          "anchor": "public func fail",
+          "matches": [
+            {
+              "line": 127,
+              "text": "    public func fail(_ permit: Permit, diagnostic: String,"
+            }
+          ]
+        },
+        {
+          "anchor": "afterCancellation: status == .cancelled",
+          "matches": [
+            {
+              "line": 132,
+              "text": "                afterCancellation: status == .cancelled, resources: resources)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDReferenceChecks/WaveLoaderReference.swift",
+        "bytes": 9467,
+        "sha256": "3adc5522b3bae934a2f04f1d9c8311d9837ffaf509e70869d76eb7226bf8d1c7",
+        "mode": 420,
+        "mtime_ns": 1788838235652636471
+      },
+      "anchors": [
+        {
+          "anchor": "private static func error",
+          "matches": [
+            {
+              "line": 23,
+              "text": "    private static func error(_ text: String) -> OriginalStateError { .invalidStorage(\"Wave reference: \\(text)\") }"
+            }
+          ]
+        },
+        {
+          "anchor": "public static func compare",
+          "matches": [
+            {
+              "line": 24,
+              "text": "    public static func compare(_ input: Data) throws -> Result {"
+            }
+          ]
+        },
+        {
+          "anchor": "raw[$0] != actual.bytes[$0]",
+          "matches": [
+            {
+              "line": 41,
+              "text": "            if let index = raw.indices.first(where: { raw[$0] != actual.bytes[$0] || (mask[$0] == 1) != actual.defined[$0] }) {"
+            }
+          ]
+        },
+        {
+          "anchor": "let native = try OriginalWaveLoader.load",
+          "matches": [
+            {
+              "line": 54,
+              "text": "            let native = try OriginalWaveLoader.load(path: item.path, file: file, output: item.outputBefore, platform: item.input) { events.append($0) }"
+            }
+          ]
+        },
+        {
+          "anchor": "try OriginalInitialSoundLoading.load",
+          "matches": [
+            {
+              "line": 93,
+              "text": "            try OriginalInitialSoundLoading.load(globals: &globals, targetSurface: startup.targetSurface, fileSource: { path in"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalMenuSoundStartupTests.swift",
+        "bytes": 10980,
+        "sha256": "faf9b55042fb0b7667ec494b0edec5da99448897caf7085425f7654a8d4a777b",
+        "mode": 420,
+        "mtime_ns": 1789030293711848384
+      },
+      "anchors": [
+        {
+          "anchor": "XCTAssertEqual(actual.bytes, bytes",
+          "matches": [
+            {
+              "line": 52,
+              "text": "            XCTAssertEqual(actual.bytes, bytes, label+\" bytes\")"
+            }
+          ]
+        },
+        {
+          "anchor": "XCTAssertEqual(actual.defined",
+          "matches": [
+            {
+              "line": 53,
+              "text": "            XCTAssertEqual(actual.defined, mask.map { $0 == 1 }, label+\" mask\")"
+            }
+          ]
+        },
+        {
+          "anchor": "XCTAssertEqual(whole,112)",
+          "matches": [
+            {
+              "line": 137,
+              "text": "        XCTAssertEqual(whole,112);XCTAssertEqual(rejected,10);XCTAssertEqual(loadsChecked,590)"
+            }
+          ]
+        },
+        {
+          "anchor": "func testMissingDeviceAndLateObserverRollback",
+          "matches": [
+            {
+              "line": 141,
+              "text": "    func testMissingDeviceAndLateObserverRollback() throws {"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationObservedStartupTests.swift",
+        "bytes": 32162,
+        "sha256": "adaaa4f0934d0f27231c9031fa0654b653492e9c4120eeaa3eefbd8f47dd008d",
+        "mode": 420,
+        "mtime_ns": 1790430038400772408
+      },
+      "anchors": [
+        {
+          "anchor": "let expected = try reference.start",
+          "matches": [
+            {
+              "line": 135,
+              "text": "                let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,"
+            }
+          ]
+        },
+        {
+          "anchor": "XCTAssertEqual(try D().encoded(value.operations)",
+          "matches": [
+            {
+              "line": 142,
+              "text": "                XCTAssertEqual(try D().encoded(value.operations),try D().encoded(expected.operations))"
+            }
+          ]
+        },
+        {
+          "anchor": "XCTAssertEqual(events,6325)",
+          "matches": [
+            {
+              "line": 187,
+              "text": "        XCTAssertEqual(events,6325); XCTAssertEqual(waves,119); XCTAssertEqual(served,650)"
+            }
+          ]
+        },
+        {
+          "anchor": "func testLateFailuresRetriesAndOwners",
+          "matches": [
+            {
+              "line": 191,
+              "text": "    func testLateFailuresRetriesAndOwners() throws {"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Users/michael/Developer/ntsd-2.4/docs/research/WINMAIN_STARTUP.md",
+        "bytes": 12383,
+        "sha256": "5741400ab8d4a0304ea91c55cfc0a3d4480b58f3f7dea2802ab733687363ce8c",
+        "mode": 420,
+        "mtime_ns": 1789045791284614093
+      },
+      "anchors": [
+        {
+          "anchor": "23 whole native chains",
+          "matches": [
+            {
+              "line": 4,
+              "text": "`43cf40..43d100` startup prefix. **23 whole native chains match. Five original"
+            }
+          ]
+        },
+        {
+          "anchor": "five original4014e0",
+          "matches": [
+            {
+              "line": 52,
+              "text": "creates DirectSound and calls all five original4014e0 WAV loaders. Native"
+            }
+          ]
+        },
+        {
+          "anchor": "Platform implementations must stage",
+          "matches": [
+            {
+              "line": 71,
+              "text": "Platform implementations must stage their external effects until this commit."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Users/michael/Developer/ntsd-2.4/docs/research/WAVE_LOADING.md",
+        "bytes": 17523,
+        "sha256": "29baa92a0254591974d5deddee1eb750d7c4a32c83decda89278e645824aa69c",
+        "mode": 420,
+        "mtime_ns": 1788841191933755902
+      },
+      "anchors": [
+        {
+          "anchor": "cbSize",
+          "matches": [
+            {
+              "line": 94,
+              "text": "`cbSize` \u043d\u0435 \u043e\u0431\u043d\u0443\u043b\u044f\u0435\u0442\u0441\u044f \u0438 \u043d\u0435 \u043a\u043e\u043f\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u0438\u0437 \u0444\u0430\u0439\u043b\u0430. \u041e\u043d\u043e \u043f\u0435\u0440\u0435\u043a\u0440\u044b\u0432\u0430\u0435\u0442\u0441\u044f \u0441 \u0440\u0430\u043d\u0435\u0435"
+            },
+            {
+              "line": 99,
+              "text": "destination. PCM API \u0438\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0435\u0442 cbSize, \u0447\u0442\u043e \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u043e \u043e\u043f\u0438\u0441\u0430\u043d\u043e \u0432"
+            }
+          ]
+        },
+        {
+          "anchor": "\u043d\u0435 \u043e\u0441\u0432\u043e\u0431\u043e\u0436\u0434\u0430\u0435\u0442",
+          "matches": [
+            {
+              "line": 86,
+              "text": "\u043d\u043e **\u043d\u0435 \u043e\u0441\u0432\u043e\u0431\u043e\u0436\u0434\u0430\u0435\u0442 \u0443\u0436\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0439 payload**. \u041d\u0430\u0442\u0438\u0432\u043d\u044b\u0439 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 \u0441\u043e\u0445\u0440\u0430\u043d\u044f\u0435\u0442"
+            }
+          ]
+        },
+        {
+          "anchor": "\u043d\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u044e\u0442\u0441\u044f",
+          "matches": [
+            {
+              "line": 8,
+              "text": "\u043d\u043e\u0432\u044b\u0439 \u043f\u0443\u0442\u044c \u043f\u043e\u043a\u0430 \u043d\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0451\u043d; \u043c\u0438\u043a\u0448\u0435\u0440 \u0438 \u0432\u044b\u0445\u043e\u0434 \u0437\u0432\u0443\u043a\u0430 \u0437\u0434\u0435\u0441\u044c \u043d\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u044e\u0442\u0441\u044f."
+            },
+            {
+              "line": 119,
+              "text": "\u0436\u0435 \u0432\u0445\u043e\u0434\u0430\u043c\u0438. Restore result \u0438 \u043e\u043a\u043e\u043d\u0447\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439 Lock HRESULT **\u043d\u0435 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u044e\u0442\u0441\u044f**."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "historyResolution": {
+    "path": "/Users/michael/Developer/ntsd-2.4/AGENTS_HISTORY_2026-09-12.md",
+    "lines": [
+      [
+        1543,
+        1575
+      ],
+      [
+        3349,
+        3380
+      ],
+      [
+        3648,
+        3681
+      ]
+    ],
+    "currentContract": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationObservedStartup.swift",
+      "bytes": 5430,
+      "sha256": "a660114cad4013551e1085ad2daf6cc25dd1c5183b27deb1efa4fabafd447e18",
+      "mode": 420,
+      "mtime_ns": 1790431317537989285
+    },
+    "scope": "No host IO inside Core remains binding; observed service happens after unwind and fulfilled receipts survive rollback; no physical undo claimed"
+  },
+  "selectedNext": "Request-driven shared DirectSound initialization and WAV device/copy children through whole WinMain; explicit prepared file/backing inputs retained",
+  "designIsOriginalRule": false,
+  "independentReview": false
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "ntsd-startup-audio-preflight-docs-v1",
+  "UTC": "2026-09-26T23:39:10.147968+00:00",
+  "baseHead": "6bf406d48b562b2b819c22b4679e12578fc83e11",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/publication1.json",
+    "bytes": 3700,
+    "sha256": "ce18224a656529d37a1df50f0fd1081169c0d08b20adbf4f8117da1dbfc252f9",
+    "mode": 420,
+    "mtime_ns": 1790465841790048823
+  },
+  "publisherJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-preflight-20260927/publish1.job.json",
+    "bytes": 757,
+    "sha256": "a6e4463f7c33fea428e5ed16dc7739717255caaa51afced9fdfb479d02f42833",
+    "mode": 420,
+    "mtime_ns": 1790465841790979034
+  },
+  "publisherTerminalAndAbsent": true,
+  "publishedStudyUnchanged": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_PREFLIGHT_PLAN.md",
+      "bytes": 4446,
+      "sha256": "703de567966a8aae58c9fcbfe479bad1b2ea317e14a18f392046606613890aaa",
+      "mode": 420,
+      "mtime_ns": 1790465206694475309
+    },
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_PREFLIGHT.md",
+      "bytes": 14020,
+      "sha256": "1c300ecb52d191328df2fbac7369ef1fbf83d8f4c494ea139c34135c1b8f0f39",
+      "mode": 420,
+      "mtime_ns": 1790465657239542971
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-preflight.json",
+      "bytes": 3700,
+      "sha256": "ce18224a656529d37a1df50f0fd1081169c0d08b20adbf4f8117da1dbfc252f9",
+      "mode": 420,
+      "mtime_ns": 1790465841790810034
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-preflight-close.json",
+      "bytes": 974,
+      "sha256": "4b1153ceb27eb7464dedeaa3f1a5b99029f57f64a27aa3d1288bffb2962be1b4",
+      "mode": 420,
+      "mtime_ns": 1790465841790907117
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-preflight-observations.json",
+      "bytes": 32419,
+      "sha256": "20933c66074ee5cd035b7516868bb93a9b3aa1491dbc83b0c4ff3d097205ecc0",
+      "mode": 420,
+      "mtime_ns": 1790465832089382365
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-preflight-next-comparison.json",
+      "bytes": 10209,
+      "sha256": "b4468145c4dd0e312342f73d027159babb40fdc1904b41270ac6e5f1c05fc063",
+      "mode": 420,
+      "mtime_ns": 1790465832098064430
+    },
+    {
+      "path": "tools/prepare_application_startup_audio_preflight.py",
+      "bytes": 6824,
+      "sha256": "b7505f80eb900dfca0f527c51c676b2669a8e3bec0564947ebeef14cd71683c7",
+      "mode": 420,
+      "mtime_ns": 1790465308520191228
+    },
+    {
+      "path": "tools/publish_application_startup_audio_preflight.py",
+      "bytes": 14978,
+      "sha256": "2484f6b10adbc1bb9c8572f20373d9d33e3f6c10965271dcec0e375e5ae6a5cd",
+      "mode": 420,
+      "mtime_ns": 1790465778019612470
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "502d4179423f1e89a52b532661a7577ae10c951b44746024c661178326045505",
+      "insertedBlockSHA256": "735dcf317ca1df375e7b7ab947b0d8a4892a10ead5d49afaf77305db5cbb727d",
+      "stagedBlob": "4f27c315f06cbed3a947a8e14b7935e19da9d2b8",
+      "unrelatedDiffRetained": "260\t0\tdocs/research/CURRENT_WORK.md"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "b7f21873e01691630a0c4ead555eb8dcb3d5beb2b7592296cc1b11339acc8799",
+      "insertedBlockSHA256": "955cada5649e53d5f7a1fa63be435cac57078556b5ee6dccacad987dbdd503ad",
+      "stagedBlob": "49002aea5a205ecb47df2b20f2db306cda4669dc",
+      "unrelatedDiffRetained": "123\t1\tdocs/RESEARCH_MAP.md"
+    }
+  ],
+  "analysisComplete": true,
+  "implementation": false,
+  "nativeExecuted": false,
+  "originalExecuted": false,
+  "deviceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "metadataMembers": 77,
+  "metadataSHA256": "2d13cb2419d322765b971b129124ba54168444d80b860700adccc3f99cca4e42",
+  "priorGoalTurn": "progress:6bf406d Native raster all95 and archives",
+  "nextGoalTask": "Implement common per-call startup sound/WAV and whole WinMain integration after exact105-method candidate plan",
+  "whitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+}
