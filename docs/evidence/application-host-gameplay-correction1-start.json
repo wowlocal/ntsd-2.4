@@ -1,0 +1,134 @@
+{
+  "schema": "ntsd-host-gameplay-correction1-build-and-queue-start-v1",
+  "UTC": "2026-09-26T06:28:45.669300+00:00",
+  "baseHead": "47ef76ea0df91da7aac2fee9bbfea7dad7b689d3",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926",
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/plan1.md",
+    "bytes": 5248,
+    "sha256": "16fd5a40afba36171400ae9fee3a95c7d0f60df7e2ca4cbe9957e624262cceff",
+    "mode": 420
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/context1.json",
+    "bytes": 26314,
+    "sha256": "1d7a9c913a67223aa757d947f86d15ed4cb9796b35ca8cd3f9c087cb530bd3ea",
+    "mode": 420
+  },
+  "baselineManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/baseline-inputs1.json",
+    "bytes": 216337,
+    "sha256": "4deadc3ce77d2151662b41df365e9ca2c9c4c6ab1da7f8eb0161ec11a0b282cc",
+    "mode": 420
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1-inputs.json",
+    "bytes": 216337,
+    "sha256": "5505b78d77d5c92eb6932508deeab30184ee406452d22ce2522e151df70490b5",
+    "mode": 420
+  },
+  "correction": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/correction1.json",
+    "bytes": 994,
+    "sha256": "d379bc28c6b84918425b03fb41887842fa8aa0e42ac8533ae6affedee5fd4aea",
+    "mode": 420
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/correction1.patch",
+    "bytes": 750,
+    "sha256": "c4ec433b664ea720fac97350db02bdc8cf58b60423276724cd847b0dd0d6a9cb",
+    "mode": 420
+  },
+  "changedPaths": [
+    "native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift"
+  ],
+  "rootNativeFiles": 1034,
+  "candidateFiles": 1040,
+  "priorCandidatesVerified": 2,
+  "sourceCodePins": 55,
+  "protectedInputsUnchanged": true,
+  "build": {
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/build1.job.json",
+      "bytes": 95550,
+      "sha256": "07d556c1d1133999551fb189f7de2397f7316a3cdcf47db177c54580e6b1e098",
+      "mode": 420
+    },
+    "log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/build1.log",
+      "bytes": 25453,
+      "sha256": "8f7ec72b76502a8dd1400b11a1c3e73682bcb0cf20f1767af645d0a99e27c052",
+      "mode": 420
+    },
+    "pid": 10257,
+    "exitCode": 0,
+    "seconds": 282.92663016700004,
+    "peakTreeRSS": 6393593856,
+    "processAbsent": true
+  },
+  "package": {
+    "check": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/package-check1.json",
+      "bytes": 947152,
+      "sha256": "4df43b5e568204058a70d36744278d4eacc081f3b86860ec91bf440c29ac5d3a",
+      "mode": 420
+    },
+    "binary": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+      "bytes": 63174872,
+      "sha256": "4c57255ca09227fec399cdbfef5d5ab986e95b7c0823fc4beb9403706f05b72d",
+      "mode": 493,
+      "mtime_ns": 1790404039374252116
+    },
+    "sourceCounts": {
+      "NTSDCore": 191,
+      "NTSDReferenceChecks": 61,
+      "NTSDCoreTests": 270
+    },
+    "fixtureFiles": 385,
+    "runtimeFiles": 102
+  },
+  "runnerControls": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/runner-controls1.json",
+    "bytes": 375,
+    "sha256": "7c2880ff7b7d5c0568f48cb353f93a887a8840557ab1566b85c14a281cac6fa6",
+    "mode": 420
+  },
+  "toolAdaptation": {
+    "path": "/Users/michael/Developer/ntsd-2.4/build/research/application-host-gameplay-correction1-20260926-tools/adaptation1.json",
+    "bytes": 20297,
+    "sha256": "06e02547b409ce0f5ea7e6d4c5531d8e03eb3132dd49c8157637aa85217403ac",
+    "mode": 420
+  },
+  "queueObservation": {
+    "pid": 20715,
+    "status": "running",
+    "identity": "20715 Sat Sep 26 09:27:47 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-host-gameplay-correction1-20260926-tools/run_application_host_gameplay_tests.py /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926",
+    "cwd": "p20715\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "completedAtObservation": 3,
+    "jobPath": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/tests1-queue.job.json"
+  },
+  "selectedMethods": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/selected-methods1.json",
+    "bytes": 6710,
+    "sha256": "7c9ba92ae3fd3ea3ea777d8fa2e036bc4fa5228f989a843d03a7d5d19bfd3bdf",
+    "mode": 420
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/source-terminal-observation1.json",
+    "bytes": 1612,
+    "sha256": "a4ef959b156e5024c7fe68eff9b6bf521061bfd2134c86b85b38c6939d1fd5b1",
+    "mode": 420
+  },
+  "gates": {
+    "freshBuild": true,
+    "packageBytes": true,
+    "complete69Comparison": false,
+    "artifactArchive": false,
+    "metadataArchive": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "fullGame": false
+  },
+  "originalExecuted": false
+}

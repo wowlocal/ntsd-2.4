@@ -1,5 +1,22 @@
 # Текущая передача работы
 
+## Продолжение — 2026-09-26
+
+[Host gameplay correction1](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md): the one
+missing optional driver declaration now passes fresh build10257 (exit0/282.927s),
+exact191/61/270 source inventories and487 packaged resource bytes. Only one test
+signature changed in the isolated1040-file candidate; root1034, both prior1040
+candidates and source55 remain unchanged. Queue20715 is running all69 unchanged
+methods with previous limits; first3 passed at the build/start receipt. Full
+comparison/archive/review gates remain open. [Receipt](../evidence/application-host-gameplay-correction1-start.json).
+NEXT: revalidate and observe this same queue/current child, never duplicate it;
+on terminal outcome diagnose the first nonpass or finalize all69/package/archive.
+Generated tools and exact paths are in the study. This supersedes the correction
+NEXT below. Source59727 is terminal0/absent since2026-09-23T00:10:17Z, stopped at
+the declared publication logical cap (researchBoundary/dependency), not a full
+catalog return; do not restart. Root promotion/installed trajectory/devices/catalog/
+first complete match/full game and prior safety dependencies remain open.
+
 ## Актуальный срез — 2026-09-22
 
 [Host gameplay validation failed at compile](APPLICATION_HOST_GAMEPLAY_VALIDATION.md):

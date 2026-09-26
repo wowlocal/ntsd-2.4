@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay signature correction](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
+fresh build/package pass on the one-declaration corrected1040-file candidate;
+191/61/270 source inventories and487 resources verified. Complete69-method queue
+is running under PID20715; comparison/archive/independent review remain open.
+Next: observe the same queue and preserve its terminal result, then finalizer;
+no duplicate or source restart. Source59727 is terminal at a publication logical
+cap, not a full catalog return. Root/source/prior-candidate bytes preserved.
+[Build/start evidence](evidence/application-host-gameplay-correction1-start.json).
+
 [Host gameplay compile failure](research/APPLICATION_HOST_GAMEPLAY_VALIDATION.md):
 build83817 terminal1/154.046s; ActiveOutputTests.sequence lacks the driver parameter
 already used by its forwarding call and caller. All69 methods unstarted; package/

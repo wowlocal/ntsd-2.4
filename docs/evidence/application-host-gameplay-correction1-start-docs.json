@@ -1,0 +1,52 @@
+{
+  "UTC": "2026-09-26T06:31:13.137697+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeSHA256": "f1ece864b50b162e99ef98a1aef6ef98b5794ddf0257f9e9d753cbceb3f191f7",
+      "insertion": "## \u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0435\u043d\u0438\u0435 \u2014 2026-09-26\n\n[Host gameplay correction1](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md): the one\nmissing optional driver declaration now passes fresh build10257 (exit0/282.927s),\nexact191/61/270 source inventories and487 packaged resource bytes. Only one test\nsignature changed in the isolated1040-file candidate; root1034, both prior1040\ncandidates and source55 remain unchanged. Queue20715 is running all69 unchanged\nmethods with previous limits; first3 passed at the build/start receipt. Full\ncomparison/archive/review gates remain open. [Receipt](../evidence/application-host-gameplay-correction1-start.json).\nNEXT: revalidate and observe this same queue/current child, never duplicate it;\non terminal outcome diagnose the first nonpass or finalize all69/package/archive.\nGenerated tools and exact paths are in the study. This supersedes the correction\nNEXT below. Source59727 is terminal0/absent since2026-09-23T00:10:17Z, stopped at\nthe declared publication logical cap (researchBoundary/dependency), not a full\ncatalog return; do not restart. Root promotion/installed trajectory/devices/catalog/\nfirst complete match/full game and prior safety dependencies remain open.\n\n",
+      "afterSHA256": "17cc7572aad5bd33e5103648aa9e9895b304572f922efddb493c32509058b426",
+      "prefix": "# \u0422\u0435\u043a\u0443\u0449\u0430\u044f \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0430 \u0440\u0430\u0431\u043e\u0442\u044b\n\n"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeSHA256": "24b70cb058bc022fd81820021832261d9e7cd487c275d6de791dab5cd71463d6",
+      "insertion": "[Host gameplay signature correction](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):\nfresh build/package pass on the one-declaration corrected1040-file candidate;\n191/61/270 source inventories and487 resources verified. Complete69-method queue\nis running under PID20715; comparison/archive/independent review remain open.\nNext: observe the same queue and preserve its terminal result, then finalizer;\nno duplicate or source restart. Source59727 is terminal at a publication logical\ncap, not a full catalog return. Root/source/prior-candidate bytes preserved.\n[Build/start evidence](evidence/application-host-gameplay-correction1-start.json).\n\n",
+      "afterSHA256": "b51c0a1abfe3a1d9bfda649acf96fff70a31d388b5582735976ad7eadb6864f7",
+      "prefix": "# \u041a\u0430\u0440\u0442\u0430 \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u0438 \u043f\u0435\u0440\u0435\u043d\u043e\u0441\u0430 NTSD 2.4\n\n"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 7,
+  "adapterAndGeneratedASTsVerified": 6,
+  "generatedToolPinsVerified": 5,
+  "archiveInstructionHashVerified": true,
+  "checks": [
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md",
+      "sha256": "62f473b2d8d4fb0d8dbb135c85a64bb8409fdfd4bb475c2f9a5c24de5d0dc40f"
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_CORRECTION1_PLAN.md",
+      "sha256": "16fd5a40afba36171400ae9fee3a95c7d0f60df7e2ca4cbe9957e624262cceff"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1-start.json",
+      "sha256": "14fe1dc4ca1f6eeb23438e6bc8006008c66d827eba0d61d49338425eaf5120a1"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1.patch",
+      "sha256": "c4ec433b664ea720fac97350db02bdc8cf58b60423276724cd847b0dd0d6a9cb"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1-tools.json",
+      "sha256": "06e02547b409ce0f5ea7e6d4c5531d8e03eb3132dd49c8157637aa85217403ac"
+    },
+    {
+      "path": "tools/prepare_application_host_gameplay_correction1.py",
+      "sha256": "003222b1562724425b434bb373b403cf63a667882f872d1a06917cacb159a380"
+    }
+  ],
+  "nativeComparisonComplete": false,
+  "independentReview": false
+}

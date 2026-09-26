@@ -1,0 +1,11 @@
+--- native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift
++++ native/Tests/NTSDCoreTests/OriginalApplicationActiveOutputTests.swift
+@@ -10,7 +10,7 @@
+     typealias M = OriginalApplicationLoadedMenuSession
+     typealias G = OriginalApplicationCatalogGraphicsComparison
+     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
+-    func sequence(_ reverse: Bool) throws {
++    func sequence(_ reverse: Bool, driver: OriginalApplicationLoadedTestDriver? = nil) throws {
+         let sourceCount = try OriginalApplicationActiveOutputSource(reverse).compare()
+         var before: M.Snapshot?,endpoint: M.Snapshot?
+         var earlier: [OriginalFrontScreenEvent] = [],front: [OriginalFrontScreenEvent] = [],prefix: [G.Event] = []
