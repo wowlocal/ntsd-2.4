@@ -1,5 +1,17 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Installed text replies through the own front body](research/APPLICATION_TEXT_RESPONSES.md):
+Provider-based GetDC/GDI replies now pass through the complete own body; legacy
+prepared/pristine paths retained. All84 Native methods pass:276 installed-text
+cases/43 own bodies, late rollback controls and80 regressions. Fresh package1686
+resources, exact patch and4964-file/370-member archives verified. [Publication](evidence/application-text-responses.json).
+Candidate2273 files frozen; old root1034/prior2257/base2272/source55 preserved.
+Independent review/root promotion/MenuSession-Host integration/raster/Windows/
+full match/game remain open; EXE envelope not recalculated. NEXT Native: connect
+actual text replies to MenuSession effects and retained Host exchange. Host still
+locked; same Windows installer already approved, CrossOver process preserved.
+This supersedes environment-only NEXT prose below; existing incidents stay open.
+
 [Windows DirectDraw menu-text observer prepared](research/WINDOWS_MENU_TEXT_PROBE.md):
 Exact three first-menu text requests, owned DC/font metadata and readonly pixel
 snapshots; 33 synthetic tests pass. Two final ten-file kits byte-identical; final

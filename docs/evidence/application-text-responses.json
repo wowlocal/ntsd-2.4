@@ -1,0 +1,114 @@
+{
+  "schema": "ntsd-application-text-responses-validation-v1",
+  "UTC": "2026-09-26T21:22:22.501756+00:00",
+  "status": "all84-passed",
+  "baseHead": "d6f2ce865737c8af47c33bfd5e781db3b7c82685",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/candidate1-inputs.json",
+    "bytes": 573789,
+    "sha256": "007ef2d2c9646df19ad70704550ba14c4ef1b9c8b7d98e68ceb9e361912672e8",
+    "mode": 420,
+    "mtime_ns": 1790456482602228217
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/context1.json",
+    "bytes": 28609,
+    "sha256": "5cf7c88f42cb7198c9249b22b29bd2083a30cf5aa09b387170a06208e2739041",
+    "mode": 420,
+    "mtime_ns": 1790456483199816905
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/build1.job.json",
+    "bytes": 86024,
+    "sha256": "a8576229634812ebf602ab9f61e8a6eff34f158fdc34c166fd397ff804516b6c",
+    "mode": 420,
+    "mtime_ns": 1790456804382772987
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/package-check1.json",
+    "bytes": 1446241,
+    "sha256": "58848d441a127e42b0bebe40a967baf024913eb42ffeab7ac5a548d685d2cb76",
+    "mode": 420,
+    "mtime_ns": 1790456820706237719
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 66711112,
+    "sha256": "ae7a3204fd1296b6e2b94ec09ff1fc91aae750620b503ede7074791681dc20f7",
+    "mode": 493,
+    "mtime_ns": 1790456802009696824
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/tests1-queue.job.json",
+    "bytes": 67260,
+    "sha256": "2201537b39db505a9d0aca0a79df222a346979f3d4434804ae1ada415cd7a8e6",
+    "mode": 420,
+    "mtime_ns": 1790457639405630763
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/verification1.json",
+    "bytes": 35174,
+    "sha256": "129a432f6cd515236b6e44d2cd4a1bb35d6d4dcce442e1e01eca1ed217b4d02f",
+    "mode": 420,
+    "mtime_ns": 1790457705340210083
+  },
+  "passedMethods": 84,
+  "selectedMethods": 84,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/artifact-archive1",
+    "files": 4964,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11413959818,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/artifact-archive1.json",
+      "bytes": 2551170,
+      "sha256": "543d764bda001d68676894ffd287353d697631fa72b15a2f795b905aac01a0d8",
+      "mode": 420,
+      "mtime_ns": 1790457705332316068
+    }
+  },
+  "metadataArchive": {
+    "members": 370,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/metadata1.tar",
+    "bytes": 6963200,
+    "sha256": "2a015c5fd9f22fee7bf41420bcad018b1f2655f30384a23c53f777219d10d420",
+    "mode": 420,
+    "mtime_ns": 1790457742347926979
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "e261a3b03b9ee79b47875a833637189f3761a28d45f7ddf4ba088926562696a5",
+    "mode": 420,
+    "mtime_ns": 1790457705338860122
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2273,
+  "installedTextResponseProviderAdded": true,
+  "allOldTestBodiesUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Installed-library helper and whole own body obtain replies per request. MenuSession/Host response integration and retained exchange remain open; no physical IO is undone by Native rollback.",
+    "All84 includes276 preserved installed-text cases,43 whole own bodies, Native-only failure controls, old library/body tests and76 retained geometry/Host regressions. No original execution, Windows/font/device or raster acceptance.",
+    "Source59727 terminal at34 Objects; full137 and transport/provenance audits remain open. Independent review/root promotion/general raster/other providers/loading/Windows/input/audio/clean-Mac/full match/game remain open; NTSDApp still Practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

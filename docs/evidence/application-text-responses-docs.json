@@ -1,0 +1,126 @@
+{
+  "schema": "ntsd-text-responses-docs-v1",
+  "UTC": "2026-09-26T21:23:49.198587+00:00",
+  "baseHead": "d6f2ce865737c8af47c33bfd5e781db3b7c82685",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/publication1.json",
+    "bytes": 5380,
+    "sha256": "abc7ae93bfb0b5fada14680074becbc3d894d67c36f57739fc6ac6c15df25947",
+    "mode": 420,
+    "mtime_ns": 1790457742507729579
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-text-responses-20260926/finalize1.job.json",
+    "bytes": 871,
+    "sha256": "4b6378e02e6e9df889c4c111ce48466e803ecdbb84f931d8ea24aeb9f3b57afd",
+    "mode": 420,
+    "mtime_ns": 1790457742511310086
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_TEXT_RESPONSES_PLAN.md",
+      "bytes": 5446,
+      "sha256": "f853342c48bc12f01f0ae316657c72f1ec194249f7406366f933929fab17d7d7",
+      "mode": 420,
+      "mtime_ns": 1790456299341742015
+    },
+    {
+      "path": "docs/research/APPLICATION_TEXT_RESPONSES.md",
+      "bytes": 6653,
+      "sha256": "3f409c409b11d48b27c8be7cc1e319d258ded7228b38898a41a7e283f854dd8e",
+      "mode": 420,
+      "mtime_ns": 1790457829100682216
+    },
+    {
+      "path": "docs/evidence/application-text-responses.json",
+      "bytes": 5380,
+      "sha256": "abc7ae93bfb0b5fada14680074becbc3d894d67c36f57739fc6ac6c15df25947",
+      "mode": 420,
+      "mtime_ns": 1790457742510962335
+    },
+    {
+      "path": "docs/evidence/application-text-responses-close.json",
+      "bytes": 1658,
+      "sha256": "72a57fad89cbfe63defbf6f862a285f7ebfb80cbc13d4a26112eae5b3d93c213",
+      "mode": 420,
+      "mtime_ns": 1790457742511085544
+    },
+    {
+      "path": "docs/evidence/application-text-responses.patch",
+      "bytes": 24085,
+      "sha256": "e67aab74efe8b2aa5f498e366bbdaa99b7ec9d1a5134355a2ddb9a2fc84cc6ed",
+      "mode": 420,
+      "mtime_ns": 1790457662550879495
+    },
+    {
+      "path": "tools/OriginalLibSurfaceText.swift",
+      "bytes": 3741,
+      "sha256": "8c437b746fb35c0791cb196337da61aa8215056ed63de5e1678795eb6d8887ba",
+      "mode": 420,
+      "mtime_ns": 1790456299337511386
+    },
+    {
+      "path": "tools/OriginalApplicationTextResponseTests.swift",
+      "bytes": 14573,
+      "sha256": "1d2b79ac1d7624572355d1ffa9e9bc34051a860a26422ddf61abef8b88240892",
+      "mode": 420,
+      "mtime_ns": 1790456397185911405
+    },
+    {
+      "path": "tools/apply_text_response_candidate.py",
+      "bytes": 3779,
+      "sha256": "9f3232053f0c6b62eb343660db92739b49624aa4732784b21d2ec0253c746242",
+      "mode": 420,
+      "mtime_ns": 1790456299339925013
+    },
+    {
+      "path": "tools/prepare_application_text_responses.py",
+      "bytes": 12701,
+      "sha256": "451141282dbefa1e55a3be62a2f7f4cc929a025bf54f84e514d5744a457ac801",
+      "mode": 420,
+      "mtime_ns": 1790456459349649644
+    },
+    {
+      "path": "tools/finalize_application_text_responses.py",
+      "bytes": 18223,
+      "sha256": "58d4cda736e3ef9b3e2ec6eef359000f67ffccecb8d722d798deacb3d19c46cf",
+      "mode": 420,
+      "mtime_ns": 1790456528041433741
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "9306ef7c31bc259f46f02d6898f99aa65e0d7d26e65893a1031e2ca24e347c6d",
+      "insertedBlockSHA256": "e7eb60441ff6201e1148ce7a92cf1b4e1c65d80465257a00ed278025957ba11e",
+      "stagedBlob": "143571216d415ed08c64e3597f774f5cf0e65436",
+      "unrelatedDiffRetained": "260\t0\tdocs/research/CURRENT_WORK.md"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "da5715e08bb3efd1a7a2d3a9e4f0862601953a0edc4728af574b38a77c7e78b7",
+      "insertedBlockSHA256": "af4041d9550f1acd894d04faaed60a532ff14f1a41403976b40a6123ab5d4861",
+      "stagedBlob": "af8a707b425169a72d040d95fb168c7cb14b1a7e",
+      "unrelatedDiffRetained": "123\t1\tdocs/RESEARCH_MAP.md"
+    }
+  ],
+  "all84Passed": true,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "originalExecuted": false,
+  "whitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/evidence/application-text-responses.patch"
+    ],
+    "exitCode": 0,
+    "evidencePatchException": "Unified-diff empty context line6 is the mandatory single-space context marker; preserve exact frozen/round-tripped patch bytes.",
+    "unfilteredResult": "docs/evidence/application-text-responses.patch:6: trailing whitespace.\n+ \n"
+  }
+}
