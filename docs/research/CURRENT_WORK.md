@@ -2,6 +2,18 @@
 
 ## Продолжение — 2026-09-26
 
+[Catalog package comparison checkpoint](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+57/76 complete methods verified at08:52:46Z; same queue42094 and child80613/test58
+confirmed live. Finite finalizer prepared for6093 candidate/release/standalone app
+files; exact saved-result classification agrees on51 logs and12 controls. No new
+build/test/source launch. [Receipt](../evidence/application-catalog-package-validation-preclose.json).
+NEXT: observe this same queue, preserve/diagnose a nonpass; after terminal run the
+pinned task-local finalize2.py and verify all archive/preservation gates. Do not
+run it while the queue is live. Full76/large archive/independent review/root
+promotion/backend/app devices/full catalog source/full match/game remain open.
+Initial finalizer and the checkpoint observation race are preserved; queue and
+candidate unchanged. EXE envelope not recalculated. Supersedes the dated count below.
+
 [Catalog package validation started](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 fresh build25257 terminal0/311.585s,192 Core/61 Reference/271 test sources and
 all1686 packaged files verified. Core-only client links no test/reference objects;

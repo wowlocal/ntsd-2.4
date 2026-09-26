@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Catalog package comparison checkpoint](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+57/76 complete passes at08:52:46Z; same queue42094 continues. Terminal archive
+producer prepared for6093 candidate/build/app files;51 saved logs and12 reader
+controls agree. No rerun or new source. Next: same queue terminal result, then
+pinned finalize2/preservation/archive gates; full comparison/review/app/game open.
+[Receipt](evidence/application-catalog-package-validation-preclose.json).
+
 [Catalog package validation](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 fresh build and all1686 resource files verified by bytes and membership; relocated app
 reads full catalog inputs while repository/X5/T7 reads are denied. All five

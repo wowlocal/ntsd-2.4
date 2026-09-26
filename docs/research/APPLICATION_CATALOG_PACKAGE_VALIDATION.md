@@ -9,6 +9,42 @@ selection is still running; full76 comparison, archive closure, independent revi
 and root promotion are not accepted at this progress publication.
 [Build/start receipt](../evidence/application-catalog-package-validation-start.json).
 
+## Comparison checkpoint and terminal archive preparation
+
+At2026-09-26T08:52:46Z,57 of76 methods had complete named passes, all three
+zero-failure summaries, exit0 and no guard/signal/residual process. Queue42094
+and current child80613/test58 were revalidated by PID/start/command/cwd. The
+remaining19 methods continue on the same binary and original limits. This dated
+[checkpoint](../evidence/application-catalog-package-validation-preclose.json)
+supersedes the smaller live count below, not the queue's eventual terminal result.
+
+The task-local finalize2.py is prepared but unexecuted. It reuses the existing
+saved-result checks and APFS regular archive procedure. Its finite archive domain
+is2241 candidate files,2651 release files and1201 standalone app files:6093 total.
+Cross-volume app preservation uses ordinary copy2 with complete bytes/mode/nsmtime
+verification; X5 files use distinct-inode clones. The finalizer requires a terminal
+queue, diagnoses a nonpass separately, verifies all protected inputs/package/client
+bindings, and keeps comparison, archive and independent-review gates distinct.
+No tests/build/original execution is added. The initial unexecuted finalizer and
+its pins are preserved; prelaunch revision2 adds explicit client/config/progress
+receipt bindings and exact domain counts. Result reading agrees on the51 complete
+logs available when checked and on2 positive/10 negative controls. This is author
+verification, not independent review.
+
+A read-only checkpoint observation encountered test56's job path between the
+queue recording its current phase and the child creating its job. The exact
+FileNotFoundError is retained in preclose-observation1-error.json. The same queue
+and child were then observed live, and a later snapshot verified57 completed
+methods; no restart, queue mutation or Native-failure reclassification occurred.
+
+NEXT remains this queue's terminal result, followed by finalize2.py and archive
+verification within the fixed plan. Do not execute the finalizer while the queue
+is live. Full76 comparison/large artifact closure/review/root promotion remain
+open. The shipping input gap has passed its local reader/catalog checks; the next
+application dependency after this validation is retained per-commit delivery
+owners and prepared backend replies described by the existing host/app preflight.
+Current AppKit still runs Practice; no device or full-match acceptance is claimed.
+
 ## Fresh build and package
 
 Preparation24323 exited0 in15.658s after verifying and APFS-cloning all2241 Native

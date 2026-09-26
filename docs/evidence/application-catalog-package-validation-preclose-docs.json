@@ -1,0 +1,41 @@
+{
+  "UTC": "2026-09-26T08:53:50.059588+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Catalog package validation started]",
+      "insertion": "[Catalog package comparison checkpoint](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\n57/76 complete methods verified at08:52:46Z; same queue42094 and child80613/test58\nconfirmed live. Finite finalizer prepared for6093 candidate/release/standalone app\nfiles; exact saved-result classification agrees on51 logs and12 controls. No new\nbuild/test/source launch. [Receipt](../evidence/application-catalog-package-validation-preclose.json).\nNEXT: observe this same queue, preserve/diagnose a nonpass; after terminal run the\npinned task-local finalize2.py and verify all archive/preservation gates. Do not\nrun it while the queue is live. Full76/large archive/independent review/root\npromotion/backend/app devices/full catalog source/full match/game remain open.\nInitial finalizer and the checkpoint observation race are preserved; queue and\ncandidate unchanged. EXE envelope not recalculated. Supersedes the dated count below.\n\n",
+      "beforeSHA256": "c10bec2cbcc560293d565695cb15ccae437a8c56e5c3cda96646c0cacc3838ce",
+      "afterSHA256": "5359d388c58bb808e97d320e8b75660a393d16264dac5a2b1d94a0dc8c7a1581"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Catalog package validation]",
+      "insertion": "[Catalog package comparison checkpoint](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\n57/76 complete passes at08:52:46Z; same queue42094 continues. Terminal archive\nproducer prepared for6093 candidate/build/app files;51 saved logs and12 reader\ncontrols agree. No rerun or new source. Next: same queue terminal result, then\npinned finalize2/preservation/archive gates; full comparison/review/app/game open.\n[Receipt](evidence/application-catalog-package-validation-preclose.json).\n\n",
+      "beforeSHA256": "61de8f69a1f63459659158bcda0677c6ae036ca01b21888e41a3f5a79f827f6a",
+      "afterSHA256": "45f9d3a178ff16761a6978420c149f73d12a610bcc3876a7e7bc005284864921"
+    }
+  ],
+  "studyBeforeSHA256": "68887c620b542ce1f41a6d777879048c74a2db328565b3e02357bf57632c5d7f",
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md",
+      "bytes": 9063,
+      "sha256": "54522eee9a7bc53e15787ddf52dbc0ed751e14dc75a394debaaa83afad108d82",
+      "mode": 420,
+      "mtime_ns": 1790412830042574032
+    },
+    {
+      "path": "docs/evidence/application-catalog-package-validation-preclose.json",
+      "bytes": 4127,
+      "sha256": "d20bef02e4236df8940607ef0bb703c786720e4d3d4636851e5cf1ea31862f15",
+      "mode": 420,
+      "mtime_ns": 1790412766900509496
+    }
+  ],
+  "queuePID": 42094,
+  "taskFrozen": false,
+  "finalizerExecuted": false,
+  "independentReview": false,
+  "rootPromotion": false
+}

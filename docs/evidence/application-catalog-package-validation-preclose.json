@@ -1,0 +1,78 @@
+{
+  "schema": "ntsd-catalog-package-validation-preclose-v1",
+  "UTC": "2026-09-26T08:52:46.886200+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926",
+  "classification": "progress: additional completed Native comparisons verified; finite finalizer prepared without queue mutation",
+  "queuePID": 42094,
+  "queueIdentity": "42094 Sat Sep 26 11:31:51 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-catalog-package-validation-20260926/tools/run_application_host_gameplay_tests.py build/research/application-catalog-package-validation-20260926",
+  "queueCwd": "p42094\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+  "queueSnapshot": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/tests1-queue-snapshot2.json",
+    "bytes": 46411,
+    "sha256": "cd9ef60d33efc9b61eeec717568cfc0cc0224684f02bb51a0a2213ae46305650",
+    "mode": 420,
+    "mtime_ns": 1790412766884735663
+  },
+  "completedMethods": 57,
+  "passedMethods": 57,
+  "current": {
+    "phase": "test-58",
+    "method": "OriginalApplicationHostMatchLaunchTests/testActualHostStartLaunchAndNextInputRetainWholeOwners",
+    "pid": 80613,
+    "identity": "80613 Sat Sep 26 11:52:35 2026     /Applications/Xcode.app/Contents/Developer/usr/bin/xctest -XCTest NTSDCoreTests.OriginalApplicationHostMatchLaunchTests/testActualHostStartLaunchAndNextInputRetainWholeOwners /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest",
+    "cwd": "p80613\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/candidate1",
+    "statusAtRead": "running",
+    "elapsedSeconds": 0.014464458000020386,
+    "sampledTreeRSS": 110280704
+  },
+  "finalizerInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalizer-inputs2.json",
+    "bytes": 1391,
+    "sha256": "5c35934fa661b70d6daf7f196f60e7776b915c54eb27016b58c60b89d1a05328",
+    "mode": 420,
+    "mtime_ns": 1790412554201781004
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalize2.py",
+    "bytes": 19107,
+    "sha256": "2f9d60944c36375eb7eb691c9c51696c038d9df397137cf91ae5553717e28da5",
+    "mode": 420,
+    "mtime_ns": 1790412554198075162
+  },
+  "resultReaderControls": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalizer-controls1.json",
+    "bytes": 1530,
+    "sha256": "59e52b72ac7308052823bfe69dccbe50dc714caea3e51e224469b75d8439c38f",
+    "mode": 420,
+    "mtime_ns": 1790412580924812529
+  },
+  "oldUnexecutedFinalizerPreserved": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalize1.py",
+    "bytes": 17598,
+    "sha256": "356f78efa1bb9156a3a9163a89b59a7f76ad71b15820ca9c83dd06902e1dbf28",
+    "mode": 420,
+    "mtime_ns": 1790412468561227472
+  },
+  "priorObservationError": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/preclose-observation1-error.json",
+    "bytes": 577,
+    "sha256": "4944584476d10c91e616b8f05d120b82440159b539a5a68baefbc0f65075a505",
+    "mode": 420,
+    "mtime_ns": 1790412726877138516
+  },
+  "liveProducerPinsVerified": true,
+  "finalizerExecuted": false,
+  "taskFrozen": false,
+  "full76Comparison": false,
+  "largeArchiveClosed": false,
+  "independentReview": false,
+  "rootPromotion": false,
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false,
+  "expectedArchiveFiles": {
+    "candidate": 2241,
+    "release": 2651,
+    "standalone": 1201,
+    "total": 6093
+  }
+}
