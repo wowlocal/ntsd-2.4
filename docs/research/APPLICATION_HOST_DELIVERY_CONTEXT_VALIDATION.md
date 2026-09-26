@@ -14,6 +14,13 @@ The [progress publication](../evidence/application-host-delivery-context-validat
 pins the build, binary, package check, methods, actual queue snapshot and archive.
 The candidate itself and earlier archives remain frozen; root1034 is unpromoted.
 
+A later [checkpoint](../evidence/application-host-delivery-context-validation-checkpoint.json)
+verifies40/82 complete saved results individually against the pinned result
+predicates and terminal jobs. Queue5193 remains live on method41. All145 progress
+archive members were rechecked for full body/mode/nsmtime/membership, and the
+finalizer's result function remains identical to the earlier accepted reader.
+This supersedes the progress count above; full comparison/archive gates remain open.
+
 ## Analysis and implementation boundary
 
 This validates the missing ownership contract for a delayed backend consumer:

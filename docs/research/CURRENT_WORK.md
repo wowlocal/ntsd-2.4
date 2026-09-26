@@ -2,6 +2,13 @@
 
 ## Продолжение — 2026-09-26
 
+[Delivery-context checkpoint](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+40/82 exact saved method results verified; same queue5193 continues test41.
+The145-member progress archive was fully reverified; finalizer result predicates
+remain unchanged. [Receipt](../evidence/application-host-delivery-context-validation-checkpoint.json).
+NEXT remains same-queue completion/diagnosis and full archive closure; no rerun.
+Independent review/backend/app/full-game gates remain open.
+
 [Host delivery context validation](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
 fresh build93616 terminal0/291.448s,192 Core/61 Reference/272 test sources and
 all1686 package files verified. All six new delayed-delivery/copy-failure/lifetime

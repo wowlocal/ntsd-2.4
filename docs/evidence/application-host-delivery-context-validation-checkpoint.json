@@ -1,0 +1,39 @@
+{
+  "UTC": "2026-09-26T10:15:50.621249+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926",
+  "queueSnapshot": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/checkpoint1-queue.json",
+    "bytes": 32869,
+    "sha256": "73f6181ce6b9c56f51123063a35664c6cae4e04d3043a5a989309ecb5da9790d",
+    "mode": 420,
+    "mtime_ns": 1790417750621180121
+  },
+  "queuePID": 5193,
+  "queueConfirmedLive": {
+    "identity": "5193 Sat Sep 26 13:01:37 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-delivery-context-validation-20260926/tools/run_application_host_gameplay_tests.py build/research/application-host-delivery-context-validation-20260926",
+    "cwd": "p5193\nfcwd\nn/Users/michael/Developer/ntsd-2.4"
+  },
+  "passedMethods": 40,
+  "selectedMethods": 82,
+  "current": "test-41",
+  "allSavedCompletedResultsVerified": true,
+  "progressArchivePreservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start-archive-preservation1.json",
+    "bytes": 1802,
+    "sha256": "5dd69be0815b2d7a5bc27504a6c3e167f5386fbb4b6e1084b3ba0686c7dbb09c",
+    "mode": 420,
+    "mtime_ns": 1790417575865033263
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalize1.py",
+    "bytes": 16127,
+    "sha256": "ccf1dddff32c55b2306490c269dd75dce8859a0e75939fb6b919ff4e943fad55",
+    "mode": 420,
+    "mtime_ns": 1790416712349406015
+  },
+  "nativeRerun": false,
+  "originalExecuted": false,
+  "independentReview": false,
+  "completeComparison": false,
+  "completeArtifactArchive": false
+}

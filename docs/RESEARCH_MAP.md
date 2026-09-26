@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Delivery-context checkpoint](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+40/82 complete saved results and145-member progress archive verified; same queue5193
+continues test41. Next: same queue terminal outcome and full archive gates.
+[Receipt](evidence/application-host-delivery-context-validation-checkpoint.json).
+
 [Host delivery context validation](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
 fresh build and1686 package files verified; all six new context methods pass,
 12/82 in the saved snapshot. Same queue5193 continues unchanged old schedules.
