@@ -1,0 +1,59 @@
+{
+  "UTC": "2026-09-26T14:28:49.633361+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/publication1.json",
+    "bytes": 5306,
+    "sha256": "bc159336a3ee247ba664d8c5f251d43fe06511bb936f0c117896c96b8deeb88c",
+    "mode": 420,
+    "mtime_ns": 1790432873117128897
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/external-close1.json",
+    "bytes": 1634,
+    "sha256": "8822271eba91b309f92c3aa1ecf59175c6f36157ec577b319eb2af69e68256b1",
+    "mode": 420,
+    "mtime_ns": 1790432873120098033
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/finalize1.job.json",
+    "bytes": 833,
+    "sha256": "ade23d296e123961fe158597ae2976686c3a105745928dddfe6660b9f53ebc6a",
+    "mode": 420,
+    "mtime_ns": 1790432873120576869
+  },
+  "study": {
+    "path": "docs/research/APPLICATION_MAC_WINDOW_VALIDATION.md",
+    "bytes": 6144,
+    "sha256": "76d29f97a5e1cfbfbad48870a76481a13dfa58b442d4bb84528ca67f5de64f2c",
+    "mode": 420,
+    "mtime_ns": 1790432929550640840
+  },
+  "actualAppKitObservations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/new-method-observations1.json",
+    "bytes": 5351,
+    "sha256": "dc8caa48dfb5251548ec9944a3d47536cc6eb47e6cfad33fe21b75bda5f785de",
+    "mode": 420,
+    "mtime_ns": 1790432688968313436
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "onlyOwnInsertionStaged": true,
+      "unrelatedWorkingBytesPreserved": true,
+      "previousWorkingSHA256": "90566035281c0bdd907166db9c9912f3ac55f59b18449ff218e284aa75584df8",
+      "indexSHA256": "3fae3c19f019bc3a02a90a67a3e6b22e90074ced8161cf45f3db952e5f7499b7"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "onlyOwnInsertionStaged": true,
+      "unrelatedWorkingBytesPreserved": true,
+      "previousWorkingSHA256": "bca3358aed6f82b7d274dd16f347b86d3929114d85f485014f099179ba5d4932",
+      "indexSHA256": "a8eba7c9548f37103904ad43dfb793edbe013b8c9ba965590f6704923913c5b3"
+    }
+  ],
+  "independentReview": false,
+  "all29Passed": true,
+  "physicalWindowProperties": true,
+  "visualOrWindowsEquivalence": false,
+  "fullGame": false
+}

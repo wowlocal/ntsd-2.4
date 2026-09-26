@@ -1,5 +1,21 @@
 # Текущая передача работы
 
+[Physical AppKit window passes all29 methods](APPLICATION_MAC_WINDOW_VALIDATION.md):
+fresh build/package verified199Core/61Reference/2MacPlatform/278test sources and1686
+resources. Four actual-window whole-startup/geometry/permit/late-retry methods pass;
+794×550 client points at2x backing,11 physical window requests, one create across
+late rollback. All25 original controlled regressions pass unchanged. Queue75740/
+finalizer81466 terminal0/absent;4932-file artifact/147-member metadata archives
+verified, task frozen. Root/prior/candidate/source preserved.
+[Publication](../evidence/application-mac-window-validation.json).
+NEXT: concrete native display/surface acquisition and startup clear through the
+same exchange and actual window identity. Use existing descriptor/mask/alias/release
+contracts; establish host format/backing provenance before conversion, retain whole
+startup/late rollback and unsupported boundaries. Independent review/root promotion,
+Windows format/palette/text/clipper/callback/fullscreen, other providers/audio,
+loading/visual/input/Windows/clean-Mac/full match/game remain open. NTSDApp still
+Practice; EXE envelope not recalculated. Supersedes fresh29 NEXT below.
+
 [Physical macOS window candidate](APPLICATION_MAC_WINDOW.md): AppKit service now
 consumes whole-startup permits on the same Host, owns cursor/class/window identities
 and retains physical replies through rollback. Common beginService rejects foreign,

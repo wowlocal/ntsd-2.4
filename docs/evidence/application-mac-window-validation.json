@@ -1,0 +1,112 @@
+{
+  "schema": "ntsd-observed-startup-validation-v1",
+  "UTC": "2026-09-26T14:27:53.112082+00:00",
+  "status": "all29-passed",
+  "baseHead": "ae25280766614ed7ec738223d152a78c96d5a228",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/candidate1-inputs.json",
+    "bytes": 569875,
+    "sha256": "f1bdd040998f5d4254277c31d92474206c9d43dccb05ae536643d090279bf92f",
+    "mode": 420,
+    "mtime_ns": 1790432138282575703
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/context1.json",
+    "bytes": 26763,
+    "sha256": "d5d46c1e8f721da161961a23775d6dca237658ade5ad2576c0f380188518ca5d",
+    "mode": 420,
+    "mtime_ns": 1790432295195731254
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/build1.job.json",
+    "bytes": 112128,
+    "sha256": "bc397e3ae10b317afb75c23779721596ab1167c8206a46ed9ead8ebf8525c2c6",
+    "mode": 420,
+    "mtime_ns": 1790432599141236599
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/package-check1.json",
+    "bytes": 1455858,
+    "sha256": "5b8d4ec4f1a313e3c0d98e9c6683ea796e6a6e83d8d4254d8aac9674980fde2a",
+    "mode": 420,
+    "mtime_ns": 1790432613966902456
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 65277224,
+    "sha256": "3a6135f1544cd083cf281bb1daba4407c31e7f96ed26fb4a3f0fb7d440a959ad",
+    "mode": 493,
+    "mtime_ns": 1790432596754585476
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/tests1-queue.job.json",
+    "bytes": 24302,
+    "sha256": "a646a9491493db9a3c005f83e9007e45fdd52b557975089e76a91daef5659830",
+    "mode": 420,
+    "mtime_ns": 1790432781430686969
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/verification1.json",
+    "bytes": 12609,
+    "sha256": "47f7774c1c1aa5a5339ed8643d01661baad72aa112c2c92aa899cb4535fc6acd",
+    "mode": 420,
+    "mtime_ns": 1790432858521424382
+  },
+  "passedMethods": 29,
+  "selectedMethods": 29,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/artifact-archive1",
+    "files": 4932,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11397956216,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/artifact-archive1.json",
+      "bytes": 2571629,
+      "sha256": "81d1acfd6d41590d7d943dfe48387c2d2dfba67bba0d0ff52a334c28f74885f9",
+      "mode": 420,
+      "mtime_ns": 1790432858511815887
+    }
+  },
+  "metadataArchive": {
+    "members": 147,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/metadata1.tar",
+    "bytes": 5457920,
+    "sha256": "5916cc7711daffe27091070349b091a4d56bac3495c7cf5c3e1811636e64e164",
+    "mode": 420,
+    "mtime_ns": 1790432872981237578
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "e586665be93bbea369a708fb37b9cc65748f5de73201974567627dfd310d45fe",
+    "mode": 420,
+    "mtime_ns": 1790432858520973797
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2254,
+  "candidateUnchanged": 2257,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Unified startup is tested with declared responses plus a separate actual Mac clock whole-caller control if its exact method passes. Physical AppKit window methods are separately observed if passed; Windows/visual/callback equivalence, graphics/raster/other providers/input/audio remain open; NTSDApp still uses practice. Retained inspection controls are finite scheduler observations.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}
