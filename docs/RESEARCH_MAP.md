@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host inspection correction candidate](research/APPLICATION_HOST_WINDOW_INSPECTION.md):
+post-handoff coordinator-to-Host lock nesting removed; two files parse, eight whole
+methods selected, fresh build/comparison open. All old test files/Core dependencies
+and root/base/source preserved;2247-file artifact/two-file patch roundtrip/31-member
+metadata archive verified. Finalizer58464 terminal0/absent; task frozen.
+Next: fresh build/package/eight methods; independent review/production backend/
+devices/full match/game remain open. [Publication](evidence/application-host-window-inspection.json).
+
 [Same-Host startup validation](research/APPLICATION_HOST_WINDOW_STARTUP_VALIDATION.md):
 all28 selected comparisons passed; fresh build/1686 package files and full4900-file
 artifact/140-member metadata archives verified. Queue23770/finalizer38551 terminal0/

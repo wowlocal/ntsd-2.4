@@ -1,0 +1,190 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationWindowStartup.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationWindowStartup.swift
+@@ -36,10 +36,20 @@
+             inFlight = true; defer { inFlight = false }; return try body()
+         }
+     }
+-    public var snapshot: Host.Application { locked { host.snapshot } }
++    // The returned Host may be running a callback that reads the exchange.
++    // Never hold our lock while waiting for these committed Host value reads.
++    public var snapshot: Host.Application { host.snapshot }
+     public var exchangeSnapshot: Exchange.Snapshot { locked { exchange.snapshot } }
+-    public var pendingBatchCount: Int { locked { host.pendingBatchCount } }
+-    public func platformSnapshot() throws -> Platform { try attempt { try host.platformSnapshot() } }
++    public var pendingBatchCount: Int { host.pendingBatchCount }
++    /// Before handoff, inspect an independent copy of our private Host platform.
++    /// After completion use the returned Host, avoiding coordinator -> Host lock
++    /// nesting while external Host callbacks may inspect the exchange.
++    public func platformSnapshot() throws -> Platform {
++        try attempt {
++            guard exchange.snapshot.status != .finished else { throw Exchange.Boundary.closed(.finished) }
++            return try host.platformSnapshot()
++        }
++    }
+ 
+     /// Preparation/observers mutate only attempted state; they must retain the
+     /// same nonwindow inputs across retries. No callback is a device consumer.
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationWindowInspectionTests.swift
+@@ -0,0 +1,161 @@
++import Dispatch
++import Foundation
++import XCTest
++@testable import NTSDCore
++
++final class OriginalApplicationWindowInspectionTests: XCTestCase {
++    typealias W = OriginalApplicationWindowStartupTests
++    typealias D = OriginalApplicationHostDeliveryContextTests
++    typealias B = OriginalApplicationBootstrapTests
++    typealias E = OriginalWindowRequestExchange
++    typealias Driver = W.Driver
++    typealias Host = W.Host
++    typealias P = W.P.Adapter
++    final class Box<Value>: @unchecked Sendable {
++        private let lock = NSLock()
++        private var value: Value?
++        func set(_ value: Value) { lock.lock(); defer { lock.unlock() }; self.value = value }
++        func get() -> Value? { lock.lock(); defer { lock.unlock() }; return value }
++    }
++    enum CopyResult: Equatable { case returned, boundary(E.Boundary), unexpected(String) }
++
++    /// The same real MSG and queue packet as the retained input comparison. The
++    /// callback observes tentative state; readers must receive committed Host data.
++    func key(_ host: Host,_ kind: UInt32,callback: () throws -> Void) throws -> OriginalStateRecord {
++        let input = try D().message(host,kind)
++        var reached = false
++        let result = try host.step(prepare:{ p,_ in
++            p.hostQueuePosition += 4; p.hostReservations.append(Int(kind))
++            return .init(responses:OriginalApplicationLoadedCycleTests.responses,
++                queue:[.init(result:1),.init(result:1,writes:[.init(offset:0,bytes:input.bytes)]),.init(),.init()],windowDefault:[0])
++        },beforeCommit:{ _,state in
++            reached = true
++            XCTAssertEqual(try state.full.integer(at:0x455378-0x44d000+74,as:UInt8.self),kind == 0x100 ? 100 : 117)
++            try callback()
++        })
++        XCTAssertTrue(reached)
++        guard case .committed(_,let outcome) = result else { throw W.Stop.missingOutcome }
++        XCTAssertEqual(outcome,.continued); return input
++    }
++    func platformResult(_ driver: Driver) -> CopyResult {
++        do { _ = try driver.platformSnapshot(); return .returned }
++        catch let boundary as E.Boundary { return .boundary(boundary) }
++        catch { return .unexpected(String(describing:error)) }
++    }
++
++    func testPlatformInspectionEndsAtHandoffAndHostCopiesRemainIndependent() throws {
++        let helper = W(),(driver,p,_) = try helper.fresh()
++        let before = try driver.platformSnapshot(); before.hostReservations.append(-1); before.shadow[0] ^= 0xff
++        try helper.unchanged(driver,p)
++        let host = try helper.drive(driver,p),startup = try XCTUnwrap(host.takeCommitted())
++        let receipts = driver.exchangeSnapshot.receipts
++        XCTAssertEqual(platformResult(driver),.boundary(.closed(.finished)))
++        let done = DispatchSemaphore(value:0),result = Box<CopyResult>(),workers = DispatchGroup()
++        let input = try key(host,0x100) {
++            workers.enter()
++            DispatchQueue.global(qos:.userInitiated).async {
++                result.set(self.platformResult(driver)); done.signal(); workers.leave()
++            }
++            // The worker must return while Host is still locked. On a failure,
++            // leave this callback so any waiting Host inspection can unwind.
++            XCTAssertEqual(done.wait(timeout:.now()+5),.success,"Coordinator inspection waited for the handed-off Host")
++        }
++        XCTAssertEqual(workers.wait(timeout:.now()+5),.success,"Inspection worker did not join after Host released")
++        XCTAssertEqual(result.get(),.boundary(.closed(.finished)))
++        XCTAssertEqual(try host.takeCommitted()?.sequence,2); XCTAssertNil(try host.takeCommitted())
++        XCTAssertEqual(try XCTUnwrap(driver.snapshot.session).loop.message,input)
++        XCTAssertEqual(driver.pendingBatchCount,0)
++        XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.request),receipts.map(\.request))
++        XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.response),receipts.map(\.response))
++        let one = try host.platformSnapshot(),two = try host.platformSnapshot()
++        XCTAssertFalse(one === two); one.hostReservations.append(-2); one.shadow[0] ^= 0xff
++        XCTAssertEqual(try host.platformSnapshot().shadow,two.shadow)
++        XCTAssertEqual(try host.platformSnapshot().hostReservations,[0x100])
++        try D().isolated(startup.context,queue:0,reservations:[])
++    }
++
++    func testConcurrentCommittedReadersAndExchangeObservationDuringInputCallbacks() throws {
++        let helper = W(),(driver,p,_) = try helper.fresh(),host = try helper.drive(driver,p)
++        let startup = try XCTUnwrap(host.takeCommitted()),initialSession = try XCTUnwrap(startup.context.application.session)
++        var reservations: [Int] = []
++        for index in 0..<32 {
++            let kind: UInt32 = index % 2 == 0 ? 0x100 : 0x101
++            let started = DispatchSemaphore(value:0),exchangeDone = DispatchSemaphore(value:0),workers = DispatchGroup()
++            let application = Box<Host.Application>(),count = Box<Int>(),status = Box<E.Status>()
++            let input = try key(host,kind) {
++                workers.enter()
++                DispatchQueue.global(qos:.userInitiated).async {
++                    started.signal()
++                    if index % 2 == 0 { application.set(driver.snapshot) }
++                    else { count.set(driver.pendingBatchCount) }
++                    workers.leave()
++                }
++                XCTAssertEqual(started.wait(timeout:.now()+5),.success,"Committed reader did not start")
++                workers.enter()
++                DispatchQueue.global(qos:.userInitiated).async {
++                    status.set(driver.exchangeSnapshot.status); exchangeDone.signal(); workers.leave()
++                }
++                // A blocked committed-value reader must not monopolize the
++                // coordinator lock needed by a Host callback's exchange read.
++                XCTAssertEqual(exchangeDone.wait(timeout:.now()+5),.success,"Host/coordinator inspection lock cycle")
++            }
++            XCTAssertEqual(workers.wait(timeout:.now()+5),.success,"Readers did not join after Host released")
++            XCTAssertEqual(status.get(),.finished)
++            if index % 2 == 0 {
++                let value = try XCTUnwrap(application.get())
++                B.same(try XCTUnwrap(value.session),try XCTUnwrap(host.snapshot.session))
++                try B.sameStartup(XCTUnwrap(value.startup),XCTUnwrap(host.snapshot.startup))
++            } else { XCTAssertEqual(count.get(),1) }
++            XCTAssertEqual(driver.pendingBatchCount,1)
++            let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,UInt64(index+2))
++            reservations.append(Int(kind))
++            try D().iteration(batch,input:input,key:kind == 0x100 ? 100 : 117,queue:4*(index+1),reservations:reservations)
++            XCTAssertNil(try host.takeCommitted()); XCTAssertEqual(driver.pendingBatchCount,0)
++            B.same(try XCTUnwrap(startup.context.application.session),initialSession)
++        }
++        print("Window inspection: 32 whole key transactions, 16 Application readers, 16 count readers; all workers joined")
++    }
++
++    func testPrivateHostInspectionSurvivesFailedCancelledAndIndeterminateStartup() throws {
++        let helper = W(),(driver,p,_) = try helper.fresh(); var failures = 0
++        XCTAssertThrowsError(try driver.resume(prepare:{ candidate in
++            XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session)
++            XCTAssertEqual(driver.pendingBatchCount,0); XCTAssertEqual(driver.exchangeSnapshot.status,.open)
++            XCTAssertThrowsError(try driver.platformSnapshot()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            candidate.hostReservations.append(7); throw W.Stop.injected
++        },failedAttempt:{ candidate,_ in failures += 1; XCTAssertEqual(candidate.hostReservations,[7]) })) { XCTAssertTrue($0 is W.Stop) }
++        XCTAssertEqual(failures,1); try helper.unchanged(driver,p)
++        func request(_ driver: Driver) throws -> E.Permit {
++            guard case .request(let permit) = try driver.resume(store:{ $0.store($1,$2) }) else { throw W.Stop.missingOutcome }
++            return permit
++        }
++        let first = try request(driver); try helper.unchanged(driver,p)
++        try driver.answer(first,response:helper.reply(p,first))
++        let second = try request(driver),saved = driver.exchangeSnapshot
++        try driver.cancel(); try driver.answer(second,response:helper.reply(p,second))
++        XCTAssertEqual(driver.exchangeSnapshot.status,.cancelled); XCTAssertEqual(driver.exchangeSnapshot.receipts.count,2)
++        XCTAssertEqual(driver.exchangeSnapshot.receipts.first?.response,saved.receipts.first?.response)
++        try helper.unchanged(driver,p)
++        let cancelledCopy = try driver.platformSnapshot(); cancelledCopy.hostReservations.append(9)
++        XCTAssertEqual(try driver.platformSnapshot().hostReservations,[])
++        XCTAssertThrowsError(try driver.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++
++        let (failed,p2,_) = try helper.fresh(),permit = try request(failed)
++        try failed.fail(permit,diagnostic:"unknown physical outcome control")
++        XCTAssertEqual(failed.exchangeSnapshot.status,.indeterminate); XCTAssertTrue(failed.exchangeSnapshot.receipts.isEmpty)
++        XCTAssertEqual(failed.exchangeSnapshot.failure?.request,permit.request)
++        try helper.unchanged(failed,p2)
++        let failedCopy = try failed.platformSnapshot(); failedCopy.shadow[0] ^= 0xff
++        XCTAssertEqual(try failed.platformSnapshot().shadow,p2.shadow)
++
++        let (complete,p3,_) = try helper.fresh(); var reached = false
++        let host = try helper.drive(complete,p3,before:{ owner,session,candidate in
++            reached = true; XCTAssertNil(complete.snapshot.startup); XCTAssertEqual(complete.pendingBatchCount,0)
++            XCTAssertThrowsError(try complete.platformSnapshot()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++            try candidate.complete(owner,helper.globals(session))
++        })
++        XCTAssertTrue(reached); XCTAssertEqual(platformResult(complete),.boundary(.closed(.finished)))
++        B.same(try XCTUnwrap(complete.snapshot.session),try XCTUnwrap(host.snapshot.session))
++        XCTAssertEqual(try host.takeCommitted()?.sequence,1); XCTAssertNil(try host.takeCommitted())
++    }
++}

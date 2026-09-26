@@ -1,0 +1,138 @@
+{
+  "schema": "ntsd-host-window-inspection-docs-v1",
+  "UTC": "2026-09-26T12:23:59.636655+00:00",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-20260926/finalize1.job.json",
+    "bytes": 781,
+    "sha256": "0001743f72b5abaf562b9f896780493922113b7a3b7dc78ceb4e5825f9a7b5f1",
+    "mode": 420,
+    "mtime_ns": 1790425353723771130
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-20260926/finalize1.log",
+    "bytes": 743,
+    "sha256": "9be9f6e5467af9346f8b9a4c3ccd65b1e2ae614ed862fb627cafcbd4283b0253",
+    "mode": 420,
+    "mtime_ns": 1790425353723824380
+  },
+  "finalizerAbsent": true,
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 58464,
+    "startedUTC": "2026-09-26T12:22:11.716520+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Users/michael/Developer/ntsd-2.4/build/research/application-host-window-inspection-20260926/finalize1.py"
+    ],
+    "identity": "58464 Sat Sep 26 15:22:11 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-window-inspection-20260926/finalize1.py",
+    "cwd": "p58464\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "files": 2247,
+    "directories": 59,
+    "metadataMembers": 31,
+    "endedUTC": "2026-09-26T12:22:33.723683+00:00",
+    "elapsedSeconds": 22.104959792
+  },
+  "rootFiles": [
+    {
+      "path": "tools/prepare_application_host_window_inspection.py",
+      "bytes": 5674,
+      "sha256": "e3a9bbc918de0895543eec9a4981aac1c8cfa2119a38add4bab1d343d5f4afc1",
+      "mode": 420,
+      "mtime_ns": 1790425046379041593
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_INSPECTION_PLAN.md",
+      "bytes": 7183,
+      "sha256": "d389081df6e248cf4e80bfa7f0335c1817a88cd7114f68b371f6766a8287de87",
+      "mode": 420,
+      "mtime_ns": 1790425046295793997
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_INSPECTION.md",
+      "bytes": 6677,
+      "sha256": "3836dc36e1f513f52c932557e9f8cd6e677832ef717a9544a33cf30cb6e51fa2",
+      "mode": 420,
+      "mtime_ns": 1790425439515319087
+    },
+    {
+      "path": "docs/evidence/application-host-window-inspection.patch",
+      "bytes": 12182,
+      "sha256": "33f8d8a0a66873b45d1114193b8fde5c55b2f221e4a6c238afaf45db2fb82cb1",
+      "mode": 420,
+      "mtime_ns": 1790425342166130532
+    },
+    {
+      "path": "docs/evidence/application-host-window-inspection.json",
+      "bytes": 3944,
+      "sha256": "1d65114f5fca66eec48abd078975bc3d4868691d97f9d296494b0a0c54f01ec7",
+      "mode": 420,
+      "mtime_ns": 1790425353723570463
+    },
+    {
+      "path": "docs/evidence/application-host-window-inspection-close.json",
+      "bytes": 1434,
+      "sha256": "be895b30d91637ff59c77df767e4e94ac12d4b23eab0b53f79421976ef3d57be",
+      "mode": 420,
+      "mtime_ns": 1790425353723669755
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "824bf7c97aaab8c2175c33fbcdf45f77c71c9cde17b9d4713298aa824f5deff7",
+      "workingAfter": {
+        "bytes": 145855,
+        "sha256": "c29cab0d06eaa2a2612cf67f36e4c13408ab5e7922db9ca743f0c5e27c4266c9",
+        "mode": 420,
+        "mtime_ns": 1790425439528623129
+      },
+      "indexedBlob": "498af927d16eba3ffcf57c3b4337367cb9139a90",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "117f964158d06abc1b55195b2878972a6f55519e1e9c787c424cb827dfd3f53e",
+      "workingAfter": {
+        "bytes": 328550,
+        "sha256": "cd5292dc683c8e619b9e867b4b2d72117a13f945697423af5e7103028a315b34",
+        "mode": 420,
+        "mtime_ns": 1790425439569136047
+      },
+      "indexedBlob": "61af4f4501d860770ee8c6c640695b2b19b7a509",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "metadataArchive": {
+    "members": 31,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-20260926/metadata1.tar",
+    "bytes": 1955840,
+    "sha256": "4fed64524fff0e5682c64f4b211b6c3dc97e2a8314d416017f658966205c7f43",
+    "mode": 420,
+    "mtime_ns": 1790425351782037864
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-20260926/artifact-archive1",
+    "files": 2247,
+    "directories": 59,
+    "bytes": 5127073406,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-20260926/artifact-archive1.json",
+      "bytes": 632583,
+      "sha256": "75990770155b0950d8c85c7272a19d91ed89ef0d84c8384c99f7f8d8490262ba",
+      "mode": 420,
+      "mtime_ns": 1790425351676490657
+    }
+  },
+  "patchCheck": {
+    "exitCode": 2,
+    "stdout": "docs/evidence/application-host-window-inspection.patch:24: trailing whitespace.\n+ \n",
+    "stderr": "",
+    "classification": "Any reported whitespace is only an exact immutable unified-diff blank context marker; all changed Swift and other staged files clean",
+    "roundtripVerified": true
+  },
+  "buildPassed": false,
+  "nativeComparison": false,
+  "independentReview": false,
+  "rootNativeChanged": false
+}

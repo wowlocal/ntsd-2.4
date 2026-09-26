@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Host inspection correction candidate](APPLICATION_HOST_WINDOW_INSPECTION.md):
+coordinator value reads now use Host's own lock; after handoff coordinator platform
+copying rejects before Host access, with copies available on the returned Host.
+The reported opposite lock edge is removed in code. Two Swift files parse; three
+new bounded inspection/concurrency methods plus five unchanged whole startup
+methods are selected, not executed. All old tests/Core dependencies/root1034/
+base2246/source55 preserved;2247-file archive, two-file patch roundtrip and31-member
+metadata archive verified. Finalizer58464 terminal0/absent; task frozen.
+[Publication](../evidence/application-host-window-inspection.json).
+NEXT: fresh build/package and all8 methods on this exact correction. Passing the
+prior28 is baseline evidence only. Independent review/root promotion, production
+providers/backend/devices/full catalog source/Windows/clean-Mac/full match/game
+remain open; EXE envelope not recalculated. Supersedes the correction NEXT below.
+
 [Same-Host startup validation](APPLICATION_HOST_WINDOW_STARTUP_VALIDATION.md):
 all28 methods passed on the unchanged2246-file candidate, including five new whole
 startup/rollback/protocol/lifetime methods and23 retained window/Host/context/
