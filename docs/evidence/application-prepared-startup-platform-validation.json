@@ -1,0 +1,112 @@
+{
+  "schema": "ntsd-prepared-startup-platform-validation-v1",
+  "UTC": "2026-09-26T13:06:32.677544+00:00",
+  "status": "all11-passed",
+  "baseHead": "7f882b8a947ad637e8c1abdfca6ebeb52bc3e587",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/candidate1-inputs.json",
+    "bytes": 567948,
+    "sha256": "295864416a72f76e19471ece43331fc40d4a2a2ec8b6d66dbe69251c7c977eb6",
+    "mode": 420,
+    "mtime_ns": 1790427235038195854
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/context1.json",
+    "bytes": 27058,
+    "sha256": "e46bdcd46c1cbf515e22e3c3aea8f1d7d1e24dc0baba72586b0565d2068308e6",
+    "mode": 420,
+    "mtime_ns": 1790427459955267079
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/build1.job.json",
+    "bytes": 92752,
+    "sha256": "6f0577a147de4f4beb94632fda339d8a4b14fea1e386532b969311121c30cd2b",
+    "mode": 420,
+    "mtime_ns": 1790427822471931571
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/package-check1.json",
+    "bytes": 1505173,
+    "sha256": "27eb5c281bd27f5e8e235e57442619f0b36008e4996ed2bcfb373314643886f5",
+    "mode": 420,
+    "mtime_ns": 1790427838309426606
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 64665848,
+    "sha256": "5f525dbc99e1a3fcbc28dca01b1f9c8bb519cc145e951050a93be98a01bde610",
+    "mode": 493,
+    "mtime_ns": 1790427819785019054
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/tests1-queue.job.json",
+    "bytes": 10435,
+    "sha256": "ea14ede9c41e84c27de09de8e8bfee5d73916846368225210530cdc6fd33af9c",
+    "mode": 420,
+    "mtime_ns": 1790427905410216863
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/verification1.json",
+    "bytes": 5226,
+    "sha256": "b4b17afe8a31f6138f8541603297a4d186d7b3b770fa41273fd67ead24b22248",
+    "mode": 420,
+    "mtime_ns": 1790427985544234333
+  },
+  "passedMethods": 11,
+  "selectedMethods": 11,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/artifact-archive1",
+    "files": 4906,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11392003407,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/artifact-archive1.json",
+      "bytes": 2634960,
+      "sha256": "ebd7cce3e5d3db3b6eabb884e0b4351fe4b9da7ff6dd942c4e0d881d8b41940f",
+      "mode": 420,
+      "mtime_ns": 1790427985535648051
+    }
+  },
+  "metadataArchive": {
+    "members": 71,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/metadata1.tar",
+    "bytes": 5273600,
+    "sha256": "61c67f1524b94e6c4524bb7e043075f1c96f6f41b4ac0e5f50ed2dc7a40de7e0",
+    "mode": 420,
+    "mtime_ns": 1790427992554379045
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "c7b3c835598458a9681b1c30ae807656e928cc5b2c13009c7a138a054b721426",
+    "mode": 420,
+    "mtime_ns": 1790427985544002708
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2247,
+  "candidateUnchanged": 2249,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "The production prepared platform is tested with declared nonwindow observations, not actual device production. Physical observations/resource mapping/callbacks/backend remain open; current AppKit still uses practice. Retained inspection controls are finite scheduler observations.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

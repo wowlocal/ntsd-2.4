@@ -1,5 +1,16 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Prepared startup validation complete](research/APPLICATION_PREPARED_STARTUP_PLATFORM_VALIDATION.md):
+all11 methods passed on the production prepared provider and retained consumers;
+whole23/5/7 outcomes,6325events/119WAVs/650 replies and typed-input/rollback/lifetime
+controls retained. Fresh build/1686 package files,4906-file artifact/71-member metadata
+archives verified; queue34416/finalizer36848 terminal0/absent, task frozen.
+[Publication](evidence/application-prepared-startup-platform-validation.json).
+Next: resumable external nonwindow acquisition at actual whole-startup request
+boundaries, especially FILETIME after window responses; retain fulfilled values and
+owners across retries. Independent review/root promotion/physical backend/devices/
+full match/game remain open.
+
 [Production prepared startup candidate](research/APPLICATION_PREPARED_STARTUP_PLATFORM.md):
 Core provider now owns prepared positions/output/cursors and retained resources,
 using original package inputs without XCTest/reference/host IO. Two new files parse;

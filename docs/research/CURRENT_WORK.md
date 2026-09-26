@@ -1,5 +1,24 @@
 # Текущая передача работы
 
+[Prepared startup validation complete](APPLICATION_PREPARED_STARTUP_PLATFORM_VALIDATION.md):
+fresh build/package and all11 selected methods passed on unchanged2249 files.
+The production Core provider preserves23 complete/5 stops/7 provenance outcomes,
+6325events/119WAVs/650 window replies, late failures/copies/owner retention and16
+prepared-response families; eight unchanged inspection/startup methods also pass.
+Queue34416/finalizer36848 terminal0/absent;4906-file artifact/71-member metadata
+archives verified, root/prior/candidate/source preserved; task frozen.
+[Publication](../evidence/application-prepared-startup-platform-validation.json).
+The preparation job's inherited summary label8 is preserved and separately qualified;
+actual selection/limits/controls/queue all contain11, no tests were omitted or rerun.
+NEXT: connect resumable external nonwindow observations to this platform and whole
+startup, preserving actual request payloads and fulfilled values/resources across
+retries. Milliseconds precedes the window; FILETIME must be observed after it.
+Current immutable preparation is not live acquisition. Reuse the exchange/Host;
+require complete caller/late rollback and actual macOS observations where implemented.
+Independent review/root promotion, physical backend/callbacks/input/audio/loading
+messages/fills/full137 source/Windows/clean-Mac/full match/game remain open; EXE
+envelope not recalculated. Supersedes the fresh11-method NEXT below.
+
 [Production prepared startup candidate](APPLICATION_PREPARED_STARTUP_PLATFORM.md):
 Core now supplies the real startup-platform conformance from bundled original inputs
 and typed explicit observations, with independent positions/output/cursor copies
