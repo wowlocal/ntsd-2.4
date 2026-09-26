@@ -1,0 +1,78 @@
+{
+  "schema": "ntsd-mac-display-color-diagnosis-v1",
+  "UTC": "2026-09-26T15:17:40.970084+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926",
+  "baseHead": "6a2fc8469dd7987feab1a0bafc44d2d81da7a869",
+  "status": "native-profile-readback-discrepancy-observed",
+  "cases": 48,
+  "directImages": 8,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/verification1.json",
+    "bytes": 2743,
+    "sha256": "cf15edac5c19231e3bfeebee1d9a887b989a2794234e8a18425ce72870df434c",
+    "mode": 420,
+    "mtime_ns": 1790435779162061154
+  },
+  "result": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/result2.json",
+    "bytes": 193266,
+    "sha256": "fc1b57d99672929fbb43b21c9a3155b7aa75a9992ab45e4d92d2d687ff8d1ba4",
+    "mode": 420,
+    "mtime_ns": 1790435695555289888
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/context1.json",
+    "bytes": 25271,
+    "sha256": "fda510fd8fc240aaa9b579fb7f0737524c5641214d99734fa9cd1f9e091dde1b",
+    "mode": 420,
+    "mtime_ns": 1790435564820474124
+  },
+  "archive": {
+    "members": 34,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/evidence1.tar",
+    "bytes": 522240,
+    "sha256": "1c729df3917d719663945ed1b50728fba041ebec278c8917a735851db57fe2ae",
+    "mode": 420,
+    "mtime_ns": 1790435860965239847
+  },
+  "archiveInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/archive-inputs1.json",
+    "bytes": 6653,
+    "sha256": "f7f7dfd5cd9d1a42a32cbd10283dd6d33a3e8a4c660e5dcc7e21b872a71d107f",
+    "mode": 420,
+    "mtime_ns": 1790435860921247897
+  },
+  "jobs": [
+    {
+      "pid": 63383,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 1.121000083,
+      "peakTreeRSS": 638976
+    },
+    {
+      "pid": 65983,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 3.1995175,
+      "peakTreeRSS": 354910208
+    },
+    {
+      "pid": 66814,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 1.1011535000000001,
+      "peakTreeRSS": 32768
+    }
+  ],
+  "rootNativeUnchanged": 1034,
+  "failedCandidateUnchanged": 2261,
+  "sourcePinsUnchanged": 55,
+  "allProtectedPreserved": true,
+  "independentReview": false,
+  "productionChanged": false,
+  "expectedChanged": false,
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false,
+  "next": "Separate profile-aware bitmap sampling/conversion controls, retaining failed caller/assertions and current production pixels; capture/comparator correction requires explicit evidence and independent-review gap."
+}

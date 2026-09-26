@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Color diagnosis localizes a readback-profile discrepancy](APPLICATION_MAC_DISPLAY_COLOR_DIAGNOSIS.md):
+48 native view cases plus8 direct-image controls checked. Bitmap.colorAt returns
+Generic RGB while actual bitmap profiles are sRGB or monitor ICC. Explicit sRGB
+raw pixels match every input; default profile reproduces the failed RGB triplet
+exactly. All24 NSImage/CGContext pairs agree. No production/expected change.
+First missing-SDK compile failure preserved; build65983/probe66814/finalizer71256
+terminal0/absent,34-member evidence archive verified, task frozen; root/prior/source
+preserved. [Publication](../evidence/application-mac-display-color-diagnosis.json).
+NEXT: validate profile-aware sampling/conversion of actual bitmap data before a
+separate capture/comparator correction. Preserve failed methods/expected RGB and
+all34 requirements; a rendering change is not justified by this readback result.
+Independent review/all34/root promotion/Windows/input/audio/full match/game stay
+open; NTSDApp still Practice, EXE envelope not recalculated. Supersedes correction2
+implementation as the immediate next action below.
+
 [Display correction1: build passes, AppKit color fails](APPLICATION_MAC_DISPLAY_CORRECTION1.md):
 whole-startup physical allocation passes; second method reports nine sRGB readback
 mismatches at three samples. Expected RGB/tolerance and all tests unchanged;32 of34

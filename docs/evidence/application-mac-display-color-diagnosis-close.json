@@ -1,0 +1,29 @@
+{
+  "UTC": "2026-09-26T15:17:40.970590+00:00",
+  "taskFrozen": true,
+  "externalFree": 163166687232,
+  "internalFree": 58764857344,
+  "observedDecrease": 68050944,
+  "externalReserve": 42949672960,
+  "sourceCommitment": 18253611008,
+  "internalReserve": 6442450944,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/publication1.json",
+    "bytes": 2992,
+    "sha256": "3bfb2a170080281f307dbc53228f01a7bda4a9420c8556c666cf17eb42731705",
+    "mode": 420,
+    "mtime_ns": 1790435860970574408
+  },
+  "archive": {
+    "members": 34,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/evidence1.tar",
+    "bytes": 522240,
+    "sha256": "1c729df3917d719663945ed1b50728fba041ebec278c8917a735851db57fe2ae",
+    "mode": 420,
+    "mtime_ns": 1790435860965239847
+  },
+  "excludedRebuildableDirectories": [
+    "modules",
+    "tmp"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-color-diagnosis-20260926/finalize1.job.json",
+    "bytes": 641,
+    "sha256": "5e143b47286cf061af74b2341d91e3b766c1819852a1ce49deae7a81433322ee",
+    "mode": 420,
+    "mtime_ns": 1790435860971007451
+  },
+  "finalizerAbsent": true,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "priorWorkingSHA256": "97e583c012ba94c787d7a3d6588dc109f3150a3b585c50ffc8c906ddacbadf47",
+      "newWorkingSHA256": "d02b50f8e71adaaf5d812f753aea5656c75a6df394076c956b65ced3b4667b63",
+      "indexSHA256": "657324a09b13760958efdafefb211bb083ac1bff054edc50aa9347f1e5c5adca",
+      "unrelatedDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "priorWorkingSHA256": "6cd9c64e11231332e18678932f13f3d91b83c2068b8c6eb16a21ffa8b1054633",
+      "newWorkingSHA256": "4ea266677c8ef63b56187169ed9cc00ed1e82adbbc4e183205bf3afbce266a9e",
+      "indexSHA256": "c7dd433647751a95ab611e3a2f2113a6d2ad2e9cfb55de0419735a21dc4d3a79",
+      "unrelatedDiffPreserved": true
+    }
+  ],
+  "publicationChecker": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/check_application_mac_display_color_diagnosis.py",
+    "bytes": 2177,
+    "sha256": "cc09e00b7a88cb190baad1a53c08c6ac3ad3854b26037addf5290c873400ac9c",
+    "mode": 420,
+    "mtime_ns": 1790435954338208464
+  },
+  "checkerResult": {
+    "cases": 48,
+    "directImages": 8,
+    "drawPairs": 24,
+    "profilePairs": 16,
+    "failedTripletExact": true,
+    "productionAccepted": false,
+    "independentReview": false
+  },
+  "checkerIsAuthorReview": true
+}
