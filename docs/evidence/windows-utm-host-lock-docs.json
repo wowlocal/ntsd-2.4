@@ -1,0 +1,16 @@
+[
+  {
+    "path": "docs/research/CURRENT_WORK.md",
+    "beforeSHA256": "e2cb1b556eb489bb7f6f2d047d3eedbd1b41fc9423361d691d45122c595e67b2",
+    "afterSHA256": "834f45feac2bf710bb247e9d35a16a4440ba9d6a64b358344fdbed879b1bc557",
+    "blob": "744d0b945f93592fe1a00208eac1cb3ee5a9b23d",
+    "unrelatedWorkingChangesPreserved": true
+  },
+  {
+    "path": "docs/RESEARCH_MAP.md",
+    "beforeSHA256": "20600fe21b0e3b971c7bc971a532f96a5d4eaca98b3cc736359cff99528a6eaf",
+    "afterSHA256": "94c8d804c310a2d74076d854ed68fed153186294f29b96b5316f74ae7e96b983",
+    "blob": "fe9ad3fd14c9c363900a1688c4b7f9608ae6342e",
+    "unrelatedWorkingChangesPreserved": true
+  }
+]

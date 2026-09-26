@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Windows approval received; host screen locked](research/WINDOWS_UTM_HOST_LOCK.md):
+User approved EULA and continued installation agreements. CUA cannot find UTM
+window; IORegistry confirms locked screen. QEMU43650 and CrossOver33492 remain
+live, identities checked; no Accept/restart/unlock attempt. [Checkpoint](evidence/windows-utm-host-lock.json).
+NEXT after UI unlock: reobserve same installer, accept already-approved EULA and
+continue. Meanwhile independent first-menu reference work remains permitted.
+No Windows/game acceptance; independent review/Native/full game and safety gates
+remain open. Supersedes approval-pending prose below, without changing history.
+
 [Windows cursor bitmap probe prepared](research/WINDOWS_CURSOR_BITMAP_PROBE.md):
 Freestanding x86/ARM64 collectors; 54 synthetic tests pass, two final nine-file
 kits byte-identical, tested PE bytes retained. ZIP/ISO members and 148-member
