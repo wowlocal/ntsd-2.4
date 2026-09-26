@@ -1,0 +1,502 @@
+--- a/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
+@@ -11,7 +11,7 @@
+         case geometry, allocationBudget, allocationFailed, unknownPixel, image
+         case foreignPreparation, repeatedPreparation, referenceOverflow
+     }
+-    public enum Kind: String { case display, primary, backbuffer, clipper }
++    public enum Kind: String { case display, primary, backbuffer, clipper, offscreen, module, bitmap, stockBitmap, memoryDC, surfaceDC }
+     public struct Observation: Equatable {
+         public let token: UInt32, kind: Kind, references: UInt32, width: Int, height: Int
+         public let window: UInt32?, clipper: UInt32?, knownPixels: Int
+@@ -70,6 +70,7 @@
+     private final class Surface: Resource {
+         let draw: Draw, width: Int, height: Int, screen: CGRect?
+         var storage: Storage?, clipper: Clipper?
++        var activeBitmapDC: UInt32?, sourceColorKey: [UInt32]?
+         init(_ token: UInt32,_ kind: Kind,_ draw: Draw,_ storage: Storage,_ screen: CGRect?) {
+             self.draw = draw; self.storage = storage; self.screen = screen
+             width = storage.width; height = storage.height; super.init(token,kind)
+@@ -85,6 +86,8 @@
+         init(_ value: Resource) { self.value = value }
+     }
+     public let windows: OriginalMacWindowBackend
++    private var bitmapModule: Resource?
++    public private(set) var bitmapOperations: [BitmapOperation] = []
+     private let identity = Identity(), budget: Budget
+     private var live: [UInt32:Resource] = [:], history: [UInt32:WeakResource] = [:]
+     public private(set) var operations: [Operation] = []
+@@ -169,6 +172,8 @@
+         case "release":
+             try require(q.words.count == 1)
+             let value = try resource(q.words[0],as:Resource.self)
++            try require([Kind.display,.primary,.backbuffer,.offscreen,.clipper].contains(value.kind))
++            guard (value as? Surface)?.activeBitmapDC == nil else { throw Boundary.unsupported("surface DC still acquired") }
+             if let c = (value as? Surface)?.clipper,c.references == 0 { throw Boundary.released(c.token) }
+         case "pixelFormat":
+             try require(q.words.count == 1); _ = try resource(q.words[0],as:Surface.self)
+@@ -199,7 +204,7 @@
+     /// The primary represents this screen's logical desktop, while its clipper
+     /// limits writes/delivery to our own window. No desktop pixels are sampled.
+     private func rectangle(_ s: Surface) throws -> (Int,Int,Int,Int,UInt32?) {
+-        if s.kind == .backbuffer { return (0,0,s.width,s.height,nil) }
++        if s.kind == .backbuffer || s.kind == .offscreen { return (0,0,s.width,s.height,nil) }
+         guard let clipper = s.clipper,let window = clipper.window,let screen = s.screen else { throw Boundary.unsupported("primary without native window clipper") }
+         guard clipper.references > 0 else { throw Boundary.released(clipper.token) }
+         let geometry = try windows.displayGeometry(window.token)
+@@ -288,3 +293,213 @@
+         operations.append(.init(request:q,response:response));return .init(response:response,resources:retained)
+     }
+ }
++
++// Original bitmap helpers use the same display registry/storage as startup.
++// This is native XRGB policy; it does not assert Windows GDI raster equivalence.
++extension OriginalMacDisplayBackend {
++    public typealias BitmapAPI = OriginalBitmapSurfaceLoading
++    public struct BitmapInputs {
++        public enum File { case bitmap(OriginalApplicationStartupInputs.Bitmap), missing }
++        public let resources: [String:OriginalApplicationStartupInputs.Bitmap]
++        public let files: [String:File]
++        public init(resources: [String:OriginalApplicationStartupInputs.Bitmap],files: [String:File]) {
++            self.resources = resources;self.files = files
++        }
++    }
++    public struct BitmapOperation: Equatable {
++        public let request: BitmapAPI.Request,response: BitmapAPI.Response
++    }
++    public struct BitmapServed {
++        public let response: BitmapAPI.Response,resources: [any OriginalApplicationStartupResource]
++    }
++    public struct BitmapPrepared {
++        fileprivate let request: BitmapAPI.Request,inputs: BitmapInputs,identity: Identity,once: Once
++    }
++    public struct BitmapObservation: Equatable {
++        public let selected: UInt32?,surface: UInt32?,activeDC: UInt32?,colorKey: [UInt32]?
++    }
++    private final class Bitmap: Resource {
++        let input: OriginalApplicationStartupInputs.Bitmap?
++        init(_ token: UInt32,_ input: OriginalApplicationStartupInputs.Bitmap?) {
++            self.input = input;super.init(token,input == nil ? .stockBitmap : .bitmap)
++        }
++    }
++    private final class MemoryDC: Resource {
++        let stock: Bitmap
++        var selected: Bitmap
++        init(_ token: UInt32,_ stock: Bitmap) { self.stock = stock;self.selected = stock;super.init(token,.memoryDC) }
++    }
++    private final class SurfaceDC: Resource {
++        let surface: Surface
++        init(_ token: UInt32,_ surface: Surface) { self.surface = surface;super.init(token,.surfaceDC) }
++    }
++    public func bitmapObservation(_ token: UInt32) throws -> BitmapObservation {
++        let r = try lease(token),m = r as? MemoryDC,d = r as? SurfaceDC,s = r as? Surface
++        return .init(selected:m?.selected.token,surface:d?.surface.token,activeDC:s?.activeBitmapDC,colorKey:s?.sourceColorKey)
++    }
++    public nonisolated static func handlesBitmap(_ q: BitmapAPI.Request) -> Bool {
++        ["module","image","getObject","createSurface","restore","createDC","selectObject","description",
++         "getDC","stretch","releaseDC","deleteDC","deleteObject","colorKey","release"].contains(q.kind)
++    }
++    public func prepareBitmap(_ q: BitmapAPI.Request,inputs: BitmapInputs) throws -> BitmapPrepared {
++        _ = try validateBitmap(q,inputs:inputs)
++        return .init(request:q,inputs:inputs,identity:identity,once:Once())
++    }
++    private func bitmapRect(_ x: UInt32,_ y: UInt32,_ w: UInt32,_ h: UInt32,_ width: Int,_ height: Int) throws -> (Int,Int,Int,Int) {
++        let x = Int(Int32(bitPattern:x)),y = Int(Int32(bitPattern:y)),w = Int(Int32(bitPattern:w)),h = Int(Int32(bitPattern:h))
++        guard x >= 0,y >= 0,w > 0,h > 0,x <= width,y <= height,w <= width-x,h <= height-y else { throw Boundary.geometry }
++        return (x,y,w,h)
++    }
++    private func bitmapSurface(_ token: UInt32) throws -> Surface {
++        let s = try resource(token,as:Surface.self)
++        guard s.kind == .offscreen || s.kind == .backbuffer else { throw Boundary.unsupported("bitmap DC on primary") }
++        guard s.storage != nil else { throw Boundary.released(token) };return s
++    }
++    private func validateBitmap(_ q: BitmapAPI.Request,inputs: BitmapInputs) throws -> OriginalApplicationStartupInputs.Bitmap? {
++        guard Self.handlesBitmap(q) else { throw Boundary.unsupported(q.kind) }
++        func require(_ yes: Bool) throws { if !yes { throw Boundary.arguments(q.kind) } }
++        if !["image","colorKey"].contains(q.kind) { try require(q.strings.isEmpty) }
++        if !["getObject","createSurface","description"].contains(q.kind) { try require(q.bytes == nil && q.defined == nil) }
++        switch q.kind {
++        case "module":try require(q.words == [0])
++        case "image":
++            try require(q.words.count == 5 && q.strings.count == 1 && q.words[1] == 0)
++            try require(q.words[0] == bitmapModule?.token)
++            guard !q.strings[0].contains(0),let name = String(bytes:q.strings[0],encoding:.utf8) else { throw Boundary.arguments("image name") }
++            let bitmap: OriginalApplicationStartupInputs.Bitmap?
++            if q.words[4] == 0x2010 {
++                guard let file = inputs.files[name] else { throw Boundary.unsupported("undeclared bitmap file: "+name) }
++                switch file { case .bitmap(let input):bitmap = input;case .missing:bitmap = nil }
++            } else if q.words[4] == 0x2000 { bitmap = inputs.resources[name] }
++            else { throw Boundary.unsupported("image flags") }
++            if let bitmap {
++                guard (q.words[2] == 0 || q.words[2] == UInt32(bitmap.width)),
++                      (q.words[3] == 0 || q.words[3] == UInt32(bitmap.height)) else { throw Boundary.unsupported("image scaling") }
++            }
++            return bitmap
++        case "getObject":
++            try require(q.words.count == 2 && q.words[1] == 24);_ = try record(q,24)
++            guard try resource(q.words[0],as:Bitmap.self).input != nil else { throw Boundary.unsupported("stock bitmap description") }
++        case "createSurface":
++            try require(q.words.count == 2 && q.words[1] == 0)
++            let d = try resource(q.words[0],as:Draw.self);try require(d.window != nil)
++            let r = try record(q,108),flags = try r.integer(at:4,as:UInt32.self)
++            try require(try r.integer(at:0,as:UInt32.self) == 108 && r.integer(at:104,as:UInt32.self) == 0x40)
++            let w = try r.integer(at:12,as:UInt32.self),h = try r.integer(at:8,as:UInt32.self)
++            _ = try bitmapRect(0,0,w,h,Int(Int32.max),Int(Int32.max))
++            if flags == 0x1007 {
++                let expected: [UInt32] = [0,0x40,0,32,0xff0000,0xff00,0xff,0]
++                for i in 0..<8 { try require(try r.integer(at:72+i*4,as:UInt32.self) == expected[i]) }
++            } else { try require(flags == 7) }
++        case "restore":try require(q.words.count == 1);_ = try bitmapSurface(q.words[0])
++        case "createDC":try require(q.words == [0])
++        case "selectObject":
++            try require(q.words.count == 2)
++            let dc = try resource(q.words[0],as:MemoryDC.self),b = try resource(q.words[1],as:Bitmap.self)
++            try require(b.input != nil || b === dc.stock)
++        case "description":
++            try require(q.words.count == 1);_ = try bitmapSurface(q.words[0])
++            let r = try record(q,108)
++            try require(try r.integer(at:0,as:UInt32.self) == 108 && r.integer(at:4,as:UInt32.self) == 6)
++        case "getDC":
++            try require(q.words.count == 1);let s = try bitmapSurface(q.words[0])
++            guard s.activeBitmapDC == nil else { throw Boundary.unsupported("surface DC already acquired") }
++        case "stretch":
++            try require(q.words.count == 11 && q.words[10] == 0xcc0020)
++            let dc = try resource(q.words[0],as:SurfaceDC.self),s = try bitmapSurface(dc.surface.token)
++            try require(s.activeBitmapDC == dc.token)
++            let source = try resource(q.words[5],as:MemoryDC.self)
++            guard let b = source.selected.input else { throw Boundary.unsupported("copy from stock bitmap") }
++            _ = try resource(source.selected.token,as:Bitmap.self)
++            _ = try bitmapRect(q.words[1],q.words[2],q.words[3],q.words[4],s.width,s.height)
++            _ = try bitmapRect(q.words[6],q.words[7],q.words[8],q.words[9],Int(b.width),Int(b.height))
++            guard q.words[3] == q.words[8],q.words[4] == q.words[9] else { throw Boundary.unsupported("bitmap stretching") }
++        case "releaseDC":
++            try require(q.words.count == 2)
++            let s = try bitmapSurface(q.words[0]),dc = try resource(q.words[1],as:SurfaceDC.self)
++            try require(dc.surface === s && s.activeBitmapDC == dc.token)
++        case "deleteDC":try require(q.words.count == 1);_ = try resource(q.words[0],as:MemoryDC.self)
++        case "deleteObject":
++            try require(q.words.count == 1);let b = try resource(q.words[0],as:Bitmap.self)
++            try require(b.input != nil)
++        case "colorKey":
++            try require(q.words.count == 2 && q.words[1] == 8 && q.strings.count == 1 && q.strings[0].count == 8)
++            _ = try bitmapSurface(q.words[0])
++            let r = try OriginalStateRecord(bytes:q.strings[0],defined:Array(repeating:true,count:8))
++            try require(try r.integer(at:0,as:UInt32.self) <= r.integer(at:4,as:UInt32.self))
++        case "release":try validate(q)
++        default:throw Boundary.unsupported(q.kind)
++        }
++        return nil
++    }
++    public func performBitmap(_ prepared: BitmapPrepared) throws -> BitmapServed {
++        guard prepared.identity === identity else { throw Boundary.foreignPreparation }
++        guard !prepared.once.used else { throw Boundary.repeatedPreparation }
++        let q = prepared.request,input = try validateBitmap(q,inputs:prepared.inputs)
++        prepared.once.used = true
++        var owners: [any OriginalApplicationStartupResource] = []
++        let response: BitmapAPI.Response
++        switch q.kind {
++        case "module":
++            if bitmapModule == nil { let r = try Resource(windows.identities.take(),.module);install(r);bitmapModule = r }
++            let m = bitmapModule!;owners = [m];response = .init(result:Int32(bitPattern:m.token))
++        case "image":
++            if let input { let b = try Bitmap(windows.identities.take(),input);install(b);owners = [b];response = .init(result:Int32(bitPattern:b.token)) }
++            else { response = .init() }
++        case "getObject":
++            let b = try resource(q.words[0],as:Bitmap.self),bytes = try b.input!.objectBytes()
++            owners = [b];response = .init(result:24,writes:[.init(offset:4,bytes:Array(bytes[4..<20]))])
++        case "createSurface":
++            let d = try resource(q.words[0],as:Draw.self),r = try record(q,108)
++            let storage = try Storage(Int(r.integer(at:12,as:UInt32.self)),Int(r.integer(at:8,as:UInt32.self)),budget)
++            let s = try Surface(windows.identities.take(),.offscreen,d,storage,nil)
++            install(s);owners = [s];response = .init(output:s.token)
++        case "restore":let s = try bitmapSurface(q.words[0]);owners = [s];response = .init()
++        case "createDC":
++            let stock = try Bitmap(windows.identities.take(),nil),dc = try MemoryDC(windows.identities.take(),stock)
++            install(stock);install(dc);owners = [dc,stock];response = .init(result:Int32(bitPattern:dc.token))
++        case "selectObject":
++            let dc = try resource(q.words[0],as:MemoryDC.self),b = try resource(q.words[1],as:Bitmap.self)
++            let elsewhere = live.values.compactMap { $0 as? MemoryDC }.contains { $0 !== dc && $0.selected === b }
++            owners = [dc,b]
++            if elsewhere { response = .init() }
++            else { let old = dc.selected;dc.selected = b;owners.append(old);response = .init(result:Int32(bitPattern:old.token)) }
++        case "description":
++            let s = try bitmapSurface(q.words[0]);owners = [s]
++            let bytes = [UInt32(s.height),UInt32(s.width)].flatMap { v in (0..<4).map { UInt8(truncatingIfNeeded:v >> ($0*8)) } }
++            response = .init(writes:[.init(offset:8,bytes:bytes)])
++        case "getDC":
++            let s = try bitmapSurface(q.words[0]),dc = try SurfaceDC(windows.identities.take(),s)
++            install(dc);s.activeBitmapDC = dc.token;owners = [dc,s];response = .init(output:dc.token)
++        case "stretch":
++            let dc = try resource(q.words[0],as:SurfaceDC.self),memory = try resource(q.words[5],as:MemoryDC.self)
++            let p = memory.selected.input!.pixels,s = dc.surface,data = s.storage!
++            let (x,y,w,h) = try bitmapRect(q.words[1],q.words[2],q.words[3],q.words[4],s.width,s.height)
++            let sx = Int(q.words[6]),sy = Int(q.words[7])
++            for row in 0..<h { for column in 0..<w {
++                let a = (sy+row)*p.width+sx+column,b = (y+row)*data.width+x+column,i = a*3
++                data.values[b] = (UInt32(p.rgb[i]) << 16 | UInt32(p.rgb[i+1]) << 8 | UInt32(p.rgb[i+2])).littleEndian
++                data.known[b] = p.defined[a] ? 1 : 0
++            } }
++            owners = [dc,memory,s,memory.selected];response = .init(result:1)
++        case "releaseDC":
++            let s = try bitmapSurface(q.words[0]),dc = try resource(q.words[1],as:SurfaceDC.self)
++            s.activeBitmapDC = nil;release(dc);owners = [s,dc];response = .init()
++        case "deleteDC":
++            let dc = try resource(q.words[0],as:MemoryDC.self);release(dc.stock);release(dc)
++            owners = [dc,dc.stock,dc.selected];response = .init(result:1)
++        case "deleteObject":
++            let b = try resource(q.words[0],as:Bitmap.self)
++            let selected = live.values.compactMap { $0 as? MemoryDC }.contains { $0.selected === b }
++            if !selected { release(b) };owners = [b];response = .init(result:selected ? 0 : 1)
++        case "colorKey":
++            let s = try bitmapSurface(q.words[0]),r = try OriginalStateRecord(bytes:q.strings[0],defined:Array(repeating:true,count:8))
++            s.sourceColorKey = try [r.integer(at:0,as:UInt32.self),r.integer(at:4,as:UInt32.self)]
++            owners = [s];response = .init()
++        case "release":
++            let r = try resource(q.words[0],as:Resource.self);release(r);owners = [r];response = .init(result:Int32(bitPattern:r.references))
++        default:throw Boundary.unsupported(q.kind)
++        }
++        bitmapOperations.append(.init(request:q,response:response));return .init(response:response,resources:owners)
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacBitmapService.swift
+@@ -0,0 +1,31 @@
++import NTSDCore
++
++/// A typed use of the shared request exchange, not another execution engine.
++/// The enclosing caller stages a cursor, unwinds on RequestNeeded, then claims
++/// and serves the request here. Finish only after the entire caller can commit.
++public struct OriginalMacBitmapRequest: OriginalExchangeRequest {
++    public typealias Reply = OriginalBitmapSurfaceLoading.Response
++    public let value: OriginalBitmapSurfaceLoading.Request
++    public init(_ value: OriginalBitmapSurfaceLoading.Request) { self.value = value }
++    public func accepts(_ response: Reply) -> Bool { true }
++}
++@MainActor public final class OriginalMacBitmapService {
++    public typealias Exchange = OriginalRequestExchange<OriginalMacBitmapRequest, any OriginalApplicationStartupResource>
++    public let backend: OriginalMacDisplayBackend,inputs: OriginalMacDisplayBackend.BitmapInputs
++    public init(backend: OriginalMacDisplayBackend,inputs: OriginalMacDisplayBackend.BitmapInputs) {
++        self.backend = backend;self.inputs = inputs
++    }
++    /// Validation precedes beginService; actual allocation/copy follows it once.
++    /// Receipts retain retired owners as well as live ones across late rollback.
++    public func serve(_ permit: Exchange.Permit,on exchange: Exchange) throws {
++        let prepared = try backend.prepareBitmap(permit.request.value,inputs:inputs)
++        try exchange.beginService(permit)
++        do {
++            let result = try backend.performBitmap(prepared)
++            try exchange.answer(permit,response:result.response,retaining:result.resources)
++        } catch {
++            try exchange.fail(permit,diagnostic:String(reflecting:error),retaining:backend.retainedResources)
++            throw error
++        }
++    }
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalMacBitmapBackendTests.swift
+@@ -0,0 +1,205 @@
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalMacBitmapBackendTests: XCTestCase {
++    typealias D = OriginalMacDisplayBackendTests
++    typealias B = OriginalMacDisplayBackend
++    typealias S = OriginalMacBitmapService
++    typealias E = S.Exchange
++    typealias API = OriginalBitmapSurfaceLoading
++    typealias Q = API.Request
++    enum Stop: Error { case limit, late }
++    func service(_ run: D.Run,_ inputs: OriginalApplicationStartupInputs) -> S {
++        S(backend:run.setup.display,inputs:.init(resources:inputs.bitmaps,
++            files:Dictionary(uniqueKeysWithValues:inputs.bitmaps.keys.map { ($0,B.BitmapInputs.File.missing) })))
++    }
++    func call(_ service: S,_ q: Q) throws -> API.Response {
++        let e = E();var c = try e.snapshot.cursor()
++        do { _ = try c.response(for:.init(q));throw Stop.limit }
++        catch let ticket as E.RequestNeeded { try service.serve(e.claim(ticket),on:e) }
++        c = try e.snapshot.cursor();let result = try c.response(for:.init(q));_ = try e.finish(c);return result
++    }
++    func construct(_ service: S,_ name: String,_ device: UInt32,optional: Bool = false,late: Bool = false) throws -> (OriginalLoadedBitmap,E) {
++        let e = E();var failed = false
++        for _ in 0..<80 {
++            var cursor = try e.snapshot.cursor()
++            do {
++                let result = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:name,optional:optional,
++                    backing:Array(repeating:0xa7,count:0x1f50),device:device,flags:0x40,context:&cursor,
++                    perform:{ q,c in try c.response(for:.init(q)) })
++                if late && !failed {
++                    failed = true;let count = service.backend.bitmapOperations.count
++                    XCTAssertEqual(e.snapshot.status,.open)
++                    // A complete retry must consume saved replies without physical work.
++                    var replay = try e.snapshot.cursor()
++                    _ = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:name,optional:optional,
++                        backing:Array(repeating:0xa7,count:0x1f50),device:device,flags:0x40,context:&replay,
++                        perform:{ q,c in try c.response(for:.init(q)) })
++                    XCTAssertEqual(service.backend.bitmapOperations.count,count)
++                    throw Stop.late
++                }
++                _ = try e.finish(cursor);XCTAssertEqual(failed,late);return (result,e)
++            } catch let needed as E.RequestNeeded { try service.serve(e.claim(needed),on:e) }
++            catch Stop.late { XCTAssertEqual(e.snapshot.status,.open) }
++        }
++        throw Stop.limit
++    }
++    func surface(_ e: E) throws -> UInt32 {
++        try XCTUnwrap(e.snapshot.receipts.first { $0.request.value.kind == "createSurface" }?.response.output)
++    }
++    func check(_ result: B.Pixels,_ input: OriginalDIBPixels) {
++        XCTAssertEqual(result.width,input.width);XCTAssertEqual(result.height,input.height)
++        XCTAssertEqual(result.defined,input.defined)
++        // Independent XRGB packing from the accepted RGB bytes, not backend pixels.
++        let words = stride(from:0,to:input.rgb.count,by:3).map { i in
++            UInt32(input.rgb[i])*65536+UInt32(input.rgb[i+1])*256+UInt32(input.rgb[i+2])
++        }
++        XCTAssertEqual(result.values,words)
++    }
++    func testAllOriginalDIBsThroughWholeConstructorOnStartupDisplay() throws {
++        let d = D(),r = try d.run(late:false);defer { try? d.close(r) }
++        let inputs = try OriginalApplicationStartupInputs.bundled(),s = service(r,inputs),device = try d.ids(r).0
++        let baseline = s.backend.allocatedBytes
++        var count = 0,unknown = 0
++        for name in inputs.bitmaps.keys.sorted() {
++            let bitmap = try XCTUnwrap(inputs.bitmaps[name]),(loaded,e) = try construct(s,name,device)
++            let token = try surface(e),pixels = try s.backend.pixels(token)
++            XCTAssertEqual(loaded.input.width,bitmap.width);XCTAssertEqual(loaded.input.height,bitmap.height)
++            XCTAssertTrue(loaded.input.present);XCTAssertEqual(try loaded.storage.integer(at:0,as:UInt32.self),1)
++            XCTAssertTrue(loaded.storage.defined.prefix(12).allSatisfy { $0 })
++            XCTAssertTrue(loaded.storage.defined.dropFirst(12).allSatisfy { !$0 })
++            check(pixels,bitmap.pixels);unknown += pixels.defined.filter { !$0 }.count;count += 1
++            XCTAssertEqual(try s.backend.bitmapObservation(token).colorKey,[0,0])
++            XCTAssertNil(try s.backend.bitmapObservation(token).activeDC)
++            XCTAssertEqual(e.snapshot.receipts.map { $0.request.value.kind },["module","image","module","image","getObject","createSurface","restore","createDC","selectObject","getObject","description","getDC","stretch","releaseDC","deleteDC","deleteObject","colorKey"])
++            let object = try XCTUnwrap(e.snapshot.receipts.first { $0.request.value.kind == "getObject" })
++            XCTAssertEqual(object.response.writes.map(\.offset),[4]);XCTAssertEqual(object.response.writes.first?.bytes.count,16)
++            let image = try XCTUnwrap(e.snapshot.receipts.first { $0.request.value.kind == "image" && $0.response.result != 0 })
++            XCTAssertEqual(try s.backend.observation(UInt32(bitPattern:image.response.result)).references,0)
++            if pixels.defined.allSatisfy({ $0 }) { XCTAssertEqual(try s.backend.image(token).width,pixels.width) }
++            else { XCTAssertThrowsError(try s.backend.image(token)) { XCTAssertEqual($0 as? B.Boundary,.unknownPixel) } }
++            XCTAssertEqual(try call(s,.init("release",[token])).result,0)
++            XCTAssertEqual(s.backend.allocatedBytes,baseline)
++            check(pixels,bitmap.pixels) // owned snapshot survives native surface release
++            withExtendedLifetime(e) {}
++        }
++        XCTAssertEqual(count,inputs.bitmaps.count);XCTAssertGreaterThan(count,20);XCTAssertGreaterThan(unknown,0)
++        print("Native whole bitmap constructors",count,"unknown original pixels",unknown)
++    }
++    func testLateRetryMissingFileAndExplicitFormat() throws {
++        let d = D(),r = try d.run(late:false);defer { try? d.close(r) }
++        let inputs = try OriginalApplicationStartupInputs.bundled(),device = try d.ids(r).0
++        let name = try XCTUnwrap(inputs.bitmaps.keys.sorted().first),bitmap = try XCTUnwrap(inputs.bitmaps[name])
++        let s = service(r,inputs),(_,retained) = try construct(s,name,device,late:true)
++        XCTAssertEqual(s.backend.bitmapOperations.count,17)
++        let token = try surface(retained);check(try s.backend.pixels(token),bitmap.pixels)
++        let missing = S(backend:s.backend,inputs:.init(resources:[:],files:["missing.bmp":.missing]))
++        let (absent,e) = try construct(missing,"missing.bmp",device,optional:true)
++        XCTAssertFalse(absent.input.present);XCTAssertNil(absent.input.width);XCTAssertNil(absent.input.height)
++        XCTAssertEqual(e.snapshot.receipts.count,4);XCTAssertTrue(absent.storage.defined.dropFirst(4).allSatisfy { !$0 })
++        // Prepare an actual BMP container from immutable original DIB bytes.
++        var header = try OriginalStateRecord(bytes:Array(repeating:0,count:14),defined:Array(repeating:true,count:14))
++        try header.write(UInt16(0x4d42),at:0);try header.write(UInt32(14+bitmap.dib.count),at:2)
++        try header.write(UInt32(14+bitmap.pixelOffset),at:10)
++        let file = try OriginalApplicationStartupInputs.Bitmap(bitmapFile:header.bytes+bitmap.dib)
++        let fileService = S(backend:s.backend,inputs:.init(resources:[:],files:["original-colors.bmp":.bitmap(file)]))
++        let exchange = E();var loaded: UInt32?
++        for _ in 0..<80 {
++            var cursor = try exchange.snapshot.cursor()
++            do {
++                loaded = try API.load(path:Array("original-colors.bmp".utf8),device:device,flags:0x40,
++                    pixelFormat:[32,0x40,0,32,0xff0000,0xff00,0xff,0],context:&cursor,
++                    perform:{ q,c in try c.response(for:.init(q)) })
++                _ = try exchange.finish(cursor);break
++            } catch let needed as E.RequestNeeded { try fileService.serve(exchange.claim(needed),on:exchange) }
++        }
++        check(try s.backend.pixels(XCTUnwrap(loaded)),bitmap.pixels)
++        XCTAssertEqual(exchange.snapshot.receipts.filter { $0.request.value.kind == "image" }.count,1)
++        let desc = try XCTUnwrap(exchange.snapshot.receipts.first { $0.request.value.kind == "createSurface" }?.request.value)
++        XCTAssertEqual(Array(try XCTUnwrap(desc.bytes)[72..<76]),[0,0,0,0])
++        XCTAssertThrowsError(try s.backend.prepareBitmap(.init("image",[UInt32(bitPattern:retained.snapshot.receipts[0].response.result),0,0,0,0x2010],strings:[Array("undeclared".utf8)]),inputs:s.inputs))
++        XCTAssertThrowsError(try s.backend.prepareBitmap(.init("message",[0,0],strings:[[],[]]),inputs:s.inputs))
++        XCTAssertEqual(try call(s,.init("release",[token])).result,0)
++        XCTAssertEqual(try call(s,.init("release",[XCTUnwrap(loaded)])).result,0)
++    }
++    func testSelectionAcquisitionMasksAndAtomicRectangles() throws {
++        let d = D(),r = try d.run(late:false);defer { try? d.close(r) }
++        // Two source pixels: one explicitly red; an RLE EOB leaves the other unknown.
++        var dib = try OriginalStateRecord(bytes:Array(repeating:0,count:52),defined:Array(repeating:true,count:52))
++        try dib.write(UInt32(40),at:0);try dib.write(Int32(2),at:4);try dib.write(Int32(1),at:8)
++        try dib.write(UInt16(1),at:12);try dib.write(UInt16(8),at:14);try dib.write(UInt32(1),at:16)
++        try dib.write(UInt32(4),at:20);try dib.write(UInt32(2),at:32);try dib.write(UInt8(255),at:46)
++        for (i,v) in [1,1,0,1].enumerated().map({ ($0.offset,UInt8($0.element)) }) { try dib.write(v,at:48+i) }
++        let input = try OriginalApplicationStartupInputs.Bitmap(dib:dib.bytes)
++        let s = S(backend:r.setup.display,inputs:.init(resources:["control":input],files:["control":.missing]))
++        let (_,e) = try construct(s,"control",d.ids(r).0),token = try surface(e)
++        XCTAssertEqual(try s.backend.pixels(token).values,[0xff0000,0]);XCTAssertEqual(try s.backend.pixels(token).defined,[true,false])
++        let module = UInt32(bitPattern:try call(s,.init("module",[0])).result)
++        let bitmap = UInt32(bitPattern:try call(s,.init("image",[module,0,0,0,0x2000],strings:[Array("control".utf8)])).result)
++        let dc = UInt32(bitPattern:try call(s,.init("createDC",[0])).result)
++        let other = UInt32(bitPattern:try call(s,.init("createDC",[0])).result)
++        let stock = try call(s,.init("selectObject",[dc,bitmap])).result;XCTAssertNotEqual(stock,0)
++        XCTAssertEqual(try call(s,.init("selectObject",[other,bitmap])).result,0)
++        XCTAssertEqual(try call(s,.init("deleteObject",[bitmap])).result,0)
++        let target = try XCTUnwrap(call(s,.init("getDC",[token])).output)
++        XCTAssertThrowsError(try s.backend.prepareBitmap(.init("getDC",[token]),inputs:s.inputs))
++        XCTAssertThrowsError(try s.backend.prepareBitmap(.init("release",[token]),inputs:s.inputs))
++        let before = try s.backend.pixels(token),operations = s.backend.bitmapOperations.count
++        for words: [UInt32] in [[target,1,0,2,1,dc,0,0,2,1,0xcc0020], [target,0,0,2,1,dc,0,0,1,1,0xcc0020], [target,0,0,2,1,dc,UInt32.max,0,2,1,0xcc0020]] {
++            XCTAssertThrowsError(try s.backend.prepareBitmap(.init("stretch",words),inputs:s.inputs))
++        }
++        XCTAssertEqual(try s.backend.pixels(token),before);XCTAssertEqual(s.backend.bitmapOperations.count,operations)
++        XCTAssertEqual(try call(s,.init("stretch",[target,0,0,1,1,dc,1,0,1,1,0xcc0020])).result,1)
++        XCTAssertEqual(try s.backend.pixels(token).defined,[false,false]);XCTAssertEqual(before.defined,[true,false])
++        XCTAssertEqual(try call(s,.init("releaseDC",[token,target])).result,0)
++        XCTAssertThrowsError(try s.backend.prepareBitmap(.init("releaseDC",[token,target]),inputs:s.inputs))
++        XCTAssertEqual(try call(s,.init("selectObject",[dc,UInt32(bitPattern:stock)])).result,Int32(bitPattern:bitmap))
++        XCTAssertEqual(try call(s,.init("deleteObject",[bitmap])).result,1)
++        for handle in [dc,other] { XCTAssertEqual(try call(s,.init("deleteDC",[handle])).result,1) }
++        XCTAssertEqual(try call(s,.init("release",[token])).result,0)
++        withExtendedLifetime(e) {}
++    }
++    func ticket(_ e: E,_ q: Q) throws -> E.Permit {
++        var c = try e.snapshot.cursor()
++        do { _ = try c.response(for:.init(q));throw Stop.limit }
++        catch let needed as E.RequestNeeded { return try e.claim(needed) }
++    }
++    func testServiceProtocolAndAllocationFailure() throws {
++        let d = D(),r = try d.run(late:false);defer { try? d.close(r) }
++        let inputs = try OriginalApplicationStartupInputs.bundled(),s = service(r,inputs),e = E(),other = E()
++        let p = try ticket(e,.init("module",[0])),foreign = try ticket(other,.init("module",[0]))
++        let allocations = s.backend.allocationCount
++        XCTAssertThrowsError(try s.serve(foreign,on:e)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        XCTAssertEqual(s.backend.allocationCount,allocations)
++        try s.serve(p,on:e);XCTAssertEqual(s.backend.allocationCount,allocations+1)
++        XCTAssertThrowsError(try s.serve(p,on:e));XCTAssertEqual(s.backend.allocationCount,allocations+1)
++        other.cancel();XCTAssertThrowsError(try s.serve(foreign,on:other)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        let a = try s.backend.prepareBitmap(.init("module",[0]),inputs:s.inputs)
++        let bounded = B(windows:r.setup.window.backend,maximumBytes:0)
++        XCTAssertThrowsError(try bounded.performBitmap(a)) { XCTAssertEqual($0 as? B.Boundary,.foreignPreparation) }
++        _ = try s.backend.performBitmap(a)
++        XCTAssertThrowsError(try s.backend.performBitmap(a)) { XCTAssertEqual($0 as? B.Boundary,.repeatedPreparation) }
++        let draw = try XCTUnwrap(bounded.perform(bounded.prepare(.init("directDrawCreate",[0,0x457578,0]))).response.output)
++        _ = try bounded.perform(bounded.prepare(.init("cooperativeLevel",[draw,r.setup.controls.window,8])))
++        let b = S(backend:bounded,inputs:s.inputs),name = try XCTUnwrap(inputs.bitmaps.keys.sorted().first),exchange = E()
++        var rejected = false
++        for _ in 0..<20 {
++            var cursor = try exchange.snapshot.cursor()
++            do {
++                _ = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:name,optional:false,
++                    backing:Array(repeating:0xa7,count:0x1f50),device:draw,flags:0x40,context:&cursor,
++                    perform:{ q,c in try c.response(for:.init(q)) })
++                XCTFail("Zero-budget surface unexpectedly returned");break
++            } catch let needed as E.RequestNeeded {
++                do { try b.serve(exchange.claim(needed),on:exchange) }
++                catch B.Boundary.allocationBudget { rejected = true;break }
++            }
++        }
++        XCTAssertTrue(rejected);XCTAssertEqual(exchange.snapshot.status,.indeterminate)
++        XCTAssertEqual(bounded.allocatedBytes,0);XCTAssertEqual(exchange.snapshot.failure?.request.value.kind,"createSurface")
++        XCTAssertFalse(try XCTUnwrap(exchange.snapshot.failure).resources.isEmpty)
++        XCTAssertThrowsError(try exchange.snapshot.cursor())
++    }
++}

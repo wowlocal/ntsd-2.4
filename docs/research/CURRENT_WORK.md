@@ -1,5 +1,23 @@
 # Текущая передача работы
 
+[Native bitmap provider passes all48 methods](APPLICATION_MAC_BITMAP.md):
+whole constructor/loader/copy uses the startup display's own image/DC/offscreen
+resources and shared exchange. All36 named DIBs preserve full colors and146289
+unknown pixels; late retry/missing-file/DC/rectangle/protocol/budget controls and
+all35 prior plus9 original bitmap/DIB/source-color methods pass unchanged.
+Fresh package199Core/61Reference/7MacPlatform/281tests,1686 resources verified.
+Build54930 exit0 was observed without restart after a numeric-PID monitor error;
+the95.735s sampling gap stays explicit. Original monitor-error retained; test
+monitor now checks process lifetime. Queue69433/finalizer77265 terminal0/absent;
+4948-file artifact/238-member metadata and three-file patch verified, task frozen.
+Root/prior/source preserved. [Publication](../evidence/application-mac-bitmap.json).
+NEXT: compose this provider with the whole front/bootstrap caller and retained
+Host state, including suspension, late rollback and required-resource diagnostics.
+General Blt/callback/rectangle provenance and exact zero presentation rectangles
+remain required; independent review/root promotion/other providers/loading/Windows/
+input/audio/clean-Mac/full match/game stay open. NTSDApp remains Practice; EXE
+envelope not recalculated. Supersedes the bitmap-provider NEXT below.
+
 [Display correction2 passes all35 methods](APPLICATION_MAC_DISPLAY_CORRECTION2.md):
 explicit sRGB native window backing and owned profile-aware capture pass the new
 32-sample pattern test, previously failing whole-clear readback, resource/protocol/

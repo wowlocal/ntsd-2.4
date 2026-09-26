@@ -1,0 +1,49 @@
+{
+  "UTC": "2026-09-26T16:20:33.223451+00:00",
+  "head": "a75f3a246373014e847775091b0f77b113af4db3",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeWorkingSHA256": "1c14fabc452d83bfed2c98ef11080274190418fca227e9003f622805d08579ec",
+      "afterWorkingSHA256": "7454ac3d4b966c0dde5de3d2da140c50027ca12c8fb9d41ef5a86a7159192a15",
+      "headSHA256": "684b502162054e3b6fab5e32679817d1a5f2b5e4e226c0413aeefa2f52c62f3b",
+      "stagedSHA256": "5ce2c1d7a072b129dc352dc30e3ea1baf25040af66078bd2077ab7719cec5755",
+      "indexBlob": "5f92654a17953a0fe5a189376cd7783728e3f957",
+      "unrelatedWorkingContentPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeWorkingSHA256": "d8204a3837519b758ae436ec80cc6959cc24d35f583dd4ada202a3f581bcfb6c",
+      "afterWorkingSHA256": "efed8818a71d615efc7a368eebcb1117a93278bbdd69c7fc163a1a340c920767",
+      "headSHA256": "c095d2fdb3489419eb7644568dc89a8f1fa539c1d7a3db6ccefec9578043c4a9",
+      "stagedSHA256": "6b1cc6ce4f6b8709c7b6793ec4dc8212e0986d5bad7b3ea22f50bcedc8ad32ce",
+      "indexBlob": "d032d9a7b993cb92fb1f5f75e4af190458871967",
+      "unrelatedWorkingContentPreserved": true
+    }
+  ],
+  "ownedFiles": [
+    "docs/research/APPLICATION_MAC_BITMAP.md",
+    "docs/research/APPLICATION_MAC_BITMAP_PLAN.md",
+    "docs/research/APPLICATION_MAC_BITMAP_MONITOR_RECOVERY.md",
+    "docs/evidence/application-mac-bitmap.json",
+    "docs/evidence/application-mac-bitmap-close.json",
+    "docs/evidence/application-mac-bitmap.patch",
+    "tools/OriginalMacBitmapDisplay.swift.inc",
+    "tools/OriginalMacBitmapService.swift",
+    "tools/OriginalMacBitmapBackendTests.swift",
+    "tools/prepare_application_mac_bitmap.py",
+    "tools/finalize_application_mac_bitmap.py",
+    "tools/recover_application_mac_bitmap_monitor.py"
+  ],
+  "sourceExecuted": false,
+  "nativeRootModified": false,
+  "independentReview": false,
+  "buildMonitoringGap": true,
+  "checks": {
+    "all48MethodsPassed": true,
+    "packageBytesVerified": true,
+    "artifactAndMetadataVerified": true,
+    "oldMonitorErrorPreserved": true
+  },
+  "EXEEnvelopeRecalculated": false
+}
