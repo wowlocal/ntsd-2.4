@@ -1,0 +1,114 @@
+{
+  "schema": "ntsd-application-observed-graphics-validation-v1",
+  "UTC": "2026-09-26T22:12:19.190997+00:00",
+  "status": "all89-passed",
+  "baseHead": "7ef8424a2850c8999f1d14f90630a90aa7cacf76",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/candidate1-inputs.json",
+    "bytes": 574539,
+    "sha256": "99162d8c7bb544c5c45086eb90e0ef8bc6d627c0d6756c19631cca04af27a982",
+    "mode": 420,
+    "mtime_ns": 1790459270974964777
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/context1.json",
+    "bytes": 30375,
+    "sha256": "625ab1441e1465ecba65d2c0e9b6cf4b827386d3850b519dc2e1cdd073d642b8",
+    "mode": 420,
+    "mtime_ns": 1790459271526859757
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/build1.job.json",
+    "bytes": 104919,
+    "sha256": "51c5b23b3ef947c0aa1ba3debf7f3e89a8566ff33e4490f687e2ecc500756f62",
+    "mode": 420,
+    "mtime_ns": 1790459589125567056
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/package-check1.json",
+    "bytes": 1464041,
+    "sha256": "438270a87d97cea7a4c1e29823f817cdfe15ada09a43b4be7ddbdbed3116d21f",
+    "mode": 420,
+    "mtime_ns": 1790459791855735712
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 67198152,
+    "sha256": "f8feb8f2bc3c66bbffcebd153ba19288d0daaef117e73b969ddc78aeec7d288d",
+    "mode": 493,
+    "mtime_ns": 1790459586404134541
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/tests1-queue.job.json",
+    "bytes": 71370,
+    "sha256": "b6f64682a8f599aee53427622521b18bee4a6d61656712257afea1f384d8a0a2",
+    "mode": 420,
+    "mtime_ns": 1790460631492929848
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/verification1.json",
+    "bytes": 37338,
+    "sha256": "b1d773365689ff44d43c9730931ecde7385cbf0ae3669c46d358d2f4cc44aa26",
+    "mode": 420,
+    "mtime_ns": 1790460700448275294
+  },
+  "passedMethods": 89,
+  "selectedMethods": 89,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/artifact-archive1",
+    "files": 4970,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11421651448,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/artifact-archive1.json",
+      "bytes": 2569692,
+      "sha256": "1f8ad37e781a6a0512c39cf64eb37bd84c0e3aa77091b6a4b0e203ba1d96d5c8",
+      "mode": 420,
+      "mtime_ns": 1790460700440171564
+    }
+  },
+  "metadataArchive": {
+    "members": 388,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/metadata1.tar",
+    "bytes": 7127040,
+    "sha256": "184aaf3ce436e0cada305f044e5865e077f1c0a9caa319731207bc57a39ecd88",
+    "mode": 420,
+    "mtime_ns": 1790460739046351180
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "76bd18b3b91a97b295904289e0d7b605d915050b3ac0317015ed8878ee08808d",
+    "mode": 420,
+    "mtime_ns": 1790460700447110291
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2276,
+  "orderedMenuGraphicsProviderAdded": true,
+  "allOldTestBodiesUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "One whole Host iteration retains window/bitmap/front requests in original order. Actual Native bitmap service is connected; front and dispatcher Window responses in new controls are declared, not physical rendering or Windows observations.",
+    "All89 includes5 new whole-menu ordering/reply/rollback/protocol/lifetime methods and84 retained methods. No original execution or raster/font/device acceptance. Actual bitmap reply payloads compare fully against service/receipt/effect/command; prepared comparison normalizes only their distinct write projection.",
+    "Source59727 terminal at34 Objects; full137 and transport/provenance audits remain open. Independent review/root promotion/general raster/other providers/loading/Windows/input/audio/clean-Mac/full match/game remain open; NTSDApp still Practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

@@ -1,0 +1,712 @@
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalMenuGraphicsRequestExchange.swift
+@@ -0,0 +1,49 @@
++/// Ordered, typed requests from one whole menu iteration. Reply-family checks
++/// are pure; observed numeric failures remain replies, not Native exceptions.
++public enum OriginalMenuGraphicsRequest: OriginalExchangeRequest {
++    public typealias Stage = OriginalApplicationBootstrap.Stage
++    public enum Reply: Equatable {
++        case window(OriginalWindowInitialization.Response)
++        case bitmap(OriginalBitmapSurfaceLoading.Response)
++        case front(OriginalLibSurfaceText.Response)
++    }
++    case window(OriginalWindowInitialization.Request)
++    case bitmap(Stage, OriginalBitmapSurfaceLoading.Request)
++    case front(Stage, OriginalFrontScreenEvent)
++    public func accepts(_ response: Reply) -> Bool {
++        switch (self,response) {
++        case (.window,.window),(.bitmap,.bitmap):return true
++        case let (.front(_,q),.front(r)):
++            switch q.kind {
++            case "getDC":return r.result < 0 || r.output != nil
++            case "blit","fill","method","setBackgroundMode","setTextColor","textOut","releaseDC":return true
++            default:return false
++            }
++        default:return false
++        }
++    }
++}
++public typealias OriginalMenuGraphicsRequestExchange = OriginalRequestExchange<OriginalMenuGraphicsRequest, any OriginalApplicationStartupResource>
++
++/// One staged value cursor and retained earlier nonempty iterations. Receipt
++/// resources remain alive through copied platform/delivery contexts.
++public struct OriginalMenuGraphicsDelivery {
++    public private(set) var cursor: OriginalMenuGraphicsRequestExchange.Cursor?
++    private var earlier: [OriginalMenuGraphicsRequestExchange.Cursor] = []
++    public var retainedIterationCount: Int { earlier.count }
++    public init() {}
++    public mutating func begin(_ cursor: OriginalMenuGraphicsRequestExchange.Cursor) {
++        if let old = self.cursor,old.position > 0 { earlier.append(old) }
++        self.cursor = cursor
++    }
++    public mutating func response(for request: OriginalMenuGraphicsRequest) throws -> OriginalMenuGraphicsRequest.Reply {
++        guard var cursor else { throw OriginalApplicationObservedGraphicsBoundary.missingCursor }
++        defer { self.cursor = cursor };return try cursor.response(for:request)
++    }
++}
++public enum OriginalApplicationObservedGraphicsBoundary: Error, Equatable {
++    case missingCursor, invalidResponse, reentrantAttempt
++}
++public protocol OriginalApplicationObservedGraphicsPlatform: OriginalApplicationStartupPlatform {
++    var graphicsDelivery: OriginalMenuGraphicsDelivery { get set }
++}
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationObservedGraphicsIteration.swift
+@@ -0,0 +1,76 @@
++import Foundation
++
++/// One whole Host iteration on its existing owner. Window, bitmap and front requests
++/// share one journal in original order; other inputs stay explicitly prepared.
++public final class OriginalApplicationObservedGraphicsIteration<Platform: OriginalApplicationObservedGraphicsPlatform> {
++    public typealias Host = OriginalApplicationHostSession<Platform>
++    public typealias Exchange = OriginalMenuGraphicsRequestExchange
++    public typealias Boundary = OriginalApplicationObservedGraphicsBoundary
++    public enum Outcome {
++        case request(Exchange.Permit)
++        case advanced(Host.Outcome)
++    }
++    private let host: Host, sequence: UInt64, exchange = Exchange(), lock = NSRecursiveLock()
++    private var inFlight = false
++    public init(host: Host) { self.host = host;sequence = host.committedSequence }
++    private func locked<T>(_ body: () throws -> T) rethrows -> T {
++        lock.lock();defer { lock.unlock() };return try body()
++    }
++    private func attempt<T>(_ body: () throws -> T) throws -> T {
++        try locked {
++            guard !inFlight else { throw Boundary.reentrantAttempt }
++            inFlight = true;defer { inFlight = false };return try body()
++        }
++    }
++    public var exchangeSnapshot: Exchange.Snapshot { locked { exchange.snapshot } }
++    public func resume(prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
++        observe: @escaping (Host.Application.Observation) throws -> Void = { _ in },
++        menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
++        graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
++        checkpoint: (Host.Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
++        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
++        beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
++        beforePublication: (Platform) throws -> Void = { _ in }) throws -> Outcome {
++        try attempt {
++            let cursor = try exchange.snapshot.cursor()
++            do {
++                let result = try host.step(prepare:{ p,state in
++                    p.graphicsDelivery.begin(cursor);return try prepare(p,state)
++                },observe:observe,menuObserve:menuObserve,graphicsObserve:graphicsObserve,
++                checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,
++                bitmap:{ stage,q,p in
++                    guard case .bitmap(let r) = try p.graphicsDelivery.response(for:.bitmap(stage,q)) else { throw Boundary.invalidResponse }
++                    return r
++                },lifecycle:{ q,p in
++                    guard case .window(let r) = try p.graphicsDelivery.response(for:.window(q)) else { throw Boundary.invalidResponse }
++                    return r
++                },surface:{ q,p in
++                    guard case .window(let r) = try p.graphicsDelivery.response(for:.window(q)) else { throw Boundary.invalidResponse }
++                    return r
++                },front:{ stage,q,p in
++                    guard case .front(let r) = try p.graphicsDelivery.response(for:.front(stage,q)) else { throw Boundary.invalidResponse }
++                    return r
++                },
++                beforePublication:{ p in
++                    try beforePublication(p)
++                    guard let consumed = p.graphicsDelivery.cursor else { throw Boundary.missingCursor }
++                    _ = try self.exchange.finish(consumed)
++                },expectedSequence:sequence)
++                return .advanced(result)
++            } catch let needed as Exchange.RequestNeeded {
++                // The entire Host/Core attempt has unwound before claim/service.
++                return .request(try exchange.claim(needed))
++            }
++        }
++    }
++    public func beginService(_ permit: Exchange.Permit) throws { try attempt { try exchange.beginService(permit) } }
++    public func answer(_ permit: Exchange.Permit,response: Exchange.Response,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.answer(permit,response:response,retaining:resources) }
++    }
++    public func fail(_ permit: Exchange.Permit,diagnostic: String,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.fail(permit,diagnostic:diagnostic,retaining:resources) }
++    }
++    public func cancel() throws { try attempt { exchange.cancel() } }
++}
+--- a/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift
+@@ -6,7 +6,7 @@
+ /// inputs before entering Core. Observations are prepared values or replies to
+ /// a suspended whole-startup request serviced outside Core. This class performs no
+ /// host IO and does not derive clock, allocation, codepage or device responses.
+-public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform, OriginalApplicationObservedLifecyclePlatform {
++public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform, OriginalApplicationObservedLifecyclePlatform, OriginalApplicationObservedGraphicsPlatform {
+     public enum Kind: String, CaseIterable, Equatable {
+         case milliseconds, criticalSection, com, panelWrite, panelClose, panelAllocation
+         case panelBitmap, panelDevice, filetime, timezone, calendarAllocation, zoneName
+@@ -86,6 +86,7 @@
+     public var startupExchange: OriginalStartupRequestExchange.Cursor?
+     public var bitmapDelivery = OriginalBitmapDelivery()
+     public var lifecycleDelivery = OriginalLifecycleDelivery()
++    public var graphicsDelivery = OriginalMenuGraphicsDelivery()
+     public var snapshot: Snapshot { state }
+     public var panelIO: OriginalWinMainStartup.PanelIO { prepared.panelIO }
+     public var environmentTZ: [UInt8]? { prepared.environmentTZ }
+@@ -96,7 +97,7 @@
+     }
+     public func stagedCopy() throws -> OriginalApplicationPreparedStartupPlatform {
+         let copy = OriginalApplicationPreparedStartupPlatform(inputs:inputs,prepared:prepared)
+-        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery
++        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery; copy.graphicsDelivery = graphicsDelivery
+         return copy
+     }
+     private func take<T>(_ kind: Kind,_ values: [T],matching matches: (T) -> Bool = { _ in true }) throws -> T {
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -197,6 +197,8 @@
+         beforeCommit: (Session.Loop, Session.State) throws -> Void = { _,_ in },
+         bitmap: ((Application.Stage, OriginalBitmapSurfaceLoading.Request, Platform) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
+         lifecycle: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
++        surface: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
++        front: ((Application.Stage, OriginalFrontScreenEvent, Platform) throws -> OriginalLibSurfaceText.Response)? = nil,
+         beforePublication: (Platform) throws -> Void = { _ in },
+         expectedSequence: UInt64? = nil) throws -> Outcome {
+         try attempt {
+@@ -212,7 +214,9 @@
+                 graphicsObserve: graphicsObserve, checkpoint: checkpoint, bodyProduced: bodyProduced,
+                 beforeCommit: beforeCommit,
+                 bitmap: bitmap.map { callback in { stage,q in try callback(stage,q,candidate) } },
+-                lifecycleProvider: lifecycle.map { callback in { q in try callback(q,candidate) } })
++                lifecycleProvider: lifecycle.map { callback in { q in try callback(q,candidate) } },
++                surfaceProvider: surface.map { callback in { q in try callback(q,candidate) } },
++                frontProvider: front.map { callback in { stage,q in try callback(stage,q,candidate) } })
+             switch result {
+             case .committed(let value):
+                 let context = try DeliveryContext(application: next, platform: candidate)
+--- a/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
+@@ -77,9 +77,12 @@
+         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+         beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in },
+         bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
+-        lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil) throws -> Session.Outcome {
++        lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
++        surfaceProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
++        frontProvider: ((Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil) throws -> Session.Outcome {
+         guard var next = session,startup != nil else { throw Boundary.notStarted }
+         if lifecycleProvider != nil && !lifecycle.isEmpty { throw Session.Boundary.dependency("Observed lifecycle requests cannot mix prepared response arrays") }
++        if surfaceProvider != nil && !surface.isEmpty { throw Session.Boundary.dependency("Observed surface requests cannot mix prepared response arrays") }
+         var qi = 0,wi = 0,si = 0,li = 0
+         func take<T>(_ values: [T],_ index: inout Int,_ name: String) throws -> T {
+             guard index < values.count else { throw Session.Boundary.dependency("Bootstrap "+name+" response") }
+@@ -95,11 +98,11 @@
+         },windowDefault:{ q in
+             let r = try take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
+         },surface:{ q in
+-            let r = try take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
++            let r = try surfaceProvider?(q) ?? take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
+         },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in
+             try requireConsumed()
+             try beforeCommit(loop,state)
+-        },initialization:inputs,initializationBitmap:bitmap,bootstrapObserve:observe,lifecycle:{ q in
++        },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,bootstrapObserve:observe,lifecycle:{ q in
+             let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
+         })
+         switch result {
+--- a/native/Sources/NTSDCore/OriginalApplicationGraphics.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationGraphics.swift
+@@ -293,6 +293,7 @@
+         case let .fill(f,r):var e = OriginalFrontScreenEvent("fill");e.fill = f;return try front(e,result:r,inputs:inputs)
+         case let .release(e,r),let .present(e,r),let .graphics(e,r),let .startupGraphics(e,r):return try front(e,result:r,inputs:inputs)
+         case let .getDC(e,r,output):return try front(e,result:r,output:output,inputs:inputs)
++        case let .frontAPI(e,r):return try front(e,result:r.result,output:r.output,inputs:inputs)
+         default:return nil
+         }
+     }
+--- a/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift
+@@ -107,6 +107,7 @@
+         case present(OriginalFrontScreenEvent, result: Int32)
+         case getDC(OriginalFrontScreenEvent, result: Int32, output: UInt32)
+         case graphics(OriginalFrontScreenEvent,result: Int32)
++        case frontAPI(OriginalFrontScreenEvent,OriginalLibSurfaceText.Response)
+         case free(UInt32)
+         case translate(Loop.Request)
+         case sleep(UInt32)
+@@ -184,6 +185,7 @@
+         beforeCommit: (Loop,State) throws -> Void = { _,_ in },
+         initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
+         initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
++        frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
+         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
+         try state.validateAliases()
+@@ -206,6 +208,7 @@
+         }
+         let oldCounter = loop.counter
+         var stage: OriginalApplicationBootstrap.Stage = .menu
++        var lastBltResult: Int32 = 0, lastPresentationResult: Int32?
+         var drawResult: Int32 {
+             if let initialization {
+                 if stage == .prefix { return initialization.prefix.drawResults.first ?? responses.draw }
+@@ -217,26 +220,42 @@
+             switch e.kind {
+             case "blit":
+                 guard let b = e.blit else { throw Boundary.dependency("Missing bitmap Blt request") }
+-                try emit(.blit(b,result:drawResult))
++                if let reply = try frontProvider?(stage,e) {
++                    lastBltResult = reply.result;try emit(.frontAPI(e,reply))
++                } else { lastBltResult = drawResult;try emit(.blit(b,result:drawResult)) }
+             case "fill":
+                 guard let f = e.fill else { throw Boundary.dependency("Missing fill request") }
+-                try emit(.fill(f,result:stage == .prefix ? initialization?.prefix.fillResult ?? responses.draw : responses.draw))
++                if let reply = try frontProvider?(stage,e) { try emit(.frontAPI(e,reply)) }
++                else { try emit(.fill(f,result:stage == .prefix ? initialization?.prefix.fillResult ?? responses.draw : responses.draw)) }
+             case "soundMethod": try emit(.soundMethod(e,ignoredResult:responses.sound))
+             case "method":
+                 guard e.arguments.count >= 2 else { throw Boundary.dependency("Menu COM request") }
+                 if e.arguments[1] == 8 {
++                    let reply = try frontProvider?(stage,e),value = reply?.result ?? responses.release
+                     if var bindings = bitmapInputs {
+-                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:responses.release))
++                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:value))
+                         bitmapInputs = bindings
+                     }
+-                    try emit(.release(e,ignoredResult:responses.release))
++                    if let reply { try emit(.frontAPI(e,reply)) }
++                    else { try emit(.release(e,ignoredResult:value)) }
+                 }
+-                else if e.arguments[1] == 0x14 || e.arguments[1] == 0x2c { try emit(.present(e,result:responses.presentation)) }
++                else if e.arguments[1] == 0x14 || e.arguments[1] == 0x2c {
++                    if let reply = try frontProvider?(stage,e) {
++                        lastPresentationResult = reply.result;try emit(.frontAPI(e,reply))
++                    } else { lastPresentationResult = responses.presentation;try emit(.present(e,result:responses.presentation)) }
++                }
+                 else { throw Boundary.dependency("Menu COM continuation") }
+-            case "getDC": try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
++            case "getDC":
++                // The installed body response callback already emitted its
++                // terminal effect. Keep this original event as observation.
++                if frontProvider == nil || stage != .body {
++                    try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
++                }
+             case "setBackgroundMode","setTextColor","textOut","releaseDC":
+-                if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
+-                else { try emit(.graphics(e,result:responses.draw)) }
++                if frontProvider == nil || stage != .body {
++                    if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
++                    else { try emit(.graphics(e,result:responses.draw)) }
++                }
+             case "free":
+                 guard e.arguments.count == 1 else { throw Boundary.dependency("Menu free request") }
+                 try emit(.free(e.arguments[0]))
+@@ -384,7 +403,7 @@
+                         let bitmap = try liveBitmap(args[0]), surface = try bitmap.storage.integer(at:0,as:UInt32.self)
+                         var canonical = bitmap.storage; try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
+                         let input = OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:width,viewportHeight:height)
+-                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return drawResult })
++                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return lastBltResult })
+                     }
+                     let continuation = try OriginalFrontMenuLoop.run(world:&world,globals:&g,initialize:{ w,state in
+                         let result = try resources.load(world:w,globals:&state,allocate:{ index in
+@@ -465,7 +484,12 @@
+                         return result
+                     },body:{ state in
+                         try point(.body,combined(state))
+-                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:initialization?.body ?? .init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,observe:event)
++                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:initialization?.body ?? .init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,
++                            textPerform:frontProvider.map { provider in { q in
++                                try provider(stage,.init(q.kind.rawValue,q.arguments,q.strings))
++                            } },textDidRespond:{ q,r in
++                                try emit(.frontAPI(.init(q.kind.rawValue,q.arguments,q.strings),r))
++                            },observe:event)
+                         try bodyProduced(output); body = output
+                         if initialization != nil { try bootstrapObserve(.bodyReturn(output,combined(state),library)) }
+                         return output.continuation
+@@ -507,7 +531,7 @@
+                         throw Loading(pending:.init(ownerID:ownerID,revision:revision,state:owned,target:game.target,loopContinuation:loopContinuation,stagedEffects:effects,stagedGraphics:graphicsCommands))
+                     }
+                     guard continuation == .returned else { throw Boundary.dependency("Menu continuation "+continuation.rawValue) }
+-                    try point(.worldReturn,owned.full,initialization == nil ? nil : responses.presentation)
++                    try point(.worldReturn,owned.full,initialization == nil ? nil : lastPresentationResult ?? responses.presentation)
+                     let result = try OriginalApplicationDispatchEntry.finishWorldCall(globals:owned.full)
+                     try point(.dispatchReturn,owned.full,result)
+                     return .init(result:result)
+--- a/native/Sources/NTSDMacPlatform/OriginalMacBitmapService.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacBitmapService.swift
+@@ -12,19 +12,27 @@
+         self.backend = backend;self.inputs = inputs;self.diagnostic = diagnostic
+     }
+     public func serve(_ permit: Exchange.Permit,on exchange: Exchange) throws {
+-        try serve(permit,begin:{ try exchange.beginService(permit) },
++        try serve(permit.request.value,begin:{ try exchange.beginService(permit) },
+             answer:{ try exchange.answer(permit,response:$0,retaining:$1) },
+             fail:{ try exchange.fail(permit,diagnostic:$0,retaining:$1) })
+     }
+     public func serve<P>(_ permit: Exchange.Permit,on driver: OriginalApplicationObservedBitmapIteration<P>) throws {
+-        try serve(permit,begin:{ try driver.beginService(permit) },
++        try serve(permit.request.value,begin:{ try driver.beginService(permit) },
+             answer:{ try driver.answer(permit,response:$0,retaining:$1) },
+             fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
+     }
+-    private func serve(_ permit: Exchange.Permit,begin: () throws -> Void,
++    public func serve<P>(_ permit: OriginalMenuGraphicsRequestExchange.Permit,
++        on driver: OriginalApplicationObservedGraphicsIteration<P>) throws {
++        guard case .bitmap(_,let q) = permit.request else {
++            throw OriginalMacDisplayBackend.Boundary.unsupported("menu graphics bitmap family")
++        }
++        try serve(q,begin:{ try driver.beginService(permit) },
++            answer:{ try driver.answer(permit,response:.bitmap($0),retaining:$1) },
++            fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
++    }
++    private func serve(_ q: OriginalBitmapSurfaceLoading.Request,begin: () throws -> Void,
+         answer: (Exchange.Response,[any OriginalApplicationStartupResource]) throws -> Void,
+         fail: (String,[any OriginalApplicationStartupResource]) throws -> Void) throws {
+-        let q = permit.request.value
+         let prepared: OriginalMacDisplayBackend.BitmapPrepared?
+         if q.kind == "message" || q.kind == "debug" {
+             guard diagnostic != nil,q.bytes == nil,q.defined == nil,
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationObservedGraphicsTests.swift
+@@ -0,0 +1,345 @@
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalApplicationObservedGraphicsTests: XCTestCase {
++    typealias O = OriginalApplicationObservedBitmapTests
++    typealias D = OriginalMacDisplayBackendTests
++    typealias B = OriginalApplicationBootstrapTests
++    typealias A = OriginalApplicationBootstrap
++    typealias S = OriginalApplicationMenuSession
++    typealias P = OriginalApplicationPreparedStartupPlatform
++    typealias Host = OriginalApplicationHostSession<P>
++    typealias Driver = OriginalApplicationObservedGraphicsIteration<P>
++    typealias E = OriginalMenuGraphicsRequestExchange
++    typealias Q = OriginalMenuGraphicsRequest
++    typealias R = OriginalLibSurfaceText.Response
++    enum Stop: Error { case limit, late }
++    enum Profile { case normal, positive, negative, zeroDC, failedCleanup, varied }
++    final class Marker: OriginalApplicationStartupResource {}
++    struct Run {
++        let startup: D.Run, packet: O.Packet, before: A, driver: Driver, batch: Host.Batch
++        let profile: Profile, served: [Q], checkpoints: [(S.Checkpoint,Int32?)]
++    }
++    func reply(_ q: OriginalFrontScreenEvent,_ profile: Profile,_ pass: Int) -> R {
++        let dc: UInt32 = profile == .zeroDC ? 0 : profile == .varied ? 41 : 0x12345678
++        switch q.kind {
++        case "getDC":
++            if profile == .varied && pass == 3 { return .init(result:-7) }
++            return .init(result:profile == .negative ? -7 : profile == .positive || (profile == .varied && pass == 2) ? 1 : 0,output:dc)
++        case "blit":return .init(result:profile == .varied ? -17 : 0)
++        case "fill":return .init(result:profile == .varied ? -31 : 0)
++        case "method":return .init(result:profile == .varied && q.arguments[1] != 8 ? -72 : 0)
++        case "releaseDC":return .init(result:profile == .failedCleanup ? -1 : profile == .varied && pass == 1 ? -9 : 0)
++        default:return .init(result:profile == .failedCleanup ? -1 : profile == .varied ? -23 : 0)
++        }
++    }
++    func setup() throws -> (D.Run,O.Packet) {
++        let r = try D().run(late:false),package = try OriginalApplicationStartupInputs.bundled()
++        let packets = try O().packets(r.setup.controls.window,package)
++        _ = try r.host.takeCommitted()
++        for p in packets where !p.dispatch { try O().previous(r.host,p);_ = try r.host.takeCommitted() }
++        return (r,try XCTUnwrap(packets.first { $0.dispatch }))
++    }
++    func observed(_ p: O.Packet) -> Host.Inputs {
++        let i = p.initialization
++        let poisoned = A.MenuInputs(settings:i.settings,prefix:i.prefix,
++            body:.init(dcResult:Int32.min,dc:0xeeeeeeee,methodResult:123,drawResults:i.body.drawResults,shellResult:i.body.shellResult),
++            frontAllocations:i.frontAllocations,backgroundAllocation:i.backgroundAllocation,
++            frontResponses:[],backgroundResponses:[],bitmapResources:i.bitmapResources)
++        return .init(initialization:poisoned,responses:p.responses,queue:p.queue,windowDefault:p.window,surface:[],lifecycle:[])
++    }
++    func run(profile: Profile, failure: String? = nil) throws -> Run {
++        let (r,p) = try setup(),host = r.host,before = host.snapshot,old = try XCTUnwrap(before.session)
++        let service = O().service(r,try OriginalApplicationStartupInputs.bundled()),driver = Driver(host:host)
++        var served: [Q] = [],pass = 0,window = 0,failed = false,checkpoints: [(S.Checkpoint,Int32?)] = []
++        for _ in 0..<1200 {
++            var attemptPoints: [(S.Checkpoint,Int32?)] = []
++            do {
++                switch try driver.resume(prepare:{ _,_ in self.observed(p) },observe:{ observation in
++                    if failure == "response" && !failed,case .front(_,let e) = observation,e.kind == "getDC" { throw Stop.late }
++                },graphicsObserve:{ command in
++                    if failure == "graphics" && !failed && command.event?.kind == "textOut" { throw Stop.late }
++                },checkpoint:{ checkpoint,_,value in attemptPoints.append((checkpoint,value)) },
++                beforeCommit:{ _,_ in
++                    XCTAssertThrowsError(try driver.cancel()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++                },beforePublication:{ _ in if failure == "publication" && !failed { throw Stop.late } }) {
++                case .request(let permit):
++                    B.same(try XCTUnwrap(host.snapshot.session),old);XCTAssertEqual(host.pendingBatchCount,0)
++                    XCTAssertNil(try host.platformSnapshot().graphicsDelivery.cursor)
++                    switch permit.request {
++                    case .bitmap:
++                        try service.serve(permit,on:driver)
++                    case .window:
++                        XCTAssertTrue(p.surface.indices.contains(window))
++                        try driver.beginService(permit)
++                        try driver.answer(permit,response:.window(p.surface[window]));window += 1
++                    case .front(_,let q):
++                        if q.kind == "getDC" { pass += 1 }
++                        // Controlled terminal replies, not GDI/device observations.
++                        try driver.beginService(permit)
++                        try driver.answer(permit,response:.front(reply(q,profile,pass)),retaining:[Marker()])
++                    }
++                    served.append(permit.request)
++                case .advanced(let outcome):
++                    guard case .committed(let sequence,_) = outcome else { throw Stop.limit }
++                    let batch = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(batch.sequence,sequence)
++                    XCTAssertEqual(window,p.surface.count);XCTAssertEqual(failed,failure != nil)
++                    XCTAssertNil(try host.takeCommitted());checkpoints = attemptPoints
++                    XCTAssertEqual(served,driver.exchangeSnapshot.receipts.map(\.request))
++                    return .init(startup:r,packet:p,before:before,driver:driver,batch:batch,profile:profile,served:served,checkpoints:checkpoints)
++                }
++            } catch Stop.late {
++                XCTAssertFalse(failed);failed = true
++                B.same(try XCTUnwrap(host.snapshot.session),old);XCTAssertEqual(host.pendingBatchCount,0)
++                XCTAssertEqual(driver.exchangeSnapshot.status,.open)
++                XCTAssertEqual(served,driver.exchangeSnapshot.receipts.map(\.request))
++            }
++        }
++        try D().close(r);throw Stop.limit
++    }
++    func prepared(_ r: Run, profile: Profile) throws -> (A,S.Committed) {
++        var app = r.before;let p = r.packet,i = p.initialization,receipts = r.driver.exchangeSnapshot.receipts
++        func controls(_ stage: A.Stage) -> [OriginalBitmapSurfaceLoading.Response] {
++            receipts.compactMap { receipt in
++                guard case .bitmap(let s,_) = receipt.request,s == stage,case .bitmap(let response) = receipt.response else { return nil }
++                return .init(result:response.result,output:response.output)
++            }
++        }
++        let dc: UInt32 = profile == .zeroDC ? 0 : 0x12345678
++        let input = A.MenuInputs(settings:i.settings,prefix:i.prefix,
++            body:.init(dcResult:profile == .negative ? -7 : profile == .positive ? 1 : 0,dc:dc,
++                methodResult:profile == .failedCleanup ? -1 : 0,drawResults:[0],shellResult:i.body.shellResult),
++            frontAllocations:i.frontAllocations,backgroundAllocation:i.backgroundAllocation,
++            frontResponses:controls(.resources),backgroundResponses:controls(.prefix),bitmapResources:i.bitmapResources)
++        let surface = receipts.compactMap { receipt -> OriginalWindowInitialization.Response? in
++            if case .window(let response) = receipt.response { return response };return nil
++        }
++        guard case .committed(let batch) = try app.step(inputs:input,responses:p.responses,queue:p.queue,
++            windowDefault:p.window,surface:surface,lifecycle:p.lifecycle) else { throw Stop.limit }
++        return (app,batch)
++    }
++    func normalized(_ effect: S.Effect) throws -> S.Effect {
++        switch effect {
++        case .bitmap(let q,let r):return .bitmap(q,.init(result:r.result,output:r.output))
++        case .frontAPI(let q,let r):
++            switch q.kind {
++            case "blit":return .blit(try XCTUnwrap(q.blit),result:r.result)
++            case "fill":return .fill(try XCTUnwrap(q.fill),result:r.result)
++            case "method":return q.arguments[1] == 8 ? .release(q,ignoredResult:r.result) : .present(q,result:r.result)
++            case "getDC":return .getDC(q,result:r.result,output:try XCTUnwrap(r.output))
++            default:return .startupGraphics(q,result:r.result)
++            }
++        default:return effect
++        }
++    }
++    func normalized(_ q: OriginalApplicationGraphics.Command) -> OriginalApplicationGraphics.Command {
++        .init(family:q.family,request:q.request,windowResponse:q.windowResponse,
++            bitmapResponse:q.bitmapResponse.map { .init(result:$0.result,output:$0.output) },event:q.event,result:q.result,
++            output:q.output,bindings:q.bindings,dependencies:q.dependencies,opaqueReferences:q.opaqueReferences,
++            sourceRectangle:q.sourceRectangle,destinationRectangle:q.destinationRectangle,sourceColors:q.sourceColors)
++    }
++    func checkJournal(_ r: Run) throws {
++        guard case .iteration(let iteration) = r.batch.contents else { throw Stop.limit }
++        let receipts = r.driver.exchangeSnapshot.receipts
++        let projected: [S.Effect] = try receipts.map { receipt in
++            switch (receipt.request,receipt.response) {
++            case let (.window(q),.window(a)):return .surface(q,a)
++            case let (.bitmap(_,q),.bitmap(a)):return .bitmap(q,a)
++            case let (.front(_,q),.front(a)):return .frontAPI(q,a)
++            default:throw Stop.limit
++            }
++        }
++        let effects = iteration.effects.filter { e in
++            switch e { case .surface,.bitmap,.frontAPI:return true;default:return false }
++        }
++        XCTAssertEqual(effects,projected)
++        XCTAssertEqual(iteration.graphics.count,receipts.count)
++        for (command,receipt) in zip(iteration.graphics,receipts) {
++            switch (receipt.request,receipt.response) {
++            case let (.window(q),.window(a)):
++                XCTAssertEqual(command.request,q);XCTAssertEqual(command.windowResponse,a)
++            case let (.bitmap(_,q),.bitmap(a)):
++                XCTAssertEqual(command.request,q);XCTAssertEqual(command.bitmapResponse,a)
++            case let (.front(_,q),.front(a)):
++                XCTAssertEqual(command.event,q);XCTAssertEqual(command.result,a.result);XCTAssertEqual(command.output,a.output)
++            default:throw Stop.limit
++            }
++        }
++        let bitmap = receipts.compactMap { receipt -> OriginalMacDisplayBackend.BitmapOperation? in
++            if case .bitmap(_,let q) = receipt.request,case .bitmap(let a) = receipt.response { return .init(request:q,response:a) }
++            return nil
++        }
++        XCTAssertEqual(r.startup.setup.display.bitmapOperations,bitmap)
++        let state = try XCTUnwrap(r.batch.context.application.session).state,bindings = try XCTUnwrap(state.bitmapInputs)
++        XCTAssertEqual(bindings.surfaces.count,25)
++        for (token,surface) in bindings.surfaces {
++            let pixels = try r.startup.setup.display.pixels(token),colors = surface.sourceColors
++            XCTAssertEqual(pixels.width,colors.width);XCTAssertEqual(pixels.height,colors.height);XCTAssertEqual(pixels.defined,colors.defined)
++            XCTAssertEqual(pixels.values,stride(from:0,to:colors.rgb.count,by:3).map { i in UInt32(colors.rgb[i])*65536+UInt32(colors.rgb[i+1])*256+UInt32(colors.rgb[i+2]) })
++        }
++        let fill = try XCTUnwrap(receipts.firstIndex { if case .front(.prefix,let q) = $0.request { return q.kind == "fill" };return false })
++        let background = try XCTUnwrap(receipts.firstIndex { if case .bitmap(.prefix,_) = $0.request { return true };return false })
++        XCTAssertLessThan(fill,background)
++        XCTAssertEqual(r.driver.exchangeSnapshot.status,.finished)
++        XCTAssertEqual(try r.batch.context.platformSnapshot().graphicsDelivery.cursor?.position,receipts.count)
++    }
++    func testWholeMenuOrderedGraphicsMatchesPreparedStateAndActualBitmapWork() throws {
++        for profile in [Profile.normal,.positive,.negative,.zeroDC,.failedCleanup] {
++            let r = try run(profile:profile);defer { try? D().close(r.startup) }
++            try checkJournal(r)
++            guard case .iteration(let actual) = r.batch.contents else { throw Stop.limit }
++            let (app,expected) = try prepared(r,profile:profile)
++            B.same(try XCTUnwrap(r.batch.context.application.session),try XCTUnwrap(app.session))
++            try B.sameStartup(XCTUnwrap(r.batch.context.application.startup),XCTUnwrap(r.before.startup))
++            XCTAssertEqual(try actual.effects.map(normalized),try expected.effects.map(normalized))
++            XCTAssertEqual(actual.graphics.map(normalized),expected.graphics.map(normalized))
++        }
++    }
++    func sameNonTextState(_ actual: S,_ previous: S) {
++        XCTAssertEqual(actual.state.full,previous.state.full)
++        XCTAssertEqual(actual.state.memory.replayPointers,previous.state.memory.replayPointers)
++        XCTAssertEqual(actual.state.memory.allocations,previous.state.memory.allocations)
++        XCTAssertEqual(actual.state.front.bitmaps,previous.state.front.bitmaps)
++        XCTAssertEqual(actual.state.earlyScreen.bitmaps,previous.state.earlyScreen.bitmaps)
++        XCTAssertEqual(actual.state.earlyScreen.surfaces,previous.state.earlyScreen.surfaces)
++        XCTAssertEqual(actual.state.earlyScreen.retainedOperation,previous.state.earlyScreen.retainedOperation)
++        XCTAssertEqual(actual.state.random,previous.state.random)
++        XCTAssertEqual(actual.state.screenBody,previous.state.screenBody)
++        XCTAssertEqual(actual.state.settings,previous.state.settings)
++        XCTAssertEqual(actual.state.bitmapInputs,previous.state.bitmapInputs)
++        XCTAssertEqual(actual.loop.message,previous.loop.message)
++        XCTAssertEqual(actual.loop.counter,previous.loop.counter)
++        XCTAssertEqual(actual.loop.timer.baseline,previous.loop.timer.baseline)
++    }
++    func testVariableRepliesPreserveDCGenerationsAndActualPresentationResult() throws {
++        let r = try run(profile:.varied);defer { try? D().close(r.startup) };try checkJournal(r)
++        let (baseline,baselineBatch) = try prepared(r,profile:.normal)
++        let actual = try XCTUnwrap(r.batch.context.application.session),reference = try XCTUnwrap(baseline.session)
++        sameNonTextState(actual,reference)
++        XCTAssertEqual(actual.state.libraryText.retainedDC,41)
++        let graphics = try XCTUnwrap(actual.state.graphics),previous = try XCTUnwrap(reference.state.graphics)
++        XCTAssertEqual(graphics.resources,previous.resources);XCTAssertEqual(graphics.currentResources,previous.currentResources)
++        XCTAssertEqual(graphics.displayModes,previous.displayModes)
++        XCTAssertEqual(graphics.nextTextGeneration,2);XCTAssertEqual(graphics.textLeases.count,1)
++        let lease = try XCTUnwrap(graphics.textLeases[0])
++        XCTAssertEqual(lease.ref,.init(kind:"textDC",token:41,generation:0));XCTAssertEqual(lease.acquireResult,0)
++        XCTAssertEqual(lease.releaseResults,[-9])
++        var copy = graphics
++        XCTAssertThrowsError(try copy.front(.init("textOut",[41,0,0,1],[[65]]),result:1,inputs:actual.state.bitmapInputs)) {
++            XCTAssertEqual($0 as? OriginalApplicationGraphics.Boundary,.dc(41))
++        }
++        XCTAssertEqual(copy,graphics)
++        XCTAssertEqual(try XCTUnwrap(r.checkpoints.first { $0.0 == .worldReturn }).1,-72)
++        XCTAssertEqual(try XCTUnwrap(r.checkpoints.first { $0.0 == .dispatchReturn }).1,1)
++        let textKinds: Set<String> = ["getDC","setBackgroundMode","setTextColor","textOut","releaseDC"]
++        guard case .iteration(let iteration) = r.batch.contents else { throw Stop.limit }
++        let nonText: (OriginalApplicationGraphics.Command) -> Bool = { !textKinds.contains($0.event?.kind ?? "") }
++        let expectedNonText = baselineBatch.graphics.filter(nonText).map { original -> OriginalApplicationGraphics.Command in
++            let q = normalized(original),value = q.event.map { reply($0,.varied,0).result } ?? q.result
++            return .init(family:q.family,request:q.request,windowResponse:q.windowResponse,bitmapResponse:q.bitmapResponse,
++                event:q.event,result:value,output:q.output,bindings:q.bindings,dependencies:q.dependencies,
++                opaqueReferences:q.opaqueReferences,sourceRectangle:q.sourceRectangle,destinationRectangle:q.destinationRectangle,sourceColors:q.sourceColors)
++        }
++        XCTAssertEqual(iteration.graphics.filter(nonText).map(normalized),expectedNonText)
++        let text = r.driver.exchangeSnapshot.receipts.compactMap { receipt -> (OriginalFrontScreenEvent,R)? in
++            if case .front(.body,let q) = receipt.request,textKinds.contains(q.kind),case .front(let a) = receipt.response { return (q,a) }
++            return nil
++        }
++        let fr = try B.F.Resources(),body = try B.Body.Resources(fr)
++        let target: UInt32 = try XCTUnwrap(r.before.session).state.full.integer(at:0x455608-0x44d000,as:UInt32.self)
++        var expected: [OriginalFrontScreenEvent] = [],pass = 0
++        for event in body.c.cases[0].events.compactMap({ $0.event }) where textKinds.contains(event.kind) {
++            if event.kind == "getDC" { pass += 1 }
++            if pass == 3 && event.kind != "getDC" { continue }
++            var args = event.arguments
++            if event.kind == "getDC" { args[0] = target }
++            else if event.kind == "releaseDC" { args[0] = target;args[1] = 41 }
++            else { args[0] = 41 }
++            expected.append(.init(event.kind,args,event.strings))
++        }
++        XCTAssertEqual(pass,3);XCTAssertEqual(text.map { $0.0 },expected)
++        XCTAssertEqual(text.map { $0.1.result },[0,-23,-23,-23,-9,1,-23,-23,-23,0,-7])
++        XCTAssertEqual(text.map { $0.1.output },[41,nil,nil,nil,nil,41,nil,nil,nil,nil,nil])
++    }
++    func testLateFailuresRetryWholeIterationWithoutRepeatingService() throws {
++        for failure in ["response","graphics","publication"] {
++            let r = try run(profile:.normal,failure:failure);defer { try? D().close(r.startup) }
++            try checkJournal(r)
++            let (reference,_) = try prepared(r,profile:.normal)
++            B.same(try XCTUnwrap(r.batch.context.application.session),try XCTUnwrap(reference.session))
++            XCTAssertThrowsError(try r.driver.resume(prepare:{ _,_ in self.observed(r.packet) })) {
++                XCTAssertEqual($0 as? E.Boundary,.closed(.finished))
++            }
++        }
++    }
++    func ticket(_ exchange: E,_ q: Q) throws -> E.Permit {
++        var cursor = try exchange.snapshot.cursor()
++        do { _ = try cursor.response(for:q);throw Stop.limit }
++        catch let needed as E.RequestNeeded { return try exchange.claim(needed) }
++    }
++    func message(_ window: UInt32,_ responses: S.Responses) throws -> Host.Inputs {
++        var msg = try OriginalStateRecord(bytes:Array(repeating:0,count:28),defined:Array(repeating:true,count:28))
++        try msg.write(window,at:0);try msg.write(UInt32(0x100),at:4);try msg.write(UInt32(74),at:8)
++        return .init(responses:responses,queue:[.init(result:1),.init(result:1,writes:[.init(offset:0,bytes:msg.bytes)]),.init(),.init()],windowDefault:[0])
++    }
++    func testProtocolFamiliesStaleHostCancellationAndIndeterminateService() throws {
++        let getDC = Q.front(.body,.init("getDC",[1])),exchange = E(),other = E()
++        let p = try ticket(exchange,getDC),foreign = try ticket(other,getDC)
++        XCTAssertThrowsError(try exchange.answer(foreign,response:.front(.init(result:0,output:0)))) {
++            XCTAssertEqual($0 as? E.Boundary,.foreignOwner)
++        }
++        for response in [Q.Reply.window(.init()),.bitmap(.init()),.front(.init(result:0))] {
++            XCTAssertThrowsError(try exchange.answer(p,response:response)) { XCTAssertEqual($0 as? E.Boundary,.responseMismatch) }
++        }
++        XCTAssertTrue(exchange.snapshot.receipts.isEmpty);XCTAssertFalse(exchange.snapshot.serviceStarted)
++        try exchange.beginService(p)
++        XCTAssertThrowsError(try exchange.beginService(p)) { XCTAssertEqual($0 as? E.Boundary,.serviceAlreadyStarted) }
++        exchange.cancel()
++        try exchange.answer(p,response:.front(.init(result:0,output:0)),retaining:[Marker()])
++        XCTAssertEqual(exchange.snapshot.status,.cancelled);XCTAssertEqual(exchange.snapshot.receipts.count,1)
++        XCTAssertThrowsError(try exchange.answer(p,response:.front(.init(result:0,output:0)))) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
++        try other.beginService(foreign);other.cancel()
++        try other.fail(foreign,diagnostic:"controlled unknown outcome",retaining:[Marker()])
++        XCTAssertEqual(other.snapshot.status,.indeterminate);XCTAssertEqual(other.snapshot.failure?.afterCancellation,true)
++        XCTAssertFalse(Q.front(.body,.init("stringLength")).accepts(.front(.init(result:0))))
++        var absent = OriginalMenuGraphicsDelivery()
++        XCTAssertThrowsError(try absent.response(for:getDC)) { XCTAssertEqual($0 as? Driver.Boundary,.missingCursor) }
++        let (r,packet) = try setup();defer { try? D().close(r) }
++        let driver = Driver(host:r.host),service = O().service(r,try OriginalApplicationStartupInputs.bundled())
++        guard case .request(let request) = try driver.resume(prepare:{ _,_ in self.observed(packet) }) else { throw Stop.limit }
++        guard case .window = request.request else { throw Stop.limit }
++        let operations = r.setup.display.bitmapOperations.count
++        XCTAssertThrowsError(try service.serve(request,on:driver))
++        XCTAssertEqual(r.setup.display.bitmapOperations.count,operations);XCTAssertFalse(driver.exchangeSnapshot.serviceStarted)
++        try driver.cancel()
++        XCTAssertThrowsError(try driver.beginService(request)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        let stale = Driver(host:r.host),next = Driver(host:r.host),input = try message(r.setup.controls.window,packet.responses)
++        guard case .advanced(.committed) = try next.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++        XCTAssertThrowsError(try stale.resume(prepare:{ _,_ in input })) { XCTAssertEqual($0 as? Host.Boundary,.staleSequence) }
++        XCTAssertTrue(stale.exchangeSnapshot.receipts.isEmpty)
++    }
++    func testRetainedHistoryInspectionCopiesAndContextResourceLifetime() throws {
++        weak var marker: Marker?
++        var saved: Host.DeliveryContext?
++        func exercise() throws {
++            let r = try run(profile:.normal);defer { try? D().close(r.startup) }
++            marker = try XCTUnwrap(r.driver.exchangeSnapshot.receipts.flatMap(\.resources).compactMap { $0 as? Marker }.first)
++            let host = r.startup.host,input = try message(r.startup.setup.controls.window,r.packet.responses)
++            let next = Driver(host:host)
++            guard case .advanced(.committed) = try next.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++            XCTAssertEqual(try host.platformSnapshot().graphicsDelivery.retainedIterationCount,1)
++            XCTAssertEqual(try host.platformSnapshot().graphicsDelivery.cursor?.position,0)
++            saved = try XCTUnwrap(host.takeCommitted()).context
++            let inspection = try XCTUnwrap(saved).platformSnapshot();inspection.graphicsDelivery = .init()
++            XCTAssertEqual(try saved?.platformSnapshot().graphicsDelivery.retainedIterationCount,1)
++            let empty = Driver(host:host)
++            guard case .advanced(.committed) = try empty.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++            XCTAssertEqual(try host.platformSnapshot().graphicsDelivery.retainedIterationCount,1)
++            XCTAssertEqual(try saved?.platformSnapshot().graphicsDelivery.retainedIterationCount,1)
++        }
++        try exercise();XCTAssertNotNil(marker)
++        saved = nil;XCTAssertNil(marker)
++    }
++}

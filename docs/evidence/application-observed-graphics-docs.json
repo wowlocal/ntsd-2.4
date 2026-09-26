@@ -1,0 +1,130 @@
+{
+  "schema": "ntsd-observed-graphics-docs-v1",
+  "UTC": "2026-09-26T22:14:00.767739+00:00",
+  "baseHead": "7ef8424a2850c8999f1d14f90630a90aa7cacf76",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/publication1.json",
+    "bytes": 5554,
+    "sha256": "b5272b563531e355e1d9fcee516deb11fee058fd17ed9e7cd83ff80465aa6bcb",
+    "mode": 420,
+    "mtime_ns": 1790460739197043590
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-graphics-20260927/finalize1.job.json",
+    "bytes": 869,
+    "sha256": "306b7ecfe368257c3b3e8142de0dd58dddac4eb9ee9e73741b9b3ef80204716b",
+    "mode": 420,
+    "mtime_ns": 1790460739200503807
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_OBSERVED_GRAPHICS_PLAN.md",
+      "bytes": 7964,
+      "sha256": "8e6804674218a3b7e4334bcfd84609135b9e0210f716978a7ed511e784cf398c",
+      "mode": 420,
+      "mtime_ns": 1790458928405875139
+    },
+    {
+      "path": "docs/research/APPLICATION_OBSERVED_GRAPHICS.md",
+      "bytes": 8206,
+      "sha256": "afa23b0bc1077d6e27b90311694b51e17ebcee49efcebec1d347b1b89f8a9e41",
+      "mode": 420,
+      "mtime_ns": 1790460789823103413
+    },
+    {
+      "path": "docs/evidence/application-observed-graphics.json",
+      "bytes": 5554,
+      "sha256": "b5272b563531e355e1d9fcee516deb11fee058fd17ed9e7cd83ff80465aa6bcb",
+      "mode": 420,
+      "mtime_ns": 1790460739200211973
+    },
+    {
+      "path": "docs/evidence/application-observed-graphics-close.json",
+      "bytes": 1673,
+      "sha256": "ddf54ec10329913bc2685c9c9fca813ce0184bb3ce7a7919547c461eec36f526",
+      "mode": 420,
+      "mtime_ns": 1790460739200307973
+    },
+    {
+      "path": "docs/evidence/application-observed-graphics.patch",
+      "bytes": 51120,
+      "sha256": "3826d6244c899b63f6915273c421a72cc02d0c1d549e2460f1f78e182570f1eb",
+      "mode": 420,
+      "mtime_ns": 1790460657887494070
+    },
+    {
+      "path": "tools/OriginalMenuGraphicsRequestExchange.swift",
+      "bytes": 2532,
+      "sha256": "2e66dc6adab9301f73cd953a2556c6ba99c2c6feb88506e819d093c7d3fa7105",
+      "mode": 420,
+      "mtime_ns": 1790458928405708805
+    },
+    {
+      "path": "tools/OriginalApplicationObservedGraphicsIteration.swift",
+      "bytes": 4551,
+      "sha256": "42cf3d33cf3ef4eb084a32819983cc00391cefb64e2e302d9f3835088006b2ec",
+      "mode": 420,
+      "mtime_ns": 1790458519495078113
+    },
+    {
+      "path": "tools/OriginalApplicationObservedGraphicsTests.swift",
+      "bytes": 24222,
+      "sha256": "46e7fe5b1bb586065cebe6218a4b02477df7f1c0e527365048aeee6120d2bd85",
+      "mode": 420,
+      "mtime_ns": 1790459140397428674
+    },
+    {
+      "path": "tools/apply_observed_graphics_candidate.py",
+      "bytes": 10459,
+      "sha256": "b7572502aab4c9098da94a252876bcb02a970b6e7d397841e573302833940d5f",
+      "mode": 420,
+      "mtime_ns": 1790458629244029856
+    },
+    {
+      "path": "tools/prepare_application_observed_graphics.py",
+      "bytes": 12716,
+      "sha256": "9813d9b83ffa3627df7e0fc061bc5dbabb7f8193d3ffe05fa516343b1ae2d918",
+      "mode": 420,
+      "mtime_ns": 1790459214522982430
+    },
+    {
+      "path": "tools/finalize_application_observed_graphics.py",
+      "bytes": 18372,
+      "sha256": "a36f1cd84f64bd0ef2936c52ea6874dcd45ce103a9cda811888e2fcb38d9bba6",
+      "mode": 420,
+      "mtime_ns": 1790459370824318167
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "9df0559e2714e80640410e9814bdf0bbe867851a918bedb1017681042b32af8e",
+      "insertedBlockSHA256": "6f15968917d3980749e4626626456599013f8f355425a1ccfdf2c21c6958433d",
+      "stagedBlob": "25123ce6c56a8c417e482bbeeee59a1f18b7da95",
+      "unrelatedDiffRetained": "260\t0\tdocs/research/CURRENT_WORK.md"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "69603e5a5f6a74de62588d8db386d76c8ab9bdda674fe1dcb60ab04a78c080fe",
+      "insertedBlockSHA256": "60dab62c4e12ff926434928ad9699e4b653fbb2321a800bf53be75463b809d56",
+      "stagedBlob": "2faee763fb80b9175f0cafd3f338a08c1189339c",
+      "unrelatedDiffRetained": "123\t1\tdocs/RESEARCH_MAP.md"
+    }
+  ],
+  "all89Passed": true,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "originalExecuted": false,
+  "whitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exitCode": 0,
+    "evidencePatchException": null,
+    "unfilteredResult": ""
+  }
+}

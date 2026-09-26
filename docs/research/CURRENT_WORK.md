@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Ordered whole-menu graphics replies](APPLICATION_OBSERVED_GRAPHICS.md):
+Window/bitmap/front requests now share one retained Host journal in source order.
+Actual Native bitmap service is connected; Window/front controls remain declared,
+without raster/font/device claims. All89 methods pass:5 new and84 retained.
+Fresh package1686 resources, exact patch and4970-file/388-member archives verify.
+[Publication](../evidence/application-observed-graphics.json). Candidate2276 files
+frozen; root1034/prior2257/base2273/source55 unchanged. Independent review/root
+promotion/physical front rendering/other IO/Windows/full match/game remain open.
+NEXT Native: connect the actual front renderer through the ordered service,
+keeping unsupported pixels/device contracts explicit. Host remains locked; same
+Windows installer already approved, CrossOver process preserved. This supersedes
+the text-only MenuSession/Host NEXT below; safety incidents remain open and the
+EXE envelope is not recalculated.
+
 [Installed text replies through the own front body](APPLICATION_TEXT_RESPONSES.md):
 Provider-based GetDC/GDI replies now pass through the complete own body; legacy
 prepared/pristine paths retained. All84 Native methods pass:276 installed-text
