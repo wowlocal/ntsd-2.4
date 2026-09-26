@@ -1,0 +1,22 @@
+{
+  "UTC": "2026-09-26T06:40:57.428352+00:00",
+  "taskFrozen": true,
+  "ownedBytesBeforeClosure": 643594,
+  "outputLimitBytes": 16777216,
+  "externalFree": 124293300224,
+  "internalFree": 63097372672,
+  "originalExternalReserve": 42949672960,
+  "originalInternalReserve": 6442450944,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/publication1.json",
+    "bytes": 7695,
+    "sha256": "2dce0eef7417f0fb2e1922e7952b39739e6abc13accc77c7a5a613c657ccf25e",
+    "mode": 420
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/metadata1.tar",
+    "bytes": 327680,
+    "sha256": "26c67348011e6d3e2d10b816d9baa406f07ea3ae6394e8117e08cf96b18cc8f5",
+    "mode": 420
+  }
+}

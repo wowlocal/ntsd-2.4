@@ -17,6 +17,17 @@ the declared publication logical cap (researchBoundary/dependency), not a full
 catalog return; do not restart. Root promotion/installed trajectory/devices/catalog/
 first complete match/full game and prior safety dependencies remain open.
 
+[Catalog53 terminal preflight](FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT.md):
+saved249,780,969-byte publication SHA verified; source stops at publication
+logical cap after34 Object returns, pending35/kisame.dat, not whole137 return.
+Nine manifests/80,296 parts have valid metadata and present exact-sized regular
+files;326,092,501,942 trace raw bytes and27,852 blobs remain undecoded/unverified.
+Eight-member metadata archive verified; source/root1034/host1040 preserved.
+[Evidence](../evidence/first-damage-catalog53-terminal-preflight.json).
+Independent branch complete at metadata scope. First finish/diagnose same host69
+queue above; next source gate is separately bounded whole saved transport audit,
+then provenance/read/state audit. No original restart or full catalog acceptance.
+
 ## Актуальный срез — 2026-09-22
 
 [Host gameplay validation failed at compile](APPLICATION_HOST_GAMEPLAY_VALIDATION.md):

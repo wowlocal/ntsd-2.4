@@ -1,0 +1,46 @@
+{
+  "UTC": "2026-09-26T06:41:48.334073+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "insertion": "[Catalog53 terminal preflight](FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT.md):\nsaved249,780,969-byte publication SHA verified; source stops at publication\nlogical cap after34 Object returns, pending35/kisame.dat, not whole137 return.\nNine manifests/80,296 parts have valid metadata and present exact-sized regular\nfiles;326,092,501,942 trace raw bytes and27,852 blobs remain undecoded/unverified.\nEight-member metadata archive verified; source/root1034/host1040 preserved.\n[Evidence](../evidence/first-damage-catalog53-terminal-preflight.json).\nIndependent branch complete at metadata scope. First finish/diagnose same host69\nqueue above; next source gate is separately bounded whole saved transport audit,\nthen provenance/read/state audit. No original restart or full catalog acceptance.\n\n",
+      "anchor": "## \u0410\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0440\u0435\u0437 \u2014 2026-09-22",
+      "beforeSHA256": "17cc7572aad5bd33e5103648aa9e9895b304572f922efddb493c32509058b426",
+      "afterSHA256": "9d971a2566ff8ea7e86bfc03d7a1938c8ce44ce9a5ea2b5f364a6de8ed0fc48e"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "insertion": "[Catalog53 terminal metadata](research/FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT.md):\nouter publication length/SHA and all9 manifest metadata/80,296 part file sizes\nverified.34 Object returns, pending35/kisame.dat; source ended at logical-cap\nresearch boundary, not whole catalog.326.09GB trace raw declarations and27,852\nblobs still need transport/provenance/state/read audits. Small archive verified;\nno original/Native execution or source restart. Finish same live host queue first.\n[Evidence](evidence/first-damage-catalog53-terminal-preflight.json).\n\n",
+      "anchor": "[Host gameplay compile failure]",
+      "beforeSHA256": "b51c0a1abfe3a1d9bfda649acf96fff70a31d388b5582735976ad7eadb6864f7",
+      "afterSHA256": "8865dab71d0d6e62dc945a514eb7eebe578e6ee2d7abe47430135d963323e607"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 6,
+  "readerASTVerified": true,
+  "files": [
+    {
+      "path": "docs/research/FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT_PLAN.md",
+      "sha256": "abdbbf93ef9f1546c959e590f8c57d2f89db745adc6440a1fa90ba9b54850495"
+    },
+    {
+      "path": "docs/research/FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT.md",
+      "sha256": "26a727a51d6f1cf1563257eefecd0ea49704156ead3067908fd1b1d176463534"
+    },
+    {
+      "path": "docs/evidence/first-damage-catalog53-terminal-preflight.json",
+      "sha256": "2dce0eef7417f0fb2e1922e7952b39739e6abc13accc77c7a5a613c657ccf25e"
+    },
+    {
+      "path": "docs/evidence/first-damage-catalog53-terminal-preflight-close.json",
+      "sha256": "39fe95eefe6eaa536a224d114680017c1951383ab622de84e4a1f3805a1a7fc7"
+    },
+    {
+      "path": "tools/inspect_catalog53_terminal_publication.py",
+      "sha256": "63422f989ebc495376eb89a025c8f1688b53e1accbac52e199968298ab4f22ff"
+    }
+  ],
+  "bodyAuditComplete": false,
+  "independentReview": false
+}

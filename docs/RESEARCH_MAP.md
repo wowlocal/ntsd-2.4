@@ -9,6 +9,14 @@ no duplicate or source restart. Source59727 is terminal at a publication logical
 cap, not a full catalog return. Root/source/prior-candidate bytes preserved.
 [Build/start evidence](evidence/application-host-gameplay-correction1-start.json).
 
+[Catalog53 terminal metadata](research/FIRST_DAMAGE_CATALOG53_TERMINAL_PREFLIGHT.md):
+outer publication length/SHA and all9 manifest metadata/80,296 part file sizes
+verified.34 Object returns, pending35/kisame.dat; source ended at logical-cap
+research boundary, not whole catalog.326.09GB trace raw declarations and27,852
+blobs still need transport/provenance/state/read audits. Small archive verified;
+no original/Native execution or source restart. Finish same live host queue first.
+[Evidence](evidence/first-damage-catalog53-terminal-preflight.json).
+
 [Host gameplay compile failure](research/APPLICATION_HOST_GAMEPLAY_VALIDATION.md):
 build83817 terminal1/154.046s; ActiveOutputTests.sequence lacks the driver parameter
 already used by its forwarding call and caller. All69 methods unstarted; package/

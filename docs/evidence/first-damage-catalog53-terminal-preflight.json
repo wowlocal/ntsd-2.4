@@ -1,0 +1,255 @@
+{
+  "schema": "ntsd-catalog53-terminal-preflight-v1",
+  "UTC": "2026-09-26T06:40:57.426694+00:00",
+  "status": "metadata-preflight-complete-body-and-provenance-audits-open",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926",
+  "baseHead": "97a07b2e381eafaca253e93b49b8ca3eb33c7c41",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/context1.json",
+    "bytes": 15799,
+    "sha256": "509eb1c2436421d767e0fecfe3e5a3f8f715d412a03c54f7afcb41acaea41af8",
+    "mode": 420
+  },
+  "inventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/inventory1.json",
+    "bytes": 265448,
+    "sha256": "69ad94ffd732c075f44c522f51a01d1ad8a73b52d9d089057d200457195e59df",
+    "mode": 420
+  },
+  "readerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/job-terminal1.json",
+    "bytes": 746,
+    "sha256": "a70a53a89af505a1ee22c020ba8c616d5d32b2a2193e9bd26a55c50b010da963",
+    "mode": 420
+  },
+  "source": {
+    "path": "/Users/michael/Developer/ntsd-2.4/build/research/first-damage-catalog53-source-20260922/capture1/capture1.json",
+    "bytes": 249780969,
+    "sha256": "010c6cfec0280e501954cf2c678a08de620022d9eceedf73a6b94b90071c6232",
+    "mode": 420
+  },
+  "sourceOutcome": {
+    "outcome": "researchBoundary",
+    "publication": {
+      "bytes": 249780969,
+      "sha256": "010c6cfec0280e501954cf2c678a08de620022d9eceedf73a6b94b90071c6232"
+    },
+    "end": "dependency"
+  },
+  "boundary": {
+    "kind": "researchPublicationLimit",
+    "reason": "logicalCap",
+    "phase": "stream",
+    "used": 15024171029,
+    "prospectiveBytes": 8417857,
+    "limit": 15032385536,
+    "externalFree": 152348954624,
+    "externalFloor": 47244640256,
+    "internalFree": 65642684416,
+    "internalFloor": 7516192768
+  },
+  "observedEnd": {
+    "pc": 4278675,
+    "sp": 268491540,
+    "cw": 575,
+    "storeCount": 1305182059
+  },
+  "returnedObjects": 34,
+  "allocatedObjects": 35,
+  "pendingDecoder": "chars\\kisame.dat",
+  "frameAllocations": 9075,
+  "bitmaps": 302,
+  "files": 139,
+  "waves": 267,
+  "consumedInputsPresent": false,
+  "traces": [
+    {
+      "path": "$.case.writes",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 1305182059,
+      "parts": 26104,
+      "rawBytes": 98311475848,
+      "packedBytes": 1799695730,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.localReads",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 1453713405,
+      "parts": 29075,
+      "rawBytes": 154562193569,
+      "packedBytes": 11819337509,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.catalogReads",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 103,
+      "parts": 2,
+      "rawBytes": 10193,
+      "packedBytes": 929,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.scans",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 6656897,
+      "parts": 134,
+      "rawBytes": 1777645587,
+      "packedBytes": 72227155,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.outputCalls",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 3054469,
+      "parts": 62,
+      "rawBytes": 1035471362,
+      "packedBytes": 57084114,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.stackStores",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 1232009427,
+      "parts": 24641,
+      "rawBytes": 69643013865,
+      "packedBytes": 1214274798,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.crtStores",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 13313586,
+      "parts": 267,
+      "rawBytes": 758874936,
+      "packedBytes": 2983372,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.globalStores",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 19383,
+      "parts": 2,
+      "rawBytes": 1344957,
+      "packedBytes": 116799,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    },
+    {
+      "path": "$.case.recordTables",
+      "encoding": "ordered-json-array-zlib-parts-v1",
+      "declaredCount": 1624,
+      "parts": 9,
+      "rawBytes": 2471625,
+      "packedBytes": 473417,
+      "metadataValid": true,
+      "bodyHashesVerified": false,
+      "decoded": false
+    }
+  ],
+  "uniqueParts": 80296,
+  "declaredTraceRawBytes": 326092501942,
+  "declaredTracePackedBytes": 14966193823,
+  "blobs": {
+    "count": 27852,
+    "declaredRawBytes": 1891246796,
+    "base64Characters": 164815528,
+    "declarationKeySets": [
+      "count,deflate,sha256"
+    ],
+    "decoded": false,
+    "hashesVerified": false
+  },
+  "traceFiles": {
+    "regularFiles": 80305,
+    "bytes": 14988031020,
+    "referencedBytes": 14966193823,
+    "inventorySHA256": "5677274aaf6b1827429b55601345582ca126ad719ec7fd13dc1263ae09c3cb6a",
+    "missing": [],
+    "sizeOrTypeMismatches": [],
+    "unreferenced": [
+      {
+        "path": "capture1.traces/catalog_accesses-index.json",
+        "bytes": 623
+      },
+      {
+        "path": "capture1.traces/catalog_reads-index.json",
+        "bytes": 8002578
+      },
+      {
+        "path": "capture1.traces/global_stores-index.json",
+        "bytes": 632
+      },
+      {
+        "path": "capture1.traces/output_returns-index.json",
+        "bytes": 17125
+      },
+      {
+        "path": "capture1.traces/record_tables-index.json",
+        "bytes": 2484
+      },
+      {
+        "path": "capture1.traces/scan_returns-index.json",
+        "bytes": 36657
+      },
+      {
+        "path": "capture1.traces/stack_stores-index.json",
+        "bytes": 6729554
+      },
+      {
+        "path": "capture1.traces/stores-index.json",
+        "bytes": 70897
+      },
+      {
+        "path": "capture1.traces/writes-index.json",
+        "bytes": 6976647
+      }
+    ],
+    "bodyHashesVerified": false
+  },
+  "declaredTotalDecodedBytes": 327983748738,
+  "archive": {
+    "members": 8,
+    "pin": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/catalog53-terminal-preflight-20260926/metadata1.tar",
+      "bytes": 327680,
+      "sha256": "26c67348011e6d3e2d10b816d9baa406f07ea3ae6394e8117e08cf96b18cc8f5",
+      "mode": 420
+    },
+    "exactBodiesModesMtimesMembershipVerified": true
+  },
+  "protectedPins": 12,
+  "rootFiles": 1034,
+  "hostCandidateFiles": 1040,
+  "sourceCodePins": 55,
+  "sourceUnchanged": true,
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false,
+  "fullCatalogReturned": false,
+  "sourceBodyAuditComplete": false,
+  "wholeApplicationNativeCompared": false,
+  "readerSeconds": 13.734945084,
+  "readerPeakRSS": 1047379968,
+  "consoleDisplayNote": {
+    "toolChunk": "a9f38b",
+    "outcome": "Console output truncated; complete saved inventory unaffected; bounded follow-up view used"
+  },
+  "next": "Finish or diagnose same host queue; then separately freeze complete saved transport audit before provenance/snapshot/read replay. No source restart."
+}
