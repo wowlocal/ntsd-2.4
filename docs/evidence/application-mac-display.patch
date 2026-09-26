@@ -1,0 +1,612 @@
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
+@@ -0,0 +1,287 @@
++import AppKit
++import Darwin
++import NTSDCore
++
++/// Windowed host resources. XRGB8888 and logical desktop points describe this
++/// native backend, not an observed Windows display mode or offscreen conversion.
++@MainActor public final class OriginalMacDisplayBackend {
++    public typealias Window = OriginalWindowInitialization
++    public enum Boundary: Error, Equatable {
++        case unsupported(String), arguments(String), owner(UInt32), released(UInt32)
++        case geometry, allocationBudget, allocationFailed, unknownPixel, image
++        case foreignPreparation, repeatedPreparation, referenceOverflow
++    }
++    public enum Kind: String { case display, primary, backbuffer, clipper }
++    public struct Observation: Equatable {
++        public let token: UInt32, kind: Kind, references: UInt32, width: Int, height: Int
++        public let window: UInt32?, clipper: UInt32?, knownPixels: Int
++    }
++    public struct Pixels: Equatable {
++        public let width: Int, height: Int, values: [UInt32], defined: [Bool]
++    }
++    public struct Served {
++        public let response: Window.Response
++        public let resources: [any OriginalApplicationStartupResource]
++    }
++    public struct Operation: Equatable {
++        public let request: Window.Request, response: Window.Response
++    }
++    fileprivate final class Identity {}
++    fileprivate final class Once { var used = false }
++    public struct Prepared {
++        fileprivate let request: Window.Request, identity: Identity, once: Once
++    }
++    public class Resource: OriginalApplicationStartupResource {
++        public let token: UInt32, kind: Kind
++        fileprivate var references: UInt32 = 1
++        fileprivate init(_ token: UInt32,_ kind: Kind) { self.token = token; self.kind = kind }
++    }
++    private final class Draw: Resource {
++        var window: OriginalMacWindowBackend.WindowLease?
++        init(_ token: UInt32) { super.init(token,.display) }
++    }
++    /// Accounting may be released when a retained context dies off-main.
++    private final class Budget {
++        private let lock = NSLock(), maximum: Int
++        private var used = 0
++        init(_ maximum: Int) { self.maximum = maximum }
++        var allocated: Int { lock.lock(); defer { lock.unlock() }; return used }
++        func reserve(_ bytes: Int) throws {
++            lock.lock(); defer { lock.unlock() }
++            guard bytes >= 0,bytes <= maximum,used <= maximum-bytes else { throw Boundary.allocationBudget }
++            used += bytes
++        }
++        func release(_ bytes: Int) { lock.lock(); used -= bytes; lock.unlock() }
++    }
++    private final class Storage {
++        let width: Int, height: Int, count: Int, byteCount: Int
++        let values: UnsafeMutablePointer<UInt32>, known: UnsafeMutablePointer<UInt8>, budget: Budget
++        init(_ width: Int,_ height: Int,_ budget: Budget) throws {
++            guard width > 0,height > 0,width <= Int.max/height,width*height <= Int.max/5 else { throw Boundary.geometry }
++            self.width = width; self.height = height; count = width*height; byteCount = count*5; self.budget = budget
++            try budget.reserve(byteCount)
++            guard let pixels = calloc(count,4) else { budget.release(byteCount); throw Boundary.allocationFailed }
++            guard let mask = calloc(count,1) else { free(pixels); budget.release(byteCount); throw Boundary.allocationFailed }
++            values = pixels.assumingMemoryBound(to:UInt32.self); known = mask.assumingMemoryBound(to:UInt8.self)
++            // Zero allocation bytes are not an original initialized framebuffer.
++        }
++        deinit { free(values); free(known); budget.release(byteCount) }
++    }
++    private final class Surface: Resource {
++        let draw: Draw, width: Int, height: Int, screen: CGRect?
++        var storage: Storage?, clipper: Clipper?
++        init(_ token: UInt32,_ kind: Kind,_ draw: Draw,_ storage: Storage,_ screen: CGRect?) {
++            self.draw = draw; self.storage = storage; self.screen = screen
++            width = storage.width; height = storage.height; super.init(token,kind)
++        }
++    }
++    private final class Clipper: Resource {
++        let draw: Draw
++        var window: OriginalMacWindowBackend.WindowLease?
++        init(_ token: UInt32,_ draw: Draw) { self.draw = draw; super.init(token,.clipper) }
++    }
++    private final class WeakResource {
++        weak var value: Resource?
++        init(_ value: Resource) { self.value = value }
++    }
++    public let windows: OriginalMacWindowBackend
++    private let identity = Identity(), budget: Budget
++    private var live: [UInt32:Resource] = [:], history: [UInt32:WeakResource] = [:]
++    public private(set) var operations: [Operation] = []
++    public private(set) var allocationCount = 0
++    public var allocatedBytes: Int { budget.allocated }
++    public var retainedResources: [any OriginalApplicationStartupResource] { Array(live.values) }
++    public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024) {
++        self.windows = windows; budget = Budget(maximumBytes)
++    }
++    public nonisolated static func handles(_ q: Window.Request) -> Bool {
++        ["directDrawCreate","cooperativeLevel","createSurface","createClipper","clipperWindow","setClipper","release","pixelFormat","blt"].contains(q.kind)
++    }
++    public func lease(_ token: UInt32) throws -> Resource {
++        guard let resource = history[token]?.value else { throw Boundary.owner(token) }; return resource
++    }
++    private func resource<T:Resource>(_ token: UInt32,as type: T.Type) throws -> T {
++        guard let value = try lease(token) as? T else { throw Boundary.owner(token) }
++        guard value.references > 0 else { throw Boundary.released(token) }; return value
++    }
++    private func install(_ value: Resource) {
++        live[value.token] = value; history[value.token] = WeakResource(value); allocationCount += 1
++    }
++    public func observation(_ token: UInt32) throws -> Observation {
++        let value = try lease(token),s = value as? Surface,c = value as? Clipper,d = value as? Draw
++        let known = s?.storage.map { Array(UnsafeBufferPointer(start:$0.known,count:$0.count)).filter { $0 != 0 }.count } ?? 0
++        return .init(token:token,kind:value.kind,references:value.references,width:s?.width ?? 0,height:s?.height ?? 0,
++            window:c?.window?.token ?? d?.window?.token ?? s?.draw.window?.token,clipper:s?.clipper?.token,knownPixels:known)
++    }
++    public func pixels(_ token: UInt32) throws -> Pixels {
++        let s = try resource(token,as:Surface.self)
++        guard let data = s.storage else { throw Boundary.released(token) }
++        return .init(width:data.width,height:data.height,
++            values:Array(UnsafeBufferPointer(start:data.values,count:data.count)),
++            defined:UnsafeBufferPointer(start:data.known,count:data.count).map { $0 != 0 })
++    }
++    private func record(_ q: Window.Request,_ size: Int) throws -> OriginalStateRecord {
++        guard let b = q.bytes,let m = q.defined,b.count == size,m.count == size else { throw Boundary.arguments(q.kind) }
++        return try .init(bytes:b,defined:m)
++    }
++    /// Pure payload/identity validation. Only flagged structure fields are read;
++    /// ignored private bytes stay untouched and do not become known zero.
++    public func prepare(_ q: Window.Request) throws -> Prepared {
++        try validate(q); return .init(request:q,identity:identity,once:Once())
++    }
++    private func validate(_ q: Window.Request) throws {
++        guard Self.handles(q) else { throw Boundary.unsupported(q.kind) }
++        func require(_ condition: Bool) throws { if !condition { throw Boundary.arguments(q.kind) } }
++        try require(q.strings.isEmpty)
++        if !["createSurface","pixelFormat","blt"].contains(q.kind) { try require(q.bytes == nil && q.defined == nil) }
++        switch q.kind {
++        case "directDrawCreate": try require(q.words == [0,0x457578,0])
++        case "cooperativeLevel":
++            try require(q.words.count == 3 && q.words[2] == 8)
++            _ = try resource(q.words[0],as:Draw.self); _ = try windows.lease(q.words[1])
++        case "createSurface":
++            try require(q.words.count == 3 && q.words[2] == 0)
++            let draw = try resource(q.words[0],as:Draw.self);try require(draw.window != nil)
++            let r = try record(q,108),flags = try r.integer(at:4,as:UInt32.self),caps = try r.integer(at:104,as:UInt32.self)
++            try require(try r.integer(at:0,as:UInt32.self) == 108)
++            if flags == 1 && caps == 0x200 { try require(q.words[1] == 0x455634) }
++            else if flags == 7 && caps == 0x40 {
++                try require(q.words[1] == 0x455608)
++                try require(try r.integer(at:8,as:UInt32.self) > 0 && r.integer(at:12,as:UInt32.self) > 0)
++            } else { throw Boundary.unsupported("surface flags/caps") }
++        case "createClipper":
++            try require(q.words.count == 4 && q.words[1...3] == [0,0x457584,0]); _ = try resource(q.words[0],as:Draw.self)
++        case "clipperWindow":
++            try require(q.words.count == 3 && q.words[1] == 0)
++            _ = try resource(q.words[0],as:Clipper.self); _ = try windows.lease(q.words[2])
++        case "setClipper":
++            try require(q.words.count == 2)
++            let s = try resource(q.words[0],as:Surface.self)
++            if let old = s.clipper,old.references == 0 { throw Boundary.released(old.token) }
++            if q.words[1] != 0 {
++                let c = try resource(q.words[1],as:Clipper.self)
++                try require(c.draw === s.draw)
++                if s.clipper !== c { guard c.references < UInt32.max else { throw Boundary.referenceOverflow } }
++            }
++        case "release":
++            try require(q.words.count == 1)
++            let value = try resource(q.words[0],as:Resource.self)
++            if let c = (value as? Surface)?.clipper,c.references == 0 { throw Boundary.released(c.token) }
++        case "pixelFormat":
++            try require(q.words.count == 1); _ = try resource(q.words[0],as:Surface.self)
++            try require(try record(q,32).integer(at:0,as:UInt32.self) == 32)
++        case "blt":
++            try require(q.words.count == 5 && q.words[1...4] == [0,0,0,0x1000400])
++            _ = try resource(q.words[0],as:Surface.self)
++            let r = try record(q,100);try require(try r.integer(at:0,as:UInt32.self) == 100)
++            _ = try r.integer(at:80,as:UInt32.self)
++        default:throw Boundary.unsupported(q.kind)
++        }
++    }
++    private func dimensions(_ size: CGSize) throws -> (Int,Int) {
++        guard size.width.isFinite,size.height.isFinite,size.width > 0,size.height > 0,
++            size.width <= CGFloat(Int32.max),size.height <= CGFloat(Int32.max),
++            size.width.rounded(.towardZero) == size.width,size.height.rounded(.towardZero) == size.height else { throw Boundary.geometry }
++        return (Int(size.width),Int(size.height))
++    }
++    private func release(_ r: Resource) {
++        r.references -= 1
++        if r.references == 0 {
++            if let s = r as? Surface {
++                if let c = s.clipper { s.clipper = nil; release(c) }; s.storage = nil
++            }
++            live.removeValue(forKey:r.token)
++        }
++    }
++    /// The primary represents this screen's logical desktop, while its clipper
++    /// limits writes/delivery to our own window. No desktop pixels are sampled.
++    private func rectangle(_ s: Surface) throws -> (Int,Int,Int,Int,UInt32?) {
++        if s.kind == .backbuffer { return (0,0,s.width,s.height,nil) }
++        guard let clipper = s.clipper,let window = clipper.window,let screen = s.screen else { throw Boundary.unsupported("primary without native window clipper") }
++        guard clipper.references > 0 else { throw Boundary.released(clipper.token) }
++        let geometry = try windows.displayGeometry(window.token)
++        guard geometry.screen == screen else { throw Boundary.unsupported("screen changed") }
++        let rect = geometry.clientInDesktop,(w,h) = try dimensions(rect.size)
++        guard rect.minX >= 0,rect.minY >= 0,rect.minX.rounded(.towardZero) == rect.minX,
++              rect.minY.rounded(.towardZero) == rect.minY,rect.maxX <= CGFloat(s.width),rect.maxY <= CGFloat(s.height) else { throw Boundary.geometry }
++        return (Int(rect.minX),Int(rect.minY),w,h,window.token)
++    }
++    private func image(_ data: Storage,_ region: (Int,Int,Int,Int,UInt32?)) throws -> CGImage {
++        let (x,y,w,h,_) = region
++        var bytes = Data(count:w*h*4)
++        try bytes.withUnsafeMutableBytes { destination in
++            for row in 0..<h {
++                let start = (y+row)*data.width+x
++                guard UnsafeBufferPointer(start:data.known+start,count:w).allSatisfy({ $0 != 0 }) else { throw Boundary.unknownPixel }
++                destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:data.values+start,byteCount:w*4)
++            }
++        }
++        guard let provider = CGDataProvider(data:bytes as CFData),let space = CGColorSpace(name:CGColorSpace.sRGB),
++            let result = CGImage(width:w,height:h,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:w*4,space:space,
++                bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.noneSkipFirst.rawValue).union(.byteOrder32Little),
++                provider:provider,decode:nil,shouldInterpolate:false,intent:.defaultIntent) else { throw Boundary.image }
++        return result
++    }
++    public func image(_ token: UInt32) throws -> CGImage {
++        let s = try resource(token,as:Surface.self)
++        guard let data = s.storage else { throw Boundary.released(token) }
++        return try image(data,rectangle(s))
++    }
++    public func perform(_ prepared: Prepared) throws -> Served {
++        guard prepared.identity === identity else { throw Boundary.foreignPreparation }
++        guard !prepared.once.used else { throw Boundary.repeatedPreparation }
++        try validate(prepared.request); prepared.once.used = true
++        let q = prepared.request
++        var retained: [any OriginalApplicationStartupResource] = []
++        let response: Window.Response
++        switch q.kind {
++        case "directDrawCreate":
++            let d = try Draw(windows.identities.take()); install(d);retained = [d];response = .init(output:d.token)
++        case "cooperativeLevel":
++            let d = try resource(q.words[0],as:Draw.self),w = try windows.lease(q.words[1])
++            _ = try windows.displayGeometry(w.token);d.window = w;retained = [d,w];response = .init()
++        case "createSurface":
++            let d = try resource(q.words[0],as:Draw.self),r = try record(q,108)
++            let primary = try r.integer(at:104,as:UInt32.self) == 0x200
++            let width: Int,height: Int,screen: CGRect?
++            if primary {
++                let geometry = try windows.displayGeometry(d.window!.token)
++                (width,height) = try dimensions(geometry.screen.size);screen = geometry.screen
++            } else {
++                width = Int(try r.integer(at:12,as:UInt32.self));height = Int(try r.integer(at:8,as:UInt32.self));screen = nil
++            }
++            let storage = try Storage(width,height,budget)
++            let s = try Surface(windows.identities.take(),primary ? .primary : .backbuffer,d,storage,screen)
++            install(s);retained = [s];response = .init(output:s.token)
++        case "createClipper":
++            let d = try resource(q.words[0],as:Draw.self),c = try Clipper(windows.identities.take(),d)
++            install(c);retained = [c];response = .init(output:c.token)
++        case "clipperWindow":
++            let c = try resource(q.words[0],as:Clipper.self),w = try windows.lease(q.words[2])
++            _ = try windows.displayGeometry(w.token);c.window = w;retained = [c,w];response = .init()
++        case "setClipper":
++            let s = try resource(q.words[0],as:Surface.self)
++            let c = try q.words[1] == 0 ? nil : resource(q.words[1],as:Clipper.self)
++            if s.clipper !== c {
++                if let old = s.clipper { release(old) };s.clipper = c
++                if let c { c.references += 1 }
++            }
++            retained = [s];if let c { retained.append(c) };response = .init()
++        case "release":
++            let r = try resource(q.words[0],as:Resource.self);release(r);retained = [r];response = .init(result:Int32(bitPattern:r.references))
++        case "pixelFormat":
++            let s = try resource(q.words[0],as:Surface.self);retained = [s]
++            let words: [UInt32] = [32,0x40,0,32,0x00ff0000,0x0000ff00,0x000000ff,0]
++            response = .init(bytes:words.flatMap { value in (0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) } })
++        case "blt":
++            let s = try resource(q.words[0],as:Surface.self),color = try record(q,100).integer(at:80,as:UInt32.self)
++            guard let data = s.storage else { throw Boundary.released(s.token) }
++            let rect = try rectangle(s),(x,y,w,h,window) = rect
++            for row in y..<(y+h) { for column in x..<(x+w) { let i = row*data.width+column;data.values[i] = color.littleEndian;data.known[i] = 1 } }
++            if let window { try windows.display(image(data,rect),in:window) }
++            retained = [s];response = .init()
++        default:throw Boundary.unsupported(q.kind)
++        }
++        operations.append(.init(request:q,response:response));return .init(response:response,resources:retained)
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacDisplayStartupService.swift
+@@ -0,0 +1,22 @@
++import NTSDCore
++
++/// Physical resource work is served outside Core, once per validated permit.
++@MainActor public final class OriginalMacDisplayStartupService<Platform: OriginalApplicationObservedStartupPlatform> {
++    public typealias Driver = OriginalApplicationObservedStartup<Platform>
++    public enum Boundary: Error { case notWindowRequest }
++    public let backend: OriginalMacDisplayBackend
++    private let driver: Driver
++    public init(driver: Driver,backend: OriginalMacDisplayBackend) { self.driver = driver;self.backend = backend }
++    public func serve(_ permit: Driver.Exchange.Permit) throws {
++        guard case .window(let q) = permit.request else { throw Boundary.notWindowRequest }
++        let prepared = try backend.prepare(q)
++        try driver.beginService(permit)
++        do {
++            let value = try backend.perform(prepared)
++            try driver.answer(permit,response:.window(value.response),retaining:value.resources)
++        } catch {
++            try driver.fail(permit,diagnostic:String(reflecting:error),retaining:backend.retainedResources)
++            throw error
++        }
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacResourceIdentityPool.swift
+@@ -0,0 +1,11 @@
++/// One identity space for all resources of a native platform instance. Tokens
++/// are never recycled and do not encode pointers or source address ranges.
++@MainActor public final class OriginalMacResourceIdentityPool {
++    public enum Boundary: Error { case exhausted }
++    private var next: UInt32 = 1
++    public init() {}
++    func take() throws -> UInt32 {
++        guard next != 0 else { throw Boundary.exhausted }
++        let result = next; next &+= 1; return result
++    }
++}
+--- a/native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift
+@@ -58,6 +58,13 @@
+     }
+     private final class ContentView: NSView {
+         let cursor: NSCursor
++        var image: CGImage?
++        override func draw(_ dirtyRect: NSRect) {
++            guard let image else { return }
++            NSGraphicsContext.saveGraphicsState(); defer { NSGraphicsContext.restoreGraphicsState() }
++            NSGraphicsContext.current?.imageInterpolation = .none
++            NSImage(cgImage:image,size:bounds.size).draw(in:bounds,from:.zero,operation:.copy,fraction:1,respectFlipped:true,hints:nil)
++        }
+         init(frame: CGRect,cursor: NSCursor) { self.cursor = cursor; super.init(frame:frame) }
+         required init?(coder: NSCoder) { fatalError("Programmatic original window only") }
+         override var isFlipped: Bool { true }
+@@ -68,19 +75,20 @@
+     /// is still open. One game client unit maps to one AppKit point here.
+     public static let style: NSWindow.StyleMask = [.titled,.closable,.miniaturizable]
+     private let identity = Identity(), instance: UInt32
+-    private var nextToken: UInt32 = 1
++    public let identities: OriginalMacResourceIdentityPool
+     private var cursor: CursorLease?, windowClass: ClassLease?
+     private var windows: [UInt32:WeakWindow] = [:]
+     public private(set) var operations: [Operation] = []
+     public private(set) var createdWindowCount = 0
+-    public init(instance: UInt32) { self.instance = instance }
++    public init(instance: UInt32,identities: OriginalMacResourceIdentityPool? = nil) {
++        self.instance = instance; self.identities = identities ?? OriginalMacResourceIdentityPool()
++    }
+ 
+     public nonisolated static func handles(_ request: Window.Request) -> Bool {
+         ["metric","icon","cursor","registerClass","createWindow","updateWindow","showWindow","destroyWindow"].contains(request.kind)
+     }
+     private func token() throws -> UInt32 {
+-        guard nextToken != 0 else { throw Boundary.exhaustedTokens }
+-        let value = nextToken; nextToken &+= 1; return value
++        try identities.take()
+     }
+     public func lease(_ token: UInt32) throws -> WindowLease {
+         guard let value = windows[token]?.value else { throw Boundary.unknownOwner(token) }; return value
+@@ -89,6 +97,35 @@
+         let owner = try lease(token),w = owner.window
+         return .init(token:token,title:w.title,frame:w.frame,client:w.contentView?.bounds ?? .zero,
+             backingScale:w.backingScaleFactor,visible:w.isVisible,closed:owner.closed,windowNumber:w.windowNumber)
++    }
++    public struct DisplayGeometry: Equatable {
++        public let screen: CGRect, clientOnScreen: CGRect
++        /// Top-left desktop coordinates in logical AppKit points.
++        public var clientInDesktop: CGRect {
++            .init(x:clientOnScreen.minX-screen.minX,y:screen.maxY-clientOnScreen.maxY,
++                  width:clientOnScreen.width,height:clientOnScreen.height)
++        }
++    }
++    public func displayGeometry(_ token: UInt32) throws -> DisplayGeometry {
++        let owner = try lease(token)
++        guard !owner.closed,let screen = owner.window.screen,let view = owner.window.contentView else { throw Boundary.geometry }
++        return .init(screen:screen.frame,clientOnScreen:owner.window.convertToScreen(view.convert(view.bounds,to:nil)))
++    }
++    /// Consumes an owned immutable image crop; this is host delivery, not a Core
++    /// observer. No implicit presentation is performed by window creation.
++    public func display(_ image: CGImage,in token: UInt32) throws {
++        let owner = try lease(token)
++        guard !owner.closed,let view = owner.window.contentView as? ContentView,
++              CGFloat(image.width) == view.bounds.width,CGFloat(image.height) == view.bounds.height else { throw Boundary.geometry }
++        view.image = image; view.needsDisplay = true; owner.window.displayIfNeeded()
++    }
++    /// Actual AppKit view rendering for device checks, distinct from framebuffer
++    /// bytes and from a screenshot of the physical display.
++    public func captureView(_ token: UInt32) throws -> NSBitmapImageRep {
++        let owner = try lease(token)
++        guard !owner.closed,let view = owner.window.contentView,
++              let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
++        view.cacheDisplay(in:view.bounds,to:bitmap); return bitmap
+     }
+     public var retainedResources: [any OriginalApplicationStartupResource] {
+         var result: [any OriginalApplicationStartupResource] = windows.values.compactMap { $0.value }
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalMacDisplayBackendTests.swift
+@@ -0,0 +1,203 @@
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalMacDisplayBackendTests: XCTestCase {
++    typealias W = OriginalMacWindowBackendTests
++    typealias Driver = W.Driver
++    typealias Backend = OriginalMacDisplayBackend
++    typealias Service = OriginalMacDisplayStartupService<W.N>
++    typealias Request = OriginalWindowInitialization.Request
++    typealias E = OriginalStartupRequestExchange
++    struct Setup {
++        let driver: Driver,window: W.Service,controls: W.Controls,display: Backend,service: Service
++    }
++    struct Run { let setup: Setup,host: Driver.Host }
++    func setup(maximumBytes: Int = 256*1024*1024) throws -> Setup {
++        let (driver,window,controls) = try W().setup()
++        let display = Backend(windows:window.backend,maximumBytes:maximumBytes)
++        return .init(driver:driver,window:window,controls:controls,display:display,service:Service(driver:driver,backend:display))
++    }
++    func answer(_ permit: E.Permit,_ s: Setup) throws {
++        XCTAssertEqual(permit.ordinal,s.controls.values.calls)
++        if case .window(let q) = permit.request,Backend.handles(q) {
++            let events = s.controls.source.c.events.filter { $0.kind == "window" }
++            XCTAssertEqual(q.kind,try XCTUnwrap(events[s.controls.values.windowIndex].event?.request).kind)
++            try s.service.serve(permit)
++            s.controls.values.windowIndex += 1;s.controls.values.calls += 1
++        } else { try W().service(permit,s.driver,s.window,s.controls) }
++    }
++    func run(late: Bool) throws -> Run {
++        let s = try setup();var failed = false
++        for _ in 0..<1000 {
++            do {
++                switch try s.driver.resume(beforeCommit:{ _,_,_ in if late && !failed { throw W.P.Trial.late } }) {
++                case .request(let p):
++                    XCTAssertNil(s.driver.snapshot.startup);XCTAssertEqual(s.driver.pendingBatchCount,0)
++                    try answer(p,s)
++                case .started(let sequence,let host):
++                    XCTAssertEqual(sequence,1);XCTAssertEqual(failed,late)
++                    try s.controls.values.values.validatePreparedConsumption()
++                    XCTAssertEqual(s.controls.values.calls,s.driver.exchangeSnapshot.receipts.count)
++                    return .init(setup:s,host:host)
++                }
++            } catch W.P.Trial.late {
++                XCTAssertTrue(late);XCTAssertFalse(failed);failed = true
++                XCTAssertNil(s.driver.snapshot.startup);XCTAssertEqual(s.driver.pendingBatchCount,0)
++                XCTAssertEqual(s.display.allocationCount,4)
++                XCTAssertTrue(try s.window.backend.observation(s.controls.window).visible)
++            }
++        }
++        throw W.Stop.missingOutcome
++    }
++    func ids(_ run: Run) throws -> (UInt32,UInt32,UInt32,UInt32) {
++        let g = try XCTUnwrap(run.host.snapshot.session).state.full
++        return try (g.integer(at:0x457578-0x44d000,as:UInt32.self),g.integer(at:0x455634-0x44d000,as:UInt32.self),
++                    g.integer(at:0x455608-0x44d000,as:UInt32.self),g.integer(at:0x457584-0x44d000,as:UInt32.self))
++    }
++    func close(_ run: Run) throws { try close(run.setup) }
++    func close(_ s: Setup) throws {
++        let b = s.window.backend
++        XCTAssertEqual(try b.perform(b.prepare(.init("destroyWindow",[s.controls.window]))).response.result,1)
++    }
++    func clear(_ backend: Backend,_ token: UInt32,_ color: UInt32) throws -> Int32 {
++        try OriginalSurfaceClearing.clear(target:token,color:color,backing:Array(repeating:0xa7,count:100)) { q in
++            try backend.perform(backend.prepare(.init("blt",[q.target,0,0,0,q.flags],
++                structure:OriginalStateRecord(bytes:q.effects,defined:q.defined)))).response.result
++        }
++    }
++    func testWholeStartupUsesOwnedDisplaySurfacesAndClipper() throws {
++        let r = try run(late:false);defer { try? close(r) }
++        let s = r.setup,(draw,primary,back,clip) = try ids(r)
++        XCTAssertEqual(Set([draw,primary,back,clip,s.controls.window]).count,5)
++        XCTAssertEqual(s.display.allocationCount,4);XCTAssertEqual(s.window.backend.createdWindowCount,1)
++        let d = try s.display.observation(draw),p = try s.display.observation(primary),b = try s.display.observation(back),c = try s.display.observation(clip)
++        XCTAssertEqual(d.kind,.display);XCTAssertEqual(d.window,s.controls.window)
++        XCTAssertEqual(p.kind,.primary);XCTAssertEqual(p.clipper,clip);XCTAssertEqual(c.window,s.controls.window)
++        XCTAssertEqual(c.references,1);XCTAssertEqual(b.kind,.backbuffer)
++        let screen = try s.window.backend.displayGeometry(s.controls.window).screen
++        XCTAssertEqual(p.width,Int(screen.width));XCTAssertEqual(p.height,Int(screen.height))
++        let client = try s.window.backend.observation(s.controls.window).client
++        XCTAssertEqual(b.width,Int(client.width));XCTAssertEqual(b.height,Int(client.height))
++        XCTAssertEqual(p.knownPixels,0);XCTAssertEqual(b.knownPixels,0)
++        XCTAssertEqual(s.display.allocatedBytes,(p.width*p.height+b.width*b.height)*5)
++        XCTAssertEqual(s.display.operations.map(\.request.kind),["directDrawCreate","cooperativeLevel","createSurface","createSurface","createClipper","clipperWindow","setClipper","release"])
++        XCTAssertFalse(s.display.operations.contains { $0.request.kind == "blt" || $0.request.kind == "pixelFormat" })
++        let batch = try XCTUnwrap(r.host.takeCommitted())
++        guard case .startup(let output) = batch.contents else { throw W.Stop.missingOutcome }
++        let requests = output.operations.compactMap { if case .window(let q,_) = $0 { return q };return nil }
++        XCTAssertEqual(requests.filter(Backend.handles),s.display.operations.map(\.request))
++        XCTAssertEqual(try batch.context.platformSnapshot().startupExchange?.position,s.driver.exchangeSnapshot.receipts.count)
++        print("Physical display whole startup",d,p,b,c,"allocated bytes",s.display.allocatedBytes)
++    }
++    func testWholeClearMasksPixelsAndAppKitViewReadback() throws {
++        let r = try run(late:false);defer { try? close(r) }
++        let s = r.setup,(_,primary,back,_) = try ids(r)
++        XCTAssertThrowsError(try s.display.image(back)) { XCTAssertEqual($0 as? Backend.Boundary,.unknownPixel) }
++        let before = try s.display.pixels(back);XCTAssertTrue(before.defined.allSatisfy { !$0 })
++        for color: UInt32 in [0,1,0xff,0xff0000,0xff00,0x123456,0xffabcdef] {
++            XCTAssertEqual(try clear(s.display,back,color),0)
++            let pixels = try s.display.pixels(back)
++            XCTAssertEqual(pixels.values.count,pixels.width*pixels.height)
++            XCTAssertTrue(pixels.defined.allSatisfy { $0 });XCTAssertTrue(pixels.values.allSatisfy { $0 == color })
++        }
++        XCTAssertTrue(before.defined.allSatisfy { !$0 })
++        let image = try s.display.image(back)
++        XCTAssertEqual(image.bitsPerPixel,32);XCTAssertEqual(image.bitsPerComponent,8);XCTAssertEqual(image.alphaInfo,.noneSkipFirst)
++        var format = try OriginalStateRecord(bytes:Array(repeating:0xa7,count:32),defined:Array(repeating:false,count:32));try format.write(UInt32(32),at:0)
++        let f = try s.display.perform(s.display.prepare(.init("pixelFormat",[back],structure:format)))
++        let formatRecord = try OriginalStateRecord(bytes:XCTUnwrap(f.response.bytes),defined:Array(repeating:true,count:32))
++        XCTAssertEqual(try formatRecord.integer(at:12,as:UInt32.self),32)
++        XCTAssertEqual(try formatRecord.integer(at:16,as:UInt32.self),0xff0000)
++        XCTAssertEqual(try formatRecord.integer(at:20,as:UInt32.self),0xff00)
++        XCTAssertEqual(try formatRecord.integer(at:24,as:UInt32.self),0xff)
++        XCTAssertEqual(try clear(s.display,primary,0x00336699),0)
++        let p = try s.display.pixels(primary),rect = try s.window.backend.displayGeometry(s.controls.window).clientInDesktop
++        for y in 0..<p.height { for x in 0..<p.width {
++            let inside = x >= Int(rect.minX) && x < Int(rect.maxX) && y >= Int(rect.minY) && y < Int(rect.maxY)
++            XCTAssertEqual(p.defined[y*p.width+x],inside)
++            if inside { XCTAssertEqual(p.values[y*p.width+x],0x00336699) }
++        } }
++        let view = try s.window.backend.captureView(s.controls.window)
++        for point in [(1,1),(view.pixelsWide/2,view.pixelsHigh/2),(view.pixelsWide-2,view.pixelsHigh-2)] {
++            let color = try XCTUnwrap(view.colorAt(x:point.0,y:point.1)?.usingColorSpace(.sRGB))
++            XCTAssertEqual(color.redComponent,0.2,accuracy:2.0/255)
++            XCTAssertEqual(color.greenComponent,0.4,accuracy:2.0/255)
++            XCTAssertEqual(color.blueComponent,0.6,accuracy:2.0/255)
++        }
++        print("Physical primary clear and AppKit view",rect,"view pixels",view.pixelsWide,view.pixelsHigh,"XRGB",0x00336699)
++    }
++    func firstDisplay(_ s: Setup) throws -> E.Permit {
++        for _ in 0..<100 {
++            switch try s.driver.resume() {
++            case .request(let p):
++                if case .window(let q) = p.request,Backend.handles(q) { return p }
++                try answer(p,s)
++            case .started:throw W.Stop.missingOutcome
++            }
++        }
++        throw W.Stop.missingOutcome
++    }
++    func testProtocolUnknownAndAllocationBoundaries() throws {
++        let s = try setup(),other = try setup()
++        let p = try firstDisplay(s),foreign = try firstDisplay(other)
++        defer {
++            do { try close(s);try close(other) }
++            catch { XCTFail("Physical protocol-window cleanup: \(error)") }
++        }
++        XCTAssertThrowsError(try s.service.serve(foreign)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        XCTAssertEqual(s.display.allocationCount,0)
++        try s.driver.beginService(p)
++        XCTAssertThrowsError(try s.service.serve(p)) { XCTAssertEqual($0 as? E.Boundary,.serviceAlreadyStarted) }
++        try s.driver.cancel()
++        XCTAssertThrowsError(try s.service.serve(p)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        try s.driver.fail(p,diagnostic:"declared cancellation control, no physical service performed")
++        XCTAssertEqual(s.display.allocationCount,0);XCTAssertTrue(s.display.operations.isEmpty)
++        try other.driver.cancel();try other.driver.fail(foreign,diagnostic:"foreign-owner control cleanup")
++        let q = Request("directDrawCreate",[0,0x457578,0]),prepared = try s.display.prepare(q)
++        XCTAssertThrowsError(try other.display.perform(prepared)) { XCTAssertEqual($0 as? Backend.Boundary,.foreignPreparation) }
++        let served = try s.display.perform(prepared)
++        XCTAssertThrowsError(try s.display.perform(prepared)) { XCTAssertEqual($0 as? Backend.Boundary,.repeatedPreparation) }
++        XCTAssertThrowsError(try s.display.prepare(.init("release",[UInt32.max]))) { XCTAssertEqual($0 as? Backend.Boundary,.owner(UInt32.max)) }
++        XCTAssertThrowsError(try s.display.prepare(.init("displayMode",[1,640,480,8])))
++        withExtendedLifetime(served) {}
++        let bounded = try setup(maximumBytes:0)
++        let firstPermit = try firstDisplay(bounded)
++        defer { do { try close(bounded) } catch { XCTFail("Bounded window cleanup: \(error)") } }
++        try answer(firstPermit,bounded)
++        var failed = false
++        for _ in 0..<10 {
++            guard case .request(let permit) = try bounded.driver.resume() else { throw W.Stop.missingOutcome }
++            do { try answer(permit,bounded) }
++            catch Backend.Boundary.allocationBudget { failed = true;break }
++        }
++        XCTAssertTrue(failed);XCTAssertEqual(bounded.driver.exchangeSnapshot.status,.indeterminate)
++        XCTAssertEqual(bounded.display.allocationCount,1);XCTAssertEqual(bounded.display.allocatedBytes,0)
++        XCTAssertNil(bounded.driver.snapshot.startup);XCTAssertEqual(bounded.driver.pendingBatchCount,0)
++        XCTAssertFalse(try XCTUnwrap(bounded.driver.exchangeSnapshot.failure).resources.isEmpty)
++        XCTAssertThrowsError(try bounded.driver.resume())
++    }
++    func testLateRetryReleaseAndContextOwnership() throws {
++        weak var retained: Backend.Resource?
++        func context() throws -> Driver.Host.DeliveryContext {
++            let r = try run(late:true),s = r.setup,(draw,primary,back,clip) = try ids(r)
++            XCTAssertEqual(s.display.allocationCount,4)
++            retained = try s.display.lease(back)
++            let context = try XCTUnwrap(r.host.takeCommitted()).context
++            XCTAssertEqual(try s.display.observation(clip).references,1)
++            XCTAssertEqual(try s.display.perform(s.display.prepare(.init("release",[back]))).response.result,0)
++            XCTAssertEqual(try s.display.observation(back).references,0)
++            XCTAssertThrowsError(try s.display.pixels(back)) { XCTAssertEqual($0 as? Backend.Boundary,.released(back)) }
++            XCTAssertThrowsError(try s.display.prepare(.init("release",[back])))
++            XCTAssertEqual(try s.display.perform(s.display.prepare(.init("release",[primary]))).response.result,0)
++            XCTAssertEqual(try s.display.observation(clip).references,0)
++            XCTAssertEqual(try s.display.perform(s.display.prepare(.init("release",[draw]))).response.result,0)
++            XCTAssertEqual(s.display.allocatedBytes,0);XCTAssertNotNil(retained)
++            try close(r);return context
++        }
++        var saved: Driver.Host.DeliveryContext? = try context()
++        XCTAssertNotNil(retained);XCTAssertNotNil(try XCTUnwrap(saved).platformSnapshot().startupExchange)
++        saved = nil;XCTAssertNil(retained)
++    }
++}

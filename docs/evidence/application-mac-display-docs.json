@@ -1,0 +1,49 @@
+{
+  "UTC": "2026-09-26T14:46:45.035970+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-20260926/publication1.json",
+    "bytes": 3801,
+    "sha256": "e8c78735e5b350e1c8888e9438f4dae2ca787b3ace14c7f0ed9e7c46167f24fd",
+    "mode": 420,
+    "mtime_ns": 1790433964320825904
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-20260926/external-close1.json",
+    "bytes": 1390,
+    "sha256": "40a6741284bbaab3494f79642037bfc1846f71eeb7f9deda3034f311c3ad0c5f",
+    "mode": 420,
+    "mtime_ns": 1790433964356603999
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-20260926/finalize1.job.json",
+    "bytes": 762,
+    "sha256": "38eac8cb8f5c8d56f6d4d53fedb84d0999f50211b1b939e7adf50f9a2fd9ac94",
+    "mode": 420,
+    "mtime_ns": 1790433964356969167
+  },
+  "study": {
+    "path": "docs/research/APPLICATION_MAC_DISPLAY.md",
+    "bytes": 7688,
+    "sha256": "0fbf8e2a29fba3ba472fdad58847a3181475c4a8e5b372bd2b7f9abdc62308ae",
+    "mode": 420,
+    "mtime_ns": 1790434004944989771
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "onlyOwnInsertionStaged": true,
+      "unrelatedWorkingBytesPreserved": true,
+      "previousWorkingSHA256": "499b4f0ddf58a39261e35683705740ccd02e77eac8d3c7d32c966bcc38c71972",
+      "indexSHA256": "aea091d5252e6d7d36bb4610fe89462f9f9be20924fac004be0de6b65853d228"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "onlyOwnInsertionStaged": true,
+      "unrelatedWorkingBytesPreserved": true,
+      "previousWorkingSHA256": "5b20d5fbee058739a112140485fe2a10a5086b759c6ddbc20f347fb3b9651a96",
+      "indexSHA256": "4befe6823f17831b20cf36a51cd8396af0d3378baf5c7448f1e2143a68059b1e"
+    }
+  ],
+  "independentReview": false,
+  "comparison": false
+}

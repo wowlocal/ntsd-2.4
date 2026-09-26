@@ -1,5 +1,22 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native display-resource candidate](research/APPLICATION_MAC_DISPLAY.md): owned display,
+primary/backbuffer/clipper allocations, shared window/resource tokens and masked
+full-color clear/image delivery implemented. Fresh pixels remain unknown; primary
+writes clip to the native window. XRGB8888/logical-screen mapping is explicit host
+policy, not Windows format evidence. Windowed WinMain still performs no clear;
+that helper has a separate physical test and unchanged420-case regression.
+Five files parse;34 methods selected, not run. Root1034/base2257/source55 protected;
+2261-file archive, five-file patch roundtrip and61-member metadata verified.
+Finalizer14412 terminal0/absent; task frozen.
+[Publication](evidence/application-mac-display.json).
+NEXT: fresh build/package/all34 on exact candidate, including actual backing,
+clipper lifetime, full color fill and AppKit view readback. Preserve failures before
+correction. Independent review/root promotion/general blit/presentation/conversion/
+callbacks/fullscreen/other providers/loading/Windows/visual/input/audio/clean-Mac/
+full match/game remain open. NTSDApp still Practice; EXE envelope not recalculated.
+Supersedes resource-implementation NEXT below.
+
 [Physical AppKit window passes all29 methods](research/APPLICATION_MAC_WINDOW_VALIDATION.md):
 fresh build/package verified199Core/61Reference/2MacPlatform/278test sources and1686
 resources. Four actual-window whole-startup/geometry/permit/late-retry methods pass;
