@@ -2,6 +2,20 @@
 
 ## Продолжение — 2026-09-26
 
+[Retained Host delivery context candidate](APPLICATION_HOST_DELIVERY_CONTEXT.md):
+startup/iteration/loaded batches now retain their own computed Application and
+independent Platform. Three Swift files parse; six new methods are written and
+all76 prior method bodies preserved (82 selected, not executed). Root1034/base2241/
+source55 unchanged;2242-file/59-directory regular archive,38-member metadata archive
+and three-file patch roundtrip verified. Finalizer82743 terminal0/absent; task frozen.
+[Publication](../evidence/application-host-delivery-context.json).
+NEXT: fresh bounded build and all82 comparisons on this exact candidate, retaining
+old76 limits/schedules. This validates delayed delivery resources and publication
+rollback before the prepared backend can consume batches. Independent review/root
+promotion/backend/catalog transport/full137 source/app devices/Windows/clean-Mac/
+full match/game remain open. EXE envelope not recalculated. Supersedes the earlier
+implementation NEXT below; no original or previously completed job was restarted.
+
 [Catalog package validation complete](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 all76 methods passed on the unchanged2241-file candidate, including4 reader,
 3 direct catalog and69 retained whole-host/caller methods. Queue42094 and

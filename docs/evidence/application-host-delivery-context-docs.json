@@ -1,0 +1,135 @@
+{
+  "UTC": "2026-09-26T09:51:22.263908+00:00",
+  "head": "d23848c910918a1cc33369c09de1a3d7e0239ff5",
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-20260926/finalize1.job.json",
+    "bytes": 785,
+    "sha256": "2ce9002c5e2f1fc5b0e9b2da94f853e5cbcab8cb59f77807ff974084b9cc4288",
+    "mode": 420,
+    "mtime_ns": 1790416216898510941
+  },
+  "finalizerAbsent": true,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-20260926/publication1.json",
+    "bytes": 3931,
+    "sha256": "380e05c92f887f4e5b71a08fdba45f6c27d524af9b19f215bec57bca891fba9e",
+    "mode": 420,
+    "mtime_ns": 1790416216862648756
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-20260926/external-close1.json",
+    "bytes": 1430,
+    "sha256": "4922e77e2b20d7aa7abfc4a7e174b452d6ac6946f4714f9c85b474a8b2c15e87",
+    "mode": 420,
+    "mtime_ns": 1790416216898129274
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "70e15c61d3689964f5de5565b14e98bbed1139ed4aad3d8ce5e1a2be70c9dfcc",
+      "workingAfterSHA256": "60d724a7d9548bf5e6f42e752a1757d82f91fae45a17f78124ae756afde66bf7",
+      "indexBlob": "8608c891727c61d8a02fac9d058baf8523796d40",
+      "insertion": "[Retained Host delivery context candidate](APPLICATION_HOST_DELIVERY_CONTEXT.md):\nstartup/iteration/loaded batches now retain their own computed Application and\nindependent Platform. Three Swift files parse; six new methods are written and\nall76 prior method bodies preserved (82 selected, not executed). Root1034/base2241/\nsource55 unchanged;2242-file/59-directory regular archive,38-member metadata archive\nand three-file patch roundtrip verified. Finalizer82743 terminal0/absent; task frozen.\n[Publication](../evidence/application-host-delivery-context.json).\nNEXT: fresh bounded build and all82 comparisons on this exact candidate, retaining\nold76 limits/schedules. This validates delayed delivery resources and publication\nrollback before the prepared backend can consume batches. Independent review/root\npromotion/backend/catalog transport/full137 source/app devices/Windows/clean-Mac/\nfull match/game remain open. EXE envelope not recalculated. Supersedes the earlier\nimplementation NEXT below; no original or previously completed job was restarted.\n\n",
+      "anchor": "## \u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0435\u043d\u0438\u0435 \u2014 2026-09-26\n\n",
+      "unrelatedWorkingChangesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "60b6cd15696bb9919578ab8e939a9628b079d06fc655fc8d23c3eec87bcabd01",
+      "workingAfterSHA256": "38c0d368f733bf05f68e382a3cccd91d1dc476cbe69a26ed52dc0326d51d27d5",
+      "indexBlob": "2b8e5bcedb0a669bf619d233b2548999fb83afe4",
+      "insertion": "[Retained Host delivery context](research/APPLICATION_HOST_DELIVERY_CONTEXT.md):\nall three batch variants retain per-commit owners before publication; three-file\nsyntax passed. Six new methods plus unchanged76 selected; no build/test yet.\n2242-file candidate, three-file patch roundtrip and38-member metadata archive\nverified; prior/root/source pins preserved, task frozen. Next: fresh bounded82\ncomparison before prepared backend delivery. Independent review/root promotion/\ndevices/full catalog source/match/game open.\n[Publication](evidence/application-host-delivery-context.json).\n\n",
+      "anchor": "# \u041a\u0430\u0440\u0442\u0430 \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u0438 \u043f\u0435\u0440\u0435\u043d\u043e\u0441\u0430 NTSD 2.4\n\n",
+      "unrelatedWorkingChangesPreserved": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 10903,
+      "sha256": "38e0f4980f2dcdfb6a812419010a31a7b157d53de3214fa9390413c1d0de2bde",
+      "mode": 420,
+      "mtime_ns": 1790407392091657403
+    },
+    {
+      "path": "AGENTS_HISTORY_2026-09-12.md",
+      "bytes": 364046,
+      "sha256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff",
+      "mode": 420,
+      "mtime_ns": 1789191537898499666
+    },
+    {
+      "path": "docs/research/WORKFLOW.md",
+      "bytes": 28888,
+      "sha256": "c0df83c13c0b69543b0fa40974e4688efb8d0f09a1887a3c060bf4f8d5483116",
+      "mode": 420,
+      "mtime_ns": 1790407607173805820
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT_PLAN.md",
+      "bytes": 9264,
+      "sha256": "2896b8a0ebd781687c7bee08b37e3a79efacbab93739f5ba7401e3cced5300e5",
+      "mode": 420,
+      "mtime_ns": 1790415216139321150
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT.md",
+      "bytes": 8131,
+      "sha256": "5fb6cf26f5856f6ae60f2da29196e34fd3155b5c17c1cf589c3703e54efcd1df",
+      "mode": 420,
+      "mtime_ns": 1790416166671167900
+    },
+    {
+      "path": "tools/prepare_application_host_delivery_context.py",
+      "bytes": 5644,
+      "sha256": "229b4775a70acc35c5e2bfafef3ee47f6eb40b338ec7c37cbf84b34d1fa6d14a",
+      "mode": 420,
+      "mtime_ns": 1790415216141710695
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context.patch",
+      "bytes": 24831,
+      "sha256": "9ccd707094a9529eaa821e9567d00e51b306fa555ce7d6b52671b306c0b390c0",
+      "mode": 420,
+      "mtime_ns": 1790416202272562203
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context.json",
+      "bytes": 3931,
+      "sha256": "380e05c92f887f4e5b71a08fdba45f6c27d524af9b19f215bec57bca891fba9e",
+      "mode": 420,
+      "mtime_ns": 1790416216898299024
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context-close.json",
+      "bytes": 1430,
+      "sha256": "4922e77e2b20d7aa7abfc4a7e174b452d6ac6946f4714f9c85b474a8b2c15e87",
+      "mode": 420,
+      "mtime_ns": 1790416216898405107
+    }
+  ],
+  "independentReview": false,
+  "nativeBuild": false,
+  "nativeTests": false,
+  "stagedWhitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exitCode": 2,
+    "stdout": "docs/evidence/application-host-delivery-context.patch:45: trailing whitespace.\n+ \ndocs/evidence/application-host-delivery-context.patch:60: trailing whitespace.\n+ \n",
+    "diagnosis": "Two valid blank unified-diff context lines contain the required single leading space. Frozen round-tripped patch is preserved verbatim; no source whitespace error.",
+    "otherFilesCommand": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/evidence/application-host-delivery-context.patch"
+    ],
+    "otherFilesExitCode": 0
+  }
+}

@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Retained Host delivery context](research/APPLICATION_HOST_DELIVERY_CONTEXT.md):
+all three batch variants retain per-commit owners before publication; three-file
+syntax passed. Six new methods plus unchanged76 selected; no build/test yet.
+2242-file candidate, three-file patch roundtrip and38-member metadata archive
+verified; prior/root/source pins preserved, task frozen. Next: fresh bounded82
+comparison before prepared backend delivery. Independent review/root promotion/
+devices/full catalog source/match/game open.
+[Publication](evidence/application-host-delivery-context.json).
+
 [Catalog package validation complete](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 all76 methods,1686 package files and five isolated Core-client checks passed.
 Queue42094/finalizer29333 terminal0/absent;6093-file artifact and381-member metadata

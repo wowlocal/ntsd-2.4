@@ -1,0 +1,396 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -29,6 +29,23 @@
+             self.surface = surface; self.lifecycle = lifecycle
+         }
+     }
++    /// Native owners for exactly one committed handoff. The value survives
++    /// later Host commits and the Host itself; it never consults latest state.
++    /// This retains computed data, not an actual device lease or IO acknowledgement.
++    public struct DeliveryContext {
++        public let application: Application
++        private let retainedPlatform: Platform
++        fileprivate init(application: Application, platform: Platform) throws {
++            self.application = application
++            retainedPlatform = try OriginalApplicationHostSession<Platform>.copy(platform)
++        }
++        /// A caller may mutate this independent inspection copy without changing
++        /// the batch or Host. stagedCopy retains its existing value-state contract.
++        public func platformSnapshot() throws -> Platform {
++            try OriginalApplicationHostSession<Platform>.copy(retainedPlatform)
++        }
++    }
++
+     /// These are overlapping views of the same ordered work, not two lists to
+     /// execute. The consumer must retain original cross-domain operation order.
+     public struct Batch {
+@@ -39,6 +56,7 @@
+         }
+         /// Host handoff ordinal only; never a game timer/counter or resource ID.
+         public let sequence: UInt64, contents: Contents
++        public let context: DeliveryContext
+     }
+     public enum Outcome {
+         case committed(sequence: UInt64, result: Session.Loop.Result)
+@@ -112,8 +130,8 @@
+         guard pending == nil else { throw Boundary.pendingLoading }
+         guard sequence < UInt64.max else { throw Boundary.publicationExtent }
+     }
+-    private func publish(_ contents: Batch.Contents) -> UInt64 {
+-        sequence += 1; batches.append(.init(sequence: sequence, contents: contents))
++    private func publish(_ contents: Batch.Contents, context: DeliveryContext) -> UInt64 {
++        sequence += 1; batches.append(.init(sequence: sequence, contents: contents, context: context))
+         return sequence
+     }
+ 
+@@ -149,8 +167,13 @@
+             var next = application, candidate = platform
+             let value = try next.start(instance: instance, show: show, initial: initial,
+                 platform: &candidate, store: store, beforeCommit: beforeCommit, failedAttempt: failedAttempt)
++            // Bootstrap failures already invoke its failure hook. Only this
++            // new late preparation failure is reported here, exactly once.
++            let context: DeliveryContext
++            do { context = try .init(application: next, platform: candidate) }
++            catch { failedAttempt(candidate, error); throw error }
+             application = next; platform = candidate
+-            return publish(.startup(value))
++            return publish(.startup(value), context: context)
+         }
+     }
+ 
+@@ -178,8 +201,9 @@
+                 beforeCommit: beforeCommit)
+             switch result {
+             case .committed(let value):
++                let context = try DeliveryContext(application: next, platform: candidate)
+                 application = next; platform = candidate
+-                return .committed(sequence: publish(.iteration(value)), result: value.result)
++                return .committed(sequence: publish(.iteration(value), context: context), result: value.result)
+             case .loading(let loading):
+                 pending = .init(loading: loading, inputs: inputs, platform: candidate)
+                 return .loading
+@@ -322,8 +346,9 @@
+             let result = try next.finishLoadedMenu(child,environment:&candidate,
+                 perform:{ request,platform in try perform(request,platform) },
+                 beforeCommit:{ loop,state,platform in try beforeCommit(loop,state,platform) })
++            let context = try DeliveryContext(application: next, platform: candidate)
+             application = next;self.platform = candidate;self.prepared = nil;self.pending = nil
+-            return .committed(sequence:publish(.loaded(result)),result:result.result)
++            return .committed(sequence:publish(.loaded(result),context:context),result:result.result)
+         }
+     }
+ }
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationHostDeliveryContextTests.swift
+@@ -0,0 +1,297 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++
++final class OriginalApplicationHostDeliveryContextTests: XCTestCase {
++    typealias B = OriginalApplicationBootstrapTests
++    typealias W = OriginalWinMainStartupTests
++    typealias H = OriginalApplicationHostLoadingTests
++    typealias C = OriginalApplicationLoadedCycleTests
++    typealias Host = H.Host
++    typealias P = H.P
++    typealias A = OriginalApplicationBootstrap
++    typealias S = OriginalApplicationMenuSession
++    typealias Returned = OriginalApplicationLoadedMenuSession.PendingReturn
++    enum CopyFailure { case throwing, shared }
++
++    func inputs() throws -> (P,OriginalStateRecord) {
++        let br = try B.B.Resources(),c = try XCTUnwrap(br.c.cases[61].parents).parent
++        let raw = try XCTUnwrap((br.rawCases[61]["parents"] as? [String:Any])?["parent"] as? [String:Any])
++        let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(c.input).loads.map {
++            (String(decoding:$0.path,as:UTF8.self),$0.file)
++        })
++        let package = try OriginalApplicationStartupInputsTests.shared.get()
++        return (try P(c,raw,sources:sources,blob:br.blob,initial:Array(package.initial.bytes[..<0xb440]),startupInputs:package),package.initial)
++    }
++    @discardableResult
++    func start(_ host: Host,_ initial: OriginalStateRecord,
++        before: (OriginalWinMainStartup,S,P) throws -> Void = { _,_,_ in },
++        failed: (P,Error) -> Void = { _,_ in }) throws -> UInt64 {
++        try host.start(instance:0x400000,show:10,initial:initial,store:{ $0.store($1,$2) },beforeCommit:before,failedAttempt:failed)
++    }
++    func arm(_ p: P,_ failure: CopyFailure) {
++        switch failure { case .throwing:p.hostFailCopies = true;case .shared:p.hostShareCopies = true }
++    }
++    func error(_ error: Error,_ failure: CopyFailure) {
++        switch failure {
++        case .throwing:XCTAssertTrue(error is W.Trial)
++        case .shared:XCTAssertEqual(error as? Host.Boundary,.sharedPlatform)
++        }
++    }
++    func encoded<T: Encodable>(_ value: T) throws -> Data {
++        let encoder = JSONEncoder();encoder.outputFormatting = [.sortedKeys]
++        return try encoder.encode(value)
++    }
++    func sameWave(_ a: OriginalWaveLoadResult,_ b: OriginalWaveLoadResult) {
++        XCTAssertEqual(a.exit,b.exit);XCTAssertEqual(a.returned,b.returned);XCTAssertEqual(a.output,b.output)
++        XCTAssertEqual(a.temporary,b.temporary);XCTAssertEqual(a.temporaryLive,b.temporaryLive)
++        XCTAssertEqual(a.first,b.first);XCTAssertEqual(a.second,b.second)
++        XCTAssertEqual(a.format,b.format);XCTAssertEqual(a.descriptor,b.descriptor)
++    }
++    func isolated(_ context: Host.DeliveryContext,queue: Int,reservations: [Int]) throws {
++        let one = try context.platformSnapshot(),two = try context.platformSnapshot()
++        XCTAssertFalse(one === two)
++        XCTAssertEqual(one.hostQueuePosition,queue);XCTAssertEqual(one.hostReservations,reservations)
++        one.hostQueuePosition = -900;one.hostReservations.append(-901)
++        one.shadow[0] ^= 0xff;one.hostFailCopies = true;one.hostShareCopies = true
++        let again = try context.platformSnapshot()
++        XCTAssertEqual(again.hostQueuePosition,queue);XCTAssertEqual(again.hostReservations,reservations)
++        XCTAssertEqual(again.shadow,two.shadow);XCTAssertEqual(again.index,two.index)
++        XCTAssertEqual(again.waves,two.waves)
++    }
++    func message(_ host: Host,_ kind: UInt32,key: UInt32 = 74) throws -> OriginalStateRecord {
++        var bytes = [UInt8](repeating:0,count:28)
++        let state = try XCTUnwrap(host.snapshot.session).state.full
++        for (offset,value) in [(0,try state.integer(at:0x4546f4-0x44d000,as:UInt32.self)),(4,kind),(8,key)] {
++            for i in 0..<4 { bytes[offset+i] = UInt8(truncatingIfNeeded:value >> (8*i)) }
++        }
++        return try .init(bytes:bytes,defined:[Bool](repeating:true,count:28))
++    }
++    @discardableResult
++    func key(_ host: Host,_ kind: UInt32,failure: CopyFailure? = nil) throws -> (UInt64,OriginalStateRecord) {
++        let input = try message(host,kind)
++        var reached = false
++        defer { XCTAssertTrue(reached, "Key transaction reached its final hook before publication preparation") }
++        let result = try host.step(prepare:{ p,_ in
++            p.hostQueuePosition += 4;p.hostReservations.append(Int(kind))
++            if let failure { self.arm(p,failure) }
++            return .init(responses:C.responses,queue:[.init(result:1),.init(result:1,writes:[.init(offset:0,bytes:input.bytes)]),.init(),.init()],windowDefault:[0])
++        },beforeCommit:{ _,state in
++            reached = true
++            XCTAssertEqual(try state.full.integer(at:0x455378-0x44d000+74,as:UInt8.self),kind == 0x100 ? 100 : 117)
++        })
++        guard case .committed(let sequence,let outcome) = result else { throw H.Stop.injected("key suspended") }
++        XCTAssertEqual(outcome,.continued)
++        return (sequence,input)
++    }
++    func iteration(_ batch: Host.Batch,input: OriginalStateRecord,key: UInt8,queue: Int,reservations: [Int]) throws {
++        guard case .iteration(let value) = batch.contents else { throw H.Stop.injected("iteration variant") }
++        XCTAssertEqual(value.effects,[.translate(.init(.translate,message:input))])
++        XCTAssertTrue(value.graphics.isEmpty)
++        let session = try XCTUnwrap(batch.context.application.session)
++        XCTAssertEqual(session.loop.message,input)
++        XCTAssertEqual(try session.state.full.integer(at:0x455378-0x44d000+74,as:UInt8.self),key)
++        try isolated(batch.context,queue:queue,reservations:reservations)
++    }
++    @discardableResult
++    func finish(_ host: Host,failure: CopyFailure? = nil) throws -> (UInt64,UInt32) {
++        let time = try XCTUnwrap(host.snapshot.session).loop.timer.baseline &+ 1000
++        var reached = false
++        defer { XCTAssertTrue(reached, "Loaded transaction reached its final hook before publication preparation") }
++        let result = try host.finishLoadedMenu(perform:{ q,p in
++            XCTAssertEqual(q,.init(.time));p.hostQueuePosition += 1
++            return .init(result:Int32(bitPattern:time))
++        },beforeCommit:{ _,_,p in
++            reached = true
++            p.hostReservations.append(-200)
++            if let failure { self.arm(p,failure) }
++        })
++        guard case .committed(let sequence,let outcome) = result else { throw H.Stop.injected("loaded suspended") }
++        XCTAssertEqual(outcome,.continued)
++        return (sequence,time)
++    }
++    func loaded(_ batch: Host.Batch,_ child: Returned,time: UInt32) throws {
++        guard case .loaded(let value) = batch.contents else { throw H.Stop.injected("loaded variant") }
++        // This existing comparator independently computes the final counter and
++        // complete outer tail from the source-backed child, not from the context.
++        try C.checkFinished(batch.context.application,child,value,time:time)
++        let owners = try XCTUnwrap(batch.context.application.session?.loadedOwners)
++        let actual = owners.entry.entry,expected = child.entry.entry.entry
++        XCTAssertEqual(actual.snapshot.sounds.buffers.count,400)
++        XCTAssertEqual(Set(actual.snapshot.sounds.buffers.keys),Set(expected.snapshot.sounds.buffers.keys))
++        for (index,wave) in expected.snapshot.sounds.buffers { sameWave(try XCTUnwrap(actual.snapshot.sounds.buffers[index]),wave) }
++        XCTAssertEqual(actual.entry.common.sounds.count,18)
++        XCTAssertEqual(actual.entry.common.sounds.count,expected.entry.common.sounds.count)
++        for (a,b) in zip(actual.entry.common.sounds,expected.entry.common.sounds) { sameWave(a,b) }
++        XCTAssertEqual(actual.startup.owner.loads.count,5)
++        for (a,b) in zip(actual.startup.owner.loads,expected.startup.owner.loads) { sameWave(a,b) }
++        XCTAssertEqual(actual.startup.music.allocations,expected.startup.music.allocations)
++    }
++
++    func testDelayedStartupAndIterationsKeepTheirOwnStateAndOrder() throws {
++        let (p,initial) = try inputs()
++        var reference = A(),referencePlatform = try p.stagedCopy()
++        let expected = try reference.start(instance:0x400000,show:10,initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) })
++        let host = try Host(platform:p)
++        XCTAssertEqual(try start(host,initial),1)
++        let down = try key(host,0x100),up = try key(host,0x101)
++        XCTAssertEqual(down.0,2);XCTAssertEqual(up.0,3);XCTAssertEqual(host.pendingBatchCount,3)
++        let startup = try XCTUnwrap(host.takeCommitted())
++        XCTAssertEqual(startup.sequence,1)
++        guard case .startup(let value) = startup.contents else { throw H.Stop.injected("startup variant") }
++        XCTAssertEqual(try encoded(value.operations),try encoded(expected.operations));XCTAssertEqual(value.graphics,expected.graphics)
++        B.same(try XCTUnwrap(startup.context.application.session),try XCTUnwrap(reference.session))
++        try B.sameStartup(XCTUnwrap(startup.context.application.startup),XCTUnwrap(reference.startup))
++        try isolated(startup.context,queue:0,reservations:[])
++        let second = try XCTUnwrap(host.takeCommitted()),third = try XCTUnwrap(host.takeCommitted())
++        XCTAssertEqual(second.sequence,2);XCTAssertEqual(third.sequence,3)
++        try iteration(second,input:down.1,key:100,queue:4,reservations:[0x100])
++        try iteration(third,input:up.1,key:117,queue:8,reservations:[0x100,0x101])
++        try C.key(&reference,0x100,74)
++        B.same(try XCTUnwrap(second.context.application.session),try XCTUnwrap(reference.session))
++        try B.sameStartup(XCTUnwrap(second.context.application.startup),XCTUnwrap(reference.startup))
++        try C.key(&reference,0x101,74)
++        B.same(try XCTUnwrap(third.context.application.session),try XCTUnwrap(reference.session))
++        try B.sameStartup(XCTUnwrap(third.context.application.startup),XCTUnwrap(reference.startup))
++        XCTAssertNil(try host.takeCommitted());XCTAssertEqual(p.index,0);XCTAssertEqual(p.waves,0)
++    }
++
++    func testStartupCopyFailuresLeaveNoPublicationAndRetryOnce() throws {
++        for failure in [CopyFailure.throwing,.shared] {
++            let (p,initial) = try inputs(),host = try Host(platform:p)
++            var callbacks = 0,reached = false
++            XCTAssertThrowsError(try start(host,initial,before:{ owner,_,candidate in
++                reached = true;XCTAssertEqual(owner.input?.sounds.loads.count,5);self.arm(candidate,failure)
++            },failed:{ candidate,error in
++                callbacks += 1;self.error(error,failure);XCTAssertEqual(candidate.waves,5)
++            })) { self.error($0,failure) }
++            XCTAssertTrue(reached);XCTAssertEqual(callbacks,1)
++            XCTAssertNil(host.snapshot.startup);XCTAssertNil(host.snapshot.session)
++            XCTAssertEqual(host.pendingBatchCount,0);XCTAssertNil(try host.takeCommitted())
++            XCTAssertEqual(try host.platformSnapshot().index,0);XCTAssertEqual(p.index,0)
++            XCTAssertEqual(try start(host,initial),1)
++            let batch = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(batch.sequence,1)
++            XCTAssertEqual(batch.context.application.startup?.input?.sounds.loads.count,5)
++            try isolated(batch.context,queue:0,reservations:[])
++            XCTAssertEqual(callbacks,1);XCTAssertNil(try host.takeCommitted())
++        }
++    }
++
++    func testIterationCopyFailuresPreserveEarlierBatchesAndSamePacketRetry() throws {
++        let (p,initial) = try inputs(),host = try Host(platform:p)
++        try start(host,initial);let first = try key(host,0x100)
++        let before = host.snapshot,platform = try host.platformSnapshot()
++        for failure in [CopyFailure.throwing,.shared] {
++            XCTAssertThrowsError(try key(host,0x101,failure:failure)) { self.error($0,failure) }
++            B.same(try XCTUnwrap(host.snapshot.session),try XCTUnwrap(before.session))
++            H().samePlatform(try host.platformSnapshot(),platform)
++            XCTAssertEqual(host.pendingBatchCount,2)
++        }
++        let retry = try key(host,0x101);XCTAssertEqual(retry.0,3)
++        let startup = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(startup.sequence,1)
++        try B.sameStartup(XCTUnwrap(startup.context.application.startup),XCTUnwrap(before.startup))
++        try isolated(startup.context,queue:0,reservations:[])
++        let old = try XCTUnwrap(host.takeCommitted()),new = try XCTUnwrap(host.takeCommitted())
++        XCTAssertEqual(old.sequence,2);XCTAssertEqual(new.sequence,3)
++        try iteration(old,input:first.1,key:100,queue:4,reservations:[0x100])
++        try iteration(new,input:retry.1,key:117,queue:8,reservations:[0x100,0x101])
++        XCTAssertNil(try host.takeCommitted())
++    }
++
++    func testDelayedLoadedContextsRetainReleasedResourcesOnBothBackings() throws {
++        for reverse in [false,true] {
++            let h = H(),host = try h.atLoading()
++            var children: [Returned] = [],times: [UInt32] = [],sequences: [UInt64] = []
++            var platforms: [P] = []
++            children.append(try h.prepare(host,reverse:reverse))
++            let first = try finish(host);sequences.append(first.0);times.append(first.1);platforms.append(try host.platformSnapshot())
++            var keySequence: UInt64?,keyState: A?,keyInput: OriginalStateRecord?
++            var keyPlatform: P?
++            for index in 0..<3 {
++                if index == 1 {
++                    keyInput = try message(host,0x100)
++                    keySequence = try h.key(host,0x100,drain:false)
++                    keyState = host.snapshot;keyPlatform = try host.platformSnapshot()
++                }
++                try h.next(host);children.append(try h.prepare(host,reverse:reverse,cycleIndex:index))
++                let next = try finish(host);sequences.append(next.0);times.append(next.1);platforms.append(try host.platformSnapshot())
++            }
++            XCTAssertEqual(host.pendingBatchCount,5)
++            XCTAssertEqual(host.snapshot.session?.state.memory.allocations[0x7e230020]?.live,false)
++            var retained: [Host.Batch] = []
++            for index in 0..<4 {
++                if index == 2 {
++                    let key = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(key.sequence,keySequence)
++                    let p = try XCTUnwrap(keyPlatform)
++                    try iteration(key,input:XCTUnwrap(keyInput),key:100,queue:p.hostQueuePosition,reservations:p.hostReservations)
++                    try C.unchanged(key.context.application,XCTUnwrap(keyState))
++                }
++                let batch = try XCTUnwrap(host.takeCommitted());retained.append(batch)
++                XCTAssertEqual(batch.sequence,sequences[index]);try loaded(batch,children[index],time:times[index])
++                try isolated(batch.context,queue:platforms[index].hostQueuePosition,reservations:platforms[index].hostReservations)
++            }
++            XCTAssertEqual(retained[0].context.application.session?.state.memory.allocations[0x7e230020]?.live,true)
++            XCTAssertEqual(retained[3].context.application.session?.state.memory.allocations[0x7e230020]?.live,false)
++            XCTAssertNil(try host.takeCommitted())
++            // Later reads of the old batch keep the independently checked state,
++            // PCM regions and ordered operations after the queue itself is empty.
++            try loaded(retained[0],children[0],time:times[0])
++        }
++    }
++
++    func testLoadedCopyFailuresRetainPreparedOwnersAndEarlierQueue() throws {
++        for reverse in [false,true] {
++            let h = H(),host = try h.atLoading();try h.prepare(host,reverse:reverse);try h.finish(host)
++            let oldInput = try message(host,0x101)
++            let oldSequence = try h.key(host,0x101,drain:false)
++            let oldApplication = host.snapshot,oldPlatform = try host.platformSnapshot()
++            try h.next(host)
++            let child = try h.prepare(host,reverse:reverse,cycleIndex:0)
++            let before = host.snapshot,platform = try host.platformSnapshot()
++            let pending = try XCTUnwrap(host.pendingLoading),prepared = try XCTUnwrap(host.preparedPlatformSnapshot())
++            for failure in [CopyFailure.throwing,.shared] {
++                XCTAssertThrowsError(try finish(host,failure:failure)) { self.error($0,failure) }
++                try C.unchanged(host.snapshot,before);H().samePlatform(try host.platformSnapshot(),platform)
++                H().samePlatform(try XCTUnwrap(host.preparedPlatformSnapshot()),prepared)
++                XCTAssertTrue(try XCTUnwrap(host.pendingLoading).isSameAttempt(as:pending))
++                XCTAssertTrue(try XCTUnwrap(host.preparedLoadedMenu).loading.isSameAttempt(as:child.loading))
++                XCTAssertEqual(host.pendingBatchCount,1)
++            }
++            let completed = try finish(host)
++            let old = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(old.sequence,oldSequence)
++            try iteration(old,input:oldInput,key:117,queue:oldPlatform.hostQueuePosition,reservations:oldPlatform.hostReservations)
++            try C.unchanged(old.context.application,oldApplication)
++            let batch = try XCTUnwrap(host.takeCommitted());XCTAssertEqual(batch.sequence,completed.0)
++            XCTAssertEqual(completed.0,oldSequence+1);try loaded(batch,child,time:completed.1)
++            XCTAssertNil(host.pendingLoading);XCTAssertNil(host.preparedLoadedMenu);XCTAssertNil(try host.takeCommitted())
++        }
++    }
++
++    func testContextsOutliveHostAndInspectionCopiesDoNotChangeOwners() throws {
++        let (p,initial) = try inputs()
++        var host: Host? = try Host(platform:p);weak var weakHost = host
++        try start(XCTUnwrap(host),initial)
++        let batch = try XCTUnwrap(host?.takeCommitted()),before = batch.context.application
++        host = nil;XCTAssertNil(weakHost)
++        var inspected = batch.context.application
++        try C.key(&inspected,0x100,74)
++        XCTAssertEqual(try inspected.session?.state.full.integer(at:0x455378-0x44d000+74,as:UInt8.self),100)
++        B.same(try XCTUnwrap(batch.context.application.session),try XCTUnwrap(before.session))
++        try B.sameStartup(XCTUnwrap(batch.context.application.startup),XCTUnwrap(before.startup))
++        try isolated(batch.context,queue:0,reservations:[])
++        func detachedLoaded() throws -> (Host.Batch,Returned,UInt32,P) {
++            var owner: Host? = try H().atLoading();weak var weakOwner = owner
++            let child = try H().prepare(XCTUnwrap(owner)),done = try finish(XCTUnwrap(owner))
++            let platform = try XCTUnwrap(owner).platformSnapshot()
++            let result = try XCTUnwrap(owner?.takeCommitted())
++            owner = nil;XCTAssertNil(weakOwner)
++            return (result,child,done.1,platform)
++        }
++        let (retained,child,time,platform) = try detachedLoaded()
++        try loaded(retained,child,time:time)
++        var independent = retained.context.application
++        try C.key(&independent,0x100,74)
++        try loaded(retained,child,time:time)
++        try isolated(retained.context,queue:platform.hostQueuePosition,reservations:platform.hostReservations)
++    }
++}
+--- a/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalWinMainStartupTests.swift
+@@ -77,9 +77,11 @@
+         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]
+         // Host-owner test sentinels only, never original state or expectations.
+         var hostQueuePosition = 0,hostReservations: [Int] = [],hostShareCopies = false
++        var hostFailCopies = false
+         /// Every mutable member is a value. Blob's shared cache holds immutable
+         /// input bytes and is not a reply position or an external effect queue.
+         func stagedCopy() throws -> Adapter {
++            if hostFailCopies { throw Trial.late }
+             if hostShareCopies { return self }
+             let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail,startupInputs:startupInputs)
+             copy.index = index;copy.storeIndex = storeIndex;copy.stageIndex = stageIndex
