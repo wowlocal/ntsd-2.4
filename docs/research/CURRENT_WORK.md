@@ -2,6 +2,24 @@
 
 ## Продолжение — 2026-09-26
 
+[Catalog package candidate](APPLICATION_CATALOG_PACKAGE.md): regular original
+input package and Native reader implemented in isolated2241-file candidate.
+1,198 payloads/661,635,220 bytes plus manifest verified against original inputs;
+full catalog input preparation now uses this producer. Root1034/prior1040/source55,
+all old fixtures/resources and69 existing test bodies unchanged. Three Swift files
+parse; no compile/XCTest yet. Finalizer98474 terminal0/absent;2244-file/60-directory
+candidate and34-file metadata archives verified, task frozen.
+[Publication](../evidence/application-catalog-package.json).
+NEXT: separately bounded fresh release build, all76 methods (4 reader +3 direct
+full-catalog/late rollback +69 retained host/caller), complete built package byte
+verification and isolated Core-only reader against an ordinary app layout.
+Use selected-methods2 and the saved-log reader correction; keep original limits
+for inherited methods, and freeze new method/client limits before launch. No
+original restart or edits to this closed candidate. Native comparison/independent
+review/root promotion/backend delivery/catalog transport/full137 source return/
+actual app/Windows/devices/clean-Mac/full match/game remain open. EXE envelope not
+recalculated. This supersedes the catalog-package NEXT below.
+
 [Host app preflight complete](APPLICATION_HOST_APP_PREFLIGHT.md): three ordered
 batch streams, all23 startup provider members and nine later input groups mapped.
 Full catalog still receives original input bytes from XCTest fixtures; the app

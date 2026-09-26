@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Catalog package candidate](research/APPLICATION_CATALOG_PACKAGE.md): Native reader
+and original-data packaging implemented in isolated2241-file tree;1199 package
+files verified,661,635,220 payload bytes. Three Swift files parse;76 comparisons
+remain unstarted (4 new +3 direct-catalog +69 retained). Root/prior/source/old
+fixtures unchanged;2244-file candidate and34-file metadata archives verified.
+Next: fresh bounded build/comparison and standalone bundle read; independent
+review/root promotion/devices/full catalog source/full match/game remain open.
+[Publication](evidence/application-catalog-package.json).
+
 [Host app preflight complete](research/APPLICATION_HOST_APP_PREFLIGHT.md): ordered
 startup/iteration/loaded streams and complete provider inventory mapped; production
 catalog inputs and retained backend delivery remain missing. Root1034/current1040/

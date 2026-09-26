@@ -1,0 +1,100 @@
+{
+  "schema": "ntsd-catalog-package-candidate-v1",
+  "UTC": "2026-09-26T08:08:00.783346+00:00",
+  "status": "implemented-package-verified-comparison-review-open",
+  "baseHead": "1d1ebed44eb525c744220b5ea4663e0b114f4517",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/candidate1-inputs.json",
+    "bytes": 565951,
+    "sha256": "41725682877ec5430eca64c165ac46f857e25af8ea534c7ed388208293cfde54",
+    "mode": 420,
+    "mtime_ns": 1790410065996402460
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/context1.json",
+    "bytes": 23726,
+    "sha256": "7e0ca35c002b84719572b1dd0995dfd658babad3bc415b14bf946cc7023bc0bd",
+    "mode": 420,
+    "mtime_ns": 1790409352037977253
+  },
+  "inputInventory": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/input-inventory1.json",
+    "bytes": 354349,
+    "sha256": "e87c76cb661c96008fdd263cf6fa7ba447b57535a34ac7f394836a0320e8c86e",
+    "mode": 420,
+    "mtime_ns": 1790409423807588179
+  },
+  "packageVerification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/package-verification1.json",
+    "bytes": 1194,
+    "sha256": "a5fcb033a85329c6aeff876e941b08f587c21bf7189a289a216d153273451ab4",
+    "mode": 420,
+    "mtime_ns": 1790409749610241136
+  },
+  "candidateArchive": {
+    "files": 2244,
+    "directories": 60,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/candidate1.tar",
+    "bytes": 5131417600,
+    "sha256": "56e84b15f1e468ee7d8e3b8ce56b26974ae738c9bf6534350c80a1fe52ce5447",
+    "mode": 420,
+    "mtime_ns": 1790410071493570933
+  },
+  "metadataArchive": {
+    "files": 34,
+    "directories": 0,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/metadata1.tar",
+    "bytes": 3082240,
+    "sha256": "b9828df82fd8220228a73d435c94f8c489f2a6e9727dcd968cd6cf141e6f5146",
+    "mode": 420,
+    "mtime_ns": 1790410080738917264
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/verification1.json",
+    "bytes": 902,
+    "sha256": "cd07494b9ad0e9e1cbba4f370dd5252ea57e51318dae4fffb3f2bea6d15f96c8",
+    "mode": 420,
+    "mtime_ns": 1790410080675631489
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/selected-methods2.json",
+    "bytes": 14722,
+    "sha256": "6bfe22065c476ed0e6fdf92721edd0e38be6178d3fc0e1d0d548ed844530cd8e",
+    "mode": 420,
+    "mtime_ns": 1790409964043601218
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/candidate-changes1.patch",
+    "bytes": 295595,
+    "sha256": "797450c9a3334977fd37d439c7409bca3b0471f587e13f5747f5c548c7371028",
+    "mode": 420,
+    "mtime_ns": 1790409867201484885
+  },
+  "rootFilesUnchanged": 1034,
+  "baselineFilesUnchanged": 1040,
+  "sourcePinsUnchanged": 55,
+  "nativeFiles": 2241,
+  "packageFiles": 1199,
+  "payloadBytes": 661635220,
+  "selectedMethods": 76,
+  "originalExecuted": false,
+  "nativeCompiled": false,
+  "nativeCompared": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false,
+  "gates": {
+    "inputProvenance": true,
+    "regularPackage": true,
+    "implementation": true,
+    "syntax": true,
+    "archive": true,
+    "build": false,
+    "comparison": false,
+    "standaloneRead": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "UTC": "2026-09-26T08:09:00.593471+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Host app preflight complete]",
+      "insertion": "[Catalog package candidate](APPLICATION_CATALOG_PACKAGE.md): regular original\ninput package and Native reader implemented in isolated2241-file candidate.\n1,198 payloads/661,635,220 bytes plus manifest verified against original inputs;\nfull catalog input preparation now uses this producer. Root1034/prior1040/source55,\nall old fixtures/resources and69 existing test bodies unchanged. Three Swift files\nparse; no compile/XCTest yet. Finalizer98474 terminal0/absent;2244-file/60-directory\ncandidate and34-file metadata archives verified, task frozen.\n[Publication](../evidence/application-catalog-package.json).\nNEXT: separately bounded fresh release build, all76 methods (4 reader +3 direct\nfull-catalog/late rollback +69 retained host/caller), complete built package byte\nverification and isolated Core-only reader against an ordinary app layout.\nUse selected-methods2 and the saved-log reader correction; keep original limits\nfor inherited methods, and freeze new method/client limits before launch. No\noriginal restart or edits to this closed candidate. Native comparison/independent\nreview/root promotion/backend delivery/catalog transport/full137 source return/\nactual app/Windows/devices/clean-Mac/full match/game remain open. EXE envelope not\nrecalculated. This supersedes the catalog-package NEXT below.\n\n",
+      "beforeSHA256": "76dde142bbf8def4ac423c0499fdde0e4bfea3f6e981f5e0dd367dc135fe19c1",
+      "afterSHA256": "dc532e264a2592bcc84f568afe26195f8dc28c610587136692bbab4fc9d28f1f"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Host app preflight complete]",
+      "insertion": "[Catalog package candidate](research/APPLICATION_CATALOG_PACKAGE.md): Native reader\nand original-data packaging implemented in isolated2241-file tree;1199 package\nfiles verified,661,635,220 payload bytes. Three Swift files parse;76 comparisons\nremain unstarted (4 new +3 direct-catalog +69 retained). Root/prior/source/old\nfixtures unchanged;2244-file candidate and34-file metadata archives verified.\nNext: fresh bounded build/comparison and standalone bundle read; independent\nreview/root promotion/devices/full catalog source/full match/game remain open.\n[Publication](evidence/application-catalog-package.json).\n\n",
+      "beforeSHA256": "c785908458f8220586b2a3105585a94014f146134a4ecbaadd4c1b72fd9b9f6b",
+      "afterSHA256": "b0da2f6ec3ea09db34b28c5e49af29f52fe331ace4b3d7f3ebb83ddb6c236c20"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 3,
+  "publicationMatchesFrozenTask": true,
+  "terminalProcessesAbsent": [
+    78539,
+    80687,
+    89778,
+    98474
+  ],
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE_PLAN.md",
+      "bytes": 6715,
+      "sha256": "e4dba14881d381df518edde3c5beae394de0ae301ddb04ae4341b24bd8419f18",
+      "mode": 420,
+      "mtime_ns": 1790409290541678443
+    },
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE.md",
+      "bytes": 7767,
+      "sha256": "510776b8b5cb9b0fd0fa173077ae1971d5afe897a172ebd6b4b05b9295edf5f0",
+      "mode": 420,
+      "mtime_ns": 1790409964070975605
+    },
+    {
+      "path": "tools/package_catalog_inputs.py",
+      "bytes": 5017,
+      "sha256": "1d853b77e28062401afaaf635e4c1b7df2c4ce13d47d00b676c63081a6c24158",
+      "mode": 420,
+      "mtime_ns": 1790409490219617642
+    },
+    {
+      "path": "tools/catalog_inputs_manifest.json",
+      "bytes": 271133,
+      "sha256": "fd42d041549f00f5ba715063d7e560a9e2b01ab720017d1da5e032c34ca9451d",
+      "mode": 420,
+      "mtime_ns": 1790409423789351295
+    },
+    {
+      "path": "docs/evidence/application-catalog-package.json",
+      "bytes": 4072,
+      "sha256": "a537345e0f5ba8abbd80c53fd0e00a009ed6d3043fabd117d57f71e1d4d2cf32",
+      "mode": 420,
+      "mtime_ns": 1790410080784720368
+    },
+    {
+      "path": "docs/evidence/application-catalog-package-close.json",
+      "bytes": 1399,
+      "sha256": "5ac50d659a79ad72fee112649e381f4274352ba9141b9ba2cac383c189c6ce72",
+      "mode": 420,
+      "mtime_ns": 1790410080784826494
+    }
+  ],
+  "candidateArchive": {
+    "files": 2244,
+    "directories": 60,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/candidate1.tar",
+    "bytes": 5131417600,
+    "sha256": "56e84b15f1e468ee7d8e3b8ce56b26974ae738c9bf6534350c80a1fe52ce5447",
+    "mode": 420,
+    "mtime_ns": 1790410071493570933
+  },
+  "metadataArchive": {
+    "files": 34,
+    "directories": 0,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-20260926/metadata1.tar",
+    "bytes": 3082240,
+    "sha256": "b9828df82fd8220228a73d435c94f8c489f2a6e9727dcd968cd6cf141e6f5146",
+    "mode": 420,
+    "mtime_ns": 1790410080738917264
+  },
+  "rootPromotion": false,
+  "nativeCompiled": false,
+  "nativeCompared": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false
+}
