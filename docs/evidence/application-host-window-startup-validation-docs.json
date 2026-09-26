@@ -1,0 +1,166 @@
+{
+  "schema": "ntsd-host-window-startup-validation-docs-v1",
+  "UTC": "2026-09-26T12:12:56.717475+00:00",
+  "baseHead": "71ca01e4e663f8b8d1f9cff84d46554ea2da087e",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/finalize1.job.json",
+    "bytes": 849,
+    "sha256": "257c5ede955c32e7433a9ae4f8b7993629b750fab0030b2f10c4828b668c6ed9",
+    "mode": 420,
+    "mtime_ns": 1790424698455098877
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/finalize1.log",
+    "bytes": 809,
+    "sha256": "453812f5a41947450a5210e615a661df680f1f3bce7bb5cb91d1c5087b0c604a",
+    "mode": 420,
+    "mtime_ns": 1790424698455153836
+  },
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 38551,
+    "startedUTC": "2026-09-26T12:10:31.044111+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/finalize1.py"
+    ],
+    "identity": "38551 Sat Sep 26 15:10:30 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-window-startup-validation-20260926/finalize1.py",
+    "cwd": "p38551\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "all28Passed": true,
+    "passedMethods": 28,
+    "archivedFiles": 4900,
+    "metadataMembers": 140,
+    "endedUTC": "2026-09-26T12:11:38.455024+00:00",
+    "elapsedSeconds": 67.410729292
+  },
+  "processObservations": [
+    {
+      "pid": 12320,
+      "absent": true
+    },
+    {
+      "pid": 12957,
+      "absent": true
+    },
+    {
+      "pid": 23770,
+      "absent": true
+    },
+    {
+      "pid": 38551,
+      "absent": true
+    },
+    {
+      "pid": 59727,
+      "absent": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "tools/prepare_application_host_window_startup_validation.py",
+      "bytes": 12123,
+      "sha256": "1318c0eb1fd8c07ed6b06c76032e73abd54cb32567132f43567202115f875369",
+      "mode": 420,
+      "mtime_ns": 1790423801323342571
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_STARTUP_VALIDATION_PLAN.md",
+      "bytes": 5379,
+      "sha256": "905a6e2622febf665bcbb01af3a4f54d88c8d7e455ef767af2419ca5c2bab7e7",
+      "mode": 420,
+      "mtime_ns": 1790423801251646855
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_STARTUP_VALIDATION.md",
+      "bytes": 7650,
+      "sha256": "38a3e2a50ee2112b0ed8b42b1a409ca3d41ca89f918a7f94d55714af2fdfd71e",
+      "mode": 420,
+      "mtime_ns": 1790424776653230918
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup-validation.json",
+      "bytes": 5250,
+      "sha256": "7555705eae2ff10c0a92a37e6dc5a65d81a934186551b946c5abc835a2b8d05a",
+      "mode": 420,
+      "mtime_ns": 1790424698454886377
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup-validation-close.json",
+      "bytes": 1673,
+      "sha256": "1abe5ba1bc495a369e782cf97f2e5f86172ac412cf1c3ad16c70c3beb0a884f2",
+      "mode": 420,
+      "mtime_ns": 1790424698455014252
+    },
+    {
+      "path": "docs/evidence/application-host-window-startup-lock-review.json",
+      "bytes": 2223,
+      "sha256": "500927847cd6fd5ae673a6ecd304938cb4c047bf5cf42f324b7cd1eb0fc1c57d",
+      "mode": 420,
+      "mtime_ns": 1790424631005070511
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "cbceefb5870e141bd83f1073f6882cefd92ee7f9e6826ed42384ab6f4c586982",
+      "workingAfter": {
+        "bytes": 144825,
+        "sha256": "824bf7c97aaab8c2175c33fbcdf45f77c71c9cde17b9d4713298aa824f5deff7",
+        "mode": 420,
+        "mtime_ns": 1790424776664692784
+      },
+      "indexedBlob": "8fc76e833507c1a100233ddd3b74d230600b6f42",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "9129602ad49cf6895e09de863ab3d5617f803eba56834a95b3a418bb4309e6c7",
+      "workingAfter": {
+        "bytes": 327953,
+        "sha256": "117f964158d06abc1b55195b2878972a6f55519e1e9c787c424cb827dfd3f53e",
+        "mode": 420,
+        "mtime_ns": 1790424776694379535
+      },
+      "indexedBlob": "ec2d01f0f8311910be6e4fef9431f1a10c91c541",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "metadataArchive": {
+    "members": 140,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/metadata1.tar",
+    "bytes": 5529600,
+    "sha256": "dfd0f5e46cb75ecaad845e9db4c95787e70616d357bbe0fff67c41c1471e4045",
+    "mode": 420,
+    "mtime_ns": 1790424698324425882
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/artifact-archive1",
+    "files": 4900,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11383163548,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/artifact-archive1.json",
+      "bytes": 2601137,
+      "sha256": "3f27285d6796c418f5cdb2417a9033598be87a5fd5cdce4e816dce0f1e28f3d9",
+      "mode": 420,
+      "mtime_ns": 1790424684768474039
+    }
+  },
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "postHandoffLockOrderAcceptance": false,
+  "authorFindingIsObservedHang": false,
+  "rootNativeChanged": false
+}

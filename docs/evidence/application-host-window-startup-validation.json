@@ -1,0 +1,112 @@
+{
+  "schema": "ntsd-host-window-startup-validation-v1",
+  "UTC": "2026-09-26T12:11:38.446736+00:00",
+  "status": "all28-passed",
+  "baseHead": "71ca01e4e663f8b8d1f9cff84d46554ea2da087e",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/candidate1-inputs.json",
+    "bytes": 567183,
+    "sha256": "87b587d087afa1d870cdaf80e76e11aff486ad9bf25aecaafb3313b90186e8dc",
+    "mode": 420,
+    "mtime_ns": 1790423602771752631
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/context1.json",
+    "bytes": 26908,
+    "sha256": "552ae4215cdda7ffbaa3d78e39dde7cb369984209b57c6568cb7ed02e2c6593d",
+    "mode": 420,
+    "mtime_ns": 1790423821070044960
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/build1.job.json",
+    "bytes": 90756,
+    "sha256": "eedc474034f6bfb7b5f5b258ca7ae636165b89ea8312aae4d0fd104726ddde7c",
+    "mode": 420,
+    "mtime_ns": 1790424117639965887
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/package-check1.json",
+    "bytes": 1474282,
+    "sha256": "80d6be925af7da119cadb99ca7929cbdd86c0932fda51f361dd0a226d80dfa62",
+    "mode": 420,
+    "mtime_ns": 1790424137109105868
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 64109240,
+    "sha256": "be34a6d78d3467dc6d93989afcb976b3876c65af0262bf0b1d3b6f4f90bfc2e1",
+    "mode": 493,
+    "mtime_ns": 1790424115546197652
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/tests1-queue.job.json",
+    "bytes": 23727,
+    "sha256": "48d994598e94bd55b8a7072ad142cf0ccba84cd5588a9e4c4c734b915e7feb41",
+    "mode": 420,
+    "mtime_ns": 1790424610166588775
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/verification1.json",
+    "bytes": 12265,
+    "sha256": "60bd97c692d445441ffcde8d506bfc5e72aa3f4f758055c81aac088a505cac13",
+    "mode": 420,
+    "mtime_ns": 1790424684776960646
+  },
+  "passedMethods": 28,
+  "selectedMethods": 28,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/artifact-archive1",
+    "files": 4900,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11383163548,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/artifact-archive1.json",
+      "bytes": 2601137,
+      "sha256": "3f27285d6796c418f5cdb2417a9033598be87a5fd5cdce4e816dce0f1e28f3d9",
+      "mode": 420,
+      "mtime_ns": 1790424684768474039
+    }
+  },
+  "metadataArchive": {
+    "members": 140,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/metadata1.tar",
+    "bytes": 5529600,
+    "sha256": "dfd0f5e46cb75ecaad845e9db4c95787e70616d357bbe0fff67c41c1471e4045",
+    "mode": 420,
+    "mtime_ns": 1790424698324425882
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "7341be2d9e59cb349397562db1772d6bb3f3c869de3130bd0881bb0977606885",
+    "mode": 420,
+    "mtime_ns": 1790424684776514437
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2244,
+  "candidateUnchanged": 2246,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Same-Host startup suspension and publication are tested under declared controls; production nonwindow providers, physical resource mapping/callbacks and backend remain open, current AppKit still uses practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

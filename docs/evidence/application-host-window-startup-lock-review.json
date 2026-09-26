@@ -1,0 +1,30 @@
+{
+  "UTC": "2026-09-26T12:00:56.685779+00:00",
+  "classification": "author static concurrency finding; no concurrent execution or independent review",
+  "sources": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/candidate1/native/Sources/NTSDCore/OriginalApplicationWindowStartup.swift",
+      "bytes": 4593,
+      "sha256": "98b998044a00bd058208779ab86274dabdc00660bd00c0dc83582f0bcfcdfbf3",
+      "mode": 420,
+      "mtime_ns": 1790423416642448205
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-startup-validation-20260926/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 20085,
+      "sha256": "9cd86a8a72d814b15163b388bac47f06bd1ff67559e189527a1a990a1643d2c8",
+      "mode": 420,
+      "mtime_ns": 1790423416642174871
+    }
+  ],
+  "finding": "After success the same Host is externally available. Coordinator snapshot/pendingBatchCount/platformSnapshot currently acquire coordinator then Host locks. A concurrent Host callback holding the Host lock can read exchangeSnapshot and request coordinator lock, forming a lock-order cycle. Existing no-IO/no-shared-mutation restrictions do not prohibit that read-only observation.",
+  "interleaving": [
+    "Thread A enters a coordinator inspection, holds coordinator lock, and waits for Host lock.",
+    "Thread B is inside a Host step callback holding Host lock and reads coordinator exchangeSnapshot, waiting for coordinator lock."
+  ],
+  "boundary": "This is a possible post-handoff deadlock inferred from code; it is not an observed execution, Windows behavior, saved test failure or safety refusal. The frozen28-method selection has no concurrent post-handoff check.",
+  "nextAction": "Preserve ongoing exact-candidate build/comparison evidence. Before claiming the coordinator ownership contract accepted, separately freeze a correction/check for post-handoff inspection lock ordering. Do not mutate this pinned candidate or present author inspection as independent review.",
+  "originalExecuted": false,
+  "devicesExecuted": false,
+  "independentReview": false
+}

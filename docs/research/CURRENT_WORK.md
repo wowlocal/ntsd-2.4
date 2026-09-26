@@ -1,5 +1,21 @@
 # Текущая передача работы
 
+[Same-Host startup validation](APPLICATION_HOST_WINDOW_STARTUP_VALIDATION.md):
+all28 methods passed on the unchanged2246-file candidate, including five new whole
+startup/rollback/protocol/lifetime methods and23 retained window/Host/context/
+Bootstrap methods. Exact23 complete/5 original-stop/7 provenance outcomes and650
+once-served startup replies retained. Fresh build/1686 package files,4900-file
+artifact and140-member metadata archives verified; root/prior/candidate/source
+preserved. Queue23770/finalizer38551 terminal0/absent; task frozen.
+[Publication](../evidence/application-host-window-startup-validation.json).
+NEXT: correct the [post-handoff inspection lock-order gap](../evidence/application-host-window-startup-lock-review.json)
+identified by author source inspection; freeze finite checks before edits. This
+possible concurrent cycle is not an observed hang and is outside the28-method
+selection; its pass does not accept the complete ownership contract. Preserve the
+same Host and receipt/rollback rules. Independent review/root promotion, production
+providers/backend/devices/full catalog source/Windows/clean-Mac/full match/game
+remain open; EXE envelope not recalculated. Supersedes the fresh28-method NEXT below.
+
 [Same-Host window startup candidate](APPLICATION_HOST_WINDOW_STARTUP.md): one
 retained Host now receives fresh prepared window cursors between startup attempts.
 Receipt completion follows the fallible delivery-context copy and precedes Host

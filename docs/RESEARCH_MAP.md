@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Same-Host startup validation](research/APPLICATION_HOST_WINDOW_STARTUP_VALIDATION.md):
+all28 selected comparisons passed; fresh build/1686 package files and full4900-file
+artifact/140-member metadata archives verified. Queue23770/finalizer38551 terminal0/
+absent; root/prior/candidate/source preserved, task frozen.
+[Publication](evidence/application-host-window-startup-validation.json).
+Next: finite correction/checks for the author-identified possible post-handoff
+inspection lock cycle, outside this passing selection. Complete ownership acceptance,
+independent review/root promotion/production backend/devices/full game remain open.
+
 [Same-Host window startup candidate](research/APPLICATION_HOST_WINDOW_STARTUP.md):
 prepared startup and a private request/response coordinator now retain one Host
 through suspension and finish receipt consumption immediately before publication.
