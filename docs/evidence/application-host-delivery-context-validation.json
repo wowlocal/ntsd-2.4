@@ -1,0 +1,112 @@
+{
+  "schema": "ntsd-host-delivery-context-validation-v1",
+  "UTC": "2026-09-26T10:53:27.752562+00:00",
+  "status": "all82-passed",
+  "baseHead": "3716487b66f226f0958b8aed214881bf028447e9",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/candidate1-inputs.json",
+    "bytes": 566207,
+    "sha256": "ab4c0eb67b1c6b25abd4690124e116465dad709db807acd1bd2636c41350f430",
+    "mode": 420,
+    "mtime_ns": 1790416202218078549
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/context1.json",
+    "bytes": 26138,
+    "sha256": "3a3b7efba47747a083a7ff5ea88a7ea78aefce9e456aa649dbdd92a1234f314b",
+    "mode": 420,
+    "mtime_ns": 1790416542039694694
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/build1.job.json",
+    "bytes": 76045,
+    "sha256": "3cd40490404c6a3cca44c99b0a57dfce0310c9aedc28267b9a9db28667b4e87b",
+    "mode": 420,
+    "mtime_ns": 1790416864409613184
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/package-check1.json",
+    "bytes": 1477339,
+    "sha256": "435072c163617f7dd1bc8ddedb24f243a227ce9f27ebfbb4547c6415a4758a5a",
+    "mode": 420,
+    "mtime_ns": 1790416889116475510
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 63608616,
+    "sha256": "bf0a7c04adcc83310c8c9f2fdf38a70fed17ec97615c6bd7d408e2747057e3ad",
+    "mode": 493,
+    "mtime_ns": 1790416862520422511
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/tests1-queue.job.json",
+    "bytes": 66220,
+    "sha256": "4fb083338c56058e0b49f159df754ee89db35f6e58902c543d5d8f7570e803b5",
+    "mode": 420,
+    "mtime_ns": 1790419882395248127
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/verification1.json",
+    "bytes": 35303,
+    "sha256": "4500c37d2444df8d1949d545effeb0c337ba4d99947fa67236c6833b55f1e611",
+    "mode": 420,
+    "mtime_ns": 1790419971164729283
+  },
+  "passedMethods": 82,
+  "selectedMethods": 82,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/artifact-archive1",
+    "files": 4892,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11377551639,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/artifact-archive1.json",
+      "bytes": 2607332,
+      "sha256": "3760efdc049d7614e12a0af39f7db7e1d0ad844f94f76e7ced9f3b26f5efccb7",
+      "mode": 420,
+      "mtime_ns": 1790419971157083645
+    }
+  },
+  "metadataArchive": {
+    "members": 367,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/metadata1.tar",
+    "bytes": 7331840,
+    "sha256": "9eb205d2ae76f5162f22e29d4211a7e7642e952f52753a613d1676f0b7b8751d",
+    "mode": 420,
+    "mtime_ns": 1790420007599167987
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "344929ae5c0ea3353b7d28f06e41e34e054142363f132e22113af87d2e628605",
+    "mode": 420,
+    "mtime_ns": 1790419971163711782
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2241,
+  "candidateUnchanged": 2242,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Host retains per-commit Native owners; prepared device replies and backend delivery remain open, current AppKit still uses practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

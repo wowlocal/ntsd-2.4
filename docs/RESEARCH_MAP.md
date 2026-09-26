@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host delivery-context validation complete](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+all82 methods passed; fresh build and1686 package files verified, with exact
+retained17/48/14 schedules. Queue5193/finalizer98639 terminal0/absent. Complete
+4892-file artifact and367-member metadata archives verified, old145-member progress
+archive and root/prior/candidate/source pins preserved; task frozen.
+Next: resumable whole-window request/reply owner in actual WinMain, with the
+280-window/23-parent comparisons and distinct stop/provenance outcomes retained.
+[Publication](evidence/application-host-delivery-context-validation.json).
+Independent review/backend/device/full catalog source/match/game gates stay open.
+
 [Prepared backend preflight](research/APPLICATION_PREPARED_BACKEND_PREFLIGHT.md):
 request/reply and publication gaps pinned against23 Native files/15 studies;
 56-member archive verified, no execution. Animated catalog drawing exists, but

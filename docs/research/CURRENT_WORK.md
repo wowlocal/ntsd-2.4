@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Host delivery-context validation complete](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+all82 methods passed on the unchanged2242-file candidate, including all76 prior
+whole catalog/Host/caller methods and the complete17/48/14 gameplay schedules.
+Queue5193 terminal0/2984.333s; finalizer98639 terminal0/91.621s, both absent.
+Fresh build,1686 package files,4892-file artifact and367-member metadata archives
+verified; prior145-member progress archive preserved. Root1034/prior2241/current2242/
+source55 unchanged; task frozen. [Publication](../evidence/application-host-delivery-context-validation.json).
+NEXT: finite resumable window request/reply owner consumed by whole WinMain,
+following the prepared backend preflight; freeze contract/cases before edits.
+Keep280 whole-window cases,23 successful startup parents and distinct original
+stops/provenance rejections, plus suspension/receipt/late-rollback checks.
+Independent review/root promotion/backend/loading message and fill contracts/
+catalog transport/full137 source/devices/Windows/clean-Mac/full match/game remain
+open; EXE envelope not recalculated. Supersedes all live-queue NEXT prose below.
+
 [Prepared backend preflight](APPLICATION_PREPARED_BACKEND_PREFLIGHT.md) closed its
 static scope:23 Native files/15 studies pinned;56-member PAX archive verified.
 Current batches retain owners but cannot supply before-consumption device replies.

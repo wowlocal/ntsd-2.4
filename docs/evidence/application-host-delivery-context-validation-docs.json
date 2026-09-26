@@ -1,0 +1,132 @@
+{
+  "schema": "ntsd-host-delivery-context-validation-docs-v1",
+  "UTC": "2026-09-26T10:55:45.175491+00:00",
+  "baseHead": "a6c862ff7ae299d3de90525673a99560a21c3b76",
+  "status": "all82-and-archive-gates-complete",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalize1.job.json",
+    "bytes": 853,
+    "sha256": "434d8cd5861b1b2faa75b9f6269b39392e96def254e68ef945093936ae31e6ae",
+    "mode": 420,
+    "mtime_ns": 1790420007762262802
+  },
+  "finalizerJobRecord": {
+    "status": "terminal",
+    "pid": 98639,
+    "startedUTC": "2026-09-26T10:51:56.141369+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalize1.py"
+    ],
+    "identity": "98639 Sat Sep 26 13:51:55 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-delivery-context-validation-20260926/finalize1.py",
+    "cwd": "p98639\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "all82Passed": true,
+    "passedMethods": 82,
+    "archivedFiles": 4892,
+    "metadataMembers": 367,
+    "endedUTC": "2026-09-26T10:53:27.762063+00:00",
+    "elapsedSeconds": 91.620548208
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalize1.log",
+    "bytes": 813,
+    "sha256": "1620b3892fdb2c4a62e5d1b49c747c6ab2c1ea17737211ad93a7b5244c423687",
+    "mode": 420,
+    "mtime_ns": 1790420007762319677
+  },
+  "queueAndFinalizerAbsent": true,
+  "rootFiles": [
+    {
+      "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md",
+      "bytes": 10613,
+      "sha256": "1932d89db798cd02ad80d96f5024e1e7234b47a2dfc53987296a9a1cd89c0f5d",
+      "mode": 420,
+      "mtime_ns": 1790420076904873937
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context-validation.json",
+      "bytes": 5201,
+      "sha256": "77fdf93238032a9322a3644a2ae52dca9e4fb6c567597334a1006f9a52c51db5",
+      "mode": 420,
+      "mtime_ns": 1790420007761905926
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context-validation-close.json",
+      "bytes": 1683,
+      "sha256": "6279d43b008f92ad68d6ac36c15517ce350104cfabf09de4f28e17514f5ae063",
+      "mode": 420,
+      "mtime_ns": 1790420007762050468
+    }
+  ],
+  "previousStudyPreservedInGit": {
+    "revision": "a6c862f",
+    "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md",
+    "sha256": "de0f89ff58866da49bcd16de99f6003da0504480deffe52bdcbce368d9b19421"
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "eb015daf33b5df22e1bd63732ec42984812d57058153860c0a427a7998fac2d6",
+      "workingAfter": {
+        "bytes": 140410,
+        "sha256": "b798a05ea0e891534c483136325257815c77da56ae71b198166548fd5ddae8db",
+        "mode": 420,
+        "mtime_ns": 1790420145112932246
+      },
+      "indexedBlob": "8a61b282a082cdb39861c696a46984e4f0eea84f",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "df51ce796f2ea3faff7c46d9e2a4d1c7116a296f9b43b5c265ebe2f094cdf80c",
+      "workingAfter": {
+        "bytes": 325260,
+        "sha256": "c089a63cb4c12e5ee5d4fec202694cf6c2e4e49379cd67c49e53b5d3d4f85b7a",
+        "mode": 420,
+        "mtime_ns": 1790420145144593395
+      },
+      "indexedBlob": "3de442d6ee74165f6c17bed87666865fd462ac6a",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/artifact-archive1",
+    "files": 4892,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11377551639,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/artifact-archive1.json",
+      "bytes": 2607332,
+      "sha256": "3760efdc049d7614e12a0af39f7db7e1d0ad844f94f76e7ced9f3b26f5efccb7",
+      "mode": 420,
+      "mtime_ns": 1790419971157083645
+    }
+  },
+  "metadataArchive": {
+    "members": 367,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/metadata1.tar",
+    "bytes": 7331840,
+    "sha256": "9eb205d2ae76f5162f22e29d4211a7e7642e952f52753a613d1676f0b7b8751d",
+    "mode": 420,
+    "mtime_ns": 1790420007599167987
+  },
+  "progressArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start-metadata1.tar",
+    "bytes": 2938880,
+    "sha256": "4e94c73ef03d904dc089f9c6e6107f15465bd85d5d9bf54a472c874dbaf05307",
+    "mode": 420,
+    "mtime_ns": 1790417254694602748
+  },
+  "separateProgressPreservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/preclose-preservation1.json",
+    "bytes": 1791,
+    "sha256": "e198725e4c129305e832d4ec9c70a0cdfd6548014ffa9b1fddc8dcf3b61b0186",
+    "mode": 420,
+    "mtime_ns": 1790419167606078514
+  },
+  "rootNativeChanged": false,
+  "independentReview": false,
+  "fullGoalComplete": false
+}

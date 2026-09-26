@@ -1,11 +1,23 @@
-# Retained Host delivery context — validation in progress
+# Retained Host delivery context — Native validation complete
+
+2026-09-26. All **82 selected methods passed** on the unchanged2242-file
+candidate: six new retained-context methods and all76 prior catalog/Host/caller
+methods. Queue5193 finished with exit0 after2984.333s; finalizer98639 finished
+with exit0 after91.621s. Both were checked absent. Exact saved-method results,
+fresh build,1686 package files, all preservation pins and complete archives pass.
+The [final publication](../evidence/application-host-delivery-context-validation.json)
+and [closure](../evidence/application-host-delivery-context-validation-close.json)
+supersede the dated progress counts below. The task is frozen. Independent review,
+root promotion, actual backend and application/device acceptance remain open.
+
+## Preserved progress snapshots
 
 2026-09-26. Fresh compilation and package-byte verification pass. All six new
 delivery-context methods pass on the unchanged2242-file candidate. The saved
 10:07:34 UTC progress publication records12/82 completed methods: those six,
 four catalog-input reader methods and two direct catalog methods. The same
-sequential queue continues; full82 comparison, complete artifact archive and
-independent review remain open.
+sequential queue was still running at that snapshot; full82 comparison, complete
+artifact archive and independent review were then open.
 
 The [plan](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION_PLAN.md) validates the
 [candidate](APPLICATION_HOST_DELIVERY_CONTEXT.md) from commit3716487. Its exact
@@ -16,10 +28,11 @@ The candidate itself and earlier archives remain frozen; root1034 is unpromoted.
 
 A later [checkpoint](../evidence/application-host-delivery-context-validation-checkpoint.json)
 verifies40/82 complete saved results individually against the pinned result
-predicates and terminal jobs. Queue5193 remains live on method41. All145 progress
+predicates and terminal jobs. Queue5193 was live on method41. All145 progress
 archive members were rechecked for full body/mode/nsmtime/membership, and the
 finalizer's result function remains identical to the earlier accepted reader.
-This supersedes the progress count above; full comparison/archive gates remain open.
+That checkpoint superseded the earlier count; full comparison/archive gates were
+still open then. Its original records and the earlier publication remain unchanged.
 
 ## Analysis and implementation boundary
 
@@ -77,9 +90,15 @@ no guard/signal and no residual process:
 The largest sampled peak among these six is9,585,606,656 bytes. A sample of a
 short process is not its exact maximum and a missing sample never establishes
 zero memory. The four unchanged catalog-input reader methods and first two direct
-catalog methods also passed in the saved progress snapshot. Complete old schedules
-and remaining methods are still required; passing the new cases alone does not
-close the Host regression gate.
+catalog methods also passed in the saved progress snapshot. The subsequent queue
+completed every retained schedule, including17 neutral returns, both48-call active
+sequences, both14-call pause/step/resume sequences and all late-failure/identity
+checks. No method was split, skipped or restarted. Sum of test-process durations
+is2705.115s; the full queue includes monitor/admission overhead. Largest sampled
+test-process-tree RSS is11,672,502,272 bytes. All82 logs have the exact selected
+method, one passed result and the required three one-test/zero-failure summaries;
+there is no guard, signal or residual observed study process. The saved-result
+reader's predicate remains unchanged.
 
 The earlier isolated Core-only relocated catalog client remains a separate
 preserved result. Its reader/package are unchanged here; it was not rerun merely
@@ -103,12 +122,39 @@ the progress record preserves that boundary without inventing a process failure.
 No comparison has failed in this snapshot. Read-only source-path discovery errors
 are preserved separately. No completed source, build or test was restarted.
 
-NEXT: revalidate and observe this same queue/current child. On nonpass preserve
+Historical queue handoff (now complete): revalidate and observe the same
+queue/current child. On nonpass preserve
 and diagnose its exact outcome; otherwise complete all82, then run the pinned
 task-local `finalize1.py` only after the queue is terminal. It verifies saved
 results and full candidate/release/metadata archives, without launching tests.
 Before closure also verify the preserved progress archive against its member
-manifest. Do not alter the running producer, candidate or old expectations.
+manifest. Running producers, the candidate and old expectations were not altered.
+
+The finalizer verified root1034, prior2241, both copies of current2242 and all55
+source-code pins. The complete regular APFS artifact archive contains2242 candidate
+files and2650 release files:4892 files,210 directories, no links and11,377,551,639
+logical bytes. Every file's bytes/mode/nsmtime and complete membership were checked;
+clones have distinct regular inodes. Artifact manifest SHA256 is
+`3760efdc049d7614e12a0af39f7db7e1d0ad844f94f76e7ced9f3b26f5efccb7`.
+The367-member PAX metadata archive is7,331,840 bytes, SHA256
+`9eb205d2ae76f5162f22e29d4211a7e7642e952f52753a613d1676f0b7b8751d`;
+every member name/body/mode/nanosecond mtime was verified. The earlier145-member
+progress archive remains byte-exact to its complete verification and member
+manifest; `preclose-preservation1.json` retains that separate final gate.
+
+Closure records172,430,872,576 external free bytes and58,958,073,856 internal free
+bytes. Observed external free-space decrease1,165,029,376 bytes stays below the
+28GiB allowance; it is not a per-task allocation measurement. Original40/6GiB
+reserves and17GiB source commitment remain intact. No evidence was deleted and
+no completed source, build, method or publisher was restarted.
+
+NEXT: implement the finite resumable window request/reply owner selected by the
+[prepared backend preflight](APPLICATION_PREPARED_BACKEND_PREFLIGHT.md), consumed
+by the existing whole WinMain path. Freeze the implementation contract and finite
+cases first: unchanged280 whole-window cases,23 successful whole startup parents,
+distinct source stops/provenance rejections, suspension/receipt ownership and late
+rollback. This addresses the first dependent device-response boundary for an
+actual application; a successful response or physical rollback may not be invented.
 
 Independent review/root promotion, prepared backend observations and delivery,
 catalog transport/full137 original return, AppKit input/render/audio, Windows,
