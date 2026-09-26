@@ -1,0 +1,156 @@
+{
+  "schema": "ntsd-host-window-inspection-validation-docs-v1",
+  "UTC": "2026-09-26T12:39:12.795024+00:00",
+  "baseHead": "379d2667bc4f9801d0b934dc4da01e9e4f15ffe6",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/finalize2.job.json",
+    "bytes": 852,
+    "sha256": "127b684bf7b5b6a4f6c3463066956832554c5b2979c44e4f0e7f2006dfdebd0d",
+    "mode": 420,
+    "mtime_ns": 1790426227473851015
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/finalize2.log",
+    "bytes": 812,
+    "sha256": "236be598e93b6fde82e7b6422dc95c008e4a1d968945a4d254de0f8874543ec6",
+    "mode": 420,
+    "mtime_ns": 1790426227473909265
+  },
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 84149,
+    "startedUTC": "2026-09-26T12:36:07.987876+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/finalize2.py"
+    ],
+    "identity": "84149 Sat Sep 26 15:36:07 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-window-inspection-validation-20260926/finalize2.py",
+    "cwd": "p84149\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "all8Passed": true,
+    "passedMethods": 8,
+    "archivedFiles": 4902,
+    "metadataMembers": 60,
+    "endedUTC": "2026-09-26T12:37:07.473773+00:00",
+    "elapsedSeconds": 59.485701625
+  },
+  "processObservations": [
+    {
+      "pid": 64523,
+      "absent": true
+    },
+    {
+      "pid": 71816,
+      "absent": true
+    },
+    {
+      "pid": 82338,
+      "absent": true
+    },
+    {
+      "pid": 84149,
+      "absent": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "tools/prepare_application_host_window_inspection_validation.py",
+      "bytes": 12073,
+      "sha256": "242afea37ddb7cc4ce1933e11c03869a6df803d44ae092ec2b05a0d282ac4489",
+      "mode": 420,
+      "mtime_ns": 1790425541647053958
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION_PLAN.md",
+      "bytes": 5309,
+      "sha256": "d80320d5b217c6806cadff50554b00fdffa831025bd8d977229a8be17cd59ae9",
+      "mode": 420,
+      "mtime_ns": 1790425541562901485
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION.md",
+      "bytes": 7377,
+      "sha256": "4a3938c085a764649bb763bf2a7fb7898e9062ff889b65187e2bb84cd4bc8c9a",
+      "mode": 420,
+      "mtime_ns": 1790426382131689310
+    },
+    {
+      "path": "docs/evidence/application-host-window-inspection-validation.json",
+      "bytes": 5359,
+      "sha256": "4da799d1d3ca215fe872e570ef53f29fde83f7e3636434499c320ea9ad344525",
+      "mode": 420,
+      "mtime_ns": 1790426227473654764
+    },
+    {
+      "path": "docs/evidence/application-host-window-inspection-validation-close.json",
+      "bytes": 1687,
+      "sha256": "ff33846ab17217754858a7aea3c43d2ce38304c892d408c7a8212b60b829587c",
+      "mode": 420,
+      "mtime_ns": 1790426227473761723
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "c29cab0d06eaa2a2612cf67f36e4c13408ab5e7922db9ca743f0c5e27c4266c9",
+      "workingAfter": {
+        "bytes": 147292,
+        "sha256": "2fe9fc7efe6b62a32cc6ca0fe2115b0f96dd7c55278791ab0883dcceb9126496",
+        "mode": 420,
+        "mtime_ns": 1790426352727133914
+      },
+      "indexedBlob": "1678e4942ac9b5c5e046cf4ddc35b9172b9d33e7",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "cd5292dc683c8e619b9e867b4b2d72117a13f945697423af5e7103028a315b34",
+      "workingAfter": {
+        "bytes": 329352,
+        "sha256": "1edc82dc7ec13560ac65f8b843583aa796c71b6159307ccd9aa27a8f4e04380d",
+        "mode": 420,
+        "mtime_ns": 1790426352765025127
+      },
+      "indexedBlob": "eec49e1f2bc398e48816897068434946f73eb810",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "metadataArchive": {
+    "members": 60,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/metadata1.tar",
+    "bytes": 5201920,
+    "sha256": "5294f0c6f609373790a6f703cee4c62e5879d3506172664d846b67d52b0ab648",
+    "mode": 420,
+    "mtime_ns": 1790426227362180218
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/artifact-archive1",
+    "files": 4902,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11384656951,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-window-inspection-validation-20260926/artifact-archive1.json",
+      "bytes": 2617509,
+      "sha256": "a816bdeac3f73979ed6f97585305565af54c420b03f586c282059d1ab44f8878",
+      "mode": 420,
+      "mtime_ns": 1790426221627815514
+    }
+  },
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "boundedInspectionControlsPassed": true,
+  "exhaustiveSchedulerCoverage": false,
+  "authorFindingIsObservedHang": false,
+  "rootNativeChanged": false
+}

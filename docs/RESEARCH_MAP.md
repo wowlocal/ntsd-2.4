@@ -1,5 +1,16 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host inspection validation complete](research/APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION.md):
+all8 methods passed, including32 whole key transactions with concurrent readers and
+five whole startup regressions. Fresh build/1686 package files,4902-file artifact
+and60-member metadata archives verified; queue82338/finalizer84149 terminal0/absent.
+Root/prior/candidate/source preserved, task frozen.
+[Publication](evidence/application-host-window-inspection-validation.json).
+Next: production startup platform on this same coordinator/Host with bundled inputs,
+Native-owned staged storage and explicit prepared nonwindow observations; complete
+startup/late-failure comparison, not another inventory-only phase. Independent review,
+physical backend/devices/root promotion/full match/game remain open.
+
 [Host inspection correction candidate](research/APPLICATION_HOST_WINDOW_INSPECTION.md):
 post-handoff coordinator-to-Host lock nesting removed; two files parse, eight whole
 methods selected, fresh build/comparison open. All old test files/Core dependencies

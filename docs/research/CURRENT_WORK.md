@@ -1,5 +1,24 @@
 # Текущая передача работы
 
+[Host inspection validation complete](APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION.md):
+fresh build/package and all8 complete methods passed on the unchanged2247-file
+candidate. The three new methods cover post-handoff copying,32 whole key transactions
+with concurrent readers, and private inspection across failures/cancellation; five
+whole startup regressions retain23 complete/5 stops/7 provenance outcomes and650
+once-served replies. The reported lock edge is removed in code and the declared
+controls pass; independent review and exhaustive scheduler coverage are not claimed.
+Queue82338/finalizer84149 terminal0/absent;4902-file artifact/60-member metadata
+archives verified, root/prior/candidate/source preserved; task frozen.
+[Publication](../evidence/application-host-window-inspection-validation.json).
+NEXT: production startup platform consumed by this coordinator and the same Host,
+using original bundled inputs, Native-owned staged storage and explicit prepared
+nonwindow observations. Freeze its concrete ownership/request/failure contract,
+replace the XCTest-only adapter and retain whole startup/late-failure comparison;
+reuse the existing inventory, not another inventory/receipt-only study.
+Physical backend/callbacks/input/audio/loading dispatch, independent review/root
+promotion/full137 source/Windows/clean-Mac/full match/game remain open. EXE envelope
+not recalculated. Supersedes the fresh8-method NEXT below.
+
 [Host inspection correction candidate](APPLICATION_HOST_WINDOW_INSPECTION.md):
 coordinator value reads now use Host's own lock; after handoff coordinator platform
 copying rejects before Host access, with copies available on the returned Host.
