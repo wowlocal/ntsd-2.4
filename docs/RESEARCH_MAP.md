@@ -1,5 +1,20 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Observed bitmap Host candidate: test build failure preserved](research/APPLICATION_OBSERVED_BITMAP.md):
+whole first-menu suspension/receipt/late-publication bridge implemented; nine files
+parse and Core/MacPlatform compile. Build21610 terminal1 after152.265s: two new
+helper calls resolve to XCTestCase.run() returning Void. All69 methods unstarted;
+no package or comparison acceptance. Failed2268-file candidate/partial build,
+4634-file artifact/32-member metadata archive and nine-file patch verified;
+finalizer28739 terminal0/absent, task frozen. Root/prior/source preserved.
+[Publication](evidence/application-observed-bitmap.json).
+NEXT: separate exact-clone correction passing late:false at those two test calls;
+retain production bytes, every assertion, all69 methods and original limits, then
+fresh build/package/comparison. Independent review/root promotion/general raster/
+callbacks/other IO/Windows/input/audio/clean-Mac/full match/game stay open.
+NTSDApp remains Practice; EXE envelope not recalculated. Supersedes the provider
+composition NEXT below.
+
 [Native bitmap provider passes all48 methods](research/APPLICATION_MAC_BITMAP.md):
 whole constructor/loader/copy uses the startup display's own image/DC/offscreen
 resources and shared exchange. All36 named DIBs preserve full colors and146289

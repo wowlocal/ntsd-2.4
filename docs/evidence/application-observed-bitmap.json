@@ -1,0 +1,101 @@
+{
+  "schema": "ntsd-observed-bitmap-validation-v1",
+  "UTC": "2026-09-26T16:47:09.740553+00:00",
+  "status": "build-failed-before-tests",
+  "baseHead": "878f7fd77fa00f7f7e4fe980a6bd01e750082560",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/candidate1-inputs.json",
+    "bytes": 572554,
+    "sha256": "abd082fc1b711d4f004391b8fa9000b04cba589a2f895c0acccac293eced6b74",
+    "mode": 420,
+    "mtime_ns": 1790440941852279058
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/context1.json",
+    "bytes": 29335,
+    "sha256": "628ed0e18dbff9464d5f300d4091155dbd702cd69d77928c2334bf676f4ed3e4",
+    "mode": 420,
+    "mtime_ns": 1790440942097520848
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/build1.job.json",
+    "bytes": 90082,
+    "sha256": "b9f02136e21b463776360c7b24bc7fe712c7b35c591b693acd3479418093b177",
+    "mode": 420,
+    "mtime_ns": 1790441108234397597
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/failure-diagnosis1.json",
+    "bytes": 4986,
+    "sha256": "3dda2c9954f7ff9843ade222432489ae6c1621c5544188f2296f8158bffbd585",
+    "mode": 420,
+    "mtime_ns": 1790441171842765389
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/verification1.json",
+    "bytes": 7063,
+    "sha256": "18445176cffec671ec3c7d891a061482156199100252047c447b46d89e44e155",
+    "mode": 420,
+    "mtime_ns": 1790441226626306829
+  },
+  "passedMethods": 0,
+  "selectedMethods": 69,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/artifact-archive1",
+    "files": 4634,
+    "directories": 202,
+    "links": 0,
+    "bytes": 11065648923,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/artifact-archive1.json",
+      "bytes": 2385998,
+      "sha256": "04df13bf930fa86ccec8f99c1376483a200b74e01177b8df3c99e9c892b38ce5",
+      "mode": 420,
+      "mtime_ns": 1790441226617254919
+    }
+  },
+  "metadataArchive": {
+    "members": 32,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/metadata1.tar",
+    "bytes": 4659200,
+    "sha256": "3edaf53d84998c5a259847da08d701b006f4063f42aaedbea7d12982ea830f1e",
+    "mode": 420,
+    "mtime_ns": 1790441229622572718
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "d01432f054e611e83e747777ccf3e551541b1924edd09d8d56aca4b6bc8da2b8",
+    "mode": 420,
+    "mtime_ns": 1790441226626130454
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateUnchanged": 2268,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "The new observed-bitmap test has two helper-call overload errors; Core and MacPlatform compiled but the complete test package did not. All69 methods remain unstarted; prior all48 evidence is separate. Whole menu/physical bitmap comparison, independent review and application/Windows gates remain open.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}
