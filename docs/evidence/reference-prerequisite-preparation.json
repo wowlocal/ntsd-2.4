@@ -1,0 +1,395 @@
+{
+  "UTC": "2026-09-26T19:34:41.470910+00:00",
+  "head": "3cea373de91c328eafc3da3fd521fcbaa0f3672f",
+  "userApprovals": {
+    "AppleScript": "received for scoped NTSD/Wine control",
+    "GhosttyDeviceControl": "received; switch already on when reobserved; agent did not toggle",
+    "Windows11Compatibility": "user questioned compatibility, then said use judgment and CrossOver remains an option"
+  },
+  "permissionAndDialog": {
+    "inspect": {
+      "UTC": "2026-09-26T19:17:01.110411+00:00",
+      "userApproval": "Да, включить доступ Ghostty",
+      "permissionUI": "Ghostty switch already on when reobserved; agent did not toggle it",
+      "identity": "33492 Sat Sep 26 21:40:15 2026     Z:\\Volumes\\X5\\ntsd-2.4-research\\01a0dc49-738f-7972-8fb0-e98fb2f34408\\crossover-reference-20260926\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe \n",
+      "cwd": "p33492\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a\n",
+      "exitCode": 0,
+      "stdout": "true, NTSD 2.4.exe, 33492, ERROR, Little Fighter 2\n",
+      "stderr": "",
+      "scope": "Wine process only; CUA Ghostty refusal remains open"
+    },
+    "dismiss": {
+      "UTC": "2026-09-26T19:17:54.196071+00:00",
+      "identity": "33492 Sat Sep 26 21:40:15 2026     Z:\\Volumes\\X5\\ntsd-2.4-research\\01a0dc49-738f-7972-8fb0-e98fb2f34408\\crossover-reference-20260926\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe \n",
+      "exitCode": 0,
+      "stdout": "ERROR, Little Fighter 2\n",
+      "stderr": "",
+      "action": "one Return to verified frontmost NTSD ERROR window"
+    },
+    "after": {
+      "UTC": "2026-09-26T19:20:18.180170+00:00",
+      "exitCode": 0,
+      "stdout": "true, NTSD 2.4.exe, 1, Little Fighter 2, 3, 31, 794, 578\n",
+      "stderr": ""
+    },
+    "laterAX": {
+      "UTC": "2026-09-26T19:25:32.336723+00:00",
+      "correction": "Use separately literal observed PIDs; avoid AppleScript repeat-variable reference in whose predicate",
+      "results": [
+        {
+          "pid": 33489,
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-window-pid33489.applescript:81:129: execution error: System Events got an error: Can’t get application process 1 whose unix id = 33489. Invalid index. (-1719)\n"
+        },
+        {
+          "pid": 33492,
+          "exitCode": 0,
+          "stdout": "NTSD 2.4.exe, 0,\n",
+          "stderr": ""
+        },
+        {
+          "pid": 33495,
+          "exitCode": 0,
+          "stdout": "explorer.exe, 0,\n",
+          "stderr": ""
+        }
+      ]
+    },
+    "captureFailure": {
+      "UTC": "2026-09-26T19:18:27.073719+00:00",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-capture1.applescript:473:690: execution error: could not create image from rect (1)\n",
+      "scope": "only observed frontmost Wine/NTSD window bounds; no Ghostty UI access"
+    },
+    "agentMenuObserved": false,
+    "gameRestarted": false,
+    "limitations": "One Return only; later zero AX windows is not proof of failed game. User mentions CrossOver launch; successful menu/gameplay not independently observed. Exact capture-failure cause unknown. Ghostty CUA safety refusal remains open; no Ghostty UI retry or alternate access."
+  },
+  "VC80Preparation": {
+    "status": "terminal",
+    "pid": 95947,
+    "startedUTC": "2026-09-26T19:15:25.282062+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "95947 Sat Sep 26 22:15:25 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/prepare.py",
+    "producerSHA256": "b98d27e8449c6cfa37bf25a8273799b983225ef946fba0d58c9b547b74b16915",
+    "planSHA256": "85fe5de7b0f970911779e07ab0f6df20bbf49185daa1947bc5954b2aedc59916",
+    "certificateInspection": {
+      "exitCode": 0,
+      "securityDirectoryOffset": 2701312,
+      "securityDirectoryBytes": 9208,
+      "winCertificateBytes": 9208,
+      "containsMicrosoftCorporation": true,
+      "authenticodeTrustVerified": false
+    },
+    "exitCode": 0,
+    "ISOPath": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/NTSD-VC80-Prerequisite.iso",
+    "ISOBytes": 2766848,
+    "ISOSHA256": "4cc9d606264cf4e9987bea2b12b0795036f0b7b5ce92278be0027d966fc179ca",
+    "verifiedMediaFiles": [
+      {
+        "path": "README.txt",
+        "bytes": 1127,
+        "sha256": "070b3d2a6ba23667c488b17008d39ecc301a1e9ebf0886a56b7f1e7495d7c058"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 1423,
+        "sha256": "a006eb17280702a4b6b0b6b0d53f4db549b56560511ed87443927e64740a163f"
+      },
+      {
+        "path": "vcredist2005-x86.exe",
+        "bytes": 2710520,
+        "sha256": "8648c5fc29c44b9112fe52f9a33f80e7fc42d10f3b5b42b2121542a13e44adfd"
+      }
+    ],
+    "inputsUnchanged": true,
+    "sourceExecuted": false,
+    "installerExecuted": false,
+    "taskBytes": 5515429,
+    "endedUTC": "2026-09-26T19:15:25.717092+00:00",
+    "elapsedSeconds": 0.435046833
+  },
+  "mediaAttachment": {
+    "UTC": "2026-09-26T19:34:41.470910+00:00",
+    "outcome": "UI attachment incomplete; no saved configuration change",
+    "attempts": "Removable checkbox becomes merged sidebar AX row; Browse/Create coordinates and keyboard activation did not add a drive. Return closed sheet with original bytes unchanged. Fresh binding produced same merged AX row; final Escape and Cancel retained original configuration. No further repeats in this interval.",
+    "configBytesUnchanged": true,
+    "before": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/config-before.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    "after": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/config-after.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    "twoNewMediaAttached": false,
+    "guestBooted": false,
+    "next": "Use existing optical drive media selection when guest needs each verified ISO; additional simultaneous drives are optional and remain unconfigured."
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/reference-prerequisite-publication1.tar",
+    "bytes": 143360,
+    "sha256": "e80223a6e97997da3d9cdb9e95e2abed7a353ec776067ac1364ee30b5cb0173c"
+  },
+  "archiveMembersVerified": 45,
+  "evidenceFiles": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/after-dialog-process1.json",
+      "bytes": 946,
+      "sha256": "44d5ea53488c895bd6184b2a51b9ca4d33bdc5a5278997d7d416a7b2f6ddccfa"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-after1-bounds.applescript",
+      "bytes": 288,
+      "sha256": "ff41ab1ed3330f82f801646cda6943cb4df54c01cfa406b1111e03e33398de0e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-after1-bounds.json",
+      "bytes": 318,
+      "sha256": "57e880bd983538313477e4e4aea0a3f43d48bfc2d7393d8f05ab0664450434e9"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-capture1.applescript",
+      "bytes": 739,
+      "sha256": "d51874bef6c44077f097d4fb14e29ef3f23d34106fde81d0b20e04ecd93409ec"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-capture1.json",
+      "bytes": 370,
+      "sha256": "7de8770c187676e1f437f3a138199021d6c4edf25aa06af1c2e08c2743191aec"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-controls.applescript",
+      "bytes": 329,
+      "sha256": "6564b8b0bf09da93079c9f345abc478f8020c02ebb223e82c6e2ba97f436d47b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-controls.json",
+      "bytes": 179,
+      "sha256": "da1c373d22f765475051f17ff147878b2ed2fc6fb93f212795f51df49f8e8a5b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-dismiss1.applescript",
+      "bytes": 508,
+      "sha256": "9f9f403570a9e76ba7c871ef543c030e300ccf438e3c063382902347c7413665"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-dismiss1.json",
+      "bytes": 381,
+      "sha256": "f9cc8471934bc1142c5f7b5a890f6fefaffc1be876fd456ffdea19c5f4f28635"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-inspect.applescript",
+      "bytes": 226,
+      "sha256": "304e4a7eb880837e397e63727e4a35f210559e8a53922d8d8bca8b3fecce6faa"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-inspect.json",
+      "bytes": 769,
+      "sha256": "d4ba7529905588e82dc0648ab2bb96c32478442b625543f291cd1f5e04b78a3a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-native-capture-prepare.applescript",
+      "bytes": 311,
+      "sha256": "2514bb36610b04405099c386e3d27a528f7563ac3b62c52b09a67ef888dd7cf5"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-native-capture-prepare.json",
+      "bytes": 506,
+      "sha256": "f3212e98156ddc2cd243fe95db72819fe135f998677caa0a42712db6f8bdb731"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-related-windows.applescript",
+      "bytes": 415,
+      "sha256": "95548ceaff2ab512bb95661b509ac944eb0de314b8605a8f4889217593a7dcd1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-related-windows.json",
+      "bytes": 323,
+      "sha256": "da114d504562ce3f9acef785d6c1d4e26702eee8caa9951bee066de44333af96"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-related-windows2.applescript",
+      "bytes": 494,
+      "sha256": "f631ce5d775d9ad05109bbedd6021c87462beac459ff415d5dc67120a4468b3e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-related-windows2.json",
+      "bytes": 459,
+      "sha256": "d83dd84107a569f799cb7e6f823168900f9b44c14ef84e34dd82eec337237f27"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-related-windows3.json",
+      "bytes": 771,
+      "sha256": "e68a9336bf3f8adb03ccb61fd6b918f18aa53056901f3ef811d0c4138c0d7983"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state2.applescript",
+      "bytes": 293,
+      "sha256": "328a680dd1c5d0dd3a1ccc9089d672be2ee66c4531d93d238fafeca7747ef264"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state2.json",
+      "bytes": 155,
+      "sha256": "1dd3f14659e153639cfe0b419648427d65580924cf5af635df59c1663fb223c9"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state3.applescript",
+      "bytes": 238,
+      "sha256": "bfda9e7ec148c799ed9c23284df516102b249ffd8e96b889b30b6ef80c8975a8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state3.json",
+      "bytes": 363,
+      "sha256": "83142b3ff98bcd344ee2eed2e465b628999eda77b1b7711507ae2959b19293c1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state4.applescript",
+      "bytes": 244,
+      "sha256": "da9e684112870f494c838f2531de59867089a940fc46a0883ae52aa137882330"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-state4.json",
+      "bytes": 128,
+      "sha256": "c14f485a670893e25500c7bda62b9586b8dc47f04287b04bf47c5f238db93aca"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-window-pid33489.applescript",
+      "bytes": 253,
+      "sha256": "29d755eb33de1475387b266405d3b022c544fed0d4d42fe31b30d71845068b9f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-window-pid33492.applescript",
+      "bytes": 253,
+      "sha256": "a65e2c735ec535424ebfe4783dc9bae5bbde46bd4a376197d337fe09c57cc9ff"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog3-window-pid33495.applescript",
+      "bytes": 253,
+      "sha256": "d8de809bd7708c121b35f3e6714f4ab40e8d319912045c9eaa694f258206e6e1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/config-after.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/config-before.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/continuation1.json",
+      "bytes": 808,
+      "sha256": "6360f80bf8dc660e5835e0ef409582dba8290a6f967d8fad41621582411a4c6a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/inputs.json",
+      "bytes": 703,
+      "sha256": "1c40f8ed3cd693a44cbd3750e789afedfcb6c94b47d963737a69b6c7ceb9028a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/plan.md",
+      "bytes": 878,
+      "sha256": "9505c6808fff229103fb5c885d82d6dfbe1d96c758f24514a2884b467c9cd6ae"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/media-attach1/result.json",
+      "bytes": 1225,
+      "sha256": "f0b08effce38d976d68f722e2667609d1c8cdbf722e74f848f848e58ed2e3e54"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/authenticode-pkcs7.der",
+      "bytes": 9200,
+      "sha256": "2c1a2ddf5243603b23b157a3bc3d834e72319406038171e632981b6f2c59dbf2"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/certificate-inspection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/certificate-inspection.txt",
+      "bytes": 15352,
+      "sha256": "c992b6b7fe844c1e8e202b38e7fc4a4b689ee771dee75ce395bb42e705a34ddc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/context.json",
+      "bytes": 326,
+      "sha256": "e0346addc1e96cf8075839e9d9e7a93851ccf6eea04b8d15a88bda9c6ffa3820"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/detach.json",
+      "bytes": 168,
+      "sha256": "1ee523f6e0853b79cc57a2cf9c963ab8825be123e914f2f6999079408ce1ee66"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/inputs.json",
+      "bytes": 1423,
+      "sha256": "a006eb17280702a4b6b0b6b0d53f4db549b56560511ed87443927e64740a163f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/iso-build.log",
+      "bytes": 26,
+      "sha256": "acbda05770a9d2523ce896b9f246cc2cf7e6622c2473d7ddcf7ec77bad5f1227"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/job.json",
+      "bytes": 1825,
+      "sha256": "5c56f78ccb81bfb2087876789eb9ad5870bebfc0911f38752a76f4d13dae62d1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/mount.plist",
+      "bytes": 474,
+      "sha256": "1309dfd0a89e43d3272e59b715e2a8c0f9b10e93b0626b9713ac75b5cf4fc925"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/mount.stderr",
+      "bytes": 157,
+      "sha256": "32740ae8e5b8ed5aa6df5ff82e71f8a2faa6906b8b03100dca7a937e77836129"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/plan.md",
+      "bytes": 1514,
+      "sha256": "85fe5de7b0f970911779e07ab0f6df20bbf49185daa1947bc5954b2aedc59916"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/vc80-preparation1/prepare.py",
+      "bytes": 6244,
+      "sha256": "b98d27e8449c6cfa37bf25a8273799b983225ef946fba0d58c9b547b74b16915"
+    }
+  ],
+  "processes": {
+    "60299": {
+      "identity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py\n",
+      "cwd": "p60299\nfcwd\nn/Users/michael/Developer/ntsd-2.4\n"
+    },
+    "33492": {
+      "identity": "33492 Sat Sep 26 21:40:15 2026     Z:\\Volumes\\X5\\ntsd-2.4-research\\01a0dc49-738f-7972-8fb0-e98fb2f34408\\crossover-reference-20260926\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe \n",
+      "cwd": "p33492\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a\n"
+    }
+  },
+  "windowsDownload": {
+    "status": "running",
+    "pid": 60299,
+    "startedUTC": "2026-09-26T18:56:02.538717+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+    "totalBytes": 7994415104,
+    "chunkBytes": 1048576,
+    "concurrency": 8,
+    "maxSeconds": 7200,
+    "completedBytes": 6986661888,
+    "completedRanges": 5247,
+    "retainedRanges": 176,
+    "missingRanges": 6209
+  },
+  "vmStatus": "UUID                                 Status   Name\n98DFE348-2BA4-426E-9E40-7214229E8E45 stopped  NTSD Windows 11 ARM Reference\n",
+  "nativeChanges": false,
+  "independentReview": "open",
+  "acceptance": "Preparation and preserved UI observations only; no Windows binding/font/cursor/device or Native/game acceptance."
+}

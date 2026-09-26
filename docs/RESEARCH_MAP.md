@@ -1,5 +1,19 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Reference prerequisites and dialog dismissal](research/REFERENCE_PREREQUISITE_PREPARATION.md):
+User approved OS access; switch was already on when observed. One Return closed
+NTSD's ERROR dialog; later AX0 windows is inconclusive, no independent menu check.
+Game33492 remains live; no restart. Verified VC80 prerequisite ISO3 files, four
+inputs unchanged,45-member publication archive; Windows signature/binding open.
+Optional extra CD UI attachment incomplete; original VM config bytes unchanged,
+stopped/no NIC/shares. Download60299 live,6.987GB at checkpoint, full vendor SHA
+pending; lost tool handle is not process termination. CrossOver remains available;
+Windows11 ARM compatibility unverified. [Publication](evidence/reference-prerequisite-preparation.json).
+NEXT: verify completed download, replace partial CD, ordinary guest setup; existing
+CDs can mount transfer/prerequisite media in turn. Ghostty CUA refusal remains
+open. Independent review/Native raster/root/Windows/device/full-game gates open.
+Supersedes permission-pending status below; no Native changes or EXE recalculation.
+
 [Reference environment: OS access boundary](research/REFERENCE_ENVIRONMENT_ACCESS.md):
 AppleScript authorized; current NTSD33492 identified, but macOS denies assistive
 access. Ghostty's Device Control and Data Access switch is off; action-time
