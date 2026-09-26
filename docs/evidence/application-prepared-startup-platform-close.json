@@ -1,0 +1,34 @@
+{
+  "UTC": "2026-09-26T12:54:08.480316+00:00",
+  "taskFrozen": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926",
+  "externalFree": 168929157120,
+  "internalFree": 58844647424,
+  "observedFreeDecrease": 6582272,
+  "physicalAllowance": 4294967296,
+  "logicalBytes": 10258312652,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/publication1.json",
+    "bytes": 3983,
+    "sha256": "a3f8c527370ee4d3240d8ede95afc0bd25475f31a629c6d229e803ca48031b83",
+    "mode": 420,
+    "mtime_ns": 1790427248480293735
+  },
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/artifact-archive1.json",
+    "bytes": 633145,
+    "sha256": "941ffb9c67ccf4accc0f5027729ac81e0e7ba8f9c13d0524cdf0c9d3ab6cc27b",
+    "mode": 420,
+    "mtime_ns": 1790427246405355152
+  },
+  "metadata": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/metadata1.tar",
+    "bytes": 2068480,
+    "sha256": "50f6c0d9ee142e7be20ccb460c9acac5a30ee031398b12431f46d1c39e464d74",
+    "mode": 420,
+    "mtime_ns": 1790427246511364943
+  }
+}

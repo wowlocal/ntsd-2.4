@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Production prepared startup candidate](APPLICATION_PREPARED_STARTUP_PLATFORM.md):
+Core now supplies the real startup-platform conformance from bundled original inputs
+and typed explicit observations, with independent positions/output/cursor copies
+and retained owners. Two new files parse; all old algorithms/tests/fixtures/resources
+remain exact. Three new whole/boundary methods plus unchanged8 are selected (11),
+not executed. Root1034/base2247/source55 preserved;2249-file archive, two-new-file
+patch roundtrip and31-member metadata archive verified. Finalizer14906 terminal0/
+absent; task frozen. [Publication](../evidence/application-prepared-startup-platform.json).
+NEXT: fresh build/package/all11 methods on exact candidate295864416a72f76e19471ece43331fc40d4a2a2ec8b6d66dbe69251c7c977eb6.
+The runtime provider is implemented but unaccepted; it does not supply actual
+physical device observations. Independent review/root promotion/physical backend/
+callbacks/loading messages/fills/audio/full137 source/Windows/clean-Mac/full match/
+game remain open; EXE envelope not recalculated. Supersedes the provider NEXT below.
+
 [Host inspection validation complete](APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION.md):
 fresh build/package and all8 complete methods passed on the unchanged2247-file
 candidate. The three new methods cover post-handoff copying,32 whole key transactions

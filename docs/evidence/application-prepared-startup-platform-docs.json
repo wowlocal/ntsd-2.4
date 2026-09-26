@@ -1,0 +1,134 @@
+{
+  "schema": "ntsd-prepared-startup-platform-docs-v1",
+  "UTC": "2026-09-26T12:55:27.921795+00:00",
+  "baseHead": "b12ebbdb329f8f428a38af5544fb104da59abfdb",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/finalize1.job.json",
+    "bytes": 787,
+    "sha256": "433ec584bf4509ea705cb0a187f1c2f1c6113aa1aedc079c6e3cbc39ed274b94",
+    "mode": 420,
+    "mtime_ns": 1790427248515134733
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/finalize1.log",
+    "bytes": 749,
+    "sha256": "6552a2b13f25efe422d671046092f39fd3ae5b45996b3274ed6b274d9171aa80",
+    "mode": 420,
+    "mtime_ns": 1790427248515192608
+  },
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 14906,
+    "startedUTC": "2026-09-26T12:53:45.854322+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Users/michael/Developer/ntsd-2.4/build/research/application-prepared-startup-platform-20260926/finalize1.py"
+    ],
+    "identity": "14906 Sat Sep 26 15:53:45 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-prepared-startup-platform-20260926/finalize1.py",
+    "cwd": "p14906\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "files": 2249,
+    "directories": 59,
+    "metadataMembers": 31,
+    "endedUTC": "2026-09-26T12:54:08.515050+00:00",
+    "elapsedSeconds": 22.762551708
+  },
+  "processObservations": [
+    {
+      "pid": 97242,
+      "absent": true
+    },
+    {
+      "pid": 11982,
+      "absent": true
+    },
+    {
+      "pid": 14906,
+      "absent": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "tools/prepare_application_prepared_startup_platform.py",
+      "bytes": 5689,
+      "sha256": "677094767b93095a56c0db40d926ffd25183be332b355809cac966ad22f6cd53",
+      "mode": 420,
+      "mtime_ns": 1790426618504787588
+    },
+    {
+      "path": "docs/research/APPLICATION_PREPARED_STARTUP_PLATFORM_PLAN.md",
+      "bytes": 7311,
+      "sha256": "4288c7ed822f83b9436e225436082c5496717f9f20e65462f39520c3403cbeee",
+      "mode": 420,
+      "mtime_ns": 1790426618422241598
+    },
+    {
+      "path": "docs/research/APPLICATION_PREPARED_STARTUP_PLATFORM.md",
+      "bytes": 7434,
+      "sha256": "a981612220ef083b1cbdc261abb825f0899d5a94cabeb4a0fc80b722627daea6",
+      "mode": 420,
+      "mtime_ns": 1790427327738951722
+    },
+    {
+      "path": "docs/evidence/application-prepared-startup-platform.json",
+      "bytes": 3983,
+      "sha256": "a3f8c527370ee4d3240d8ede95afc0bd25475f31a629c6d229e803ca48031b83",
+      "mode": 420,
+      "mtime_ns": 1790427248514942399
+    },
+    {
+      "path": "docs/evidence/application-prepared-startup-platform-close.json",
+      "bytes": 1446,
+      "sha256": "4cf12b981a8367cd47c5e8529b0f0aec0bf7b1955bb25c7374bf9d4fec205238",
+      "mode": 420,
+      "mtime_ns": 1790427248515037566
+    },
+    {
+      "path": "docs/evidence/application-prepared-startup-platform.patch",
+      "bytes": 41352,
+      "sha256": "9b4a51fa153d609bbffb2e361484577340237b55603ae7c70f4ab9b44b2bf9b6",
+      "mode": 420,
+      "mtime_ns": 1790427236679899114
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "2fe9fc7efe6b62a32cc6ca0fe2115b0f96dd7c55278791ab0883dcceb9126496",
+      "workingAfter": {
+        "bytes": 148420,
+        "sha256": "dd48fa0ef0885561e75a86cc0393db01092126268d031fd27f93b68651605536",
+        "mode": 420,
+        "mtime_ns": 1790427327870840146
+      },
+      "indexedBlob": "9963d90d603712c17ec1b14e8907bb3eb9742d7c",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "1edc82dc7ec13560ac65f8b843583aa796c71b6159307ccd9aa27a8f4e04380d",
+      "workingAfter": {
+        "bytes": 330067,
+        "sha256": "6e6f3e6c8cbac87a75c05d3f4dcc3f72b1cb2f21575b1322f14ebd52a33615c2",
+        "mode": 420,
+        "mtime_ns": 1790427327899736498
+      },
+      "indexedBlob": "93f8bc7d930043de5186da9f2409e8deb53d8f9c",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "gates": {
+    "implementation": true,
+    "syntax": true,
+    "patchRoundtrip": true,
+    "preservation": true,
+    "archive": true,
+    "build": false,
+    "comparison": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  },
+  "rootNativeChanged": false
+}

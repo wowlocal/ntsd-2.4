@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Production prepared startup candidate](research/APPLICATION_PREPARED_STARTUP_PLATFORM.md):
+Core provider now owns prepared positions/output/cursors and retained resources,
+using original package inputs without XCTest/reference/host IO. Two new files parse;
+three new plus eight unchanged methods selected, not yet run. Root/base/source and
+all prior tests preserved;2249-file artifact/patch roundtrip/31-member metadata
+archive verified. Finalizer14906 terminal0/absent; task frozen.
+[Publication](evidence/application-prepared-startup-platform.json).
+Next: fresh build/package/all11 comparisons, then actual observation/backend integration.
+Independent review/root promotion/devices/full match/game remain open.
+
 [Host inspection validation complete](research/APPLICATION_HOST_WINDOW_INSPECTION_VALIDATION.md):
 all8 methods passed, including32 whole key transactions with concurrent readers and
 five whole startup regressions. Fresh build/1686 package files,4902-file artifact

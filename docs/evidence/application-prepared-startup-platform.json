@@ -1,0 +1,91 @@
+{
+  "schema": "ntsd-prepared-startup-platform-v1",
+  "UTC": "2026-09-26T12:54:08.478417+00:00",
+  "status": "implemented-syntax-passed-comparison-review-open",
+  "baseHead": "b12ebbdb329f8f428a38af5544fb104da59abfdb",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/candidate1-inputs.json",
+    "bytes": 567948,
+    "sha256": "295864416a72f76e19471ece43331fc40d4a2a2ec8b6d66dbe69251c7c977eb6",
+    "mode": 420,
+    "mtime_ns": 1790427235038195854
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/context1.json",
+    "bytes": 25735,
+    "sha256": "fb6603141caf8441850020de1dbe38b23d13af298b4ffd5a0590d6913a73e637",
+    "mode": 420,
+    "mtime_ns": 1790426627106929309
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/verification1.json",
+    "bytes": 2707,
+    "sha256": "ab7177366d399fc1753486f16d8a09319ca01f494a98d32b1ed23782af96209d",
+    "mode": 420,
+    "mtime_ns": 1790427246420329788
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/selected-methods1.json",
+    "bytes": 2517,
+    "sha256": "51c34518644e5ba7c01983215a7ab7d1fc248f7199ecdb85640c3239ab75fc18",
+    "mode": 420,
+    "mtime_ns": 1790426676455711805
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/candidate1.patch",
+    "bytes": 41352,
+    "sha256": "9b4a51fa153d609bbffb2e361484577340237b55603ae7c70f4ab9b44b2bf9b6",
+    "mode": 420,
+    "mtime_ns": 1790427236659147290
+  },
+  "syntax": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/syntax1.json",
+    "bytes": 3384,
+    "sha256": "3eeb41a3ab468d59178403e72799773bf09a5d1009a627f4a2015ac4ce6f4333",
+    "mode": 420,
+    "mtime_ns": 1790427119516577250
+  },
+  "authorReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/author-review1.json",
+    "bytes": 3109,
+    "sha256": "c3d9045879280452c6ce1b7f32c452fcdfbb69138749245c72d78fdce7bb023f",
+    "mode": 420,
+    "mtime_ns": 1790427081576839540
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/artifact-archive1",
+    "files": 2249,
+    "directories": 59,
+    "bytes": 5127113934,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/artifact-archive1.json",
+      "bytes": 633145,
+      "sha256": "941ffb9c67ccf4accc0f5027729ac81e0e7ba8f9c13d0524cdf0c9d3ab6cc27b",
+      "mode": 420,
+      "mtime_ns": 1790427246405355152
+    }
+  },
+  "metadataArchive": {
+    "members": 31,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-startup-platform-20260926/metadata1.tar",
+    "bytes": 2068480,
+    "sha256": "50f6c0d9ee142e7be20ccb460c9acac5a30ee031398b12431f46d1c39e464d74",
+    "mode": 420,
+    "mtime_ns": 1790427246511364943
+  },
+  "gates": {
+    "implementation": true,
+    "syntax": true,
+    "patchRoundtrip": true,
+    "preservation": true,
+    "archive": true,
+    "build": false,
+    "comparison": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  }
+}

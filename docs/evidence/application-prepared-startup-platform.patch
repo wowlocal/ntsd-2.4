@@ -1,0 +1,600 @@
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift
+@@ -0,0 +1,180 @@
++/// An opaque lifetime owner acquired outside the Core transaction. Copies retain
++/// it; the platform never invokes it or uses it as mutable response storage.
++public protocol OriginalApplicationStartupResource: AnyObject {}
++
++/// Production adapter for the existing prepared WinMain boundaries. Load package
++/// inputs and prepare observations before entering Core. This class performs no
++/// host IO and does not derive clock, allocation, codepage or device responses.
++public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform {
++    public enum Kind: String, CaseIterable, Equatable {
++        case milliseconds, criticalSection, com, panelWrite, panelClose, panelAllocation
++        case panelBitmap, panelDevice, filetime, timezone, calendarAllocation, zoneName
++        case music, cursor, joystick, wave
++    }
++    public enum Boundary: Error, Equatable {
++        case missing(Kind,Int), mismatched(Kind,Int), unconsumed(Kind,Int), missingWindowCursor
++    }
++    public struct Reply<Request: Equatable,Value> {
++        public let request: Request, value: Value
++        public init(_ request: Request,_ value: Value) { self.request = request; self.value = value }
++    }
++    public struct Name: Equatable {
++        public let text: String, capacity: Int
++        public init(_ text: String,_ capacity: Int) { self.text = text; self.capacity = capacity }
++    }
++    public struct Cursor: Equatable {
++        public let load: Bool, arguments: [UInt32]
++        public init(_ load: Bool,_ arguments: [UInt32]) { self.load = load; self.arguments = arguments }
++    }
++    public struct Wave: Equatable {
++        public let index: Int, path: String, destination: UInt32, device: UInt32
++        public init(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) {
++            self.index = index; self.path = path; self.destination = destination; self.device = device
++        }
++    }
++    public struct Zone {
++        public let result: UInt32, value: OriginalCalendarTime.Zone?
++        public init(_ result: UInt32,_ value: OriginalCalendarTime.Zone?) { self.result = result; self.value = value }
++    }
++    public struct PanelDevice {
++        public let surface: UInt32, colorKeyResult: Int32
++        public init(_ surface: UInt32,_ colorKeyResult: Int32) { self.surface = surface; self.colorKeyResult = colorKeyResult }
++    }
++    public enum File: Equatable { case absent, bytes([UInt8]) }
++
++    /// Value preparation, independently copied at construction. Empty arrays mean
++    /// unavailable observations, never default success. Request bindings include
++    /// complete byte arguments; unknown backing is not made defined here.
++    public struct Prepared {
++        public var panelIO: OriginalWinMainStartup.PanelIO
++        public var environmentTZ: [UInt8]?
++        public var sound: OriginalMenuSoundStartup.Platform
++        public var files: [String:File] = [:]
++        public var milliseconds: [UInt32] = []
++        public var criticalSections: [Reply<UInt32,[UInt8]>] = []
++        public var com: [UInt32] = []
++        public var panelWrites: [Reply<[UInt8],Int32>] = []
++        public var panelCloses: [Int32] = []
++        public var panelAllocations: [OriginalInterfaceAllocation] = []
++        public var panelBitmaps: [Reply<String,OriginalBitmapInput>] = []
++        public var panelDevices: [PanelDevice] = []
++        public var filetimes: [UInt64] = []
++        public var zones: [Zone] = []
++        public var calendarAllocations: [Reply<Int,OriginalInterfaceAllocation>] = []
++        public var zoneNames: [Reply<Name,[UInt8]>] = []
++        public var music: [Reply<OriginalMusicEvent,OriginalMusicResponse>] = []
++        public var cursors: [Reply<Cursor,UInt32>] = []
++        public var joysticks: [Reply<OriginalInputStartup.Request,OriginalInputStartup.Response>] = []
++        public var waves: [Reply<Wave,OriginalWavePlatform>] = []
++        public var resources: [any OriginalApplicationStartupResource] = []
++        public init(panelIO: OriginalWinMainStartup.PanelIO, environmentTZ: [UInt8]?,
++                    sound: OriginalMenuSoundStartup.Platform) {
++            self.panelIO = panelIO; self.environmentTZ = environmentTZ; self.sound = sound
++        }
++    }
++    public struct Snapshot: Equatable {
++        public fileprivate(set) var positions: [Kind:Int] = [:]
++        /// Attempted bytes and close results, not physical IO or a second FILE.
++        public fileprivate(set) var panelWrites: [[UInt8]] = []
++        public fileprivate(set) var panelCloses: [Int32] = []
++    }
++    public let inputs: OriginalApplicationStartupInputs
++    private let prepared: Prepared
++    private var state = Snapshot()
++    public var windowExchange: OriginalWindowRequestExchange.Cursor?
++    public var snapshot: Snapshot { state }
++    public var panelIO: OriginalWinMainStartup.PanelIO { prepared.panelIO }
++    public var environmentTZ: [UInt8]? { prepared.environmentTZ }
++    public var sound: OriginalMenuSoundStartup.Platform { prepared.sound }
++
++    public init(inputs: OriginalApplicationStartupInputs, prepared: Prepared) {
++        self.inputs = inputs; self.prepared = prepared
++    }
++    public func stagedCopy() throws -> OriginalApplicationPreparedStartupPlatform {
++        let copy = OriginalApplicationPreparedStartupPlatform(inputs:inputs,prepared:prepared)
++        copy.state = state; copy.windowExchange = windowExchange
++        return copy
++    }
++    private func take<T>(_ kind: Kind,_ values: [T],matching matches: (T) -> Bool = { _ in true }) throws -> T {
++        let index = state.positions[kind,default:0]
++        guard values.indices.contains(index) else { throw Boundary.missing(kind,index) }
++        let value = values[index]
++        guard matches(value) else { throw Boundary.mismatched(kind,index) }
++        state.positions[kind] = index+1
++        return value
++    }
++    private func take<Q: Equatable,V>(_ kind: Kind,_ values: [Reply<Q,V>],_ request: Q) throws -> V {
++        try take(kind,values,matching:{ $0.request == request }).value
++    }
++    /// Called by the enclosing owner's final validation. It does not consume or
++    /// finish the separate window exchange, whose completion is owned by Driver.
++    public func validatePreparedConsumption() throws {
++        let counts: [Kind:Int] = [
++            .milliseconds:prepared.milliseconds.count,.criticalSection:prepared.criticalSections.count,
++            .com:prepared.com.count,.panelWrite:prepared.panelWrites.count,.panelClose:prepared.panelCloses.count,
++            .panelAllocation:prepared.panelAllocations.count,.panelBitmap:prepared.panelBitmaps.count,
++            .panelDevice:prepared.panelDevices.count,.filetime:prepared.filetimes.count,
++            .timezone:prepared.zones.count,.calendarAllocation:prepared.calendarAllocations.count,
++            .zoneName:prepared.zoneNames.count,.music:prepared.music.count,.cursor:prepared.cursors.count,
++            .joystick:prepared.joysticks.count,.wave:prepared.waves.count]
++        for kind in Kind.allCases {
++            let remaining = counts[kind,default:0]-state.positions[kind,default:0]
++            if remaining != 0 { throw Boundary.unconsumed(kind,remaining) }
++        }
++    }
++    public func milliseconds() throws -> UInt32 { try take(.milliseconds,prepared.milliseconds) }
++    public func initializeCriticalSection(_ address: UInt32) throws -> [UInt8] {
++        try take(.criticalSection,prepared.criticalSections,address)
++    }
++    public func initializeCOM() throws -> UInt32 { try take(.com,prepared.com) }
++    public func window(_ request: OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response {
++        guard var cursor = windowExchange else { throw Boundary.missingWindowCursor }
++        defer { windowExchange = cursor }
++        return try cursor.response(for:request)
++    }
++    public func file(_ path: String) throws -> [UInt8]? {
++        if let file = prepared.files[path] {
++            switch file { case .absent:return nil; case .bytes(let bytes):return bytes }
++        }
++        return try inputs.file(path)
++    }
++    public func writePanel(_ bytes: [UInt8]) throws -> Int32 {
++        let result = try take(.panelWrite,prepared.panelWrites,bytes)
++        state.panelWrites.append(bytes); return result
++    }
++    public func closePanel() throws -> Int32 {
++        let result = try take(.panelClose,prepared.panelCloses)
++        state.panelCloses.append(result); return result
++    }
++    public func allocatePanel() throws -> OriginalInterfaceAllocation { try take(.panelAllocation,prepared.panelAllocations) }
++    public func panelBitmap(_ path: String) throws -> OriginalBitmapInput { try take(.panelBitmap,prepared.panelBitmaps,path) }
++    public func panelDevice() throws -> (surface: UInt32,colorKeyResult: Int32) {
++        let value = try take(.panelDevice,prepared.panelDevices); return (value.surface,value.colorKeyResult)
++    }
++    public func filetime() throws -> UInt64 { try take(.filetime,prepared.filetimes) }
++    public func timezone() throws -> (result: UInt32,zone: OriginalCalendarTime.Zone?) {
++        let value = try take(.timezone,prepared.zones); return (value.result,value.value)
++    }
++    public func allocateCalendar(_ count: Int) throws -> OriginalInterfaceAllocation {
++        try take(.calendarAllocation,prepared.calendarAllocations,count)
++    }
++    public func convertZoneName(_ name: String,_ capacity: Int) throws -> [UInt8] {
++        try take(.zoneName,prepared.zoneNames,Name(name,capacity))
++    }
++    public func music(_ event: OriginalMusicEvent) throws -> OriginalMusicResponse {
++        // The shared child discards these notification return values; they are
++        // neither COM calls nor fabricated replies to terminal device requests.
++        if event.kind == .helper || event.kind == .format { return .init() }
++        return try take(.music,prepared.music,event)
++    }
++    public func cursor(_ load: Bool,_ arguments: [UInt32]) throws -> UInt32 {
++        try take(.cursor,prepared.cursors,Cursor(load,arguments))
++    }
++    public func joystick(_ request: OriginalInputStartup.Request,_ globals: OriginalStateRecord) throws -> OriginalInputStartup.Response {
++        try take(.joystick,prepared.joysticks,request)
++    }
++    public func wave(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWavePlatform {
++        try take(.wave,prepared.waves,Wave(index,path,destination,device))
++    }
++    public func observe(_ event: OriginalWinMainStartup.Observation) throws {}
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationPreparedStartupPlatformTests.swift
+@@ -0,0 +1,414 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++@testable import NTSDReferenceChecks
++
++final class OriginalApplicationPreparedStartupPlatformTests: XCTestCase {
++    typealias N = OriginalApplicationPreparedStartupPlatform
++    typealias P = OriginalWinMainStartupTests
++    typealias B = OriginalApplicationBootstrapTests
++    typealias D = OriginalApplicationHostDeliveryContextTests
++    typealias E = OriginalWindowRequestExchange
++    typealias Driver = OriginalApplicationWindowStartup<Audit>
++    typealias Host = Driver.Host
++    enum Stop: Error { case missingOutcome }
++    final class Resource: OriginalApplicationStartupResource {}
++    static func same<T: Encodable>(_ a: T,_ b: T) throws {
++        let e = JSONEncoder(); e.outputFormatting = [.sortedKeys]
++        XCTAssertEqual(try e.encode(a),try e.encode(b))
++    }
++
++    /// Reference requests/stores/observations are checked independently. Only
++    /// native replies feed Core. No audit after-state initializes the platform.
++    final class Audit: OriginalApplicationWindowStartupPlatform {
++        let native: N, audit: P.Adapter
++        var failCopies = false
++        init(_ native: N,_ audit: P.Adapter) { self.native = native; self.audit = audit }
++        func stagedCopy() throws -> Audit {
++            if failCopies { throw P.Trial.late }
++            return try .init(native.stagedCopy(),audit.stagedCopy())
++        }
++        var windowExchange: E.Cursor? {
++            get { native.windowExchange }
++            set { native.windowExchange = newValue }
++        }
++        var panelIO: OriginalWinMainStartup.PanelIO { native.panelIO }
++        var environmentTZ: [UInt8]? { native.environmentTZ }
++        var sound: OriginalMenuSoundStartup.Platform { native.sound }
++        func milliseconds() throws -> UInt32 { let r = try native.milliseconds(); XCTAssertEqual(r,try audit.milliseconds()); return r }
++        func initializeCriticalSection(_ a: UInt32) throws -> [UInt8] { let r = try native.initializeCriticalSection(a); XCTAssertEqual(r,try audit.initializeCriticalSection(a)); return r }
++        func initializeCOM() throws -> UInt32 { let r = try native.initializeCOM(); XCTAssertEqual(r,try audit.initializeCOM()); return r }
++        func window(_ q: OriginalWindowInitialization.Request) throws -> E.Response {
++            let r = try native.window(q); try OriginalApplicationPreparedStartupPlatformTests.same(r,audit.window(q)); return r
++        }
++        func file(_ path: String) throws -> [UInt8]? { let r = try native.file(path); XCTAssertEqual(r,try audit.file(path)); return r }
++        func writePanel(_ bytes: [UInt8]) throws -> Int32 { let r = try native.writePanel(bytes); XCTAssertEqual(r,try audit.writePanel(bytes)); return r }
++        func closePanel() throws -> Int32 { let r = try native.closePanel(); XCTAssertEqual(r,try audit.closePanel()); return r }
++        func allocatePanel() throws -> OriginalInterfaceAllocation {
++            let r = try native.allocatePanel(),e = try audit.allocatePanel(); XCTAssertEqual(r.address,e.address); XCTAssertEqual(r.backing,e.backing); return r
++        }
++        func panelBitmap(_ path: String) throws -> OriginalBitmapInput { let r = try native.panelBitmap(path); XCTAssertEqual(r,try audit.panelBitmap(path)); return r }
++        func panelDevice() throws -> (surface: UInt32,colorKeyResult: Int32) {
++            let r = try native.panelDevice(),e = try audit.panelDevice(); XCTAssertEqual(r.surface,e.surface); XCTAssertEqual(r.colorKeyResult,e.colorKeyResult); return r
++        }
++        func filetime() throws -> UInt64 { let r = try native.filetime(); XCTAssertEqual(r,try audit.filetime()); return r }
++        func timezone() throws -> (result: UInt32,zone: OriginalCalendarTime.Zone?) {
++            let r = try native.timezone(),e = try audit.timezone(); XCTAssertEqual(r.result,e.result)
++            try OriginalApplicationPreparedStartupPlatformTests.same(r.zone,e.zone); return r
++        }
++        func allocateCalendar(_ count: Int) throws -> OriginalInterfaceAllocation {
++            let r = try native.allocateCalendar(count),e = try audit.allocateCalendar(count); XCTAssertEqual(r.address,e.address); XCTAssertEqual(r.backing,e.backing); return r
++        }
++        func convertZoneName(_ name: String,_ count: Int) throws -> [UInt8] { let r = try native.convertZoneName(name,count); XCTAssertEqual(r,try audit.convertZoneName(name,count)); return r }
++        func music(_ q: OriginalMusicEvent) throws -> OriginalMusicResponse {
++            let r = try native.music(q),e = try audit.music(q)
++            if q.kind != .helper && q.kind != .format { XCTAssertEqual(r,e) }
++            return r
++        }
++        func cursor(_ load: Bool,_ args: [UInt32]) throws -> UInt32 { let r = try native.cursor(load,args); XCTAssertEqual(r,try audit.cursor(load,args)); return r }
++        func joystick(_ q: OriginalInputStartup.Request,_ g: OriginalStateRecord) throws -> OriginalInputStartup.Response {
++            let r = try native.joystick(q,g); try OriginalApplicationPreparedStartupPlatformTests.same(r,audit.joystick(q,g)); return r
++        }
++        func wave(_ i: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWavePlatform {
++            let r = try native.wave(i,path,destination,device)
++            try OriginalApplicationPreparedStartupPlatformTests.same(r,audit.wave(i,path,destination,device)); return r
++        }
++        func observe(_ event: OriginalWinMainStartup.Observation) throws { try native.observe(event); try audit.observe(event) }
++    }
++
++    /// Only declared spec/API input values are projected. The "backing" member
++    /// is recorded before allocation; never use its later "bytes"/"mask" result.
++    func preparation(_ p: P.Adapter) throws -> N.Prepared {
++        let c = p.c
++        var result = N.Prepared(panelIO:p.panelIO,environmentTZ:p.environmentTZ,sound:p.sound)
++        result.files["data\\adinfo.txt"] = c.spec.panel.info.map(N.File.bytes) ?? .absent
++        var names = 0
++        for (event,raw) in zip(c.events,p.rawEvents) {
++            switch event.kind {
++            case "timeGetTime":result.milliseconds.append(c.spec.milliseconds)
++            case "initializeCriticalSection":
++                result.criticalSections.append(.init(try XCTUnwrap(event.arguments?.first),c.spec.criticalSection))
++            case "coInitialize":result.com.append(try XCTUnwrap(event.result))
++            case "filetime":result.filetimes.append(c.spec.filetime)
++            case "timezone":result.zones.append(.init(c.spec.zoneResult ?? 0,c.spec.zone))
++            case "allocate":
++                let address = try XCTUnwrap(event.address),count = try XCTUnwrap(event.count)
++                let backing = try address == 0 ? [] : p.blob(XCTUnwrap(c.after.allocations.first { $0.address == address }?.backing))
++                result.calendarAllocations.append(.init(count,.init(address:address,backing:backing)))
++            case "nameConversion":
++                let name = names == 0 ? c.spec.zone.standardName : c.spec.zone.daylightName; names += 1
++                result.zoneNames.append(.init(.init(name,try XCTUnwrap(event.capacity)),try XCTUnwrap(event.bytes)))
++            case "music":
++                let m = try XCTUnwrap(event.music)
++                if m.kind != .helper && m.kind != .format { result.music.append(.init(.init(m.kind,m.arguments,m.strings),m.response)) }
++            case "loadCursor","setCursor":
++                result.cursors.append(.init(.init(event.kind == "loadCursor",try XCTUnwrap(event.arguments)),try XCTUnwrap(event.result)))
++            case "panel-content","panel-defaults":
++                let e = try JSONDecoder().decode(P.PanelEvent.self,from:JSONSerialization.data(withJSONObject:XCTUnwrap(raw["event"])))
++                if event.kind == "panel-content" && e.kind == "open" {
++                    let path = String(decoding:try XCTUnwrap(e.strings?.first),as:UTF8.self)
++                    result.files[path] = c.spec.panel.content.map(N.File.bytes) ?? .absent
++                }
++                if e.kind == "writeFile" { result.panelWrites.append(.init(try XCTUnwrap(e.strings?.first),Int32(bitPattern:try XCTUnwrap(e.result)))) }
++                if e.kind == "closeFile" { result.panelCloses.append(Int32(bitPattern:try XCTUnwrap(e.result))) }
++            default:break
++            }
++        }
++        for child in c.panel.children where child.kind == "bitmap" {
++            if let a = child.allocation { result.panelAllocations.append(try .init(address:a.address,backing:a.backing.map(p.blob) ?? [])) }
++            if let bitmap = child.resource { result.panelBitmaps.append(.init(bitmap.path,bitmap)) }
++            if child.allocation?.address != 0,let surface = child.surface,let code = child.colorKeyResult { result.panelDevices.append(.init(surface,code)) }
++        }
++        for j in c.input?.joyRequests ?? [] { result.joysticks.append(.init(j.request,j.response)) }
++        for (i,w) in (c.input?.loads ?? []).enumerated() {
++            let path = String(decoding:w.path,as:UTF8.self)
++            result.waves.append(.init(.init(i,path,w.input.destination,w.input.device),w.input))
++        }
++        return result
++    }
++    func audited(_ p: P.Adapter,_ package: OriginalApplicationStartupInputs,
++                 retaining resources: [any OriginalApplicationStartupResource] = []) throws -> Audit {
++        var prepared = try preparation(p); prepared.resources = resources
++        // WAV bytes use the real input package, checked against immutable source
++        // input hashes. These are not decoded expected PCM or output storage.
++        for w in p.c.input?.loads ?? [] {
++            let path = String(decoding:w.path,as:UTF8.self)
++            XCTAssertEqual(try package.file(path),try p.blob(w.file))
++        }
++        return Audit(N(inputs:package,prepared:prepared),p)
++    }
++    func globals(_ session: Host.Session) throws -> OriginalStateRecord {
++        try .init(bytes:Array(session.state.full.bytes[..<0xb440]),defined:Array(session.state.full.defined[..<0xb440]))
++    }
++    func unchanged(_ driver: Driver,_ p: P.Adapter) throws {
++        XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session); XCTAssertEqual(driver.pendingBatchCount,0)
++        let saved = try driver.platformSnapshot()
++        XCTAssertEqual(saved.audit.index,0); XCTAssertEqual(saved.audit.shadow,p.shadow)
++        XCTAssertEqual(saved.native.snapshot,N.Snapshot()); XCTAssertNil(saved.windowExchange)
++    }
++    @discardableResult
++    func drive(_ driver: Driver,_ p: P.Adapter,prepare: (Audit) throws -> Void = { _ in },
++        before: (OriginalWinMainStartup,Host.Session,Audit) throws -> Void = { _,_,_ in },
++        failed: (Audit,Error) -> Void = { _,_ in }) throws -> Host {
++        let responses = p.c.events.filter { $0.kind == "window" }
++        for _ in 0...responses.count {
++            switch try driver.resume(prepare:prepare,store:{ $0.audit.store($1,$2) },beforeCommit:before,failedAttempt:failed) {
++            case .request(let permit):
++                try unchanged(driver,p); XCTAssertTrue(responses.indices.contains(permit.ordinal))
++                try driver.answer(permit,response:XCTUnwrap(responses[permit.ordinal].event?.response))
++            case .started(let sequence,let host):
++                XCTAssertEqual(sequence,1); XCTAssertEqual(driver.exchangeSnapshot.status,.finished); return host
++            }
++        }
++        throw Stop.missingOutcome
++    }
++    func testWholeWinMainThroughProductionPreparedPlatform() throws {
++        let (corpus,raw) = try P().read(), package = try OriginalApplicationStartupInputsTests.shared.get()
++        var cache: [String:[UInt8]] = [:]
++        func blob(_ h: String) throws -> [UInt8] {
++            if let value = cache[h] { return value }
++            let b = try XCTUnwrap(corpus.blobs[h])
++            let value = try MatchPreparationReference.inflate(b.deflate,count:b.count,maximumCount:10_000_000)
++            XCTAssertEqual(MatchPreparationReference.digest(Data(value)),h); cache[h] = value; return value
++        }
++        XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
++        XCTAssertEqual(corpus.dllSHA256,"c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d")
++        let sources = Dictionary(uniqueKeysWithValues:corpus.sources.map { ($0.path,$0.sha256) })
++        var whole = 0,stops = 0,unknown = 0,events = 0,waves = 0,served = 0
++        for (c,r) in zip(corpus.cases,raw) {
++            var before = try OriginalStateRecord(bytes:blob(c.initialGlobals),defined:[Bool](repeating:true,count:0xb440))
++            for w in c.stimulus { for (i,b) in P.hex(w.bytes).enumerated() { try before.write(b,at:w.address-OriginalMatchPreparation.globalBase+i) } }
++            XCTAssertEqual(before.bytes,try blob(c.beforeGlobals))
++            var bytes = package.initial.bytes,mask = package.initial.defined
++            bytes.replaceSubrange(0..<0xb440,with:before.bytes); mask.replaceSubrange(0..<0xb440,with:before.defined)
++            let initial = try OriginalStateRecord(bytes:bytes,defined:mask)
++            let p = try P.Adapter(c,r,sources:sources,blob:blob,initial:before.bytes)
++            let driver = try Driver(platform:audited(p,package),instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,initial:initial)
++            try p.calendar(OriginalWinMainStartup().output.calendar,c.before)
++            var attempted: P.Adapter?
++            do {
++                let host = try drive(driver,p,before:{ owner,session,candidate in
++                    try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
++                },failed:{ candidate,_ in attempted = candidate.audit })
++                let committed = try host.platformSnapshot(); attempted = committed.audit
++                XCTAssertEqual(c.end,"startupBoundary"); XCTAssertEqual(c.endPC,0x43d100); XCTAssertEqual(c.endSP,0x1000effc)
++                let batch = try XCTUnwrap(host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
++                XCTAssertNil(try host.takeCommitted())
++                guard case .startup(let value) = batch.contents else { throw Stop.missingOutcome }
++                var reference = OriginalApplicationBootstrap(), referencePlatform = try p.stagedCopy()
++                let expected = try reference.start(instance:c.spec.instance ?? 0x400000,show:c.spec.show ?? 10,
++                    initial:initial,platform:&referencePlatform,store:{ $0.store($1,$2) },beforeCommit:{ owner,session,candidate in
++                        try candidate.complete(owner,self.globals(session))
++                    })
++                try B.sameStartup(XCTUnwrap(host.snapshot.startup),XCTUnwrap(reference.startup))
++                B.same(try XCTUnwrap(host.snapshot.session),try XCTUnwrap(reference.session))
++                B.same(try XCTUnwrap(batch.context.application.session),try XCTUnwrap(reference.session))
++                XCTAssertEqual(try D().encoded(value.operations),try D().encoded(expected.operations))
++                XCTAssertEqual(value.graphics,expected.graphics)
++                let cursor = try XCTUnwrap(committed.windowExchange)
++                XCTAssertEqual(cursor.position,driver.exchangeSnapshot.receipts.count); XCTAssertFalse(cursor.isSuspended)
++                XCTAssertThrowsError(try driver.resume()) { XCTAssertEqual($0 as? E.Boundary,.closed(.finished)) }
++                XCTAssertEqual(host.pendingBatchCount,0); whole += 1
++            } catch let error as OriginalWinMainStartup.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(error,.unknownFullscreenCursor)
++                let next = try XCTUnwrap(c.events[a.index].event),q = try XCTUnwrap(next.request)
++                XCTAssertEqual(q.kind,"registerClass"); XCTAssertEqual(q.defined.map { Array($0[24..<28]) },[false,false,false,false])
++                XCTAssertTrue(c.stackStores.prefix(try XCTUnwrap(next.stackStoreCount)).allSatisfy {
++                    $0.address >= 0x1000efd8+4 || $0.address+P.hex($0.bytes).count <= 0x1000efd8
++                })
++                a.compareStores(count:try XCTUnwrap(next.globalStoreCount)); unknown += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch OriginalStateError.undefinedBytes(let offset,let length) {
++                let a = try XCTUnwrap(attempted),b = try XCTUnwrap(c.panel.ownBoundary ?? c.input?.ownBoundary)
++                XCTAssertEqual(offset,b.offset); XCTAssertEqual(length,b.count); XCTAssertEqual(a.index,b.rootEventCount)
++                a.compareStores(count:b.globalStoreCount); XCTAssertEqual(a.shadow,try blob(b.rootGlobals)); unknown += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch let error as OriginalStartupOutput.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(c.end,"nullCalendarRead"); XCTAssertEqual(error,.nullCalendarRead(address:try XCTUnwrap(c.boundaryPC)))
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch let error as OriginalCalendarTime.Boundary {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(c.end,"invalidParameter"); XCTAssertEqual(error,.invalidParameter)
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            } catch OriginalStateError.invalidStorage(let message) {
++                let a = try XCTUnwrap(attempted)
++                XCTAssertEqual(message,"Original menu wave reaches invalid CreateSoundBuffer continuation")
++                XCTAssertEqual(c.end,"invalidCreateContinuation"); XCTAssertEqual(c.boundaryPC,0x40187a)
++                a.compareStores(count:c.globalStores.count); XCTAssertEqual(a.index,c.events.count); stops += 1
++                try unchanged(driver,p); try driver.cancel()
++            }
++            let a = try XCTUnwrap(attempted)
++            XCTAssertEqual(c.controlWord,0x37f); events += a.index; waves += a.waves; served += driver.exchangeSnapshot.receipts.count
++            XCTAssertEqual(p.index,0); XCTAssertEqual(p.waves,0); XCTAssertNil(p.windowExchange)
++        }
++        XCTAssertEqual(corpus.cases.count,35); XCTAssertEqual(whole,23); XCTAssertEqual(stops,5); XCTAssertEqual(unknown,7)
++        XCTAssertEqual(events,6325); XCTAssertEqual(waves,119); XCTAssertEqual(served,650)
++        print("Production prepared startup:",whole,"whole",stops,"source stops",unknown,"provenance rejections",served,"once-served replies")
++    }
++
++    func testLateFailuresCopiesAndRetainedOwners() throws {
++        let package = try OriginalApplicationStartupInputsTests.shared.get()
++        for phase in ["window-return","panel-return","secondDate","output-return","fifthWave","after","publication-copy"] {
++            let (p,initial) = try D().inputs()
++            let original = try audited(p,package)
++            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial)
++            var reached = 0
++            XCTAssertThrowsError(try drive(driver,p,prepare:{ $0.audit.fail = phase },before:{ owner,session,candidate in
++                try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
++                if phase == "after" { throw P.Trial.late }
++                if phase == "publication-copy" { candidate.failCopies = true }
++            },failed:{ candidate,error in
++                if error is P.Trial {
++                    reached += 1
++                    XCTAssertGreaterThan(candidate.native.snapshot.positions[.milliseconds,default:0],0)
++                }
++            })) { XCTAssertTrue($0 is P.Trial) }
++            XCTAssertEqual(reached,1); try unchanged(driver,p)
++            XCTAssertEqual(original.native.snapshot,N.Snapshot()); XCTAssertEqual(p.index,0)
++            let receipts = driver.exchangeSnapshot.receipts
++            let host = try drive(driver,p,before:{ owner,session,candidate in
++                try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
++            })
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.request),receipts.map(\.request))
++            XCTAssertEqual(driver.exchangeSnapshot.receipts.map(\.response),receipts.map(\.response))
++            let committed = try host.platformSnapshot(),copy = try committed.native.stagedCopy()
++            XCTAssertFalse(copy === committed.native); XCTAssertEqual(copy.snapshot,committed.native.snapshot)
++            XCTAssertEqual(copy.snapshot.panelWrites,committed.native.snapshot.panelWrites)
++            try copy.validatePreparedConsumption()
++            XCTAssertEqual(try host.takeCommitted()?.sequence,1); XCTAssertNil(try host.takeCommitted())
++        }
++        do {
++            let (p,initial) = try D().inputs()
++            let original = try audited(p,package)
++            let driver = try Driver(platform:original,instance:0x400000,show:10,initial:initial)
++            XCTAssertThrowsError(try driver.resume(prepare:{ candidate in
++                _ = try candidate.native.milliseconds(); throw P.Trial.late
++            })) { XCTAssertTrue($0 is P.Trial) }
++            try unchanged(driver,p); XCTAssertTrue(driver.exchangeSnapshot.receipts.isEmpty)
++            XCTAssertEqual(original.native.snapshot,N.Snapshot())
++            _ = try drive(driver,p,before:{ owner,session,candidate in
++                try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
++            })
++        }
++        let (p,initial) = try D().inputs()
++        weak var weakOwner: Resource?
++        func make() throws -> Driver {
++            let owner = Resource(); weakOwner = owner
++            return try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial)
++        }
++        var driver: Driver? = try make()
++        var host: Host? = try drive(XCTUnwrap(driver),p,before:{ owner,session,candidate in
++            try candidate.audit.complete(owner,self.globals(session)); try candidate.native.validatePreparedConsumption()
++        })
++        var batch = try XCTUnwrap(host).takeCommitted()
++        XCTAssertNotNil(weakOwner); driver = nil; host = nil; XCTAssertNotNil(weakOwner)
++        let retained = try XCTUnwrap(batch).context
++        XCTAssertEqual(try retained.platformSnapshot().native.snapshot.positions[.milliseconds],1)
++        batch = nil
++        // The explicitly retained context is still a lifetime owner.
++        XCTAssertNotNil(weakOwner)
++        try assertRelease(p,package,initial)
++    }
++    func assertRelease(_ p: P.Adapter,_ package: OriginalApplicationStartupInputs,_ initial: OriginalStateRecord) throws {
++        weak var weakOwner: Resource?
++        func run() throws {
++            let owner = Resource(); weakOwner = owner
++            let driver = try Driver(platform:audited(p,package,retaining:[owner]),instance:0x400000,show:10,initial:initial)
++            let host = try drive(driver,p)
++            var batch = try host.takeCommitted()
++            XCTAssertNotNil(weakOwner); batch = nil
++        }
++        try run(); XCTAssertNil(weakOwner)
++    }
++
++    func testPreparedInputBoundariesAndConsumption() throws {
++        let package = try OriginalApplicationStartupInputsTests.shared.get()
++        let base = N.Prepared(panelIO:.init(outputBacking:[0xa5]),environmentTZ:nil,
++                              sound:.init(createResult:-1,createdDevice:nil))
++        var values = base
++        values.files["absent"] = .absent; values.files["empty"] = .bytes([])
++        values.milliseconds = [7]; values.criticalSections = [.init(0x4554a4,[UInt8](repeating:0xa5,count:24))]
++        values.com = [0x80004005]; values.panelWrites = [.init([8,9],-1)]; values.panelCloses = [-5]
++        let allocation = OriginalInterfaceAllocation(address:0x28000000,backing:[1,2,3])
++        values.panelAllocations = [allocation]
++        values.panelBitmaps = [.init("image",.init(path:"image",present:false))]
++        values.panelDevices = [.init(0,-6)]; values.filetimes = [9]; values.zones = [.init(UInt32.max,nil)]
++        values.calendarAllocations = [.init(3,allocation)]
++        values.zoneNames = [.init(.init("name",2),[1,0])]
++        let music = OriginalMusicEvent(.method,[1,4],[[]])
++        values.music = [.init(music,.init(result:-7,pointer:nil,bytes:nil))]
++        values.cursors = [.init(.init(true,[0,0x7f00]),0)]
++        let joy = OriginalInputStartup.Request("position",[1],information:[5])
++        values.joysticks = [.init(joy,.init(result:167,writes:[.init(offset:1,bytes:[3])]))]
++        let wave = OriginalWavePlatform(destination:4,device:0,stream:0,buffer:0,firstPointer:0,secondPointer:0,
++            descendResults:[0,0,0],formatReadResult:0,ascendResult:0,dataReadResult:0,createResult:0,
++            lockResults:[0,0],restoreResult:0,unlockResult:0,closeResult:0,firstCount:0,secondCount:0,ramp:false)
++        values.waves = [.init(.init(0,"wave",4,0),wave)]
++        let globals = package.initial
++        let calls: [(N.Kind,(N) throws -> Void)] = [
++            (.milliseconds,{ let r = try $0.milliseconds(); XCTAssertEqual(r,7) }),
++            (.criticalSection,{ let r = try $0.initializeCriticalSection(0x4554a4); XCTAssertEqual(r,[UInt8](repeating:0xa5,count:24)) }),
++            (.com,{ let r = try $0.initializeCOM(); XCTAssertEqual(r,0x80004005) }),
++            (.panelWrite,{ let r = try $0.writePanel([8,9]); XCTAssertEqual(r,-1) }),
++            (.panelClose,{ let r = try $0.closePanel(); XCTAssertEqual(r,-5) }),
++            (.panelAllocation,{ let a = try $0.allocatePanel(); XCTAssertEqual(a.address,allocation.address); XCTAssertEqual(a.backing,allocation.backing) }),
++            (.panelBitmap,{ let r = try $0.panelBitmap("image"); XCTAssertEqual(r,.init(path:"image",present:false)) }),
++            (.panelDevice,{ let d = try $0.panelDevice(); XCTAssertEqual(d.surface,0); XCTAssertEqual(d.colorKeyResult,-6) }),
++            (.filetime,{ let r = try $0.filetime(); XCTAssertEqual(r,9) }),
++            (.timezone,{ let z = try $0.timezone(); XCTAssertEqual(z.result,UInt32.max); XCTAssertNil(z.zone) }),
++            (.calendarAllocation,{ let r = try $0.allocateCalendar(3); XCTAssertEqual(r.backing,allocation.backing) }),
++            (.zoneName,{ let r = try $0.convertZoneName("name",2); XCTAssertEqual(r,[1,0]) }),
++            (.music,{ let r = try $0.music(music); XCTAssertEqual(r,.init(result:-7)) }),
++            (.cursor,{ let r = try $0.cursor(true,[0,0x7f00]); XCTAssertEqual(r,0) }),
++            (.joystick,{ try Self.same($0.joystick(joy,globals),OriginalInputStartup.Response(result:167,writes:[.init(offset:1,bytes:[3])])) }),
++            (.wave,{ try Self.same($0.wave(0,"wave",4,0),wave) })]
++        XCTAssertEqual(calls.map(\.0),N.Kind.allCases)
++        for (kind,call) in calls {
++            let missing = N(inputs:package,prepared:base)
++            XCTAssertThrowsError(try call(missing)) { XCTAssertEqual($0 as? N.Boundary,.missing(kind,0)) }
++            XCTAssertEqual(missing.snapshot,N.Snapshot())
++            let actual = N(inputs:package,prepared:values),copy = try actual.stagedCopy()
++            try call(copy); XCTAssertEqual(actual.snapshot,N.Snapshot())
++            let saved = copy.snapshot
++            XCTAssertThrowsError(try call(copy)) { XCTAssertEqual($0 as? N.Boundary,.missing(kind,1)) }
++            XCTAssertEqual(copy.snapshot,saved)
++        }
++        let mismatches: [(N.Kind,(N) throws -> Void)] = [
++            (.criticalSection,{ _ = try $0.initializeCriticalSection(0) }),
++            (.panelWrite,{ _ = try $0.writePanel([8]) }),
++            (.panelBitmap,{ _ = try $0.panelBitmap("other") }),
++            (.calendarAllocation,{ _ = try $0.allocateCalendar(4) }),
++            (.zoneName,{ _ = try $0.convertZoneName("name",3) }),
++            (.zoneName,{ _ = try $0.convertZoneName("different",2) }),
++            (.music,{ _ = try $0.music(.init(.method,[1,5],[[]])) }),
++            (.cursor,{ _ = try $0.cursor(false,[0,0x7f00]) }),
++            (.joystick,{ _ = try $0.joystick(.init("position",[1],information:[6]),globals) }),
++            (.wave,{ _ = try $0.wave(1,"wave",4,0) }),
++            (.wave,{ _ = try $0.wave(0,"wrong",4,0) }),
++            (.wave,{ _ = try $0.wave(0,"wave",5,0) }),
++            (.wave,{ _ = try $0.wave(0,"wave",4,1) })]
++        for (kind,call) in mismatches {
++            let actual = N(inputs:package,prepared:values)
++            XCTAssertThrowsError(try call(actual)) { XCTAssertEqual($0 as? N.Boundary,.mismatched(kind,0)) }
++            XCTAssertEqual(actual.snapshot,N.Snapshot())
++        }
++        let actual = N(inputs:package,prepared:values)
++        values.milliseconds = [99]; values.files["empty"] = .bytes([1])
++        XCTAssertThrowsError(try actual.validatePreparedConsumption()) { XCTAssertEqual($0 as? N.Boundary,.unconsumed(.milliseconds,1)) }
++        for (_,call) in calls { try call(actual) }
++        try actual.validatePreparedConsumption()
++        XCTAssertEqual(actual.snapshot.panelWrites,[[8,9]]); XCTAssertEqual(actual.snapshot.panelCloses,[-5])
++        XCTAssertNil(try actual.file("absent")); XCTAssertEqual(try actual.file("empty"),[])
++        XCTAssertNil(try actual.file("data\\ad0.txt")); XCTAssertEqual(try actual.file("data\\m_join.wav"),try package.file("data\\m_join.wav"))
++        XCTAssertThrowsError(try actual.file("unsupported"))
++        let saved = actual.snapshot
++        XCTAssertThrowsError(try actual.window(.init("metric",[1]))) { XCTAssertEqual($0 as? N.Boundary,.missingWindowCursor) }
++        XCTAssertEqual(actual.snapshot,saved)
++        _ = try actual.music(.init(.helper,[0x402020])); _ = try actual.music(.init(.format,[],[]))
++        XCTAssertEqual(actual.snapshot,saved); try actual.validatePreparedConsumption()
++    }
++}
