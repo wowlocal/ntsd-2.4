@@ -1,0 +1,107 @@
+{
+  "UTC": "2026-09-26T18:57:38.675935+00:00",
+  "head": "37e4d854d6b214e98bb9408c5576c400a7599b76",
+  "dialog": {
+    "exactText": "Could not create a filter graph for this file!",
+    "source": "user screenshot and subsequent agent-operated macOS Screenshot full-screen capture",
+    "gamePID": 33492,
+    "gameMenuObserved": false,
+    "dismissalObserved": false,
+    "alternativeUIApproval": "pending"
+  },
+  "hostSample": {
+    "exitCode": 0,
+    "seconds": 5,
+    "boundary": "host stack sample; translated frames unresolved; no Windows or exact game instruction claim"
+  },
+  "crossFiles": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/diagnostic2-plan.md",
+      "bytes": 798,
+      "sha256": "a49d72c33b92bdf1f3931ff9db4af1f9c4a59838ae43882768159a35dd87c746"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/diagnostic2-context.json",
+      "bytes": 532,
+      "sha256": "7d1f74fa6ce33d2f330d3e7cb479d49be535c3eb911b0bc99d789e99e7bc3e6a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/sample1.txt",
+      "bytes": 1751378,
+      "sha256": "a540646123406a2f93a42c605a7ffa3cd5858382a23a1f58185014341813a16b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/sample1-result.json",
+      "bytes": 383,
+      "sha256": "8e10a54ea5e8251c7601410e5e8c5eac7feadce566aa6e0e382b0c13953b8622"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/user-filter-graph-error1.png",
+      "bytes": 45541,
+      "sha256": "e50dda553aa08bd76134d4e1efb6b9927514952fbb4bdd4138b5fc762ceb1462"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/private-screen1.png",
+      "bytes": 6132641,
+      "sha256": "7df4ef7d21f059f6eefb955c7f6ba3a0676154300a07be27cd8641c391608855"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/dialog1-plan.md",
+      "bytes": 1514,
+      "sha256": "c076b7de6bb744c6106468cae8d7cb61a8cd5ddb0ff312976f40bed7c7b14581"
+    }
+  ],
+  "windowsDownload": {
+    "jobCheckpoint": {
+      "status": "running",
+      "pid": 60299,
+      "startedUTC": "2026-09-26T18:56:02.538717+00:00",
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+      "totalBytes": 7994415104,
+      "chunkBytes": 1048576,
+      "concurrency": 8,
+      "maxSeconds": 7200,
+      "completedBytes": 1730150400,
+      "completedRanges": 234,
+      "retainedRanges": 176,
+      "missingRanges": 6209
+    },
+    "retainedRanges": 176,
+    "missing1MiBRanges": 6209,
+    "taskBoundGiB": 24,
+    "freeReserveGiB": 40,
+    "preflightCompileErrorPreserved": true,
+    "vendorHashVerified": false
+  },
+  "windowsFiles": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+      "bytes": 5794,
+      "sha256": "7db60bf28cafd5b3bdb34022dcd9d8d600253d2261d81784bc79ec494c7b888e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-plan.md",
+      "bytes": 1495,
+      "sha256": "35c83310acbf9ea396519d3f7d8ac3565a2738064de1e639a4ac3ac623454a93"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-inputs.json",
+      "bytes": 353362,
+      "sha256": "a5356e87f4d53d2dbd7fe4376d5e84a5d9359cdf3aa143055e825892d1e73b1a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-preflight-invalid.py",
+      "bytes": 5793,
+      "sha256": "d42ecf31602aa6710387d7cc4ecfd3650f05fa9217dca7204db195f7adae20e0"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-preflight-error.json",
+      "bytes": 269,
+      "sha256": "ab0b2620edfb6c017e512e17a5e4229ba56248f59239a203f8a3d25949e2462a"
+    }
+  ],
+  "independentReview": "open",
+  "nativeChanges": false,
+  "acceptance": "environment progress only"
+}

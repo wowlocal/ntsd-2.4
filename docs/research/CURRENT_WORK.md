@@ -1,5 +1,15 @@
 # Текущая передача работы
 
+[Reference environment: visible media error; ISO continuation](REFERENCE_ENVIRONMENT_CONTINUATION.md):
+Agent-operated full-screen capture confirms NTSD's filter-graph error. No menu
+acceptance; game33492 preserved. CUA cannot bind Wine; explicit alternative UI
+permission pending. Host sample retained without Windows/instruction claims.
+Download3 PID60299 live after rechecking176 retained intervals; only6209 missing
+1MiB ranges requested, no retries. T7 bound24GiB,40GiB reserve unchanged.
+[Checkpoint](../evidence/reference-environment-continuation.json). NEXT: observe current jobs and resolve current dialog;
+verify full vendor ISO hash before guest boot. All review/Native/game gates open.
+Supersedes earlier no-window/pending-status and download2 NEXT below.
+
 [Original NTSD process live under CrossOver](CROSSOVER_REFERENCE_LAUNCH.md):
 Rosetta confirmed installed; NTSD24XP winxp/win32 Ready on X5. CLI bottle-path
 failure preserved; explicit CX_BOTTLE_PATH launches unchanged original copy.

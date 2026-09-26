@@ -1,0 +1,21 @@
+{
+  "selectiveNavigationStaging": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "5aaceffe3b60db30b4c1e6d9d2623b1bfd53e107716f5af2a70dc652eb200a3b",
+      "headSHA256": "4e69c7432a66e0fb33ada81f05d41df7634d8da7b0af28d76a618236c92f9610",
+      "workingAfterSHA256": "01871a5ce926a57a9ea3948b7fa416fe3e6ed8a7971b49bc3ba7303fab6809f8",
+      "stagedSHA256": "d8d7103ae3b6718be095d5a129ade2c55457c1db1787341f7dcb57e0db4adddb",
+      "blob": "dee46dbebf23b64dbd78c3415a409054a453bbc1"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "f807211c387f5e8a21b42ef01c38ac6f9105a37e6a0c043d1a70f44d23ac7d62",
+      "headSHA256": "c9a7c63cb63e4d7b463e2ec2c7515a056ef9cc7e2f8f9be0117919d46e5a87c6",
+      "workingAfterSHA256": "e6762e91c5ddb99bd19e6a894fa082c90ae7057cac79c81d4a6e7617cc851c89",
+      "stagedSHA256": "519734fffc6bb933828169e89585a56bc86a40fdffcb84624a121bfc28dec374",
+      "blob": "1f6d054ac1a68e68181e46f57de5f7a54a748e16"
+    }
+  ],
+  "unrelatedWorkPreserved": true
+}
