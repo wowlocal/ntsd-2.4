@@ -2,6 +2,19 @@
 
 ## Продолжение — 2026-09-26
 
+[Host gameplay correction1 terminal result](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
+queue20715 terminal1/absent after57 accepted methods. Method58 has a complete named
+XCTest pass, three zero-failure summaries and exit0, but the reader's line-start
+anchor misses its result embedded in buffered JSON. Exact byte-span diagnosis and
+old nonpass are preserved;59–69 remain unstarted. Finalizer70559 terminal0/absent;
+2,488-file artifact and275-member metadata archives verified. Root1034/current1040/
+both prior1040/source55/package487 unchanged. [Publication](../evidence/application-host-gameplay-correction1.json).
+NEXT: separately freeze/read-only validate the one-anchor result-reader correction,
+recover method58 from its immutable log, then run only59–69 on this unchanged
+binary with unchanged limits. Do not rerun58, rebuild, edit the closed task or
+restart source. Independent review/full69 comparison/root promotion/app/match/game
+remain open. This supersedes the live-queue NEXT below.
+
 [Host gameplay correction1](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md): the one
 missing optional driver declaration now passes fresh build10257 (exit0/282.927s),
 exact191/61/270 source inventories and487 packaged resource bytes. Only one test

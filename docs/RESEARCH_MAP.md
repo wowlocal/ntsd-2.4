@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay comparison reader failure](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
+57 accepted methods;58 returned0 with one exact passed result and three zero-failure
+summaries, but its line-start anchor misses buffered interleaving. Queue stopped;
+11 methods unstarted. Byte-span diagnosis and old nonpass retained;2,488-file/
+275-member archives verified, task frozen. Next: separately validate saved-log
+reader recovery, then only59–69 on unchanged binary; no rebuild/rerun58/source.
+Full69 comparison/independent review/root/app/full game remain open.
+[Evidence](evidence/application-host-gameplay-correction1.json).
+
 [Host gameplay signature correction](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
 fresh build/package pass on the one-declaration corrected1040-file candidate;
 191/61/270 source inventories and487 resources verified. Complete69-method queue

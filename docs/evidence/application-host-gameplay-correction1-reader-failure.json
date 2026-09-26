@@ -1,0 +1,68 @@
+{
+  "schema": "ntsd-host-gameplay-correction1-result-reader-diagnosis-v1",
+  "UTC": "2026-09-26T06:54:25.881243+00:00",
+  "classification": "result-reader-line-anchor-failure",
+  "queue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/tests1-queue.job.json",
+    "bytes": 47081,
+    "sha256": "123f2a08f71c5622d182901e86b6da6918e522adb94af6696fdbb1a9699c7b6c",
+    "mode": 420
+  },
+  "job": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/test-58.job.json",
+    "bytes": 3953,
+    "sha256": "46db0fa6722d1b1800ab4cfe5b90a3a18fc05b2cc0930e4c940835c9a90632d1",
+    "mode": 420
+  },
+  "rawLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/test-58.log",
+    "bytes": 73128,
+    "sha256": "dc0e98e0ca5c3d71578b097d9524a83c597f989fb40901cb19c826dbe7c03391",
+    "mode": 420
+  },
+  "queueExitCode": 1,
+  "childExitCode": 0,
+  "guard": null,
+  "processesAbsent": [
+    20715,
+    65072
+  ],
+  "selectedMethod": "OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection",
+  "oldPattern": "^Test Case '-\\[NTSDCoreTests\\.([^ ]+) ([^\\]]+)\\]' (passed|failed) \\(([^)]*)\\)\\.$",
+  "oldMatches": [],
+  "proposedPattern": "Test Case '-\\[NTSDCoreTests\\.([^ ]+) ([^\\]]+)\\]' (passed|failed) \\(([^)]*)\\)\\.$",
+  "exactNamedSpan": {
+    "startByte": 69969,
+    "endByte": 70092,
+    "text": "Test Case '-[NTSDCoreTests.OriginalApplicationActiveOutputTests testPrimaryOwnedOutputProjection]' passed (86.589 seconds).",
+    "prefix": "ication OPEN\nOwned active preflight {\"activeSlots\":[0,1],\"bodyDifferentialAccepted\":f"
+  },
+  "exactMetadataBlock": "Test Case '-[NTSDCoreTests.OriginalApplicationActiveOutputTests testPrimaryOwnedOutputProjection]' passed (86.589 seconds).\nTest Suite 'OriginalApplicationActiveOutputTests' passed at 2026-09-26 09:52:58.038.\n\t Executed 1 test, with 0 failures (0 unexpected) in 86.589 (86.589) seconds\nTest Suite 'NTSDNativePackageTests.xctest' passed at 2026-09-26 09:52:58.038.\n\t Executed 1 test, with 0 failures (0 unexpected) in 86.589 (86.589) seconds\nTest Suite 'Selected tests' passed at 2026-09-26 09:52:58.038.\n\t Executed 1 test, with 0 failures (0 unexpected) in 86.589 (86.590) seconds\n",
+  "metadataStartByte": 69969,
+  "metadataEndByte": 70550,
+  "rawLogUnchanged": true,
+  "diagnosticViewSHA256": "afe1fc13c42db8ca3223f7e51665de337ad91cb69c358b4489d97aedfee4d730",
+  "diagnosticRows": 48,
+  "zeroFailureSuiteSummaries": 3,
+  "selectedSuitePassed": true,
+  "originalTaskPassed": 57,
+  "originalTaskUnacceptedMethod": 58,
+  "unstartedMethods": [
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69
+  ],
+  "independentReview": false,
+  "readerCorrectionAccepted": false,
+  "nativeRerun": false,
+  "originalExecuted": false,
+  "next": "Freeze a separate saved-log recovery/continuation: validate removal of only the start-of-line anchor with positive/negative controls, retain raw failure, independently classify the saved exact result, and execute only unstarted59-69 on the unchanged binary with unchanged per-method limits."
+}

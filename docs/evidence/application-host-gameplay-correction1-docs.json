@@ -1,0 +1,49 @@
+{
+  "UTC": "2026-09-26T06:57:14.322461+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "insertion": "[Host gameplay correction1 terminal result](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):\nqueue20715 terminal1/absent after57 accepted methods. Method58 has a complete named\nXCTest pass, three zero-failure summaries and exit0, but the reader's line-start\nanchor misses its result embedded in buffered JSON. Exact byte-span diagnosis and\nold nonpass are preserved;59\u201369 remain unstarted. Finalizer70559 terminal0/absent;\n2,488-file artifact and275-member metadata archives verified. Root1034/current1040/\nboth prior1040/source55/package487 unchanged. [Publication](../evidence/application-host-gameplay-correction1.json).\nNEXT: separately freeze/read-only validate the one-anchor result-reader correction,\nrecover method58 from its immutable log, then run only59\u201369 on this unchanged\nbinary with unchanged limits. Do not rerun58, rebuild, edit the closed task or\nrestart source. Independent review/full69 comparison/root promotion/app/match/game\nremain open. This supersedes the live-queue NEXT below.\n\n",
+      "anchor": "[Host gameplay correction1]",
+      "beforeSHA256": "9d971a2566ff8ea7e86bfc03d7a1938c8ce44ce9a5ea2b5f364a6de8ed0fc48e",
+      "afterSHA256": "4a4ddc6b7d03bed95de58f61281fe4605629e22553585ef37a12f79c53b63cb9"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "insertion": "[Host gameplay comparison reader failure](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):\n57 accepted methods;58 returned0 with one exact passed result and three zero-failure\nsummaries, but its line-start anchor misses buffered interleaving. Queue stopped;\n11 methods unstarted. Byte-span diagnosis and old nonpass retained;2,488-file/\n275-member archives verified, task frozen. Next: separately validate saved-log\nreader recovery, then only59\u201369 on unchanged binary; no rebuild/rerun58/source.\nFull69 comparison/independent review/root/app/full game remain open.\n[Evidence](evidence/application-host-gameplay-correction1.json).\n\n",
+      "anchor": "[Host gameplay signature correction]",
+      "beforeSHA256": "8865dab71d0d6e62dc945a514eb7eebe578e6ee2d7abe47430135d963323e607",
+      "afterSHA256": "93e3cce28ef0186e01ea9d380f3fb2c3ac39b93395e6ae07801767fea1ba1218"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 8,
+  "publicationMatchesFrozenTask": true,
+  "terminalProcessesAbsent": [
+    20715,
+    65072,
+    70559
+  ],
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md",
+      "sha256": "f39226643dc0df1217cd955fe7c6e71a1a108091cbbe09c4008a18f22d10a981"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1.json",
+      "sha256": "852a4413694df70d6ddefc65c26a3db8303476efc2dcc797c47188c402ecf19e"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1-close.json",
+      "sha256": "e4dd470b1a0cb4ca4add08ce44be0ddd6dc0a4484bb14e116b071dbaa6be7738"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-correction1-reader-failure.json",
+      "sha256": "e1fc81256b2c100303fa4fc35ce37a9acb9654ff090c505eec5428f65a977867"
+    }
+  ],
+  "formalPasses": 57,
+  "unacceptedReaderResult": 58,
+  "unstarted": 11,
+  "independentReview": false
+}

@@ -1,4 +1,86 @@
-# Host gameplay correction1 — build verified, comparisons running
+# Host gameplay correction1 — build passed, result-reader failure preserved
+
+2026-09-26, terminal result. Fresh build and package checks passed. The unchanged
+69-method queue stopped after57 accepted methods because its reader did not
+recognize method58's complete passing XCTest result inside buffered output.
+Methods59–69 were never started. This is a **result-reader failure**, with no
+recorded XCTest assertion failure or resource guard. The old task is now frozen;
+no test or source was restarted. [Publication](../evidence/application-host-gameplay-correction1.json),
+[closure](../evidence/application-host-gameplay-correction1-close.json),
+[exact diagnosis](../evidence/application-host-gameplay-correction1-reader-failure.json).
+
+## Terminal comparison and diagnosis
+
+Queue20715 exited1 after1,511.394s; its58 test processes totaled1,353.367s.
+Methods1–57 have exact named passes, three complete one-test/zero-failure suite
+summaries, exit0, no guard and verified process absence. They include the prior53
+host/parent controls, two saved-source readers and both neutral projections.
+No new HostGameplayTests method64–69 has run yet; the full host gameplay retention
+contract remains unaccepted. The candidate has not been promoted to root.
+
+Method58, OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection,
+ran under65072 and exited0 after87.191s with no guard/signals. Its sole named result
+is `passed (86.589 seconds)`, at exact raw-log byte span[69969,70092). All three
+suite summaries say one test/zero failures and Selected tests passed. However,
+the named line starts immediately after the prefix
+`Owned active preflight {"activeSlots":[0,1],"bodyDifferentialAccepted":f`.
+The remainder of `false` follows the XCTest suite metadata. The old parser's
+start-of-line anchor therefore yields zero matches and correctly stops its queue
+under its existing rule. The preserved finalizer classifies this generically as
+native-process-or-result-failure; the byte-level diagnosis narrows it to the reader.
+It is not a Native assertion mismatch, source fault or safety refusal.
+
+Removing only the identified XCTest metadata block in a separate in-memory
+inspection reconstructs all48 complete ordered primary diagnostic rows. The raw
+log, queue result, failed reader and binary remain unchanged. This inspection is
+a diagnosis, not a retrospective rewrite of the queue's acceptance. The proposed
+reader correction removes only the start-of-line anchor while keeping the exact
+named result, end-of-line boundary, three complete summaries, actual exit and
+no-guard/process-absence gates. Positive/negative controls and separate saved-log
+recovery are the next task; no corrected-parser acceptance is claimed here.
+The earlier active-notices study independently encountered buffered XCTest output;
+its completed capture/auditor was read as context and was not executed again.
+
+## Archive and preservation gates
+
+Finalizer70559 exited0 in32.300s and is absent. It verified root1034, corrected1040,
+both prior1040 candidates,29 protected inputs/source55, exact one-declaration delta,
+the fresh binary/products and487 packaged resource files. All58 test processes
+and their observed descendants are terminal/absent. The57 accepted outcomes and
+method58's nonpass are retained distinctly; all11 unstarted names remain explicit.
+
+The APFS clone artifact archive contains2,488 regular files and156 directories
+(154 traversed plus two parents),10,047,065,022 logical bytes. Its manifest SHA is
+`1fd82085678f026286ed2375e2de6c5ebd57f9454c189d9b043f7665bf590c41`.
+Full bodies, modes, nanosecond mtimes and membership were checked, with distinct
+regular inodes. The275-member metadata archive is3,768,320 bytes, SHA256
+`2ec9985397d8fe4e216fd5b7d70b7ec88f96eedf66c5527792290260e4e53c1c`;
+its PAX member bodies/modes/mtimes/membership were read back separately.
+
+Observed external free-space decrease1,142,325,248 bytes is within24GiB;
+external124,308,156,416/internal63,094,628,352 free bytes preserve original40GiB/6GiB
+reserves. X5 UUID was revalidated. No evidence was deleted and no reserve reduced.
+Source59727 remains terminal at its separately documented publication boundary.
+The earlier read-only child-job observation race is preserved in
+observation-diagnostic1.json; it neither stopped nor restarted the queue.
+
+## First permissible continuation
+
+Freeze a separate unchanged-binary result-reader recovery/continuation. Check the
+one-anchor parser correction against the saved method58 span and finite negative
+controls; preserve all old results. If the saved exact result is validated, retain
+it plus the57 prior passes and execute only unstarted59–69 with unchanged limits,
+comparison bodies, expected, masks and entire17/48/14 schedules. Reuse the existing
+unchanged-binary completion runner/package/archive procedures; no rebuild or
+re-execution of method58. Stop on the first nonpass. Independent reader/contract
+review remains unavailable and open; author checks are not independent review.
+After all69 and publication gates, reassess the next app/match consumer. Catalog
+transport/provenance, full catalog return, installed trajectory, app/devices,
+Windows/clean-Mac, first full match and full game remain open. This supersedes the
+live-queue NEXT in the historical build/start observation below.
+
+## Earlier build/start observation (preserved)
+
 
 2026-09-26. The single declaration correction specified by the
 [failed validation](APPLICATION_HOST_GAMEPLAY_VALIDATION.md) now passes a fresh
