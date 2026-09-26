@@ -1,5 +1,18 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Verified Windows ISO reaches installer](research/WINDOWS_UTM_INSTALLER_START.md):
+Download60299 terminal0/absent;176 retained+6209 new ranges cover7994415104 bytes.
+Separate full-file read matches vendor SHA;12432-member metadata archive verifies.
+UTM CD1 now verified3 ISO, original config unchanged before boot; QEMU43650 live,
+no NIC/shares. One VM boot/two ordinary CD selections reaches Windows11 Setup.
+English/US, default Home, official no-product-key option. Microsoft EULA April2024
+shown; Accept untouched, action-time user confirmation pending. No Windows/game
+installation or compatibility claim. [Publication](evidence/windows-utm-installer-start.json).
+NEXT after approval: ordinary isolated guest setup; preserve actual boundaries.
+CrossOver remains available. Independent review/Windows observations/Native/full
+match/game and existing safety incidents remain open. Supersedes download-live
+and VM-stopped checkpoints below; no Native changes or EXE recalculation.
+
 [Reference prerequisites and dialog dismissal](research/REFERENCE_PREREQUISITE_PREPARATION.md):
 User approved OS access; switch was already on when observed. One Return closed
 NTSD's ERROR dialog; later AX0 windows is inconclusive, no independent menu check.

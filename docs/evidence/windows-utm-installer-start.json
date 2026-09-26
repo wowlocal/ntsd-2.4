@@ -1,0 +1,165 @@
+{
+  "UTC": "2026-09-26T19:46:02.068068+00:00",
+  "head": "2b186706f694a0f6e8e1bac922576121acdbcbef",
+  "ISO": {
+    "UTC": "2026-09-26T19:40:16.641834+00:00",
+    "job": {
+      "status": "terminal",
+      "pid": 60299,
+      "startedUTC": "2026-09-26T18:56:02.538717+00:00",
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "60299 Sat Sep 26 21:56:02 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+      "totalBytes": 7994415104,
+      "chunkBytes": 1048576,
+      "concurrency": 8,
+      "maxSeconds": 7200,
+      "completedBytes": 7994415104,
+      "completedRanges": 6209,
+      "retainedRanges": 176,
+      "missingRanges": 6209,
+      "output": "/Volumes/T7/ntsd-2.4-artifacts/windows-utm-reference-20260926/Win11_25H2_English_Arm64_verified3.iso",
+      "sha256": "638aa2c88e94385b00f4f178d071e3df0b7d9e335577a83bd533b7f2eb65adf0",
+      "vendorHashMatched": true,
+      "endedUTC": "2026-09-26T19:39:44.959597+00:00",
+      "elapsedSeconds": 2622.4231445,
+      "exitCode": 0,
+      "failures": []
+    },
+    "independentISOReadSHA256": "638aa2c88e94385b00f4f178d071e3df0b7d9e335577a83bd533b7f2eb65adf0",
+    "isoBytes": 7994415104,
+    "rangeCoverage": {
+      "retained": 176,
+      "new": 6209,
+      "contiguousExactTotal": true,
+      "failures": []
+    },
+    "producerProcess": "",
+    "hashSeconds": 8.343407541000001
+  },
+  "preboot": {
+    "UTC": "2026-09-26T19:40:38.600256+00:00",
+    "isoAccepted": "638aa2c88e94385b00f4f178d071e3df0b7d9e335577a83bd533b7f2eb65adf0",
+    "CD1UI": "Win11_25H2_English_Arm64_verified3.iso",
+    "CD2UI": "utm-guest-tools-latest.iso",
+    "configSHA256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6",
+    "configUnchanged": true,
+    "vmBeforeBoot": "UUID                                 Status   Name\n98DFE348-2BA4-426E-9E40-7214229E8E45 stopped  NTSD Windows 11 ARM Reference\n",
+    "uiTransportErrors": [
+      "Go to Folder typeText omitted prefix; subsequent setValue/Return showed only /",
+      "Computer Use server error -10005: Timed out waiting for the application to read the clipboard"
+    ],
+    "diagnosedCorrection": "Abandoned text entry; chose observed T7 sidebar and task folders with exposed Open Finder item actions; exact verified3 ISO label confirmed. No different UI technology used."
+  },
+  "setup": {
+    "UTC": "2026-09-26T19:45:58.571755+00:00",
+    "vmStatus": "UUID                                 Status   Name\n98DFE348-2BA4-426E-9E40-7214229E8E45 started  NTSD Windows 11 ARM Reference\n",
+    "qemuIdentity": "43650 Sat Sep 26 22:40:45 2026     /Applications/UTM.app/Contents/XPCServices/QEMUHelper.xpc/Contents/MacOS/QEMULauncher.app/Contents/MacOS/QEMULauncher /Applications/UTM.app/Contents/Frameworks/qemu-aarch64-softmmu.framework/Versions/A/qemu-aarch64-softmmu -L /Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu -S -spice unix=on,addr=98DFE348-2BA4-426E-9E40-7214229E8E45.spice,disable-ticketing=on,image-compression=off,playback-compression=off,streaming-video=off,gl=on -chardev spiceport,name=org.qemu.monitor.qmp.0,id=org.qemu.monitor.qmp -mon chardev=org.qemu.monitor.qmp,mode=control -nodefaults -vga none -nic none -device virtio-ramfb-gl -cpu host -smp cpus=4,sockets=1,cores=4,threads=1 -machine virt -accel hvf -drive if=pflash,format=raw,unit=0,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu/edk2-aarch64-secure-code.fd,file.locking=off,readonly=on -drive if=pflash,unit=1,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/efi_vars.fd -m 8192 -audiodev spice,id=audio0 -device intel-hda -device hda-duplex,audiodev=audio0 -device nec-usb-xhci,id=usb-bus -device usb-tablet,bus=usb-bus.0 -device usb-mouse,bus=usb-bus.0 -device usb-kbd,bus=usb-bus.0 -device qemu-xhci,id=usb-controller-0 -chardev spicevmc,name=usbredir,id=usbredirchardev0 -device usb-redir,chardev=usbredirchardev0,id=usbredirdev0,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev1 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev2 -device usb-redir,chardev=usbredirchardev2,id=usbredirdev2,bus=usb-controller-0.0 -device usb-storage,drive=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,removable=true,bootindex=0,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,file.filename=/Volumes/T7/ntsd-2.4-artifacts/windows-utm-reference-20260926/Win11_25H2_English_Arm64_verified3.iso,file.locking=off,readonly=on -device nvme,drive=driveDD8331D7-4607-48E1-9494-02229FD6FA58,serial=DD8331D7-4607-48E1-9494-02229FD6FA58,bootindex=1 -drive if=none,media=disk,id=driveDD8331D7-4607-48E1-9494-02229FD6FA58,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/DD8331D7-4607-48E1-9494-02229FD6FA58.qcow2,discard=unmap,detect-zeroes=unmap -device usb-storage,drive=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,removable=true,bootindex=2,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Application Support/GuestSupportTools/utm-guest-tools-latest.iso,file.locking=off,readonly=on -device virtio-serial -device virtserialport,chardev=org.qemu.guest_agent,name=org.qemu.guest_agent.0 -chardev spiceport,name=org.qemu.guest_agent.0,id=org.qemu.guest_agent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 -chardev spicevmc,id=vdagent,debug=0,name=vdagent -name NTSD Windows 11 ARM Reference -uuid 98DFE348-2BA4-426E-9E40-7214229E8E45 -rtc base=localtime -device virtio-rng-pci -chardev socket,id=chrtpm0,path=98DFE348-2BA4-426E-9E40-7214229E8E45.swtpm -tpmdev emulator,id=tpm0,chardev=chrtpm0 -device tpm-crb-device,tpmdev=tpm0\n",
+    "cwd": "p43650\nfcwd\nn/Users/michael/Library/Group Containers/WDNLXAD4W8.com.utmapp.UTM\n",
+    "observedSequence": [
+      "UEFI shell on initial automatic boot",
+      "Normal exit to firmware Boot Manager, first USB CD showed Press any key; separate call did not enter setup",
+      "Same-VM second CD selection and immediate prompt acknowledgement reached Windows11 Setup",
+      "English (United States) language/time and US keyboard",
+      "Official I do not have a product key option; default Windows11 Home selected",
+      "Applicable notices and license terms, Last updated April2024; Accept button not pressed"
+    ],
+    "WindowsInstalled": false,
+    "originalGameExecuted": false,
+    "licenseAccepted": false,
+    "pendingUserInput": "Accept Windows11 Home Microsoft EULA and continue, or decline/use CrossOver",
+    "network": "no NIC, command -nic none; no host directory/clipboard share configured",
+    "bootAttemptCount": 1,
+    "firmwareCDSelections": 2,
+    "review": "open"
+  },
+  "archive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/iso-boot-publication1.tar",
+    "bytes": 34549760,
+    "sha256": "7d74312806706ba1485fcf058a5d237db38f211ca02a80241e721b8ddaf16ec6"
+  },
+  "archiveMemberCount": 12432,
+  "archiveMembersBytesVerified": true,
+  "inputPins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.job.json",
+      "bytes": 988,
+      "sha256": "e95967cda0fcebf40c566f7db236bf9d9c03fdcf5feb89282c298acfbf0197ac"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-parts.json",
+      "bytes": 1887572,
+      "sha256": "5a7a1d017d736c7e29edaaae6a19af8fc89de191e8ac28b28d5a7233aacdaad4"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-inputs.json",
+      "bytes": 353362,
+      "sha256": "a5356e87f4d53d2dbd7fe4376d5e84a5d9359cdf3aa143055e825892d1e73b1a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3.py",
+      "bytes": 5794,
+      "sha256": "7db60bf28cafd5b3bdb34022dcd9d8d600253d2261d81784bc79ec494c7b888e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download3-plan.md",
+      "bytes": 1495,
+      "sha256": "35c83310acbf9ea396519d3f7d8ac3565a2738064de1e639a4ac3ac623454a93"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/boot-selection-correction1.json",
+      "bytes": 4057,
+      "sha256": "9884de2e3f5119dbd88bc578cbc4abd7d9c1ef8ed60633d9c5cb8a1ae501a39e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/boot-selection-correction2.json",
+      "bytes": 637,
+      "sha256": "535cb2e8b86b3a92d2b54dbf56dfbbccd0812f93c3010109632c18cc3e4413b3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/boot1.json",
+      "bytes": 4341,
+      "sha256": "2bd025efdce701fdba45abbab6c4dd892620bae28d439cc7ba0232d2e0ba05d1"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/config-before.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/context.json",
+      "bytes": 1461,
+      "sha256": "83aa9cd2f0edf27a29eafde1d5a65fcd38e16a6225916cca1f39484e7afab29a"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/eula-pending.json",
+      "bytes": 4604,
+      "sha256": "1379ac48da72d0cbe421768f7293addcfd22509c4886fb72330c7f67dbe41455"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/iso-verification.json",
+      "bytes": 1390,
+      "sha256": "51ebbb987e83155da7069751dcac3e0abd7092c2cdc89107626187712e9487ad"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/plan.md",
+      "bytes": 2424,
+      "sha256": "3e4b1b56001233e953f87ed43af6cb8b86de5681857c6fe7d151b24fff102eff"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/guest-setup1/preboot.json",
+      "bytes": 909,
+      "sha256": "ae03cba85187f7d29c3c6870f89ac91804437dd7b40b56cea7c0348cfb10b973"
+    }
+  ],
+  "openGates": [
+    "Windows EULA authorization",
+    "Windows installation/license/activation",
+    "guest tools provenance",
+    "original EXE/VC80 binding and game compatibility",
+    "NLS/GDI/cursor/device observations",
+    "independent review",
+    "Native integration/full match/game"
+  ],
+  "nativeChanges": false,
+  "sourceFixturesChanged": false
+}
