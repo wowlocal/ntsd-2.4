@@ -1,0 +1,29 @@
+{
+  "UTC": "2026-09-26T15:30:49.381623+00:00",
+  "taskFrozen": true,
+  "externalFree": 163098263552,
+  "internalFree": 58765742080,
+  "observedDecrease": 68440064,
+  "externalReserve": 42949672960,
+  "sourceCommitment": 18253611008,
+  "internalReserve": 6442450944,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/publication1.json",
+    "bytes": 3126,
+    "sha256": "f4ca20499e9e50bc52a82c873d517454568d5f289adcfaea2ebc93fa8d3e649e",
+    "mode": 420,
+    "mtime_ns": 1790436649381608152
+  },
+  "archive": {
+    "members": 47,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/evidence1.tar",
+    "bytes": 706560,
+    "sha256": "b317a89b7e886329c5d8748fc07473871240cdc695c0044c8d8b214a5ae7a54f",
+    "mode": 420,
+    "mtime_ns": 1790436649372750912
+  },
+  "excludedRebuildableDirectories": [
+    "modules",
+    "tmp"
+  ]
+}

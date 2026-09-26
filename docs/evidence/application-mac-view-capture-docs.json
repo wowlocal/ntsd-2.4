@@ -1,0 +1,28 @@
+{
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/finalize1.job.json",
+    "bytes": 630,
+    "sha256": "4d068f61269202adf98468f8bda444df573c34fa4d64568f8348178252e315fe",
+    "mode": 420,
+    "mtime_ns": 1790436649382196779
+  },
+  "finalizerAbsent": true,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "priorWorkingSHA256": "d02b50f8e71adaaf5d812f753aea5656c75a6df394076c956b65ced3b4667b63",
+      "newWorkingSHA256": "1df69d82e62a7086ca933337133b3d5d6cc170b9deb873d0aa4553489b5efd1a",
+      "indexSHA256": "09ee71220b09e3fdc564847618c40fbffd10ccaf171a0e5706343c23759d8d0e",
+      "unrelatedDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "priorWorkingSHA256": "4ea266677c8ef63b56187169ed9cc00ed1e82adbbc4e183205bf3afbce266a9e",
+      "newWorkingSHA256": "74565882c92648f46f7200ee4760bd8fbeb7739ead652ed7e65e03b53cb0507a",
+      "indexSHA256": "0f8f1ff3c1ac02cee123b0417b62822efb462be58f8d6ca14636a44c305e91f8",
+      "unrelatedDiffPreserved": true
+    }
+  ],
+  "allControlsPassed": false,
+  "previousGoalTurn": "progress: preserved physical failure and profile diagnosis"
+}

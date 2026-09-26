@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Profile-aware capture exposes a further window-color mismatch](APPLICATION_MAC_VIEW_CAPTURE.md):
+owned snapshot agrees with separate ICC calculation on128 opaque samples, but four
+pure-blue monitor-profile samples differ from input by7/255 red; original2/255
+limit unchanged. Explicit sRGB/direct controls pass; alpha/bounds/ownership checks
+pass. Overall control matrix remains nonpassing. First invalid bitmap-constructor
+exception and bounded input correction retained; production unchanged. All jobs
+terminal/absent; finalizer93739 verifies47-member archive, task frozen, root/source
+preserved. [Publication](../evidence/application-mac-view-capture.json).
+NEXT: separate display correction2 with explicit sRGB native window backing and
+owned profile-aware capture; require unchanged34 methods plus a nonuniform pattern
+regression. Preserve all old failures/expected; native policy is not Windows evidence.
+Independent review/root promotion/general graphics/providers/loading/Windows/input/
+audio/clean-Mac/full match/game remain open. NTSDApp still Practice; EXE envelope
+not recalculated. Supersedes the sampling-only NEXT below.
+
 [Color diagnosis localizes a readback-profile discrepancy](APPLICATION_MAC_DISPLAY_COLOR_DIAGNOSIS.md):
 48 native view cases plus8 direct-image controls checked. Bitmap.colorAt returns
 Generic RGB while actual bitmap profiles are sRGB or monitor ICC. Explicit sRGB

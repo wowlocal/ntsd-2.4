@@ -1,0 +1,87 @@
+{
+  "schema": "ntsd-mac-view-capture-controls-v1",
+  "UTC": "2026-09-26T15:30:49.381098+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926",
+  "baseHead": "6ba168e4b4188107bef631bcd16a26ffa59d963b",
+  "status": "control-nonpass-retained",
+  "opaqueSamples": 128,
+  "nonpassingInputSamples": 4,
+  "allControlsPassed": false,
+  "helperProfileComparison": true,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/verification1.json",
+    "bytes": 1562,
+    "sha256": "9a111e7c115801b236eae93c833a92c460cc459ae639e611a897caa3d8f9213a",
+    "mode": 420,
+    "mtime_ns": 1790436603906696654
+  },
+  "result": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/result2.json",
+    "bytes": 94395,
+    "sha256": "7a13948a9ad833c211ae83e4eb789f0288d3013b4a77961684a3725ed291ae42",
+    "mode": 420,
+    "mtime_ns": 1790436491231557388
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/context1.json",
+    "bytes": 27343,
+    "sha256": "68f921ba3e83ba67ba8f65a642168e4e7d339c685c9239c56387d2c9537c9c54",
+    "mode": 420,
+    "mtime_ns": 1790436317828838992
+  },
+  "archive": {
+    "members": 47,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/evidence1.tar",
+    "bytes": 706560,
+    "sha256": "b317a89b7e886329c5d8748fc07473871240cdc695c0044c8d8b214a5ae7a54f",
+    "mode": 420,
+    "mtime_ns": 1790436649372750912
+  },
+  "archiveInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-view-capture-20260926/archive-inputs1.json",
+    "bytes": 9251,
+    "sha256": "c960f5781a77d8faeea35f4dcc9cd67e3c0bd7013f77b58624d5e56e4f6b6017",
+    "mode": 420,
+    "mtime_ns": 1790436649311025651
+  },
+  "jobs": [
+    {
+      "pid": 84810,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 3.1510352919999995,
+      "peakTreeRSS": 353894400
+    },
+    {
+      "pid": 86213,
+      "status": "terminal",
+      "exitCode": -6,
+      "elapsedSeconds": 2.135353041,
+      "peakTreeRSS": 32768
+    },
+    {
+      "pid": 88675,
+      "status": "terminal",
+      "exitCode": 0,
+      "elapsedSeconds": 1.140399542,
+      "peakTreeRSS": 2375680
+    },
+    {
+      "pid": 89462,
+      "status": "terminal",
+      "exitCode": 1,
+      "elapsedSeconds": 1.110294166,
+      "peakTreeRSS": 32768
+    }
+  ],
+  "rootNativeUnchanged": 1034,
+  "failedCandidateUnchanged": 2261,
+  "sourcePinsUnchanged": 55,
+  "allProtectedPreserved": true,
+  "independentReview": false,
+  "productionChanged": false,
+  "expectedChanged": false,
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false,
+  "next": "Declare and validate native sRGB window backing policy alongside profile-aware capture, retaining all old failures/expected/required34 methods. No whole rendering acceptance; independent review open."
+}
