@@ -1,0 +1,83 @@
+{
+  "schema": "ntsd-prepared-backend-preflight-v1",
+  "UTC": "2026-09-26T10:33:19.968321+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926",
+  "status": "static-preflight-complete",
+  "head": "d2b19ddc4ce40f50f094cf6a3aa9f6986f94cc4e",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/candidate1-inputs.json",
+    "bytes": 566207,
+    "sha256": "ab4c0eb67b1c6b25abd4690124e116465dad709db807acd1bd2636c41350f430",
+    "mode": 420,
+    "mtime_ns": 1790416202218078549
+  },
+  "plan": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_PREPARED_BACKEND_PREFLIGHT_PLAN.md",
+    "bytes": 6065,
+    "sha256": "1048d9712569ce33fbc33316f1923bc4d953e5f98df97b18b4b90d6fa2f71a07",
+    "mode": 420,
+    "mtime_ns": 1790417949193905540
+  },
+  "study": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_PREPARED_BACKEND_PREFLIGHT.md",
+    "bytes": 10662,
+    "sha256": "6f0b20dd25e24a4b2c598529c6a279c42da544da7b4b8efe59763d573cd5563c",
+    "mode": 420,
+    "mtime_ns": 1790418651847380571
+  },
+  "consultedInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/consulted-inputs1.json",
+    "bytes": 16408,
+    "sha256": "77be6e7a276a6ae969229712872a448b093959390669ba87a44fa06586c4b1a9",
+    "mode": 420,
+    "mtime_ns": 1790418799907568877
+  },
+  "observations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/observations1.json",
+    "bytes": 21042,
+    "sha256": "cb051296895a8ca52839f8e58e02d049b6f18aa7ec1897415409afc18fea50c8",
+    "mode": 420,
+    "mtime_ns": 1790418799909370797
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/verification1.json",
+    "bytes": 657,
+    "sha256": "edd223f40b548bb85a394c90c8504946a6c4c43f9346f3355d8e696324ed283e",
+    "mode": 420,
+    "mtime_ns": 1790418799929481787
+  },
+  "validationObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/validation-observation1.json",
+    "bytes": 1282,
+    "sha256": "52c5e56786eca5c0dd279acaeb192b111e2a3381fb63b09588a8b78919bd032a",
+    "mode": 420,
+    "mtime_ns": 1790418799927104033
+  },
+  "metadataArchive": {
+    "members": 56,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/metadata1.tar",
+    "bytes": 1751040,
+    "sha256": "79123f54bfaebc68d0ffe9d783251d0b979490836eea462a5c7ba2c1aeed5466",
+    "mode": 420,
+    "mtime_ns": 1790418799961021046
+  },
+  "publisher": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/publish1.py",
+    "bytes": 11308,
+    "sha256": "12fe978e5706fc038b4cf9d5a0b5b27fb23ad0eb58b5432b980e61dbee9840d8",
+    "mode": 420,
+    "mtime_ns": 1790418773757018569
+  },
+  "nextContract": "Resumable whole window request/reply exchange in actual WinMain consumer; no invented device responses or physical rollback claim",
+  "gates": {
+    "staticAnalysis": true,
+    "implementation": false,
+    "independentReview": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false
+}

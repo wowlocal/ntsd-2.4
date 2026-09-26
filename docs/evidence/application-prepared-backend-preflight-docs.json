@@ -1,0 +1,79 @@
+{
+  "schema": "ntsd-prepared-backend-preflight-docs-v1",
+  "UTC": "2026-09-26T10:34:06.093807+00:00",
+  "publisherJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/publish1.job.json",
+    "bytes": 766,
+    "sha256": "c17edb25dced83b4b68604d7d38e188686b060c2baedc9d9c8b9209abf8e6ab9",
+    "mode": 420,
+    "mtime_ns": 1790418799970479727
+  },
+  "publisherAbsent": true,
+  "rootFiles": [
+    {
+      "path": "docs/research/APPLICATION_PREPARED_BACKEND_PREFLIGHT_PLAN.md",
+      "bytes": 6065,
+      "sha256": "1048d9712569ce33fbc33316f1923bc4d953e5f98df97b18b4b90d6fa2f71a07",
+      "mode": 420,
+      "mtime_ns": 1790417949193905540
+    },
+    {
+      "path": "docs/research/APPLICATION_PREPARED_BACKEND_PREFLIGHT.md",
+      "bytes": 10662,
+      "sha256": "6f0b20dd25e24a4b2c598529c6a279c42da544da7b4b8efe59763d573cd5563c",
+      "mode": 420,
+      "mtime_ns": 1790418651847380571
+    },
+    {
+      "path": "docs/evidence/application-prepared-backend-preflight.json",
+      "bytes": 3698,
+      "sha256": "3a305756f88776d812d6d43f20be63ffefb7fefa54c557d90c23c921e2dd9fd7",
+      "mode": 420,
+      "mtime_ns": 1790418799970301477
+    },
+    {
+      "path": "docs/evidence/application-prepared-backend-preflight-close.json",
+      "bytes": 984,
+      "sha256": "e492a13d95c18482ef91ed9540b0c284dd6ff9df2c0cc07332e4086a7c5731c8",
+      "mode": 420,
+      "mtime_ns": 1790418799970399227
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "dae2b852d36deced7cb829a106aafe428547c648305a50c6d25262c47499086c",
+      "workingAfter": {
+        "bytes": 139249,
+        "sha256": "eb015daf33b5df22e1bd63732ec42984812d57058153860c0a427a7998fac2d6",
+        "mode": 420,
+        "mtime_ns": 1790418846036565289
+      },
+      "indexedBlob": "9a48e1234410828e32c61cc24a2e4541d924197b",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "2973e1ea8c4133a104cab1fbc34d53f3ca5f521523a5ce9ab9f165c839d816ed",
+      "workingAfter": {
+        "bytes": 324531,
+        "sha256": "df51ce796f2ea3faff7c46d9e2a4d1c7116a296f9b43b5c265ebe2f094cdf80c",
+        "mode": 420,
+        "mtime_ns": 1790418846068107173
+      },
+      "indexedBlob": "c61168fee6fdb40219388d5c453aeca3ae971f4f",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "archive": {
+    "members": 56,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/metadata1.tar",
+    "bytes": 1751040,
+    "sha256": "79123f54bfaebc68d0ffe9d783251d0b979490836eea462a5c7ba2c1aeed5466",
+    "mode": 420,
+    "mtime_ns": 1790418799961021046
+  },
+  "rootNativeChanged": false,
+  "independentReview": false
+}

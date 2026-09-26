@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Prepared backend preflight](research/APPLICATION_PREPARED_BACKEND_PREFLIGHT.md):
+request/reply and publication gaps pinned against23 Native files/15 studies;
+56-member archive verified, no execution. Animated catalog drawing exists, but
+nonempty loading dispatch/fills/links remain open. Same82-method queue closes
+first; then a resumable whole-window exchange consumed by WinMain, preserving
+280 window cases,23 successful parents and distinct stops/rejections.
+[Receipt](evidence/application-prepared-backend-preflight.json). Actual backend,
+independent review/devices/full catalog source/match/game remain open.
+
 [Delivery-context checkpoint](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
 40/82 complete saved results and145-member progress archive verified; same queue5193
 continues test41. Next: same queue terminal outcome and full archive gates.

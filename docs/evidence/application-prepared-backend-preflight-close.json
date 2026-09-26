@@ -1,0 +1,25 @@
+{
+  "schema": "ntsd-prepared-backend-preflight-close-v1",
+  "UTC": "2026-09-26T10:33:19.969614+00:00",
+  "taskFrozen": true,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/publication1.json",
+    "bytes": 3698,
+    "sha256": "3a305756f88776d812d6d43f20be63ffefb7fefa54c557d90c23c921e2dd9fd7",
+    "mode": 420,
+    "mtime_ns": 1790418799969589726
+  },
+  "metadataArchive": {
+    "members": 56,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-prepared-backend-preflight-20260926/metadata1.tar",
+    "bytes": 1751040,
+    "sha256": "79123f54bfaebc68d0ffe9d783251d0b979490836eea462a5c7ba2c1aeed5466",
+    "mode": 420,
+    "mtime_ns": 1790418799961021046
+  },
+  "externalFree": 172419903488,
+  "internalFree": 58977779712,
+  "taskBytes": 3407642,
+  "elapsedFromPlanSeconds": 850.569048
+}

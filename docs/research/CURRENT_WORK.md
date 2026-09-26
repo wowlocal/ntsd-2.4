@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Prepared backend preflight](APPLICATION_PREPARED_BACKEND_PREFLIGHT.md) closed its
+static scope:23 Native files/15 studies pinned;56-member PAX archive verified.
+Current batches retain owners but cannot supply before-consumption device replies.
+Catalog already has animated drawing; nonempty loading messages/fill/link paths
+remain explicit gaps. Publisher64234 terminal0/absent; no source/Native/device run.
+[Receipt](../evidence/application-prepared-backend-preflight.json).
+NEXT remains the same82-method validation queue and its terminal/archive gates.
+After closure: finite resumable window request/reply owner in actual WinMain,
+with unchanged280 whole-window and23 successful whole-parent comparisons plus
+preserved stops/provenance rejections. This is a design contract, not an actual
+backend or relaxed IO/rollback rule. Independent review/root promotion/devices/
+full catalog source/match/game open; EXE envelope not recalculated.
+
 ## Продолжение — 2026-09-26
 
 [Delivery-context checkpoint](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
