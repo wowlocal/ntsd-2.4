@@ -1,0 +1,26 @@
+{
+  "finalizer": {
+    "bytes": 831,
+    "sha256": "47360b8246a480051b0b36668a13c045b04c6d57432f25e66021b19bd55c0909",
+    "mode": 420,
+    "mtime_ns": 1790435276076695432
+  },
+  "finalizerAbsent": true,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "priorWorkingSHA256": "eb589b91a4c2a7fe6fbd323224f6ff1034c7dc2a9a3dccc48090b4e5eac0865d",
+      "newWorkingSHA256": "97e583c012ba94c787d7a3d6588dc109f3150a3b585c50ffc8c906ddacbadf47",
+      "indexSHA256": "e4708a5afa760153fd4a8eb8e66c6bb13aee733e5d5a25a6e4ea4f658abe7741",
+      "unrelatedDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "priorWorkingSHA256": "cd0e5ed5bdaebd0a8bca53b92e8c3e195b57d451c81ff611b0b1942f55e1ed0c",
+      "newWorkingSHA256": "6cd9c64e11231332e18678932f13f3d91b83c2068b8c6eb16a21ffa8b1054633",
+      "indexSHA256": "95fe8f6b37442a30604e8f2b8b89d7e8a920c1e6ac7a770efad7f36d5dc321a4",
+      "unrelatedDiffPreserved": true
+    }
+  ],
+  "previousGoalTurn": "No progress toward port: T7 policy confirmation only; existing terminal failure now preserved and published."
+}

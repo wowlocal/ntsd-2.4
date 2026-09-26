@@ -1,0 +1,14 @@
+--- a/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
+@@ -109,7 +109,10 @@
+     }
+     public func observation(_ token: UInt32) throws -> Observation {
+         let value = try lease(token),s = value as? Surface,c = value as? Clipper,d = value as? Draw
+-        let known = s?.storage.map { Array(UnsafeBufferPointer(start:$0.known,count:$0.count)).filter { $0 != 0 }.count } ?? 0
++        let known: Int
++        if let storage = s?.storage {
++            known = Array(UnsafeBufferPointer(start:storage.known,count:storage.count)).filter { $0 != 0 }.count
++        } else { known = 0 }
+         return .init(token:token,kind:value.kind,references:value.references,width:s?.width ?? 0,height:s?.height ?? 0,
+             window:c?.window?.token ?? d?.window?.token ?? s?.draw.window?.token,clipper:s?.clipper?.token,knownPixels:known)
+     }

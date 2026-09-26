@@ -1,0 +1,42 @@
+{
+  "schema": "ntsd-mac-display-validation-close-v1",
+  "UTC": "2026-09-26T15:07:56.076023+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-correction1-20260926",
+  "externalFree": 163234082816,
+  "internalFree": 58774994944,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "observedFreeDecrease": 1179267072,
+  "physicalAllowance": 30064771072,
+  "publication": {
+    "bytes": 5532,
+    "sha256": "26b4287d6effb7ad866d543b78dc7ca342280ca4fc011393656753e0a23c0269",
+    "mode": 420,
+    "mtime_ns": 1790435276075976596
+  },
+  "metadataArchive": {
+    "members": 75,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-correction1-20260926/metadata1.tar",
+    "bytes": 5754880,
+    "sha256": "181dbabd4da11460672a05ef3d85f2a503bc67480850bb4ee6fb76b5d5f65f65",
+    "mode": 420,
+    "mtime_ns": 1790435275948458590
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-correction1-20260926/artifact-archive1",
+    "files": 4940,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11400588466,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-correction1-20260926/artifact-archive1.json",
+      "bytes": 2585867,
+      "sha256": "e668928c5304aec685bd60afd41a2223b0b3163f99c3d34d0f98a105c2a735f6",
+      "mode": 420,
+      "mtime_ns": 1790435268600755410
+    }
+  }
+}

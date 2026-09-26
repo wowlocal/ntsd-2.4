@@ -1,5 +1,18 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Display correction1: build passes, AppKit color fails](research/APPLICATION_MAC_DISPLAY_CORRECTION1.md):
+whole-startup physical allocation passes; second method reports nine sRGB readback
+mismatches at three samples. Expected RGB/tolerance and all tests unchanged;32 of34
+methods unstarted. Build/package verified199Core/61Reference/5MacPlatform/279tests,
+1686 resources. Queue42859 terminal1/absent; finalizer52939 terminal0/absent,
+4940-file artifact/75-member metadata verified, task frozen. Root/prior/source preserved.
+[Publication](evidence/application-mac-display-correction1.json).
+NEXT: finite Native CGImage/NSImage/AppKit bitmap color-path diagnosis before a
+separate correction2, retaining original assertions and all34 methods/limits.
+Independent review/root promotion/rendering acceptance/remaining providers/loading/
+Windows/input/audio/clean-Mac/full match/game remain open; NTSDApp still Practice.
+EXE envelope not recalculated. Supersedes the explicit-count correction NEXT below.
+
 [Display candidate compile failure preserved](research/APPLICATION_MAC_DISPLAY_VALIDATION.md):
 build20523 terminal1/absent; observation known-pixel count remains Int? where Int is
 required. No package acceptance or XCTest; all34 methods unstarted. Failed2261
