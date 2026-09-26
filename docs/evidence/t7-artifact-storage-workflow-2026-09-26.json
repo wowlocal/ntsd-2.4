@@ -1,0 +1,22 @@
+{
+  "UTC": "2026-09-26T07:26:47.276403+00:00",
+  "workflow": "docs/research/WORKFLOW.md",
+  "beforeSHA256": "a83bf4d46c33eff73df15f9a6917014736d2c39cbd835d43fd04c2a8d7ff8a14",
+  "afterSHA256": "c0df83c13c0b69543b0fa40974e4688efb8d0f09a1887a3c060bf4f8d5483116",
+  "deferredUpdateCompleted": true,
+  "closedValidationTask": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926",
+  "finalizerPID": 26386,
+  "finalizerTerminalAndAbsent": true,
+  "closedPublicationSHA256": "1443a45502748df93552a2d32613165da614767988437b2a8bf27a06fdc007a9",
+  "frozenPreviousWorkflow": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/workflow-input-before-t7.md",
+  "previousWorkflowArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/metadata1.tar",
+    "sha256": "862a0799c36fdf67d4462925144c19efefcb2277a3f06e1ed4f59ed04b593b25",
+    "member": "workflow-input-before-t7.md",
+    "memberBodyVerified": true
+  },
+  "newPolicy": "X5 plus T7 artifact storage as authorized in AGENTS.md; T7 ExFAT metadata boundaries and40GiB reserve",
+  "existingFrozenInputsUnchanged": true,
+  "newTasksMustPinCurrentInstructionVersion": true,
+  "reference": "docs/evidence/t7-artifact-storage-2026-09-26.json"
+}
