@@ -1,0 +1,94 @@
+{
+  "UTC": "2026-09-26T18:08:18.927087+00:00",
+  "baseHead": "cff421e39fb5fe1ee738721ee686ce3562c69438",
+  "publication": {
+    "path": "docs/evidence/application-first-menu-raster-contract.json",
+    "bytes": 19043,
+    "sha256": "5fc74aebff2c708335e5661d58b6e5a8a5ec7964425f615b1a504ddd4554b7d3",
+    "mode": 420,
+    "mtime_ns": 1790445698256539549
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/finalize1.job.json",
+    "bytes": 838,
+    "sha256": "69c8809d2b65355a0bb3a9452d3852f86071e723ef4b4e7b1c7fe96366f434e3",
+    "mode": 420,
+    "mtime_ns": 1790445698256852717
+  },
+  "processesAbsent": true,
+  "savedInputsAndArchivesVerified": true,
+  "sourceExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "unrelatedWorkingBeforeSHA256": "caad3f2b10145a31d04852116bca99aa06626024d773eeffdac3b265a1036572",
+      "headBeforeSHA256": "29114d10932f50815bf6a7806bc558de66dac498658cd7e3bb663a2049977f13",
+      "workingAfterSHA256": "8808f62b410a8a4f44971317b33ca8dc788799c7fc1f39c3277a187bd6320048",
+      "stagedSHA256": "3b729f76970d46ec28330b729b6d64fbdae020dbf92ee13651bb55ff3eaf3a96",
+      "stagedBlob": "be4e039c603f11aad68acbc606126689b7d689d9",
+      "onlyOwnBlockStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "unrelatedWorkingBeforeSHA256": "21073615eb399a3e465769c4f789484142ba1058d546be45b830325280e809b7",
+      "headBeforeSHA256": "7663f55ce6fafb20955a38a93a7bcb5421a6cca2250a19e848f54348fa440537",
+      "workingAfterSHA256": "0af4b0b2b78efff0c63df16ba7f9d65143e98aa0e8d56b7d79708616bf4ee405",
+      "stagedSHA256": "f06e0f87198d9026a52e960d421bef8dfd2359e86a6bed9f6b9bac39be4df4b3",
+      "stagedBlob": "d5ddf6ce39f57dc1761e3585d080f84f37831ad1",
+      "onlyOwnBlockStaged": true
+    }
+  ],
+  "ownFiles": [
+    {
+      "path": "docs/research/APPLICATION_FIRST_MENU_RASTER_CONTRACT_PLAN.md",
+      "bytes": 4853,
+      "sha256": "c6fa90ddbb7834139eaf46a9582484e9f75c04cee2cdd9e252009dd38997e03f",
+      "mode": 420,
+      "mtime_ns": 1790445161777402922
+    },
+    {
+      "path": "docs/research/APPLICATION_FIRST_MENU_RASTER_CONTRACT.md",
+      "bytes": 7684,
+      "sha256": "1b645e075467990b04b8a501c25834c6283be1a9d8a5c277a363877f787bd495",
+      "mode": 420,
+      "mtime_ns": 1790446098790818426
+    },
+    {
+      "path": "docs/evidence/application-first-menu-raster-contract.json",
+      "bytes": 19043,
+      "sha256": "5fc74aebff2c708335e5661d58b6e5a8a5ec7964425f615b1a504ddd4554b7d3",
+      "mode": 420,
+      "mtime_ns": 1790445698256539549
+    },
+    {
+      "path": "docs/evidence/application-first-menu-raster-contract-close.json",
+      "bytes": 1666,
+      "sha256": "22cfc5783731b103973eea6e97d66b806a790f05275ce37e269dfe0d972b2205",
+      "mode": 420,
+      "mtime_ns": 1790445698256641508
+    },
+    {
+      "path": "tools/inspect_application_first_menu_raster.py",
+      "bytes": 16168,
+      "sha256": "d4022832f666deaa15c61c03ba412ad440a6d7118746b384d9e12cabe1b75d85",
+      "mode": 420,
+      "mtime_ns": 1790445401831188072
+    },
+    {
+      "path": "tools/inspect_application_first_menu_raster2.py",
+      "bytes": 16684,
+      "sha256": "e249338cbc925b986fe85ce386695103eb8668784ef3d26c379cfb594f6b9dc1",
+      "mode": 420,
+      "mtime_ns": 1790445501148209742
+    },
+    {
+      "path": "tools/finalize_application_first_menu_raster.py",
+      "bytes": 7669,
+      "sha256": "b9e8d25a110bdf9ff9f157a2fc02a8d84c476ff8add51e2a742e45360c3e04b6",
+      "mode": 420,
+      "mtime_ns": 1790445688262894772
+    }
+  ]
+}

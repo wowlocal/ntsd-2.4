@@ -1,0 +1,735 @@
+{
+  "schema": "ntsd-first-menu-raster-contract-publication-v1",
+  "UTC": "2026-09-26T18:01:38.252676+00:00",
+  "profile": "Saved command/color-mask readiness, not a rasterizer or actual Windows/device outcome",
+  "stages": 224,
+  "chains": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/chains1.json",
+    "bytes": 1913874,
+    "sha256": "7d748a8697a2c7f362bfb0f8ccc9f7f07ee3efaa9a28a06933c0083f1499dbbc",
+    "mode": 420,
+    "mtime_ns": 1790445512382424979
+  },
+  "uniqueCommands": 5612,
+  "composedCommands": 53265,
+  "uniqueBlitCommands": 491,
+  "composedBlitOccurrences": 901,
+  "composedFrontKinds": {
+    "fill": 172,
+    "blit": 901,
+    "getDC": 507,
+    "setBackgroundMode": 501,
+    "setTextColor": 501,
+    "textOut": 501,
+    "releaseDC": 501,
+    "method": 210
+  },
+  "composedBlitFlags": {
+    "16809984": 874,
+    "16777216": 27
+  },
+  "firstMenu": {
+    "commandCount": 472,
+    "frontCount": 22,
+    "frontKinds": {
+      "fill": 1,
+      "blit": 5,
+      "getDC": 3,
+      "setBackgroundMode": 3,
+      "setTextColor": 3,
+      "textOut": 3,
+      "releaseDC": 3,
+      "method": 1
+    },
+    "blits": [
+      {
+        "stage": "front:8318379fd844bceb20c80f051677c1c1f59bbbdbc02238ec5f418edd13ccd049",
+        "eventIndex": 30,
+        "source": [
+          0,
+          0,
+          794,
+          547
+        ],
+        "destination": [
+          0,
+          0,
+          794,
+          547
+        ],
+        "flags": 16809984,
+        "effects": null,
+        "equalExtents": true,
+        "sourceSurface": 839024640,
+        "targetSurface": 822095872,
+        "declaredResult": 0,
+        "nullSource": false,
+        "colorKeyRequests": [
+          {
+            "request": {
+              "kind": "colorKey",
+              "strings": [
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "words": [
+                839024640,
+                8
+              ]
+            },
+            "response": {
+              "result": 0,
+              "writes": []
+            }
+          }
+        ],
+        "asset": {
+          "bpp": 24,
+          "height": 547,
+          "kind": "embedded",
+          "path": "MENU_BACK9",
+          "planes": 1,
+          "raw": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+          "width": 809
+        },
+        "sourceWidth": 809,
+        "sourceHeight": 547,
+        "rawSHA256": "aa6644706cdee2befaf85d55648bc1148fcce3f0beee68174f261adf21b6f57f",
+        "footprint": {
+          "shape": "positive",
+          "width": 794,
+          "height": 547,
+          "inBounds": true,
+          "actualDeviceSamplingObserved": false,
+          "positions": 434318,
+          "knownPositions": 434318,
+          "unknownPositions": 0,
+          "knownRGBZeroPositions": 0,
+          "twoMaskTraversalChecks": true
+        }
+      },
+      {
+        "stage": "body:b630e4a6d5a287d78436da71c6b6e88eda8441b74d1de170e50ca6ae9f4b63e7",
+        "eventIndex": 144,
+        "source": [
+          648,
+          5,
+          710,
+          18
+        ],
+        "destination": [
+          725,
+          5,
+          787,
+          18
+        ],
+        "flags": 16809984,
+        "effects": null,
+        "equalExtents": true,
+        "sourceSurface": 838955008,
+        "targetSurface": 822095872,
+        "declaredResult": 0,
+        "nullSource": false,
+        "colorKeyRequests": [
+          {
+            "request": {
+              "kind": "colorKey",
+              "strings": [
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "words": [
+                838955008,
+                8
+              ]
+            },
+            "response": {
+              "result": 0,
+              "writes": []
+            }
+          }
+        ],
+        "asset": {
+          "bpp": 24,
+          "height": 540,
+          "kind": "embedded",
+          "path": "MENU_CLIP7",
+          "planes": 1,
+          "raw": "46a6098867e45c220efd4753d4cb39f2ba3a527e4e52e21f9b920f66f81eedab",
+          "width": 713
+        },
+        "sourceWidth": 713,
+        "sourceHeight": 540,
+        "rawSHA256": "46a6098867e45c220efd4753d4cb39f2ba3a527e4e52e21f9b920f66f81eedab",
+        "footprint": {
+          "shape": "positive",
+          "width": 62,
+          "height": 13,
+          "inBounds": true,
+          "actualDeviceSamplingObserved": false,
+          "positions": 806,
+          "knownPositions": 806,
+          "unknownPositions": 0,
+          "knownRGBZeroPositions": 662,
+          "twoMaskTraversalChecks": true
+        }
+      },
+      {
+        "stage": "body:b630e4a6d5a287d78436da71c6b6e88eda8441b74d1de170e50ca6ae9f4b63e7",
+        "eventIndex": 154,
+        "source": [
+          0,
+          41,
+          496,
+          121
+        ],
+        "destination": [
+          155,
+          96,
+          651,
+          176
+        ],
+        "flags": 16809984,
+        "effects": null,
+        "equalExtents": true,
+        "sourceSurface": 838930432,
+        "targetSurface": 822095872,
+        "declaredResult": 0,
+        "nullSource": false,
+        "colorKeyRequests": [
+          {
+            "request": {
+              "kind": "colorKey",
+              "strings": [
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "words": [
+                838930432,
+                8
+              ]
+            },
+            "response": {
+              "result": 0,
+              "writes": []
+            }
+          }
+        ],
+        "asset": {
+          "bpp": 24,
+          "height": 500,
+          "kind": "embedded",
+          "path": "MENU_CLIP",
+          "planes": 1,
+          "raw": "84eb0f1ef805abb37c530c820933ad3e812e9f892e15cf8f9c23a12326e4ec8d",
+          "width": 794
+        },
+        "sourceWidth": 794,
+        "sourceHeight": 500,
+        "rawSHA256": "84eb0f1ef805abb37c530c820933ad3e812e9f892e15cf8f9c23a12326e4ec8d",
+        "footprint": {
+          "shape": "positive",
+          "width": 496,
+          "height": 80,
+          "inBounds": true,
+          "actualDeviceSamplingObserved": false,
+          "positions": 39680,
+          "knownPositions": 39680,
+          "unknownPositions": 0,
+          "knownRGBZeroPositions": 32471,
+          "twoMaskTraversalChecks": true
+        }
+      },
+      {
+        "stage": "menu:4e4f6afe2beffba172185b9125b5809f88e02e01ccd42840457612fe2151e69a",
+        "eventIndex": 9,
+        "source": [
+          0,
+          0,
+          282,
+          181
+        ],
+        "destination": [
+          263,
+          202,
+          545,
+          383
+        ],
+        "flags": 16809984,
+        "effects": null,
+        "equalExtents": true,
+        "sourceSurface": 838946816,
+        "targetSurface": 822095872,
+        "declaredResult": 0,
+        "nullSource": false,
+        "colorKeyRequests": [
+          {
+            "request": {
+              "kind": "colorKey",
+              "strings": [
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "words": [
+                838946816,
+                8
+              ]
+            },
+            "response": {
+              "result": 0,
+              "writes": []
+            }
+          }
+        ],
+        "asset": {
+          "bpp": 24,
+          "height": 600,
+          "kind": "embedded",
+          "path": "MENU_CLIP5",
+          "planes": 1,
+          "raw": "7b75397bd44ce754c93351d91e7c47540ad5c2b48c694b327276f3341b278aca",
+          "width": 794
+        },
+        "sourceWidth": 794,
+        "sourceHeight": 600,
+        "rawSHA256": "7b75397bd44ce754c93351d91e7c47540ad5c2b48c694b327276f3341b278aca",
+        "footprint": {
+          "shape": "positive",
+          "width": 282,
+          "height": 181,
+          "inBounds": true,
+          "actualDeviceSamplingObserved": false,
+          "positions": 51042,
+          "knownPositions": 51042,
+          "unknownPositions": 0,
+          "knownRGBZeroPositions": 46805,
+          "twoMaskTraversalChecks": true
+        }
+      },
+      {
+        "stage": "menu:4e4f6afe2beffba172185b9125b5809f88e02e01ccd42840457612fe2151e69a",
+        "eventIndex": 18,
+        "source": [
+          0,
+          0,
+          11,
+          19
+        ],
+        "destination": [
+          0,
+          2,
+          11,
+          21
+        ],
+        "flags": 16809984,
+        "effects": null,
+        "equalExtents": true,
+        "sourceSurface": 838926336,
+        "targetSurface": 822095872,
+        "declaredResult": 0,
+        "nullSource": false,
+        "colorKeyRequests": [
+          {
+            "request": {
+              "kind": "colorKey",
+              "strings": [
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              ],
+              "words": [
+                838926336,
+                8
+              ]
+            },
+            "response": {
+              "result": 0,
+              "writes": []
+            }
+          }
+        ],
+        "asset": {
+          "bpp": 8,
+          "height": 19,
+          "kind": "embedded",
+          "path": "LF2_CURSOR",
+          "planes": 1,
+          "raw": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8",
+          "width": 11
+        },
+        "sourceWidth": 11,
+        "sourceHeight": 19,
+        "rawSHA256": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8",
+        "footprint": {
+          "shape": "positive",
+          "width": 11,
+          "height": 19,
+          "inBounds": true,
+          "actualDeviceSamplingObserved": false,
+          "positions": 209,
+          "knownPositions": 108,
+          "unknownPositions": 101,
+          "knownRGBZeroPositions": 19,
+          "twoMaskTraversalChecks": true
+        }
+      }
+    ],
+    "textCommands": [
+      {
+        "arguments": [
+          305419896,
+          591,
+          491,
+          27
+        ],
+        "kind": "textOut",
+        "strings": [
+          [
+            98,
+            121,
+            32,
+            77,
+            97,
+            114,
+            116,
+            105,
+            32,
+            87,
+            111,
+            110,
+            103,
+            44,
+            32,
+            83,
+            116,
+            97,
+            114,
+            115,
+            107,
+            121,
+            32,
+            87,
+            111,
+            110,
+            103
+          ]
+        ]
+      },
+      {
+        "arguments": [
+          305419896,
+          591,
+          511,
+          30
+        ],
+        "kind": "textOut",
+        "strings": [
+          [
+            49,
+            57,
+            57,
+            57,
+            45,
+            50,
+            48,
+            48,
+            56,
+            44,
+            32,
+            97,
+            108,
+            108,
+            32,
+            114,
+            105,
+            103,
+            104,
+            116,
+            115,
+            32,
+            114,
+            101,
+            115,
+            101,
+            114,
+            118,
+            101,
+            100
+          ]
+        ]
+      },
+      {
+        "arguments": [
+          305419896,
+          591,
+          531,
+          28
+        ],
+        "kind": "textOut",
+        "strings": [
+          [
+            104,
+            116,
+            116,
+            112,
+            58,
+            47,
+            47,
+            119,
+            119,
+            119,
+            46,
+            76,
+            105,
+            116,
+            116,
+            108,
+            101,
+            70,
+            105,
+            103,
+            104,
+            116,
+            101,
+            114,
+            46,
+            99,
+            111,
+            109
+          ]
+        ]
+      }
+    ],
+    "bitmapCommands": 425,
+    "historicalPresentation": [
+      {
+        "stage": "menu:4e4f6afe2beffba172185b9125b5809f88e02e01ccd42840457612fe2151e69a",
+        "command": {
+          "event": {
+            "arguments": [
+              822091776,
+              20,
+              4537548,
+              822095872,
+              0,
+              16777216,
+              0
+            ],
+            "kind": "method",
+            "strings": [
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          "eventIndex": 20,
+          "eventSHA256": "3221650112cef2b1b27b7885b376bd20f6e09f1114308e2df53703648475064c",
+          "family": "front",
+          "output": null,
+          "result": 0
+        },
+        "relation": {
+          "bindings": [
+            {
+              "ref": {
+                "generation": 0,
+                "kind": "primary",
+                "token": 822091776
+              },
+              "role": "owner"
+            },
+            {
+              "ref": {
+                "generation": 0,
+                "kind": "primary",
+                "token": 822091776
+              },
+              "role": "target"
+            },
+            {
+              "ref": {
+                "generation": 0,
+                "kind": "backbuffer",
+                "token": 822095872
+              },
+              "role": "source"
+            }
+          ],
+          "dependencies": [],
+          "destinationRectangle": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "eventIndex": 20,
+          "sourceRectangle": null,
+          "stage": "menu:4e4f6afe2beffba172185b9125b5809f88e02e01ccd42840457612fe2151e69a"
+        }
+      }
+    ]
+  },
+  "blitFootprintRequests": 901,
+  "footprintOutcomes": {
+    "positive/inBounds": 883,
+    "nullSource": 18
+  },
+  "uniqueMaskFootprints": 15,
+  "knownSourceDoesNotProveRaster": true,
+  "nativeGeometrySeparatePublication": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-window-geometry.json",
+    "bytes": 5414,
+    "sha256": "eb157a8ea86c67b9ba6b444e16909fc6787ccd6c08da6a75519833dd17075e39",
+    "mode": 420,
+    "mtime_ns": 1790444754611189323
+  },
+  "dependencies": [
+    "primary/offscreen actual format",
+    "palette entries/realization",
+    "bitmap-to-device conversion",
+    "color key",
+    "font/glyph/codepage/DPI",
+    "clipper geometry",
+    "device errors and actual lease validity",
+    "initial pixels",
+    "clipping/scaling/Blt/text/presentation raster outcomes"
+  ],
+  "gates": {
+    "savedInputs": true,
+    "joins": true,
+    "footprintConsistency": true,
+    "nativeRaster": false,
+    "windowsObserved": false,
+    "independentReview": false,
+    "fullMenuFrame": false,
+    "fullGame": false
+  },
+  "sourceExecuted": false,
+  "nativeExecuted": false,
+  "pixelDecoderExecuted": false,
+  "historicalProducerAuditorExecuted": false,
+  "EXEEnvelopeRecalculated": false,
+  "status": "finite-saved-raster-contract-verified",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926",
+  "baseHead": "cff421e39fb5fe1ee738721ee686ce3562c69438",
+  "inspection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/inspection1.json",
+    "bytes": 15509,
+    "sha256": "b05bce8fa8008ae3924a3da84cf9836888e07446fbd81c2bb9df4e4f6ba2956e",
+    "mode": 420,
+    "mtime_ns": 1790445512396698285
+  },
+  "fullFirstMenu": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/first-menu1.json",
+    "bytes": 596386,
+    "sha256": "87245df0ba78b2141b84a318eb6fdc3d4aba89a82db52bab3f34f2c158ceddb7",
+    "mode": 420,
+    "mtime_ns": 1790445512394258733
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/verification1.json",
+    "bytes": 483,
+    "sha256": "cb5dd5ca2286c0b32a317459b8d36a35ac1a3e5bb0418fcc341b17612f8c4d95",
+    "mode": 420,
+    "mtime_ns": 1790445521983088961
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/context1.json",
+    "bytes": 21380,
+    "sha256": "c4f4e563d900f313aa340d57247abdbc882f000ecd8d1227cbc1b6fef6f96b47",
+    "mode": 420,
+    "mtime_ns": 1790445511646517503
+  },
+  "producer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/inspect2.py",
+    "bytes": 16684,
+    "sha256": "e249338cbc925b986fe85ce386695103eb8668784ef3d26c379cfb594f6b9dc1",
+    "mode": 420,
+    "mtime_ns": 1790445501148209742
+  },
+  "preservedFailure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/failure-diagnosis1.json",
+    "bytes": 1160,
+    "sha256": "5f78f964c3cfd25276171b1cc2b38d1fbc4d0cc3def48d95ed296a8f31180447",
+    "mode": 420,
+    "mtime_ns": 1790445501144807021
+  },
+  "inputArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/input-archive1",
+    "files": 9,
+    "bytes": 71453103,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/input-archive1.json",
+      "bytes": 2061,
+      "sha256": "b14bd524c78f9b59f0df10eb42b2fcdf4f239d9b2f10bc14ce57b487dd8595f9",
+      "mode": 420,
+      "mtime_ns": 1790445698200148036
+    }
+  },
+  "metadataArchive": {
+    "members": 19,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-first-menu-raster-contract-20260926/metadata1.tar",
+    "bytes": 2652160,
+    "sha256": "ec7cc9875f476e3c5fd5fd9ab2984815e7ffbc1e8bcd039017cc585f603275b1",
+    "mode": 420,
+    "mtime_ns": 1790445698217565479
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "baselineNativeUnchanged": 2272,
+  "sourceCodePinsUnchanged": 55
+}

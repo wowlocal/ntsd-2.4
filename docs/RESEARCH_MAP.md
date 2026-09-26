@@ -1,5 +1,18 @@
 # Карта исследования и переноса NTSD 2.4
 
+[First-menu raster contract: saved inputs verified](research/APPLICATION_FIRST_MENU_RASTER_CONTRACT.md):
+all224 stages/110 chains retained; 491 unique/901 composed Blts inventoried.
+Case0 has472 commands/22 front commands: fill, five Blts, three transparent GDI
+text rows and presentation. Cursor footprint has101 unknown pixels; font/DC/DPI
+and actual key/format/clip/raster remain open. No source/Native/decoder executed.
+Storage-only EXDEV correction preserves original failure; inspector60710 and
+finalizer65998 terminal0/absent. Nine input files/19 PAX members verified, task frozen.
+[Publication](evidence/application-first-menu-raster-contract.json).
+NEXT per user instruction: prepare Windows through UTM for bounded original
+cursor/GDI observations, with explicit guest/device provenance. VM is reference
+infrastructure only. Independent review/Native raster/root promotion/first full
+frame/input/audio/clean-Mac/match/game remain open. Supersedes raster NEXT below.
+
 [Native window geometry passes all76 methods](research/APPLICATION_MAC_WINDOW_GEOMETRY.md):
 whole Host WM_MOVE uses actual client/point replies; the following first-menu
 presentation retains that rectangle. Late retry, fresh moves, ownership/history,
