@@ -1,0 +1,23 @@
+{
+  "UTC": "2026-09-26T20:16:01.621381+00:00",
+  "records": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeWorkingSHA256": "47bf42c95d19402143009f7275762fba25686dc1e6eb1a7183d7b5a9ed42b763",
+      "headSHA256": "0aba07f0031c2f2f06d0ce3d0cfd1eb9dde290d19feee54875953eb9e0eff4d5",
+      "afterWorkingSHA256": "e2cb1b556eb489bb7f6f2d047d3eedbd1b41fc9423361d691d45122c595e67b2",
+      "stagedSHA256": "906f634ae729196e15b690e1df54a0c6dca7a9af0a459eadac7abe2407e8c163",
+      "blob": "46103fcf2151c0c4c5179bdf2c97db8e7b5e8450",
+      "unrelatedWorkingChangesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeWorkingSHA256": "ba1033d7ce27c115f330826cbd68c23566a1a53c6a18b8d556f71500ca824b53",
+      "headSHA256": "140046cc93321d816c556bf003b11976f4870586d7337d99ca95701b73d52f73",
+      "afterWorkingSHA256": "20600fe21b0e3b971c7bc971a532f96a5d4eaca98b3cc736359cff99528a6eaf",
+      "stagedSHA256": "4e7b47b0782fa5c1ab02bbed9fd25a530e6623d7d434ba489b620cfd7909a73b",
+      "blob": "71265e02d0b601490c6c967a1e90ef64257b6355",
+      "unrelatedWorkingChangesPreserved": true
+    }
+  ]
+}

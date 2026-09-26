@@ -1,0 +1,593 @@
+{
+  "UTC": "2026-09-26T20:10:23.753343+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926",
+  "baseHead": "ab504f50bd3a0a5daab6aa4d025c0da06887b738",
+  "scope": "Prepared original LF2_CURSOR resource-loader observation; no Windows/original-game execution or Native implementation",
+  "referenceEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "resourceSHA256": "9382aac33a46878e4d94f1aea332fbd06a1508a21ee38b46be5149b9bbff39b8",
+  "reproducibility": {
+    "UTC": "2026-09-26T20:06:28.370485+00:00",
+    "reproducibleKits": [
+      "build2/kit",
+      "build3/kit"
+    ],
+    "kitFiles": 9,
+    "manifestSHA256": "5095cad6cb12159112c5ec0266cfdb125e39337907b3401bcedc8522b261485f",
+    "PEBytesEqualTestedBuild1": true,
+    "syntheticTests": 54,
+    "selfTestReportSHA256": "89355ce2f8fc0d3e43a23b847ed56b8acf511059aa02aec8570eae809d6b935d",
+    "windowsExecuted": false,
+    "gameExecuted": false
+  },
+  "binaries": {
+    "arm64": {
+      "bytes": 12288,
+      "dllCharacteristics": 33120,
+      "entryRVA": 4096,
+      "hasBaseRelocations": false,
+      "imports": [
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CreateFileW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "ExitProcess"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FindResourceA"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FlushFileBuffers"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FreeLibrary"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetACP"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetCurrentProcess"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleFileNameW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleHandleW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetOEMCP"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetProcAddress"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LoadLibraryExW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LoadResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LockResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SetLastError"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SizeofResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile"
+        }
+      ],
+      "machine": 43620,
+      "pointerBits": 64,
+      "sections": [
+        {
+          "characteristics": 1610612768,
+          "name": ".text",
+          "rawOffset": 1024,
+          "rawSize": 8704,
+          "rva": 4096,
+          "virtualSize": 8364
+        },
+        {
+          "characteristics": 1073741888,
+          "name": ".rdata",
+          "rawOffset": 9728,
+          "rawSize": 2560,
+          "rva": 16384,
+          "virtualSize": 2431
+        },
+        {
+          "characteristics": 3221225536,
+          "name": ".data",
+          "rawOffset": 0,
+          "rawSize": 0,
+          "rva": 20480,
+          "virtualSize": 72
+        }
+      ],
+      "sha256": "b05e5cfcca4a7a324484f6aca93a03404faa9446bd5c9854312fd4739b2d2a47",
+      "windowsExecuted": false
+    },
+    "x86": {
+      "bytes": 11776,
+      "dllCharacteristics": 34112,
+      "entryRVA": 4096,
+      "hasBaseRelocations": true,
+      "imports": [
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CloseHandle"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "CreateFileW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "ExitProcess"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FindResourceA"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FlushFileBuffers"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "FreeLibrary"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetACP"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetCurrentProcess"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetLastError"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleFileNameW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetModuleHandleW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetOEMCP"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "GetProcAddress"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LoadLibraryExW"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LoadResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "LockResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SetLastError"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "SizeofResource"
+        },
+        {
+          "dll": "KERNEL32.dll",
+          "name": "WriteFile"
+        }
+      ],
+      "machine": 332,
+      "pointerBits": 32,
+      "sections": [
+        {
+          "characteristics": 1610612768,
+          "name": ".text",
+          "rawOffset": 1024,
+          "rawSize": 7680,
+          "rva": 4096,
+          "virtualSize": 7499
+        },
+        {
+          "characteristics": 1073741888,
+          "name": ".rdata",
+          "rawOffset": 8704,
+          "rawSize": 2048,
+          "rva": 12288,
+          "virtualSize": 2007
+        },
+        {
+          "characteristics": 3221225536,
+          "name": ".data",
+          "rawOffset": 0,
+          "rawSize": 0,
+          "rva": 16384,
+          "virtualSize": 36
+        },
+        {
+          "characteristics": 1107296320,
+          "name": ".reloc",
+          "rawOffset": 10752,
+          "rawSize": 1024,
+          "rva": 20480,
+          "virtualSize": 612
+        }
+      ],
+      "sha256": "2442b12d3f5940c53ee2c326335783184d3191b7564a63426f41e0ad6b2460ed",
+      "windowsExecuted": false
+    }
+  },
+  "selfTests": {
+    "count": 54,
+    "architectures": [
+      "x86",
+      "arm64"
+    ],
+    "stimuli": [
+      "bitmap-failure",
+      "cleanup-failure",
+      "close-failure",
+      "complete",
+      "dc-failure",
+      "descriptor-boundary",
+      "existing",
+      "flush-failure",
+      "missing-function",
+      "module-failure",
+      "null-bits",
+      "palette-coverage",
+      "palette-failure",
+      "partial-palette",
+      "query-failure",
+      "resource-failure",
+      "resource-load-failure",
+      "resource-lock-failure",
+      "resource-size-boundary",
+      "restore-failure",
+      "selection-failure",
+      "short-write",
+      "storage-change",
+      "system-module-failure",
+      "top-down",
+      "write-failure",
+      "write-zero"
+    ],
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/self-test1/report.json",
+      "bytes": 11847,
+      "sha256": "89355ce2f8fc0d3e43a23b847ed56b8acf511059aa02aec8570eae809d6b935d",
+      "mode": 420,
+      "mtime_ns": 1790453057523121947
+    },
+    "synthetic": true
+  },
+  "retainedNLSDefaultInspection": {
+    "UTC": "2026-09-26T20:08:33.899628+00:00",
+    "previousKitManifestSHA256": "093182b1787e30ecdd7b65e4e66accd2ec8432bb54ae74f2acb8947b559160f4",
+    "results": [
+      {
+        "architecture": "x86",
+        "bytes": 9728,
+        "sha256": "0ba7192479eac881a2925e23950b7d63b007cc0cdd7abc9649c61e7b2ecb7e71",
+        "imports": 22
+      },
+      {
+        "architecture": "arm64",
+        "bytes": 10240,
+        "sha256": "84526361e571ce36a2e70d46c09be256d812aa89ed1077df582b58c6ab99aeda",
+        "imports": 22
+      }
+    ],
+    "collectorExecuted": false
+  },
+  "package": {
+    "UTC": "2026-09-26T20:08:33.939733+00:00",
+    "inputChecks": [
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/tools/build_windows_nls_probe.py",
+        "oldSaved": true,
+        "newSHA256": "3963c13f05c2a3f0f8e44d8abfdd74c726057f447898d0e94501aa6effac1fd3"
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/tools/test_windows_nls_probe.py",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/tools/probe_windows_nls.c",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/tools/run_windows_nls_probe.ps1",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_windows_nls_capture.py",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_DIB_PIXELS.md",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_FIRST_MENU_RASTER_CONTRACT.md",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-first-menu-raster-contract.json",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/michael/Developer/ntsd-2.4/AGENTS_HISTORY_2026-09-12.md",
+        "unchanged": true
+      }
+    ],
+    "zip": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/ntsd-windows-cursor-bitmap-kit.zip",
+      "bytes": 29322,
+      "sha256": "666602cbbaf04e99502459e09e79ff1d84c16c6c13c34017d9761bc471921469",
+      "membersVerified": 9
+    },
+    "syntheticTests": 54,
+    "runnerWindowsExecuted": false,
+    "PEWindowsExecuted": false,
+    "powershellSyntaxTool": null,
+    "archiveMetadata": "Exact modes and ns mtimes retained separately in final PAX task archive; Windows kit ZIP checked for membership and bytes."
+  },
+  "media": {
+    "UTC": "2026-09-26T20:09:21.380285+00:00",
+    "ISO": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/NTSD-Cursor-Bitmap-Probe.iso",
+      "bytes": 921600,
+      "sha256": "16521fefb88b07b4c9c8c161c22d4e2d5dcdc6a2596d21222fd6aa282e2d7840"
+    },
+    "mountedReadOnly": true,
+    "verifiedMembers": [
+      "WINDOWS_CURSOR_BITMAP_PROBE_PLAN.md",
+      "build_windows_cursor_bitmap_probe.py",
+      "build_windows_nls_probe.py",
+      "manifest.json",
+      "probe-windows-cursor-bitmap-arm64.exe",
+      "probe-windows-cursor-bitmap-x86.exe",
+      "probe_windows_cursor_bitmap.c",
+      "run_windows_cursor_bitmap_probe.ps1",
+      "verify_windows_cursor_bitmap_capture.py"
+    ],
+    "ownedDevice": "/dev/disk9",
+    "detach": {
+      "exitCode": 0,
+      "stdout": "\"disk9\" ejected.\n",
+      "stderr": "hdiutil: WARNING: 'hdiutil detach ...' is deprecated. Please use 'diskutil eject ...' instead.\n"
+    },
+    "windowsExecuted": false,
+    "vmMediaChanged": false
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/artifacts1.tar",
+    "bytes": 3010560,
+    "sha256": "e39fa64c9354b98d1fad88086ee6987321724d99269c5ba7f67650b0cb016143",
+    "mode": 420,
+    "mtime_ns": 1790453423741122090
+  },
+  "artifactMembersVerified": 148,
+  "memberBytesModesNanosecondMTimesVerified": true,
+  "jobs": [
+    {
+      "status": "terminal",
+      "pid": 77454,
+      "startedUTC": "2026-09-26T20:00:40.024459+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_cursor_bitmap_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/build1"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "77454 Sat Sep 26 23:00:39 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:00:40.797491+00:00",
+      "elapsedSeconds": 0.773063917
+    },
+    {
+      "status": "terminal",
+      "pid": 83531,
+      "startedUTC": "2026-09-26T20:04:15.656834+00:00",
+      "command": [
+        "uv",
+        "run",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/test1-tools/test_windows_cursor_bitmap_probe.py",
+        "--kit",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/build1/kit",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/self-test1"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "83531 Sat Sep 26 23:04:15 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "scope": "Execute only newly compiled collector in Unicorn with synthetic resource/bitmap/palette/API values; no original EXE/DLL instructions, Windows or historical capture.",
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:04:17.563705+00:00",
+      "elapsedSeconds": 1.9068951250000001
+    },
+    {
+      "status": "terminal",
+      "pid": 87206,
+      "startedUTC": "2026-09-26T20:06:27.664246+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_cursor_bitmap_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/build2"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "87206 Sat Sep 26 23:06:27 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:06:28.046296+00:00",
+      "elapsedSeconds": 0.38207941700000003
+    },
+    {
+      "status": "terminal",
+      "pid": 87206,
+      "startedUTC": "2026-09-26T20:06:28.046581+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_cursor_bitmap_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/build3"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "87206 Sat Sep 26 23:06:27 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:06:28.363619+00:00",
+      "elapsedSeconds": 0.317088125
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/WINDOWS_CURSOR_BITMAP_PROBE_PLAN.md",
+      "bytes": 5597,
+      "sha256": "9df8b25de1782dce9b0f5fd1e776d5bd98f4f9d6711f8b8403ebd6b02d6836f1",
+      "mode": 420,
+      "mtime_ns": 1790452403679927570
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/build_windows_cursor_bitmap_probe.py",
+      "bytes": 4645,
+      "sha256": "149dd122114a96344cd0e702f4b3dd70484370296ae2d5972c92ea83f63c1083",
+      "mode": 420,
+      "mtime_ns": 1790452700823840119
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/build_windows_nls_probe.py",
+      "bytes": 7317,
+      "sha256": "3963c13f05c2a3f0f8e44d8abfdd74c726057f447898d0e94501aa6effac1fd3",
+      "mode": 420,
+      "mtime_ns": 1790452571737778553
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/probe_windows_cursor_bitmap.c",
+      "bytes": 11231,
+      "sha256": "a8a3ae1fefc49c2047ec7e7c43ccc15d35c45885cb5c04d4931a286e5db8a6fb",
+      "mode": 420,
+      "mtime_ns": 1790452571738132054
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/run_windows_cursor_bitmap_probe.ps1",
+      "bytes": 6888,
+      "sha256": "d24b0820bfd91d7f71ea2daed5c0b6681d63001927b266be083f27848a996a2e",
+      "mode": 420,
+      "mtime_ns": 1790453137393024291
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/test_windows_cursor_bitmap_probe.py",
+      "bytes": 14351,
+      "sha256": "5e9281c1f2a097ee71a12fcc5aa9a25b5bf3297bc698fd70a9559ebbaa0cc72f",
+      "mode": 420,
+      "mtime_ns": 1790453022653419688
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/test_windows_nls_probe.py",
+      "bytes": 11197,
+      "sha256": "7f2e7d120357952726d16ba83c0ba8559b4b3494eefec6226d6060ea73ea539f",
+      "mode": 420,
+      "mtime_ns": 1789009915674090212
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/verify_windows_cursor_bitmap_capture.py",
+      "bytes": 7733,
+      "sha256": "41806714314ca657c2d5df0cfbedecf2afc3e9f96f4821595a60e121e2609e67",
+      "mode": 420,
+      "mtime_ns": 1790453187584535548
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/final-tools/verify_windows_nls_capture.py",
+      "bytes": 6401,
+      "sha256": "9fce7b7c3cd524d1590505ea1306829ed2847b3b482b03773cbf99c9a3adb6c9",
+      "mode": 420,
+      "mtime_ns": 1789010016909370217
+    }
+  ],
+  "metadataPins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/context.json",
+      "bytes": 2533,
+      "sha256": "86164a5cfb8f87307f57eb0ba2d531051078e5f793d488dc688cd1f4ae6beb3b",
+      "mode": 420,
+      "mtime_ns": 1790452357310870890
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/runner-correction1.json",
+      "bytes": 722,
+      "sha256": "a52cd0163f117a5bbda84e054277950297efd7e892dd9261d0d00b1e70a46b00",
+      "mode": 420,
+      "mtime_ns": 1790453137502765485
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-cursor-bitmap-probe-20260926/archive-members1.json",
+      "bytes": 46619,
+      "sha256": "dd0c71df802de562bb3591e977d5156bfeb671d4ff543bbbfd6f6373e948ea80",
+      "mode": 420,
+      "mtime_ns": 1790453423725733628
+    }
+  ],
+  "nativeChanges": false,
+  "WindowsExecuted": false,
+  "originalExecuted": false,
+  "powershellRunnerExecuted": false,
+  "independentReview": false,
+  "openGates": [
+    "Windows execution/PowerShell runner validation",
+    "resource-only versus own-module loader comparison",
+    "actual RLE-hole values/initialization behavior",
+    "DirectDraw/font/cursor/full-frame and game observations",
+    "independent review",
+    "Native raster/root promotion/full match/game"
+  ],
+  "userEULAApproval": "received during packaging; continue existing Windows setup after this checked commit; Accept not yet pressed"
+}

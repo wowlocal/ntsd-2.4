@@ -1,5 +1,16 @@
 # Текущая передача работы
 
+[Windows cursor bitmap probe prepared](WINDOWS_CURSOR_BITMAP_PROBE.md):
+Freestanding x86/ARM64 collectors; 54 synthetic tests pass, two final nine-file
+kits byte-identical, tested PE bytes retained. ZIP/ISO members and 148-member
+archive bytes/modes/ns mtimes verified. Original EXE maps resource-only; no
+original/Windows execution or Native pixel assumptions. PowerShell execution,
+loader equivalence, actual pixels/fonts/device and independent review remain open.
+[Publication](../evidence/windows-cursor-bitmap-probe.json). Windows EULA approval now received;
+NEXT: continue the existing guest installer, then bounded actual observations.
+CrossOver remains available. Supersedes EULA-pending checkpoint below; prior
+source evidence, masks, Native candidate and safety incidents remain unchanged.
+
 [Verified Windows ISO reaches installer](WINDOWS_UTM_INSTALLER_START.md):
 Download60299 terminal0/absent;176 retained+6209 new ranges cover7994415104 bytes.
 Separate full-file read matches vendor SHA;12432-member metadata archive verifies.

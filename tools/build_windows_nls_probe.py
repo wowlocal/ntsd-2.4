@@ -29,7 +29,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def inspect_pe(path, machine):
+def inspect_pe(path, machine, expected_imports=None):
     b = path.read_bytes()
     def u16(o): return struct.unpack_from('<H', b, o)[0]
     def u32(o): return struct.unpack_from('<I', b, o)[0]
@@ -77,7 +77,8 @@ def inspect_pe(path, machine):
             cursor += size
         descriptor += 20
     assert {i['dll'].lower() for i in imports} == {'kernel32.dll'}
-    assert sorted(i['name'] for i in imports) == sorted(IMPORTS)
+    assert sorted(i['name'] for i in imports) == sorted(
+        IMPORTS if expected_imports is None else expected_imports)
     return dict(machine=machine, pointerBits=size * 8, entryRVA=u32(opt + 16),
                 dllCharacteristics=flags, imports=imports, sections=sections,
                 hasBaseRelocations=has_relocations,
