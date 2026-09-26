@@ -1,0 +1,66 @@
+{
+  "UTC": "2026-09-26T08:38:19.954729+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Catalog package candidate]",
+      "insertion": "[Catalog package validation started](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\nfresh build25257 terminal0/311.585s,192 Core/61 Reference/271 test sources and\nall1686 packaged files verified. Core-only client links no test/reference objects;\nrelocated app reads all521 files/669 images/8 music inputs with repository/X5/T7\nreads actually denied. All three denial probes, complete read and missing-package\ncontrol passed; client queue40449 terminal0. First7 Native methods pass (4 reader,\n3 full-catalog/late rollback);16 total passes in the dated progress snapshot.\nQueue42094 continues all76 on this unchanged binary under the original limits;\n156-member progress metadata archive verified. [Receipt](../evidence/application-catalog-package-validation-start.json).\nNEXT: revalidate and observe the same queue/current child. On nonpass diagnose\nits exact saved result; otherwise finish all76/preservation/large archive gates.\nDo not duplicate, rebuild, rerun prior passes or alter pinned tools/candidate.\nRoot1034/prior1040/current2241/source55 unchanged. Full76 acceptance/large archive\nclosure/independent review/root promotion/backend delivery/catalog transport/\nfull137 source/app devices/Windows/clean-Mac/full match/game remain open; task is\nnot frozen. EXE envelope not recalculated. Supersedes the fresh-build NEXT below.\n\n",
+      "beforeSHA256": "dc532e264a2592bcc84f568afe26195f8dc28c610587136692bbab4fc9d28f1f",
+      "afterSHA256": "c10bec2cbcc560293d565695cb15ccae437a8c56e5c3cda96646c0cacc3838ce"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Catalog package candidate]",
+      "insertion": "[Catalog package validation](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\nfresh build and all1686 resource files verified by bytes and membership; relocated app\nreads full catalog inputs while repository/X5/T7 reads are denied. All five\nstandalone checks and first7 Native methods pass; queue42094 continues all76.\n156-member progress metadata archive verified; current2241/root/prior/source pins\nunchanged. Next: observe/diagnose same queue, then full comparison/archive closure.\nIndependent review/root promotion/backend/devices/full catalog source/game open.\n[Progress receipt](evidence/application-catalog-package-validation-start.json).\n\n",
+      "beforeSHA256": "b0da2f6ec3ea09db34b28c5e49af29f52fe331ace4b3d7f3ebb83ddb6c236c20",
+      "afterSHA256": "61de8f69a1f63459659158bcda0677c6ae036ca01b21888e41a3f5a79f827f6a"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 3,
+  "publicationMatchesLiveTask": true,
+  "metadataArchive": {
+    "members": 156,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/start-metadata1.tar",
+    "bytes": 3573760,
+    "sha256": "cf6daaf117165c7c30fc1856e8d986e78c85e752448b4f6e25776ade1bfc9f81",
+    "mode": 420,
+    "mtime_ns": 1790411821703605521
+  },
+  "queuePID": 42094,
+  "full76Comparison": false,
+  "taskFrozen": false,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE_VALIDATION_PLAN.md",
+      "bytes": 6800,
+      "sha256": "6814ffd4c23132185384d8ebef0cf53ed99602816402028b987a6bc28841af6d",
+      "mode": 420,
+      "mtime_ns": 1790410376866889197
+    },
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md",
+      "bytes": 6631,
+      "sha256": "68887c620b542ce1f41a6d777879048c74a2db328565b3e02357bf57632c5d7f",
+      "mode": 420,
+      "mtime_ns": 1790411720318463982
+    },
+    {
+      "path": "tools/prepare_application_catalog_package_validation.py",
+      "bytes": 12131,
+      "sha256": "10cb37eaabfa9cd7d63f7c11c8a8d97d9ccc434a41a7b866b290bdf4f6933ad0",
+      "mode": 420,
+      "mtime_ns": 1790410944805165400
+    },
+    {
+      "path": "docs/evidence/application-catalog-package-validation-start.json",
+      "bytes": 8790,
+      "sha256": "81cff813e8b585297fb41b44aabc95ae5322df1977b9a089226a59ad5eafdede",
+      "mode": 420,
+      "mtime_ns": 1790411821723390131
+    }
+  ],
+  "rootPromotion": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false
+}

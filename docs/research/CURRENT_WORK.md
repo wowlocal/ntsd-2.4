@@ -2,6 +2,23 @@
 
 ## Продолжение — 2026-09-26
 
+[Catalog package validation started](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+fresh build25257 terminal0/311.585s,192 Core/61 Reference/271 test sources and
+all1686 packaged files verified. Core-only client links no test/reference objects;
+relocated app reads all521 files/669 images/8 music inputs with repository/X5/T7
+reads actually denied. All three denial probes, complete read and missing-package
+control passed; client queue40449 terminal0. First7 Native methods pass (4 reader,
+3 full-catalog/late rollback);16 total passes in the dated progress snapshot.
+Queue42094 continues all76 on this unchanged binary under the original limits;
+156-member progress metadata archive verified. [Receipt](../evidence/application-catalog-package-validation-start.json).
+NEXT: revalidate and observe the same queue/current child. On nonpass diagnose
+its exact saved result; otherwise finish all76/preservation/large archive gates.
+Do not duplicate, rebuild, rerun prior passes or alter pinned tools/candidate.
+Root1034/prior1040/current2241/source55 unchanged. Full76 acceptance/large archive
+closure/independent review/root promotion/backend delivery/catalog transport/
+full137 source/app devices/Windows/clean-Mac/full match/game remain open; task is
+not frozen. EXE envelope not recalculated. Supersedes the fresh-build NEXT below.
+
 [Catalog package candidate](APPLICATION_CATALOG_PACKAGE.md): regular original
 input package and Native reader implemented in isolated2241-file candidate.
 1,198 payloads/661,635,220 bytes plus manifest verified against original inputs;

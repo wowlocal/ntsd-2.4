@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Catalog package validation](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+fresh build and all1686 resource files verified by bytes and membership; relocated app
+reads full catalog inputs while repository/X5/T7 reads are denied. All five
+standalone checks and first7 Native methods pass; queue42094 continues all76.
+156-member progress metadata archive verified; current2241/root/prior/source pins
+unchanged. Next: observe/diagnose same queue, then full comparison/archive closure.
+Independent review/root promotion/backend/devices/full catalog source/game open.
+[Progress receipt](evidence/application-catalog-package-validation-start.json).
+
 [Catalog package candidate](research/APPLICATION_CATALOG_PACKAGE.md): Native reader
 and original-data packaging implemented in isolated2241-file tree;1199 package
 files verified,661,635,220 payload bytes. Three Swift files parse;76 comparisons
