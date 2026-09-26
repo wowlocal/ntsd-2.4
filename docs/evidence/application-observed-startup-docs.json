@@ -1,0 +1,43 @@
+{
+  "UTC": "2026-09-26T13:30:53.204324+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/publication1.json",
+    "bytes": 3867,
+    "sha256": "cf74e28dafa20506308c4c4b19a860e06a176ea22486d5859fb00db1629e8bda",
+    "mode": 420,
+    "mtime_ns": 1790429402996041931
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/external-close1.json",
+    "bytes": 1410,
+    "sha256": "48188810f8403c6beb9f1db637356d0123bb64bbfddca7dcb017847afdf4d646",
+    "mode": 420,
+    "mtime_ns": 1790429403030533982
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/finalize1.job.json",
+    "bytes": 772,
+    "sha256": "c62927b86da4b9b50fd1158dffd771e5222bb3a5543d3a13c22a965a66d5ba75",
+    "mode": 420,
+    "mtime_ns": 1790429403030846816
+  },
+  "study": {
+    "path": "docs/research/APPLICATION_OBSERVED_STARTUP.md",
+    "bytes": 6387,
+    "sha256": "b22bbb045d40a3783c2ede9b53adf1b6dbe413bc8322ac131fd612d23a8793ca",
+    "mode": 420,
+    "mtime_ns": 1790429453132833478
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "independentReview": false,
+  "comparison": false
+}

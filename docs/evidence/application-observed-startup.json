@@ -1,0 +1,91 @@
+{
+  "schema": "ntsd-observed-startup-v1",
+  "UTC": "2026-09-26T13:30:02.994217+00:00",
+  "status": "implemented-syntax-passed-comparison-review-open",
+  "baseHead": "e55e4735db26a87fdec637c35aa84427780faf6e",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/candidate1-inputs.json",
+    "bytes": 569145,
+    "sha256": "c47909457f499bd3253f9b74d1806269e8b3226e791da2ed21b18fdba78124f5",
+    "mode": 420,
+    "mtime_ns": 1790429386193338786
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/context1.json",
+    "bytes": 25708,
+    "sha256": "cc12e3425f62d965f226780eb876850ba4d70b23c6506ded27a8d23999d69dd2",
+    "mode": 420,
+    "mtime_ns": 1790428922023101175
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/verification1.json",
+    "bytes": 3017,
+    "sha256": "71488698f3598139280ae6182a94deb93b678e3f6177bb3f8e2026c06d612792",
+    "mode": 420,
+    "mtime_ns": 1790429400476940521
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/selected-methods1.json",
+    "bytes": 5077,
+    "sha256": "f5ef12f77ea9df0f5d6436a93e868432096140ec1f7460485becbdc6d70476bb",
+    "mode": 420,
+    "mtime_ns": 1790429042164455628
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/candidate1.patch",
+    "bytes": 68188,
+    "sha256": "23dd5699cc278ee15d9d21659d8257fbc2c62490c06e745875df2873c91443f8",
+    "mode": 420,
+    "mtime_ns": 1790429387784035257
+  },
+  "syntax": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/syntax1.json",
+    "bytes": 10974,
+    "sha256": "b9f4d27f068cac1c5cce5de8d496bdc6289cce5edfd48d41ffc65b1efbee94a6",
+    "mode": 420,
+    "mtime_ns": 1790429269238991480
+  },
+  "authorReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/author-review1.json",
+    "bytes": 3149,
+    "sha256": "348905e814e366d5e3dbe74d0f9eab6017c14a490e853437a8b528abb06a0d03",
+    "mode": 420,
+    "mtime_ns": 1790429377068043964
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/artifact-archive1",
+    "files": 2254,
+    "directories": 59,
+    "bytes": 5127159618,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/artifact-archive1.json",
+      "bytes": 634467,
+      "sha256": "33762f8abec5accb6e9d2568a32336cd0779a8e338872a40907e1b41706b9829",
+      "mode": 420,
+      "mtime_ns": 1790429400474296219
+    }
+  },
+  "metadataArchive": {
+    "members": 48,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-20260926/metadata1.tar",
+    "bytes": 2099200,
+    "sha256": "d7163307b9b3b2460a309286a7081bc10155114f659b23b9c30c9c4827ddf5a1",
+    "mode": 420,
+    "mtime_ns": 1790429400576418740
+  },
+  "gates": {
+    "implementation": true,
+    "syntax": true,
+    "patchRoundtrip": true,
+    "preservation": true,
+    "archive": true,
+    "build": false,
+    "comparison": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  }
+}

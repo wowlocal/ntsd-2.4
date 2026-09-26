@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Resumable startup candidate](APPLICATION_OBSERVED_STARTUP.md): one typed exchange
+now covers window plus16 throwing nonwindow families; production provider and same
+Host retain actual answers/resources across retries. External macOS integer clock
+producer implemented. Seven Swift files parse; four new plus21 unchanged methods
+selected, not run. Root/base/source and prior tests preserved;2254-file archive,
+seven-file patch roundtrip and48-member metadata archive verified. Finalizer77836
+terminal0/absent, task frozen. [Publication](../evidence/application-observed-startup.json).
+NEXT: fresh build/package/all25 methods on this exact candidate, including actual
+Mac clock acquisition at whole-caller permits and late retry. Then concrete physical
+backend acquisition; independent review/root promotion/nonthrowing constants/live
+window/input/audio/loading/Windows/clean-Mac/full match/game remain open. EXE envelope
+not recalculated. Supersedes prepared-only acquisition NEXT below.
+
+
 [Prepared startup validation complete](APPLICATION_PREPARED_STARTUP_PLATFORM_VALIDATION.md):
 fresh build/package and all11 selected methods passed on unchanged2249 files.
 The production Core provider preserves23 complete/5 stops/7 provenance outcomes,
