@@ -1,0 +1,112 @@
+{
+  "schema": "ntsd-window-exchange-validation-v1",
+  "UTC": "2026-09-26T11:29:07.470439+00:00",
+  "status": "all10-passed",
+  "baseHead": "29889bdfab2454d8e22ed2ca0fb5bc064837c332",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/candidate1-inputs.json",
+    "bytes": 566692,
+    "sha256": "1e8d448c1c0889c0de25c7cfb8d486212aa4657fca0ee72ec725f02af3fa22f7",
+    "mode": 420,
+    "mtime_ns": 1790421277633852169
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/context1.json",
+    "bytes": 26873,
+    "sha256": "026c19335ec411a9b63548efd5c2f1302c8cbd566b7d7772302509a2890bb9dd",
+    "mode": 420,
+    "mtime_ns": 1790421547565188961
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/build1.job.json",
+    "bytes": 85434,
+    "sha256": "bf73ba71e612cd5cfd3b56251b50b4da19a97002c8f13b4f7309e482b30c4f15",
+    "mode": 420,
+    "mtime_ns": 1790421855600654508
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/package-check1.json",
+    "bytes": 1453881,
+    "sha256": "3858c1a3d176a4e709cdc4d58b084fcb814669b4d2e9fb63ca58e55c393dbaee",
+    "mode": 420,
+    "mtime_ns": 1790421936841414975
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 63864952,
+    "sha256": "cd11f8f8f02dcf14613ccd33e6acf40a3f3356c04f3269df796b0bbba55c9c38",
+    "mode": 493,
+    "mtime_ns": 1790421853017628695
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/tests1-queue.job.json",
+    "bytes": 9191,
+    "sha256": "853a3b260d6e98903fb81c99ae5522b01e6f5697b90eb122ee093574a1f06ec2",
+    "mode": 420,
+    "mtime_ns": 1790422025443349776
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/verification1.json",
+    "bytes": 4609,
+    "sha256": "e3e98063fe30214aa1b6f1d7b2d943c2701a42d3bfa26996bcb05728aa4038cf",
+    "mode": 420,
+    "mtime_ns": 1790422140952879528
+  },
+  "passedMethods": 10,
+  "selectedMethods": 10,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/artifact-archive1",
+    "files": 4896,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11379890744,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/artifact-archive1.json",
+      "bytes": 2578705,
+      "sha256": "946a70ff40e224fcaa8a9befa8e6fcbad998dd476faa8247dcb733b0cfc92956",
+      "mode": 420,
+      "mtime_ns": 1790422140944817553
+    }
+  },
+  "metadataArchive": {
+    "members": 67,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/metadata1.tar",
+    "bytes": 5120000,
+    "sha256": "70138b9c24b05d766b8be0261e6c2c920d2c54b3a8998c1965bdff0ff9d17549",
+    "mode": 420,
+    "mtime_ns": 1790422147362456972
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "13bddd82c24419b2f2045b7c3e0d207b97807f6684afe943ffd4285572012ca4",
+    "mode": 420,
+    "mtime_ns": 1790422140952623903
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2242,
+  "candidateUnchanged": 2244,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Window reply receipts and pure cursors are compared under declared controls; production startup provider/Host suspension and backend remain open, current AppKit still uses practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

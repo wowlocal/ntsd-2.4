@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Window exchange validation complete](APPLICATION_WINDOW_EXCHANGE_VALIDATION.md):
+all 10 selected methods passed on the unchanged 2244-file candidate. The 280
+whole-window cases fulfilled 4574 requests once each; WinMain retained 23 complete
+chains, 5 original stops and 7 provenance rejections with 650 window replies.
+Fresh build, 1686 package files, 4896-file artifact and 67-member metadata archive
+verified; root/prior/candidate/source pins preserved. Queue58993/finalizer62857
+terminal0 and absent; task frozen. [Publication](../evidence/application-window-exchange-validation.json).
+NEXT: finite Host startup preparation and window-response coordinator on the same
+Host, preserving receipts across suspension and late failures; publish only after
+the whole caller and response-consumption checks succeed. This closes the concrete
+missing startup preparation hook identified in the study. Independent review,
+root promotion, production providers/backend/devices, full catalog source/Windows/
+clean-Mac/full match/game remain open; EXE envelope not recalculated. Supersedes
+all earlier window-exchange build/comparison NEXT statements below.
+
 [Window exchange candidate](APPLICATION_WINDOW_EXCHANGE.md): additive Core
 receipt/suspension/claim/answer/failure owner implemented; same window/WinMain
 algorithms remain unchanged. Four Swift files parse; five new whole-caller/

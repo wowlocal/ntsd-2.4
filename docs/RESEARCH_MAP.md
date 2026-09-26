@@ -1,5 +1,15 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Window exchange validation complete](research/APPLICATION_WINDOW_EXCHANGE_VALIDATION.md):
+all 10 methods passed, including 280 whole-window cases/4574 once-served requests
+and WinMain's distinct 23 complete/5 stopped/7 provenance outcomes. Fresh build,
+1686 package files, 4896-file artifact and 67-member metadata archive verified;
+root/prior/candidate/source preserved. Queue58993/finalizer62857 terminal0/absent,
+task frozen. [Publication](evidence/application-window-exchange-validation.json).
+Next: same-Host startup preparation and window-response coordinator, including
+whole-caller publication, suspension, cancellation and late-failure ownership.
+Independent review/root promotion/production backend/devices/full game remain open.
+
 [Window exchange candidate](research/APPLICATION_WINDOW_EXCHANGE.md): pure
 prepared cursors plus external request permits/receipts implemented; no physical
 IO or duplicated window rules. Four files parse, ten methods selected; no build/

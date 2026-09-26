@@ -1,0 +1,165 @@
+{
+  "schema": "ntsd-window-exchange-validation-docs-v1",
+  "UTC": "2026-09-26T11:41:03.006551+00:00",
+  "baseHead": "29889bdfab2454d8e22ed2ca0fb5bc064837c332",
+  "previousGoalTurnClassification": "progress: completed exact-candidate build, all10 comparisons and archive closure; current documentation delivery closes its pending commit",
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/finalize1.job.json",
+    "bytes": 840,
+    "sha256": "3ced44a68d6726eb971a8c2d3595e6d95fd47b4292ae89459f7af55b086e1635",
+    "mode": 420,
+    "mtime_ns": 1790422147478485789
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/finalize1.log",
+    "bytes": 800,
+    "sha256": "d7887b5b83ab3a103779054fba080350397124a97356c5703d6eee508762e499",
+    "mode": 420,
+    "mtime_ns": 1790422147478543206
+  },
+  "finalizerRecord": {
+    "status": "terminal",
+    "pid": 62857,
+    "startedUTC": "2026-09-26T11:28:07.609148+00:00",
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/finalize1.py"
+    ],
+    "identity": "62857 Sat Sep 26 14:28:07 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-window-exchange-validation-20260926/finalize1.py",
+    "cwd": "p62857\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "exitCode": 0,
+    "all10Passed": true,
+    "passedMethods": 10,
+    "archivedFiles": 4896,
+    "metadataMembers": 67,
+    "endedUTC": "2026-09-26T11:29:07.478402+00:00",
+    "elapsedSeconds": 59.869099917
+  },
+  "processObservations": [
+    {
+      "pid": 45294,
+      "absent": true
+    },
+    {
+      "pid": 46100,
+      "absent": true
+    },
+    {
+      "pid": 58993,
+      "absent": true
+    },
+    {
+      "pid": 62857,
+      "absent": true
+    },
+    {
+      "pid": 59727,
+      "absent": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "docs/research/APPLICATION_WINDOW_EXCHANGE_VALIDATION_PLAN.md",
+      "bytes": 5121,
+      "sha256": "23c24204139f46fe860fa31164fe25cc2abd884f3f23137837d8651faf5da98e",
+      "mode": 420,
+      "mtime_ns": 1790421469967193796
+    },
+    {
+      "path": "docs/research/APPLICATION_WINDOW_EXCHANGE_VALIDATION.md",
+      "bytes": 7226,
+      "sha256": "3ddd38ee38e9d549e3a48dfc5bba76ba1dbba76a9635b74890bac1ac99bd446a",
+      "mode": 420,
+      "mtime_ns": 1790422536702291907
+    },
+    {
+      "path": "tools/prepare_application_window_exchange_validation.py",
+      "bytes": 12004,
+      "sha256": "dc586c4c28e749b9783313eb654c082a0ca9246bae9927fa5e9ff66501f6c50e",
+      "mode": 420,
+      "mtime_ns": 1790421535122221462
+    },
+    {
+      "path": "docs/evidence/application-window-exchange-validation.json",
+      "bytes": 5163,
+      "sha256": "1b053868baf461a0371b3ff702a7844b08eb3dc829c76d749e57cbadd8331a0b",
+      "mode": 420,
+      "mtime_ns": 1790422147478279955
+    },
+    {
+      "path": "docs/evidence/application-window-exchange-validation-close.json",
+      "bytes": 1652,
+      "sha256": "eb857e693914a184c3ac485554a6c9c39b4df7d9e4193e5fb37ca35a7204e9ce",
+      "mode": 420,
+      "mtime_ns": 1790422147478387705
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "8162a73eab1066810ba5dd7769276a2624e5941e85a08ff5ccfd9d357221bf89",
+      "workingAfter": {
+        "path": "docs/research/CURRENT_WORK.md",
+        "bytes": 142554,
+        "sha256": "c8a62da480d5a8fa07dac185882cf237f25666d52b198a2723e189e11b58a95c",
+        "mode": 420,
+        "mtime_ns": 1790422862951138995
+      },
+      "indexedBlob": "6edcdaf093ad7904bae62143a9ea8cdbf04d7a53",
+      "onlyOwnInsertionStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "ad4f9060cccdad3f39182243c41a2586709312c33836d16531c5b789e06f08c5",
+      "workingAfter": {
+        "path": "docs/RESEARCH_MAP.md",
+        "bytes": 326609,
+        "sha256": "05c9fbd1e7b363fe64b51f47bce384a0a765185643dc33d90310153fcbc1e356",
+        "mode": 420,
+        "mtime_ns": 1790422862981507179
+      },
+      "indexedBlob": "c70960821b21dc641545419ecd2b2f98fc511779",
+      "onlyOwnInsertionStaged": true
+    }
+  ],
+  "metadataArchive": {
+    "members": 67,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/metadata1.tar",
+    "bytes": 5120000,
+    "sha256": "70138b9c24b05d766b8be0261e6c2c920d2c54b3a8998c1965bdff0ff9d17549",
+    "mode": 420,
+    "mtime_ns": 1790422147362456972
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/artifact-archive1",
+    "files": 4896,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11379890744,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-window-exchange-validation-20260926/artifact-archive1.json",
+      "bytes": 2578705,
+      "sha256": "946a70ff40e224fcaa8a9befa8e6fcbad998dd476faa8247dcb733b0cfc92956",
+      "mode": 420,
+      "mtime_ns": 1790422140944817553
+    }
+  },
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "rootNativeChanged": false,
+  "readOnlyReceiptProbeFailure": {
+    "error": "AttributeError: module 'hashlib' has no attribute 'file_digest'",
+    "effect": "read-only pin check stopped before hashing; no task files or processes changed",
+    "correction": "Python 3.9-compatible streamed hashlib.sha256 read verified all publication pins and both exact root copies; ten saved job/log hashes checked"
+  }
+}
