@@ -1,0 +1,38 @@
+{
+  "UTC": "2026-09-26T18:21:34.479654+00:00",
+  "baseHead": "2255ba5305a6303aa6606b9568ec4ecb8b937097",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "8808f62b410a8a4f44971317b33ca8dc788799c7fc1f39c3277a187bd6320048",
+      "headSHA256": "3b729f76970d46ec28330b729b6d64fbdae020dbf92ee13651bb55ff3eaf3a96",
+      "workingAfterSHA256": "4cc949e8f6c84bec083f5b2458ccb5c466ad2b2d37de56df548690f6d3fc0965",
+      "stagedSHA256": "1c22b680d62e7d22f78fd5751e3e1d605cc60cc107d87830148798712ca1b0da",
+      "onlyOwnBlockStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "0af4b0b2b78efff0c63df16ba7f9d65143e98aa0e8d56b7d79708616bf4ee405",
+      "headSHA256": "f06e0f87198d9026a52e960d421bef8dfd2359e86a6bed9f6b9bac39be4df4b3",
+      "workingAfterSHA256": "9f420ad53daa4c2b097c9265d494e9276f6cda329e9ce8149bc19ee6a7988bb4",
+      "stagedSHA256": "04e2f042c4e3251b86ff0678750ccdf4ae2836d460745b3d5ae21f14d4255dd6",
+      "onlyOwnBlockStaged": true
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/research/WINDOWS_UTM_REFERENCE_SETUP_PLAN.md",
+      "sha256": "c4531176ff197b8fcf32b4103d265ac04a6d28e55384cbda855875f136e1b0db"
+    },
+    {
+      "path": "docs/research/WINDOWS_UTM_REFERENCE_SETUP.md",
+      "sha256": "3ff522d56a4af76b2863b1c65a09bc111a275719ce8097524af2c4ea0d87ee83"
+    },
+    {
+      "path": "docs/evidence/windows-utm-reference-setup.json",
+      "sha256": "70bcb151ec99ed48485cc6cf0051c0db059b1288600b1ea18a64ca3f4ed6be47"
+    }
+  ],
+  "downloadJobRemainsLive": true,
+  "WindowsObserved": false
+}

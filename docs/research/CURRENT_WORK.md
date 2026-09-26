@@ -1,5 +1,16 @@
 # Текущая передача работы
 
+[UTM reference VM configured; Windows ISO download live](WINDOWS_UTM_REFERENCE_SETUP.md):
+UTM4.7.5, ARM64/4CPU/8GiB/thin64GiB on X5, no NIC/shares/clipboard; stopped.
+Microsoft retail ISO download2 PID94629 identity-verified live on T7; first
+16MiB stalled transfer preserved, exact206 range correction underway. Do not
+restart for silence or boot current partial CD. Read-only transfer ISO1605 files
+verified, baseline1595 game files unchanged. [Checkpoint](../evidence/windows-utm-reference-setup.json).
+NEXT: observe existing download/tools, verify vendor SHA, replace partial CD and
+install guest. No Windows/game/Native execution yet; independent review and all
+render/API/device/full-game gates remain open. User confirmed no CrossOver install.
+Supersedes environment-preparation NEXT below.
+
 [First-menu raster contract: saved inputs verified](APPLICATION_FIRST_MENU_RASTER_CONTRACT.md):
 all224 stages/110 chains retained; 491 unique/901 composed Blts inventoried.
 Case0 has472 commands/22 front commands: fill, five Blts, three transparent GDI

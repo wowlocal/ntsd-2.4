@@ -1,0 +1,205 @@
+{
+  "UTC": "2026-09-26T18:20:35.097160+00:00",
+  "status": "VM-configured-ISO-download-live-Windows-not-installed",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926",
+  "UTMVersion": "4.7.5",
+  "vmUUID": "98DFE348-2BA4-426E-9E40-7214229E8E45",
+  "vmPath": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm",
+  "vmStatus": "stopped",
+  "config": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/config.plist",
+    "bytes": 3396,
+    "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6"
+  },
+  "configuration": {
+    "Backend": "QEMU",
+    "ConfigurationVersion": 4,
+    "Display": [
+      {
+        "DownscalingFilter": "Linear",
+        "DynamicResolution": true,
+        "Hardware": "virtio-ramfb-gl",
+        "NativeResolution": false,
+        "UpscalingFilter": "Nearest"
+      }
+    ],
+    "Drive": [
+      {
+        "Identifier": "B8B6EC1A-75E1-4C86-B26E-1EDD7618364D",
+        "ImageType": "CD",
+        "Interface": "USB",
+        "InterfaceVersion": 1,
+        "ReadOnly": true
+      },
+      {
+        "Identifier": "DD8331D7-4607-48E1-9494-02229FD6FA58",
+        "ImageName": "DD8331D7-4607-48E1-9494-02229FD6FA58.qcow2",
+        "ImageType": "Disk",
+        "Interface": "NVMe",
+        "InterfaceVersion": 1,
+        "ReadOnly": false
+      },
+      {
+        "Identifier": "D04463C8-71A6-449D-B4B3-9FCA76DCB392",
+        "ImageType": "CD",
+        "Interface": "USB",
+        "InterfaceVersion": 1,
+        "ReadOnly": true
+      }
+    ],
+    "Information": {
+      "Icon": "windows",
+      "IconCustom": false,
+      "Name": "NTSD Windows 11 ARM Reference",
+      "Notes": "Original NTSD reference only. Windows ARM x86 translation and virtual devices; no Windows evidence until actual captures. Research task windows-utm-reference-20260926.",
+      "UUID": "98DFE348-2BA4-426E-9E40-7214229E8E45"
+    },
+    "Input": {
+      "MaximumUsbShare": 3,
+      "UsbBusSupport": "3.0",
+      "UsbSharing": false
+    },
+    "Network": [],
+    "QEMU": {
+      "AdditionalArguments": [],
+      "BalloonDevice": false,
+      "DebugLog": false,
+      "Hypervisor": true,
+      "PS2Controller": false,
+      "RNGDevice": true,
+      "RTCLocalTime": true,
+      "TPMDevice": true,
+      "TSO": false,
+      "UEFIBoot": true
+    },
+    "Serial": [],
+    "Sharing": {
+      "ClipboardSharing": false,
+      "DirectoryShareMode": "None",
+      "DirectoryShareReadOnly": false
+    },
+    "Sound": [
+      {
+        "Hardware": "intel-hda"
+      }
+    ],
+    "System": {
+      "Architecture": "aarch64",
+      "CPU": "default",
+      "CPUCount": 4,
+      "CPUFlagsAdd": [],
+      "CPUFlagsRemove": [],
+      "ForceMulticore": false,
+      "JITCacheSize": 0,
+      "MemorySize": 8192,
+      "Target": "virt"
+    }
+  },
+  "virtualDiskBytes": 68719476736,
+  "preBootPins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/DD8331D7-4607-48E1-9494-02229FD6FA58.qcow2",
+      "bytes": 197632,
+      "sha256": "e158e01d39969cb040172da69d2519ca994a2cc75b7bff08800b47202f2e3f9e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/efi_vars.fd",
+      "bytes": 340992,
+      "sha256": "e16c802acef4b55ad6a9a21908ba0c3fdec59abec7b9cecb084a8e9261c75f06"
+    }
+  ],
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/context1.json",
+    "bytes": 1060,
+    "sha256": "cc3e6b76af64f7150f8f12a6c634f171a5837b96262cfcf06f08107e56590a15"
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/plan1.md",
+    "bytes": 4002,
+    "sha256": "c4531176ff197b8fcf32b4103d265ac04a6d28e55384cbda855875f136e1b0db"
+  },
+  "download1": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download1.job.json",
+    "bytes": 1520,
+    "sha256": "2afd5a60368ab8684e369138ba4c6d3293e06cdd24e6f509d35ff9e2d04a504a"
+  },
+  "rangeProbe": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/range-probe1.json",
+    "bytes": 668,
+    "sha256": "fd115985c510a1684e30e31bd160aa93e1070c69515304cedbe807ec6e44e554"
+  },
+  "download2JobAtObservation": {
+    "status": "running",
+    "pid": 94629,
+    "startedUTC": "2026-09-26T18:18:06.137970+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "94629 Sat Sep 26 21:18:06 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py",
+    "command": [
+      "python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py"
+    ],
+    "totalBytes": 7994415104,
+    "chunkBytes": 8388608,
+    "concurrency": 8,
+    "completedRanges": 22,
+    "completedBytes": 201326592,
+    "maxSeconds": 7200
+  },
+  "download2IdentityRevalidated": true,
+  "download2Producer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py",
+    "bytes": 3601,
+    "sha256": "f6a58ba201b4ac3e3c64ea076d84c20ab11cdde5b1b9aedd709508e2eca10808"
+  },
+  "download2InputPins": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2-inputs.json",
+    "bytes": 352,
+    "sha256": "69860dd4b95cf94319ab0cd807c0354d55e69d2fe6f3ab5ba240ca57132f5ff5"
+  },
+  "download2CorrectionPlan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2-plan.md",
+    "bytes": 977,
+    "sha256": "06a4a47054e12f1dcdf1b9e83b489ea7f0f8b0489b14d608482e8468ef278d75"
+  },
+  "transferJob": {
+    "status": "terminal",
+    "pid": 95892,
+    "startedUTC": "2026-09-26T18:18:53.889461+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "command": [
+      "python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/prepare-transfer1.py"
+    ],
+    "identity": "95892 Sat Sep 26 21:18:53 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/prepare-transfer1.py",
+    "exitCode": 0,
+    "gameFiles": 1595,
+    "gameBytes": 854489099,
+    "ISOPath": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD-Reference-Transfer.iso",
+    "ISOBytes": 857237504,
+    "ISOSHA256": "a12d5692ac4bf350c175787a0219130cf1ac535e4168d2c811f55ca2b9e9c3a2",
+    "originalSourceStillMatches": true,
+    "sourceExecuted": false,
+    "endedUTC": "2026-09-26T18:18:58.170500+00:00",
+    "elapsedSeconds": 4.281041958
+  },
+  "transferVerification": {
+    "UTC": "2026-09-26T18:20:00.782505+00:00",
+    "ISO": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD-Reference-Transfer.iso",
+    "ISOSHA256": "a12d5692ac4bf350c175787a0219130cf1ac535e4168d2c811f55ca2b9e9c3a2",
+    "mountedReadOnly": true,
+    "exactFileMembership": true,
+    "allPayloadBytesMatched": true,
+    "files": 1605,
+    "sourceExecuted": false
+  },
+  "CrossOverInstalled": false,
+  "CrossOverBottlePresent": false,
+  "CrossOverAbsenceConfirmedByUser": true,
+  "sourceExecuted": false,
+  "WindowsObserved": false,
+  "NativeChanged": false,
+  "independentReview": false,
+  "oldIoTDownloadRejectionStillOpen": true,
+  "X5Free": 155792199680,
+  "T7Free": 1999480422400
+}
