@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Native front raster candidate: compile failure preserved](APPLICATION_MAC_FRONT_RASTER.md):
+Fill/keyed-mirrored copy/Release/windowed presentation and journal service are
+implemented in a2278-file candidate, but build43929 failed on one missing try in
+mirror-effect validation. All95 methods unstarted; no package/raster acceptance.
+[Publication](../evidence/application-mac-front-raster.json). Three-file patch,
+4362-file partial artifact and35-member metadata archives verify; finalizer50345
+terminal0/absent, task frozen. Initial finalizer date-assertion failure retained.
+Root1034/prior2257/base2276/source55 unchanged; preceding all89 remains checked.
+NEXT: separate exact-clone correction adding only the second guard's try, then
+fresh build/package/all95 unchanged. Host still locked; no blind UTM input.
+Windows/font/device/root promotion/independent review/full match/game and safety
+incidents remain open; EXE envelope not recalculated. Supersedes renderer NEXT below.
+
 [Ordered whole-menu graphics replies](APPLICATION_OBSERVED_GRAPHICS.md):
 Window/bitmap/front requests now share one retained Host journal in source order.
 Actual Native bitmap service is connected; Window/front controls remain declared,

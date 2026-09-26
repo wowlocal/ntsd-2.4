@@ -1,0 +1,144 @@
+{
+  "schema": "ntsd-mac-front-raster-failure-docs-v1",
+  "UTC": "2026-09-26T22:36:34.138260+00:00",
+  "baseHead": "2ef356a7c71ac6b9b5b5221e84e9b3ca4d962ab0",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/publication1.json",
+    "bytes": 4458,
+    "sha256": "b168773a0e17b8b9b761151de177c2807f21d1b6f418f1c47b1f408a79184148",
+    "mode": 420,
+    "mtime_ns": 1790462113968552188
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/finalize-failure2.job.json",
+    "bytes": 885,
+    "sha256": "0f8952ffb2baa86050c7150fe21cf7adb95b449188a65891efd4e92543e12c7a",
+    "mode": 420,
+    "mtime_ns": 1790462113971883197
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_MAC_FRONT_RASTER_PLAN.md",
+      "bytes": 7314,
+      "sha256": "cfd3026a4e971412dc78fd9a565ab223fbcf28607a8adfc9e9363fb223317923",
+      "mode": 420,
+      "mtime_ns": 1790461337775251724
+    },
+    {
+      "path": "docs/research/APPLICATION_MAC_FRONT_RASTER.md",
+      "bytes": 6226,
+      "sha256": "db89f972a22006a09ce8f7ef53e6fc1f8446811ea80cef9d17f16db01eeeda48",
+      "mode": 420,
+      "mtime_ns": 1790462193881335960
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster.json",
+      "bytes": 4458,
+      "sha256": "b168773a0e17b8b9b761151de177c2807f21d1b6f418f1c47b1f408a79184148",
+      "mode": 420,
+      "mtime_ns": 1790462113971675946
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster-close.json",
+      "bytes": 1654,
+      "sha256": "716368b405c61cf7aec9911255170b448b31c636d1e9db5ebb2e9da065c7330e",
+      "mode": 420,
+      "mtime_ns": 1790462113971779446
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster.patch",
+      "bytes": 34344,
+      "sha256": "96cfe8a1d10f8fbacaa210549d6ca2524381b11a9885952f58e2eb2f23f9e9cd",
+      "mode": 420,
+      "mtime_ns": 1790462072414206645
+    },
+    {
+      "path": "tools/OriginalMacFrontRaster.swift",
+      "bytes": 10759,
+      "sha256": "2bba649c9adce88fe76a81a0943b273ecdeaff256345aa987d6301b422abc577",
+      "mode": 420,
+      "mtime_ns": 1790461457698862104
+    },
+    {
+      "path": "tools/OriginalMacFrontService.swift",
+      "bytes": 2530,
+      "sha256": "385d153bbb9af5f9a7a68a960128ae0444d88032c12fe8b0cf71a1c3c7346818",
+      "mode": 420,
+      "mtime_ns": 1790461457700657442
+    },
+    {
+      "path": "tools/OriginalMacFrontRasterTests.swift",
+      "bytes": 19645,
+      "sha256": "f0bdf0d0442f62f68692bb1718b7f1045955d4a910f26f6e622e3358e7363493",
+      "mode": 420,
+      "mtime_ns": 1790461757870558399
+    },
+    {
+      "path": "tools/apply_mac_front_raster_candidate.py",
+      "bytes": 1298,
+      "sha256": "1a76b808bac611ff4235d57f50654a8487755b3ed7b888bf9085b0326841d6ce",
+      "mode": 420,
+      "mtime_ns": 1790461757874087034
+    },
+    {
+      "path": "tools/prepare_application_mac_front_raster.py",
+      "bytes": 12891,
+      "sha256": "f675340ae766e7fc0a7c2c597cef14061371d2817cbf92d1b5a1ac26cffcbf2c",
+      "mode": 420,
+      "mtime_ns": 1790461757894423130
+    },
+    {
+      "path": "tools/finalize_application_mac_front_raster.py",
+      "bytes": 18490,
+      "sha256": "6fdefe63afacce035d57439f51a35502273d1871de7b5cd3cc777c8f5966cdc3",
+      "mode": 420,
+      "mtime_ns": 1790461835488603558
+    },
+    {
+      "path": "tools/finalize_application_mac_front_raster_failure.py",
+      "bytes": 15318,
+      "sha256": "b7c05e9eae1134e57256237007f8c4529174d3d2433c5333daa90d79883fe58f",
+      "mode": 420,
+      "mtime_ns": 1790462014046291731
+    },
+    {
+      "path": "tools/finalize_application_mac_front_raster_failure2.py",
+      "bytes": 15318,
+      "sha256": "6bfc87d06d5aeb2e3f76949814fa4f5326ff3adf07d64c3c29b3db5659979b73",
+      "mode": 420,
+      "mtime_ns": 1790462057201078999
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "569a6b94265085b7a899c76825478aecab02a6381db7eb15c7fdc72396031218",
+      "insertedBlockSHA256": "010f38357b1e0ed3057dbabc0fd358475961115664140126010d2a15aac75e85",
+      "stagedBlob": "7fe54bd7f90f4b0aaea78c6bbeca9d89570bff1d",
+      "unrelatedDiffRetained": "260\t0\tdocs/research/CURRENT_WORK.md"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "9e81814d541e6171e45f94a594ae563cf8fc81d903e6f381b85b5a306a71b9ee",
+      "insertedBlockSHA256": "3f960c75dd56d4ed75db7d34c8eec83094e41145002caaf94ed482c6f1429dd4",
+      "stagedBlob": "741be9eb5cdf53565f0eb9c61c1522fe905f4ea6",
+      "unrelatedDiffRetained": "123\t1\tdocs/RESEARCH_MAP.md"
+    }
+  ],
+  "buildPassed": false,
+  "selectedMethods": 95,
+  "testsStarted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "originalExecuted": false,
+  "whitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+}

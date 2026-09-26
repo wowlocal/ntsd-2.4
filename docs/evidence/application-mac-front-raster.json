@@ -1,0 +1,100 @@
+{
+  "schema": "ntsd-mac-front-raster-validation-v1",
+  "UTC": "2026-09-26T22:35:13.964379+00:00",
+  "status": "build-failed-before-tests",
+  "baseHead": "2ef356a7c71ac6b9b5b5221e84e9b3ca4d962ab0",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/candidate1-inputs.json",
+    "bytes": 575018,
+    "sha256": "c160fe8d10a6487bea1eb0ed5fb65fb0e4b92529fa036c6850c6ea798db8be2d",
+    "mode": 420,
+    "mtime_ns": 1790461798759597466
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/context1.json",
+    "bytes": 31373,
+    "sha256": "776c0fc84f4abb1369cc7ba163b336c6a97904e74a31cac6811c55b1f86dc0c4",
+    "mode": 420,
+    "mtime_ns": 1790461799103410942
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/build1.job.json",
+    "bytes": 45721,
+    "sha256": "140ec50f743b0b2074b1b9132d4cc0641dce9f9d904d62386540d33343b7f5ba",
+    "mode": 420,
+    "mtime_ns": 1790461934695789279
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/failure-diagnosis1.json",
+    "bytes": 1867,
+    "sha256": "a1141a258b614b64903f83619c23161c1d2e4fd050d0c516a81cc28cc9f91295",
+    "mode": 420,
+    "mtime_ns": 1790462014045974938
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/verification1.json",
+    "bytes": 9550,
+    "sha256": "76c39e59c05d4b0128cecfed2ed6bf722c9ca7d4c5b6774c181ac8cb64cc8966",
+    "mode": 420,
+    "mtime_ns": 1790462111052150843
+  },
+  "passedMethods": 0,
+  "selectedMethods": 95,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/artifact-archive1",
+    "files": 4362,
+    "directories": 131,
+    "links": 0,
+    "bytes": 10376805364,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/artifact-archive1.json",
+      "bytes": 2234732,
+      "sha256": "7561324b286995a6aef355e3fd5d814b7e3006d332d8961547f6e22581e9b4e3",
+      "mode": 420,
+      "mtime_ns": 1790462111045643992
+    }
+  },
+  "metadataArchive": {
+    "members": 35,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/metadata1.tar",
+    "bytes": 4474880,
+    "sha256": "0d88689e64ecb19773b86bdbc60b1b9d28c3fc91b9d918726af7d737647e3ae4",
+    "mode": 420,
+    "mtime_ns": 1790462113859803350
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "052a5b112995aefb5281f6e1bfd8b553d87af4bb459d60301672ce1ee6afb582",
+    "mode": 420,
+    "mtime_ns": 1790462111051975134
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateUnchanged": 2278,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Native front raster candidate did not compile: second throwing guard condition lacks try. No package acceptance or test execution; all95 methods remain unstarted.",
+    "Previous all89 ordered-graphics candidate remains separate and unchanged. The new host XRGB raster is not Windows/device/font evidence. No actual menu/frame or AppKit presentation acceptance follows.",
+    "Source59727 remains terminal34Objects, not137. Independent review/root promotion/Windows/device/input/audio/clean-Mac/full match/game and safety incidents remain open."
+  ]
+}
