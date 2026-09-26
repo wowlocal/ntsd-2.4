@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host app preflight complete](research/APPLICATION_HOST_APP_PREFLIGHT.md): ordered
+startup/iteration/loaded streams and complete provider inventory mapped; production
+catalog inputs and retained backend delivery remain missing. Root1034/current1040/
+source55 preserved;12-member archive verified; no original/Native/device execution.
+Next: ordinary original catalog/media package and Native reader, complete input-map
+comparison plus unchanged69 host/caller methods and bundle verification. Independent
+review/root promotion/full catalog/device/full match/game remain open.
+[Publication](evidence/application-host-app-preflight.json).
+
 [Host gameplay comparison complete](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
 all69 pass (57 prior + separately recovered58 +11 new), unchanged binary/package.
 Queue90854/finalizer26386 terminal0/absent; prior2488-file and new70-member archives

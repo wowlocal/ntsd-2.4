@@ -1,0 +1,81 @@
+{
+  "UTC": "2026-09-26T07:51:15.929414+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Host gameplay comparison complete]",
+      "insertion": "[Host app preflight complete](APPLICATION_HOST_APP_PREFLIGHT.md): three ordered\nbatch streams, all23 startup provider members and nine later input groups mapped.\nFull catalog still receives original input bytes from XCTest fixtures; the app\nhas no shipping catalog reader or host consumer. Preparation40374/finalizer62503\nterminal0/absent;12-member metadata archive verified. Root1034/candidate1040/\nsource55 unchanged. No original/Native/device execution; independent review open.\n[Publication](../evidence/application-host-app-preflight.json).\nNEXT: original catalog/media package and Native reader in a fresh candidate from\ncurrent1040. Pin521 file roles,669 image roles and8 WMA inputs to original bytes;\ncount unique payloads separately. Compare complete maps with the old input producer,\nretain all69 host/caller methods and17/48/14 schedules, then verify self-contained\nbundle reads. Freeze copying/build/test bounds before execution. This removes a\nstandalone-data dependency on the path to the full match. Retained delivery owners,\nprepared device replies, root promotion, catalog transport/full137 return, actual\napp/Windows/devices/clean-Mac/full match/game remain open. EXE envelope not\nrecalculated. This supersedes the app-preflight NEXT below.\n\n",
+      "beforeSHA256": "ab37b9cc6a70580a39b25045df5b5edefd63170619ad203caddabff81e5175e1",
+      "afterSHA256": "76dde142bbf8def4ac423c0499fdde0e4bfea3f6e981f5e0dd367dc135fe19c1"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Host gameplay comparison complete]",
+      "insertion": "[Host app preflight complete](research/APPLICATION_HOST_APP_PREFLIGHT.md): ordered\nstartup/iteration/loaded streams and complete provider inventory mapped; production\ncatalog inputs and retained backend delivery remain missing. Root1034/current1040/\nsource55 preserved;12-member archive verified; no original/Native/device execution.\nNext: ordinary original catalog/media package and Native reader, complete input-map\ncomparison plus unchanged69 host/caller methods and bundle verification. Independent\nreview/root promotion/full catalog/device/full match/game remain open.\n[Publication](evidence/application-host-app-preflight.json).\n\n",
+      "beforeSHA256": "5a698eb5a74b074e807a64d24c569e568c185dd5c8312f21999b8475c9eb8912",
+      "afterSHA256": "c785908458f8220586b2a3105585a94014f146134a4ecbaadd4c1b72fd9b9f6b"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 4,
+  "publicationMatchesFrozenTask": true,
+  "terminalProcessesAbsent": [
+    62503,
+    40374,
+    90854,
+    26386,
+    59727
+  ],
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_HOST_APP_PREFLIGHT_PLAN.md",
+      "bytes": 6012,
+      "sha256": "6e4cafdf8023d44e419ff7e854b6417607c2120ea7eb3ddda2a4e7b3858f8161",
+      "mode": 420,
+      "mtime_ns": 1790407932085996134
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_APP_PREFLIGHT.md",
+      "bytes": 14305,
+      "sha256": "f44c9a09cb5a5c76901d031a794932136ee75a2e5cec1da755348b283db0b315",
+      "mode": 420,
+      "mtime_ns": 1790408644604241824
+    },
+    {
+      "path": "docs/evidence/application-host-app-preflight.json",
+      "bytes": 2440,
+      "sha256": "d79380ec63d994ce70b7406d52a200c3fa2c4808d2261cbecb4ebaf6dc2880b5",
+      "mode": 420,
+      "mtime_ns": 1790408790546808029
+    },
+    {
+      "path": "docs/evidence/application-host-app-preflight-close.json",
+      "bytes": 852,
+      "sha256": "c207062f0c89cfffe41dac81814bb31e3f7768c25ff251fb1716154ef03fee89",
+      "mode": 420,
+      "mtime_ns": 1790408790546932737
+    },
+    {
+      "path": "docs/evidence/application-host-app-preflight-observations.json",
+      "bytes": 16417,
+      "sha256": "97510855d9cc6646f4057b8709cb7e7b66042a9f2ba14e0b0abd3763084cb6f3",
+      "mode": 420,
+      "mtime_ns": 1790408790547056071
+    }
+  ],
+  "metadataArchive": {
+    "members": 12,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/metadata1.tar",
+    "bytes": 122880,
+    "sha256": "64cc1e88d4eb7206fc0f31036d6b2c3e5a44c2d252d1ef28ae9796c7bd335b7d",
+    "mode": 420,
+    "mtime_ns": 1790408790491036497
+  },
+  "rootFilesUnchanged": 1034,
+  "candidateFilesUnchanged": 1040,
+  "sourcePinsUnchanged": 55,
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false
+}

@@ -1,0 +1,565 @@
+{
+  "UTC": "2026-09-26T07:41:25.529502+00:00",
+  "kind": "Static contract inventory, not new Native or Windows comparison",
+  "enumInventory": {
+    "startup": {
+      "file": "OriginalApplicationStartupPlatform.swift",
+      "enum": "OriginalApplicationStartupOperation",
+      "cases": [
+        "milliseconds",
+        "criticalSection",
+        "initializeCOM",
+        "window",
+        "file",
+        "panelWrite",
+        "panelClose",
+        "panelAllocation",
+        "panelResource",
+        "panelDevice",
+        "filetime",
+        "timezone",
+        "calendarAllocation",
+        "zoneName",
+        "music",
+        "cursor",
+        "joystick",
+        "sound",
+        "wave"
+      ]
+    },
+    "iteration": {
+      "file": "OriginalApplicationMenuSession.swift",
+      "enum": "Effect",
+      "cases": [
+        "blit",
+        "fill",
+        "surface",
+        "soundMethod",
+        "release",
+        "present",
+        "getDC",
+        "graphics",
+        "free",
+        "translate",
+        "sleep",
+        "bitmap",
+        "allocate",
+        "settings",
+        "lifecycle",
+        "startupFront",
+        "startupGraphics"
+      ]
+    },
+    "loaded": {
+      "file": "OriginalApplicationLoadedMenuSession.swift",
+      "enum": "Operation",
+      "cases": [
+        "preceding",
+        "menu",
+        "music",
+        "front",
+        "clock",
+        "loop",
+        "localTime",
+        "recordingAllocation",
+        "gameplayRecording",
+        "gameplayAllocate",
+        "gameplayProcessor",
+        "gameplayOpen",
+        "gameplayWrite",
+        "gameplayClose",
+        "gameplayResume"
+      ]
+    },
+    "input": {
+      "file": "OriginalApplicationInputSession.swift",
+      "enum": "Operation",
+      "cases": [
+        "preceding",
+        "menu",
+        "control",
+        "replayMessage",
+        "roundMethod"
+      ]
+    },
+    "pool": {
+      "file": "OriginalApplicationPoolSession.swift",
+      "enum": "Operation",
+      "cases": [
+        "preceding",
+        "allocation",
+        "menu"
+      ]
+    },
+    "catalog": {
+      "file": "OriginalApplicationCatalogSession.swift",
+      "enum": "Operation",
+      "cases": [
+        "preceding",
+        "menu",
+        "allocation",
+        "file",
+        "wave",
+        "volume",
+        "clock",
+        "message"
+      ]
+    },
+    "loading": {
+      "file": "OriginalApplicationLoadingSession.swift",
+      "enum": "Operation",
+      "cases": [
+        "menu",
+        "wave"
+      ]
+    }
+  },
+  "startupProviderMembers": [
+    "panelIO",
+    "environmentTZ",
+    "sound",
+    "milliseconds",
+    "initializeCriticalSection",
+    "initializeCOM",
+    "window",
+    "file",
+    "writePanel",
+    "closePanel",
+    "allocatePanel",
+    "panelBitmap",
+    "panelDevice",
+    "filetime",
+    "timezone",
+    "allocateCalendar",
+    "convertZoneName",
+    "music",
+    "cursor",
+    "joystick",
+    "wave",
+    "observe",
+    "stagedCopy"
+  ],
+  "startupProviderGroups": [
+    {
+      "group": "staged platform",
+      "members": [
+        "stagedCopy"
+      ],
+      "source": "OriginalApplicationStartupPlatform",
+      "owner": "Independent mutable queues, allocation reservations and reply positions",
+      "gap": "A different object identity alone does not prove storage independence"
+    },
+    {
+      "group": "immutable original inputs",
+      "members": [
+        "file",
+        "panelBitmap"
+      ],
+      "owner": "OriginalStartup package and Bitmap producer",
+      "gap": "Writable overlays, resource-error responses and additional content package required"
+    },
+    {
+      "group": "panel stream",
+      "members": [
+        "panelIO",
+        "writePanel",
+        "closePanel"
+      ],
+      "owner": "Own panel parser and buffered request journal",
+      "gap": "Prepare file identity/presence/read extent and actual write/close outcome without publishing live IO inside Core"
+    },
+    {
+      "group": "logical memory",
+      "members": [
+        "allocatePanel",
+        "allocateCalendar"
+      ],
+      "owner": "OriginalInterfaceAllocation and Native records",
+      "gap": "Task-owned allocator tokens, backing provenance, aliases and reservation rollback; source-private backing is not a provider"
+    },
+    {
+      "group": "clock/calendar",
+      "members": [
+        "milliseconds",
+        "filetime",
+        "environmentTZ",
+        "timezone",
+        "convertZoneName"
+      ],
+      "owner": "Recovered timer/calendar rules consume explicit inputs",
+      "gap": "Host time origins/wrap, zone/codepage observations; no copied expected clock/date or guessed Windows locale"
+    },
+    {
+      "group": "window/device",
+      "members": [
+        "initializeCriticalSection",
+        "initializeCOM",
+        "window",
+        "panelDevice",
+        "cursor"
+      ],
+      "owner": "Recovered request models and graphics generation owner",
+      "gap": "Prepared backend replies, callback order, device/resource error behavior, palette/raster and actual leases remain open"
+    },
+    {
+      "group": "audio",
+      "members": [
+        "sound",
+        "music",
+        "wave"
+      ],
+      "owner": "Own music allocations, WaveLoadResult PCM/masks and declared platform tokens",
+      "gap": "Real device/mixer/media semantics and retained payload ownership; AVAudioPlayer practice is not that contract"
+    },
+    {
+      "group": "input",
+      "members": [
+        "joystick"
+      ],
+      "owner": "Recovered InputStartup request model",
+      "gap": "Device capabilities/capture and event translation are host observations, not success constants"
+    },
+    {
+      "group": "validation only",
+      "members": [
+        "observe"
+      ],
+      "owner": "Read-only validation hook",
+      "gap": "No backend IO or live allocator/event consumption here"
+    }
+  ],
+  "packages": [
+    {
+      "name": "OriginalCharacterMenu",
+      "manifest": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/Resources/OriginalCharacterMenu/manifest.json",
+        "bytes": 1943,
+        "sha256": "f0c363739088e477c8b51b597374f29bccae9f63d7d09f7169128c57b01b1161",
+        "mode": 420,
+        "mtime_ns": 1789290481827986476
+      },
+      "keys": [
+        "version",
+        "exeSHA256",
+        "entries"
+      ],
+      "entries": 11
+    },
+    {
+      "name": "OriginalCommonSounds",
+      "manifest": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/Resources/OriginalCommonSounds/manifest.json",
+        "bytes": 2171,
+        "sha256": "b1a519e2db09f18aa0d2bbaf29aa44226fba6a04852f8a4062778ae7d8e8a2f3",
+        "mode": 420,
+        "mtime_ns": 1789246096951775845
+      },
+      "keys": [
+        "entries",
+        "exeSHA256",
+        "version"
+      ],
+      "entries": 18
+    },
+    {
+      "name": "OriginalLoadingInterface",
+      "manifest": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/Resources/OriginalLoadingInterface/manifest.json",
+        "bytes": 1863,
+        "sha256": "9f8cb29ac2546c0718e7c83541972b6e4589c64488ec057027b4fe4edd55af82",
+        "mode": 420,
+        "mtime_ns": 1789283703696704527
+      },
+      "keys": [
+        "version",
+        "exeSHA256",
+        "entries"
+      ],
+      "entries": 10
+    },
+    {
+      "name": "OriginalMatchArenas",
+      "manifest": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/Resources/OriginalMatchArenas/manifest.json",
+        "bytes": 3917,
+        "sha256": "1e52d2fabb7eeedd9b9dd5ed3df1c70a8112091109107d98917e2b93144824fd",
+        "mode": 420,
+        "mtime_ns": 1789311401669813399
+      },
+      "keys": [
+        "version",
+        "exeSHA256",
+        "entries"
+      ],
+      "entries": 13
+    },
+    {
+      "name": "OriginalStartup",
+      "manifest": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/Resources/OriginalStartup/manifest.json",
+        "bytes": 15290,
+        "sha256": "f67aff089a95f230b4e7f5c381ac92b420a5541f7fea6b6a268986aa6b7ef177",
+        "mode": 420,
+        "mtime_ns": 1789231646007809532
+      },
+      "keys": [
+        "absentFiles",
+        "controlProjection",
+        "entries",
+        "exeSHA256",
+        "globalAddress",
+        "globalCount",
+        "provenance",
+        "version"
+      ],
+      "entries": 45
+    }
+  ],
+  "sourceFilesRead": 36,
+  "metadataFilesRead": 22,
+  "inventoryCompleteAtDeclaredInterfaces": true,
+  "additionalProviderGroups": [
+    {
+      "group": "Host.Inputs",
+      "contract": [
+        "MenuInputs",
+        "Responses",
+        "queue",
+        "windowDefault",
+        "surface",
+        "lifecycle"
+      ],
+      "native": "Bootstrap consumes exact reply arrays, State owns masks/aliases/MSG; Host stages Platform",
+      "gap": "Prepared native queue, lifecycle/error replies, immutable package bytes and actual events required"
+    },
+    {
+      "group": "first loading",
+      "contract": [
+        "common inputs",
+        "waves",
+        "drawResult",
+        "presentationResult"
+      ],
+      "native": "Own18 WAVs and pending catalog through exact outer ticket",
+      "gap": "CommonSounds bytes exist; WAV/device responses remain explicit"
+    },
+    {
+      "group": "catalog",
+      "contract": [
+        "files",
+        "bitmaps",
+        "allocate",
+        "bitmap",
+        "file",
+        "wave",
+        "volume",
+        "time",
+        "message",
+        "finish"
+      ],
+      "native": "Native catalog/shared loaders own records, checksum, file streams and bitmap metadata",
+      "gap": "Current full test reference decodes521 file inputs and669 images from fixtures; standalone resource producer missing"
+    },
+    {
+      "group": "pool/UI",
+      "contract": [
+        "allocate",
+        "bitmap",
+        "finish",
+        "arithmeticPrecision"
+      ],
+      "native": "Own400 Actors and10 UI constructors; tokens/callback controls are attempt-owned",
+      "gap": "Resource identities, allocator backing and explicit53-bit provenance required"
+    },
+    {
+      "group": "loaded input",
+      "contract": [
+        "dispatch",
+        "controlBoundary",
+        "replayEvent",
+        "roundEvent"
+      ],
+      "native": "Current LoadingContext and retained pool owners, own local/replay/round decision",
+      "gap": "Actual keyboard/network/device inputs and remaining AI/object child; observer hooks are not device delivery"
+    },
+    {
+      "group": "loaded menu",
+      "contract": [
+        "MenuInputs",
+        "screenInput",
+        "outputInput",
+        "allocate",
+        "bitmap",
+        "music",
+        "milliseconds"
+      ],
+      "native": "Current menu/body owners and installed text route",
+      "gap": "Prepared resource/device/clock replies; common scalar replies do not establish per-call device behavior"
+    },
+    {
+      "group": "match launch",
+      "contract": [
+        "bitmaps",
+        "outputInput",
+        "methodResult",
+        "allocateBitmap",
+        "bitmap",
+        "localTime",
+        "music",
+        "allocateReplay",
+        "milliseconds"
+      ],
+      "native": "Retained Start, original District package, own recording and current music",
+      "gap": "Host allocator/media/resource preparation and current calendar observations"
+    },
+    {
+      "group": "gameplay/paused",
+      "contract": [
+        "outputInput",
+        "caller",
+        "fillBacking",
+        "allocate",
+        "processorSignature",
+        "open",
+        "write",
+        "close",
+        "resumeMusic"
+      ],
+      "native": "Owned simulation/library state and result writer; missing callbacks reject and roll back",
+      "gap": "Host backing provenance and replay/media IO outcome preparation; copying a Swift value cannot undo published IO"
+    },
+    {
+      "group": "outer completion",
+      "contract": [
+        "perform(time/sleep)",
+        "beforeCommit"
+      ],
+      "native": "Only retained outer tail runs; one loaded publication",
+      "gap": "Actual time observation and pacing delivery; no reacquisition/body replay on a tail retry"
+    }
+  ],
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "deviceObserved": false,
+  "independentReview": false,
+  "baselineDirectoryStats": {
+    "counts": {
+      ".txt": 7,
+      ".dll": 1,
+      ".exe": 1,
+      ".lfr": 3,
+      ".dat": 184,
+      ".bmp": 982,
+      ".wma": 8,
+      ".wav": 409
+    },
+    "bytesByExtension": {
+      ".txt": 52763,
+      ".dll": 6144,
+      ".exe": 31715328,
+      ".lfr": 33087,
+      ".dat": 5965229,
+      ".bmp": 786849168,
+      ".wma": 14455318,
+      ".wav": 15412062
+    },
+    "music": [
+      {
+        "path": "bgm/boss1.wma",
+        "bytes": 1254751
+      },
+      {
+        "path": "bgm/boss2.wma",
+        "bytes": 1284791
+      },
+      {
+        "path": "bgm/main.wma",
+        "bytes": 3895405
+      },
+      {
+        "path": "bgm/stage1.wma",
+        "bytes": 2162365
+      },
+      {
+        "path": "bgm/stage2.wma",
+        "bytes": 1311827
+      },
+      {
+        "path": "bgm/stage3.wma",
+        "bytes": 1236727
+      },
+      {
+        "path": "bgm/stage4.wma",
+        "bytes": 1236727
+      },
+      {
+        "path": "bgm/stage5.wma",
+        "bytes": 2072725
+      }
+    ],
+    "level": "Filesystem names/extents only; payload bodies not newly verified by this directory inventory"
+  },
+  "orderedStreams": [
+    {
+      "kind": "startup",
+      "producer": "StartupBridge.operations",
+      "graphics": "One command per .window operation",
+      "duplicateDeliveryForbidden": true
+    },
+    {
+      "kind": "iteration",
+      "producer": "MenuSession.emit/effects",
+      "graphics": "Graphics.consume optional command at same effect",
+      "duplicateDeliveryForbidden": true
+    },
+    {
+      "kind": "loaded",
+      "producer": "Native nested preceding operations, current child, outer time/sleep tail",
+      "graphics": "Same effect emission plus retained current prefix; cached cycle does not replay historical pool journal",
+      "duplicateDeliveryForbidden": true
+    }
+  ],
+  "concreteGaps": [
+    {
+      "id": "shipping-inputs",
+      "observed": "Package assets copies BMP/WAV, five small packages and game.json; full catalog test producer inflates521 input files and669 images; eight WMA not packaged",
+      "next": "Regular original input package/reader and unchanged source comparisons"
+    },
+    {
+      "id": "commit-resource-lifetime",
+      "observed": "Host permits queued batches and later commits; startup/iteration do not retain complete corresponding application/platform context; WAV copy event has counts without PCM",
+      "next": "Retained generation/owner payload context at commit, before delayed backend consumption"
+    },
+    {
+      "id": "prepared-device-replies",
+      "observed": "Core requires replies before commit and forbids live IO in staged callbacks",
+      "next": "Backend reservation/observation/cancellation contract; no blanket successful replies"
+    },
+    {
+      "id": "device-fidelity",
+      "observed": "Resolved graphics is not rasterizer; DIB unknown pixels, format/palette/text/device behavior and actual input/audio remain open",
+      "next": "Existing explicit Windows/device evidence dependencies; no substitute Practice output"
+    }
+  ],
+  "proposedCandidate": {
+    "kind": "Original catalog/media runtime input package",
+    "inputRoles": {
+      "catalogAndWaveFiles": 521,
+      "images": 669,
+      "originalWMA": 8
+    },
+    "countsAreRolesNotUniquePayloads": true,
+    "existingNativeMethodsRetained": 69,
+    "newFiniteCheckGroups": 4,
+    "expectedAndMasksUnchanged": true,
+    "originalExecutionRequired": false,
+    "implementationExecuted": false
+  },
+  "staticChecks": {
+    "allFiveAppFilesWithoutHostConsumer": true,
+    "packageAssetFilterBMPWAV": true,
+    "testOnlyFullCatalogInputCountsPresent": true,
+    "startupProviderCoverageExact": true,
+    "rootAndCandidateAlreadyVerified": true
+  }
+}

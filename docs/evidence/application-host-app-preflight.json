@@ -1,0 +1,58 @@
+{
+  "schema": "ntsd-host-app-preflight-v1",
+  "UTC": "2026-09-26T07:46:30.545872+00:00",
+  "status": "static-preflight-complete-review-open",
+  "baseHead": "95be05f529ee1a70711dff3cea94bc4d603ae0de",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/context1.json",
+    "bytes": 24827,
+    "sha256": "7c541a3cfc3150a3a761b9741d19e3330e3383644a8ac2b0ecf256cfd776ea33",
+    "mode": 420,
+    "mtime_ns": 1790408000723858078
+  },
+  "inputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/consulted-inputs1.json",
+    "bytes": 20962,
+    "sha256": "0db31bfe15736b068d3670bda94006984f7b41092fca537d6603e0ed65688465",
+    "mode": 420,
+    "mtime_ns": 1790408485499166771
+  },
+  "observations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/observations1.json",
+    "bytes": 16417,
+    "sha256": "97510855d9cc6646f4057b8709cb7e7b66042a9f2ba14e0b0abd3763084cb6f3",
+    "mode": 420,
+    "mtime_ns": 1790408690021724843
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/verification1.json",
+    "bytes": 1789,
+    "sha256": "e27feec500106fec9813bb78205909c2317fa32aece8872cd36fef029059d2e8",
+    "mode": 420,
+    "mtime_ns": 1790408790474959125
+  },
+  "metadataArchive": {
+    "members": 12,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-app-preflight-20260926/metadata1.tar",
+    "bytes": 122880,
+    "sha256": "64cc1e88d4eb7206fc0f31036d6b2c3e5a44c2d252d1ef28ae9796c7bd335b7d",
+    "mode": 420,
+    "mtime_ns": 1790408790491036497
+  },
+  "result": "Next: package original catalog/media inputs and add production Native reader; retain69 comparisons and all device/whole-game dependencies",
+  "originalExecuted": false,
+  "nativeExecuted": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false,
+  "gates": {
+    "staticInventory": true,
+    "preservation": true,
+    "archive": true,
+    "implementation": false,
+    "rootPromotion": false,
+    "actualDevices": false,
+    "wholeCatalogSource": false,
+    "fullGame": false
+  }
+}

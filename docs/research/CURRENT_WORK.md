@@ -2,6 +2,23 @@
 
 ## Продолжение — 2026-09-26
 
+[Host app preflight complete](APPLICATION_HOST_APP_PREFLIGHT.md): three ordered
+batch streams, all23 startup provider members and nine later input groups mapped.
+Full catalog still receives original input bytes from XCTest fixtures; the app
+has no shipping catalog reader or host consumer. Preparation40374/finalizer62503
+terminal0/absent;12-member metadata archive verified. Root1034/candidate1040/
+source55 unchanged. No original/Native/device execution; independent review open.
+[Publication](../evidence/application-host-app-preflight.json).
+NEXT: original catalog/media package and Native reader in a fresh candidate from
+current1040. Pin521 file roles,669 image roles and8 WMA inputs to original bytes;
+count unique payloads separately. Compare complete maps with the old input producer,
+retain all69 host/caller methods and17/48/14 schedules, then verify self-contained
+bundle reads. Freeze copying/build/test bounds before execution. This removes a
+standalone-data dependency on the path to the full match. Retained delivery owners,
+prepared device replies, root promotion, catalog transport/full137 return, actual
+app/Windows/devices/clean-Mac/full match/game remain open. EXE envelope not
+recalculated. This supersedes the app-preflight NEXT below.
+
 [Host gameplay comparison complete](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
 all69 methods verified on unchanged correction1 binary:57 prior, separately
 recovered58,11 new. Queue90854 terminal0/absent; finalizer26386 terminal0/absent.
