@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Physical macOS window candidate](APPLICATION_MAC_WINDOW.md): AppKit service now
+consumes whole-startup permits on the same Host, owns cursor/class/window identities
+and retains physical replies through rollback. Common beginService rejects foreign,
+duplicate/cancelled physical starts before IO. Six Swift files parse; four new plus
+25 unchanged methods selected, not run. Root1034/base2254/source55 preserved;
+2257-file/60-directory archive, six-file patch roundtrip and45-member metadata
+verified. Finalizer59873 terminal0/absent; task frozen. Native policy uses points,
+AppKit decorations/center; Windows callbacks/DPI/menu/focus are not proved.
+[Publication](../evidence/application-mac-window.json).
+NEXT: fresh build/package/all29 on this exact candidate, including actual AppKit
+window checks and the new target's compiled source membership. Preserve any failure
+before correction. Independent review/root promotion/graphics/raster/other physical
+providers/callbacks/fullscreen/loading/Windows/clean-Mac/full match/game remain open.
+NTSDApp still Practice; EXE envelope not recalculated. Supersedes window-service NEXT below.
+
 [Observed whole startup passes all25 methods](APPLICATION_OBSERVED_STARTUP_CORRECTION1.md):
 import-only correction builds;199Core/61Reference/277test sources and1686 resources
 verified. Full35 cases retain23 matches/5 stops/7 provenance outcomes,6325events/

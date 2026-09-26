@@ -1,0 +1,91 @@
+{
+  "schema": "ntsd-mac-window-v1",
+  "UTC": "2026-09-26T14:15:55.299393+00:00",
+  "status": "implemented-syntax-passed-comparison-review-open",
+  "baseHead": "fc584bb896f9b908a6cdf016200be824e6be0903",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/candidate1-inputs.json",
+    "bytes": 569875,
+    "sha256": "f1bdd040998f5d4254277c31d92474206c9d43dccb05ae536643d090279bf92f",
+    "mode": 420,
+    "mtime_ns": 1790432138282575703
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/context1.json",
+    "bytes": 25630,
+    "sha256": "2109a9b305a83383c422942f9d23f25c135944178308a67a3472a2389fcbe8ce",
+    "mode": 420,
+    "mtime_ns": 1790431250842712590
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/verification1.json",
+    "bytes": 2876,
+    "sha256": "a87f0bbdd761248c710f817486c0ab3402cc4644f18d0c9f9c540108deb97a74",
+    "mode": 420,
+    "mtime_ns": 1790432152888310114
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/selected-methods1.json",
+    "bytes": 5765,
+    "sha256": "0f32377b55d40d0e123980466aa8e3bcc171dd1f8de2078b865edbb64bced057",
+    "mode": 420,
+    "mtime_ns": 1790431317582262031
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/candidate1.patch",
+    "bytes": 33170,
+    "sha256": "0896ce1160402fba5d2b918d81348d115bee7ecb4f6b1ac7b325d440add1c2a3",
+    "mode": 420,
+    "mtime_ns": 1790432139917449178
+  },
+  "syntax": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/syntax1.json",
+    "bytes": 9174,
+    "sha256": "16f0232bf02898dd031a336345d937d43e691260b13f4bc3ad47190e17bc1a86",
+    "mode": 420,
+    "mtime_ns": 1790431723792697693
+  },
+  "authorReview": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/author-review1.json",
+    "bytes": 3990,
+    "sha256": "460b6ddfc20c15ed1e4694ace6d0ed562694a506fdd9b403af1cb91c14036f05",
+    "mode": 420,
+    "mtime_ns": 1790432122059330590
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/artifact-archive1",
+    "files": 2257,
+    "directories": 60,
+    "bytes": 5127186622,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/artifact-archive1.json",
+      "bytes": 635401,
+      "sha256": "1995e27f34ca7b9babfef6e54f66febec1be08374930fdb0da1d196b966d02a2",
+      "mode": 420,
+      "mtime_ns": 1790432152887413235
+    }
+  },
+  "metadataArchive": {
+    "members": 45,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-20260926/metadata1.tar",
+    "bytes": 2058240,
+    "sha256": "86bf04ce683159dd325a6ef04727011321e103343cb81da9546e7c4da07df40a",
+    "mode": 420,
+    "mtime_ns": 1790432152992359968
+  },
+  "gates": {
+    "implementation": true,
+    "syntax": true,
+    "patchRoundtrip": true,
+    "preservation": true,
+    "archive": true,
+    "build": false,
+    "comparison": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  }
+}

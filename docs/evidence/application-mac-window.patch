@@ -1,0 +1,550 @@
+--- a/native/Package.swift
++++ b/native/Package.swift
+@@ -18,6 +18,7 @@
+         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
+                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
+         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
++        .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore"], linkerSettings: [.linkedFramework("AppKit")]),
+         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
+         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
+         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
+@@ -28,10 +29,10 @@
+         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
+         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
+         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
+-        .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore"],
++        .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"],
+                           linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
+                                            .linkedFramework("AVFoundation")]),
+-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks"], resources: [.copy("Fixtures")])
++        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDMacPlatform"], resources: [.copy("Fixtures")])
+     ],
+     swiftLanguageModes: [.v5]
+ )
+--- a/native/Sources/NTSDCore/OriginalApplicationObservedStartup.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationObservedStartup.swift
+@@ -77,6 +77,11 @@
+             }
+         }
+     }
++    /// External services call this before IO, after validating supported inputs.
++    /// It never calls host code while the coordinator or exchange lock is held.
++    public func beginService(_ permit: Exchange.Permit) throws {
++        try attempt { try exchange.beginService(permit) }
++    }
+     public func answer(_ permit: Exchange.Permit, response: Exchange.Response,
+         retaining resources: [any OriginalApplicationStartupResource] = []) throws {
+         try attempt { try exchange.answer(permit, response: response, retaining: resources) }
+--- a/native/Sources/NTSDCore/OriginalRequestExchange.swift
++++ b/native/Sources/NTSDCore/OriginalRequestExchange.swift
+@@ -15,7 +15,7 @@
+     public typealias Response = Input.Reply
+     public enum Status: Equatable { case open, cancelled, finished, indeterminate }
+     public enum Boundary: Error, Equatable {
+-        case foreignOwner, staleRevision, requestInFlight, invalidPermit, responseMismatch
++        case foreignOwner, staleRevision, requestInFlight, invalidPermit, responseMismatch, serviceAlreadyStarted
+         case requestMismatch(Int), suspendedCursor, unconsumedReplies, closed(Status)
+     }
+     fileprivate final class Identity: @unchecked Sendable {}
+@@ -40,6 +40,7 @@
+     public struct Snapshot {
+         public let receipts: [Receipt], status: Status
+         public let outstandingRequest: Request?, failure: Failure?
++        public let serviceStarted: Bool
+         fileprivate let owner: Identity
+         public func cursor() throws -> Cursor {
+             guard status == .open else { throw Boundary.closed(status) }
+@@ -72,13 +73,14 @@
+     private var receipts: [Receipt] = []
+     private var status = Status.open
+     private var active: Permit?
++    private var serviceStarted = false
+     private var failure: Failure?
+     public init() {}
+     private func locked<T>(_ body: () throws -> T) rethrows -> T {
+         mutex.lock(); defer { mutex.unlock() }; return try body()
+     }
+     private func view() -> Snapshot {
+-        .init(receipts: receipts, status: status, outstandingRequest: active?.request, failure: failure, owner: owner)
++        .init(receipts: receipts, status: status, outstandingRequest: active?.request, failure: failure, serviceStarted: serviceStarted, owner: owner)
+     }
+     public var snapshot: Snapshot { locked { view() } }
+ 
+@@ -91,12 +93,23 @@
+             guard ticket.revision == receipts.count, ticket.ordinal == receipts.count else { throw Boundary.staleRevision }
+             guard active == nil else { throw Boundary.requestInFlight }
+             let permit = Permit(request: ticket.request, ordinal: ticket.ordinal, owner: owner, identity: Identity())
+-            active = permit; return permit
++            active = permit; serviceStarted = false; return permit
+         }
+     }
+     private func validate(_ permit: Permit) throws {
+         guard permit.owner === owner else { throw Boundary.foreignOwner }
+         guard let active, permit.identity === active.identity else { throw Boundary.invalidPermit }
++    }
++    /// Claim physical service once, before any external effect. Existing prepared
++    /// callers may still answer without IO. Cancellation prevents new service;
++    /// an operation already begun may record its actual late answer or failure.
++    public func beginService(_ permit: Permit) throws {
++        try locked {
++            try validate(permit)
++            guard status == .open else { throw Boundary.closed(status) }
++            guard !serviceStarted else { throw Boundary.serviceAlreadyStarted }
++            serviceStarted = true
++        }
+     }
+     /// An issued operation may finish after cancellation. Keep its actual reply
+     /// and owners once, while leaving further service cancelled.
+@@ -106,7 +119,7 @@
+             try validate(permit)
+             guard permit.request.accepts(response) else { throw Boundary.responseMismatch }
+             receipts.append(.init(request: permit.request, response: response, resources: resources))
+-            active = nil
++            active = nil; serviceStarted = false
+         }
+     }
+     /// Unknown physical outcome is terminal and is never translated into an
+@@ -117,7 +130,7 @@
+             try validate(permit)
+             failure = .init(request: permit.request, diagnostic: diagnostic,
+                 afterCancellation: status == .cancelled, resources: resources)
+-            active = nil; status = .indeterminate
++            active = nil; serviceStarted = false; status = .indeterminate
+         }
+     }
+     public func cancel() {
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift
+@@ -0,0 +1,195 @@
++import AppKit
++import NTSDCore
++
++/// Physical window boundary only. This is not a DirectDraw/raster backend or a
++/// Windows callback implementation. All methods are called outside Core attempts.
++@MainActor public final class OriginalMacWindowBackend {
++    public typealias Window = OriginalWindowInitialization
++    public enum Boundary: Error, Equatable {
++        case unsupported(String), arguments(String), unknownOwner(UInt32)
++        case geometry, exhaustedTokens, foreignPreparation, repeatedPreparation
++    }
++    public struct Observation: Equatable {
++        public let token: UInt32, title: String, frame: CGRect, client: CGRect
++        public let backingScale: CGFloat, visible: Bool, closed: Bool, windowNumber: Int
++    }
++    public struct Operation: Equatable {
++        public let request: Window.Request, response: Window.Response
++    }
++    public struct Served {
++        public let response: Window.Response
++        public let resources: [any OriginalApplicationStartupResource]
++    }
++    fileprivate final class Identity {}
++    fileprivate final class Once { var used = false }
++    public struct Prepared {
++        fileprivate let request: Window.Request
++        fileprivate let owner: Identity, once: Once
++    }
++    fileprivate final class CursorLease: OriginalApplicationStartupResource {
++        let token: UInt32, cursor: NSCursor
++        init(_ token: UInt32,_ cursor: NSCursor) { self.token = token; self.cursor = cursor }
++    }
++    fileprivate final class ClassLease: OriginalApplicationStartupResource {
++        let token: UInt32, cursor: CursorLease, source: Window.Request
++        init(_ token: UInt32,_ cursor: CursorLease,_ source: Window.Request) {
++            self.token = token; self.cursor = cursor; self.source = source
++        }
++    }
++    /// Receipts retain this lease; the registry is weak. Closing is a physical
++    /// action, never an effect of Native transaction rollback. Final release may
++    /// occur off-main, so the NSWindow's last teardown is queued on main.
++    public final class WindowLease: OriginalApplicationStartupResource {
++        public let token: UInt32
++        fileprivate let window: NSWindow, windowClass: ClassLease
++        fileprivate var closed = false
++        fileprivate init(_ token: UInt32,_ window: NSWindow,_ windowClass: ClassLease) {
++            self.token = token; self.window = window; self.windowClass = windowClass
++        }
++        deinit {
++            guard !closed else { return }
++            let retainedWindow = window
++            DispatchQueue.main.async { retainedWindow.close() }
++        }
++    }
++    private final class WeakWindow {
++        weak var value: WindowLease?
++        init(_ value: WindowLease) { self.value = value }
++    }
++    private final class ContentView: NSView {
++        let cursor: NSCursor
++        init(frame: CGRect,cursor: NSCursor) { self.cursor = cursor; super.init(frame:frame) }
++        required init?(coder: NSCoder) { fatalError("Programmatic original window only") }
++        override var isFlipped: Bool { true }
++        override func resetCursorRects() { addCursorRect(bounds,cursor:cursor) }
++    }
++    /// Native window decorations are an explicit host policy. The recovered
++    /// 10cb0000 style is preserved in requests; Windows zoom/menu/DPI equivalence
++    /// is still open. One game client unit maps to one AppKit point here.
++    public static let style: NSWindow.StyleMask = [.titled,.closable,.miniaturizable]
++    private let identity = Identity(), instance: UInt32
++    private var nextToken: UInt32 = 1
++    private var cursor: CursorLease?, windowClass: ClassLease?
++    private var windows: [UInt32:WeakWindow] = [:]
++    public private(set) var operations: [Operation] = []
++    public private(set) var createdWindowCount = 0
++    public init(instance: UInt32) { self.instance = instance }
++
++    public nonisolated static func handles(_ request: Window.Request) -> Bool {
++        ["metric","icon","cursor","registerClass","createWindow","updateWindow","showWindow","destroyWindow"].contains(request.kind)
++    }
++    private func token() throws -> UInt32 {
++        guard nextToken != 0 else { throw Boundary.exhaustedTokens }
++        let value = nextToken; nextToken &+= 1; return value
++    }
++    public func lease(_ token: UInt32) throws -> WindowLease {
++        guard let value = windows[token]?.value else { throw Boundary.unknownOwner(token) }; return value
++    }
++    public func observation(_ token: UInt32) throws -> Observation {
++        let owner = try lease(token),w = owner.window
++        return .init(token:token,title:w.title,frame:w.frame,client:w.contentView?.bounds ?? .zero,
++            backingScale:w.backingScaleFactor,visible:w.isVisible,closed:owner.closed,windowNumber:w.windowNumber)
++    }
++    public var retainedResources: [any OriginalApplicationStartupResource] {
++        var result: [any OriginalApplicationStartupResource] = windows.values.compactMap { $0.value }
++        if let cursor { result.append(cursor) }; if let windowClass { result.append(windowClass) }; return result
++    }
++    private func classWords(_ q: Window.Request) throws -> [UInt32] {
++        guard let b = q.bytes,let mask = q.defined,b.count == 40,mask.count == 40 else { throw Boundary.arguments(q.kind) }
++        let r = try OriginalStateRecord(bytes:b,defined:mask)
++        return try stride(from:0,to:40,by:4).map { try r.integer(at:$0,as:UInt32.self) }
++    }
++    /// Pure payload/owner validation: no AppKit calls and no physical service claim.
++    public func prepare(_ q: Window.Request) throws -> Prepared {
++        try validate(q); return .init(request:q,owner:identity,once:Once())
++    }
++    private func validate(_ q: Window.Request) throws {
++        guard Self.handles(q) else { throw Boundary.unsupported(q.kind) }
++        func require(_ valid: Bool) throws { if !valid { throw Boundary.arguments(q.kind) } }
++        if q.kind != "registerClass" { try require(q.bytes == nil && q.defined == nil) }
++        if q.kind != "createWindow" { try require(q.strings.isEmpty) }
++        switch q.kind {
++        case "metric": try require(q.words.count == 1 && [7,8,4].contains(q.words[0]))
++        case "icon": try require(q.words == [instance,0x7f00])
++        case "cursor": try require(q.words == [0,0x7f00])
++        case "registerClass":
++            try require(q.words.isEmpty)
++            let words = try classWords(q)
++            guard let cursor else { throw Boundary.unknownOwner(words[6]) }
++            try require(words == [3,0x43b3d0,0,0,instance,0,cursor.token,0,0x447634,0x447634])
++        case "createWindow":
++            try require(q.words.count == 12 && q.strings.count == 2)
++            let w = q.words
++            try require(w[0] == 0 && w[1] == 0x447634 && w[2] == 0x447620 && w[3] == 0x10cb0000 &&
++                w[4] == 0x80000000 && w[5] == 5 && w[8] == 0 && w[9] == 0 && w[10] == instance && w[11] == 0)
++            try require(q.strings[0] == Array("Marti".utf8) && q.strings[1] == Array("Little Fighter 2".utf8))
++            guard w[6] > 0,w[7] > 0,w[6] <= UInt32(Int32.max),w[7] <= UInt32(Int32.max) else { throw Boundary.geometry }
++            guard windowClass != nil else { throw Boundary.arguments("unregistered class") }
++        case "updateWindow","destroyWindow":
++            try require(q.words.count == 1); if q.words[0] != 0 { _ = try lease(q.words[0]) }
++        case "showWindow":
++            try require(q.words.count == 2 && q.words[1] == 5); if q.words[0] != 0 { _ = try lease(q.words[0]) }
++        default: throw Boundary.unsupported(q.kind)
++        }
++    }
++    private func metric(_ index: UInt32) throws -> Int32 {
++        let client = NSRect(x:100,y:100,width:256,height:256)
++        let frame = NSWindow.frameRect(forContentRect:client,styleMask:Self.style)
++        let x = client.minX-frame.minX,y = client.minY-frame.minY
++        guard x == frame.maxX-client.maxX else { throw Boundary.geometry }
++        let value = index == 7 ? x : index == 8 ? y : frame.maxY-client.maxY-y
++        guard value.isFinite,value >= 0,value <= CGFloat(Int32.max),value.rounded(.towardZero) == value else { throw Boundary.geometry }
++        return Int32(value)
++    }
++    public func perform(_ prepared: Prepared) throws -> Served {
++        guard prepared.owner === identity else { throw Boundary.foreignPreparation }
++        guard !prepared.once.used else { throw Boundary.repeatedPreparation }
++        try validate(prepared.request)
++        prepared.once.used = true
++        let q = prepared.request
++        var resources: [any OriginalApplicationStartupResource] = []
++        let result: Window.Response
++        switch q.kind {
++        case "metric": result = .init(result:try metric(q.words[0]))
++        case "icon":
++            // Pinned original EXE has group121, not the requested group32512.
++            // Do not substitute its unrelated icon or a generic macOS image.
++            result = .init(result:0)
++        case "cursor":
++            if cursor == nil { cursor = try CursorLease(token(),NSCursor.arrow) }
++            let value = cursor!; resources = [value]; result = .init(result:Int32(bitPattern:value.token))
++        case "registerClass":
++            if windowClass != nil { result = .init(result:0); resources = [windowClass!] }
++            else {
++                let value = try ClassLease(token(),cursor!,q); windowClass = value
++                resources = [value]; result = .init(result:Int32(bitPattern:value.token))
++            }
++        case "createWindow":
++            let frame = NSRect(x:0,y:0,width:CGFloat(q.words[6]),height:CGFloat(q.words[7]))
++            let content = NSWindow.contentRect(forFrameRect:frame,styleMask:Self.style)
++            guard content.width > 0,content.height > 0 else { throw Boundary.geometry }
++            let id = try token(),cls = windowClass!
++            let window = NSWindow(contentRect:content,styleMask:Self.style,backing:.buffered,defer:false)
++            window.isReleasedWhenClosed = false; window.title = String(decoding:q.strings[1],as:UTF8.self)
++            window.contentView = ContentView(frame:NSRect(origin:.zero,size:content.size),cursor:cls.cursor.cursor)
++            let owner = WindowLease(id,window,cls)
++            windows[id] = WeakWindow(owner); resources = [owner]; createdWindowCount += 1
++            window.center(); window.orderFront(nil) // Source requests WS_VISIBLE.
++            result = .init(result:Int32(bitPattern:id))
++        case "updateWindow","showWindow","destroyWindow":
++            if q.words[0] == 0 { result = .init(result:0) }
++            else {
++                let owner = try lease(q.words[0]); resources = [owner]
++                if owner.closed { result = .init(result:0) }
++                else if q.kind == "updateWindow" { owner.window.displayIfNeeded(); result = .init(result:1) }
++                else if q.kind == "showWindow" {
++                    let wasVisible = owner.window.isVisible
++                    owner.window.makeKeyAndOrderFront(nil); result = .init(result:wasVisible ? 1 : 0)
++                } else { owner.window.close(); owner.closed = true; result = .init(result:1) }
++            }
++        default: throw Boundary.unsupported(q.kind)
++        }
++        operations.append(.init(request:q,response:result))
++        return .init(response:result,resources:resources)
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacWindowStartupService.swift
+@@ -0,0 +1,29 @@
++import NTSDCore
++
++/// Bound to one startup owner; IO starts only after its unforgeable permit is
++/// validated atomically. Core rollback never repeats or undoes this physical work.
++@MainActor public final class OriginalMacWindowStartupService<Platform: OriginalApplicationObservedStartupPlatform> {
++    public typealias Driver = OriginalApplicationObservedStartup<Platform>
++    public enum Boundary: Error { case notWindowRequest }
++    public let backend: OriginalMacWindowBackend
++    private let driver: Driver
++    public init(driver: Driver,backend: OriginalMacWindowBackend) {
++        self.driver = driver; self.backend = backend
++    }
++    public func serve(_ permit: Driver.Exchange.Permit) throws {
++        guard case .window(let q) = permit.request else { throw Boundary.notWindowRequest }
++        // Unsupported DirectDraw/surface requests stay available to a separately
++        // declared provider. They do not turn into numeric success or failure.
++        let prepared = try backend.prepare(q)
++        try driver.beginService(permit)
++        do {
++            let served = try backend.perform(prepared)
++            try driver.answer(permit,response:.window(served.response),retaining:served.resources)
++        } catch {
++            // The operation began; preserve a diagnostic and all remaining owners.
++            // If a reentrant caller already ended the permit, do not hide its error.
++            try driver.fail(permit,diagnostic:String(reflecting:error),retaining:backend.retainedResources)
++            throw error
++        }
++    }
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalMacWindowBackendTests.swift
+@@ -0,0 +1,202 @@
++import Foundation
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalMacWindowBackendTests: XCTestCase {
++    typealias N = OriginalApplicationPreparedStartupPlatform
++    typealias Old = OriginalApplicationPreparedStartupPlatformTests
++    typealias Observed = OriginalApplicationObservedStartupTests
++    typealias P = OriginalWinMainStartupTests
++    typealias D = OriginalApplicationHostDeliveryContextTests
++    typealias Driver = OriginalApplicationObservedStartup<N>
++    typealias Service = OriginalMacWindowStartupService<N>
++    typealias Backend = OriginalMacWindowBackend
++    typealias E = OriginalStartupRequestExchange
++    enum Stop: Error { case missingOutcome }
++
++    /// All non-window-system APIs are explicit controlled responses. Only HWND
++    /// request bindings change to the Native-owned actual window token; no source
++    /// after-state, private pointer or expected pixel buffer is used as input.
++    @MainActor final class Controls {
++        let source: P.Adapter, values: Observed.Service
++        let originalWindow: UInt32
++        var window: UInt32 = 0
++        init(_ source: P.Adapter,_ package: OriginalApplicationStartupInputs) throws {
++            self.source = source; values = try Observed.Service(source,package)
++            originalWindow = UInt32(bitPattern:try XCTUnwrap(source.c.events.first { $0.kind == "window" && $0.event?.request?.kind == "createWindow" }?.event?.response?.result))
++        }
++        func answer(_ q: OriginalStartupRequest) throws -> OriginalStartupResponse {
++            switch q {
++            case .music(let event) where event.kind == .method && event.arguments.count == 5 && event.arguments[1] == 0x34:
++                var words = event.arguments; XCTAssertEqual(words[2],window); words[2] = originalWindow
++                return try values.answer(.music(.init(event.kind,words,event.strings)))
++            case .joystick(let request) where request.kind == "capture":
++                var words = request.arguments; XCTAssertEqual(words[0],window); words[0] = originalWindow
++                return try values.answer(.joystick(.init(request.kind,words,information:request.information)))
++            case .window(let request):
++                let events = source.c.events.filter { $0.kind == "window" }
++                let expected = try XCTUnwrap(events[values.windowIndex].event?.request)
++                XCTAssertEqual(request.kind,expected.kind)
++                var words = request.words
++                if request.kind == "cooperativeLevel" { XCTAssertEqual(words[1],window); words[1] = originalWindow }
++                if request.kind == "clipperWindow" { XCTAssertEqual(words[2],window); words[2] = originalWindow }
++                XCTAssertEqual(words,expected.words)
++                return try values.answer(q)
++            default:return try values.answer(q)
++            }
++        }
++    }
++
++    struct Run {
++        let host: Driver.Host, driver: Driver, service: Service, controls: Controls
++    }
++    func setup() throws -> (Driver,Service,Controls) {
++        _ = NSApplication.shared
++        let package = try OriginalApplicationStartupInputsTests.shared.get(),(p,initial) = try D().inputs()
++        let native = N(inputs:package,prepared:Observed.constants(try Old().preparation(p)))
++        let driver = try Driver(platform:native,instance:0x400000,show:10,initial:initial)
++        let backend = Backend(instance:0x400000)
++        return (driver,Service(driver:driver,backend:backend),try Controls(p,package))
++    }
++    func service(_ permit: E.Permit,_ driver: Driver,_ service: Service,_ controls: Controls) throws {
++        XCTAssertEqual(permit.ordinal,controls.values.calls)
++        if case .window(let q) = permit.request,Backend.handles(q) {
++            let events = controls.source.c.events.filter { $0.kind == "window" }
++            XCTAssertEqual(q.kind,try XCTUnwrap(events[controls.values.windowIndex].event?.request).kind)
++            try service.serve(permit)
++            controls.values.windowIndex += 1; controls.values.calls += 1
++            if q.kind == "createWindow" {
++                guard case .window(let response) = try XCTUnwrap(driver.exchangeSnapshot.receipts.last).response else { throw Stop.missingOutcome }
++                controls.window = UInt32(bitPattern:response.result)
++                XCTAssertNotEqual(controls.window,0)
++            }
++        } else { try driver.answer(permit,response:controls.answer(permit.request)) }
++    }
++    func run(late: Bool) throws -> Run {
++        let (driver,service,controls) = try setup()
++        var didFail = false
++        for _ in 0..<1000 {
++            do {
++                switch try driver.resume(beforeCommit:{ _,_,_ in if late && !didFail { throw P.Trial.late } }) {
++                case .request(let permit):
++                    XCTAssertNil(driver.snapshot.startup); XCTAssertNil(driver.snapshot.session)
++                    XCTAssertEqual(driver.pendingBatchCount,0)
++                    try self.service(permit,driver,service,controls)
++                case .started(let sequence,let host):
++                    XCTAssertEqual(sequence,1); XCTAssertEqual(didFail,late)
++                    try controls.values.values.validatePreparedConsumption()
++                    XCTAssertEqual(controls.values.calls,driver.exchangeSnapshot.receipts.count)
++                    XCTAssertEqual(service.backend.createdWindowCount,1)
++                    return .init(host:host,driver:driver,service:service,controls:controls)
++                }
++            } catch P.Trial.late {
++                XCTAssertTrue(late); XCTAssertFalse(didFail); didFail = true
++                XCTAssertNil(driver.snapshot.startup); XCTAssertEqual(driver.pendingBatchCount,0)
++                XCTAssertEqual(service.backend.createdWindowCount,1)
++                XCTAssertTrue(try service.backend.observation(controls.window).visible)
++            }
++        }
++        throw Stop.missingOutcome
++    }
++    func close(_ run: Run) throws {
++        let b = run.service.backend
++        let reply = try b.perform(b.prepare(.init("destroyWindow",[run.controls.window])))
++        XCTAssertEqual(reply.response.result,1)
++        XCTAssertFalse(try b.observation(run.controls.window).visible)
++    }
++    func testWholeStartupUsesPhysicalWindowAndRetainsReplies() throws {
++        let run = try run(late:false); defer { try? close(run) }
++        let b = run.service.backend,id = run.controls.window,observation = try b.observation(id)
++        XCTAssertEqual(observation.title,"Little Fighter 2"); XCTAssertTrue(observation.visible)
++        XCTAssertFalse(observation.closed); XCTAssertGreaterThan(observation.windowNumber,0)
++        XCTAssertGreaterThan(observation.backingScale,0)
++        let state = try XCTUnwrap(run.host.snapshot.session).state.full
++        XCTAssertEqual(try state.integer(at:0x4546f4-0x44d000,as:UInt32.self),id)
++        XCTAssertEqual(observation.client.width,CGFloat(try state.integer(at:0x44d78c-0x44d000,as:UInt32.self)))
++        XCTAssertEqual(observation.client.height,CGFloat(try state.integer(at:0x44d790-0x44d000,as:UInt32.self)))
++        XCTAssertEqual(b.operations.filter { $0.request.kind == "createWindow" }.count,1)
++        XCTAssertEqual(b.operations.filter { $0.request.kind == "showWindow" }.count,2)
++        XCTAssertEqual(b.operations.filter { $0.request.kind == "metric" }.map(\.request.words),[[7],[8],[8],[4]])
++        XCTAssertEqual(b.operations.first { $0.request.kind == "icon" }?.response.result,0)
++        let batch = try XCTUnwrap(run.host.takeCommitted()); XCTAssertEqual(batch.sequence,1)
++        XCTAssertEqual(try batch.context.platformSnapshot().startupExchange?.position,run.driver.exchangeSnapshot.receipts.count)
++        guard case .startup(let output) = batch.contents else { throw Stop.missingOutcome }
++        let requests = output.operations.compactMap { if case .window(let q,_) = $0 { return q }; return nil }
++        XCTAssertEqual(requests.filter(Backend.handles),b.operations.map(\.request))
++        print("Physical AppKit whole startup",observation,"physical window requests",b.operations.count)
++    }
++    func testWindowGeometryAndResourceLifetimes() throws {
++        let run = try run(late:false); defer { try? close(run) }
++        let b = run.service.backend,first = try b.observation(run.controls.window)
++        let create = try XCTUnwrap(b.operations.first { $0.request.kind == "createWindow" }).request
++        var words = create.words; words[6] += 160; words[7] += 120
++        let prepared = try b.prepare(.init("createWindow",words,strings:create.strings))
++        let served = try b.perform(prepared),id = UInt32(bitPattern:served.response.result)
++        XCTAssertNotEqual(id,first.token)
++        let second = try b.observation(id)
++        XCTAssertEqual(second.client.width,first.client.width+160); XCTAssertEqual(second.client.height,first.client.height+120)
++        XCTAssertEqual(second.frame.width,first.frame.width+160); XCTAssertEqual(second.frame.height,first.frame.height+120)
++        XCTAssertThrowsError(try b.perform(prepared)) { XCTAssertEqual($0 as? Backend.Boundary,.repeatedPreparation) }
++        let count = b.operations.count
++        XCTAssertThrowsError(try b.prepare(.init("directDrawCreate",[0,0x457578,0]))) { XCTAssertEqual($0 as? Backend.Boundary,.unsupported("directDrawCreate")) }
++        XCTAssertThrowsError(try b.prepare(.init("showWindow",[UInt32.max,5]))) { XCTAssertEqual($0 as? Backend.Boundary,.unknownOwner(UInt32.max)) }
++        var full = words; full[0] = 8; full[3] = 0x80000000; full[4] = 0
++        XCTAssertThrowsError(try b.prepare(.init("createWindow",full,strings:create.strings)))
++        XCTAssertEqual(b.operations.count,count)
++        let other = Backend(instance:0x400000)
++        XCTAssertThrowsError(try other.perform(b.prepare(.init("metric",[7])))) { XCTAssertEqual($0 as? Backend.Boundary,.foreignPreparation) }
++        let closed = try b.perform(b.prepare(.init("destroyWindow",[id])))
++        XCTAssertEqual(closed.response.result,1); XCTAssertTrue(try b.observation(id).closed)
++        XCTAssertEqual(try b.perform(b.prepare(.init("destroyWindow",[id]))).response.result,0)
++        XCTAssertEqual(try b.perform(b.prepare(.init("showWindow",[0,5]))).response.result,0)
++        withExtendedLifetime(served) {}
++    }
++    func firstWindow(_ driver: Driver,_ controls: Controls) throws -> E.Permit {
++        for _ in 0..<10 {
++            switch try driver.resume() {
++            case .request(let p):
++                if case .window = p.request { return p }
++                try driver.answer(p,response:controls.answer(p.request))
++            case .started:throw Stop.missingOutcome
++            }
++        }
++        throw Stop.missingOutcome
++    }
++    func testPhysicalServiceRejectsForeignDuplicateAndCancelledPermits() throws {
++        let (driver,service,controls) = try setup(),(foreign,_,other) = try setup()
++        let permit = try firstWindow(driver,controls),alien = try firstWindow(foreign,other)
++        XCTAssertThrowsError(try service.serve(alien)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        XCTAssertTrue(service.backend.operations.isEmpty)
++        try driver.beginService(permit); XCTAssertTrue(driver.exchangeSnapshot.serviceStarted)
++        XCTAssertThrowsError(try service.serve(permit)) { XCTAssertEqual($0 as? E.Boundary,.serviceAlreadyStarted) }
++        XCTAssertTrue(service.backend.operations.isEmpty)
++        try driver.cancel()
++        XCTAssertThrowsError(try service.serve(permit)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        XCTAssertTrue(service.backend.operations.isEmpty)
++        try driver.answer(permit,response:.window(.init(result:0)))
++        XCTAssertEqual(driver.exchangeSnapshot.status,.cancelled); XCTAssertFalse(driver.exchangeSnapshot.serviceStarted)
++        try foreign.cancel()
++        XCTAssertThrowsError(try foreign.beginService(alien)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        try foreign.fail(alien,diagnostic:"declared unavailable outcome")
++        XCTAssertEqual(foreign.exchangeSnapshot.status,.indeterminate)
++        XCTAssertEqual(foreign.exchangeSnapshot.failure?.afterCancellation,true)
++    }
++    func testStartupLateFailureAndWindowDestruction() throws {
++        weak var retained: Backend.WindowLease?
++        func context() throws -> Driver.Host.DeliveryContext {
++            let run = try run(late:true)
++            retained = try run.service.backend.lease(run.controls.window)
++            let context = try XCTUnwrap(run.host.takeCommitted()).context
++            XCTAssertEqual(run.service.backend.createdWindowCount,1)
++            try close(run)
++            XCTAssertNotNil(retained)
++            return context
++        }
++        var saved: Driver.Host.DeliveryContext? = try context()
++        XCTAssertNotNil(retained)
++        XCTAssertNotNil(try XCTUnwrap(saved).platformSnapshot().startupExchange)
++        saved = nil; XCTAssertNil(retained)
++    }
++}
