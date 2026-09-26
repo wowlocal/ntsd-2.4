@@ -1,0 +1,93 @@
+{
+  "UTC": "2026-09-26T10:09:24.115652+00:00",
+  "head": "3716487b66f226f0958b8aed214881bf028447e9",
+  "progressPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start1.json",
+    "bytes": 3791,
+    "sha256": "4bbadcadf0d9dc50f5b4474cf8ae8cb9b519361fe7b4b9b7410ebc5a33276f8a",
+    "mode": 420,
+    "mtime_ns": 1790417254712292600
+  },
+  "publisherJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start1.job.json",
+    "bytes": 923,
+    "sha256": "5c38a6bc4da559a3d92318f8fc3001aa7264140af0684b005da292c33c96e332",
+    "mode": 420,
+    "mtime_ns": 1790417254713348342
+  },
+  "publisherAbsent": true,
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalize1.py",
+    "bytes": 16127,
+    "sha256": "ccf1dddff32c55b2306490c269dd75dce8859a0e75939fb6b919ff4e943fad55",
+    "mode": 420,
+    "mtime_ns": 1790416712349406015
+  },
+  "finalizerInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/finalizer-inputs1.json",
+    "bytes": 358,
+    "sha256": "ee3289aa23432e54f5d3fc0a93eb6e9c8369828494281797bb4dc846f2452b28",
+    "mode": 420,
+    "mtime_ns": 1790416712350327099
+  },
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "60d724a7d9548bf5e6f42e752a1757d82f91fae45a17f78124ae756afde66bf7",
+      "workingAfterSHA256": "4d967f615d2ff082a2f71e1b7325d088b0c967e39c85dadb7d5614eddfe11e84",
+      "indexBlob": "6ec95a481fd5eba1274b0c60e5c1a81a94c9dfd1",
+      "anchor": "## \u041f\u0440\u043e\u0434\u043e\u043b\u0436\u0435\u043d\u0438\u0435 \u2014 2026-09-26\n\n",
+      "insertion": "[Host delivery context validation](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):\nfresh build93616 terminal0/291.448s,192 Core/61 Reference/272 test sources and\nall1686 package files verified. All six new delayed-delivery/copy-failure/lifetime\nmethods pass;12/82 total passes in the10:07:34Z saved snapshot. Queue5193 verified\nlive and continues the unchanged candidate and complete old76 schedules/limits.\nRoot1034/prior2241/current2242/source55 unchanged;145-member progress archive\nverified. [Receipt](../evidence/application-host-delivery-context-validation-start.json).\nNEXT: revalidate/observe this same queue and current child; preserve and diagnose\nany nonpass. After terminal, pinned task-local finalize1.py verifies all saved\nresults and full candidate/release/metadata archives; separately reverify progress\narchive. Do not duplicate or rerun. Full82/archive closure/independent review/root\npromotion/prepared backend/catalog transport/full137 source/app devices/Windows/\nclean-Mac/full match/game remain open. Task not frozen; EXE envelope not recalculated.\nSupersedes the fresh-build NEXT below.\n\n",
+      "unrelatedWorkingChangesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "38c0d368f733bf05f68e382a3cccd91d1dc476cbe69a26ed52dc0326d51d27d5",
+      "workingAfterSHA256": "3bd229628593037d6ba89f93f6186743b209fe1ed858fe2ed87559b0d011cc98",
+      "indexBlob": "a187f4e390e234d239e66eea142c95606ba03c79",
+      "anchor": "# \u041a\u0430\u0440\u0442\u0430 \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u044f \u0438 \u043f\u0435\u0440\u0435\u043d\u043e\u0441\u0430 NTSD 2.4\n\n",
+      "insertion": "[Host delivery context validation](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):\nfresh build and1686 package files verified; all six new context methods pass,\n12/82 in the saved snapshot. Same queue5193 continues unchanged old schedules.\nPrior/root/source pins and145-member progress archive verified. Next: observe same\nqueue, diagnose any nonpass, then complete saved-result/full archive gates.\nFull82/independent review/root promotion/backend/devices/full match/game open.\n[Progress receipt](evidence/application-host-delivery-context-validation-start.json).\n\n",
+      "unrelatedWorkingChangesPreserved": true
+    }
+  ],
+  "rootFiles": [
+    {
+      "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION_PLAN.md",
+      "bytes": 6398,
+      "sha256": "41cb1d63fa938460df2de83b3ccf29d5b2798ef7c2246959d42632e8bd18f4e4",
+      "mode": 420,
+      "mtime_ns": 1790416405993441438
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md",
+      "bytes": 6937,
+      "sha256": "3a61022a48328a295b859593400f0bfef7ea4b0417c48e77753bdeeb8cb4548d",
+      "mode": 420,
+      "mtime_ns": 1790417363918951875
+    },
+    {
+      "path": "tools/prepare_application_host_delivery_context_validation.py",
+      "bytes": 11672,
+      "sha256": "639d4779797da47d36759f1d35d662dcd39e7b1b17938f7bd176a6a0afdfc85f",
+      "mode": 420,
+      "mtime_ns": 1790416528599556131
+    },
+    {
+      "path": "docs/evidence/application-host-delivery-context-validation-start.json",
+      "bytes": 3791,
+      "sha256": "4bbadcadf0d9dc50f5b4474cf8ae8cb9b519361fe7b4b9b7410ebc5a33276f8a",
+      "mode": 420,
+      "mtime_ns": 1790417254712438855
+    }
+  ],
+  "liveQueue": {
+    "pid": 5193,
+    "identity": "5193 Sat Sep 26 13:01:37 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -B build/research/application-host-delivery-context-validation-20260926/tools/run_application_host_gameplay_tests.py build/research/application-host-delivery-context-validation-20260926",
+    "cwd": "p5193\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "completedAtObservation": 16,
+    "current": "test-17"
+  },
+  "independentReview": false,
+  "completeComparison": false,
+  "completeArtifactArchive": false
+}

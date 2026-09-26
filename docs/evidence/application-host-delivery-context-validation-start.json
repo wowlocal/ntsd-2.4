@@ -1,0 +1,90 @@
+{
+  "schema": "ntsd-host-delivery-context-validation-start-v1",
+  "UTC": "2026-09-26T10:07:34.709716+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/candidate1-inputs.json",
+    "bytes": 566207,
+    "sha256": "ab4c0eb67b1c6b25abd4690124e116465dad709db807acd1bd2636c41350f430",
+    "mode": 420,
+    "mtime_ns": 1790416202218078549
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/build1.job.json",
+    "bytes": 76045,
+    "sha256": "3cd40490404c6a3cca44c99b0a57dfce0310c9aedc28267b9a9db28667b4e87b",
+    "mode": 420,
+    "mtime_ns": 1790416864409613184
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/package-check1.json",
+    "bytes": 1477339,
+    "sha256": "435072c163617f7dd1bc8ddedb24f243a227ce9f27ebfbb4547c6415a4758a5a",
+    "mode": 420,
+    "mtime_ns": 1790416889116475510
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 63608616,
+    "sha256": "bf0a7c04adcc83310c8c9f2fdf38a70fed17ec97615c6bd7d408e2747057e3ad",
+    "mode": 493,
+    "mtime_ns": 1790416862520422511
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/selected-methods1.json",
+    "bytes": 16365,
+    "sha256": "97f8e57c2c2d510351b670627e5cb8b538e441c5246aeec61807071d52d08886",
+    "mode": 420,
+    "mtime_ns": 1790416202245299689
+  },
+  "queueSnapshot": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start-queue1.json",
+    "bytes": 10883,
+    "sha256": "08180f204e50073d0d69622258bf843d4ef4abc8eb183b8ec200a6be700e71e3",
+    "mode": 420,
+    "mtime_ns": 1790417254642962695
+  },
+  "observation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start-observation1.json",
+    "bytes": 5387,
+    "sha256": "ce84b8ee690071839d117f038938d802b7a1f50263c7681668a0d8a9f1fcd69b",
+    "mode": 420,
+    "mtime_ns": 1790417254652363993
+  },
+  "passedMethods": 12,
+  "selectedMethods": 82,
+  "allSixNewPassed": true,
+  "queuePID": 5193,
+  "queueStatusAtSnapshot": "running",
+  "queueCurrent": "test-13",
+  "rootFilesUnchanged": 1034,
+  "priorFilesUnchanged": 2241,
+  "candidateFilesUnchanged": 2242,
+  "sourcePinsUnchanged": 55,
+  "metadataArchive": {
+    "members": 145,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-delivery-context-validation-20260926/start-metadata1.tar",
+    "bytes": 2938880,
+    "sha256": "4e94c73ef03d904dc089f9c6e6107f15465bd85d5d9bf54a472c874dbaf05307",
+    "mode": 420,
+    "mtime_ns": 1790417254694602748
+  },
+  "externalFree": 172424638464,
+  "internalFree": 59002191872,
+  "observedFreeDecrease": 1171263488,
+  "taskFrozen": false,
+  "gates": {
+    "build": true,
+    "package": true,
+    "newSixMethods": true,
+    "all82": false,
+    "metadataArchive": true,
+    "completeArtifactArchive": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  },
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false
+}

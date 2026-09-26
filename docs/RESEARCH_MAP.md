@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host delivery context validation](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+fresh build and1686 package files verified; all six new context methods pass,
+12/82 in the saved snapshot. Same queue5193 continues unchanged old schedules.
+Prior/root/source pins and145-member progress archive verified. Next: observe same
+queue, diagnose any nonpass, then complete saved-result/full archive gates.
+Full82/independent review/root promotion/backend/devices/full match/game open.
+[Progress receipt](evidence/application-host-delivery-context-validation-start.json).
+
 [Retained Host delivery context](research/APPLICATION_HOST_DELIVERY_CONTEXT.md):
 all three batch variants retain per-commit owners before publication; three-file
 syntax passed. Six new methods plus unchanged76 selected; no build/test yet.

@@ -2,6 +2,21 @@
 
 ## Продолжение — 2026-09-26
 
+[Host delivery context validation](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
+fresh build93616 terminal0/291.448s,192 Core/61 Reference/272 test sources and
+all1686 package files verified. All six new delayed-delivery/copy-failure/lifetime
+methods pass;12/82 total passes in the10:07:34Z saved snapshot. Queue5193 verified
+live and continues the unchanged candidate and complete old76 schedules/limits.
+Root1034/prior2241/current2242/source55 unchanged;145-member progress archive
+verified. [Receipt](../evidence/application-host-delivery-context-validation-start.json).
+NEXT: revalidate/observe this same queue and current child; preserve and diagnose
+any nonpass. After terminal, pinned task-local finalize1.py verifies all saved
+results and full candidate/release/metadata archives; separately reverify progress
+archive. Do not duplicate or rerun. Full82/archive closure/independent review/root
+promotion/prepared backend/catalog transport/full137 source/app devices/Windows/
+clean-Mac/full match/game remain open. Task not frozen; EXE envelope not recalculated.
+Supersedes the fresh-build NEXT below.
+
 [Retained Host delivery context candidate](APPLICATION_HOST_DELIVERY_CONTEXT.md):
 startup/iteration/loaded batches now retain their own computed Application and
 independent Platform. Three Swift files parse; six new methods are written and
