@@ -1,0 +1,90 @@
+{
+  "schema": "ntsd-observed-bitmap-correction1-start-v1",
+  "UTC": "2026-09-26T16:56:39.972493+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/candidate1-inputs.json",
+    "bytes": 572554,
+    "sha256": "a3cdcc93f350578cfdd744f9accb1eaac2f5e6f7a18c415b57fb26beb009dda2",
+    "mode": 420,
+    "mtime_ns": 1790441372018539617
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/build1.job.json",
+    "bytes": 95855,
+    "sha256": "7d38d2bbb82e69bc6a9f1ca20ad5a2bd6c08a75c75005c0e5b4f116e79a19d3b",
+    "mode": 420,
+    "mtime_ns": 1790441697849180961
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/package-check1.json",
+    "bytes": 1498211,
+    "sha256": "fc621ddb81702584e189e918d5d43777a59aa0bc230cdd2f6f6d8771c2972cae",
+    "mode": 420,
+    "mtime_ns": 1790441710887681286
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 66213704,
+    "sha256": "6b8174851ffbc1737a115a8438dd4462ccf126ac5ad4cddb05ec5c121ec651c0",
+    "mode": 493,
+    "mtime_ns": 1790441695828558299
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/selected-methods1.json",
+    "bytes": 13457,
+    "sha256": "db0b8dd200ee416e8fe06773126b51a6bc825d5161f4c95f7b7b9060ea86141d",
+    "mode": 420,
+    "mtime_ns": 1790440941952243490
+  },
+  "queueSnapshot": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/start-queue1.json",
+    "bytes": 14397,
+    "sha256": "a31a524b7b36a15f239984953c5b2434f9d7d7639da6de659fe02b91c202a1c4",
+    "mode": 420,
+    "mtime_ns": 1790441799924400671
+  },
+  "observation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/start-observation1.json",
+    "bytes": 630,
+    "sha256": "cb45d2b07e7e77371a3767df7c476e27bade1866f49e95426983a2cb5dcfdaeb",
+    "mode": 420,
+    "mtime_ns": 1790441799924588463
+  },
+  "passedMethods": 17,
+  "selectedMethods": 69,
+  "allFiveNewPassed": true,
+  "queuePID": 46279,
+  "queueStatusAtSnapshot": "running",
+  "queueCurrent": "test-18",
+  "rootFilesUnchanged": 1034,
+  "priorFilesUnchanged": 2257,
+  "candidateFilesUnchanged": 2268,
+  "sourcePinsUnchanged": 55,
+  "metadataArchive": {
+    "members": 150,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/start-metadata1.tar",
+    "bytes": 3481600,
+    "sha256": "5dbe540d23cd4cb9082d051e79c790ac8f4c0a5de4af2660154fbeab1014ce1d",
+    "mode": 420,
+    "mtime_ns": 1790441799957701827
+  },
+  "externalFree": 158696554496,
+  "internalFree": 58737627136,
+  "observedFreeDecrease": 1201590272,
+  "taskFrozen": false,
+  "gates": {
+    "build": true,
+    "package": true,
+    "newFiveMethods": true,
+    "all69": false,
+    "metadataArchive": true,
+    "completeArtifactArchive": false,
+    "independentReview": false,
+    "rootPromotion": false,
+    "devices": false,
+    "fullGame": false
+  },
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false
+}

@@ -1,5 +1,20 @@
 # Текущая передача работы
 
+[Observed bitmap correction1: build/package and five new methods pass](APPLICATION_OBSERVED_BITMAP_CORRECTION1.md):
+only two test helper calls now explicitly supply late:false; production and all
+assertions unchanged. Whole first-menu425 actual bitmap replies/25 surfaces,
+full Core replay/color/mask checks, late rollback without repeated work, missing
+resource diagnostics and protocol/context lifetimes pass. Build35275 terminal0;
+201Core/61Reference/7MacPlatform/282tests and1686 resource bytes verified.
+[Progress publication](../evidence/application-observed-bitmap-correction1-start.json)
+records17/69 passes; queue46279 verified live, same unchanged binary. Publisher48350
+terminal0/absent,150-member metadata verified. Original failure/root/prior/source
+preserved. NEXT: revalidate/observe this queue, preserve any nonpass or finalize
+all69/package/patch/full archives. Full comparison/archive/independent review/root
+promotion/general raster/other IO/Windows/input/audio/full match/game remain open.
+NTSDApp still Practice; EXE envelope not recalculated. Supersedes helper-correction
+NEXT below.
+
 [Observed bitmap Host candidate: test build failure preserved](APPLICATION_OBSERVED_BITMAP.md):
 whole first-menu suspension/receipt/late-publication bridge implemented; nine files
 parse and Core/MacPlatform compile. Build21610 terminal1 after152.265s: two new
