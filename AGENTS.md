@@ -133,6 +133,14 @@ outputs and partial/failure records; do not modify pinned running producers.
   reserve. Do not lower reserves, delete evidence or restart sources to get space.
   If unavailable, pause dependent IO and continue independent permitted work.
   Shipping/runtime fixtures remain regular, self-contained local files.
+- User update, 2026-09-26: `/Volumes/T7` is also authorized for task-owned
+  artifacts, including traces, reports and archives. Verify its mount, writable
+  ExFAT filesystem, volume UUID `7C9569C1-BC8F-3288-B3FD-8831A3F07FAA` and free
+  space before IO; declare task bounds and retain at least 40 GiB free there.
+  Keep APFS-clone/POSIX-metadata-dependent builds and working trees on X5;
+  preserve required modes, links and nanosecond mtimes inside verified archives
+  when storing them on T7. This extends the older X5-only rule for new work;
+  existing pinned jobs, paths, plans and evidence remain unchanged.
 - Treat source/audit publication, Native tests, package byte verification and
   archive verification as separate gates. Process exit 0 alone is not acceptance.
 - Do not install ReAgent or change model/safety settings as a side effect of

@@ -1,0 +1,31 @@
+{
+  "UTC": "2026-09-26T07:23:12.334193+00:00",
+  "authorization": "User explicitly added /Volumes/T7 for artifacts on2026-09-26",
+  "observation": "diskutil info -plist /Volumes/T7; read-only, no artifact write or copy",
+  "volume": {
+    "MountPoint": "/Volumes/T7",
+    "VolumeUUID": "7C9569C1-BC8F-3288-B3FD-8831A3F07FAA",
+    "FilesystemType": "exfat",
+    "WritableVolume": true,
+    "FreeSpace": 1999728672768,
+    "VolumeSize": 2000125296640
+  },
+  "newTaskMinimumFreeBytes": 42949672960,
+  "existingX5AndInternalReservesUnchanged": true,
+  "supported": "Task-owned traces, reports and archives with declared bounds and readback verification",
+  "metadata": "ExFAT host metadata is not an APFS/POSIX preservation mechanism; required modes, links and nanosecond mtimes belong inside verified archive payloads",
+  "apfsDependentBuildsRemainOnX5": true,
+  "existingJobsPathsPlansAndEvidenceUnchanged": true,
+  "workflowUpdate": "Deferred until host gameplay completion finalizer closes its current WORKFLOW.md input pin",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "38e0f4980f2dcdfb6a812419010a31a7b157d53de3214fa9390413c1d0de2bde"
+    },
+    {
+      "path": "docs/CONTINUE_GOAL.md",
+      "sha256": "9ee218f4b8c928e15403aab8868b81b56b028c1ded62e46c50e11dc2125c113a"
+    }
+  ],
+  "immutableHistorySHA256": "1f124556e757a1f1efe7dabbc19df76bc482ca9a316df2295eb86beeae1f5dff"
+}
