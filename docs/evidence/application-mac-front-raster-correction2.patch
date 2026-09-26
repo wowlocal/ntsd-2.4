@@ -1,0 +1,132 @@
+--- a/native/Sources/NTSDMacPlatform/OriginalMacFrontService.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacFrontService.swift
+@@ -4,12 +4,17 @@
+ /// Text and other unsupported requests stop before physical service begins.
+ @MainActor public final class OriginalMacFrontService {
+     public typealias E = OriginalMenuGraphicsRequestExchange
++    public typealias Diagnostic = (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response
+     public let backend: OriginalMacDisplayBackend
+-    public init(backend: OriginalMacDisplayBackend) { self.backend = backend }
++    private let diagnostic: Diagnostic?
++    public init(backend: OriginalMacDisplayBackend,diagnostic: Diagnostic? = nil) {
++        self.backend = backend;self.diagnostic = diagnostic
++    }
+     private enum Prepared {
+         case display(OriginalMacDisplayBackend.Prepared)
+         case window(OriginalMacWindowBackend.Prepared)
+         case front(OriginalMacDisplayBackend.FrontPrepared)
++        case diagnostic(OriginalWindowInitialization.Request,Diagnostic)
+     }
+     public func serve<P>(_ permit: E.Permit,on driver: OriginalApplicationObservedGraphicsIteration<P>) throws {
+         try serve(permit.request,begin:{ try driver.beginService(permit) },
+@@ -27,7 +32,13 @@
+         let prepared: Prepared
+         switch request {
+         case .window(let q):
+-            if OriginalMacDisplayBackend.handles(q) { prepared = .display(try backend.prepare(q)) }
++            if q.kind == "debug" {
++                guard let diagnostic else { throw OriginalMacDisplayBackend.Boundary.unsupported("window debug consumer") }
++                guard q.words.isEmpty,q.bytes == nil,q.defined == nil,q.strings.count == 1 else {
++                    throw OriginalMacDisplayBackend.Boundary.arguments("window debug")
++                }
++                prepared = .diagnostic(q,diagnostic)
++            } else if OriginalMacDisplayBackend.handles(q) { prepared = .display(try backend.prepare(q)) }
+             else { prepared = .window(try backend.windows.prepare(q)) }
+         case .front(_,let q):prepared = .front(try backend.prepareFront(q))
+         case .bitmap:throw OriginalMacDisplayBackend.Boundary.unsupported("bitmap uses its existing service")
+@@ -38,6 +49,9 @@
+             case .display(let q):let r = try backend.perform(q);try answer(.window(r.response),r.resources)
+             case .window(let q):let r = try backend.windows.perform(q);try answer(.window(r.response),r.resources)
+             case .front(let q):let r = try backend.performFront(q);try answer(.front(r.response),r.resources)
++            case .diagnostic(let q,let consume):
++                let response = try consume(q)
++                try answer(.window(response),backend.retainedResources+backend.windows.retainedResources)
+             }
+         } catch {
+             try fail(String(reflecting:error),backend.retainedResources+backend.windows.retainedResources);throw error
+--- a/native/Tests/NTSDCoreTests/OriginalMacFrontRasterTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalMacFrontRasterTests.swift
+@@ -65,7 +65,14 @@
+         let ready = try W().ready(),r = ready.run,packet = ready.menu
+         _ = try W().move(ready)
+         let host = r.host,before = host.snapshot,old = try XCTUnwrap(before.session)
+-        let driver = G.Driver(host:host),bitmap = G.O().service(r,ready.package),service = Service(backend:r.setup.display)
++        var windowIndex = 0,diagnostics: [[UInt8]] = []
++        let driver = G.Driver(host:host),bitmap = G.O().service(r,ready.package)
++        let service = Service(backend:r.setup.display,diagnostic:{ q in
++            guard packet.surface.indices.contains(windowIndex) else { throw Stop.limit }
++            diagnostics.append(q.strings[0])
++            // Saved declared API input response, not an expected after-state.
++            return packet.surface[windowIndex]
++        })
+         var served: [OriginalMenuGraphicsRequest] = [],checkpoints: [(G.S.Checkpoint,Int32?)] = [],failed = false,negative = 0,presentation = 0
+         for _ in 0..<1200 {
+             var points: [(G.S.Checkpoint,Int32?)] = []
+@@ -79,7 +86,7 @@
+                     G.B.same(try XCTUnwrap(host.snapshot.session),old);XCTAssertEqual(host.pendingBatchCount,0)
+                     switch permit.request {
+                     case .bitmap:try bitmap.serve(permit,on:driver)
+-                    case .window:try service.serve(permit,on:driver)
++                    case .window:try service.serve(permit,on:driver);windowIndex += 1
+                     case .front(_,let q):
+                         if q.kind == "getDC" {
+                             let count = r.setup.display.frontOperations.count
+@@ -99,6 +106,8 @@
+                     served.append(permit.request)
+                 case .advanced(.committed):
+                     checkpoints = points
++                    XCTAssertEqual(windowIndex,packet.surface.count)
++                    XCTAssertEqual(diagnostics,[Array("LoadGameArt: Art loaded.\n".utf8)])
+                     XCTAssertEqual(failed,failure != nil);XCTAssertEqual(negative,3);XCTAssertEqual(presentation,1)
+                     let batch = try XCTUnwrap(host.takeCommitted());XCTAssertNil(try host.takeCommitted())
+                     let run = G.Run(startup:r,packet:packet,before:before,driver:driver,batch:batch,profile:.negative,served:served,checkpoints:checkpoints)
+@@ -250,6 +259,49 @@
+         let completed = E(),p = try G().ticket(completed,.front(.prefix,q));try service.serve(p,on:completed)
+         XCTAssertEqual(completed.snapshot.receipts.count,1);XCTAssertFalse(completed.snapshot.receipts[0].resources.isEmpty)
+         XCTAssertThrowsError(try service.serve(p,on:completed));XCTAssertEqual(b.frontOperations.count,count+1)
++        // Controlled diagnostic inputs exercise the same retained service boundary.
++        let debug = OriginalWindowInitialization.Request("debug",strings:[[0xff,0,0x41]])
++        let missing = E(),missingTicket = try G().ticket(missing,.window(debug))
++        XCTAssertThrowsError(try service.serve(missingTicket,on:missing)) { XCTAssertEqual($0 as? B.Boundary,.unsupported("window debug consumer")) }
++        XCTAssertFalse(missing.snapshot.serviceStarted);XCTAssertTrue(missing.snapshot.receipts.isEmpty)
++        var diagnostics: [OriginalWindowInitialization.Request] = []
++        let reply = OriginalWindowInitialization.Response(result:-23,output:0xa7,bytes:[0xff,0,0x12])
++        let diagnosticService = Service(backend:b,diagnostic:{ q in diagnostics.append(q);return reply })
++        let structure = try OriginalStateRecord(bytes:[0],defined:[true])
++        for malformed in [OriginalWindowInitialization.Request("debug"),.init("debug",[1],strings:[[1]]),
++            .init("debug",strings:[[1],[2]]),.init("debug",strings:[[1]],structure:structure)] {
++            let exchange = E(),permit = try G().ticket(exchange,.window(malformed))
++            XCTAssertThrowsError(try diagnosticService.serve(permit,on:exchange)) { XCTAssertEqual($0 as? B.Boundary,.arguments("window debug")) }
++            XCTAssertFalse(exchange.snapshot.serviceStarted);XCTAssertTrue(exchange.snapshot.receipts.isEmpty)
++        }
++        let diagnosticExchange = E(),foreignExchange = E()
++        let diagnosticPermit = try G().ticket(diagnosticExchange,.window(debug)),foreignPermit = try G().ticket(foreignExchange,.window(debug))
++        XCTAssertThrowsError(try diagnosticService.serve(foreignPermit,on:diagnosticExchange)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        foreignExchange.cancel()
++        XCTAssertThrowsError(try diagnosticService.serve(foreignPermit,on:foreignExchange)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        XCTAssertTrue(diagnostics.isEmpty)
++        try diagnosticService.serve(diagnosticPermit,on:diagnosticExchange)
++        XCTAssertEqual(diagnostics,[debug]);XCTAssertEqual(diagnosticExchange.snapshot.receipts.count,1)
++        XCTAssertEqual(diagnosticExchange.snapshot.receipts[0].request,.window(debug))
++        XCTAssertEqual(diagnosticExchange.snapshot.receipts[0].response,.window(reply))
++        XCTAssertFalse(diagnosticExchange.snapshot.receipts[0].resources.isEmpty)
++        XCTAssertThrowsError(try diagnosticService.serve(diagnosticPermit,on:diagnosticExchange))
++        XCTAssertEqual(diagnostics,[debug])
++        let thrown = E(),thrownPermit = try G().ticket(thrown,.window(debug))
++        let throwingService = Service(backend:b,diagnostic:{ q in diagnostics.append(q);throw Stop.late })
++        XCTAssertThrowsError(try throwingService.serve(thrownPermit,on:thrown)) { XCTAssertTrue($0 is Stop) }
++        XCTAssertEqual(diagnostics,[debug,debug]);XCTAssertEqual(thrown.snapshot.status,.indeterminate)
++        XCTAssertTrue(thrown.snapshot.receipts.isEmpty)
++        let failure = try XCTUnwrap(thrown.snapshot.failure)
++        XCTAssertEqual(failure.request,.window(debug));XCTAssertFalse(failure.afterCancellation);XCTAssertFalse(failure.resources.isEmpty)
++        XCTAssertThrowsError(try throwingService.serve(thrownPermit,on:thrown));XCTAssertEqual(diagnostics.count,2)
++        let late = E(),latePermit = try G().ticket(late,.window(debug))
++        let lateService = Service(backend:b,diagnostic:{ q in diagnostics.append(q);late.cancel();return reply })
++        try lateService.serve(latePermit,on:late)
++        XCTAssertEqual(late.snapshot.status,.cancelled);XCTAssertEqual(late.snapshot.receipts.count,1)
++        XCTAssertEqual(late.snapshot.receipts[0].response,.window(reply));XCTAssertFalse(late.snapshot.receipts[0].resources.isEmpty)
++        XCTAssertThrowsError(try lateService.serve(latePermit,on:late));XCTAssertEqual(diagnostics.count,3)
++        XCTAssertEqual(try b.pixels(back),pixels);XCTAssertEqual(b.frontOperations.count,count+1)
+         let release = E(),ticket = try G().ticket(release,.front(.menu,.init("method",[back,8])))
+         try service.serve(ticket,on:release)
+         guard case .front(let response) = try XCTUnwrap(release.snapshot.receipts.first).response else { throw Stop.limit }

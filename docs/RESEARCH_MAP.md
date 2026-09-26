@@ -1,5 +1,19 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native front raster and diagnostic delivery: all95 checked](research/APPLICATION_MAC_FRONT_RASTER_CORRECTION2.md):
+Owned fill/keyed-mirrored copy/Release/windowed presentation and explicit raw
+Window diagnostics share the retained journal. Whole-menu known pixels/masks,
+late retries, Native view readback and90 retained regressions pass. The101 unknown
+cursor pixels and three controlled negative GetDC calls remain explicit; no full
+Windows menu/font/device acceptance. [Publication](evidence/application-mac-front-raster-correction2.json).
+Candidate2278 and4974-file/414-member archives verify; finalizer36234 terminal0/
+absent, task frozen. Root1034/prior2257/base2278/source55 preserved; prior failures
+retained. NEXT while host locked: bounded startup-audio request-boundary preflight
+using existing sound/WAV/music and whole WinMain evidence, then one finite plan.
+After unlock resume the same approved Windows installer and prepared probes.
+Review/root promotion/input/audio/clean-Mac/full match/game and safety incidents
+remain open; EXE envelope not recalculated. Supersedes diagnostic-fix NEXT below.
+
 [Front raster correction1: caller diagnostic failure preserved](research/APPLICATION_MAC_FRONT_RASTER_CORRECTION1.md):
 The one-token guard correction builds; package bytes and1686 resources verify.
 First whole-menu test stops at unsupported Window `debug`:0 passed,94 unstarted

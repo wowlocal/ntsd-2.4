@@ -1,0 +1,111 @@
+{
+  "schema": "ntsd-mac-front-raster-correction2-docs-v1",
+  "UTC": "2026-09-26T23:23:52.339285+00:00",
+  "baseHead": "b3c7bb05c4adac3718b9988ed8aa8ff8fbd0a4e2",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/publication1.json",
+    "bytes": 6003,
+    "sha256": "7dd5f928a3833da7197bb4cd435d8a7c64873191d9d8a49e9f58d1e6562a2839",
+    "mode": 420,
+    "mtime_ns": 1790464941480023761
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction2-20260927/finalize1.job.json",
+    "bytes": 843,
+    "sha256": "802954073cbf4cd59555a1b51e0c1f500015a10c04e1c850568d8ddf175749c8",
+    "mode": 420,
+    "mtime_ns": 1790464941480801680
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_MAC_FRONT_RASTER_CORRECTION2_PLAN.md",
+      "bytes": 4490,
+      "sha256": "f7c5af44a3252c7ecc8dbff93ea60209d417949521d061a7f5f6b022b1d94e89",
+      "mode": 420,
+      "mtime_ns": 1790463470256018103
+    },
+    {
+      "path": "docs/research/APPLICATION_MAC_FRONT_RASTER_CORRECTION2.md",
+      "bytes": 7184,
+      "sha256": "ad6e7cdb3c33b7087306c3f4ff2e6b502aa1bea6cdba6ff2f279a117a606c753",
+      "mode": 420,
+      "mtime_ns": 1790465032236930494
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster-correction2.json",
+      "bytes": 6003,
+      "sha256": "7dd5f928a3833da7197bb4cd435d8a7c64873191d9d8a49e9f58d1e6562a2839",
+      "mode": 420,
+      "mtime_ns": 1790464941480587846
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster-correction2-close.json",
+      "bytes": 1727,
+      "sha256": "658702450ed5938f344aa17a6035344c4639bf7972574ee0550fb4207ade952d",
+      "mode": 420,
+      "mtime_ns": 1790464941480698555
+    },
+    {
+      "path": "docs/evidence/application-mac-front-raster-correction2.patch",
+      "bytes": 10149,
+      "sha256": "10faf23c6d0db90b719687c47bbf0c357d2e24a88b1f8c2cca1c0a805496da3b",
+      "mode": 420,
+      "mtime_ns": 1790464857010183920
+    },
+    {
+      "path": "tools/prepare_application_mac_front_raster_correction2.py",
+      "bytes": 12056,
+      "sha256": "03a2b6326e0f548d39c1f2404505b452f248cde8c5a10b1a221c86bd796ddaef",
+      "mode": 420,
+      "mtime_ns": 1790463544393079689
+    },
+    {
+      "path": "tools/finalize_application_mac_front_raster_correction2.py",
+      "bytes": 18857,
+      "sha256": "59f02383d0c1d99eaf62fa4ce3a14ad95ae353c46badac5ef38d0920cf7e30f0",
+      "mode": 420,
+      "mtime_ns": 1790463527598271692
+    },
+    {
+      "path": "tools/apply_mac_front_diagnostic_correction.py",
+      "bytes": 7919,
+      "sha256": "dcd5f9309a2c1ad38e42e8ecce526a19715ef05dd144b694b09f69715c61643b",
+      "mode": 420,
+      "mtime_ns": 1790463470256673646
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "workingBeforeSHA256": "9f3b75fa3961caaecac8f4a626910f67213354110c1e6f39ae6941a8b0f1c7a0",
+      "insertedBlockSHA256": "3f352ad904ba328e4df92b6ea61ac9a9042d78597a850aed884303747320f0bb",
+      "stagedBlob": "26218ea68caac17b57e4301edceffe947159a044",
+      "unrelatedDiffRetained": "260\t0\tdocs/research/CURRENT_WORK.md"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "workingBeforeSHA256": "34c5a8c79c05f4a90cf25bc3fefada41a2c063db384224898389cd00712ed344",
+      "insertedBlockSHA256": "14f238a6dd3a0c29ef041a611068fc0717ab189573f1b14511a0bbd2d5f27e66",
+      "stagedBlob": "9a8e6516785f5768acb909f0aaa3f6b8923e388b",
+      "unrelatedDiffRetained": "123\t1\tdocs/RESEARCH_MAP.md"
+    }
+  ],
+  "buildPassed": true,
+  "packageBytesVerified": true,
+  "selectedMethods": 95,
+  "passedMethods": 95,
+  "archiveVerified": true,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "originalExecuted": false,
+  "whitespaceCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+}
