@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Catalog package validation complete](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+all76 methods,1686 package files and five isolated Core-client checks passed.
+Queue42094/finalizer29333 terminal0/absent;6093-file artifact and381-member metadata
+archives verified; root/prior/source pins preserved and task frozen. Next: retained
+per-commit owners/order for all three Host batch variants, then prepared backend.
+Independent review/root promotion/full catalog source/devices/match/game remain open.
+[Publication](evidence/application-catalog-package-validation.json).
+
 [Catalog package comparison checkpoint](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 57/76 complete passes at08:52:46Z; same queue42094 continues. Terminal archive
 producer prepared for6093 candidate/build/app files;51 saved logs and12 reader

@@ -1,0 +1,89 @@
+{
+  "schema": "ntsd-catalog-package-validation-complete-docs-v1",
+  "UTC": "2026-09-26T09:23:26.756559+00:00",
+  "previousGoalTurnClassification": "verified wait of confirmed live queue; this turn completed76 results and all preservation/archive gates",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Catalog package comparison checkpoint]",
+      "insertion": "[Catalog package validation complete](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\nall76 methods passed on the unchanged2241-file candidate, including4 reader,\n3 direct catalog and69 retained whole-host/caller methods. Queue42094 and\nfinalizer29333 terminal0/absent. Fresh build,1686 resource files, all five isolated\nCore-client checks,6093-file artifact and381-member metadata archives verified;\nroot1034/prior1040/source55 preserved. Task frozen. [Publication](../evidence/application-catalog-package-validation.json).\nNEXT: finite retained per-commit delivery context for startup/iteration/loaded\nHost batches, from this candidate and the existing app preflight. A delayed\nconsumer must retain its own resources/order after later commits; failed attempts\nmust leave earlier batches and owners intact. Freeze contract/cases before edits.\nIndependent review/root promotion/prepared backend/catalog transport/full137\nsource/AppKit devices/Windows/clean-Mac/full match/game remain open. EXE envelope\nnot recalculated. Supersedes the live-queue/archive NEXT below; do not rerun it.\n\n",
+      "beforeSHA256": "5359d388c58bb808e97d320e8b75660a393d16264dac5a2b1d94a0dc8c7a1581",
+      "afterSHA256": "70e15c61d3689964f5de5565b14e98bbed1139ed4aad3d8ce5e1a2be70c9dfcc"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Catalog package comparison checkpoint]",
+      "insertion": "[Catalog package validation complete](research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md):\nall76 methods,1686 package files and five isolated Core-client checks passed.\nQueue42094/finalizer29333 terminal0/absent;6093-file artifact and381-member metadata\narchives verified; root/prior/source pins preserved and task frozen. Next: retained\nper-commit owners/order for all three Host batch variants, then prepared backend.\nIndependent review/root promotion/full catalog source/devices/match/game remain open.\n[Publication](evidence/application-catalog-package-validation.json).\n\n",
+      "beforeSHA256": "45f9d3a178ff16761a6978420c149f73d12a610bcc3876a7e7bc005284864921",
+      "afterSHA256": "60b6cd15696bb9919578ab8e939a9628b079d06fc655fc8d23c3eec87bcabd01"
+    }
+  ],
+  "studyBeforeSHA256": "54522eee9a7bc53e15787ddf52dbc0ed751e14dc75a394debaaa83afad108d82",
+  "preservedPreviousStudy": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/study-preclose1.md",
+    "bytes": 9063,
+    "sha256": "54522eee9a7bc53e15787ddf52dbc0ed751e14dc75a394debaaa83afad108d82",
+    "mode": 420,
+    "mtime_ns": 1790412830057098153
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalize1.job.json",
+    "bytes": 839,
+    "sha256": "c69be0fc5ac20a044151d462c774f8e884a9c20cae86414b26530053ee807548",
+    "mode": 420,
+    "mtime_ns": 1790414411609880116
+  },
+  "finalizerLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/finalize1.log",
+    "bytes": 799,
+    "sha256": "9e01bf2207bb6e40218167cf0e888303d312fad9f1314f04a518dca86439258f",
+    "mode": 420,
+    "mtime_ns": 1790414411610094282
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/verification1.json",
+    "bytes": 33234,
+    "sha256": "b5594da231871c07e94948b078bcde0f5d677449c7a69bbcb7d6aff7898230b4",
+    "mode": 420,
+    "mtime_ns": 1790414369475887034
+  },
+  "progressArchivePreservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-catalog-package-validation-20260926/start-archive-preservation1.json",
+    "bytes": 652,
+    "sha256": "badb583bacaca6d7377fc1ed51f684d3f976067e6c837b15f8889b3ac4e2ba99",
+    "mode": 420,
+    "mtime_ns": 1790413594877072616
+  },
+  "queueSeconds": 2760.052928917,
+  "totalTestProcessSeconds": 2498.3594141219987,
+  "passedMethods": 76,
+  "archiveFiles": 6093,
+  "metadataMembers": 381,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_CATALOG_PACKAGE_VALIDATION.md",
+      "bytes": 10998,
+      "sha256": "3f4384f175b75b4a24de73607976c73b57513fd23311264f55b247bb8becd990",
+      "mode": 420,
+      "mtime_ns": 1790414606754831793
+    },
+    {
+      "path": "docs/evidence/application-catalog-package-validation.json",
+      "bytes": 5504,
+      "sha256": "b44bd5521b276eb18be6c1acafd7c2c6449ad397175f85ff0500ad17a8eaf963",
+      "mode": 420,
+      "mtime_ns": 1790414411609653825
+    },
+    {
+      "path": "docs/evidence/application-catalog-package-validation-close.json",
+      "bytes": 1653,
+      "sha256": "dd531bc7f22f0b750459f7dfeda28bb83c4f22fe4406ecbefaa0851c5cc3869d",
+      "mode": 420,
+      "mtime_ns": 1790414411609784741
+    }
+  ],
+  "taskFrozen": true,
+  "rootPromotion": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false
+}

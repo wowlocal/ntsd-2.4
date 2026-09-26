@@ -1,49 +1,18 @@
-# Catalog package validation — fresh build and standalone read passed
+# Catalog package validation — complete comparison and artifact gates passed
 
-2026-09-26. Continue the unchanged
-[catalog package candidate](APPLICATION_CATALOG_PACKAGE.md) under the fixed
-[validation plan](APPLICATION_CATALOG_PACKAGE_VALIDATION_PLAN.md).
-Fresh compilation, exact built resource verification, the standalone Core reader
-and the first seven selected methods pass. The remaining inherited host/caller
-selection is still running; full76 comparison, archive closure, independent review
-and root promotion are not accepted at this progress publication.
-[Build/start receipt](../evidence/application-catalog-package-validation-start.json).
+2026-09-26. The unchanged [catalog package candidate](APPLICATION_CATALOG_PACKAGE.md)
+has passed the finite [validation plan](APPLICATION_CATALOG_PACKAGE_VALIDATION_PLAN.md):
+fresh build, exact package bytes, all76 Native comparisons, standalone Core input
+reading and complete artifact/archive verification. Queue42094 and finalizer29333
+are terminal0 and absent. The task is frozen; do not rebuild or rerun it.
+[Publication](../evidence/application-catalog-package-validation.json),
+[closure](../evidence/application-catalog-package-validation-close.json).
 
-## Comparison checkpoint and terminal archive preparation
-
-At2026-09-26T08:52:46Z,57 of76 methods had complete named passes, all three
-zero-failure summaries, exit0 and no guard/signal/residual process. Queue42094
-and current child80613/test58 were revalidated by PID/start/command/cwd. The
-remaining19 methods continue on the same binary and original limits. This dated
-[checkpoint](../evidence/application-catalog-package-validation-preclose.json)
-supersedes the smaller live count below, not the queue's eventual terminal result.
-
-The task-local finalize2.py is prepared but unexecuted. It reuses the existing
-saved-result checks and APFS regular archive procedure. Its finite archive domain
-is2241 candidate files,2651 release files and1201 standalone app files:6093 total.
-Cross-volume app preservation uses ordinary copy2 with complete bytes/mode/nsmtime
-verification; X5 files use distinct-inode clones. The finalizer requires a terminal
-queue, diagnoses a nonpass separately, verifies all protected inputs/package/client
-bindings, and keeps comparison, archive and independent-review gates distinct.
-No tests/build/original execution is added. The initial unexecuted finalizer and
-its pins are preserved; prelaunch revision2 adds explicit client/config/progress
-receipt bindings and exact domain counts. Result reading agrees on the51 complete
-logs available when checked and on2 positive/10 negative controls. This is author
-verification, not independent review.
-
-A read-only checkpoint observation encountered test56's job path between the
-queue recording its current phase and the child creating its job. The exact
-FileNotFoundError is retained in preclose-observation1-error.json. The same queue
-and child were then observed live, and a later snapshot verified57 completed
-methods; no restart, queue mutation or Native-failure reclassification occurred.
-
-NEXT remains this queue's terminal result, followed by finalize2.py and archive
-verification within the fixed plan. Do not execute the finalizer while the queue
-is live. Full76 comparison/large artifact closure/review/root promotion remain
-open. The shipping input gap has passed its local reader/catalog checks; the next
-application dependency after this validation is retained per-commit delivery
-owners and prepared backend replies described by the existing host/app preflight.
-Current AppKit still runs Practice; no device or full-match acceptance is claimed.
+This closes the production catalog input dependency of the existing Host within
+the declared input domain. Independent contract review remains unavailable/open;
+author verification is not independent review. Root Native promotion, retained
+backend delivery, actual app/Windows/device/clean-Mac/full-match/full-game acceptance
+remain open. EXE envelope was not recalculated. No original code executed.
 
 ## Fresh build and package
 
@@ -108,36 +77,96 @@ ownership, RSS/time/space guards, action revalidation and reaping remain in forc
 The exact adaptation and positive/negative cwd/transition checks are recorded;
 there is no blanket executable/cwd exception.
 
-## Native comparison in progress
+## Complete Native comparison
 
-The exact76-method selection is4 new reader checks,3 direct catalog checks and
-all69 prior host/caller methods. Its generated queue uses the independently
-preserved one-anchor result-reader correction, exact named result and zero-failure
-summaries, and rejects guards/signals/residual processes. Existing69 method bodies,
-expected/masks, both backings and full17/48/14 schedules remain unchanged. Their
-memory/time bounds retain the **old ordinal**, despite seven prepended methods.
+The exact76-method selection passed:4 new reader methods,3 direct full-catalog
+methods and all69 inherited host/caller methods. Queue42094 exited0 after2760.053s;
+summed test process time was2498.359s and sampled peak tree RSS12,099,895,296 bytes.
+Every method has its unique named pass, three one-test/zero-failure summaries,
+Selected-tests pass and exit0, with no guard, signal or residual owned process.
+Short-process RSS0 means no sample, not proven zero memory use. The inherited
+methods kept their original ordinal-based time/RSS bounds after seven prepends.
 
-The first four pass complete independent file/image input comparison; owned
-snapshots and absent/empty overlays; eleven missing/corrupt/duplicate/conflicting/
-extra/nonregular controls with no published snapshot; and relocated app lookup.
-The next three pass the real owned catalog return, cancellation after late Stage,
-and prepublication cancellation followed by a fresh successful retry. The old
-reference input reconstruction remains comparison-only; Core uses ordinary
-packaged original bytes, never expected records or captured device results.
+The reader methods compare complete file/image maps and origins against the old
+input reconstruction, preserve owned snapshots and absent/empty overlays, reject
+eleven missing/corrupt/duplicate/conflicting/extra/nonregular controls without
+partial publication, and verify strict relocated-app lookup. The three direct
+catalog methods cover the owned complete return, late Stage cancellation and
+prepublication cancellation followed by a fresh successful retry.
 
-Queue42094 is live at the build/start receipt and continues the inherited69
-methods on this same unchanged binary. Revalidate its job/PID/start/cwd and current
-child before observation or action. Do not start a duplicate queue, rebuild or
-rerun the first seven. On a nonpass preserve the exact log and diagnose it;
-otherwise complete all76/package/preservation/archive gates on this task.
+The existing69 bodies, expected records, masks and controls remain unchanged.
+Their actual input producer now uses the ordinary original-byte package. Full
+startup/menu/loading/selection/launch parents, neutral17-return chain, both active
+48-call schedules, both paused14-call schedules, late rollback/retry and foreign/
+consumed-ticket/reentry checks all passed. No schedule was shortened or split.
+The old input reconstruction is comparison-only; no expected after-state, captured
+device result or unknown source backing becomes a Core runtime input.
 
-Task: build/research/application-catalog-package-validation-20260926 on verified
-X5, with the separate declared internal app. The progress receipt preserves the
-terminal build/client/seven-method evidence and a dated live queue observation.
-Final large-artifact/archive closure remains open; the task is not frozen yet.
-Independent review remains unavailable/open and author checks are not independent.
-Source59727 stays terminal at the previously recorded34-Object publication bound;
-transport/provenance/full137 original application return remain separate open
-dependencies. All existing safety incidents are unchanged. No original execution,
-Windows/device/full-match/full-game acceptance or EXE-envelope recalculation is
-claimed. The next step is completion or diagnosis of this exact live queue.
+The previously corrected one-anchor XCTest reader recognized the buffered output
+case directly in this run. Its unique-method/line-end/suite/exit/guard/process
+predicates were retained. The historical nonpass and recovery controls remain in
+the earlier closed task; current tests were not rerun to repair classification.
+
+## Preservation and archives
+
+Finalizer29333 exited0 in101.459s. It reverified root1034, prior1040, base/current
+2241-file Native memberships and bytes, all55 source-code pins, protected plans,
+incidents/history, compiled outputs, resource membership and the standalone app's
+installed bytes/linked inputs/configurations/results. The complete previously
+published156-member progress archive was also reverified; its hash is unchanged.
+
+The regular artifact archive contains6093 files,242 directories and no links:
+2241 candidate files,2651 release-product files and1201 standalone app files.
+Its12,046,872,540 logical bytes were verified by full membership, contents, modes
+and nanosecond mtimes. X5 members use distinct-inode APFS clones; the internal app
+uses ordinary cross-volume copies with the same complete verification. The three
+implicit archive parent directories are declared separately from source directories.
+The381-member PAX metadata archive is8,591,360 bytes, SHA256
+77bd31ba4b426df6e5694af38ecb44e76f1009229a5bb799fe8ee48bb4bcb0e6;
+each member's name/body/mode/nsmtime was checked, not just the archive checksum.
+
+The final external free space is173,601,914,880 bytes and internal free space
+59,041,873,920 bytes. Observed external decrease1,837,572,096 bytes remains within
+the28GiB physical allowance;40GiB external/6GiB internal reserves and17GiB source
+commitment were retained. Internal standalone artifacts remain672,650,373 bytes.
+The frozen task is build/research/application-catalog-package-validation-20260926.
+No evidence was deleted and no live or completed source was restarted.
+
+The initial unexecuted finalizer and its prelaunch revision2 remain preserved.
+Two read-only status observations encountered missing job paths during test56/74
+admission, after the queue selected a phase but before the child wrote its job.
+Both errors and later live-process observations are preserved separately; neither
+was a Native failure, a stopped queue or a reason to rerun a test. The dated start
+and57-method checkpoints remain in their immutable receipts and archived study
+copies. They are historical observations, superseded by the terminal76 result.
+
+## Application readiness and next dependency
+
+The accepted comparison boundary now includes self-contained production catalog
+inputs through the unchanged full host/caller comparisons. This is not a complete
+original application-source comparison: source59727 remains terminal at its
+previous34-Object publication boundary, and full137 return plus saved transport/
+provenance audits remain open. Existing safety incidents are unchanged. Controlled
+API/time/device responses are not measured Windows or actual macOS device behavior.
+WMA bytes are installed, but decoding/playback, native rendering/input/audio and
+a clean-Mac full match have not been exercised by this task. NTSDApp still uses
+Practice and has no consumer for the recovered Host's committed batches.
+
+NEXT: implement and compare a retained per-commit delivery context for all three
+Host.Batch variants in a fresh candidate derived from this2241-file tree. Use the
+existing [host/app preflight](APPLICATION_HOST_APP_PREFLIGHT.md), not a new broad
+inventory. Freeze a finite contract and cases before implementation: a delayed
+consumer must resolve the actual Native resources of its own commit after later
+host commits; startup/iteration/loaded order and generation-qualified identities
+must be retained; failed preparation must publish neither a batch nor partial
+owners; previous queued batches and all existing whole-caller comparisons remain
+intact. Comparison must use independently declared owner/event expectations, not
+the proposed delivery producer as its own oracle. Preserve the fixed current
+candidate and root dirty inputs; review remains an explicit open gate.
+
+Actual device observations/reservations, cancellation and post-commit failure
+semantics are the subsequent prepared-backend dependency. They must precede real
+AppKit presentation/audio/file delivery: queuing an operation cannot supply the
+successful reply already consumed by Core, and Swift rollback cannot undo device
+side effects. This next owner-retention step removes a concrete app integration
+obstacle on the path to the complete Naruto/Sasuke District match and full game.

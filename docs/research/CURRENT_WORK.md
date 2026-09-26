@@ -2,6 +2,20 @@
 
 ## Продолжение — 2026-09-26
 
+[Catalog package validation complete](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
+all76 methods passed on the unchanged2241-file candidate, including4 reader,
+3 direct catalog and69 retained whole-host/caller methods. Queue42094 and
+finalizer29333 terminal0/absent. Fresh build,1686 resource files, all five isolated
+Core-client checks,6093-file artifact and381-member metadata archives verified;
+root1034/prior1040/source55 preserved. Task frozen. [Publication](../evidence/application-catalog-package-validation.json).
+NEXT: finite retained per-commit delivery context for startup/iteration/loaded
+Host batches, from this candidate and the existing app preflight. A delayed
+consumer must retain its own resources/order after later commits; failed attempts
+must leave earlier batches and owners intact. Freeze contract/cases before edits.
+Independent review/root promotion/prepared backend/catalog transport/full137
+source/AppKit devices/Windows/clean-Mac/full match/game remain open. EXE envelope
+not recalculated. Supersedes the live-queue/archive NEXT below; do not rerun it.
+
 [Catalog package comparison checkpoint](APPLICATION_CATALOG_PACKAGE_VALIDATION.md):
 57/76 complete methods verified at08:52:46Z; same queue42094 and child80613/test58
 confirmed live. Finite finalizer prepared for6093 candidate/release/standalone app
