@@ -1,4 +1,80 @@
-# Host gameplay completion — saved result recovered, eleven methods running
+# Host gameplay comparison complete — independent review open
+
+2026-09-26. All69 selected methods now pass on the unchanged correction1 binary:
+57 prior passes, separately recovered method58 and11 newly executed methods59–69.
+Package bytes, the prior artifact archive and the new metadata archive are
+verified. No Native or source rerun was used to recover58. Independent reader/
+contract review remains open; this is bounded comparison acceptance, not a
+complete application or match.
+[Publication](../evidence/application-host-gameplay-completion.json),
+[closure](../evidence/application-host-gameplay-completion-close.json),
+[reader evidence](../evidence/application-host-gameplay-completion-reader.json),
+[next-consumer assessment](../evidence/application-host-gameplay-completion-readiness.json).
+
+## Comparison and preservation
+
+Queue90854 is terminal0/absent after1078.890s. Its11 tests total1009.928s;
+peak aggregate RSS10,535,960,576 bytes. All have one exact named pass, three
+one-test/zero-failure summaries, exit0, no guard/signals and no residual process.
+The six new host tests cover both17-return neutral schedules, both48-call active
+schedules, both14-call pause/step/resume schedules, input/body/outer failure
+retention with retry, ticket ownership and callback reentry. The active/paused
+methods retain their existing17-return neutral parents; these counts are not
+additive coverage or evidence of an installed whole-application trajectory.
+
+The one-anchor reader change keeps all57 earlier classifications unchanged and
+separately recovers58 from its original exact byte span. Two positive and twelve
+negative controls pass. The old queue's false result, compile failure, logs and
+candidate remain immutable. Author controls do not close independent review.
+
+Finalizer26386 is terminal0/absent after20.596s. It verified root1034,
+candidate1040,487 packaged resources, source55 and protected inputs, plus complete
+bodies/modes/nanosecond mtimes/membership of the prior2488-file artifact archive
+and its156 directories. The new70-member metadata archive is1,095,680 bytes,
+SHA256 `862a0799c36fdf67d4462925144c19efefcb2277a3f06e1ed4f59ed04b593b25`;
+all member bodies and metadata were read back. The new task is frozen.
+
+The external free-space observation increased by56,934,141,952 bytes during this
+queue; that is a volume observation, not an attributed task saving. Final free
+space181,243,486,208 external/59,740,803,072 internal bytes preserves the original
+40GiB/6GiB reserves and the declared floors. No evidence was deleted by this task.
+The two read-only inspection/observation errors are preserved in its metadata:
+missing guessed root filenames and reading test66's job during its prelaunch gap.
+Neither error affected or restarted the Native queue.
+
+During execution the user authorized T7 for artifacts. Its separate instruction
+update preserved the active WORKFLOW pin. The exact old WORKFLOW body is included
+as workflow-input-before-t7.md in the verified metadata archive. Only after closure
+was the active policy updated; [the amendment](../evidence/t7-artifact-storage-workflow-2026-09-26.json)
+records both versions. Future plans must pin the current instructions while
+preserving these historical inputs; no frozen plan or archive was rewritten.
+
+## Next app boundary
+
+Static inspection after closure verifies that all five NTSDApp Swift files match
+root and contain no host/takeCommitted consumer. main.swift still chooses the
+Melee/Movement practice scene or inspector. The candidate host now exposes
+startup/iteration/loaded batches, whose overlapping views require one original
+cross-domain order. Its staged platform forbids host IO during the Core transaction;
+currently the actual host gameplay transport is supplied by test code.
+
+The first permissible next task is a bounded read-only app-delivery preflight:
+map all three batch variants to the real app input/provider/resource boundaries,
+identify each required value's provenance and retained identity, and specify
+ordered delivery plus failure/retry ownership. Finish with a finite candidate and
+comparison plan for the nearest runnable app boundary. Do not copy practice rules,
+use test fixtures as a shipping provider, or infer missing device behavior. This
+removes a concrete integration obstacle to the Naruto/Sasuke District match.
+
+Source59727 remains terminal at its publication boundary after34 Object returns;
+whole137 return is missing. Saved transport/provenance audits remain a separate
+open dependency. Root promotion, independent review, installed trajectory,
+actual window/input/audio, Windows/clean-Mac, first complete match and full game
+remain open. Prior safety dependencies remain open. EXE envelope was not
+recalculated in this increment. This supersedes the live-queue NEXT below.
+
+## Earlier recovery/start observation (preserved)
+
 
 2026-09-26. The saved result-reader correction passes its bounded controls.
 Method58 is separately recovered as a pass without rerunning Native code or

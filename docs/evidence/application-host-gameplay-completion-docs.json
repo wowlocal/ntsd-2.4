@@ -1,0 +1,51 @@
+{
+  "UTC": "2026-09-26T07:28:52.656350+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Host gameplay saved-result recovery]",
+      "insertion": "[Host gameplay comparison complete](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):\nall69 methods verified on unchanged correction1 binary:57 prior, separately\nrecovered58,11 new. Queue90854 terminal0/absent; finalizer26386 terminal0/absent.\nRoot1034/candidate1040/package487/source55 and prior2488-file archive unchanged;\nnew70-member metadata archive verified, task frozen. Old reader nonpass preserved.\n[Publication](../evidence/application-host-gameplay-completion.json).\nNEXT: bounded read-only app-delivery preflight of the host startup/iteration/loaded\nbatches, platform input provenance, retained resources, cross-domain delivery and\nfailure/retry ownership. Current AppKit remains on practice scenes; host has no\nshipping consumer. End with a finite implementation/comparison plan for the next\nrunnable app boundary. No source restart or test rerun. Independent review/root\npromotion/catalog transport and whole137 return/app devices/full match/game remain\nopen. EXE envelope not recalculated. This supersedes the live-queue NEXT below.\nT7 is now authorized for artifacts under AGENTS/WORKFLOW; its ExFAT boundaries and\n40GiB reserve are recorded. The old WORKFLOW was archived before the policy update.\n\n",
+      "beforeSHA256": "6bd8eff38bbb778515afab48931952bb1e334bf4355a57a3c11428d76d322d1c",
+      "afterSHA256": "ab37b9cc6a70580a39b25045df5b5edefd63170619ad203caddabff81e5175e1"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Host gameplay continuation]",
+      "insertion": "[Host gameplay comparison complete](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):\nall69 pass (57 prior + separately recovered58 +11 new), unchanged binary/package.\nQueue90854/finalizer26386 terminal0/absent; prior2488-file and new70-member archives\nverified, task frozen. Next: bounded app-delivery preflight for three host batch\nvariants and actual platform/provider/resource boundaries; AppKit still uses\npractice scenes. Independent review/root promotion/catalog/device/full match/game\nremain open. [Publication](evidence/application-host-gameplay-completion.json).\n\n",
+      "beforeSHA256": "c094d274e8aede1e8f588a19e4100e2e8df3906342df922ed21df9f17d733f6d",
+      "afterSHA256": "5a698eb5a74b074e807a64d24c569e568c185dd5c8312f21999b8475c9eb8912"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 8,
+  "publicationMatchesFrozenTask": true,
+  "terminalProcessesAbsent": [
+    90854,
+    26386
+  ],
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md",
+      "sha256": "29d7ac09c3fb60a26e858b295003e29638b53aea444b7ab16a5c927354f061e3"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-completion.json",
+      "sha256": "1443a45502748df93552a2d32613165da614767988437b2a8bf27a06fdc007a9"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-completion-close.json",
+      "sha256": "ce9da30fb13c0604800eda882b3fd1f668a82720275dfd68ce7ec9b3d8701f9e"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-completion-readiness.json",
+      "sha256": "d3dceda3f7b5093efa8fdae8bec07e0d2d20388c50125bfbb5a1d9a71ea3f864"
+    }
+  ],
+  "verifiedMethods": 69,
+  "prior": 57,
+  "recovered": 1,
+  "new": 11,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false,
+  "instructionAmendment": "docs/evidence/t7-artifact-storage-workflow-2026-09-26.json"
+}

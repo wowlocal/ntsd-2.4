@@ -2,6 +2,22 @@
 
 ## Продолжение — 2026-09-26
 
+[Host gameplay comparison complete](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
+all69 methods verified on unchanged correction1 binary:57 prior, separately
+recovered58,11 new. Queue90854 terminal0/absent; finalizer26386 terminal0/absent.
+Root1034/candidate1040/package487/source55 and prior2488-file archive unchanged;
+new70-member metadata archive verified, task frozen. Old reader nonpass preserved.
+[Publication](../evidence/application-host-gameplay-completion.json).
+NEXT: bounded read-only app-delivery preflight of the host startup/iteration/loaded
+batches, platform input provenance, retained resources, cross-domain delivery and
+failure/retry ownership. Current AppKit remains on practice scenes; host has no
+shipping consumer. End with a finite implementation/comparison plan for the next
+runnable app boundary. No source restart or test rerun. Independent review/root
+promotion/catalog transport and whole137 return/app devices/full match/game remain
+open. EXE envelope not recalculated. This supersedes the live-queue NEXT below.
+T7 is now authorized for artifacts under AGENTS/WORKFLOW; its ExFAT boundaries and
+40GiB reserve are recorded. The old WORKFLOW was archived before the policy update.
+
 [Host gameplay saved-result recovery](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
 one-anchor reader correction passes2 positive/12 negative controls; all57 prior
 classifications unchanged, method58 separately recovered without rerun. Old nonpass

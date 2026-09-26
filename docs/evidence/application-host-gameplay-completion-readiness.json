@@ -1,0 +1,80 @@
+{
+  "UTC": "2026-09-26T07:27:28.244028+00:00",
+  "kind": "Bounded static next-consumer assessment after all69 comparison and archive closure",
+  "completedPublicationSHA256": "1443a45502748df93552a2d32613165da614767988437b2a8bf27a06fdc007a9",
+  "appFiles": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDApp/Assets.swift",
+      "rootPath": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/Assets.swift",
+      "bytes": 3839,
+      "sha256": "f39b54171ff46e4d662f4b32a1580f4f70a0dc13effa9c08f86988a5f53466ef",
+      "rootAndCandidateEqual": true
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDApp/MeleeScene.swift",
+      "rootPath": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/MeleeScene.swift",
+      "bytes": 16618,
+      "sha256": "c249a07e30d89395e993665634f612d1c9fe0f324fc7dc23568ad676b08a76e4",
+      "rootAndCandidateEqual": true
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDApp/MovementScene.swift",
+      "rootPath": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/MovementScene.swift",
+      "bytes": 7088,
+      "sha256": "1a06aa8ab92df8f6c5f41524febb2a60277fcaa7c3ca0fbbb2dc37090cafda41",
+      "rootAndCandidateEqual": true
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDApp/OriginalScene.swift",
+      "rootPath": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/OriginalScene.swift",
+      "bytes": 3327,
+      "sha256": "005f5a2dff280cef061e289c00dcc930620c99bb3bcbdb0b474a3b037cfa88a1",
+      "rootAndCandidateEqual": true
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDApp/main.swift",
+      "rootPath": "/Users/michael/Developer/ntsd-2.4/native/Sources/NTSDApp/main.swift",
+      "bytes": 18757,
+      "sha256": "9cb5c126977e24ec6bc9a2ff5e933e692a3641088cdd571ff1fe3e4921770954",
+      "rootAndCandidateEqual": true
+    }
+  ],
+  "contractInputs": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 18210,
+      "sha256": "fff5e0dd49c7b4bcbefe72440100d96ef2e8a27f0f6efdb4c9a0a9bb8783dff0"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Sources/NTSDCore/OriginalApplicationStartupPlatform.swift",
+      "bytes": 7039,
+      "sha256": "5ab1ccb1579e2ff81ff9b7c4b6317c20252dc316ee622bc814198311e9dd1c42"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationLoadedTestDriver.swift",
+      "bytes": 11758,
+      "sha256": "5d56e367a5e3b69355844c8fe39bf27e65cd9a6661be2dddcb679614ba7715ca"
+    }
+  ],
+  "observations": [
+    "Current AppKit entry chooses practice Melee or Movement scenes, plus inspector",
+    "No NTSDApp Swift source references OriginalApplicationHostSession or takeCommitted",
+    "Host Batch exposes startup, iteration and loaded variants; their overlapping views must preserve one cross-domain order",
+    "Startup platform requires isolated staged storage and no host IO during Core transaction",
+    "Current loaded driver is test transport using owned host parents, not a shipping provider"
+  ],
+  "inference": "The next app consumer requires a separate platform/provider and committed-batch delivery contract before wiring this host into AppKit",
+  "nextTask": "Read-only preflight of all three host Batch consumers, app input/provider provenance, resource identities, ordered delivery and failure/retry boundaries; finite implementation/comparison plan, no source replay or app behavior guessed",
+  "originalExecuted": false,
+  "appLaunched": false,
+  "independentReview": false,
+  "EXEEnvelopeRecalculated": false,
+  "open": [
+    "independent contract and reader review",
+    "root promotion",
+    "saved catalog transport/provenance and missing whole137 return",
+    "actual window/input/audio and Windows/clean-Mac observations",
+    "first complete match",
+    "full game"
+  ]
+}

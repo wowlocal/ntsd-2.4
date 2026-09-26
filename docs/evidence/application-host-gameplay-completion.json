@@ -1,0 +1,103 @@
+{
+  "schema": "ntsd-host-match-completion-v1",
+  "UTC": "2026-09-26T07:25:35.664785+00:00",
+  "status": "all69-passed-review-open",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926",
+  "baseHead": "d124756141c4faa99af59b45a28903b342deef87",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/context1.json",
+    "bytes": 71053,
+    "sha256": "1664e4373b71ab478d352b0b69946945ea86e5e4d49c982bafbd2f4fb348642e",
+    "mode": 420,
+    "mtime_ns": 1790406383881843811
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/verification1.json",
+    "bytes": 91871,
+    "sha256": "c8810e6971f63bf09f63a80c5484b86ba9235934e21f0811d00a67dcbf081e4f",
+    "mode": 420,
+    "mtime_ns": 1790407535583251204
+  },
+  "resourceContract": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/resource-contract1.json",
+    "bytes": 2172,
+    "sha256": "b3f479dcf9629b41ddb715353de9bd824c10b55dfd2925ad0149e0b4eef70620",
+    "mode": 420,
+    "mtime_ns": 1790406383880674846
+  },
+  "priorPublication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/publication1.json",
+    "bytes": 30419,
+    "sha256": "852a4413694df70d6ddefc65c26a3db8303476efc2dcc797c47188c402ecf19e",
+    "mode": 420,
+    "mtime_ns": 1790405712962509896
+  },
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/candidate1-inputs.json",
+    "bytes": 216337,
+    "sha256": "5505b78d77d5c92eb6932508deeab30184ee406452d22ce2522e151df70490b5",
+    "mode": 420,
+    "mtime_ns": 1790403739831273123
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 63174872,
+    "sha256": "4c57255ca09227fec399cdbfef5d5ab986e95b7c0823fc4beb9403706f05b72d",
+    "mode": 493,
+    "mtime_ns": 1790404039374252116
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/package-check1.json",
+    "bytes": 947152,
+    "sha256": "4df43b5e568204058a70d36744278d4eacc081f3b86860ec91bf440c29ac5d3a",
+    "mode": 420,
+    "mtime_ns": 1790404061002674055
+  },
+  "priorArtifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/artifact-archive1.json",
+    "bytes": 695598,
+    "sha256": "1fd82085678f026286ed2375e2de6c5ebd57f9454c189d9b043f7665bf590c41",
+    "mode": 420,
+    "mtime_ns": 1790405712862117687
+  },
+  "all69Passed": true,
+  "verifiedMethods": 69,
+  "newMethods": 11,
+  "remaining": [],
+  "newQueueSeconds": 1078.889911917,
+  "newTestSeconds": 1009.9282107100001,
+  "sampledNewTestPeakRSS": 10535960576,
+  "metadataArchive": {
+    "members": 70,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/metadata1.tar",
+    "bytes": 1095680,
+    "sha256": "862a0799c36fdf67d4462925144c19efefcb2277a3f06e1ed4f59ed04b593b25",
+    "mode": 420,
+    "mtime_ns": 1790407535657176492
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/source-live1.json",
+    "bytes": 299,
+    "sha256": "83a5b9670e77296ec7e561bf0454f14b59749c1f7174c25949fa036b6f8e6a69",
+    "mode": 420,
+    "mtime_ns": 1790407535576289582
+  },
+  "failureDiagnosis": null,
+  "gates": {
+    "nativeComparison": true,
+    "packageBytes": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullGame": false
+  },
+  "limitations": [
+    "Typed-host changes have not received independent contract review.",
+    "The prior compile failure and original result-reader nonpass remain immutable outcomes.",
+    "Selected host gameplay retention comparison does not establish installed whole-application, match or whole Catalog53 source equivalence.",
+    "Actual providers/timing/devices, installed trajectory, full match and full game remain open."
+  ]
+}

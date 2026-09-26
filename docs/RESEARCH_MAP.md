@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay comparison complete](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
+all69 pass (57 prior + separately recovered58 +11 new), unchanged binary/package.
+Queue90854/finalizer26386 terminal0/absent; prior2488-file and new70-member archives
+verified, task frozen. Next: bounded app-delivery preflight for three host batch
+variants and actual platform/provider/resource boundaries; AppKit still uses
+practice scenes. Independent review/root promotion/catalog/device/full match/game
+remain open. [Publication](evidence/application-host-gameplay-completion.json).
+
 [Host gameplay continuation](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
 method58 separately recovered from immutable log after2 positive/12 negative
 reader controls;57 earlier classifications unchanged. Queue90854 runs only the
