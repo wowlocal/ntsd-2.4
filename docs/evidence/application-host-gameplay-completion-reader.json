@@ -1,0 +1,621 @@
+{
+  "UTC": "2026-09-26T07:06:23.821447+00:00",
+  "oldPattern": "^Test Case '-\\[NTSDCoreTests\\.([^ ]+) ([^\\]]+)\\]' (passed|failed) \\(([^)]*)\\)\\.$",
+  "newPattern": "Test Case '-\\[NTSDCoreTests\\.([^ ]+) ([^\\]]+)\\]' (passed|failed) \\(([^)]*)\\)\\.$",
+  "exactOneAnchorChange": true,
+  "controls": [
+    {
+      "name": "actual interleaved log",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "ordinary complete result",
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "absent result",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "failed result",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "duplicate result",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "foreign method",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "unterminated result",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "missing summary",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "extra summary",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "missing selected pass",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "nonzero exit",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "guard",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "signal",
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "remaining process",
+      "expected": false,
+      "passed": true
+    }
+  ],
+  "prior57ClassificationsUnchanged": [
+    {
+      "method": "OriginalApplicationHostSessionTests/testWholeFirstMenuParentsUseHostCommitHandoff",
+      "log": {
+        "bytes": 940,
+        "sha256": "99d35a2c0f3abd83661cb15cb9bd3c6ac64133f191f7ae49ab8a0d42d39a8364",
+        "mode": 420,
+        "mtime_ns": 1790404101812235001
+      }
+    },
+    {
+      "method": "OriginalApplicationHostSessionTests/testFirstMenuLateFailuresRetainEarlierHostCommits",
+      "log": {
+        "bytes": 941,
+        "sha256": "bc6916b4cf471b1c9ab84d65e4845b01b4800f51eda349d03edafc27700f3f4a",
+        "mode": 420,
+        "mtime_ns": 1790404111959547659
+      }
+    },
+    {
+      "method": "OriginalApplicationHostSessionTests/testSamePreparedAttemptsRetryWithIndependentHostState",
+      "log": {
+        "bytes": 949,
+        "sha256": "c464079bdf6f6d39fa81b551f195bdecf1ba9815bc75daf4e059f7976c4c240e",
+        "mode": 420,
+        "mtime_ns": 1790404119036564563
+      }
+    },
+    {
+      "method": "OriginalApplicationHostSessionTests/testWholeInputChainsRetainActualHostLoadingTicket",
+      "log": {
+        "bytes": 948,
+        "sha256": "a14fb1c4b9aa2ac599016fd16a7e2803df053561b41f7697658e976c7e11c7b6",
+        "mode": 420,
+        "mtime_ns": 1790404158765546825
+      }
+    },
+    {
+      "method": "OriginalApplicationHostSessionTests/testStartupLateFailuresAndSharedCopyRejection",
+      "log": {
+        "bytes": 933,
+        "sha256": "7db6247ae7c0ce3b41cc03819eaed4236c675d548b24ec86a2f5b60ce26e2dc8",
+        "mode": 420,
+        "mtime_ns": 1790404162666275010
+      }
+    },
+    {
+      "method": "OriginalApplicationBootstrapTests/testLateFirstMenuFailuresRetainStartupAndResize",
+      "log": {
+        "bytes": 929,
+        "sha256": "dca5f8744e0ff89d59729641c39c64c4fc7c6ce2542696fcf40084f85d6644d9",
+        "mode": 420,
+        "mtime_ns": 1790404173103058212
+      }
+    },
+    {
+      "method": "OriginalApplicationBootstrapTests/testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+      "log": {
+        "bytes": 949,
+        "sha256": "fdd44d21b49f552dae8928d23a34cc46db395c4f46d4423acff83593893bd05b",
+        "mode": 420,
+        "mtime_ns": 1790404176720321601
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuReturnTests/testOwnMenusReturnDispatcherAndCommitFirstDueIteration",
+      "log": {
+        "bytes": 1124,
+        "sha256": "262e084a9e45577a101cd4d36db44fb1efdff0037060123c6b6a7539ee734d85",
+        "mode": 420,
+        "mtime_ns": 1790404210178926195
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuReturnTests/testLateMenuReturnFailuresRollBackWholeIteration",
+      "log": {
+        "bytes": 935,
+        "sha256": "5cfb97750e700f25a065b964c00580502e7f857388357753b9053d7a5b931080",
+        "mode": 420,
+        "mtime_ns": 1790404218815207650
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuInputTests/testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+      "log": {
+        "bytes": 956,
+        "sha256": "ead09720808c04a639847fbc23f27dcfe0abb7ce0f271b15cf20ec3cde961a59",
+        "mode": 420,
+        "mtime_ns": 1790404256126090418
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuInputTests/testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+      "log": {
+        "bytes": 953,
+        "sha256": "18599d2eb3137cdcdc7e9e865c0818ab24f14fa164fe261ada8cb6348c57d56b",
+        "mode": 420,
+        "mtime_ns": 1790404268119957991
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuInputTests/testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+      "log": {
+        "bytes": 971,
+        "sha256": "858f09d95c7d0da580167a147f05629652a20a2c8614cf30b9f59c310060c099",
+        "mode": 420,
+        "mtime_ns": 1790404271380000116
+      }
+    },
+    {
+      "method": "OriginalApplicationMenuInputTests/testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+      "log": {
+        "bytes": 937,
+        "sha256": "6441c932deb94db71ed32e827202a8e124d2dd91d91fbfa77d894939c7686412",
+        "mode": 420,
+        "mtime_ns": 1790404278305443475
+      }
+    },
+    {
+      "method": "OriginalApplicationStartupInputsTests/testBundledInputsHavePinnedInitialFileAndBitmapProvenance",
+      "log": {
+        "bytes": 965,
+        "sha256": "57cc602b248150d614f5a3258787ec62b32ac66b0526ab78d1b31fc623e62224",
+        "mode": 420,
+        "mtime_ns": 1790404281384123699
+      }
+    },
+    {
+      "method": "OriginalApplicationStartupInputsTests/testSnapshotOwnsBytesAfterFilesDisappearAndOptionalOverlaysStaySeparate",
+      "log": {
+        "bytes": 993,
+        "sha256": "5552a0da44d1a9031fc240b493d50094494645463c68bef69ef62f1cd8d42c7b",
+        "mode": 420,
+        "mtime_ns": 1790404284980307204
+      }
+    },
+    {
+      "method": "OriginalApplicationStartupInputsTests/testPackageRejectsMissingCorruptAndUnexpectedFiles",
+      "log": {
+        "bytes": 951,
+        "sha256": "e4784cf97a7c4ce0cf0803675899c540424e431e71228d22b5078f66bf598412",
+        "mode": 420,
+        "mtime_ns": 1790404288450919497
+      }
+    },
+    {
+      "method": "OriginalApplicationStartupInputsTests/testBitmapRepliesUseOwnedMetadataAndPreserveFailedAttempts",
+      "log": {
+        "bytes": 967,
+        "sha256": "6845f8ee53034a1f4df27b37d12b607a87ef63c7179aea3e09da954f972fe607",
+        "mode": 420,
+        "mtime_ns": 1790404291793707937
+      }
+    },
+    {
+      "method": "OriginalApplicationGraphicsTests/testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+      "log": {
+        "bytes": 927,
+        "sha256": "a70897c2ee90ef0df1cead2feedec5529fe95ddcab460311b9135a34a7ef14f8",
+        "mode": 420,
+        "mtime_ns": 1790404295248919841
+      }
+    },
+    {
+      "method": "OriginalApplicationGraphicsTests/testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+      "log": {
+        "bytes": 937,
+        "sha256": "ddb39b1c2abaa24bf08c5b14fe163971c4588022f14073024dae6c95822f94c6",
+        "mode": 420,
+        "mtime_ns": 1790404298698719044
+      }
+    },
+    {
+      "method": "OriginalApplicationGraphicsTests/testResolvedSourceSnapshotAndNullSourceBoundary",
+      "log": {
+        "bytes": 925,
+        "sha256": "f1b7d7e666350ab768c36f0b968efa7d2b8ca539cd7d5f3d6bb3c1f6371a0409",
+        "mode": 420,
+        "mtime_ns": 1790404302169392920
+      }
+    },
+    {
+      "method": "OriginalApplicationMessageLoopTests/testWholeLoopAndOwnStartupCallbacks",
+      "log": {
+        "bytes": 1095,
+        "sha256": "1fa88afe20d288ebd495a59a2b775b616614d3b0a7f5931d33c3856629e7fb4a",
+        "mode": 420,
+        "mtime_ns": 1790404306506251077
+      }
+    },
+    {
+      "method": "OriginalApplicationMessageLoopTests/testOwnKeyReleaseCallbackFailureRetainsCommittedPress",
+      "log": {
+        "bytes": 949,
+        "sha256": "d57902c0ccc9fac7ed0cb25ab21f46f9b1af0a009561be7cb4f65f2fb72ece81",
+        "mode": 420,
+        "mtime_ns": 1790404309154561780
+      }
+    },
+    {
+      "method": "OriginalApplicationMessageLoopTests/testLateFailureRollsBackContextMessageCounterAndBaseline",
+      "log": {
+        "bytes": 955,
+        "sha256": "fd8d2a004c43aec25b02b5adc01d9897eb760971eabb175c5310b155fd9fd867",
+        "mode": 420,
+        "mtime_ns": 1790404312543963598
+      }
+    },
+    {
+      "method": "OriginalWinMainStartupTests/testContinuousStartupOwnedStateAndExplicitBoundaries",
+      "log": {
+        "bytes": 1037,
+        "sha256": "9d09173a83a0751e3ed42d8e09b64050b122d1b35a8d0cc312dda04b917422ff",
+        "mode": 420,
+        "mtime_ns": 1790404317043860371
+      }
+    },
+    {
+      "method": "OriginalWinMainStartupTests/testLateRollbackOfWholeStartup",
+      "log": {
+        "bytes": 871,
+        "sha256": "b3e0966b2541cf7e8169ae56462d9630ed482e3dceb0338def30740278cbbdf5",
+        "mode": 420,
+        "mtime_ns": 1790404320100340620
+      }
+    },
+    {
+      "method": "OriginalApplicationHostLoadingTests/testOwnFreshLoadingAndThreeCachedCyclesUseHostHandoff",
+      "log": {
+        "bytes": 1296,
+        "sha256": "b3163b53c16a7f11c5c8ffe1eb69d943d91bca02a1ffc8fc177f5390ea424763",
+        "mode": 420,
+        "mtime_ns": 1790404419705473481
+      }
+    },
+    {
+      "method": "OriginalApplicationHostLoadingTests/testPreparedChildAndPlatformSurviveLateFailuresAndRetry",
+      "log": {
+        "bytes": 1130,
+        "sha256": "d9704e9c2ec22d15841c8d08b5371bb6c0f3db91b2431ebc9fd2459cb897403e",
+        "mode": 420,
+        "mtime_ns": 1790404473708138451
+      }
+    },
+    {
+      "method": "OriginalApplicationHostLoadingTests/testDifferentSameRevisionTicketsAndRepeatedCompletionAreRejected",
+      "log": {
+        "bytes": 1318,
+        "sha256": "39d5ae569b61de55cc8260c95b1b32dff22809b07222a95c2298a0e87131debb",
+        "mode": 420,
+        "mtime_ns": 1790404573920492536
+      }
+    },
+    {
+      "method": "OriginalApplicationHostLoadingTests/testLoadingPrefixRequiresExactlyItsPreparedReplies",
+      "log": {
+        "bytes": 950,
+        "sha256": "9596263c4e691fd39c989d126f396ba7d5510733e2aa5e82f52ebb778481c277",
+        "mode": 420,
+        "mtime_ns": 1790404644475206672
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedMenuTests/testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+      "log": {
+        "bytes": 1419,
+        "sha256": "ea27b3052cdc9ada903b83ccb04305d460639d80f4a28be956c603c4da98c78e",
+        "mode": 420,
+        "mtime_ns": 1790404667157978533
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedMenuTests/testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+      "log": {
+        "bytes": 1118,
+        "sha256": "9b800bcbcc728316bb4b626621628472b8159aee4343341626b7aa16bea57cdd",
+        "mode": 420,
+        "mtime_ns": 1790404690173897339
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedMenuTests/testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+      "log": {
+        "bytes": 1134,
+        "sha256": "0f5fb466b35e8053b4417f80c22a365da788f0b3eb749fc0bcc3dc1a778464c3",
+        "mode": 420,
+        "mtime_ns": 1790404712935466367
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedMenuTests/testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+      "log": {
+        "bytes": 1128,
+        "sha256": "03e3245d850fab78c0cd0999e49635788d16a6d1d7526b5cfdc919ddf806f826",
+        "mode": 420,
+        "mtime_ns": 1790404735217350729
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedMenuTests/testForeignStaleAndOverlappingOwnersAreRejected",
+      "log": {
+        "bytes": 1110,
+        "sha256": "9a6081c9a672f6ab746a02ad5dbb53e9e2e36058c3186a71cf0731a0d238ddb1",
+        "mode": 420,
+        "mtime_ns": 1790404757998073952
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedCycleTests/testActualBootstrapCyclesKeepCachedOwnersAndReachHeldSelectionBoundary",
+      "log": {
+        "bytes": 1160,
+        "sha256": "23ff261f86656133d56f5b1d49a416674909dcb405251f40105a30d16ff447bc",
+        "mode": 420,
+        "mtime_ns": 1790404782211970655
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedCycleTests/testRepeatedInputMenuAndOuterRollbackPreservesEarlierCommits",
+      "log": {
+        "bytes": 1140,
+        "sha256": "c5cd158ac270afb5882340e4030a294312991ce80517c9864c1f4c013a105986",
+        "mode": 420,
+        "mtime_ns": 1790404806883558205
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedCycleTests/testBindingRefreshKeepsMutableFramesArenasAndReleaseHistory",
+      "log": {
+        "bytes": 1138,
+        "sha256": "ca35f7d4edca1905e5d92f6e9c8c2be1727ae2fd0e8ab06d0d8383520c0f0cc8",
+        "mode": 420,
+        "mtime_ns": 1790404831564832570
+      }
+    },
+    {
+      "method": "OriginalApplicationInitializedMenuTests/testInitializedSourceMatchesOwnBootstrapAndWholeMenu",
+      "log": {
+        "bytes": 1107,
+        "sha256": "d34b848362c98bed47112b936b1859cca145dc9668f15e7d533e38bd2988bdf0",
+        "mode": 420,
+        "mtime_ns": 1790404836377488869
+      }
+    },
+    {
+      "method": "OriginalApplicationInitializedMenuTests/testInitializedMenuLateFailuresRetainCommittedStartupAndResize",
+      "log": {
+        "bytes": 1121,
+        "sha256": "57aaac5da8f399ed8b198c33ecb48274d14186444bc8227a9592d77297c2f72a",
+        "mode": 420,
+        "mtime_ns": 1790404847738390312
+      }
+    },
+    {
+      "method": "OriginalApplicationInitializedLoadingTests/testInitializedBootstrapActivationAndCommonSoundsMatchSource",
+      "log": {
+        "bytes": 1131,
+        "sha256": "d25e05bc31ce88cdffccde4cc70bb46528d553a407075cac1548f973f0f3c7b0",
+        "mode": 420,
+        "mtime_ns": 1790404854109204000
+      }
+    },
+    {
+      "method": "OriginalApplicationInitializedLoadingTests/testInitializedActivationFailuresPreservePriorCommittedIterations",
+      "log": {
+        "bytes": 1094,
+        "sha256": "d7032f3653702e024b20e548409a724169fed1739be5525744bc1d1ae74201cd",
+        "mode": 420,
+        "mtime_ns": 1790404864896471886
+      }
+    },
+    {
+      "method": "OriginalApplicationInitializedLoadingTests/testInitializedCommonLoadingFailuresPreservePendingOwners",
+      "log": {
+        "bytes": 1077,
+        "sha256": "523c8e313d8de32a18a200c1bddd9f5b4cdc0a04dc0d125b52b80ca2bc46bb18",
+        "mode": 420,
+        "mtime_ns": 1790404874042549086
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedCharacterTests/testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns",
+      "log": {
+        "bytes": 1471,
+        "sha256": "980c98090e933762ff5f15d4e5c99324d736989f6b8c90a3be5610cfdf924917",
+        "mode": 420,
+        "mtime_ns": 1790404902685420493
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedCharacterTests/testCharacterBodyAndOuterFailuresKeepPriorApplicationCommits",
+      "log": {
+        "bytes": 1156,
+        "sha256": "4fddefb5a92dec4f44537ac7f1aa69e2effbeed13d36ceb9375f2836b62c48ca",
+        "mode": 420,
+        "mtime_ns": 1790404927204743409
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedSelectionTests/testOwnCountdownDistrictAndStartRetainTheActualApplication",
+      "log": {
+        "bytes": 1810,
+        "sha256": "831bc52f4ead5a775eb969213d8877c58d7001080e4ed40629fd2e14fb32e4ab",
+        "mode": 420,
+        "mtime_ns": 1790404967736008564
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedSelectionTests/testSelectionAndPendingStartFailuresPreserveEarlierCommits",
+      "log": {
+        "bytes": 1482,
+        "sha256": "420a02d74fa4557b0c2825072205189aa84542e2d4cd774fcf84f820f3dad4f3",
+        "mode": 420,
+        "mtime_ns": 1790405000151307091
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedLaunchTests/testOwnStartPreparesDistrictRecordsAndReachesGameplay",
+      "log": {
+        "bytes": 2159,
+        "sha256": "4d5ce72814bee2e9ae309073b66a5567cc9773e324162d24c21841bd222c7059",
+        "mode": 420,
+        "mtime_ns": 1790405041227449314
+      }
+    },
+    {
+      "method": "OriginalApplicationLoadedLaunchTests/testLaunchFailuresPreserveTheRetainedStartAndAllEarlierCommits",
+      "log": {
+        "bytes": 1478,
+        "sha256": "f2a11899d4b7de92e00290266746c59c35c0053f6389572bcc042c2726734ba8",
+        "mode": 420,
+        "mtime_ns": 1790405074395369498
+      }
+    },
+    {
+      "method": "OriginalMatchLaunchTests/testOwnStartThroughEnabledMusicAndRecordingToFirstGameplayEntry",
+      "log": {
+        "bytes": 932,
+        "sha256": "992c95aa1b677895249261c32f2d733dedd923cf15c6448e37056d281efae35d",
+        "mode": 420,
+        "mtime_ns": 1790405095937068650
+      }
+    },
+    {
+      "method": "OriginalMatchLaunchTests/testSameWholeLaunchWithRampAndReverseActorAddresses",
+      "log": {
+        "bytes": 908,
+        "sha256": "fd103ecff3fc5638de96297f575a37e48ba63bce8380b113e251c93d8daff955",
+        "mode": 420,
+        "mtime_ns": 1790405116685196768
+      }
+    },
+    {
+      "method": "OriginalApplicationHostMatchLaunchTests/testActualHostStartLaunchAndNextInputRetainWholeOwners",
+      "log": {
+        "bytes": 1979,
+        "sha256": "f36d79a179fde7fe20cd719694f9948b64d3f5abac4305d8ca889565b44d98a5",
+        "mode": 420,
+        "mtime_ns": 1790405233728411050
+      }
+    },
+    {
+      "method": "OriginalApplicationHostMatchLaunchTests/testStartLaunchAndOuterTailFailuresRetainHostStages",
+      "log": {
+        "bytes": 1468,
+        "sha256": "4186c3eab808d810b2d2936a85917722e5e55d5bfe1702d430874382f54b6ca9",
+        "mode": 420,
+        "mtime_ns": 1790405296597797471
+      }
+    },
+    {
+      "method": "OriginalApplicationHostMatchLaunchTests/testMatchPreludeRejectsDifferentTicketsAndReentry",
+      "log": {
+        "bytes": 1962,
+        "sha256": "1f68d115f698897fbe3bc52babd61439cde705e1bc9b3ecf491990819687f5a4",
+        "mode": 420,
+        "mtime_ns": 1790405385583942140
+      }
+    },
+    {
+      "method": "OriginalApplicationGameplaySourceTests/testPrimarySavedSequence",
+      "log": {
+        "bytes": 1104,
+        "sha256": "7042d911c64c8d956db144eed784762ec7136064f66d3e1a7e54c6955b28ee56",
+        "mode": 420,
+        "mtime_ns": 1790405394951632492
+      }
+    },
+    {
+      "method": "OriginalApplicationGameplaySourceTests/testControlSavedSequence",
+      "log": {
+        "bytes": 1103,
+        "sha256": "87cb3cb8ab04e5261a26874b0298a03338545b02b70cf857e1f2d7d1a6d7cfce",
+        "mode": 420,
+        "mtime_ns": 1790405403471672100
+      }
+    },
+    {
+      "method": "OriginalApplicationGameplayProjectionTests/testPrimaryOwnedScalarSequence",
+      "log": {
+        "bytes": 1711,
+        "sha256": "8f2ab387b4bde8ede0b7e8e2b3450426d4274fb646dab9a33aeab1a27a9844f8",
+        "mode": 420,
+        "mtime_ns": 1790405444912778144
+      }
+    },
+    {
+      "method": "OriginalApplicationGameplayProjectionTests/testControlOwnedScalarSequence",
+      "log": {
+        "bytes": 1708,
+        "sha256": "90dc03dbe6b5be0cf46ee7b2527aaf14aeb9a54eea223b52d1ae974c3305e1df",
+        "mode": 420,
+        "mtime_ns": 1790405487138856457
+      }
+    }
+  ],
+  "recoveredMethod": "OriginalApplicationActiveOutputTests/testPrimaryOwnedOutputProjection",
+  "recoveredOrdinal": 58,
+  "rawLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/test-58.log",
+    "bytes": 73128,
+    "sha256": "dc0e98e0ca5c3d71578b097d9524a83c597f989fb40901cb19c826dbe7c03391",
+    "mode": 420,
+    "mtime_ns": 1790405578042775611
+  },
+  "job": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-correction1-20260926/test-58.job.json",
+    "bytes": 3953,
+    "sha256": "46db0fa6722d1b1800ab4cfe5b90a3a18fc05b2cc0930e4c940835c9a90632d1",
+    "mode": 420,
+    "mtime_ns": 1790405578584253461
+  },
+  "exactNamedSpan": {
+    "startByte": 69969,
+    "endByte": 70092,
+    "text": "Test Case '-[NTSDCoreTests.OriginalApplicationActiveOutputTests testPrimaryOwnedOutputProjection]' passed (86.589 seconds).",
+    "prefix": "ication OPEN\nOwned active preflight {\"activeSlots\":[0,1],\"bodyDifferentialAccepted\":f"
+  },
+  "oldQueueUnchanged": true,
+  "oldNonpassRetained": true,
+  "recoveredPass": true,
+  "nativeRerun": false,
+  "originalExecuted": false,
+  "independentReview": false
+}

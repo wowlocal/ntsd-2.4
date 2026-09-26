@@ -2,6 +2,18 @@
 
 ## Продолжение — 2026-09-26
 
+[Host gameplay saved-result recovery](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
+one-anchor reader correction passes2 positive/12 negative controls; all57 prior
+classifications unchanged, method58 separately recovered without rerun. Old nonpass
+retained. Preparation90525 terminal0; root1034/candidate1040/package487/source55
+unchanged. Queue90854 running only59–69 on the unchanged binary, original limits.
+[Receipt](../evidence/application-host-gameplay-completion-start.json).
+NEXT: revalidate/observe this same queue/current child, then diagnose any nonpass
+or finalize all69/package/old2488-file archive/new metadata. Do not duplicate,
+rebuild, rerun1–58 or restart source. Full69 comparison/archive/independent review/
+root promotion/app/match/game remain open. This supersedes the reader-recovery
+NEXT below.
+
 [Host gameplay correction1 terminal result](APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
 queue20715 terminal1/absent after57 accepted methods. Method58 has a complete named
 XCTest pass, three zero-failure summaries and exit0, but the reader's line-start

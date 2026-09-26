@@ -1,0 +1,48 @@
+{
+  "UTC": "2026-09-26T07:08:07.393515+00:00",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "anchor": "[Host gameplay correction1 terminal result]",
+      "insertion": "[Host gameplay saved-result recovery](APPLICATION_HOST_GAMEPLAY_COMPLETION.md):\none-anchor reader correction passes2 positive/12 negative controls; all57 prior\nclassifications unchanged, method58 separately recovered without rerun. Old nonpass\nretained. Preparation90525 terminal0; root1034/candidate1040/package487/source55\nunchanged. Queue90854 running only59\u201369 on the unchanged binary, original limits.\n[Receipt](../evidence/application-host-gameplay-completion-start.json).\nNEXT: revalidate/observe this same queue/current child, then diagnose any nonpass\nor finalize all69/package/old2488-file archive/new metadata. Do not duplicate,\nrebuild, rerun1\u201358 or restart source. Full69 comparison/archive/independent review/\nroot promotion/app/match/game remain open. This supersedes the reader-recovery\nNEXT below.\n\n",
+      "beforeSHA256": "4a4ddc6b7d03bed95de58f61281fe4605629e22553585ef37a12f79c53b63cb9",
+      "afterSHA256": "6bd8eff38bbb778515afab48931952bb1e334bf4355a57a3c11428d76d322d1c"
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "anchor": "[Host gameplay comparison reader failure]",
+      "insertion": "[Host gameplay continuation](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):\nmethod58 separately recovered from immutable log after2 positive/12 negative\nreader controls;57 earlier classifications unchanged. Queue90854 runs only the\n11 unstarted methods on unchanged binary; full69/package/archive closure pending.\nNo rebuild/rerun1\u201358/source restart. Independent review/root/app/full game open.\n[Receipt](evidence/application-host-gameplay-completion-start.json).\n\n",
+      "beforeSHA256": "93e3cce28ef0186e01ea9d380f3fb2c3ac39b93395e6ae07801767fea1ba1218",
+      "afterSHA256": "c094d274e8aede1e8f588a19e4100e2e8df3906342df922ed21df9f17d733f6d"
+    }
+  ],
+  "unrelatedNavigationBytesPreserved": true,
+  "localLinksVerified": 4,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md",
+      "sha256": "f248cedec9d89d0f36cc3e6eba2d5e8882a88d7ed581829c479836dde28c168f"
+    },
+    {
+      "path": "docs/research/APPLICATION_HOST_GAMEPLAY_COMPLETION_PLAN.md",
+      "sha256": "32a47e5f391f5e8cfa1771bb9b005e3475344b5ac8648e4fd722f83fc4d8c3f8"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-completion-start.json",
+      "sha256": "ee134119b0c4d9dac1c4eb2287f281b3afc729470859240fca0c9efc9f3be74e"
+    },
+    {
+      "path": "docs/evidence/application-host-gameplay-completion-reader.json",
+      "sha256": "6e6cff901c9247770f8981e6b1825d6525f6288348781da1e714aa954800a72f"
+    },
+    {
+      "path": "tools/prepare_application_host_gameplay_completion.py",
+      "sha256": "7172e2d95c0f7664e08e67083ce99e0dc3d89edbe8ccc51f57cc1f82e609911a"
+    }
+  ],
+  "priorPasses": 57,
+  "recoveredPass": 58,
+  "newQueue": 90854,
+  "full69Comparison": false,
+  "independentReview": false
+}

@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Host gameplay continuation](research/APPLICATION_HOST_GAMEPLAY_COMPLETION.md):
+method58 separately recovered from immutable log after2 positive/12 negative
+reader controls;57 earlier classifications unchanged. Queue90854 runs only the
+11 unstarted methods on unchanged binary; full69/package/archive closure pending.
+No rebuild/rerun1–58/source restart. Independent review/root/app/full game open.
+[Receipt](evidence/application-host-gameplay-completion-start.json).
+
 [Host gameplay comparison reader failure](research/APPLICATION_HOST_GAMEPLAY_CORRECTION1.md):
 57 accepted methods;58 returned0 with one exact passed result and three zero-failure
 summaries, but its line-start anchor misses buffered interleaving. Queue stopped;

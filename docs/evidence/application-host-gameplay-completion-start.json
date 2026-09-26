@@ -1,0 +1,92 @@
+{
+  "schema": "ntsd-host-gameplay-completion-start-v1",
+  "UTC": "2026-09-26T07:07:09.172228+00:00",
+  "baseHead": "d124756141c4faa99af59b45a28903b342deef87",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926",
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/context1.json",
+    "bytes": 71053,
+    "sha256": "1664e4373b71ab478d352b0b69946945ea86e5e4d49c982bafbd2f4fb348642e",
+    "mode": 420,
+    "mtime_ns": 1790406383881843811
+  },
+  "preparation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/prepare1.job.json",
+    "bytes": 997,
+    "sha256": "31952028ce2513e0ac81502f2b78c7f192eb859e018a5b569ae26642a8401715",
+    "mode": 420,
+    "mtime_ns": 1790406383903807521
+  },
+  "readerRecovery": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/reader-recovery1.json",
+    "bytes": 20812,
+    "sha256": "6e6cff901c9247770f8981e6b1825d6525f6288348781da1e714aa954800a72f",
+    "mode": 420,
+    "mtime_ns": 1790406383822438220
+  },
+  "adaptation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/adaptation1.json",
+    "bytes": 35111,
+    "sha256": "698bf3a31dd5965a4998b94884973c09c032092f7341cc7dc80de2c90b81b76c",
+    "mode": 420,
+    "mtime_ns": 1790406375163793009
+  },
+  "resourceContract": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/resource-contract1.json",
+    "bytes": 2172,
+    "sha256": "b3f479dcf9629b41ddb715353de9bd824c10b55dfd2925ad0149e0b4eef70620",
+    "mode": 420,
+    "mtime_ns": 1790406383880674846
+  },
+  "runnerPreflight": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/runner-preflight1.json",
+    "bytes": 1192,
+    "sha256": "13a8b7f542122c2d952c3fe6d7e82c3106b3b6552b96be95f51febd68bad7f4d",
+    "mode": 420,
+    "mtime_ns": 1790406383901439674
+  },
+  "priorPasses": 57,
+  "recoveredPass": 58,
+  "nativeRerunFor58": false,
+  "remainingSelection": [
+    "OriginalApplicationActiveOutputTests/testControlOwnedOutputProjection",
+    "OriginalApplicationPausedGameplayTests/testPrimaryOwnedPauseStepResume",
+    "OriginalApplicationPausedGameplayTests/testControlOwnedPauseStepResume",
+    "OriginalApplicationGameplayProviderTests/testRetainedSurfaceMapsAndActualOwnerRejections",
+    "OriginalApplicationGameplayProviderTests/testMusicRecoveryProviderAndLateRollback",
+    "OriginalApplicationHostGameplayTests/testHostNeutralGameplayRetainsSeventeenWholeReturns",
+    "OriginalApplicationHostGameplayTests/testHostActiveGameplayRetainsBothFortyEightCallSchedules",
+    "OriginalApplicationHostGameplayTests/testHostPauseStepResumeRetainsBothFourteenCallSchedules",
+    "OriginalApplicationHostGameplayTests/testGameplayInputPreparationFailuresPreserveHostOwners",
+    "OriginalApplicationHostGameplayTests/testGameplayBodyAndOuterFailuresRetainStagesAndRetry",
+    "OriginalApplicationHostGameplayTests/testGameplayTicketsAndReentryRejectForeignSiblingAndConsumedInputs"
+  ],
+  "queue": {
+    "pid": 90854,
+    "identity": "90854 Sat Sep 26 10:06:30 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-host-gameplay-completion-20260926-tools/run_application_host_match_tests3.py /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926",
+    "cwd": "p90854\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "observedStatus": "running",
+    "current": {
+      "method": "OriginalApplicationActiveOutputTests/testControlOwnedOutputProjection",
+      "phase": "test-59",
+      "config": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-host-gameplay-completion-20260926/test-59-config.json",
+      "pin": {
+        "bytes": 1615,
+        "sha256": "b661a5f91b586ad6c2778bd331c8bb6646d035417cac76475c60cc8dac7561ce",
+        "mode": 420,
+        "mtime_ns": 1790406390492916090
+      }
+    },
+    "completed": []
+  },
+  "candidateUnchanged": 1040,
+  "rootNativeUnchanged": 1034,
+  "resourceFilesUnchanged": 487,
+  "sourceCodePinsUnchanged": 55,
+  "originalExecuted": false,
+  "independentReview": false,
+  "full69Comparison": false,
+  "archiveClosure": false,
+  "rootPromotion": false,
+  "fullGame": false
+}
