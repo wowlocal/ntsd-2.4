@@ -1,0 +1,42 @@
+{
+  "schema": "ntsd-mac-window-geometry-validation-close-v1",
+  "UTC": "2026-09-26T17:45:54.607984+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926",
+  "externalFree": 157514444800,
+  "internalFree": 58722488320,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "observedFreeDecrease": 1192042496,
+  "physicalAllowance": 30064771072,
+  "publication": {
+    "bytes": 5414,
+    "sha256": "eb157a8ea86c67b9ba6b444e16909fc6787ccd6c08da6a75519833dd17075e39",
+    "mode": 420,
+    "mtime_ns": 1790444754607920894
+  },
+  "metadataArchive": {
+    "members": 338,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/metadata1.tar",
+    "bytes": 6891520,
+    "sha256": "52d1ef0e4e4b3c9fab25e64a7afcccde84d390497927d3fe6fb2d07ce69656c5",
+    "mode": 420,
+    "mtime_ns": 1790444754461196583
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/artifact-archive1",
+    "files": 4962,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11411735266,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/artifact-archive1.json",
+      "bytes": 2576038,
+      "sha256": "a381bd1e43d6ce8a11ae04d79a09d45c0f36f89aab2c8a89b84767248549edab",
+      "mode": 420,
+      "mtime_ns": 1790444720539725157
+    }
+  }
+}

@@ -1,5 +1,20 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native window geometry passes all76 methods](research/APPLICATION_MAC_WINDOW_GEOMETRY.md):
+whole Host WM_MOVE uses actual client/point replies; the following first-menu
+presentation retains that rectangle. Late retry, fresh moves, ownership/history,
+ignored numeric failures and all72 retained methods pass. Fresh package203Core/
+61Reference/8MacPlatform/283tests and1686 resources verified. Queue14614 terminal0/
+absent in695.243s; finalizer36409 terminal0/absent verifies4962 artifact files,
+338 PAX members and nine-file patch. Task frozen; root/prior/source preserved.
+[Publication](evidence/application-mac-window-geometry.json).
+NEXT: bound whole first-menu raster/presentation from exact committed commands
+and current owners; resolve required Blt/text/color-key/clip/format contracts from
+saved original evidence before implementing the physical consumer. Independent
+review/root promotion/automatic callbacks/other IO/Windows/input/audio/clean-Mac/
+full match/game remain open. NTSDApp still Practice; EXE envelope not recalculated.
+Supersedes the geometry NEXT below.
+
 [Observed bitmap Host integration passes all69 methods](research/APPLICATION_OBSERVED_BITMAP_CORRECTION1.md):
 whole first-menu425 physical bitmap replies/25 surfaces, Core prepared replay,
 full colors/masks, late rollback, missing-resource diagnostics and retained owners

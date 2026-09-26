@@ -1,0 +1,579 @@
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalLifecycleRequestExchange.swift
+@@ -0,0 +1,26 @@
++import Foundation
++
++public typealias OriginalLifecycleRequestExchange = OriginalRequestExchange<OriginalWindowInitialization.Request, any OriginalApplicationStartupResource>
++
++/// Value-owned receipt lifetimes on a staged platform. Earlier nonempty cursors
++/// retain their actual owners after a later iteration replaces the active cursor.
++public struct OriginalLifecycleDelivery {
++    public private(set) var cursor: OriginalLifecycleRequestExchange.Cursor?
++    private var earlier: [OriginalLifecycleRequestExchange.Cursor] = []
++    public var retainedIterationCount: Int { earlier.count }
++    public init() {}
++    public mutating func begin(_ cursor: OriginalLifecycleRequestExchange.Cursor) {
++        if let old = self.cursor,old.position > 0 { earlier.append(old) }
++        self.cursor = cursor
++    }
++    public mutating func response(for request: OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response {
++        guard var cursor else { throw OriginalApplicationObservedLifecycleBoundary.missingCursor }
++        defer { self.cursor = cursor };return try cursor.response(for:request)
++    }
++}
++public enum OriginalApplicationObservedLifecycleBoundary: Error, Equatable {
++    case missingCursor, reentrantAttempt
++}
++public protocol OriginalApplicationObservedLifecyclePlatform: OriginalApplicationStartupPlatform {
++    var lifecycleDelivery: OriginalLifecycleDelivery { get set }
++}
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationObservedLifecycleIteration.swift
+@@ -0,0 +1,64 @@
++import Foundation
++
++/// One whole Host iteration on its existing owner. Only lifecycle requests are
++/// suspended here; all other inputs remain explicitly prepared observations.
++public final class OriginalApplicationObservedLifecycleIteration<Platform: OriginalApplicationObservedLifecyclePlatform> {
++    public typealias Host = OriginalApplicationHostSession<Platform>
++    public typealias Exchange = OriginalLifecycleRequestExchange
++    public typealias Boundary = OriginalApplicationObservedLifecycleBoundary
++    public enum Outcome {
++        case request(Exchange.Permit)
++        case advanced(Host.Outcome)
++    }
++    private let host: Host, sequence: UInt64, exchange = Exchange(), lock = NSRecursiveLock()
++    private var inFlight = false
++    public init(host: Host) { self.host = host;sequence = host.committedSequence }
++    private func locked<T>(_ body: () throws -> T) rethrows -> T {
++        lock.lock();defer { lock.unlock() };return try body()
++    }
++    private func attempt<T>(_ body: () throws -> T) throws -> T {
++        try locked {
++            guard !inFlight else { throw Boundary.reentrantAttempt }
++            inFlight = true;defer { inFlight = false };return try body()
++        }
++    }
++    public var exchangeSnapshot: Exchange.Snapshot { locked { exchange.snapshot } }
++    public func resume(prepare: (Platform, Host.Session.State) throws -> Host.Inputs,
++        observe: @escaping (Host.Application.Observation) throws -> Void = { _ in },
++        menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
++        graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
++        checkpoint: (Host.Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
++        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
++        beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
++        beforePublication: (Platform) throws -> Void = { _ in }) throws -> Outcome {
++        try attempt {
++            let cursor = try exchange.snapshot.cursor()
++            do {
++                let result = try host.step(prepare:{ p,state in
++                    p.lifecycleDelivery.begin(cursor);return try prepare(p,state)
++                },observe:observe,menuObserve:menuObserve,graphicsObserve:graphicsObserve,
++                checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:beforeCommit,
++                lifecycle:{ q,p in try p.lifecycleDelivery.response(for:q) },
++                beforePublication:{ p in
++                    try beforePublication(p)
++                    guard let consumed = p.lifecycleDelivery.cursor else { throw Boundary.missingCursor }
++                    _ = try self.exchange.finish(consumed)
++                },expectedSequence:sequence)
++                return .advanced(result)
++            } catch let needed as Exchange.RequestNeeded {
++                // The entire Host/Core attempt has unwound before claim/service.
++                return .request(try exchange.claim(needed))
++            }
++        }
++    }
++    public func beginService(_ permit: Exchange.Permit) throws { try attempt { try exchange.beginService(permit) } }
++    public func answer(_ permit: Exchange.Permit,response: Exchange.Response,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.answer(permit,response:response,retaining:resources) }
++    }
++    public func fail(_ permit: Exchange.Permit,diagnostic: String,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.fail(permit,diagnostic:diagnostic,retaining:resources) }
++    }
++    public func cancel() throws { try attempt { exchange.cancel() } }
++}
+--- a/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift
+@@ -6,7 +6,7 @@
+ /// inputs before entering Core. Observations are prepared values or replies to
+ /// a suspended whole-startup request serviced outside Core. This class performs no
+ /// host IO and does not derive clock, allocation, codepage or device responses.
+-public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform {
++public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform, OriginalApplicationObservedLifecyclePlatform {
+     public enum Kind: String, CaseIterable, Equatable {
+         case milliseconds, criticalSection, com, panelWrite, panelClose, panelAllocation
+         case panelBitmap, panelDevice, filetime, timezone, calendarAllocation, zoneName
+@@ -85,6 +85,7 @@
+     public var windowExchange: OriginalWindowRequestExchange.Cursor?
+     public var startupExchange: OriginalStartupRequestExchange.Cursor?
+     public var bitmapDelivery = OriginalBitmapDelivery()
++    public var lifecycleDelivery = OriginalLifecycleDelivery()
+     public var snapshot: Snapshot { state }
+     public var panelIO: OriginalWinMainStartup.PanelIO { prepared.panelIO }
+     public var environmentTZ: [UInt8]? { prepared.environmentTZ }
+@@ -95,7 +96,7 @@
+     }
+     public func stagedCopy() throws -> OriginalApplicationPreparedStartupPlatform {
+         let copy = OriginalApplicationPreparedStartupPlatform(inputs:inputs,prepared:prepared)
+-        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery
++        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery
+         return copy
+     }
+     private func take<T>(_ kind: Kind,_ values: [T],matching matches: (T) -> Bool = { _ in true }) throws -> T {
+--- a/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationHostSession.swift
+@@ -196,6 +196,7 @@
+         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+         beforeCommit: (Session.Loop, Session.State) throws -> Void = { _,_ in },
+         bitmap: ((Application.Stage, OriginalBitmapSurfaceLoading.Request, Platform) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
++        lifecycle: ((OriginalWindowInitialization.Request, Platform) throws -> OriginalWindowInitialization.Response)? = nil,
+         beforePublication: (Platform) throws -> Void = { _ in },
+         expectedSequence: UInt64? = nil) throws -> Outcome {
+         try attempt {
+@@ -210,7 +211,8 @@
+                 lifecycle: inputs.lifecycle, observe: observe, menuObserve: menuObserve,
+                 graphicsObserve: graphicsObserve, checkpoint: checkpoint, bodyProduced: bodyProduced,
+                 beforeCommit: beforeCommit,
+-                bitmap: bitmap.map { callback in { stage,q in try callback(stage,q,candidate) } })
++                bitmap: bitmap.map { callback in { stage,q in try callback(stage,q,candidate) } },
++                lifecycleProvider: lifecycle.map { callback in { q in try callback(q,candidate) } })
+             switch result {
+             case .committed(let value):
+                 let context = try DeliveryContext(application: next, platform: candidate)
+--- a/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationBootstrap.swift
+@@ -76,8 +76,10 @@
+         checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
+         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+         beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in },
+-        bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil) throws -> Session.Outcome {
++        bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
++        lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil) throws -> Session.Outcome {
+         guard var next = session,startup != nil else { throw Boundary.notStarted }
++        if lifecycleProvider != nil && !lifecycle.isEmpty { throw Session.Boundary.dependency("Observed lifecycle requests cannot mix prepared response arrays") }
+         var qi = 0,wi = 0,si = 0,li = 0
+         func take<T>(_ values: [T],_ index: inout Int,_ name: String) throws -> T {
+             guard index < values.count else { throw Session.Boundary.dependency("Bootstrap "+name+" response") }
+@@ -98,7 +100,7 @@
+             try requireConsumed()
+             try beforeCommit(loop,state)
+         },initialization:inputs,initializationBitmap:bitmap,bootstrapObserve:observe,lifecycle:{ q in
+-            let r = try take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
++            let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
+         })
+         switch result {
+         case .committed:session = next
+--- a/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationMenuSession.swift
+@@ -253,6 +253,12 @@
+             else { try observe(e) }
+         }
+         func store(_ address: Int,_ bytes: [UInt8]) throws {
++            if [8,16].contains(bytes.count) {
++                // API rectangle writes are retained whole in lifecycle replies.
++                // Project their words into the existing scalar observation format.
++                for i in stride(from:0,to:bytes.count,by:4) { try store(address+i,Array(bytes[i..<i+4])) }
++                return
++            }
+             guard [1,2,4].contains(bytes.count) else { throw Boundary.dependency("Menu store extent") }
+             let value = bytes.enumerated().reduce(UInt32(0)) { $0 | UInt32($1.element) << ($1.offset*8) }
+             try event(.init("write",[UInt32(address),UInt32(bytes.count),value]))
+@@ -287,7 +293,7 @@
+                         var g = try State.slice(owned.full,0,Self.globalCount)
+                         var local = try State.slice(owned.full,Self.outerStart,0x140)
+                         let result: Int32
+-                        if input.message == 5 {
++                        if input.message == 3 || input.message == 5 {
+                             result = try OriginalWindowLifecycle.receive(input,globals:&g,memory:&owned.memory,
+                                 backing:{ _,_ in throw Boundary.dependency("Initial resize backing") },perform:{ q in
+                                     let r = try lifecycle(q);try emit(.lifecycle(q,r));return r
+--- a/native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift
+@@ -85,7 +85,7 @@
+     }
+ 
+     public nonisolated static func handles(_ request: Window.Request) -> Bool {
+-        ["metric","icon","cursor","registerClass","createWindow","updateWindow","showWindow","destroyWindow"].contains(request.kind)
++        ["metric","icon","cursor","registerClass","createWindow","updateWindow","showWindow","destroyWindow","clientRect","screenPoint"].contains(request.kind)
+     }
+     private func token() throws -> UInt32 {
+         try identities.take()
+@@ -143,9 +143,10 @@
+     private func validate(_ q: Window.Request) throws {
+         guard Self.handles(q) else { throw Boundary.unsupported(q.kind) }
+         func require(_ valid: Bool) throws { if !valid { throw Boundary.arguments(q.kind) } }
+-        if q.kind != "registerClass" { try require(q.bytes == nil && q.defined == nil) }
++        if !["registerClass","clientRect","screenPoint"].contains(q.kind) { try require(q.bytes == nil && q.defined == nil) }
+         if q.kind != "createWindow" { try require(q.strings.isEmpty) }
+         switch q.kind {
++        case "clientRect","screenPoint": try validateGeometry(q)
+         case "metric": try require(q.words.count == 1 && [7,8,4].contains(q.words[0]))
+         case "icon": try require(q.words == [instance,0x7f00])
+         case "cursor": try require(q.words == [0,0x7f00])
+@@ -187,6 +188,8 @@
+         var resources: [any OriginalApplicationStartupResource] = []
+         let result: Window.Response
+         switch q.kind {
++        case "clientRect","screenPoint":
++            let owner = try lease(q.words[0]);resources = [owner];result = try performGeometry(q)
+         case "metric": result = .init(result:try metric(q.words[0]))
+         case "icon":
+             // Pinned original EXE has group121, not the requested group32512.
+@@ -231,3 +234,44 @@
+         return .init(response:result,resources:resources)
+     }
+ }
++
++extension OriginalMacWindowBackend {
++    /// Same integral logical-point policy as the native primary/clipper backing.
++    /// Reject unsupported host coordinates without inventing rounded game bytes.
++    static func geometryInteger(_ value: CGFloat) throws -> Int32 {
++        guard value.isFinite,value >= CGFloat(Int32.min),value <= CGFloat(Int32.max),
++              value.rounded(.towardZero) == value else { throw Boundary.geometry }
++        return Int32(value)
++    }
++    private func validateGeometry(_ q: Window.Request) throws {
++        guard q.words.count == 2,q.words[1] != 0,let bytes = q.bytes,let mask = q.defined,
++              bytes.count == (q.kind == "clientRect" ? 16 : 8),mask.count == bytes.count else {
++            throw Boundary.arguments(q.kind)
++        }
++        let owner = try lease(q.words[0]);guard !owner.closed else { throw Boundary.geometry }
++        if q.kind == "screenPoint" {
++            let point = try OriginalStateRecord(bytes:bytes,defined:mask)
++            _ = try point.integer(at:0,as:Int32.self);_ = try point.integer(at:4,as:Int32.self)
++        }
++    }
++    /// Called only after the external service permit began. Each request samples
++    /// the current owned view/window; preparation never freezes geometry.
++    private func performGeometry(_ q: Window.Request) throws -> Window.Response {
++        let owner = try lease(q.words[0])
++        guard !owner.closed,let view = owner.window.contentView as? ContentView,
++              view.bounds.origin == .zero,view.bounds.size == view.frame.size else { throw Boundary.geometry }
++        let values: [Int32]
++        if q.kind == "clientRect" {
++            guard view.bounds.width >= 0,view.bounds.height >= 0 else { throw Boundary.geometry }
++            values = [0,0,try Self.geometryInteger(view.bounds.width),try Self.geometryInteger(view.bounds.height)]
++        } else {
++            guard let screen = owner.window.screen,let bytes = q.bytes,let mask = q.defined else { throw Boundary.geometry }
++            let input = try OriginalStateRecord(bytes:bytes,defined:mask)
++            let local = NSPoint(x:CGFloat(try input.integer(at:0,as:Int32.self)),y:CGFloat(try input.integer(at:4,as:Int32.self)))
++            let physical = owner.window.convertPoint(toScreen:view.convert(local,to:nil))
++            values = [try Self.geometryInteger(physical.x-screen.frame.minX),try Self.geometryInteger(screen.frame.maxY-physical.y)]
++        }
++        let output = values.flatMap { word in (0..<4).map { UInt8(truncatingIfNeeded:UInt32(bitPattern:word) >> ($0*8)) } }
++        return .init(result:1,bytes:output)
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDMacPlatform/OriginalMacWindowGeometryService.swift
+@@ -0,0 +1,23 @@
++import NTSDCore
++
++/// Actual geometry queries run outside the Core transaction and only once per
++/// receipt. Other lifecycle requests require their own explicit provider.
++@MainActor public final class OriginalMacWindowGeometryService {
++    public let backend: OriginalMacWindowBackend
++    public enum Boundary: Error, Equatable { case notGeometry }
++    public init(backend: OriginalMacWindowBackend) { self.backend = backend }
++    public func serve<P>(_ permit: OriginalLifecycleRequestExchange.Permit,
++        on driver: OriginalApplicationObservedLifecycleIteration<P>) throws {
++        let q = permit.request
++        guard q.kind == "clientRect" || q.kind == "screenPoint" else { throw Boundary.notGeometry }
++        let prepared = try backend.prepare(q)
++        try driver.beginService(permit)
++        do {
++            let value = try backend.perform(prepared)
++            try driver.answer(permit,response:value.response,retaining:value.resources)
++        } catch {
++            try driver.fail(permit,diagnostic:String(reflecting:error),retaining:backend.retainedResources)
++            throw error
++        }
++    }
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalMacWindowGeometryTests.swift
+@@ -0,0 +1,282 @@
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalMacWindowGeometryTests: XCTestCase {
++    typealias D = OriginalMacDisplayBackendTests
++    typealias O = OriginalApplicationObservedBitmapTests
++    typealias B = OriginalApplicationBootstrapTests
++    typealias A = OriginalApplicationBootstrap
++    typealias S = OriginalApplicationMenuSession
++    typealias P = OriginalApplicationPreparedStartupPlatform
++    typealias Host = OriginalApplicationHostSession<P>
++    typealias Driver = OriginalApplicationObservedLifecycleIteration<P>
++    typealias E = OriginalLifecycleRequestExchange
++    typealias API = OriginalWindowInitialization
++    typealias Backend = OriginalMacWindowBackend
++    enum Stop: Error { case limit, late }
++    final class Marker: OriginalApplicationStartupResource {}
++    struct Ready { let run: D.Run, menu: O.Packet, package: OriginalApplicationStartupInputs }
++    func ready() throws -> Ready {
++        let run = try D().run(late:false),package = try OriginalApplicationStartupInputs.bundled()
++        let packets = try O().packets(run.setup.controls.window,package)
++        _ = try run.host.takeCommitted()
++        for packet in packets where !packet.dispatch { try O().previous(run.host,packet);_ = try run.host.takeCommitted() }
++        return .init(run:run,menu:try XCTUnwrap(packets.first { $0.dispatch }),package:package)
++    }
++    func window(_ r: D.Run) throws -> NSWindow {
++        let number = try r.setup.window.backend.observation(r.setup.controls.window).windowNumber
++        return try XCTUnwrap(NSApp.windows.first { $0.windowNumber == number })
++    }
++    // Independent AppKit route: contentRect from frame, not backend view conversions.
++    func rectangle(_ window: NSWindow) throws -> [Int32] {
++        let screen = try XCTUnwrap(window.screen).frame,content = window.contentRect(forFrameRect:window.frame)
++        return try [content.minX-screen.minX,screen.maxY-content.maxY,content.maxX-screen.minX,screen.maxY-content.minY].map {
++            try XCTUnwrap(Int32(exactly:$0))
++        }
++    }
++    func bytes(_ words: [Int32]) -> [UInt8] {
++        words.flatMap { w in (0..<4).map { UInt8(truncatingIfNeeded:UInt32(bitPattern:w) >> ($0*8)) } }
++    }
++    func record(_ words: [Int32],known: Bool = true) throws -> OriginalStateRecord {
++        let data = bytes(words);return try .init(bytes:data,defined:Array(repeating:known,count:data.count))
++    }
++    func stored(_ app: A) throws -> [Int32] {
++        let g = try XCTUnwrap(app.session).state.full
++        return try (0..<4).map { try g.integer(at:0x453ccc-0x44d000+$0*4,as:Int32.self) }
++    }
++    func message(_ r: Ready,kind: UInt32 = 3) throws -> Host.Inputs {
++        var msg = try OriginalStateRecord(bytes:Array(repeating:0,count:28),defined:Array(repeating:true,count:28))
++        try msg.write(r.run.setup.controls.window,at:0);try msg.write(kind,at:4)
++        try msg.write(UInt32(74),at:8);try msg.write(UInt32(0x7fff8000),at:12) // WM_MOVE ignores these packed coordinates.
++        return .init(responses:r.menu.responses,queue:[.init(result:1),.init(result:1,writes:[.init(offset:0,bytes:msg.bytes)]),.init(),.init()],windowDefault:kind == 3 ? [] : [0])
++    }
++    func compare(_ before: A,_ after: A,_ input: Host.Inputs,_ receipts: [E.Receipt]) throws {
++        var expected = before
++        guard case .committed = try expected.step(inputs:input.initialization,responses:input.responses,queue:input.queue,
++            windowDefault:input.windowDefault,surface:input.surface,lifecycle:receipts.map(\.response)) else { throw Stop.limit }
++        B.same(try XCTUnwrap(after.session),try XCTUnwrap(expected.session))
++        try B.sameStartup(XCTUnwrap(after.startup),XCTUnwrap(before.startup))
++    }
++    func checkMove(_ batch: Host.Batch,_ driver: Driver) throws {
++        guard case .iteration(let iteration) = batch.contents else { throw Stop.limit }
++        let effects = iteration.effects.compactMap { e -> (API.Request,API.Response)? in
++            if case .lifecycle(let q,let response) = e { return (q,response) };return nil
++        }
++        let receipts = driver.exchangeSnapshot.receipts
++        XCTAssertEqual(effects.map { $0.0 },receipts.map(\.request));XCTAssertEqual(effects.map { $0.1 },receipts.map(\.response))
++        XCTAssertEqual(receipts.map(\.request.kind),["clientRect","screenPoint","screenPoint","windowDefault"])
++        XCTAssertEqual(receipts[0].request.words[1],0x453ccc);XCTAssertEqual(receipts[1].request.words[1],0x453ccc)
++        XCTAssertEqual(receipts[2].request.words[1],0x453cd4)
++        XCTAssertEqual(receipts[3].request.words,[receipts[0].request.words[0],3,74,0x7fff8000])
++        if let client = receipts[0].response.bytes {
++            XCTAssertEqual(receipts[1].request.bytes,Array(client[0..<8]));XCTAssertEqual(receipts[2].request.bytes,Array(client[8..<16]))
++        }
++        XCTAssertEqual(try batch.context.platformSnapshot().lifecycleDelivery.cursor?.position,4)
++        XCTAssertEqual(driver.exchangeSnapshot.status,.finished)
++    }
++    func checkStores(_ observations: [OriginalFrontScreenEvent],_ receipts: [E.Receipt]) {
++        let actual = observations.filter { $0.kind == "write" && $0.arguments[0] >= 0x453ccc && $0.arguments[0] < 0x453cdc }.map(\.arguments)
++        let expected = receipts.flatMap { receipt -> [[UInt32]] in
++            guard let output = receipt.response.bytes else { return [] }
++            return stride(from:0,to:output.count,by:4).map { offset in
++                let word = (0..<4).reduce(UInt32(0)) { $0 | UInt32(output[offset+$1]) << ($1*8) }
++                return [receipt.request.words[1]+UInt32(offset),4,word]
++            }
++        }
++        XCTAssertEqual(actual,expected)
++    }
++    func move(_ r: Ready,late: Bool = false,marker: Marker? = nil,onLate: () throws -> Void = {}) throws -> (Host.Batch,Driver) {
++        let host = r.run.host,input = try message(r),before = host.snapshot,old = try XCTUnwrap(before.session)
++        let driver = Driver(host:host),backend = r.run.setup.window.backend,service = OriginalMacWindowGeometryService(backend:backend)
++        let priorPosition = try host.platformSnapshot().lifecycleDelivery.cursor?.position,operations = backend.operations.count
++        var failed = false
++        for _ in 0..<8 {
++            var observations: [OriginalFrontScreenEvent] = []
++            do {
++                switch try driver.resume(prepare:{ _,_ in input },menuObserve:{ observations.append($0) },beforeCommit:{ _,_ in
++                    XCTAssertThrowsError(try driver.cancel()) { XCTAssertEqual($0 as? Driver.Boundary,.reentrantAttempt) }
++                },beforePublication:{ _ in if late && !failed { throw Stop.late } }) {
++                case .request(let p):
++                    B.same(try XCTUnwrap(host.snapshot.session),old);XCTAssertEqual(host.pendingBatchCount,0)
++                    XCTAssertEqual(try host.platformSnapshot().lifecycleDelivery.cursor?.position,priorPosition)
++                    if p.request.kind == "windowDefault" {
++                        try driver.beginService(p);try driver.answer(p,response:.init(result:-17),retaining:marker.map { [$0] } ?? [])
++                    } else { try service.serve(p,on:driver) }
++                case .advanced(.committed):
++                    let batch = try XCTUnwrap(host.takeCommitted());XCTAssertNil(try host.takeCommitted())
++                    XCTAssertEqual(failed,late);try compare(before,host.snapshot,input,driver.exchangeSnapshot.receipts);try checkMove(batch,driver);checkStores(observations,driver.exchangeSnapshot.receipts)
++                    let physical = Array(backend.operations.dropFirst(operations)),receipts = Array(driver.exchangeSnapshot.receipts.prefix(3))
++                    XCTAssertEqual(physical.map(\.request),receipts.map(\.request));XCTAssertEqual(physical.map(\.response),receipts.map(\.response))
++                    return (batch,driver)
++                case .advanced:throw Stop.limit
++                }
++            } catch Stop.late {
++                XCTAssertTrue(late);XCTAssertFalse(failed);failed = true
++                B.same(try XCTUnwrap(host.snapshot.session),old);XCTAssertEqual(host.pendingBatchCount,0)
++                XCTAssertEqual(try host.platformSnapshot().lifecycleDelivery.cursor?.position,priorPosition)
++                XCTAssertEqual(driver.exchangeSnapshot.receipts.count,4);XCTAssertEqual(backend.operations.count-operations,3)
++                try onLate()
++            }
++        }
++        throw Stop.limit
++    }
++    func menu(_ r: Ready) throws -> O.Run {
++        let host = r.run.host,before = host.snapshot,driver = O.Driver(host:host),service = O().service(r.run,r.package)
++        for _ in 0..<1000 {
++            var replies: [(A.Stage,OriginalBitmapSurfaceLoading.Request,OriginalBitmapSurfaceLoading.Response)] = []
++            switch try driver.resume(prepare:{ _,_ in r.menu.host },observe:{ e in
++                if case .bitmap(let stage,let q,let response) = e { replies.append((stage,q,response)) }
++            }) {
++            case .request(let p):try service.serve(p,on:driver)
++            case .advanced(.committed):
++                return .init(startup:r.run,packet:r.menu,driver:driver,batch:try XCTUnwrap(host.takeCommitted()),before:before,replies:replies)
++            case .advanced:throw Stop.limit
++            }
++        }
++        throw Stop.limit
++    }
++    func testWholeMoveOwnsGeometryAndFollowingMenuPresentation() throws {
++        let r = try ready();defer { try? D().close(r.run) }
++        XCTAssertEqual(try stored(r.run.host.snapshot),[0,0,0,0])
++        let expected = try rectangle(window(r.run)),(batch,_) = try move(r)
++        XCTAssertEqual(try stored(batch.context.application),expected)
++        let front = try menu(r);try O().check(front)
++        guard case .iteration(let iteration) = front.batch.contents else { throw Stop.limit }
++        let presents = iteration.graphics.filter { $0.family == "front" && $0.event?.kind == "method" && $0.event?.arguments.dropFirst().first == 0x14 }
++        XCTAssertFalse(presents.isEmpty)
++        for command in presents { XCTAssertEqual(command.destinationRectangle,expected);XCTAssertNil(command.sourceRectangle) }
++        XCTAssertEqual(try front.batch.context.platformSnapshot().lifecycleDelivery.cursor?.position,4)
++        print("Whole WM_MOVE physical geometry",expected,"following first-menu presentations",presents.count)
++    }
++    func testMoveLateFailureRetriesSavedGeometryAndRetainsHistory() throws {
++        weak var retained: Marker?;var saved: Host.DeliveryContext?
++        func exercise() throws {
++            let r = try ready();defer { try? D().close(r.run) }
++            let w = try window(r.run),firstRect = try rectangle(w),stale = Driver(host:r.run.host),marker = Marker();retained = marker
++            let (first,_) = try move(r,late:true,marker:marker,onLate:{ w.setFrameOrigin(.init(x:w.frame.minX+7,y:w.frame.minY-9)) })
++            XCTAssertEqual(try stored(first.context.application),firstRect);XCTAssertNotEqual(try rectangle(w),firstRect)
++            let (second,_) = try move(r);XCTAssertEqual(try stored(second.context.application),try rectangle(w))
++            XCTAssertEqual(try second.context.platformSnapshot().lifecycleDelivery.retainedIterationCount,1)
++            XCTAssertEqual(try stored(first.context.application),firstRect)
++            let input = try message(r,kind:0x100)
++            XCTAssertThrowsError(try stale.resume(prepare:{ _,_ in input })) { XCTAssertEqual($0 as? Host.Boundary,.staleSequence) }
++            XCTAssertTrue(stale.exchangeSnapshot.receipts.isEmpty)
++            for _ in 0..<2 {
++                let driver = Driver(host:r.run.host)
++                guard case .advanced(.committed) = try driver.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++                saved = try XCTUnwrap(r.run.host.takeCommitted()).context
++                XCTAssertEqual(try saved?.platformSnapshot().lifecycleDelivery.retainedIterationCount,2)
++                XCTAssertEqual(try saved?.platformSnapshot().lifecycleDelivery.cursor?.position,0)
++            }
++            let inspection = try XCTUnwrap(saved).platformSnapshot();inspection.lifecycleDelivery = .init()
++            XCTAssertEqual(try saved?.platformSnapshot().lifecycleDelivery.retainedIterationCount,2)
++        }
++        try exercise();XCTAssertNotNil(retained)
++        XCTAssertEqual(try saved?.platformSnapshot().lifecycleDelivery.retainedIterationCount,2)
++        saved = nil;XCTAssertNil(retained)
++    }
++    func ticket(_ exchange: E,_ q: API.Request) throws -> E.Permit {
++        var cursor = try exchange.snapshot.cursor()
++        do { _ = try cursor.response(for:q);throw Stop.limit }
++        catch let needed as E.RequestNeeded { return try exchange.claim(needed) }
++    }
++    func testGeometryPayloadOwnershipAndServiceProtocol() throws {
++        let r = try ready(),backend = r.run.setup.window.backend,w = try window(r.run),token = r.run.setup.controls.window
++        var closed = false;defer { if !closed { try? D().close(r.run) } }
++        let client = API.Request("clientRect",[token,0x453ccc],structure:try record([17,29,-1,-1],known:false))
++        let prepared = try backend.prepare(client),n = backend.operations.count
++        w.setFrameOrigin(.init(x:w.frame.minX-11,y:w.frame.minY-13))
++        XCTAssertEqual(backend.operations.count,n)
++        let result = try backend.perform(prepared),rect = try rectangle(w),size = [Int32(0),0,rect[2]-rect[0],rect[3]-rect[1]]
++        XCTAssertEqual(result.response,.init(result:1,bytes:bytes(size)));XCTAssertFalse(result.resources.isEmpty)
++        XCTAssertThrowsError(try backend.perform(prepared)) { XCTAssertEqual($0 as? Backend.Boundary,.repeatedPreparation) }
++        for point: [Int32] in [[-12,7],[size[2]+8,size[3]+9],[0,0]] {
++            let q = API.Request("screenPoint",[token,0x453ccc],structure:try record(point)),p = try backend.prepare(q)
++            w.setFrameOrigin(.init(x:w.frame.minX+2,y:w.frame.minY-3))
++            let current = try rectangle(w),output = try backend.perform(p)
++            XCTAssertEqual(output.response,.init(result:1,bytes:bytes([current[0]+point[0],current[1]+point[1]])))
++        }
++        for value: CGFloat in [0,-1,CGFloat(Int32.min),CGFloat(Int32.max)] { XCTAssertEqual(try Backend.geometryInteger(value),Int32(value)) }
++        for value: CGFloat in [0.5,-0.5,.infinity,-.infinity,.nan,CGFloat(Int32.max)+1,CGFloat(Int32.min)-1] {
++            XCTAssertThrowsError(try Backend.geometryInteger(value)) { XCTAssertEqual($0 as? Backend.Boundary,.geometry) }
++        }
++        let malformed: [API.Request] = [
++            .init("clientRect",[token,1]),.init("clientRect",[token],structure:try record([0,0,1,1])),
++            .init("clientRect",[token,0],structure:try record([0,0,1,1])),
++            .init("clientRect",[token,1],strings:[[65]],structure:try record([0,0,1,1])),
++            .init("clientRect",[token,1],structure:try record([0,0])),
++            .init("screenPoint",[token,1],structure:try record([0,0],known:false)),
++            .init("screenPoint",[token,1],structure:try record([0,0,0])),
++            .init("screenPoint",[UInt32.max,1],structure:try record([0,0]))]
++        let count = backend.operations.count
++        for q in malformed { XCTAssertThrowsError(try backend.prepare(q)) }
++        let alien = Backend(instance:1)
++        XCTAssertThrowsError(try alien.perform(backend.prepare(client))) { XCTAssertEqual($0 as? Backend.Boundary,.foreignPreparation) }
++        let service = OriginalMacWindowGeometryService(backend:backend),driver = Driver(host:r.run.host),input = try message(r)
++        guard case .request(let p) = try driver.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++        let foreign = E(),foreignPermit = try ticket(foreign,p.request)
++        XCTAssertThrowsError(try service.serve(foreignPermit,on:driver)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
++        foreign.cancel()
++        let unsupported = E(),other = try ticket(unsupported,.init("windowDefault",[token,3,0,0]))
++        XCTAssertThrowsError(try service.serve(other,on:driver)) { XCTAssertEqual($0 as? OriginalMacWindowGeometryService.Boundary,.notGeometry) }
++        unsupported.cancel();XCTAssertEqual(backend.operations.count,count)
++        try service.serve(p,on:driver)
++        XCTAssertThrowsError(try service.serve(p,on:driver)) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
++        guard case .request(let next) = try driver.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++        try driver.beginService(next)
++        XCTAssertThrowsError(try service.serve(next,on:driver)) { XCTAssertEqual($0 as? E.Boundary,.serviceAlreadyStarted) }
++        try driver.cancel()
++        XCTAssertThrowsError(try service.serve(next,on:driver)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
++        try driver.fail(next,diagnostic:"No geometry service after cancellation")
++        XCTAssertEqual(backend.operations.count,count+1)
++        let broken = Driver(host:r.run.host)
++        guard case .request(let bp) = try broken.resume(prepare:{ _,_ in input }) else { throw Stop.limit }
++        let view = try XCTUnwrap(w.contentView),origin = view.bounds.origin;view.setBoundsOrigin(.init(x:1,y:0))
++        XCTAssertThrowsError(try service.serve(bp,on:broken)) { XCTAssertEqual($0 as? Backend.Boundary,.geometry) }
++        view.setBoundsOrigin(origin)
++        XCTAssertEqual(broken.exchangeSnapshot.status,.indeterminate)
++        XCTAssertFalse(try XCTUnwrap(broken.exchangeSnapshot.failure).resources.isEmpty)
++        XCTAssertEqual(r.run.host.pendingBatchCount,0);XCTAssertEqual(backend.operations.count,count+1)
++        try D().close(r.run);closed = true
++        XCTAssertThrowsError(try backend.prepare(client)) { XCTAssertEqual($0 as? Backend.Boundary,.geometry) }
++    }
++    func testIgnoredNumericGeometryRepliesAndWholeMoveRollback() throws {
++        let r = try ready();defer { try? D().close(r.run) }
++        let host = r.run.host,input = try message(r),backend = r.run.setup.window.backend,operations = backend.operations.count
++        let controls: [[API.Response]] = [
++            [.init(result:0,bytes:bytes([0,0,61,43])),.init(result:-7,bytes:bytes([-17,-29])),.init(result:Int32.min,bytes:bytes([44,14])),.init(result:-11)],
++            [.init(result:0),.init(result:0),.init(result:0),.init(result:0)],
++            [.init(result:-1,bytes:bytes([0,0,71,53])),.init(result:0),.init(result:-2,bytes:bytes([99,111])),.init(result:37)]]
++        let expected: [[Int32]] = [[-17,-29,44,14],[-17,-29,44,14],[0,0,99,111]]
++        for (index,replies) in controls.enumerated() {
++            let before = host.snapshot,driver = Driver(host:host);var late = false,finished = false
++            for _ in 0..<8 {
++                var observations: [OriginalFrontScreenEvent] = []
++                do {
++                    switch try driver.resume(prepare:{ _,_ in input },observe:{ e in
++                        if case .lifecycleResponse(let q,_) = e,q.kind == "windowDefault",!late { throw Stop.late }
++                    },menuObserve:{ observations.append($0) }) {
++                    case .request(let p):try driver.answer(p,response:replies[p.ordinal])
++                    case .advanced(.committed):
++                        let batch = try XCTUnwrap(host.takeCommitted());try compare(before,host.snapshot,input,driver.exchangeSnapshot.receipts)
++                        try checkMove(batch,driver);checkStores(observations,driver.exchangeSnapshot.receipts);XCTAssertEqual(try stored(host.snapshot),expected[index]);finished = true
++                    case .advanced:throw Stop.limit
++                    }
++                } catch Stop.late {
++                    XCTAssertFalse(late);late = true;B.same(try XCTUnwrap(host.snapshot.session),try XCTUnwrap(before.session))
++                    XCTAssertEqual(host.pendingBatchCount,0);XCTAssertEqual(driver.exchangeSnapshot.receipts.count,4)
++                }
++                if finished { break }
++            }
++            XCTAssertTrue(finished);XCTAssertTrue(late)
++        }
++        var app = host.snapshot;let old = try XCTUnwrap(app.session);var callbacks = 0
++        XCTAssertThrowsError(try app.step(responses:input.responses,queue:input.queue,windowDefault:[],surface:[],lifecycle:[.init()],
++            lifecycleProvider:{ _ in callbacks += 1;return .init() }))
++        XCTAssertEqual(callbacks,0);B.same(try XCTUnwrap(app.session),old)
++        XCTAssertThrowsError(try app.step(responses:input.responses,queue:input.queue,windowDefault:[],surface:[],lifecycle:[.init(bytes:bytes([0,0]))]))
++        B.same(try XCTUnwrap(app.session),old);XCTAssertEqual(backend.operations.count,operations)
++    }
++}

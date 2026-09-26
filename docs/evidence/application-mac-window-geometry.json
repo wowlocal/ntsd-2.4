@@ -1,0 +1,114 @@
+{
+  "schema": "ntsd-mac-window-geometry-validation-v1",
+  "UTC": "2026-09-26T17:45:54.602372+00:00",
+  "status": "all76-passed",
+  "baseHead": "a06324ccb0e816659aff809b78380e8a6e75ca46",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/candidate1-inputs.json",
+    "bytes": 573540,
+    "sha256": "880a5a79a117d9ffc0f773056ff58da829d434f081a90f703d2abe4cbb4a88e1",
+    "mode": 420,
+    "mtime_ns": 1790443629631558055
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/context1.json",
+    "bytes": 30925,
+    "sha256": "80a302e34fb9f49bd1aa9e129638b338771ec6eb935037b3cd6fdcb28825188b",
+    "mode": 420,
+    "mtime_ns": 1790443629862697307
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/build1.job.json",
+    "bytes": 89812,
+    "sha256": "867af02b9b45bb0daadab403857fc30f4076a75e2ac42d5ed96538b5d6c68d5a",
+    "mode": 420,
+    "mtime_ns": 1790443946355875967
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/package-check1.json",
+    "bytes": 1467571,
+    "sha256": "e295999d18ec0cd7bb754ad1ea67287223304fbe7fbdb54736248325d0f14468",
+    "mode": 420,
+    "mtime_ns": 1790443959604787085
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 66509960,
+    "sha256": "6f1a1f8a8cb8bfc76db58ac7843b5b394e339b06aa2b15aa6b5db9c2df983808",
+    "mode": 493,
+    "mtime_ns": 1790443944586947504
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/tests1-queue.job.json",
+    "bytes": 60913,
+    "sha256": "af4abcd723c08663e226097a460581a2ed117f3e4f3d90871870f07a6d119786",
+    "mode": 420,
+    "mtime_ns": 1790444658942213187
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/verification1.json",
+    "bytes": 31929,
+    "sha256": "506f27cce77ca285514b0328c2a3c5495d130f5d5e29b4487ebfb92006ad4763",
+    "mode": 420,
+    "mtime_ns": 1790444720549821195
+  },
+  "passedMethods": 76,
+  "selectedMethods": 76,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/artifact-archive1",
+    "files": 4962,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11411735266,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/artifact-archive1.json",
+      "bytes": 2576038,
+      "sha256": "a381bd1e43d6ce8a11ae04d79a09d45c0f36f89aab2c8a89b84767248549edab",
+      "mode": 420,
+      "mtime_ns": 1790444720539725157
+    }
+  },
+  "metadataArchive": {
+    "members": 338,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/metadata1.tar",
+    "bytes": 6891520,
+    "sha256": "52d1ef0e4e4b3c9fab25e64a7afcccde84d390497927d3fe6fb2d07ce69656c5",
+    "mode": 420,
+    "mtime_ns": 1790444754461196583
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "dc4a24ac42ddd3eb9df35661db12f166941c3fa434765067c242d913b00905ff",
+    "mode": 420,
+    "mtime_ns": 1790444720548797566
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2272,
+  "nativeWindowGeometryBridgeAdded": true,
+  "allOldTestBodiesUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Physical geometry is a Native integral logical-point/top-left-current-screen mapping, not a measured Windows/DPI/multi-screen contract.",
+    "All76 compares whole WM_MOVE and following first-menu presentation projection, saved replies/late rollback, owners and numeric failure controls; DefWindowProc and other queue/API inputs are explicit controls. No original execution or automatic callback delivery.",
+    "Source59727 terminal at34 Objects; full137 and transport/provenance audits remain open. Independent review/root promotion/general raster/other providers/loading/Windows/input/audio/clean-Mac/full match/game remain open; NTSDApp still Practice.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

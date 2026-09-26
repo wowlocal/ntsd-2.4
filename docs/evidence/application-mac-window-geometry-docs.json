@@ -1,0 +1,138 @@
+{
+  "UTC": "2026-09-26T17:47:37.633443+00:00",
+  "baseHead": "a06324ccb0e816659aff809b78380e8a6e75ca46",
+  "publication": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-window-geometry.json",
+    "bytes": 5414,
+    "sha256": "eb157a8ea86c67b9ba6b444e16909fc6787ccd6c08da6a75519833dd17075e39",
+    "mode": 420,
+    "mtime_ns": 1790444754611189323
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-window-geometry-20260926/finalize1.job.json",
+    "bytes": 824,
+    "sha256": "03aa68a279ff70ea3ed5764ec3a904fc7d3a01d84f760d146a5f89dbf6297001",
+    "mode": 420,
+    "mtime_ns": 1790444754611500741
+  },
+  "finalizerProcessAbsent": true,
+  "all76Passed": true,
+  "packageAndArchivesVerified": true,
+  "independentReview": false,
+  "rootPromotion": false,
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "unrelatedWorkingBeforeSHA256": "dafb37f0f696f375082fc8fa6ef7746e3181c3307640347ccf1c73a12ec07698",
+      "headBeforeSHA256": "5dede20514e5aa98dc61115e9903ab6001c156400a30e6d72ef542cb698b4928",
+      "workingAfterSHA256": "caad3f2b10145a31d04852116bca99aa06626024d773eeffdac3b265a1036572",
+      "stagedSHA256": "29114d10932f50815bf6a7806bc558de66dac498658cd7e3bb663a2049977f13",
+      "stagedBlob": "1b78dd531f425e894ab8f63579defd8c1f3e6cf6",
+      "onlyOwnBlockStaged": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "unrelatedWorkingBeforeSHA256": "ecb361385389940976ba2fd2ff32d9fb49799639d70697ae69b29247ae5981b4",
+      "headBeforeSHA256": "4b5ad4ad4f44af70b269eecdfb8047eb929f9035d9340c990a8a4b840e8f4628",
+      "workingAfterSHA256": "21073615eb399a3e465769c4f789484142ba1058d546be45b830325280e809b7",
+      "stagedSHA256": "7663f55ce6fafb20955a38a93a7bcb5421a6cca2250a19e848f54348fa440537",
+      "stagedBlob": "75679576a574c24c8b30f7a97e7f866078cb9a5d",
+      "onlyOwnBlockStaged": true
+    }
+  ],
+  "ownFiles": [
+    {
+      "path": "docs/research/APPLICATION_MAC_WINDOW_GEOMETRY_PLAN.md",
+      "bytes": 7270,
+      "sha256": "d95ee7b86cd8ea8a6cde7e56c0e45bd1a4be45d6680d3988b80a4e25273c2e98",
+      "mode": 420,
+      "mtime_ns": 1790443559699606474
+    },
+    {
+      "path": "docs/research/APPLICATION_MAC_WINDOW_GEOMETRY.md",
+      "bytes": 7792,
+      "sha256": "5d5a8d4664480f7ca5415e5eb66413de36d90bec70d1d2836e14f84561e02fea",
+      "mode": 420,
+      "mtime_ns": 1790444857563849938
+    },
+    {
+      "path": "docs/evidence/application-mac-window-geometry.json",
+      "bytes": 5414,
+      "sha256": "eb157a8ea86c67b9ba6b444e16909fc6787ccd6c08da6a75519833dd17075e39",
+      "mode": 420,
+      "mtime_ns": 1790444754611189323
+    },
+    {
+      "path": "docs/evidence/application-mac-window-geometry-close.json",
+      "bytes": 1629,
+      "sha256": "48b0d635c2f68a9e7c3dcf5ec6e08f862f540a6d2793bb135c166a17bb14285a",
+      "mode": 420,
+      "mtime_ns": 1790444754611296032
+    },
+    {
+      "path": "docs/evidence/application-mac-window-geometry.patch",
+      "bytes": 39646,
+      "sha256": "8e2149c3eefd9c1631e286fa3f6e041129adffc0191c8e5f72cea0d8753f21fe",
+      "mode": 420,
+      "mtime_ns": 1790444679931869120
+    },
+    {
+      "path": "tools/OriginalLifecycleRequestExchange.swift",
+      "bytes": 1411,
+      "sha256": "a5e8d72a33a34f1bb2ced396ec13ebae5b60c5053720dc59a08b5b5af5df2a16",
+      "mode": 420,
+      "mtime_ns": 1790442945190054127
+    },
+    {
+      "path": "tools/OriginalApplicationObservedLifecycleIteration.swift",
+      "bytes": 3785,
+      "sha256": "dd8a5fa5c2981a3fc047235d3962aa46777b1b5bbaad6ddd41e3184b6ff55f32",
+      "mode": 420,
+      "mtime_ns": 1790442945190225711
+    },
+    {
+      "path": "tools/OriginalMacWindowGeometry.swift.inc",
+      "bytes": 2604,
+      "sha256": "e27772112e125b9aa1f888e9ab6f8b95947c60d2f75e6d986bfe45665140951b",
+      "mode": 420,
+      "mtime_ns": 1790443037724056105
+    },
+    {
+      "path": "tools/OriginalMacWindowGeometryService.swift",
+      "bytes": 1121,
+      "sha256": "8ea836cd44a2a2f8689ff87c5a3a7fc92272a55be50c09ed6c9681c2512d02af",
+      "mode": 420,
+      "mtime_ns": 1790443037726366113
+    },
+    {
+      "path": "tools/OriginalMacWindowGeometryTests.swift",
+      "bytes": 20704,
+      "sha256": "7c7ed9fe4b4cd64737c0b97b74fbf50158a94dc9e2a522921eaf3f74473d057c",
+      "mode": 420,
+      "mtime_ns": 1790443559699788933
+    },
+    {
+      "path": "tools/apply_window_geometry_candidate.py",
+      "bytes": 5527,
+      "sha256": "2f741ecf623cbe981135e406570d78e6b6a0463dfd3092ab615c33173770952f",
+      "mode": 420,
+      "mtime_ns": 1790443559699435098
+    },
+    {
+      "path": "tools/prepare_application_mac_window_geometry.py",
+      "bytes": 12799,
+      "sha256": "475d156a1fd56b1c1052d2c585df87cd8794514d522447b4b646a4e30688cb00",
+      "mode": 420,
+      "mtime_ns": 1790443618065832035
+    },
+    {
+      "path": "tools/finalize_application_mac_window_geometry.py",
+      "bytes": 18118,
+      "sha256": "56d5f3da7a2a30e6fbb0642ec601261d3d79505a07dea5c6dd21ac0748ade14e",
+      "mode": 420,
+      "mtime_ns": 1790443682831028632
+    }
+  ],
+  "originalExecuted": false,
+  "EXEEnvelopeRecalculated": false
+}
