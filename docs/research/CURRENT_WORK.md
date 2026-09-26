@@ -1,5 +1,17 @@
 # Текущая передача работы
 
+[Windows DirectDraw menu-text observer prepared](WINDOWS_MENU_TEXT_PROBE.md):
+Exact three first-menu text requests, owned DC/font metadata and readonly pixel
+snapshots; 33 synthetic tests pass. Two final ten-file kits byte-identical; final
+validator checks30 retained bodies/rejects9 mutations. ZIP/ISO bytes and163-member
+archive modes/ns mtimes verify. ISO mount denied by OS; no retry or permission
+change, archive-only verification retained. [Publication](../evidence/windows-menu-text-probe.json).
+No Windows/original execution or Native pixel assumptions; PowerShell and actual
+font/device/full-menu comparison remain open. Host still locked; Windows EULA
+already approved. NEXT after unlock: continue same installer, then bounded NLS/
+cursor/text observations. CrossOver remains live. Independent review/Native/full
+game and existing safety incidents remain open; EXE envelope not recalculated.
+
 [Windows approval received; host screen locked](WINDOWS_UTM_HOST_LOCK.md):
 User approved EULA and continued installation agreements. CUA cannot find UTM
 window; IORegistry confirms locked screen. QEMU43650 and CrossOver33492 remain

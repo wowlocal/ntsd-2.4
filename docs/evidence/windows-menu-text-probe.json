@@ -1,0 +1,602 @@
+{
+  "UTC": "2026-09-26T20:40:33.275466+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926",
+  "baseHead": "e1567bf2d344200180eb51b1c2795bce850fdc1c",
+  "scope": "Prepared bounded controlled Windows DirectDraw/GDI observer for three original first-menu text requests; no original or Windows execution, no Native implementation",
+  "referenceEXESHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "reproducibility": {
+    "UTC": "2026-09-26T20:36:32.451837+00:00",
+    "byteIdenticalKits": [
+      "build3/kit",
+      "build4/kit"
+    ],
+    "files": 10,
+    "manifestSHA256": "9276bf66788dc940f5dcf87f47030216b20bc359ad778da1066c4ffa358ffbe6",
+    "PEEqualTestedBuild2": true,
+    "syntheticTests": 33,
+    "orderingVerified": true,
+    "validatorPositiveCases": 30,
+    "validatorRejectedMutations": 9,
+    "pwsh": null,
+    "WindowsExecuted": false
+  },
+  "PE": {
+    "bytes": 14848,
+    "dllCharacteristics": 34112,
+    "entryRVA": 4096,
+    "hasBaseRelocations": true,
+    "imports": [
+      {
+        "dll": "KERNEL32.dll",
+        "name": "CloseHandle"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "CreateFileW"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "ExitProcess"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "FlushFileBuffers"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "FreeLibrary"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetACP"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetCurrentProcess"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetLastError"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetModuleFileNameW"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetModuleHandleW"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetOEMCP"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "GetProcAddress"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "LoadLibraryExW"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "SetLastError"
+      },
+      {
+        "dll": "KERNEL32.dll",
+        "name": "WriteFile"
+      }
+    ],
+    "machine": 332,
+    "pointerBits": 32,
+    "sections": [
+      {
+        "characteristics": 1610612768,
+        "name": ".text",
+        "rawOffset": 1024,
+        "rawSize": 9728,
+        "rva": 4096,
+        "virtualSize": 9240
+      },
+      {
+        "characteristics": 1073741888,
+        "name": ".rdata",
+        "rawOffset": 10752,
+        "rawSize": 3072,
+        "rva": 16384,
+        "virtualSize": 2609
+      },
+      {
+        "characteristics": 3221225536,
+        "name": ".data",
+        "rawOffset": 0,
+        "rawSize": 0,
+        "rva": 20480,
+        "virtualSize": 1746904
+      },
+      {
+        "characteristics": 1107296320,
+        "name": ".reloc",
+        "rawOffset": 13824,
+        "rawSize": 1024,
+        "rva": 1769472,
+        "virtualSize": 848
+      }
+    ],
+    "sha256": "04f18d21aff7e1d4444f12bff8c080da6c710bc7a2a6bea9b8f7e0c6bf7fbd68",
+    "windowsExecuted": false
+  },
+  "selfTests": {
+    "count": 33,
+    "report": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/self-test1/report.json",
+      "bytes": 6084,
+      "sha256": "4c433f508551e760cd198bd4b998ac7a24f480248d4f8568335bde856f30c250",
+      "mode": 420,
+      "mtime_ns": 1790454822382385296
+    },
+    "synthetic": true
+  },
+  "validator": {
+    "UTC": "2026-09-26T20:35:16.901673+00:00",
+    "reason": "Strengthen structural validator branch completeness; replay preserved synthetic outputs as data only, no PE/original/Windows rerun.",
+    "retainedRawCases": 30,
+    "cases": [
+      "back-failure-output",
+      "back-failure",
+      "bpp16",
+      "bpp24",
+      "cleanup-failure",
+      "close-failure",
+      "complete",
+      "cooperative-failure",
+      "dc-failure",
+      "dd-failure",
+      "descriptor-boundary",
+      "fill-failure",
+      "flush-failure",
+      "font-failure",
+      "lock-failure",
+      "metadata-failure",
+      "missing-function",
+      "module-failure",
+      "negative-pitch",
+      "null-dc",
+      "null-pixels",
+      "positive-dc",
+      "primary-failure-output",
+      "primary-failure",
+      "register-failure",
+      "release-dc-failure",
+      "short-write",
+      "text-failure",
+      "unlock-failure",
+      "window-failure"
+    ],
+    "mutationsRejected": [
+      {
+        "name": "missing-register",
+        "error": "KeyError"
+      },
+      {
+        "name": "missing-draw",
+        "error": "KeyError"
+      },
+      {
+        "name": "missing-font-bytes",
+        "error": "KeyError"
+      },
+      {
+        "name": "wrong-text-length",
+        "error": "AssertionError"
+      },
+      {
+        "name": "empty-lines",
+        "error": "AssertionError"
+      },
+      {
+        "name": "missing-final-snapshot",
+        "error": "AssertionError"
+      },
+      {
+        "name": "truncated-pixels",
+        "error": "AssertionError"
+      },
+      {
+        "name": "false-storage-acceptance",
+        "error": "AssertionError"
+      },
+      {
+        "name": "wrong-primary-input",
+        "error": "AssertionError"
+      }
+    ],
+    "oldValidatorSHA256": "d7c7ec425f944b667dd6ae9d100a28bf5a9177d7892a25db200ff6e37027f6fb",
+    "newValidatorSHA256": "31b41485c76e97181395c8232a4c0c8e8df8d6a62210e0cc71773c17753a6976",
+    "PEChanged": false,
+    "WindowsExecuted": false
+  },
+  "ordering": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/ordering-check1.json",
+    "bytes": 4301,
+    "sha256": "cfad1a5144747c6c488ed4e5f2a06a8aaed577c9b341b2b542f943b7277c3c39",
+    "mode": 420,
+    "mtime_ns": 1790454991933645328
+  },
+  "package": {
+    "UTC": "2026-09-26T20:37:19.845285+00:00",
+    "zip": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/ntsd-windows-menu-text-kit.zip",
+      "bytes": 64191,
+      "sha256": "8fd666189b8cbbfd1e90b740207ab2f1f93e33a8ef1bd2be57a7217a987a69cd",
+      "membersVerified": 10
+    },
+    "validatorCLI": {
+      "synthetic": true,
+      "successExitCode": 0,
+      "badManifestExitCode": 1
+    },
+    "WindowsExecuted": false
+  },
+  "media": {
+    "UTC": "2026-09-26T20:39:09.428459+00:00",
+    "ISO": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/NTSD-Menu-Text-Probe.iso",
+      "bytes": 921600,
+      "sha256": "6596158ae3bd3813dc856ee307388e1826cf8c832db5f0ab90506bdc9cd691a4"
+    },
+    "mountAttempt": {
+      "result": "OS permission failure",
+      "stderr": "hdiutil: WARNING: 'hdiutil attach -readonly -nobrowse -mountpoint ...' is deprecated. Please use 'diskutil image attach --readOnly --mountOptions nobrowse --mountPoint ...' instead.\nhdiutil: attach failed - Permission denied\n",
+      "subsequentMountAttempt": false
+    },
+    "mounted": false,
+    "attachedImageAbsent": true,
+    "verification": "Read existing owned ISO9660/Joliet bytes with system libarchive tar; no disk-image attachment, permission/security change or alternate mount attempted.",
+    "readerVersion": "bsdtar 3.5.3 - libarchive 3.7.4 zlib/1.2.12 liblzma/5.4.3 bz2lib/1.0.8",
+    "verifiedMembers": [
+      {
+        "name": "probe_windows_menu_text.c",
+        "bytes": 15479,
+        "sha256": "6a3c94c467dd8e71a0f0f5285d6862819bc610b5a0602957d289cfa456d29e23"
+      },
+      {
+        "name": "verify_windows_menu_text_capture.py",
+        "bytes": 10146,
+        "sha256": "31b41485c76e97181395c8232a4c0c8e8df8d6a62210e0cc71773c17753a6976"
+      },
+      {
+        "name": "probe-windows-menu-text-x86.exe",
+        "bytes": 14848,
+        "sha256": "04f18d21aff7e1d4444f12bff8c080da6c710bc7a2a6bea9b8f7e0c6bf7fbd68"
+      },
+      {
+        "name": "windows_menu_text_inputs.h",
+        "bytes": 682,
+        "sha256": "ae2e91674b9d19a322a975e19f66fd206ace4f7e2e92d7524c4455cba6b7eb4e"
+      },
+      {
+        "name": "build_windows_menu_text_probe.py",
+        "bytes": 4642,
+        "sha256": "fc5585307191e68b0baa0413c4df68d0975bec8dbf8041c3005879ae16501d73"
+      },
+      {
+        "name": "first-menu1.json",
+        "bytes": 596386,
+        "sha256": "87245df0ba78b2141b84a318eb6fdc3d4aba89a82db52bab3f34f2c158ceddb7"
+      },
+      {
+        "name": "manifest.json",
+        "bytes": 4056,
+        "sha256": "9276bf66788dc940f5dcf87f47030216b20bc359ad778da1066c4ffa358ffbe6"
+      },
+      {
+        "name": "WINDOWS_MENU_TEXT_PROBE_PLAN.md",
+        "bytes": 4467,
+        "sha256": "703538881846534515d1a4fa92cc4d6fc23afa61fb613a1b67cf9ba99adae618"
+      },
+      {
+        "name": "build_windows_nls_probe.py",
+        "bytes": 7317,
+        "sha256": "3963c13f05c2a3f0f8e44d8abfdd74c726057f447898d0e94501aa6effac1fd3"
+      },
+      {
+        "name": "run_windows_menu_text_probe.ps1",
+        "bytes": 5788,
+        "sha256": "25c623f8d3722cbe1dcfb2ac54c2840ed5fdb0e2fa41976204c5c1e266ff20d0"
+      }
+    ],
+    "VMChanged": false,
+    "WindowsExecuted": false,
+    "mountOrWindowsMediaAcceptanceOpen": true
+  },
+  "ABI": {
+    "header": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/ddraw.h",
+      "bytes": 241491,
+      "sha256": "faa9634fb2f65d633dd4dea3a1be2bf28d117f43919c6089479237381b4907f5",
+      "mode": 420,
+      "mtime_ns": 1790454145099880665
+    },
+    "URL": "https://raw.githubusercontent.com/microsoft/win32metadata/main/generation/WinSDK/RecompiledIdlHeaders/um/ddraw.h",
+    "interfaces": {
+      "IDirectDraw": [
+        "QueryInterface",
+        "AddRef",
+        "Release",
+        "Compact",
+        "CreateClipper",
+        "CreatePalette",
+        "CreateSurface",
+        "DuplicateSurface",
+        "EnumDisplayModes",
+        "EnumSurfaces",
+        "FlipToGDISurface",
+        "GetCaps",
+        "GetDisplayMode",
+        "GetFourCCCodes",
+        "GetGDISurface",
+        "GetMonitorFrequency",
+        "GetScanLine",
+        "GetVerticalBlankStatus",
+        "Initialize",
+        "RestoreDisplayMode",
+        "SetCooperativeLevel",
+        "SetDisplayMode",
+        "WaitForVerticalBlank"
+      ],
+      "IDirectDrawSurface": [
+        "QueryInterface",
+        "AddRef",
+        "Release",
+        "AddAttachedSurface",
+        "AddOverlayDirtyRect",
+        "Blt",
+        "BltBatch",
+        "BltFast",
+        "DeleteAttachedSurface",
+        "EnumAttachedSurfaces",
+        "EnumOverlayZOrders",
+        "Flip",
+        "GetAttachedSurface",
+        "GetBltStatus",
+        "GetCaps",
+        "GetClipper",
+        "GetColorKey",
+        "GetDC",
+        "GetFlipStatus",
+        "GetOverlayPosition",
+        "GetPalette",
+        "GetPixelFormat",
+        "GetSurfaceDesc",
+        "Initialize",
+        "IsLost",
+        "Lock",
+        "ReleaseDC",
+        "Restore",
+        "SetClipper",
+        "SetColorKey",
+        "SetOverlayPosition",
+        "SetPalette",
+        "Unlock",
+        "UpdateOverlay",
+        "UpdateOverlayDisplay",
+        "UpdateOverlayZOrder"
+      ]
+    },
+    "scope": "Public ABI evidence, not game behavior or actual Windows execution",
+    "apiDocs": [
+      "https://learn.microsoft.com/en-us/windows/win32/api/ddraw/ns-ddraw-ddsurfacedesc",
+      "https://learn.microsoft.com/en-us/windows/win32/api/ddraw/nf-ddraw-idirectdrawsurface7-getdc",
+      "https://learn.microsoft.com/en-us/windows/win32/api/ddraw/nf-ddraw-idirectdrawsurface7-lock",
+      "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-getcurrentobject",
+      "https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-gettextmetricsw"
+    ],
+    "versionBoundary": "Original IDirectDrawSurface has LPVOID Unlock; Surface7 docs are used only for common ownership/lock concepts, not its changed ABI"
+  },
+  "correction": {
+    "UTC": "2026-09-26T20:33:26.764855+00:00",
+    "reason": "Author inspection before execution found failed CreateSurface output could be nonnull but not establish owned interface. Cleanup now requires successful creation, with explicit primary/back failed-output stimuli. Build1 and original tools retained unchanged.",
+    "oldC": "38454f3c4e7abbe2ab1f5971d8dea8915d008ef0c46abaad7ada4586629a682c",
+    "newC": "6a3c94c467dd8e71a0f0f5285d6862819bc610b5a0602957d289cfa456d29e23"
+  },
+  "jobs": [
+    {
+      "status": "terminal",
+      "pid": 26868,
+      "startedUTC": "2026-09-26T20:29:13.685881+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_menu_text_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/build1",
+        "--first-menu",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/inputs/first-menu1.json"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "26868 Sat Sep 26 23:29:13 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:29:14.211202+00:00",
+      "elapsedSeconds": 0.5204795
+    },
+    {
+      "status": "terminal",
+      "pid": 34181,
+      "startedUTC": "2026-09-26T20:33:26.835383+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_menu_text_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/build2",
+        "--first-menu",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/inputs/first-menu1.json"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "34181 Sat Sep 26 23:33:26 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:33:27.143393+00:00",
+      "elapsedSeconds": 0.303639459
+    },
+    {
+      "status": "terminal",
+      "pid": 39381,
+      "startedUTC": "2026-09-26T20:36:31.933692+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_menu_text_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/build3",
+        "--first-menu",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/inputs/first-menu1.json"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "39381 Sat Sep 26 23:36:31 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:36:32.215439+00:00",
+      "elapsedSeconds": 0.27744562500000003
+    },
+    {
+      "status": "terminal",
+      "pid": 39381,
+      "startedUTC": "2026-09-26T20:36:32.215702+00:00",
+      "command": [
+        "python3",
+        "tools/build_windows_menu_text_probe.py",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/build4",
+        "--first-menu",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/inputs/first-menu1.json"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "39381 Sat Sep 26 23:36:31 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:36:32.444463+00:00",
+      "elapsedSeconds": 0.22511974999999995
+    },
+    {
+      "status": "terminal",
+      "pid": 34181,
+      "startedUTC": "2026-09-26T20:33:27.143800+00:00",
+      "command": [
+        "uv",
+        "run",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/test1-tools/test_windows_menu_text_probe.py",
+        "--kit",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/build2/kit",
+        "--output",
+        "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/self-test1"
+      ],
+      "cwd": "/Users/michael/Developer/ntsd-2.4",
+      "identity": "34181 Sat Sep 26 23:33:26 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python -\n",
+      "maxSeconds": 600,
+      "scope": "Only newly compiled observer with synthetic Win32/COM and owned pixel buffers; no original or Windows execution",
+      "exitCode": 0,
+      "endedUTC": "2026-09-26T20:33:42.429111+00:00",
+      "elapsedSeconds": 15.281119084
+    }
+  ],
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/artifacts1.tar",
+    "bytes": 63600640,
+    "sha256": "61e413f7f38e67fa747d06a62da18ef698ee24e68dd17afe7b21812235ae0b57",
+    "mode": 420,
+    "mtime_ns": 1790455233236616954
+  },
+  "artifactMembersVerified": 163,
+  "memberBytesModesNanosecondMTimesVerified": true,
+  "sourcePins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/verify_windows_nls_capture.py",
+      "bytes": 6401,
+      "sha256": "9fce7b7c3cd524d1590505ea1306829ed2847b3b482b03773cbf99c9a3adb6c9",
+      "mode": 420,
+      "mtime_ns": 1789010016909370217
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/probe_windows_menu_text.c",
+      "bytes": 15479,
+      "sha256": "6a3c94c467dd8e71a0f0f5285d6862819bc610b5a0602957d289cfa456d29e23",
+      "mode": 420,
+      "mtime_ns": 1790454771179020750
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/test_windows_menu_text_probe.py",
+      "bytes": 17614,
+      "sha256": "397424faa184e8fe684fba72979d7111ee0a81f3a04fbfe03501edd78166b3c5",
+      "mode": 420,
+      "mtime_ns": 1790454771185320463
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/verify_windows_menu_text_capture.py",
+      "bytes": 10146,
+      "sha256": "31b41485c76e97181395c8232a4c0c8e8df8d6a62210e0cc71773c17753a6976",
+      "mode": 420,
+      "mtime_ns": 1790454880030081972
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/test_windows_nls_probe.py",
+      "bytes": 11197,
+      "sha256": "7f2e7d120357952726d16ba83c0ba8559b4b3494eefec6226d6060ea73ea539f",
+      "mode": 420,
+      "mtime_ns": 1789009915674090212
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/build_windows_menu_text_probe.py",
+      "bytes": 4642,
+      "sha256": "fc5585307191e68b0baa0413c4df68d0975bec8dbf8041c3005879ae16501d73",
+      "mode": 420,
+      "mtime_ns": 1790454412172270315
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/WINDOWS_MENU_TEXT_PROBE_PLAN.md",
+      "bytes": 4467,
+      "sha256": "703538881846534515d1a4fa92cc4d6fc23afa61fb613a1b67cf9ba99adae618",
+      "mode": 420,
+      "mtime_ns": 1790454144161568921
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/build_windows_nls_probe.py",
+      "bytes": 7317,
+      "sha256": "3963c13f05c2a3f0f8e44d8abfdd74c726057f447898d0e94501aa6effac1fd3",
+      "mode": 420,
+      "mtime_ns": 1790452571737778553
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-menu-text-probe-20260926/final-tools/run_windows_menu_text_probe.ps1",
+      "bytes": 5788,
+      "sha256": "25c623f8d3722cbe1dcfb2ac54c2840ed5fdb0e2fa41976204c5c1e266ff20d0",
+      "mode": 420,
+      "mtime_ns": 1790454514823233486
+    }
+  ],
+  "inputPinsPreserved": 10,
+  "processState": {
+    "UTC": "2026-09-26T20:40:33.097834+00:00",
+    "ownJobPIDs": [
+      26868,
+      34181,
+      39381
+    ],
+    "ownJobsTerminalAbsent": true,
+    "hostScreenStillLocked": true,
+    "WindowsAcceptPressed": false,
+    "liveReferences": "33492 Sat Sep 26 21:40:15 2026     Z:\\Volumes\\X5\\ntsd-2.4-research\\01a0dc49-738f-7972-8fb0-e98fb2f34408\\crossover-reference-20260926\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe \n43650 Sat Sep 26 22:40:45 2026     /Applications/UTM.app/Contents/XPCServices/QEMUHelper.xpc/Contents/MacOS/QEMULauncher.app/Contents/MacOS/QEMULauncher /Applications/UTM.app/Contents/Frameworks/qemu-aarch64-softmmu.framework/Versions/A/qemu-aarch64-softmmu -L /Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu -S -spice unix=on,addr=98DFE348-2BA4-426E-9E40-7214229E8E45.spice,disable-ticketing=on,image-compression=off,playback-compression=off,streaming-video=off,gl=on -chardev spiceport,name=org.qemu.monitor.qmp.0,id=org.qemu.monitor.qmp -mon chardev=org.qemu.monitor.qmp,mode=control -nodefaults -vga none -nic none -device virtio-ramfb-gl -cpu host -smp cpus=4,sockets=1,cores=4,threads=1 -machine virt -accel hvf -drive if=pflash,format=raw,unit=0,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu/edk2-aarch64-secure-code.fd,file.locking=off,readonly=on -drive if=pflash,unit=1,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/efi_vars.fd -m 8192 -audiodev spice,id=audio0 -device intel-hda -device hda-duplex,audiodev=audio0 -device nec-usb-xhci,id=usb-bus -device usb-tablet,bus=usb-bus.0 -device usb-mouse,bus=usb-bus.0 -device usb-kbd,bus=usb-bus.0 -device qemu-xhci,id=usb-controller-0 -chardev spicevmc,name=usbredir,id=usbredirchardev0 -device usb-redir,chardev=usbredirchardev0,id=usbredirdev0,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev1 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev2 -device usb-redir,chardev=usbredirchardev2,id=usbredirdev2,bus=usb-controller-0.0 -device usb-storage,drive=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,removable=true,bootindex=0,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,file.filename=/Volumes/T7/ntsd-2.4-artifacts/windows-utm-reference-20260926/Win11_25H2_English_Arm64_verified3.iso,file.locking=off,readonly=on -device nvme,drive=driveDD8331D7-4607-48E1-9494-02229FD6FA58,serial=DD8331D7-4607-48E1-9494-02229FD6FA58,bootindex=1 -drive if=none,media=disk,id=driveDD8331D7-4607-48E1-9494-02229FD6FA58,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/DD8331D7-4607-48E1-9494-02229FD6FA58.qcow2,discard=unmap,detect-zeroes=unmap -device usb-storage,drive=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,removable=true,bootindex=2,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Application Support/GuestSupportTools/utm-guest-tools-latest.iso,file.locking=off,readonly=on -device virtio-serial -device virtserialport,chardev=org.qemu.guest_agent,name=org.qemu.guest_agent.0 -chardev spiceport,name=org.qemu.guest_agent.0,id=org.qemu.guest_agent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 -chardev spicevmc,id=vdagent,debug=0,name=vdagent -name NTSD Windows 11 ARM Reference -uuid 98DFE348-2BA4-426E-9E40-7214229E8E45 -rtc base=localtime -device virtio-rng-pci -chardev socket,id=chrtpm0,path=98DFE348-2BA4-426E-9E40-7214229E8E45.swtpm -tpmdev emulator,id=tpm0,chardev=chrtpm0 -device tpm-crb-device,tpmdev=tpm0\n",
+    "X5FreeBytes": 152757096448
+  },
+  "independentReview": false,
+  "WindowsExecuted": false,
+  "originalExecuted": false,
+  "nativeChanges": false,
+  "openGates": [
+    "PowerShell runner syntax/execution in Windows",
+    "Mounted/Windows media verification after host unlock",
+    "Actual Windows font/DC/device/pixels",
+    "Original own-context/whole-menu equivalence and comparison",
+    "Independent review",
+    "Native raster/root promotion/input/audio/full match/full game"
+  ]
+}
