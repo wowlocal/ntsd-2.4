@@ -1,0 +1,11 @@
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationObservedStartupTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationObservedStartupTests.swift
+@@ -1,6 +1,7 @@
++import Foundation
+ import XCTest
+ @testable import NTSDCore
+-import NTSDReference
++@testable import NTSDReferenceChecks
+ 
+ extension OriginalApplicationPreparedStartupPlatformTests.Audit: OriginalApplicationObservedStartupPlatform {
+     var startupExchange: OriginalStartupRequestExchange.Cursor? {

@@ -1,5 +1,23 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Observed whole startup passes all25 methods](research/APPLICATION_OBSERVED_STARTUP_CORRECTION1.md):
+import-only correction builds;199Core/61Reference/277test sources and1686 resources
+verified. Full35 cases retain23 matches/5 stops/7 provenance outcomes,6325events/
+119WAVs and1841 replies (650window/1191nonwindow). Actual Mac clocks are acquired
+at whole-caller permits, FILETIME after21window replies; late retry retains both.
+Four new plus21 unchanged tests pass. Queue10821/finalizer16329 terminal0/absent;
+4916-file artifact/133-member metadata archives verified, task frozen. Root/base/
+failed candidate/source preserved; prior compile failure remains recorded.
+[Publication](evidence/application-observed-startup-correction1.json).
+NEXT: concrete macOS window/resource request service consumed by this whole-startup
+exchange and same Host. Freeze finite AppKit/windowed mapping and observable failure/
+callback boundaries, implement owned identities/lifetimes and actual window checks;
+reuse existing evidence, not another inventory/queue-only phase. Synchronous callbacks,
+unknown fullscreen provenance, other physical providers/nonthrowing/aggregate audio,
+independent review/root promotion/loading/Windows/clean-Mac/full match/game stay open.
+EXE envelope not recalculated. Supersedes import-correction NEXT below.
+
+
 [Observed startup build failure preserved](research/APPLICATION_OBSERVED_STARTUP_VALIDATION.md):
 fresh build84305 terminal1/absent: new test imports nonexistent NTSDReference instead
 of NTSDReferenceChecks. No XCTest/package acceptance; all25 methods unstarted.

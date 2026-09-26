@@ -1,0 +1,47 @@
+{
+  "UTC": "2026-09-26T13:52:04.901653+00:00",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/publication1.json",
+    "bytes": 5348,
+    "sha256": "efd8b34eefae5ff2426d0ef8b8635fc38117026cac45edd76ef875dc690c31e2",
+    "mode": 420,
+    "mtime_ns": 1790430658526293059
+  },
+  "closure": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/external-close1.json",
+    "bytes": 1662,
+    "sha256": "7368cfc94c1dcebf92bdb71de0c466a89c4e4d995da6bcc98287030dc9a97dfb",
+    "mode": 420,
+    "mtime_ns": 1790430658529264153
+  },
+  "finalizer": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/finalize2.job.json",
+    "bytes": 847,
+    "sha256": "430e78813549ca5b5cd73d22d600b1dd0dd7bd6c6b2aec85c5c1e6881d8624eb",
+    "mode": 420,
+    "mtime_ns": 1790430658529838989
+  },
+  "observations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/new-method-observations1.json",
+    "bytes": 4130,
+    "sha256": "190f15fa985f62aefb5bee696aa7898bc57cc2d5b53fd2078ad09905fc4e89f6",
+    "mode": 420,
+    "mtime_ns": 1790430516620810699
+  },
+  "study": {
+    "path": "docs/research/APPLICATION_OBSERVED_STARTUP_CORRECTION1.md",
+    "bytes": 7911,
+    "sha256": "13c117e05cd58e5e13fe53d05741005652b17bbaf1fa2b1c2bb9f76c0c3f17d4",
+    "mode": 420,
+    "mtime_ns": 1790430724828599803
+  },
+  "navigationOnlyOwnInsertionStaged": [
+    "docs/research/CURRENT_WORK.md",
+    "docs/RESEARCH_MAP.md"
+  ],
+  "independentReview": false,
+  "all25Comparison": true,
+  "actualMacClocks": true,
+  "actualWindowInputAudio": false,
+  "fullGame": false
+}

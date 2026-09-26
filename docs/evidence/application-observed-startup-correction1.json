@@ -1,0 +1,113 @@
+{
+  "schema": "ntsd-observed-startup-validation-v1",
+  "UTC": "2026-09-26T13:50:58.520984+00:00",
+  "status": "all25-passed",
+  "baseHead": "1164fb8be24bae8eaffefc5c63d00c5eaacba62d",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/candidate1-inputs.json",
+    "bytes": 569145,
+    "sha256": "431bcfd835882159c1b9e992e4aaa6d661d692cff5b50eab4ce65356eb4f5755",
+    "mode": 420,
+    "mtime_ns": 1790430040698931913
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/context1.json",
+    "bytes": 29025,
+    "sha256": "3948b01c89b9f2b6e65b08ff99784318d79a3dc066584af76aa4890734b9bdef",
+    "mode": 420,
+    "mtime_ns": 1790430040879191555
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/build1.job.json",
+    "bytes": 89327,
+    "sha256": "2488fd12d94ef76312455359e0ececcfab8a6683f4e4c9f565b5947f189730e9",
+    "mode": 420,
+    "mtime_ns": 1790430381947388380
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/package-check1.json",
+    "bytes": 1476840,
+    "sha256": "b1d394ec010ec6b8099e76c96ba40e2d59d95480264b7d16da862e5207631bfe",
+    "mode": 420,
+    "mtime_ns": 1790430398563693953
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 65066472,
+    "sha256": "8ad7edc70e792294af5edfee60a0094b6356094a100ac5da48e9bb4242d2a3f6",
+    "mode": 493,
+    "mtime_ns": 1790430380125784390
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/tests1-queue.job.json",
+    "bytes": 21253,
+    "sha256": "0628f02b2df14f7fb8a218a76a600812b1c9ee42bee4dcd92cf2a4683e330913",
+    "mode": 420,
+    "mtime_ns": 1790430552875996179
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/verification1.json",
+    "bytes": 10991,
+    "sha256": "085d68816b69f005b0bc137ee58716c0171002bd6fe92abb9d351582db29861d",
+    "mode": 420,
+    "mtime_ns": 1790430645520681381
+  },
+  "passedMethods": 25,
+  "selectedMethods": 25,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/artifact-archive1",
+    "files": 4916,
+    "directories": 210,
+    "links": 0,
+    "bytes": 11396837735,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/artifact-archive1.json",
+      "bytes": 2598928,
+      "sha256": "5dc8f67dc443912246096a3a2da21c08fc043efbf8894cc774810f3c8a039e9d",
+      "mode": 420,
+      "mtime_ns": 1790430645512662601
+    }
+  },
+  "metadataArchive": {
+    "members": 133,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/metadata1.tar",
+    "bytes": 6000640,
+    "sha256": "ff8bde7c5b0f01dbcf4b9c2af61dbda9caed3dabcc0b5a25d2701d6842a45311",
+    "mode": 420,
+    "mtime_ns": 1790430658408812738
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-startup-correction1-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "d86e075b07f928a4c1b0bcbae5b7a2e4689069e3472b09edcf8a2395159255c2",
+    "mode": 420,
+    "mtime_ns": 1790430645520361380
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2249,
+  "candidateUnchanged": 2254,
+  "onlyCorrectionImportsChanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "Unified startup is tested with declared responses plus a separate actual Mac clock whole-caller control if its exact method passes. Window/resource mapping, callbacks, audio/input and backend remain open; AppKit still uses practice. Retained inspection controls are finite scheduler observations.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}
