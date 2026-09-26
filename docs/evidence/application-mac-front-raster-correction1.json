@@ -1,0 +1,115 @@
+{
+  "schema": "ntsd-application-mac-front-raster-correction1-validation-v1",
+  "UTC": "2026-09-26T22:49:27.569254+00:00",
+  "status": "first-nonpass-retained",
+  "baseHead": "fb494f28edadf7653bc7c7422eb221480f8f4d73",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/candidate1-inputs.json",
+    "bytes": 575018,
+    "sha256": "dc22b1e70981ea8362a0e5cd8a7f25b3e1701b20f48500997a71a46727bf2a0e",
+    "mode": 420,
+    "mtime_ns": 1790462309578830975
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/context1.json",
+    "bytes": 30153,
+    "sha256": "44c5780870dc037ef1e16902a53ab9e39d8c8ef626e86d9f988a59cd6141a0aa",
+    "mode": 420,
+    "mtime_ns": 1790462309829752986
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/build1.job.json",
+    "bytes": 98694,
+    "sha256": "1bee3db500509ae4bc03605a22b137c94b16aa78dce485b0239f3d0a772cdb47",
+    "mode": 420,
+    "mtime_ns": 1790462651109465361
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/package-check1.json",
+    "bytes": 1516981,
+    "sha256": "56e6d4d8612424882eb3a84830d8f62c1e389ae12856f31f454982b171e50c62",
+    "mode": 420,
+    "mtime_ns": 1790462694317594665
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 67432024,
+    "sha256": "438b88b12a838ad9880ce18f90fafc5f35f23438d66f80e1e467e66985a67aed",
+    "mode": 493,
+    "mtime_ns": 1790462648797113245
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/tests1-queue.job.json",
+    "bytes": 2365,
+    "sha256": "ee0157f373b303cd636e8e49950309ee4e7666fffd39816f0dd0348f7a97dca1",
+    "mode": 420,
+    "mtime_ns": 1790462732746510647
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/verification1.json",
+    "bytes": 9851,
+    "sha256": "c46044b65a0ef81c1db205cc66ba55945523727d2bf9667a5b19dd4be8dd6f65",
+    "mode": 420,
+    "mtime_ns": 1790462954709926616
+  },
+  "passedMethods": 0,
+  "selectedMethods": 95,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/artifact-archive1",
+    "files": 4974,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11425577686,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/artifact-archive1.json",
+      "bytes": 2628651,
+      "sha256": "fb0f77901cfeea072f2e5fd139aebef996f5cb6f99033905895bd527ca48966c",
+      "mode": 420,
+      "mtime_ns": 1790462954698830794
+    }
+  },
+  "metadataArchive": {
+    "members": 131,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/metadata1.tar",
+    "bytes": 6092800,
+    "sha256": "aaeb3f4c3a1cc1bb52f41f59e388894df9d88bce3d0b5a4671d7c01d54c4016b",
+    "mode": 420,
+    "mtime_ns": 1790462967436873051
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "4fc0990f3f97b8d7684965e898b7a2f31d2f5f8a6c9ec914b4ae15232483e7cb",
+    "mode": 420,
+    "mtime_ns": 1790462954709751491
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2278,
+  "missingTryCorrected": true,
+  "allOldTestBodiesUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Native XRGB fill, keyed/mirrored equal-size copy, Release and windowed presentation run on the existing owner. This is not original Windows raster/format/font/device evidence.",
+    "Whole first-menu nontext operations use actual Native work. Three negative GetDC controls avoid GDI; unknown cursor pixels prevent presentation before service. A declared presentation reply is used only for full Core/Host comparison.",
+    "All95 includes5 new physical raster/menu/late-retry/presentation/protocol methods,89 retained methods and the existing3971-case BitmapDrawing method. Independent review/root promotion/Windows/input/audio/clean-Mac/full match/game remain open; NTSDApp still Practice.",
+    "Source59727 terminal at34 Objects; full137 and transport/provenance audits remain open. Unknown visible pixels, unsupported rectangles/stretch/self-copy/fullscreen/text and other device contracts remain explicit Native boundaries, not source-fault matches.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}

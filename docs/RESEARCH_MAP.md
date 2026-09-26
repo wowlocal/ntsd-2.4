@@ -1,5 +1,17 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Front raster correction1: caller diagnostic failure preserved](research/APPLICATION_MAC_FRONT_RASTER_CORRECTION1.md):
+The one-token guard correction builds; package bytes and1686 resources verify.
+First whole-menu test stops at unsupported Window `debug`:0 passed,94 unstarted
+of95 selected. This is a missing Native caller dependency, not a raster mismatch.
+[Publication](evidence/application-mac-front-raster-correction1.json). Candidate2278,
+4974-file artifact and131-member metadata archives verified; finalizer76110
+terminal0/absent, task frozen. Root1034/prior2257/base2278/source55 preserved.
+NEXT: explicit diagnostic callback and finite service controls in a new exact
+clone, preserving expected pixels/masks and all pre-raster tests. Previous all89
+remains checked. Windows/device/review/root promotion/full match/game remain open;
+EXE envelope not recalculated. Supersedes the guard-only NEXT below.
+
 [Native front raster candidate: compile failure preserved](research/APPLICATION_MAC_FRONT_RASTER.md):
 Fill/keyed-mirrored copy/Release/windowed presentation and journal service are
 implemented in a2278-file candidate, but build43929 failed on one missing try in

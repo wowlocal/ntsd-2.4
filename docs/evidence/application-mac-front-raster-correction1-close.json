@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd-application-mac-front-raster-correction1-validation-close-v1",
+  "UTC": "2026-09-26T22:49:27.575272+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927",
+  "externalFree": 148944904192,
+  "internalFree": 68182413312,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "prospectiveVMCommitment": 68719476736,
+  "observedFreeDecrease": 1202933760,
+  "physicalAllowance": 17179869184,
+  "publication": {
+    "bytes": 5846,
+    "sha256": "1e53a3d841199f24fe82c942fb42a232529710434fff5644fe26d6b042545cf7",
+    "mode": 420,
+    "mtime_ns": 1790462967575200888
+  },
+  "metadataArchive": {
+    "members": 131,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/metadata1.tar",
+    "bytes": 6092800,
+    "sha256": "aaeb3f4c3a1cc1bb52f41f59e388894df9d88bce3d0b5a4671d7c01d54c4016b",
+    "mode": 420,
+    "mtime_ns": 1790462967436873051
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/artifact-archive1",
+    "files": 4974,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11425577686,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-front-raster-correction1-20260927/artifact-archive1.json",
+      "bytes": 2628651,
+      "sha256": "fb0f77901cfeea072f2e5fd139aebef996f5cb6f99033905895bd527ca48966c",
+      "mode": 420,
+      "mtime_ns": 1790462954698830794
+    }
+  }
+}

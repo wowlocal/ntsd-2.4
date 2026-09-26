@@ -1,0 +1,11 @@
+--- a/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift
+@@ -584,7 +584,7 @@
+         if mirrored {
+             guard let effects,effects.count == 100 else { throw Boundary.arguments("front mirror effects") }
+             let r = try OriginalStateRecord(bytes:effects,defined:Array(repeating:true,count:100))
+-            guard try r.integer(at:0,as:UInt32.self) == 100,r.integer(at:4,as:UInt32.self) == 2 else { throw Boundary.unsupported("front mirror effect") }
++            guard try r.integer(at:0,as:UInt32.self) == 100,try r.integer(at:4,as:UInt32.self) == 2 else { throw Boundary.unsupported("front mirror effect") }
+         } else { guard effects == nil else { throw Boundary.arguments("unused front effects") } }
+         let key: [UInt32]?
+         if flags & 0x8000 != 0 {
