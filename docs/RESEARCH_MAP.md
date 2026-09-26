@@ -1,5 +1,16 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Original NTSD process live under CrossOver](research/CROSSOVER_REFERENCE_LAUNCH.md):
+Rosetta confirmed installed; NTSD24XP winxp/win32 Ready on X5. CLI bottle-path
+failure preserved; explicit CX_BOTTLE_PATH launches unchanged original copy.
+Wrapper33454/game33492 live, cwd/identity checked,1595 files unchanged. Menu not
+yet observed; user UI-status question pending, GStreamer warnings retained.
+[Checkpoint](evidence/crossover-reference-launch.json). Windows download94629 terminal1: one180s range timeout,
+175 validated ranges/1.485GB retained. NEXT: separately pinned smaller-range
+continuation, preserve live game, resolve UI status. No Windows/Native/full-game
+acceptance; independent review and previous gates remain open. Supersedes pending
+Rosetta/download-live status below.
+
 [CrossOver trial build installed; Rosetta confirmation pending](research/CROSSOVER_REFERENCE_SETUP.md):
 official26.3.0.39832, ZIP CRC/CodeWeavers signatures/Gatekeeper pass. Separate
 1595-file original game copy verified. Transport/wrapper failures preserved;

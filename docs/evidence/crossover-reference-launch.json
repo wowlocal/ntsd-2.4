@@ -1,0 +1,99 @@
+{
+  "UTC": "2026-09-26T18:46:19.024361+00:00",
+  "status": "original-process-live-menu-not-yet-observed",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926",
+  "RosettaObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/rosetta-observed2.json",
+    "bytes": 477,
+    "sha256": "04f500c06279f9040cc3a326be4790609e8338fe68cce4ab27f43c20adc62c94"
+  },
+  "bottleConfig": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/Bottles/NTSD24XP/cxbottle.conf",
+    "bytes": 14016,
+    "sha256": "d699008315552ed44e0dc019718e51bca771ea4cfe282a84c8e65f162267d448"
+  },
+  "bottleType": "winxp",
+  "WineArch": "win32",
+  "bottleUIStatus": "Ready",
+  "launch1": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/launch1.job.json",
+    "bytes": 1092,
+    "sha256": "01e20a8475e83eda0a47b96196c60b59a6b807e5ae1108fd01baa4ecfd810e3f"
+  },
+  "launch1Log": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/launch1.log",
+    "bytes": 337,
+    "sha256": "9f3e5c2e16f57e7da9f2cf02479b91a550403067e1a6c70964ba2f4c6ad35db3"
+  },
+  "launch1Diagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/launch1-diagnosis.json",
+    "bytes": 364,
+    "sha256": "22323c7f1d817165d8fa978f7ef3372db910e78024b11cde984dd57622194e2c"
+  },
+  "launch2AtObservation": {
+    "status": "running",
+    "pid": 33454,
+    "startedUTC": "2026-09-26T18:40:14.010813+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "33454 Sat Sep 26 21:40:13 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/launch2.py",
+    "command": [
+      "/Users/michael/Developer/ntsd-2.4/run-ntsd24.sh"
+    ],
+    "environmentOverrides": {
+      "GAME_DIR": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a",
+      "EXE_PATH": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a/NTSD 2.4.exe",
+      "BOTTLE": "NTSD24XP",
+      "CX_BOTTLE_PATH": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/Bottles"
+    },
+    "childPID": 33458,
+    "childIdentity": "33458 Sat Sep 26 21:40:14 2026     bash /Users/michael/Developer/ntsd-2.4/run-ntsd24.sh"
+  },
+  "gamePID": 33492,
+  "gameProcess": "33492     1 Sat Sep 26 21:40:15 2026     Z:\\Volumes\\X5\\ntsd-2.4-research\\01a0dc49-738f-7972-8fb0-e98fb2f34408\\crossover-reference-20260926\\game\\NTSD 2.4_2.0a\\NTSD 2.4.exe",
+  "gameCwd": "p33492\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/game/NTSD 2.4_2.0a\n",
+  "logSnapshot": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/launch2-log-checkpoint1.txt",
+    "bytes": 2599,
+    "sha256": "3e5e0c3ee96af2385664f517c1c37aea7ac1d65a6df7383da4539d110688e263"
+  },
+  "gameFilesStillMatch": 1595,
+  "agentMenuObserved": false,
+  "userMenuConfirmationPending": true,
+  "gameExecutedUnderCrossOver": true,
+  "WindowsObserved": false,
+  "NativeChanged": false,
+  "independentReview": false,
+  "reusableLauncher": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/crossover-reference-20260926/Run NTSD24XP.command",
+    "bytes": 497,
+    "sha256": "95c729a2d8daff9e9d8b257d3bb6552ff18a428cd9474f668ca75a73f3e109a0"
+  },
+  "WindowsDownload2": {
+    "status": "terminal",
+    "pid": 94629,
+    "startedUTC": "2026-09-26T18:18:06.137970+00:00",
+    "cwd": "/Users/michael/Developer/ntsd-2.4",
+    "identity": "94629 Sat Sep 26 21:18:06 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py",
+    "command": [
+      "python3",
+      "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/download2.py"
+    ],
+    "totalBytes": 7994415104,
+    "chunkBytes": 8388608,
+    "concurrency": 8,
+    "completedRanges": 175,
+    "completedBytes": 1484783616,
+    "maxSeconds": 7200,
+    "endedUTC": "2026-09-26T18:39:21.023954+00:00",
+    "elapsedSeconds": 1274.8853711250001,
+    "exitCode": 1,
+    "failures": [
+      {
+        "first": 1333788672,
+        "last": 1342177279,
+        "error": "AssertionError(('curl', 28))"
+      }
+    ]
+  },
+  "next": "preserve live original process, await visible menu/error information; continue official Windows download from validated ranges after diagnosed timeout"
+}
