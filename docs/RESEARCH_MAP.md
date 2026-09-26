@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Window exchange candidate](research/APPLICATION_WINDOW_EXCHANGE.md): pure
+prepared cursors plus external request permits/receipts implemented; no physical
+IO or duplicated window rules. Four files parse, ten methods selected; no build/
+comparison yet. Prior/root/source and all82 old test bodies preserved;2244-file
+candidate, four-file patch roundtrip and46-member metadata archive verified.
+Next: fresh build/package and all10 methods. Production provider/Host integration,
+independent review/devices/full catalog source/match/game remain open.
+[Publication](evidence/application-window-exchange.json).
+
 [Host delivery-context validation complete](research/APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
 all82 methods passed; fresh build and1686 package files verified, with exact
 retained17/48/14 schedules. Queue5193/finalizer98639 terminal0/absent. Complete

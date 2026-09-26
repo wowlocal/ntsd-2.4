@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Window exchange candidate](APPLICATION_WINDOW_EXCHANGE.md): additive Core
+receipt/suspension/claim/answer/failure owner implemented; same window/WinMain
+algorithms remain unchanged. Four Swift files parse; five new whole-caller/
+protocol/lifetime methods and five retained methods are selected, not executed.
+All old82 test bodies,385 fixtures,1301 resources and root1034/base2242/source55
+preserved. Four-file patch roundtrip,2244-file candidate archive and46-member PAX
+archive verified; finalizer37731 terminal0/absent, task frozen.
+[Publication](../evidence/application-window-exchange.json).
+NEXT: fresh bounded build, package verification and all10 complete methods on
+this exact candidate. This supplies before-consumption window response ownership;
+production provider/Host suspension integration, independent review/root promotion,
+real devices/full catalog source/Windows/clean-Mac/full match/game remain open.
+EXE envelope not recalculated. Supersedes the implementation NEXT below.
+
 [Host delivery-context validation complete](APPLICATION_HOST_DELIVERY_CONTEXT_VALIDATION.md):
 all82 methods passed on the unchanged2242-file candidate, including all76 prior
 whole catalog/Host/caller methods and the complete17/48/14 gameplay schedules.
