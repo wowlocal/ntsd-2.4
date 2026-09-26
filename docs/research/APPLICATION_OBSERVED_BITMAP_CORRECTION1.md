@@ -1,5 +1,16 @@
 # Observed bitmap Host — correction1 validation
 
+2026-09-26. **All69 selected methods passed** on unchanged correction1.
+Queue46279 completed with exit0 in661.361s; finalizer67686 completed with exit0
+in88.032s. Both are absent. Fresh build, exact package membership/bytes, complete
+method results, protected inputs, one-file patch and full archives verify. The
+[final publication](../evidence/application-observed-bitmap-correction1.json) and
+[closure](../evidence/application-observed-bitmap-correction1-close.json) supersede
+the live progress snapshot below. The task is frozen. Independent review, root
+promotion, rendered front/application/Windows/device acceptance remain open.
+
+## Preserved implementation and progress snapshot
+
 2026-09-26. Correction1 explicitly supplies `late:false` at the two test helper
 calls that collided with XCTestCase.run(). It preserves the original failed
 candidate, build diagnostics and verified archives. [Plan](APPLICATION_OBSERVED_BITMAP_CORRECTION1_PLAN.md),
@@ -57,3 +68,45 @@ nonpass; otherwise finalize all69/package/one-file patch/full artifacts using
 the already prepared finalizer. The live snapshot does not close full comparison,
 complete artifact archival or independent review. No new correction or build
 is justified while this queue is live. The full game goal stays active.
+
+## Complete comparison, preservation and next consumer
+
+All48 prior window/display/startup/bitmap/DIB/source-color methods and16 additional
+Host/Bootstrap/Graphics/delivery-context methods passed after the five new methods.
+Each of69 logs contains its exact selected method, one passed result and all three
+required one-test/zero-failure summaries. There were no guards, signals or residual
+observed processes. Test processes totaled470.961s;
+largest sampled process-tree RSS was10281713664 bytes. Samples
+are not continuous maxima; a missing short-process sample is not known zero.
+
+The three loaded-context methods retain their original1800s/16GiB limits. They
+exercise repeated loading on both allocation backings, late copy failure and
+retry, retained released resources and contexts that outlive Host. No method was
+split, skipped or repeated. The two earlier test-call errors remain in the original
+failed candidate and its log/archive; no expected or assertion was changed.
+
+Finalization verifies4954 regular candidate/release files and
+319 PAX metadata members by complete body/mode/nsmtime/membership.
+The correction patch reproduces exactly the two invocation changes. Root1034,
+prior2257, failed baseline2268, corrected2268 and source55 pins are preserved;
+385 fixtures and1301 runtime resource files agree with the built package.
+The earlier150-member progress archive was separately rechecked in full before
+closure. The read-only continuation analysis and its six input pins are included
+in the final metadata archive. No Native root promotion or original execution.
+
+Next implement Native window-geometry replies through the whole Host move callback
+and following first-menu presentation projection. The saved WINDOW_LIFECYCLE
+contract already fixes windowed clientRect → first screenPoint → second screenPoint
+→ windowDefault ordering and retains actual output bytes at0x453ccc. The physical
+window backend already owns real client/screen geometry but does not serve these
+lifecycle requests. This is a concrete missing input for front presentation.
+Freeze finite cases, coordinate policy, method limits and whole-caller late-rollback
+checks before new execution. Use controlled move-message stimuli with real Native
+geometry observations; automatic AppKit event translation and synchronous Windows
+callbacks remain separate required contracts.
+
+The historical109 explicit zero presentation rectangles remain unchanged. General
+Blt, text/color-key/format behavior and actual visible front acceptance also remain
+required. This closes bitmap request composition and its69-method validation, not
+rendered menu, input/audio, full loading/source137, Windows/clean-Mac, a full match
+or the complete game. The full goal remains active; EXE envelope not recalculated.

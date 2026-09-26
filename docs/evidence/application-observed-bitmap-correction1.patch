@@ -1,0 +1,20 @@
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationObservedBitmapTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationObservedBitmapTests.swift
+@@ -152,7 +152,7 @@
+         print("Whole first-menu physical bitmap replies",receipts.count,"surfaces",bindings.surfaces.count)
+     }
+     func testWholeFrontRetainsPhysicalBitmapRepliesOnHost() throws {
+-        let r = try run();defer { try? D().close(r.startup) };try check(r)
++        let r = try run(late:false);defer { try? D().close(r.startup) };try check(r)
+     }
+     func testLateFailuresRetryWithoutRepeatingPhysicalWork() throws {
+         let r = try run(late:true);defer { try? D().close(r.startup) };try check(r)
+@@ -208,7 +208,7 @@
+         weak var lease: OriginalMacDisplayBackend.Resource?
+         var saved: Host.DeliveryContext?
+         func exercise() throws {
+-            let r = try run();defer { try? D().close(r.startup) }
++            let r = try run(late:false);defer { try? D().close(r.startup) }
+             let host = r.startup.host,receipts = r.driver.exchangeSnapshot.receipts
+             let token = try XCTUnwrap(receipts.first { $0.request.value.kind == "createSurface" }?.response.output)
+             lease = try r.startup.setup.display.lease(token)

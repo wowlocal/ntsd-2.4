@@ -1,5 +1,21 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Observed bitmap Host integration passes all69 methods](research/APPLICATION_OBSERVED_BITMAP_CORRECTION1.md):
+whole first-menu425 physical bitmap replies/25 surfaces, Core prepared replay,
+full colors/masks, late rollback, missing-resource diagnostics and retained owners
+pass, together with all48 prior and16 Host/Bootstrap/Graphics/context methods.
+Queue46279 terminal0/absent after661.361s; fresh package201Core/61Reference/
+7MacPlatform/282tests and1686 resources verified. Finalizer67686 terminal0/absent;
+4954-file artifact/319-member metadata, one-file patch and earlier150-member
+progress archive verified. Task frozen; failed candidate/root/prior/source intact.
+[Publication](evidence/application-observed-bitmap-correction1.json).
+NEXT: bounded Native window-geometry replies through whole Host WM_MOVE and the
+following first-menu presentation projection. Preserve exact historical zero
+rectangles; use actual owned geometry and ordered replies, with late rollback.
+Automatic callbacks/general raster/other IO/independent review/root promotion/
+Windows/input/audio/clean-Mac/full match/game remain open. NTSDApp still Practice;
+EXE envelope not recalculated. Supersedes live-queue NEXT below.
+
 [Observed bitmap correction1: build/package and five new methods pass](research/APPLICATION_OBSERVED_BITMAP_CORRECTION1.md):
 only two test helper calls now explicitly supply late:false; production and all
 assertions unchanged. Whole first-menu425 actual bitmap replies/25 surfaces,

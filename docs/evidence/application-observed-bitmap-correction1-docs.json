@@ -1,0 +1,49 @@
+{
+  "UTC": "2026-09-26T17:10:01.009706+00:00",
+  "head": "fd4094349c4364290a30a27eca0a4ef6a6abc877",
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "beforeWorkingSHA256": "5ee7b897097f6c05cd0f7d32b4e88b20d2f8f58fc3007ac993ddae88061a2db3",
+      "afterWorkingSHA256": "dafb37f0f696f375082fc8fa6ef7746e3181c3307640347ccf1c73a12ec07698",
+      "headSHA256": "8dcd6b4eced31f482f75402fb03e6df33cba902ac59cc4749dc55781cca3dfbf",
+      "stagedSHA256": "5dede20514e5aa98dc61115e9903ab6001c156400a30e6d72ef542cb698b4928",
+      "indexBlob": "545095d0a8a50ff495daa180953af29f3a1b84d7",
+      "unrelatedWorkingContentPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "beforeWorkingSHA256": "93cdefa255f476b69d88456325040fd37460011939d8502b87d1a811efd866ff",
+      "afterWorkingSHA256": "ecb361385389940976ba2fd2ff32d9fb49799639d70697ae69b29247ae5981b4",
+      "headSHA256": "4711eeeb63d47977b7b1773c03836f05935d452774aad9627c7963bcb22a98eb",
+      "stagedSHA256": "4b5ad4ad4f44af70b269eecdfb8047eb929f9035d9340c990a8a4b840e8f4628",
+      "indexBlob": "caabb493ba83fa03617962f6c2c64d10acb5c738",
+      "unrelatedWorkingContentPreserved": true
+    }
+  ],
+  "ownedFiles": [
+    "docs/research/APPLICATION_OBSERVED_BITMAP_CORRECTION1.md",
+    "docs/evidence/application-observed-bitmap-correction1.json",
+    "docs/evidence/application-observed-bitmap-correction1-close.json",
+    "docs/evidence/application-observed-bitmap-correction1.patch"
+  ],
+  "checks": {
+    "all69Passed": true,
+    "packageBytes": true,
+    "fullArchives": true,
+    "progressArchiveRechecked": true,
+    "oldFailurePreserved": true,
+    "protectedInputs": true
+  },
+  "nextEvidence": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-observed-bitmap-correction1-20260926/continuation-analysis1.json",
+    "bytes": 4317,
+    "sha256": "4db6373159a9537fed992331aec50df59a24f261023c874fe7c164cdd51fadcd",
+    "mode": 420,
+    "mtime_ns": 1790442187333809876
+  },
+  "independentReview": false,
+  "originalExecuted": false,
+  "nativeRootModified": false,
+  "EXEEnvelopeRecalculated": false
+}
