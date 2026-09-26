@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Display candidate compile failure preserved](APPLICATION_MAC_DISPLAY_VALIDATION.md):
+build20523 terminal1/absent; observation known-pixel count remains Int? where Int is
+required. No package acceptance or XCTest; all34 methods unstarted. Failed2261
+candidate and partial build preserved;4339-file artifact/27-member metadata archives
+verified, finalizer25731 terminal0/absent, task frozen. Root/prior/source unchanged.
+[Publication](../evidence/application-mac-display-validation.json).
+NEXT: separate exact-clone correction explicitly unwrapping storage for the same
+Int pixel-count expression, then fresh build/package/all34 with unchanged methods
+and limits. No pixel mutation/allocation/reference/Core/expected change. Independent
+review/root promotion/actual clear/readback/general raster/presentation/conversion/
+callbacks/fullscreen/providers/loading/Windows/visual/input/audio/clean-Mac/full
+match/game remain open; EXE envelope not recalculated. Supersedes fresh34 NEXT below.
+
 [Native display-resource candidate](APPLICATION_MAC_DISPLAY.md): owned display,
 primary/backbuffer/clipper allocations, shared window/resource tokens and masked
 full-color clear/image delivery implemented. Fresh pixels remain unknown; primary

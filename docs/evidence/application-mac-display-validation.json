@@ -1,0 +1,101 @@
+{
+  "schema": "ntsd-mac-display-validation-v1",
+  "UTC": "2026-09-26T14:52:49.021854+00:00",
+  "status": "build-failed-before-tests",
+  "baseHead": "739ac2e70d5cfa6084ebe5f9105c36fec799e3f3",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/candidate1-inputs.json",
+    "bytes": 570854,
+    "sha256": "c6077a1eeaec431860dc58930ac8eed593faba350870bc597cf256383bc5905f",
+    "mode": 420,
+    "mtime_ns": 1790433947228436752
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/context1.json",
+    "bytes": 26746,
+    "sha256": "74ee9470f2c8919d3e318fe207207d96b929abaed4d4c3f14a9fb738f2139b43",
+    "mode": 420,
+    "mtime_ns": 1790434111698244954
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/build1.job.json",
+    "bytes": 52409,
+    "sha256": "fd680ac8a0436af8d593085d309ffe0abbd2ee6299235752052d6bd45df97ec6",
+    "mode": 420,
+    "mtime_ns": 1790434234043264526
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/failure-diagnosis1.json",
+    "bytes": 1563,
+    "sha256": "cdb1fd21b4b261fcd6d919ab0ee6c9eae4dbb6131b76d058bb87c7b5964cb35e",
+    "mode": 420,
+    "mtime_ns": 1790434315106550972
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/verification1.json",
+    "bytes": 3795,
+    "sha256": "cebb7fa5483747c8e0654d45af64396e100a4a33ec2101e9ddc4645116838ee2",
+    "mode": 420,
+    "mtime_ns": 1790434366754664346
+  },
+  "passedMethods": 0,
+  "selectedMethods": 34,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/artifact-archive1",
+    "files": 4339,
+    "directories": 131,
+    "links": 0,
+    "bytes": 10375219784,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/artifact-archive1.json",
+      "bytes": 2250475,
+      "sha256": "93206dc83b2bccd37a6709ca0401d7a89a3c1dd8b18d0279e55407304d4bc56d",
+      "mode": 420,
+      "mtime_ns": 1790434366746683399
+    }
+  },
+  "metadataArchive": {
+    "members": 27,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/metadata1.tar",
+    "bytes": 3778560,
+    "sha256": "6ed7a7039246b49a912dd66d2291f9e4bf5a9881c1f41d98c639ea08bd620cc7",
+    "mode": 420,
+    "mtime_ns": 1790434368920572983
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-display-validation-20260926/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "7805d85741501b6fc0284d1c2c611a2fbd1e7e21b1bcd591d7b37a4d995cdcca",
+    "mode": 420,
+    "mtime_ns": 1790434366754528429
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateUnchanged": 2261,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Controlled responses do not establish actual Windows or host device behavior.",
+    "Source59727 terminal at its previously recorded34-Object publication boundary; full137 and transport/provenance audits remain open.",
+    "This physical-display candidate has not compiled or run any of the34 selected methods. Prior window29 evidence remains separate. AppKit clear/readback, independent review and all declared Windows/application gates remain open.",
+    "Short processes can finish before RSS sample; recorded0 is not known zero."
+  ]
+}
