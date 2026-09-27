@@ -1,0 +1,115 @@
+{
+  "schema": "ntsd-utm-screenshot-capability-v1",
+  "UTC": "2026-09-27T06:21:07.091744+00:00",
+  "purpose": "Find an observable guest display for the authorized NTSD Windows reference installation while the host screen is locked.",
+  "scope": "Read-only official UTM4.7.5 source/docs, installed bundle inventory, two defaults keys, task VM filenames/config and process identity. No API library loaded or SPICE/QMP connection created.",
+  "metadataAllowanceBytes": 2097152,
+  "externalFree": 138554400768,
+  "externalReserve": 129922760704,
+  "installedVersion": "4.7.5",
+  "installedBuild": "118",
+  "processPID": 43650,
+  "processIdentityMatchesPrior": true,
+  "processCwdMatchesPrior": true,
+  "config": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/config.plist",
+    "bytes": 3396,
+    "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6",
+    "mode": 420,
+    "mtime_ns": 1790451165539774540
+  },
+  "configUnchanged": true,
+  "displayHardware": "virtio-ramfb-gl",
+  "diskInterface": "NVMe",
+  "packageImageFiles": [],
+  "packagePlistFiles": [
+    "config.plist"
+  ],
+  "lockFlags": [
+    {
+      "CGSSessionScreenIsLocked": true,
+      "kCGSSessionOnConsoleKey": true
+    }
+  ],
+  "installedFrameworks": [
+    "spice-server.1.framework",
+    "spice-client-glib-2.0.8.framework"
+  ],
+  "cocoaSpiceStandaloneFrameworkOrHeadersFound": false,
+  "preferenceQueries": [
+    {
+      "key": "NoScreenshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Error: Domain 'com.utmapp.UTM' not found.",
+      "value": "unknown"
+    },
+    {
+      "key": "NoSaveScreenshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Error: Domain 'com.utmapp.UTM' not found.",
+      "value": "unknown"
+    }
+  ],
+  "officialSources": [
+    {
+      "url": "https://github.com/utmapp/CocoaSpice",
+      "finding": "SDK advertises Unix socket connections and display screenshots. This is library capability, not an installed screenshot CLI."
+    },
+    {
+      "url": "https://docs.getutm.app/preferences/macos/",
+      "finding": "Documents automatic screenshots and a separate disk-save preference; screenshot normally lives in the VM package."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMVirtualMachine.swift",
+      "finding": "60-second timer calls takeScreenshot; saveScreenshot is separate and writes screenshot.png when enabled. The docs say30s, so this versioned source is more precise for the installed version."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMSpiceVirtualMachine.swift",
+      "finding": "SPICE takeScreenshot updates the in-memory property and does not call saveScreenshot."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMQemuVirtualMachine.swift",
+      "finding": "Default suspend-state save and terminal stop call saveScreenshot. determineSnapshotSupport rejects GL display hardware and NVMe. Both conditions occur in the unchanged VM config."
+    },
+    {
+      "url": "https://docs.getutm.app/scripting/reference/",
+      "finding": "suspend saving true is a documented state-changing operation; it is not a read-only screenshot request."
+    }
+  ],
+  "conclusions": [
+    "Waiting for the periodic timer alone does not establish a fresh disk PNG.",
+    "Static source/config inference: saved-state capture is unsupported for this VM; not experimentally attempted.",
+    "No existing disk screenshot or installed direct screenshot command established. A second SPICE client could affect the current session; its coexistence was not established or tested."
+  ],
+  "errors": [
+    {
+      "chunk": "ab6fd6",
+      "operation": "Public GitHub v4.7.5 tree read with urllib,2MiB cap,20s timeout",
+      "exactError": "urllib.error.URLError: <urlopen error Remote end closed connection without response>",
+      "classification": "transport error, no safety-refusal message"
+    },
+    {
+      "operation": "web open of the same public GitHub tree URL",
+      "exactError": "Internal Error",
+      "classification": "reader error; versioned source files were subsequently readable through web"
+    },
+    {
+      "chunk": "b2bbc7",
+      "operation": "Read two named UTM defaults keys",
+      "exactError": "Error: Domain 'com.utmapp.UTM' not found.",
+      "classification": "unknown preference values, not false/disabled values"
+    }
+  ],
+  "VMRestarted": false,
+  "VMSuspended": false,
+  "guestInputPerformed": false,
+  "settingsChanged": false,
+  "hostUnlockAttempted": false,
+  "privatePathRetry": false,
+  "installerApprovalRetained": true,
+  "lastGuestScreen": "Previously observed Windows11Home EULA; no new guest frame obtained.",
+  "independentReview": false,
+  "next": "Continue the current Native comparison. Reobserve the same approved installer when its display becomes available; do not infer pixels or send blind input."
+}

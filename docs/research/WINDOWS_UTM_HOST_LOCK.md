@@ -43,3 +43,25 @@ read error corrected using the physical path already present in the QEMU command
 No SPICE/QMP connection, guest command, UI input, VM restart or configuration
 change occurred. The last actual guest screen remains the approved EULA;
 installation is still incomplete. The separate Native loading queue continues.
+
+The [screenshot capability follow-up](../evidence/windows-utm-screenshot-capability.json)
+checks installed4.7.5/build118 against versioned public source. The
+[CocoaSpice SDK](https://github.com/utmapp/CocoaSpice) supports guest display
+screenshots and Unix sockets, but that does not supply an installed capture CLI.
+No second client was connected; its effect on the current session is unverified.
+
+The [4.7.5 timer](https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMVirtualMachine.swift)
+runs every60 seconds, while the general documentation says30. It calls
+[the SPICE capture method](https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMSpiceVirtualMachine.swift),
+which updates in-memory image state without saving a PNG. Disk saving is separate;
+there is still no screenshot file in this task's VM package. Two named defaults
+queries returned an absent domain, so the actual preference values are unknown.
+
+[QEMU VM source](https://raw.githubusercontent.com/utmapp/UTM/v4.7.5/Services/UTMQemuVirtualMachine.swift)
+saves the image during default saved-state creation or terminal stop. It rejects
+saved states for GL displays and NVMe drives; the pinned VM has both. This is a
+source/config inference, not an attempted suspend or a new runtime error.
+No suspension, restart, configuration/preference change, guest input, host unlock
+or denied-path retry occurred. Process43650 and config remain unchanged. The
+receipt preserves the public-tree transport/reader errors separately. Windows
+installation and actual font/cursor observations remain open; approval persists.
