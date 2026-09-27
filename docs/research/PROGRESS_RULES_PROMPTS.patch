@@ -1,0 +1,59 @@
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -27,6 +27,16 @@
+ instructions and dated states, not an instruction to restart historical work.
+ Keep this file concise; put new detailed results in study documents and update
+ CURRENT_WORK with links. Do not paste the whole archive into every task.
++
++## Progress and validation bounds
++
++User update, 2026-09-27: follow [PROGRESS_RULES](docs/research/PROGRESS_RULES.md)
++for task selection and new runs. After a checked candidate, prioritize transfer
++into `native/` and its ready consumer; name evidence for any integration blocker.
++Routine corrections stay within the same mechanism, with preserved failures and
++separate run IDs. Count correction rounds across renamed tasks; reuse configured
++tools and run required comparisons after cheap checks. The supplement takes
++precedence over older process guidance; fidelity, review and live pins remain binding.
+
+ ## Authoritative reference
+
+--- a/docs/research/WORKFLOW.md
++++ b/docs/research/WORKFLOW.md
+@@ -5,6 +5,13 @@
+ шаблону. Область совместимости и требования точности из [AGENTS.md](../../AGENTS.md)
+ сохраняются. Это рабочие инструкции, а не программная песочница или гарантия
+ отсутствия ложных срабатываний.
++
++## Дополнение о продвижении реализации
++
++По указанию пользователя от 2026-09-27 применять [PROGRESS_RULES](PROGRESS_RULES.md)
++к выбору задач, исправлениям, инструментам и новым проверкам. При противоречии
++процессных указаний действует дополнение. Обязательные behavioral gates, review,
++неизменяемые эталоны и protected inputs действующих jobs сохраняются.
+
+ ## Результат и единица работы
+
+--- a/docs/research/TASK_TEMPLATE.md
++++ b/docs/research/TASK_TEMPLATE.md
+@@ -2,6 +2,12 @@
+
+ Порядок работы: [WORKFLOW](WORKFLOW.md). Шаблон для новой/незавершённой работы;
+ старые принятые карточки и frozen plans ради него не переписывать.
++Применять [PROGRESS_RULES](PROGRESS_RULES.md). Обычное исправление записывается
++как новый run ID и короткое дополнение текущей карточки, без копии всего шаблона.
++
++**Потребитель в native/ и критерий интеграции / доказанный блокер:** …
++**Причина нового запуска / проверки, действительные по прежним pins:** …
++**Раунд механизма, включая прежние названия / дешёвые проверки перед дорогими:** …
+
+ **Статус:** очередь / исследование / перенос / проверка / закрыта в объявленном объёме.
+ **Игровой результат и ближайшая сквозная веха:** …
+@@ -112,7 +118,7 @@
+ - [ ] Карта, адреса, EX-исключения и продолжения обновлены.
+
+ **Фактический результат:** команды, числа, хеши, дата, ограничения.
+-**Коммит результата:** после его создания; не выполнять коммит автоматически.
++**Коммит результата:** hash после обязательного коммита проверенного этапа по WORKFLOW.
+ **Следующая карточка:** одна конкретная задача и основание выбора.
+ **Открытые зависимости / ограничения / incidents:** …
+ **Передача:** короткая ссылка в [CURRENT_WORK](CURRENT_WORK.md), подробности здесь.

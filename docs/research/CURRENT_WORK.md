@@ -10,6 +10,13 @@ queue51788: сначала её терминальный результат и �
 Пока очередь работает, сверить состав переноса и реальные недостающие providers;
 не запускать новую серию подготовки/упаковки вместо реализации.
 
+Указание пользователя 2026-09-27: применять [правила продвижения](PROGRESS_RULES.md)
+при выборе следующей работы и новых запусках. Живая loading-arena queue сохраняет
+прежние inputs/лимиты; AGENTS/WORKFLOW/TASK_TEMPLATE закреплены её protected pins.
+После терминального результата, проверки и публикации всех зависимых jobs
+подключить подготовленную [правку промптов](PROGRESS_RULES_PROMPTS.patch).
+Это процессное изменение; новая Native/gameplay приёмка не заявлена.
+
 [Complete loading test: front storage correction passes its new control](APPLICATION_LOADING_ARENA.md):
 Candidate2291 changes only two test files; old defaults,166 test bodies/limits,
 all production and source expectations remain intact. New arena6f000000 avoids
