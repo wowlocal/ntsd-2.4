@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Native PCM correction1: package passes, snapshot test crashes](APPLICATION_MAC_AUDIO_CORRECTION1.md):
+Two optional assertions corrected; build78660 terminal0/absent and1686-resource
+package pass. First XCTest97182 exits-11 at a temporary PCM snapshot pointer;
+release/disassembly and matching crash UUID establish the test lifetime defect.
+0 passed/119 unstarted of120; queue97025 terminal1/absent. [Publication](../evidence/application-mac-audio-correction1.json), [failure](../evidence/application-mac-audio-correction1-failure.json).
+One-file patch and4986-file/162-member archives verify; finalizer527 terminal0/
+absent. Extra disk-key observation error preserved. Root1034/prior2257/base2284/
+source55 and preceding all105 unchanged. NEXT: exact-clone correction2 retains
+PCM owners through raw-pointer reads; same120 methods/limits, fresh build/package.
+No frozen job restart. Common/catalog/playback/WMA/device, review/root promotion,
+Windows/clean-Mac/full match/game and incidents remain open; host locked, approvals
+retained. EXE envelope unchanged. Supersedes the optional-assertion NEXT below.
+
 [Own Native PCM startup candidate: two test type errors retained](APPLICATION_MAC_AUDIO.md):
 Device-independent WAV preparation and actual AVAudioPCMBuffer owner/service are
 implemented in2284 files. Core/Mac compile; new test optional accesses fail at

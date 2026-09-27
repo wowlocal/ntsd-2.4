@@ -1,0 +1,20 @@
+--- a/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift
+@@ -123,7 +123,7 @@
+             let (r,e) = try load(s,f,d,i)
+             XCTAssertEqual(r.exit,.returned);XCTAssertEqual(r.returned,1);XCTAssertFalse(r.temporaryLive)
+             XCTAssertEqual(r.first.bytes,f.payload);XCTAssertTrue(r.first.defined.allSatisfy { $0 });XCTAssertNil(r.second)
+-            XCTAssertEqual(r.initialStorage.first.bytes,[]);try check(b,r.output,f)
++            XCTAssertEqual(try XCTUnwrap(r.initialStorage).first.bytes,[]);try check(b,r.output,f)
+             XCTAssertEqual(e.snapshot.receipts.count,4)
+             guard case .waveAudio(.locked(_,let lock?)) = e.snapshot.receipts[1].response else { throw Stop.bound }
+             XCTAssertTrue(try XCTUnwrap(lock.first).storage.defined.allSatisfy { !$0 })
+@@ -145,7 +145,7 @@
+         let package = try OriginalApplicationStartupInputsTests.shared.get(),(p,initial) = try W.D().inputs()
+         let full = try W.Old().preparation(p),values = try A.Service(p,package)
+         var prepared = W.Observed.constants(full);prepared.observesAudio = true;prepared.waves = [];prepared.waveInputs = []
+-        let files = try full.waves.map { try file($0.request.path,package.file($0.request.path)) }
++        let files = try full.waves.map { try file($0.request.path,XCTUnwrap(package.file($0.request.path))) }
+         prepared.waveFiles = zip(full.waves,files).map { row,f in
+             .init(.init(row.request.index,row.request.path,row.request.destination),OriginalWaveFileInput(f.input(row.request.destination,0)))
+         }

@@ -1,0 +1,121 @@
+{
+  "schema": "ntsd-mac-audio-correction1-docs-v1",
+  "UTC": "2026-09-27T01:51:47.155669+00:00",
+  "baseHead": "f2668aafc6d326a7b76160dc5e2ce233be2cd84f",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/publication1.json",
+    "bytes": 6152,
+    "sha256": "b26aad2435e4ea6f20343575174be74ad737976fcbc14727da91b7692baafa71",
+    "mode": 420,
+    "mtime_ns": 1790473856563460394
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/finalize1.job.json",
+    "bytes": 828,
+    "sha256": "9d6dd31899fc781087fa7f16f45e9d138766dbf075360dab6831991019292157",
+    "mode": 420,
+    "mtime_ns": 1790473856564414856
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_CORRECTION1_PLAN.md",
+      "bytes": 3434,
+      "sha256": "74139ff914e703c94ea9a4d7ff0dd6595d5e007324810b641e21f68c30f9b3c7",
+      "mode": 420,
+      "mtime_ns": 1790473019019176183
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_CORRECTION1.md",
+      "bytes": 4614,
+      "sha256": "90325a164b83b59144ab5ae757113305f569f76e0e38c910582f83c4e153d0d3",
+      "mode": 420,
+      "mtime_ns": 1790473849655004055
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/apply_mac_audio_optional_correction.py",
+      "bytes": 666,
+      "sha256": "cdd01b78f18ee1cf813becb083d3ae71515ef2cfae36b0025a66be61d74f951b",
+      "mode": 420,
+      "mtime_ns": 1790473019020303936
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_mac_audio_correction1.py",
+      "bytes": 13626,
+      "sha256": "1d5ed57b0f8b65e942fd2e77013f74a3324bf2ef4e5cee3529de3dc3a1d1e3e0",
+      "mode": 420,
+      "mtime_ns": 1790473019098834221
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_mac_audio_correction1.py",
+      "bytes": 20936,
+      "sha256": "6de0021558028c6cdcb9843fb6dbb273e8dda04dc475f39a4fa0cedf634ca654",
+      "mode": 420,
+      "mtime_ns": 1790473068911018203
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction1.json",
+      "bytes": 6152,
+      "sha256": "b26aad2435e4ea6f20343575174be74ad737976fcbc14727da91b7692baafa71",
+      "mode": 420,
+      "mtime_ns": 1790473856564216563
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction1-close.json",
+      "bytes": 1692,
+      "sha256": "4d2bb0302bc2beb98e11d8f0f1559beae3c8bb37d3d529d79ea83204a1fdaa04",
+      "mode": 420,
+      "mtime_ns": 1790473856564330022
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction1-failure.json",
+      "bytes": 7373,
+      "sha256": "81bb340fd892cbd4f382c79c80d52de372b2c23fe9a9d3f4beeb3d746be4d825",
+      "mode": 420,
+      "mtime_ns": 1790473783254869321
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction1.patch",
+      "bytes": 1650,
+      "sha256": "2f0daa696bcf928cd6cbbfbeddeb0cda8ad5ccb22cbe396f4aeeddf7c78c86b9",
+      "mode": 420,
+      "mtime_ns": 1790473798867477446
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "0ba6cd2dcfd9a7d38a1778cb137a6d0cd9a26f49",
+      "blockSHA256": "b4f1337568f505aa2d997d3b0a8268444e313b227aa73acc720ad2e1aa6293b1",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "a459352e3ca6346a1f848030c5f8c8809377a3b2",
+      "blockSHA256": "b9b44db854ed1458b9f0ed4fb285c3ad19fbe21a394f0c23927507ab77e012db",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "buildPassed": true,
+  "packagePassed": true,
+  "startedMethods": 1,
+  "passedMethods": 0,
+  "unstartedMethods": 119,
+  "selectedMethods": 120,
+  "priorAll105Unchanged": true,
+  "sourceExecuted": false,
+  "physicalEndpointExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "artifactFiles": 4986,
+  "metadataMembers": 162,
+  "metadataSHA256": "d44674ccc9885ef638a0baca86bd77703b32859a88f4b8ab86de7b43760f70b9",
+  "whitespaceCheck": {
+    "exitCode": 0,
+    "exactOutput": "",
+    "exceptions": [],
+    "allOtherFilesClean": true
+  },
+  "next": "new exact clone with retained test PCM owners; same120 checks"
+}

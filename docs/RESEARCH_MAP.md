@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native PCM correction1](research/APPLICATION_MAC_AUDIO_CORRECTION1.md):
+Build/package pass after two optional assertions. First test crashes at a pointer
+from a released temporary PCM snapshot; matching binary/disassembly proves the
+test lifetime defect.0 passed/119 unstarted;4986-file/162-member archives verify.
+Next: retain test owners through raw reads in correction2 and preserve all120
+checks. Core/Mac/expected bytes unchanged; audio/Windows/review/integration open.
+[Evidence](evidence/application-mac-audio-correction1.json).
+
 [Own Native PCM startup candidate](research/APPLICATION_MAC_AUDIO.md):
 2284 files implement device-independent file binding and owned PCM buffers/service.
 Core/Mac compile; two missing optional unwraps in the new tests stop build60564.

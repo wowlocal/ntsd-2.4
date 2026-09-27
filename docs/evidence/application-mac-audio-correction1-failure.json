@@ -1,0 +1,200 @@
+{
+  "schema": "ntsd-application-mac-audio-correction1-failure-v1",
+  "UTC": "2026-09-27T01:49:43.252788+00:00",
+  "classification": "native-test-process-failure",
+  "buildPassed": true,
+  "packagePassed": true,
+  "passedMethods": 0,
+  "startedMethods": 1,
+  "unstartedMethods": 119,
+  "method": "OriginalMacAudioBackendTests/testOriginalWAVsThroughOwnedBuffers",
+  "pid": 97182,
+  "exitCode": -11,
+  "guardReason": null,
+  "signalsByRunner": [],
+  "remainingProcessGroup": [],
+  "remainingObservedProcesses": {},
+  "testJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01.job.json",
+    "bytes": 3908,
+    "sha256": "938eb6cedc418f847c1b63d184bc6b31893e56206eaf5c5026b1d82b723ffcf3",
+    "mode": 420,
+    "mtime_ns": 1790473670969006644
+  },
+  "testLog": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01.log",
+    "bytes": 324,
+    "sha256": "e45b240ad1893825a1f93547d73d6e6b012bc8c3093d89d4b25210211fcf6457",
+    "mode": 420,
+    "mtime_ns": 1790473669894644702
+  },
+  "queueJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/tests1-queue.job.json",
+    "bytes": 2067,
+    "sha256": "34350d3fd8f0134d88ce461dcaf46a6d00481b55c17e1166d2dde51ea6af2139",
+    "mode": 420,
+    "mtime_ns": 1790473670972464530
+  },
+  "crashProvenance": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01-crash-provenance1.json",
+    "bytes": 983,
+    "sha256": "9dee12922b06bf183b233d00ee0085400a455488c1e35326baa24cdaa5ab2529",
+    "mode": 420,
+    "mtime_ns": 1790473723725862839
+  },
+  "exception": {
+    "codes": "0x0000000000000001, 0xe20a46a90e33d204",
+    "rawCodes": [
+      1,
+      -2158835379469037052
+    ],
+    "type": "EXC_BAD_ACCESS",
+    "signal": "SIGSEGV",
+    "subtype": "KERN_INVALID_ADDRESS at 0xe20a46a90e33d204"
+  },
+  "termination": {
+    "flags": 0,
+    "code": 11,
+    "namespace": "SIGNAL",
+    "indicator": "Segmentation fault: 11",
+    "byProc": "exc handler",
+    "byPid": 97182
+  },
+  "faultFrames": [
+    {
+      "imageOffset": 15082936,
+      "sourceFile": "/<compiler-generated>",
+      "symbol": "implicit closure #21 in OriginalMacAudioBackendTests.check(_:_:_:)",
+      "symbolLocation": 124,
+      "imageIndex": 27
+    },
+    {
+      "imageOffset": 15145592,
+      "sourceFile": "/<compiler-generated>",
+      "symbol": "partial apply for implicit closure #21 in OriginalMacAudioBackendTests.check(_:_:_:)",
+      "symbolLocation": 20,
+      "imageIndex": 27
+    },
+    {
+      "imageOffset": 440704,
+      "symbol": "closure #1 in XCTAssertEqual<A>(_:_:_:file:line:)",
+      "symbolLocation": 224,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 421252,
+      "symbol": "partial apply for closure #1 in XCTAssertEqual<A>(_:_:_:file:line:)",
+      "symbolLocation": 32,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 416260,
+      "symbol": "partial apply for closure #1 in XCTAssertEqual<A>(_:_:_:file:line:)",
+      "symbolLocation": 16,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 402768,
+      "symbol": "closure #1 in _XCTRunThrowableBlock(_:)",
+      "symbolLocation": 44,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 451336,
+      "symbol": "thunk for @callee_guaranteed () -> ()",
+      "symbolLocation": 28,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 451376,
+      "symbol": "thunk for @escaping @callee_guaranteed () -> ()",
+      "symbolLocation": 28,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 119896,
+      "symbol": "_XCTRunThrowableBlockBridge",
+      "symbolLocation": 40,
+      "imageIndex": 2
+    },
+    {
+      "imageOffset": 402560,
+      "symbol": "_XCTRunThrowableBlock(_:)",
+      "symbolLocation": 240,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 414892,
+      "symbol": "XCTAssertEqual<A>(_:_:_:file:line:)",
+      "symbolLocation": 264,
+      "imageIndex": 28
+    },
+    {
+      "imageOffset": 15118520,
+      "sourceLine": 117,
+      "sourceFile": "OriginalMacAudioBackendTests.swift",
+      "symbol": "specialized OriginalMacAudioBackendTests.check(_:_:_:)",
+      "imageIndex": 27,
+      "symbolLocation": 1248
+    },
+    {
+      "imageOffset": 15119812,
+      "sourceFile": "/<compiler-generated>",
+      "symbol": "OriginalMacAudioBackendTests.check(_:_:_:)",
+      "imageIndex": 27,
+      "symbolLocation": 16,
+      "inline": true
+    },
+    {
+      "imageOffset": 15119812,
+      "sourceLine": 126,
+      "sourceFile": "OriginalMacAudioBackendTests.swift",
+      "symbol": "specialized OriginalMacAudioBackendTests.testOriginalWAVsThroughOwnedBuffers()",
+      "imageIndex": 27,
+      "symbolLocation": 1244
+    },
+    {
+      "imageOffset": 15104720,
+      "symbol": "@objc OriginalMacAudioBackendTests.testOriginalWAVsThroughOwnedBuffers()",
+      "symbolLocation": 32,
+      "imageIndex": 27
+    }
+  ],
+  "binaryImageUUID": "8213c4aa-ef88-3da0-a9b8-95e7e81485ae",
+  "diagnosis": "Test line117 reads floatChannelData from a temporary pcmSnapshot owner. The generated nested closure calls pcmSnapshot at0xe625ec, obtains floatChannelData at0xe625fc, calls objc_release at0xe62608 and returns only the pointer. Caller dereferences it at0xe625b4/0xe625b8; crash PC0xe625b8. Buffer lifetime is not retained through the dereference.",
+  "disassembly": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01-fault-disassembly1.txt",
+      "bytes": 4128,
+      "sha256": "76da8ff9047684bcb9a23add48f5f1a3f2d7fe2eca84fb9da06fe21742f689c9",
+      "mode": 420,
+      "mtime_ns": 1790473734031350911
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01-snapshot-lifetime-disassembly1.txt",
+      "bytes": 1958,
+      "sha256": "202c9c561cf28ecbd3647c5c4307c37121275b3b418ec813307394154ddd01aa",
+      "mode": 420,
+      "mtime_ns": 1790473741811293017
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/test-01-release-symbol1.txt",
+      "bytes": 40,
+      "sha256": "c46b6ed7f2e50821acedb5f4e6d43edf8ca1231fb501894d217006627d4128eb",
+      "mode": 420,
+      "mtime_ns": 1790473755872203101
+    }
+  ],
+  "next": "Separate correction2 retains snapshot owner with withExtendedLifetime through all raw-pointer reads in the new tests; same120 methods and unchanged expectations/Core/Reference/Mac. Do not rerun frozen candidate.",
+  "sourceFault": false,
+  "backendPCMComparisonAccepted": false,
+  "independentReview": false,
+  "additionalObservationError": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/package-precheck-observation-error1.json",
+    "bytes": 520,
+    "sha256": "ac50d6c5ac87578c65a64762b28780a0a2dcbd2444042999e9a2fc464d494f18",
+    "mode": 420,
+    "mtime_ns": 1790473655174475374
+  },
+  "queueWrapper": "Parent subprocess.run(check=True) reported CalledProcessError when the queue correctly exited1 after first nonpass; not another test execution."
+}

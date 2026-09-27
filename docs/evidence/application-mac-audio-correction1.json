@@ -1,0 +1,124 @@
+{
+  "schema": "ntsd-application-mac-audio-correction1-validation-v1",
+  "UTC": "2026-09-27T01:50:56.557768+00:00",
+  "status": "first-nonpass-retained",
+  "baseHead": "f2668aafc6d326a7b76160dc5e2ce233be2cd84f",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/candidate1-inputs.json",
+    "bytes": 576448,
+    "sha256": "414ac467dcbfd1da3a4065918f1436043a186f1f4b74d08f4cbde64949725894",
+    "mode": 420,
+    "mtime_ns": 1790473047670493396
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/context1.json",
+    "bytes": 35855,
+    "sha256": "85d5a1ad556736cfaa149ed56f8b66e6005abae34bf4e5886297a3bff9c68955",
+    "mode": 420,
+    "mtime_ns": 1790473047924768348
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/build1.job.json",
+    "bytes": 105603,
+    "sha256": "a1cadd1af6417ae3ce0277b7ad610d94779e9252db9b48f27b0156552083b65a",
+    "mode": 420,
+    "mtime_ns": 1790473396335869712
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/package-check1.json",
+    "bytes": 1493416,
+    "sha256": "39c53423750af68e1ab1446701859daa7a6d9b2c93c9e07d66b12eb01b8b2f08",
+    "mode": 420,
+    "mtime_ns": 1790473646829457564
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 68851192,
+    "sha256": "3e99cde891b9c543c0ecb586b3aabec188a219f946685389ae157a1e29c649ee",
+    "mode": 493,
+    "mtime_ns": 1790473393546271140
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/tests1-queue.job.json",
+    "bytes": 2067,
+    "sha256": "34350d3fd8f0134d88ce461dcaf46a6d00481b55c17e1166d2dde51ea6af2139",
+    "mode": 420,
+    "mtime_ns": 1790473670972464530
+  },
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/failure-diagnosis1.json",
+    "bytes": 7373,
+    "sha256": "81bb340fd892cbd4f382c79c80d52de372b2c23fe9a9d3f4beeb3d746be4d825",
+    "mode": 420,
+    "mtime_ns": 1790473783254587111
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/verification1.json",
+    "bytes": 11945,
+    "sha256": "b6cde2acb3929feee66060aa0e8ee2f60a32da2484a8368babf6c80fa7ac3f7e",
+    "mode": 420,
+    "mtime_ns": 1790473840510211304
+  },
+  "passedMethods": 0,
+  "selectedMethods": 120,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/artifact-archive1",
+    "files": 4986,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11450203403,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/artifact-archive1.json",
+      "bytes": 2598105,
+      "sha256": "9267d5da385b485d0c19b77544817cedd95b1de4248d6c5ff6a4d5854ef1450d",
+      "mode": 420,
+      "mtime_ns": 1790473840502430438
+    }
+  },
+  "metadataArchive": {
+    "members": 162,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/metadata1.tar",
+    "bytes": 6195200,
+    "sha256": "d44674ccc9885ef638a0baca86bd77703b32859a88f4b8ab86de7b43760f70b9",
+    "mode": 420,
+    "mtime_ns": 1790473856424187152
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction1-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "6fac058c99cad5de22f4f05aee04800bb90038f70756397b86009a1001f23ae7",
+    "mode": 420,
+    "mtime_ns": 1790473840510018428
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2284,
+  "optionalAssertionsCorrected": true,
+  "coreReferenceMacUnchanged": true,
+  "retainedTestMethodsUnchanged": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Two optional test accesses now require their values. Core/Reference/Mac remain byte-identical to the preserved first Native PCM round. AVAudioEngine transport is offline/same-rate only if its selected test passes; no endpoint opened or Windows audio equivalence.",
+    "All120 selection retains115 methods and adds5 bounded PCM/startup/lifetime/protocol/offline methods. First failures and unstarted methods stay explicit; the preceding all105 source-comparison candidate remains separate.",
+    "File/MMIO and non-audio responses remain declared. No original/Unicorn/Windows execution, fixture edit, root promotion or shipping integration. Common/catalog callers, runtime scheduling, WMA/graph, gain/pan/mixing/resampling/latency remain open.",
+    "Source59727 terminal34Objects is not137. Windows font/cursor/device, independent review, integration, clean-Mac/full match/game and safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}
