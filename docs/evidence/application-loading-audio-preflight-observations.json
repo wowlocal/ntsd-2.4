@@ -1,0 +1,679 @@
+{
+  "UTC": "2026-09-27T02:31:22.991966+00:00",
+  "classification": "Static Native ownership/caller inspection; not executed behavior",
+  "patterns": 54,
+  "sources": [
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDMacPlatform/OriginalMacResourceIdentityPool.swift",
+        "bytes": 478,
+        "sha256": "13f894bef6584672011677ebb4e6b05701c6290585df7e3975a4a8d909ed56dc",
+        "mode": 420,
+        "mtime_ns": 1790433298946112733
+      },
+      "anchors": [
+        {
+          "anchor": "do not encode pointers or source address ranges",
+          "matches": [
+            {
+              "line": 2,
+              "text": "/// are never recycled and do not encode pointers or source address ranges."
+            }
+          ]
+        },
+        {
+          "anchor": "private var next: UInt32 = 1",
+          "matches": [
+            {
+              "line": 5,
+              "text": "    private var next: UInt32 = 1"
+            }
+          ]
+        },
+        {
+          "anchor": "next &+= 1",
+          "matches": [
+            {
+              "line": 9,
+              "text": "        let result = next; next &+= 1; return result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDMacPlatform/OriginalMacAudioBackend.swift",
+        "bytes": 13204,
+        "sha256": "816afdf1e03b13f2f3bfea0e9871876ade80fc94aae923cd5f2d54a5327bbb8a",
+        "mode": 420,
+        "mtime_ns": 1790472461168559128
+      },
+      "anchors": [
+        {
+          "anchor": "Device(windows.identities.take())",
+          "matches": [
+            {
+              "line": 148,
+              "text": "                let d = try Device(windows.identities.take());devices[d.token] = d;retained = [d]"
+            }
+          ]
+        },
+        {
+          "anchor": "Buffer(windows.identities.take()",
+          "matches": [
+            {
+              "line": 165,
+              "text": "                let b = try Buffer(windows.identities.take(),d,binding,f,pcm,raw)"
+            }
+          ]
+        },
+        {
+          "anchor": "Region(windows.identities.take()",
+          "matches": [
+            {
+              "line": 169,
+              "text": "                let b = try buffer(q.event.arguments[0],binding),r = try Region(windows.identities.take(),b)"
+            }
+          ]
+        },
+        {
+          "anchor": "firstPointer:r.token",
+          "matches": [
+            {
+              "line": 171,
+              "text": "                response = .waveAudio(.locked(0,.init(firstPointer:r.token,firstCount:b.raw.bytes.count,"
+            }
+          ]
+        },
+        {
+          "anchor": "b.raw = try .init(bytes:q.bytes!,defined:q.defined!)",
+          "matches": [
+            {
+              "line": 175,
+              "text": "                b.raw = try .init(bytes:q.bytes!,defined:q.defined!);b.pcm.frameLength = 0;retained = [b,r]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDMacPlatform/OriginalMacAudioService.swift",
+        "bytes": 1647,
+        "sha256": "550d513858fe70f277ae6ce9feabbffc53f25da3c340751345091f136d0fc575",
+        "mode": 420,
+        "mtime_ns": 1790472461168841296
+      },
+      "anchors": [
+        {
+          "anchor": "let prepared = try backend.prepare(request)",
+          "matches": [
+            {
+              "line": 22,
+              "text": "        let prepared = try backend.prepare(request)"
+            }
+          ]
+        },
+        {
+          "anchor": "try begin()",
+          "matches": [
+            {
+              "line": 23,
+              "text": "        try begin()"
+            }
+          ]
+        },
+        {
+          "anchor": "try fail(String(reflecting:error),backend.retainedResources)",
+          "matches": [
+            {
+              "line": 27,
+              "text": "            try fail(String(reflecting:error),backend.retainedResources);throw error"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalWaveLoader.swift",
+        "bytes": 15959,
+        "sha256": "9e020f4ffdcffc6855e47da68a8b501991910f434b73a477cfd593cb86c12b42",
+        "mode": 420,
+        "mtime_ns": 1790467813071572450
+      },
+      "anchors": [
+        {
+          "anchor": "public var lockReplies: [OriginalWaveResponse]",
+          "matches": [
+            {
+              "line": 49,
+              "text": "    public var lockReplies: [OriginalWaveResponse] = []"
+            }
+          ]
+        },
+        {
+          "anchor": "public var regions: [UInt32: OriginalStateRecord]",
+          "matches": [
+            {
+              "line": 50,
+              "text": "    public var regions: [UInt32: OriginalStateRecord] = [:]"
+            }
+          ]
+        },
+        {
+          "anchor": "result.lockReplies.append(reply)",
+          "matches": [
+            {
+              "line": 217,
+              "text": "            result.lockReplies.append(reply);return reply"
+            }
+          ]
+        },
+        {
+          "anchor": "region.token == token",
+          "matches": [
+            {
+              "line": 231,
+              "text": "            guard let region,region.token == token,region.storage.bytes.count >= count,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalInitialSoundLoading.swift",
+        "bytes": 4337,
+        "sha256": "749e4de35eca06a74003300cc7a7dd6dc68e22b05457921a09575036d6c2d80e",
+        "mode": 420,
+        "mtime_ns": 1790467813074006499
+      },
+      "anchors": [
+        {
+          "anchor": "audio: OriginalWaveRequest.Factory?",
+          "matches": [
+            {
+              "line": 23,
+              "text": "                            audio: OriginalWaveRequest.Factory? = nil,"
+            }
+          ]
+        },
+        {
+          "anchor": "audio:try audio?(input)",
+          "matches": [
+            {
+              "line": 52,
+              "text": "                },audio:try audio?(input)) {"
+            }
+          ]
+        },
+        {
+          "anchor": "Count is always",
+          "matches": [
+            {
+              "line": 60,
+              "text": "        // Individual false returns are ignored by this caller. Count is always"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift",
+        "bytes": 2062,
+        "sha256": "03e6ae671f8f07b6f424e5ef4e6e01f25db12fea5b2296c07498b46ddee3f6b6",
+        "mode": 420,
+        "mtime_ns": 1789246387095441878
+      },
+      "anchors": [
+        {
+          "anchor": "OriginalInitialSoundLoading.load",
+          "matches": [
+            {
+              "line": 24,
+              "text": "        try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,"
+            }
+          ]
+        },
+        {
+          "anchor": "fileSource:fileSource,platform:platform",
+          "matches": [
+            {
+              "line": 25,
+              "text": "            fileSource:fileSource,platform:platform,afterWave:{ i,wave,state in"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift",
+        "bytes": 2020,
+        "sha256": "f40d8bfc6e47f01f0b580e6eed051e7603eb00f0ff922df486cb9816426c2fb8",
+        "mode": 420,
+        "mtime_ns": 1789071471022083940
+      },
+      "anchors": [
+        {
+          "anchor": "guard device != 0",
+          "matches": [
+            {
+              "line": 15,
+              "text": "        guard device != 0 else { return }"
+            }
+          ]
+        },
+        {
+          "anchor": "OriginalWaveLoader.load",
+          "matches": [
+            {
+              "line": 20,
+              "text": "        let result = try OriginalWaveLoader.load(path: request.path.unicodeScalars.map { UInt8($0.value) },"
+            }
+          ]
+        },
+        {
+          "anchor": "onVolume([result.output",
+          "matches": [
+            {
+              "line": 27,
+              "text": "        try onVolume([result.output, UInt32(bitPattern: -10000)])"
+            }
+          ]
+        },
+        {
+          "anchor": "buffers[request.index] = result",
+          "matches": [
+            {
+              "line": 29,
+              "text": "        buffers[request.index] = result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift",
+        "bytes": 6967,
+        "sha256": "db2d7723fbf24ff5a41abf93b66bd7713cfa3e306195b4f699d617c2f3fa2b5e",
+        "mode": 420,
+        "mtime_ns": 1789292147874833870
+      },
+      "anchors": [
+        {
+          "anchor": "public let waveInputs: [OriginalWavePlatform]",
+          "matches": [
+            {
+              "line": 19,
+              "text": "        public let waveInputs: [OriginalWavePlatform]"
+            }
+          ]
+        },
+        {
+          "anchor": "return waves[index]",
+          "matches": [
+            {
+              "line": 81,
+              "text": "                return waves[index]"
+            }
+          ]
+        },
+        {
+          "anchor": "common:common,waveInputs:waves",
+          "matches": [
+            {
+              "line": 99,
+              "text": "        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationCatalogControls.swift",
+        "bytes": 4291,
+        "sha256": "e7a924c477137674be798fe46e288bd1dcb8909a32a7c13e557561cb621773ea",
+        "mode": 420,
+        "mtime_ns": 1789280666564079682
+      },
+      "anchors": [
+        {
+          "anchor": "public let wave:",
+          "matches": [
+            {
+              "line": 24,
+              "text": "        public let wave: (OriginalSoundRegistration,UInt32) throws -> OriginalWavePlatform"
+            }
+          ]
+        },
+        {
+          "anchor": "public let volume:",
+          "matches": [
+            {
+              "line": 25,
+              "text": "        public let volume: ([UInt32]) throws -> Int32"
+            }
+          ]
+        },
+        {
+          "anchor": "self.volume = volume",
+          "matches": [
+            {
+              "line": 37,
+              "text": "            self.volume = volume;self.time = time;self.message = message;self.finish = finish"
+            }
+          ]
+        },
+        {
+          "anchor": "wave:{ _,_ in try owner.take",
+          "matches": [
+            {
+              "line": 45,
+              "text": "            wave:{ _,_ in try owner.take(input.waves,&owner.wi,\"registered WAV\") },"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift",
+        "bytes": 27000,
+        "sha256": "40a0433b7a451b87b5e3951c15d621d481d0c38753e367d81c7844d83ff54d4c",
+        "mode": 420,
+        "mtime_ns": 1789289851535693463
+      },
+      "anchors": [
+        {
+          "anchor": "public let owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]",
+          "matches": [
+            {
+              "line": 15,
+              "text": "        public let owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]"
+            }
+          ]
+        },
+        {
+          "anchor": "func retainWave(",
+          "matches": [
+            {
+              "line": 201,
+              "text": "        func retainWave(_ owner: OriginalWaveLoadResult,_ p: OriginalWavePlatform) throws {"
+            }
+          ]
+        },
+        {
+          "anchor": "try range(p.firstPointer",
+          "matches": [
+            {
+              "line": 212,
+              "text": "            try range(p.firstPointer,owner.first.bytes.count)"
+            }
+          ]
+        },
+        {
+          "anchor": "let p = try controls.wave",
+          "matches": [
+            {
+              "line": 331,
+              "text": "            let p = try controls.wave(request,device),index = request.index"
+            }
+          ]
+        },
+        {
+          "anchor": "try candidate.load(request",
+          "matches": [
+            {
+              "line": 335,
+              "text": "            try candidate.load(request,device:device,outputBefore:outputBefore,platform:p,fileSource:file,"
+            }
+          ]
+        },
+        {
+          "anchor": "self.controls.volume(args)",
+          "matches": [
+            {
+              "line": 339,
+              "text": "                    let result = try self.controls.volume(args)"
+            }
+          ]
+        },
+        {
+          "anchor": "waveInputs.append(p)",
+          "matches": [
+            {
+              "line": 343,
+              "text": "            try retainWave(owner,p); sounds = candidate; waveInputs.append(p)"
+            }
+          ]
+        },
+        {
+          "anchor": "try store(0x455638+request.index*20,incoming)",
+          "matches": [
+            {
+              "line": 348,
+              "text": "            try store(0x455638+request.index*20,incoming); try put(0x458438,UInt32(count))"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationPoolSession.swift",
+        "bytes": 11162,
+        "sha256": "cf17a10abc2553300dd8131d524abc8b2e73ce6b6a7e450a55cc0c6ce1977938",
+        "mode": 420,
+        "mtime_ns": 1789289851536793384
+      },
+      "anchors": [
+        {
+          "anchor": "for (owner,p) in zip(entry.startup.owner.loads,entry.startup.platforms)",
+          "matches": [
+            {
+              "line": 82,
+              "text": "            for (owner,p) in zip(entry.startup.owner.loads,entry.startup.platforms) { retain(owner,p) }"
+            }
+          ]
+        },
+        {
+          "anchor": "for (i,p) in entry.snapshot.waveInputs.enumerated()",
+          "matches": [
+            {
+              "line": 85,
+              "text": "            for (i,p) in entry.snapshot.waveInputs.enumerated() {"
+            }
+          ]
+        },
+        {
+          "anchor": "reserve(p.firstPointer",
+          "matches": [
+            {
+              "line": 93,
+              "text": "            reserve(p.firstPointer,owner.first.bytes.count)"
+            }
+          ]
+        },
+        {
+          "anchor": "guard !ranges.contains",
+          "matches": [
+            {
+              "line": 106,
+              "text": "            guard !ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) else { throw Boundary.overlap(value.address) }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+        "bytes": 27746,
+        "sha256": "788ed047b01bd613a4f0df3fcb8800bfb9df96f1683e59a3f7c30da6b53a9f15",
+        "mode": 420,
+        "mtime_ns": 1789317419472135963
+      },
+      "anchors": [
+        {
+          "anchor": "for (a,p) in zip(catalog.startup.owner.loads,catalog.startup.platforms)",
+          "matches": [
+            {
+              "line": 150,
+              "text": "            for (a,p) in zip(catalog.startup.owner.loads,catalog.startup.platforms) { retain(a,p) }"
+            }
+          ]
+        },
+        {
+          "anchor": "for (i,p) in catalog.snapshot.waveInputs.enumerated()",
+          "matches": [
+            {
+              "line": 152,
+              "text": "            for (i,p) in catalog.snapshot.waveInputs.enumerated() {"
+            }
+          ]
+        },
+        {
+          "anchor": "reserve(p.firstPointer",
+          "matches": [
+            {
+              "line": 159,
+              "text": "            reserve(p.firstPointer,a.first.bytes.count);if let b = a.second { reserve(p.secondPointer,b.bytes.count) }"
+            }
+          ]
+        },
+        {
+          "anchor": "!ranges.contains",
+          "matches": [
+            {
+              "line": 164,
+              "text": "                  !ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) else { throw Boundary.overlap(token) }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationObservedGraphicsIteration.swift",
+        "bytes": 4551,
+        "sha256": "42cf3d33cf3ef4eb084a32819983cc00391cefb64e2e302d9f3835088006b2ec",
+        "mode": 420,
+        "mtime_ns": 1790459267912371633
+      },
+      "anchors": [
+        {
+          "anchor": "The entire Host/Core attempt has unwound",
+          "matches": [
+            {
+              "line": 61,
+              "text": "                // The entire Host/Core attempt has unwound before claim/service."
+            }
+          ]
+        },
+        {
+          "anchor": "self.exchange.finish(consumed)",
+          "matches": [
+            {
+              "line": 57,
+              "text": "                    _ = try self.exchange.finish(consumed)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalStartupRequestExchange.swift",
+        "bytes": 2566,
+        "sha256": "b54bbf690fa58d34e9d273251ae3813a98ec4d4e8ae9804a4ecc20bb16e0d28c",
+        "mode": 420,
+        "mtime_ns": 1790467813073352789
+      },
+      "anchors": [
+        {
+          "anchor": "case sound(OriginalMenuSoundStartup.Event), waveAudio",
+          "matches": [
+            {
+              "line": 13,
+              "text": "    case sound(OriginalMenuSoundStartup.Event), waveAudio(OriginalWaveBinding,OriginalWaveRequest)"
+            }
+          ]
+        },
+        {
+          "anchor": "case let (.waveAudio(_,q),.waveAudio(r))",
+          "matches": [
+            {
+              "line": 24,
+              "text": "        case let (.waveAudio(_,q),.waveAudio(r)):return q.accepts(r)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+        "bytes": 21485,
+        "sha256": "3a1ab27f00f2869f86438eee1ea98eeb2e0b4e1c6c2287eec5d98ae411058672",
+        "mode": 420,
+        "mtime_ns": 1790459267913391927
+      },
+      "anchors": [
+        {
+          "anchor": "public func prepareLoadedUntilBoundary",
+          "matches": [
+            {
+              "line": 275,
+              "text": "    public func prepareLoadedUntilBoundary("
+            }
+          ]
+        },
+        {
+          "anchor": "validate(_ child:",
+          "matches": [
+            {
+              "line": 282,
+              "text": "    private func validate(_ child: LoadedMenu.PendingReturn,for loading: Session.PendingLoading) throws {"
+            }
+          ]
+        },
+        {
+          "anchor": "child.loading.isSameAttempt",
+          "matches": [
+            {
+              "line": 283,
+              "text": "        guard child.loading.isSameAttempt(as:loading) else { throw Boundary.differentLoadingAttempt }"
+            },
+            {
+              "line": 302,
+              "text": "            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }"
+            },
+            {
+              "line": 305,
+              "text": "            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }"
+            },
+            {
+              "line": 325,
+              "text": "            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }"
+            },
+            {
+              "line": 344,
+              "text": "            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }"
+            },
+            {
+              "line": 364,
+              "text": "            guard child.loading.isSameAttempt(as:pending.loading) else { throw Boundary.differentLoadingAttempt }"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "independentReview": false
+}

@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Common/catalog audio identity prerequisite](research/APPLICATION_LOADING_AUDIO_PREFLIGHT.md):
+54 anchors and a synthetic23566-byte false-overlap witness establish why Native
+opaque WAV identities cannot enter legacy PCM address-range checks. Catalog,
+pool and loaded-menu handoffs all require an explicit storage domain.39 Native/
+15 document inputs and93-member archive verified; existing all120 unchanged.
+Next: per-call common/registered loading and retained owners through all consumers,
+with145 existing selectors plus6 proposed groups. No new Native/source/device
+execution or acceptance. [Evidence](evidence/application-loading-audio-preflight.json).
+
 [Native PCM startup: all120 checked](research/APPLICATION_MAC_AUDIO_CORRECTION2.md):
 Retained snapshot owners fix the test crash without changing Core/Mac/expected
 bytes.409 WAVs/23 formats/18 rates, whole own startup, lifetime/protocol controls,

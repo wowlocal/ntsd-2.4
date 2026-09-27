@@ -1,0 +1,101 @@
+{
+  "schema": "ntsd-loading-audio-preflight-v1",
+  "UTC": "2026-09-27T02:34:46.583790+00:00",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927",
+  "status": "static-ownership-preflight-complete",
+  "head": "fe4399f2eb7cefd351a344317888bb22558ea8e3",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/candidate1-inputs.json",
+    "bytes": 576448,
+    "sha256": "80ced805b198ebdc49068ca1c7e6068ccd7da41828d5c9053be0df04f16ce981",
+    "mode": 420,
+    "mtime_ns": 1790474028975290161
+  },
+  "plan": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PREFLIGHT_PLAN.md",
+    "bytes": 4740,
+    "sha256": "55449ab7051375eee9beab4f84fe1af6cbac3fdc3cbcd05c4c39e2c70ecf545e",
+    "mode": 420,
+    "mtime_ns": 1790476070520628281
+  },
+  "study": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PREFLIGHT.md",
+    "bytes": 8099,
+    "sha256": "1c90ab346c0209c230c59366ceb0f58d59708c1f671ef9ee90f9120988850fe4",
+    "mode": 420,
+    "mtime_ns": 1790476476538911574
+  },
+  "consultedInputs": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/consulted-inputs1.json",
+    "bytes": 28275,
+    "sha256": "4d42006b042e059b3741e342c4d7d4df65c9f664314927483b6ac489e8fa2c95",
+    "mode": 420,
+    "mtime_ns": 1790476476798402266
+  },
+  "observations": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/observations1.json",
+    "bytes": 22244,
+    "sha256": "3a028e6fc0e3ec78ef180eb0b24ee6f90eac71fa6ed6ff17622a63ad5061c548",
+    "mode": 420,
+    "mtime_ns": 1790476282993085915
+  },
+  "identityWitness": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/identity-witness1.json",
+    "bytes": 2480,
+    "sha256": "5eab37dd94336795ff90733c11e99772aa43ef1ce55d8cab38b28820a67862d3",
+    "mode": 420,
+    "mtime_ns": 1790476282995483380
+  },
+  "nextComparison": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/next-comparison1.json",
+    "bytes": 15459,
+    "sha256": "180477ebec416eb5d217fa10e7e030349377f1d5a215cb2379cb7c056730cf1d",
+    "mode": 420,
+    "mtime_ns": 1790476283009340920
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/verification1.json",
+    "bytes": 942,
+    "sha256": "429ff6ea2973ecca7c0a46389b4434d5953902cad6780d11de7f07d0914f55f9",
+    "mode": 420,
+    "mtime_ns": 1790476486484589544
+  },
+  "validationObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/validation-observation1.json",
+    "bytes": 945,
+    "sha256": "2b797788c59b2556d56155b6c612e2eada69505fdffc63880d620b7c9376bce7",
+    "mode": 420,
+    "mtime_ns": 1790476486475383102
+  },
+  "metadataArchive": {
+    "members": 93,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/metadata1.tar",
+    "bytes": 3082240,
+    "sha256": "bf20cebff8e0121db4c9e20e97a1e5c6a46f94d4df15720682439fa67b98d828",
+    "mode": 420,
+    "mtime_ns": 1790476486568917908
+  },
+  "publisher": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/publish1.py",
+    "bytes": 11248,
+    "sha256": "0fc9d5044bccfe0614a449c21524595cb6e9292a1f21bac6d8c4a0d18c6202d8",
+    "mode": 420,
+    "mtime_ns": 1790476476538743949
+  },
+  "nextContract": "Common/registered per-call WAV input and explicit addressed-versus-opaque ownership through startup/common/catalog/pool/loaded-menu; ordered volume and retained service journal;145 existing methods plus6 finite comparison groups proposed",
+  "gates": {
+    "staticAnalysis": true,
+    "ownershipObstructionEstablished": true,
+    "implementation": false,
+    "nativeComparison": false,
+    "independentReview": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "nativeExecuted": false
+}

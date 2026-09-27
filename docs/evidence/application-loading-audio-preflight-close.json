@@ -1,0 +1,25 @@
+{
+  "schema": "ntsd-loading-audio-preflight-close-v1",
+  "UTC": "2026-09-27T02:34:46.585630+00:00",
+  "taskFrozen": true,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/publication1.json",
+    "bytes": 4568,
+    "sha256": "48861565db4407234b1cb0b9b1cda08435106d5627c235d4a4d6e7c89c357c8b",
+    "mode": 420,
+    "mtime_ns": 1790476486585600580
+  },
+  "metadataArchive": {
+    "members": 93,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/metadata1.tar",
+    "bytes": 3082240,
+    "sha256": "bf20cebff8e0121db4c9e20e97a1e5c6a46f94d4df15720682439fa67b98d828",
+    "mode": 420,
+    "mtime_ns": 1790476486568917908
+  },
+  "externalFree": 142300291072,
+  "internalFree": 67526434816,
+  "taskBytes": 6017933,
+  "elapsedFromPlanSeconds": 226.92846
+}

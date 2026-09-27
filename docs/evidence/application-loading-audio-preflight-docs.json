@@ -1,0 +1,124 @@
+{
+  "schema": "ntsd-loading-audio-preflight-docs-v1",
+  "UTC": "2026-09-27T02:36:02.379641+00:00",
+  "baseHead": "fe4399f2eb7cefd351a344317888bb22558ea8e3",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/publication1.json",
+    "bytes": 4568,
+    "sha256": "48861565db4407234b1cb0b9b1cda08435106d5627c235d4a4d6e7c89c357c8b",
+    "mode": 420,
+    "mtime_ns": 1790476486585600580
+  },
+  "publisherJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-preflight-20260927/publish1.job.json",
+    "bytes": 757,
+    "sha256": "a0edcdd9c52cbf134bb7654c4a80a38c9724ebac638112371f0c0ac300acb859",
+    "mode": 420,
+    "mtime_ns": 1790476486586929792
+  },
+  "publisherTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PREFLIGHT_PLAN.md",
+      "bytes": 4740,
+      "sha256": "55449ab7051375eee9beab4f84fe1af6cbac3fdc3cbcd05c4c39e2c70ecf545e",
+      "mode": 420,
+      "mtime_ns": 1790476070520628281
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PREFLIGHT.md",
+      "bytes": 8099,
+      "sha256": "1c90ab346c0209c230c59366ceb0f58d59708c1f671ef9ee90f9120988850fe4",
+      "mode": 420,
+      "mtime_ns": 1790476476538911574
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_loading_audio_preflight.py",
+      "bytes": 7409,
+      "sha256": "2f981fbabe9ed5511b096770ca75c2de32499796541fb81d06b0b47ce79f53f5",
+      "mode": 420,
+      "mtime_ns": 1790476110186662435
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/inspect_application_loading_audio_preflight.py",
+      "bytes": 10929,
+      "sha256": "0a6c018c70d40b552200388a811957310320cd5acb2c2fd173e301606f5e167b",
+      "mode": 420,
+      "mtime_ns": 1790476248710195025
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/publish_application_loading_audio_preflight.py",
+      "bytes": 11248,
+      "sha256": "0fc9d5044bccfe0614a449c21524595cb6e9292a1f21bac6d8c4a0d18c6202d8",
+      "mode": 420,
+      "mtime_ns": 1790476476538743949
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-preflight.json",
+      "bytes": 4568,
+      "sha256": "48861565db4407234b1cb0b9b1cda08435106d5627c235d4a4d6e7c89c357c8b",
+      "mode": 420,
+      "mtime_ns": 1790476486586484749
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-preflight-close.json",
+      "bytes": 974,
+      "sha256": "26a3d8290d2d3f26b026d100d97afbf99e2a2f16af90af449884f47258060c63",
+      "mode": 420,
+      "mtime_ns": 1790476486586581541
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-preflight-observations.json",
+      "bytes": 22244,
+      "sha256": "3a028e6fc0e3ec78ef180eb0b24ee6f90eac71fa6ed6ff17622a63ad5061c548",
+      "mode": 420,
+      "mtime_ns": 1790476486586669166
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-preflight-identity-witness.json",
+      "bytes": 2480,
+      "sha256": "5eab37dd94336795ff90733c11e99772aa43ef1ce55d8cab38b28820a67862d3",
+      "mode": 420,
+      "mtime_ns": 1790476486586749166
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-preflight-next-comparison.json",
+      "bytes": 15459,
+      "sha256": "180477ebec416eb5d217fa10e7e030349377f1d5a215cb2379cb7c056730cf1d",
+      "mode": 420,
+      "mtime_ns": 1790476486586851792
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "16f93c3801f3de3c5d8660824d7241e5d2957af5",
+      "blockSHA256": "b70b4cb165d7abdd042a514bc0d5bb24a16d516f6aa30190651624664dc5b202",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "0e360fcc5708e2d9dafb34b73060f51f6af00ba7",
+      "blockSHA256": "56a498338edd10a7791f4af05109ab189c93fc6e794540fd25ca54fd919550ca",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "staticAnchors": 54,
+  "nativeInputs": 39,
+  "documents": 15,
+  "syntheticArithmeticWitnesses": 1,
+  "arithmeticControls": 4,
+  "priorAll120Unchanged": true,
+  "proposedExistingSelectors": 145,
+  "newComparisonGroups": 6,
+  "newTestsExecuted": false,
+  "sourceExecuted": false,
+  "deviceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "metadataMembers": 93,
+  "metadataSHA256": "bf20cebff8e0121db4c9e20e97a1e5c6a46f94d4df15720682439fa67b98d828",
+  "whitespaceCheckPassed": true,
+  "next": "Implement common/registered per-call WAV loading and explicit addressed-versus-opaque ownership through catalog/pool/loaded-menu, with retained ordered service and frozen finite comparisons."
+}

@@ -1,5 +1,23 @@
 # Текущая передача работы
 
+[Common/catalog audio ownership prerequisite checked](APPLICATION_LOADING_AUDIO_PREFLIGHT.md):
+39 Native/15 document inputs and54 anchors expose three PCM range consumers:
+catalog, pool and loaded menu. Native opaque regions3/5 with saved23568/23578-byte
+payload lengths yield a false23566-byte intersection under the legacy address
+model. This is a synthetic static witness, not Native/device execution or source
+fault. [Publication](../evidence/application-loading-audio-preflight.json), [witness](../evidence/application-loading-audio-preflight-identity-witness.json).
+Prior all120 and root1034/prior2257/base2284/source55 remain unchanged. Publisher
+82617 terminal0/absent;93-member archive verified, task frozen.145 existing test
+selectors and6 proposed comparison groups cover whole callers and handoffs.
+NEXT: implement per-call common/registered WAV loading with explicit addressed
+versus opaque region ownership through startup/common/catalog/pool/loaded-menu,
+ordered SetVolume/cache and retained exchange receipts. Freeze actual methods/
+limits and bound full-catalog retry work before a fresh candidate; no source
+restart or deletion of legacy overlap checks. Implementation/review/root promotion,
+playback/WMA/device/Windows/clean-Mac/full match/game and incidents remain open.
+Last host observation locked; approvals retained. EXE envelope not recalculated.
+Supersedes the common/catalog planning NEXT below.
+
 [Native PCM startup and offline transport: all120 checked](APPLICATION_MAC_AUDIO_CORRECTION2.md):
 Test snapshot owners remain alive through raw-pointer reads; Core/Reference/Mac
 and expected bytes/masks are unchanged. All409 WAVs/23 formats/18 rates, whole

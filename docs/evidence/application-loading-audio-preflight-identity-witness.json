@@ -1,0 +1,103 @@
+{
+  "UTC": "2026-09-27T02:31:22.995020+00:00",
+  "classification": "Synthetic arithmetic witness from pinned implementation and saved original payload lengths; no Native/device run",
+  "inventory": {
+    "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-wav-inputs.json",
+    "bytes": 577901,
+    "sha256": "75ebd4ac8ba5f30c10089b0eee078ee8420ef7ac64660dd97a66f439f1542621",
+    "mode": 420,
+    "mtime_ns": 1790471504444905227
+  },
+  "inputs": [
+    {
+      "source": {
+        "path": "data\\001.wav",
+        "sha256": "28f50924fc845a963d398fda600b9df740149f1c696843aa7cbd56f8552d785a",
+        "bytes": 23694
+      },
+      "data": {
+        "idHex": "64617461",
+        "headerOffset": 36,
+        "dataOffset": 44,
+        "bytes": 23568
+      }
+    },
+    {
+      "source": {
+        "path": "data\\002.wav",
+        "sha256": "f2783a52e1fc333a46a094b61332bb883380586119c77b1b0f86031dfa3f15f0",
+        "bytes": 23704
+      },
+      "data": {
+        "idHex": "64617461",
+        "headerOffset": 36,
+        "dataOffset": 44,
+        "bytes": 23578
+      }
+    }
+  ],
+  "syntheticAllocationOrder": {
+    "device": 1,
+    "buffers": [
+      2,
+      4
+    ],
+    "regions": [
+      3,
+      5
+    ],
+    "counts": [
+      23568,
+      23578
+    ]
+  },
+  "distinctRegionTokens": true,
+  "incorrectAddressInterpretationOverlaps": true,
+  "intersection": {
+    "start": 5,
+    "endExclusive": 23571,
+    "bytes": 23566
+  },
+  "controls": [
+    {
+      "name": "addressed-disjoint",
+      "a": 1610612768,
+      "n": 23568,
+      "b": 1610678304,
+      "m": 23578,
+      "expected": false,
+      "observedArithmetic": false
+    },
+    {
+      "name": "addressed-overlap",
+      "a": 1610612768,
+      "n": 23568,
+      "b": 1610612770,
+      "m": 23578,
+      "expected": true,
+      "observedArithmetic": true
+    },
+    {
+      "name": "touching-exclusive-end",
+      "a": 4096,
+      "n": 16,
+      "b": 4112,
+      "m": 16,
+      "expected": false,
+      "observedArithmetic": false
+    },
+    {
+      "name": "zero-count-is-not-a-range",
+      "a": 4096,
+      "n": 0,
+      "b": 4096,
+      "m": 16,
+      "expected": false,
+      "observedArithmetic": false
+    }
+  ],
+  "conclusion": "Opaque Native region identities cannot be treated as byte-address intervals. Existing addressed-source overlap checks must remain in their explicit domain.",
+  "sourceFault": false,
+  "comparatorAcceptance": false,
+  "independentReview": false
+}
