@@ -1,0 +1,102 @@
+{
+  "schema": "ntsd-loading-arena-full-caller-checkpoint-v1",
+  "UTC": "2026-09-27T07:06:01.048471+00:00",
+  "head": "19f1ee2f64d5c28e3e834dda38a44f61d0f41189",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927",
+  "scope": "Read saved Native full-caller test output and observe its terminal process; original code was not executed by this checkpoint.",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/candidate1-inputs.json",
+    "bytes": 578120,
+    "sha256": "0f0a5c61c3c97c96bd804043ab9b1abe97b88cd04a6563783d50cff379deac2f",
+    "mode": 420,
+    "mtime_ns": 1790488279916205324
+  },
+  "selectedMethods": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/selected-methods1.json",
+    "bytes": 30575,
+    "sha256": "1a82ed432066c5dbf3b963bbe8b43986a128ff02e0aefee66b37598a592805f5",
+    "mode": 420,
+    "mtime_ns": 1790488279991234350
+  },
+  "fullCaller": {
+    "method": "OriginalMacLoadingAudioTests/testWholeCatalogPoolLoadedMenuHostWithOwnedAudio",
+    "job": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-22.job.json",
+      "bytes": 4973,
+      "sha256": "9980836ffab6113b90980c0530b85b964a73a60efb099f1f5e1305815fd13ecc",
+      "mode": 420,
+      "mtime_ns": 1790491539634668373
+    },
+    "log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-22.log",
+      "bytes": 1483,
+      "sha256": "b649189f3567bcd75bc204f33f933a3e9f52776c2892e6cec6d3e04ce88db8e2",
+      "mode": 420,
+      "mtime_ns": 1790491538487551446
+    },
+    "pid": 57258,
+    "startedUTC": "2026-09-27T06:00:19.852730+00:00",
+    "endedUTC": "2026-09-27T06:45:39.634209+00:00",
+    "exitCode": 0,
+    "processAbsent": true,
+    "processSeconds": 2719.7916353749997,
+    "xctestSeconds": 2718.587,
+    "peakTreeRSS": 4308566016,
+    "guardReason": null,
+    "signals": [],
+    "remainingProcessGroup": [],
+    "remainingObservedProcesses": {},
+    "uniqueNamedPass": true,
+    "zeroFailureSummaryCount": 3,
+    "selectedSuitePassed": true,
+    "passed": true,
+    "output": "Test Suite 'Selected tests' started at 2026-09-27 09:00:19.894.\nTest Suite 'NTSDNativePackageTests.xctest' started at 2026-09-27 09:00:19.895.\nTest Suite 'OriginalMacLoadingAudioTests' started at 2026-09-27 09:00:19.895.\nTest Case '-[NTSDCoreTests.OriginalMacLoadingAudioTests testWholeCatalogPoolLoadedMenuHostWithOwnedAudio]' started.\nTest Case '-[NTSDCoreTests.OriginalMacLoadingAudioTests testWholeCatalogPoolLoadedMenuHostWithOwnedAudio]' passed (2718.587 seconds).\nTest Suite 'OriginalMacLoadingAudioTests' passed at 2026-09-27 09:45:38.483.\n\t Executed 1 test, with 0 failures (0 unexpected) in 2718.587 (2718.588) seconds\nTest Suite 'NTSDNativePackageTests.xctest' passed at 2026-09-27 09:45:38.483.\n\t Executed 1 test, with 0 failures (0 unexpected) in 2718.587 (2718.588) seconds\nTest Suite 'Selected tests' passed at 2026-09-27 09:45:38.483.\n\t Executed 1 test, with 0 failures (0 unexpected) in 2718.587 (2718.588) seconds\nWhole own WinMain PCM 5 buffers; Native window/display; other boundaries declared\nOwned pool/UI:400 allocations/408 constructor returns/two400-record phases/10UI;170 source API requests+responses; full entry bytes/masks and independent colors retained\nOwned pool/UI:400 allocations/408 constructor returns/two400-record phases/10UI;170 source API requests+responses; full entry bytes/masks and independent colors retained\nOwned Native loading 2072 requests,423 buffers,137 Objects/400 registrations; pool/menu/Host retained; no Windows endpoint claim\n"
+  },
+  "queueObservation": {
+    "jobSnapshot": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/tests1-queue.job.json",
+      "bytes": 117591,
+      "sha256": "d89932e1d215804f3cfd2f746dd06cc74b385684f8439239df4d7a912876ce5a",
+      "mode": 420,
+      "mtime_ns": 1790492750650158916
+    },
+    "snapshotIsLiveNotFinal": true,
+    "pid": 51788,
+    "status": "running",
+    "startedUTC": "2026-09-27T05:57:25.044628+00:00",
+    "processIdentity": "51788 Sun Sep 27 08:57:24 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-loading-arena-20260927/tools/run_application_host_gameplay_tests2.py build/research/application-loading-arena-20260927",
+    "cwdObservation": "p51788\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "selectedCount": 167,
+    "completedCount": 150,
+    "passedCount": 150,
+    "current": {
+      "method": "OriginalApplicationCatalogSessionTests/testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+      "phase": "test-151",
+      "config": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-151-config.json",
+      "pin": {
+        "bytes": 1473,
+        "sha256": "450a5195d49d51398e562ad1b3c78dfe836b1c016f2bf04742704f199bab005f",
+        "mode": 420,
+        "mtime_ns": 1790488645029072807
+      }
+    }
+  },
+  "runtimePackaging": {
+    "commit": "166ddf7",
+    "change": "Ordinary app packaging now calls the existing original catalog resource builder; no bundle rebuild was performed in this wrap-up."
+  },
+  "boundaries": [
+    "Native controlled composition with declared nonaudio API responses; not an actual Windows/device observation.",
+    "2072 loading requests, 423 buffers, 137 Objects and 400 registrations reach pool/menu/Host in this test.",
+    "Remaining regressions, final archive verification/publication and independent review remain open.",
+    "Root native promotion and NTSDApp integration remain open; the app still launches Practice.",
+    "Complete source application return, endpoint playback, Windows font/cursor, clean-Mac acceptance, full match and full game remain open."
+  ],
+  "handoff": "Finish observing the existing bounded queue without restarting it; after terminal verification/publication, apply the deferred progress-rule prompt patch and promote checked code into native. UTM work is cancelled; CrossOver remains an option.",
+  "unchanged": [
+    "Historical 14-method receipt",
+    "Frozen candidate, source expectations, masks and limits",
+    "Protected root Native inputs and finalizer",
+    "Unrelated working-tree changes"
+  ]
+}

@@ -59,3 +59,22 @@ Next: observe this same bounded queue, verify complete results,
 then archive/publish. Preserve and diagnose any nonpass without restarting this
 candidate, changing source expectations, removing the full caller or increasing
 its deadline.
+
+Iteration checkpoint, 2026-09-27T07:06:01.048471+00:00: the complete catalog/pool/menu/Host caller
+passes (test-22, PID57258 terminal0 and absent,2718.587 XCTest seconds). The
+[full-caller receipt](../evidence/application-loading-arena-full-caller.json)
+pins the job/log and checks the unique named pass plus three zero-failure
+summaries. Its actual output reports2072 loading requests,423 buffers,137 Objects
+and400 registrations; the pool/menu/Host composition retains its owners. This
+is Native execution with declared nonaudio responses, not Windows/device or
+whole-game acceptance. Queue51788 has150/150 completed passing methods of167 at
+this checkpoint and continues unchanged. Final queue verification, archives and
+publication remain open; no finalizer or root promotion started in this wrap-up.
+
+Ordinary app packaging now includes the existing original catalog builder
+(commit166ddf7); its syntax and equality to the already checked candidate were
+verified, without rebuilding the bundle. UTM work is cancelled by the user.
+After this queue closes and its existing finalizer publishes, the next priority
+is reversible promotion into native/ and application integration under
+[the progress rules](PROGRESS_RULES.md). Independent review remains open.
+This dated checkpoint supersedes the earlier live-count/UTM status above.
