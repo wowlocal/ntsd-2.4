@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd-application-startup-audio-correction1-validation-close-v1",
+  "UTC": "2026-09-27T00:47:44.187999+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927",
+  "externalFree": 145641521152,
+  "internalFree": 67892379648,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "prospectiveVMCommitment": 68719476736,
+  "observedFreeDecrease": 1227202560,
+  "physicalAllowance": 8589934592,
+  "publication": {
+    "bytes": 5845,
+    "sha256": "ea25e6c2835fce1e16778b84a5fe4937829be25b7d0fd2be9452db58b0ff500a",
+    "mode": 420,
+    "mtime_ns": 1790470064187930150
+  },
+  "metadataArchive": {
+    "members": 452,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/metadata1.tar",
+    "bytes": 7424000,
+    "sha256": "e90070cbe2a3e15a08a87b77a1476ebc8986fc005bffe9b1a22acdd3fa67de6c",
+    "mode": 420,
+    "mtime_ns": 1790470064036508704
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/artifact-archive1",
+    "files": 4980,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11445539206,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/artifact-archive1.json",
+      "bytes": 2615979,
+      "sha256": "3a9a2d3a1987e4f295af7869703a29824a5ef5712fd142156659e50be43e0250",
+      "mode": 420,
+      "mtime_ns": 1790470018430216730
+    }
+  }
+}

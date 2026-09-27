@@ -1,0 +1,94 @@
+{
+  "schema": "ntsd-startup-audio-correction1-docs-v1",
+  "UTC": "2026-09-27T00:51:03.718490+00:00",
+  "baseHead": "f34558e56e1219f6bf7514217dba113524f5a907",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/publication1.json",
+    "bytes": 5845,
+    "sha256": "ea25e6c2835fce1e16778b84a5fe4937829be25b7d0fd2be9452db58b0ff500a",
+    "mode": 420,
+    "mtime_ns": 1790470064187930150
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/finalize1.job.json",
+    "bytes": 839,
+    "sha256": "b44246b281099913a4ebfd3af306a2ff69650d4533ce86b09f463886291df47c",
+    "mode": 420,
+    "mtime_ns": 1790470064191461244
+  },
+  "finalizerTerminalAndAbsent": true,
+  "all105Passed": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_CORRECTION1_PLAN.md",
+      "bytes": 3611,
+      "sha256": "d076dac60a69d134563b94ec97fff31a7d8c62a89e586b6611928e239c6cbc83",
+      "mode": 420,
+      "mtime_ns": 1790468479105113818
+    },
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_CORRECTION1.md",
+      "bytes": 5063,
+      "sha256": "9dbd1d4792fe6462e27046b8d3da69df9e91af3ddc9d5a091c953a45f4fe5285",
+      "mode": 420,
+      "mtime_ns": 1790470263583472767
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-correction1.json",
+      "bytes": 5845,
+      "sha256": "ea25e6c2835fce1e16778b84a5fe4937829be25b7d0fd2be9452db58b0ff500a",
+      "mode": 420,
+      "mtime_ns": 1790470064191238410
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-correction1-close.json",
+      "bytes": 1712,
+      "sha256": "c3f35fbcec4a0715e98d310926927f5985b34c629efe1ab1c19f28a9af1878ef",
+      "mode": 420,
+      "mtime_ns": 1790470064191358702
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-correction1.patch",
+      "bytes": 1252,
+      "sha256": "16b69b81c596628ffec481712865c230d91cb9e13769bcb8d1780eca9137b684",
+      "mode": 420,
+      "mtime_ns": 1790469975905031313
+    },
+    {
+      "path": "tools/apply_startup_audio_assertion_correction.py",
+      "bytes": 2307,
+      "sha256": "e893c288721a94fb87534a0ae0dffee2e14e295e87007fcebc56b80e2bf222df",
+      "mode": 420,
+      "mtime_ns": 1790468479107536242
+    },
+    {
+      "path": "tools/prepare_application_startup_audio_correction1.py",
+      "bytes": 13636,
+      "sha256": "263aa07e036efd04953a0c88b98bb6cbab3fc8b4bf13ab08051bd7b38508b181",
+      "mode": 420,
+      "mtime_ns": 1790468564071352274
+    },
+    {
+      "path": "tools/finalize_application_startup_audio_correction1.py",
+      "bytes": 20894,
+      "sha256": "74c25c1585f3e8b7069acd378a66f660f8c3c20800ec16bf2e44469eff37738b",
+      "mode": 420,
+      "mtime_ns": 1790468608910233929
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "blockSHA256": "cccaac7a30d284156053a57202935bc5839579a3c83733515e28b9bddb99df00",
+      "stagedBlob": "e464cc791822d51f77b6eb9d1cece896619cb8f6",
+      "unrelatedWorkingDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "blockSHA256": "178b1f8e075915106761dce2a1484d4f120f9b95fdd09510a7c01f6548ae28d8",
+      "stagedBlob": "d63914aaf700d2506b1888e06c91726eb40d868b",
+      "unrelatedWorkingDiffPreserved": true
+    }
+  ],
+  "independentReview": false
+}

@@ -1,0 +1,14 @@
+--- a/native/Tests/NTSDCoreTests/OriginalStartupAudioTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalStartupAudioTests.swift
+@@ -427,7 +427,10 @@
+         XCTAssertEqual(same.first.defined,[true,true,true,true,true,false,false,false])
+         let conflict = OriginalWaveLock(firstPointer:20,firstCount:3,secondPointer:20,secondCount:5,
+             first:region(20,8),second:.init(token:20,storage:.init(bytes:Array(repeating:0x44,count:8),defined:Array(repeating:false,count:8))))
+-        XCTAssertThrowsError(try run(conflict)) { XCTAssertEqual($0 as? OriginalStateError,.invalidStorage("Wave loading: Conflicting Lock alias backing")) }
++        XCTAssertThrowsError(try run(conflict)) {
++            guard case OriginalStateError.invalidStorage(let text) = $0 else { return XCTFail("Wrong alias boundary: \($0)") }
++            XCTAssertEqual(text,"Wave loading: Conflicting Lock alias backing")
++        }
+         var zeroCopies: [OriginalWaveRequest] = []
+         let zero = try run(.init(firstPointer:20,firstCount:8,secondPointer:21,secondCount:0,first:region(20,8),second:region(21,0)),sink:{ zeroCopies.append($0) })
+         XCTAssertEqual(zero.second?.bytes,[]);XCTAssertEqual(zeroCopies.filter { $0.event.kind == .copy }.count,2)

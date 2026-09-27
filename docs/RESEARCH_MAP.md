@@ -1,5 +1,20 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Per-call startup audio: all105 methods checked](research/APPLICATION_STARTUP_AUDIO_CORRECTION1.md):
+Own initial/Lock storage, typed replies and PCM/mask payload pass whole WAV/menu/
+WinMain comparisons, protocol controls and late retry without repeated service.
+One new assertion corrected; Core/Reference/Mac unchanged from the preserved
+first audio round. Fresh build/package1686 resources and all105 methods pass.
+[Publication](evidence/application-startup-audio-correction1.json). Candidate2281,
+one-file correction and4980-file/452-member archives verify; finalizer87847
+terminal0/absent. Root1034/prior2257/base2281/source55 and earlier errors preserved.
+NEXT: bounded Native audio-consumer preflight using existing loading, registered/
+queued playback and music evidence; define one owner and finite actual-service
+comparison. No new original capture for that preflight. Windows installer resumes
+when host UI is available, with approval already given; CrossOver remains live.
+Actual audio/Windows/review/root integration/clean-Mac/full match/game and safety
+incidents stay open. EXE envelope unchanged; supersedes the assertion-fix NEXT below.
+
 [Per-call startup audio candidate: compile/monitor failures retained](research/APPLICATION_STARTUP_AUDIO.md):
 New device/WAV requests, separate Lock storage and actual PCM/mask payload are
 implemented in2281 files. Test compilation rejects an Equatable comparison of

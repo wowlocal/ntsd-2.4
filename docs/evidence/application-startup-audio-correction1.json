@@ -1,0 +1,118 @@
+{
+  "schema": "ntsd-application-startup-audio-correction1-validation-v1",
+  "UTC": "2026-09-27T00:47:44.181709+00:00",
+  "status": "all105-passed",
+  "baseHead": "f34558e56e1219f6bf7514217dba113524f5a907",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/candidate1-inputs.json",
+    "bytes": 575728,
+    "sha256": "7b609b8c4f61f1ec6d3903c84239478f84dba89f9820d2e3182fac262ef6a4ea",
+    "mode": 420,
+    "mtime_ns": 1790468589600772459
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/context1.json",
+    "bytes": 34323,
+    "sha256": "894902dce0cdd6b0ff57892a53e9e52972403a24e85a331d7967c63d4dc7c4a3",
+    "mode": 420,
+    "mtime_ns": 1790468589854467804
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/build1.job.json",
+    "bytes": 96756,
+    "sha256": "2e1f186328cf2d2f68d8d493ba00057d4fe0487b09b8227b1869644c9bba2c38",
+    "mode": 420,
+    "mtime_ns": 1790468925180211505
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/package-check1.json",
+    "bytes": 1507358,
+    "sha256": "679a990548830dcb923e9db7917a80267722227795165f346eaf69b4ff22e256",
+    "mode": 420,
+    "mtime_ns": 1790468942571717175
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 68500008,
+    "sha256": "0cca33219999da527ae47dfeb02135bcf96ba64340c5f79924a5a02f89744960",
+    "mode": 493,
+    "mtime_ns": 1790468922826576522
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/tests1-queue.job.json",
+    "bytes": 83631,
+    "sha256": "68145477f1fb1673005830b2893dea886211b610d8901ae6efd47413eb02c891",
+    "mode": 420,
+    "mtime_ns": 1790469930549963126
+  },
+  "failureDiagnosis": null,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/verification1.json",
+    "bytes": 43980,
+    "sha256": "fb5a547a9b5562eb26268de53ac06df3ef39edb023665fc732a80a7c87548aca",
+    "mode": 420,
+    "mtime_ns": 1790470018440474957
+  },
+  "passedMethods": 105,
+  "selectedMethods": 105,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/artifact-archive1",
+    "files": 4980,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11445539206,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/artifact-archive1.json",
+      "bytes": 2615979,
+      "sha256": "3a9a2d3a1987e4f295af7869703a29824a5ef5712fd142156659e50be43e0250",
+      "mode": 420,
+      "mtime_ns": 1790470018430216730
+    }
+  },
+  "metadataArchive": {
+    "members": 452,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/metadata1.tar",
+    "bytes": 7424000,
+    "sha256": "e90070cbe2a3e15a08a87b77a1476ebc8986fc005bffe9b1a22acdd3fa67de6c",
+    "mode": 420,
+    "mtime_ns": 1790470064036508704
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-correction1-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "173ab4cb43bfc277d5ef9e493a229281ff521c72cece9feb89dfaee8e7449b63",
+    "mode": 420,
+    "mtime_ns": 1790470018438453537
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2281,
+  "aliasAssertionCorrected": true,
+  "coreReferenceMacUnchanged": true,
+  "retainedTestMethodsUnchanged": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "One new test assertion is corrected by matching the same invalidStorage case/text. Core/Reference/Mac and expected bytes/masks are unchanged from the first audio round. Per-call replies remain controlled inputs, not actual audio/device evidence.",
+    "All105 selection retains100 methods and adds5 bounded audio/caller/protocol/late-retry methods. For build or first test failure, unstarted methods stay explicit; the preceding all95 raster result remains separate.",
+    "Prepared file/MMIO controls remain declared inputs. No original, Unicorn or Windows execution, fixture edits, root Native promotion or shipping audio backend. New reply projection/comparator requires independent review.",
+    "Source59727 remains terminal34Objects, not137. Windows font/cursor/device, review, integration, clean-Mac/full match/game and existing safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}
