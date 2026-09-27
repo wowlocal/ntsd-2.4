@@ -1,0 +1,32 @@
+{
+  "scope": "Mutable template authoring, before candidate/build/Native execution",
+  "date": "2026-09-27",
+  "observations": [
+    {
+      "operation": "Read host lock flags through plistlib.load on piped ioreg output",
+      "error": "io.UnsupportedOperation: underlying stream is not seekable",
+      "resolution": "Read bytes then plistlib.loads; no UI action."
+    },
+    {
+      "operation": "Read host lock flags assuming a list root",
+      "error": "AttributeError: 'str' object has no attribute 'get'",
+      "resolution": "Handle dictionary root; observed CGSSessionScreenIsLocked=true and kCGSSessionOnConsoleKey=true."
+    },
+    {
+      "operation": "Author optional per-call fixture helper using asserted unique text replacement",
+      "error": "AssertionError: ('}, afterPrologue:', 0)",
+      "resolution": "Inspected actual named-argument line and used its unique anchor. Partial earlier template writes retained; original candidate never changed."
+    },
+    {
+      "operation": "Read saved menu input fixture envelope with default zlib header",
+      "error": "zlib.error: Error -3 while decompressing data: unknown compression method",
+      "resolution": "Used existing raw DEFLATE format (-15), verified declared count and SHA-256 before JSON decode; case47 activate-parent-0 matches menu case0 and has five continued iterations then loading. No original execution."
+    }
+  ],
+  "hostUI": {
+    "operation": "cua.getApp('UTM')",
+    "response": "Computer Use server error -10005: cgWindowNotFound",
+    "uiInputSent": false,
+    "status": "Availability error, not safety refusal; installation approval retained."
+  }
+}

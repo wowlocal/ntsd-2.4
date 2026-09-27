@@ -1,5 +1,22 @@
 # Текущая передача работы
 
+[Common/catalog audio: five methods pass, full handoff times out](APPLICATION_LOADING_AUDIO.md):
+Candidate2290 implements per-call WAV loading, explicit addressed/opaque owners,
+ordered volume/cache and retained Host receipts. Build53067 and corrected package
+1686 pass; the first package source-count error is preserved. Queue67719 exits1:
+5 passed, full Native catalog/pool/menu/Host70212 hits3600s,145 unstarted. This is
+incomplete comparison, not an observed Native mismatch or accepted whole handoff.
+[Publication](../evidence/application-loading-audio.json), [diagnosis](../evidence/application-loading-audio-failure.json).
+Finalizer83936 terminal0/absent verifies4998-file/218-member archives; task frozen.
+Root1034/prior2257/base2284/source55 and old results remain unchanged. NEXT after
+this commit: bounded numeric-text materialization optimization, supported by the
+Native profile and saved863-DAT-read count (64.9MB suffixes versus6270 prefix bytes).
+Preserve regex/Double/position/EOF/observer/error semantics; retain all151 methods,
+add existing numeric/catalog regressions, fresh candidate/build, same full-method
+hour limit. No source restart, in-Core IO or dropped caller. Review/root promotion,
+playback/device/Windows/clean-Mac/full match/game remain open. Host locked, installer
+approvals retained; EXE envelope not recalculated. Supersedes preflight NEXT below.
+
 [Common/catalog audio ownership prerequisite checked](APPLICATION_LOADING_AUDIO_PREFLIGHT.md):
 39 Native/15 document inputs and54 anchors expose three PCM range consumers:
 catalog, pool and loaded menu. Native opaque regions3/5 with saved23568/23578-byte

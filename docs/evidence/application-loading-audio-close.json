@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd-application-loading-audio-validation-close-v1",
+  "UTC": "2026-09-27T04:27:01.263547+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927",
+  "externalFree": 141057830912,
+  "internalFree": 67161067520,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "prospectiveVMCommitment": 68719476736,
+  "observedFreeDecrease": 1242468352,
+  "physicalAllowance": 8589934592,
+  "publication": {
+    "bytes": 6350,
+    "sha256": "a2e07812dbf9e6e4da0aafddee1cc65613d461ce6295b5508f1b42d7c378950f",
+    "mode": 420,
+    "mtime_ns": 1790483221263487592
+  },
+  "metadataArchive": {
+    "members": 218,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/metadata1.tar",
+    "bytes": 7864320,
+    "sha256": "366cf17c01b5694239109cbcbee5da18eb266e5299df42fcd965d2d57a64264b",
+    "mode": 420,
+    "mtime_ns": 1790483221126452677
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/artifact-archive1",
+    "files": 4998,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11459795458,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/artifact-archive1.json",
+      "bytes": 2562167,
+      "sha256": "0a58b22da2f435c90f9a02c80cc3c59f26ae910136ccd1b3f652c7dd45482d24",
+      "mode": 420,
+      "mtime_ns": 1790483199591375980
+    }
+  }
+}

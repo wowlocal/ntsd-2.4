@@ -1,0 +1,482 @@
+{
+  "schema": "ntsd-application-loading-audio-guard-diagnosis-v1",
+  "UTC": "2026-09-27T04:25:33.210652+00:00",
+  "outcome": "guard-incomplete",
+  "nativeMismatchObserved": false,
+  "successfulWholeComparison": false,
+  "originalExecuted": false,
+  "independentReview": false,
+  "buildPassed": true,
+  "packageGatePassed": true,
+  "passedMethods": 5,
+  "incompleteMethods": 1,
+  "unstartedMethods": [
+    "OriginalMacAudioBackendTests/testOriginalWAVsThroughOwnedBuffers",
+    "OriginalMacAudioBackendTests/testWholeStartupWithOwnedMenuBuffers",
+    "OriginalMacAudioBackendTests/testLateRetryAndResourceLifetimes",
+    "OriginalMacAudioBackendTests/testUnsupportedInputsAndServiceProtocol",
+    "OriginalMacAudioBackendTests/testOfflinePCMTransportForEveryOriginalFormat",
+    "OriginalStartupAudioTests/testPerCallWaveCorpusAndInitialCallerKeepAllBytesAndMasks",
+    "OriginalStartupAudioTests/testPerCallMenuSoundCorpusKeepsWholeAndStoppedOutcomes",
+    "OriginalStartupAudioTests/testWholeWinMainAudioRequestsMatchSourceAndPreparedState",
+    "OriginalStartupAudioTests/testAudioProtocolAndLockRegionsKeepDistinctOutcomes",
+    "OriginalStartupAudioTests/testLateStartupAudioFailuresDoNotRepeatServedCopies",
+    "OriginalMacFrontRasterTests/testWholeMenuPhysicalRasterRetainsUnknownCursorAndControlledTextBoundary",
+    "OriginalMacFrontRasterTests/testLateWholeMenuFailuresDoNotRepeatPhysicalRaster",
+    "OriginalMacFrontRasterTests/testMaskedFillKeyAndMirrorCopyUseOwnedConstructorSurfaces",
+    "OriginalMacFrontRasterTests/testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic",
+    "OriginalMacFrontRasterTests/testProtocolPreflightResourcesAndReleaseKeepDistinctOutcomes",
+    "OriginalApplicationObservedGraphicsTests/testWholeMenuOrderedGraphicsMatchesPreparedStateAndActualBitmapWork",
+    "OriginalApplicationObservedGraphicsTests/testVariableRepliesPreserveDCGenerationsAndActualPresentationResult",
+    "OriginalApplicationObservedGraphicsTests/testLateFailuresRetryWholeIterationWithoutRepeatingService",
+    "OriginalApplicationObservedGraphicsTests/testProtocolFamiliesStaleHostCancellationAndIndeterminateService",
+    "OriginalApplicationObservedGraphicsTests/testRetainedHistoryInspectionCopiesAndContextResourceLifetime",
+    "OriginalApplicationTextResponseTests/testPerRequestRepliesMatchInstalledCorpusAndRetainedChain",
+    "OriginalApplicationTextResponseTests/testMissingOutputIgnoredResultsAndEachLateFailureRollBack",
+    "OriginalApplicationTextResponseTests/testWholeOwnBodyUsesActualRepliesInsteadOfPreparedDC",
+    "OriginalApplicationTextResponseTests/testLateRepliesRollBackWholeOwnStartupIteration",
+    "OriginalMacWindowGeometryTests/testWholeMoveOwnsGeometryAndFollowingMenuPresentation",
+    "OriginalMacWindowGeometryTests/testMoveLateFailureRetriesSavedGeometryAndRetainsHistory",
+    "OriginalMacWindowGeometryTests/testGeometryPayloadOwnershipAndServiceProtocol",
+    "OriginalMacWindowGeometryTests/testIgnoredNumericGeometryRepliesAndWholeMoveRollback",
+    "OriginalApplicationObservedBitmapTests/testWholeFrontRetainsPhysicalBitmapRepliesOnHost",
+    "OriginalApplicationObservedBitmapTests/testLateFailuresRetryWithoutRepeatingPhysicalWork",
+    "OriginalApplicationObservedBitmapTests/testMissingResourceDiagnosticsRemainOrderedAcrossRollback",
+    "OriginalApplicationObservedBitmapTests/testObservedOutputBoundsAndAtomicRegistry",
+    "OriginalApplicationObservedBitmapTests/testProtocolStaleHostAndRetainedHistory",
+    "OriginalMacBitmapBackendTests/testAllOriginalDIBsThroughWholeConstructorOnStartupDisplay",
+    "OriginalMacBitmapBackendTests/testLateRetryMissingFileAndExplicitFormat",
+    "OriginalMacBitmapBackendTests/testSelectionAcquisitionMasksAndAtomicRectangles",
+    "OriginalMacBitmapBackendTests/testServiceProtocolAndAllocationFailure",
+    "OriginalMacDisplayColorTests/testWholeWindowKeepsSRGBPatternsAndOwnedCapture",
+    "OriginalMacDisplayBackendTests/testWholeStartupUsesOwnedDisplaySurfacesAndClipper",
+    "OriginalMacDisplayBackendTests/testWholeClearMasksPixelsAndAppKitViewReadback",
+    "OriginalMacDisplayBackendTests/testProtocolUnknownAndAllocationBoundaries",
+    "OriginalMacDisplayBackendTests/testLateRetryReleaseAndContextOwnership",
+    "OriginalMacWindowBackendTests/testWholeStartupUsesPhysicalWindowAndRetainsReplies",
+    "OriginalMacWindowBackendTests/testWindowGeometryAndResourceLifetimes",
+    "OriginalMacWindowBackendTests/testPhysicalServiceRejectsForeignDuplicateAndCancelledPermits",
+    "OriginalMacWindowBackendTests/testStartupLateFailureAndWindowDestruction",
+    "OriginalApplicationObservedStartupTests/testWholeWinMainWithObservedRequests",
+    "OriginalApplicationObservedStartupTests/testLateFailuresRetriesAndOwners",
+    "OriginalApplicationObservedStartupTests/testTypedRequestsAndProtocolBoundaries",
+    "OriginalApplicationObservedStartupTests/testActualMacClocksAtWholeCallerBoundaries",
+    "OriginalApplicationPreparedStartupPlatformTests/testWholeWinMainThroughProductionPreparedPlatform",
+    "OriginalApplicationPreparedStartupPlatformTests/testLateFailuresCopiesAndRetainedOwners",
+    "OriginalApplicationPreparedStartupPlatformTests/testPreparedInputBoundariesAndConsumption",
+    "OriginalApplicationWindowInspectionTests/testPlatformInspectionEndsAtHandoffAndHostCopiesRemainIndependent",
+    "OriginalApplicationWindowInspectionTests/testConcurrentCommittedReadersAndExchangeObservationDuringInputCallbacks",
+    "OriginalApplicationWindowInspectionTests/testPrivateHostInspectionSurvivesFailedCancelledAndIndeterminateStartup",
+    "OriginalApplicationWindowStartupTests/testAllWholeWinMainOutcomesSuspendOnOneHostAndComparePublication",
+    "OriginalApplicationWindowStartupTests/testSixLateStartupFailuresRetrySameOwnerWithoutServingWindowAgain",
+    "OriginalApplicationWindowStartupTests/testPreparationPublicationCopiesAndConsumptionFailuresKeepAnswersRetryable",
+    "OriginalApplicationWindowStartupTests/testPermitsReentryCancellationAndIndeterminateOutcomesStayDistinct",
+    "OriginalApplicationWindowStartupTests/testReturnedHostRunsInputAndRetainsStartupResourcesAfterCoordinatorDeath",
+    "OriginalWindowRequestExchangeTests/testEveryWholeWindowRequestSuspendsAndRetainsOriginalFailures",
+    "OriginalWindowRequestExchangeTests/testWholeWinMainParentsAndDistinctBoundariesUseSuspendedResponses",
+    "OriginalWindowRequestExchangeTests/testLateWholeStartupFailuresRetryWithoutServingWindowAgain",
+    "OriginalWindowRequestExchangeTests/testProtocolRejectsWrongOwnersReentryAndClosedOrIncompleteWork",
+    "OriginalWindowRequestExchangeTests/testReceiptsAndSnapshotsOwnResourcesAcrossCompletionCancellationAndDeath",
+    "OriginalWindowInitializationTests/testWholeOriginalWindowDisplayAndFailureOrder",
+    "OriginalWindowInitializationTests/testLatePlatformFailureRollsBackGlobals",
+    "OriginalWindowInitializationTests/testMissingDeclaredBackingAndOutputRollBack",
+    "OriginalWinMainStartupTests/testContinuousStartupOwnedStateAndExplicitBoundaries",
+    "OriginalWinMainStartupTests/testLateRollbackOfWholeStartup",
+    "OriginalApplicationDispatchPrefixTests/testWholeSurfaceClearRequestsAndReturns",
+    "OriginalBitmapSurfaceLoadingTests/testWholeLoaderAndCopyAtOwnedPlatformFields",
+    "OriginalBitmapSurfaceLoadingTests/testOwnFrontResourcesUseWholeImageAndCopyHelpers",
+    "OriginalBitmapSurfaceLoadingTests/testLateResourceFailuresRetainCommittedStartupAndCallback",
+    "OriginalDIBPixelsTests/testAllPackagedPixelsMatchIndependentBytesMasksAndRows",
+    "OriginalDIBPixelsTests/testDeclaredDecoderControlsAndTypedRejections",
+    "OriginalDIBPixelsTests/testImagePixelsStayImmutableAndDeletedHandlesDoNotRevive",
+    "OriginalSurfaceSourceColorsTests/testAllSavedLifetimesOwnExactColorsMasksAndDCGenerations",
+    "OriginalSurfaceSourceColorsTests/testKnownBlackUnknownPartialCopiesAndAtomicBounds",
+    "OriginalSurfaceSourceColorsTests/testSelectionCleanupReuseAndReleaseControls",
+    "OriginalApplicationHostSessionTests/testWholeFirstMenuParentsUseHostCommitHandoff",
+    "OriginalApplicationHostSessionTests/testFirstMenuLateFailuresRetainEarlierHostCommits",
+    "OriginalApplicationHostSessionTests/testSamePreparedAttemptsRetryWithIndependentHostState",
+    "OriginalApplicationHostSessionTests/testWholeInputChainsRetainActualHostLoadingTicket",
+    "OriginalApplicationHostSessionTests/testStartupLateFailuresAndSharedCopyRejection",
+    "OriginalApplicationBootstrapTests/testLateFirstMenuFailuresRetainStartupAndResize",
+    "OriginalApplicationBootstrapTests/testStartupAttemptOwnsReplyCursorAndPublishesOnlyAtCommit",
+    "OriginalApplicationGraphicsTests/testDeclaredTextAcquisitionsAndUnresolvedCleanup",
+    "OriginalApplicationGraphicsTests/testDisplayGenerationsLiveTargetsPaletteAndRectangles",
+    "OriginalApplicationGraphicsTests/testResolvedSourceSnapshotAndNullSourceBoundary",
+    "OriginalApplicationHostDeliveryContextTests/testDelayedStartupAndIterationsKeepTheirOwnStateAndOrder",
+    "OriginalApplicationHostDeliveryContextTests/testStartupCopyFailuresLeaveNoPublicationAndRetryOnce",
+    "OriginalApplicationHostDeliveryContextTests/testIterationCopyFailuresPreserveEarlierBatchesAndSamePacketRetry",
+    "OriginalApplicationHostDeliveryContextTests/testDelayedLoadedContextsRetainReleasedResourcesOnBothBackings",
+    "OriginalApplicationHostDeliveryContextTests/testLoadedCopyFailuresRetainPreparedOwnersAndEarlierQueue",
+    "OriginalApplicationHostDeliveryContextTests/testContextsOutliveHostAndInspectionCopiesDoNotChangeOwners",
+    "OriginalWindowLifecycleTests/testWholeLifecycleOwnWindowsAndExactRequestStoreOrder",
+    "OriginalWindowLifecycleTests/testLateRecreationAndMissingBackingRollBackWholeCallback",
+    "OriginalWindowLifecycleTests/testDestroyOwnershipAndLateQuitRollBack",
+    "OriginalLibSurfaceTextTests/testActualInstalledReplacementAndRetainedDC",
+    "OriginalLibSurfaceTextTests/testLateObserverFailurePreservesRetainedDC",
+    "OriginalApplicationScreenBodyTests/testOwnPanelAndBodyUseInstalledTextAndProducedLocalBytes",
+    "OriginalApplicationScreenBodyTests/testLateBodyFailuresRollBackWholePendingIteration",
+    "OriginalBitmapDrawingTests/testOriginalBitmapDrawingAndClipping",
+    "OriginalMenuSoundStartupTests/testWholeMenuSoundStartupAgainstOriginal",
+    "OriginalMenuSoundStartupTests/testMissingDeviceAndLateObserverRollback",
+    "OriginalWaveLoaderTests/testEveryOriginalWaveAndInitialSoundLoadingAgainstEXE",
+    "OriginalInputStartupTests/testInputSoundProducerAndOwnJoystickCallbacks",
+    "OriginalInputStartupTests/testLateStartupAndCallbackRollback",
+    "OriginalQueuedSoundTests/testWholeOriginalQueuedSoundAndBufferPlayback",
+    "OriginalCatalogSoundsTests/testCompleteSourceCatalogWithEnabledWaveLoading",
+    "OriginalCatalogSoundsTests/testRepeatedObjectsUseTheLiveOriginalSoundCache",
+    "OriginalMusicPlaybackTests/testEnabledMusicFromNaturalFirstMenu",
+    "OriginalMusicPlaybackTests/testMusicWithReversePoolAndRampStorage",
+    "OriginalGraphEventsTests/testWholeNotificationsAndOwnGraphProducer",
+    "OriginalGraphEventsTests/testGraphInitializationLateFailureRollsBack",
+    "OriginalGraphEventsTests/testLateCallbackAndProviderExhaustionRollBackLocals",
+    "OriginalGraphEventsTests/testUnknownLocalsAreRequiredOnlyWhenRead",
+    "OriginalGraphEventsTests/testMissingGraphInterfacesRollBackLocals",
+    "OriginalInitialLoadingTests/testContinuousFirstLoadingFromRealPrologue",
+    "OriginalInitialLoadingTests/testPhaseZeroPauseAndReversedActorAllocations",
+    "OriginalApplicationLoadingPrefixTests/testOwnLoadingCommonSoundsAndOrdinaryFailures",
+    "OriginalApplicationLoadingPrefixTests/testLateLoadingFailuresPreserveOwnMenuAndPendingIteration",
+    "OriginalApplicationLoadingSessionTests/testBundledCommonSoundsAreOwnedAndRetainDistinctNames",
+    "OriginalApplicationLoadingSessionTests/testMissingCorruptExtraAndSymlinkPackagesAreDistinctNativeBoundaries",
+    "OriginalApplicationLoadingSessionTests/testApplicationBundleRequiresItsOwnCommonSoundPackage",
+    "OriginalApplicationCatalogSessionTests/testOwnCatalogPrefixesPreserveAllChildrenFilesGlobalsAndOperations",
+    "OriginalApplicationCatalogSessionTests/testLateCatalogCancellationAndChangingTextDCDoNotPublishOwners",
+    "OriginalApplicationCatalogSessionTests/testCatalogAllocationCannotOverlapRetainedCommonPCM",
+    "OriginalApplicationCatalogFullTests/testCompleteCatalogFromOwnedApplication",
+    "OriginalApplicationCatalogFullTests/testLateStageCancellationRollsBackEntireCatalog",
+    "OriginalApplicationCatalogFullTests/testBeforePublicationCancellationAndFreshFactory",
+    "OriginalApplicationPoolTests/testCompleteOwnedCatalogPoolAndInterface",
+    "OriginalApplicationPoolTests/testLateFailuresKeepWholeEntryAndFreshRetry",
+    "OriginalApplicationPoolTests/testOwnedRangeAndCapturedWriteBoundaries",
+    "OriginalApplicationLoadedMenuTests/testOwnMenuAndExactOuterIterationWithBothBitmapBackings",
+    "OriginalApplicationLoadedMenuTests/testLateMenuAndOuterFailuresRetainAllOwnersAndRetry",
+    "OriginalApplicationLoadedMenuTests/testDeclaredMissingBackgroundLoadsWithoutReplacingOldOwners",
+    "OriginalApplicationLoadedMenuTests/testMenuReturnRequestsItsClockOnlyAtTheActualTimerBranch",
+    "OriginalApplicationLoadedMenuTests/testForeignStaleAndOverlappingOwnersAreRejected",
+    "OriginalApplicationHostLoadingTests/testOwnFreshLoadingAndThreeCachedCyclesUseHostHandoff",
+    "OriginalApplicationHostLoadingTests/testPreparedChildAndPlatformSurviveLateFailuresAndRetry",
+    "OriginalApplicationHostLoadingTests/testDifferentSameRevisionTicketsAndRepeatedCompletionAreRejected",
+    "OriginalApplicationHostLoadingTests/testLoadingPrefixRequiresExactlyItsPreparedReplies"
+  ],
+  "method": "OriginalMacLoadingAudioTests/testWholeCatalogPoolLoadedMenuHostWithOwnedAudio",
+  "pid": 70212,
+  "startedUTC": "2026-09-27T03:24:18.346383+00:00",
+  "endedUTC": "2026-09-27T04:24:18.567530+00:00",
+  "elapsedSeconds": 3600.225265667,
+  "exitCode": -15,
+  "guardReason": "timeout",
+  "signals": [
+    {
+      "pid": 70212,
+      "identity": "70212 Sun Sep 27 06:24:18 2026     /Applications/Xcode.app/Contents/Developer/usr/bin/xctest -XCTest NTSDCoreTests.OriginalMacLoadingAudioTests/testWholeCatalogPoolLoadedMenuHostWithOwnedAudio /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest",
+      "cwd": "p70212\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/candidate1",
+      "signal": "SIGTERM"
+    }
+  ],
+  "exactTestLog": "Test Suite 'Selected tests' started at 2026-09-27 06:24:18.389.\nTest Suite 'NTSDNativePackageTests.xctest' started at 2026-09-27 06:24:18.390.\nTest Suite 'OriginalMacLoadingAudioTests' started at 2026-09-27 06:24:18.390.\nTest Case '-[NTSDCoreTests.OriginalMacLoadingAudioTests testWholeCatalogPoolLoadedMenuHostWithOwnedAudio]' started.\n",
+  "terminalToolOutput": "{\"status\": \"terminal\", \"pid\": 70212, \"exitCode\": -15, \"elapsedSeconds\": 3600.225265667, \"peakLogicalBytes\": 11472006012, \"peakTreeRSS\": 4290347008, \"observedFreeDecrease\": 1259298816, \"remainingProcessGroup\": []}\n{\"method\": \"OriginalMacLoadingAudioTests/testWholeCatalogPoolLoadedMenuHostWithOwnedAudio\", \"passed\": false, \"completed\": 6}\n",
+  "queueToolSession": 27413,
+  "queueToolChunk": "33f399",
+  "queueTerminalReaped": true,
+  "queueExitCode": 1,
+  "processAbsence": [
+    {
+      "job": "prepare1.job.json",
+      "pid": 52125,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 53067,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 53259,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 53260,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55883,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55887,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55899,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55919,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55920,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 55947,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56120,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56121,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56145,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56146,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56324,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 56328,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 57878,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 57879,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 57880,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 57881,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 58057,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 58061,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 58103,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 58107,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 63574,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 63575,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 63592,
+      "absent": true
+    },
+    {
+      "job": "build1.job.json",
+      "pid": 63595,
+      "absent": true
+    },
+    {
+      "job": "tests1-queue.job.json",
+      "pid": 67719,
+      "absent": true
+    },
+    {
+      "job": "test-01.job.json",
+      "pid": 67874,
+      "absent": true
+    },
+    {
+      "job": "test-02.job.json",
+      "pid": 68040,
+      "absent": true
+    },
+    {
+      "job": "test-03.job.json",
+      "pid": 68524,
+      "absent": true
+    },
+    {
+      "job": "test-04.job.json",
+      "pid": 68858,
+      "absent": true
+    },
+    {
+      "job": "test-05.job.json",
+      "pid": 70018,
+      "absent": true
+    },
+    {
+      "job": "test-06.job.json",
+      "pid": 70212,
+      "absent": true
+    }
+  ],
+  "inputs": {
+    "context1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/context1.json",
+      "bytes": 40848,
+      "sha256": "5ce9652482363ff455052cecbf58d4f7382c11b334f3fab9167326adcaf2e547",
+      "mode": 420,
+      "mtime_ns": 1790478902926845811
+    },
+    "candidate1-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/candidate1-inputs.json",
+      "bytes": 577873,
+      "sha256": "8cb1afa866f9abc36dd747b08755ffc50fdaa1b520abd03b8d46eb2721badb24",
+      "mode": 420,
+      "mtime_ns": 1790478902515120255
+    },
+    "candidate1.patch": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/candidate1.patch",
+      "bytes": 100216,
+      "sha256": "585abe0d61ee79e0d9731ce89d4e0985f49576de36dd24533e4d30dd0c6a9fdb",
+      "mode": 420,
+      "mtime_ns": 1790478899473671225
+    },
+    "build1.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/build1.job.json",
+      "bytes": 105682,
+      "sha256": "878d18ff402a2c29ef7d91bca91448d13027f085e4fc364c3774117e5d633cda",
+      "mode": 420,
+      "mtime_ns": 1790479234193677812
+    },
+    "package-check1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-check1.json",
+      "bytes": 1464457,
+      "sha256": "94491b5e7ea3da46396c3ddb733ac7f7c22d35048de2d729fd9233082302864e",
+      "mode": 420,
+      "mtime_ns": 1790479350576839442
+    },
+    "package-check1-failure.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-check1-failure.json",
+      "bytes": 2386,
+      "sha256": "109875c1e6259a15b567d75801261432b12cbd3b50f1c67cbd053986e34aa915",
+      "mode": 420,
+      "mtime_ns": 1790479323657503860
+    },
+    "package-correction1-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-correction1-inputs.json",
+      "bytes": 3336,
+      "sha256": "913635104a54315253dbea62b4c0b40a10f8834bbf8cf619edf77e72cc043091",
+      "mode": 420,
+      "mtime_ns": 1790479323658191487
+    },
+    "package-check2-result.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-check2-result.json",
+      "bytes": 1225,
+      "sha256": "334d9a9151b58589d440a5f049518e7b9d11a3a00d60396474998013d4e1fa22",
+      "mode": 420,
+      "mtime_ns": 1790479438915567525
+    },
+    "tests1-queue.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/tests1-queue.job.json",
+      "bytes": 5751,
+      "sha256": "a85f8b5e5995db58a6b687dd818d2bf4f2a4a51718ab4491c6bc742734be119e",
+      "mode": 420,
+      "mtime_ns": 1790483058569451738
+    },
+    "test-06.job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/test-06.job.json",
+      "bytes": 4816,
+      "sha256": "776ed9678c0432c50ac8115afb163fee269361231c2278b09c793dc865d88236",
+      "mode": 420,
+      "mtime_ns": 1790483058568029610
+    },
+    "test-06.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/test-06.log",
+      "bytes": 337,
+      "sha256": "23846615011401ba212106391c05761e561af5228778babc28bf9aec4766bce8",
+      "mode": 420,
+      "mtime_ns": 1790479458389696005
+    },
+    "test-06-native-sample1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/test-06-native-sample1.json",
+      "bytes": 1465,
+      "sha256": "d5e81c08b937b891d2b64888c83b18be4849576c59091fb525112a9f872318a1",
+      "mode": 420,
+      "mtime_ns": 1790480552807340161
+    },
+    "test-06-native-sample1.txt": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/test-06-native-sample1.txt",
+      "bytes": 223719,
+      "sha256": "8bf1472405bf3145fbaf7eead4430186be7fa4035570ce18d0a4ee677a600c85",
+      "mode": 420,
+      "mtime_ns": 1790480552798891250
+    },
+    "test-06-native-sample1-analysis.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/test-06-native-sample1-analysis.json",
+      "bytes": 2738,
+      "sha256": "ca3c906d5fccca9ac3b3a298301cd349a935dbda08ca8b1487ba1090305599f6",
+      "mode": 420,
+      "mtime_ns": 1790480941789159079
+    },
+    "numeric-suffix-work1.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/numeric-suffix-work1.json",
+      "bytes": 306286,
+      "sha256": "e0d26ff37247022fd5776f87559f334f91ff8c7f5312b5ad0ec7b84609b039fe",
+      "mode": 420,
+      "mtime_ns": 1790481504476119166
+    }
+  },
+  "finding": "The whole Native catalog/pool/loaded-menu/Host method did not finish within the frozen 3600-second limit. The runner revalidated the live identity/cwd, sent SIGTERM, and recorded no remaining owned processes. Its log has only the start record; no complete comparison or assertion-failure result is observed.",
+  "performanceEvidence": "The one-second sample found active catalog parsing, including binary64 whole-suffix conversion. Static saved-input accounting verifies 64,910,686 suffix bytes versus 6,270 numeric-alphabet-prefix bytes across 863 actual DAT reads. This is not an overall timing attribution or proof that a changed parser passes.",
+  "next": "Commit and freeze this incomplete increment. Then declare a separate bounded Native scanner text-materialization optimization preserving the existing decimal regex, Double conversion, position/EOF/observer/error behavior; retain all151 methods and add existing actual-DAT numeric and whole-catalog regressions. Use a fresh candidate/build and unchanged whole-method bound; no source restart, old fixture edit, IO inside Core or full-caller deletion.",
+  "controls": {
+    "frozenCandidateChanged": false,
+    "deadlineExtended": false,
+    "sourceRestarted": false,
+    "automaticRetry": false,
+    "wholeCallerDropped": false
+  },
+  "openGates": [
+    "Whole loading handoff comparison",
+    "145 retained methods on this candidate",
+    "Independent review",
+    "Root/runtime integration",
+    "Windows/device/clean-Mac/full match/game"
+  ]
+}

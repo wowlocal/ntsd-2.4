@@ -1,0 +1,1485 @@
+--- a/native/Sources/NTSDCore/OriginalApplicationCatalogControls.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationCatalogControls.swift
+@@ -23,6 +23,8 @@
+         public let file: (String,String) throws -> OriginalLoadingFileAllocation
+         public let wave: (OriginalSoundRegistration,UInt32) throws -> OriginalWavePlatform
+         public let volume: ([UInt32]) throws -> Int32
++        public let prepareWave: (OriginalSoundRegistration,UInt32) throws -> OriginalWavePreparation
++        public let setVolume: (OriginalWaveBinding,[UInt32]) throws -> Int32
+         public let time: () throws -> UInt32
+         public let message: (String,[UInt8]) throws -> MessageInput
+         public let finish: () throws -> Void
+@@ -35,6 +37,20 @@
+                     finish: @escaping () throws -> Void = {}) {
+             self.allocate = allocate;self.bitmap = bitmap;self.file = file;self.wave = wave
+             self.volume = volume;self.time = time;self.message = message;self.finish = finish
++            prepareWave = { .legacy(try wave($0,$1)) };setVolume = { _,args in try volume(args) }
++        }
++        public init(allocate: @escaping (Allocation.Kind,Int) throws -> UInt32,
++                    bitmap: @escaping (API.Request) throws -> API.Response,
++                    file: @escaping (String,String) throws -> OriginalLoadingFileAllocation,
++                    wavePreparation: @escaping (OriginalSoundRegistration,UInt32) throws -> OriginalWavePreparation,
++                    volume: @escaping (OriginalWaveBinding,[UInt32]) throws -> Int32,
++                    time: @escaping () throws -> UInt32,
++                    message: @escaping (String,[UInt8]) throws -> MessageInput,
++                    finish: @escaping () throws -> Void = {}) {
++            self.allocate = allocate;self.bitmap = bitmap;self.file = file;prepareWave = wavePreparation
++            setVolume = volume;self.time = time;self.message = message;self.finish = finish
++            wave = { _,_ in throw Boundary.dependency("Observed WAV has no aggregate future reply") }
++            self.volume = { _ in throw Boundary.dependency("Observed volume requires its binding") }
+         }
+     }
+     static func fixedControls(_ input: Inputs) -> Controls {
+--- a/native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift
+@@ -13,12 +13,23 @@
+     /// registered WAV owners. Platforms give logical PCM identities, not bytes.
+     public struct StartupSounds {
+         public let owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]
++        public let waveOwners: [OriginalWaveOwnership]
+         /// The real WinMain output already owns its wide music allocation.
+         /// Retain it through catalog/pool/input until the next music consumer.
+         public let music: OriginalMusicMemory
+         public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform], music: OriginalMusicMemory) throws {
+             guard owner.loads.count == platforms.count else { throw Boundary.input("Startup WAV owners") }
+             self.owner = owner; self.platforms = platforms; self.music = music
++            waveOwners = zip(owner.loads,platforms).enumerated().map { i,pair in
++                let path = i < OriginalMenuSoundStartup.paths.count ? OriginalMenuSoundStartup.paths[i] : ""
++                return .init(binding:.init(i,path,pair.1.destination,pair.1.device),result:pair.0,legacy:pair.1)
++            }
++        }
++        public init(owner: OriginalMenuSoundStartup.Result,waveOwners: [OriginalWaveOwnership],music: OriginalMusicMemory) throws {
++            guard owner.loads.count == waveOwners.count,zip(waveOwners,owner.loads).allSatisfy({ pair in pair.0.matches(pair.1) }) else {
++                throw Boundary.input("Startup WAV owners")
++            }
++            self.owner = owner;self.waveOwners = waveOwners;self.music = music;platforms = []
+         }
+     }
+     public struct MessageInput {
+@@ -71,6 +82,7 @@
+         public let state: Session.State, parent: [Int:OriginalStateRecord], allocations: [Allocation]
+         public let objectTokens: [UInt32], bitmapTokens: [UInt32], bitmapSurfaces: [UInt32]
+         public let sounds: OriginalRegisteredSoundLoading, waveInputs: [OriginalWavePlatform]
++        public let waveOwners: [OriginalWaveOwnership]
+         /// Actual semantic writes; this mask is not Native knowledge and does
+         /// not claim original instruction widths, PC order or store counts.
+         public let globalStores: [GlobalStore], observedGlobalWrites: [Bool]
+@@ -87,7 +99,7 @@
+     public init(pending: Loading.PendingCatalog, startup: StartupSounds) throws {
+         try pending.state.validateAliases()
+         guard pending.state.bitmapInputs != nil, pending.state.graphics != nil,
+-              pending.common.sounds.count == pending.waveInputs.count else { throw Boundary.missingOwners }
++              pending.common.sounds.count == pending.waveOwners.count else { throw Boundary.missingOwners }
+         // The shared registry initializes its own ordinal count to zero. A
+         // retained nonempty cache needs a separately recovered continuation.
+         guard try pending.state.full.integer(at:0x458438-0x44d000,as:UInt32.self) == 0 else {
+@@ -129,6 +141,8 @@
+         var state: Session.State, parent: [Int:OriginalStateRecord] = [:], allocations: [Allocation] = []
+         var objectTokens: [UInt32] = [], bitmapTokens: [UInt32] = [], bitmapSurfaces: [UInt32] = []
+         var sounds = OriginalRegisteredSoundLoading(), waveInputs: [OriginalWavePlatform] = []
++        var waveOwners: [OriginalWaveOwnership] = []
++        let audioDomain: OriginalWaveRegionDomain
+         var globalStores: [GlobalStore] = [], observedGlobalWrites: [Bool]
+         var operations: [Operation], graphics: [OriginalApplicationGraphics.Command]
+         var ranges: [(UInt64,UInt64)] = []
+@@ -137,6 +151,8 @@
+             observe: @escaping (Observation,Session.State) throws -> Void,
+             afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void) throws {
+             self.entry = entry; self.inputs = inputs; self.controls = controls; self.observe = observe; self.afterChild = afterChild
++            guard let first = startup.waveOwners.first else { throw Boundary.missingOwners }
++            audioDomain = first.domain
+             state = entry.state; observedGlobalWrites = [Bool](repeating:false,count:state.full.bytes.count)
+             operations = entry.stagedOperations.map(Operation.preceding); graphics = entry.stagedGraphics
+             guard inputs.presentation.targetSurface == entry.target else { throw Boundary.input("Catalog presentation target") }
+@@ -150,24 +166,25 @@
+                   startup.owner.loads.count == OriginalMenuSoundStartup.paths.count else {
+                 throw Boundary.dependency("Startup sound ownership for catalog entry")
+             }
+-            for (i,pair) in zip(startup.owner.loads,startup.platforms).enumerated() {
+-                let (owner,p) = pair
+-                guard p.destination == UInt32(0x45560c+4*i),p.device == device,
+-                      try word(Int(p.destination)) == owner.output else { throw Boundary.input("Startup WAV binding") }
+-                try retainWave(owner,p)
++            for (i,owner) in startup.waveOwners.enumerated() {
++                guard owner.binding.index == i,owner.binding.path == OriginalMenuSoundStartup.paths[i] else { throw Boundary.input("Startup WAV path/index") }
++                try owner.validate(device:device,destination:UInt32(0x45560c+4*i),
++                    output:word(0x45560c+4*i),domain:audioDomain)
++                try retainWave(owner)
+             }
+             for (token,record) in startup.music.allocations { try range(token,record.bytes.count) }
+-            for (i,pair) in zip(entry.common.sounds,entry.waveInputs).enumerated() {
+-                let (owner,p) = pair
+-                guard p.destination == UInt32(0x451db0+4*i),p.device == device,
+-                      try word(Int(p.destination)) == owner.output else { throw Boundary.input("Common WAV binding") }
+-                try retainWave(owner,p)
++            for (i,owner) in entry.waveOwners.enumerated() {
++                guard owner.binding.index == i,owner.binding.path == OriginalInitialSoundLoading.paths[i] else { throw Boundary.input("Common WAV path/index") }
++                guard owner.matches(entry.common.sounds[i]) else { throw Boundary.input("Common WAV result") }
++                try owner.validate(device:device,destination:UInt32(0x451db0+4*i),
++                    output:word(0x451db0+4*i),domain:audioDomain)
++                try retainWave(owner)
+             }
+             for (region,count) in OriginalCatalogRegistry.regionSizes { parent[region] = try backing(count) }
+         }
+         func snapshot() -> Snapshot {
+             .init(state:state,parent:parent,allocations:allocations,objectTokens:objectTokens,bitmapTokens:bitmapTokens,
+-                bitmapSurfaces:bitmapSurfaces,sounds:sounds,waveInputs:waveInputs,globalStores:globalStores,
++                bitmapSurfaces:bitmapSurfaces,sounds:sounds,waveInputs:waveInputs,waveOwners:waveOwners,globalStores:globalStores,
+                 observedGlobalWrites:observedGlobalWrites,operations:operations,graphics:graphics)
+         }
+         func backing(_ count: Int) throws -> OriginalStateRecord {
+@@ -198,19 +215,14 @@
+             if checkingOverlap && ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) { throw Boundary.overlap(token) }
+             ranges.append((lo,hi))
+         }
+-        func retainWave(_ owner: OriginalWaveLoadResult,_ p: OriginalWavePlatform) throws {
+-            guard owner.exit == .returned,owner.returned == 1,!owner.temporaryLive,
+-                  p.device != 0,p.buffer != 0,owner.output == p.buffer,owner.temporary != nil else {
++        func retainWave(_ owner: OriginalWaveOwnership) throws {
++            guard owner.domain == audioDomain else { throw Boundary.input("WAV identity domain") }
++            do { for span in try owner.addressedRegions() { try range(span.token,span.count) } }
++            catch OriginalWaveOwnership.Boundary.incomplete {
+                 throw Boundary.dependency("WAV without established completed PCM ownership")
+-            }
+-            guard p.firstCount == owner.first.bytes.count, p.secondCount == (owner.second?.bytes.count ?? 0) else {
+-                throw Boundary.input("WAV PCM allocation provenance")
+-            }
+-            // Temporary WAV bytes have no declared address in WavePlatform.
+-            // They stay owned values, outside this logical address journal;
+-            // unresolved live temporaries above cannot authorize allocation.
+-            try range(p.firstPointer,owner.first.bytes.count)
+-            if let second = owner.second { try range(p.secondPointer,second.bytes.count) }
++            } catch let error as OriginalWaveOwnership.Boundary {
++                throw Boundary.input("WAV PCM allocation provenance: \(error)")
++            }
+         }
+         func allocate(_ kind: Allocation.Kind,_ count: Int) throws -> UInt32 {
+             let token = try controls.allocate(kind,count)
+@@ -328,19 +340,20 @@
+             pendingSound = request
+             let device = try word(0x44eecc)
+             guard device != 0 else { return }
+-            let p = try controls.wave(request,device),index = request.index
++            let p = try controls.prepareWave(request,device),index = request.index
+             let address = 0x452948+index*4,outputBefore = try word(address)
+             try emit(.wave(index,.init(.load,[p.destination],[request.path.unicodeScalars.map { UInt8($0.value) }])))
+             var candidate = sounds
+-            try candidate.load(request,device:device,outputBefore:outputBefore,platform:p,fileSource:file,
++            try candidate.load(request,device:device,outputBefore:outputBefore,preparation:p,fileSource:file,
+                 outputStored:{ try self.put(address,$0) },onWave:{ e in
+                     if e.kind != .load { self.operations.append(.wave(index,e)) }; try self.emit(.wave(index,e))
+                 },onVolume:{ args in
+-                    let result = try self.controls.volume(args)
++                    let result = try self.controls.setVolume(.init(index,request.path,p.destination,p.device),args)
+                     self.operations.append(.volume(args,ignoredResult:result)); try self.emit(.volume(args,ignoredResult:result))
+                 })
+-            guard let owner = candidate.buffers[index] else { throw Boundary.missingOwners }
+-            try retainWave(owner,p); sounds = candidate; waveInputs.append(p)
++            guard let owner = candidate.owners[index] else { throw Boundary.missingOwners }
++            try retainWave(owner);sounds = candidate;waveOwners.append(owner)
++            if let legacy = p.legacyPlatform { waveInputs.append(legacy) }
+         }
+         func soundCache(_ bytes: [UInt8],_ count: Int) throws {
+             guard let request = pendingSound,request.index+1 == count else { throw Boundary.input("Sound commit order") }
+--- a/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift
+@@ -147,16 +147,14 @@
+             let catalog = entry.entry.entry
+             for a in catalog.snapshot.allocations { reserve(a.token,a.count) }
+             for f in catalog.files.streams.values { reserve(f.allocation.buffer,f.allocation.capacity) }
+-            for (a,p) in zip(catalog.startup.owner.loads,catalog.startup.platforms) { retain(a,p) }
+-            for (a,p) in zip(catalog.entry.common.sounds,catalog.entry.waveInputs) { retain(a,p) }
+-            for (i,p) in catalog.snapshot.waveInputs.enumerated() {
+-                guard let a = catalog.snapshot.sounds.buffers[i] else { throw Boundary.dependency("WAV owner") };retain(a,p)
+-            }
++            for owner in catalog.startup.waveOwners { try retain(owner) }
++            for owner in catalog.entry.waveOwners { try retain(owner) }
++            for owner in catalog.snapshot.waveOwners { try retain(owner) }
+             for (token,record) in audio.allocations { reserve(token,record.bytes.count) }
+         }
+         func reserve(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) } }
+-        func retain(_ a: OriginalWaveLoadResult,_ p: OriginalWavePlatform) {
+-            reserve(p.firstPointer,a.first.bytes.count);if let b = a.second { reserve(p.secondPointer,b.bytes.count) }
++        func retain(_ owner: OriginalWaveOwnership) throws {
++            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
+         }
+         func claim(_ token: UInt32,_ count: Int) throws {
+             let lo = UInt64(token),hi = lo+UInt64(count)
+--- a/native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationLoadingSession.swift
+@@ -17,6 +17,7 @@
+         public let entry: Session.PendingLoading
+         public let state: Session.State,target: UInt32,common: OriginalInitialLoadingCommon
+         public let waveInputs: [OriginalWavePlatform]
++        public let waveOwners: [OriginalWaveOwnership]
+         public let stagedOperations: [Operation],stagedGraphics: [OriginalApplicationGraphics.Command]
+         /// The next original allocation boundary; allocation has not executed.
+         public let allocationBytes: UInt32 = 81_273_768
+@@ -40,10 +41,33 @@
+         attemptedWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
+         afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
+         beforeCatalog: (PendingCatalog) throws -> Void = { _ in }) throws -> PendingCatalog {
++        var consumed = 0
++        return try prepareCommon(inputs:inputs,prepareWave:{ index,_,_,_ in
++            guard index < waves.count else { throw Boundary.waveReply(index) }
++            consumed += 1;return .legacy(waves[index])
++        },finishWaves:{ guard consumed == waves.count else { throw Boundary.unusedReplies } },
++            drawResult:drawResult,presentationResult:presentationResult,store:store,observe:observe,
++            graphicsObserve:graphicsObserve,beforeWave:beforeWave,afterPrologue:afterPrologue,
++            attemptedWave:attemptedWave,afterWave:afterWave,beforeCatalog:beforeCatalog)
++    }
++
++    @discardableResult
++    public mutating func prepareCommon(inputs: OriginalApplicationLoadingInputs,prepareWave: (Int,String,UInt32,UInt32) throws -> OriginalWavePreparation,
++        finishWaves: () throws -> Void = {},
++        drawResult: Int32,presentationResult: Int32,
++        store: (Int,[UInt8]) throws -> Void = { _,_ in },
++        observe: (Observation) throws -> Void = { _ in },
++        graphicsObserve: (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
++        beforeWave: (Int,String,UInt32,OriginalStateRecord) throws -> Void = { _,_,_,_ in },
++        afterPrologue: (OriginalStateRecord,Bool) throws -> Void = { _,_ in },
++        attemptedWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
++        afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
++        beforeCatalog: (PendingCatalog) throws -> Void = { _ in }) throws -> PendingCatalog {
+         guard pendingCatalog == nil else { throw Boundary.alreadyPrepared }
+         var state = entry.state,operations = entry.stagedEffects.map(Operation.menu),graphics = entry.stagedGraphics
+         let initial = try Session.State.slice(state.full,0,OriginalMatchPreparation.globalSize)
+-        var waveIndex = -1,consumed = 0
++        var waveIndex = -1
++        var waves: [OriginalWavePlatform] = [],owners: [OriginalWaveOwnership] = []
+         func emit(_ effect: Session.Effect) throws {
+             guard var owner = state.graphics else { throw Boundary.missingOwners }
+             let command = try owner.consume(effect,inputs:state.bitmapInputs);state.graphics = owner
+@@ -74,12 +98,14 @@
+             })
+         }
+         let common = try OriginalInitialLoadingCommon.load(globals:initial,targetSurface:entry.target,fileSource:inputs.file,
+-            platform:{ index,path,destination in
+-                guard index < waves.count else { throw Boundary.waveReply(index) }
+-                waveIndex = index;consumed += 1
++            preparation:{ index,path,destination in
++                let device = try state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
++                let preparation = try prepareWave(index,path,destination,device)
++                waveIndex = index
+                 try beforeWave(index,path,destination,Session.State.slice(state.full,0,OriginalMatchPreparation.globalSize))
+-                return waves[index]
+-            },afterPrologue:afterPrologue,afterWave:afterWave,attemptedWave:attemptedWave,store:ownedStore,observe:{ event in
++                if let legacy = preparation.legacyPlatform { waves.append(legacy) }
++                return preparation
++            },ownedWave:{ _,owner in owners.append(owner) },afterPrologue:afterPrologue,afterWave:afterWave,attemptedWave:attemptedWave,store:ownedStore,observe:{ event in
+                 if let wave = event.wave {
+                     if wave.kind != .load { operations.append(.wave(waveIndex,wave)) }
+                     try observe(.wave(wave))
+@@ -94,9 +120,9 @@
+                     }
+                 }
+             })
+-        guard consumed == waves.count else { throw Boundary.unusedReplies }
++        try finishWaves()
+         try state.replace(0,common.globals);try state.validateAliases()
+-        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,
++        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,waveOwners:owners,
+             stagedOperations:operations,stagedGraphics:graphics)
+         try beforeCatalog(prepared)
+         pendingCatalog = prepared
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalApplicationObservedLoadingAudio.swift
+@@ -0,0 +1,60 @@
++import Foundation
++
++/// Retains one loading ticket and services its ordered audio only after the
++/// entire Host/Core preparation unwinds. Non-audio inputs remain declared.
++public final class OriginalApplicationObservedLoadingAudio<Platform: OriginalApplicationStartupPlatform> {
++    public typealias Host = OriginalApplicationHostSession<Platform>
++    public typealias Exchange = OriginalLoadingAudioExchange
++    public enum Boundary: Error, Equatable { case reentrantAttempt, missingLoading, staleLoading }
++    public enum Outcome { case request(Exchange.Permit), prepared(Host.LoadedOutcome) }
++    private let host: Host, sequence: UInt64, entry: Host.Session.PendingLoading
++    private let exchange = Exchange(), lock = NSRecursiveLock(), domain: OriginalWaveRegionDomain
++    private var inFlight = false
++    public init(host: Host,domain: OriginalWaveRegionDomain) throws {
++        guard let entry = host.pendingLoading else { throw Boundary.missingLoading }
++        self.host = host;self.entry = entry;sequence = host.committedSequence;self.domain = domain
++    }
++    private func locked<T>(_ body: () throws -> T) rethrows -> T {
++        lock.lock();defer { lock.unlock() };return try body()
++    }
++    private func attempt<T>(_ body: () throws -> T) throws -> T {
++        try locked {
++            guard !inFlight else { throw Boundary.reentrantAttempt }
++            inFlight = true;defer { inFlight = false };return try body()
++        }
++    }
++    public var exchangeSnapshot: Exchange.Snapshot { locked { exchange.snapshot } }
++    public func resume(
++        prepare: (Host.LoadingContext,Platform,OriginalLoadingAudioContext) throws -> Host.LoadedOutcome,
++        beforePrepared: (Host.LoadedOutcome,Platform) throws -> Void = { _,_ in }) throws -> Outcome {
++        try attempt {
++            let audio = try OriginalLoadingAudioContext(domain:domain,cursor:exchange.snapshot.cursor())
++            do {
++                let outcome = try host.prepareLoadedUntilBoundary(prepare:{ context,platform in
++                    // Both checks run inside the Host attempt lock; another
++                    // committed iteration cannot race this validation.
++                    guard self.host.committedSequence == self.sequence,
++                        context.entry.isSameAttempt(as:self.entry) else { throw Boundary.staleLoading }
++                    return try prepare(context,platform,audio)
++                },beforePrepared:{ outcome,platform in
++                    try beforePrepared(outcome,platform)
++                    // Host publication after this hook is nonthrowing.
++                    _ = try self.exchange.finish(audio.cursor)
++                })
++                return .prepared(outcome)
++            } catch let needed as Exchange.RequestNeeded {
++                return .request(try exchange.claim(needed))
++            }
++        }
++    }
++    public func beginService(_ permit: Exchange.Permit) throws { try attempt { try exchange.beginService(permit) } }
++    public func answer(_ permit: Exchange.Permit,response: Exchange.Response,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.answer(permit,response:response,retaining:resources) }
++    }
++    public func fail(_ permit: Exchange.Permit,diagnostic: String,
++        retaining resources: [any OriginalApplicationStartupResource] = []) throws {
++        try attempt { try exchange.fail(permit,diagnostic:diagnostic,retaining:resources) }
++    }
++    public func cancel() throws { try attempt { exchange.cancel() } }
++}
+--- a/native/Sources/NTSDCore/OriginalApplicationPoolSession.swift
++++ b/native/Sources/NTSDCore/OriginalApplicationPoolSession.swift
+@@ -79,19 +79,16 @@
+             for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.bytes.count) }
+             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
+             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }
+-            for (owner,p) in zip(entry.startup.owner.loads,entry.startup.platforms) { retain(owner,p) }
++            for owner in entry.startup.waveOwners { try retain(owner) }
+             for (token,record) in entry.startup.music.allocations { reserve(token,record.bytes.count) }
+-            for (owner,p) in zip(entry.entry.common.sounds,entry.entry.waveInputs) { retain(owner,p) }
+-            for (i,p) in entry.snapshot.waveInputs.enumerated() {
+-                guard let owner = entry.snapshot.sounds.buffers[i] else { throw Boundary.missingOwners };retain(owner,p)
+-            }
++            for owner in entry.entry.waveOwners { try retain(owner) }
++            for owner in entry.snapshot.waveOwners { try retain(owner) }
+         }
+         func reserve(_ token: UInt32,_ count: Int) {
+             if token != 0,count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) }
+         }
+-        func retain(_ owner: OriginalWaveLoadResult,_ p: OriginalWavePlatform) {
+-            reserve(p.firstPointer,owner.first.bytes.count)
+-            if let second = owner.second { reserve(p.secondPointer,second.bytes.count) }
++        func retain(_ owner: OriginalWaveOwnership) throws {
++            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
+         }
+         func allocate(_ kind: Allocation.Kind,_ count: Int) throws -> OriginalInterfaceAllocation {
+             let value = try controls.allocate(kind,count),a = Allocation(kind:kind,token:value.address,count:count)
+--- a/native/Sources/NTSDCore/OriginalInitialLoading.swift
++++ b/native/Sources/NTSDCore/OriginalInitialLoading.swift
+@@ -78,6 +78,7 @@
+                             allocateInterface: (Int) throws -> OriginalInterfaceAllocation,
+                             interfaceSource: (Int, String) throws -> OriginalBitmapInput,
+                             interfaceDevice: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
++                            audio: OriginalWaveRequest.Factory? = nil,
+                             afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
+                             afterCommonWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                             afterCommon: (OriginalStateRecord) throws -> Void = { _ in },
+@@ -94,7 +95,7 @@
+             throw OriginalStateError.invalidStorage("First loading requires flag1 and an empty sound registry")
+         }
+         let prefix = try OriginalInitialLoadingCommon.load(globals:initialGlobals,targetSurface:targetSurface,
+-            fileSource:fileSource,platform:wavePlatform,afterPrologue:afterPrologue,
++            fileSource:fileSource,platform:wavePlatform,audio:audio,afterPrologue:afterPrologue,
+             afterWave:afterCommonWave,observe:observeCommon)
+         var globals = prefix.globals
+         try afterCommon(globals)
+--- a/native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift
++++ b/native/Sources/NTSDCore/OriginalInitialLoadingCommon.swift
+@@ -12,6 +12,22 @@
+     public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
+                             fileSource: (String) throws -> [UInt8],
+                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
++                            audio: OriginalWaveRequest.Factory? = nil,
++                            afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
++                            afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
++                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
++                            store: (Int, [UInt8]) throws -> Void = { _, _ in },
++                            observe: (OriginalInitialSoundEvent) throws -> Void = { _ in },
++                            beforeCommit: (Self) throws -> Void = { _ in }) throws -> Self {
++        try load(globals:initial,targetSurface:targetSurface,fileSource:fileSource,
++            preparation:{ .legacy(try platform($0,$1,$2),audio) },afterPrologue:afterPrologue,
++            afterWave:afterWave,attemptedWave:attemptedWave,store:store,observe:observe,beforeCommit:beforeCommit)
++    }
++
++    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
++                            fileSource: (String) throws -> [UInt8],
++                            preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
++                            ownedWave: (Int, OriginalWaveOwnership) throws -> Void = { _,_ in },
+                             afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
+                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                             attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+@@ -22,9 +38,9 @@
+         let paused = try OriginalInitialLoading.begin(globals:&globals,store:store)
+         try afterPrologue(globals,paused)
+         try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,
+-            fileSource:fileSource,platform:platform,afterWave:{ i,wave,state in
++            fileSource:fileSource,preparation:preparation,afterWave:{ i,wave,state in
+                 sounds.append(wave);try afterWave(i,wave,state)
+-            },attemptedWave:attemptedWave,store:store,observe:observe)
++            },attemptedWave:attemptedWave,store:store,ownedWave:ownedWave,observe:observe)
+         let result = Self(globals:globals,sounds:sounds,paused:paused,
+                           commands:[[UInt8](repeating:0,count:10),[UInt8](repeating:0,count:10)])
+         try beforeCommit(result)
+--- a/native/Sources/NTSDCore/OriginalInitialSoundLoading.swift
++++ b/native/Sources/NTSDCore/OriginalInitialSoundLoading.swift
+@@ -22,6 +22,19 @@
+                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
+                             audio: OriginalWaveRequest.Factory? = nil,
+                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
++        try load(globals:&globals,targetSurface:targetSurface,fileSource:fileSource,
++            preparation:{ .legacy(try platform($0,$1,$2),audio) },afterWave:afterWave,
++            attemptedWave:attemptedWave,store:store,observe:observe)
++    }
++
++    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32,
++                            fileSource: (String) throws -> [UInt8],
++                            preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
++                            afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
++                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
++                            store: (Int, [UInt8]) throws -> Void = { _, _ in },
++                            ownedWave: (Int, OriginalWaveOwnership) throws -> Void = { _,_ in },
++                            observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
+         var candidate = globals
+         let base = OriginalMatchPreparation.globalBase
+         guard candidate.bytes.count == OriginalMatchPreparation.globalSize,
+@@ -37,24 +50,25 @@
+             }
+         }
+         for (index,path) in paths.enumerated() {
+-            let destination = UInt32(0x451db0+index*4), input = try platform(index,path,destination)
++            let destination = UInt32(0x451db0+index*4), input = try preparation(index,path,destination)
+             guard input.destination == destination,
+                   try candidate.integer(at: 0x44eecc-base, as: UInt32.self) == input.device else {
+                 throw OriginalStateError.invalidStorage("Initial sound device/destination binding")
+             }
+             try observe(.init(wave: .init(.load, [destination], [Array(path.utf8)])))
+             let file = try input.device == 0 || input.stream == 0 ? [] : fileSource(path)
+-            let result = try OriginalWaveLoader.load(path: Array(path.utf8), file: file,
+-                output: candidate.integer(at: Int(destination)-base, as: UInt32.self), platform: input,
++            let result = try input.load(path: Array(path.utf8), file: file,
++                output: candidate.integer(at: Int(destination)-base, as: UInt32.self),
+                 outputStored: { value in
+                     try candidate.write(value, at: Int(destination)-base)
+                     try store(Int(destination),(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
+-                },audio:try audio?(input)) {
++                }) {
+                     try observe(.init(wave: $0))
+                 }
+             try attemptedWave(index,result,candidate)
+             guard result.exit == .returned else { throw OriginalStateError.invalidStorage("Invalid original CreateSoundBuffer continuation") }
+             try candidate.write(result.output, at: Int(destination)-base)
++            try ownedWave(index,input.ownership(index:index,path:path,result:result))
+             try afterWave(index,result,candidate)
+         }
+         // Individual false returns are ignored by this caller. Count is always
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalLoadingAudioExchange.swift
+@@ -0,0 +1,48 @@
++public enum OriginalLoadingAudioRequest: OriginalExchangeRequest {
++    public enum Reply {
++        case wave(OriginalWaveRegionDomain,OriginalWaveResponse,OriginalWaveResourceLease?)
++        case volume(OriginalWaveRegionDomain,Int32)
++    }
++    case wave(OriginalWaveRegionDomain,OriginalWaveBinding,OriginalWaveRequest)
++    case volume(OriginalWaveRegionDomain,OriginalWaveBinding,UInt32,Int32)
++    public func accepts(_ response: Reply) -> Bool {
++        switch (self,response) {
++        case let (.wave(domain,binding,q),.wave(replyDomain,r,lease)):
++            guard domain == replyDomain,q.accepts(r) else { return false }
++            if let lease {
++                guard case .opaque(let identity) = domain,q.event.kind == .unlock,
++                    lease.domain === identity,lease.binding == binding,lease.buffer == q.event.arguments.first else { return false }
++            }
++            return true
++        case let (.volume(domain,_,_,_),.volume(replyDomain,_)):return domain == replyDomain
++        default:return false
++        }
++    }
++}
++public typealias OriginalLoadingAudioExchange = OriginalRequestExchange<
++    OriginalLoadingAudioRequest, any OriginalApplicationStartupResource>
++
++/// One attempt owns this cursor. It performs no IO; resources are retained by
++/// the consumed response lease and then by the returned WaveOwnership.
++public final class OriginalLoadingAudioContext {
++    public let domain: OriginalWaveRegionDomain
++    public private(set) var cursor: OriginalLoadingAudioExchange.Cursor
++    private final class Owner { var lease: OriginalWaveResourceLease? }
++    public init(domain: OriginalWaveRegionDomain,cursor: OriginalLoadingAudioExchange.Cursor) {
++        self.domain = domain;self.cursor = cursor
++    }
++    public func prepare(_ binding: OriginalWaveBinding,file: OriginalWaveFileInput) -> OriginalWavePreparation {
++        let owner = Owner()
++        return .observed(file.bind(destination:binding.destination,device:binding.device),{ q in
++            let response = try self.cursor.response(for:.wave(self.domain,binding,q))
++            guard case .wave(_,let value,let lease) = response else { throw OriginalWaveOwnership.Boundary.provenance }
++            if q.event.kind == .unlock { owner.lease = lease }
++            return value
++        },domain,{ owner.lease })
++    }
++    public func volume(_ binding: OriginalWaveBinding,buffer: UInt32,value: Int32) throws -> Int32 {
++        let response = try cursor.response(for:.volume(domain,binding,buffer,value))
++        guard case .volume(_,let value) = response else { throw OriginalWaveOwnership.Boundary.provenance }
++        return value
++    }
++}
+--- a/native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift
++++ b/native/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift
+@@ -4,6 +4,7 @@
+ /// The caller's path cache is committed only after this method returns.
+ public struct OriginalRegisteredSoundLoading {
+     public private(set) var buffers: [Int: OriginalWaveLoadResult] = [:]
++    public private(set) var owners: [Int: OriginalWaveOwnership] = [:]
+     public init() {}
+ 
+     public mutating func load(_ request: OriginalSoundRegistration, device: UInt32, outputBefore: UInt32,
+@@ -11,14 +12,23 @@
+                               outputStored: (UInt32) throws -> Void = { _ in },
+                               onWave: (OriginalWaveEvent) throws -> Void = { _ in },
+                               onVolume: ([UInt32]) throws -> Void = { _ in }) throws {
++        try load(request,device:device,outputBefore:outputBefore,preparation:.legacy(platform),
++            fileSource:fileSource,outputStored:outputStored,onWave:onWave,onVolume:onVolume)
++    }
++
++    public mutating func load(_ request: OriginalSoundRegistration, device: UInt32, outputBefore: UInt32,
++                              preparation: OriginalWavePreparation, fileSource: (String) throws -> [UInt8],
++                              outputStored: (UInt32) throws -> Void = { _ in },
++                              onWave: (OriginalWaveEvent) throws -> Void = { _ in },
++                              onVolume: ([UInt32]) throws -> Void = { _ in }) throws {
+         // The parent skips the helper entirely when audio is disabled.
+         guard device != 0 else { return }
+         guard request.index >= 0, request.index <= (0x2e00-1)/20,
+-              platform.device == device, platform.destination == 0x452948+UInt32(request.index)*4,
++              preparation.device == device, preparation.destination == 0x452948+UInt32(request.index)*4,
+               buffers[request.index] == nil else { throw OriginalStateError.invalidStorage("Registered sound device/index binding") }
+-        let file = try platform.stream == 0 ? [] : fileSource(request.path)
+-        let result = try OriginalWaveLoader.load(path: request.path.unicodeScalars.map { UInt8($0.value) },
+-            file: file, output: outputBefore, platform: platform, outputStored: outputStored, observe: onWave)
++        let file = try preparation.stream == 0 ? [] : fileSource(request.path)
++        let result = try preparation.load(path: request.path.unicodeScalars.map { UInt8($0.value) },
++            file: file, output: outputBefore, outputStored: outputStored, observe: onWave)
+         guard result.exit == .returned, result.output != 0 else {
+             // The EXE dereferences the resulting buffer even after an ordinary
+             // false return. Do not silently advance the cache past that fault.
+@@ -27,5 +37,6 @@
+         try onVolume([result.output, UInt32(bitPattern: -10000)])
+         // SetVolume's HRESULT is ignored; no buffer is released by this caller.
+         buffers[request.index] = result
++        owners[request.index] = preparation.ownership(index:request.index,path:request.path,result:result)
+     }
+ }
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalWaveOwnership.swift
+@@ -0,0 +1,95 @@
++/// Opaque identity domains are compared by owner identity, never by an integer
++/// range. No host pointer or source address is encoded in this value.
++public final class OriginalAudioIdentityDomain: Equatable {
++    public init() {}
++    public static func == (a: OriginalAudioIdentityDomain,b: OriginalAudioIdentityDomain) -> Bool { a === b }
++}
++
++public enum OriginalWaveRegionDomain: Equatable {
++    case addressed
++    case opaque(OriginalAudioIdentityDomain)
++}
++
++/// Issued by an actual service after a completed buffer unlock. Retains physical
++/// owners as well as their immutable raw/mask snapshot across Core handoffs.
++public struct OriginalWaveResourceLease {
++    public let domain: OriginalAudioIdentityDomain, binding: OriginalWaveBinding, buffer: UInt32
++    public let regions: [UInt32:OriginalStateRecord]
++    public let resources: [any OriginalApplicationStartupResource]
++    public init(domain: OriginalAudioIdentityDomain,binding: OriginalWaveBinding,buffer: UInt32,
++        regions: [UInt32:OriginalStateRecord],resources: [any OriginalApplicationStartupResource]) {
++        self.domain = domain;self.binding = binding;self.buffer = buffer
++        self.regions = regions;self.resources = resources
++    }
++}
++
++/// An attempted WAV may be incomplete. Ownership is validated only when the
++/// caller reaches a consumer requiring completed PCM, preserving false returns
++/// and short-read temporaries at the earlier common-loading boundary.
++public struct OriginalWaveOwnership {
++    public enum Boundary: Error, Equatable { case incomplete, provenance, foreignDomain, binding }
++    public let binding: OriginalWaveBinding, result: OriginalWaveLoadResult, domain: OriginalWaveRegionDomain
++    public let legacy: OriginalWavePlatform?
++    public let lease: OriginalWaveResourceLease?
++    public init(binding: OriginalWaveBinding,result: OriginalWaveLoadResult,legacy: OriginalWavePlatform) {
++        self.binding = binding;self.result = result;self.legacy = legacy
++        domain = .addressed;lease = nil
++    }
++    public init(binding: OriginalWaveBinding,result: OriginalWaveLoadResult,
++        domain: OriginalWaveRegionDomain,lease: OriginalWaveResourceLease? = nil) {
++        self.binding = binding;self.result = result;self.domain = domain;self.lease = lease;legacy = nil
++    }
++    public func matches(_ value: OriginalWaveLoadResult) -> Bool {
++        result.exit == value.exit && result.returned == value.returned && result.output == value.output &&
++        result.temporary == value.temporary && result.temporaryLive == value.temporaryLive &&
++        result.first == value.first && result.second == value.second && result.format == value.format &&
++        result.descriptor == value.descriptor && result.initialStorage == value.initialStorage &&
++        result.lockReplies == value.lockReplies && result.regions == value.regions
++    }
++    public func validate(device: UInt32,destination: UInt32,output: UInt32,
++        domain expected: OriginalWaveRegionDomain) throws {
++        guard binding.device == device,binding.destination == destination,result.output == output else { throw Boundary.binding }
++        guard domain == expected else { throw Boundary.foreignDomain }
++        _ = try addressedRegions()
++    }
++    /// Complete source ownership checks remain here. Opaque owners deliberately
++    /// return no address intervals, after proving their actual lease and regions.
++    public func addressedRegions() throws -> [(token: UInt32,count: Int)] {
++        guard result.exit == .returned,result.returned == 1,!result.temporaryLive,
++            binding.device != 0,result.output != 0,result.temporary != nil else { throw Boundary.incomplete }
++        if let p = legacy {
++            guard domain == .addressed,p.device == binding.device,p.destination == binding.destination,
++                p.buffer == result.output,p.firstCount == result.first.bytes.count,
++                p.secondCount == (result.second?.bytes.count ?? 0) else { throw Boundary.provenance }
++            var spans = [(p.firstPointer,result.first.bytes.count)]
++            if let second = result.second { spans.append((p.secondPointer,second.bytes.count)) }
++            return spans
++        }
++        guard let reply = result.lockReplies.last,case .locked(_,let lock?) = reply,
++            lock.firstPointer != 0,let first = result.regions[lock.firstPointer],
++            first == result.first,lock.first?.token == lock.firstPointer,
++            lock.firstCount >= 0,lock.firstCount <= first.bytes.count else { throw Boundary.provenance }
++        var spans = [(lock.firstPointer,first.bytes.count)]
++        var tokens: Set<UInt32> = [lock.firstPointer]
++        if lock.secondPointer != 0 {
++            guard let second = result.regions[lock.secondPointer],second == result.second,
++                lock.second?.token == lock.secondPointer,lock.secondCount >= 0,
++                lock.secondCount <= second.bytes.count else { throw Boundary.provenance }
++            if tokens.insert(lock.secondPointer).inserted { spans.append((lock.secondPointer,second.bytes.count)) }
++        } else {
++            guard result.second == nil else { throw Boundary.provenance }
++        }
++        guard Set(result.regions.keys) == tokens else { throw Boundary.provenance }
++        switch domain {
++        case .addressed:
++            guard lease == nil else { throw Boundary.foreignDomain }
++            return spans
++        case .opaque(let identity):
++            guard let lease,lease.domain === identity,lease.binding == binding,
++                lease.buffer == result.output,lease.regions == result.regions,!lease.resources.isEmpty else {
++                throw Boundary.provenance
++            }
++            return []
++        }
++    }
++}
+--- /dev/null
++++ b/native/Sources/NTSDCore/OriginalWavePreparation.swift
+@@ -0,0 +1,38 @@
++/// Input composition for the one shared WAV algorithm. Legacy conversion and
++/// its optional request factory are deferred until the original load call.
++public enum OriginalWavePreparation {
++    case legacy(OriginalWavePlatform, OriginalWaveRequest.Factory? = nil)
++    case observed(OriginalWaveInput, OriginalWaveRequest.Handler, OriginalWaveRegionDomain,
++                  () -> OriginalWaveResourceLease?)
++
++    public var destination: UInt32 {
++        switch self { case .legacy(let p,_):return p.destination;case .observed(let p,_,_,_):return p.destination }
++    }
++    public var device: UInt32 {
++        switch self { case .legacy(let p,_):return p.device;case .observed(let p,_,_,_):return p.device }
++    }
++    public var stream: UInt32 {
++        switch self { case .legacy(let p,_):return p.stream;case .observed(let p,_,_,_):return p.stream }
++    }
++    public var legacyPlatform: OriginalWavePlatform? {
++        if case .legacy(let p,_) = self { return p };return nil
++    }
++    public func load(path: [UInt8],file: [UInt8],output: UInt32,
++        outputStored: (UInt32) throws -> Void,observe: (OriginalWaveEvent) throws -> Void) throws -> OriginalWaveLoadResult {
++        switch self {
++        case .legacy(let p,let factory):
++            return try OriginalWaveLoader.load(path:path,file:file,output:output,platform:p,
++                outputStored:outputStored,audio:try factory?(p),observe:observe)
++        case .observed(let input,let request,_,_):
++            return try OriginalWaveLoader.loadObserved(path:path,file:file,output:output,input:input,
++                request:request,outputStored:outputStored,observe:observe)
++        }
++    }
++    public func ownership(index: Int,path: String,result: OriginalWaveLoadResult) -> OriginalWaveOwnership {
++        let binding = OriginalWaveBinding(index,path,destination,device)
++        switch self {
++        case .legacy(let p,_):return .init(binding:binding,result:result,legacy:p)
++        case .observed(_,_,let domain,let lease):return .init(binding:binding,result:result,domain:domain,lease:lease())
++        }
++    }
++}
+--- a/native/Sources/NTSDMacPlatform/OriginalMacAudioBackend.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacAudioBackend.swift
+@@ -32,6 +32,7 @@
+     private final class Buffer: Resource {
+         let device: Device, binding: OriginalWaveBinding, format: Format, pcm: AVAudioPCMBuffer
+         var raw: OriginalStateRecord, active: UInt32?
++        var volume: Int32?
+         init(_ token: UInt32,_ device: Device,_ binding: OriginalWaveBinding,_ format: Format,
+             _ pcm: AVAudioPCMBuffer,_ raw: OriginalStateRecord) {
+             self.device = device;self.binding = binding;self.format = format;self.pcm = pcm;self.raw = raw
+@@ -52,6 +53,7 @@
+     }
+     private final class Identity {}
+     private let identity = Identity(), maximumBytes: Int, diagnostic: Diagnostic?
++    public let loadingDomain = OriginalAudioIdentityDomain()
+     public let windows: OriginalMacWindowBackend
+     private var generation: UInt64 = 0
+     private var devices: [UInt32:Device] = [:], buffers: [UInt32:Buffer] = [:], regions: [UInt32:Region] = [:]
+@@ -203,6 +205,78 @@
+         return .init(token:token,device:b.device.token,binding:b.binding,format:b.format,raw:.init(b.raw),
+             activeLock:b.active,ready:b.pcm.frameLength > 0)
+     }
++    public struct LoadingResult {
++        public let response: OriginalLoadingAudioRequest.Reply
++        public let resources: [any OriginalApplicationStartupResource]
++    }
++    public struct LoadingOperation {
++        public let request: OriginalLoadingAudioRequest, response: OriginalLoadingAudioRequest.Reply
++    }
++    public final class LoadingPrepared {
++        fileprivate let owner: AnyObject, generation: UInt64, wave: Prepared?
++        public let request: OriginalLoadingAudioRequest
++        fileprivate var consumed = false
++        fileprivate init(_ owner: AnyObject,_ generation: UInt64,_ request: OriginalLoadingAudioRequest,_ wave: Prepared?) {
++            self.owner = owner;self.generation = generation;self.request = request;self.wave = wave
++        }
++    }
++    public private(set) var loadingOperations: [LoadingOperation] = []
++    private func loadingRequest(_ q: OriginalLoadingAudioRequest) throws -> Prepared? {
++        switch q {
++        case .wave(let domain,let binding,let wave):
++            try require(domain == .opaque(loadingDomain),"foreign loading audio domain")
++            return try prepare(.waveAudio(binding,wave))
++        case .volume(let domain,let binding,let token,let volume):
++            try require(domain == .opaque(loadingDomain),"foreign loading audio domain")
++            let b = try buffer(token,binding)
++            try require(volume == -10000 && b.active == nil && b.pcm.frameLength > 0,"registered SetVolume")
++            return nil
++        }
++    }
++    public func prepareLoading(_ request: OriginalLoadingAudioRequest) throws -> LoadingPrepared {
++        LoadingPrepared(identity,generation,request,try loadingRequest(request))
++    }
++    public func performLoading(_ prepared: LoadingPrepared) throws -> LoadingResult {
++        guard prepared.owner === identity else { throw Boundary.foreignPreparation }
++        guard !prepared.consumed else { throw Boundary.repeatedPreparation }
++        guard prepared.generation == generation else { throw Boundary.stalePreparation }
++        let result: LoadingResult
++        switch prepared.request {
++        case .wave(let domain,let binding,let q):
++            guard let wave = prepared.wave else { throw Boundary.foreignPreparation }
++            prepared.consumed = true
++            let served = try perform(wave)
++            guard case .waveAudio(let response) = served.response else { throw Boundary.unsupported("loading reply") }
++            let lease = try q.event.kind == .unlock
++                ? resourceLease(binding,buffer:q.event.arguments[0],region:q.event.arguments[1]) : nil
++            result = .init(response:.wave(domain,response,lease),resources:served.resources)
++        case .volume(let domain,let binding,let token,let volume):
++            _ = try loadingRequest(prepared.request)
++            prepared.consumed = true;generation &+= 1
++            let b = try buffer(token,binding);b.volume = volume
++            // Explicit Native scalar ownership, not DSP gain or endpoint output.
++            result = .init(response:.volume(domain,0),resources:[b])
++        }
++        loadingOperations.append(.init(request:prepared.request,response:result.response))
++        return result
++    }
++    public func volumeObservation(_ token: UInt32) throws -> Int32? {
++        guard let buffer = buffers[token] else { throw Boundary.owner(token) };return buffer.volume
++    }
++    private func resourceLease(_ binding: OriginalWaveBinding,buffer token: UInt32,region: UInt32) throws -> OriginalWaveResourceLease {
++        let b = try buffer(token,binding)
++        guard let r = regions[region],r.buffer === b,b.active == nil,b.pcm.frameLength > 0 else { throw Boundary.owner(region) }
++        return .init(domain:loadingDomain,binding:binding,buffer:token,regions:[region:b.raw],resources:[b.device,b,r])
++    }
++    /// Called on completed actual startup results before entering Core loading.
++    /// The retained lease makes later handoffs independent of this backend's life.
++    public func ownership(_ binding: OriginalWaveBinding,result: OriginalWaveLoadResult) throws -> OriginalWaveOwnership {
++        guard let reply = result.lockReplies.last,case .locked(_,let lock?) = reply,
++            lock.secondPointer == 0 else { throw Boundary.unsupported("completed Native WAV ownership") }
++        let lease = try resourceLease(binding,buffer:result.output,region:lock.firstPointer)
++        let owner = OriginalWaveOwnership(binding:binding,result:result,domain:.opaque(loadingDomain),lease:lease)
++        _ = try owner.addressedRegions();return owner
++    }
+     /// A consumer receives independent storage, not mutable access to our owner.
+     public func pcmSnapshot(_ token: UInt32) throws -> AVAudioPCMBuffer {
+         guard let b = buffers[token] else { throw Boundary.owner(token) }
+--- a/native/Sources/NTSDMacPlatform/OriginalMacAudioService.swift
++++ b/native/Sources/NTSDMacPlatform/OriginalMacAudioService.swift
+@@ -27,4 +27,25 @@
+             try fail(String(reflecting:error),backend.retainedResources);throw error
+         }
+     }
++    public func serve(_ permit: OriginalLoadingAudioExchange.Permit,on exchange: OriginalLoadingAudioExchange) throws {
++        try serveLoading(permit.request,begin:{ try exchange.beginService(permit) },
++            answer:{ try exchange.answer(permit,response:$0,retaining:$1) },
++            fail:{ try exchange.fail(permit,diagnostic:$0,retaining:$1) })
++    }
++    public func serve<P>(_ permit: OriginalLoadingAudioExchange.Permit,on driver: OriginalApplicationObservedLoadingAudio<P>) throws {
++        try serveLoading(permit.request,begin:{ try driver.beginService(permit) },
++            answer:{ try driver.answer(permit,response:$0,retaining:$1) },
++            fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
++    }
++    private func serveLoading(_ request: OriginalLoadingAudioRequest,begin: () throws -> Void,
++        answer: (OriginalLoadingAudioRequest.Reply,[any OriginalApplicationStartupResource]) throws -> Void,
++        fail: (String,[any OriginalApplicationStartupResource]) throws -> Void) throws {
++        let prepared = try backend.prepareLoading(request)
++        try begin()
++        do {
++            let result = try backend.performLoading(prepared);try answer(result.response,result.resources)
++        } catch {
++            try fail(String(reflecting:error),backend.retainedResources);throw error
++        }
++    }
+ }
+--- a/native/Sources/NTSDReferenceChecks/CatalogSoundsReference.swift
++++ b/native/Sources/NTSDReferenceChecks/CatalogSoundsReference.swift
+@@ -18,7 +18,7 @@
+     }
+     private struct Corpus: Decodable { let exeSHA256: String, calls: [Call], sources: [Source], blobs: [String: Blob], finalBuffers: String }
+     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Catalog sounds reference: \(text)") }
+-    public static func compare(catalog: Data, sounds: Data, initialSoundBytes: [UInt8]? = nil,
++    public static func compare(catalog: Data, sounds: Data, initialSoundBytes: [UInt8]? = nil, observedAudio: Bool = false,
+                                onProgress: (OriginalLoadingProgress.Request) throws -> Void = { _ in },
+                                onLoaded: (OriginalLoadedCatalog, OriginalRegisteredSoundLoading) throws -> Void = { _, _ in }) throws -> Result {
+         let corpus = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(sounds))
+@@ -66,7 +66,12 @@
+                   Array(before[(0x455638-base)..<(0x458438-base)]) == request.cacheBefore else { throw error("Real registration globals") }
+             let device = try globals.integer(at: 0x44eecc-base, as: UInt32.self)
+             var wave: [OriginalWaveEvent] = [], volume: [[UInt32]] = []
+-            try loader.load(request, device: device, outputBefore: item.outputBefore, platform: item.input,
++            let preparation: OriginalWavePreparation
++            if observedAudio {
++                let replies = try OriginalWaveLegacyReplies(item.input)
++                preparation = .observed(replies.input,replies.reply,.addressed,{ nil })
++            } else { preparation = .legacy(item.input) }
++            try loader.load(request, device: device, outputBefore: item.outputBefore, preparation: preparation,
+                 fileSource: { path in
+                     guard path == request.path else { throw error("WAV file request") }
+                     return try blob(item.file)
+--- a/native/Sources/NTSDReferenceChecks/InitialLoadingReference.swift
++++ b/native/Sources/NTSDReferenceChecks/InitialLoadingReference.swift
+@@ -34,7 +34,7 @@
+     private struct CatalogIdentity: Decodable { let catalogAddress: UInt32, objectAddresses: [UInt32], initialChecksum: UInt32 }
+     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Initial loading reference: \(message)") }
+ 
+-    public static func compare(loading: Data, catalog: Data, sounds: Data,
++    public static func compare(loading: Data, catalog: Data, sounds: Data, observedAudio: Bool = false,
+                                initialState: (world: OriginalStateRecord, globals: OriginalStateRecord)? = nil,
+                                onCommonEvent: (OriginalInitialSoundEvent) throws -> Void = { _ in },
+                                onCatalog: (OriginalInitialLoadingContinuation) throws -> Void = { _ in },
+@@ -122,7 +122,7 @@
+             }, loadCatalog: { checksum,initialSoundBytes,progress in
+                 guard checksum == identity.initialChecksum else { throw error("Inherited checksum") }
+                 var resources: OriginalInitialCatalogResources?
+-                comparison = try CatalogSoundsReference.compare(catalog: catalog, sounds: sounds, initialSoundBytes: initialSoundBytes,
++                comparison = try CatalogSoundsReference.compare(catalog: catalog, sounds: sounds, initialSoundBytes: initialSoundBytes, observedAudio: observedAudio,
+                     onProgress: progress, onLoaded: { resources = .init(catalog: $0,sounds: $1) })
+                 guard let resources else { throw error("Native catalog construction") }
+                 return resources
+@@ -138,7 +138,9 @@
+                       try dib.integer(at: 8,as: Int32.self) == input.resource.height else { throw error("Embedded source DIB dimensions") }
+                 return input.resource
+             }, interfaceDevice: { index in let i = c.interface.inputs[index]; return (i.surface,i.colorKeyResult) },
+-            afterPrologue: { globals,paused in
++            audio: observedAudio ? { p in
++                let replies = try OriginalWaveLegacyReplies(p);return replies.reply
++            } : nil, afterPrologue: { globals,paused in
+                 try global(globals,c.afterPrologue,"Prologue globals")
+                 guard paused == (c.paused == 1), c.common.beforeGlobals == c.afterPrologue else { throw error("Prologue pause/common continuity") }
+             }, afterCommonWave: { i,wave,globals in
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift
+@@ -153,7 +153,7 @@
+         let all = [own.header]+own.frameStorage+[own.nameTail]
+         try same(.init(bytes:all.flatMap(\.bytes),defined:all.flatMap(\.defined)),e,c.path)
+     }
+-    func complete(_ p: C.PendingPool) throws {
++    func completeRecords(_ p: C.PendingPool) throws {
+         let a = p.catalog,s = p.snapshot
+         let entryChecksum = try p.entry.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
+         let entryCache = Array(p.entry.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
+@@ -196,6 +196,10 @@
+         XCTAssertEqual(p.files.streams.count,621);XCTAssertTrue(p.files.streams.values.allSatisfy { $0.closed })
+         XCTAssertEqual(p.files.decoderReturns,Array(repeating:0,count:155))
+         XCTAssertEqual(p.files.files[OriginalLoadingFiles.temporaryPath],Array("Do not erase this file.".utf8))
++    }
++    func complete(_ p: C.PendingPool) throws {
++        try completeRecords(p)
++        let s = p.snapshot
+         XCTAssertEqual(s.sounds.buffers.count,400);XCTAssertEqual(s.waveInputs.count,400)
+         for (i,w) in audio.calls.enumerated() {
+             let x = try XCTUnwrap(s.sounds.buffers[i]);XCTAssertEqual(x.exit,.returned);XCTAssertEqual(x.returned,w.returned)
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift
+@@ -75,7 +75,7 @@
+         }
+     }
+     @discardableResult
+-    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ pending: OriginalApplicationMenuSession.PendingLoading,responses: I.Spec,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
++    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ pending: OriginalApplicationMenuSession.PendingLoading,responses: I.Spec,fail: String? = nil,observedAudio: Bool = false) throws -> OriginalInitialLoadingCommon? {
+         let retainedBitmapInputs = try XCTUnwrap(own.bitmapInputs)
+         let retainedGraphics = try XCTUnwrap(own.applicationGraphics)
+         let target = pending.target
+@@ -98,7 +98,16 @@
+             XCTAssertEqual(try files.file(String(decoding:wave.path,as:UTF8.self)),try r.blob(wave.file))
+         }
+         do {
+-            prepared = try loading.prepareCommon(inputs:files,waves:c.loads.map(\.input),
++            var consumed = 0
++            prepared = try loading.prepareCommon(inputs:files,prepareWave:{ index,_,_,_ in
++                guard index < c.loads.count else { throw Loading.Boundary.waveReply(index) }
++                consumed += 1
++                if observedAudio {
++                    let replies = try OriginalWaveLegacyReplies(c.loads[index].input)
++                    return .observed(replies.input,replies.reply,.addressed,{ nil })
++                }
++                return .legacy(c.loads[index].input)
++            },finishWaves:{ XCTAssertEqual(consumed,c.loads.count) },
+                 drawResult:responses.drawResult,presentationResult:responses.presentResult,store:a.store,
+                 observe:{ event in
+                     switch event {
+@@ -150,7 +159,15 @@
+             XCTAssertEqual(prepared.common.paused,c.paused == 1)
+             for i in 0..<2 { XCTAssertEqual(prepared.common.commands[i],try r.blob(c.commands[i])) }
+             let encoder = JSONEncoder();encoder.outputFormatting = .sortedKeys
+-            XCTAssertEqual(try encoder.encode(prepared.waveInputs),try encoder.encode(c.loads.map(\.input)))
++            if observedAudio {
++                XCTAssertTrue(prepared.waveInputs.isEmpty)
++                XCTAssertEqual(prepared.waveOwners.count,c.loads.count)
++                for i in c.loads.indices {
++                    XCTAssertNil(prepared.waveOwners[i].legacy)
++                    XCTAssertEqual(prepared.waveOwners[i].domain,.addressed)
++                    XCTAssertTrue(prepared.waveOwners[i].matches(prepared.common.sounds[i]))
++                }
++            } else { XCTAssertEqual(try encoder.encode(prepared.waveInputs),try encoder.encode(c.loads.map(\.input))) }
+             try OriginalApplicationGraphicsTests.compareOwner(prepared.state.graphics,kind:"loading",index:caseIndex)
+             XCTAssertEqual(prepared.stagedGraphics,pending.stagedGraphics+commands)
+             XCTAssertEqual(prepared.state.full.bytes,try r.blob(c.after.globals))
+@@ -198,13 +215,13 @@
+         }
+         return result
+     }
+-    func run(_ indices: [Int],failures: [String?]) throws {
++    func run(_ indices: [Int],failures: [String?],observedAudio: Bool = false) throws {
+         let r = try Resources(),fr = try I.F.Resources(),body = try I.Body.Resources(fr),mr = try I.M.Resources(body,fr),ir = try I.Resources(mr),br = try B.Resources(),er = try B.Entry.Resources()
+         for i in indices {
+             for fail in failures {
+                 var called = false
+                 try I().run(r.c.cases[i].spec.parentIndex,ir,mr,body,fr,br,er,loading:{ own,pending in
+-                    called = true;try self.check(r.c.cases[i],r,own,pending,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail)
++                    called = true;try self.check(r.c.cases[i],r,own,pending,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail,observedAudio:observedAudio)
+                 })
+                 XCTAssertTrue(called)
+             }
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalLoadingAudioTests.swift
+@@ -0,0 +1,119 @@
++import Foundation
++import XCTest
++@testable import NTSDCore
++import NTSDReferenceChecks
++
++final class OriginalLoadingAudioTests: XCTestCase {
++    enum Stop: Error { case late }
++    final class Marker: OriginalApplicationStartupResource {}
++    func fixture(_ name: String) throws -> Data {
++        try Data(contentsOf:XCTUnwrap(Bundle.module.url(forResource:name,withExtension:"json",subdirectory:"Fixtures")))
++    }
++    func testWholeCommonAndInitialLoadingWithObservedReplies() throws {
++        try OriginalApplicationLoadingPrefixTests().run(Array(0..<12),failures:[nil],observedAudio:true)
++        try OriginalApplicationLoadingPrefixTests().run([0],
++            failures:["write#1","blit#1","copy#12","method#1","commit"],observedAudio:true)
++        for suffix in ["","-control"] {
++            let r = try InitialLoadingReference.compare(loading:fixture("original-initial-loading"+suffix),
++                catalog:fixture("original-initial-loading-catalog"+suffix),
++                sounds:fixture("original-initial-loading-sounds"+suffix),observedAudio:true)
++            XCTAssertEqual(r.commonLoads,18);XCTAssertEqual(r.catalog.calls,400)
++            XCTAssertEqual(r.catalog.catalog.objects,137);XCTAssertEqual(r.catalog.catalog.frames,15388)
++            XCTAssertEqual(r.catalog.catalog.checksum,31_475_378)
++            XCTAssertEqual(r.poolConstructors,408);XCTAssertEqual(r.interfaceConstructors,10)
++        }
++    }
++    func testWholeSourceCatalogAndInterleavedObservedReplies() throws {
++        for suffix in ["","-interleaved"] {
++            let r = try CatalogSoundsReference.compare(catalog:fixture("original-loaded-catalog-audio"+suffix),
++                sounds:fixture("original-catalog-sounds"+suffix),observedAudio:true)
++            if suffix.isEmpty {
++                XCTAssertEqual(r.catalog.objects,137);XCTAssertEqual(r.catalog.frames,15388)
++                XCTAssertEqual(r.catalog.bytes,112_063_739);XCTAssertEqual(r.catalog.checksum,31_475_378)
++                XCTAssertEqual(r.calls,400);XCTAssertEqual(r.sources,365)
++                XCTAssertEqual(r.weaponCalls,14);XCTAssertEqual(r.frameCalls,386)
++                XCTAssertEqual(r.bytes,66_210_142);XCTAssertEqual(r.events,6426);XCTAssertEqual(r.restores,80)
++            } else {
++                XCTAssertEqual(r.catalog.objects,3);XCTAssertEqual(r.catalog.frames,720)
++                XCTAssertEqual(r.catalog.bytes,82_089_953);XCTAssertEqual(r.catalog.checksum,1_496_213)
++                XCTAssertEqual(r.calls,29);XCTAssertEqual(r.sources,28)
++                XCTAssertEqual(r.weaponCalls,0);XCTAssertEqual(r.frameCalls,29)
++                XCTAssertEqual(r.bytes,4_157_380);XCTAssertEqual(r.events,466);XCTAssertEqual(r.restores,6)
++            }
++        }
++    }
++    /// Declared four-byte mono PCM control; no expected game after-state.
++    func wav() -> [UInt8] {
++        var b = Array("RIFF".utf8)+[UInt8](repeating:0,count:4)+Array("WAVEfmt ".utf8)
++        b += [16,0,0,0,1,0,1,0,0x40,0x1f,0,0,0x40,0x1f,0,0,1,0,8,0]
++        b += Array("data".utf8)+[4,0,0,0,0,127,128,255]
++        b[4] = UInt8(b.count-8);return b
++    }
++    func platform(_ index: Int,alias: Bool = false) -> OriginalWavePlatform {
++        .init(destination:0x452948+UInt32(index)*4,device:17,stream:18,
++            buffer:UInt32(100+index),firstPointer:0x800000+UInt32(index)*16,
++            secondPointer:alias ? 0x800000+UInt32(index)*16 : 0,
++            descendResults:[0,0,0],formatReadResult:18,ascendResult:0,dataReadResult:4,
++            createResult:0,lockResults:[0,0],restoreResult:0,unlockResult:0,closeResult:0,
++            firstCount:alias ? 2 : 4,secondCount:alias ? 2 : 0,ramp:false)
++    }
++    func testOwnershipDomainsAndOrderedCacheControls() throws {
++        var registry = OriginalSoundRegistry(),loader = OriginalRegisteredSoundLoading(),order: [String] = []
++        let long = "abcdefghijklmnopqrstu"
++        func register(_ path: String,previous: Int32 = -1,failVolume: Bool = false) throws -> Int32 {
++            try registry.register(path,previous:previous,assignIndex:{ order.append("assign\($0)") },onNewSound:{ q in
++                let replies = try OriginalWaveLegacyReplies(self.platform(q.index))
++                let preparation = OriginalWavePreparation.observed(replies.input,{ request in
++                    order.append(request.event.kind.rawValue);return try replies.reply(request)
++                },.addressed,{ nil })
++                try loader.load(q,device:17,outputBefore:0,preparation:preparation,fileSource:{ _ in self.wav() },
++                    onVolume:{ args in
++                        XCTAssertEqual(args,[UInt32(100+q.index),UInt32(bitPattern:-10000)])
++                        order.append("volume");if failVolume { throw Stop.late }
++                    })
++            },onCommit:{ bytes,count in
++                XCTAssertEqual(Array(bytes[(count-1)*20..<(count-1)*20+path.utf8.count+1]),Array(path.utf8)+[0])
++                order.append("commit\(count)")
++            })
++        }
++        XCTAssertEqual(try register(long),0)
++        XCTAssertEqual(order,["assign0","create","lock","copy","unlock","volume","commit1"])
++        order = [];XCTAssertEqual(try register(long),0);XCTAssertEqual(order,["assign0"])
++        order = [];XCTAssertEqual(try register("two.wav"),1)
++        XCTAssertEqual(order,["assign1","create","lock","copy","unlock","volume","commit2"])
++        order = [];XCTAssertEqual(try register(long),2)
++        XCTAssertEqual(order,["assign2","create","lock","copy","unlock","volume","commit3"])
++        XCTAssertEqual(loader.buffers.count,3);XCTAssertEqual(loader.owners.count,3)
++        XCTAssertNotEqual(loader.buffers[0]?.output,loader.buffers[2]?.output)
++        order = [];XCTAssertEqual(try register("missing.wav",previous:9),9);XCTAssertTrue(order.isEmpty)
++        let cache = registry.bytes,count = registry.count
++        XCTAssertThrowsError(try register("failed.wav",failVolume:true))
++        XCTAssertEqual(registry.bytes,cache);XCTAssertEqual(registry.count,count);XCTAssertEqual(loader.buffers.count,3)
++        let owner = try XCTUnwrap(loader.owners[0]),spans = try owner.addressedRegions()
++        XCTAssertEqual(spans.map(\.token),[0x800000]);XCTAssertEqual(spans.map(\.count),[4])
++        XCTAssertThrowsError(try owner.validate(device:18,destination:owner.binding.destination,
++            output:owner.result.output,domain:.addressed))
++        var incomplete = owner.result;incomplete.temporaryLive = true
++        XCTAssertThrowsError(try OriginalWaveOwnership(binding:owner.binding,result:incomplete,domain:.addressed).addressedRegions())
++        let domain = OriginalAudioIdentityDomain(),other = OriginalAudioIdentityDomain()
++        let lease = OriginalWaveResourceLease(domain:domain,binding:owner.binding,buffer:owner.result.output,
++            regions:owner.result.regions,resources:[Marker()])
++        let opaque = OriginalWaveOwnership(binding:owner.binding,result:owner.result,domain:.opaque(domain),lease:lease)
++        XCTAssertTrue(try opaque.addressedRegions().isEmpty)
++        XCTAssertThrowsError(try opaque.validate(device:17,destination:owner.binding.destination,
++            output:owner.result.output,domain:.opaque(other)))
++        let bad = OriginalWaveResourceLease(domain:domain,binding:owner.binding,buffer:owner.result.output,
++            regions:[:],resources:[Marker()])
++        XCTAssertThrowsError(try OriginalWaveOwnership(binding:owner.binding,result:owner.result,
++            domain:.opaque(domain),lease:bad).addressedRegions())
++        XCTAssertThrowsError(try OriginalWaveOwnership(binding:owner.binding,result:owner.result,domain:.opaque(domain)).addressedRegions())
++        let p = platform(0,alias:true),replies = try OriginalWaveLegacyReplies(p)
++        let preparation = OriginalWavePreparation.observed(replies.input,replies.reply,.addressed,{ nil })
++        let result = try preparation.load(path:Array(long.utf8),file:wav(),output:0,outputStored:{ _ in },observe:{ _ in })
++        XCTAssertEqual(result.first.bytes,[128,255]);XCTAssertEqual(result.second,result.first)
++        let aliases = preparation.ownership(index:0,path:long,result:result)
++        XCTAssertEqual(try aliases.addressedRegions().count,1)
++        let legacy = OriginalWaveOwnership(binding:aliases.binding,result:result,legacy:p)
++        XCTAssertEqual(try legacy.addressedRegions().count,2) // Historical addressed overlap is not erased.
++    }
++}
+--- /dev/null
++++ b/native/Tests/NTSDCoreTests/OriginalMacLoadingAudioTests.swift
+@@ -0,0 +1,378 @@
++import AppKit
++import XCTest
++@testable import NTSDCore
++@testable import NTSDMacPlatform
++
++@MainActor final class OriginalMacLoadingAudioTests: XCTestCase {
++    typealias A = OriginalMacAudioBackendTests
++    typealias B = OriginalMacAudioBackend
++    typealias E = OriginalLoadingAudioExchange
++    typealias C = OriginalApplicationCatalogSession
++    typealias F = OriginalApplicationCatalogFullTests
++    typealias M = OriginalApplicationLoadedMenuTests
++    typealias P = OriginalApplicationPreparedStartupPlatform
++    typealias Host = OriginalApplicationHostSession<P>
++    typealias Driver = OriginalApplicationObservedLoadingAudio<P>
++    typealias O = OriginalApplicationObservedBitmapTests
++    typealias Q = OriginalApplicationMenuInputTests
++    enum Stop: Error, Equatable { case bound, late, afterCommon }
++    struct Ready {
++        let startup: A.Startup, sounds: C.StartupSounds
++        let files: [String:A.File], common: OriginalApplicationLoadingInputs
++        var host: Host { startup.host }
++    }
++    func ready() throws -> Ready {
++        let run = try A().startup(false)
++        do {
++            try A().verify(run)
++            let host = run.host,package = try OriginalApplicationStartupInputsTests.shared.get()
++            _ = try host.takeCommitted()
++            let packets = try O().packets(run.window,package)
++            for p in packets where !p.dispatch { try O().previous(host,p);_ = try host.takeCommitted() }
++            let packet = try XCTUnwrap(packets.first { $0.dispatch })
++            let service = OriginalMacBitmapService(backend:run.display,inputs:.init(resources:package.bitmaps,
++                files:Dictionary(uniqueKeysWithValues:package.bitmaps.keys.map { ($0,BitsFile.missing) })))
++            let bitmap = OriginalApplicationObservedBitmapIteration<P>(host:host)
++            var finished = false
++            for _ in 0..<1200 {
++                switch try bitmap.resume(prepare:{ _,_ in packet.host }) {
++                case .request(let permit):try service.serve(permit,on:bitmap)
++                case .advanced(let outcome):
++                    guard case .committed = outcome else { throw Stop.bound }
++                    _ = try host.takeCommitted();finished = true
++                }
++                if finished { break }
++            }
++            guard finished else { throw Stop.bound }
++            // Replay only saved input/API stimuli, bound to the actual window.
++            // No captured global/record after-state enters this Native Host.
++            let fr = try Q.F.Resources(),body = try Q.Body.Resources(fr),mr = try Q.M.Resources(body,fr),qr = try Q.Resources(mr)
++            XCTAssertEqual(qr.indices[47],0)
++            let input = qr.c.cases[47],spec = input.spec
++            let responses = OriginalApplicationMenuSession.Responses(draw:spec.drawResult,presentation:spec.presentResult,
++                sound:spec.soundResult,release:spec.releaseResult,dcResult:spec.dcResult,dc:0x12345678)
++            let kinds: Set<String> = ["peek","get","translate","dispatchMessage","time","sleep"]
++            var offset = 0
++            for step in input.iterations {
++                let events = input.events[offset..<step.eventEnd];offset = step.eventEnd
++                let queue = try events.filter { $0.kind == "queue" && kinds.contains($0.request?.kind ?? "") }.map { event -> Q.Loop.Response in
++                    if let response = event.response {
++                        let writes = response.writes.map { write -> Q.Loop.Write in
++                            var bytes = write.bytes
++                            if event.request?.kind == "get" || event.request?.kind == "peek" {
++                                for i in bytes.indices where (0..<4).contains(write.offset+i) {
++                                    bytes[i] = UInt8(truncatingIfNeeded:run.window >> ((write.offset+i)*8))
++                                }
++                            }
++                            return .init(offset:write.offset,bytes:bytes)
++                        }
++                        return .init(result:response.result,writes:writes)
++                    }
++                    let kind = try XCTUnwrap(event.request).kind
++                    guard kind == "translate" || kind == "dispatchMessage" else { throw Stop.bound }
++                    return .init()
++                }
++                let window = try events.filter { $0.kind == "queue" && $0.request?.kind == "windowDefault" }.map { try XCTUnwrap($0.response).result }
++                let surface = events.filter { $0.kind == "front" && $0.event?.kind == "clear" }.map { _ in OriginalWindowInitialization.Response(result:spec.drawResult) }
++                let outcome = try host.step(prepare:{ _,_ in .init(responses:responses,queue:queue,windowDefault:window,surface:surface) })
++                if step.end == "loading" { guard case .loading = outcome else { throw Stop.bound } }
++                else { guard case .committed = outcome else { throw Stop.bound };_ = try host.takeCommitted() }
++            }
++            let pending = try XCTUnwrap(host.pendingLoading),startup = try XCTUnwrap(host.snapshot.startup)
++            let sounds = try XCTUnwrap(startup.input?.sounds)
++            let device = try pending.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
++            let owners = try sounds.loads.enumerated().map { i,result in
++                try run.audio.ownership(.init(i,OriginalMenuSoundStartup.paths[i],UInt32(0x45560c+i*4),device),result:result)
++            }
++            let files = Dictionary(uniqueKeysWithValues:try A().files().map { ($0.path,$0) })
++            return try .init(startup:run,sounds:.init(owner:sounds,waveOwners:owners,music:startup.output.music),
++                files:files,common:OriginalApplicationLoadingPrefixTests.commonInputs.get())
++        } catch { try A().close(run);throw error }
++    }
++    typealias BitsFile = OriginalMacDisplayBackend.BitmapInputs.File
++    func common(_ ready: Ready,_ pending: OriginalApplicationMenuSession.PendingLoading,
++        _ audio: OriginalLoadingAudioContext) throws -> OriginalApplicationLoadingSession.PendingCatalog {
++        var loading = try pending.makeLoadingSession()
++        return try loading.prepareCommon(inputs:ready.common,prepareWave:{ i,path,destination,device in
++            let file = try XCTUnwrap(ready.files[path])
++            return audio.prepare(.init(i,path,destination,device),file:.init(file.input(destination,device)))
++        },drawResult:0,presentationResult:0)
++    }
++    func registration(_ index: Int,_ path: String) -> OriginalSoundRegistration {
++        .init(kind:.frame,index:index,path:path,cacheBefore:Array(repeating:0,count:0x2e00))
++    }
++    func registered(_ loader: inout OriginalRegisteredSoundLoading,_ q: OriginalSoundRegistration,
++        _ file: A.File,_ device: UInt32,_ audio: OriginalLoadingAudioContext) throws {
++        let binding = OriginalWaveBinding(q.index,q.path,0x452948+UInt32(q.index)*4,device)
++        try loader.load(q,device:device,outputBefore:0,
++            preparation:audio.prepare(binding,file:.init(file.input(binding.destination,device))),fileSource:{ _ in file.bytes },
++            onVolume:{ args in
++                XCTAssertEqual(args.count,2);XCTAssertEqual(args[1],UInt32(bitPattern:-10000))
++                _ = try audio.volume(binding,buffer:args[0],value:Int32(bitPattern:args[1]))
++            })
++    }
++    func check(_ owners: [OriginalWaveOwnership],_ ready: Ready) throws {
++        for owner in owners {
++            XCTAssertEqual(owner.domain,.opaque(ready.startup.audio.loadingDomain))
++            XCTAssertNil(owner.legacy);XCTAssertNotNil(owner.lease)
++            XCTAssertTrue(try owner.addressedRegions().isEmpty)
++            try A().check(ready.startup.audio,owner.result.output,XCTUnwrap(ready.files[owner.binding.path]))
++        }
++    }
++    func testOwnedStartupCommonAndRegisteredBuffers() throws {
++        let r = try ready();defer { try? A().close(r.startup) }
++        let exchange = E(),service = OriginalMacAudioService(backend:r.startup.audio)
++        let pending = try XCTUnwrap(r.host.pendingLoading)
++        var completed = false
++        for _ in 0..<100 {
++            let audio = try OriginalLoadingAudioContext(domain:.opaque(r.startup.audio.loadingDomain),cursor:exchange.snapshot.cursor())
++            do {
++                let common = try common(r,pending,audio)
++                var loader = OriginalRegisteredSoundLoading()
++                let device = try common.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
++                for index in 0..<3 {
++                    let path = OriginalInitialSoundLoading.paths[index == 2 ? 0 : index]
++                    try registered(&loader,registration(index,path),XCTUnwrap(r.files[path]),device,audio)
++                }
++                _ = try exchange.finish(audio.cursor)
++                XCTAssertTrue(common.waveInputs.isEmpty);XCTAssertEqual(common.waveOwners.count,18)
++                XCTAssertEqual(try common.state.full.integer(at:0x45843c-0x44d000,as:UInt32.self),18)
++                let owners = r.sounds.waveOwners+common.waveOwners+(0..<3).map { loader.owners[$0]! }
++                try check(owners,r);XCTAssertEqual(Set(owners.map { $0.result.output }).count,26)
++                XCTAssertEqual(r.startup.audio.bufferTokens.count,26);XCTAssertEqual(exchange.snapshot.receipts.count,87)
++                for i in 0..<3 { XCTAssertEqual(try r.startup.audio.volumeObservation(loader.buffers[i]!.output),-10000) }
++                let first = common.waveOwners[0],second = common.waveOwners[1]
++                let a = try XCTUnwrap(first.result.regions.keys.first),b = try XCTUnwrap(second.result.regions.keys.first)
++                XCTAssertLessThan(b-a,UInt32(first.result.first.bytes.count)) // Old address arithmetic would falsely overlap.
++                var catalog = try C(pending:common,startup:r.sounds)
++                let ref = try F.reference.get(),resources = try F().resources(ref,common.target)
++                var reached = false
++                XCTAssertThrowsError(try catalog.load(resources:resources,makeControls:{
++                    .init(allocate:{ _,_ in reached = true;throw Stop.afterCommon },
++                        bitmap:{ _ in throw Stop.bound },file:{ _,_ in throw Stop.bound },
++                        wavePreparation:{ _,_ in throw Stop.bound },volume:{ _,_ in throw Stop.bound },
++                        time:{ throw Stop.bound },message:{ _,_ in throw Stop.bound })
++                })) { XCTAssertEqual($0 as? Stop,.afterCommon) }
++                XCTAssertTrue(reached);XCTAssertNil(catalog.pendingPool)
++                completed = true;break
++            } catch let needed as E.RequestNeeded { try service.serve(exchange.claim(needed),on:exchange) }
++        }
++        XCTAssertTrue(completed);XCTAssertNil(r.host.preparedLoadedMenu)
++    }
++
++    func full(_ r: Ready,_ context: Host.LoadingContext,_ audio: OriginalLoadingAudioContext,
++        reference: F.R) throws -> (C.PendingPool,M.S.PendingReturn) {
++        let common = try common(r,context.entry,audio)
++        let checksum = try common.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
++        let cache = Array(common.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
++        let provider = F.Provider(reference,checksum,cache),old = provider.controls()
++        let controls = C.Controls(allocate:old.allocate,bitmap:old.bitmap,file:old.file,wavePreparation:{ q,device in
++            // This source provider checks registration/cache order. Its future
++            // audio outputs are not used by Native file preparation or service.
++            _ = try provider.wave(q,device)
++            let f = try XCTUnwrap(r.files[q.path]),destination = UInt32(0x452948+q.index*4)
++            return audio.prepare(.init(q.index,q.path,destination,device),file:.init(f.input(destination,device)))
++        },volume:{ binding,args in
++            let value = try audio.volume(binding,buffer:args[0],value:Int32(bitPattern:args[1]))
++            provider.volumes += 1;return value
++        },time:old.time,message:old.message,finish:old.finish)
++        var catalog = try C(pending:common,startup:r.sounds)
++        var pendingRegistration: Int?,pathWritten = false
++        let loaded = try catalog.load(resources:F().resources(reference,common.target),makeControls:{ controls },
++            observe:{ event,state in
++                switch event {
++                case .wave:break // Actual audio is checked from its own payload, not predicted replies.
++                case .volume(let args,let result):
++                    XCTAssertNil(pendingRegistration);let i = provider.volumes-1
++                    XCTAssertEqual(result,0);XCTAssertEqual(args[1],UInt32(bitPattern:-10000))
++                    XCTAssertEqual(try state.full.integer(at:0x458438-0x44d000,as:UInt32.self),UInt32(i))
++                    XCTAssertEqual(try state.full.integer(at:0x452948+i*4-0x44d000,as:UInt32.self),args[0])
++                    XCTAssertEqual(Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]),try reference.cache(i,entry:cache))
++                    pendingRegistration = i;pathWritten = false
++                case .globalStore(let store):
++                    if let i = pendingRegistration {
++                        if store.address == 0x455638+i*20 {
++                            XCTAssertEqual(store.bytes,reference.audio.calls[i].path+[0]);pathWritten = true
++                        } else if store.address == 0x458438 {
++                            XCTAssertTrue(pathWritten)
++                            XCTAssertEqual(store.bytes,(0..<4).map { UInt8(truncatingIfNeeded:UInt32(i+1) >> ($0*8)) })
++                            pendingRegistration = nil
++                        }
++                    }
++                    try provider.observe(event,state)
++                default:try provider.observe(event,state)
++                }
++            },afterChild:provider.afterChild)
++        try reference.completeRecords(loaded)
++        XCTAssertTrue(provider.finished);XCTAssertEqual(loaded.snapshot.waveOwners.count,400)
++        XCTAssertTrue(loaded.snapshot.waveInputs.isEmpty)
++        XCTAssertNil(pendingRegistration)
++        for owner in loaded.snapshot.waveOwners {
++            let file = try XCTUnwrap(r.files[owner.binding.path])
++            XCTAssertEqual(owner.result.first.bytes,file.payload);XCTAssertTrue(owner.result.first.defined.allSatisfy { $0 })
++            XCTAssertNil(owner.result.second);XCTAssertTrue(try owner.addressedRegions().isEmpty)
++            XCTAssertEqual(try loaded.snapshot.state.full.integer(at:Int(owner.binding.destination)-0x44d000,as:UInt32.self),owner.result.output)
++        }
++        // Every actual volume precedes this registration's full path+NUL copy.
++        var volumes = 0
++        for operation in loaded.snapshot.operations {
++            if case .volume(let args,let value) = operation {
++                XCTAssertEqual(args[1],UInt32(bitPattern:-10000));XCTAssertEqual(value,0)
++                volumes += 1
++            }
++            // Stores are compared in the retained globalStores journal below.
++        }
++        XCTAssertEqual(volumes,400)
++        for i in 0..<400 {
++            let path = Array(loaded.snapshot.waveOwners[i].binding.path.utf8)+[0]
++            let pathStore = try XCTUnwrap(loaded.snapshot.globalStores.firstIndex { $0.address == 0x455638+i*20 && $0.bytes == path })
++            let countStore = try XCTUnwrap(loaded.snapshot.globalStores.dropFirst(pathStore+1).first { $0.address == 0x458438 })
++            XCTAssertEqual(countStore.bytes,(0..<4).map { UInt8(truncatingIfNeeded:UInt32(i+1) >> ($0*8)) })
++        }
++        let poolProvider = try M.P.Provider(loaded);var pool = try M.S.Input.Pool(pending:loaded)
++        let pooled = try pool.prepare(inputs:OriginalApplicationInterfaceInputsTests.inputs.get(),
++            makeControls:poolProvider.controls,observe:poolProvider.observe,beforeCommit:poolProvider.complete)
++        var input = try M.S.Input(pending:pooled,arithmeticPrecision:.bits53),environment: Void = ()
++        let ready = try input.advance(environment:&environment,controlBoundary:{ _,_ in throw Stop.bound })
++        var menu = try M.S(pending:ready),env = M.Environment()
++        let returned = try M.advance(&menu,&env)
++        try M().compareGraphics(returned,env)
++        XCTAssertEqual(returned.exit,.returned);XCTAssertEqual(returned.dispatcherResult,1)
++        return (loaded,returned)
++    }
++    func testWholeCatalogPoolLoadedMenuHostWithOwnedAudio() throws {
++        let r = try ready();defer { try? A().close(r.startup) }
++        let driver = try Driver(host:r.host,domain:.opaque(r.startup.audio.loadingDomain))
++        let service = OriginalMacAudioService(backend:r.startup.audio),reference = try F.reference.get()
++        let before = r.host.snapshot,sequence = r.host.committedSequence
++        var result: (C.PendingPool,M.S.PendingReturn)?,late = false,physical = -1,requests = 0
++        for _ in 0..<3002 {
++            do {
++                var current: (C.PendingPool,M.S.PendingReturn)?
++                let outcome = try driver.resume(prepare:{ context,_,audio in
++                    current = try self.full(r,context,audio,reference:reference)
++                    return .returned(try XCTUnwrap(current).1)
++                },beforePrepared:{ _,_ in
++                    if !late { throw Stop.late }
++                    XCTAssertEqual(r.startup.audio.loadingOperations.count,physical)
++                })
++                switch outcome {
++                case .request(let permit):
++                    requests += 1;guard requests <= 3000 else { throw Stop.bound }
++                    XCTAssertEqual(r.host.committedSequence,sequence);XCTAssertNil(r.host.preparedLoadedMenu)
++                    try service.serve(permit,on:driver)
++                case .prepared:
++                    result = try XCTUnwrap(current)
++                }
++                if result != nil { break }
++            } catch Stop.late {
++                XCTAssertFalse(late);late = true;physical = r.startup.audio.loadingOperations.count
++                XCTAssertNil(r.host.preparedLoadedMenu);XCTAssertEqual(driver.exchangeSnapshot.status,.open)
++            }
++        }
++        let loaded = try XCTUnwrap(result)
++        XCTAssertTrue(late);XCTAssertEqual(driver.exchangeSnapshot.status,.finished)
++        try check(r.sounds.waveOwners+loaded.0.entry.waveOwners+loaded.0.snapshot.waveOwners,r)
++        for owner in loaded.0.snapshot.waveOwners {
++            XCTAssertEqual(try r.startup.audio.volumeObservation(owner.result.output),-10000)
++        }
++        XCTAssertEqual(requests,18*4+400*5);XCTAssertEqual(r.startup.audio.bufferTokens.count,423)
++        XCTAssertEqual(Set(loaded.0.snapshot.waveOwners.map { $0.result.output }).count,400)
++        XCTAssertEqual(Set(loaded.0.snapshot.waveOwners.map { $0.binding.path }).count,365)
++        XCTAssertTrue(try XCTUnwrap(r.host.preparedLoadedMenu).loading.isSameAttempt(as:loaded.1.loading))
++        try OriginalApplicationLoadedCycleTests.unchanged(r.host.snapshot,before)
++        let time = try XCTUnwrap(r.host.snapshot.session).loop.timer.baseline &+ 1000
++        let finished = try r.host.finishLoadedMenu(perform:{ request,_ in
++            XCTAssertEqual(request.kind,.time);return .init(result:Int32(bitPattern:time))
++        })
++        guard case .committed(let next,_) = finished else { throw Stop.bound }
++        XCTAssertGreaterThan(next,sequence);XCTAssertNil(r.host.pendingLoading)
++        let batch = try XCTUnwrap(r.host.takeCommitted())
++        guard case .loaded(let commit) = batch.contents else { throw Stop.bound }
++        try OriginalApplicationLoadedCycleTests.checkFinished(r.host.snapshot,loaded.1,commit,time:time)
++        XCTAssertNil(try r.host.takeCommitted())
++        print("Owned Native loading",requests,"requests,423 buffers,137 Objects/400 registrations; pool/menu/Host retained; no Windows endpoint claim")
++    }
++
++    func permit(_ request: OriginalLoadingAudioRequest,_ e: E) throws -> E.Permit {
++        var cursor = try e.snapshot.cursor()
++        do { _ = try cursor.response(for:request);throw Stop.bound }
++        catch let needed as E.RequestNeeded { return try e.claim(needed) }
++    }
++    func isolated(_ service: OriginalMacAudioService,_ file: A.File,late: Bool = false,
++        exchange: E = E()) throws -> OriginalWaveOwnership {
++        let device = try A().device(service),binding = OriginalWaveBinding(0,file.path,0x452948,device)
++        var failed = false,count = -1
++        for _ in 0..<10 {
++            let context = try OriginalLoadingAudioContext(domain:.opaque(service.backend.loadingDomain),cursor:exchange.snapshot.cursor())
++            do {
++                var loader = OriginalRegisteredSoundLoading()
++                try registered(&loader,registration(0,file.path),file,device,context)
++                if late && !failed { failed = true;count = service.backend.loadingOperations.count;throw Stop.late }
++                if late { XCTAssertEqual(service.backend.loadingOperations.count,count) }
++                _ = try exchange.finish(context.cursor)
++                let owner = try XCTUnwrap(loader.owners[0]);XCTAssertEqual(owner.binding,binding)
++                XCTAssertEqual(failed,late);return owner
++            } catch let needed as E.RequestNeeded { try service.serve(exchange.claim(needed),on:exchange) }
++            catch Stop.late { XCTAssertEqual(exchange.snapshot.status,.open) }
++        }
++        throw Stop.bound
++    }
++    func testLateRetryProtocolAndRetainedOwners() throws {
++        let file = try XCTUnwrap(A().files().first)
++        var retained: OriginalWaveOwnership?
++        weak var resource: AnyObject?
++        weak var backend: B?
++        do {
++            let b = A().backend(),service = OriginalMacAudioService(backend:b);backend = b
++            retained = try isolated(service,file,late:true)
++            resource = try XCTUnwrap(retained?.lease?.resources.first) as AnyObject
++            XCTAssertEqual(b.loadingOperations.count,5);XCTAssertEqual(b.bufferTokens.count,1)
++            let owner = try XCTUnwrap(retained),request = OriginalLoadingAudioRequest.volume(owner.domain,owner.binding,owner.result.output,-10000)
++            let e = E(),foreign = E(),ticket = try permit(request,e)
++            XCTAssertThrowsError(try service.serve(ticket,on:foreign));XCTAssertEqual(b.loadingOperations.count,5)
++            XCTAssertThrowsError(try e.answer(ticket,response:.volume(.opaque(OriginalAudioIdentityDomain()),0)))
++            try service.serve(ticket,on:e);XCTAssertEqual(b.loadingOperations.count,6)
++            XCTAssertThrowsError(try service.serve(ticket,on:e));XCTAssertEqual(b.loadingOperations.count,6)
++            let prepared = try b.prepareLoading(request),stale = try b.prepareLoading(request)
++            _ = try b.performLoading(prepared)
++            XCTAssertThrowsError(try b.performLoading(prepared)) { XCTAssertEqual($0 as? B.Boundary,.repeatedPreparation) }
++            XCTAssertThrowsError(try b.performLoading(stale)) { XCTAssertEqual($0 as? B.Boundary,.stalePreparation) }
++            let other = A().backend()
++            XCTAssertThrowsError(try other.prepareLoading(request))
++            XCTAssertThrowsError(try other.performLoading(b.prepareLoading(request))) { XCTAssertEqual($0 as? B.Boundary,.foreignPreparation) }
++            let cancelled = E(),pending = try permit(request,cancelled),count = b.loadingOperations.count
++            cancelled.cancel();XCTAssertThrowsError(try service.serve(pending,on:cancelled))
++            XCTAssertEqual(b.loadingOperations.count,count)
++        }
++        XCTAssertNil(backend);XCTAssertNotNil(resource)
++        XCTAssertTrue(try XCTUnwrap(retained).addressedRegions().isEmpty)
++        retained = nil;XCTAssertNil(resource)
++        let empty = A().backend(0),service = OriginalMacAudioService(backend:empty),e = E()
++        XCTAssertThrowsError(try isolated(service,file,exchange:e)) { XCTAssertEqual($0 as? B.Boundary,.allocationBudget) }
++        XCTAssertEqual(e.snapshot.status,.indeterminate);XCTAssertNotNil(e.snapshot.failure)
++        XCTAssertEqual(empty.bufferTokens.count,0)
++        let r = try ready();defer { try? A().close(r.startup) }
++        let driver = try Driver(host:r.host,domain:.opaque(r.startup.audio.loadingDomain))
++        let live = OriginalMacAudioService(backend:r.startup.audio)
++        var late = 0,physical = -1
++        for _ in 0..<80 {
++            do {
++                let result = try driver.resume(prepare:{ context,_,audio in
++                    _ = try self.common(r,context.entry,audio);throw Stop.afterCommon
++                })
++                guard case .request(let ticket) = result else { throw Stop.bound }
++                try live.serve(ticket,on:driver)
++            } catch Stop.afterCommon {
++                late += 1
++                if late == 1 { physical = r.startup.audio.loadingOperations.count }
++                else { XCTAssertEqual(r.startup.audio.loadingOperations.count,physical);break }
++            }
++        }
++        XCTAssertEqual(late,2);XCTAssertEqual(physical,72)
++        XCTAssertNil(r.host.preparedLoadedMenu);XCTAssertEqual(driver.exchangeSnapshot.status,.open)
++        try driver.cancel();XCTAssertEqual(driver.exchangeSnapshot.status,.cancelled)
++        XCTAssertThrowsError(try driver.resume(prepare:{ _,_,_ in throw Stop.bound }))
++        XCTAssertEqual(driver.exchangeSnapshot.receipts.count,72)
++    }
++}

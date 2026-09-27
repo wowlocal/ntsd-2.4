@@ -1,5 +1,16 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Common/catalog audio ownership: compiled, whole handoff incomplete](research/APPLICATION_LOADING_AUDIO.md):
+Candidate2290 carries actual WAV replies/region owners through common/catalog/
+pool/menu and retains physical service receipts outside Core. Build/package1686
+pass;5 new methods pass, full Native handoff hits3600s,145 following methods are
+unstarted. No whole-chain acceptance.4998-file/218-member archives verified;
+finalizer83936 terminal0/absent, task frozen. Native profiling and saved numeric
+inputs identify full-suffix conversion for a separately bounded optimization.
+Prior inputs/expected bytes/masks remain unchanged; review/root promotion,
+playback/device/Windows/clean-Mac/full game remain open.
+[Evidence](evidence/application-loading-audio.json), [timeout](evidence/application-loading-audio-failure.json).
+
 [Common/catalog audio identity prerequisite](research/APPLICATION_LOADING_AUDIO_PREFLIGHT.md):
 54 anchors and a synthetic23566-byte false-overlap witness establish why Native
 opaque WAV identities cannot enter legacy PCM address-range checks. Catalog,

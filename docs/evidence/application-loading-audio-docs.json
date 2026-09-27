@@ -1,0 +1,304 @@
+{
+  "schema": "ntsd-loading-audio-docs-v1",
+  "UTC": "2026-09-27T04:30:44.705507+00:00",
+  "baseHead": "5ab3e9b1eacd32047f158d401ebfdb7909151524",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/publication1.json",
+    "bytes": 6350,
+    "sha256": "a2e07812dbf9e6e4da0aafddee1cc65613d461ce6295b5508f1b42d7c378950f",
+    "mode": 420,
+    "mtime_ns": 1790483221263487592
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/finalize1.job.json",
+    "bytes": 813,
+    "sha256": "aa52cf2fa28a4c14325223b7949e90e1f4528f1f13747a1fbed1d7691cb79141",
+    "mode": 420,
+    "mtime_ns": 1790483221267073850
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-close.json",
+      "bytes": 1652,
+      "sha256": "32d526ed67bfc3ab5e84e6bc3b47456d2be5e3d819843dd23a9a3a3124486ce3",
+      "mode": 420,
+      "mtime_ns": 1790483221266859308
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio-failure.json",
+      "bytes": 25274,
+      "sha256": "7f852463393bdb91cd6f36650e459095b9936a6f59e5fb3450e9ad7f11b07951",
+      "mode": 420,
+      "mtime_ns": 1790483133218024482
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio.json",
+      "bytes": 6350,
+      "sha256": "a2e07812dbf9e6e4da0aafddee1cc65613d461ce6295b5508f1b42d7c378950f",
+      "mode": 420,
+      "mtime_ns": 1790483221266734641
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-loading-audio.patch",
+      "bytes": 100216,
+      "sha256": "585abe0d61ee79e0d9731ce89d4e0985f49576de36dd24533e4d30dd0c6a9fdb",
+      "mode": 420,
+      "mtime_ns": 1790483156406495634
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO.md",
+      "bytes": 8861,
+      "sha256": "644005a4e10fcba52ab64e512fee368818119132472d107f4c427685eecbfcd2",
+      "mode": 420,
+      "mtime_ns": 1790483299652384244
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PACKAGE_CORRECTION.md",
+      "bytes": 1519,
+      "sha256": "46ce5e81cd412f2a8a8ea183177d6dd73289bc3303859bde02c38a40b01d8a73",
+      "mode": 420,
+      "mtime_ns": 1790479323546195530
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_LOADING_AUDIO_PLAN.md",
+      "bytes": 8176,
+      "sha256": "a3f62c057db1e1ad0c6727d52a01648f03b791e9f7627be016adeb3c3a387cbc",
+      "mode": 420,
+      "mtime_ns": 1790478820618398921
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/apply_loading_audio_candidate.py",
+      "bytes": 2076,
+      "sha256": "91f0cb72debe7e999fd11f77ac587df03b155276577fc1cab7eeca97f3fbf210",
+      "mode": 420,
+      "mtime_ns": 1790478820615996081
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_loading_audio.py",
+      "bytes": 22891,
+      "sha256": "436e09f487a3b3bb6981dac946b65e20b7434f4a3d006f60ebde46510d865987",
+      "mode": 420,
+      "mtime_ns": 1790480502086662038
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationCatalogControls.swift",
+      "bytes": 5630,
+      "sha256": "4e8d68be75efbd63176dd558d80998715466ed34581fa0da63026593f678a895",
+      "mode": 420,
+      "mtime_ns": 1790477865956687418
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationCatalogSession.swift",
+      "bytes": 28079,
+      "sha256": "1a8a42de136bf0fa868dc00fc394d7bae00a82a4d1327339e71f0cfbec6f01f1",
+      "mode": 420,
+      "mtime_ns": 1790478880943465453
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift",
+      "bytes": 27514,
+      "sha256": "a3bcf9f95f376c4fada3e722edb9972302c21d5fecd940a18c3772584d47db31",
+      "mode": 420,
+      "mtime_ns": 1790477945876084118
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationLoadingSession.swift",
+      "bytes": 8838,
+      "sha256": "fca669569611d26351b8c524b042efed3edeb13e9403df4e58ffaea2d7b3d0b9",
+      "mode": 420,
+      "mtime_ns": 1790477865956520209
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationObservedLoadingAudio.swift",
+      "bytes": 3548,
+      "sha256": "2e4546688c5cecd96281c542df7854ae732d63016d73964fba59725c9a8cdb9b",
+      "mode": 420,
+      "mtime_ns": 1790477768258135937
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalApplicationPoolSession.swift",
+      "bytes": 10888,
+      "sha256": "91870477c3855f8d447ae770a75471782639fa4b1bf926e6c7e18a8698f681ac",
+      "mode": 420,
+      "mtime_ns": 1790477945875969826
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalInitialLoading.swift",
+      "bytes": 8386,
+      "sha256": "2c2e899f264749b74d71e39c75224757ec43758440b9dfcfb3fe81b8335993b9",
+      "mode": 420,
+      "mtime_ns": 1790478124206741890
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalInitialLoadingCommon.swift",
+      "bytes": 3428,
+      "sha256": "228c862fef8eaa75fd093e81be394335648c0517a9ddb9c9f582039d7b9da6af",
+      "mode": 420,
+      "mtime_ns": 1790478124206846224
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalInitialSoundLoading.swift",
+      "bytes": 5401,
+      "sha256": "6e19ecaa48657ca4d4a2483cd1af162563c6c85155edbaea6f1ea50243ded037",
+      "mode": 420,
+      "mtime_ns": 1790477815734366064
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalLoadingAudioExchange.swift",
+      "bytes": 2635,
+      "sha256": "8f59bdd39288f96c4729b585bfe5cc3e4c4d2bb69fc448909101ca74a2b0c8d0",
+      "mode": 420,
+      "mtime_ns": 1790477730114211598
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalRegisteredSoundLoading.swift",
+      "bytes": 2842,
+      "sha256": "32d7efa7df102959e185588bf2b58b46a62005558c3cd8fa419f5e8421bba595",
+      "mode": 420,
+      "mtime_ns": 1790477815734631648
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalWaveOwnership.swift",
+      "bytes": 5700,
+      "sha256": "09fe37d206cbfbb0402b2332ced6552792ab7347aa9d67463ea1c0a488d1c7a5",
+      "mode": 420,
+      "mtime_ns": 1790478024590851458
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDCore/OriginalWavePreparation.swift",
+      "bytes": 2081,
+      "sha256": "2ce32d56124c4131a97ed774194fe0de5a912979445f524d775871852df7d1ab",
+      "mode": 420,
+      "mtime_ns": 1790477815734719940
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDMacPlatform/OriginalMacAudioBackend.swift",
+      "bytes": 17843,
+      "sha256": "e41d75ea3c2322a2f8185020d684ce43f2530d3f57d3df73efa4664d2b1d9dba",
+      "mode": 420,
+      "mtime_ns": 1790478024617990951
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDMacPlatform/OriginalMacAudioService.swift",
+      "bytes": 2993,
+      "sha256": "88ba293bee944ffaf1eb4b2f634b4d3b3b881b3442c09d9f6d739a7664d72c0c",
+      "mode": 420,
+      "mtime_ns": 1790478024618181868
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDReferenceChecks/CatalogSoundsReference.swift",
+      "bytes": 8412,
+      "sha256": "25712afed40b8840cda06ffc0509339ff669b0cc745b21dbe954e245587b3ce5",
+      "mode": 420,
+      "mtime_ns": 1790478124206920724
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Sources/NTSDReferenceChecks/InitialLoadingReference.swift",
+      "bytes": 14570,
+      "sha256": "dd28924453e3b238b610ff594c99455c46c06b1a910d2024d61b77009972fdc1",
+      "mode": 420,
+      "mtime_ns": 1790478168410257766
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift",
+      "bytes": 15022,
+      "sha256": "61ff33e170247f6185c0ac63880bb18ab6e84b69c94b37cb32199f3f7d6c4c85",
+      "mode": 420,
+      "mtime_ns": 1790478412549975214
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Tests/NTSDCoreTests/OriginalApplicationLoadingPrefixTests.swift",
+      "bytes": 15782,
+      "sha256": "bb0e00302f9d2110151510745ca4aaf5e6e4706d68a52439b8931a4009ac237c",
+      "mode": 420,
+      "mtime_ns": 1790478168410496058
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Tests/NTSDCoreTests/OriginalLoadingAudioTests.swift",
+      "bytes": 8390,
+      "sha256": "a09cc3851acab2c94b73fcc734e7d3f64b1f832120ada37364bd6ff347069e5a",
+      "mode": 420,
+      "mtime_ns": 1790478357113280583
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/Tests/NTSDCoreTests/OriginalMacLoadingAudioTests.swift",
+      "bytes": 25399,
+      "sha256": "3caa0d4716307b405bfdea75e07b4425ce87d2172a63f28750fa03e1ed8c52f7",
+      "mode": 420,
+      "mtime_ns": 1790478724072523746
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_audio_candidate/authoring-observations.json",
+      "bytes": 1645,
+      "sha256": "982b00077d4becf62cafc5a0d6ab92567dee19c6130513f1d748374b2094c233",
+      "mode": 420,
+      "mtime_ns": 1790478724072808538
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_loading_audio.py",
+      "bytes": 15086,
+      "sha256": "dd7faccc534166eda788c484d5b561fde827648a4388ee844152e4453d3930a2",
+      "mode": 420,
+      "mtime_ns": 1790478820702325712
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/verify_application_loading_audio_package2.py",
+      "bytes": 5853,
+      "sha256": "f4422bb1d4b596ade859f7c2ed891a146ce3cbbff3971822b234f9d9437e8c5f",
+      "mode": 420,
+      "mtime_ns": 1790479323641573521
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "9f71da8629784a61abe4caf92e8f94db501a20c1",
+      "blockSHA256": "7462810dd6d0ea0db52de002eeff76595b23a762e522dc9b5893f9ae05c68c15",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "a2de5abc7606f118d36ce7a9afc82e90c9b799de",
+      "blockSHA256": "e596e4e1689d83bdd031183bd5c104a1fb98627328ce18d800cd15b7c399093c",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "buildPassed": true,
+  "packagePassed": true,
+  "selectedMethods": 151,
+  "startedMethods": 6,
+  "passedMethods": 5,
+  "incompleteMethods": 1,
+  "unstartedMethods": 145,
+  "wholeComparisonAccepted": false,
+  "timeoutSeconds": 3600,
+  "priorAll120Unchanged": true,
+  "sourceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "artifactFiles": 4998,
+  "metadataMembers": 218,
+  "metadataSHA256": "366cf17c01b5694239109cbcbee5da18eb266e5299df42fcd965d2d57a64264b",
+  "whitespaceCheck": {
+    "exitCode": 2,
+    "exactOutput": "docs/evidence/application-loading-audio.patch:542: trailing whitespace.\n+ \ndocs/evidence/application-loading-audio.patch:873: trailing whitespace.\n+ \n",
+    "exceptions": [
+      {
+        "path": "docs/evidence/application-loading-audio.patch",
+        "lines": [
+          542,
+          873
+        ],
+        "reason": "Immutable unified-diff blank context lines, each exactly one ASCII space; root patch equals the frozen candidate patch byte-for-byte."
+      }
+    ],
+    "allOtherFilesClean": true,
+    "nonPatchCheckExitCode": 0,
+    "firstPreparationToolChunk": "e99467",
+    "firstPreparationExitCode": 1,
+    "firstPreparationReason": "Stopped to inspect the two patch-context whitespace findings before documenting the exception; no candidate or evidence bytes were changed."
+  },
+  "next": "bounded numeric text materialization optimization with the same151 methods, saved numeric/catalog regressions, fresh candidate and unchanged whole-method deadline"
+}

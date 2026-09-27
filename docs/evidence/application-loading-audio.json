@@ -1,0 +1,132 @@
+{
+  "schema": "ntsd-application-loading-audio-validation-v1",
+  "UTC": "2026-09-27T04:27:01.256782+00:00",
+  "status": "first-nonpass-retained",
+  "baseHead": "5ab3e9b1eacd32047f158d401ebfdb7909151524",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/candidate1-inputs.json",
+    "bytes": 577873,
+    "sha256": "8cb1afa866f9abc36dd747b08755ffc50fdaa1b520abd03b8d46eb2721badb24",
+    "mode": 420,
+    "mtime_ns": 1790478902515120255
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/context1.json",
+    "bytes": 40848,
+    "sha256": "5ce9652482363ff455052cecbf58d4f7382c11b334f3fab9167326adcaf2e547",
+    "mode": 420,
+    "mtime_ns": 1790478902926845811
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/build1.job.json",
+    "bytes": 105682,
+    "sha256": "878d18ff402a2c29ef7d91bca91448d13027f085e4fc364c3774117e5d633cda",
+    "mode": 420,
+    "mtime_ns": 1790479234193677812
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-check1.json",
+    "bytes": 1464457,
+    "sha256": "94491b5e7ea3da46396c3ddb733ac7f7c22d35048de2d729fd9233082302864e",
+    "mode": 420,
+    "mtime_ns": 1790479350576839442
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 69469640,
+    "sha256": "f1a7687a55823eb5b772de8954986edb31e26a682f710b1f7736b3a935816663",
+    "mode": 493,
+    "mtime_ns": 1790479231888109884
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/tests1-queue.job.json",
+    "bytes": 5751,
+    "sha256": "a85f8b5e5995db58a6b687dd818d2bf4f2a4a51718ab4491c6bc742734be119e",
+    "mode": 420,
+    "mtime_ns": 1790483058569451738
+  },
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/failure-diagnosis1.json",
+    "bytes": 25274,
+    "sha256": "7f852463393bdb91cd6f36650e459095b9936a6f59e5fb3450e9ad7f11b07951",
+    "mode": 420,
+    "mtime_ns": 1790483133217811273
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/verification1.json",
+    "bytes": 16389,
+    "sha256": "28986f12ebb72a757d70f468a15509758fcd25136e2e928cbd4151af0ed87250",
+    "mode": 420,
+    "mtime_ns": 1790483199599035996
+  },
+  "passedMethods": 5,
+  "selectedMethods": 151,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/artifact-archive1",
+    "files": 4998,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11459795458,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/artifact-archive1.json",
+      "bytes": 2562167,
+      "sha256": "0a58b22da2f435c90f9a02c80cc3c59f26ae910136ccd1b3f652c7dd45482d24",
+      "mode": 420,
+      "mtime_ns": 1790483199591375980
+    }
+  },
+  "metadataArchive": {
+    "members": 218,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/metadata1.tar",
+    "bytes": 7864320,
+    "sha256": "366cf17c01b5694239109cbcbee5da18eb266e5299df42fcd965d2d57a64264b",
+    "mode": 420,
+    "mtime_ns": 1790483221126452677
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "3455b967520f474bc8088e713ccd39b4b3c29d4c130e409c3919999958cb3967",
+    "mode": 420,
+    "mtime_ns": 1790483199598356036
+  },
+  "packageVerifierCorrection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/package-correction1-inputs.json",
+    "bytes": 3336,
+    "sha256": "913635104a54315253dbea62b4c0b40a10f8834bbf8cf619edf77e72cc043091",
+    "mode": 420,
+    "mtime_ns": 1790479323658191487
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2290,
+  "perCallLoadingAudio": true,
+  "explicitRegionDomains": true,
+  "legacyComparatorsRetained": true,
+  "retainedSelectorsPreserved": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Common/catalog audio preparations and explicit addressed/opaque region owners are implemented in a fresh candidate. Only actual passed methods establish comparison; failures and unstarted methods remain explicit.",
+    "All151 selection retains120 checked selectors and25 affected caller methods, with6 new bounded source/Native ownership, whole loading, catalog, handoff, retry and protocol methods. Independent review remains open.",
+    "SetVolume is owned scalar state, not validated playback or DSP gain. File/MMIO and non-audio responses remain declared. No original/Unicorn/Windows execution, fixture edit, root promotion or shipping integration.",
+    "Source59727 terminal34Objects is not137. Runtime playback/WMA/gain/pan/mixing/resampling/latency, Windows font/cursor/device, review/integration/clean-Mac/full match/game and safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}
