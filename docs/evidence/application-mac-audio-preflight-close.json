@@ -1,0 +1,25 @@
+{
+  "schema": "ntsd-mac-audio-preflight-close-v1",
+  "UTC": "2026-09-27T01:11:44.443437+00:00",
+  "taskFrozen": true,
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-preflight-20260927/publication1.json",
+    "bytes": 5043,
+    "sha256": "b460be86da2c6d07b14da0b35bb5999f3bb4770cb475eda5f7261daabece8b56",
+    "mode": 420,
+    "mtime_ns": 1790471504443402097
+  },
+  "metadataArchive": {
+    "members": 119,
+    "allNamesBodiesModesNanosecondMtimesVerified": true,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-preflight-20260927/metadata1.tar",
+    "bytes": 3962880,
+    "sha256": "ea93397edccea6ebb7b014996ec1e71236275ca7d0e7fd149e3914257755bb60",
+    "mode": 420,
+    "mtime_ns": 1790471504422443244
+  },
+  "externalFree": 145633730560,
+  "internalFree": 67850305536,
+  "taskBytes": 7738991,
+  "elapsedFromPlanSeconds": 654.930388
+}

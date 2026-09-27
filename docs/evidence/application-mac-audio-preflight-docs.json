@@ -1,0 +1,148 @@
+{
+  "schema": "ntsd-mac-audio-preflight-docs-v1",
+  "UTC": "2026-09-27T01:12:55.453660+00:00",
+  "baseHead": "a177cab225e7d3e4f596769670b40469dafb454f",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-preflight-20260927/publication1.json",
+    "bytes": 5043,
+    "sha256": "b460be86da2c6d07b14da0b35bb5999f3bb4770cb475eda5f7261daabece8b56",
+    "mode": 420,
+    "mtime_ns": 1790471504443402097
+  },
+  "publisherJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-preflight-20260927/publish1.job.json",
+    "bytes": 751,
+    "sha256": "ea515692b9e46fabb66d6e5e1b5b7dd534beaad8254458fe1a9c8b0b7c4a6f8e",
+    "mode": 420,
+    "mtime_ns": 1790471504445269186
+  },
+  "publisherTerminalAndAbsent": true,
+  "publishedStudyUnchanged": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-api.json",
+      "bytes": 3774,
+      "sha256": "a7ff6a74de1a738cdbe21eb35101604d6ebf4040abc47a2243044851c5ec0300",
+      "mode": 420,
+      "mtime_ns": 1790471504445185894
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-close.json",
+      "bytes": 964,
+      "sha256": "fe20bfabf55a42e43bac2ec740745cc1e0e2620bd75fc66d7e93262206e78afc",
+      "mode": 420,
+      "mtime_ns": 1790471504444663934
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-failure.json",
+      "bytes": 1020,
+      "sha256": "35ea950b68068b90b904f2618a54e9f6a5b38e8cddb092f1c28ae62cc582495a",
+      "mode": 420,
+      "mtime_ns": 1790471504445103436
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-next-comparison.json",
+      "bytes": 11857,
+      "sha256": "30506dadea30de9714de197748966cf6494acf2c85495e2acc36899dc34cf74a",
+      "mode": 420,
+      "mtime_ns": 1790471504445023852
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-observations.json",
+      "bytes": 35421,
+      "sha256": "85694c71f8acfc64037c332074a55756353a68258322adafbde86bde1cef3ed3",
+      "mode": 420,
+      "mtime_ns": 1790471504444754934
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight-wav-inputs.json",
+      "bytes": 577901,
+      "sha256": "75ebd4ac8ba5f30c10089b0eee078ee8420ef7ac64660dd97a66f439f1542621",
+      "mode": 420,
+      "mtime_ns": 1790471504444905227
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-preflight.json",
+      "bytes": 5043,
+      "sha256": "b460be86da2c6d07b14da0b35bb5999f3bb4770cb475eda5f7261daabece8b56",
+      "mode": 420,
+      "mtime_ns": 1790471504444574726
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_PREFLIGHT.md",
+      "bytes": 12197,
+      "sha256": "073c199992bbf94b2e58e4ff70c1690c2bfc07eaef4f58140a64c2e5d0d6df2a",
+      "mode": 420,
+      "mtime_ns": 1790471403576761659
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_PREFLIGHT_AMENDMENT.md",
+      "bytes": 2003,
+      "sha256": "2b6345548c8af6f4ef9b99f6c1c4daa067676ff5a90f7382af3a4c4fc74d5a14",
+      "mode": 420,
+      "mtime_ns": 1790471158297795458
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_PREFLIGHT_PLAN.md",
+      "bytes": 5003,
+      "sha256": "60c73ae3f48087406256a40e9d39df7a7dedbb71a8dd2f6e28ce2b98fb7c7d9d",
+      "mode": 420,
+      "mtime_ns": 1790470788228131319
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/inspect_application_mac_audio_preflight.py",
+      "bytes": 9331,
+      "sha256": "e079195096516839b81b371c52dd92804ae8615ee316dda41885074089ea7850",
+      "mode": 420,
+      "mtime_ns": 1790471051657834845
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/inspect_application_mac_audio_preflight2.py",
+      "bytes": 9428,
+      "sha256": "8f9238393ffc33f0634fd5072b77394b5c30a75a62f54d63095937c5b7f9d798",
+      "mode": 420,
+      "mtime_ns": 1790471158413789424
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_mac_audio_preflight.py",
+      "bytes": 7548,
+      "sha256": "36a3a7bab94b285c64efd467b5076347fdc1303cbaa6d80a4177446979df3f54",
+      "mode": 420,
+      "mtime_ns": 1790470838684893055
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/publish_application_mac_audio_preflight.py",
+      "bytes": 12193,
+      "sha256": "6c42f96318fe77e552d6f7ce5461b1417fc824e05d4123883d5f07d78b10dd1f",
+      "mode": 420,
+      "mtime_ns": 1790471465262979380
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "b90b19955156b78d7fdc83814b2de0e700778ee3",
+      "blockSHA256": "5a8185b23da94f22a9148aefd08517cb078c7c7ec61990a005566397e42938c8",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "12042e333b24f69616355b9fdd606cf6da8c9472",
+      "blockSHA256": "591ca9899f7d1e9ac6789e1f84d3f17deb6bf771e5e0621326174330f9c2ac16",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "analysisComplete": true,
+  "implementation": false,
+  "nativeExecuted": false,
+  "originalExecuted": false,
+  "deviceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "metadataMembers": 119,
+  "metadataSHA256": "ea93397edccea6ebb7b014996ec1e71236275ca7d0e7fd149e3914257755bb60",
+  "priorGoalTurn": "progress:a177cab all105 startup audio",
+  "nextGoalTask": "Native PCM backend/startup service and bounded offline transport;115 retained+5 new groups",
+  "whitespaceCheck": "must pass before commit"
+}

@@ -1,0 +1,55 @@
+{
+  "UTC": "2026-09-27T01:08:20.755928+00:00",
+  "classification": "primary API documentation and installed SDK; platform design input, not NTSD Windows/device observation",
+  "SDKVersion": "27.0",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/api/mmeapi/ns-mmeapi-waveformatex",
+      "claim": "PCM block alignment derives from channels and sample width; average bytes from rate and alignment; cbSize is ignored for PCM. The source destination-low-word cbSize must remain in its record."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/multimedia/devices-and-data-types",
+      "claim": "8-bit PCM is unsigned with midpoint128;16-bit PCM is signed with midpoint0. Stereo is left/right interleaved and16-bit words are little endian."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee418150(v=vs.85)",
+      "claim": "DirectSound volume attenuation uses hundredths of dB, range-10000 through0, with no amplification. This does not establish device error retention or exact DSP rounding."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee418148(v=vs.85)",
+      "claim": "DirectSound pan attenuates one channel, leaving the other at full level; its attenuation combines with volume. Apple pan range alone is insufficient to prove an equivalent mapping."
+    },
+    {
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudioengine",
+      "claim": "AVAudioEngine can render manually; installed header supplies exact ordering and output-buffer contracts used by the proposed offline test."
+    },
+    {
+      "url": "https://developer.apple.com/documentation/avfaudio/avaudioengine/manualrenderingblock",
+      "claim": "Manual rendering block exists; no block or engine was executed here."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee417554(v=vs.85)",
+      "claim": "DirectSound loading and playback use secondary-buffer Lock and Play; original EXE, not this tutorial, determines NTSD call order."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/multimedia/using-the-waveformatex-structure",
+      "claim": "WAVEFORMATEX describes mono/stereo8/16-bit PCM; support at a particular device remains a separate question."
+    }
+  ],
+  "lookupFailures": [
+    {
+      "url": "https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee418149(v=vs.85)",
+      "error": "URL not accessible via web tool; no technical claim drawn"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/multimedia/pcm-waveform-audio",
+      "error": "URL not accessible via web tool; no technical claim drawn"
+    }
+  ],
+  "design": {
+    "rawPCM": "Retain original interleaved bytes/masks separately from the platform PCM buffer. Fully known8-bit samples map to Float32(sample-128)/128;16-bit signed samples to Float32(sample)/32768. This exact representation mapping is Native design, not a claim about Windows DSP. Preserve source rate and channel order.",
+    "ownership": "Use the existing Native resource identity pool; no host/source pointer tokens or path-based deduplication. Shared owner retained by fulfilled exchange receipts.",
+    "offline": "Configure manual rendering before any mixer/input/output node access; no physical output or microphone. Use the same native rate/channel count to avoid claiming resampling equivalence. Observe status and actual frameLength; never infer zero samples from a short render.",
+    "excluded": "Music WMA/graph notifications, DirectSound pan/volume mapping, runtime sound-command scheduling, hardware output/latency/mixing and Windows reference still open."
+  }
+}

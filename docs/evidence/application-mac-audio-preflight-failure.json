@@ -1,0 +1,23 @@
+{
+  "UTC": "2026-09-27T01:05:58.395415+00:00",
+  "classification": "static metadata audit limit; not source/Native execution or comparator mismatch",
+  "job": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-preflight-20260927/inspect1.job.json",
+    "bytes": 1014,
+    "sha256": "6c9d87e9d3064684ef599ce421d2713edd58f1bd20c1899b66b9636b3bcf9a11",
+    "mode": 420,
+    "mtime_ns": 1790471051893085408
+  },
+  "error": "AssertionError()",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/michael/Developer/ntsd-2.4/build/research/application-mac-audio-preflight-20260927/inspect1.py\", line 74, in main\n    assert len(chunks)<256 and cursor+8<=limit\nAssertionError\n",
+  "processAbsent": true,
+  "diagnosedSourceOrdinal": 390,
+  "sourcePath": "data\\heart.wav",
+  "fileBytes": 572652,
+  "RIFFEnd": 572652,
+  "limitChunks": 256,
+  "nextOffset": 572612,
+  "uninterpretedRemainingBytes": 40,
+  "inputBytesChanged": false,
+  "retryOriginal": false
+}

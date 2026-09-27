@@ -1,5 +1,21 @@
 # Текущая передача работы
 
+[Native audio consumer boundary mapped](APPLICATION_MAC_AUDIO_PREFLIGHT.md):
+All409 original WAVs hash-verified:23 format tuples/18 rates; raw/mask ownership,
+startup/common/catalog and menu/gameplay/music consumers mapped at79 anchors.
+[Publication](../evidence/application-mac-audio-preflight.json), [inventory](../evidence/application-mac-audio-preflight-wav-inputs.json).
+First metadata audit hit a post-data chunk limit; exact failure preserved, bounded
+correction follows the loader's first-data stop with all409 files retained.
+38 Native/17 study/5 SDK inputs and119-member archive verified; publisher32485
+terminal0/absent, task frozen. Root1034/prior2257/base2281/source55 unchanged.
+NEXT: own Native PCM backend and retained startup service, all409 input buffers,
+whole own WinMain and23-format offline transport;115 retained+5 proposed methods.
+Freeze implementation plan/limits before build; no new original capture. Common/
+catalog request propagation, runtime playback and WMA/device mixing remain open.
+Windows resumes when observable with approvals retained; host still locked.
+Review/root promotion/Windows/clean-Mac/full match/game and incidents remain open;
+EXE envelope unchanged. Supersedes the audio-consumer-preflight NEXT below.
+
 [Per-call startup audio: all105 methods checked](APPLICATION_STARTUP_AUDIO_CORRECTION1.md):
 Own initial/Lock storage, typed replies and PCM/mask payload pass whole WAV/menu/
 WinMain comparisons, protocol controls and late retry without repeated service.

@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native audio-consumer preflight](research/APPLICATION_MAC_AUDIO_PREFLIGHT.md):
+409 original input WAVs/23 formats/18 rates verified;79 static anchors expose
+common/catalog and menu/gameplay service gaps. Own PCM startup backend and bounded
+offline transport chosen next (115 retained+5 proposed tests).119-member archive
+verified; first metadata-limit failure retained. No Native/device execution or
+Windows/audio acceptance; prior all105 and root inputs unchanged. [Evidence](evidence/application-mac-audio-preflight.json).
+
 [Per-call startup audio: all105 methods checked](research/APPLICATION_STARTUP_AUDIO_CORRECTION1.md):
 Own initial/Lock storage, typed replies and PCM/mask payload pass whole WAV/menu/
 WinMain comparisons, protocol controls and late retry without repeated service.
