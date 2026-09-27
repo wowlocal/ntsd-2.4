@@ -1,0 +1,135 @@
+    // Small declared Native controls. No claim of Windows reachability or audio.
+    func testAudioProtocolAndLockRegionsKeepDistinctOutcomes() throws {
+        let file = P.hex("524946462c00000057415645666d74201000000001000100401f0000401f00000100080064617461080000000a141e28323c4650")
+        let prior = OriginalWaveStorage(first:.init(bytes:[201,202],defined:[false,true]),second:nil,ramp:false)
+        func input(_ read: Int32 = 8,_ device: UInt32 = 7) -> OriginalWaveInput {
+            .init(destination:0x1234,device:device,stream:8,descendResults:[0,0,0],formatReadResult:18,
+                ascendResult:0,dataReadResult:read,closeResult:-99,storage:prior)
+        }
+        func region(_ token: UInt32,_ count: Int) -> OriginalWaveRegion {
+            .init(token:token,storage:.init(bytes:Array(repeating:0xa5,count:count),defined:Array(repeating:false,count:count)))
+        }
+        let finalLock = OriginalWaveLock(firstPointer:20,firstCount:3,secondPointer:21,secondCount:5,
+            first:region(20,3),second:region(21,5))
+        let ignored = OriginalWaveLock(firstPointer:0,firstCount:-1,secondPointer:99,secondCount:99,first:nil,second:nil)
+        var requests: [OriginalWaveRequest] = [],locks = 0
+        let result = try OriginalWaveLoader.loadObserved(path:Array("control.wav".utf8),file:file,output:55,input:input(),request:{ q in
+            requests.append(q)
+            switch q.event.kind {
+            case .create:return .created(0,9)
+            case .lock:
+                locks += 1
+                return locks == 1 ? .locked(0x88780096,ignored) : .locked(0x80004005,finalLock)
+            case .copy:return .copied
+            case .restore,.unlock,.message:return .result(-17)
+            default:throw Stop.missingOutcome
+            }
+        })
+        XCTAssertEqual(result.initialStorage,prior);XCTAssertEqual(result.output,9);XCTAssertEqual(result.returned,1)
+        XCTAssertEqual(result.lockReplies,[.locked(0x88780096,ignored),.locked(0x80004005,finalLock)])
+        XCTAssertEqual(requests.map { $0.event.kind },[.create,.lock,.restore,.lock,.copy,.copy,.unlock])
+        XCTAssertEqual(result.first.bytes,[10,20,30]);XCTAssertEqual(result.second?.bytes,[40,50,60,70,80])
+        XCTAssertEqual(result.first.defined,[true,true,true]);XCTAssertEqual(result.second?.defined,Array(repeating:true,count:5))
+        XCTAssertEqual(requests[4].target,20);XCTAssertEqual(requests[4].bytes,[10,20,30])
+        XCTAssertEqual(requests[5].target,21);XCTAssertEqual(requests[5].bytes,[40,50,60,70,80])
+        XCTAssertEqual(requests.last?.event.arguments,[9,20,3,21,5])
+        XCTAssertEqual(result.regions.count,2);XCTAssertFalse(result.temporaryLive)
+        func run(_ lock: OriginalWaveLock?,create: OriginalWaveResponse = .created(0,9),read: Int32 = 8,
+            sink: (OriginalWaveRequest) -> Void = { _ in }) throws -> OriginalWaveLoadResult {
+            try OriginalWaveLoader.loadObserved(path:Array("control.wav".utf8),file:file,output:55,input:input(read),request:{ q in
+                sink(q)
+                switch q.event.kind {
+                case .create:return create
+                case .lock:return .locked(0,lock)
+                case .copy:return .copied
+                case .message,.restore,.unlock:return .result(-13)
+                default:throw Stop.missingOutcome
+                }
+            })
+        }
+        let alias = OriginalWaveLock(firstPointer:20,firstCount:3,secondPointer:20,secondCount:5,first:region(20,8),second:region(20,8))
+        let same = try run(alias)
+        XCTAssertEqual(same.regions.count,1);XCTAssertEqual(same.first,same.second)
+        XCTAssertEqual(same.first.bytes,[40,50,60,70,80,0xa5,0xa5,0xa5])
+        XCTAssertEqual(same.first.defined,[true,true,true,true,true,false,false,false])
+        let conflict = OriginalWaveLock(firstPointer:20,firstCount:3,secondPointer:20,secondCount:5,
+            first:region(20,8),second:.init(token:20,storage:.init(bytes:Array(repeating:0x44,count:8),defined:Array(repeating:false,count:8))))
+        XCTAssertThrowsError(try run(conflict)) { XCTAssertEqual($0 as? OriginalStateError,.invalidStorage("Wave loading: Conflicting Lock alias backing")) }
+        var zeroCopies: [OriginalWaveRequest] = []
+        let zero = try run(.init(firstPointer:20,firstCount:8,secondPointer:21,secondCount:0,first:region(20,8),second:region(21,0)),sink:{ zeroCopies.append($0) })
+        XCTAssertEqual(zero.second?.bytes,[]);XCTAssertEqual(zeroCopies.filter { $0.event.kind == .copy }.count,2)
+        XCTAssertEqual(zeroCopies.last?.event.arguments,[9,20,8,21,0])
+        let absent = try run(.init(firstPointer:20,firstCount:3,secondPointer:0,secondCount:5,first:region(20,3),second:nil))
+        XCTAssertNil(absent.second);XCTAssertEqual(absent.first.bytes,[10,20,30])
+        for lock: OriginalWaveLock? in [nil,ignored,.init(firstPointer:20,firstCount:3,secondPointer:21,secondCount:5,first:region(99,3),second:region(21,5))] {
+            XCTAssertThrowsError(try run(lock))
+        }
+        var missing: [OriginalWaveEvent.Kind] = []
+        XCTAssertThrowsError(try run(finalLock,create:.created(0,nil),sink:{ missing.append($0.event.kind) }))
+        XCTAssertEqual(missing,[.create])
+        XCTAssertThrowsError(try run(finalLock,create:.result(0)))
+        let invalid = try run(finalLock,create:.created(1,9))
+        XCTAssertEqual(invalid.exit,.invalidCreateContinuation);XCTAssertNil(invalid.returned);XCTAssertFalse(invalid.temporaryLive)
+        XCTAssertEqual(invalid.initialStorage,prior);XCTAssertTrue(invalid.lockReplies.isEmpty)
+        let short = try run(nil,read:3)
+        XCTAssertEqual(short.returned,0);XCTAssertTrue(short.temporaryLive)
+        XCTAssertEqual(short.temporary?.bytes,[10,20,30,0xa5,0xa5,0xa5,0xa5,0xa5])
+        XCTAssertEqual(short.temporary?.defined,[true,true,true,false,false,false,false,false])
+        let noDevice = try OriginalWaveLoader.loadObserved(path:[],file:[],output:55,input:input(8,0),request:{ _ in XCTFail("device0 audio IO");throw Stop.missingOutcome })
+        XCTAssertEqual(noDevice.output,55);XCTAssertEqual(noDevice.returned,1);XCTAssertEqual(noDevice.first,try prior.first.record())
+        var globals = try OriginalStateRecord(bytes:Array(repeating:0xa5,count:OriginalMatchPreparation.globalSize),defined:Array(repeating:true,count:OriginalMatchPreparation.globalSize))
+        let saved = globals
+        var stores: [UInt32] = [],soundEvents: [String] = []
+        let ready = try OriginalMenuSoundStartup.initializeDevice(globals:&globals,window:6,request:{ q in
+            soundEvents.append(q.kind);return .init(result:1,output:77)
+        },store:{ _,v in stores.append(v) })
+        XCTAssertFalse(ready);XCTAssertEqual(stores,[77,0]);XCTAssertEqual(soundEvents,["deviceCreate"])
+        XCTAssertEqual(try globals.integer(at:0x44eecc-OriginalMatchPreparation.globalBase,as:UInt32.self),0)
+        globals = saved
+        XCTAssertThrowsError(try OriginalMenuSoundStartup.initializeDevice(globals:&globals,window:6,request:{ _ in .init(result:0) }))
+        XCTAssertEqual(globals,saved)
+        let copy = OriginalWaveRequest(.init(.copy,[0,0,3]),target:20,bytes:[10,20,30],defined:[true,true,true])
+        try copy.validate()
+        for q in [OriginalWaveRequest(.init(.copy,[0,0,3]),target:20),
+                  OriginalWaveRequest(.init(.copy,[0,0,3]),target:0,bytes:[10,20,30],defined:[true,true,true]),
+                  OriginalWaveRequest(.init(.lock,[]))] { XCTAssertThrowsError(try q.validate()) }
+        let request = OriginalStartupRequest.waveAudio(.init(0,"control.wav",0x1234,7),copy)
+        func ticket(_ e: E) throws -> E.RequestNeeded {
+            var cursor = try e.snapshot.cursor()
+            do { _ = try cursor.response(for:request);throw Stop.missingOutcome }
+            catch let needed as E.RequestNeeded { return needed }
+        }
+        let exchange = E(),other = E(),needed = try ticket(exchange),permit = try exchange.claim(needed)
+        XCTAssertThrowsError(try other.beginService(permit)) { XCTAssertEqual($0 as? E.Boundary,.foreignOwner) }
+        XCTAssertThrowsError(try exchange.answer(permit,response:.sound(.init(result:0)))) { XCTAssertEqual($0 as? E.Boundary,.responseMismatch) }
+        XCTAssertThrowsError(try exchange.answer(permit,response:.waveAudio(.result(0)))) { XCTAssertEqual($0 as? E.Boundary,.responseMismatch) }
+        try exchange.beginService(permit)
+        XCTAssertThrowsError(try exchange.beginService(permit)) { XCTAssertEqual($0 as? E.Boundary,.serviceAlreadyStarted) }
+        try exchange.answer(permit,response:.waveAudio(.copied))
+        XCTAssertThrowsError(try exchange.answer(permit,response:.waveAudio(.copied))) { XCTAssertEqual($0 as? E.Boundary,.invalidPermit) }
+        XCTAssertThrowsError(try exchange.claim(needed)) { XCTAssertEqual($0 as? E.Boundary,.staleRevision) }
+        var cursor = try exchange.snapshot.cursor()
+        guard case .waveAudio(.copied) = try cursor.response(for:request) else { throw Stop.missingOutcome }
+        XCTAssertEqual(try exchange.finish(cursor).status,.finished)
+        let cancelled = E(),cancelPermit = try cancelled.claim(ticket(cancelled));cancelled.cancel()
+        XCTAssertThrowsError(try cancelled.beginService(cancelPermit)) { XCTAssertEqual($0 as? E.Boundary,.closed(.cancelled)) }
+        XCTAssertTrue(cancelled.snapshot.receipts.isEmpty)
+        weak var retained: Resource?
+        func late(_ failure: Bool) throws -> E.Snapshot {
+            let e = E(),p = try e.claim(ticket(e)),owner = Resource();retained = owner
+            try e.beginService(p);e.cancel()
+            if failure { try e.fail(p,diagnostic:"controlled outcome unavailable",retaining:[owner]) }
+            else { try e.answer(p,response:.waveAudio(.copied),retaining:[owner]) }
+            return e.snapshot
+        }
+        for failure in [false,true] {
+            var snapshot: E.Snapshot? = try late(failure)
+            XCTAssertNotNil(retained)
+            XCTAssertEqual(snapshot?.status,failure ? .indeterminate : .cancelled)
+            if failure {
+                XCTAssertEqual(snapshot?.failure?.diagnostic,"controlled outcome unavailable")
+                XCTAssertEqual(snapshot?.failure?.afterCancellation,true);XCTAssertEqual(snapshot?.receipts.count,0)
+            } else { XCTAssertEqual(snapshot?.receipts.count,1);XCTAssertNil(snapshot?.failure) }
+            snapshot = nil;XCTAssertNil(retained)
+        }
+    }

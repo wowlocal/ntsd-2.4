@@ -1,0 +1,180 @@
+{
+  "schema": "ntsd-startup-audio-docs-v1",
+  "UTC": "2026-09-27T00:19:28.669464+00:00",
+  "baseHead": "28f356bd2b9dbfa160cc1834c1cce5e695d2c94a",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/publication1.json",
+    "bytes": 4936,
+    "sha256": "3ed695ce198beea88f552114fb04e472f707fed4a11eff8e78e8c932d2c73428",
+    "mode": 420,
+    "mtime_ns": 1790468259096046027
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/finalize1.job.json",
+    "bytes": 812,
+    "sha256": "aceba2ec8c0dcd25df9ca56767541cccc863d979de01766c68957167369f472a",
+    "mode": 420,
+    "mtime_ns": 1790468259099356329
+  },
+  "finalizerTerminalAndAbsent": true,
+  "buildExitUnknown": true,
+  "all105TestsUnstarted": true,
+  "files": [
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_PLAN.md",
+      "bytes": 7400,
+      "sha256": "7c14bd84788c56dbb0a78d28cf58d5e6bfbf17fc8a831e95013e1beeb628c8a1",
+      "mode": 420,
+      "mtime_ns": 1790467802787262382
+    },
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO_RUNNER_AMENDMENT.md",
+      "bytes": 1381,
+      "sha256": "e65efa81c022bd816494e602189bd71e40d19db7522130f8d81d2967f7b3f339",
+      "mode": 420,
+      "mtime_ns": 1790467892164280893
+    },
+    {
+      "path": "docs/research/APPLICATION_STARTUP_AUDIO.md",
+      "bytes": 7062,
+      "sha256": "9f392f0d99c6a069c0197c1189b9f2b366c73d5f4f6e5ec579fc8aff9a1316af",
+      "mode": 420,
+      "mtime_ns": 1790468368536992752
+    },
+    {
+      "path": "docs/evidence/application-startup-audio.json",
+      "bytes": 4936,
+      "sha256": "3ed695ce198beea88f552114fb04e472f707fed4a11eff8e78e8c932d2c73428",
+      "mode": 420,
+      "mtime_ns": 1790468259099069828
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-close.json",
+      "bytes": 1650,
+      "sha256": "405f77f0bca3f105c9f6703de8c312b86ef93dc78d6e5c79b1b44d7c6635821a",
+      "mode": 420,
+      "mtime_ns": 1790468259099170245
+    },
+    {
+      "path": "docs/evidence/application-startup-audio.patch",
+      "bytes": 93501,
+      "sha256": "6c1d08b4159e8e0542972b53f5e2f323dc155e0558b2e29241c1237bf3622b41",
+      "mode": 420,
+      "mtime_ns": 1790468213117311932
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-failure.json",
+      "bytes": 1621,
+      "sha256": "2e73dcac240e4efa9f599f38287e99755d4391dedcb959b2e7c65932277f38d4",
+      "mode": 420,
+      "mtime_ns": 1790468368592185126
+    },
+    {
+      "path": "docs/evidence/application-startup-audio-process-absence.json",
+      "bytes": 2621,
+      "sha256": "2a75fd993900b37183f7074b620a141314fd4503a1676abd3ca737277a08b08c",
+      "mode": 420,
+      "mtime_ns": 1790468368592433460
+    },
+    {
+      "path": "tools/OriginalStartupAudio.swift",
+      "bytes": 10231,
+      "sha256": "eba9aae5a126a1107e663d8b5374d5820cda321b875376c0c75e1d0a23c72508",
+      "mode": 420,
+      "mtime_ns": 1790467421728226355
+    },
+    {
+      "path": "tools/OriginalStartupAudioTests.swift",
+      "bytes": 35886,
+      "sha256": "0763a2f281ed5d3d2be899be42d16de42b4ff4f278bee1a23c29d8c9cb4ab59e",
+      "mode": 420,
+      "mtime_ns": 1790467685925685120
+    },
+    {
+      "path": "tools/OriginalStartupAudioMenuCorpus.swift",
+      "bytes": 9906,
+      "sha256": "2b8eeec8e90f4b4b3ac9061b17a10c200ad661efef2e6c39abe0cd8c1d31f49b",
+      "mode": 420,
+      "mtime_ns": 1790467685925372786
+    },
+    {
+      "path": "tools/apply_startup_audio_candidate.py",
+      "bytes": 24944,
+      "sha256": "4f510f5f9a34c3a91d256acac8eb0d96180e6863b5f37432731aad83389bbfe4",
+      "mode": 420,
+      "mtime_ns": 1790467348455599123
+    },
+    {
+      "path": "tools/generate_startup_audio_tests.py",
+      "bytes": 6967,
+      "sha256": "2d740f72c8593bf5e4d28f9c3c75d973ee4b289d409c584eca450d3de135c71f",
+      "mode": 420,
+      "mtime_ns": 1790467490104108483
+    },
+    {
+      "path": "tools/OriginalStartupAudioTestHelpers.part",
+      "bytes": 9538,
+      "sha256": "763f5c24482e55ab1334550ffff89e0e6607d456b400e3dc6c3ee215b6af058c",
+      "mode": 420,
+      "mtime_ns": 1790467685901931929
+    },
+    {
+      "path": "tools/OriginalStartupAudioTestControls.part",
+      "bytes": 10482,
+      "sha256": "b43ea22b1b6346de6ad8f1e55d65d0991a33a37ad26171db15b89163a4befa75",
+      "mode": 420,
+      "mtime_ns": 1790467653332617969
+    },
+    {
+      "path": "tools/prepare_application_startup_audio.py",
+      "bytes": 13682,
+      "sha256": "44a98dc52017938fc743327aa2cf51b409501fbec224b4256e8fa8e4960f6c21",
+      "mode": 420,
+      "mtime_ns": 1790467779847070510
+    },
+    {
+      "path": "tools/amend_startup_audio_runner.py",
+      "bytes": 2981,
+      "sha256": "65d353e20226be8a2e427e8dde64078d57156e9f66f9befe050f4b7c552c7eb4",
+      "mode": 420,
+      "mtime_ns": 1790467917336436822
+    },
+    {
+      "path": "tools/finalize_application_startup_audio.py",
+      "bytes": 21290,
+      "sha256": "174963a220bf2e49bcaa45e59090c6a4f02553fcda45fafc16e8dac4d1d94630",
+      "mode": 420,
+      "mtime_ns": 1790468175700067505
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "blockSHA256": "c69fa6502ecf3f21fc5e4c6e919b10682ab9901430b549c0973e7b5a79b1eb6a",
+      "stagedBlob": "0195ee00daf93fbea82fc241bffac2f34a57bd07",
+      "unrelatedWorkingDiffPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "blockSHA256": "8f70a8c62251fdb153abd385706525e994bd6ba3190a3f37ac953d876ea23636",
+      "stagedBlob": "97fabe162bc5e243e5df91aeddf7c87d3e73d4f9",
+      "unrelatedWorkingDiffPreserved": true
+    }
+  ],
+  "independentReview": false,
+  "whitespaceCheck": {
+    "exitCode": 2,
+    "output": "docs/evidence/application-startup-audio.patch:11: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:15: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:22: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:205: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:335: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:368: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:424: trailing whitespace.\n+ \ndocs/evidence/application-startup-audio.patch:460: trailing whitespace.\n+ \n",
+    "exception": "Eight immutable unified-diff context blank lines, each exactly one space. Patch bytes preserved; no source trailing whitespace exception.",
+    "lines": [
+      11,
+      15,
+      22,
+      205,
+      335,
+      368,
+      424,
+      460
+    ]
+  }
+}

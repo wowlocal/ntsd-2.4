@@ -1,0 +1,166 @@
+import Foundation
+import XCTest
+@testable import NTSDCore
+@testable import NTSDReferenceChecks
+
+// These witnesses forward the new path. Old Audit instances keep observesAudio=false.
+extension OriginalApplicationPreparedStartupPlatformTests.Audit {
+    var observesAudio: Bool { native.observesAudio }
+    func soundRequest(_ event: OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse {
+        try native.soundRequest(event)
+    }
+    func waveInput(_ i: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWaveInput {
+        let r = try native.waveInput(i,path,destination,device)
+        XCTAssertEqual(r,try OriginalWaveInput(legacy:audit.wave(i,path,destination,device)));return r
+    }
+    func waveRequest(_ binding: OriginalWaveBinding,_ q: OriginalWaveRequest) throws -> OriginalWaveResponse {
+        try native.waveRequest(binding,q)
+    }
+}
+
+final class OriginalStartupAudioTests: XCTestCase {
+    typealias N = OriginalApplicationPreparedStartupPlatform
+    typealias Old = OriginalApplicationPreparedStartupPlatformTests
+    typealias Observed = OriginalApplicationObservedStartupTests
+    typealias Audit = Old.Audit
+    typealias P = OriginalWinMainStartupTests
+    typealias B = OriginalApplicationBootstrapTests
+    typealias D = OriginalApplicationHostDeliveryContextTests
+    typealias E = OriginalStartupRequestExchange
+    typealias Driver = OriginalApplicationObservedStartup<Audit>
+    typealias Host = Driver.Host
+    typealias Op = OriginalApplicationStartupOperation
+    enum Stop: Error { case missingOutcome }
+    final class Resource: OriginalApplicationStartupResource {}
+    final class AudioOwner: OriginalApplicationStartupResource {
+        var regions: [Int:[UInt32:OriginalStateRecord]] = [:]
+        var copyWrites = 0
+    }
+    func audited(_ p: P.Adapter,_ package: OriginalApplicationStartupInputs) throws -> Audit {
+        let checked = try Old().audited(p,package),full = try Old().preparation(p)
+        var inputs = Observed.constants(full)
+        inputs.observesAudio = true
+        // Deliberately contradictory unused aggregate: actual sound replies win.
+        inputs.sound = .init(createResult:123,createdDevice:0xdeadbeef,cooperativeResult:-123,messageResult:123)
+        inputs.waveInputs = try full.waves.map {
+            try .init(.init($0.request.index,$0.request.path,$0.request.destination,$0.request.device),OriginalWaveInput(legacy:$0.value))
+        }
+        return Audit(N(inputs:checked.native.inputs,prepared:inputs),p)
+    }
+    final class Service {
+        let values: N, full: N.Prepared
+        let windows: [OriginalWindowInitialization.Response]
+        let owner = AudioOwner()
+        var waves: [Int:OriginalWaveLegacyReplies] = [:]
+        var audio: [Op] = []
+        var windowIndex = 0, calls = 0
+        init(_ p: P.Adapter,_ package: OriginalApplicationStartupInputs) throws {
+            full = try Old().preparation(p)
+            var other = full;other.waves = []
+            values = N(inputs:package,prepared:other)
+            windows = try p.c.events.filter { $0.kind == "window" }.map { try XCTUnwrap($0.event?.response) }
+            for w in full.waves { waves[w.request.index] = try OriginalWaveLegacyReplies(w.value) }
+        }
+        func wave(_ binding: OriginalWaveBinding) throws -> OriginalWavePlatform {
+            let w = try XCTUnwrap(full.waves.first { $0.request.index == binding.index })
+            XCTAssertEqual(binding,.init(w.request.index,w.request.path,w.request.destination,w.request.device));return w.value
+        }
+        func project(_ ops: [Op]) throws -> [Op] {
+            try ops.map { operation in
+                switch operation {
+                case .soundReply(let q,_):return .sound(q,full.sound)
+                case .waveReply(let binding,let q,_):return .wave(q.event,try wave(binding))
+                case .wavePrepared(let binding,let q,let input):
+                    let p = try wave(binding);XCTAssertEqual(input,try OriginalWaveInput(legacy:p));return .wave(q,p)
+                default:return operation
+                }
+            }
+        }
+        func verifyReceipts(_ snapshot: E.Snapshot) throws {
+            let operations: [Op] = snapshot.receipts.compactMap { r in
+                switch (r.request,r.response) {
+                case (.sound(let q),.sound(let a)):return .soundReply(q,a)
+                case (.waveAudio(let b,let q),.waveAudio(let a)):return .waveReply(b,q,a)
+                default:return nil
+                }
+            }
+            XCTAssertEqual(try D().encoded(operations),try D().encoded(audio))
+            XCTAssertEqual(owner.copyWrites,operations.filter { if case .waveReply(_,let q,_) = $0 { return q.event.kind == .copy };return false }.count)
+            for receipt in snapshot.receipts { XCTAssertTrue(receipt.resources.contains { $0 === owner }) }
+        }
+        func verify(_ snapshot: E.Snapshot,_ ops: [Op],_ startup: OriginalWinMainStartup) throws {
+            try verifyReceipts(snapshot)
+            let replies = ops.filter { switch $0 { case .soundReply,.waveReply:return true;default:return false } }
+            XCTAssertEqual(try D().encoded(replies),try D().encoded(audio))
+            for (i,load) in (startup.input?.sounds.loads ?? []).enumerated() {
+                let expectedInput = try XCTUnwrap(waves[i]).input
+                XCTAssertEqual(load.initialStorage,expectedInput.storage)
+                let requests: [(OriginalWaveRequest,OriginalWaveResponse)] = audio.compactMap {
+                    if case .waveReply(let b,let q,let r) = $0,b.index == i { return (q,r) };return nil
+                }
+                let locks = requests.filter { $0.0.event.kind == .lock }.map { $0.1 }
+                XCTAssertEqual(load.lockReplies,locks)
+                if !load.regions.isEmpty {
+                    XCTAssertEqual(load.regions,owner.regions[i])
+                    let temporary = try XCTUnwrap(load.temporary)
+                    for (q,_) in requests where q.event.kind == .copy {
+                        let offset = Int(q.event.arguments[1]),count = Int(q.event.arguments[2])
+                        XCTAssertEqual(q.bytes,Array(temporary.bytes[offset..<(offset+count)]))
+                        XCTAssertEqual(q.defined,Array(temporary.defined[offset..<(offset+count)]))
+                    }
+                }
+            }
+        }
+/* SERVICE_ANSWER */
+    func globals(_ session: Host.Session) throws -> OriginalStateRecord { try Old().globals(session) }
+    func unchanged(_ driver: Driver,_ p: P.Adapter) throws { try Observed().unchanged(driver,p) }
+    @discardableResult
+    func drive(_ driver: Driver,_ p: P.Adapter,_ service: Service,
+        prepare: (Audit) throws -> Void = { _ in },
+        before: (OriginalWinMainStartup,Host.Session,Audit) throws -> Void = { _,_,_ in },
+        failed: (Audit,Error) -> Void = { _,_ in },
+        resources: () -> [any OriginalApplicationStartupResource] = { [] }) throws -> Host {
+        for _ in 0..<1500 {
+            switch try driver.resume(prepare:prepare,store:{ $0.audit.store($1,$2) },beforeCommit:before,failedAttempt:failed) {
+            case .request(let permit):
+                try unchanged(driver,p);XCTAssertEqual(permit.ordinal,service.calls)
+                if case .waveAudio(_,let q) = permit.request { try q.validate() }
+                try driver.beginService(permit)
+                do {
+                    let response = try service.answer(permit.request)
+                    try driver.answer(permit,response:response,retaining:[service.owner]+resources())
+                } catch {
+                    try driver.fail(permit,diagnostic:String(describing:error),retaining:[service.owner]);throw error
+                }
+            case .started(let sequence,let host):
+                XCTAssertEqual(sequence,1);XCTAssertEqual(driver.exchangeSnapshot.status,.finished)
+                XCTAssertEqual(service.calls,driver.exchangeSnapshot.receipts.count)
+                try service.values.validatePreparedConsumption();return host
+            }
+        }
+        throw Stop.missingOutcome
+    }
+    func testPerCallWaveCorpusAndInitialCallerKeepAllBytesAndMasks() throws {
+        let url = try XCTUnwrap(Bundle.module.url(forResource:"original-wave-loader",withExtension:"json",subdirectory:"Fixtures"))
+        var copies = 0,bytes = 0
+        let result = try WaveLoaderReference.compare(Data(contentsOf:url),audio:{ p in
+            let replies = try OriginalWaveLegacyReplies(p)
+            return { q in
+                try q.validate()
+                if q.event.kind == .copy {
+                    copies += 1;bytes += try XCTUnwrap(q.bytes).count
+                    XCTAssertTrue(try XCTUnwrap(q.defined).allSatisfy { $0 })
+                }
+                return try replies.reply(q)
+            }
+        })
+        XCTAssertEqual(result.sources,409);XCTAssertEqual(result.cases,431)
+        XCTAssertEqual(result.startupPasses,3);XCTAssertEqual(result.startupLoads,54)
+        XCTAssertEqual(result.bytes,75_829_038);XCTAssertEqual(result.events,6982)
+        XCTAssertEqual(result.restores,93);XCTAssertEqual(result.messages,13)
+        XCTAssertEqual(result.leaks,2);XCTAssertEqual(result.invalidContinuations,2)
+        XCTAssertGreaterThan(copies,400);XCTAssertGreaterThan(bytes,1_000_000)
+    }
+    func testPerCallMenuSoundCorpusKeepsWholeAndStoppedOutcomes() throws {
+        try OriginalStartupAudioMenuCorpus().compareWholeMenuSoundStartupAgainstOriginal()
+    }

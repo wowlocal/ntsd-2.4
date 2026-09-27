@@ -1,0 +1,25 @@
+{
+  "UTC": "2026-09-27T00:16:15.683336+00:00",
+  "status": "compile-diagnostic-and-monitor-error",
+  "exactCompilerDiagnostics": [
+    "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalStartupAudioTests.swift:430:51: error: global function 'XCTAssertEqual(_:_:_:file:line:)' requires that 'OriginalStateError' conform to 'Equatable'"
+  ],
+  "compilerDiagnosticFile": "native/Tests/NTSDCoreTests/OriginalStartupAudioTests.swift",
+  "line": 430,
+  "diagnosis": "New control compares Optional<OriginalStateError> with XCTAssertEqual; OriginalStateError is not Equatable. Pattern-match invalidStorage and compare its String payload in a separately identified candidate.",
+  "monitorFailure": "AssertionError('')",
+  "monitorTraceback": "Traceback (most recent call last):\n  File \"/Users/michael/Developer/ntsd-2.4/build/research/application-startup-audio-20260927/tools/run_application_host_gameplay_validation2.py\", line 182, in main\n    assert owned_cwd(where_now,pid,P),where_now\nAssertionError\n",
+  "monitorCause": "Empty cwd reached the existing ownership assertion. The failing sampled PID is not recorded by that assertion; exact sampled PID is unknown.",
+  "buildExitCode": null,
+  "processAbsence": {
+    "bytes": 2621,
+    "sha256": "2a75fd993900b37183f7074b620a141314fd4503a1676abd3ca737277a08b08c",
+    "mode": 420,
+    "mtime_ns": 1790468175699350420
+  },
+  "all105MethodsUnstarted": true,
+  "packageGate": false,
+  "actualAudio": false,
+  "expectedBytesMasksUnchanged": true,
+  "originalExecuted": false
+}

@@ -1,5 +1,19 @@
 # Текущая передача работы
 
+[Per-call startup audio candidate: compile/monitor failures retained](APPLICATION_STARTUP_AUDIO.md):
+New device/WAV requests, separate Lock storage and actual PCM/mask payload are
+implemented in2281 files. Test compilation rejects an Equatable comparison of
+OriginalStateError; all105 methods are unstarted. Monitor separately reports empty
+cwd; its job is immutable, build exit unknown, all15 recorded identities absent.
+[Publication](../evidence/application-startup-audio.json), [failure](../evidence/application-startup-audio-failure.json).
+Exact13-file patch and4654-file/44-member archives verify; finalizer33386 terminal0/
+absent. Root1034/prior2257/base2278/source55 preserved; prior all95 stays checked.
+NEXT: exact-clone assertion correction, review the monitor observation boundary,
+then fresh build/package/same105 methods. Do not rerun this frozen failed round.
+Windows resumes after host unlock; agreements already approved. Actual audio/
+Windows/review/root integration/full match/game and safety incidents remain open.
+EXE envelope not recalculated. Supersedes the implementation NEXT below.
+
 [Startup audio request boundary mapped](APPLICATION_STARTUP_AUDIO_PREFLIGHT.md):
 Music already has per-call replies; DirectSound and WAV still rely on aggregate
 future outputs. Native PCM copy events omit payload, and early-return backing

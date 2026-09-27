@@ -1,0 +1,105 @@
+{
+  "schema": "ntsd-application-startup-audio-validation-v1",
+  "UTC": "2026-09-27T00:17:39.091877+00:00",
+  "status": "build-incomplete-before-tests",
+  "baseHead": "28f356bd2b9dbfa160cc1834c1cce5e695d2c94a",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/candidate1-inputs.json",
+    "bytes": 575728,
+    "sha256": "f4371c62781794d0da6f6bd29d06e17f29d9f682f4c1aa4878ad97e1e780e052",
+    "mode": 420,
+    "mtime_ns": 1790467816167412817
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/context1.json",
+    "bytes": 32647,
+    "sha256": "85a8bbceac5e4f001b2cda92bf19cdb1d5cefddcb3d8a0e4cfa4ecd1916ae7e6",
+    "mode": 420,
+    "mtime_ns": 1790467816424206861
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/build1.job.json",
+    "bytes": 71131,
+    "sha256": "ba2c9dbd7a91fab4a12016f5dc20c7114d35f53e71f0da91512f48698d7238d0",
+    "mode": 420,
+    "mtime_ns": 1790468057945373129
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/failure-diagnosis1.json",
+    "bytes": 1621,
+    "sha256": "2e73dcac240e4efa9f599f38287e99755d4391dedcb959b2e7c65932277f38d4",
+    "mode": 420,
+    "mtime_ns": 1790468175699871005
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/verification1.json",
+    "bytes": 10439,
+    "sha256": "0e63bd64dce7b9d28486ac7f0199af40a300ac41abb31f2b4892eafecb1fcea3",
+    "mode": 420,
+    "mtime_ns": 1790468254913966305
+  },
+  "passedMethods": 0,
+  "selectedMethods": 105,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/artifact-archive1",
+    "files": 4654,
+    "directories": 202,
+    "links": 0,
+    "bytes": 11090336139,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/artifact-archive1.json",
+      "bytes": 2385900,
+      "sha256": "82e253cb3b3cf209536694b4da443ae1fe53f49ba3c32f081037719432a3b472",
+      "mode": 420,
+      "mtime_ns": 1790468254907101367
+    }
+  },
+  "metadataArchive": {
+    "members": 44,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/metadata1.tar",
+    "bytes": 4874240,
+    "sha256": "f89ac3ded4fde8e930087cbea939823348a9cc5e47f81e11611e0ff995b7b0c0",
+    "mode": 420,
+    "mtime_ns": 1790468258977374337
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "9a44eb337e4743c4dfbae258fb4e6a1c0cbbe8b19417366f392fcae67437b8d2",
+    "mode": 420,
+    "mtime_ns": 1790468254913765596
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2281,
+  "perCallAudio": true,
+  "retainedTestMethodsUnchanged": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Per-call DirectSound/WAV input and response model, separate initial/final Lock storage and PCM/mask copy payload. This controlled Native comparison does not establish actual sound/device playback or latency.",
+    "All105 selection retains100 methods and adds5 bounded audio/caller/protocol/late-retry methods. For build or first test failure, unstarted methods stay explicit; the preceding all95 raster result remains separate.",
+    "Prepared file/MMIO controls remain declared inputs. No original, Unicorn or Windows execution, fixture edits, root Native promotion or shipping audio backend. New reply projection/comparator requires independent review.",
+    "Source59727 remains terminal34Objects, not137. Windows font/cursor/device, review, integration, clean-Mac/full match/game and existing safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}

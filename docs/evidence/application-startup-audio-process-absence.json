@@ -1,0 +1,119 @@
+{
+  "observedUTC": "2026-09-27T00:16:15.683336+00:00",
+  "job": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/build1.job.json",
+    "bytes": 71131,
+    "sha256": "ba2c9dbd7a91fab4a12016f5dc20c7114d35f53e71f0da91512f48698d7238d0",
+    "mode": 420,
+    "mtime_ns": 1790468057945373129
+  },
+  "log": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-startup-audio-20260927/build1.log",
+    "bytes": 32579,
+    "sha256": "70e01df3bf148f2063abb477d6f899172d20e7cf9f06b12513024fe02f3cd707",
+    "mode": 420,
+    "mtime_ns": 1790468074631581968
+  },
+  "monitorToolSession": 1153,
+  "monitorToolExitCode": 1,
+  "buildExitCode": null,
+  "buildExitUnknown": true,
+  "monitorTraceback": "Traceback (most recent call last):\n  File \"/Users/michael/Developer/ntsd-2.4/build/research/application-startup-audio-20260927/tools/run_application_host_gameplay_validation2.py\", line 182, in main\n    assert owned_cwd(where_now,pid,P),where_now\nAssertionError\n",
+  "observations": [
+    {
+      "pid": 24475,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 24626,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 24672,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 24673,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27337,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27339,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27345,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27346,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27372,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27554,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27555,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27581,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27583,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27786,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    },
+    {
+      "pid": 27789,
+      "identity": "",
+      "cwd": "",
+      "absent": true
+    }
+  ],
+  "taskCommandMatches": [],
+  "allObservedProcessesAbsent": true,
+  "restarted": false,
+  "signalsSent": false,
+  "sourceExecuted": false
+}
