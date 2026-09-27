@@ -1,0 +1,26 @@
+{
+  "schema": "ntsd-loading-arena-static-audit-v1",
+  "sourceFixture": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files.json",
+  "rawSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "rawBytes": 95289959,
+  "futureAddressedInputs": 16726,
+  "newArena": [
+    1862270976,
+    1862471376
+  ],
+  "newIntersections": [],
+  "oldObjectIntersections": [
+    64
+  ],
+  "providersRead": [
+    "OriginalApplicationCatalogFullTests.swift",
+    "OriginalApplicationPoolTests.swift",
+    "OriginalApplicationPoolReference.swift",
+    "OriginalApplicationLoadedMenuTests.swift"
+  ],
+  "actualReadyOwnersGate": "New first Native selector; not yet executed",
+  "independentReview": false,
+  "nativeExecuted": false,
+  "originalExecuted": false,
+  "boundary": "Synthetic test allocations; no Windows heap observation; opaque tokens are not address ranges."
+}

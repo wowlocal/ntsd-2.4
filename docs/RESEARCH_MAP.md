@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Complete audio-loading test: disjoint front storage verified](research/APPLICATION_LOADING_ARENA.md):
+Two test files parameterize the old default and supply6f000000 only to the new
+loading composition. New control checks16726 future allocations and actual ready
+owners while preserving the old Object64 collision. Production/expected/166
+retained method bodies and limits unchanged. Build40576/package1686 pass;
+14 methods pass at the checkpoint,167-method queue51788 continues. Full caller,
+archive/review/root promotion/Windows/device/full game stay open.
+[Progress](evidence/application-loading-arena-progress.json).
+
 [Decimal materialization: next failure is composed test-address overlap](research/APPLICATION_DECIMAL_MATERIALIZATION.md):
 Candidate2291 passes build/package and20 methods, including2212 preservation
 observations and863 original DAT scans. Full loading rejects0x51000020 after

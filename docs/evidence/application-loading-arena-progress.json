@@ -1,0 +1,397 @@
+{
+  "schema": "ntsd-loading-arena-progress-v1",
+  "UTC": "2026-09-27T05:59:03.177748+00:00",
+  "head": "7ca01ccea8ea4489a0c8f684366e6627cc95b7d0",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/candidate1-inputs.json",
+    "bytes": 578120,
+    "sha256": "0f0a5c61c3c97c96bd804043ab9b1abe97b88cd04a6563783d50cff379deac2f",
+    "mode": 420,
+    "mtime_ns": 1790488279916205324
+  },
+  "plan": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/plan1.md",
+    "bytes": 5512,
+    "sha256": "cecb6b6563f142dcaec72b3ee44fca98a47ee6b0f0cf8180db588822624e2220",
+    "mode": 420,
+    "mtime_ns": 1790488018098623836
+  },
+  "prepareJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/prepare1.job.json",
+    "bytes": 1020,
+    "sha256": "bb19bd7a24f89bbaa71b9610481b9c674140fc4a086013b7633feee9e7884682",
+    "mode": 420,
+    "mtime_ns": 1790488280177423749
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/build1.job.json",
+    "bytes": 101401,
+    "sha256": "10056b9b992bfb5b0d1198cacfd6e33a35e00ee7aa6b4d4b4ded5444971bd9d8",
+    "mode": 420,
+    "mtime_ns": 1790488622607621883
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/package-check1.json",
+    "bytes": 1465816,
+    "sha256": "e0b32b02acf4c8ccca449b073c728405b7abdf552be653121e926c9699e189ab",
+    "mode": 420,
+    "mtime_ns": 1790488638933184019
+  },
+  "authorInspection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/author-review1.json",
+    "bytes": 1721,
+    "sha256": "8c0c196ff42ea5eb5e26b60f33d3b6a9537d2df5c880cc20e83d9dee8f2faed9",
+    "mode": 420,
+    "mtime_ns": 1790488367817753539
+  },
+  "addressAudit": {
+    "path": "/Users/michael/Developer/ntsd-2.4/tools/loading_arena_candidate/address-audit.json",
+    "bytes": 1012,
+    "sha256": "6ddccab9b8f9ae3e47890f8e89b96779cad3bae9b344c98e3ddf2dda76319546",
+    "mode": 420,
+    "mtime_ns": 1790488124119586637
+  },
+  "patch": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/candidate1.patch",
+    "bytes": 7901,
+    "sha256": "60dc904baa9bff33310761067af81ff60183a3491231a13fccb43176c4758a70",
+    "mode": 420,
+    "mtime_ns": 1790488276808644775
+  },
+  "buildPassed": true,
+  "packagedResourceBodies": 1686,
+  "newControlPassed": true,
+  "selectedMethods": 167,
+  "completedMethods": [
+    {
+      "method": "OriginalMacLoadingAudioTests/testFrontStorageAvoidsCompleteLoadingAllocations",
+      "phase": "test-01",
+      "pid": 51952,
+      "seconds": 16.583060791999998,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-01.job.json",
+        "bytes": 3885,
+        "sha256": "07862787bc630cf0ea1ab26292a5d7a341b22869d65a77055517dab01687b783",
+        "mode": 420,
+        "mtime_ns": 1790488666305078493
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-01.log",
+        "bytes": 1107,
+        "sha256": "16dcf1d9e04bd7e6c4260cddd23ba2cbae9b13514ac4aa82243eeb90046f97d5",
+        "mode": 420,
+        "mtime_ns": 1790488665530697524
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalDecimalMaterializationTests/testMaterializationPreservesExistingNativeReadProtocol",
+      "phase": "test-02",
+      "pid": 52604,
+      "seconds": 1.1955624159999978,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-02.job.json",
+        "bytes": 3943,
+        "sha256": "edd1c82e8eb6b8fa1c10cc74769654fee85425b249c1abce40db013939d81cb9",
+        "mode": 420,
+        "mtime_ns": 1790488671684287632
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-02.log",
+        "bytes": 1047,
+        "sha256": "4a80679980e1d4ea0e352f5e2fac136092db6b290e7fc35ff3456c6602946c04",
+        "mode": 420,
+        "mtime_ns": 1790488670584818043
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalCatalogPrecisionTests/testEveryActualDATDoubleScanAtExplicit53Bits",
+      "phase": "test-03",
+      "pid": 52763,
+      "seconds": 3.191818834000003,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-03.job.json",
+        "bytes": 3873,
+        "sha256": "f175d059a100c6840e74441ec0a9ff6fb74701fbaed8d28163adc27b7a56b52f",
+        "mode": 420,
+        "mtime_ns": 1790488677895567978
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-03.log",
+        "bytes": 990,
+        "sha256": "c2778bdb6266607ce903017555813795d5dbc4517008dd9b1040a6563991a11c",
+        "mode": 420,
+        "mtime_ns": 1790488677336264116
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalCatalogPrecisionTests/testCompleteOriginalCatalogAtExplicit53Bits",
+      "phase": "test-04",
+      "pid": 52948,
+      "seconds": 3.181683624999998,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-04.job.json",
+        "bytes": 3871,
+        "sha256": "65f4f8611d9a7e98650af3daeb77575778ba679f04cc6ed6397b780ac8573c00",
+        "mode": 420,
+        "mtime_ns": 1790488684093624692
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-04.log",
+        "bytes": 962,
+        "sha256": "4bce956490a2caac5d51d73ea086e6406a222c0a0180d33deec1d28686e32346",
+        "mode": 420,
+        "mtime_ns": 1790488684050761629
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalCRTTests/testIntegersAgainstMicrosoftInstructions",
+      "phase": "test-05",
+      "pid": 53122,
+      "seconds": 1.1853861250000008,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-05.job.json",
+        "bytes": 3823,
+        "sha256": "5263b03f758460a5b956f0dabea2c7b388767af2e49df22538b04b584d3013d9",
+        "mode": 420,
+        "mtime_ns": 1790488688255496933
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-05.log",
+        "bytes": 847,
+        "sha256": "f8a0a8f186df8cd4cef36f40d8e10d97694ac49763096a2776998f9c4b37791e",
+        "mode": 420,
+        "mtime_ns": 1790488687191495652
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalObjectTests/testAllSourceObjectsAndRawFrameStorage",
+      "phase": "test-06",
+      "pid": 53282,
+      "seconds": 6.271160082999998,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-06.job.json",
+        "bytes": 3827,
+        "sha256": "402d41fd68a2f4dea71457bd1df6a919d720a5b037b6383f0566a175ffa10932",
+        "mode": 420,
+        "mtime_ns": 1790488697506933835
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-06.log",
+        "bytes": 855,
+        "sha256": "105cb37f662b14ccee28bccdbae0855c965c11ea3dbe2d2b8626d437e13057a8",
+        "mode": 420,
+        "mtime_ns": 1790488696566585116
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalObjectTests/testObjectStreamsWithMicrosoftScanf",
+      "phase": "test-07",
+      "pid": 53605,
+      "seconds": 1.1843139999999934,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-07.job.json",
+        "bytes": 3817,
+        "sha256": "f4f29cc8e73194b784486b2a6eeb99250cc416f5b6e3f720bf30f8f98c0c8aee",
+        "mode": 420,
+        "mtime_ns": 1790488701651997317
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-07.log",
+        "bytes": 849,
+        "sha256": "c11f00350566a3323b04781e683d62bc1466a867f66256e4bc0199a2673c8d5f",
+        "mode": 420,
+        "mtime_ns": 1790488700684759168
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalObjectTests/testCompleteObjectStreamsAgainstOriginalInstructions",
+      "phase": "test-08",
+      "pid": 53629,
+      "seconds": 1.1763515000000027,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-08.job.json",
+        "bytes": 3868,
+        "sha256": "8b39f1b80383b08e628a756b081b375281840ff33bf49f9fe10064d77e0d43ec",
+        "mode": 420,
+        "mtime_ns": 1790488705770740203
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-08.log",
+        "bytes": 883,
+        "sha256": "28d60c3e39c3af71b47ea006de24e6999ee95119e57b3783065b2f84d7565ca0",
+        "mode": 420,
+        "mtime_ns": 1790488704883672386
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalObjectTests/testFailedObjectDoesNotCommitSharedLoadingState",
+      "phase": "test-09",
+      "pid": 53796,
+      "seconds": 1.1843533330000042,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-09.job.json",
+        "bytes": 3444,
+        "sha256": "8a151e32f1ee4a68cdcab375a731eb78707d4f69b6a0a2de626bac3575f00f7a",
+        "mode": 420,
+        "mtime_ns": 1790488709921671897
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-09.log",
+        "bytes": 873,
+        "sha256": "4de51de2705dc9f5dfada1fd3f926ac4e97bb4b5ac6859f6627da8556c427cfd",
+        "mode": 420,
+        "mtime_ns": 1790488708791202042
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalStageTests/testWholeStageTableAgainstOriginalInstructions",
+      "phase": "test-10",
+      "pid": 53957,
+      "seconds": 3.220126499999992,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-10.job.json",
+        "bytes": 3847,
+        "sha256": "f74f4f686c6d25f971c6e2746a20d49f09653820e05e754b906dacb98e7a0b5a",
+        "mode": 420,
+        "mtime_ns": 1790488716111713732
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-10.log",
+        "bytes": 867,
+        "sha256": "1c187badafc0393b282559a5a92fd828666ec4fe2fb98a7235c4e2d3240499fe",
+        "mode": 420,
+        "mtime_ns": 1790488715427916224
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalStageTests/testUnsupportedStageDoesNotCommitEarlierParsedStages",
+      "phase": "test-11",
+      "pid": 54131,
+      "seconds": 1.174865208,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-11.job.json",
+        "bytes": 3445,
+        "sha256": "10916b39c51036bbed15c994b82e794b3d85b92da764d0cd288bea3ab61866b9",
+        "mode": 420,
+        "mtime_ns": 1790488720274636182
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-11.log",
+        "bytes": 879,
+        "sha256": "d312bd0e987b11eab2f57a82aea85e6ff96c9cc524d5cf05cb6b955f75ec7a40",
+        "mode": 420,
+        "mtime_ns": 1790488719165035712
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testCompleteOriginalCatalogWithTextFiles",
+      "phase": "test-12",
+      "pid": 54288,
+      "seconds": 3.1978725409999953,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-12.job.json",
+        "bytes": 3854,
+        "sha256": "48ee004e4c524000fcc13cbde6b896d77f1b9adbd1d48e86091e36cdb2f3c9be",
+        "mode": 420,
+        "mtime_ns": 1790488726435453752
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-12.log",
+        "bytes": 887,
+        "sha256": "48a5f7de1b09f8c99906919a364322e9e3c28bf10421cc94d980fa4026d471c6",
+        "mode": 420,
+        "mtime_ns": 1790488726323689654
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testCompleteOriginalCatalogWithRawFilesAndZeroBacking",
+      "phase": "test-13",
+      "pid": 54461,
+      "seconds": 3.220711584,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-13.job.json",
+        "bytes": 3886,
+        "sha256": "d1129863edd1a18940e6e4e5ba9848a5c7e42409e76b14e28675eab719c8acb3",
+        "mode": 420,
+        "mtime_ns": 1790488732617566624
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-13.log",
+        "bytes": 913,
+        "sha256": "f857fe20636250649f8d9a04fd63b7fc504e00b8b283306d1356d229cb716535",
+        "mode": 420,
+        "mtime_ns": 1790488732324047186
+      },
+      "processAbsent": true,
+      "passed": true
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testInterleavedChildrenAndDuplicateSourceIDs",
+      "phase": "test-14",
+      "pid": 54637,
+      "seconds": 1.1761019169999969,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-14.job.json",
+        "bytes": 3865,
+        "sha256": "13156b6dca4a71f13316dd554b7aa3050bee11a84d16fe8a666bceb73969306f",
+        "mode": 420,
+        "mtime_ns": 1790488736772309112
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/test-14.log",
+        "bytes": 895,
+        "sha256": "6111ba3069dcd702c577b4b190ff39eae5facda03f74a17e5757ccdb21c60998",
+        "mode": 420,
+        "mtime_ns": 1790488735946426367
+      },
+      "processAbsent": true,
+      "passed": true
+    }
+  ],
+  "passedMethodsAtCheckpoint": 14,
+  "queueObservation": {
+    "pid": 51788,
+    "identity": "51788 Sun Sep 27 08:57:24 2026     /Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python build/research/application-loading-arena-20260927/tools/run_application_host_gameplay_tests2.py build/research/application-loading-arena-20260927",
+    "cwd": "p51788\nfcwd\nn/Users/michael/Developer/ntsd-2.4",
+    "status": "running",
+    "toolSession": 12721,
+    "snapshotOnly": true
+  },
+  "wholeComparisonAccepted": false,
+  "archivesPending": true,
+  "independentReview": false,
+  "productionUnchanged": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "rootNativePromoted": false,
+  "rootNativeFilesVerified": 1034,
+  "protectedPinsVerified": 59,
+  "externalFree": 138556993536,
+  "combinedExternalReserve": 129922760704,
+  "sourceExecuted": false,
+  "next": "Observe the existing queue; full caller unchanged at3600s/3000requests/3002attempts. Preserve any nonpass and all unstarted methods; finalize and archive only after terminal process verification."
+}

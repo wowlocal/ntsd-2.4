@@ -1,0 +1,27 @@
+{
+  "UTC": "2026-09-27T05:48:18.736064+00:00",
+  "oldFailure": "overlap(0x51000020), Object64 versus old front arena",
+  "newBase": "0x6f000000",
+  "changedTestFiles": 2,
+  "productionChanged": false,
+  "independentReview": false,
+  "readErrors": [
+    {
+      "chunk": "7bb3f3",
+      "error": "sed: OriginalApplicationPoolSessionTests.swift: No such file or directory",
+      "resolution": "Located actual OriginalApplicationPoolTests.swift with rg --files; read it."
+    },
+    {
+      "chunk": "cec391",
+      "error": "sed: Sources/NTSDCore/OriginalApplicationCatalogFullReference.swift: No such file or directory",
+      "resolution": "Read existing Tests/NTSDCoreTests/OriginalApplicationCatalogFullReference.swift in same call."
+    },
+    {
+      "chunk": "703e9d",
+      "error": "AssertionError: APPLICATION_POOL.md",
+      "stage": "Authoring generator, before helper write or task creation",
+      "resolution": "rg --files located APPLICATION_POOL_INTERFACE.md; generator corrected to actual path."
+    }
+  ],
+  "noRefusalObserved": true
+}

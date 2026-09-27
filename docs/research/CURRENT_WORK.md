@@ -1,5 +1,17 @@
 # Текущая передача работы
 
+[Complete loading test: front storage correction passes its new control](APPLICATION_LOADING_ARENA.md):
+Candidate2291 changes only two test files; old defaults,166 test bodies/limits,
+all production and source expectations remain intact. New arena6f000000 avoids
+16726 future addressed inputs and actual ready owners; old Object64 collision
+is retained as a negative control. Build40576/package1686 pass; progress records
+14 passing methods. Queue51788 live,167 fixed selectors, same3600s full caller.
+NEXT: observe this queue; retain any nonpass/unstarted, verify/archive/publish
+terminal results. Do not restart it or change frozen inputs. [Progress](../evidence/application-loading-arena-progress.json),
+[plan](APPLICATION_LOADING_ARENA_PLAN.md). Review/root promotion/runtime/Windows/
+clean-Mac/full match/game remain open; host locked and installer approval retained.
+Supersedes the arena-correction NEXT below; implementation exists, full check open.
+
 [Decimal materialization: numeric checks pass; full loading rejects test overlap](APPLICATION_DECIMAL_MATERIALIZATION.md):
 Candidate2291 keeps regex/conversion/read semantics, with2212 parent-Native controls
 and863 actual-DAT scans checked. Build17481/package1686 pass. Queue29527 terminal1/
