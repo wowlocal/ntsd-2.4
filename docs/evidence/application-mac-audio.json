@@ -1,0 +1,108 @@
+{
+  "schema": "ntsd-application-mac-audio-validation-v1",
+  "UTC": "2026-09-27T01:33:06.942895+00:00",
+  "status": "build-incomplete-before-tests",
+  "baseHead": "3bfcea37bbef053136163fd1be5e4b7db921526d",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/candidate1-inputs.json",
+    "bytes": 576448,
+    "sha256": "a2cbdd3e3465631db8507cb320a65db492bb1a6924c482387437283433bd9706",
+    "mode": 420,
+    "mtime_ns": 1790472464273527590
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/context1.json",
+    "bytes": 34822,
+    "sha256": "f8b8b995bbc387286f2631753c8f954152a4c550860dff0ed2235b7021ba745e",
+    "mode": 420,
+    "mtime_ns": 1790472464633568112
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/build1.job.json",
+    "bytes": 81860,
+    "sha256": "c27f2f2e3e35d58edbd16a6b15e14ba410cf4becf2d9e061b4dbfd1c60ac7bd7",
+    "mode": 420,
+    "mtime_ns": 1790472644839154479
+  },
+  "packageCheck": null,
+  "binary": null,
+  "testQueue": null,
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/failure-diagnosis1.json",
+    "bytes": 1916,
+    "sha256": "ef12c6a4cf0b146be76b1b9c4f401aed4dfae797b8848584966abd0f52bfe7a2",
+    "mode": 420,
+    "mtime_ns": 1790472726922576438
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/verification1.json",
+    "bytes": 11570,
+    "sha256": "e83f84b806e52ba47776131e944ff7cc50de55a3a5d89d797bc03216fe5bd10e",
+    "mode": 420,
+    "mtime_ns": 1790472784002131261
+  },
+  "passedMethods": 0,
+  "selectedMethods": 120,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/artifact-archive1",
+    "files": 4659,
+    "directories": 202,
+    "links": 0,
+    "bytes": 11091572767,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/artifact-archive1.json",
+      "bytes": 2368809,
+      "sha256": "807baecbb279bca004d9acff34e3ab322c489da4f5023d82f0699496978b7321",
+      "mode": 420,
+      "mtime_ns": 1790472783994477822
+    }
+  },
+  "metadataArchive": {
+    "members": 31,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/metadata1.tar",
+    "bytes": 4638720,
+    "sha256": "02e8cc3bc094d17f0ebf5aedd0187872699a44168ba27b5f8260b84620804418",
+    "mode": 420,
+    "mtime_ns": 1790472786829948196
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "b160a7aac9c5cfb5f4a4d21f7f4c36446c5ae755d6afa97319c45cd7a95b6679",
+    "mode": 420,
+    "mtime_ns": 1790472784001903594
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2284,
+  "deviceIndependentFileInputs": true,
+  "ownedPCMService": true,
+  "referenceUnchanged": true,
+  "priorMacUnchanged": true,
+  "retainedTestMethodsUnchanged": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": false,
+    "packageBytes": false,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Native PCM buffer ownership, actual per-call copies and device-independent file preparation are new. AVAudioEngine transport is offline/same-rate only if its selected test passes; no endpoint opened or Windows audio equivalence.",
+    "All120 selection retains115 methods and adds5 bounded PCM/startup/lifetime/protocol/offline methods. First failures and unstarted methods stay explicit; the preceding all105 source-comparison candidate remains separate.",
+    "File/MMIO and non-audio responses remain declared. No original/Unicorn/Windows execution, fixture edit, root promotion or shipping integration. Common/catalog callers, runtime scheduling, WMA/graph, gain/pan/mixing/resampling/latency remain open.",
+    "Source59727 terminal34Objects is not137. Windows font/cursor/device, independent review, integration, clean-Mac/full match/game and safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}

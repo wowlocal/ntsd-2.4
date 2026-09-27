@@ -1,0 +1,147 @@
+{
+  "schema": "ntsd-mac-audio-docs-v1",
+  "UTC": "2026-09-27T01:34:33.282997+00:00",
+  "baseHead": "3bfcea37bbef053136163fd1be5e4b7db921526d",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/publication1.json",
+    "bytes": 5040,
+    "sha256": "7028254db6443898de78d2fb1cad65befd5977ac2cbea7e5cc20150918be822e",
+    "mode": 420,
+    "mtime_ns": 1790472786946744041
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/finalize1.job.json",
+    "bytes": 810,
+    "sha256": "01494a776820ba49e9ef6cb556a2e5f1047f530c39363e37859189d57c19b474",
+    "mode": 420,
+    "mtime_ns": 1790472786950025092
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_PLAN.md",
+      "bytes": 7432,
+      "sha256": "f16234d5fb3385830c625647ac91c57f6a933120358e73c646b89154521c7904",
+      "mode": 420,
+      "mtime_ns": 1790471866102901130
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO.md",
+      "bytes": 5822,
+      "sha256": "29710753cc780260c1055e19c147bdf9044f67944ee261474f29ab04ffbb0b1d",
+      "mode": 420,
+      "mtime_ns": 1790472783863152017
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio.json",
+      "bytes": 5040,
+      "sha256": "7028254db6443898de78d2fb1cad65befd5977ac2cbea7e5cc20150918be822e",
+      "mode": 420,
+      "mtime_ns": 1790472786949819841
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-close.json",
+      "bytes": 1630,
+      "sha256": "da56da4f4750fc415c89a4a196d9ef9d53a35a2ee576c2198725ba1bc4458cd3",
+      "mode": 420,
+      "mtime_ns": 1790472786949928758
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-failure.json",
+      "bytes": 1916,
+      "sha256": "ef12c6a4cf0b146be76b1b9c4f401aed4dfae797b8848584966abd0f52bfe7a2",
+      "mode": 420,
+      "mtime_ns": 1790472811406090151
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio.patch",
+      "bytes": 43323,
+      "sha256": "569695f32ecc68ebe6fac5bf9701fa73a9aa43c548a759377c1e02ece8614bff",
+      "mode": 420,
+      "mtime_ns": 1790472742320074953
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/OriginalMacAudioBackend.swift",
+      "bytes": 13204,
+      "sha256": "816afdf1e03b13f2f3bfea0e9871876ade80fc94aae923cd5f2d54a5327bbb8a",
+      "mode": 420,
+      "mtime_ns": 1790472000400649326
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/OriginalMacAudioService.swift",
+      "bytes": 1647,
+      "sha256": "550d513858fe70f277ae6ce9feabbffc53f25da3c340751345091f136d0fc575",
+      "mode": 420,
+      "mtime_ns": 1790472000401327203
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/OriginalMacAudioBackendTests.swift",
+      "bytes": 22719,
+      "sha256": "de02e654bd731a1d7611d502b80ea41a3cb752c4fc76ab925cf9199140462065",
+      "mode": 420,
+      "mtime_ns": 1790472435674713296
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/apply_mac_audio_candidate.py",
+      "bytes": 4283,
+      "sha256": "cde09f336125d7cc82fb128cf666a7911d21c9119da69817dfd1297575d9459f",
+      "mode": 420,
+      "mtime_ns": 1790472313563282165
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_mac_audio.py",
+      "bytes": 14426,
+      "sha256": "e50d233b2f743912bb4e5d1454f298e8ebb77b0f85704b54e90675c24abe5b02",
+      "mode": 420,
+      "mtime_ns": 1790472435677114220
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_mac_audio.py",
+      "bytes": 21162,
+      "sha256": "0d0107fea6007d88e539493654ad9cee57004055baa9c811224c22deb93f581b",
+      "mode": 420,
+      "mtime_ns": 1790472552314606935
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "0d578f2437b913595287d1adc2097fcff3835187",
+      "blockSHA256": "53f4bd566d22da9d382e843b2a60b7be5c1acfcf50ec3c31d6548fc6f94d7e15",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "fe5b9ecb4aeb6a4ad9fb9f09683357000f8ee6dd",
+      "blockSHA256": "54b72599dc847566169df7c3a13d66f3a1bfeb560ac0d09e80cdbb28023a4dc2",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "implementation": true,
+  "buildPassed": false,
+  "newTestsExecuted": false,
+  "selectedMethods": 120,
+  "priorAll105Unchanged": true,
+  "sourceExecuted": false,
+  "deviceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "artifactFiles": 4659,
+  "metadataMembers": 31,
+  "metadataSHA256": "02e8cc3bc094d17f0ebf5aedd0187872699a44168ba27b5f8260b84620804418",
+  "whitespaceCheck": {
+    "exitCode": 2,
+    "exactOutput": "docs/evidence/application-mac-audio.patch:26: trailing whitespace.\n+ \n",
+    "exceptions": [
+      {
+        "path": "docs/evidence/application-mac-audio.patch",
+        "line": 26,
+        "exactContent": " ",
+        "reason": "immutable unified-diff blank context marker; preserve patch bytes"
+      }
+    ],
+    "allOtherFilesClean": true
+  },
+  "next": "two XCTUnwrap corrections in a new clone; same120 selection/limits"
+}

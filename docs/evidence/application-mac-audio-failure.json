@@ -1,0 +1,32 @@
+{
+  "UTC": "2026-09-27T01:32:06.907929+00:00",
+  "classification": "Swift test compilation failure; no new Native test executed",
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/build1.job.json",
+    "bytes": 81860,
+    "sha256": "c27f2f2e3e35d58edbd16a6b15e14ba410cf4becf2d9e061b4dbfd1c60ac7bd7",
+    "mode": 420,
+    "mtime_ns": 1790472644839154479
+  },
+  "log": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/build1.log",
+    "bytes": 33568,
+    "sha256": "503bcbb83c191fea2a3517b9bfd11a7824a81709dcefca6fc5e6e0a95b05c1f8",
+    "mode": 420,
+    "mtime_ns": 1790472644461035321
+  },
+  "errors": [
+    "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift:126:30: error: value of optional type 'OriginalWaveStorage?' must be unwrapped to refer to member 'first' of wrapped base type 'OriginalWaveStorage'",
+    "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift:148:75: error: value of optional type '[UInt8]?' must be unwrapped to a value of type '[UInt8]'"
+  ],
+  "diagnosis": "New test accesses optional initialStorage and optional package.file result without unwrapping. Backend/Core compiled; candidate not accepted.",
+  "nextCorrection": "Separate clone; wrap exactly r.initialStorage and package.file(...) with throwing XCTUnwrap; no default backing/file and no Core/Reference/Mac/expected edit.",
+  "passedMethods": 0,
+  "unstartedMethods": 120,
+  "priorAll105Unchanged": true,
+  "sourceExecuted": false,
+  "deviceExecuted": false,
+  "guardReason": null,
+  "remainingProcessGroup": [],
+  "remainingObservedProcesses": {}
+}

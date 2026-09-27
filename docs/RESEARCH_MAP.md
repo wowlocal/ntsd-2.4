@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Own Native PCM startup candidate](research/APPLICATION_MAC_AUDIO.md):
+2284 files implement device-independent file binding and owned PCM buffers/service.
+Core/Mac compile; two missing optional unwraps in the new tests stop build60564.
+All120 methods unstarted; preceding all105 unchanged.4659-file/31-member archives
+verify; next is an exact two-line correction and fresh unchanged selection.
+Actual audio/Windows/review/integration remain open. [Evidence](evidence/application-mac-audio.json).
+
 [Native audio-consumer preflight](research/APPLICATION_MAC_AUDIO_PREFLIGHT.md):
 409 original input WAVs/23 formats/18 rates verified;79 static anchors expose
 common/catalog and menu/gameplay service gaps. Own PCM startup backend and bounded

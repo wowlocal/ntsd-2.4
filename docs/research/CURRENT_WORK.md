@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Own Native PCM startup candidate: two test type errors retained](APPLICATION_MAC_AUDIO.md):
+Device-independent WAV preparation and actual AVAudioPCMBuffer owner/service are
+implemented in2284 files. Core/Mac compile; new test optional accesses fail at
+lines126/148. Build60564 terminal1/absent; all120 methods unstarted, prior all105
+unchanged. [Publication](../evidence/application-mac-audio.json), [failure](../evidence/application-mac-audio-failure.json).
+Five-file patch and4659-file/31-member archives verify; finalizer68392 terminal0/
+absent. Closure-preparation KeyError is separately retained. Root1034/prior2257/
+base2281/source55 preserved. NEXT: exact-clone two-line XCTUnwrap correction,
+fresh build/package and the same120 methods/limits; no original capture/restart.
+Native audio comparison, common/catalog/playback/WMA/device, review/root promotion,
+Windows/clean-Mac/full match/game and safety incidents remain open. Host locked,
+installer approvals retained. EXE envelope unchanged; supersedes backend NEXT below.
+
 [Native audio consumer boundary mapped](APPLICATION_MAC_AUDIO_PREFLIGHT.md):
 All409 original WAVs hash-verified:23 format tuples/18 rates; raw/mask ownership,
 startup/common/catalog and menu/gameplay/music consumers mapped at79 anchors.
