@@ -1,0 +1,103 @@
+{
+  "schema": "ntsd-decimal-materialization-docs-v1",
+  "UTC": "2026-09-27T05:39:59.854337+00:00",
+  "baseHead": "b690e401add6a12acd749fbc7a1905dbe61ec700",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/publication1.json",
+    "bytes": 6586,
+    "sha256": "4e377654b8db6c2129dbbc0f035b9ebb235caf084427d5fda187f7e6e4095583",
+    "mode": 420,
+    "mtime_ns": 1790487427720171726
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/finalize1.job.json",
+    "bytes": 833,
+    "sha256": "953cdff15a0f7d382aa60a43c0397c5e799a36faf22f440fd05267649e709e6c",
+    "mode": 420,
+    "mtime_ns": 1790487427720848560
+  },
+  "finalizerTerminalReaped": true,
+  "finalizerToolSession": 13953,
+  "finalizerToolChunk": "455006",
+  "finalizerPIDAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_DECIMAL_MATERIALIZATION.md",
+      "bytes": 9245,
+      "sha256": "0c88cea6f550699eb6710385fd992d7562fc8eb357b3420575016f8cb2e26e97",
+      "mode": 420,
+      "mtime_ns": 1790487516911312134
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-decimal-materialization.json",
+      "bytes": 6586,
+      "sha256": "4e377654b8db6c2129dbbc0f035b9ebb235caf084427d5fda187f7e6e4095583",
+      "mode": 420,
+      "mtime_ns": 1790487427720530476
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-decimal-materialization-close.json",
+      "bytes": 1702,
+      "sha256": "aefe3f6cc6910e717736548014ab9d3cd388cb0a0b01c81dbf1bbe03ea767e6a",
+      "mode": 420,
+      "mtime_ns": 1790487427720642601
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-decimal-materialization.patch",
+      "bytes": 6207,
+      "sha256": "12fd3bfd966d53e2f14db0b54ac8f50a8f8e02d8697a42993034ab96f79f8102",
+      "mode": 420,
+      "mtime_ns": 1790487357017309418
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-decimal-materialization-failure.json",
+      "bytes": 27753,
+      "sha256": "41d0b7af1542d463f166c075348e53eed788a535d9565f46a396607ec0eaddc1",
+      "mode": 420,
+      "mtime_ns": 1790487313191613562
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-decimal-materialization-overlap.json",
+      "bytes": 10553,
+      "sha256": "36efa268802e9cd4279d950ab285af52542bd9bb1f9dcf9df1ef7fcf584ed238",
+      "mode": 420,
+      "mtime_ns": 1790487516911483634
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "955453b5fed067d3801cbb1b3479d1b194fd5f39",
+      "blockSHA256": "084f1a9896fffb2bfe91cda6660a3583c4f7603a786f13fca4c0197fb8432f1e",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "bf79e8ca2682b68c9d9879ba234dd99bd2c1148a",
+      "blockSHA256": "def1857a1c11c7c64c038d7074595a69184afab7577aecd22cfe54d2e2fc0a1b",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "buildPassed": true,
+  "packagePassed": true,
+  "selectedMethods": 166,
+  "startedMethods": 21,
+  "passedMethods": 20,
+  "failedMethods": 1,
+  "incompleteMethods": 0,
+  "unstartedMethods": 145,
+  "wholeComparisonAccepted": false,
+  "failure": "composed test front arena overlaps saved Object64; correct Native overlap rejection",
+  "sourceExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "artifactFiles": 5000,
+  "metadataMembers": 284,
+  "metadataSHA256": "a20c2c7910c551a981acbad78148eca90f181ff47b10f7ef27f0244794aba0d9",
+  "whitespaceCheck": {
+    "exitCode": 0,
+    "output": ""
+  },
+  "next": "Bounded test-environment arena audit/correction; unchanged source expectations and production guards, all166 retained methods plus fast disjointness control, same full-caller hour bound."
+}

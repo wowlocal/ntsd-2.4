@@ -1,12 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
-[Decimal materialization candidate: comparison running](research/APPLICATION_DECIMAL_MATERIALIZATION.md):
-One production-file optimization bounds the String passed to the unchanged decimal
-regex; one Native preservation control and14 existing numeric/catalog methods
-precede all151 retained methods. Candidate2291, build17481 and package1686 pass;
-queue29527 live, first20 pass. Whole audio-loading handoff keeps its original
-hour bound; no full-chain acceptance yet. Parent timeout and original evidence
-remain frozen. Review/integration/Windows/device/full game stay open.
+[Decimal materialization: next failure is composed test-address overlap](research/APPLICATION_DECIMAL_MATERIALIZATION.md):
+Candidate2291 passes build/package and20 methods, including2212 preservation
+observations and863 original DAT scans. Full loading rejects0x51000020 after
+2201.486s: saved Object64 intersects the Native front test arena.145 methods are
+unstarted; source expectations and the correct range guard remain unchanged.
+Finalizer12918 terminal0/absent verifies5000-file/284-member archives. Next: audit
+and relocate only this new composition's test wrappers, retain all166 methods
+and the full caller/hour bound. Review/runtime/Windows/full game stay open.
+[Evidence](evidence/application-decimal-materialization.json), [failure](evidence/application-decimal-materialization-failure.json).
 
 [Common/catalog audio ownership: compiled, whole handoff incomplete](research/APPLICATION_LOADING_AUDIO.md):
 Candidate2290 carries actual WAV replies/region owners through common/catalog/

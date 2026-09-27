@@ -5,7 +5,9 @@ continues the incomplete [audio loading composition](APPLICATION_LOADING_AUDIO.m
 The previous full Native catalog/pool/menu/Host comparison timed out at 3,600
 seconds. That result remains immutable. This candidate changes one production
 statement and adds one preservation test; it does not extend the accepted
-decimal grammar or promote root Native.
+decimal grammar or promote root Native. The first 20 methods pass; the full
+loading method then rejects overlapping test allocations. Its 145 following
+methods were not started. This is not an accepted complete loading handoff.
 
 ## Implementation and evidence
 
@@ -54,20 +56,44 @@ outputs and all 1,686 packaged resource bodies were verified. The binary is
 69,518,392 bytes. This task adapted the already corrected source counts before
 freezing; the parent's earlier package-verifier failure is preserved separately.
 
-Queue 29527 runs 166 fixed methods (whole-loading PID34343): the new preservation control, 14 existing
-numeric/catalog methods and all 151 prior audio/application methods in their
-original relative order. Per-method limits and comparisons are unchanged for
-those 151 methods. The whole loading method retains its 3,600-second limit and
-3,000-request / 3,002-attempt bounds. A first nonpass stops the remainder.
-The queue is still running; final Native comparison and archive gates are open.
+Queue 29527 completed with exit 1 in 2,355.08874025 seconds and is absent.
+It retains 166 fixed methods: the new preservation control, 14 existing numeric/
+catalog methods and all 151 prior audio/application methods in their original
+relative order. The full loading method keeps its 3,600-second limit and
+3,000-request / 3,002-attempt bounds. No deadline or comparison changed.
 
-The first 20 methods passed. The first 15 cover the preservation control, 863 actual DAT numeric
+The first 20 methods passed: the preservation control, 863 actual DAT numeric
 reads at explicit 53-bit precision, complete catalogs, Object and Stage streams,
-Frame snapshots and rollback checks. The next five retain the parent audio ownership, common/registered, retry and
-whole source caller checks. [Live evidence](../evidence/application-decimal-materialization-live.json)
-pins those terminal results separately from the running full comparison.
-Historical isolated Frame exclusions remain
-historical; this change does not turn them into accepted behavior.
+Frame snapshots, rollback, and the parent's five initial audio ownership/common/
+registered/retry/source-caller groups. Historical isolated Frame exclusions remain
+historical. The [live receipt](../evidence/application-decimal-materialization-live.json)
+preserves the earlier checkpoint separately from the terminal result.
+
+Full-caller PID34343 exited 1 at 05:30:01 UTC after 2,201.486271958 seconds with
+`overlap(1358954528)` (`0x51000020`) at the unchanged CatalogSession range guard.
+XCTest reports one unexpected thrown error, not a completed successful chain.
+There was no guard timeout or signal; all 47 recorded process-presence checks
+were absent, with no remaining process group or observed child. The queue stopped
+at the first nonpass: 20 passed, one failed and 145 unstarted.
+
+The [diagnosis](../evidence/application-decimal-materialization-failure.json) and
+[separate static witness](../evidence/application-decimal-materialization-overlap.json)
+pin the actual error and its input provenance. The retained catalog fixture's
+95,289,959 raw bytes reproduce SHA-256
+`8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee`.
+Its Object64 (`chars\charge.dat`, ID203) uses declared address `0x51000020` and
+size `0x25360`. The Native bitmap test helper chooses 25 wrapper slots spanning
+`0x51000000..<0x51030ed0`. The entire 152,416-byte Object lies inside that arena,
+intersecting 20 slots. The full test composed two synthetic environments that
+were not disjoint; the production overlap guard correctly rejected them.
+This is not a Windows heap observation, original fault or demonstrated Native/
+source byte mismatch. The log does not publish final request or buffer counts.
+
+The first witness inspected child allocations and separately located Object64,
+but omitted Object extents from its collision loop. Its zero child-allocation
+intersections remain preserved; the second witness explicitly includes all 137
+Objects. An unmatched shell-glob read error is also retained. No old expected
+value, fixture, candidate or range check was edited to diagnose the failure.
 
 A separately recorded one-second, 10 ms interval sample at 04:59:22 UTC found
 all 33 sampled main-thread stacks inside the catalog attempt: file preparation,
@@ -86,12 +112,31 @@ availability error, not a safety refusal. No UI input was performed. Windows
 installer approvals remain valid; installation resumes when the window is
 observable. Existing Ghostty and other safety incidents stay open.
 
-X5 retains its declared 121 GiB combined reserve. Parent 2,290, prior 2,257,
-root 1,034 files, 55 source producer pins, old failures, fixtures and expected
-bytes/masks remain protected. Root implementation, whole application integration,
-runtime audio playback/device behavior, Windows font/cursor, clean-Mac acceptance,
-full match and full game remain open. The EXE envelope is not recalculated.
+The [publication](../evidence/application-decimal-materialization.json),
+[close receipt](../evidence/application-decimal-materialization-close.json) and
+[exact two-file patch](../evidence/application-decimal-materialization.patch)
+separate build, package, comparison and archive gates. Finalizer12918 completed
+with exit 0 in 86.66434225 seconds and is absent. It verifies root1,034/prior2,257/
+parent2,290/candidate2,291 files, 55 source pins and the patch round-trip.
+The artifact archive contains 5,000 regular files, 213 directories, no links and
+11,462,018,279 logical bytes; manifest SHA-256 is
+`6ff225d80acdd416fa64a5e9fe40e35a25c5cc54c541af7a92ebb310b62932c2`.
+The 284-member, 8,622,080-byte PAX metadata archive has SHA-256
+`a20c2c7910c551a981acbad78148eca90f181ff47b10f7ef27f0244794aba0d9`.
+Bodies, membership, modes, nanosecond mtimes and distinct regular artifact inodes
+were verified. The task is frozen with 139,814,252,544 bytes free on X5 and the
+121 GiB combined reserve retained. The documentation receipt records the terminal
+finalizer and final repository files separately.
 
-Next: let this live queue reach its bounded terminal result, verify process
-absence and archive/publication gates, then commit this increment. Do not restart
-the queue, remove the full caller or mutate frozen producers to obtain a pass.
+Root implementation, independent review, whole application integration, runtime
+playback/device behavior, Windows font/cursor, clean-Mac acceptance, full match
+and full game remain open. The EXE envelope is not recalculated. Source59727
+remains terminal at34 Objects; this does not become a whole137 source return.
+
+Next: preserve and commit this failed comparison, then declare a separate test-
+environment correction. Audit a disjoint front-wrapper arena against the complete
+startup/catalog/pool/menu lifetimes before choosing it. Keep the existing default
+bitmap tests, source addresses/bytes/masks and all production range checks intact;
+change only the new composition's declared test storage. Add a fast collision/
+disjointness control, retain all166 methods and run the complete caller in a fresh
+candidate under its unchanged hour bound. Do not restart this frozen task.

@@ -1,0 +1,133 @@
+{
+  "schema": "ntsd-application-decimal-materialization-validation-v1",
+  "UTC": "2026-09-27T05:37:07.709915+00:00",
+  "status": "first-nonpass-retained",
+  "baseHead": "da92b7c6c26a982fb640c9bbbb9f0061ba438e92",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1-inputs.json",
+    "bytes": 578120,
+    "sha256": "e23c59520310c10f97d505eb10386d8dd04d92f77022414589be1a8ae8c937ce",
+    "mode": 420,
+    "mtime_ns": 1790484258228833612
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/context1.json",
+    "bytes": 36910,
+    "sha256": "b3b03eb63a1ee871217bdddaecf1e97bfc37ab949d2b019bedfe73ad1c1b58b8",
+    "mode": 420,
+    "mtime_ns": 1790484258477189521
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/build1.job.json",
+    "bytes": 102693,
+    "sha256": "8080b658deb4a5d8981b37f4330a1bc891a40e98b3404276922f36b6821a36ad",
+    "mode": 420,
+    "mtime_ns": 1790484599670070757
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/package-check1.json",
+    "bytes": 1512166,
+    "sha256": "de56cea6fd3cc937d648e3bb77f1c2e665136e4e06eae8da216af3f4ebc7d293",
+    "mode": 420,
+    "mtime_ns": 1790484642644790407
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 69518392,
+    "sha256": "25a8fbea41572ef2e32a35e5c3bda23ad3357b59e5c229b3ef367a231a6075c9",
+    "mode": 493,
+    "mtime_ns": 1790484596813854456
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/tests1-queue.job.json",
+    "bytes": 17205,
+    "sha256": "63926a66de4b44547f54eb7c6dcf22251ede519f1dfde7dad88048ca94d19cb5",
+    "mode": 420,
+    "mtime_ns": 1790487001434266129
+  },
+  "failureDiagnosis": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/failure-diagnosis1.json",
+    "bytes": 27753,
+    "sha256": "41d0b7af1542d463f166c075348e53eed788a535d9565f46a396607ec0eaddc1",
+    "mode": 420,
+    "mtime_ns": 1790487313191416187
+  },
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/verification1.json",
+    "bytes": 22284,
+    "sha256": "753aef06ed2998d3fe8b72ea7c9b4c4b0274bc8e180397b153d31964bf677fa6",
+    "mode": 420,
+    "mtime_ns": 1790487399158148460
+  },
+  "passedMethods": 20,
+  "selectedMethods": 166,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/artifact-archive1",
+    "files": 5000,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11462018279,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/artifact-archive1.json",
+      "bytes": 2615269,
+      "sha256": "6ff225d80acdd416fa64a5e9fe40e35a25c5cc54c541af7a92ebb310b62932c2",
+      "mode": 420,
+      "mtime_ns": 1790487399148410746
+    }
+  },
+  "metadataArchive": {
+    "members": 284,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/metadata1.tar",
+    "bytes": 8622080,
+    "sha256": "a20c2c7910c551a981acbad78148eca90f181ff47b10f7ef27f0244794aba0d9",
+    "mode": 420,
+    "mtime_ns": 1790487427571855021
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "d67bf2972bb26c30af8a4e3d01776d3b40f1de7e0ab54a28eee67875315b9826",
+    "mode": 420,
+    "mtime_ns": 1790487399157439334
+  },
+  "parentFailurePreserved": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/failure-diagnosis1.json",
+    "bytes": 25274,
+    "sha256": "7f852463393bdb91cd6f36650e459095b9936a6f59e5fb3450e9ad7f11b07951",
+    "mode": 420,
+    "mtime_ns": 1790483133217811273
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2291,
+  "numericTextExtentOnly": true,
+  "regexAndConversionUnchanged": true,
+  "referenceAndMacUnchanged": true,
+  "retainedTestFilesUnchanged": true,
+  "retainedSelectorsPreserved": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": false,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Only numeric-alphabet prefix materialization changes in production. Regex, Double conversion, position, EOF, observer and errors retain the existing implementation; its known CRT incomplete-exponent gap remains open.",
+    "All166 selection retains151 previous selectors and14 existing numeric/catalog callers with one new Native preservation method (553 texts, 2212 paired observations). Only actual passed methods establish comparison. Independent review remains open.",
+    "Native preservation controls are not the authoritative game oracle. Saved actual-DAT and whole caller comparisons remain unchanged; no original/Unicorn/Windows execution, fixture edit, root promotion or shipping integration.",
+    "Source59727 terminal34Objects is not137. Runtime playback/WMA/gain/pan/mixing/resampling/latency, Windows font/cursor/device, review/integration/clean-Mac/full match/game and safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}

@@ -1,17 +1,21 @@
 # Текущая передача работы
 
-[Decimal materialization: fresh build/package pass; comparison running](APPLICATION_DECIMAL_MATERIALIZATION.md):
-Candidate2291 changes only decimal text extent and adds one parent-Native
-preservation control. Regex/conversion/position/EOF/observer/errors are unchanged;
-known CRT incomplete-exponent gap stays open. Build17481 terminal0/absent and
-package1686 pass. Queue29527 runs166 fixed methods, first20 pass; full loading
-keeps3600s/3000 requests/3002 attempts. Do not restart the live queue or change
-frozen inputs. NEXT: observe terminal result, preserve first nonpass/unstarted if
-any, verify/archive/publish, then commit. [Plan](APPLICATION_DECIMAL_MATERIALIZATION_PLAN.md).
-Parent timeout and all prior inputs/expected/masks remain unchanged. Review/root
-promotion/playback/device/Windows/clean-Mac/full match/game remain open. Host locked
-at04:52:15UTC; UTM window unavailable, approvals retained. EXE envelope unchanged.
-Supersedes the optimization NEXT below; implementation exists, comparison pending.
+[Decimal materialization: numeric checks pass; full loading rejects test overlap](APPLICATION_DECIMAL_MATERIALIZATION.md):
+Candidate2291 keeps regex/conversion/read semantics, with2212 parent-Native controls
+and863 actual-DAT scans checked. Build17481/package1686 pass. Queue29527 terminal1/
+absent:20 passed, full caller34343 fails at2201.486s with overlap(0x51000020),145
+unstarted. Saved Object64 (chars/charge.dat) overlaps the Native front test arena;
+the existing guard is correct. [Evidence](../evidence/application-decimal-materialization.json),
+[diagnosis](../evidence/application-decimal-materialization-failure.json), [witness](../evidence/application-decimal-materialization-overlap.json).
+Finalizer12918 terminal0/absent verifies5000-file/284-member archives; task frozen.
+NEXT after commit: audit a disjoint test-owned wrapper arena through startup,
+catalog/pool/menu, then correct only this new composition's test storage in a
+fresh candidate. Preserve existing defaults/source addresses/bytes/masks/guards;
+add a fast overlap/disjointness control, retain all166 methods and3600s full bound.
+Root1034/prior2257/parent2290/source55 and prior timeout remain unchanged. Review/
+root promotion/playback/device/Windows/clean-Mac/full match/game remain open.
+Host locked, installer approval retained; EXE envelope not recalculated.
+Supersedes the running-queue/optimization NEXT below.
 
 [Common/catalog audio: five methods pass, full handoff times out](APPLICATION_LOADING_AUDIO.md):
 Candidate2290 implements per-call WAV loading, explicit addressed/opaque owners,

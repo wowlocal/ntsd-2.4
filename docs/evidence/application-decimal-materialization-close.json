@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd-application-decimal-materialization-validation-close-v1",
+  "UTC": "2026-09-27T05:37:07.720199+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927",
+  "externalFree": 139814252544,
+  "internalFree": 66869501952,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "prospectiveVMCommitment": 68719476736,
+  "observedFreeDecrease": 1244524544,
+  "physicalAllowance": 8589934592,
+  "publication": {
+    "bytes": 6586,
+    "sha256": "4e377654b8db6c2129dbbc0f035b9ebb235caf084427d5fda187f7e6e4095583",
+    "mode": 420,
+    "mtime_ns": 1790487427720171726
+  },
+  "metadataArchive": {
+    "members": 284,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/metadata1.tar",
+    "bytes": 8622080,
+    "sha256": "a20c2c7910c551a981acbad78148eca90f181ff47b10f7ef27f0244794aba0d9",
+    "mode": 420,
+    "mtime_ns": 1790487427571855021
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/artifact-archive1",
+    "files": 5000,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11462018279,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/artifact-archive1.json",
+      "bytes": 2615269,
+      "sha256": "6ff225d80acdd416fa64a5e9fe40e35a25c5cc54c541af7a92ebb310b62932c2",
+      "mode": 420,
+      "mtime_ns": 1790487399148410746
+    }
+  }
+}

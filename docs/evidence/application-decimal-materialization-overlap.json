@@ -1,0 +1,386 @@
+{
+  "schema": "ntsd-decimal-materialization-object-overlap-witness-v1",
+  "UTC": "2026-09-27T05:33:40.777459+00:00",
+  "priorPartialWitness": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/overlap-witness1.json",
+    "bytes": 4894,
+    "sha256": "c47a4d85047b2ee846fa6afac729c377d06c55569e7b2b1b7d9c34dff91c3b54",
+    "mode": 420,
+    "mtime_ns": 1790487146720917017
+  },
+  "fixture": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Tests/NTSDCoreTests/Fixtures/original-loaded-catalog-files.json",
+    "bytes": 13427294,
+    "sha256": "14aab2f9653c3c6a4cff550343ef5a3721899acdaf980d017672afdb4d135872",
+    "mode": 420,
+    "mtime_ns": 1789194454529007296
+  },
+  "rawBytes": 95289959,
+  "rawSHA256": "8ff43ea70036d84dbbea5309387176595658b0246aa3ff5773e8e22d08f12dee",
+  "correction": "First witness inventories catalog.allocations and separately locates matching objectAddresses[64], but its collision loop omits Object slots. Zero collisions there applies only to child allocations. This separate witness adds all137 Object extents without changing the first record.",
+  "objectCount": 137,
+  "objectSize": 152416,
+  "objectSizeProvenance": "OriginalApplicationCatalogFullTests.Provider.allocate(.object) asserts0x25360 and returns catalog.objectAddresses[objects].",
+  "target": 1358954528,
+  "targetHex": "0x51000020",
+  "matchingObjectIndices": [
+    64
+  ],
+  "children": [
+    {
+      "kind": "object",
+      "path": "chars\\charge.dat",
+      "index": 64,
+      "id": 203,
+      "allocationStart": 12799,
+      "allocationEnd": 12866,
+      "soundCount": 385
+    }
+  ],
+  "frontRanges": [
+    {
+      "index": 0,
+      "lo": 1358954496,
+      "hi": 1358962512
+    },
+    {
+      "index": 1,
+      "lo": 1358962512,
+      "hi": 1358970528
+    },
+    {
+      "index": 2,
+      "lo": 1358970528,
+      "hi": 1358978544
+    },
+    {
+      "index": 3,
+      "lo": 1358978544,
+      "hi": 1358986560
+    },
+    {
+      "index": 4,
+      "lo": 1358986560,
+      "hi": 1358994576
+    },
+    {
+      "index": 5,
+      "lo": 1358994576,
+      "hi": 1359002592
+    },
+    {
+      "index": 6,
+      "lo": 1359002592,
+      "hi": 1359010608
+    },
+    {
+      "index": 7,
+      "lo": 1359010608,
+      "hi": 1359018624
+    },
+    {
+      "index": 8,
+      "lo": 1359018624,
+      "hi": 1359026640
+    },
+    {
+      "index": 9,
+      "lo": 1359026640,
+      "hi": 1359034656
+    },
+    {
+      "index": 10,
+      "lo": 1359034656,
+      "hi": 1359042672
+    },
+    {
+      "index": 11,
+      "lo": 1359042672,
+      "hi": 1359050688
+    },
+    {
+      "index": 12,
+      "lo": 1359050688,
+      "hi": 1359058704
+    },
+    {
+      "index": 13,
+      "lo": 1359058704,
+      "hi": 1359066720
+    },
+    {
+      "index": 14,
+      "lo": 1359066720,
+      "hi": 1359074736
+    },
+    {
+      "index": 15,
+      "lo": 1359074736,
+      "hi": 1359082752
+    },
+    {
+      "index": 16,
+      "lo": 1359082752,
+      "hi": 1359090768
+    },
+    {
+      "index": 17,
+      "lo": 1359090768,
+      "hi": 1359098784
+    },
+    {
+      "index": 18,
+      "lo": 1359098784,
+      "hi": 1359106800
+    },
+    {
+      "index": 19,
+      "lo": 1359106800,
+      "hi": 1359114816
+    },
+    {
+      "index": 20,
+      "lo": 1359114816,
+      "hi": 1359122832
+    },
+    {
+      "index": 21,
+      "lo": 1359122832,
+      "hi": 1359130848
+    },
+    {
+      "index": 22,
+      "lo": 1359130848,
+      "hi": 1359138864
+    },
+    {
+      "index": 23,
+      "lo": 1359138864,
+      "hi": 1359146880
+    },
+    {
+      "index": 24,
+      "lo": 1359146880,
+      "hi": 1359154896
+    }
+  ],
+  "collisions": [
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 0,
+      "intersectionStart": 1358954528,
+      "intersectionEnd": 1358962512,
+      "intersectionBytes": 7984
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 1,
+      "intersectionStart": 1358962512,
+      "intersectionEnd": 1358970528,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 2,
+      "intersectionStart": 1358970528,
+      "intersectionEnd": 1358978544,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 3,
+      "intersectionStart": 1358978544,
+      "intersectionEnd": 1358986560,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 4,
+      "intersectionStart": 1358986560,
+      "intersectionEnd": 1358994576,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 5,
+      "intersectionStart": 1358994576,
+      "intersectionEnd": 1359002592,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 6,
+      "intersectionStart": 1359002592,
+      "intersectionEnd": 1359010608,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 7,
+      "intersectionStart": 1359010608,
+      "intersectionEnd": 1359018624,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 8,
+      "intersectionStart": 1359018624,
+      "intersectionEnd": 1359026640,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 9,
+      "intersectionStart": 1359026640,
+      "intersectionEnd": 1359034656,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 10,
+      "intersectionStart": 1359034656,
+      "intersectionEnd": 1359042672,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 11,
+      "intersectionStart": 1359042672,
+      "intersectionEnd": 1359050688,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 12,
+      "intersectionStart": 1359050688,
+      "intersectionEnd": 1359058704,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 13,
+      "intersectionStart": 1359058704,
+      "intersectionEnd": 1359066720,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 14,
+      "intersectionStart": 1359066720,
+      "intersectionEnd": 1359074736,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 15,
+      "intersectionStart": 1359074736,
+      "intersectionEnd": 1359082752,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 16,
+      "intersectionStart": 1359082752,
+      "intersectionEnd": 1359090768,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 17,
+      "intersectionStart": 1359090768,
+      "intersectionEnd": 1359098784,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 18,
+      "intersectionStart": 1359098784,
+      "intersectionEnd": 1359106800,
+      "intersectionBytes": 8016
+    },
+    {
+      "objectIndex": 64,
+      "address": 1358954528,
+      "size": 152416,
+      "frontIndex": 19,
+      "intersectionStart": 1359106800,
+      "intersectionEnd": 1359106944,
+      "intersectionBytes": 144
+    }
+  ],
+  "totalIntersectionBytes": 152416,
+  "sourcePins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationObservedBitmapTests.swift",
+      "bytes": 18698,
+      "sha256": "5340e7a4e9d8ffda24a5ddf214421963a54b4d89bbbc44e890e8c71699e81009",
+      "mode": 420,
+      "mtime_ns": 1790441369878684162
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalMacLoadingAudioTests.swift",
+      "bytes": 25399,
+      "sha256": "3caa0d4716307b405bfdea75e07b4425ce87d2172a63f28750fa03e1ed8c52f7",
+      "mode": 420,
+      "mtime_ns": 1790478899471152301
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Tests/NTSDCoreTests/OriginalApplicationCatalogFullTests.swift",
+      "bytes": 19990,
+      "sha256": "6451a9fc19047dfa1fe72c55d8cac90c47a6085c1aaf359d37f27e51861ab7df",
+      "mode": 420,
+      "mtime_ns": 1789282204910887849
+    }
+  ],
+  "rangeGuard": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift",
+    "bytes": 28079,
+    "sha256": "1a8a42de136bf0fa868dc00fc394d7bae00a82a4d1327339e71f0cfbec6f01f1",
+    "mode": 420,
+    "mtime_ns": 1790478899462211983
+  },
+  "finding": "The saved declared Object64 address0x51000020 and size0x25360 is wholly inside the composite Native front-wrapper arena0x51000000..<0x51030ed0. The existing overlap guard therefore correctly rejects these composed test allocations.",
+  "boundary": "Synthetic test-environment collision, not a Windows heap observation or proof of original failure. The log does not publish final requests/buffer counts or complete handoff.",
+  "next": "Retain this failed candidate. In a fresh bounded correction, provide a proven disjoint test-owned front-wrapper arena for the Mac loading composition; leave production overlap checks, source addresses/bytes/masks and the full caller intact.",
+  "originalExecuted": false,
+  "nativeExecutedForWitness": false,
+  "independentReview": false
+}
