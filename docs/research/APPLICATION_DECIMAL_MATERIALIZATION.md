@@ -69,6 +69,15 @@ pins those terminal results separately from the running full comparison.
 Historical isolated Frame exclusions remain
 historical; this change does not turn them into accepted behavior.
 
+A separately recorded one-second, 10 ms interval sample at 04:59:22 UTC found
+all 33 sampled main-thread stacks inside the catalog attempt: file preparation,
+parsed content consumption, text conversion and child comparison. No binary64
+frame appears in this single snapshot; that is not evidence of zero cost or
+absent calls. `test-21-native-sample1{,-result,-analysis}.json` and the original
+text profile retain the operation, revalidated identity/cwd, binary/source pins
+and exact line anchors in the [profile receipt](../evidence/application-decimal-materialization-profile.json). The sample does not establish a full-run speedup,
+shipping latency or completion within the unchanged deadline.
+
 ## Environment and open work
 
 The 04:52:15 UTC host observation reports a locked console. CUA selecting UTM

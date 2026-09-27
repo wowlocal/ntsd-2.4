@@ -1,0 +1,87 @@
+{
+  "schema": "ntsd-decimal-materialization-native-sample-analysis-v1",
+  "UTC": "2026-09-27T05:00:44.414310+00:00",
+  "profile": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-21-native-sample1.txt",
+    "bytes": 245857,
+    "sha256": "6196c71ddf3abffa7af6de288ce0ee1233e8ec74d9d0e3eb64dfb9c9b781af90",
+    "mode": 420,
+    "mtime_ns": 1790485164188819413
+  },
+  "operation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-21-native-sample1.json",
+    "bytes": 5832,
+    "sha256": "37974857742f5c06445b4a7e36a6ebdc0f69d00639a2a78decb2366ec4f6edaa",
+    "mode": 420,
+    "mtime_ns": 1790485162565879855
+  },
+  "result": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-21-native-sample1-result.json",
+    "bytes": 1018,
+    "sha256": "99c60efa551e6e29ad131c4d938065a7e7c2ec8de380684a6c76f6a4aebda208",
+    "mode": 420,
+    "mtime_ns": 1790485164196064506
+  },
+  "mainThreadSampleCount": 33,
+  "mainSamplesWithinCatalogAttempt": 33,
+  "observedBinary64Frames": 0,
+  "anchors": [
+    {
+      "line": 25,
+      "text": "    33 Thread_22563928   DispatchQueue_1: com.apple.main-thread  (serial)"
+    },
+    {
+      "line": 112,
+      "text": "    +                                                                                                                                                                             33 OriginalApplicationCatalogSession.Attempt.run()  (in NTSDNativePackageTests) + 3076  [0x10f539fa4]  OriginalApplicationCatalogSession.swift:371"
+    },
+    {
+      "line": 116,
+      "text": "    +                                                                                                                                                                                   ! 16 OriginalLoadedCatalog.FileSession.parse(_:kind:consume:)  (in NTSDNativePackageTests) + 292  [0x10f85a828]  OriginalLoadedCatalog.swift:271"
+    },
+    {
+      "line": 160,
+      "text": "    +                                                                                                                                                                                   ! 14 OriginalLoadedCatalog.FileSession.parse(_:kind:consume:)  (in NTSDNativePackageTests) + 1540  [0x10f85ad08]  /<compiler-generated>:0"
+    },
+    {
+      "line": 273,
+      "text": "    +                                                                                                                                                                                   ! 2 OriginalLoadedCatalog.FileSession.parse(_:kind:consume:)  (in NTSDNativePackageTests) + 1428  [0x10f85ac98]  OriginalLoadedCatalog.swift:271"
+    },
+    {
+      "line": 286,
+      "text": "    +                                                                                                                                                                                           1 OriginalApplicationCatalogFullReference.child(_:_:entryChecksum:entryCache:)  (in NTSDNativePackageTests) + 1232  [0x10fb8c504]  OriginalApplicationCatalogFullReference.swift:130"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Sources/NTSDCore/OriginalFrameLoader.swift",
+      "bytes": 19436,
+      "sha256": "aa5b2794e801bace6b98ca0973dae2c917fc578c83a6c4a4867b1929068f8c5a",
+      "mode": 420,
+      "mtime_ns": 1790484255163281512
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Sources/NTSDCore/OriginalLoadingFiles.swift",
+      "bytes": 14026,
+      "sha256": "a7a20ebc327509a8e8cffd183490fddb748a7ba347ebd69c0566897cc681328c",
+      "mode": 420,
+      "mtime_ns": 1789077401784628924
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1/native/Sources/NTSDCore/OriginalLoadedCatalog.swift",
+      "bytes": 20747,
+      "sha256": "51718f8807aaecde366cd89cd439c6c5642ff9f6d20963986d73dd1bb34c8e01",
+      "mode": 420,
+      "mtime_ns": 1789252170403729410
+    }
+  ],
+  "observation": "All33 sampled main-thread stacks are in the catalog attempt. A16-count parse branch enters openObject and declared file decoding/read/write preparation;14 enter parsed content consumption,2 text conversion, and1 follows child comparison. These selected sibling counts sum33 in this snapshot.",
+  "inference": "The changed whole-suffix decimal conversion is not visible in this sample. Remaining observed work includes file preparation and Object/frame parsing. The profile does not establish the full-test completion time or an overall speedup.",
+  "limits": [
+    "A single one-second sample with33 captured main-thread stacks is not full-run accounting.",
+    "Absence of binary64 frames is not proof of zero cost or absence of calls.",
+    "Test comparator costs are included; shipping application latency is unmeasured.",
+    "No additional sample, source execution, candidate mutation, caller removal or deadline extension is authorized by this observation."
+  ],
+  "independentReview": false,
+  "originalExecuted": false
+}
