@@ -1,0 +1,48 @@
+{
+  "scope": "Mutable authoring before candidate execution",
+  "sourceSHA256": "f0a8b2fb5695c1c34b70030c1893f5691f05bcee9acef318d68d8d9e437cedb6",
+  "changedStatement": "Only the text extent materialized before the unchanged anchored regex.",
+  "explicitTexts": 41,
+  "singleByteControls": 512,
+  "totalTexts": 553,
+  "observerModes": 2,
+  "sequentialReads": 2,
+  "pairedReads": 2212,
+  "knownCRTIncompleteExponentGapPreserved": true,
+  "independentReview": false,
+  "readErrors": [
+    {
+      "operation": "Locate Object/Stage tests using guessed Loader filenames",
+      "exitCode": 2,
+      "error": "No such file or directory for OriginalObjectLoaderTests.swift and OriginalStageLoaderTests.swift",
+      "resolution": "rg --files located OriginalObjectTests.swift and OriginalStageTests.swift; no execution or file mutation occurred."
+    },
+    {
+      "operation": "Author static selector inventory",
+      "toolChunk": "bab8c2",
+      "exitCode": 1,
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/michael/Developer/ntsd-2.4/build/research/application-loading-audio-20260927/candidate1/selected-methods1.json'",
+      "resolution": "The manifest is in the parent task, two parents above native; no compiler or Native execution had started."
+    }
+  ],
+  "priorBodyStatementsUnchanged": true,
+  "priorBodyIndentationAddedSpaces": 4,
+  "authorStaticChecks": {
+    "existingScannerTailUnchanged": true,
+    "parentReadBodyReindentedOnly": true,
+    "selectors": 166,
+    "parseCommand": [
+      "xcrun",
+      "swiftc",
+      "-frontend",
+      "-parse",
+      "/Users/michael/Developer/ntsd-2.4/tools/decimal_materialization_candidate/OriginalFrameLoader.swift",
+      "/Users/michael/Developer/ntsd-2.4/tools/decimal_materialization_candidate/OriginalDecimalMaterializationTests.swift"
+    ],
+    "parseExitCode": 0,
+    "stdout": "",
+    "stderr": "",
+    "notTypecheck": true,
+    "nativeExecuted": false
+  }
+}

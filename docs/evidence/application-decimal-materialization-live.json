@@ -1,0 +1,468 @@
+{
+  "schema": "ntsd-decimal-materialization-live-v1",
+  "UTC": "2026-09-27T04:55:52.517886+00:00",
+  "baseHead": "da92b7c6c26a982fb640c9bbbb9f0061ba438e92",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1-inputs.json",
+    "bytes": 578120,
+    "sha256": "e23c59520310c10f97d505eb10386d8dd04d92f77022414589be1a8ae8c937ce",
+    "mode": 420,
+    "mtime_ns": 1790484258228833612
+  },
+  "build": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/build1.job.json",
+    "bytes": 102693,
+    "sha256": "8080b658deb4a5d8981b37f4330a1bc891a40e98b3404276922f36b6821a36ad",
+    "mode": 420,
+    "mtime_ns": 1790484599670070757
+  },
+  "package": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/package-check1.json",
+    "bytes": 1512166,
+    "sha256": "de56cea6fd3cc937d648e3bb77f1c2e665136e4e06eae8da216af3f4ebc7d293",
+    "mode": 420,
+    "mtime_ns": 1790484642644790407
+  },
+  "authorInspection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/author-review1.json",
+    "bytes": 2059,
+    "sha256": "bb15680a705d6a1efff1231b82df5e626f6f38242988fc428011beb2ccb30f42",
+    "mode": 420,
+    "mtime_ns": 1790484698234473529
+  },
+  "selection": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/selected-methods1.json",
+    "bytes": 30424,
+    "sha256": "034dbdb78b7df4eff3c9198d9d2ef2f1b55b50b8f725555a9ea78da04bdc3b53",
+    "mode": 420,
+    "mtime_ns": 1790484258300522980
+  },
+  "queueObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/tests-live1-queue-snapshot.json",
+    "bytes": 16265,
+    "sha256": "2c57060aa4400df4fe9a4996d88f9c50ea58420d611d2a615fd0ed2d6c99d701",
+    "mode": 420,
+    "mtime_ns": 1790484952517858718
+  },
+  "activeMethodObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-21-live1-snapshot.json",
+    "bytes": 3786,
+    "sha256": "bc4f2587af551ef24cce98792713d9f7fd06b2fb06f508590b569b9f2408c859",
+    "mode": 420,
+    "mtime_ns": 1790484952517435426
+  },
+  "identityRevalidated": "34343 Sun Sep 27 07:53:19 2026     /Applications/Xcode.app/Contents/Developer/usr/bin/xctest -XCTest NTSDCoreTests.OriginalMacLoadingAudioTests/testWholeCatalogPoolLoadedMenuHostWithOwnedAudio /Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest",
+  "cwdRevalidated": "p34343\nfcwd\nn/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/candidate1",
+  "startedMethods": 21,
+  "passedMethods": 20,
+  "selectedMethods": 166,
+  "completed": [
+    {
+      "method": "OriginalDecimalMaterializationTests/testMaterializationPreservesExistingNativeReadProtocol",
+      "phase": "test-01",
+      "pid": 29680,
+      "elapsedSeconds": 2.1936641249999997,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-01.job.json",
+        "bytes": 4000,
+        "sha256": "0f0357466505a3ef87217d7378c7f593560a3b1dd916dbf8ef44854aaf3ad2ef",
+        "mode": 420,
+        "mtime_ns": 1790484653157054341
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-01.log",
+        "bytes": 1047,
+        "sha256": "9ca1cde0f8713e439d96a10ee4877cdc8f7dfda3bf722588bf2b6454a99eb751",
+        "mode": 420,
+        "mtime_ns": 1790484652311589245
+      }
+    },
+    {
+      "method": "OriginalCatalogPrecisionTests/testEveryActualDATDoubleScanAtExplicit53Bits",
+      "phase": "test-02",
+      "pid": 29848,
+      "elapsedSeconds": 3.230600333,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-02.job.json",
+        "bytes": 3946,
+        "sha256": "5be054e2a85e872c9610f9ac835111ec2067156955aa43cd27beae5a3f691ac5",
+        "mode": 420,
+        "mtime_ns": 1790484659420980518
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-02.log",
+        "bytes": 990,
+        "sha256": "13b48cf68245cd50f2fc95dcaf17e9a52b6cfdf841d675d14f7c9134c5b63892",
+        "mode": 420,
+        "mtime_ns": 1790484658809080654
+      }
+    },
+    {
+      "method": "OriginalCatalogPrecisionTests/testCompleteOriginalCatalogAtExplicit53Bits",
+      "phase": "test-03",
+      "pid": 30022,
+      "elapsedSeconds": 3.190847666,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-03.job.json",
+        "bytes": 3944,
+        "sha256": "b17b24e160f8f3765066e50ea37c3c4e0722defda7019dc178c23437017c665f",
+        "mode": 420,
+        "mtime_ns": 1790484665612284140
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-03.log",
+        "bytes": 962,
+        "sha256": "fe2f4895f53bcdb1df256508e9e61720f9264f488cc99eb11546cd962b2578c0",
+        "mode": 420,
+        "mtime_ns": 1790484665561020362
+      }
+    },
+    {
+      "method": "OriginalCRTTests/testIntegersAgainstMicrosoftInstructions",
+      "phase": "test-04",
+      "pid": 30196,
+      "elapsedSeconds": 1.1844968750000007,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-04.job.json",
+        "bytes": 3902,
+        "sha256": "8eb6d32ae9ef0bb0fc2c4adf71974b0c7903fb30328ac75c2e34c50da1f769fb",
+        "mode": 420,
+        "mtime_ns": 1790484669732976517
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-04.log",
+        "bytes": 847,
+        "sha256": "9b78e88f2023ba2ab691ebaeac75fe3eaeb2ee84e72b3fe349fe15581c32ee38",
+        "mode": 420,
+        "mtime_ns": 1790484668666563332
+      }
+    },
+    {
+      "method": "OriginalObjectTests/testAllSourceObjectsAndRawFrameStorage",
+      "phase": "test-05",
+      "pid": 30362,
+      "elapsedSeconds": 6.281385208000003,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-05.job.json",
+        "bytes": 3906,
+        "sha256": "8133e57386097897d19e456542e4f5c4ce094fddb2e2b2ba29f7d3c7055705e4",
+        "mode": 420,
+        "mtime_ns": 1790484678978775748
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-05.log",
+        "bytes": 855,
+        "sha256": "b7c1d851a589f5e90890252df7555bbc156b6a37c8e2b8fee7820ea977174912",
+        "mode": 420,
+        "mtime_ns": 1790484678168588616
+      }
+    },
+    {
+      "method": "OriginalObjectTests/testObjectStreamsWithMicrosoftScanf",
+      "phase": "test-06",
+      "pid": 30676,
+      "elapsedSeconds": 1.1795008329999987,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-06.job.json",
+        "bytes": 3896,
+        "sha256": "24fc7c9d4d723207b93c4caeaa7f8f175d654e872d24c3243f23319d144697b9",
+        "mode": 420,
+        "mtime_ns": 1790484683178276773
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-06.log",
+        "bytes": 849,
+        "sha256": "aa43267362574a2b35401872e4c5a4683b1d0f82aa95ae626c20401c4959b5d8",
+        "mode": 420,
+        "mtime_ns": 1790484682218183814
+      }
+    },
+    {
+      "method": "OriginalObjectTests/testCompleteObjectStreamsAgainstOriginalInstructions",
+      "phase": "test-07",
+      "pid": 30711,
+      "elapsedSeconds": 1.1617934579999982,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-07.job.json",
+        "bytes": 3947,
+        "sha256": "409a75b14143787633d4180cf2d45f04c27f2eab7ce927636f0a2b4e1afe912d",
+        "mode": 420,
+        "mtime_ns": 1790484687317655508
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-07.log",
+        "bytes": 883,
+        "sha256": "c5c6fdcd89819e4062024aa910e1ffb3e5b8d72f181e3198aa8dfd3b5790c229",
+        "mode": 420,
+        "mtime_ns": 1790484686454730930
+      }
+    },
+    {
+      "method": "OriginalObjectTests/testFailedObjectDoesNotCommitSharedLoadingState",
+      "phase": "test-08",
+      "pid": 30871,
+      "elapsedSeconds": 1.1687512499999997,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-08.job.json",
+        "bytes": 3503,
+        "sha256": "45c985279012f2137939269958e87c32093d3813aa10d79162d526271be4a9f1",
+        "mode": 420,
+        "mtime_ns": 1790484691431194168
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-08.log",
+        "bytes": 873,
+        "sha256": "79ba1d694f8a5dc204c8b2fb0c442b85a8de845ad522cc1e21595906c4f185c3",
+        "mode": 420,
+        "mtime_ns": 1790484690316082792
+      }
+    },
+    {
+      "method": "OriginalStageTests/testWholeStageTableAgainstOriginalInstructions",
+      "phase": "test-09",
+      "pid": 31086,
+      "elapsedSeconds": 3.182613417000006,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-09.job.json",
+        "bytes": 3926,
+        "sha256": "8d93cd6d3ce1ae992830d8bfb787020d14a5746c1fc7b53585ff4593e963fb98",
+        "mode": 420,
+        "mtime_ns": 1790484697622333622
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-09.log",
+        "bytes": 867,
+        "sha256": "2f6f9dc030196d9186587d837ed712cafb853ae8c479fc9f88600e452fad7048",
+        "mode": 420,
+        "mtime_ns": 1790484696915172962
+      }
+    },
+    {
+      "method": "OriginalStageTests/testUnsupportedStageDoesNotCommitEarlierParsedStages",
+      "phase": "test-10",
+      "pid": 31261,
+      "elapsedSeconds": 1.1814617910000038,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-10.job.json",
+        "bytes": 3511,
+        "sha256": "45341e88a18eb6c86cb8c3a60976543ed35f20de2a5ea02148ba4246f3952bfb",
+        "mode": 420,
+        "mtime_ns": 1790484701753289596
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-10.log",
+        "bytes": 879,
+        "sha256": "42e2564ce9728d9a21abe736c64a3de07d29e9523c53f74462ca5e258cc4b397",
+        "mode": 420,
+        "mtime_ns": 1790484700636473510
+      }
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testCompleteOriginalCatalogWithTextFiles",
+      "phase": "test-11",
+      "pid": 31425,
+      "elapsedSeconds": 3.1790745840000056,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-11.job.json",
+        "bytes": 3933,
+        "sha256": "26de05aa3593ab1abdc3f22f860e113904b51bde5b4750ba61f30369333cfb15",
+        "mode": 420,
+        "mtime_ns": 1790484707871132785
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-11.log",
+        "bytes": 887,
+        "sha256": "71ce2938cf253d1959f1ece4b421f3a25ec312955daddf2726c30b653b2f4413",
+        "mode": 420,
+        "mtime_ns": 1790484707747072577
+      }
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testCompleteOriginalCatalogWithRawFilesAndZeroBacking",
+      "phase": "test-12",
+      "pid": 31599,
+      "elapsedSeconds": 4.204914625000001,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-12.job.json",
+        "bytes": 3971,
+        "sha256": "a7c05519bde76f076557276388be0cb328ce59653aedd03f131c5e88b1981e57",
+        "mode": 420,
+        "mtime_ns": 1790484715037085510
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-12.log",
+        "bytes": 913,
+        "sha256": "370cf059cd090352b3bc9a1ee847eb25ff24059b0a4baf2e45fc6a5146eea277",
+        "mode": 420,
+        "mtime_ns": 1790484713969521865
+      }
+    },
+    {
+      "method": "OriginalLoadedCatalogTests/testInterleavedChildrenAndDuplicateSourceIDs",
+      "phase": "test-13",
+      "pid": 31802,
+      "elapsedSeconds": 1.1822515409999994,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-13.job.json",
+        "bytes": 3944,
+        "sha256": "2b3a33dd3b61a4e1885bceabc7f27dc20c6583979c23db23c4479c3f06732d82",
+        "mode": 420,
+        "mtime_ns": 1790484719228385315
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-13.log",
+        "bytes": 895,
+        "sha256": "fe3e9db3ede7fba4dbb46162edfe033fcdf6182c3bfecdce726332b54b73b61a",
+        "mode": 420,
+        "mtime_ns": 1790484718401115577
+      }
+    },
+    {
+      "method": "OriginalFrameLoaderTests/testOriginalX86SnapshotsAfterEveryOccurrence",
+      "phase": "test-14",
+      "pid": 31970,
+      "elapsedSeconds": 1.1797325,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-14.job.json",
+        "bytes": 3498,
+        "sha256": "95771353f11ef7fa173f15c6946007b2e6853f405a60ad50025708d5fcc30e69",
+        "mode": 420,
+        "mtime_ns": 1790484723410407691
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-14.log",
+        "bytes": 887,
+        "sha256": "b6ce22f27f6310781961658e3bb13431b3080d56f5a44c3158f470452ca7e56d",
+        "mode": 420,
+        "mtime_ns": 1790484722288566182
+      }
+    },
+    {
+      "method": "OriginalFrameLoaderTests/testUnsupportedInputDoesNotCommitPartialState",
+      "phase": "test-15",
+      "pid": 32132,
+      "elapsedSeconds": 1.1735640419999953,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-15.job.json",
+        "bytes": 3509,
+        "sha256": "aae42047bbcc0286018368aa7cb7aa6d1b69512517c97826b349ee904a17fbbd",
+        "mode": 420,
+        "mtime_ns": 1790484727523906351
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-15.log",
+        "bytes": 889,
+        "sha256": "23fded3f19549f77c577d7adb77c607d2bb59fc744bcd9bd6851320f8cd4154b",
+        "mode": 420,
+        "mtime_ns": 1790484726404408761
+      }
+    },
+    {
+      "method": "OriginalLoadingAudioTests/testOwnershipDomainsAndOrderedCacheControls",
+      "phase": "test-16",
+      "pid": 32154,
+      "elapsedSeconds": 1.1641545829999984,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-16.job.json",
+        "bytes": 3507,
+        "sha256": "755c3480fad546e1060b18439c36cae018dcac5f1d927be8e85cadebf89b11ff",
+        "mode": 420,
+        "mtime_ns": 1790484731606185801
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-16.log",
+        "bytes": 889,
+        "sha256": "8ebe69833af57401ec447994d6ccd2a3e192b95e69a7471d9e0b41c539329555",
+        "mode": 420,
+        "mtime_ns": 1790484730496469183
+      }
+    },
+    {
+      "method": "OriginalMacLoadingAudioTests/testOwnedStartupCommonAndRegisteredBuffers",
+      "phase": "test-17",
+      "pid": 32319,
+      "elapsedSeconds": 10.321785625000004,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-17.job.json",
+        "bytes": 3946,
+        "sha256": "57b86bd2f26369cf28eab7b45bfb4a73d8ac59449ab147b41f68a8f583d16600",
+        "mode": 420,
+        "mtime_ns": 1790484744926044846
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-17.log",
+        "bytes": 988,
+        "sha256": "43f071e70d319bb48fd36221d4d4c46bc513deded470d9775cf817e4487d5d24",
+        "mode": 420,
+        "mtime_ns": 1790484744741157931
+      }
+    },
+    {
+      "method": "OriginalMacLoadingAudioTests/testLateRetryProtocolAndRetainedOwners",
+      "phase": "test-18",
+      "pid": 32813,
+      "elapsedSeconds": 8.331129583000006,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-18.job.json",
+        "bytes": 3933,
+        "sha256": "2e546cf936937480c1d992013c73857dad58466aefdf04e9db00d3d6d58c6053",
+        "mode": 420,
+        "mtime_ns": 1790484757151385086
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-18.log",
+        "bytes": 973,
+        "sha256": "a329398da41cac42fcb4559ab09cd747769bfebbb79b4edc4b204f23f34d2358",
+        "mode": 420,
+        "mtime_ns": 1790484756127981250
+      }
+    },
+    {
+      "method": "OriginalLoadingAudioTests/testWholeCommonAndInitialLoadingWithObservedReplies",
+      "phase": "test-19",
+      "pid": 33151,
+      "elapsedSeconds": 28.786372707999988,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-19.job.json",
+        "bytes": 3964,
+        "sha256": "1254f9a325c363272b2f3a93a7dd48048353f23e986ca9744b5111ebbfdbdd51",
+        "mode": 420,
+        "mtime_ns": 1790484789124103267
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-19.log",
+        "bytes": 912,
+        "sha256": "74852546c3a2865a83a121dab2f1a9960a10270113810f7553f55f789d0e06ef",
+        "mode": 420,
+        "mtime_ns": 1790484789033066728
+      }
+    },
+    {
+      "method": "OriginalLoadingAudioTests/testWholeSourceCatalogAndInterleavedObservedReplies",
+      "phase": "test-20",
+      "pid": 34160,
+      "elapsedSeconds": 4.1838287500000035,
+      "job": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-20.job.json",
+        "bytes": 3963,
+        "sha256": "a2b7fb153f4788dfc2de4d9abf2a7537eb903853ab75016e9cd421b366bd1c9e",
+        "mode": 420,
+        "mtime_ns": 1790484796991383310
+      },
+      "log": {
+        "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/test-20.log",
+        "bytes": 905,
+        "sha256": "4e652795c7d168da2195d74107edb5f0200da4abb7a08f14550f035f183a4b86",
+        "mode": 420,
+        "mtime_ns": 1790484796880257077
+      }
+    }
+  ],
+  "wholeLoadingComparison": "running; no terminal result claimed",
+  "archiveGate": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "sourceExecuted": false,
+  "next": "Observe this same live queue; preserve its bounded result, finalize and publish separately. No restart."
+}

@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Decimal materialization candidate: comparison running](research/APPLICATION_DECIMAL_MATERIALIZATION.md):
+One production-file optimization bounds the String passed to the unchanged decimal
+regex; one Native preservation control and14 existing numeric/catalog methods
+precede all151 retained methods. Candidate2291, build17481 and package1686 pass;
+queue29527 live, first20 pass. Whole audio-loading handoff keeps its original
+hour bound; no full-chain acceptance yet. Parent timeout and original evidence
+remain frozen. Review/integration/Windows/device/full game stay open.
+
 [Common/catalog audio ownership: compiled, whole handoff incomplete](research/APPLICATION_LOADING_AUDIO.md):
 Candidate2290 carries actual WAV replies/region owners through common/catalog/
 pool/menu and retains physical service receipts outside Core. Build/package1686

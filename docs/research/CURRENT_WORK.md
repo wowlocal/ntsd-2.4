@@ -1,5 +1,18 @@
 # Текущая передача работы
 
+[Decimal materialization: fresh build/package pass; comparison running](APPLICATION_DECIMAL_MATERIALIZATION.md):
+Candidate2291 changes only decimal text extent and adds one parent-Native
+preservation control. Regex/conversion/position/EOF/observer/errors are unchanged;
+known CRT incomplete-exponent gap stays open. Build17481 terminal0/absent and
+package1686 pass. Queue29527 runs166 fixed methods, first20 pass; full loading
+keeps3600s/3000 requests/3002 attempts. Do not restart the live queue or change
+frozen inputs. NEXT: observe terminal result, preserve first nonpass/unstarted if
+any, verify/archive/publish, then commit. [Plan](APPLICATION_DECIMAL_MATERIALIZATION_PLAN.md).
+Parent timeout and all prior inputs/expected/masks remain unchanged. Review/root
+promotion/playback/device/Windows/clean-Mac/full match/game remain open. Host locked
+at04:52:15UTC; UTM window unavailable, approvals retained. EXE envelope unchanged.
+Supersedes the optimization NEXT below; implementation exists, comparison pending.
+
 [Common/catalog audio: five methods pass, full handoff times out](APPLICATION_LOADING_AUDIO.md):
 Candidate2290 implements per-call WAV loading, explicit addressed/opaque owners,
 ordered volume/cache and retained Host receipts. Build53067 and corrected package
