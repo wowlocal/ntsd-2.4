@@ -1,5 +1,15 @@
 # Текущая передача работы
 
+Указание пользователя 2026-09-27: [работа с UTM прекращена](WINDOWS_UTM_HOST_LOCK.md);
+не возобновлять её. CrossOver остаётся альтернативой для оригинала.
+Пользовательский результат всё ещё Practice. Проверенные окно/известный растер/
+PCM остаются в кандидатах. Следующий приоритет — перенос проверенного кода в
+`native/` и подключение приложения. Сейчас root1034 защищён живой loading-arena
+queue51788: сначала её терминальный результат и публикация, затем перенос.
+Незавершённый review отмечать явно; он сам по себе не запрещает обратимый перенос.
+Пока очередь работает, сверить состав переноса и реальные недостающие providers;
+не запускать новую серию подготовки/упаковки вместо реализации.
+
 [Complete loading test: front storage correction passes its new control](APPLICATION_LOADING_ARENA.md):
 Candidate2291 changes only two test files; old defaults,166 test bodies/limits,
 all production and source expectations remain intact. New arena6f000000 avoids

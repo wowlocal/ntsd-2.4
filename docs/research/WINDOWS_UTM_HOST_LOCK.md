@@ -1,5 +1,21 @@
 # Windows setup: approval received, host screen locked
 
+**2026-09-27: UTM work discontinued at the user's explicit request, “give up on
+UTM”. Do not resume this installer or further UTM setup.** Earlier instructions
+below to resume after unlock are superseded. CrossOver remains the authorized
+alternative for running the original; it does not establish actual Windows
+device equivalence. Preserve the VM, ISO and previous evidence.
+
+Immediately before cancellation, the existing UTM guest window became observable
+at the April2024 license screen. A coordinate click failed with
+`Computer Use server error -10005: windowNotFoundAtPosition((857.0, 1396.0))`.
+After a fresh unchanged-screen observation, Return advanced to “Please wait”.
+The next screenshot showed only the UTM library. At06:42:46 UTC, `ps` no longer
+listed the previously pinned QEMU43650. Its terminal cause/exit is unknown;
+neither successful Windows installation nor an installer error is established.
+No restart or further UTM input followed the user's cancellation. The independent
+Native loading test57258 remained live.
+
 2026-09-26. Continues [installer start](WINDOWS_UTM_INSTALLER_START.md).
 [Exact checkpoint](../evidence/windows-utm-host-lock.json).
 
