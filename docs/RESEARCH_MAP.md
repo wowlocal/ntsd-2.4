@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Native PCM startup: all120 checked](research/APPLICATION_MAC_AUDIO_CORRECTION2.md):
+Retained snapshot owners fix the test crash without changing Core/Mac/expected
+bytes.409 WAVs/23 formats/18 rates, whole own startup, lifetime/protocol controls,
+418363 offline frames and115 retained methods pass. Build/package and4986-file/
+515-member archives verify; old failures remain frozen. Next: bounded common/
+registered catalog WAV service propagation; actual endpoint/Windows/review/root
+integration remain open. [Evidence](evidence/application-mac-audio-correction2.json).
+
 [Native PCM correction1](research/APPLICATION_MAC_AUDIO_CORRECTION1.md):
 Build/package pass after two optional assertions. First test crashes at a pointer
 from a released temporary PCM snapshot; matching binary/disassembly proves the

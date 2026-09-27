@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd-application-mac-audio-correction2-validation-close-v1",
+  "UTC": "2026-09-27T02:19:53.297806+00:00",
+  "taskFrozen": true,
+  "largePhaseClosed": true,
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927",
+  "externalFree": 142306541568,
+  "internalFree": 67551928320,
+  "externalReserve": 42949672960,
+  "internalReserve": 6442450944,
+  "sourceCommitment": 18253611008,
+  "prospectiveVMCommitment": 68719476736,
+  "observedFreeDecrease": 1232719872,
+  "physicalAllowance": 8589934592,
+  "publication": {
+    "bytes": 5857,
+    "sha256": "1bba3184dfaed51d86d70795ad97b81d7edaa8b224fd2c98fef110b78293b55d",
+    "mode": 420,
+    "mtime_ns": 1790475593297747900
+  },
+  "metadataArchive": {
+    "members": 515,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/metadata1.tar",
+    "bytes": 7628800,
+    "sha256": "baaac3df03fde628c78e7cc6f21170d5458355bd05127ab042c0bd2188053722",
+    "mode": 420,
+    "mtime_ns": 1790475593134174149
+  },
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/artifact-archive1",
+    "files": 4986,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11450203389,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/artifact-archive1.json",
+      "bytes": 2598105,
+      "sha256": "fb6cc9c26dd574eaabf3e24ba313738cb4f150cd51f57efc5c74cf71c2569f3d",
+      "mode": 420,
+      "mtime_ns": 1790475541070682048
+    }
+  }
+}

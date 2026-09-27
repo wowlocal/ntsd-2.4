@@ -1,5 +1,21 @@
 # Текущая передача работы
 
+[Native PCM startup and offline transport: all120 checked](APPLICATION_MAC_AUDIO_CORRECTION2.md):
+Test snapshot owners remain alive through raw-pointer reads; Core/Reference/Mac
+and expected bytes/masks are unchanged. All409 WAVs/23 formats/18 rates, whole
+own WinMain with5 menu buffers, late retries/protocol controls and418363 offline
+frames pass, together with115 retained methods. [Publication](../evidence/application-mac-audio-correction2.json).
+Build8660/package1686 resources and queue20414 pass; finalizer54098 terminal0/
+absent verifies4986-file/515-member archives. Root1034/prior2257/base2284/source55
+and earlier compile/crash evidence are preserved. The task is frozen; no root
+promotion or actual endpoint/Windows claim. NEXT: finite plan for per-call WAV
+propagation through common/registered catalog loading, using the existing audio
+consumer preflight and retained caller evidence; then one bounded candidate.
+Preserve repeated-path owners/live sound cache; no new original capture for that
+preparation. Review/runtime playback/WMA/device, Windows/font/cursor/clean-Mac/
+full match/game and incidents remain open. Host locked, approvals retained; EXE
+envelope unchanged. Supersedes the snapshot-lifetime correction NEXT below.
+
 [Native PCM correction1: package passes, snapshot test crashes](APPLICATION_MAC_AUDIO_CORRECTION1.md):
 Two optional assertions corrected; build78660 terminal0/absent and1686-resource
 package pass. First XCTest97182 exits-11 at a temporary PCM snapshot pointer;

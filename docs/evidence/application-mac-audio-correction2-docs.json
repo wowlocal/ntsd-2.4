@@ -1,0 +1,117 @@
+{
+  "schema": "ntsd-mac-audio-correction2-docs-v1",
+  "UTC": "2026-09-27T02:21:26.796070+00:00",
+  "baseHead": "e6b3dbad1370659f6511433044f18aeb5b364e57",
+  "publication": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/publication1.json",
+    "bytes": 5857,
+    "sha256": "1bba3184dfaed51d86d70795ad97b81d7edaa8b224fd2c98fef110b78293b55d",
+    "mode": 420,
+    "mtime_ns": 1790475593297747900
+  },
+  "finalizerJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-mac-audio-correction2-20260927/finalize1.job.json",
+    "bytes": 883,
+    "sha256": "ae4b44e49fa7490c0b0abd7e5c93e86f48cd5d9e6d10c36164698dfefe52daf5",
+    "mode": 420,
+    "mtime_ns": 1790475593302011121
+  },
+  "finalizerTerminalAndAbsent": true,
+  "files": [
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_CORRECTION2_PLAN.md",
+      "bytes": 3369,
+      "sha256": "990afe4d315108f2c0c5e1218cb6092a407bd623da1c9c65a332829378cb6b94",
+      "mode": 420,
+      "mtime_ns": 1790473983649919011
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/research/APPLICATION_MAC_AUDIO_CORRECTION2.md",
+      "bytes": 6540,
+      "sha256": "f378e569e92cd629ad0eebe9dd31d0b58e6350c3a6bf26056dad88f16845ea9f",
+      "mode": 420,
+      "mtime_ns": 1790475624537316315
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/apply_mac_audio_lifetime_correction.py",
+      "bytes": 2441,
+      "sha256": "e3e39a1081ed81f71614aa4f3135075cb679cb55d158f8332dee48b6bcbdbe57",
+      "mode": 420,
+      "mtime_ns": 1790473983650584305
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/prepare_application_mac_audio_correction2.py",
+      "bytes": 14113,
+      "sha256": "68c4ecc150817656a3ba13fd67e172a3e5f5f57e8dcf1c457bc1bb7e7afa0a41",
+      "mode": 420,
+      "mtime_ns": 1790474015882738527
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/tools/finalize_application_mac_audio_correction2.py",
+      "bytes": 20955,
+      "sha256": "0c240f0439b28685c9c1e57e612694c49dfc57355eec03c34527730d6ac13e13",
+      "mode": 420,
+      "mtime_ns": 1790474015885912953
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction2.json",
+      "bytes": 5857,
+      "sha256": "1bba3184dfaed51d86d70795ad97b81d7edaa8b224fd2c98fef110b78293b55d",
+      "mode": 420,
+      "mtime_ns": 1790475593301667870
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction2-close.json",
+      "bytes": 1692,
+      "sha256": "1e194da7132622e04313d2af5327f91f9cbfef4f91db756aa0e642bad8e8df77",
+      "mode": 420,
+      "mtime_ns": 1790475593301798537
+    },
+    {
+      "path": "/Users/michael/Developer/ntsd-2.4/docs/evidence/application-mac-audio-correction2.patch",
+      "bytes": 2742,
+      "sha256": "bf3dd026838030827095e47bafe490971f0e25be70e4f6d7302b4b60a307d0b0",
+      "mode": 420,
+      "mtime_ns": 1790475498076233135
+    }
+  ],
+  "navigation": [
+    {
+      "path": "docs/research/CURRENT_WORK.md",
+      "indexBlob": "2246db1c8080632647e923e5b45e009bc426eb50",
+      "blockSHA256": "f99f4c2bf42577d710be4f6ca6442b78add4c1468bba07230068bc3f2126ce3c",
+      "unrelatedWorkingBytesPreserved": true
+    },
+    {
+      "path": "docs/RESEARCH_MAP.md",
+      "indexBlob": "cef86b7a38cd00bfe42520fdeb6a5163ceb73aea",
+      "blockSHA256": "209c79259f7390243ee11507abca98c5cb1a229cc5c5b741be33c5de9728e62c",
+      "unrelatedWorkingBytesPreserved": true
+    }
+  ],
+  "buildPassed": true,
+  "packagePassed": true,
+  "startedMethods": 120,
+  "passedMethods": 120,
+  "unstartedMethods": 0,
+  "selectedMethods": 120,
+  "newMethods": 5,
+  "retainedMethods": 115,
+  "priorAll105Unchanged": true,
+  "sourceExecuted": false,
+  "offlineAVAudioEngineExecuted": true,
+  "physicalEndpointExecuted": false,
+  "independentReview": false,
+  "rootNativePromoted": false,
+  "archiveVerified": true,
+  "artifactFiles": 4986,
+  "metadataMembers": 515,
+  "metadataSHA256": "baaac3df03fde628c78e7cc6f21170d5458355bd05127ab042c0bd2188053722",
+  "whitespaceCheck": {
+    "exitCode": 0,
+    "exactOutput": "",
+    "exceptions": [],
+    "allOtherFilesClean": true
+  },
+  "next": "finite per-call WAV common/registered-catalog propagation plan from existing consumer/caller evidence"
+}

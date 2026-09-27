@@ -1,0 +1,41 @@
+--- a/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalMacAudioBackendTests.swift
+@@ -109,12 +109,17 @@
+         XCTAssertEqual(o.format.channels,file.channels);XCTAssertEqual(o.format.bits,file.bits);XCTAssertEqual(o.format.rate,UInt32(file.rate))
+         XCTAssertEqual(pcm.format.sampleRate,Double(file.rate));XCTAssertEqual(Int(pcm.format.channelCount),file.channels)
+         XCTAssertEqual(Int(pcm.frameLength),file.frames)
+-        let channels = try XCTUnwrap(pcm.floatChannelData)
+-        for channel in 0..<file.channels {
+-            XCTAssertEqual(Array(UnsafeBufferPointer(start:channels[channel],count:file.frames)),file.samples(channel))
+-        }
+-        channels[0][0] = 123 // exported snapshot must not alias the retained owner
+-        XCTAssertEqual(try XCTUnwrap(b.pcmSnapshot(token).floatChannelData)[0][0],file.samples(0)[0])
++        try withExtendedLifetime(pcm) {
++            let channels = try XCTUnwrap(pcm.floatChannelData)
++            for channel in 0..<file.channels {
++                XCTAssertEqual(Array(UnsafeBufferPointer(start:channels[channel],count:file.frames)),file.samples(channel))
++            }
++            channels[0][0] = 123 // exported snapshot must not alias the retained owner
++            let independent = try b.pcmSnapshot(token)
++            try withExtendedLifetime(independent) {
++                XCTAssertEqual(try XCTUnwrap(independent.floatChannelData)[0][0],file.samples(0)[0])
++            }
++        }
+     }
+     func testOriginalWAVsThroughOwnedBuffers() throws {
+         let files = try files(),b = backend(),s = S(backend:b),d = try device(s)
+@@ -304,9 +309,11 @@
+                 let request = min(1024,f.frames-position),status = try engine.renderOffline(AVAudioFrameCount(request),to:output)
+                 XCTAssertEqual(status,.success);XCTAssertEqual(Int(output.frameLength),request)
+                 guard status == .success,Int(output.frameLength) == request else { throw Stop.bound }
+-                let channels = try XCTUnwrap(output.floatChannelData)
+-                for channel in 0..<f.channels {
+-                    XCTAssertEqual(Array(UnsafeBufferPointer(start:channels[channel],count:request)),Array(expected[channel][position..<(position+request)]))
++                try withExtendedLifetime(output) {
++                    let channels = try XCTUnwrap(output.floatChannelData)
++                    for channel in 0..<f.channels {
++                        XCTAssertEqual(Array(UnsafeBufferPointer(start:channels[channel],count:request)),Array(expected[channel][position..<(position+request)]))
++                    }
+                 }
+                 position += request
+             }
