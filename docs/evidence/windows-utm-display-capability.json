@@ -1,0 +1,75 @@
+{
+  "schema": "ntsd-utm-display-capability-observation-v1",
+  "UTC": "2026-09-27T05:09:17.297587+00:00",
+  "purpose": "Identify an observable Windows installer display while host UI is locked, without restarting or reconfiguring the existing reference VM.",
+  "scope": "Read-only installed capability receipt, QEMU process command/cwd, task-owned VM package top-level files, immutable config and public vendor documentation. No guest/QMP/SPICE command or UI input.",
+  "metadataAllowanceBytes": 2097152,
+  "externalFreeBytes": 139798769664,
+  "combinedExternalReserveBytes": 129922760704,
+  "processIdentity": "43650 Sat Sep 26 22:40:45 2026     /Applications/UTM.app/Contents/XPCServices/QEMUHelper.xpc/Contents/MacOS/QEMULauncher.app/Contents/MacOS/QEMULauncher /Applications/UTM.app/Contents/Frameworks/qemu-aarch64-softmmu.framework/Versions/A/qemu-aarch64-softmmu -L /Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu -S -spice unix=on,addr=98DFE348-2BA4-426E-9E40-7214229E8E45.spice,disable-ticketing=on,image-compression=off,playback-compression=off,streaming-video=off,gl=on -chardev spiceport,name=org.qemu.monitor.qmp.0,id=org.qemu.monitor.qmp -mon chardev=org.qemu.monitor.qmp,mode=control -nodefaults -vga none -nic none -device virtio-ramfb-gl -cpu host -smp cpus=4,sockets=1,cores=4,threads=1 -machine virt -accel hvf -drive if=pflash,format=raw,unit=0,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Caches/qemu/edk2-aarch64-secure-code.fd,file.locking=off,readonly=on -drive if=pflash,unit=1,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/efi_vars.fd -m 8192 -audiodev spice,id=audio0 -device intel-hda -device hda-duplex,audiodev=audio0 -device nec-usb-xhci,id=usb-bus -device usb-tablet,bus=usb-bus.0 -device usb-mouse,bus=usb-bus.0 -device usb-kbd,bus=usb-bus.0 -device qemu-xhci,id=usb-controller-0 -chardev spicevmc,name=usbredir,id=usbredirchardev0 -device usb-redir,chardev=usbredirchardev0,id=usbredirdev0,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev1 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1,bus=usb-controller-0.0 -chardev spicevmc,name=usbredir,id=usbredirchardev2 -device usb-redir,chardev=usbredirchardev2,id=usbredirdev2,bus=usb-controller-0.0 -device usb-storage,drive=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,removable=true,bootindex=0,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveB8B6EC1A-75E1-4C86-B26E-1EDD7618364D,file.filename=/Volumes/T7/ntsd-2.4-artifacts/windows-utm-reference-20260926/Win11_25H2_English_Arm64_verified3.iso,file.locking=off,readonly=on -device nvme,drive=driveDD8331D7-4607-48E1-9494-02229FD6FA58,serial=DD8331D7-4607-48E1-9494-02229FD6FA58,bootindex=1 -drive if=none,media=disk,id=driveDD8331D7-4607-48E1-9494-02229FD6FA58,file.filename=/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/Data/DD8331D7-4607-48E1-9494-02229FD6FA58.qcow2,discard=unmap,detect-zeroes=unmap -device usb-storage,drive=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,removable=true,bootindex=2,bus=usb-bus.0 -drive if=none,media=cdrom,id=driveD04463C8-71A6-449D-B4B3-9FCA76DCB392,file.filename=/Users/michael/Library/Containers/com.utmapp.UTM/Data/Library/Application Support/GuestSupportTools/utm-guest-tools-latest.iso,file.locking=off,readonly=on -device virtio-serial -device virtserialport,chardev=org.qemu.guest_agent,name=org.qemu.guest_agent.0 -chardev spiceport,name=org.qemu.guest_agent.0,id=org.qemu.guest_agent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 -chardev spicevmc,id=vdagent,debug=0,name=vdagent -name NTSD Windows 11 ARM Reference -uuid 98DFE348-2BA4-426E-9E40-7214229E8E45 -rtc base=localtime -device virtio-rng-pci -chardev socket,id=chrtpm0,path=98DFE348-2BA4-426E-9E40-7214229E8E45.swtpm -tpmdev emulator,id=tpm0,chardev=chrtpm0 -device tpm-crb-device,tpmdev=tpm0",
+  "cwd": "p43650\nfcwd\nn/Users/michael/Library/Group Containers/WDNLXAD4W8.com.utmapp.UTM",
+  "config": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/config.plist",
+    "bytes": 3396,
+    "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6",
+    "mode": 420,
+    "mtime_ns": 1790451165539774540
+  },
+  "configMatchesInstaller": true,
+  "priorInstalledCapability": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-audio-20260927/utm-capability-observation1.json",
+    "bytes": 1579,
+    "sha256": "7fc5d5830eac1ab66029d5cecd98e8fe5dcf5728b04652d574e8cb610dcfbdcb",
+    "mode": 420,
+    "mtime_ns": 1790482235003820956
+  },
+  "topLevelRegularFiles": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm/config.plist",
+      "bytes": 3396,
+      "sha256": "640f64c8dac3c7d79b4a7c78b6287e378dc9db33c797c7cbdaef9c96be7538e6",
+      "mode": 420,
+      "mtime_ns": 1790451165539774540
+    }
+  ],
+  "lockFlags": [
+    {
+      "CGSSessionScreenIsLocked": true,
+      "kCGSSessionOnConsoleKey": true
+    }
+  ],
+  "publicDocumentation": [
+    {
+      "url": "https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html",
+      "finding": "QMP documents screendump as a display capture command, conditional on CONFIG_PIXMAN. Availability and connection in this installed UTM process were not established."
+    },
+    {
+      "url": "https://www.qemu.org/docs/master/system/qemu-manpage.html",
+      "finding": "A spiceport character device carries a named channel through a SPICE client."
+    },
+    {
+      "url": "https://docs.getutm.app/scripting/cheat-sheet/",
+      "finding": "Documented scripting covers VM control, guest-agent file/execute operations and input. No display-read command appears in this page; the installed CLI/SDEF inventory is separately pinned."
+    }
+  ],
+  "observation": "This process exposes its QMP monitor through the named SPICE channel, with no separate -qmp socket/stdio endpoint. The task-owned VM package top level contains only config.plist; no saved screenshot was found there. Installed automation inventory has no screenshot command.",
+  "limits": [
+    "This is not proof that every possible UTM capture mechanism is absent.",
+    "A new SPICE client, unsupported/private protocol and a VM configuration change were not attempted.",
+    "No signed download URL, guest-tools body or denied private path was read.",
+    "The last actual guest screen remains the approved EULA; a live process does not prove current installer contents."
+  ],
+  "readError": {
+    "toolChunk": "ea036c",
+    "exitCode": 1,
+    "exactError": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/michael/Developer/ntsd-2.4/build/research/windows-utm-reference-20260926/NTSD Windows 11 ARM Reference.utm'",
+    "cause": "Assumed root build alias is absent; the task-owned physical path is established by the live QEMU command.",
+    "correction": "Read that exact existing physical task path; no VM or download restart."
+  },
+  "guestChanged": false,
+  "hostUnlockAttempted": false,
+  "VMRestarted": false,
+  "installerApprovalRetained": true,
+  "independentReview": false,
+  "next": "Reobserve and continue the same approved installer once its display is available; Native fixed queue continues independently."
+}

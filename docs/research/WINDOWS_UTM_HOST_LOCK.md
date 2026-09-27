@@ -26,3 +26,20 @@ first-menu renderer's missing reference contracts; the prepared cursor kit is
 committed at4ad8cbb. Actual Windows capture, independent review, Native raster,
 full menu/match/game and existing safety incidents remain open. No Native code,
 source expected bytes or envelope estimate changed in this checkpoint.
+
+2026-09-27 display-capability follow-up: the same QEMU identity, command, cwd and
+configuration remain unchanged. Its QMP monitor is carried by a named SPICE port;
+the observed command exposes no separate `-qmp` socket/stdio endpoint. The VM
+package top level contains only config.plist, without a saved screenshot. The
+installed CLI/SDEF inventory and [UTM scripting guide](https://docs.getutm.app/scripting/cheat-sheet/)
+have no display-read command in the inspected interfaces. The
+[QMP reference](https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html) documents
+`screendump`, but an available connection to it in this installed UTM process has
+not been established. This does not prove absence of every possible capture path.
+
+The [capability receipt](../evidence/windows-utm-display-capability.json) preserves
+the fresh locked-console flags, process/config pins and an initial absent-alias
+read error corrected using the physical path already present in the QEMU command.
+No SPICE/QMP connection, guest command, UI input, VM restart or configuration
+change occurred. The last actual guest screen remains the approved EULA;
+installation is still incomplete. The separate Native loading queue continues.
