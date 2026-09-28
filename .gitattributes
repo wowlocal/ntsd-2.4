@@ -8,3 +8,4 @@ native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib -text 
 native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session*.zlib -text -diff
 native/Sources/NTSDCore/Resources/OriginalCatalog/files/** filter=lfs diff=lfs merge=lfs -text
 native/Sources/NTSDCore/Resources/OriginalCatalog/embedded/** -text -diff
+native/Sources/NTSDMacPlatform/Resources/OriginalMusic/*.caf filter=lfs diff=lfs merge=lfs -text

@@ -15,6 +15,7 @@ import NTSDMacPlatform
 /// BASE + STEP × iterations started, startup FILETIME and GetLocalTime use a
 /// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
 /// `--stage-checkpoints` builds the per-stage snapshots the app never uses.
+/// `--mute-music` plays the original tracks at zero output gain.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -32,6 +33,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     /// Windows does not throttle a background game's Sleep loop; App Nap would
     /// stretch every scheduled iteration once the window is not frontmost.
     private var activity: NSObjectProtocol?
+    private var music: OriginalMacMusicOutput?
     init(exitAfterStartup: Bool) {
         self.exitAfterStartup = exitAfterStartup
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
@@ -82,11 +84,14 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment())
                 self.started = started
                 while try started.host.takeCommitted() != nil {}
+                let music = try OriginalMacMusicOutput.bundled()
+                music.muted = arguments.contains("--mute-music"); self.music = music
+                try music.present(started.runtime.music.presented())
                 let dates = started.host.snapshot.startup?.dates?.dates.map { String(decoding:$0.dropLast(),as:UTF8.self) } ?? []
                 let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
-                    "musicOutput":"silent (WMA playback not implemented)"])
+                    "musicOutput":"packaged ALAC tracks; looping not connected"])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })
@@ -154,6 +159,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                         "getDCFailures":menu.textRequests,"emptyBlits":menu.emptyBlits])
                     if arguments.contains("--exit-after-capture") { NSApp.terminate(nil); return }
                 }
+                try music?.present(started.runtime.music.presented())
                 let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? menu.messages.sleeps.last! : 1) : 0
                 schedule(delay)
             case .loading:
@@ -184,7 +190,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
-                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6))]
+                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport()]
                         if let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
                             try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:path)); event["path"] = path
@@ -201,6 +207,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"allocations":c.allocations,
                         "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
                 }
+                try music?.present(started.runtime.music.presented())
                 let delay = loading.sleeps.count > sleeps ? loading.sleeps.last! : 1
                 waited += Int(delay); schedule(delay)
             }
@@ -244,11 +251,17 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
-                    "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1]])
+                    "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport()])
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
         }
+    }
+    @MainActor private func musicReport() -> [String:Any] {
+        guard let s = music?.state else { return [:] }
+        return ["graph":s.graph,"track":s.track ?? "","playing":s.playing,"ended":s.ended,"gain":s.gain,
+                "volume":started?.runtime.music.presented()?.volume ?? 0,
+                "time":(s.time*1000).rounded()/1000,"unresolved":music?.unresolved.map { String(decoding:$0,as:UTF8.self) } ?? []]
     }
     @MainActor private func stop(_ error: Error) {
         stopped = true

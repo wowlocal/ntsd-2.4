@@ -3,9 +3,10 @@ import NTSDCore
 
 /// Runtime answers for the recovered DirectShow music calls. Graph and interface
 /// pointers are opaque runtime identities with one COM reference count per graph.
-/// Declared limits: audio output is silent (WMA decoding/playback is a separate
-/// dependency) and no graph event is posted; CreateFile of the root-relative
-/// graph log fails with access denied, as for a non-administrator Windows user.
+/// Answers carry no audio effect: `presented()` exposes the committed graph
+/// state that `OriginalMacMusicOutput` plays. Declared limits: no graph event
+/// is posted; CreateFile of the root-relative graph log fails with access
+/// denied, as for a non-administrator Windows user.
 @MainActor public final class OriginalMacRuntimeMusic {
     public enum Boundary: Error, Equatable {
         case unsupported(String), arguments(String), unknownInterface(UInt32), released(UInt32), nonASCIIPath
@@ -20,9 +21,15 @@ import NTSDCore
         var references: UInt32 = 1
         var interfaces: [Interface:UInt32] = [:]
         var file: [UInt8]?, running = false, volume: Int32 = 0
+        var seeks = 0, position = 0.0
+    }
+    /// The newest live graph as the output needs it. `seeks` counts
+    /// put_CurrentPosition calls; `position` is the last REFTIME in seconds.
+    public struct Presented: Equatable {
+        public let graph: UInt32, file: [UInt8]?, running: Bool, volume: Int32, seeks: Int, position: Double
     }
     private let identities: OriginalMacResourceIdentityPool, heap: OriginalMacRuntimeHeap
-    private var graphs: [UInt32:Graph] = [:]
+    private var graphs: [UInt32:Graph] = [:], created: [UInt32] = []
     private var owners: [UInt32:(graph: UInt32,interface: Interface)] = [:]
     public private(set) var operations: [Operation] = []
     public private(set) var messages: [[[UInt8]]] = []
@@ -40,6 +47,10 @@ import NTSDCore
     }
     public func isRunning(_ pointer: UInt32) -> Bool { owners[pointer].flatMap { graphs[$0.graph]?.running } ?? false }
     public func volume(_ pointer: UInt32) -> Int32? { owners[pointer].flatMap { graphs[$0.graph]?.volume } }
+    public func presented() -> Presented? {
+        guard let token = created.last(where: { (graphs[$0]?.references ?? 0) > 0 }),let g = graphs[token] else { return nil }
+        return .init(graph:token,file:g.file,running:g.running,volume:g.volume,seeks:g.seeks,position:g.position)
+    }
     private func live(_ pointer: UInt32) throws -> (Graph,Interface) {
         guard let owner = owners[pointer],let graph = graphs[owner.graph] else { throw Boundary.unknownInterface(pointer) }
         guard graph.references > 0 else { throw Boundary.released(pointer) }
@@ -53,7 +64,7 @@ import NTSDCore
             // CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, &out)
             try require(a == [0x44a2a4,0,1,0x44a254,0x44f040] && e.strings.isEmpty,"createInstance")
             let token = try identities.take(),graph = Graph(); graph.interfaces[.graph] = token
-            graphs[token] = graph; owners[token] = (token,.graph)
+            graphs[token] = graph; owners[token] = (token,.graph); created.append(token)
             response = .init(result:0,pointer:token)
         case .queryInterface:
             try require(a.count == 1 && e.strings.count == 1 && e.strings[0].count == 16 && Array(e.strings[0].dropFirst()) == Self.iidTail,"queryInterface")
@@ -90,7 +101,11 @@ import NTSDCore
             case (.event,0x38): try require(args.count == 1,"SetNotifyFlags"); response = .init(result:0)
             case (.control,0x1c): try require(args.isEmpty,"Run"); graph.running = true; response = .init(result:0)
             case (.control,0x24): try require(args.isEmpty,"Stop"); graph.running = false; response = .init(result:0)
-            case (.position,0x20): try require(args.count == 2,"put_CurrentPosition"); response = .init(result:0)
+            case (.position,0x20):
+                try require(args.count == 2,"put_CurrentPosition")
+                let seconds = Double(bitPattern:UInt64(args[1]) << 32 | UInt64(args[0]))
+                try require(seconds.isFinite && seconds >= 0,"put_CurrentPosition time")
+                graph.seeks += 1; graph.position = seconds; response = .init(result:0)
             case (.audio,0x1c):
                 try require(args.count == 1,"put_Volume"); let level = Int32(bitPattern:args[0])
                 try require(level <= 0 && level >= -10000,"put_Volume range"); graph.volume = level; response = .init(result:0)

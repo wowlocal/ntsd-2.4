@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Music output, stage 1](research/APPLICATION_MUSIC.md): the app plays the
+original tracks for the committed DirectShow graph state (menu `main`, District
+`boss1`, volume −500). `tools/package_music.py` decodes the WMA v2/Pro files
+at packaging time into lossless ALAC (Apple decode bit-exact to the declared
+int16 conversion). Track-end looping (graph events) is stage 2.
+[Evidence](evidence/application-music.json).
+
 [Application tick speed](research/APPLICATION_TICK_SPEED.md): the computer-VS
 match runs at the original's pace, 30.3 ticks/s with three fighters (≈8.5 ms
 of work per body). Causes: App Nap throttling (now exempt) and unused

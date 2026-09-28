@@ -1,0 +1,213 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T22:10:08.867976Z",
+ "parentHead": "9d33d8d",
+ "scope": "Music output stage 1: packaged ALAC tracks played for committed DirectShow graph state",
+ "files": {
+  "tools/package_music.py": "9d5f8ebc79052b3f17ab829c2e46ac2e11df1ef0ae196fc90f78c3339d54308e",
+  "native/Sources/NTSDMacPlatform/OriginalMacMusicOutput.swift": "377c9de781e210e85e12c345574366726a5067a0498d779d32211a6f1fae9f75",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeMusic.swift": "fc86f747986f9862f6cf0172fcca53932821f9d6eca6e18a62c53d0cada6069a",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "186bd556dbc597ab3e79a31d95f73a98e9311248fb4bf36e3807a43f6d948c94",
+  "native/Package.swift": "bdce9847c68374e09afe2b4a3600dd35895dd99f96d85379dfec0dcac1353997",
+  "native/Tests/NTSDCoreTests/OriginalMacMusicOutputTests.swift": "cab5eef94de9420082b0392b379568a506de100cdbf6224e17382721d57b51d8",
+  "native/Sources/NTSDMacPlatform/Resources/OriginalMusic/manifest.json": "435febdab20fe943191959ea0a5955f1e7a9a0654bf6e70168366693815fa799"
+ },
+ "package": {
+  "tracks": 8,
+  "frames": 56423177,
+  "cafBytes": 116917761,
+  "tools": {
+   "afconvert": "macOS 27.0 26A428",
+   "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers"
+  },
+  "conversion": "FFmpeg float decode; int16 = saturate(roundHalfEven(x*32768)); ALAC by afconvert",
+  "verify": "python3 tools/package_music.py --verify passed"
+ },
+ "runs": {
+  "mus1": {
+   "flags": "--mute-music --virtual-clock 123456789 8 --script-clock gameplay (cpu12)",
+   "events": [
+    {
+     "event": "captured",
+     "iterations": 30,
+     "bodies": 0,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 8,
+      "playing": true,
+      "time": 6.43,
+      "track": "bgm\\main.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "captured",
+     "iterations": 500,
+     "bodies": 0,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 8,
+      "playing": true,
+      "time": 11,
+      "track": "bgm\\main.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "captured",
+     "iterations": 1200,
+     "bodies": 0,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 8,
+      "playing": true,
+      "time": 18.622,
+      "track": "bgm\\main.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 2414,
+     "bodies": 300,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 9.185,
+      "track": "bgm\\boss1.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 3351,
+     "bodies": 600,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 18.784,
+      "track": "bgm\\boss1.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 4289,
+     "bodies": 900,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 28.435,
+      "track": "bgm\\boss1.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 5226,
+     "bodies": 1200,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 38.224,
+      "track": "bgm\\boss1.wma",
+      "unresolved": []
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 6164,
+     "bodies": 1500,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 48.724,
+      "track": "bgm\\boss1.wma",
+      "unresolved": []
+     }
+    }
+   ],
+   "capturesIdenticalToTickSpeedReference": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png"
+   ]
+  },
+  "mus2": {
+   "flags": "same, 300 bodies, requested volume reported",
+   "events": [
+    {
+     "event": "captured",
+     "iterations": 30,
+     "bodies": 0,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 8,
+      "playing": true,
+      "time": 6.533,
+      "track": "bgm\\main.wma",
+      "unresolved": [],
+      "volume": -500
+     }
+    },
+    {
+     "event": "captured",
+     "iterations": 1200,
+     "bodies": 0,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 8,
+      "playing": true,
+      "time": 18.74,
+      "track": "bgm\\main.wma",
+      "unresolved": [],
+      "volume": -500
+     }
+    },
+    {
+     "event": "progress",
+     "iterations": 2414,
+     "bodies": 300,
+     "music": {
+      "ended": false,
+      "gain": 0,
+      "graph": 5318,
+      "playing": true,
+      "time": 9.325,
+      "track": "bgm\\boss1.wma",
+      "unresolved": [],
+      "volume": -500
+     }
+    }
+   ]
+  }
+ },
+ "tests": {
+  "suites": [
+   "OriginalMacMusicOutputTests",
+   "OriginalMacRuntimeStartupTests"
+  ],
+  "tests": 8,
+  "failures": 0
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

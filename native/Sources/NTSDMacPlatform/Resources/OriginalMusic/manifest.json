@@ -1,0 +1,157 @@
+{
+ "channels": 2,
+ "conversion": "FFmpeg float decode; int16 = saturate(roundHalfEven(x*32768)); ALAC by afconvert",
+ "entries": [
+  {
+   "caf": {
+    "bytes": 16030928,
+    "sha256": "065752b4adb7d2bf2f5af2311f2527d37e0fbb5b4bc113603797dfafbf192855"
+   },
+   "codec": "wmav2",
+   "frames": 6776832,
+   "name": "bgm\\boss1.wma",
+   "pcm": {
+    "bytes": 27107328,
+    "sha256": "61637685fbb61bb5b3cb108ec26ff0c5de9b0eefe56b9a0852686cb71ac26168"
+   },
+   "resource": "boss1.caf",
+   "source": {
+    "bytes": 1254751,
+    "sha256": "851b9337cf258e59f8c2ba34c884507644b81cbceebb3d8e4ab6fa763e5a6d8e"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 16640447,
+    "sha256": "ce1ea80b753fe505c6bd21a99fac55dea9cf0caf9fda0b6091fdef2532a63604"
+   },
+   "codec": "wmav2",
+   "frames": 6969344,
+   "name": "bgm\\boss2.wma",
+   "pcm": {
+    "bytes": 27877376,
+    "sha256": "8133878961307bbd47ed785d176cf09ef64e25466f27ebe5741544d6329eb600"
+   },
+   "resource": "boss2.caf",
+   "source": {
+    "bytes": 1284791,
+    "sha256": "5806bb56d2dcb6d05af3362c080d6be5c92418a432d2f5bedeb743380fbb82c9"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 27533049,
+    "sha256": "aef6dd652f9eb8c30fde2546210f91e6ffe4cbf1ba69f4c468b76c3d988aae1c"
+   },
+   "codec": "wmapro",
+   "frames": 10647936,
+   "name": "bgm\\main.wma",
+   "pcm": {
+    "bytes": 42591744,
+    "sha256": "5501286bc937a2786e5c055b5cc7f7e91d4f266e26221d410f13f55bb11590c9"
+   },
+   "resource": "main.caf",
+   "source": {
+    "bytes": 3895405,
+    "sha256": "e3448b9b8445e3483b18e2eab4eaf60592695e73771728d6857f1cc02a583e2d"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 5282574,
+    "sha256": "dcd479d74462ad784e115e2950a51a72a77ca4c99ceec014e59e1b0bcabb3f2b"
+   },
+   "codec": "wmapro",
+   "frames": 5906583,
+   "name": "bgm\\stage1.wma",
+   "pcm": {
+    "bytes": 23626332,
+    "sha256": "a005239c1ed6cf6d52f8f09c2d3d6bf8d4e1ed27db89e9d2cba69837c89565e7"
+   },
+   "resource": "stage1.caf",
+   "source": {
+    "bytes": 2162365,
+    "sha256": "82ae94243bbd6ab4513713f67f23773196cacc0bf4560ccb18c87e752641e8f3"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 14800997,
+    "sha256": "3385a9cc723e97c46cc4994a6b282c0912622841689f27d864349cd69d21bb3b"
+   },
+   "codec": "wmav2",
+   "frames": 7108608,
+   "name": "bgm\\stage2.wma",
+   "pcm": {
+    "bytes": 28434432,
+    "sha256": "6003cfb382cfa5c0ed763909464b3a9684541cc0dbf0420d6cbdbcdcc9769b60"
+   },
+   "resource": "stage2.caf",
+   "source": {
+    "bytes": 1311827,
+    "sha256": "568be15688c780495521fc7aa3c1c3df9712bd6031257b4c873b754a61911f4f"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 14755924,
+    "sha256": "285144a702bffb2ca031a596fae1d0ea02d3af1297b6de292caf24336de528af"
+   },
+   "codec": "wmav2",
+   "frames": 6676480,
+   "name": "bgm\\stage3.wma",
+   "pcm": {
+    "bytes": 26705920,
+    "sha256": "54716469aa7334c254f8327369e4d20f351e66ff1162da99337c5730ec5347e7"
+   },
+   "resource": "stage3.caf",
+   "source": {
+    "bytes": 1236727,
+    "sha256": "3557950e4a5d83dc10d711862f27649b6758471c34b5c23ab4003b276cf3ce39"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 16737571,
+    "sha256": "9e7ceb7d71b915f3bd146c7b0166a36c095f818f3529d818ec2fe9ccc8b47069"
+   },
+   "codec": "wmav2",
+   "frames": 6682624,
+   "name": "bgm\\stage4.wma",
+   "pcm": {
+    "bytes": 26730496,
+    "sha256": "650deb842061e4acd247bdfc256a9e52639b9d8b169c90d06cbb1958ff37e448"
+   },
+   "resource": "stage4.caf",
+   "source": {
+    "bytes": 1236727,
+    "sha256": "323ec7712db42b348c50964b919d3859b206f3da9f6f5b8d61f433741db92a36"
+   }
+  },
+  {
+   "caf": {
+    "bytes": 5136271,
+    "sha256": "b1e43db3279cc9c2c2e53621542676f1c62a7412be1bcd4f298a17c748303fe1"
+   },
+   "codec": "wmapro",
+   "frames": 5654770,
+   "name": "bgm\\stage5.wma",
+   "pcm": {
+    "bytes": 22619080,
+    "sha256": "ce5cf6765332d8ca462e33c5022ea0f31338049c55a2c0dadab470f65769957a"
+   },
+   "resource": "stage5.caf",
+   "source": {
+    "bytes": 2072725,
+    "sha256": "1af041e596fe69f67c214a6d9c6ccc410dd969212fa0ac688aade0fe43ffe435"
+   }
+  }
+ ],
+ "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+ "sampleRate": 44100,
+ "tools": {
+  "afconvert": "macOS 27.0 26A428",
+  "ffmpeg": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers"
+ },
+ "version": 1
+}
