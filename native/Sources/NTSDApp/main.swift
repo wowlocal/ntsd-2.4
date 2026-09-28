@@ -249,6 +249,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 }
 
+if arguments.contains("--original") {
+    let app = NSApplication.shared; app.setActivationPolicy(.regular)
+    let delegate = OriginalRuntimeDelegate(exitAfterStartup: arguments.contains("--exit-after-startup"))
+    app.delegate = delegate
+    withExtendedLifetime(delegate) { app.run() }
+    exit(0)
+}
+
 do {
     let game = try GameData.load(from: dataURL)
     if arguments.contains("--verify-data") {

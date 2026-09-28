@@ -9,17 +9,21 @@ Native методов, включая целый caller загрузка→ка�
 [проверка и архивы](APPLICATION_LOADING_ARENA.md), [публикация](../evidence/application-loading-arena.json).
 Он [перенесён в `native/`](../evidence/native-root-promotion-2291.json) побайтно
 (866bf83; OriginalCatalog через LFS); NTSDApp всё ещё запускает Practice.
-Правка process prompts применена (d1a930e).
+Правка process prompts применена (d1a930e). [`NTSDNative --original`](APPLICATION_RUNTIME_STARTUP.md)
+проходит весь WinMain на Mac-службах и runtime providers (75 запросов, без
+корпусов); новые4 и сохранённые9 тестов прошли, review открыт.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) NTSDApp не
-использует Host; (2) целый caller получает allocate/bitmap/file/
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) цикл сообщений
+меню принимает peek/get/time/sleep только заранее подготовленным массивом —
+нет permit-драйвера для живого ввода/часов; (2) текст GDI не поддержан растром;
+(3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
-ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301), поэтому
-у приложения нет runtime providers этих запросов; (3) window/input/audio на
-устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** runtime providers и подключение NTSDApp к Host (карточка
-в подготовке); сборка/тесты тех же перенесённых байтов не повторяются.
+ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
+беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
+**Следующая задача:** permit-драйвер цикла сообщений по образцу lifecycle/bitmap
+итераций и runtime-служба ввода/часов для первых итераций меню в приложении —
+снимает препятствие (1), без которого живое управление недоступно.
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

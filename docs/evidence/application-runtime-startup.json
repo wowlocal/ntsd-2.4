@@ -1,0 +1,223 @@
+{
+  "schema": "ntsd-application-runtime-startup-v1",
+  "UTC": "2026-09-28T11:55:55.151479+00:00",
+  "parentHead": "b55e8d95fe6791ffa4e93d7c66f3426deae406a3",
+  "scope": "Runtime WinMain providers and NTSDApp --original startup; Native/Mac execution only; no original executed.",
+  "plan": {
+    "path": "docs/research/APPLICATION_RUNTIME_STARTUP_PLAN.md",
+    "bytes": 5965,
+    "sha256": "d1c7b0ef4f30069d2c0c052c4aa316237849813ca7335d418b61445b43eec9a5"
+  },
+  "files": [
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeHeap.swift",
+      "bytes": 1546,
+      "sha256": "0730efbca72824b3c6eade908c4af1120d9c64a5efd41203f643af4ac9a00cd2"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeZone.swift",
+      "bytes": 4712,
+      "sha256": "a7cff502f7066ca3d1397fdb0f399db5dfc7b7c2ed2acced76e08caa14a0d130"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeMusic.swift",
+      "bytes": 8215,
+      "sha256": "77a1fda2a39dc4bcd5ec149ae22d5e1f64e69f97e5ac23a26110194dca22b898"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeStartupService.swift",
+      "bytes": 9757,
+      "sha256": "481c46f1729091396b8157931a242e9e203cb50a7ea07ab3d21ae15def9a7e5c"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeStartup.swift",
+      "bytes": 6834,
+      "sha256": "e240b462e0395b22f1e6a21ece1a3c00c4375f2350c69eb37f5b397235401647"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift",
+      "bytes": 16712,
+      "sha256": "eb6e762b4a6d4608b3213b93235235df4a3932e1707ccda46d4b326277c00c9d"
+    },
+    {
+      "path": "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift",
+      "bytes": 2311,
+      "sha256": "4fe5ae76253840fbf845432012794ae72dcfbdaca456dff0b19055d7334c519d"
+    },
+    {
+      "path": "native/Sources/NTSDApp/main.swift",
+      "bytes": 19062,
+      "sha256": "e284f5e8affd185932999ddefc5f2ea191c5ace16e6c0ef7ae0bdea1da09b2eb"
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalMacRuntimeStartupTests.swift",
+      "bytes": 12463,
+      "sha256": "00cb54d8e74893a8b134cd8b9c6554668b5fb17d8f1972ef021a8b759cb7feed"
+    },
+    {
+      "path": "tools/build-native.sh",
+      "bytes": 1505,
+      "sha256": "586320e4ef85c6c0dc8141774e3648461b45100645e22b11d473aa8ca97c1ad8"
+    }
+  ],
+  "toolchain": {
+    "swiftBuild": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build",
+    "version": "swift-driver version: 1.168.6 Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)",
+    "note": "PATH swift (swiftly 6.3.3) fails on this SDK: unknown argument -target-arch-variant, no module CryptoKit."
+  },
+  "build": {
+    "command": [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-build",
+      "--package-path",
+      "native",
+      "--scratch-path",
+      "build/swiftpm-app",
+      "--build-system",
+      "native",
+      "--build-tests",
+      "--jobs",
+      "4"
+    ],
+    "configuration": "debug",
+    "exitCode": 0,
+    "realSeconds": 39.91,
+    "maximumRSS": 933281792,
+    "errors": 0
+  },
+  "newTests": {
+    "filter": "OriginalMacRuntimeStartupTests",
+    "exitCode": 0,
+    "results": [
+      {
+        "method": "OriginalMacRuntimeStartupTests testDirectShowSuccessPathOwnsIdentitiesAndCounts",
+        "outcome": "passed",
+        "seconds": 0.002
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testHeapIsDisjointAlignedZeroAndBounded",
+        "outcome": "passed",
+        "seconds": 0.642
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testWholeWinMainWithRuntimeProvidersAndOverlay",
+        "outcome": "passed",
+        "seconds": 7.315
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testZoneRulesMatchWindowsDayInMonthForm",
+        "outcome": "passed",
+        "seconds": 0.002
+      }
+    ],
+    "printed": [
+      "Runtime WinMain: 75 requests; [\"display\": 8, \"window\": 11, \"audio\": 22, \"runtime\": 34] dates 2026/09/28/14/34/56"
+    ]
+  },
+  "regressions": {
+    "filter": "OriginalMacWindowBackendTests|OriginalMacAudioBackendTests",
+    "reason": "changed dependency: window backend accessor and shared startup services",
+    "exitCode": 0,
+    "results": [
+      {
+        "method": "OriginalMacAudioBackendTests testLateRetryAndResourceLifetimes",
+        "outcome": "passed",
+        "seconds": 5.426
+      },
+      {
+        "method": "OriginalMacAudioBackendTests testOfflinePCMTransportForEveryOriginalFormat",
+        "outcome": "passed",
+        "seconds": 3.304
+      },
+      {
+        "method": "OriginalMacAudioBackendTests testOriginalWAVsThroughOwnedBuffers",
+        "outcome": "passed",
+        "seconds": 46.683
+      },
+      {
+        "method": "OriginalMacAudioBackendTests testUnsupportedInputsAndServiceProtocol",
+        "outcome": "passed",
+        "seconds": 0.446
+      },
+      {
+        "method": "OriginalMacAudioBackendTests testWholeStartupWithOwnedMenuBuffers",
+        "outcome": "passed",
+        "seconds": 3.441
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testPhysicalServiceRejectsForeignDuplicateAndCancelledPermits",
+        "outcome": "passed",
+        "seconds": 0.663
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testStartupLateFailureAndWindowDestruction",
+        "outcome": "passed",
+        "seconds": 1.381
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testWholeStartupUsesPhysicalWindowAndRetainsReplies",
+        "outcome": "passed",
+        "seconds": 1.056
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testWindowGeometryAndResourceLifetimes",
+        "outcome": "passed",
+        "seconds": 1.057
+      }
+    ]
+  },
+  "appLaunches": [
+    {
+      "run": 1,
+      "command": "build/swiftpm-app/debug/NTSDNative --original --exit-after-startup",
+      "exitCode": 1,
+      "output": "{\"error\":\"NTSDMacPlatform.OriginalMacRuntimeStartup.Boundary.unserved(\\\"window:debug\\\")\",\"event\":\"failed\"}",
+      "outcome": "unserved OutputDebugStringA window request; corrected by runtime debug handling"
+    },
+    {
+      "run": 2,
+      "exitCode": 0,
+      "output": "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/13\\/52\\/15\",\"2026\\/10\\/02\\/13\\/52\\/15\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"next\":\"front-menu message loop not connected\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+      "outcome": "started; overlay adinfo.txt written LF-only (14 bytes) because _write text-mode translation was missing; corrected"
+    },
+    {
+      "run": 3,
+      "exitCode": 0,
+      "output": "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/13\\/55\\/29\",\"2026\\/10\\/02\\/13\\/55\\/29\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"next\":\"front-menu message loop not connected\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+      "outcome": "started; overlay adinfo.txt equals the shipped original bytes",
+      "overlayFile": {
+        "path": "~/Library/Application Support/NTSD Native/data/adinfo.txt",
+        "bytes": 15,
+        "sha256": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e"
+      }
+    }
+  ],
+  "gates": {
+    "compile": true,
+    "newTests": true,
+    "retainedRegressions": true,
+    "appStartup": true,
+    "independentReview": false,
+    "frontMenuLoop": false,
+    "textRaster": false,
+    "musicOutput": false,
+    "loadingProviders": false,
+    "deviceAcceptance": false,
+    "windows": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "declaredRuntimePolicies": [
+    "logical heap arena 0x30000000..0x70000000, zero backing, no reuse",
+    "critical section bytes DebugInfo0/LockCount-1",
+    "CoInitialize S_OK",
+    "TZI from macOS zone; English macOS names",
+    "DirectShow success path, silent output, no graph events",
+    "graph.log CreateFile access denied (INVALID_HANDLE_VALUE)",
+    "joystick: 16 devices, position JOYERR_UNPLUGGED",
+    "OutputDebugStringA recorded no-op",
+    "text-mode _write LF->CRLF, result counts caller bytes",
+    "overlay ~/Library/Application Support/NTSD Native"
+  ],
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false
+}

@@ -127,6 +127,8 @@ import NTSDCore
               let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
         view.cacheDisplay(in:view.bounds,to:bitmap); return try OriginalMacViewCapture(bitmap)
     }
+    /// Shared LoadCursor(0, IDC_ARROW) identity once the class cursor exists.
+    public var arrowCursorToken: UInt32? { cursor?.token }
     public var retainedResources: [any OriginalApplicationStartupResource] {
         var result: [any OriginalApplicationStartupResource] = windows.values.compactMap { $0.value }
         if let cursor { result.append(cursor) }; if let windowClass { result.append(windowClass) }; return result

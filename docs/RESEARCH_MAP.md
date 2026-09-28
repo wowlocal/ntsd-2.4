@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Runtime WinMain providers: the app starts the original application](research/APPLICATION_RUNTIME_STARTUP.md):
+`NTSDNative --original` runs WinMain to `.started` on Mac window/display/audio
+services plus runtime clock/zone/heap/COM/DirectShow/cursor/joystick/_write
+answers, no corpus. 4 new + 9 retained tests pass; overlay adinfo.txt equals the
+original. Next: permit-based message loop for live input. Review, text raster,
+music output, loading providers, device/Windows, match/game open.
+[Evidence](evidence/application-runtime-startup.json).
+
 [Complete audio-loading test: all167 verified and published](research/APPLICATION_LOADING_ARENA.md):
 Queue51788 terminal0 with all167 fixed methods passing, including the whole
 catalog/pool/menu/Host caller. Pinned finalizer96393 terminal0 rechecks pins,

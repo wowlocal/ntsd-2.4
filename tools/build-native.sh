@@ -3,8 +3,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 python3 tools/import_ntsd.py
 python3 tools/inspect_original.py
-swift build --package-path native -c release
-binary_dir="$(swift build --package-path native -c release --show-bin-path)"
+# Pin Xcode's toolchain; another swift earlier in PATH may not match the SDK.
+swift=(xcrun --toolchain XcodeDefault swift)
+"${swift[@]}" build --package-path native -c release
+binary_dir="$("${swift[@]}" build --package-path native -c release --show-bin-path)"
 bundle='build/NTSD Native.app'
 mkdir -p "$bundle/Contents/MacOS" "$bundle/Contents/Resources"
 cp "$binary_dir/NTSDNative" "$bundle/Contents/MacOS/NTSDNative"
