@@ -64,25 +64,34 @@ final class OriginalWinMainStartupTests: XCTestCase {
     struct Corpus: Decodable { let exeSHA256: String,dllSHA256: String,cases: [Case],sources: [Source],blobs: [String:Blob] }
     enum Trial: Error { case late }
     static func hex(_ s: String) -> [UInt8] { stride(from:0,to:s.count,by:2).map { UInt8(s.dropFirst($0).prefix(2),radix:16)! } }
-    private func read() throws -> (Corpus,[[String:Any]]) {
+    func read() throws -> (Corpus,[[String:Any]]) {
         let url = try ProcessInfo.processInfo.environment["NTSD_WINMAIN_STARTUP"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-winmain-startup",withExtension:"json",subdirectory:"Fixtures"))
         let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
         let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
         return (try JSONDecoder().decode(Corpus.self,from:data),try XCTUnwrap(raw["cases"] as? [[String:Any]]))
     }
     final class Adapter: OriginalApplicationStartupPlatform {
-        let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String],fail: String?
+        let c: Case,rawEvents: [[String:Any]],blob: (String) throws -> [UInt8],sources: [String:String]
+        var fail: String?
         let startupInputs: OriginalApplicationStartupInputs?
         var index = 0,storeIndex = 0,stageIndex = 0,calendarIndex = 0,joyIndex = 0,capsIndex = 0,waves = 0,childIndex = -1,writes = 0
         var shadow: [UInt8],expected: [UInt8],mask: [UInt8]
+        // Host-owner test sentinels only, never original state or expectations.
+        var hostQueuePosition = 0,hostReservations: [Int] = [],hostShareCopies = false
+        var hostFailCopies = false
+        var windowExchange: OriginalWindowRequestExchange.Cursor?
         /// Every mutable member is a value. Blob's shared cache holds immutable
         /// input bytes and is not a reply position or an external effect queue.
         func stagedCopy() throws -> Adapter {
+            if hostFailCopies { throw Trial.late }
+            if hostShareCopies { return self }
             let copy = try Adapter(c,["events":rawEvents],sources:sources,blob:blob,initial:shadow,fail:fail,startupInputs:startupInputs)
             copy.index = index;copy.storeIndex = storeIndex;copy.stageIndex = stageIndex
             copy.calendarIndex = calendarIndex;copy.joyIndex = joyIndex;copy.capsIndex = capsIndex
             copy.waves = waves;copy.childIndex = childIndex;copy.writes = writes
             copy.expected = expected;copy.mask = mask
+            copy.hostQueuePosition = hostQueuePosition;copy.hostReservations = hostReservations
+            copy.windowExchange = windowExchange
             return copy
         }
         init(_ c: Case,_ raw: [String:Any],sources: [String:String],blob: @escaping (String) throws -> [UInt8],initial: [UInt8],fail: String? = nil,startupInputs: OriginalApplicationStartupInputs? = nil) throws {
@@ -138,6 +147,10 @@ final class OriginalWinMainStartupTests: XCTestCase {
             XCTAssertEqual(request.kind,r.kind);XCTAssertEqual(request.words,r.words,c.spec.label);XCTAssertEqual(request.strings,r.strings)
             XCTAssertEqual(request.defined,r.defined,c.spec.label);XCTAssertEqual(request.bytes?.count,r.bytes?.count)
             if let mask = r.defined { let a = try XCTUnwrap(request.bytes),b = try XCTUnwrap(r.bytes);XCTAssertTrue(mask.indices.allSatisfy { !mask[$0] || a[$0] == b[$0] },c.spec.label+" window owned fields") }
+            if var cursor = windowExchange {
+                defer { windowExchange = cursor }
+                return try cursor.response(for: request)
+            }
             return try XCTUnwrap(e.response)
         }
         func file(_ path: String) throws -> [UInt8]? {
@@ -252,7 +265,7 @@ final class OriginalWinMainStartupTests: XCTestCase {
             }
         }
     }
-    private func rollback(_ a: OriginalWinMainStartup,_ b: OriginalWinMainStartup) {
+    func rollback(_ a: OriginalWinMainStartup,_ b: OriginalWinMainStartup) {
         XCTAssertEqual(a.random,b.random);XCTAssertEqual(a.output.calendar,b.output.calendar);XCTAssertEqual(a.output.music.allocations,b.output.music.allocations)
         XCTAssertEqual(a.panel.infoLocal,b.panel.infoLocal);XCTAssertEqual(a.panel.contentLocal,b.panel.contentLocal);XCTAssertEqual(a.panel.panel.records.count,b.panel.panel.records.count)
         XCTAssertNil(a.panel.output);XCTAssertNil(a.input);XCTAssertNil(a.dates)

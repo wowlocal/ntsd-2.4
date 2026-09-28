@@ -293,6 +293,7 @@ public struct OriginalApplicationGraphics: Equatable {
         case let .fill(f,r):var e = OriginalFrontScreenEvent("fill");e.fill = f;return try front(e,result:r,inputs:inputs)
         case let .release(e,r),let .present(e,r),let .graphics(e,r),let .startupGraphics(e,r):return try front(e,result:r,inputs:inputs)
         case let .getDC(e,r,output):return try front(e,result:r,output:output,inputs:inputs)
+        case let .frontAPI(e,r):return try front(e,result:r.result,output:r.output,inputs:inputs)
         default:return nil
         }
     }

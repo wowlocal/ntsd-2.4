@@ -20,15 +20,23 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
         let c: Corpus,indices: [Int],rawCases: [[String:Any]]
+        let sourceControlWord: UInt32
         var cache: [String:[UInt8]] = [:]
-        init(_ body: Body.Resources,_ front: F.Resources) throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_MENU_RETURN"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-menu-return",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
-            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,48)
+        init(_ body: Body.Resources,_ front: F.Resources, supplied: Data? = nil,
+             expectedCounts: (cases: Int, bodyParents: Int, frontParents: Int) = (48,43,40)) throws {
+            sourceControlWord = front.sourceControlWord
+            XCTAssertEqual(body.sourceControlWord,sourceControlWord)
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_MENU_RETURN"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-menu-return",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
+            }
+            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,expectedCounts.cases)
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any])
             rawCases = try XCTUnwrap(raw["cases"] as? [[String:Any]])
             let bp = try XCTUnwrap(raw["bodyParents"] as? [String:[String:Any]]),fp = try XCTUnwrap(raw["frontParents"] as? [String:[String:Any]])
-            XCTAssertEqual(bp.count,43);XCTAssertEqual(fp.count,40)
+            XCTAssertEqual(bp.count,expectedCounts.bodyParents);XCTAssertEqual(fp.count,expectedCounts.frontParents)
             indices = try c.cases.map { c in
                 let parent = try XCTUnwrap((c.parentKind == "body" ? bp : fp)[c.parent])
                 return try XCTUnwrap((c.parentKind == "body" ? body.rawCases : front.rawCases).firstIndex { NSDictionary(dictionary:$0).isEqual(to:parent) })
@@ -61,8 +69,10 @@ final class OriginalApplicationMenuReturnTests: XCTestCase {
             try observe(.init("write",[UInt32(address),UInt32(bytes.count),v]))
         }
     }
-    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,continuation: ((OriginalApplicationMessageLoop,B.OwnContext) throws -> Void)? = nil) throws {
-        try OriginalApplicationBootstrapTests().runMenu(index,r,body,front,br,er,fail:fail,continuation:continuation)
+    func run(_ index: Int,_ r: Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,
+        useHost: Bool = false,hostReady: ((OriginalApplicationHostSessionTests.Application) throws -> Void)? = nil,
+        continuation: ((OriginalApplicationMessageLoop,B.OwnContext) throws -> Void)? = nil) throws {
+        try OriginalApplicationBootstrapTests().runMenu(index,r,body,front,br,er,fail:fail,useHost:useHost,hostReady:hostReady,continuation:continuation)
     }
     func testOwnMenusReturnDispatcherAndCommitFirstDueIteration() throws {
         let front = try F.Resources(),body = try Body.Resources(front),r = try Resources(body,front),br = try B.Resources(),er = try Entry.Resources()

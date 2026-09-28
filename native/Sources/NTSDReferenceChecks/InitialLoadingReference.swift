@@ -34,7 +34,7 @@ public enum InitialLoadingReference {
     private struct CatalogIdentity: Decodable { let catalogAddress: UInt32, objectAddresses: [UInt32], initialChecksum: UInt32 }
     private static func error(_ message: String) -> OriginalStateError { .invalidStorage("Initial loading reference: \(message)") }
 
-    public static func compare(loading: Data, catalog: Data, sounds: Data,
+    public static func compare(loading: Data, catalog: Data, sounds: Data, observedAudio: Bool = false,
                                initialState: (world: OriginalStateRecord, globals: OriginalStateRecord)? = nil,
                                onCommonEvent: (OriginalInitialSoundEvent) throws -> Void = { _ in },
                                onCatalog: (OriginalInitialLoadingContinuation) throws -> Void = { _ in },
@@ -122,7 +122,7 @@ public enum InitialLoadingReference {
             }, loadCatalog: { checksum,initialSoundBytes,progress in
                 guard checksum == identity.initialChecksum else { throw error("Inherited checksum") }
                 var resources: OriginalInitialCatalogResources?
-                comparison = try CatalogSoundsReference.compare(catalog: catalog, sounds: sounds, initialSoundBytes: initialSoundBytes,
+                comparison = try CatalogSoundsReference.compare(catalog: catalog, sounds: sounds, initialSoundBytes: initialSoundBytes, observedAudio: observedAudio,
                     onProgress: progress, onLoaded: { resources = .init(catalog: $0,sounds: $1) })
                 guard let resources else { throw error("Native catalog construction") }
                 return resources
@@ -138,7 +138,9 @@ public enum InitialLoadingReference {
                       try dib.integer(at: 8,as: Int32.self) == input.resource.height else { throw error("Embedded source DIB dimensions") }
                 return input.resource
             }, interfaceDevice: { index in let i = c.interface.inputs[index]; return (i.surface,i.colorKeyResult) },
-            afterPrologue: { globals,paused in
+            audio: observedAudio ? { p in
+                let replies = try OriginalWaveLegacyReplies(p);return replies.reply
+            } : nil, afterPrologue: { globals,paused in
                 try global(globals,c.afterPrologue,"Prologue globals")
                 guard paused == (c.paused == 1), c.common.beforeGlobals == c.afterPrologue else { throw error("Prologue pause/common continuity") }
             }, afterCommonWave: { i,wave,globals in

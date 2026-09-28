@@ -4,6 +4,7 @@ import Foundation
 /// The caller's path cache is committed only after this method returns.
 public struct OriginalRegisteredSoundLoading {
     public private(set) var buffers: [Int: OriginalWaveLoadResult] = [:]
+    public private(set) var owners: [Int: OriginalWaveOwnership] = [:]
     public init() {}
 
     public mutating func load(_ request: OriginalSoundRegistration, device: UInt32, outputBefore: UInt32,
@@ -11,14 +12,23 @@ public struct OriginalRegisteredSoundLoading {
                               outputStored: (UInt32) throws -> Void = { _ in },
                               onWave: (OriginalWaveEvent) throws -> Void = { _ in },
                               onVolume: ([UInt32]) throws -> Void = { _ in }) throws {
+        try load(request,device:device,outputBefore:outputBefore,preparation:.legacy(platform),
+            fileSource:fileSource,outputStored:outputStored,onWave:onWave,onVolume:onVolume)
+    }
+
+    public mutating func load(_ request: OriginalSoundRegistration, device: UInt32, outputBefore: UInt32,
+                              preparation: OriginalWavePreparation, fileSource: (String) throws -> [UInt8],
+                              outputStored: (UInt32) throws -> Void = { _ in },
+                              onWave: (OriginalWaveEvent) throws -> Void = { _ in },
+                              onVolume: ([UInt32]) throws -> Void = { _ in }) throws {
         // The parent skips the helper entirely when audio is disabled.
         guard device != 0 else { return }
         guard request.index >= 0, request.index <= (0x2e00-1)/20,
-              platform.device == device, platform.destination == 0x452948+UInt32(request.index)*4,
+              preparation.device == device, preparation.destination == 0x452948+UInt32(request.index)*4,
               buffers[request.index] == nil else { throw OriginalStateError.invalidStorage("Registered sound device/index binding") }
-        let file = try platform.stream == 0 ? [] : fileSource(request.path)
-        let result = try OriginalWaveLoader.load(path: request.path.unicodeScalars.map { UInt8($0.value) },
-            file: file, output: outputBefore, platform: platform, outputStored: outputStored, observe: onWave)
+        let file = try preparation.stream == 0 ? [] : fileSource(request.path)
+        let result = try preparation.load(path: request.path.unicodeScalars.map { UInt8($0.value) },
+            file: file, output: outputBefore, outputStored: outputStored, observe: onWave)
         guard result.exit == .returned, result.output != 0 else {
             // The EXE dereferences the resulting buffer even after an ordinary
             // false return. Do not silently advance the cache past that fault.
@@ -27,5 +37,6 @@ public struct OriginalRegisteredSoundLoading {
         try onVolume([result.output, UInt32(bitPattern: -10000)])
         // SetVolume's HRESULT is ignored; no buffer is released by this caller.
         buffers[request.index] = result
+        owners[request.index] = preparation.ownership(index:request.index,path:request.path,result:result)
     }
 }

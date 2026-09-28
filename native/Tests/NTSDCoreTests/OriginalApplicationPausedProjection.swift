@@ -100,7 +100,7 @@ enum OriginalApplicationPausedProjection {
     }
     /// Six explicit OS message iterations, including key-up after a key already
     /// consumed by input control. Source table writes have a different provenance.
-    static func acquire(_ app: inout I.C.A,_ call: Int) throws -> Int {
+    static func acquire(_ app: inout I.C.A,_ call: Int,driver: OriginalApplicationLoadedTestDriver? = nil) throws -> Int {
         let messages: [Int:(UInt32,UInt32)] = [1:(0x100,112),2:(0x101,112),5:(0x100,113),6:(0x101,113),11:(0x100,112),12:(0x101,112)]
         guard let (message,key) = messages[call] else { return 0 }
         let old = try XCTUnwrap(app.session),before = app
@@ -116,7 +116,8 @@ enum OriginalApplicationPausedProjection {
         var msg = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:28),defined:[Bool](repeating:true,count:28))
         try msg.write(old.state.full.integer(at:0x4546f4-0x44d000,as:UInt32.self),at:0)
         try msg.write(message,at:4);try msg.write(key,at:8)
-        try I.C.key(&app,message,key)
+        if let driver { try driver.key(message,key);app = driver.core }
+        else { try I.C.key(&app,message,key) }
         let current = try XCTUnwrap(app.session)
         try I.sameState(current.state,expected)
         try P.require(current.loop.message == msg && current.loop.counter == counter && current.loop.timer.baseline == old.loop.timer.baseline,"Paused acquisition entire MSG/counter/timer")

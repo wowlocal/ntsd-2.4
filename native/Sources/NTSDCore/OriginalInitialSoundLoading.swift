@@ -20,6 +20,20 @@ public enum OriginalInitialSoundLoading {
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             store: (Int, [UInt8]) throws -> Void = { _, _ in },
+                            audio: OriginalWaveRequest.Factory? = nil,
+                            observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
+        try load(globals:&globals,targetSurface:targetSurface,fileSource:fileSource,
+            preparation:{ .legacy(try platform($0,$1,$2),audio) },afterWave:afterWave,
+            attemptedWave:attemptedWave,store:store,observe:observe)
+    }
+
+    public static func load(globals: inout OriginalStateRecord, targetSurface: UInt32,
+                            fileSource: (String) throws -> [UInt8],
+                            preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
+                            afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            store: (Int, [UInt8]) throws -> Void = { _, _ in },
+                            ownedWave: (Int, OriginalWaveOwnership) throws -> Void = { _,_ in },
                             observe: (OriginalInitialSoundEvent) throws -> Void = { _ in }) throws {
         var candidate = globals
         let base = OriginalMatchPreparation.globalBase
@@ -36,15 +50,15 @@ public enum OriginalInitialSoundLoading {
             }
         }
         for (index,path) in paths.enumerated() {
-            let destination = UInt32(0x451db0+index*4), input = try platform(index,path,destination)
+            let destination = UInt32(0x451db0+index*4), input = try preparation(index,path,destination)
             guard input.destination == destination,
                   try candidate.integer(at: 0x44eecc-base, as: UInt32.self) == input.device else {
                 throw OriginalStateError.invalidStorage("Initial sound device/destination binding")
             }
             try observe(.init(wave: .init(.load, [destination], [Array(path.utf8)])))
             let file = try input.device == 0 || input.stream == 0 ? [] : fileSource(path)
-            let result = try OriginalWaveLoader.load(path: Array(path.utf8), file: file,
-                output: candidate.integer(at: Int(destination)-base, as: UInt32.self), platform: input,
+            let result = try input.load(path: Array(path.utf8), file: file,
+                output: candidate.integer(at: Int(destination)-base, as: UInt32.self),
                 outputStored: { value in
                     try candidate.write(value, at: Int(destination)-base)
                     try store(Int(destination),(0..<4).map { UInt8(truncatingIfNeeded:value >> ($0*8)) })
@@ -54,6 +68,7 @@ public enum OriginalInitialSoundLoading {
             try attemptedWave(index,result,candidate)
             guard result.exit == .returned else { throw OriginalStateError.invalidStorage("Invalid original CreateSoundBuffer continuation") }
             try candidate.write(result.output, at: Int(destination)-base)
+            try ownedWave(index,input.ownership(index:index,path:path,result:result))
             try afterWave(index,result,candidate)
         }
         // Individual false returns are ignored by this caller. Count is always

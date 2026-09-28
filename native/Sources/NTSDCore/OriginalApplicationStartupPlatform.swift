@@ -31,6 +31,9 @@ public enum OriginalApplicationStartupOperation: Codable {
     case joystick(OriginalInputStartup.Request,OriginalInputStartup.Response)
     case sound(OriginalMenuSoundStartup.Event,OriginalMenuSoundStartup.Platform)
     case wave(OriginalWaveEvent,OriginalWavePlatform)
+    case soundReply(OriginalMenuSoundStartup.Event,OriginalSoundResponse)
+    case waveReply(OriginalWaveBinding,OriginalWaveRequest,OriginalWaveResponse)
+    case wavePrepared(OriginalWaveBinding,OriginalWaveEvent,OriginalWaveInput)
 
     /// Classify the log before any future host delivery. Fetching an immutable
     /// file input is not a second mmioOpen, and PCM copies are Core-owned work.
@@ -40,6 +43,7 @@ public enum OriginalApplicationStartupOperation: Codable {
         case .panelAllocation,.calendarAllocation:return .ownedMemory
         case let .music(event,_):return event.kind == .allocate ? .ownedMemory : .platform
         case let .wave(event,_):return [.allocate,.copy,.free].contains(event.kind) ? .ownedMemory : .platform
+        case let .wavePrepared(_,event,_):return [.allocate,.free].contains(event.kind) ? .ownedMemory : .platform
         default:return .platform
         }
     }
@@ -53,10 +57,23 @@ final class OriginalApplicationStartupBridge<P: OriginalApplicationStartupPlatfo
     var graphics = OriginalApplicationGraphics()
     var graphicsCommands: [OriginalApplicationGraphics.Command] = []
     private var currentWave: OriginalWavePlatform?
+    private var currentAudioWave: (OriginalWaveBinding,OriginalWaveInput)?
     init(_ platform: P) { self.platform = platform }
     var panelIO: OriginalWinMainStartup.PanelIO { platform.panelIO }
     var environmentTZ: [UInt8]? { platform.environmentTZ }
     var sound: OriginalMenuSoundStartup.Platform { platform.sound }
+    var observesAudio: Bool { platform.observesAudio }
+    func soundRequest(_ event: OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse {
+        let response = try platform.soundRequest(event);operations.append(.soundReply(event,response));return response
+    }
+    func waveInput(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWaveInput {
+        let input = try platform.waveInput(index,path,destination,device)
+        currentAudioWave = (.init(index,path,destination,device),input);return input
+    }
+    func waveRequest(_ binding: OriginalWaveBinding,_ request: OriginalWaveRequest) throws -> OriginalWaveResponse {
+        let response = try platform.waveRequest(binding,request)
+        operations.append(.waveReply(binding,request,response));return response
+    }
     func milliseconds() throws -> UInt32 {
         let r = try platform.milliseconds();operations.append(.milliseconds(r));return r
     }
@@ -119,7 +136,12 @@ final class OriginalApplicationStartupBridge<P: OriginalApplicationStartupPlatfo
     }
     func observe(_ observation: OriginalWinMainStartup.Observation) throws {
         if case let .sound(event,_) = observation {
-            if let wave = event.wave {
+            if observesAudio {
+                if let wave = event.wave, ![.load,.create,.lock,.restore,.copy,.unlock,.message].contains(wave.kind) {
+                    guard let (binding,input) = currentAudioWave else { throw OriginalStateError.invalidStorage("Startup audio input lifetime") }
+                    operations.append(.wavePrepared(binding,wave,input))
+                }
+            } else if let wave = event.wave {
                 guard let input = currentWave else { throw OriginalStateError.invalidStorage("Startup WAV response lifetime") }
                 if wave.kind != .load { operations.append(.wave(wave,input)) }
             } else if ["deviceCreate","cooperativeLevel","message"].contains(event.kind) {

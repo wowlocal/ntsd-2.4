@@ -8,14 +8,14 @@ final class OriginalApplicationActiveBodyTests: XCTestCase {
     typealias P = I.P
     typealias S = OriginalApplicationActiveBodyControl
     typealias M = OriginalApplicationLoadedMenuSession
-    func control(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+    func control(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveBodySource(reverse)
         let sourcePoints = try source.compareControl()
         for n in [Double.leastNonzeroMagnitude,Double.infinity,1e-101] {
             XCTAssertThrowsError(try S.Actor.finite(n),"Reject unsupported numeric comparison domain")
         }
         var draws: [S.Draw] = [],controls = 0,primitiveDraws = 0
-        try OriginalApplicationActiveGameplayTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveGameplayTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplay(.control(let slot,let value)):
                 switch value {

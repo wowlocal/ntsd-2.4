@@ -13,12 +13,12 @@ final class OriginalApplicationActiveGraphicsTests: XCTestCase {
         let state: OriginalApplicationMenuSession.State
         let events: [G.Event]
     }
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveGraphicsSource(reverse),sourceCount = try source.compare()
         var previous: M.Snapshot?,front: [OriginalFrontScreenEvent] = [],endpoints: [Endpoint] = []
         var computedGraphics: [G.Event] = [],wholeRelations: [G.Event] = []
         var stageIndex = 0,count = 0,events = 0,unknown = 0
-        try OriginalApplicationActiveContactsTests().sequence(reverse,onBody:{ call,ready,observation in
+        try OriginalApplicationActiveContactsTests().sequence(reverse,driver:driver,onBody:{ call,ready,observation in
             switch observation {
             case .front(let e):front.append(e)
             case .gameplay(.drawing),.gameplay(.impulses):break // One .front route only.

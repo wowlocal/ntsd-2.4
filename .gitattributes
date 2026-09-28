@@ -6,3 +6,5 @@ native/Tests/NTSDCoreTests/Fixtures/startup-dib-pixels.bin -text -diff
 native/Sources/NTSDCore/Resources/OriginalCommonSounds/** -text
 native/Tests/NTSDCoreTests/Fixtures/original-catalog-dib-pixels.json.zlib -text -diff
 native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session*.zlib -text -diff
+native/Sources/NTSDCore/Resources/OriginalCatalog/files/** filter=lfs diff=lfs merge=lfs -text
+native/Sources/NTSDCore/Resources/OriginalCatalog/embedded/** -text -diff

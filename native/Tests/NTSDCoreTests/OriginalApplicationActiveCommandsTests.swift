@@ -8,10 +8,10 @@ final class OriginalApplicationActiveCommandsTests: XCTestCase {
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let sourceCount = try OriginalApplicationActiveCommandsSource(reverse).compare()
         var predecessor: M.Snapshot?,endpoint: M.Snapshot?,count = 0
-        try OriginalApplicationActiveLifecycleTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveLifecycleTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplayCheckpoint(.lifecycle,let snapshot):
                 try P.require(predecessor == nil && endpoint == nil,"Single current lifecycle predecessor for commands")

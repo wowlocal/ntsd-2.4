@@ -23,6 +23,8 @@ extension OriginalApplicationCatalogSession {
         public let file: (String,String) throws -> OriginalLoadingFileAllocation
         public let wave: (OriginalSoundRegistration,UInt32) throws -> OriginalWavePlatform
         public let volume: ([UInt32]) throws -> Int32
+        public let prepareWave: (OriginalSoundRegistration,UInt32) throws -> OriginalWavePreparation
+        public let setVolume: (OriginalWaveBinding,[UInt32]) throws -> Int32
         public let time: () throws -> UInt32
         public let message: (String,[UInt8]) throws -> MessageInput
         public let finish: () throws -> Void
@@ -35,6 +37,20 @@ extension OriginalApplicationCatalogSession {
                     finish: @escaping () throws -> Void = {}) {
             self.allocate = allocate;self.bitmap = bitmap;self.file = file;self.wave = wave
             self.volume = volume;self.time = time;self.message = message;self.finish = finish
+            prepareWave = { .legacy(try wave($0,$1)) };setVolume = { _,args in try volume(args) }
+        }
+        public init(allocate: @escaping (Allocation.Kind,Int) throws -> UInt32,
+                    bitmap: @escaping (API.Request) throws -> API.Response,
+                    file: @escaping (String,String) throws -> OriginalLoadingFileAllocation,
+                    wavePreparation: @escaping (OriginalSoundRegistration,UInt32) throws -> OriginalWavePreparation,
+                    volume: @escaping (OriginalWaveBinding,[UInt32]) throws -> Int32,
+                    time: @escaping () throws -> UInt32,
+                    message: @escaping (String,[UInt8]) throws -> MessageInput,
+                    finish: @escaping () throws -> Void = {}) {
+            self.allocate = allocate;self.bitmap = bitmap;self.file = file;prepareWave = wavePreparation
+            setVolume = volume;self.time = time;self.message = message;self.finish = finish
+            wave = { _,_ in throw Boundary.dependency("Observed WAV has no aggregate future reply") }
+            self.volume = { _ in throw Boundary.dependency("Observed volume requires its binding") }
         }
     }
     static func fixedControls(_ input: Inputs) -> Controls {

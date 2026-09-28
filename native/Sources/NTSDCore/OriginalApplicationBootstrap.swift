@@ -67,35 +67,48 @@ public struct OriginalApplicationBootstrap {
 
     /// Every message/timer iteration commits independently. Failed first-menu
     /// work leaves startup and all previously delivered callbacks intact.
-    public mutating func step(inputs: MenuInputs,responses: Session.Responses,
+    public mutating func step(inputs: MenuInputs? = nil,responses: Session.Responses,
         queue: [Session.Loop.Response],windowDefault: [Int32],
         surface: [OriginalWindowInitialization.Response],lifecycle: [OriginalWindowInitialization.Response],
         observe: @escaping (Observation) throws -> Void = { _ in },
         menuObserve: @escaping (OriginalFrontScreenEvent) throws -> Void = { _ in },
         graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
         checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void = { _,_,_ in },
-        beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in }) throws -> Session.Outcome {
+        bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
+        beforeCommit: (Session.Loop,Session.State) throws -> Void = { _,_ in },
+        bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
+        lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
+        surfaceProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
+        frontProvider: ((Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil) throws -> Session.Outcome {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
+        if lifecycleProvider != nil && !lifecycle.isEmpty { throw Session.Boundary.dependency("Observed lifecycle requests cannot mix prepared response arrays") }
+        if surfaceProvider != nil && !surface.isEmpty { throw Session.Boundary.dependency("Observed surface requests cannot mix prepared response arrays") }
         var qi = 0,wi = 0,si = 0,li = 0
         func take<T>(_ values: [T],_ index: inout Int,_ name: String) throws -> T {
             guard index < values.count else { throw Session.Boundary.dependency("Bootstrap "+name+" response") }
             defer { index += 1 };return values[index]
+        }
+        func requireConsumed() throws {
+            guard qi == queue.count,wi == windowDefault.count,si == surface.count,li == lifecycle.count else {
+                throw Session.Boundary.dependency("Unused bootstrap iteration responses")
+            }
         }
         let result = try next.step(responses:responses,queue:{ q in
             let r = try take(queue,&qi,"queue");try observe(.queueResponse(q,r));return r
         },windowDefault:{ q in
             let r = try take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
         },surface:{ q in
-            let r = try take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
-        },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,beforeCommit:{ loop,state in
-            guard qi == queue.count,wi == windowDefault.count,si == surface.count,li == lifecycle.count else {
-                throw Session.Boundary.dependency("Unused bootstrap iteration responses")
-            }
+            let r = try surfaceProvider?(q) ?? take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
+        },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in
+            try requireConsumed()
             try beforeCommit(loop,state)
-        },initialization:inputs,bootstrapObserve:observe,lifecycle:{ q in
-            let r = try take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
+        },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,bootstrapObserve:observe,lifecycle:{ q in
+            let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
         })
-        if case .committed = result { session = next }
+        switch result {
+        case .committed:session = next
+        case .loading:try requireConsumed()
+        }
         return result
     }
 
@@ -103,6 +116,7 @@ public struct OriginalApplicationBootstrap {
     /// globals nor operations. A later menu failure cannot undo this commit.
     public mutating func start<P: OriginalApplicationStartupPlatform>(
         instance: UInt32,show: Int32,initial: OriginalStateRecord,platform: inout P,
+        prepare: (P) throws -> Void = { _ in },
         store: (P,Int,[UInt8]) throws -> Void = { _,_,_ in },
         beforeCommit: (OriginalWinMainStartup,Session,P) throws -> Void = { _,_,_ in },
         failedAttempt: (P,Error) -> Void = { _,_ in }) throws -> Started {
@@ -114,6 +128,9 @@ public struct OriginalApplicationBootstrap {
         guard staged !== platform else { throw Boundary.sharedStartupAttempt }
         let bridge = OriginalApplicationStartupBridge(staged)
         do {
+            // Only independent staged state and immutable prepared observations.
+            // No host IO or shared allocator/queue mutation is permitted here.
+            try prepare(staged)
             var owner = OriginalWinMainStartup()
             var globals = try Session.State.slice(initial,0,OriginalMatchPreparation.globalSize)
             try owner.run(instance:instance,show:show,globals:&globals,platform:bridge,

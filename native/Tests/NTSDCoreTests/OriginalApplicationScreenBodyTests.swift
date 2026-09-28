@@ -13,14 +13,20 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
         let c: Corpus,frontIndices: [Int],rawCases: [[String:Any]]
+        let sourceControlWord: UInt32
         var cache: [String:[UInt8]] = [:]
-        init(_ front: F.Resources) throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_SCREEN_BODY"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-screen-body",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
-            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,43)
+        init(_ front: F.Resources, supplied: Data? = nil, expectedCounts: (cases: Int, parents: Int) = (43,39)) throws {
+            sourceControlWord = front.sourceControlWord
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_SCREEN_BODY"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-screen-body",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
+            }
+            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,expectedCounts.cases)
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any]),parents = try XCTUnwrap(raw["frontParents"] as? [String:[String:Any]])
             rawCases = try XCTUnwrap(raw["cases"] as? [[String:Any]])
-            XCTAssertEqual(parents.count,39)
+            XCTAssertEqual(parents.count,expectedCounts.parents)
             frontIndices = try c.cases.map { c in
                 let parent = try XCTUnwrap(parents[c.parent])
                 return try XCTUnwrap(front.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:parent) })
@@ -95,7 +101,7 @@ final class OriginalApplicationScreenBodyTests: XCTestCase {
                 if produced { ownedBytes += 1 }
             }
             XCTAssertEqual(ownedBytes,96);XCTAssertEqual(adapter.draws,2)
-            XCTAssertEqual(c.after.pc,0x4275cb);XCTAssertEqual(c.after.sp,0x1000ea74);XCTAssertEqual(c.after.cw,0x37f)
+            XCTAssertEqual(c.after.pc,0x4275cb);XCTAssertEqual(c.after.sp,0x1000ea74);XCTAssertEqual(c.after.cw,r.sourceControlWord)
             XCTAssertEqual(c.before.registers,c.after.registers);XCTAssertEqual(all.count,c.records.count)
             for record in c.records {
                 let bitmap = try XCTUnwrap(all[record.address]);var bytes = try r.blob(record.bytes)

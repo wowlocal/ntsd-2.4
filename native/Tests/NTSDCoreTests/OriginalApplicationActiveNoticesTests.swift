@@ -8,11 +8,11 @@ final class OriginalApplicationActiveNoticesTests: XCTestCase {
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let sourceCount = try OriginalApplicationActiveNoticesSource(reverse).compare()
         var before: M.Snapshot?,endpoint: M.Snapshot?
         var count = 0,rollbacks = 0
-        try OriginalApplicationActiveHUDTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveHUDTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplayCheckpoint(.hud,let snapshot):
                 try P.require(before == nil && endpoint == nil,"Single actual HUD predecessor")

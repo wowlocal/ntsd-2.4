@@ -331,7 +331,17 @@ struct OriginalFrameScanner {
     /// see docs/research/CRT_SCANNER.md and CATALOG_PRECISION.md.
     mutating func binary64() throws -> Double? {
         skipSpace()
-        let suffix = String(String.UnicodeScalarView(bytes[position...].map { UnicodeScalar($0) }))
+        // The anchored regex below can consume only this ASCII alphabet and
+        // has no lookaround. Text after its first other byte cannot affect the
+        // match. Keep the regex/conversion and scanner state updates unchanged.
+        var end = position
+        while end < bytes.count {
+            let byte = bytes[end]
+            guard (48...57).contains(byte) || byte == 43 || byte == 45 ||
+                byte == 46 || byte == 69 || byte == 101 else { break }
+            end += 1
+        }
+        let suffix = String(String.UnicodeScalarView(bytes[position..<end].map { UnicodeScalar($0) }))
         guard let range = suffix.range(of: #"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?"#, options: .regularExpression) else { try observeRead?(position); return nil }
         let literal = String(suffix[range])
         guard let value = Double(literal), value.isFinite else {

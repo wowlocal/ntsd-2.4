@@ -29,12 +29,16 @@ final class OriginalBitmapSurfaceLoadingTests: XCTestCase {
     final class Resources {
         let c: Corpus,rawCases: [[String:Any]]
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_BITMAP_SURFACE_LOADING"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-bitmap-surface-loading",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:64_000_000)
+        init(supplied: Data? = nil, expectedCases: Int = 69) throws {
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_BITMAP_SURFACE_LOADING"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-bitmap-surface-loading",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:64_000_000)
+            }
             c = try JSONDecoder().decode(Corpus.self,from:data)
             rawCases = try XCTUnwrap((JSONSerialization.jsonObject(with:data) as? [String:Any])?["cases"] as? [[String:Any]])
-            XCTAssertEqual(c.cases.count,69);XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
+            XCTAssertEqual(c.cases.count,expectedCases);XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         }
         func blob(_ key: String) throws -> [UInt8] {
             if let b = cache[key] { return b }

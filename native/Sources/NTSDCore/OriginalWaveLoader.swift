@@ -45,6 +45,9 @@ public struct OriginalWaveLoadResult {
     public var temporary: OriginalStateRecord?, temporaryLive = false
     public var first: OriginalStateRecord, second: OriginalStateRecord?
     public var format: OriginalStateRecord?, descriptor: OriginalStateRecord?
+    public var initialStorage: OriginalWaveStorage?
+    public var lockReplies: [OriginalWaveResponse] = []
+    public var regions: [UInt32: OriginalStateRecord] = [:]
 }
 
 /// Recovered 4014e0 through its real caller-visible decisions and buffer copies.
@@ -70,33 +73,58 @@ public enum OriginalWaveLoader {
     }
 
     public static func load(path: [UInt8], file: [UInt8], output: UInt32, platform p: OriginalWavePlatform,
+                            audio: OriginalWaveRequest.Handler? = nil,
                             observe: (OriginalWaveEvent) throws -> Void = { _ in }) throws -> OriginalWaveLoadResult {
-        try load(path:path,file:file,output:output,platform:p,outputStored:{ _ in },observe:observe)
+        try load(path:path,file:file,output:output,platform:p,outputStored:{ _ in },audio:audio,observe:observe)
     }
 
     public static func load(path: [UInt8], file: [UInt8], output: UInt32, platform p: OriginalWavePlatform,
                             outputStored: (UInt32) throws -> Void,
+                            audio: OriginalWaveRequest.Handler? = nil,
                             observe: (OriginalWaveEvent) throws -> Void = { _ in }) throws -> OriginalWaveLoadResult {
-        guard !path.contains(0), path.count < 256, p.descendResults.count == 3,
-              (0...2_000_000).contains(p.firstCount), (0...2_000_000).contains(p.secondCount),
-              p.lockResults.count == 2 else { throw error("Platform input extent") }
-        func backing(_ count: Int, _ origin: Int = 0) throws -> OriginalStateRecord {
-            try .init(bytes: (0..<count).map { p.ramp ? UInt8(truncatingIfNeeded: origin+$0) : 0xa5 },
-                      defined: [Bool](repeating: false, count: count))
+        let legacy = try OriginalWaveLegacyReplies(p)
+        if let audio {
+            return try run(path:path,file:file,output:output,input:legacy.input,request:audio,
+                legacyFirstPointer:nil,outputStored:outputStored,observe:observe)
         }
-        var result = try OriginalWaveLoadResult(output: output, first: backing(p.firstCount),
-                                               second: p.secondPointer == 0 ? nil : backing(p.secondCount))
-        func event(_ kind: OriginalWaveEvent.Kind, _ args: [UInt32] = [], _ strings: [[UInt8]] = []) throws {
-            try observe(.init(kind, args, strings))
+        return try run(path:path,file:file,output:output,input:legacy.input,request:legacy.reply,
+            legacyFirstPointer:p.firstPointer,outputStored:outputStored,observe:observe)
+    }
+
+    public static func loadObserved(path: [UInt8],file: [UInt8],output: UInt32,input: OriginalWaveInput,
+        request: OriginalWaveRequest.Handler,outputStored: (UInt32) throws -> Void = { _ in },
+        observe: (OriginalWaveEvent) throws -> Void = { _ in }) throws -> OriginalWaveLoadResult {
+        try run(path:path,file:file,output:output,input:input,request:request,legacyFirstPointer:nil,
+            outputStored:outputStored,observe:observe)
+    }
+
+    private static func run(path: [UInt8],file: [UInt8],output: UInt32,input p: OriginalWaveInput,
+        request: OriginalWaveRequest.Handler,legacyFirstPointer: UInt32?,outputStored: (UInt32) throws -> Void,
+        observe: (OriginalWaveEvent) throws -> Void) throws -> OriginalWaveLoadResult {
+        guard !path.contains(0),path.count < 256,p.descendResults.count == 3,
+            p.storage.first.bytes.count <= 2_000_000,(p.storage.second?.bytes.count ?? 0) <= 2_000_000 else {
+            throw error("Platform input extent")
+        }
+        func backing(_ count: Int,_ origin: Int = 0) throws -> OriginalStateRecord { try p.storage.backing(count,origin) }
+        var result = try OriginalWaveLoadResult(output:output,first:p.storage.first.record(),second:p.storage.second?.record())
+        result.initialStorage = p.storage
+        func event(_ kind: OriginalWaveEvent.Kind,_ args: [UInt32] = [],_ strings: [[UInt8]] = []) throws {
+            try observe(.init(kind,args,strings))
+        }
+        func audio(_ q: OriginalWaveRequest) throws -> OriginalWaveResponse {
+            try q.validate();try observe(q.event)
+            let response = try request(q)
+            guard q.accepts(response) else { throw error("Audio response family") }
+            return response
         }
         func close() throws { try event(.close, [p.stream, 0]) }
-        func message(_ text: String) throws { try event(.message, [0, 0], [bytes(text), []]) }
+        func message(_ text: String) throws { _ = try audio(.init(.init(.message,[0,0],[bytes(text),[]]))) }
         if p.device == 0 { result.returned = 1; return result } // output is untouched
         result.output = 0
         try outputStored(0)
         try event(.open, [0, 0x10000], [path])
         if p.stream == 0 {
-            try event(.message, [0, 0], [bytes("Could not Open Wave File <")+path+bytes(">"), path])
+            _ = try audio(.init(.init(.message,[0,0],[bytes("Could not Open Wave File <")+path+bytes(">"),path])))
             return result
         }
         try event(.descend, [p.stream, 0x20, 0, 0, 0x45564157])
@@ -169,8 +197,10 @@ public enum OriginalWaveLoader {
         // lpwfxFormat is normalized to zero only after the oracle verifies its
         // exact stack address. Other descriptor bytes have no normalization.
         result.descriptor = descriptor
-        try event(.create, [p.device, 0], [descriptor.bytes, format.bytes])
-        if p.createResult != 0 {
+        let created = try audio(.init(.init(.create,[p.device,0],[descriptor.bytes,format.bytes]),
+            structures:[.init(descriptor),.init(format)]))
+        guard case .created(let createResult,let createdBuffer) = created else { throw error("Create response") }
+        if createResult != 0 {
             try message("Could not Create Sound Buffer.")
             try event(.free); result.temporaryLive = false
             result.exit = .invalidCreateContinuation; result.returned = nil
@@ -178,25 +208,50 @@ public enum OriginalWaveLoader {
             // This boundary is recorded, not turned into a successful load.
             return result
         }
-        guard p.buffer != 0, p.firstPointer != 0 else { throw error("Null device output") }
-        try event(.lock, [p.buffer, 0, UInt32(data.count), 0])
-        if p.lockResults[0] == 0x88780096 {
-            try event(.restore, [p.buffer])
-            try event(.lock, [p.buffer, 0, UInt32(data.count), 0])
+        guard let buffer = createdBuffer,buffer != 0 else { throw error("Null device output") }
+        // Preserve the old aggregate adapter's preflight boundary. Actual replies
+        // have no future first pointer to inspect before issuing Lock.
+        if let legacyFirstPointer,legacyFirstPointer == 0 { throw error("Null device output") }
+        func lock() throws -> OriginalWaveResponse {
+            let reply = try audio(.init(.init(.lock,[buffer,0,UInt32(data.count),0])))
+            result.lockReplies.append(reply);return reply
         }
-        // The final Lock HRESULT is NOT checked. Copy lengths/pointers are
-        // explicit valid boundary outputs even for failing-HRESULT controls.
-        guard p.firstCount+p.secondCount <= data.count else { throw error("Lock lengths exceed source") }
-        try event(.copy, [0, 0, UInt32(p.firstCount)])
-        for i in 0..<p.firstCount { try result.first.write(result.temporary!.bytes[i], at: i) }
-        if p.secondPointer != 0 {
-            try event(.copy, [1, UInt32(p.firstCount), UInt32(p.secondCount)])
-            for i in 0..<p.secondCount { try result.second!.write(result.temporary!.bytes[p.firstCount+i], at: i) }
+        var locked = try lock()
+        guard case .locked(let firstResult,_) = locked else { throw error("Lock response") }
+        if firstResult == 0x88780096 {
+            _ = try audio(.init(.init(.restore,[buffer])))
+            locked = try lock()
         }
-        try event(.unlock, [p.buffer, p.firstPointer, UInt32(p.firstCount), p.secondPointer, UInt32(p.secondCount)])
+        // Final HRESULT is ignored, while actual output spans must have owners.
+        guard case .locked(_,let outputs?) = locked,
+            outputs.firstPointer != 0,(0...2_000_000).contains(outputs.firstCount),
+            (0...2_000_000).contains(outputs.secondCount),outputs.firstCount <= data.count,
+            outputs.secondCount <= data.count-outputs.firstCount else { throw error("Lock output extent") }
+        func bind(_ token: UInt32,_ count: Int,_ region: OriginalWaveRegion?) throws {
+            guard let region,region.token == token,region.storage.bytes.count >= count,
+                region.storage.bytes.count <= 2_000_000 else { throw error("Lock region binding") }
+            let record = try region.storage.record()
+            if let earlier = result.regions[token],earlier != record { throw error("Conflicting Lock alias backing") }
+            result.regions[token] = record
+        }
+        try bind(outputs.firstPointer,outputs.firstCount,outputs.first)
+        if outputs.secondPointer != 0 { try bind(outputs.secondPointer,outputs.secondCount,outputs.second) }
+        func copy(_ index: UInt32,_ offset: Int,_ count: Int,_ token: UInt32) throws {
+            guard let temporary = result.temporary,var region = result.regions[token] else { throw error("Copy storage") }
+            let payload = Array(temporary.bytes[offset..<(offset+count)]),mask = Array(temporary.defined[offset..<(offset+count)])
+            _ = try audio(.init(.init(.copy,[index,UInt32(offset),UInt32(count)]),target:token,bytes:payload,defined:mask))
+            var raw = region.bytes,known = region.defined
+            raw.replaceSubrange(0..<count,with:payload);known.replaceSubrange(0..<count,with:mask)
+            region = try .init(bytes:raw,defined:known);result.regions[token] = region
+        }
+        try copy(0,0,outputs.firstCount,outputs.firstPointer)
+        if outputs.secondPointer != 0 { try copy(1,outputs.firstCount,outputs.secondCount,outputs.secondPointer) }
+        result.first = result.regions[outputs.firstPointer]!
+        result.second = outputs.secondPointer == 0 ? nil : result.regions[outputs.secondPointer]
+        _ = try audio(.init(.init(.unlock,[buffer,outputs.firstPointer,UInt32(outputs.firstCount),outputs.secondPointer,UInt32(outputs.secondCount)])))
         try event(.free); result.temporaryLive = false
-        result.output = p.buffer; result.returned = 1
-        try outputStored(p.buffer)
+        result.output = buffer; result.returned = 1
+        try outputStored(buffer)
         return result
     }
 }

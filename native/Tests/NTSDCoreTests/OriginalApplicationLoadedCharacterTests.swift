@@ -46,22 +46,21 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
     func testOwnedKeyboardCharacterChainsReachBothReadyThroughBootstrapReturns() throws {
         for reverse in [false,true] { _ = try characterChain(reverse) }
     }
-    func characterChain(_ reverse: Bool) throws -> A {
+    func characterChain(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil) throws -> A {
             let r = try R(reverse)
-            var (app,ready) = try Self.selected(reverse)
-            let first = ready.match
-            try r.catalogInputs(first)
+            let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
+            var first: OriginalMatchPreparation?
             var portraitChecked = false
             for (index,item) in r.corpus.cases.enumerated() {
                 if index == 0 { XCTAssertTrue(item.acquired.isEmpty);XCTAssertNil(item.cycle) }
                 else {
-                    try Self.acquire(&app,item.acquired)
-                    let entry = try C.next(&app)
-                    var cycle = try app.makeLoadedCycle(pending:entry),env = C.InputEnvironment()
-                    ready = try C.input(&cycle,&env)
-                    XCTAssertEqual(env.phases,[Int32](repeating:Int32((index+1)%2),count:6))
+                    try driver.acquire(item.acquired)
+                    try driver.next()
                 }
-                let before = app
+                let before = driver.core
+                let outcome = try driver.prepare(phase:Int32((index+1)%2)) { ready in
+                if first == nil { first = ready.match;try r.catalogInputs(ready.match) }
+                let first = try XCTUnwrap(first)
                 var own = ready.match
                 XCTAssertEqual(try own.globals.integer(at:0x7c,as:UInt32.self),0)
                 // Cached resource prefix unconditionally stores the current menu
@@ -101,14 +100,17 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
                     e.kind == "draw" && r.catalog.bitmaps.contains { $0.address == e.arguments[0] }
                 }) {
                     let bitmapIndex = try XCTUnwrap(r.catalog.bitmaps.firstIndex { $0.address == sourceDraw.arguments[0] })
-                    try self.portrait(ready,parent:app,index:bitmapIndex)
+                    try self.portrait(ready,parent:before,index:bitmapIndex)
                     portraitChecked = true
                 }
-                try C.unchanged(app,before);try C.finish(&app,returned)
-                XCTAssertThrowsError(try C.finish(&app,returned))
-                try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(app.startup),XCTUnwrap(before.startup))
+                return .returned(returned)
+                }
+                guard case .returned(let returned) = outcome else { throw Stop.unexpected("Human Start boundary") }
+                try C.unchanged(driver.core,before);try driver.finish(returned)
+                try driver.rejectConsumed(returned)
+                try OriginalApplicationBootstrapTests.sameStartup(XCTUnwrap(driver.core.startup),XCTUnwrap(before.startup))
             }
-            let final = try XCTUnwrap(app.session?.loadedOwners).match
+            let final = try XCTUnwrap(driver.core.session?.loadedOwners).match
             for (seat,ordinal) in [(0,17),(1,21)] {
                 XCTAssertEqual(try final.globals.integer(at:0x451248-0x44d000+seat*4,as:Int32.self),Int32(ordinal))
                 XCTAssertEqual(try final.globals.integer(at:0x451288-0x44d000+seat*4,as:Int32.self),3)
@@ -120,7 +122,7 @@ final class OriginalApplicationLoadedCharacterTests: XCTestCase {
             XCTAssertTrue(portraitChecked)
             XCTAssertEqual(r.points,408);XCTAssertEqual(r.draws,312);XCTAssertEqual(r.sounds,6)
             print("Owned character: 34 Bootstrap returns / \(r.points) source semantic checkpoints / \(r.draws) draws / \(r.reads) current reads / \(r.blits) Blt / 18 sound methods; reverse=\(reverse)")
-            return app
+            return driver.core
     }
     func returning(_ returned: M.S.PendingReturn,body: OriginalMatchPreparation,environment: M.Environment,
                    screenEvents: Int,reference: R,item: CharacterScreenReference.Case) throws {

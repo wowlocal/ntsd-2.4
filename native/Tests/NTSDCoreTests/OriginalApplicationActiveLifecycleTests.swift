@@ -9,11 +9,11 @@ final class OriginalApplicationActiveLifecycleTests: XCTestCase {
     typealias M = OriginalApplicationLoadedMenuSession
     typealias G = OriginalApplicationGameplaySession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActiveLifecycleSource(reverse),sourceCount = try source.compare()
         var predecessor: M.Snapshot?,endpoint: M.Snapshot?,computed: Q?
         var events: [Q.Event] = [],fronts = 0,count = 0,constructors = 0,sounds = 0,rollback = 0
-        try OriginalApplicationActiveGraphicsTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveGraphicsTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplayCheckpoint(.impulses,let snapshot):
                 try P.require(predecessor == nil && endpoint == nil && events.isEmpty,"Single current impulse predecessor")

@@ -78,6 +78,7 @@ public struct OriginalInitialLoading {
                             allocateInterface: (Int) throws -> OriginalInterfaceAllocation,
                             interfaceSource: (Int, String) throws -> OriginalBitmapInput,
                             interfaceDevice: (Int) throws -> (surface: UInt32, colorKeyResult: Int32),
+                            audio: OriginalWaveRequest.Factory? = nil,
                             afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
                             afterCommonWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             afterCommon: (OriginalStateRecord) throws -> Void = { _ in },
@@ -94,7 +95,7 @@ public struct OriginalInitialLoading {
             throw OriginalStateError.invalidStorage("First loading requires flag1 and an empty sound registry")
         }
         let prefix = try OriginalInitialLoadingCommon.load(globals:initialGlobals,targetSurface:targetSurface,
-            fileSource:fileSource,platform:wavePlatform,afterPrologue:afterPrologue,
+            fileSource:fileSource,platform:wavePlatform,audio:audio,afterPrologue:afterPrologue,
             afterWave:afterCommonWave,observe:observeCommon)
         var globals = prefix.globals
         try afterCommon(globals)

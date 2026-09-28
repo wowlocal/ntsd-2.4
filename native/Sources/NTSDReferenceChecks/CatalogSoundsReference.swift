@@ -18,7 +18,7 @@ public enum CatalogSoundsReference {
     }
     private struct Corpus: Decodable { let exeSHA256: String, calls: [Call], sources: [Source], blobs: [String: Blob], finalBuffers: String }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Catalog sounds reference: \(text)") }
-    public static func compare(catalog: Data, sounds: Data, initialSoundBytes: [UInt8]? = nil,
+    public static func compare(catalog: Data, sounds: Data, initialSoundBytes: [UInt8]? = nil, observedAudio: Bool = false,
                                onProgress: (OriginalLoadingProgress.Request) throws -> Void = { _ in },
                                onLoaded: (OriginalLoadedCatalog, OriginalRegisteredSoundLoading) throws -> Void = { _, _ in }) throws -> Result {
         let corpus = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(sounds))
@@ -66,7 +66,12 @@ public enum CatalogSoundsReference {
                   Array(before[(0x455638-base)..<(0x458438-base)]) == request.cacheBefore else { throw error("Real registration globals") }
             let device = try globals.integer(at: 0x44eecc-base, as: UInt32.self)
             var wave: [OriginalWaveEvent] = [], volume: [[UInt32]] = []
-            try loader.load(request, device: device, outputBefore: item.outputBefore, platform: item.input,
+            let preparation: OriginalWavePreparation
+            if observedAudio {
+                let replies = try OriginalWaveLegacyReplies(item.input)
+                preparation = .observed(replies.input,replies.reply,.addressed,{ nil })
+            } else { preparation = .legacy(item.input) }
+            try loader.load(request, device: device, outputBefore: item.outputBefore, preparation: preparation,
                 fileSource: { path in
                     guard path == request.path else { throw error("WAV file request") }
                     return try blob(item.file)

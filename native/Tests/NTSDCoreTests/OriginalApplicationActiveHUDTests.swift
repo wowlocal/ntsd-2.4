@@ -10,12 +10,12 @@ final class OriginalApplicationActiveHUDTests: XCTestCase {
     typealias M = OriginalApplicationLoadedMenuSession
     typealias G = OriginalApplicationCatalogGraphicsComparison
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let sourceCount = try OriginalApplicationActiveHUDSource(reverse).compare()
         var before: M.Snapshot?,endpoint: M.Snapshot?
         var earlier: [OriginalFrontScreenEvent] = [],front: [OriginalFrontScreenEvent] = [],prefix: [G.Event] = []
         var count = 0,events = 0,unknown = 0,rollbacks = 0
-        try OriginalApplicationActiveCommandsTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveCommandsTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .front(let value):
                 if before != nil { front.append(value) }

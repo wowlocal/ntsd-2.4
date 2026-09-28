@@ -24,10 +24,15 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
     final class Resources {
         let c: Corpus
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_LOADING_PREFIX"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-loading-prefix",withExtension:"json",subdirectory:"Fixtures"))
-            c = try JSONDecoder().decode(Corpus.self,from:MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:150_000_000))
-            XCTAssertEqual(c.cases.count,12)
+        init(supplied: Data? = nil,expectedCases: Int = 12) throws {
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_LOADING_PREFIX"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-loading-prefix",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:150_000_000)
+            }
+            c = try JSONDecoder().decode(Corpus.self,from:data)
+            XCTAssertEqual(c.cases.count,expectedCases)
         }
         func blob(_ h: String) throws -> [UInt8] {
             if let b = cache[h] { return b }
@@ -70,7 +75,7 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         }
     }
     @discardableResult
-    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ pending: OriginalApplicationMenuSession.PendingLoading,responses: I.Spec,fail: String? = nil) throws -> OriginalInitialLoadingCommon? {
+    func check(_ c: Case,_ r: Resources,_ own: B.OwnContext,_ pending: OriginalApplicationMenuSession.PendingLoading,responses: I.Spec,fail: String? = nil,observedAudio: Bool = false) throws -> OriginalInitialLoadingCommon? {
         let retainedBitmapInputs = try XCTUnwrap(own.bitmapInputs)
         let retainedGraphics = try XCTUnwrap(own.applicationGraphics)
         let target = pending.target
@@ -93,7 +98,16 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             XCTAssertEqual(try files.file(String(decoding:wave.path,as:UTF8.self)),try r.blob(wave.file))
         }
         do {
-            prepared = try loading.prepareCommon(inputs:files,waves:c.loads.map(\.input),
+            var consumed = 0
+            prepared = try loading.prepareCommon(inputs:files,prepareWave:{ index,_,_,_ in
+                guard index < c.loads.count else { throw Loading.Boundary.waveReply(index) }
+                consumed += 1
+                if observedAudio {
+                    let replies = try OriginalWaveLegacyReplies(c.loads[index].input)
+                    return .observed(replies.input,replies.reply,.addressed,{ nil })
+                }
+                return .legacy(c.loads[index].input)
+            },finishWaves:{ XCTAssertEqual(consumed,c.loads.count) },
                 drawResult:responses.drawResult,presentationResult:responses.presentResult,store:a.store,
                 observe:{ event in
                     switch event {
@@ -145,7 +159,15 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
             XCTAssertEqual(prepared.common.paused,c.paused == 1)
             for i in 0..<2 { XCTAssertEqual(prepared.common.commands[i],try r.blob(c.commands[i])) }
             let encoder = JSONEncoder();encoder.outputFormatting = .sortedKeys
-            XCTAssertEqual(try encoder.encode(prepared.waveInputs),try encoder.encode(c.loads.map(\.input)))
+            if observedAudio {
+                XCTAssertTrue(prepared.waveInputs.isEmpty)
+                XCTAssertEqual(prepared.waveOwners.count,c.loads.count)
+                for i in c.loads.indices {
+                    XCTAssertNil(prepared.waveOwners[i].legacy)
+                    XCTAssertEqual(prepared.waveOwners[i].domain,.addressed)
+                    XCTAssertTrue(prepared.waveOwners[i].matches(prepared.common.sounds[i]))
+                }
+            } else { XCTAssertEqual(try encoder.encode(prepared.waveInputs),try encoder.encode(c.loads.map(\.input))) }
             try OriginalApplicationGraphicsTests.compareOwner(prepared.state.graphics,kind:"loading",index:caseIndex)
             XCTAssertEqual(prepared.stagedGraphics,pending.stagedGraphics+commands)
             XCTAssertEqual(prepared.state.full.bytes,try r.blob(c.after.globals))
@@ -193,13 +215,13 @@ final class OriginalApplicationLoadingPrefixTests: XCTestCase {
         }
         return result
     }
-    func run(_ indices: [Int],failures: [String?]) throws {
+    func run(_ indices: [Int],failures: [String?],observedAudio: Bool = false) throws {
         let r = try Resources(),fr = try I.F.Resources(),body = try I.Body.Resources(fr),mr = try I.M.Resources(body,fr),ir = try I.Resources(mr),br = try B.Resources(),er = try B.Entry.Resources()
         for i in indices {
             for fail in failures {
                 var called = false
                 try I().run(r.c.cases[i].spec.parentIndex,ir,mr,body,fr,br,er,loading:{ own,pending in
-                    called = true;try self.check(r.c.cases[i],r,own,pending,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail)
+                    called = true;try self.check(r.c.cases[i],r,own,pending,responses:ir.c.cases[r.c.cases[i].spec.parentIndex].spec,fail:fail,observedAudio:observedAudio)
                 })
                 XCTAssertTrue(called)
             }

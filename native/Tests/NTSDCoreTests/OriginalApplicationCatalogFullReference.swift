@@ -60,13 +60,9 @@ final class OriginalApplicationCatalogFullReference {
               audio.calls.count == 400,audio.sources.count == 365,golden.resources.count == 669 else {
             throw OriginalStateError.invalidStorage("Full catalog reference inventory")
         }
-        files[catalog.fileName] = try blob(catalog.source)
-        for c in catalog.children { files[c.path] = try blob(c.source) }
-        XCTAssertEqual(files.count,156)
-        for s in audio.sources { let b = try blob(s.sha256);XCTAssertEqual(b.count,s.bytes);files[s.path] = b }
-        XCTAssertEqual(files.count,521)
-        for r in golden.resources { images[r.name] = try golden.bitmap(r) }
-        XCTAssertEqual(images.count,669)
+        let inputs = try OriginalApplicationCatalogInputsTests.shared.get()
+        files = inputs.files;images = inputs.bitmaps
+        XCTAssertEqual(files.count,521);XCTAssertEqual(images.count,669)
         // Independently replay the recovered stride-20/full-path-with-NUL
         // stores and first require every immutable controlled cache to agree.
         var cache = try blob(audio.calls[0].cacheBefore)
@@ -81,6 +77,17 @@ final class OriginalApplicationCatalogFullReference {
         for c in catalog.children {
             guard cacheWrites[c.soundCount] == (try blob(c.soundBytes)) else { throw OriginalStateError.invalidStorage("Source child cache provenance") }
         }
+    }
+    /// Preserved fixture input producer, used only to compare the new package.
+    /// No expected record, device result or after-state enters this dictionary.
+    func fixtureFiles() throws -> [String:[UInt8]] {
+        var files: [String:[UInt8]] = [:]
+        files[catalog.fileName] = try blob(catalog.source)
+        for c in catalog.children { files[c.path] = try blob(c.source) }
+        XCTAssertEqual(files.count,156)
+        for s in audio.sources { let b = try blob(s.sha256);XCTAssertEqual(b.count,s.bytes);files[s.path] = b }
+        XCTAssertEqual(files.count,521)
+        return files
     }
     func blob(_ key: String) throws -> [UInt8] {
         if let b = decoded[key] { return b }
@@ -146,7 +153,7 @@ final class OriginalApplicationCatalogFullReference {
         let all = [own.header]+own.frameStorage+[own.nameTail]
         try same(.init(bytes:all.flatMap(\.bytes),defined:all.flatMap(\.defined)),e,c.path)
     }
-    func complete(_ p: C.PendingPool) throws {
+    func completeRecords(_ p: C.PendingPool) throws {
         let a = p.catalog,s = p.snapshot
         let entryChecksum = try p.entry.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
         let entryCache = Array(p.entry.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
@@ -189,6 +196,10 @@ final class OriginalApplicationCatalogFullReference {
         XCTAssertEqual(p.files.streams.count,621);XCTAssertTrue(p.files.streams.values.allSatisfy { $0.closed })
         XCTAssertEqual(p.files.decoderReturns,Array(repeating:0,count:155))
         XCTAssertEqual(p.files.files[OriginalLoadingFiles.temporaryPath],Array("Do not erase this file.".utf8))
+    }
+    func complete(_ p: C.PendingPool) throws {
+        try completeRecords(p)
+        let s = p.snapshot
         XCTAssertEqual(s.sounds.buffers.count,400);XCTAssertEqual(s.waveInputs.count,400)
         for (i,w) in audio.calls.enumerated() {
             let x = try XCTUnwrap(s.sounds.buffers[i]);XCTAssertEqual(x.exit,.returned);XCTAssertEqual(x.returned,w.returned)

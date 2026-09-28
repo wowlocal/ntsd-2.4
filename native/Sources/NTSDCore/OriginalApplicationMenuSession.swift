@@ -107,6 +107,7 @@ public struct OriginalApplicationMenuSession {
         case present(OriginalFrontScreenEvent, result: Int32)
         case getDC(OriginalFrontScreenEvent, result: Int32, output: UInt32)
         case graphics(OriginalFrontScreenEvent,result: Int32)
+        case frontAPI(OriginalFrontScreenEvent,OriginalLibSurfaceText.Response)
         case free(UInt32)
         case translate(Loop.Request)
         case sleep(UInt32)
@@ -129,10 +130,22 @@ public struct OriginalApplicationMenuSession {
     /// not returned. These operations must not be dispatched as committed IO.
     public struct PendingLoading {
         fileprivate let ownerID: UUID,revision: UInt64
+        // Transfer identity only. Distinguishes separate attempts made from
+        // copies of one committed Session; never enters original game state.
+        private let attemptID = UUID()
+        func isSameAttempt(as other: Self) -> Bool {
+            ownerID == other.ownerID && revision == other.revision && attemptID == other.attemptID
+        }
         public let state: State, target: UInt32
         public let loopContinuation: Loop.PendingDispatch
         public let stagedEffects: [Effect]
         public let stagedGraphics: [OriginalApplicationGraphics.Command]
+        fileprivate init(ownerID: UUID,revision: UInt64,state: State,target: UInt32,
+            loopContinuation: Loop.PendingDispatch,stagedEffects: [Effect],
+            stagedGraphics: [OriginalApplicationGraphics.Command]) {
+            self.ownerID = ownerID;self.revision = revision;self.state = state;self.target = target
+            self.loopContinuation = loopContinuation;self.stagedEffects = stagedEffects;self.stagedGraphics = stagedGraphics
+        }
         public func makeLoadingSession() throws -> OriginalApplicationLoadingSession {
             try .init(pending:self)
         }
@@ -171,9 +184,16 @@ public struct OriginalApplicationMenuSession {
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Loop,State) throws -> Void = { _,_ in },
         initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
+        initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
+        frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
         try state.validateAliases()
+        if initializationBitmap != nil,let input = initialization {
+            guard input.frontResponses.isEmpty,input.backgroundResponses.isEmpty else {
+                throw Boundary.dependency("Observed bitmap requests cannot mix prepared response arrays")
+            }
+        }
         guard revision < UInt64.max else { throw Boundary.dependency("Session revision extent") }
         var next = self, effects: [Effect] = []
         var loopContinuation: Loop.PendingDispatch?
@@ -188,6 +208,7 @@ public struct OriginalApplicationMenuSession {
         }
         let oldCounter = loop.counter
         var stage: OriginalApplicationBootstrap.Stage = .menu
+        var lastBltResult: Int32 = 0, lastPresentationResult: Int32?
         var drawResult: Int32 {
             if let initialization {
                 if stage == .prefix { return initialization.prefix.drawResults.first ?? responses.draw }
@@ -199,26 +220,42 @@ public struct OriginalApplicationMenuSession {
             switch e.kind {
             case "blit":
                 guard let b = e.blit else { throw Boundary.dependency("Missing bitmap Blt request") }
-                try emit(.blit(b,result:drawResult))
+                if let reply = try frontProvider?(stage,e) {
+                    lastBltResult = reply.result;try emit(.frontAPI(e,reply))
+                } else { lastBltResult = drawResult;try emit(.blit(b,result:drawResult)) }
             case "fill":
                 guard let f = e.fill else { throw Boundary.dependency("Missing fill request") }
-                try emit(.fill(f,result:stage == .prefix ? initialization?.prefix.fillResult ?? responses.draw : responses.draw))
+                if let reply = try frontProvider?(stage,e) { try emit(.frontAPI(e,reply)) }
+                else { try emit(.fill(f,result:stage == .prefix ? initialization?.prefix.fillResult ?? responses.draw : responses.draw)) }
             case "soundMethod": try emit(.soundMethod(e,ignoredResult:responses.sound))
             case "method":
                 guard e.arguments.count >= 2 else { throw Boundary.dependency("Menu COM request") }
                 if e.arguments[1] == 8 {
+                    let reply = try frontProvider?(stage,e),value = reply?.result ?? responses.release
                     if var bindings = bitmapInputs {
-                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:responses.release))
+                        _ = try bindings.response(.init("release",[e.arguments[0]]),control:.init(result:value))
                         bitmapInputs = bindings
                     }
-                    try emit(.release(e,ignoredResult:responses.release))
+                    if let reply { try emit(.frontAPI(e,reply)) }
+                    else { try emit(.release(e,ignoredResult:value)) }
                 }
-                else if e.arguments[1] == 0x14 || e.arguments[1] == 0x2c { try emit(.present(e,result:responses.presentation)) }
+                else if e.arguments[1] == 0x14 || e.arguments[1] == 0x2c {
+                    if let reply = try frontProvider?(stage,e) {
+                        lastPresentationResult = reply.result;try emit(.frontAPI(e,reply))
+                    } else { lastPresentationResult = responses.presentation;try emit(.present(e,result:responses.presentation)) }
+                }
                 else { throw Boundary.dependency("Menu COM continuation") }
-            case "getDC": try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
+            case "getDC":
+                // The installed body response callback already emitted its
+                // terminal effect. Keep this original event as observation.
+                if frontProvider == nil || stage != .body {
+                    try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
+                }
             case "setBackgroundMode","setTextColor","textOut","releaseDC":
-                if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
-                else { try emit(.graphics(e,result:responses.draw)) }
+                if frontProvider == nil || stage != .body {
+                    if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
+                    else { try emit(.graphics(e,result:responses.draw)) }
+                }
             case "free":
                 guard e.arguments.count == 1 else { throw Boundary.dependency("Menu free request") }
                 try emit(.free(e.arguments[0]))
@@ -235,6 +272,12 @@ public struct OriginalApplicationMenuSession {
             else { try observe(e) }
         }
         func store(_ address: Int,_ bytes: [UInt8]) throws {
+            if [8,16].contains(bytes.count) {
+                // API rectangle writes are retained whole in lifecycle replies.
+                // Project their words into the existing scalar observation format.
+                for i in stride(from:0,to:bytes.count,by:4) { try store(address+i,Array(bytes[i..<i+4])) }
+                return
+            }
             guard [1,2,4].contains(bytes.count) else { throw Boundary.dependency("Menu store extent") }
             let value = bytes.enumerated().reduce(UInt32(0)) { $0 | UInt32($1.element) << ($1.offset*8) }
             try event(.init("write",[UInt32(address),UInt32(bytes.count),value]))
@@ -269,7 +312,7 @@ public struct OriginalApplicationMenuSession {
                         var g = try State.slice(owned.full,0,Self.globalCount)
                         var local = try State.slice(owned.full,Self.outerStart,0x140)
                         let result: Int32
-                        if input.message == 5 {
+                        if input.message == 3 || input.message == 5 {
                             result = try OriginalWindowLifecycle.receive(input,globals:&g,memory:&owned.memory,
                                 backing:{ _,_ in throw Boundary.dependency("Initial resize backing") },perform:{ q in
                                     let r = try lifecycle(q);try emit(.lifecycle(q,r));return r
@@ -320,15 +363,21 @@ public struct OriginalApplicationMenuSession {
                         var created: UInt32?
                         let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:false,
                             backing:allocation.backing,device:device,flags:0x40,context:&created,perform:{ q,cursor in
-                                let replies = at == .resources ? input.frontResponses : input.backgroundResponses
-                                let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
-                                guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
-                                let control = replies[index]
                                 let response: OriginalBitmapSurfaceLoading.Response
-                                if var bindings = bitmapInputs {
-                                    response = try bindings.response(q,control:control);bitmapInputs = bindings
-                                } else { response = control }
-                                if at == .resources { frontAPIIndex += 1 } else { backgroundAPIIndex += 1 }
+                                if let provider = initializationBitmap {
+                                    let actual = try provider(at,q)
+                                    guard var bindings = bitmapInputs else { throw Boundary.dependency("Observed bitmap input provenance") }
+                                    response = try bindings.observed(q,response:actual);bitmapInputs = bindings
+                                } else {
+                                    let replies = at == .resources ? input.frontResponses : input.backgroundResponses
+                                    let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
+                                    guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
+                                    let control = replies[index]
+                                    if var bindings = bitmapInputs {
+                                        response = try bindings.response(q,control:control);bitmapInputs = bindings
+                                    } else { response = control }
+                                    if at == .resources { frontAPIIndex += 1 } else { backgroundAPIIndex += 1 }
+                                }
                                 try emit(.bitmap(q,response))
                                 try bootstrapObserve(.bitmap(at,q,response))
                                 if q.kind == "createSurface" && response.result == 0 { cursor = response.output }
@@ -354,7 +403,7 @@ public struct OriginalApplicationMenuSession {
                         let bitmap = try liveBitmap(args[0]), surface = try bitmap.storage.integer(at:0,as:UInt32.self)
                         var canonical = bitmap.storage; try canonical.write(UInt32(surface == 0 ? 0 : 1),at:0)
                         let input = OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:width,viewportHeight:height)
-                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return drawResult })
+                        _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return lastBltResult })
                     }
                     let continuation = try OriginalFrontMenuLoop.run(world:&world,globals:&g,initialize:{ w,state in
                         let result = try resources.load(world:w,globals:&state,allocate:{ index in
@@ -435,7 +484,12 @@ public struct OriginalApplicationMenuSession {
                         return result
                     },body:{ state in
                         try point(.body,combined(state))
-                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:initialization?.body ?? .init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,observe:event)
+                        let output = try OriginalFrontScreenBody.advanceOwnStartup(globals:&state,target:game.target,libraryText:&library,input:initialization?.body ?? .init(dcResult:responses.dcResult,dc:responses.dc,methodResult:responses.draw,drawResults:[responses.draw],shellResult:0),draw:draw,
+                            textPerform:frontProvider.map { provider in { q in
+                                try provider(stage,.init(q.kind.rawValue,q.arguments,q.strings))
+                            } },textDidRespond:{ q,r in
+                                try emit(.frontAPI(.init(q.kind.rawValue,q.arguments,q.strings),r))
+                            },observe:event)
                         try bodyProduced(output); body = output
                         if initialization != nil { try bootstrapObserve(.bodyReturn(output,combined(state),library)) }
                         return output.continuation
@@ -477,7 +531,7 @@ public struct OriginalApplicationMenuSession {
                         throw Loading(pending:.init(ownerID:ownerID,revision:revision,state:owned,target:game.target,loopContinuation:loopContinuation,stagedEffects:effects,stagedGraphics:graphicsCommands))
                     }
                     guard continuation == .returned else { throw Boundary.dependency("Menu continuation "+continuation.rawValue) }
-                    try point(.worldReturn,owned.full,initialization == nil ? nil : responses.presentation)
+                    try point(.worldReturn,owned.full,initialization == nil ? nil : lastPresentationResult ?? responses.presentation)
                     let result = try OriginalApplicationDispatchEntry.finishWorldCall(globals:owned.full)
                     try point(.dispatchReturn,owned.full,result)
                     return .init(result:result)

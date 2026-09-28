@@ -8,11 +8,11 @@ final class OriginalApplicationActiveLayoutTests: XCTestCase {
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.PendingReturn) throws -> Void)? = nil) throws {
         let sourceCount = try OriginalApplicationActiveLayoutSource(reverse).compare()
         var notices: M.Snapshot?,before: M.Snapshot?,endpoint: M.Snapshot?
         var count = 0,rollbacks = 0
-        try OriginalApplicationActiveRecordingTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveRecordingTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplayCheckpoint(.notices,let snapshot):
                 notices = snapshot

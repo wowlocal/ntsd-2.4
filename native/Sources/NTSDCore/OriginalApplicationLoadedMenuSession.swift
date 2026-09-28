@@ -147,16 +147,14 @@ public struct OriginalApplicationLoadedMenuSession {
             let catalog = entry.entry.entry
             for a in catalog.snapshot.allocations { reserve(a.token,a.count) }
             for f in catalog.files.streams.values { reserve(f.allocation.buffer,f.allocation.capacity) }
-            for (a,p) in zip(catalog.startup.owner.loads,catalog.startup.platforms) { retain(a,p) }
-            for (a,p) in zip(catalog.entry.common.sounds,catalog.entry.waveInputs) { retain(a,p) }
-            for (i,p) in catalog.snapshot.waveInputs.enumerated() {
-                guard let a = catalog.snapshot.sounds.buffers[i] else { throw Boundary.dependency("WAV owner") };retain(a,p)
-            }
+            for owner in catalog.startup.waveOwners { try retain(owner) }
+            for owner in catalog.entry.waveOwners { try retain(owner) }
+            for owner in catalog.snapshot.waveOwners { try retain(owner) }
             for (token,record) in audio.allocations { reserve(token,record.bytes.count) }
         }
         func reserve(_ token: UInt32,_ count: Int) { if token != 0 && count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) } }
-        func retain(_ a: OriginalWaveLoadResult,_ p: OriginalWavePlatform) {
-            reserve(p.firstPointer,a.first.bytes.count);if let b = a.second { reserve(p.secondPointer,b.bytes.count) }
+        func retain(_ owner: OriginalWaveOwnership) throws {
+            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
         }
         func claim(_ token: UInt32,_ count: Int) throws {
             let lo = UInt64(token),hi = lo+UInt64(count)

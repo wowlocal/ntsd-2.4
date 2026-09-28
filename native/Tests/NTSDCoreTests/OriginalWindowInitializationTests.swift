@@ -16,7 +16,7 @@ final class OriginalWindowInitializationTests: XCTestCase {
         let backings: [Backing], events: [Event], objects: [Object], result: Int32
     }
     struct Corpus: Decodable { let exeSHA256: String, libSHA256: String, cases: [Sample] }
-    private func corpus() throws -> Corpus {
+    func corpus() throws -> Corpus {
         let url: URL
         if let path = ProcessInfo.processInfo.environment["NTSD_WINDOW_INITIALIZATION_CORPUS"] { url = URL(fileURLWithPath: path) }
         else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-window-initialization.json", withExtension: nil, subdirectory: "Fixtures")) }
@@ -25,7 +25,7 @@ final class OriginalWindowInitializationTests: XCTestCase {
         XCTAssertEqual(c.libSHA256,"28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba")
         return c
     }
-    private func initial(_ c: Sample) throws -> OriginalStateRecord {
+    func initial(_ c: Sample) throws -> OriginalStateRecord {
         try .init(bytes: c.before,defined: [Bool](repeating: true,count: c.before.count))
     }
     func testWholeOriginalWindowDisplayAndFailureOrder() throws {

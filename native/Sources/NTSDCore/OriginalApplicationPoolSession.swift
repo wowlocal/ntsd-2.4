@@ -79,19 +79,16 @@ public struct OriginalApplicationPoolSession {
             for (token,a) in state.memory.allocations where a.live { reserve(token,a.storage.bytes.count) }
             for a in entry.snapshot.allocations { reserve(a.token,a.count) }
             for stream in entry.files.streams.values { reserve(stream.allocation.buffer,stream.allocation.capacity) }
-            for (owner,p) in zip(entry.startup.owner.loads,entry.startup.platforms) { retain(owner,p) }
+            for owner in entry.startup.waveOwners { try retain(owner) }
             for (token,record) in entry.startup.music.allocations { reserve(token,record.bytes.count) }
-            for (owner,p) in zip(entry.entry.common.sounds,entry.entry.waveInputs) { retain(owner,p) }
-            for (i,p) in entry.snapshot.waveInputs.enumerated() {
-                guard let owner = entry.snapshot.sounds.buffers[i] else { throw Boundary.missingOwners };retain(owner,p)
-            }
+            for owner in entry.entry.waveOwners { try retain(owner) }
+            for owner in entry.snapshot.waveOwners { try retain(owner) }
         }
         func reserve(_ token: UInt32,_ count: Int) {
             if token != 0,count > 0 { ranges.append((UInt64(token),UInt64(token)+UInt64(count))) }
         }
-        func retain(_ owner: OriginalWaveLoadResult,_ p: OriginalWavePlatform) {
-            reserve(p.firstPointer,owner.first.bytes.count)
-            if let second = owner.second { reserve(p.secondPointer,second.bytes.count) }
+        func retain(_ owner: OriginalWaveOwnership) throws {
+            for span in try owner.addressedRegions() { reserve(span.token,span.count) }
         }
         func allocate(_ kind: Allocation.Kind,_ count: Int) throws -> OriginalInterfaceAllocation {
             let value = try controls.allocate(kind,count),a = Allocation(kind:kind,token:value.address,count:count)

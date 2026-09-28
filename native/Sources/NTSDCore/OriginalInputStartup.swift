@@ -90,13 +90,38 @@ public enum OriginalInputStartup {
         capabilities: (Int, OriginalStateRecord) throws -> Void = { _,_ in },
         afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _,_,_ in },
         observeSound: (OriginalMenuSoundStartup.Event, OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
+        try loadBody(globals:&globals,request:request,sound:{ state in
+            try OriginalMenuSoundStartup.load(globals:&state,platform:soundPlatform,wavePlatform:wavePlatform,
+                fileSource:fileSource,afterWave:afterWave,store:{ try store($0,little($1)) },observe:observeSound)
+        },store:store,capabilities:capabilities)
+    }
+
+    public static func loadObserved(globals: inout OriginalStateRecord,
+        request: (Request,OriginalStateRecord) throws -> Response,
+        soundRequest: (OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse,
+        waveInput: (Int,String,UInt32,UInt32) throws -> OriginalWaveInput,
+        waveRequest: (OriginalWaveBinding,OriginalWaveRequest) throws -> OriginalWaveResponse,
+        fileSource: (String) throws -> [UInt8],store: OriginalWindowInput.Store = { _,_ in },
+        capabilities: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+        afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
+        observeSound: (OriginalMenuSoundStartup.Event,OriginalStateRecord) throws -> Void = { _,_ in }) throws -> Result {
+        try loadBody(globals:&globals,request:request,sound:{ state in
+            try OriginalMenuSoundStartup.loadObserved(globals:&state,soundRequest:soundRequest,waveInput:waveInput,
+                waveRequest:waveRequest,fileSource:fileSource,afterWave:afterWave,
+                store:{ try store($0,little($1)) },observe:observeSound)
+        },store:store,capabilities:capabilities)
+    }
+
+    private static func loadBody(globals: inout OriginalStateRecord,
+        request: (Request,OriginalStateRecord) throws -> Response,
+        sound: (inout OriginalStateRecord) throws -> OriginalMenuSoundStartup.Result,
+        store: OriginalWindowInput.Store,capabilities: (Int,OriginalStateRecord) throws -> Void) throws -> Result {
         var state = globals
         let keyBytes = [UInt8](repeating:117,count:256)
         for (i,byte) in keyBytes.enumerated() { try state.write(byte,at:0x455378-base+i) }
         try store(0x455378,keyBytes)
         let joystickReturn = try initializeJoysticks(globals:&state,request:request,store:store,capabilities:capabilities)
-        let sounds = try OriginalMenuSoundStartup.load(globals:&state,platform:soundPlatform,wavePlatform:wavePlatform,
-            fileSource:fileSource,afterWave:afterWave,store:{ try store($0,little($1)) },observe:observeSound)
+        let sounds = try sound(&state)
         globals = state;return .init(joystickReturn:joystickReturn,sounds:sounds)
     }
 }

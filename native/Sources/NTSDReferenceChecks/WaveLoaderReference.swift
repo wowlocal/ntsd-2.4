@@ -21,7 +21,7 @@ public enum WaveLoaderReference {
     }
     private struct Corpus: Decodable { let exeSHA256: String, sources: [Source], cases: [Case], startups: [Startup], blobs: [String: Blob] }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Wave reference: \(text)") }
-    public static func compare(_ input: Data) throws -> Result {
+    public static func compare(_ input: Data,audio: OriginalWaveRequest.Factory? = nil) throws -> Result {
         let corpus = try JSONDecoder().decode(Corpus.self, from: MatchPreparationReference.unpack(input))
         guard corpus.exeSHA256 == "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
               corpus.sources.count == 409, Set(corpus.sources.map(\.path)).count == 409 else { throw error("Source identity/inventory") }
@@ -51,7 +51,7 @@ public enum WaveLoaderReference {
                 result.sources += 1
             }
             var events: [OriginalWaveEvent] = []
-            let native = try OriginalWaveLoader.load(path: item.path, file: file, output: item.outputBefore, platform: item.input) { events.append($0) }
+            let native = try OriginalWaveLoader.load(path: item.path, file: file, output: item.outputBefore, platform: item.input,audio:try audio?(item.input)) { events.append($0) }
             guard native.output == item.outputAfter, native.returned == item.returned, native.exit == item.exit,
                   native.temporaryLive == item.temporaryLive else { throw error(item.label+" return/ownership") }
             if events != item.events {
@@ -110,7 +110,7 @@ public enum WaveLoaderReference {
                 try check(native.descriptor, item.descriptor, item.label+" startup descriptor")
                 guard try state.bytes == blob(item.afterGlobals) else { throw error("Startup child globals") }
                 result.bytes += state.bytes.count; result.startupLoads += 1
-            }) { events.append($0) }
+            },audio:audio) { events.append($0) }
             guard events == startup.events else {
                 let i = zip(events,startup.events).enumerated().first { $0.element.0 != $0.element.1 }?.offset
                 throw error("Startup event at \(i.map(String.init) ?? "count")")

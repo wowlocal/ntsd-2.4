@@ -21,12 +21,16 @@ final class OriginalApplicationDispatchEntryTests: XCTestCase {
     final class Resources {
         let c: Corpus,parents: [String:[String:Any]]
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_DISPATCH_ENTRY"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-dispatch-entry",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:32_000_000)
+        init(supplied: Data? = nil, expectedCases: Int = 8) throws {
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_DISPATCH_ENTRY"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-dispatch-entry",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:32_000_000)
+            }
             c = try JSONDecoder().decode(Corpus.self,from:data)
             parents = try XCTUnwrap((JSONSerialization.jsonObject(with:data) as? [String:Any])?["parents"] as? [String:[String:Any]])
-            XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.cases.count,8)
+            XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c");XCTAssertEqual(c.cases.count,expectedCases)
         }
         func blob(_ key: String) throws -> [UInt8] {
             if let bytes = cache[key] { return bytes }

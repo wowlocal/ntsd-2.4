@@ -1,0 +1,153 @@
+import Foundation
+
+/// A value request and its response-family check. Implementations must be pure;
+/// validation runs under the receipt owner's lock, without device IO or callbacks.
+public protocol OriginalExchangeRequest: Equatable {
+    associatedtype Reply
+    func accepts(_ response: Reply) -> Bool
+}
+
+/// Prepared responses for a typed external request consumer. Pure
+/// value cursors run inside a Core attempt; claim/answer/fail run outside it.
+/// Retrying Native calculation reuses values, not already performed host IO.
+public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resource> {
+    public typealias Request = Input
+    public typealias Response = Input.Reply
+    public enum Status: Equatable { case open, cancelled, finished, indeterminate }
+    public enum Boundary: Error, Equatable {
+        case foreignOwner, staleRevision, requestInFlight, invalidPermit, responseMismatch, serviceAlreadyStarted
+        case requestMismatch(Int), suspendedCursor, unconsumedReplies, closed(Status)
+    }
+    fileprivate final class Identity: @unchecked Sendable {}
+
+    public struct Receipt {
+        public let request: Request, response: Response
+        public let resources: [Resource]
+    }
+    public struct Failure {
+        public let request: Request, diagnostic: String, afterCancellation: Bool
+        public let resources: [Resource]
+    }
+    /// This ticket can only be made by a cursor exhausting its prepared prefix.
+    public struct RequestNeeded: Error {
+        public let request: Request, ordinal: Int
+        fileprivate let owner: Identity, revision: Int
+    }
+    public struct Permit {
+        public let request: Request, ordinal: Int
+        fileprivate let owner: Identity, identity: Identity
+    }
+    public struct Snapshot {
+        public let receipts: [Receipt], status: Status
+        public let outstandingRequest: Request?, failure: Failure?
+        public let serviceStarted: Bool
+        fileprivate let owner: Identity
+        public func cursor() throws -> Cursor {
+            guard status == .open else { throw Boundary.closed(status) }
+            guard outstandingRequest == nil else { throw Boundary.requestInFlight }
+            return Cursor(owner: owner, receipts: receipts)
+        }
+    }
+    /// Copies have independent positions. No mutable exchange/backend is held.
+    public struct Cursor {
+        fileprivate let owner: Identity, receipts: [Receipt]
+        public private(set) var position = 0
+        fileprivate var pending: RequestNeeded?
+        public var isSuspended: Bool { pending != nil }
+        fileprivate init(owner: Identity, receipts: [Receipt]) {
+            self.owner = owner; self.receipts = receipts
+        }
+        public mutating func response(for request: Request) throws -> Response {
+            guard pending == nil else { throw Boundary.suspendedCursor }
+            if position < receipts.count {
+                let receipt = receipts[position]
+                guard request == receipt.request else { throw Boundary.requestMismatch(position) }
+                position += 1; return receipt.response
+            }
+            let ticket = RequestNeeded(request: request, ordinal: position, owner: owner, revision: receipts.count)
+            pending = ticket; throw ticket
+        }
+    }
+
+    private let owner = Identity(), mutex = NSLock()
+    private var receipts: [Receipt] = []
+    private var status = Status.open
+    private var active: Permit?
+    private var serviceStarted = false
+    private var failure: Failure?
+    public init() {}
+    private func locked<T>(_ body: () throws -> T) rethrows -> T {
+        mutex.lock(); defer { mutex.unlock() }; return try body()
+    }
+    private func view() -> Snapshot {
+        .init(receipts: receipts, status: status, outstandingRequest: active?.request, failure: failure, serviceStarted: serviceStarted, owner: owner)
+    }
+    public var snapshot: Snapshot { locked { view() } }
+
+    /// Call after the Core attempt has unwound, before performing the operation.
+    /// A claim is not success and supplies no numeric response to Core.
+    public func claim(_ ticket: RequestNeeded) throws -> Permit {
+        try locked {
+            guard ticket.owner === owner else { throw Boundary.foreignOwner }
+            guard status == .open else { throw Boundary.closed(status) }
+            guard ticket.revision == receipts.count, ticket.ordinal == receipts.count else { throw Boundary.staleRevision }
+            guard active == nil else { throw Boundary.requestInFlight }
+            let permit = Permit(request: ticket.request, ordinal: ticket.ordinal, owner: owner, identity: Identity())
+            active = permit; serviceStarted = false; return permit
+        }
+    }
+    private func validate(_ permit: Permit) throws {
+        guard permit.owner === owner else { throw Boundary.foreignOwner }
+        guard let active, permit.identity === active.identity else { throw Boundary.invalidPermit }
+    }
+    /// Claim physical service once, before any external effect. Existing prepared
+    /// callers may still answer without IO. Cancellation prevents new service;
+    /// an operation already begun may record its actual late answer or failure.
+    public func beginService(_ permit: Permit) throws {
+        try locked {
+            try validate(permit)
+            guard status == .open else { throw Boundary.closed(status) }
+            guard !serviceStarted else { throw Boundary.serviceAlreadyStarted }
+            serviceStarted = true
+        }
+    }
+    /// An issued operation may finish after cancellation. Keep its actual reply
+    /// and owners once, while leaving further service cancelled.
+    public func answer(_ permit: Permit, response: Response,
+        retaining resources: [Resource] = []) throws {
+        try locked {
+            try validate(permit)
+            guard permit.request.accepts(response) else { throw Boundary.responseMismatch }
+            receipts.append(.init(request: permit.request, response: response, resources: resources))
+            active = nil; serviceStarted = false
+        }
+    }
+    /// Unknown physical outcome is terminal and is never translated into an
+    /// invented HRESULT. The caller must resolve the external failure separately.
+    public func fail(_ permit: Permit, diagnostic: String,
+        retaining resources: [Resource] = []) throws {
+        try locked {
+            try validate(permit)
+            failure = .init(request: permit.request, diagnostic: diagnostic,
+                afterCancellation: status == .cancelled, resources: resources)
+            active = nil; serviceStarted = false; status = .indeterminate
+        }
+    }
+    public func cancel() {
+        locked { if status == .open { status = .cancelled } }
+    }
+    /// Call only after the actual encompassing caller returns. This validates
+    /// receipt consumption, not whether a window/game/device operation succeeded.
+    /// Existing snapshots remain immutable; no resource receipt is discarded.
+    @discardableResult public func finish(_ cursor: Cursor) throws -> Snapshot {
+        try locked {
+            guard cursor.owner === owner else { throw Boundary.foreignOwner }
+            guard status == .open else { throw Boundary.closed(status) }
+            guard active == nil else { throw Boundary.requestInFlight }
+            guard cursor.receipts.count == receipts.count else { throw Boundary.staleRevision }
+            guard cursor.pending == nil else { throw Boundary.suspendedCursor }
+            guard cursor.position == receipts.count else { throw Boundary.unconsumedReplies }
+            status = .finished; return view()
+        }
+    }
+}

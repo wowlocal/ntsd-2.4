@@ -38,13 +38,19 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
         try P.require(actual.loadedObjects == expected.objects,label+" Object/Frame retention")
         try P.require(actual.frameAllocations == expected.ownedFrames,label+" Mutable Frame allocation retention")
     }
-    func sequence(_ reverse: Bool,onComplete: ((C.A) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,onComplete: ((C.A) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationGameplaySource(reverse)
-        _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,onStart:{ origin,pending in
+        let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
+        _ = try OriginalApplicationLoadedSelectionTests().sequence(reverse,driver:driver,onStart:{ origin,pending in
             let reference = try L.R(reverse,pending)
-            var app = origin,launch = try L.L(pending:pending),launchEnv = L.Environment()
-            let started = try L().launch(&launch,&launchEnv,reference)
-            try C.finish(&app,started)
+            func launch(_ pending: M.S.PendingMatchPrelude) throws -> M.S.PendingReturn {
+                var launch = try L.L(pending:pending),launchEnv = L.Environment()
+                return try L().launch(&launch,&launchEnv,reference)
+            }
+            let started: M.S.PendingReturn
+            if let host = driver.host { started = try host.resumeMatchLaunch(prepare:{ retained,_ in try launch(retained) }) }
+            else { started = try launch(pending) }
+            try driver.finish(started,retainBatch:driver.retainGameplayParentBatch)
             var expected: P?
             var sourceExpected: P?
             var checkpoints = 0,sourceStores = 0,ownStores = 0
@@ -52,9 +58,10 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
             var heapEndpoints = 0
             for tick in 0..<17 {
                 let call = source.calls[tick]
-                let loading = try C.next(&app)
-                var cycle = try app.makeLoadedCycle(pending:loading),input = C.InputEnvironment()
-                let ready = try C.input(&cycle,&input)
+                try driver.next()
+                let ready = try driver.prepareGameplay { cycle in
+                    var input = C.InputEnvironment();return try C.input(&cycle,&input)
+                }
                 try P.require(ready.round.continuation == .gameplay,"Own gameplay continuation")
                 if tick == 0 {
                     let catalog = try OriginalApplicationCatalogFullTests.reference.get()
@@ -113,14 +120,16 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
                 sourceExpected = saved
                 let retained = try XCTUnwrap(expected)
                 try Self.ownEqual(retained,ready.match,"Own input \(tick)")
-                var session = try G(pending:ready),env = Environment(expected:retained,sections:call.sections)
+                var env = Environment(expected:retained,sections:call.sections)
                 env.operations = ready.operations.map(M.S.Operation.preceding)
                 let drawing = try D(ready.match,ready.state)
                 let graphics = try OriginalApplicationCatalogGraphicsComparison(resources:[:],state:ready.state,graphics:ready.graphics)
                 let output = OriginalMenuPresentationInput(targetSurface:ready.loading.target,methodResult:0,
                     queryResult:0,audioGetResult:0,audioSetResult:0,queriedAudio:0,audioVolume:0,
                     dcResult:0,dc:0x12345678,postResult:0)
-                let result = try session.advance(environment:&env,outputInput:output,observe:{ observation,e in
+                let result = try driver.gameplay(ready) { ready in
+                var session = try G(pending:ready)
+                return try session.advance(environment:&env,outputInput:output,observe:{ observation,e in
                     switch observation {
                     case .front(let event):e.front.append(event)
                     case .gameplay(let event):
@@ -157,6 +166,7 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
                     default:throw OriginalApplicationGameplaySource.error("Unexpected gameplay observation")
                     }
                 })
+                }
                 try P.require(env.count == 19,"Complete scalar checkpoints")
                 try P.require(env.front.isEmpty && env.other.isEmpty,"No observations beyond final checkpoint")
                 try P.require(result.snapshot.operations == env.operations,"Whole operation journal")
@@ -179,19 +189,19 @@ final class OriginalApplicationGameplayProjectionTests: XCTestCase {
                         OriginalApplicationCatalogSessionTests.retained(failed.entry.state,ready.state)
                     }
                     for stop in ["time","sleep","commit"] {
-                        let parent = app
-                        XCTAssertThrowsError(try C.finish(&app,result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
-                        try C.unchanged(app,parent)
+                        let parent = driver.core
+                        XCTAssertThrowsError(try driver.finish(result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
+                        try C.unchanged(driver.core,parent)
                     }
                 }
                 checkpoints += env.count;expected = env.expected
                 try Self.ownEqual(env.expected,result.snapshot.match,"Whole return \(tick)")
-                try C.finish(&app,result)
+                try driver.finish(result)
             }
             XCTAssertEqual(checkpoints,323)
             XCTAssertGreaterThan(heapEndpoints,0)
             print("Gameplay state/effects projection: control=\(reverse), 17 owned Bootstrap returns, \(checkpoints) source-first stages, \(sourceStores) source typed stores, \(ownStores) own typed stores, \(heapEndpoints) available source Frame endpoints; full front/non-front streams, journal, graphics owners/colors and rollback verified")
-            try onComplete?(app)
+            try onComplete?(driver.core)
         })
     }
     func testPrimaryOwnedScalarSequence() throws { try sequence(false) }

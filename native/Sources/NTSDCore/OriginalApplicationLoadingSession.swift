@@ -17,6 +17,7 @@ public struct OriginalApplicationLoadingSession {
         public let entry: Session.PendingLoading
         public let state: Session.State,target: UInt32,common: OriginalInitialLoadingCommon
         public let waveInputs: [OriginalWavePlatform]
+        public let waveOwners: [OriginalWaveOwnership]
         public let stagedOperations: [Operation],stagedGraphics: [OriginalApplicationGraphics.Command]
         /// The next original allocation boundary; allocation has not executed.
         public let allocationBytes: UInt32 = 81_273_768
@@ -40,10 +41,33 @@ public struct OriginalApplicationLoadingSession {
         attemptedWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
         afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
         beforeCatalog: (PendingCatalog) throws -> Void = { _ in }) throws -> PendingCatalog {
+        var consumed = 0
+        return try prepareCommon(inputs:inputs,prepareWave:{ index,_,_,_ in
+            guard index < waves.count else { throw Boundary.waveReply(index) }
+            consumed += 1;return .legacy(waves[index])
+        },finishWaves:{ guard consumed == waves.count else { throw Boundary.unusedReplies } },
+            drawResult:drawResult,presentationResult:presentationResult,store:store,observe:observe,
+            graphicsObserve:graphicsObserve,beforeWave:beforeWave,afterPrologue:afterPrologue,
+            attemptedWave:attemptedWave,afterWave:afterWave,beforeCatalog:beforeCatalog)
+    }
+
+    @discardableResult
+    public mutating func prepareCommon(inputs: OriginalApplicationLoadingInputs,prepareWave: (Int,String,UInt32,UInt32) throws -> OriginalWavePreparation,
+        finishWaves: () throws -> Void = {},
+        drawResult: Int32,presentationResult: Int32,
+        store: (Int,[UInt8]) throws -> Void = { _,_ in },
+        observe: (Observation) throws -> Void = { _ in },
+        graphicsObserve: (OriginalApplicationGraphics.Command) throws -> Void = { _ in },
+        beforeWave: (Int,String,UInt32,OriginalStateRecord) throws -> Void = { _,_,_,_ in },
+        afterPrologue: (OriginalStateRecord,Bool) throws -> Void = { _,_ in },
+        attemptedWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
+        afterWave: (Int,OriginalWaveLoadResult,OriginalStateRecord) throws -> Void = { _,_,_ in },
+        beforeCatalog: (PendingCatalog) throws -> Void = { _ in }) throws -> PendingCatalog {
         guard pendingCatalog == nil else { throw Boundary.alreadyPrepared }
         var state = entry.state,operations = entry.stagedEffects.map(Operation.menu),graphics = entry.stagedGraphics
         let initial = try Session.State.slice(state.full,0,OriginalMatchPreparation.globalSize)
-        var waveIndex = -1,consumed = 0
+        var waveIndex = -1
+        var waves: [OriginalWavePlatform] = [],owners: [OriginalWaveOwnership] = []
         func emit(_ effect: Session.Effect) throws {
             guard var owner = state.graphics else { throw Boundary.missingOwners }
             let command = try owner.consume(effect,inputs:state.bitmapInputs);state.graphics = owner
@@ -74,12 +98,14 @@ public struct OriginalApplicationLoadingSession {
             })
         }
         let common = try OriginalInitialLoadingCommon.load(globals:initial,targetSurface:entry.target,fileSource:inputs.file,
-            platform:{ index,path,destination in
-                guard index < waves.count else { throw Boundary.waveReply(index) }
-                waveIndex = index;consumed += 1
+            preparation:{ index,path,destination in
+                let device = try state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
+                let preparation = try prepareWave(index,path,destination,device)
+                waveIndex = index
                 try beforeWave(index,path,destination,Session.State.slice(state.full,0,OriginalMatchPreparation.globalSize))
-                return waves[index]
-            },afterPrologue:afterPrologue,afterWave:afterWave,attemptedWave:attemptedWave,store:ownedStore,observe:{ event in
+                if let legacy = preparation.legacyPlatform { waves.append(legacy) }
+                return preparation
+            },ownedWave:{ _,owner in owners.append(owner) },afterPrologue:afterPrologue,afterWave:afterWave,attemptedWave:attemptedWave,store:ownedStore,observe:{ event in
                 if let wave = event.wave {
                     if wave.kind != .load { operations.append(.wave(waveIndex,wave)) }
                     try observe(.wave(wave))
@@ -94,9 +120,9 @@ public struct OriginalApplicationLoadingSession {
                     }
                 }
             })
-        guard consumed == waves.count else { throw Boundary.unusedReplies }
+        try finishWaves()
         try state.replace(0,common.globals);try state.validateAliases()
-        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,
+        let prepared = PendingCatalog(entry:entry,state:state,target:entry.target,common:common,waveInputs:waves,waveOwners:owners,
             stagedOperations:operations,stagedGraphics:graphics)
         try beforeCatalog(prepared)
         pendingCatalog = prepared

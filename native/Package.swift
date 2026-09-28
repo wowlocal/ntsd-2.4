@@ -17,7 +17,8 @@ let package = Package(
     targets: [
         .target(name: "NTSDReplayCodec", exclude: ["README.md", "upstream.json"],
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
-        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalMatchArenas")]),
+        .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
+        .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore"], linkerSettings: [.linkedFramework("AppKit")]),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -28,10 +29,10 @@ let package = Package(
         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
-        .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore"],
+        .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"],
                           linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
                                            .linkedFramework("AVFoundation")]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks"], resources: [.copy("Fixtures")])
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDMacPlatform"], resources: [.copy("Fixtures")])
     ],
     swiftLanguageModes: [.v5]
 )

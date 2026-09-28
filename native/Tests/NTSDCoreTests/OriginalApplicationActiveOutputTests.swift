@@ -10,14 +10,14 @@ final class OriginalApplicationActiveOutputTests: XCTestCase {
     typealias M = OriginalApplicationLoadedMenuSession
     typealias G = OriginalApplicationCatalogGraphicsComparison
     typealias Stop = OriginalApplicationLoadedCycleTests.Stop
-    func sequence(_ reverse: Bool) throws {
+    func sequence(_ reverse: Bool, driver: OriginalApplicationLoadedTestDriver? = nil) throws {
         let sourceCount = try OriginalApplicationActiveOutputSource(reverse).compare()
         var before: M.Snapshot?,endpoint: M.Snapshot?
         var earlier: [OriginalFrontScreenEvent] = [],front: [OriginalFrontScreenEvent] = [],prefix: [G.Event] = []
         var stages: [OriginalGameplayBody.Stage] = []
         var count = 0,events = 0,plays = 0,rollbacks = 0,retries = 0,currentPlays = 0
         var soundRollback = false
-        try OriginalApplicationActiveLayoutTests().sequence(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveLayoutTests().sequence(reverse,driver:driver,onBody:{ call,ready,event in
             if case .gameplayCheckpoint(let stage,_) = event { stages.append(stage) }
             switch event {
             case .front(let value):

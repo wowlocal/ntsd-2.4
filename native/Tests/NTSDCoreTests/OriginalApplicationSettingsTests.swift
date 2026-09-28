@@ -16,8 +16,10 @@ final class OriginalApplicationSettingsTests: XCTestCase {
     struct Corpus: Decodable { let cases: [Case],blobs: [String:Loop.Blob],scratchAddress: UInt32,scratchCount: Int }
     final class Resources {
         let c: Corpus,rawParents: [String:[String:Any]]
+        let sourceControlWord: UInt32
         var cache: [String:[UInt8]] = [:]
-        init(supplied: Data? = nil) throws {
+        init(supplied: Data? = nil, sourceControlWord: UInt32 = 0x37f) throws {
+            self.sourceControlWord = sourceControlWord
             let data: Data
             if let supplied { data = supplied }
             else {
@@ -40,7 +42,7 @@ final class OriginalApplicationSettingsTests: XCTestCase {
             let bytes = try blob(expected.scratch),mask = try blob(expected.scratchMask).map { $0 != 0 }
             XCTAssertEqual(scratch.defined,mask)
             XCTAssertEqual(scratch.bytes,zip(bytes,mask).map { $0.1 ? $0.0 : 0 },"Unknown scratch backing must not be imported")
-            XCTAssertEqual(expected.cw,0x37f)
+            XCTAssertEqual(expected.cw,sourceControlWord)
         }
     }
     func compare(_ index: Int,_ r: Resources,_ br: Bitmap.Resources,_ er: Entry.Resources,fail: String? = nil,

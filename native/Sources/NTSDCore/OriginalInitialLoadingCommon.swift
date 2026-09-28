@@ -12,6 +12,22 @@ public struct OriginalInitialLoadingCommon {
     public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
                             fileSource: (String) throws -> [UInt8],
                             platform: (Int, String, UInt32) throws -> OriginalWavePlatform,
+                            audio: OriginalWaveRequest.Factory? = nil,
+                            afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
+                            afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
+                            store: (Int, [UInt8]) throws -> Void = { _, _ in },
+                            observe: (OriginalInitialSoundEvent) throws -> Void = { _ in },
+                            beforeCommit: (Self) throws -> Void = { _ in }) throws -> Self {
+        try load(globals:initial,targetSurface:targetSurface,fileSource:fileSource,
+            preparation:{ .legacy(try platform($0,$1,$2),audio) },afterPrologue:afterPrologue,
+            afterWave:afterWave,attemptedWave:attemptedWave,store:store,observe:observe,beforeCommit:beforeCommit)
+    }
+
+    public static func load(globals initial: OriginalStateRecord, targetSurface: UInt32,
+                            fileSource: (String) throws -> [UInt8],
+                            preparation: (Int, String, UInt32) throws -> OriginalWavePreparation,
+                            ownedWave: (Int, OriginalWaveOwnership) throws -> Void = { _,_ in },
                             afterPrologue: (OriginalStateRecord, Bool) throws -> Void = { _, _ in },
                             afterWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
                             attemptedWave: (Int, OriginalWaveLoadResult, OriginalStateRecord) throws -> Void = { _, _, _ in },
@@ -22,9 +38,9 @@ public struct OriginalInitialLoadingCommon {
         let paused = try OriginalInitialLoading.begin(globals:&globals,store:store)
         try afterPrologue(globals,paused)
         try OriginalInitialSoundLoading.load(globals:&globals,targetSurface:targetSurface,
-            fileSource:fileSource,platform:platform,afterWave:{ i,wave,state in
+            fileSource:fileSource,preparation:preparation,afterWave:{ i,wave,state in
                 sounds.append(wave);try afterWave(i,wave,state)
-            },attemptedWave:attemptedWave,store:store,observe:observe)
+            },attemptedWave:attemptedWave,store:store,ownedWave:ownedWave,observe:observe)
         let result = Self(globals:globals,sounds:sounds,paused:paused,
                           commands:[[UInt8](repeating:0,count:10),[UInt8](repeating:0,count:10)])
         try beforeCommit(result)

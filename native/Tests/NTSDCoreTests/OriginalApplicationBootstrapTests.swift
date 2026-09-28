@@ -65,7 +65,8 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
     /// These adapters compare saved observations. Only Core chooses and calls
     /// the startup/loop/World/resources/settings/screen/menu continuations.
     func runMenu(_ index: Int,_ r: M.Resources,_ body: Body.Resources,_ front: F.Resources,
-        _ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,
+        _ br: B.Resources,_ er: Entry.Resources,fail: String? = nil,useHost: Bool = false,hostControls: Bool = false,
+        hostReady: ((OriginalApplicationHostSessionTests.Application) throws -> Void)? = nil,
         continuation: ((Session.Loop,B.OwnContext) throws -> Void)? = nil) throws {
         let c = r.c.cases[index]
         let bodyCase = c.parentKind == "body" ? body.c.cases[r.indices[index]] : nil
@@ -84,7 +85,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
         let sources = Dictionary(uniqueKeysWithValues:try XCTUnwrap(parent.input).loads.map { (String(decoding:$0.path,as:UTF8.self),$0.file) })
         var platform = try Parent.Adapter(parent,rawParent,sources:sources,blob:br.blob,initial:initialGlobals,startupInputs:package)
         let oldPlatform = platform
-        var app = A()
+        let app = OriginalApplicationHostSessionTests.Application(useHost:useHost,controls:hostControls)
         let startupBatch = try app.start(instance:0x400000,show:10,initial:initial,platform:&platform,
             store:{ $0.store($1,$2) },beforeCommit:{ owner,menu,p in
                 try p.complete(owner,Self.context(menu.state).globals)
@@ -280,7 +281,7 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
             XCTAssertEqual(loop.counter,c.after.counter);XCTAssertEqual(loop.timer.baseline,c.after.baseline)
             XCTAssertEqual(owned.libraryText.retainedDC,c.after.retainedDC)
             XCTAssertEqual(c.after.pc,0x43d110);XCTAssertEqual(c.after.sp,0x1000effc)
-            XCTAssertEqual(c.after.cw,0x37f);XCTAssertEqual(c.after.seh,UInt32.max)
+            XCTAssertEqual(c.after.cw,r.sourceControlWord);XCTAssertEqual(c.after.seh,UInt32.max)
             XCTAssertTrue(owned.full.defined.allSatisfy { $0 })
             XCTAssertEqual(owned.random,startup.random)
             XCTAssertEqual(owned.memory.allocations.count,c.records.count)
@@ -444,7 +445,8 @@ final class OriginalApplicationBootstrapTests: XCTestCase {
                     var context = B.OwnContext(base:try Self.context(own.state))
                     context = try context.receivingMenuState(own.state)
                     context.graphics = graphics;context.settings = own.state.settings
-                    context.frontSurfaces = rawSurfaces;context.dispatchResult = 1;context.bootstrap = app
+                    context.frontSurfaces = rawSurfaces;context.dispatchResult = 1;context.bootstrap = app.core
+                    try hostReady?(app)
                     try continuation?(own.loop,context)
                 } else { try p.snapshot(Self.context(own.state),own.loop,step.after) }
             } catch {

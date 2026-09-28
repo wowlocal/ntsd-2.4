@@ -22,14 +22,21 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
     struct Case: Decodable { let spec: Spec,parent: String,before: State,after: State,events: [Event],states: [Checkpoint],iterations: [Iteration],randomCalls: [Random],end: String }
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
-        let c: Corpus,extras: [[ExtraEvent]],indices: [Int]
+        let c: Corpus,extras: [[ExtraEvent]],indices: [Int],referenceIndices: [Int]
         var cache: [String:[UInt8]] = [:]
-        init(_ parent: M.Resources) throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_MENU_INPUT"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-menu-input",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:300_000_000)
-            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,50)
+        init(_ parent: M.Resources,supplied: Data? = nil,expectedCounts: (cases: Int,parents: Int) = (50,47),referenceIndices: [Int]? = nil) throws {
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_MENU_INPUT"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-menu-input",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:300_000_000)
+            }
+            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,expectedCounts.cases)
+            self.referenceIndices = referenceIndices ?? Array(c.cases.indices)
+            XCTAssertEqual(self.referenceIndices.count,c.cases.count)
+            XCTAssertTrue(self.referenceIndices.allSatisfy { (0..<50).contains($0) })
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any]),parents = try XCTUnwrap(raw["menuParents"] as? [String:[String:Any]])
-            XCTAssertEqual(parents.count,47)
+            XCTAssertEqual(parents.count,expectedCounts.parents)
             indices = try c.cases.map { c in let p = try XCTUnwrap(parents[c.parent]);return try XCTUnwrap(parent.rawCases.firstIndex { NSDictionary(dictionary:$0).isEqual(to:p) }) }
             extras = try XCTUnwrap(raw["cases"] as? [[String:Any]]).map { raw in try JSONDecoder().decode([ExtraEvent].self,from:JSONSerialization.data(withJSONObject:XCTUnwrap(raw["events"]))) }
         }
@@ -91,14 +98,21 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             XCTAssertTrue(full == (try r.blob(s.state.globals)),c.spec.label+" checkpoint "+name);return s.state
         }
     }
-    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,
+    func run(_ index: Int,_ r: Resources,_ mr: M.Resources,_ body: Body.Resources,_ front: F.Resources,_ br: B.Resources,_ er: B.Entry.Resources,fail: String? = nil,useHost: Bool = false,
              loading: ((B.OwnContext, OriginalApplicationMenuSession.PendingLoading) throws -> Void)? = nil,
-             ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil) throws {
-        let c = r.c.cases[index];var reached = false,failed = false
-        try M().run(r.indices[index],mr,body,front,br,er,continuation:{ initialLoop,initial in
+             ownerAtLoading: ((OriginalApplicationMenuSession) throws -> Void)? = nil,
+             hostAtLoading: ((OriginalApplicationHostSessionTests.Host) throws -> Void)? = nil,
+             beforeHostLoading: ((OriginalApplicationHostSessionTests.Host,OriginalApplicationHostSessionTests.Host.Inputs) throws -> Void)? = nil) throws {
+        let c = r.c.cases[index],referenceIndex = r.referenceIndices[index];var reached = false,failed = false
+        var hostApplication: OriginalApplicationHostSessionTests.Application?
+        try M().run(r.indices[index],mr,body,front,br,er,useHost:useHost,hostReady:{ if useHost { hostApplication = $0 } },continuation:{ initialLoop,initial in
             reached = true
             typealias Session = OriginalApplicationMenuSession
             var session = try Session(state:initial.menuSessionState(counter:initialLoop.counter),loop:initialLoop)
+            if let app = hostApplication {
+                OriginalApplicationBootstrapTests.same(try XCTUnwrap(app.session),session)
+                session = try XCTUnwrap(app.session)
+            }
             let parentBindings = try XCTUnwrap(session.state.bitmapInputs)
             let ownExtras = r.extras[index]
             let a = Adapter(c,r,ownExtras,session.state.full.bytes,fail)
@@ -150,7 +164,7 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             func snapshot(_ state: State,_ owned: Session.State,_ timer: Loop) throws {
                 XCTAssertTrue(owned.full.bytes == (try r.blob(state.globals)),c.spec.label+" full state")
                 XCTAssertTrue(owned.full.defined.allSatisfy { $0 },"Selected parent has independent PE provenance; source write masks are separate")
-                try OriginalSurfaceSourceColorsTests.compareInput(owned.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
+                try OriginalSurfaceSourceColorsTests.compareInput(owned.bitmapInputs,parent:parentBindings,inputIndex:referenceIndex,eventEnd:a.index)
                 XCTAssertEqual(owned.random.state,state.random);XCTAssertEqual(owned.libraryText.retainedDC,state.retainedDC)
                 XCTAssertEqual(timer.counter,state.counter);XCTAssertEqual(timer.timer.baseline,state.baseline)
                 XCTAssertEqual(timer.message.bytes,try r.blob(state.message));XCTAssertEqual(timer.message.defined,try r.blob(state.messageMask).map { $0 != 0 })
@@ -175,10 +189,47 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
             for iteration in c.iterations {
                 try snapshot(iteration.before,session.state,session.loop)
                 let prior = session, oldEffects = deliveredEffects, eventStart = a.index,graphicsStart = graphicsSeen.count
+                func advance(observe: @escaping (OriginalFrontScreenEvent) throws -> Void,
+                    graphicsObserve: @escaping (OriginalApplicationGraphics.Command) throws -> Void,
+                    checkpoint: (Session.Checkpoint,OriginalStateRecord,Int32?) throws -> Void,
+                    bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void,
+                    beforeCommit: (Session.Loop,Session.State) throws -> Void) throws -> Session.Outcome {
+                    guard let app = hostApplication else {
+                        return try session.step(responses:responses,queue:a.queue,windowDefault:{ q in
+                            XCTAssertEqual(q.kind,.windowDefault);return try a.window(q.arguments)
+                        },surface:a.clear,observe:observe,graphicsObserve:graphicsObserve,checkpoint:checkpoint,
+                            bodyProduced:bodyProduced,beforeCommit:beforeCommit)
+                    }
+                    // Declared API replies only. Existing callbacks still compare
+                    // every actual request/event; no source state initializes Core.
+                    let events = c.events[eventStart..<iteration.eventEnd]
+                    let loopKinds: Set<String> = ["peek","get","translate","dispatchMessage","time","sleep"]
+                    let queue = try events.filter { $0.kind == "queue" && loopKinds.contains($0.request?.kind ?? "") }.map { e -> Loop.Response in
+                        if let response = e.response { return response }
+                        let kind = try XCTUnwrap(e.request).kind
+                        guard kind == "translate" || kind == "dispatchMessage" else { throw Stop.late }
+                        return .init()
+                    }
+                    let window = try events.filter { $0.kind == "queue" && $0.request?.kind == "windowDefault" }.map { try XCTUnwrap($0.response).result }
+                    let surface = events.filter { $0.kind == "front" && $0.event?.kind == "clear" }.map { _ in OriginalWindowInitialization.Response(result:c.spec.drawResult) }
+                    if iteration.end == "loading",let beforeHostLoading {
+                        try beforeHostLoading(XCTUnwrap(app.host),.init(responses:responses,queue:queue,windowDefault:window,surface:surface))
+                    }
+                    let outcome = try app.step(responses:responses,queue:queue,windowDefault:window,surface:surface,lifecycle:[],observe:{ event in
+                        switch event {
+                        case .queueResponse(let q,let reply):XCTAssertEqual(reply,try a.queue(q))
+                        case .windowResponse(let q,let reply):
+                            XCTAssertEqual(q.kind,.windowDefault);XCTAssertEqual(reply,try a.window(q.arguments))
+                        case .surfaceResponse(let q,let reply):XCTAssertEqual(reply,try a.clear(q))
+                        default:XCTFail("Unexpected host input observation");throw Stop.late
+                        }
+                    },menuObserve:observe,graphicsObserve:graphicsObserve,checkpoint:checkpoint,
+                        bodyProduced:bodyProduced,beforeCommit:beforeCommit)
+                    session = try XCTUnwrap(app.session)
+                    return outcome
+                }
                 do {
-                    let outcome = try session.step(responses:responses,queue:a.queue,windowDefault:{ q in
-                        XCTAssertEqual(q.kind,.windowDefault);return try a.window(q.arguments)
-                    },surface:a.clear,observe:{ e in
+                    let outcome = try advance(observe:{ e in
                         if e.kind == "randomTable" {
                             var check = OriginalCRTRandom(state:e.arguments[0])
                             for _ in 0..<3000 {
@@ -215,12 +266,13 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                         XCTAssertEqual(iteration.after.pc,0x41bc90);XCTAssertEqual(iteration.after.sp,0x1000ea6c)
                         XCTAssertEqual(pending.stagedEffects,try expectedEffects(eventStart,iteration.eventEnd))
                         XCTAssertEqual(pending.stagedGraphics,Array(graphicsSeen[graphicsStart...]))
-                        try OriginalApplicationGraphicsTests.compareOwner(pending.state.graphics,kind:"input",index:index)
-                        try OriginalSurfaceSourceColorsTests.compareInput(pending.state.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
+                        try OriginalApplicationGraphicsTests.compareOwner(pending.state.graphics,kind:"input",index:referenceIndex)
+                        try OriginalSurfaceSourceColorsTests.compareInput(pending.state.bitmapInputs,parent:parentBindings,inputIndex:referenceIndex,eventEnd:a.index)
                         let loadingState = try initial.receivingMenuState(pending.state)
-                        try OriginalSurfaceSourceColorsTests.compareInput(loadingState.bitmapInputs,parent:parentBindings,inputIndex:index,eventEnd:a.index)
+                        try OriginalSurfaceSourceColorsTests.compareInput(loadingState.bitmapInputs,parent:parentBindings,inputIndex:referenceIndex,eventEnd:a.index)
                         try ownerAtLoading?(session)
                         try loading?(loadingState,pending)
+                        if let hostAtLoading { try hostAtLoading(XCTUnwrap(hostApplication?.host)) }
                         XCTAssertEqual(a.index,iteration.eventEnd);unchanged(prior,oldEffects)
                     }
                 } catch {
@@ -228,9 +280,9 @@ final class OriginalApplicationMenuInputTests: XCTestCase {
                     XCTAssertNotNil(fail);failed = true;unchanged(prior,oldEffects);break
                 }
             }
-            try OriginalApplicationGraphicsTests.compare(graphicsSeen,kind:"input",index:index,stageKind:"input",prefix:fail != nil,inputs:session.state.bitmapInputs)
+            try OriginalApplicationGraphicsTests.compare(graphicsSeen,kind:"input",index:referenceIndex,stageKind:"input",prefix:fail != nil,inputs:session.state.bitmapInputs)
             if fail == nil {
-                if c.iterations.last?.end != "loading" { try OriginalApplicationGraphicsTests.compareOwner(session.state.graphics,kind:"input",index:index) }
+                if c.iterations.last?.end != "loading" { try OriginalApplicationGraphicsTests.compareOwner(session.state.graphics,kind:"input",index:referenceIndex) }
                 let sound = deliveredEffects.compactMap { e -> Int32? in if case .soundMethod(_,let result) = e { return result };return nil }
                 let release = deliveredEffects.compactMap { e -> Int32? in if case .release(_,let result) = e { return result };return nil }
                 XCTAssertEqual(sound,Array(repeating:c.spec.soundResult,count:c.spec.label.hasPrefix("activate-") ? 3 : 0))

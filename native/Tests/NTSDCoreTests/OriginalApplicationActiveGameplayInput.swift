@@ -117,7 +117,7 @@ final class OriginalApplicationActiveGameplayInput {
         try P.require(c.cycle.prefix.after.poolBytes == after.state.poolBytes && c.cycle.prefix.after.poolMask == after.state.poolMask,"Source prologue pool retention")
         held = next
     }
-    static func acquire(_ app: inout C.A,_ plan: A.Plan,_ held: inout Set<UInt32>) throws -> Int {
+    static func acquire(_ app: inout C.A,_ plan: A.Plan,_ held: inout Set<UInt32>,driver: OriginalApplicationLoadedTestDriver? = nil) throws -> Int {
         let globals = try XCTUnwrap(app.session).state.full,next = try desired(globals,plan)
         var expected = keyboard(globals),count = 0
         for key in held.union(next).sorted() {
@@ -172,7 +172,8 @@ final class OriginalApplicationActiveGameplayInput {
                 try message.write(UInt32(down ? 0x100 : 0x101),at:4)
                 try message.write(key,at:8)
                 try projected.replace(0,full)
-                try C.key(&app,down ? 0x100 : 0x101,key)
+                if let driver { try driver.key(down ? 0x100 : 0x101,key);app = driver.core }
+                else { try C.key(&app,down ? 0x100 : 0x101,key) }
                 let afterSession = try XCTUnwrap(app.session)
                 try sameState(afterSession.state,projected)
                 try P.require(afterSession.loop.counter == counter && afterSession.loop.message == message && afterSession.loop.timer.baseline == beforeSession.loop.timer.baseline,"Whole keyboard iteration loop state")

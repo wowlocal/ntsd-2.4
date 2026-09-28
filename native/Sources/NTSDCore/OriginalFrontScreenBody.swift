@@ -24,10 +24,13 @@ public enum OriginalFrontScreenBody {
     /// remain unknown. The library DC and globals commit only after completion.
     public static func advanceOwnStartup(globals: inout OriginalStateRecord,target: UInt32,
         libraryText: inout OriginalLibSurfaceText,input: OriginalFrontScreenBodyInput,
-        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> StartupResult {
+        draw: ([UInt32]) throws -> Void,
+        textPerform: ((OriginalMenuPresentationEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+        textDidRespond: (OriginalMenuPresentationEvent, OriginalLibSurfaceText.Response) throws -> Void = { _,_ in },
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> StartupResult {
         var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0xc0),defined:[Bool](repeating:false,count:0xc0))
         try local.write(target,at:0x20)
-        let end = try advanceWithLibrary(globals:&globals,local:&local,libraryText:&libraryText,input:input,draw:draw,observe:observe)
+        let end = try advanceWithLibrary(globals:&globals,local:&local,libraryText:&libraryText,input:input,draw:draw,textPerform:textPerform,textDidRespond:textDidRespond,observe:observe)
         let selector: Int32? = end == .alternateDispatch ? try globals.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self) : nil
         return .init(continuation:end,local:local,retainedSelector:selector)
     }
@@ -53,14 +56,20 @@ public enum OriginalFrontScreenBody {
     /// complete body commits its own globals, local bytes and DC together.
     public static func advanceWithLibrary(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,
         libraryText: inout OriginalLibSurfaceText,input: OriginalFrontScreenBodyInput,
-        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
+        draw: ([UInt32]) throws -> Void,
+        textPerform: ((OriginalMenuPresentationEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+        textDidRespond: (OriginalMenuPresentationEvent, OriginalLibSurfaceText.Response) throws -> Void = { _,_ in },
+        observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> Continuation {
         var text: OriginalLibSurfaceText? = libraryText
-        let end = try execute(globals: &globals,local: &local,libraryText: &text,input: input,draw: draw,observe: observe)
+        let end = try execute(globals: &globals,local: &local,libraryText: &text,input: input,draw: draw,textPerform: textPerform,textDidRespond: textDidRespond,observe: observe)
         libraryText = text!;return end
     }
     private static func execute(globals: inout OriginalStateRecord,local: inout OriginalStateRecord,
         libraryText: inout OriginalLibSurfaceText?,input: OriginalFrontScreenBodyInput,
-        draw: ([UInt32]) throws -> Void,observe: (OriginalFrontScreenEvent) throws -> Void) throws -> Continuation {
+        draw: ([UInt32]) throws -> Void,
+        textPerform: ((OriginalMenuPresentationEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+        textDidRespond: (OriginalMenuPresentationEvent, OriginalLibSurfaceText.Response) throws -> Void = { _,_ in },
+        observe: (OriginalFrontScreenEvent) throws -> Void) throws -> Continuation {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize,local.bytes.count == 0xc0 else { throw OriginalStateError.invalidStorage("Front screen body extent") }
         var state = globals, scratch = local,ownText = libraryText
         let base = OriginalMatchPreparation.globalBase
@@ -95,8 +104,15 @@ public enum OriginalFrontScreenBody {
             try emit("text",[target,0x602010,color,bits(x),bits(y)],[bytes])
             guard target != 0 else { throw Stop(end: .nullTextTarget) }
             if ownText != nil {
-                try ownText!.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in
-                    try emit(e.kind.rawValue,e.arguments,e.strings)
+                if let textPerform {
+                    try ownText!.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,
+                        perform: textPerform,didRespond: textDidRespond) { e in
+                        try emit(e.kind.rawValue,e.arguments,e.strings)
+                    }
+                } else {
+                    try ownText!.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in
+                        try emit(e.kind.rawValue,e.arguments,e.strings)
+                    }
                 }
             } else {
                 try OriginalSurfaceText.draw(bytes,target: target,background: 0x602010,color: color,x: x,y: y,dcResult: input.dcResult,dc: input.dc) { e in

@@ -21,7 +21,7 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
         frontAllocations:[],backgroundAllocation:.init(address:0,backing:[]),frontResponses:[],backgroundResponses:[])
     static let responses = Session.Responses(draw:0,presentation:0,sound:0,release:0,dcResult:0,dc:0x12345678)
     static let parent: Result<Parent,Error> = Result {
-        let r = try F.reference.get(),prefix = try OriginalApplicationCatalogSessionReference(parentIndex:0)
+        let prefix = try OriginalApplicationCatalogSessionReference(parentIndex:0)
         let fr = try Q.F.Resources(),br = try Q.Body.Resources(fr),mr = try Q.M.Resources(br,fr),ir = try Q.Resources(mr)
         let bitmap = try Q.B.Resources(),entry = try Q.B.Entry.Resources()
         let index = prefix.prefix.spec.parentIndex,c = ir.c.cases[index]
@@ -58,23 +58,7 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
                 case .committed:state = try XCTUnwrap(app.session).state
                 case .loading(let pending):
                     state = pending.state
-                    var loading = try pending.makeLoadingSession()
-                    let common = try loading.prepareCommon(inputs:OriginalApplicationLoadingPrefixTests.commonInputs.get(),
-                        waves:prefix.prefix.loads.map(\.input),drawResult:c.spec.drawResult,presentationResult:c.spec.presentResult)
-                    XCTAssertEqual(common.state.full.bytes,try prefix.blob(prefix.c.before.globals))
-                    let startup = try XCTUnwrap(app.startup)
-                    var catalog = try C.Input.Pool.Catalog(pending:common,startup:.init(owner:XCTUnwrap(startup.input?.sounds),
-                        platforms:prefix.startupWaveInputs,music:startup.output.music))
-                    let checksum = try common.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
-                    let cache = Array(common.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
-                    let controls = F.Provider(r,checksum,cache)
-                    let loaded = try catalog.load(resources:F().resources(r,common.target),makeControls:controls.controls,
-                        observe:controls.observe,afterChild:controls.afterChild,beforeCommit:{ try r.complete($0);try F().checkPublication($0,r,controls) })
-                    let provider = try M.P.Provider(loaded);var pool = try C.Input.Pool(pending:loaded)
-                    let p = try pool.prepare(inputs:OriginalApplicationInterfaceInputsTests.inputs.get(),makeControls:provider.controls,
-                        observe:provider.observe,beforeCommit:provider.complete)
-                    var input = try C.Input(pending:p,arithmeticPrecision:.bits53),env: Void = ()
-                    let ready = try input.advance(environment:&env,controlBoundary:{ _,_ in throw Stop.unexpected("first input API") })
+                    let ready = try firstInput(pending,XCTUnwrap(app.startup),draw:c.spec.drawResult,presentation:c.spec.presentResult)
                     result = .init(application:app,input:ready)
                 }
                 XCTAssertEqual(state.full.bytes,try ir.blob(iteration.after.globals))
@@ -87,6 +71,27 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
                 XCTAssertEqual(adapter.index,iteration.eventEnd);eventStart = iteration.eventEnd
             }
         return try XCTUnwrap(result)
+    }
+    /// Same original comparisons, also callable with the host's actual entry.
+    static func firstInput(_ pending: Session.PendingLoading,_ startup: OriginalWinMainStartup,
+        draw: Int32 = 0,presentation: Int32 = 0) throws -> C.Input.PendingContinuation {
+        let r = try F.reference.get(),prefix = try OriginalApplicationCatalogSessionReference(parentIndex:0)
+        var loading = try pending.makeLoadingSession()
+        let common = try loading.prepareCommon(inputs:OriginalApplicationLoadingPrefixTests.commonInputs.get(),
+            waves:prefix.prefix.loads.map(\.input),drawResult:draw,presentationResult:presentation)
+        XCTAssertEqual(common.state.full.bytes,try prefix.blob(prefix.c.before.globals))
+        var catalog = try C.Input.Pool.Catalog(pending:common,startup:.init(owner:XCTUnwrap(startup.input?.sounds),
+            platforms:prefix.startupWaveInputs,music:startup.output.music))
+        let checksum = try common.state.full.integer(at:0x44f620-0x44d000,as:UInt32.self)
+        let cache = Array(common.state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)])
+        let controls = F.Provider(r,checksum,cache)
+        let loaded = try catalog.load(resources:F().resources(r,common.target),makeControls:controls.controls,
+            observe:controls.observe,afterChild:controls.afterChild,beforeCommit:{ try r.complete($0);try F().checkPublication($0,r,controls) })
+        let provider = try M.P.Provider(loaded);var pool = try C.Input.Pool(pending:loaded)
+        let p = try pool.prepare(inputs:OriginalApplicationInterfaceInputsTests.inputs.get(),makeControls:provider.controls,
+            observe:provider.observe,beforeCommit:provider.complete)
+        var input = try C.Input(pending:p,arithmeticPrecision:.bits53),env: Void = ()
+        return try input.advance(environment:&env,controlBoundary:{ _,_ in throw Stop.unexpected("first input API") })
     }
     struct InputEnvironment: Equatable {
         var requests: [OriginalInputControlRequest] = [],points: [String] = [],phases: [Int32] = []
@@ -122,6 +127,13 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
             guard q.kind == .time || q.kind == .sleep else { throw Stop.unexpected("Outer tail") }
             return .init(result:stop == "sleep" ? 1_000_000 : Int32(bitPattern:time))
         },beforeCommit:{ _,_,e in e.append("commit");if stop == "commit" { throw Stop.injected("commit") } })
+        try checkFinished(app,pending,completed,time:time)
+        } catch {
+            XCTAssertEqual(env,[]);throw error
+        }
+        XCTAssertEqual(env,["time","commit"])
+    }
+    static func checkFinished(_ app: A,_ pending: M.S.PendingReturn,_ completed: Session.LoadedCommit,time: UInt32) throws {
         let current = try XCTUnwrap(app.session),owners = try XCTUnwrap(current.loadedOwners)
         XCTAssertEqual(completed.result,.continued)
         XCTAssertEqual(completed.operations,pending.snapshot.operations+[.loop(.init(.time),.init(result:Int32(bitPattern:time)))])
@@ -140,10 +152,6 @@ final class OriginalApplicationLoadedCycleTests: XCTestCase {
         XCTAssertEqual(owners.match.releasedBitmapOrder,pending.snapshot.match.releasedBitmapOrder)
         XCTAssertEqual(owners.music.allocations,pending.snapshot.music.allocations)
         XCTAssertEqual(owners.resources.bitmaps,pending.snapshot.resources.bitmaps);XCTAssertEqual(owners.backgrounds,pending.snapshot.backgrounds)
-        } catch {
-            XCTAssertEqual(env,[]);throw error
-        }
-        XCTAssertEqual(env,["time","commit"])
     }
     static func start(_ reverse: Bool) throws -> (A,M.S.PendingReturn) {
         let p = try parent.get();var app = p.application,s = try M.S(pending:p.input),env = M.Environment(reverse:reverse)

@@ -9,11 +9,11 @@ final class OriginalApplicationActivePhysicsTests: XCTestCase {
     typealias S = Q.S
     typealias P = Q.P
     typealias M = OriginalApplicationLoadedMenuSession
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,M.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try OriginalApplicationActivePhysicsSource(reverse)
         let sourcePoints = try source.compare()
         var previous: M.Snapshot?,count = 0
-        try OriginalApplicationActiveBodyTests().control(reverse,onBody:{ call,ready,event in
+        try OriginalApplicationActiveBodyTests().control(reverse,driver:driver,onBody:{ call,ready,event in
             switch event {
             case .gameplay(.physics):
                 throw OriginalApplicationLoadedCycleTests.Stop.unexpected("Physics event requires extended comparison")

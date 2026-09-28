@@ -17,17 +17,24 @@ final class OriginalApplicationFrontScreenTests: XCTestCase {
     struct Corpus: Decodable { let cases: [Case],blobs: [String:OriginalApplicationMessageLoopTests.Blob] }
     final class Resources {
         let c: Corpus,settings: S.Resources,settingKeys: [String]
+        let sourceControlWord: UInt32
         let rawCases: [[String:Any]]
         var cache: [String:[UInt8]] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_FRONT_SCREEN"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-front-screen",withExtension:"json",subdirectory:"Fixtures"))
-            let data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
-            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,41)
+        init(supplied: Data? = nil, expectedCounts: (cases: Int, settings: Int) = (41,19), sourceControlWord: UInt32 = 0x37f) throws {
+            self.sourceControlWord = sourceControlWord
+            let data: Data
+            if let supplied { data = supplied }
+            else {
+                let url = try ProcessInfo.processInfo.environment["NTSD_APPLICATION_FRONT_SCREEN"].map { URL(fileURLWithPath:$0) } ?? XCTUnwrap(Bundle.module.url(forResource:"original-application-front-screen",withExtension:"json",subdirectory:"Fixtures"))
+                data = try MatchPreparationReference.unpack(Data(contentsOf:url),maximumCount:100_000_000)
+            }
+            c = try JSONDecoder().decode(Corpus.self,from:data);XCTAssertEqual(c.cases.count,expectedCounts.cases)
             let raw = try XCTUnwrap(JSONSerialization.jsonObject(with:data) as? [String:Any]),parents = try XCTUnwrap(raw["settingsParents"] as? [String:[String:Any]])
             rawCases = try XCTUnwrap(raw["cases"] as? [[String:Any]])
-            settingKeys = parents.keys.sorted();XCTAssertEqual(settingKeys.count,19)
+            settingKeys = parents.keys.sorted();XCTAssertEqual(settingKeys.count,expectedCounts.settings)
             let supplied: [String:Any] = ["cases":settingKeys.map { parents[$0]! },"parents":try XCTUnwrap(raw["bitmapParents"]),"blobs":try XCTUnwrap(raw["blobs"]),"scratchAddress":0x1000e878,"scratchCount":500]
-            settings = try S.Resources(supplied:JSONSerialization.data(withJSONObject:supplied))
+            settings = try S.Resources(supplied:JSONSerialization.data(withJSONObject:supplied),sourceControlWord:sourceControlWord)
+            XCTAssertEqual(settings.c.cases.count,expectedCounts.settings)
         }
         func blob(_ key: String) throws -> [UInt8] {
             if let b = cache[key] { return b }
@@ -125,7 +132,7 @@ final class OriginalApplicationFrontScreenTests: XCTestCase {
                 let present = try bitmap.storage.integer(at:0,as:UInt32.self) != 0
                 return (bitmap,present ? try XCTUnwrap(adapter.created) : 0)
             },observe:adapter.observe)
-            XCTAssertEqual(end.rawValue,c.end);XCTAssertEqual(c.after.cw,0x37f)
+            XCTAssertEqual(end.rawValue,c.end);XCTAssertEqual(c.after.cw,r.sourceControlWord)
             var all = owned.front.bitmaps
             for (token,bitmap) in screen.bitmaps { XCTAssertNil(all.updateValue(bitmap,forKey:token)) }
             try adapter.complete(g,all);XCTAssertEqual(globals.bytes,Array(adapter.shadow.prefix(0xb440)))

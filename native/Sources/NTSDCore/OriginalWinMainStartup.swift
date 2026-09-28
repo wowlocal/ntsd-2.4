@@ -6,6 +6,10 @@ public protocol OriginalWinMainStartupPlatform: AnyObject {
     var panelIO: OriginalWinMainStartup.PanelIO { get }
     var environmentTZ: [UInt8]? { get }
     var sound: OriginalMenuSoundStartup.Platform { get }
+    var observesAudio: Bool { get }
+    func soundRequest(_ event: OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse
+    func waveInput(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWaveInput
+    func waveRequest(_ binding: OriginalWaveBinding,_ request: OriginalWaveRequest) throws -> OriginalWaveResponse
     func milliseconds() throws -> UInt32
     func initializeCriticalSection(_ address: UInt32) throws -> [UInt8]
     func initializeCOM() throws -> UInt32
@@ -25,6 +29,19 @@ public protocol OriginalWinMainStartupPlatform: AnyObject {
     func joystick(_ request: OriginalInputStartup.Request,_ globals: OriginalStateRecord) throws -> OriginalInputStartup.Response
     func wave(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWavePlatform
     func observe(_ event: OriginalWinMainStartup.Observation) throws
+}
+
+public extension OriginalWinMainStartupPlatform {
+    var observesAudio: Bool { false }
+    func soundRequest(_ event: OriginalMenuSoundStartup.Event) throws -> OriginalSoundResponse {
+        throw OriginalStateError.invalidStorage("No observed sound provider")
+    }
+    func waveInput(_ index: Int,_ path: String,_ destination: UInt32,_ device: UInt32) throws -> OriginalWaveInput {
+        throw OriginalStateError.invalidStorage("No prepared WAV inputs")
+    }
+    func waveRequest(_ binding: OriginalWaveBinding,_ request: OriginalWaveRequest) throws -> OriginalWaveResponse {
+        throw OriginalStateError.invalidStorage("No observed WAV provider")
+    }
 }
 
 /// Actual WinMain entry through43d100, before its first message-loop setup.
@@ -102,12 +119,21 @@ public struct OriginalWinMainStartup {
             formatted:{ try p.observe(.date($0,$1,$2)) },requestMusic:p.music,requestCursor:p.cursor,store:store)
         try p.observe(.stage("output-return",state))
         try p.observe(.stage("input-entry",state))
+        if p.observesAudio {
+            candidate.input = try OriginalInputStartup.loadObserved(globals:&state,request:p.joystick,
+                soundRequest:p.soundRequest,waveInput:p.waveInput,waveRequest:p.waveRequest,fileSource:{ path in
+                    guard let bytes = try p.file(path) else { throw OriginalStateError.invalidStorage("Missing declared menu WAV source") }
+                    return bytes
+                },store:store,capabilities:{ try p.observe(.capabilities($0,$1)) },
+                afterWave:{ try p.observe(.wave($0,$1,$2)) },observeSound:{ try p.observe(.sound($0,$1)) })
+        } else {
         candidate.input = try OriginalInputStartup.load(globals:&state,request:p.joystick,soundPlatform:p.sound,
             wavePlatform:p.wave,fileSource:{ path in
                 guard let bytes = try p.file(path) else { throw OriginalStateError.invalidStorage("Missing declared menu WAV source") }
                 return bytes
             },store:store,capabilities:{ try p.observe(.capabilities($0,$1)) },
             afterWave:{ try p.observe(.wave($0,$1,$2)) },observeSound:{ try p.observe(.sound($0,$1)) })
+        }
         try p.observe(.stage("input-return",state))
         try after(candidate,state)
         self = candidate;globals = state

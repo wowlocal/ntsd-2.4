@@ -13,12 +13,23 @@ public struct OriginalApplicationCatalogSession {
     /// registered WAV owners. Platforms give logical PCM identities, not bytes.
     public struct StartupSounds {
         public let owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform]
+        public let waveOwners: [OriginalWaveOwnership]
         /// The real WinMain output already owns its wide music allocation.
         /// Retain it through catalog/pool/input until the next music consumer.
         public let music: OriginalMusicMemory
         public init(owner: OriginalMenuSoundStartup.Result, platforms: [OriginalWavePlatform], music: OriginalMusicMemory) throws {
             guard owner.loads.count == platforms.count else { throw Boundary.input("Startup WAV owners") }
             self.owner = owner; self.platforms = platforms; self.music = music
+            waveOwners = zip(owner.loads,platforms).enumerated().map { i,pair in
+                let path = i < OriginalMenuSoundStartup.paths.count ? OriginalMenuSoundStartup.paths[i] : ""
+                return .init(binding:.init(i,path,pair.1.destination,pair.1.device),result:pair.0,legacy:pair.1)
+            }
+        }
+        public init(owner: OriginalMenuSoundStartup.Result,waveOwners: [OriginalWaveOwnership],music: OriginalMusicMemory) throws {
+            guard owner.loads.count == waveOwners.count,zip(waveOwners,owner.loads).allSatisfy({ pair in pair.0.matches(pair.1) }) else {
+                throw Boundary.input("Startup WAV owners")
+            }
+            self.owner = owner;self.waveOwners = waveOwners;self.music = music;platforms = []
         }
     }
     public struct MessageInput {
@@ -71,6 +82,7 @@ public struct OriginalApplicationCatalogSession {
         public let state: Session.State, parent: [Int:OriginalStateRecord], allocations: [Allocation]
         public let objectTokens: [UInt32], bitmapTokens: [UInt32], bitmapSurfaces: [UInt32]
         public let sounds: OriginalRegisteredSoundLoading, waveInputs: [OriginalWavePlatform]
+        public let waveOwners: [OriginalWaveOwnership]
         /// Actual semantic writes; this mask is not Native knowledge and does
         /// not claim original instruction widths, PC order or store counts.
         public let globalStores: [GlobalStore], observedGlobalWrites: [Bool]
@@ -87,7 +99,7 @@ public struct OriginalApplicationCatalogSession {
     public init(pending: Loading.PendingCatalog, startup: StartupSounds) throws {
         try pending.state.validateAliases()
         guard pending.state.bitmapInputs != nil, pending.state.graphics != nil,
-              pending.common.sounds.count == pending.waveInputs.count else { throw Boundary.missingOwners }
+              pending.common.sounds.count == pending.waveOwners.count else { throw Boundary.missingOwners }
         // The shared registry initializes its own ordinal count to zero. A
         // retained nonempty cache needs a separately recovered continuation.
         guard try pending.state.full.integer(at:0x458438-0x44d000,as:UInt32.self) == 0 else {
@@ -129,6 +141,8 @@ public struct OriginalApplicationCatalogSession {
         var state: Session.State, parent: [Int:OriginalStateRecord] = [:], allocations: [Allocation] = []
         var objectTokens: [UInt32] = [], bitmapTokens: [UInt32] = [], bitmapSurfaces: [UInt32] = []
         var sounds = OriginalRegisteredSoundLoading(), waveInputs: [OriginalWavePlatform] = []
+        var waveOwners: [OriginalWaveOwnership] = []
+        let audioDomain: OriginalWaveRegionDomain
         var globalStores: [GlobalStore] = [], observedGlobalWrites: [Bool]
         var operations: [Operation], graphics: [OriginalApplicationGraphics.Command]
         var ranges: [(UInt64,UInt64)] = []
@@ -137,6 +151,8 @@ public struct OriginalApplicationCatalogSession {
             observe: @escaping (Observation,Session.State) throws -> Void,
             afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void) throws {
             self.entry = entry; self.inputs = inputs; self.controls = controls; self.observe = observe; self.afterChild = afterChild
+            guard let first = startup.waveOwners.first else { throw Boundary.missingOwners }
+            audioDomain = first.domain
             state = entry.state; observedGlobalWrites = [Bool](repeating:false,count:state.full.bytes.count)
             operations = entry.stagedOperations.map(Operation.preceding); graphics = entry.stagedGraphics
             guard inputs.presentation.targetSurface == entry.target else { throw Boundary.input("Catalog presentation target") }
@@ -150,24 +166,25 @@ public struct OriginalApplicationCatalogSession {
                   startup.owner.loads.count == OriginalMenuSoundStartup.paths.count else {
                 throw Boundary.dependency("Startup sound ownership for catalog entry")
             }
-            for (i,pair) in zip(startup.owner.loads,startup.platforms).enumerated() {
-                let (owner,p) = pair
-                guard p.destination == UInt32(0x45560c+4*i),p.device == device,
-                      try word(Int(p.destination)) == owner.output else { throw Boundary.input("Startup WAV binding") }
-                try retainWave(owner,p)
+            for (i,owner) in startup.waveOwners.enumerated() {
+                guard owner.binding.index == i,owner.binding.path == OriginalMenuSoundStartup.paths[i] else { throw Boundary.input("Startup WAV path/index") }
+                try owner.validate(device:device,destination:UInt32(0x45560c+4*i),
+                    output:word(0x45560c+4*i),domain:audioDomain)
+                try retainWave(owner)
             }
             for (token,record) in startup.music.allocations { try range(token,record.bytes.count) }
-            for (i,pair) in zip(entry.common.sounds,entry.waveInputs).enumerated() {
-                let (owner,p) = pair
-                guard p.destination == UInt32(0x451db0+4*i),p.device == device,
-                      try word(Int(p.destination)) == owner.output else { throw Boundary.input("Common WAV binding") }
-                try retainWave(owner,p)
+            for (i,owner) in entry.waveOwners.enumerated() {
+                guard owner.binding.index == i,owner.binding.path == OriginalInitialSoundLoading.paths[i] else { throw Boundary.input("Common WAV path/index") }
+                guard owner.matches(entry.common.sounds[i]) else { throw Boundary.input("Common WAV result") }
+                try owner.validate(device:device,destination:UInt32(0x451db0+4*i),
+                    output:word(0x451db0+4*i),domain:audioDomain)
+                try retainWave(owner)
             }
             for (region,count) in OriginalCatalogRegistry.regionSizes { parent[region] = try backing(count) }
         }
         func snapshot() -> Snapshot {
             .init(state:state,parent:parent,allocations:allocations,objectTokens:objectTokens,bitmapTokens:bitmapTokens,
-                bitmapSurfaces:bitmapSurfaces,sounds:sounds,waveInputs:waveInputs,globalStores:globalStores,
+                bitmapSurfaces:bitmapSurfaces,sounds:sounds,waveInputs:waveInputs,waveOwners:waveOwners,globalStores:globalStores,
                 observedGlobalWrites:observedGlobalWrites,operations:operations,graphics:graphics)
         }
         func backing(_ count: Int) throws -> OriginalStateRecord {
@@ -198,19 +215,14 @@ public struct OriginalApplicationCatalogSession {
             if checkingOverlap && ranges.contains(where:{ lo < $0.1 && $0.0 < hi }) { throw Boundary.overlap(token) }
             ranges.append((lo,hi))
         }
-        func retainWave(_ owner: OriginalWaveLoadResult,_ p: OriginalWavePlatform) throws {
-            guard owner.exit == .returned,owner.returned == 1,!owner.temporaryLive,
-                  p.device != 0,p.buffer != 0,owner.output == p.buffer,owner.temporary != nil else {
+        func retainWave(_ owner: OriginalWaveOwnership) throws {
+            guard owner.domain == audioDomain else { throw Boundary.input("WAV identity domain") }
+            do { for span in try owner.addressedRegions() { try range(span.token,span.count) } }
+            catch OriginalWaveOwnership.Boundary.incomplete {
                 throw Boundary.dependency("WAV without established completed PCM ownership")
+            } catch let error as OriginalWaveOwnership.Boundary {
+                throw Boundary.input("WAV PCM allocation provenance: \(error)")
             }
-            guard p.firstCount == owner.first.bytes.count, p.secondCount == (owner.second?.bytes.count ?? 0) else {
-                throw Boundary.input("WAV PCM allocation provenance")
-            }
-            // Temporary WAV bytes have no declared address in WavePlatform.
-            // They stay owned values, outside this logical address journal;
-            // unresolved live temporaries above cannot authorize allocation.
-            try range(p.firstPointer,owner.first.bytes.count)
-            if let second = owner.second { try range(p.secondPointer,second.bytes.count) }
         }
         func allocate(_ kind: Allocation.Kind,_ count: Int) throws -> UInt32 {
             let token = try controls.allocate(kind,count)
@@ -328,19 +340,20 @@ public struct OriginalApplicationCatalogSession {
             pendingSound = request
             let device = try word(0x44eecc)
             guard device != 0 else { return }
-            let p = try controls.wave(request,device),index = request.index
+            let p = try controls.prepareWave(request,device),index = request.index
             let address = 0x452948+index*4,outputBefore = try word(address)
             try emit(.wave(index,.init(.load,[p.destination],[request.path.unicodeScalars.map { UInt8($0.value) }])))
             var candidate = sounds
-            try candidate.load(request,device:device,outputBefore:outputBefore,platform:p,fileSource:file,
+            try candidate.load(request,device:device,outputBefore:outputBefore,preparation:p,fileSource:file,
                 outputStored:{ try self.put(address,$0) },onWave:{ e in
                     if e.kind != .load { self.operations.append(.wave(index,e)) }; try self.emit(.wave(index,e))
                 },onVolume:{ args in
-                    let result = try self.controls.volume(args)
+                    let result = try self.controls.setVolume(.init(index,request.path,p.destination,p.device),args)
                     self.operations.append(.volume(args,ignoredResult:result)); try self.emit(.volume(args,ignoredResult:result))
                 })
-            guard let owner = candidate.buffers[index] else { throw Boundary.missingOwners }
-            try retainWave(owner,p); sounds = candidate; waveInputs.append(p)
+            guard let owner = candidate.owners[index] else { throw Boundary.missingOwners }
+            try retainWave(owner);sounds = candidate;waveOwners.append(owner)
+            if let legacy = p.legacyPlatform { waveInputs.append(legacy) }
         }
         func soundCache(_ bytes: [UInt8],_ count: Int) throws {
             guard let request = pendingSound,request.index+1 == count else { throw Boundary.input("Sound commit order") }

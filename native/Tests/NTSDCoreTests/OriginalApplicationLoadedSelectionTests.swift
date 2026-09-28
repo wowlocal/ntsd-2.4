@@ -11,19 +11,21 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
     typealias S = OriginalApplicationLoadedSelectionComparison
     typealias Stop = M.Stop
     struct Frontier { let application: A,input: M.S.Input.PendingContinuation }
-    func sequence(_ reverse: Bool,
+    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,
+        atStartLoading: (OriginalApplicationLoadedTestDriver) throws -> Void = { _ in },
         onStart: (A,M.S.PendingMatchPrelude) throws -> Void = { _,_ in }) throws -> [Int:Frontier] {
-        var app = try H().characterChain(reverse)
-        let initial = try XCTUnwrap(app.session?.loadedOwners).match
+        let driver = try supplied ?? OriginalApplicationLoadedTestDriver.selected(reverse)
+        _ = try H().characterChain(reverse,driver:driver)
+        let initial = try XCTUnwrap(driver.core.session?.loadedOwners).match
         let r = try S(reverse,initial)
         var frontiers: [Int:Frontier] = [:],returns = 0
         for (index,item) in r.human.corpus.cases.enumerated() {
-            try H.acquire(&app,item.acquired)
-            let entry = try C.next(&app)
-            var cycle = try app.makeLoadedCycle(pending:entry),input = C.InputEnvironment()
-            let ready = try C.input(&cycle,&input),before = app
-            XCTAssertEqual(input.phases,[Int32](repeating:Int32((index+1)%2),count:6))
-            if [21,29,49].contains(index) { frontiers[index] = .init(application:app,input:ready) }
+            try driver.acquire(item.acquired)
+            try driver.next()
+            if index == 49 { try atStartLoading(driver) }
+            let before = driver.core
+            let outcome = try driver.prepare(phase:Int32((index+1)%2)) { ready in
+            if [21,29,49].contains(index) { frontiers[index] = .init(application:before,input:ready) }
             var own = ready.match
             try own.globals.write(own.globals.integer(at:0x20,as:UInt32.self),at:0x4512cc-0x44d000)
             try r.entry(own,item)
@@ -43,8 +45,7 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
                 XCTAssertEqual(item.screen.continuation,.returned);XCTAssertNotNil(item.returned)
                 try H().returning(returned,body:XCTUnwrap(body),environment:env,screenEvents:screenEvents,reference:r.human,item:item)
                 snapshot = returned.snapshot;graphics = returned.graphics
-                try C.unchanged(app,before);try C.finish(&app,returned);returns += 1
-                XCTAssertThrowsError(try C.finish(&app,returned))
+
             case .matchPrelude(let pending):
                 XCTAssertEqual(index,49);XCTAssertEqual(item.screen.continuation,.matchPrelude);XCTAssertNil(item.returned)
                 XCTAssertEqual(pending.confirmation,1)
@@ -81,11 +82,10 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
                 let path = Array(checked.globals.bytes[(0x44eed0-0x44d000)...].prefix { $0 != 0 })
                 XCTAssertEqual(path,Array("bgm\\stage5.wma".utf8))
                 snapshot = pending.snapshot;graphics = pending.graphics
-                try C.unchanged(app,before)
+                try C.unchanged(driver.core,before)
                 let oldEnvironment = env
                 XCTAssertThrowsError(try M.advanceUntilBoundary(&menu,&env)) { XCTAssertEqual($0 as? M.S.Boundary,.alreadyPrepared) }
                 XCTAssertEqual(env,oldEnvironment)
-                try onStart(app,pending)
             }
             XCTAssertEqual(snapshot.match.bitmaps,initial.bitmaps);XCTAssertEqual(snapshot.match.backgrounds,initial.backgrounds)
             XCTAssertEqual(snapshot.match.frameAllocations,initial.frameAllocations)
@@ -94,6 +94,15 @@ final class OriginalApplicationLoadedSelectionTests: XCTestCase {
             XCTAssertEqual(snapshot.state.random,ready.state.random)
             XCTAssertEqual(env.index,-1);XCTAssertEqual(env.api,0);XCTAssertTrue(env.music.isEmpty)
             try M().compareGraphics(ready,snapshot,graphics,env)
+            return outcome
+            }
+            try C.unchanged(driver.core,before)
+            switch outcome {
+            case .returned(let returned):
+                try driver.finish(returned,retainBatch:driver.retainSelectionBatch && index == 48)
+                returns += 1;try driver.rejectConsumed(returned)
+            case .matchPrelude(let pending):try onStart(driver.core,pending)
+            }
         }
         XCTAssertEqual(returns,49);XCTAssertEqual(r.points,768)
         XCTAssertEqual(r.human.draws,349);XCTAssertEqual(r.human.sounds,3)

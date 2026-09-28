@@ -100,20 +100,20 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
         var events: [String] = []
         var fronts = 0
     }
-    func sequence(_ reverse: Bool,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
+    func sequence(_ reverse: Bool,driver supplied: OriginalApplicationLoadedTestDriver? = nil,onBody: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.Observation) throws -> Void)? = nil,onReturn: ((ContinuousGameplayReference.Case,OriginalApplicationInputSession.PendingContinuation,OriginalApplicationLoadedMenuSession.PendingReturn) throws -> Void)? = nil) throws {
         let source = try I(reverse)
         var sourceHeld = Set<UInt32>()
         // Independent saved-data checks precede the application candidate.
         for index in 0..<48 {
             try source.sourceAcquisition(index,&sourceHeld);try source.sourceLocal(index);try source.sourceReplay(index)
         }
-        try N().sequence(reverse,onComplete:{ origin in
-            var app = origin,held = Set<UInt32>(),messages = 0,stages = 0
+        try N().sequence(reverse,driver:supplied,onComplete:{ origin in
+            let driver = supplied ?? OriginalApplicationLoadedTestDriver(application:origin)
+            var app = driver.core,held = Set<UInt32>(),messages = 0,stages = 0
             for index in 0..<48 {
                 let call = source.document.corpus.cases[index]
-                messages += try I.acquire(&app,I.A.schedule[index],&held)
-                let acquired = app,loading = try C.next(&app)
-                var cycle = try app.makeLoadedCycle(pending:loading)
+                messages += try I.acquire(&app,I.A.schedule[index],&held,driver:driver)
+                let acquired = app,loading = try driver.next()
                 if [0,16,47].contains(index) {
                     for stop in ["local","replay","commit"] {
                         var failed = try app.makeLoadedCycle(pending:loading)
@@ -123,11 +123,13 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
                         try P.require(I.keyboard(XCTUnwrap(app.session).state.full) == I.keyboard(XCTUnwrap(acquired.session).state.full),"Acquisition survives rejected input")
                     }
                 }
-                let ready = try Self.input(&cycle,call)
-                var session = try G(pending:ready),env = BodyEnvironment()
+                let ready = try driver.prepareGameplay { try Self.input(&$0,call) }
+                var env = BodyEnvironment()
                 let presentation = OriginalMenuPresentationInput(targetSurface:ready.loading.target,methodResult:0,queryResult:0,audioGetResult:0,
                     audioSetResult:0,queriedAudio:0,audioVolume:0,dcResult:0,dc:0x12345678,postResult:0)
-                let result = try session.advance(environment:&env,outputInput:presentation,observe:{ event,e in
+                let result = try driver.gameplay(ready) { ready in
+                var session = try G(pending:ready)
+                return try session.advance(environment:&env,outputInput:presentation,observe:{ event,e in
                     try onBody?(call,ready,event)
                     switch event {
                     case .front:e.fronts += 1
@@ -145,26 +147,27 @@ final class OriginalApplicationActiveGameplayTests: XCTestCase {
                     default:throw C.Stop.unexpected("Non-gameplay observation in active body")
                     }
                 })
+                }
                 try P.require(env.stages == OriginalGameplayBody.Stage.allCases,"Whole active body return")
                 if [0,16,47].contains(index) {
                     var failed = try G(pending:ready),tentative = 0
                     XCTAssertThrowsError(try failed.advance(environment:&tentative,outputInput:presentation,observe:{ _,n in n += 1 },beforeCommit:{ _,_ in throw C.Stop.injected("body") })) { XCTAssertEqual($0 as? C.Stop,.injected("body")) }
                     try P.require(failed.pendingReturn == nil && tentative == 0,"Active body late rollback")
                     try I.sameState(failed.entry.state,ready.state)
-                    try I.unchanged(app,acquired)
+                    try I.unchanged(driver.core,acquired)
                     var retry = try app.makeLoadedCycle(pending:loading)
                     let repeated = try Self.input(&retry,call)
                     try I.sameState(repeated.state,ready.state)
                     try I.sameMatch(repeated.match,ready.match)
                     for stop in ["time","sleep","commit"] {
                         let parent = app
-                        XCTAssertThrowsError(try C.finish(&app,result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
-                        try I.unchanged(app,parent)
-                        try I.unchanged(app,acquired)
+                        XCTAssertThrowsError(try driver.finish(result,stop:stop)) { XCTAssertEqual($0 as? C.Stop,.injected(stop)) }
+                        try I.unchanged(driver.core,parent)
+                        try I.unchanged(driver.core,acquired)
                     }
                 }
                 try onReturn?(call,ready,result)
-                try C.finish(&app,result);stages += env.stages.count
+                try driver.finish(result);app = driver.core;stages += env.stages.count
                 let p = try P(result.snapshot.match)
                 let actors = try (0..<400).filter { try p.pool.integer(at:4+$0,as:UInt8.self) != 0 }
                 let fighters = try (0..<2).map { slot in try ["slot":Int32(slot),"x":p.i(slot,0x10),"y":p.i(slot,0x14),"z":p.i(slot,0x18),"frame":p.i(slot,0x70),"hp":p.i(slot,0x2fc),"mp":p.i(slot,0x308)] }
