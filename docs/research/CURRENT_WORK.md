@@ -1,5 +1,26 @@
 # Текущая передача работы
 
+## Актуальный блок — 2026-09-28
+
+**Принято:** новых независимо принятых границ нет; review Application-карточек
+открыт. **Реализовано без приёмки:** candidate2291 (Core/Reference/MacPlatform,
+тесты, пакет OriginalCatalog) прошёл сборку, упаковку1686 ресурсов и все167
+Native методов, включая целый caller загрузка→каталог→pool→меню→Host;
+[проверка и архивы](APPLICATION_LOADING_ARENA.md), [публикация](../evidence/application-loading-arena.json).
+В `native/` пока root1034; NTSDApp запускает Practice.
+**Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
+source59727 terminal0. Живых jobs и pins на root нет.
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) проверенный
+код не перенесён в `native/`; (2) целый caller получает allocate/bitmap/file/
+time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
+ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301), поэтому
+у приложения нет runtime providers этих запросов; (3) window/input/audio на
+устройстве, Windows, clean-Mac не проверены.
+**Следующая задача:** обратимый перенос exact candidate2291 в `native/` с
+побайтной проверкой по manifest (подтверждает затем только тот же набор
+байтов; сборка/тесты тех же байтов не повторяются), затем providers приложения.
+EXE envelope не пересчитывался.
+
 Итерация завершена по указанию пользователя 2026-09-27;
 [полный Native тест загрузки/каталога/пула/меню/Host прошёл](APPLICATION_LOADING_ARENA.md)
 за2718.587с. На2026-09-27T07:06:01.048471+00:00 очередь51788 имеет150 успешных

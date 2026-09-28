@@ -78,3 +78,24 @@ After this queue closes and its existing finalizer publishes, the next priority
 is reversible promotion into native/ and application integration under
 [the progress rules](PROGRESS_RULES.md). Independent review remains open.
 This dated checkpoint supersedes the earlier live-count/UTM status above.
+
+Final verification, 2026-09-28T11:30:21.589347+00:00: queue51788 is terminal0
+and absent; all167 fixed methods passed (4167.126 summed process seconds,
+sampled peak8,923,856,896 bytes). Pinned finalizer96393 (SHA
+`e326f4a5af8ad0258ba0ece517cac3b4c53b813d6ad95330f43a47f415011e5a`) ran once,
+terminal0 in137.362s and is absent. It rechecked build/package pins, every
+queue child job/log/result predicate, root1034/prior2257/candidate2291/source55
+files and the two-file patch round trip. The regular APFS-clone artifact archive
+holds5000 files/213 directories (11,460,414,318 bytes) with full body/mode/mtime
+checks; the718-member metadata tar is verified by name/size/mode/ns mtime/SHA.
+[Publication](../evidence/application-loading-arena.json),
+[close](../evidence/application-loading-arena-close.json),
+[patch](../evidence/application-loading-arena.patch). Observed X5 decrease
+1,248,657,408 bytes, within the8GiB allowance; reserves unchanged.
+
+Gates: build, package bytes, the167-method Native comparison and archive pass.
+Independent review, root promotion, real runtime providers, window/input/audio
+on a device, Windows, whole source catalog return, full match and full game
+remain open. Only saved results were read; no original or test executed. The
+task is frozen. Next under [PROGRESS_RULES](PROGRESS_RULES.md): reversible
+promotion of the exact2291-file candidate into `native/`, then app integration.

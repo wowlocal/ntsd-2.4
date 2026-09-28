@@ -1,0 +1,127 @@
+{
+  "schema": "ntsd-application-loading-arena-validation-v1",
+  "UTC": "2026-09-28T11:30:21.589347+00:00",
+  "status": "all167-passed",
+  "baseHead": "7ca01ccea8ea4489a0c8f684366e6627cc95b7d0",
+  "task": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927",
+  "candidate": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/candidate1",
+  "candidateManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/candidate1-inputs.json",
+    "bytes": 578120,
+    "sha256": "0f0a5c61c3c97c96bd804043ab9b1abe97b88cd04a6563783d50cff379deac2f",
+    "mode": 420,
+    "mtime_ns": 1790488279916205324
+  },
+  "context": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/context1.json",
+    "bytes": 37343,
+    "sha256": "f9fe7d1c126ef3ea1865b9a051cfb84ffbb10fde5af7863d02446c49d191a8d7",
+    "mode": 420,
+    "mtime_ns": 1790488280167064621
+  },
+  "buildJob": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/build1.job.json",
+    "bytes": 101401,
+    "sha256": "10056b9b992bfb5b0d1198cacfd6e33a35e00ee7aa6b4d4b4ded5444971bd9d8",
+    "mode": 420,
+    "mtime_ns": 1790488622607621883
+  },
+  "packageCheck": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/package-check1.json",
+    "bytes": 1465816,
+    "sha256": "e0b32b02acf4c8ccca449b073c728405b7abdf552be653121e926c9699e189ab",
+    "mode": 420,
+    "mtime_ns": 1790488638933184019
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/swift/arm64-apple-macosx/release/NTSDNativePackageTests.xctest/Contents/MacOS/NTSDNativePackageTests",
+    "bytes": 69549832,
+    "sha256": "f9391658965853829532b476714bf12f6f26f427cadcc6e0524ca11f25905dd7",
+    "mode": 493,
+    "mtime_ns": 1790488620003676960
+  },
+  "testQueue": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/tests1-queue.job.json",
+    "bytes": 131037,
+    "sha256": "736cfdf708a1dde332dba3396a22ffe4457972a3e582382ec10e8b60c5304f4c",
+    "mode": 420,
+    "mtime_ns": 1790493377739077699
+  },
+  "failureDiagnosis": null,
+  "verification": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/verification1.json",
+    "bytes": 69620,
+    "sha256": "66d488118bd144d62be0cd137fa1542668ae459ef6a79850caba27fa2a89c1b2",
+    "mode": 420,
+    "mtime_ns": 1790594945509583944
+  },
+  "passedMethods": 167,
+  "selectedMethods": 167,
+  "artifactArchive": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/artifact-archive1",
+    "files": 5000,
+    "directories": 213,
+    "links": 0,
+    "bytes": 11460414318,
+    "manifest": {
+      "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/artifact-archive1.json",
+      "bytes": 2563149,
+      "sha256": "df6bdbe58a2f77b34ed903a74548e37fda4eac70c19a7231f0d64c29c73a5bfe",
+      "mode": 420,
+      "mtime_ns": 1790594945499315065
+    }
+  },
+  "metadataArchive": {
+    "members": 718,
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/metadata1.tar",
+    "bytes": 11304960,
+    "sha256": "9b1b31a12362ad40959a362f79a955c1621b17e933de2441a6750468286bdb4d",
+    "mode": 420,
+    "mtime_ns": 1790595021394224220
+  },
+  "sourceObservation": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-loading-arena-20260927/source-terminal1.json",
+    "bytes": 541,
+    "sha256": "79f9eae2a301abf6ec1ec858581c6f68bb45f6291afbf4f7034e50f8ca8576fd",
+    "mode": 420,
+    "mtime_ns": 1790594945507819936
+  },
+  "parentFailurePreserved": {
+    "path": "/Volumes/X5/ntsd-2.4-research/01a0dc49-738f-7972-8fb0-e98fb2f34408/application-decimal-materialization-20260927/failure-diagnosis1.json",
+    "bytes": 27753,
+    "sha256": "41d0b7af1542d463f166c075348e53eed788a535d9565f46a396607ec0eaddc1",
+    "mode": 420,
+    "mtime_ns": 1790487313191416187
+  },
+  "rootNativeUnchanged": 1034,
+  "priorNativeUnchanged": 2257,
+  "candidateFilesVerified": 2291,
+  "testEnvironmentOnly": true,
+  "productionUnchanged": true,
+  "referenceAndMacUnchanged": true,
+  "existingTestMethodsUnchanged": true,
+  "retainedSelectorsPreserved": true,
+  "expectedBytesAndMasksUnchanged": true,
+  "sourcePinsUnchanged": 55,
+  "gates": {
+    "build": true,
+    "packageBytes": true,
+    "nativeComparison": true,
+    "archive": true,
+    "independentReview": false,
+    "rootPromotion": false,
+    "actualWindowInputAudio": false,
+    "wholeCatalogSource": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false,
+  "limitations": [
+    "Only two test files change: a default-preserving wrapper arena parameter, explicit disjoint base in the loading composition and one finite disjointness control. Production, source expectations and all guards remain unchanged.",
+    "All167 selection retains all166 previous selectors, their method bodies and limits, plus one new front-storage control covering old Object64 collision, 16726 future addressed inputs and actual ready owners. Only passed methods establish comparison. Independent review remains open.",
+    "The address audit is a test-environment control, not a game oracle or Windows heap observation. Whole-caller comparisons remain unchanged; no original execution, fixture edit, root promotion or shipping integration.",
+    "Source59727 terminal34Objects is not137. Runtime playback/WMA/gain/pan/mixing/resampling/latency, Windows font/cursor/device, review/integration/clean-Mac/full match/game and safety incidents remain open; NTSDApp still Practice.",
+    "Short processes may finish before RSS sampling; zero is not known zero."
+  ]
+}

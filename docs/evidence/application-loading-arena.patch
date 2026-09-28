@@ -1,0 +1,113 @@
+--- a/native/Tests/NTSDCoreTests/OriginalApplicationObservedBitmapTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalApplicationObservedBitmapTests.swift
+@@ -22,8 +22,10 @@
+         var host: Host.Inputs { .init(initialization:initialization,responses:responses,queue:queue,windowDefault:window,surface:surface,lifecycle:lifecycle) }
+     }
+     /// Non-bitmap inputs are the existing declared case0 controls. Wrapper
+-    /// storage is a disjoint test-owned logical arena, not source heap addresses.
+-    func packets(_ window: UInt32,_ package: OriginalApplicationStartupInputs) throws -> [Packet] {
++    /// storage is test-owned; a caller composing later loading must supply an
++    /// arena disjoint from its retained allocations, not a Windows heap rule.
++    func packets(_ window: UInt32,_ package: OriginalApplicationStartupInputs,
++        frontBase: UInt32 = 0x51000000) throws -> [Packet] {
+         let f = try B.F.Resources(),b = try B.Body.Resources(f),r = try B.M.Resources(b,f)
+         let br = try B.B.Resources(),er = try B.Entry.Resources(),c = r.c.cases[0]
+         let body = c.parentKind == "body" ? b.c.cases[r.indices[0]] : nil
+@@ -38,8 +40,8 @@
+                 threadID:0xabcd,lastError:5,fillResult:fc.spec.fillResult ?? 0,drawResults:[fc.spec.drawResult ?? 0]),
+             body:.init(dcResult:body?.spec.dcResult ?? 0,dc:body?.spec.dc ?? 0x12345678,methodResult:body?.spec.methodResult ?? 0,
+                 drawResults:body?.spec.drawResults ?? [0],shellResult:body?.spec.shellResult ?? 0),
+-            frontAllocations:(0..<24).map { .init(address:0x51000000+UInt32($0)*0x1f50,backing:Array(repeating:0xa5,count:0x1f50)) },
+-            backgroundAllocation:.init(address:0x51000000+24*0x1f50,backing:Array(repeating:0xa5,count:0x1f50)),
++            frontAllocations:(0..<24).map { .init(address:frontBase+UInt32($0)*0x1f50,backing:Array(repeating:0xa5,count:0x1f50)) },
++            backgroundAllocation:.init(address:frontBase+24*0x1f50,backing:Array(repeating:0xa5,count:0x1f50)),
+             frontResponses:[],backgroundResponses:[],bitmapResources:package.bitmaps)
+         let replies = S.Responses(draw:c.spec.drawResult,presentation:c.spec.presentResult,sound:0,release:0,
+             dcResult:body?.spec.dcResult ?? 0,dc:body?.spec.dc ?? 0x12345678)
+--- a/native/Tests/NTSDCoreTests/OriginalMacLoadingAudioTests.swift
++++ b/native/Tests/NTSDCoreTests/OriginalMacLoadingAudioTests.swift
+@@ -21,13 +21,15 @@
+         let files: [String:A.File], common: OriginalApplicationLoadingInputs
+         var host: Host { startup.host }
+     }
++    // This composition retains the full source-controlled catalog address inputs.
++    static let frontBase: UInt32 = 0x6f000000
+     func ready() throws -> Ready {
+         let run = try A().startup(false)
+         do {
+             try A().verify(run)
+             let host = run.host,package = try OriginalApplicationStartupInputsTests.shared.get()
+             _ = try host.takeCommitted()
+-            let packets = try O().packets(run.window,package)
++            let packets = try O().packets(run.window,package,frontBase:Self.frontBase)
+             for p in packets where !p.dispatch { try O().previous(host,p);_ = try host.takeCommitted() }
+             let packet = try XCTUnwrap(packets.first { $0.dispatch })
+             let service = OriginalMacBitmapService(backend:run.display,inputs:.init(resources:package.bitmaps,
+@@ -119,6 +121,67 @@
+             try A().check(ready.startup.audio,owner.result.output,XCTUnwrap(ready.files[owner.binding.path]))
+         }
+     }
++    func testFrontStorageAvoidsCompleteLoadingAllocations() throws {
++        let r = try ready();defer { try? A().close(r.startup) }
++        let package = try OriginalApplicationStartupInputsTests.shared.get()
++        let old = try XCTUnwrap(O().packets(r.startup.window,package).first).initialization
++        let fresh = try XCTUnwrap(O().packets(r.startup.window,package,frontBase:Self.frontBase).first).initialization
++        let prior = old.frontAllocations+[old.backgroundAllocation]
++        let wrappers = fresh.frontAllocations+[fresh.backgroundAllocation]
++        XCTAssertEqual(prior.count,25);XCTAssertEqual(wrappers.count,25)
++        for i in 0..<25 {
++            XCTAssertEqual(prior[i].address,0x51000000+UInt32(i)*0x1f50)
++            XCTAssertEqual(wrappers[i].address,Self.frontBase+UInt32(i)*0x1f50)
++            XCTAssertEqual(prior[i].backing,[UInt8](repeating:0xa5,count:0x1f50))
++            XCTAssertEqual(wrappers[i].backing,prior[i].backing)
++        }
++        let lo = UInt64(Self.frontBase),hi = lo+25*0x1f50
++        XCTAssertEqual(hi,0x6f030ed0)
++        func intersects(_ address: UInt32,_ count: Int,_ start: UInt64,_ end: UInt64) -> Bool {
++            UInt64(address) < end && start < UInt64(address)+UInt64(count)
++        }
++        func disjoint(_ address: UInt32,_ count: Int,_ label: String) {
++            XCTAssertGreaterThan(count,0,label)
++            XCTAssertLessThanOrEqual(UInt64(address)+UInt64(count),UInt64(UInt32.max)+1,label)
++            XCTAssertFalse(intersects(address,count,lo,hi),label)
++        }
++        let ref = try F.reference.get(),objects = ref.catalog.objectAddresses
++        XCTAssertEqual(objects.count,137);XCTAssertEqual(objects[64],0x51000020)
++        XCTAssertEqual(objects.indices.filter { intersects(objects[$0],0x25360,0x51000000,0x51030ed0) },[64])
++        XCTAssertEqual(prior.filter { intersects(objects[64],0x25360,UInt64($0.address),UInt64($0.address)+UInt64($0.backing.count)) }.count,20)
++        for (i,address) in objects.enumerated() { disjoint(address,0x25360,"Object \(i)") }
++        XCTAssertEqual(ref.catalog.allocations.count,15545)
++        for (i,a) in ref.catalog.allocations.enumerated() { disjoint(a.address,a.size,"Catalog child \(i)") }
++        // These are the retained providers' declared allocation inputs. Opaque
++        // API/audio identities are not byte-address reservations.
++        disjoint(0x70000020,81273768,"Catalog outer")
++        let opens = ref.catalog.events.filter { $0.kind == "open" }
++        XCTAssertEqual(opens.count,621)
++        for i in 1...opens.count { disjoint(0x54001000+UInt32(i)*0x20000,65536,"File buffer \(i)") }
++        XCTAssertEqual(M.P.R.actorTokens.count,400);XCTAssertEqual(M.P.R.uiTokens.count,10)
++        for p in M.P.R.actorTokens { disjoint(p,0x420,"Pool Actor") }
++        for p in M.P.R.uiTokens { disjoint(p,0x1f50,"Pool interface") }
++        var menu = M.Environment()
++        for i in 0..<12 {
++            let a = try menu.allocate(i == 11 ? .background : .menu(i),0x1f50)
++            disjoint(a.address,a.backing.count,"Loaded menu \(i)")
++        }
++        let state = try XCTUnwrap(r.host.pendingLoading).state
++        XCTAssertEqual(Set(state.front.bitmaps.keys),Set(wrappers.prefix(24).map(\.address)))
++        for a in wrappers.prefix(24) {
++            let owned = try XCTUnwrap(state.memory.allocations[a.address])
++            XCTAssertTrue(owned.live);XCTAssertEqual(owned.storage.bytes.count,a.backing.count)
++        }
++        let addresses = Set(wrappers.map(\.address))
++        for (p,a) in state.memory.allocations where !addresses.contains(p) {
++            disjoint(p,a.storage.bytes.count,"Earlier owned storage")
++        }
++        disjoint(0x44d000,state.full.bytes.count,"Global storage")
++        for (p,a) in r.sounds.music.allocations { disjoint(p,a.bytes.count,"Startup music") }
++        for owner in r.sounds.waveOwners { XCTAssertTrue(try owner.addressedRegions().isEmpty) }
++        print("Loading front arena:25 wrappers; old Object64 intersection retained;16726 future addressed inputs disjoint")
++    }
++
+     func testOwnedStartupCommonAndRegisteredBuffers() throws {
+         let r = try ready();defer { try? A().close(r.startup) }
+         let exchange = E(),service = OriginalMacAudioService(backend:r.startup.audio)

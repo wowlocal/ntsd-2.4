@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Complete audio-loading test: all167 verified and published](research/APPLICATION_LOADING_ARENA.md):
+Queue51788 terminal0 with all167 fixed methods passing, including the whole
+catalog/pool/menu/Host caller. Pinned finalizer96393 terminal0 rechecks pins,
+results and patch round trip;5000-file/718-member archives verified. Next:
+exact root promotion of candidate2291, then real app providers. Review/device/
+Windows/full match/game stay open. [Publication](evidence/application-loading-arena.json).
+
 [Complete audio-loading test: disjoint front storage verified](research/APPLICATION_LOADING_ARENA.md):
 Two test files parameterize the old default and supply6f000000 only to the new
 loading composition. New control checks16726 future allocations and actual ready
