@@ -22,6 +22,8 @@ import XCTest
         let control = try XCTUnwrap(music.answer(.init(.queryInterface,[graph],[iid(0xb1)])).pointer)
         let event = try XCTUnwrap(music.answer(.init(.queryInterface,[graph],[iid(0xb6)])).pointer)
         let position = try XCTUnwrap(music.answer(.init(.queryInterface,[graph],[iid(0xb2)])).pointer)
+        XCTAssertEqual(try music.answer(.init(.method,[event,0x34,3,0x400,0])).result,0)
+        XCTAssertEqual(try music.answer(.init(.method,[event,0x38,0])).result,0)
         var wide: [UInt8] = []
         for byte in Array(path.utf8)+[0] { wide += [byte,0] }
         XCTAssertEqual(try music.answer(.init(.method,[graph,0x34,0x30000000,0],[wide])).result,0)
@@ -107,6 +109,44 @@ import XCTest
         try output.present(P(graph:4,file:Array("bgm\\other.wma".utf8),running:true,volume:0,seeks:0,position:0))
         XCTAssertEqual(output.unresolved,[Array("bgm\\other.wma".utf8)]); XCTAssertFalse(players[2].isPlaying)
         try output.present(nil); XCTAssertEqual(players.count,3)
+    }
+
+    func testGraphEventsQueueCompletionForTheRunningGraph() throws {
+        let music = OriginalMacRuntimeMusic(identities:.init(),heap:.init())
+        let g = try play(music,"bgm\\main.wma",volume:0)
+        let abort = OriginalGraphEvents.Response(result:OriginalMacRuntimeMusic.abort)
+        XCTAssertEqual(try music.graph(.init(.getEvent,[g.event,0x20,0])),abort)
+        XCTAssertThrowsError(try music.graph(.init(.getEvent,[g.control,0x20,0])))
+        XCTAssertThrowsError(try music.graph(.init(.getEvent,[g.event,0x20,5])))
+        XCTAssertThrowsError(try music.graph(.init(.windowDefault,[3,0x400,0,0])))
+        let target = try XCTUnwrap(music.complete(g.graph))
+        XCTAssertEqual(target.window,3); XCTAssertEqual(target.message,0x400); XCTAssertEqual(target.lParam,0)
+        XCTAssertEqual(try music.graph(.init(.getEvent,[g.event,0x20,0])),.init(result:0,code:1,first:0,second:0))
+        XCTAssertEqual(try music.graph(.init(.method,[g.event,0x30,1,0,0])),.init(result:0))
+        XCTAssertEqual(try music.graph(.init(.method,[g.position,0x20,0,0])),.init(result:0))
+        XCTAssertEqual(music.presented()?.seeks,1)
+        XCTAssertEqual(try music.graph(.init(.getEvent,[g.event,0x20,0])),abort)
+        // Notifications off (flag 1): the event still queues, no message.
+        _ = try music.answer(.init(.method,[g.event,0x38,1]))
+        XCTAssertNil(music.complete(g.graph))
+        XCTAssertEqual(try music.graph(.init(.getEvent,[g.event,0x20,0])).code,1)
+        _ = try music.answer(.init(.method,[g.event,0x38,0]))
+        _ = try music.answer(.init(.method,[g.control,0x24])); XCTAssertNil(music.complete(g.graph))
+        XCTAssertEqual(music.graphOperations.count,6) // rejected requests are not recorded
+    }
+
+    func testOutputReportsEachEndOnce() throws {
+        var ends: [() -> Void] = []
+        let output = Output(tracks:["bgm\\main.wma":URL(fileURLWithPath:"/main.caf")]) { url,ended in
+            ends.append(ended); return Recorder(url,duration:10)
+        }
+        typealias P = OriginalMacRuntimeMusic.Presented
+        try output.present(P(graph:7,file:Array("bgm\\main.wma".utf8),running:true,volume:0,seeks:0,position:0))
+        XCTAssertNil(output.takeEnded())
+        ends[0](); ends[0]()
+        XCTAssertEqual(output.takeEnded(),7); XCTAssertNil(output.takeEnded())
+        try output.present(P(graph:7,file:Array("bgm\\main.wma".utf8),running:true,volume:0,seeks:1,position:0))
+        output.finishTrack(); XCTAssertEqual(output.takeEnded(),7); XCTAssertEqual(output.state?.playing,false)
     }
 
     func testVolumeGainIsHundredthsOfDecibel() {

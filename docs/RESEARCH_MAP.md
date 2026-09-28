@@ -1,10 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
-[Music output, stage 1](research/APPLICATION_MUSIC.md): the app plays the
+[Music output](research/APPLICATION_MUSIC.md): the app plays the
 original tracks for the committed DirectShow graph state (menu `main`, District
 `boss1`, volume −500). `tools/package_music.py` decodes the WMA v2/Pro files
 at packaging time into lossless ALAC (Apple decode bit-exact to the declared
-int16 conversion). Track-end looping (graph events) is stage 2.
+int16 conversion). Stage 2: a track end queues EC_COMPLETE and posts 0x400;
+the recovered WndProc graph callback (now composed into the application
+message dispatch) seeks the track back to the start.
 [Evidence](evidence/application-music.json).
 
 [Application tick speed](research/APPLICATION_TICK_SPEED.md): the computer-VS

@@ -187,7 +187,8 @@ public struct OriginalApplicationMenuSession {
         initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
-        lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") }) throws -> Outcome {
+        lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") },
+        graph: (OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response = { _ in throw Boundary.dependency("Menu graph events") }) throws -> Outcome {
         try state.validateAliases()
         if initializationBitmap != nil,let input = initialization {
             guard input.frontResponses.isEmpty,input.backgroundResponses.isEmpty else {
@@ -317,6 +318,14 @@ public struct OriginalApplicationMenuSession {
                                 backing:{ _,_ in throw Boundary.dependency("Initial resize backing") },perform:{ q in
                                     let r = try lifecycle(q);try emit(.lifecycle(q,r));return r
                                 },store:store)
+                        } else if input.message == 0x400 {
+                            // 401e90's own stack frame: fresh undefined backing each call,
+                            // no global writes; only DefWindowProc joins the window provider.
+                            var frame = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:64),defined:[Bool](repeating:false,count:64))
+                            result = try OriginalGraphEvents.receive(input,globals:g,local:&frame,request:{ q in
+                                guard q.kind == .windowDefault else { return try graph(q) }
+                                return .init(result:try windowDefault(.init(.windowDefault,q.arguments)))
+                            })
                         } else { result = try OriginalWindowInput.receive(input,globals:&g,local:&local,memory:&owned.memory,request:{ q in
                             guard q.kind == .windowDefault else { throw Boundary.dependency("Menu window "+q.kind.rawValue) }
                             return try windowDefault(q)

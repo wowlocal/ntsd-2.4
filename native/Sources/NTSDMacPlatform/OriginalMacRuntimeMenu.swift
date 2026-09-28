@@ -20,7 +20,7 @@ import NTSDCore
         return b.destination[2] <= b.destination[0] || b.destination[3] <= b.destination[1] ||
             b.source[2] <= b.source[0] || b.source[3] <= b.source[1]
     }
-    public let host: Host, messages: OriginalMacRuntimeMessages
+    public let host: Host, messages: OriginalMacRuntimeMessages, music: OriginalMacRuntimeMusic
     public let bitmap: OriginalMacBitmapService, front: OriginalMacFrontService
     public let initialization: OriginalApplicationBootstrap.MenuInputs
     /// OutputDebugStringA text and MessageBoxA (text, caption) requests seen so far.
@@ -55,7 +55,7 @@ import NTSDCore
     }
     public init(_ started: OriginalMacRuntimeStartup.Started,inputs: OriginalApplicationStartupInputs,
         clock: @escaping () throws -> UInt32,point: @escaping () -> (Int32,Int32) = { (0,0) }) throws {
-        host = started.host; self.clock = clock
+        host = started.host; self.clock = clock; music = started.runtime.music
         messages = OriginalMacRuntimeMessages(window:started.window,clock:clock,point:point)
         initialization = try Self.initialization(started,inputs:inputs,milliseconds:clock())
         // CreateWindowEx sends WM_SIZE then WM_MOVE; the startup model does not run
@@ -101,6 +101,10 @@ import NTSDCore
                     try driver.beginService(permit); try driver.answer(permit,response:.graphics(.front(.init(result:Self.invalidRect))))
                 case .graphics: try front.serve(permit,on:driver)
                 case .queue,.windowDefault: try messages.serve(permit,on:driver)
+                case .graph(let q):
+                    try driver.beginService(permit)
+                    do { try driver.answer(permit,response:.graph(try music.graph(q))) }
+                    catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
                 }
             case .advanced(let outcome):
                 iterations += 1

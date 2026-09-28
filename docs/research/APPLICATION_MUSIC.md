@@ -1,4 +1,4 @@
-# Music output in the app, stage 1: the original tracks play
+# Music output in the app: the original tracks play and loop
 
 2026-09-29. [Plan](APPLICATION_MUSIC_PLAN.md). Parent: [tick speed](APPLICATION_TICK_SPEED.md)
 (9d33d8d). Author implementation and machine checks; independent review open.
@@ -9,9 +9,8 @@ The original was not executed.
 The app plays the original music where the game asks for it: `bgm\main.wma`
 in the menus and `bgm\boss1.wma` in the District match of the computer-VS
 script, at the game's requested volume −500 (gain 10^(−500/2000) ≈ 0.56).
-Tracks change only with committed DirectShow graph state. Looping after the
-end of a track (EC_COMPLETE → WndProc 0x400) is stage 2 and not connected:
-a track plays once, then the running graph stays silent until it seeks.
+Tracks change only with committed DirectShow graph state. When a track ends,
+the recovered WndProc callback restarts it, as in the original (stage 2).
 
 - **Assets:** `tools/package_music.py` decodes the 8 `bgm/*.wma` (5 WMA v2,
   3 WMA Pro) with FFmpeg 9.0.1's native decoders to float, converts to int16
@@ -34,23 +33,51 @@ a track plays once, then the running graph stays silent until it seeks.
   are reported. `--mute-music` keeps real playback at zero gain for automated
   runs.
 
+- **Track end (stage 2):** message 0x400 is no longer an "Unrecovered window
+  message": `OriginalApplicationMenuSession.step` routes it to the accepted
+  `OriginalGraphEvents.receive` (401e90, GRAPH_EVENTS) with a fresh undefined
+  64-byte frame and no global writes; its DefWindowProc joins the window
+  provider, GetEvent/FreeEventParams/seek go to a new `graph` provider
+  threaded through Bootstrap, Host `step` and the iteration exchange
+  (`.graph` request/reply; default: dependency boundary). The runtime
+  (declared DirectShow behavior) keeps SetNotifyWindow/Flags, queues
+  EC_COMPLETE (1, S_OK, 0) once when the output reports the end of the
+  running graph's track, posts the registered message (wParam 0), answers
+  GetEvent with timeout 0 (the event, else E_ABORT without outputs) and
+  FreeEventParams, and DefWindowProc(0x400) returns 0. The app posts after a
+  committed iteration; the callback's put_CurrentPosition(0) restarts the
+  player. Script action `musicend` forces an end for automated runs.
+
 ## Checks
 
-- `OriginalMacMusicOutputTests` (4: packaged frames = manifest, graph state
-  with seeks and release, output decisions with a recording player, gain) and
-  `OriginalMacRuntimeStartupTests` (4, including whole WinMain with runtime
-  providers): 8/8.
-- App (release, `--mute-music --virtual-clock 123456789 8`, `cpu12`): the
-  player reports `bgm\main.wma` playing at menu iterations 30/500/1200 and
-  `bgm\boss1.wma` playing through 1500 bodies (time 9.2 → 48.7 s); body
-  captures 300..1500 stay byte-identical to the tick-speed reference.
+- `OriginalMacRuntimeMenuTests.testGraphNotificationRestartsTheMenuTrack`:
+  real front-menu iterations on runtime providers until `bgm\main.wma` runs,
+  then EC_COMPLETE and the posted 0x400 pass PeekMessage/DispatchMessage into
+  the WndProc callback; requests in order GetEvent→(1,0,0),
+  put_CurrentPosition(0), FreeEventParams(1,0,0), GetEvent→E_ABORT; the graph
+  keeps running with one seek to 0.
+- `OriginalMacMusicOutputTests` (6: packaged frames = manifest, graph state
+  with seeks and release, graph event queue/notify flags/stop, output
+  decisions, one report per end, gain), `OriginalMacRuntimeMenuTests` (3),
+  `OriginalMacRuntimeStartupTests` (4): 13/13. Suites of the changed layers
+  (Bootstrap, Host session, observed iteration/graphics, menu input, input,
+  runtime loading): 25/25 in 13.6 min with 3 parallel workers.
+- App (release, `--mute-music --virtual-clock 123456789 8`, `cpu12`):
+  `bgm\main.wma` in the menus, `bgm\boss1.wma` through the match; forced
+  ends at menu iteration 100 and game step 2001 each post one notification,
+  the callback makes its 4 requests and the track restarts from 0.00 s;
+  body captures stay byte-identical to the tick-speed reference (300..1500
+  with the stage-1 binary, 300/600 with the stage-2 binary).
+  A real-clock menu run left idle: `main.wma` ended on its own twice (after
+  the 241 s track), each end posting one notification and restarting the
+  track (music time 203 s → 49 s → 177 s → 80 s at iterations 20000..35000).
+  That run also showed front-menu iterations slowing over time (41, 53, 74,
+  87, 127, 145 s per 5000 iterations): per-iteration work grows with the
+  history (cause not yet profiled); recorded as the next speed follow-up.
   [Evidence](../evidence/application-music.json).
 
 ## Remaining
 
-Stage 2: compose `OriginalGraphEvents.receive` into the application message
-dispatch (0x400 is "Unrecovered window message" there today), answer
-GetEvent/FreeEventParams and post the notify message when a track ends. The
-`.app` packaging for `--original` still relies on SwiftPM resource bundles in
-the build directory (Core catalog and music alike). No device listening test
-or Windows audio comparison. EXE envelope not recalculated.
+The `.app` packaging for `--original` still relies on SwiftPM resource
+bundles in the build directory (Core catalog and music alike). No device
+listening test or Windows audio comparison. EXE envelope not recalculated.

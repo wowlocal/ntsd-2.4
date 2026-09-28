@@ -9,17 +9,20 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
         case graphics(OriginalMenuGraphicsRequest.Reply)
         case queue(Loop.Response)
         case windowDefault(Int32)
+        case graph(OriginalGraphEvents.Response)
     }
     case graphics(OriginalMenuGraphicsRequest)
     case queue(Loop.Request)
     case windowDefault(OriginalWindowInput.Request)
+    /// GetEvent/FreeEventParams/seek of the WndProc graph callback.
+    case graph(OriginalGraphEvents.Request)
     public func accepts(_ response: Reply) -> Bool {
         switch (self,response) {
         case let (.graphics(q),.graphics(r)):return q.accepts(r)
         case let (.queue(q),.queue(r)):
             // Only message retrieval owns MSG output writes.
             return r.writes.isEmpty || q.kind == .peek || q.kind == .get
-        case (.windowDefault,.windowDefault):return true
+        case (.windowDefault,.windowDefault),(.graph,.graph):return true
         default:return false
         }
     }
@@ -109,6 +112,9 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                     return r
                 },windowDefault:{ q,p in
                     guard case .windowDefault(let r) = try p.iterationDelivery.response(for:.windowDefault(q)) else { throw Boundary.invalidResponse }
+                    return r
+                },graph:{ q,p in
+                    guard case .graph(let r) = try p.iterationDelivery.response(for:.graph(q)) else { throw Boundary.invalidResponse }
                     return r
                 },beforePublication:{ p in
                     try beforePublication(p)

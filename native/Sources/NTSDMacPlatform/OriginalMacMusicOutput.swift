@@ -22,7 +22,7 @@ import Foundation
     }
     private let load: (URL,@escaping () -> Void) throws -> Player
     private let tracks: [String:URL]
-    private var graph: UInt32?, track: String?, player: Player?, seeks = -1, ended = false, loads = 0
+    private var graph: UInt32?, track: String?, player: Player?, seeks = -1, ended = false, loads = 0, pendingEnd: UInt32?
     public private(set) var unresolved: [[UInt8]] = []
     /// Automated runs keep real playback state at zero output gain.
     public var muted = false
@@ -59,7 +59,7 @@ import Foundation
         if state.graph != graph || name != track {
             player?.pause(); loads += 1
             let current = loads
-            player = try load(url) { [weak self] in if self?.loads == current { self?.ended = true } }
+            player = try load(url) { [weak self] in self?.end(current) }
             graph = state.graph; track = name; seeks = -1; ended = false
         }
         guard let player else { return }
@@ -71,6 +71,14 @@ import Foundation
         if state.running && !ended { if !player.isPlaying { player.play() } }
         else if player.isPlaying { player.pause() }
     }
+    private func end(_ load: Int) {
+        guard load == loads,!ended else { return }
+        ended = true; pendingEnd = graph
+    }
+    /// The graph whose track ended since the last call (reported once).
+    public func takeEnded() -> UInt32? { defer { pendingEnd = nil }; return pendingEnd }
+    /// Test hook for automated runs: the current track ends now.
+    public func finishTrack() { player?.pause(); end(loads) }
     public var state: State? {
         graph.map { .init(graph:$0,track:track,playing:player?.isPlaying ?? false,ended:ended,
                           gain:player?.volume ?? 0,time:player?.currentTime ?? 0) }

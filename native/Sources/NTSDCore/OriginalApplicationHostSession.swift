@@ -201,6 +201,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         front: ((Application.Stage, OriginalFrontScreenEvent, Platform) throws -> OriginalLibSurfaceText.Response)? = nil,
         queue: ((Session.Loop.Request, Platform) throws -> Session.Loop.Response)? = nil,
         windowDefault: ((OriginalWindowInput.Request, Platform) throws -> Int32)? = nil,
+        graph: ((OriginalGraphEvents.Request, Platform) throws -> OriginalGraphEvents.Response)? = nil,
         beforePublication: (Platform) throws -> Void = { _ in },
         expectedSequence: UInt64? = nil) throws -> Outcome {
         try attempt {
@@ -220,7 +221,8 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
                 surfaceProvider: surface.map { callback in { q in try callback(q,candidate) } },
                 frontProvider: front.map { callback in { stage,q in try callback(stage,q,candidate) } },
                 queueProvider: queue.map { callback in { q in try callback(q,candidate) } },
-                windowDefaultProvider: windowDefault.map { callback in { q in try callback(q,candidate) } })
+                windowDefaultProvider: windowDefault.map { callback in { q in try callback(q,candidate) } },
+                graphProvider: graph.map { callback in { q in try callback(q,candidate) } })
             switch result {
             case .committed(let value):
                 let context = try DeliveryContext(application: next, platform: candidate)

@@ -81,7 +81,8 @@ public struct OriginalApplicationBootstrap {
         surfaceProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
         frontProvider: ((Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
         queueProvider: ((Session.Loop.Request) throws -> Session.Loop.Response)? = nil,
-        windowDefaultProvider: ((OriginalWindowInput.Request) throws -> Int32)? = nil) throws -> Session.Outcome {
+        windowDefaultProvider: ((OriginalWindowInput.Request) throws -> Int32)? = nil,
+        graphProvider: ((OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response)? = nil) throws -> Session.Outcome {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
         if queueProvider != nil && !queue.isEmpty { throw Session.Boundary.dependency("Observed queue requests cannot mix prepared response arrays") }
         if windowDefaultProvider != nil && !windowDefault.isEmpty { throw Session.Boundary.dependency("Observed window requests cannot mix prepared response arrays") }
@@ -108,6 +109,9 @@ public struct OriginalApplicationBootstrap {
             try beforeCommit(loop,state)
         },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,bootstrapObserve:observe,lifecycle:{ q in
             let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
+        },graph:{ q in
+            guard let graphProvider else { throw Session.Boundary.dependency("Bootstrap graph events") }
+            return try graphProvider(q)
         })
         switch result {
         case .committed:session = next

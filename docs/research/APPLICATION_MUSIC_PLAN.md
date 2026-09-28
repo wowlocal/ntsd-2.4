@@ -54,3 +54,39 @@ when the output reports the end. Planned separately before implementation.
 
 EXE envelope not recalculated. Out of scope: GDI text, device/Windows audio
 comparison.
+
+## Stage 2 plan (written after stage 1, before its implementation)
+
+**Criterion:** when a track ends, the app delivers the graph notification
+and the recovered WndProc callback restarts the track, as the original does.
+**Proven blocker:** message 0x400 reaches `OriginalWindowInput.receive` and
+throws "Unrecovered window message"; the runtime never posts it.
+
+1. Core: `OriginalApplicationMenuSession.step` routes message 0x400 to the
+   accepted `OriginalGraphEvents.receive` (GRAPH_EVENTS: 371 callbacks
+   byte-identical). Its 64-byte frame is 401e90's stack: a fresh record with
+   undefined bytes per call, never stored to globals; its DefWindowProc goes
+   to the existing window-default provider; GetEvent/methods go to a new
+   `graph` provider (default: dependency boundary, so existing callers and
+   tests are unchanged). The provider passes through Bootstrap and Host
+   `step` and one new iteration request/reply family (`.graph`).
+2. Runtime (declared DirectShow behavior, not a Windows observation):
+   SetNotifyWindow stores (window, message, lParam); when the output reports
+   the end of the live graph's track, EC_COMPLETE (code 1, param1 S_OK,
+   param2 0 — default handling aggregates renderers) is queued once and the
+   message is posted (wParam 0, lParam as registered). GetEvent (timeout 0)
+   returns the queued event or E_ABORT without outputs; FreeEventParams S_OK;
+   the callback's seek is the existing put_CurrentPosition. DefWindowProc of
+   0x400 returns 0.
+3. App: after each committed iteration, a reported end posts the message; the
+   next seek restarts the player.
+
+**Checks:** a Core test drives one committed menu iteration with a queued
+0x400 through the whole Host/iteration exchange and compares the request
+order (GetEvent, put_CurrentPosition(0), FreeEventParams, GetEvent,
+DefWindowProc) and unchanged globals; runtime tests for the event queue;
+existing iteration/startup/menu suites; an app run where a short virtual
+track end is forced (`--music-end-after N` test option) shows the restart.
+
+Amendment: the forced end is the script action `musicend` (not a
+`--music-end-after` option), so it can be placed at any menu or game step.

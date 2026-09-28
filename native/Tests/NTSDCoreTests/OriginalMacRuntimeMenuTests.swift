@@ -89,4 +89,39 @@ import XCTest
         print("Runtime menu:",committed,"committed iterations,",menu.requests,"permits,",menu.textRequests,"GetDC failures, loading",loading,
             "front operations",started.display.frontOperations.count,"capture",capture.path)
     }
+
+    /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through
+    /// PeekMessage/DispatchMessage into the recovered WndProc graph callback.
+    func testGraphNotificationRestartsTheMenuTrack() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-graph-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try startup(root)
+        while try started.host.takeCommitted() != nil {}
+        var now: UInt32 = 5_000_000
+        let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ now &+= 7; return now })
+        let music = started.runtime.music
+        for _ in 0..<400 where music.presented()?.running != true {
+            guard case .committed = try menu.step() else { throw Stop.limit }
+        }
+        let playing = try XCTUnwrap(music.presented())
+        XCTAssertEqual(playing.file,Array("bgm\\main.wma".utf8)); XCTAssertEqual(playing.seeks,0)
+        XCTAssertNil(music.complete(playing.graph+999))
+        let target = try XCTUnwrap(music.complete(playing.graph))
+        XCTAssertEqual(target.window,menu.messages.window); XCTAssertEqual(target.message,0x400)
+        menu.messages.post(target.message,0,target.lParam)
+        for _ in 0..<5 where !menu.messages.queue.isEmpty { guard case .committed = try menu.step() else { throw Stop.limit } }
+        XCTAssertTrue(menu.messages.queue.isEmpty); XCTAssertEqual(menu.messages.delivered.last?.message,0x400)
+        let event = try XCTUnwrap(music.graphOperations.first?.request.arguments.first)
+        XCTAssertEqual(music.interface(event),.event)
+        let position = try XCTUnwrap(music.graphOperations.dropFirst().first?.request.arguments.first)
+        XCTAssertEqual(music.interface(position),.position)
+        XCTAssertEqual(music.graphOperations,[
+            .init(request:.init(.getEvent,[event,0x20,0]),response:.init(result:0,code:1,first:0,second:0)),
+            .init(request:.init(.method,[position,0x20,0,0]),response:.init(result:0)),
+            .init(request:.init(.method,[event,0x30,1,0,0]),response:.init(result:0)),
+            .init(request:.init(.getEvent,[event,0x20,0]),response:.init(result:OriginalMacRuntimeMusic.abort))])
+        let restarted = try XCTUnwrap(music.presented())
+        XCTAssertEqual(restarted.graph,playing.graph); XCTAssertTrue(restarted.running)
+        XCTAssertEqual(restarted.seeks,1); XCTAssertEqual(restarted.position,0)
+    }
 }

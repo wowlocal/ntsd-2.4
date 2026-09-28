@@ -10,7 +10,8 @@ import NTSDMacPlatform
 /// (scripted left click at client point X,Y after N committed iterations).
 /// `--script "N action args; ..."` runs scripted input at committed iteration N:
 /// `click X Y` (button held 10 iterations), `key VK` (held 10 iterations),
-/// `capture PATH`, `exit`. Counting uses committed outer iterations.
+/// `capture PATH`, `musicend` (the current track ends now), `exit`. Counting
+/// uses committed outer iterations.
 /// `--virtual-clock BASE STEP` makes runs reproducible: timeGetTime answers
 /// BASE + STEP × iterations started, startup FILETIME and GetLocalTime use a
 /// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
@@ -91,7 +92,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
-                    "musicOutput":"packaged ALAC tracks; looping not connected"])
+                    "musicOutput":"packaged ALAC tracks; graph-event looping"])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })
@@ -159,7 +160,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                         "getDCFailures":menu.textRequests,"emptyBlits":menu.emptyBlits])
                     if arguments.contains("--exit-after-capture") { NSApp.terminate(nil); return }
                 }
-                try music?.present(started.runtime.music.presented())
+                try presentMusic(started,menu)
                 let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? menu.messages.sleeps.last! : 1) : 0
                 schedule(delay)
             case .loading:
@@ -207,7 +208,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"allocations":c.allocations,
                         "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
                 }
-                try music?.present(started.runtime.music.presented())
+                try presentMusic(started,menu)
                 let delay = loading.sleeps.count > sleeps ? loading.sleeps.last! : 1
                 waited += Int(delay); schedule(delay)
             }
@@ -252,15 +253,29 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport()])
+            case "musicend": music?.finishTrack()
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
         }
     }
+    private var musicEnds = 0, musicNotifications = 0
+    /// Committed graph state to the output; a finished track queues EC_COMPLETE
+    /// and posts the registered notification for the next iteration's WndProc.
+    @MainActor private func presentMusic(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu) throws {
+        guard let music else { return }
+        try music.present(started.runtime.music.presented())
+        guard let graph = music.takeEnded() else { return }
+        musicEnds += 1
+        guard let n = started.runtime.music.complete(graph) else { return }
+        guard n.window == menu.messages.window else { throw OriginalMacRuntimeMessages.Boundary.arguments("graph notify window") }
+        menu.messages.post(n.message,0,n.lParam); musicNotifications += 1
+    }
     @MainActor private func musicReport() -> [String:Any] {
         guard let s = music?.state else { return [:] }
         return ["graph":s.graph,"track":s.track ?? "","playing":s.playing,"ended":s.ended,"gain":s.gain,
-                "volume":started?.runtime.music.presented()?.volume ?? 0,
+                "volume":started?.runtime.music.presented()?.volume ?? 0,"ends":musicEnds,"notifications":musicNotifications,
+                "graphRequests":started?.runtime.music.graphOperations.count ?? 0,
                 "time":(s.time*1000).rounded()/1000,"unresolved":music?.unresolved.map { String(decoding:$0,as:UTF8.self) } ?? []]
     }
     @MainActor private func stop(_ error: Error) {

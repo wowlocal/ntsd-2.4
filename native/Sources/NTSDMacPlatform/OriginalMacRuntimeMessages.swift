@@ -36,7 +36,8 @@ public struct OriginalMacRuntimeKey: Equatable {
 /// The application thread's message queue for the original window, fed from
 /// AppKit events and served to whole-iteration permits. Declared runtime
 /// behavior; not a Windows observation. Only messages the recovered WndProc
-/// accepts are generated: WM_KEYDOWN/KEYUP/CHAR and mouse 200/201/202/204/205.
+/// accepts are generated: WM_KEYDOWN/KEYUP/CHAR, mouse 200/201/202/204/205 and
+/// the music graph notification registered with SetNotifyWindow (0x400).
 @MainActor public final class OriginalMacRuntimeMessages {
     public typealias Loop = OriginalApplicationMessageLoop
     public enum Boundary: Error, Equatable { case unsupported(String), emptyGet, arguments(String) }
@@ -119,11 +120,11 @@ public struct OriginalMacRuntimeKey: Equatable {
         case .gameDispatch,.recoverSurface: throw Boundary.unsupported(q.kind.rawValue)
         }
     }
-    /// DefWindowProcA for the generated key/char/mouse messages returns 0.
+    /// DefWindowProcA for the generated key/char/mouse and graph messages returns 0.
     public func answer(_ q: OriginalWindowInput.Request) throws -> Int32 {
         guard q.kind == .windowDefault,q.arguments.count == 4,q.arguments[0] == window else { throw Boundary.unsupported("window \(q.kind)") }
         let message = q.arguments[1]
-        guard [0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205].contains(message) else { throw Boundary.unsupported("DefWindowProc \(message)") }
+        guard [0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400].contains(message) else { throw Boundary.unsupported("DefWindowProc \(message)") }
         return 0
     }
     public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {
@@ -133,7 +134,7 @@ public struct OriginalMacRuntimeKey: Equatable {
             switch permit.request {
             case .queue(let q): try driver.answer(permit,response:.queue(try answer(q)))
             case .windowDefault(let q): try driver.answer(permit,response:.windowDefault(try answer(q)))
-            case .graphics: throw Boundary.unsupported("graphics family")
+            case .graphics,.graph: throw Boundary.unsupported("graphics/graph family")
             }
         } catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
     }
