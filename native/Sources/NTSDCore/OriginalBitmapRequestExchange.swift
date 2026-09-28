@@ -14,7 +14,7 @@ public typealias OriginalBitmapRequestExchange = OriginalRequestExchange<Origina
 /// retain their actual owners after a later iteration replaces the active cursor.
 public struct OriginalBitmapDelivery {
     public private(set) var cursor: OriginalBitmapRequestExchange.Cursor?
-    private var earlier: [OriginalBitmapRequestExchange.Cursor] = []
+    private var earlier = OriginalRetainedHistory<OriginalBitmapRequestExchange.Cursor>()
     public var retainedIterationCount: Int { earlier.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalBitmapRequestExchange.Cursor) {

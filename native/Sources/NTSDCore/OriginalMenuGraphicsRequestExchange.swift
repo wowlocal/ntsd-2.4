@@ -29,7 +29,7 @@ public typealias OriginalMenuGraphicsRequestExchange = OriginalRequestExchange<O
 /// resources remain alive through copied platform/delivery contexts.
 public struct OriginalMenuGraphicsDelivery {
     public private(set) var cursor: OriginalMenuGraphicsRequestExchange.Cursor?
-    private var earlier: [OriginalMenuGraphicsRequestExchange.Cursor] = []
+    private var earlier = OriginalRetainedHistory<OriginalMenuGraphicsRequestExchange.Cursor>()
     public var retainedIterationCount: Int { earlier.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalMenuGraphicsRequestExchange.Cursor) {

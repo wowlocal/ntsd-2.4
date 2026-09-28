@@ -33,7 +33,7 @@ public typealias OriginalApplicationIterationExchange = OriginalRequestExchange<
 /// resources stay alive through copied platform/delivery contexts.
 public struct OriginalApplicationIterationDelivery {
     public private(set) var cursor: OriginalApplicationIterationExchange.Cursor?
-    private var earlier: [OriginalApplicationIterationExchange.Cursor] = []
+    private var earlier = OriginalRetainedHistory<OriginalApplicationIterationExchange.Cursor>()
     public var retainedIterationCount: Int { earlier.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalApplicationIterationExchange.Cursor) {

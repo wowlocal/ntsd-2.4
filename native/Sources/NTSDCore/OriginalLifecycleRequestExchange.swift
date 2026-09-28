@@ -6,7 +6,7 @@ public typealias OriginalLifecycleRequestExchange = OriginalRequestExchange<Orig
 /// retain their actual owners after a later iteration replaces the active cursor.
 public struct OriginalLifecycleDelivery {
     public private(set) var cursor: OriginalLifecycleRequestExchange.Cursor?
-    private var earlier: [OriginalLifecycleRequestExchange.Cursor] = []
+    private var earlier = OriginalRetainedHistory<OriginalLifecycleRequestExchange.Cursor>()
     public var retainedIterationCount: Int { earlier.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalLifecycleRequestExchange.Cursor) {

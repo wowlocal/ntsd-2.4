@@ -1,0 +1,249 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T22:52:16.244254Z",
+ "parentHead": "798a66e",
+ "scope": "Retained delivery history as a persistent list: constant per-iteration cost",
+ "files": {
+  "native/Sources/NTSDCore/OriginalRetainedHistory.swift": "818443d57fea3294fbcb7ec278cd23945a52b41dd3d50097cf31a9759801d3ad",
+  "native/Sources/NTSDCore/OriginalApplicationObservedIteration.swift": "6b3e9cf5d4743527414d4bcf22e83baf535b2b2bb289c36d08c371dd01eba643",
+  "native/Sources/NTSDCore/OriginalBitmapRequestExchange.swift": "4915de90aed7d5f617650e704b749f6cabb9a0497784be0408bacb9062fb4996",
+  "native/Sources/NTSDCore/OriginalMenuGraphicsRequestExchange.swift": "97d71d9866f5e256d2d1e2d088438cc941c3f18ceb8f9026b40bb6197a73246e",
+  "native/Sources/NTSDCore/OriginalLifecycleRequestExchange.swift": "0678061e3181baf316331cd5368204cb37c4889b6766cc65b49b34dd90eebb0a",
+  "native/Tests/NTSDCoreTests/OriginalRetainedHistoryTests.swift": "215d46187d60c8f6f6415cc754a25bdb12272d9f8fc1b41e7a54e01919d97533"
+ },
+ "profile": {
+  "sampleSeconds": 10,
+  "early": {
+   "cursorCopies": 393,
+   "deliveryDestroy": 143
+  },
+  "lateAt18000": {
+   "cursorCopies": 2251,
+   "deliveryDestroy": 1166
+  }
+ },
+ "runs": {
+  "idleBefore": {
+   "note": "parent binary, real clock, --mute-music, captures every 2000",
+   "per2000": [
+    {
+     "iterations": 2000,
+     "bodies": 0,
+     "wallSeconds": null,
+     "busySeconds": null
+    },
+    {
+     "iterations": 4000,
+     "bodies": 0,
+     "wallSeconds": 16.2,
+     "busySeconds": null
+    },
+    {
+     "iterations": 6000,
+     "bodies": 0,
+     "wallSeconds": 16.4,
+     "busySeconds": null
+    },
+    {
+     "iterations": 8000,
+     "bodies": 0,
+     "wallSeconds": 16.6,
+     "busySeconds": null
+    },
+    {
+     "iterations": 10000,
+     "bodies": 0,
+     "wallSeconds": 18.4,
+     "busySeconds": null
+    },
+    {
+     "iterations": 12000,
+     "bodies": 0,
+     "wallSeconds": 19.8,
+     "busySeconds": null
+    },
+    {
+     "iterations": 14000,
+     "bodies": 0,
+     "wallSeconds": 21.9,
+     "busySeconds": null
+    },
+    {
+     "iterations": 16000,
+     "bodies": 0,
+     "wallSeconds": 22.2,
+     "busySeconds": null
+    },
+    {
+     "iterations": 18000,
+     "bodies": 0,
+     "wallSeconds": 24.7,
+     "busySeconds": null
+    }
+   ]
+  },
+  "idleAfter": {
+   "note": "new binary, same run",
+   "per2000": [
+    {
+     "iterations": 2000,
+     "bodies": 0,
+     "wallSeconds": null,
+     "busySeconds": null
+    },
+    {
+     "iterations": 4000,
+     "bodies": 0,
+     "wallSeconds": 15.4,
+     "busySeconds": null
+    },
+    {
+     "iterations": 6000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 8000,
+     "bodies": 0,
+     "wallSeconds": 15.2,
+     "busySeconds": null
+    },
+    {
+     "iterations": 10000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 12000,
+     "bodies": 0,
+     "wallSeconds": 15.2,
+     "busySeconds": null
+    },
+    {
+     "iterations": 14000,
+     "bodies": 0,
+     "wallSeconds": 14.9,
+     "busySeconds": null
+    },
+    {
+     "iterations": 16000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 18000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 20000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 22000,
+     "bodies": 0,
+     "wallSeconds": 15.0,
+     "busySeconds": null
+    },
+    {
+     "iterations": 24000,
+     "bodies": 0,
+     "wallSeconds": 14.9,
+     "busySeconds": null
+    },
+    {
+     "iterations": 26000,
+     "bodies": 0,
+     "wallSeconds": 15.3,
+     "busySeconds": null
+    },
+    {
+     "iterations": 28000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    },
+    {
+     "iterations": 30000,
+     "bodies": 0,
+     "wallSeconds": 15.1,
+     "busySeconds": null
+    }
+   ]
+  },
+  "computerVS": {
+   "flags": "--mute-music --virtual-clock 123456789 8 --script-clock gameplay (cpu12)",
+   "per300": [
+    {
+     "iterations": 2414,
+     "bodies": 300,
+     "wallSeconds": null,
+     "busySeconds": 10.807435989379883
+    },
+    {
+     "iterations": 3351,
+     "bodies": 600,
+     "wallSeconds": 8.7,
+     "busySeconds": 13.378130197525024
+    },
+    {
+     "iterations": 4289,
+     "bodies": 900,
+     "wallSeconds": 8.4,
+     "busySeconds": 15.887372016906738
+    },
+    {
+     "iterations": 5226,
+     "bodies": 1200,
+     "wallSeconds": 8.4,
+     "busySeconds": 18.411827206611633
+    },
+    {
+     "iterations": 6164,
+     "bodies": 1500,
+     "wallSeconds": 9.1,
+     "busySeconds": 21.19084644317627
+    }
+   ],
+   "capturesIdenticalToTickSpeedReference": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png"
+   ]
+  }
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open",
+ "tests": {
+  "unit": {
+   "suites": [
+    "OriginalRetainedHistoryTests",
+    "OriginalMacRuntimeMenuTests",
+    "OriginalMacMusicOutputTests"
+   ],
+   "tests": 12,
+   "failures": 0
+  },
+  "deliveries": {
+   "suites": [
+    "OriginalApplicationObservedGraphicsTests",
+    "OriginalApplicationObservedBitmapTests",
+    "OriginalApplicationObservedIterationTests",
+    "OriginalApplicationObservedStartupTests"
+   ],
+   "tests": 17,
+   "failures": 0,
+   "wallMinutes": 4.7,
+   "workers": 3
+  }
+ }
+}

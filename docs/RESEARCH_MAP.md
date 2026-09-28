@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Constant-cost iterations](research/APPLICATION_ITERATION_HISTORY.md): the
+request deliveries' retained cursor history is a persistent list, so copying a
+platform per attempt no longer grows with the session; idle menu iterations
+stay at 15.1 s per 2000. [Evidence](evidence/application-iteration-history.json).
+
 [Music output](research/APPLICATION_MUSIC.md): the app plays the
 original tracks for the committed DirectShow graph state (menu `main`, District
 `boss1`, volume −500). `tools/package_music.py` decodes the WMA v2/Pro files
