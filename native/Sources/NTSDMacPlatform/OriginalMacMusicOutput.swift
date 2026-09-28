@@ -31,9 +31,17 @@ import Foundation
         self.tracks = tracks; self.load = load
     }
     /// The packaged tracks keyed by lowercase original path (`bgm\main.wma`).
-    public static var directory: URL? { Bundle.module.url(forResource:"OriginalMusic",withExtension:nil) }
+    /// build-native.sh/package_assets.py install the tracks in an app's
+    /// Contents/Resources; SwiftPM command-line/test clients use `.module`.
+    public static func directory(in appBundle: Bundle = .main) -> URL? {
+        if let resources = appBundle.resourceURL {
+            let directory = resources.appendingPathComponent("OriginalMusic",isDirectory:true)
+            if appBundle.bundleURL.pathExtension == "app" || FileManager.default.fileExists(atPath:directory.path) { return directory }
+        }
+        return Bundle.module.url(forResource:"OriginalMusic",withExtension:nil)
+    }
     public static func bundled() throws -> OriginalMacMusicOutput {
-        guard let directory,
+        guard let directory = directory(),
               let manifest = try? JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any],
               let entries = manifest["entries"] as? [[String:Any]] else { throw Boundary.manifest }
         var tracks: [String:URL] = [:]

@@ -95,7 +95,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
                     "musicOutput":"packaged ALAC tracks; graph-event looping",
-                    "backingScale":(try? started.windows.observation(started.window).backingScale) ?? 0])
+                    "backingScale":(try? started.windows.observation(started.window).backingScale) ?? 0,
+                    "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory().path) ?? "",OriginalMacMusicOutput.directory()?.path ?? ""]])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })

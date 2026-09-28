@@ -37,12 +37,12 @@ def build():
                     "-c", "release", "--product", "NTSDNative"], cwd=ROOT, check=True)
 
 
-def run(timeout):
+def run(timeout, app=APP):
     with tempfile.TemporaryDirectory(prefix="ntsd-e2e-") as scratch:
         scratch = Path(scratch); overlay = scratch / "overlay"; captures = scratch / "captures"
         overlay.mkdir(); captures.mkdir()
         script = SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)
-        command = [str(APP), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
+        command = [str(app), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
                    "--script-clock", "gameplay", "--body-captures", str(captures), "--script", script]
         done = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
         events = []
@@ -61,7 +61,7 @@ def summarize(events, captures, overlay):
     for e in events:
         kind = e.get("event")
         if kind == "started":
-            out["backingScale"] = e.get("backingScale")
+            out["backingScale"] = e.get("backingScale"); out["resources"] = e.get("resources")
             out["milestones"].append({"event": kind, "requests": e["requests"], "attempts": e["attempts"], "dates": e["dates"]})
         elif kind == "loaded":
             out["milestones"].append({"event": kind, **{k: e[k] for k in ("allocations", "audioRequests", "bitmapRequests", "files")}})
@@ -101,10 +101,11 @@ def main():
     parser.add_argument("--build", action="store_true", help="Build the release app first")
     parser.add_argument("--record", action="store_true", help="Write the reference from this run")
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--app", type=Path, default=APP, help="Executable to run, e.g. the packaged .app's")
     args = parser.parse_args()
     if args.build:
         build()
-    observed = run(args.timeout)
+    observed = run(args.timeout, args.app)
     if args.record:
         REFERENCE.write_text(json.dumps(observed, indent=1, sort_keys=True) + "\n")
         print(json.dumps({"recorded": str(REFERENCE.relative_to(ROOT)), "progress": len(observed["progress"]),
@@ -115,7 +116,7 @@ def main():
         print(json.dumps({"result": "incomparable", "reason": "display backing scale differs from the reference"}))
         sys.exit(2)
     problems = compare(reference, observed)
-    print(json.dumps({"result": "pass" if not problems else "fail", "differs": problems,
+    print(json.dumps({"result": "pass" if not problems else "fail", "differs": problems, "resources": observed.get("resources"),
                       "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
     if problems:
         for key in problems:

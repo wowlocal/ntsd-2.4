@@ -36,6 +36,11 @@ shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalCharacterMenu"
 shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalMatchArenas",
                 destination.parent / "OriginalMatchArenas", dirs_exist_ok=True)
 
+# Lossless decodes of the original bgm tracks (tools/package_music.py), played
+# by the runtime music output.
+shutil.copytree(ROOT / "native/Sources/NTSDMacPlatform/Resources/OriginalMusic",
+                destination.parent / "OriginalMusic", dirs_exist_ok=True)
+
 # Full original catalog files, images and media for the owned host.
 from package_catalog_inputs import build_package as package_catalog_inputs
 print(package_catalog_inputs(DEFAULT_SOURCE, destination.parent / "OriginalCatalog"))

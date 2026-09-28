@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Packaged app](research/APPLICATION_PACKAGING.md): `build/NTSD Native.app` plays
+the end-to-end match with `--original` from its own Contents/Resources (music
+now installed like the Core inputs); a clone without the build tree's resource
+bundles passes too. Default launch is still Practice (user decision).
+[Evidence](evidence/application-packaging.json).
+
 [End-to-end app check](research/APPLICATION_E2E.md): `tools/app_e2e.py` replays a
 whole computer-VS match (WinMain → loading → fight → KO → replay → Summary →
 epilogue → Character Selection) on the release app under `--virtual-clock`

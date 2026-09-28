@@ -1,0 +1,55 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T23:26:21.666408Z",
+ "parentHead": "21dc762",
+ "scope": "Packaged app runs --original self-contained (music installed in Contents/Resources)",
+ "files": {
+  "native/Sources/NTSDMacPlatform/OriginalMacMusicOutput.swift": "310175edd5630237f9ca77e025afa15267fc6633f92315277810f8bce7a4eced",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "9b43458ce54097be97c6757c29d050c72b354b9570296935cdcd5e66f4a6b190",
+  "tools/package_assets.py": "1f3a1aa6feb7f5c66969a8022c133c72e7675dab22f4235381bb45f6155ee5ed",
+  "tools/app_e2e.py": "95820584eb44506f2bccef0f15de3b04125a1c2e880c4eadb532b650e29e99bc",
+  "native/Tests/NTSDCoreTests/OriginalMacMusicOutputTests.swift": "aebb8718e512817c70c702228a4142556efe4c6e144e49bf0174a6e7190cb7dc"
+ },
+ "app": {
+  "path": "build/NTSD Native.app",
+  "size": "1.6G",
+  "codesignVerify": "pass",
+  "resources": [
+   "Assets",
+   "OriginalCatalog",
+   "OriginalCharacterMenu",
+   "OriginalCommonSounds",
+   "OriginalInterface",
+   "OriginalLoadingInterface",
+   "OriginalMatchArenas",
+   "OriginalMusic",
+   "OriginalStartup",
+   "game.json"
+  ]
+ },
+ "e2e": [
+  {
+   "binary": "build/NTSD Native.app/Contents/MacOS/NTSDNative",
+   "result": "pass"
+  },
+  {
+   "binary": "scratch clone of the app, build-tree resource bundles renamed away",
+   "result": "pass"
+  }
+ ],
+ "tests": {
+  "suites": [
+   "OriginalMacMusicOutputTests",
+   "OriginalMacRuntimeStartupTests"
+  ],
+  "tests": 10,
+  "failures": 0
+ },
+ "open": [
+  "default launch still Practice (user decision)",
+  "clean-Mac not tested"
+ ],
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

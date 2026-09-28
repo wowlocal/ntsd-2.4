@@ -38,7 +38,7 @@ import XCTest
     }
 
     func testPackagedTracksMatchManifestFrames() throws {
-        let directory = try XCTUnwrap(Output.directory)
+        let directory = try XCTUnwrap(Output.directory())
         let manifest = try XCTUnwrap(JSONSerialization.jsonObject(with:Data(contentsOf:directory.appendingPathComponent("manifest.json"))) as? [String:Any])
         let entries = try XCTUnwrap(manifest["entries"] as? [[String:Any]])
         XCTAssertEqual(Set(entries.compactMap { $0["name"] as? String }),
