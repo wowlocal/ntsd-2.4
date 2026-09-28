@@ -131,6 +131,2156 @@
       "height": 29,
       "bits": 24,
       "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\s.bmp",
+      "path": "bg/sys/SandCountry/s.bmp",
+      "bytes": 428,
+      "sha256": "2383296d4a459a7d2b1581c509795be67fa7789bcf98d728b6c9ab3309c77b77",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand1.bmp",
+      "path": "bg/sys/SandCountry/sand1.bmp",
+      "bytes": 1612854,
+      "sha256": "31f38504356b1fb33665b8185109a91dff4997f54e193a4b70c516a2ca0127bc",
+      "width": 1024,
+      "height": 525,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand10.bmp",
+      "path": "bg/sys/SandCountry/sand10.bmp",
+      "bytes": 221142,
+      "sha256": "6af4877761c2a65e0a6e9d1465c597b79c294f64c5913b95955f5143d5263411",
+      "width": 376,
+      "height": 196,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand11.bmp",
+      "path": "bg/sys/SandCountry/sand11.bmp",
+      "bytes": 220794,
+      "sha256": "52024169a6e0581e0b0c8c0ceae90b3d9982d3ed38b43f3f7af2c0a10e56ccdd",
+      "width": 377,
+      "height": 195,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand12.bmp",
+      "path": "bg/sys/SandCountry/sand12.bmp",
+      "bytes": 217758,
+      "sha256": "5d43bccaf80e43e43591b44de8911c3b1161dcd82ab8c6ccf9241bcabca67c0f",
+      "width": 376,
+      "height": 193,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand13.bmp",
+      "path": "bg/sys/SandCountry/sand13.bmp",
+      "bytes": 214670,
+      "sha256": "60016345ac75998857e284c001b14ff1fc182d3453c43d4aa3183591c493a539",
+      "width": 370,
+      "height": 193,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand14.bmp",
+      "path": "bg/sys/SandCountry/sand14.bmp",
+      "bytes": 223162,
+      "sha256": "86f9aaf51ac0dbf1fc296b90c534442c569396bf9a0d183766847f23c6c56bfa",
+      "width": 385,
+      "height": 193,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand15.bmp",
+      "path": "bg/sys/SandCountry/sand15.bmp",
+      "bytes": 205398,
+      "sha256": "699a2ce9a3b0400db4bfd32ea9ce93167d0429463de85ab0f9a04b236eb5202b",
+      "width": 368,
+      "height": 186,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand16.bmp",
+      "path": "bg/sys/SandCountry/sand16.bmp",
+      "bytes": 222710,
+      "sha256": "e68cf676dfbebefe9c6886e76c7b38f1c6f13a40a0808a0c7f100edfaaaabc40",
+      "width": 378,
+      "height": 196,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand17.bmp",
+      "path": "bg/sys/SandCountry/sand17.bmp",
+      "bytes": 222354,
+      "sha256": "ce3c023b2d453eacc2a1e2a191b3f5e89de8eb5b36a458d647628fed17e0bae0",
+      "width": 380,
+      "height": 195,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand18.bmp",
+      "path": "bg/sys/SandCountry/sand18.bmp",
+      "bytes": 220074,
+      "sha256": "ff8ed3e0895550dc8c8661d436b2aa5d3aa23df634262a0f364bebbc2e11d30a",
+      "width": 380,
+      "height": 193,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand19.bmp",
+      "path": "bg/sys/SandCountry/sand19.bmp",
+      "bytes": 220074,
+      "sha256": "8a43c0af29d1abefd0ad688465c88c604c1e0b2f92c76f8650f460243365249d",
+      "width": 380,
+      "height": 193,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand2.bmp",
+      "path": "bg/sys/SandCountry/sand2.bmp",
+      "bytes": 781374,
+      "sha256": "13aa866470f402f063047512a5b293ce2196165186ecb4e5af6c8c4fafe04a33",
+      "width": 510,
+      "height": 510,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand20.bmp",
+      "path": "bg/sys/SandCountry/sand20.bmp",
+      "bytes": 218886,
+      "sha256": "9bca8a2259047d0271303ac69780ac95196128caa96492a8541316fff110d66d",
+      "width": 376,
+      "height": 194,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand3.bmp",
+      "path": "bg/sys/SandCountry/sand3.bmp",
+      "bytes": 781374,
+      "sha256": "8d3c425c39ad76326a55c848c61147343b55a93173b4ea86b791b0e2a65f3610",
+      "width": 510,
+      "height": 510,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand4.bmp",
+      "path": "bg/sys/SandCountry/sand4.bmp",
+      "bytes": 5274,
+      "sha256": "09faa996a6f8bf203f6c713d188464a3f4b6113e8d94032f90ae798b7d740152",
+      "width": 115,
+      "height": 15,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand5.bmp",
+      "path": "bg/sys/SandCountry/sand5.bmp",
+      "bytes": 5274,
+      "sha256": "eb06a3d9ad2e128993485a3f13f0a322249a61cde748af0dfaed5b3101895b6a",
+      "width": 115,
+      "height": 15,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand6.bmp",
+      "path": "bg/sys/SandCountry/sand6.bmp",
+      "bytes": 52254,
+      "sha256": "c11b596c2d4a1f34efdf0fa539a26d04e8ddfc3db79f7991683e4b9ffc22b4b7",
+      "width": 119,
+      "height": 145,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand7.bmp",
+      "path": "bg/sys/SandCountry/sand7.bmp",
+      "bytes": 34458,
+      "sha256": "9cf6bd04674a43fe80324b5052771573cbbbecf4cca4243236c4fb3bb1f8e296",
+      "width": 243,
+      "height": 47,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SandCountry\\sand9.bmp",
+      "path": "bg/sys/SandCountry/sand9.bmp",
+      "bytes": 211694,
+      "sha256": "3e60c9686f96be6fff94a8ccbfd19ca4aab8e598ddb7942a7c510d48a36caea5",
+      "width": 381,
+      "height": 185,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest.bmp",
+      "path": "bg/sys/Deep/forest.bmp",
+      "bytes": 313554,
+      "sha256": "692d911415e0ed7c40e5dea1d9de1e094c58673d5d30658aee5a56ca4b723686",
+      "width": 366,
+      "height": 285,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest0.bmp",
+      "path": "bg/sys/Deep/forest0.bmp",
+      "bytes": 7794,
+      "sha256": "cc9366c32efe0c66ba3b00b146df68ebce7bdcc1ba1d619be6c391079abc9ba6",
+      "width": 57,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest1.bmp",
+      "path": "bg/sys/Deep/forest1.bmp",
+      "bytes": 117874,
+      "sha256": "9c37fe040ccfee3e5a7b2b2e87d16bcf5d8dedfda4f665bd4e7870a6ba7615f4",
+      "width": 286,
+      "height": 137,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest11.bmp",
+      "path": "bg/sys/Deep/forest11.bmp",
+      "bytes": 12150,
+      "sha256": "81ac0b99ac89c3d5ffccf4cfebbdb312f515d8ad51bd204e74167caeaef5d7d4",
+      "width": 287,
+      "height": 14,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest2.bmp",
+      "path": "bg/sys/Deep/forest2.bmp",
+      "bytes": 38790,
+      "sha256": "7df38d1f7a0447f27f597730b6bd9c90c76288111cb2977aa82609a636e7e6b8",
+      "width": 47,
+      "height": 269,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest3.bmp",
+      "path": "bg/sys/Deep/forest3.bmp",
+      "bytes": 7794,
+      "sha256": "80f53ee62d76122c7c905e78ea7a3e68969be7fd747c3de4aa88401a2731e095",
+      "width": 57,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest4.bmp",
+      "path": "bg/sys/Deep/forest4.bmp",
+      "bytes": 21634,
+      "sha256": "fa3350a37de8ed14cb698680dc99b0cef83a1ed9226ca42f3f042a6da6e9167f",
+      "width": 110,
+      "height": 65,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest5.bmp",
+      "path": "bg/sys/Deep/forest5.bmp",
+      "bytes": 180054,
+      "sha256": "2ba496be16448e2b0f5f459d5b67de3a7116597bc2ab27306a49095a998ede4d",
+      "width": 200,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest6.bmp",
+      "path": "bg/sys/Deep/forest6.bmp",
+      "bytes": 180054,
+      "sha256": "30162c21d602797c786558f69691566ff393277362293545d6cb52dbac15bb79",
+      "width": 200,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest7.bmp",
+      "path": "bg/sys/Deep/forest7.bmp",
+      "bytes": 180054,
+      "sha256": "8a45489ea08b25cd1763b20de86bd25885b3107940bc65c4b59a8e35c7186abb",
+      "width": 200,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest8.bmp",
+      "path": "bg/sys/Deep/forest8.bmp",
+      "bytes": 180054,
+      "sha256": "b09e62744f6a67b01ae806d5faf7a692c7dcbe9e57d62e93f1615529d1558145",
+      "width": 200,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\forest9.bmp",
+      "path": "bg/sys/Deep/forest9.bmp",
+      "bytes": 116262,
+      "sha256": "5591af3e83e64d6763cb64a8d8563b2fe6d3c88f6e1948936be8fbca7b4ff395",
+      "width": 358,
+      "height": 108,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf.bmp",
+      "path": "bg/sys/Deep/leaf.bmp",
+      "bytes": 1181238,
+      "sha256": "4ae31d755362c5f9d97597f8aad2b61fb3c60e5ad00ddcc8caa0162088a516f4",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf2.bmp",
+      "path": "bg/sys/Deep/leaf2.bmp",
+      "bytes": 1181238,
+      "sha256": "4ba75ac041bd9cb0961908006f830f92371f13266569b78462b4347cabb2a119",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf3.bmp",
+      "path": "bg/sys/Deep/leaf3.bmp",
+      "bytes": 1181238,
+      "sha256": "92f4ebc668bb6a291675fac5fe30ceab6aabc90add1930b43d495609c52c5976",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf4.bmp",
+      "path": "bg/sys/Deep/leaf4.bmp",
+      "bytes": 1181238,
+      "sha256": "7cecd1a78884826d424854e42c2a2878d8ee81f67cb255ed873335e6d06091a0",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf5.bmp",
+      "path": "bg/sys/Deep/leaf5.bmp",
+      "bytes": 1181238,
+      "sha256": "1b0b37c4cec43339fe3dd587bf058d7fda0767b4b43433a8ec90b5785ea12ab2",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf6.bmp",
+      "path": "bg/sys/Deep/leaf6.bmp",
+      "bytes": 1181238,
+      "sha256": "1624f5f62892b57728408a6ec55ee0113253836e00b3d790f087884bc2d38fc4",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf7.bmp",
+      "path": "bg/sys/Deep/leaf7.bmp",
+      "bytes": 1181238,
+      "sha256": "574d7b494551d5ea0517dcdf5de3d8b5152686c479c80e253690726a150c6480",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf8.bmp",
+      "path": "bg/sys/Deep/leaf8.bmp",
+      "bytes": 1181238,
+      "sha256": "5fb7943459c6bc95310f1fa48dd5fd5aec88d5a19f92d5273f249cba6822dc15",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\leaf9.bmp",
+      "path": "bg/sys/Deep/leaf9.bmp",
+      "bytes": 1181238,
+      "sha256": "cacb4c4421de43411203959405424495c87f6df83807ab6ed6b3a0dedef9fe30",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Deep\\s.bmp",
+      "path": "bg/sys/Deep/s.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\candle.bmp",
+      "path": "bg/sys/Hideout/candle.bmp",
+      "bytes": 18486,
+      "sha256": "16131e2e55660946fab1160b8f96eabc86b4b74e6be4610035884e2b5711321d",
+      "width": 64,
+      "height": 96,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\candle2.bmp",
+      "path": "bg/sys/Hideout/candle2.bmp",
+      "bytes": 18486,
+      "sha256": "ffd60c6ba3e72e963f4497bceffbab827f51f3de79c01182038668b661faaac7",
+      "width": 64,
+      "height": 96,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\candle3.bmp",
+      "path": "bg/sys/Hideout/candle3.bmp",
+      "bytes": 18486,
+      "sha256": "8ef5c2803fe17548474f797f2320b1612676acb6a3648b4d470efb703fb08f08",
+      "width": 64,
+      "height": 96,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\hide.bmp",
+      "path": "bg/sys/Hideout/hide.bmp",
+      "bytes": 746550,
+      "sha256": "08b9a0bc0f4d453dfde5cb8106a420ec067d487d9e40adbbb0fdcf699ef09b85",
+      "width": 576,
+      "height": 432,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\hide2.bmp",
+      "path": "bg/sys/Hideout/hide2.bmp",
+      "bytes": 63990,
+      "sha256": "26243c9bc566005f9d38506827dc89270f5f9b4c8d3ba08d6a75a9b6740aed83",
+      "width": 576,
+      "height": 37,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\hide3.bmp",
+      "path": "bg/sys/Hideout/hide3.bmp",
+      "bytes": 1241734,
+      "sha256": "b94efe8a8688234e4e38b68e7358eb1c9a5beb83aa9002c582cbb761c2c05306",
+      "width": 1217,
+      "height": 340,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\s.bmp",
+      "path": "bg/sys/Hideout/s.bmp",
+      "bytes": 2086,
+      "sha256": "d7c77c9ba6b5abaac85431ccdcf678341fa28a1cfef738fb2d7f66102e2a3853",
+      "width": 37,
+      "height": 9,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\sasuke.bmp",
+      "path": "bg/sys/Hideout/sasuke.bmp",
+      "bytes": 70014,
+      "sha256": "6139ef3be8e22b8333f613b1d58592360efb825a42628ce071e4b698e5014aa3",
+      "width": 220,
+      "height": 106,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\sasuke2.bmp",
+      "path": "bg/sys/Hideout/sasuke2.bmp",
+      "bytes": 70014,
+      "sha256": "f7d01c7f9a99e842ee3358608c77478aed867cc766c8e1bbc1699f69fd07fbfb",
+      "width": 220,
+      "height": 106,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Hideout\\sasuke3.bmp",
+      "path": "bg/sys/Hideout/sasuke3.bmp",
+      "bytes": 70014,
+      "sha256": "e7b789335eb95b9f9b034baad445cd2ab02fb24cf4420e4398cff929d25030cc",
+      "width": 220,
+      "height": 106,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Cave\\cave.bmp",
+      "path": "bg/sys/Cave/cave.bmp",
+      "bytes": 198966,
+      "sha256": "049814fc8fd1b49735ffd42ec40b3b5e9a9e4025e38041b71abb872ab8147f69",
+      "width": 256,
+      "height": 259,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Cave\\cave2.bmp",
+      "path": "bg/sys/Cave/cave2.bmp",
+      "bytes": 76086,
+      "sha256": "bd04ef48a00308c90540cf4fd23a3b2795e6a3239c57e2520d339a0e393f4b63",
+      "width": 384,
+      "height": 66,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Cave\\cave3.bmp",
+      "path": "bg/sys/Cave/cave3.bmp",
+      "bytes": 45366,
+      "sha256": "fb2d69ed29006aa893e479732326ebbb998049b5bda2f5afa4425aa9abad1fab",
+      "width": 255,
+      "height": 59,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Cave\\s.bmp",
+      "path": "bg/sys/Cave/s.bmp",
+      "bytes": 2086,
+      "sha256": "d7c77c9ba6b5abaac85431ccdcf678341fa28a1cfef738fb2d7f66102e2a3853",
+      "width": 37,
+      "height": 9,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Cave\\statue.bmp",
+      "path": "bg/sys/Cave/statue.bmp",
+      "bytes": 306294,
+      "sha256": "57aef892218cfed61f47c4395f47377c32f4560e9cec97d0e1be83b87dd85c8b",
+      "width": 319,
+      "height": 319,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\pipe.bmp",
+      "path": "bg/sys/Rain/pipe.bmp",
+      "bytes": 16070,
+      "sha256": "49ba4c696be2e5c66331c74e02fc3f5315a0d5cbeeeac0757799f00743df6f5c",
+      "width": 205,
+      "height": 26,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\platform.bmp",
+      "path": "bg/sys/Rain/platform.bmp",
+      "bytes": 103294,
+      "sha256": "c213ed2c5cc7b5e677e124b9dec1a903d4792984954ab0cea06e457862ee3050",
+      "width": 386,
+      "height": 89,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\rain.bmp",
+      "path": "bg/sys/Rain/rain.bmp",
+      "bytes": 1181238,
+      "sha256": "6f16a4faa20dca02f970419ba89d6f1050bb4dfbb4a410679b29ae00776d46f4",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\rain2.bmp",
+      "path": "bg/sys/Rain/rain2.bmp",
+      "bytes": 759006,
+      "sha256": "beadb25f1a60a4d5c3c830abe72540d553259ab6783e9c7595bffbe90edacb61",
+      "width": 664,
+      "height": 381,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\rain3.bmp",
+      "path": "bg/sys/Rain/rain3.bmp",
+      "bytes": 1181238,
+      "sha256": "21b73625655966b1d7846f66e3091bbbda0b7e1d03818ed7925edb921d62b397",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\raining.bmp",
+      "path": "bg/sys/Rain/raining.bmp",
+      "bytes": 1181238,
+      "sha256": "77479b0eee85650df4983178eec441a6da6e5211338768626603267bb12a4b8d",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\raining2.bmp",
+      "path": "bg/sys/Rain/raining2.bmp",
+      "bytes": 1181238,
+      "sha256": "e64d0b5788fd656790a296e63050260ebe99bc098a2739e57dd7d07e0e3d97c2",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\raining3.bmp",
+      "path": "bg/sys/Rain/raining3.bmp",
+      "bytes": 1181238,
+      "sha256": "6074423541b4cd16f076bb72457b2223be5c47ef5989d257d185185641d8bd84",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\raining4.bmp",
+      "path": "bg/sys/Rain/raining4.bmp",
+      "bytes": 1181238,
+      "sha256": "d176de0125deab8a5ca73f14ee7ba9ac60f791fb25c3a69b102c039114783931",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\raining5.bmp",
+      "path": "bg/sys/Rain/raining5.bmp",
+      "bytes": 1181238,
+      "sha256": "e70d31623417d136d79b7c45fc8f71689077b478128122def0bbe7eecf464579",
+      "width": 512,
+      "height": 769,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\s.bmp",
+      "path": "bg/sys/Rain/s.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\wall.bmp",
+      "path": "bg/sys/Rain/wall.bmp",
+      "bytes": 50454,
+      "sha256": "307b77fdb8e597e8bea9f654b883cdf7e5657dd6843b144b4bc48208865b11b4",
+      "width": 56,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Rain\\wall2.bmp",
+      "path": "bg/sys/Rain/wall2.bmp",
+      "bytes": 50454,
+      "sha256": "3b01fe711f3f848c0fca515aadef01e60f773c204d0d721f7675708fde88b492",
+      "width": 56,
+      "height": 300,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\s.bmp",
+      "path": "bg/sys/SnowCountry/s.bmp",
+      "bytes": 428,
+      "sha256": "8091f620595dd886d715c4f5d75f9d2f20a6c6fbc29c0431390ad2540061748c",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\snow.bmp",
+      "path": "bg/sys/SnowCountry/snow.bmp",
+      "bytes": 3993654,
+      "sha256": "34010b4d73de4ae792108b0a96830fb5390e1cbedd539f00b1fdcdeab549b7d7",
+      "width": 2048,
+      "height": 650,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\snow2.bmp",
+      "path": "bg/sys/SnowCountry/snow2.bmp",
+      "bytes": 776278,
+      "sha256": "17b48aa969d8db8970a3bf43448550a776098718bcbf2d6afd3930eb8a425b11",
+      "width": 509,
+      "height": 508,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\snow3.bmp",
+      "path": "bg/sys/SnowCountry/snow3.bmp",
+      "bytes": 37110,
+      "sha256": "99babd3c0cf69dc7ceba191385d3e2c6daf4a7ec84669760141b0c419bec2a4c",
+      "width": 257,
+      "height": 48,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\snow4.bmp",
+      "path": "bg/sys/SnowCountry/snow4.bmp",
+      "bytes": 66294,
+      "sha256": "7bea1a5ddda0baa0d0fed2406bacfcdefcc8025f596cafd60459d9b053bb5839",
+      "width": 240,
+      "height": 92,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\SnowCountry\\snow5.bmp",
+      "path": "bg/sys/SnowCountry/snow5.bmp",
+      "bytes": 9414,
+      "sha256": "5c0a4de56f2c382db53fe1842e03af7ac96e561bc7608cf205649768f40e307b",
+      "width": 207,
+      "height": 15,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\boat.bmp",
+      "path": "bg/sys/River/boat.bmp",
+      "bytes": 47222,
+      "sha256": "bdfa33878f24819f79d056500ff27aea7cc85e9e36e16d9a07d6dc7d559d1e00",
+      "width": 234,
+      "height": 67,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest.bmp",
+      "path": "bg/sys/River/forest.bmp",
+      "bytes": 635130,
+      "sha256": "87d4cde41c454c3f27b4a16c9afd47e24b284f74be38bbdc0e4efee870d55b87",
+      "width": 1022,
+      "height": 207,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest10.bmp",
+      "path": "bg/sys/River/forest10.bmp",
+      "bytes": 153254,
+      "sha256": "fe033b87f77a23d7749bee11edd0bdfb2ce325f7c114d8901d8a7dfcc2cdee87",
+      "width": 1021,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest2.bmp",
+      "path": "bg/sys/River/forest2.bmp",
+      "bytes": 779842,
+      "sha256": "65983f96135c6631063625f3fdf396d4dd7c7ce358898cc15dd939b769c80fe9",
+      "width": 510,
+      "height": 509,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest3.bmp",
+      "path": "bg/sys/River/forest3.bmp",
+      "bytes": 153454,
+      "sha256": "c73d91b7a1e3e3889ae8480ba34f2870e6130bb5f3d4dd40b569d1a4c77ea4ad",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest4.bmp",
+      "path": "bg/sys/River/forest4.bmp",
+      "bytes": 153454,
+      "sha256": "6f72f33f379d41a6725f444ff1fb03a4cbfbb1b90ce5fb0e1dbbf28897155010",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest5.bmp",
+      "path": "bg/sys/River/forest5.bmp",
+      "bytes": 153454,
+      "sha256": "a49b00639476156184a5f51164a5755255ec365bd76932de5eb050be3ad5c350",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest6.bmp",
+      "path": "bg/sys/River/forest6.bmp",
+      "bytes": 153254,
+      "sha256": "f152e8c8cdc94d319d54732ecd0539fad87b2f95a8f4f0dc5be63fcbff07d9e3",
+      "width": 1021,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest7.bmp",
+      "path": "bg/sys/River/forest7.bmp",
+      "bytes": 153454,
+      "sha256": "6ab3daeaec0ed962fc88d30a87d30d3d2542093758f71f39567bc72e920b562c",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest8.bmp",
+      "path": "bg/sys/River/forest8.bmp",
+      "bytes": 153454,
+      "sha256": "82681733d53c539d791ea444e84a5eddc0648df9c7155f2488cb706698b00249",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\forest9.bmp",
+      "path": "bg/sys/River/forest9.bmp",
+      "bytes": 153454,
+      "sha256": "4b97a0e74f16a2362315289a36220d441381c60d5a48ec2f6f8cdb22276463c4",
+      "width": 1022,
+      "height": 50,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\River\\s.bmp",
+      "path": "bg/sys/River/s.bmp",
+      "bytes": 426,
+      "sha256": "75c92f8522ed15fb225cc8c7590588c7d2b493152d62c47aa11a145dbaddc996",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko.bmp",
+      "path": "bg/sys/Forest/anko.bmp",
+      "bytes": 7894,
+      "sha256": "d47b44c5a8488348f65c37dbfa32b7f2788ecd9156d75e8262352d8defb72239",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko10.bmp",
+      "path": "bg/sys/Forest/anko10.bmp",
+      "bytes": 7894,
+      "sha256": "b2bedf5d6fe48b303eb3bb3ade80c84c5fbf8515dd32adf0be7ae63d0701a554",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko11.bmp",
+      "path": "bg/sys/Forest/anko11.bmp",
+      "bytes": 7894,
+      "sha256": "4ae233e90767afa8c49b568d6e0ea29c068fc73655a3707e7584de27e19d65e5",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko12.bmp",
+      "path": "bg/sys/Forest/anko12.bmp",
+      "bytes": 7894,
+      "sha256": "b5592e4f2a3a3a44ec63c19df369b85e217fd350e7e1bee83e07deea90069711",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko13.bmp",
+      "path": "bg/sys/Forest/anko13.bmp",
+      "bytes": 7894,
+      "sha256": "df48a77db173ae56b8b6a591b29b81c663c280a3cb171c2353cbb2abf64d6eb2",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko14.bmp",
+      "path": "bg/sys/Forest/anko14.bmp",
+      "bytes": 7894,
+      "sha256": "c78b58fda51265a7d9484ec729ae92487b64bb7f342f5c33cff80aa1bb2a7d79",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko2.bmp",
+      "path": "bg/sys/Forest/anko2.bmp",
+      "bytes": 7894,
+      "sha256": "f8b65256fbd2d66ca4d5087e50dff56a10d045de71f5febffa925fa02625d20b",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko3.bmp",
+      "path": "bg/sys/Forest/anko3.bmp",
+      "bytes": 7894,
+      "sha256": "1e816c73907232707fdedcfbf1f654fc0205021771135141cf7a0c923c2fb18d",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko4.bmp",
+      "path": "bg/sys/Forest/anko4.bmp",
+      "bytes": 7894,
+      "sha256": "b661ba26b6f46634be7a001b3479e3e48fde398e3ac43e59a9f672e5d166232d",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko5.bmp",
+      "path": "bg/sys/Forest/anko5.bmp",
+      "bytes": 7894,
+      "sha256": "9c4032651e028d5743c54d5a0998c8968584d06b2fb7b32e616e370ac1257314",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko6.bmp",
+      "path": "bg/sys/Forest/anko6.bmp",
+      "bytes": 7894,
+      "sha256": "70050948bb5104edccaeb12b609782a59ad165cd261181b4688b40fb3c7ef7bf",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko7.bmp",
+      "path": "bg/sys/Forest/anko7.bmp",
+      "bytes": 7894,
+      "sha256": "206538c36b42d0f74dd52a018309ab343608d0d6972163e22259c574ec3eb67b",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko8.bmp",
+      "path": "bg/sys/Forest/anko8.bmp",
+      "bytes": 7894,
+      "sha256": "2383d92ef3ed1e4b2459c7f02c4ac207078712c5135d4aa175e71b6fda69800b",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\anko9.bmp",
+      "path": "bg/sys/Forest/anko9.bmp",
+      "bytes": 7894,
+      "sha256": "35c613f44dd4cc10753abd38a7a47645ffa210c76be006d50b4eb5d32cdb9e7b",
+      "width": 37,
+      "height": 70,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\forest.bmp",
+      "path": "bg/sys/Forest/forest.bmp",
+      "bytes": 2758710,
+      "sha256": "bc4fa437094d75567836e38288184508dd5186e541983d420c75d9267674d17a",
+      "width": 2047,
+      "height": 449,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\forest2.bmp",
+      "path": "bg/sys/Forest/forest2.bmp",
+      "bytes": 836358,
+      "sha256": "2b841d8379c580a3baa749d3ca193a5ff699d38497a81b5adddc9bf69c659c2e",
+      "width": 532,
+      "height": 524,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\forest3.bmp",
+      "path": "bg/sys/Forest/forest3.bmp",
+      "bytes": 21066,
+      "sha256": "d112d8cd35bd4b9f29c30a4a5a5f9ff0f181ad18ce12db6c3bbed23453b6b8fa",
+      "width": 411,
+      "height": 17,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\forest4.bmp",
+      "path": "bg/sys/Forest/forest4.bmp",
+      "bytes": 95226,
+      "sha256": "7148a9d8e90ef948f52ca57df59e5837bd8040c2a221522be40accb6b9ac2cc4",
+      "width": 411,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Forest\\s.bmp",
+      "path": "bg/sys/Forest/s.bmp",
+      "bytes": 428,
+      "sha256": "8091f620595dd886d715c4f5d75f9d2f20a6c6fbc29c0431390ad2540061748c",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma.bmp",
+      "path": "bg/sys/Arena/asuma.bmp",
+      "bytes": 11894,
+      "sha256": "869d4c6a245323adcea6de127f6abaff2313f8a192c96f55b09f6177ef9214f6",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma2.bmp",
+      "path": "bg/sys/Arena/asuma2.bmp",
+      "bytes": 11894,
+      "sha256": "b6d504275a881a03388a4f0f63098322f3c115ebdc4c8cec84589a45ef05dbb3",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma3.bmp",
+      "path": "bg/sys/Arena/asuma3.bmp",
+      "bytes": 11894,
+      "sha256": "7767a0bc939d90634ecf8f05b8b4e4cde6e83879bd6b7bbfd497bc7f9fd06640",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma4.bmp",
+      "path": "bg/sys/Arena/asuma4.bmp",
+      "bytes": 11894,
+      "sha256": "38068c5cf46919f487322e35797a518273c1142781382fa652f6dd544d418aaf",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma5.bmp",
+      "path": "bg/sys/Arena/asuma5.bmp",
+      "bytes": 11894,
+      "sha256": "32073b51ae41818ecfaf6231c8c6e73e46d55caccfc828db14310e473682d536",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma6.bmp",
+      "path": "bg/sys/Arena/asuma6.bmp",
+      "bytes": 11894,
+      "sha256": "db0b210d523d56e565e87a4a71523e91d5fde40e4812f46b0c9fe68b25a9de54",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma7.bmp",
+      "path": "bg/sys/Arena/asuma7.bmp",
+      "bytes": 11894,
+      "sha256": "03d225bc70b269623f3273f58338cf1a0900f3382469f778b10a4f5f8091b004",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\asuma8.bmp",
+      "path": "bg/sys/Arena/asuma8.bmp",
+      "bytes": 11894,
+      "sha256": "1b79e60b878f90e07a00a61a4c2bc6737b91f57965bad4dd5f479fe07db464f1",
+      "width": 49,
+      "height": 80,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\chunin.bmp",
+      "path": "bg/sys/Arena/chunin.bmp",
+      "bytes": 1800054,
+      "sha256": "b8bb376f449f6352da255c7da783b0856f5298fbc0e129eafd8c9ec476e0659d",
+      "width": 960,
+      "height": 625,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\chunin2.bmp",
+      "path": "bg/sys/Arena/chunin2.bmp",
+      "bytes": 128214,
+      "sha256": "3d2e49e2311082f4a788fbcc8e945adee8d5f8304d66d62ae96da82b2fbdd467",
+      "width": 949,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\chunin3.bmp",
+      "path": "bg/sys/Arena/chunin3.bmp",
+      "bytes": 128214,
+      "sha256": "b1deae28bd1a88be4c4a734d175781d92d58048885aa19d888cc2ba09ab623df",
+      "width": 949,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\chunin4.bmp",
+      "path": "bg/sys/Arena/chunin4.bmp",
+      "bytes": 128214,
+      "sha256": "fa9122c0da3c5fe279641107dd5c60752b3bee15997338a42013eeb62a8788d1",
+      "width": 949,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\chunin5.bmp",
+      "path": "bg/sys/Arena/chunin5.bmp",
+      "bytes": 128214,
+      "sha256": "5e9126e90e5aa3fab9cfecae4db97811230395521480c9d6cbdbf2ef7f882f8c",
+      "width": 949,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai.bmp",
+      "path": "bg/sys/Arena/kurenai.bmp",
+      "bytes": 9534,
+      "sha256": "bc39a0790a90a5be20ed4f6c0df6dd3fc1525207508f70b29dabcb93e3dc61b0",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai2.bmp",
+      "path": "bg/sys/Arena/kurenai2.bmp",
+      "bytes": 9534,
+      "sha256": "5f91d15f5e8e99ed2630e511332df7afa49c6b045e42e072e4874531f49ad2ec",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai3.bmp",
+      "path": "bg/sys/Arena/kurenai3.bmp",
+      "bytes": 9534,
+      "sha256": "eebdc895b6d0dd94a7a594bcd984b765bcf923134a364afe7c334e6c375f59a1",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai4.bmp",
+      "path": "bg/sys/Arena/kurenai4.bmp",
+      "bytes": 9534,
+      "sha256": "061549617290d4716b970ce5170c8e415bf38fdeef17a7e778558da9bab36e7b",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai5.bmp",
+      "path": "bg/sys/Arena/kurenai5.bmp",
+      "bytes": 9534,
+      "sha256": "55768d7c0aaececbd369b95215f867c89bcd286584444c8c10fddc7fe593d324",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai6.bmp",
+      "path": "bg/sys/Arena/kurenai6.bmp",
+      "bytes": 9534,
+      "sha256": "8362756ac216ea268265b079b8f2123c7147c91ab2a3c71c8a2f8e9faf29f88a",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai7.bmp",
+      "path": "bg/sys/Arena/kurenai7.bmp",
+      "bytes": 9534,
+      "sha256": "6f1809c4dee7af60f5ff9eb9041ba66a3965f096697f5a17a83aacd2cf5271f5",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\kurenai8.bmp",
+      "path": "bg/sys/Arena/kurenai8.bmp",
+      "bytes": 9534,
+      "sha256": "26f7f399205ed00633dd572b664432abc078ae033ba4d018d78e6f0e57b8dfc9",
+      "width": 40,
+      "height": 79,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Arena\\s.bmp",
+      "path": "bg/sys/Arena/s.bmp",
+      "bytes": 428,
+      "sha256": "8091f620595dd886d715c4f5d75f9d2f20a6c6fbc29c0431390ad2540061748c",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\RamenPlace\\ramen1.bmp",
+      "path": "bg/sys/RamenPlace/ramen1.bmp",
+      "bytes": 1310454,
+      "sha256": "809fd908177dbcb54d57ca24ffefe60c753c793ca3f2fc91472ba24c65ff736b",
+      "width": 799,
+      "height": 546,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\RamenPlace\\ramen2.bmp",
+      "path": "bg/sys/RamenPlace/ramen2.bmp",
+      "bytes": 441270,
+      "sha256": "8921ae026055f0ada1bab1301d37a5c177ff030e35e3df53ac5d55745fdda36f",
+      "width": 384,
+      "height": 383,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\RamenPlace\\ramen3.bmp",
+      "path": "bg/sys/RamenPlace/ramen3.bmp",
+      "bytes": 112854,
+      "sha256": "39755adeb1dffb88cafeaf7c6f5167579092502684bf9cbeee77e1e8f4861e19",
+      "width": 799,
+      "height": 47,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\RamenPlace\\ramen4.bmp",
+      "path": "bg/sys/RamenPlace/ramen4.bmp",
+      "bytes": 112854,
+      "sha256": "646930bc6415753971489e56b8b3c36a13fe8c4e9c0a78a9889d2197246bd1ad",
+      "width": 799,
+      "height": 47,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\RamenPlace\\s.bmp",
+      "path": "bg/sys/RamenPlace/s.bmp",
+      "bytes": 428,
+      "sha256": "8091f620595dd886d715c4f5d75f9d2f20a6c6fbc29c0431390ad2540061748c",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu.bmp",
+      "path": "bg/sys/Springs/ebisu.bmp",
+      "bytes": 8062,
+      "sha256": "8f3a2e464effbd3ff64dbf769ea8696970afb9873c60257818bcd7567bfa4ac8",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu2.bmp",
+      "path": "bg/sys/Springs/ebisu2.bmp",
+      "bytes": 8062,
+      "sha256": "2fc8305b1dd1e32eb7834d0ec89c025d87c3266714bb8a0fc375d0482841036e",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu3.bmp",
+      "path": "bg/sys/Springs/ebisu3.bmp",
+      "bytes": 8062,
+      "sha256": "ed5e880be7765df367f94ad0dfce578462448e911cac75865d17a6de6817e6fa",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu4.bmp",
+      "path": "bg/sys/Springs/ebisu4.bmp",
+      "bytes": 8062,
+      "sha256": "2d65f4eefe52a6c110c3d9867a870e4db2091de0c07ce23e736b2da83c4c7087",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu5.bmp",
+      "path": "bg/sys/Springs/ebisu5.bmp",
+      "bytes": 8062,
+      "sha256": "c6c34cb373d646ba3590db0f4a914bea7fdf8709813315f87184bd52aefcdc04",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu6.bmp",
+      "path": "bg/sys/Springs/ebisu6.bmp",
+      "bytes": 8062,
+      "sha256": "3bef51cc7cc112a1fb14e84066c25d49ec9c2ba4ad4602c2ed6258aceb1190c5",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu7.bmp",
+      "path": "bg/sys/Springs/ebisu7.bmp",
+      "bytes": 8062,
+      "sha256": "64cc5014b363fafb5c22771eea0ff52f56ed3fe8a28b038359516ab8f25f9e9c",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\ebisu8.bmp",
+      "path": "bg/sys/Springs/ebisu8.bmp",
+      "bytes": 8062,
+      "sha256": "87eea5997fee88e74742f580a56addbc7988fc7e3b0330de67009581a0b086b9",
+      "width": 34,
+      "height": 77,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\kono.bmp",
+      "path": "bg/sys/Springs/kono.bmp",
+      "bytes": 4102,
+      "sha256": "667eda61a9087556da01af916aacf0a08efb74767764719af2bde60e4acc97e5",
+      "width": 29,
+      "height": 46,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\kono2.bmp",
+      "path": "bg/sys/Springs/kono2.bmp",
+      "bytes": 3918,
+      "sha256": "776adcfad6d9512b112675a1f202364a63bd5f857a0185b44818d323f2e1e6c9",
+      "width": 28,
+      "height": 46,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\kono3.bmp",
+      "path": "bg/sys/Springs/kono3.bmp",
+      "bytes": 3918,
+      "sha256": "0f72509b8be37c91f12ba8b0db1a1b38b35c6ee1549aaebe716abd3c16dbcab4",
+      "width": 28,
+      "height": 46,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\kono4.bmp",
+      "path": "bg/sys/Springs/kono4.bmp",
+      "bytes": 3918,
+      "sha256": "190e1d3b16dad9e959f35ae5c6bc2c479dfa0c3e2a40b13680ad09e9bc2de6ba",
+      "width": 28,
+      "height": 46,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\s.bmp",
+      "path": "bg/sys/Springs/s.bmp",
+      "bytes": 426,
+      "sha256": "75c92f8522ed15fb225cc8c7590588c7d2b493152d62c47aa11a145dbaddc996",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\s2.bmp",
+      "path": "bg/sys/Springs/s2.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\springs.bmp",
+      "path": "bg/sys/Springs/springs.bmp",
+      "bytes": 1481062,
+      "sha256": "90f152a6cdbf0cfbb06ebf143199781a58ece411ccb4394ef0cc8c3f05ca6297",
+      "width": 817,
+      "height": 604,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\springs2.bmp",
+      "path": "bg/sys/Springs/springs2.bmp",
+      "bytes": 678138,
+      "sha256": "3f773ed82398f818f3632575428f8854961fdaa4fa174b03f2bf06b21c107d6b",
+      "width": 483,
+      "height": 467,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Springs\\springs3.bmp",
+      "path": "bg/sys/Springs/springs3.bmp",
+      "bytes": 178166,
+      "sha256": "061332a1f26297b00e7c2b13d16e849b1caab6e26cd18e177e08d5d06ffff6c4",
+      "width": 490,
+      "height": 121,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\academy.bmp",
+      "path": "bg/sys/Academy/academy.bmp",
+      "bytes": 2483142,
+      "sha256": "dcbe773493ee814ee3868dc990b5a9e0ee249b282be53d14e5b1ddf374e1d516",
+      "width": 1432,
+      "height": 578,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\academy2.bmp",
+      "path": "bg/sys/Academy/academy2.bmp",
+      "bytes": 500162,
+      "sha256": "dfd484065fe9ef6b7be915e6ff085fa98e90e95194e07bffba80374ebd46fc46",
+      "width": 494,
+      "height": 337,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\academy3.bmp",
+      "path": "bg/sys/Academy/academy3.bmp",
+      "bytes": 154710,
+      "sha256": "f48ebd75fbc5e3a2d829a5e6165670fefe05631365c1c77f7df2b7d6b520b6d2",
+      "width": 1432,
+      "height": 36,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\academy4.bmp",
+      "path": "bg/sys/Academy/academy4.bmp",
+      "bytes": 154710,
+      "sha256": "6077a1f45debbb19782457d5cad059017a5e8f452318cd75f59cd88492b7e013",
+      "width": 1432,
+      "height": 36,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\academy5.bmp",
+      "path": "bg/sys/Academy/academy5.bmp",
+      "bytes": 18150,
+      "sha256": "27e44c59801956ae8a531274be4919a2479bdfd62397aeadd2c26fb6fdcc412e",
+      "width": 104,
+      "height": 58,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Academy\\s.bmp",
+      "path": "bg/sys/Academy/s.bmp",
+      "bytes": 426,
+      "sha256": "1a1b552addbedbe53d540f55e045170ce04ec9fd08013fe13cd42df16f891ad0",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\castle.bmp",
+      "path": "bg/sys/CastleRoof/castle.bmp",
+      "bytes": 1734742,
+      "sha256": "a437160ac8771d23f5c6459e313427c4fa47e0217608c072d18b903a1664f55b",
+      "width": 805,
+      "height": 718,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\castle2.bmp",
+      "path": "bg/sys/CastleRoof/castle2.bmp",
+      "bytes": 476370,
+      "sha256": "4b1d7a33a9a3193ef55f6d7ecb5ae9fce1e44a7473ae911f485e4c26292fb8bb",
+      "width": 404,
+      "height": 393,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\clouds.bmp",
+      "path": "bg/sys/CastleRoof/clouds.bmp",
+      "bytes": 266690,
+      "sha256": "62901326b7683eadb1492d7a1fbbf3f60ff9d0239c232f4fde60114a2eee33da",
+      "width": 254,
+      "height": 349,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\clouds2.bmp",
+      "path": "bg/sys/CastleRoof/clouds2.bmp",
+      "bytes": 266690,
+      "sha256": "4aedae584a987932c9ef8f8afc2452ccea1aa6ab6616b794214d69ed709eb221",
+      "width": 254,
+      "height": 349,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma.bmp",
+      "path": "bg/sys/CastleRoof/genma.bmp",
+      "bytes": 8262,
+      "sha256": "fb7de668f053f18a188a3d0f921198f7a70adb3953e64eaf87a392e29f7bf310",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma2.bmp",
+      "path": "bg/sys/CastleRoof/genma2.bmp",
+      "bytes": 8262,
+      "sha256": "312d0003d51af91fed89969ac4db75caf3d5837067ddbdece53dfd4da4199c7a",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma3.bmp",
+      "path": "bg/sys/CastleRoof/genma3.bmp",
+      "bytes": 8262,
+      "sha256": "9ffa49c667a6914750e89ab121bdeed1e600a91166529963fa8d8a6c0452a328",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma4.bmp",
+      "path": "bg/sys/CastleRoof/genma4.bmp",
+      "bytes": 8262,
+      "sha256": "ab0b4e4964fdc51db79d08744466254a997d9a919e9b9f91ad0dffb75ba9d44e",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma5.bmp",
+      "path": "bg/sys/CastleRoof/genma5.bmp",
+      "bytes": 8262,
+      "sha256": "a806efa6d327a6a7fed6621786be40758b0762f14d7dfc50f83b30fe9b2e1c01",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma6.bmp",
+      "path": "bg/sys/CastleRoof/genma6.bmp",
+      "bytes": 8262,
+      "sha256": "2b7943e3ae2fbe645d2c0b5bb96355399c48aad4d66d02529f8459768346cddc",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma7.bmp",
+      "path": "bg/sys/CastleRoof/genma7.bmp",
+      "bytes": 8262,
+      "sha256": "343841ce8a41405936eb68f814c09933122a41465c22acf2fdd0dc835e97739d",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\genma8.bmp",
+      "path": "bg/sys/CastleRoof/genma8.bmp",
+      "bytes": 8262,
+      "sha256": "9a110d77460bdc1fdffb4f0fbfde012cadadb96e6ca0d28d1309a459244d7673",
+      "width": 36,
+      "height": 76,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\CastleRoof\\s.bmp",
+      "path": "bg/sys/CastleRoof/s.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\road.bmp",
+      "path": "bg/sys/Valley/road.bmp",
+      "bytes": 179766,
+      "sha256": "2f0869647909773acd43e3a97aae127cffadf9c5be7f0082236c39fa6570f339",
+      "width": 511,
+      "height": 117,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\road1.bmp",
+      "path": "bg/sys/Valley/road1.bmp",
+      "bytes": 33846,
+      "sha256": "bc4fbf76cfa069d753d8c0ad9a372daf4565eedc95ec0879a0bdff88a0dbc0ea",
+      "width": 511,
+      "height": 22,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\road2.bmp",
+      "path": "bg/sys/Valley/road2.bmp",
+      "bytes": 33846,
+      "sha256": "ef707b23f4f78a39faa880ac607fe56bd995b86edfd51aef4dc15ba3be15a677",
+      "width": 511,
+      "height": 22,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\road3.bmp",
+      "path": "bg/sys/Valley/road3.bmp",
+      "bytes": 33846,
+      "sha256": "8255fc2e35dba5c83b2c5f9dfdc3d58341005f6aaf2357176323ad3adb3a8190",
+      "width": 511,
+      "height": 22,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\road4.bmp",
+      "path": "bg/sys/Valley/road4.bmp",
+      "bytes": 33846,
+      "sha256": "1a311f013d7f6698ef9cfc134eea9eeb6ced40bb487679de820976229c95893e",
+      "width": 511,
+      "height": 22,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\s.bmp",
+      "path": "bg/sys/Valley/s.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley.bmp",
+      "path": "bg/sys/Valley/valley.bmp",
+      "bytes": 735498,
+      "sha256": "6b0158ecfbf15852b5d20002cbc7ad8cb2e27b299a31e691cb54fa736e784a78",
+      "width": 878,
+      "height": 279,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley2.bmp",
+      "path": "bg/sys/Valley/valley2.bmp",
+      "bytes": 485698,
+      "sha256": "32b95eb91ec84d015b4bcc887176658a105552ca8ab21b1b8df7b101d9b1fa6d",
+      "width": 510,
+      "height": 317,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley3.bmp",
+      "path": "bg/sys/Valley/valley3.bmp",
+      "bytes": 154494,
+      "sha256": "3beffd985ff875e1e303e06fc69093cd8aedf4971b894f7b5c64ba272f3c00ca",
+      "width": 360,
+      "height": 143,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley4.bmp",
+      "path": "bg/sys/Valley/valley4.bmp",
+      "bytes": 149514,
+      "sha256": "84093dd099bf21bfc6c917cc6f7a5e1efc8007a3ccd0cac4bc1b452c80663e65",
+      "width": 353,
+      "height": 141,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley5.bmp",
+      "path": "bg/sys/Valley/valley5.bmp",
+      "bytes": 146214,
+      "sha256": "4d1dfe860f3dc3d757e5334599a2cddf8814cbac0121ce23f0051339e8c42879",
+      "width": 348,
+      "height": 140,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Valley\\valley6.bmp",
+      "path": "bg/sys/Valley/valley6.bmp",
+      "bytes": 147454,
+      "sha256": "2e52e403ce7c10090f414c48246a4d589a682baa4afb3324e3eb528c4a6d7465",
+      "width": 446,
+      "height": 110,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass.bmp",
+      "path": "bg/sys/Grassland/grass.bmp",
+      "bytes": 644638,
+      "sha256": "52f5f0639f0a96d61ef9a71ee368e18f485abfbbe663ee2304acd115a22b058a",
+      "width": 545,
+      "height": 394,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass1.bmp",
+      "path": "bg/sys/Grassland/grass1.bmp",
+      "bytes": 233294,
+      "sha256": "31b3bc9280c6e6f8273601c02c9168df7b530bf3028c1b639f89bfd3cb23cb55",
+      "width": 793,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass11.bmp",
+      "path": "bg/sys/Grassland/grass11.bmp",
+      "bytes": 76494,
+      "sha256": "a0fdf08629884283f5adaaa176b23b323fc11de57616f45aac0627165f1bacf0",
+      "width": 259,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass12.bmp",
+      "path": "bg/sys/Grassland/grass12.bmp",
+      "bytes": 76494,
+      "sha256": "eba8bafc2a05da9d4f5d18ed9b4bc5c3953507ae8456213a0381317347feed17",
+      "width": 260,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass13.bmp",
+      "path": "bg/sys/Grassland/grass13.bmp",
+      "bytes": 60814,
+      "sha256": "40001277272f0bc4a039f7b86d6272ecb033e58c38e33220c6377acb17e5a8c2",
+      "width": 206,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass2.bmp",
+      "path": "bg/sys/Grassland/grass2.bmp",
+      "bytes": 228198,
+      "sha256": "f1172d296e07c2e2b6004b598628bb21c3d613a48bd6d24e909ce67d0a748fa8",
+      "width": 776,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass3.bmp",
+      "path": "bg/sys/Grassland/grass3.bmp",
+      "bytes": 241134,
+      "sha256": "c462e769c9979921e0844d0cafa90c8d9781b9b522d49ef5177641d7120aab96",
+      "width": 820,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\grass4.bmp",
+      "path": "bg/sys/Grassland/grass4.bmp",
+      "bytes": 190566,
+      "sha256": "f00fc019a7708e5912b2f335a47d78626c537fc243d5160f0286beaf0d58311e",
+      "width": 648,
+      "height": 98,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\s.bmp",
+      "path": "bg/sys/Grassland/s.bmp",
+      "bytes": 426,
+      "sha256": "e65112ac828f33342a9fab9fc830f3ab0296776145640e187fe48e078363a031",
+      "width": 37,
+      "height": 9,
+      "bits": 8,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Grassland\\wind.bmp",
+      "path": "bg/sys/Grassland/wind.bmp",
+      "bytes": 1500054,
+      "sha256": "754d85160bed1d92a92a8c6286a002de24f13aaf5be5ae63815f9c404ee00e7f",
+      "width": 1000,
+      "height": 500,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\path.bmp",
+      "path": "bg/sys/Path/path.bmp",
+      "bytes": 214326,
+      "sha256": "f405c9dbe1baea7ff48a335efd366c73372daf7900a387920e4f4760849707dc",
+      "width": 256,
+      "height": 279,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\path1.bmp",
+      "path": "bg/sys/Path/path1.bmp",
+      "bytes": 610014,
+      "sha256": "42946682efb4bd8bf66e9849ec54e630cc73a9d591ecb73219c7e68e1bfee5bf",
+      "width": 919,
+      "height": 221,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\path2.bmp",
+      "path": "bg/sys/Path/path2.bmp",
+      "bytes": 164754,
+      "sha256": "525fff82feef9c28c5e3e4855148f723be586616080cf3666b776bfcda511fbe",
+      "width": 1220,
+      "height": 45,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\path3.bmp",
+      "path": "bg/sys/Path/path3.bmp",
+      "bytes": 304722,
+      "sha256": "f3000d326d2b3ae2192e5682c10060a674d8850186331e7b41f8f3ef6cc71332",
+      "width": 371,
+      "height": 273,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\s.bmp",
+      "path": "bg/sys/Path/s.bmp",
+      "bytes": 2086,
+      "sha256": "b56bad1617fb7dcf0e6964c39028368d8c6a69f27be215071c348a8aa3633e51",
+      "width": 37,
+      "height": 9,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf11.bmp",
+      "path": "bg/sys/Path/wolf11.bmp",
+      "bytes": 7350,
+      "sha256": "62defce244e36ccc5ce861c1da202cf63cfa8357a49a2be4d77497e8142e674b",
+      "width": 63,
+      "height": 38,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf12.bmp",
+      "path": "bg/sys/Path/wolf12.bmp",
+      "bytes": 7350,
+      "sha256": "1a4d0ff609e5b51fa9ffebbc077605933b555f8cd8da35d06578c94e29fc01e9",
+      "width": 63,
+      "height": 38,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf13.bmp",
+      "path": "bg/sys/Path/wolf13.bmp",
+      "bytes": 7350,
+      "sha256": "79e9900d583527dda585691649adefc16c214fc70934a857c4bcdcd1ec4dd8bc",
+      "width": 63,
+      "height": 38,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf14.bmp",
+      "path": "bg/sys/Path/wolf14.bmp",
+      "bytes": 7350,
+      "sha256": "5f77449a5e6d8ad41d875dec7edcfb0233a3f666c77297d65b726c919ac5b9da",
+      "width": 63,
+      "height": 38,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf21.bmp",
+      "path": "bg/sys/Path/wolf21.bmp",
+      "bytes": 8286,
+      "sha256": "77382d40034410bec64d258581b52c882e2f120606aead36eed2eaf1a89e5e87",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf22.bmp",
+      "path": "bg/sys/Path/wolf22.bmp",
+      "bytes": 8286,
+      "sha256": "28e02c5a19a6985f08ea39493761383560d0bbf9560d36df9348e123181be0e5",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf31.bmp",
+      "path": "bg/sys/Path/wolf31.bmp",
+      "bytes": 8286,
+      "sha256": "eaf2268a7de52dc2055f1fb346973848445abcf8b2c552fff01fb16aa6856df8",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf32.bmp",
+      "path": "bg/sys/Path/wolf32.bmp",
+      "bytes": 8286,
+      "sha256": "f8056bb01ca447a1dcb235e207afdea549f48019b5b4b0768edbd80a999cc3e6",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf33.bmp",
+      "path": "bg/sys/Path/wolf33.bmp",
+      "bytes": 8286,
+      "sha256": "a8143de7587f7faec4f6c57a807749dee1c4b83af1ca16c29a9e4013489913c3",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf34.bmp",
+      "path": "bg/sys/Path/wolf34.bmp",
+      "bytes": 8286,
+      "sha256": "852de84d7c19200cc6801e07a18e09ffe8341cdc3330e4d14667c2695414047b",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf35.bmp",
+      "path": "bg/sys/Path/wolf35.bmp",
+      "bytes": 8286,
+      "sha256": "06aa1022e1a17d5b12d512a1cb41e3cf7f056e4f0dbba36d07028ab25af928d6",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf36.bmp",
+      "path": "bg/sys/Path/wolf36.bmp",
+      "bytes": 8286,
+      "sha256": "8a03f60d08d5be954179d533792fcd58f285693577d5ccfa69fd3f2e2bd0c247",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf41.bmp",
+      "path": "bg/sys/Path/wolf41.bmp",
+      "bytes": 8286,
+      "sha256": "82a589baed2ad454f3614ec426223650fae1f66757b8d1c1e27b1aecde94ef77",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf42.bmp",
+      "path": "bg/sys/Path/wolf42.bmp",
+      "bytes": 8286,
+      "sha256": "1d951fef28a8fa8bdd9cd3b784881390a09fe8638c1c02513355f0da1221ef76",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf43.bmp",
+      "path": "bg/sys/Path/wolf43.bmp",
+      "bytes": 8286,
+      "sha256": "84a22330db64366b344b2387982a17b89bd64d3aaae8083554b141307fec8c6d",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf44.bmp",
+      "path": "bg/sys/Path/wolf44.bmp",
+      "bytes": 8286,
+      "sha256": "5b8896f817ab549eb28f23b2650cea5190830c99339e9dfbd3a5f948e44b684a",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf45.bmp",
+      "path": "bg/sys/Path/wolf45.bmp",
+      "bytes": 8286,
+      "sha256": "e2317c7da59eb6fc1faabbe9e9bc5aa7874a3667dec6ae2a70a91ed3abeb6f91",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
+    },
+    {
+      "name": "bg\\sys\\Path\\wolf46.bmp",
+      "path": "bg/sys/Path/wolf46.bmp",
+      "bytes": 8286,
+      "sha256": "3a605578cea61f94f99981794f10942299a22b0a133e3c584cc88a5f3093e826",
+      "width": 65,
+      "height": 42,
+      "bits": 24,
+      "compression": 0
     }
   ]
 }

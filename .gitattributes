@@ -9,3 +9,4 @@ native/Tests/NTSDCoreTests/Fixtures/original-application-catalog-session*.zlib -
 native/Sources/NTSDCore/Resources/OriginalCatalog/files/** filter=lfs diff=lfs merge=lfs -text
 native/Sources/NTSDCore/Resources/OriginalCatalog/embedded/** -text -diff
 native/Sources/NTSDMacPlatform/Resources/OriginalMusic/*.caf filter=lfs diff=lfs merge=lfs -text
+native/Sources/NTSDCore/Resources/OriginalMatchArenas/bg/** filter=lfs diff=lfs merge=lfs -text

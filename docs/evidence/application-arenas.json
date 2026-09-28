@@ -1,0 +1,162 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T23:51:58.887718Z",
+ "parentHead": "623845f",
+ "scope": "All 17 registered backgrounds packaged; each launches and plays in the app",
+ "files": {
+  "tools/package_match_arenas.py": "bf293f59f00603dc737165efe1c6474708783799f42394635abc692fb476a592",
+  "native/Sources/NTSDCore/OriginalApplicationArenaInputs.swift": "189322319775dee2397981e413ecd4f400b7046325c4bed7496252e6a9f06afd",
+  "native/Sources/NTSDCore/Resources/OriginalMatchArenas/manifest.json": "60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519",
+  "docs/evidence/application-arenas-capture.png": "4d89477c38b66786e181401473f525c77b89a81558652810b2672f8118fb158e"
+ },
+ "package": {
+  "backgrounds": 17,
+  "files": 228,
+  "bytes": 63291154,
+  "manifestSHA256": "60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519"
+ },
+ "runs": {
+  "flags": "--mute-music --virtual-clock 123456789 8 --script-clock gameplay --exit-after-bodies 300, Background confirmed k+2 times (Random: 0)",
+  "perBackground": {
+   "0": {
+    "matchLaunched": 1476,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "9df544a27b8f43a64ae3863a7a64a0d9a74e88bef02a9aaa1c2c7b5bdf134e47"
+   },
+   "1": {
+    "matchLaunched": 1501,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "3120c2ec0a91712da309bd9b68ae6fbd59668adaa0de742c51e8aec5e688ed10"
+   },
+   "2": {
+    "matchLaunched": 1526,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "dee5b6eba46e31e0efd6a153d0e746c2abab7f479bef704350513e547b6d8da8"
+   },
+   "3": {
+    "matchLaunched": 1551,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "1c924d4c0f0efc4adb7ef73a0830622a1e7c42d8283647f3c1473c2944a4b77f"
+   },
+   "4": {
+    "matchLaunched": 1576,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "e00fddca305561175069738f2ca04658840d5dd7ad2b7b9dee6e04213b8f5c4b"
+   },
+   "5": {
+    "matchLaunched": 1601,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "899641f82084150d04612802dfcf3d387bf17070dc930eb35b1f74d862f5adef"
+   },
+   "6": {
+    "matchLaunched": 1626,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "a0517cff16b8bb17feb8815d9b6cba432a538e00d6cb9e6f2e95abd6267cedf3"
+   },
+   "7": {
+    "matchLaunched": 1651,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "ecf30d341446c6f391062e63fe35a36bec45daacdda31ff37bc3f2b31d42790b"
+   },
+   "8": {
+    "matchLaunched": 1676,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "bc057bcc9f5c451e66b255a0d96fe513bbcbb36dcfdad460e91d950946e84101"
+   },
+   "9": {
+    "matchLaunched": 1701,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "b78db5b0396bb36555b878418daa48660f57b1bd13155f858ada1c50d6bac29d"
+   },
+   "10": {
+    "matchLaunched": 1726,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "c1bf0d7758ab7855cf54c69614d694aad606a36256a0d3bb8e1b6ec4f0953bf9"
+   },
+   "11": {
+    "matchLaunched": 1751,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "9e572984d3aa356a00a208c07837cdcebec12fda27916f3c1f7aa0470c584413"
+   },
+   "12": {
+    "matchLaunched": 1776,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "c3b41c59a9ae1eaaeb2f5ba34628ea86600c18c78669033b16acad28b69fffa0"
+   },
+   "13": {
+    "matchLaunched": 1801,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "bbf529346d018d39183f9f9efc41bc26a74f201fe599c40cb23961d99a1c0a2f"
+   },
+   "14": {
+    "matchLaunched": 1826,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "245d1321f0af169e8370aba0816bdad7efc58f5f59736954d3ab749fc14c121c"
+   },
+   "15": {
+    "matchLaunched": 1851,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "0326c2114cd3c3769d3f80ac78cc3006141396c3a1af1e2c8d75a44349968cb1"
+   },
+   "16": {
+    "matchLaunched": 1876,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "cf3f4b28d1c726ef229e2aa3b2574aa1155b43651094cb5d36c67779521bce6c"
+   },
+   "100": {
+    "matchLaunched": 1476,
+    "bodies": 300,
+    "characterAI": 300,
+    "boundary": null,
+    "capture300": "9df544a27b8f43a64ae3863a7a64a0d9a74e88bef02a9aaa1c2c7b5bdf134e47"
+   }
+  },
+  "distinctCaptures0to16": 17
+ },
+ "tests": {
+  "e2e": "pass",
+  "launch": {
+   "suite": "OriginalApplicationLoadedLaunchTests",
+   "tests": 2,
+   "failures": 0,
+   "seconds": 808
+  }
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

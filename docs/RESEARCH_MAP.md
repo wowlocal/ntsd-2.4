@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[All arenas](research/APPLICATION_ARENAS.md): `tools/package_match_arenas.py`
+packages the deferred layers of all 17 registered backgrounds (228 BMPs,
+LFS); each background and Random launches and plays in the app.
+[Evidence](evidence/application-arenas.json).
+
 [Packaged app](research/APPLICATION_PACKAGING.md): `build/NTSD Native.app` plays
 the end-to-end match with `--original` from its own Contents/Resources (music
 now installed like the Core inputs); a clone without the build tree's resource

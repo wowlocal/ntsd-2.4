@@ -1,12 +1,12 @@
 import Foundation
 import CryptoKit
 
-/// Original deferred arena BMP files. Currently the pinned District package;
-/// other arenas can supply their ordinary file inputs to the same launch API.
+/// Original deferred arena BMP files of all 17 registered backgrounds
+/// (tools/package_match_arenas.py); the launch reads the selected one's.
 /// Loading this package performs no game logic or platform bitmap requests.
 public struct OriginalApplicationArenaInputs {
     public let bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
-    public static let manifestSHA256 = "1e52d2fabb7eeedd9b9dd5ed3df1c70a8112091109107d98917e2b93144824fd"
+    public static let manifestSHA256 = "60652ed8df36c7ff0bbaa167dcf1dd7be07140dac766c529d275f0705fc40519"
     private struct Manifest: Decodable {
         struct Entry: Decodable { let name: String,path: String,bytes: Int,sha256: String }
         let version: Int,exeSHA256: String,entries: [Entry]
