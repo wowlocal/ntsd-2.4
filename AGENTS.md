@@ -28,6 +28,16 @@ instructions and dated states, not an instruction to restart historical work.
 Keep this file concise; put new detailed results in study documents and update
 CURRENT_WORK with links. Do not paste the whole archive into every task.
 
+## Progress and validation bounds
+
+User update, 2026-09-27: follow [PROGRESS_RULES](docs/research/PROGRESS_RULES.md)
+for task selection and new runs. After a checked candidate, prioritize transfer
+into `native/` and its ready consumer; name evidence for any integration blocker.
+Routine corrections stay within the same mechanism, with preserved failures and
+separate run IDs. Count correction rounds across renamed tasks; reuse configured
+tools and run required comparisons after cheap checks. The supplement takes
+precedence over older process guidance; fidelity, review and live pins remain binding.
+
 ## Authoritative reference
 
 - Use only the original Windows NTSD distribution as the behavioral reference.
