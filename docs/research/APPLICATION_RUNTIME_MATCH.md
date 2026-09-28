@@ -33,11 +33,23 @@ clicks, keys and captures.
   and difficulty values) is omitted under the GetDC-failure policy; the
   "VS mode (Difficult)" label is drawn, so not all text uses GDI.
 
+## Live fighting (addendum, same day)
+
+Gameplay runs at ≈30 bodies per second in release. Holding D walks Naruto
+right with the camera scrolling; J attacks and throws. Two scripted fights
+stopped at the same Core boundary, the unrecovered AI/object input child of
+`OriginalLocalInput.localInput`; the diagnostic run names object id 219
+(`chars\jan_chaseh.dat`, type 3) at frame 51, whose frame field +0x30 is
+positive (a chasing object). One run with a different time-seeded RNG did not
+reach it. [Fight capture](../evidence/application-runtime-fight-capture.png).
+
 ## Remaining blockers toward the milestone
 
-1. Live fighting: key input during gameplay, a complete round/KO, result
-   screen and return are not yet exercised; no automated test drives this
-   path yet (it takes ≈1300 iterations).
-2. GDI text raster (needs a font decision), music output, other arenas'
+1. **AI/object input child** (characterAI for type-0 objects, objectInput for
+   frames with positive +0x30): required once such objects appear; needs
+   contract recovery from the EXE before implementation.
+2. A complete round/KO, result screen and return; an automated test of this
+   path (≈1300 iterations to reach gameplay).
+3. GDI text raster (needs a font decision), music output, other arenas'
    layers, shutdown paths, device/Windows acceptance. EXE envelope not
    recalculated.

@@ -24,15 +24,17 @@ Native методов, включая целый caller загрузка→ка�
 до retained match launch и gameplay bodies; [снимок матча](../evidence/application-runtime-match-capture.png).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) бой с живым
-вводом до KO, экран результата и возврат не проверены; автоматического теста
-этого пути нет; (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) живой ввод
+в бою работает (≈30 тиков/с), но Core останавливается на невосстановленном
+AI/object input child (`OriginalLocalInput.localInput`: characterAI/objectInput),
+например преследующий объект id219 `jan_chaseh.dat`; KO/результат/возврат и
+автотест не проверены; (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
 беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** довести бой до конца: ввод игроков в gameplay, раунд/KO,
-экран результата и возврат в меню, затем автоматический тест этого пути —
-снимает препятствие (1) до полного матча.
+**Следующая задача:** восстановить контракт objectInput для кадров с +0x30>0
+(преследующие объекты вроде id219) по EXE и сохранённым корпусам, затем
+characterAI; без этого полный матч прерывается — препятствие (1).
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

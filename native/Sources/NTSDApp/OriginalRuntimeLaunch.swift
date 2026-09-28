@@ -134,7 +134,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let completed = try loading.complete(first:first); cycles += 1
                 switch completed {
                 case .launched: Self.emit(["event":"matchLaunched","iterations":committed,"cycles":cycles])
-                case .gameplay: gameplayBodies += 1; if gameplayBodies == 1 { Self.emit(["event":"gameplay","cycles":cycles]) }
+                case .gameplay: gameplayBodies += 1; if gameplayBodies == 1 { Self.emit(["event":"gameplay","cycles":cycles,"uptime":ProcessInfo.processInfo.systemUptime]) }
                 case .menu: break
                 }
                 if first {
@@ -160,9 +160,13 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 guard let vk = UInt32(words[1]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
                 if words[0] == "key" { menu.messages.key(key,down:true); script[n+10,default:[]].append(["keyup",words[1]]) }
                 else { menu.messages.key(key,down:false) }
+            case "hold" where words.count == 3:
+                guard let vk = UInt32(words[1]),let n2 = Int(words[2]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
+                menu.messages.key(key,down:true); script[n+n2,default:[]].append(["keyup",words[1]])
             case "capture" where words.count == 2:
                 try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
-                Self.emit(["event":"captured","iterations":n,"cycles":cycles,"path":words[1]])
+                Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
+                    "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1]])
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }

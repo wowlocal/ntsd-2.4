@@ -161,7 +161,16 @@ import NTSDCore
         try started.host.prepareLoadedUntilBoundary(prepare:{ context,_ in
             guard var cycle = context.cycle else { throw Boundary.missing("cached loaded cycle") }
             var unit: Void = ()
-            let ready = try cycle.advance(environment:&unit,controlBoundary:{ q,_ in try self.control(q) })
+            let ready = try cycle.advance(environment:&unit,dispatch:{ d,match,_ in
+                // AI/object input children are not recovered yet: report the object.
+                let slot = Int(d.arguments[0])
+                let index = try match.world.integer(at:0x194+slot*4,as:UInt32.self)
+                let actor = index < 400 ? match.actors[Int(index)] : nil
+                let object = try actor?.integer(at:0x368,as:UInt32.self) ?? UInt32.max
+                let id = object < match.loadedObjects.count ? try match.loadedObjects[Int(object)].header.integer(at:0x6f4,as:Int32.self) : -1
+                let frame = try actor?.integer(at:0x70,as:UInt32.self) ?? UInt32.max
+                throw Boundary.unexpected("AI/object child \(d.kind.rawValue) slot \(slot) object \(object) header6f4 \(id) frame \(frame)")
+            },controlBoundary:{ q,_ in try self.control(q) })
             self.continuationGraphics = ready.graphics.count
             if ready.round.continuation == .gameplay { return .gameplayInput(ready) }
             return .init(menu:try self.loadedMenu(ready,target:context.entry.target))

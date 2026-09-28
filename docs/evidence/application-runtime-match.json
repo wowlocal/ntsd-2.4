@@ -135,7 +135,7 @@
   "gates": {
     "matchLaunch": true,
     "gameplayBodies": true,
-    "playerInputInGameplay": false,
+    "playerInputInGameplay": true,
     "fullMatch": false,
     "automatedTest": false,
     "independentReview": false,
@@ -147,5 +147,61 @@
     "fullGame": false
   },
   "EXEEnvelopeRecalculated": false,
-  "originalExecuted": false
+  "originalExecuted": false,
+  "liveFight": {
+    "note": "Addendum 2026-09-28 (same card): scripted gameplay input; hold/capture/uptime script actions added.",
+    "rate": "gameplay bodies 36->113 over 2.54 s uptime: ~30 per second (release)",
+    "runs": [
+      {
+        "log": "original-g1.log",
+        "lines": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/50\\/43\",\"2026\\/10\\/02\\/15\\/50\\/43\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":6.162398099899292}",
+          "{\"cycles\":464,\"event\":\"matchLaunched\",\"iterations\":1290}",
+          "{\"cycles\":465,\"event\":\"gameplay\",\"uptime\":883852.11779912503}"
+        ]
+      },
+      {
+        "log": "original-k1.log",
+        "lines": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/51\\/30\",\"2026\\/10\\/02\\/15\\/51\\/30\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":6.0581270456314087}",
+          "{\"cycles\":448,\"event\":\"matchLaunched\",\"iterations\":1288}",
+          "{\"cycles\":449,\"event\":\"gameplay\",\"uptime\":883898.35196283343}",
+          "{\"error\":\"Original state storage: Application loaded cycle needs original AI\\/object child\",\"event\":\"boundary\",\"iterations\":2093,\"request\":\"graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \\\"blt\\\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,"
+        ]
+      },
+      {
+        "log": "original-k2.log",
+        "lines": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/52\\/49\",\"2026\\/10\\/02\\/15\\/52\\/49\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.9229559898376465}",
+          "{\"cycles\":532,\"event\":\"matchLaunched\",\"iterations\":1290}",
+          "{\"cycles\":533,\"event\":\"gameplay\",\"uptime\":883979.89923179173}"
+        ]
+      },
+      {
+        "log": "original-k3.log",
+        "lines": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/54\\/54\",\"2026\\/10\\/02\\/15\\/54\\/54\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.6519020795822144}",
+          "{\"cycles\":528,\"event\":\"matchLaunched\",\"iterations\":1289}",
+          "{\"cycles\":529,\"event\":\"gameplay\",\"uptime\":884104.52407391672}",
+          "{\"error\":\"NTSDMacPlatform.OriginalMacRuntimeLoading.Boundary.unexpected(\\\"AI\\/object child objectInput slot 54 object 78 header6f4 219 frame 51\\\")\",\"event\":\"boundary\",\"iterations\":4521,\"request\":\"graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \\\"blt\\\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, "
+        ]
+      }
+    ],
+    "findings": [
+      "holding D walks Naruto right with camera scrolling; J triggers attacks (run original-g1)",
+      "run original-k1 stopped at iteration 2093: Core boundary \"Application loaded cycle needs original AI/object child\"",
+      "run original-k2 used a stale binary (diagnostic compile error) and completed its 4400-iteration script without the boundary (time-seeded RNG)",
+      "run original-k3 stopped at iteration 4521: objectInput slot 54, object index 78, id 219 (chars\\\\jan_chaseh.dat, type 3), frame 51"
+    ],
+    "capture": {
+      "path": "docs/evidence/application-runtime-fight-capture.png",
+      "bytes": 234909,
+      "sha256": "ef4d834a71ae0b1cc92d236950fffe71f5c45253365afd39e4c34977939eed6a"
+    },
+    "nextBlocker": "AI/object input child of OriginalLocalInput.localInput (characterAI for type-0 objects, objectInput for frames with positive +0x30) is not recovered; chasing objects such as id 219 need it."
+  }
 }
