@@ -7,18 +7,19 @@
 тесты, пакет OriginalCatalog) прошёл сборку, упаковку1686 ресурсов и все167
 Native методов, включая целый caller загрузка→каталог→pool→меню→Host;
 [проверка и архивы](APPLICATION_LOADING_ARENA.md), [публикация](../evidence/application-loading-arena.json).
-В `native/` пока root1034; NTSDApp запускает Practice.
+Он [перенесён в `native/`](../evidence/native-root-promotion-2291.json) побайтно
+(866bf83; OriginalCatalog через LFS); NTSDApp всё ещё запускает Practice.
+Правка process prompts применена (d1a930e).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) проверенный
-код не перенесён в `native/`; (2) целый caller получает allocate/bitmap/file/
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) NTSDApp не
+использует Host; (2) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301), поэтому
 у приложения нет runtime providers этих запросов; (3) window/input/audio на
 устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** обратимый перенос exact candidate2291 в `native/` с
-побайтной проверкой по manifest (подтверждает затем только тот же набор
-байтов; сборка/тесты тех же байтов не повторяются), затем providers приложения.
+**Следующая задача:** runtime providers и подключение NTSDApp к Host (карточка
+в подготовке); сборка/тесты тех же перенесённых байтов не повторяются.
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;
