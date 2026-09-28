@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Application tick speed](research/APPLICATION_TICK_SPEED.md): the computer-VS
+match runs at the original's pace, 30.3 ticks/s with three fighters (≈8.5 ms
+of work per body). Causes: App Nap throttling (now exempt) and unused
+per-stage snapshots (now opt-in). New `--virtual-clock` makes app runs
+reproducible; body captures match the unchanged path byte for byte.
+[Evidence](evidence/application-tick-speed.json).
+
 [VS with a computer player in the app](research/APPLICATION_COMPUTER_VS.md):
 the one-computer menu path is scripted and the computer knocks out both
 players; new script clocks and tick-based progress/captures. Three fighters

@@ -29,6 +29,11 @@ import NTSDCore
     public static let processorSignature: UInt32 = 0x600
     /// Writable files beside the original EXE; nil keeps replay output in memory.
     public var overlay: OriginalMacRuntimeOverlay?
+    /// GetLocalTime's source date; the app pins it for reproducible runs.
+    public var localDate: () -> Date = { Date() }
+    /// Per-stage owned snapshots of gameplay bodies and loaded cycles. The app
+    /// never consumes them; `true` runs the unchanged observation path.
+    public var stageCheckpoints = false
     /// Replay files written by the gameplay body, applied only after the
     /// enclosing Host batch commits (a discarded attempt writes nothing).
     public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
@@ -190,7 +195,7 @@ import NTSDCore
                 let id = object < match.loadedObjects.count ? try match.loadedObjects[Int(object)].header.integer(at:0x6f4,as:Int32.self) : -1
                 let frame = try actor?.integer(at:0x70,as:UInt32.self) ?? UInt32.max
                 throw Boundary.unexpected("AI/object child \(d.kind.rawValue) slot \(slot) object \(object) header6f4 \(id) frame \(frame)")
-            },controlBoundary:{ q,_ in try self.control(q) })
+            },controlBoundary:{ q,_ in try self.control(q) },checkpoints:stageCheckpoints)
             self.continuationGraphics = ready.graphics.count
             switch ready.round.continuation {
             case .gameplay,.pausedRendering: return .gameplayInput(ready)
@@ -232,13 +237,13 @@ import NTSDCore
             // (the final selection frame) were not committed and replay with the launch.
             return try session.advance(environment:&unit,bitmaps:self.arenaInputs.bitmaps,outputInput:self.presentation(pending.loading.target),
                 allocateBitmap:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
-                bitmap:{ q,_ in try self.bitmap(q) },localTime:{ _ in Self.localTime() },music:{ e,_ in try self.music(e) },
+                bitmap:{ q,_ in try self.bitmap(q) },localTime:{ _ in Self.localTime(self.localDate()) },music:{ e,_ in try self.music(e) },
                 allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
                 milliseconds:{ _ in try self.time() })
         })
     }
-    /// One retained gameplay body. DDBLTFX backing for fills is zero; replay
-    /// file output and music resume stay explicit boundaries until connected.
+    /// One retained gameplay body. DDBLTFX backing for fills is zero. Without
+    /// `stageCheckpoints` no per-stage snapshots are built.
     public func gameplay() throws -> LoadedMenu.PendingReturn {
         let heap = started.runtime.heap
         return try started.host.resumeGameplay(prepare:{ ready,_ in
@@ -257,7 +262,7 @@ import NTSDCore
                 resumeMusic:{ control,_ in
                     self.counts.musicResumes += 1
                     return try self.music(.init(.method,[control,0x1c])).result
-                })
+                },checkpoints:self.stageCheckpoints)
         })
     }
     /// _wfsopen(path,"wb",0x40) on a path relative to the EXE directory. The

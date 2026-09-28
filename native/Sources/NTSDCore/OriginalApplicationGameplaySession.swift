@@ -18,6 +18,8 @@ public struct OriginalApplicationGameplaySession {
     /// Environment value-owns buffered effects. No callback submits IO before
     /// the enclosing Bootstrap commits. Unconnected result-file operations
     /// throw at their actual call, preserving the preceding committed game.
+    /// `checkpoints: false` builds no per-stage snapshots (their observations
+    /// are not delivered); the final join still checks the whole result.
     @discardableResult
     public mutating func advance<Environment>(environment: inout Environment,
         outputInput: OriginalMenuPresentationInput,
@@ -46,6 +48,7 @@ public struct OriginalApplicationGameplaySession {
         observe: @escaping (Menu.Observation,inout Environment) throws -> Void = { _,_ in },
         pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
+        checkpoints: Bool = true,
         beforeCommit: (Menu.PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> Menu.PendingReturn {
         guard pendingReturn == nil else { throw Menu.Boundary.alreadyPrepared }
         let a = try Menu.Attempt(entry,.init(bitmaps:[:]),environment,
@@ -125,6 +128,7 @@ public struct OriginalApplicationGameplaySession {
                     try front(event,stage == .output)
                     try pausedObserve(stage,event,&a.environment)
                 },ownedCheckpoint:{ stage,match,input,library in
+                    guard checkpoints else { return }
                     try pausedCheckpoint(stage,checkpoint(match,input,random,library),&a.environment)
                 })
         } else {
@@ -158,6 +162,7 @@ public struct OriginalApplicationGameplaySession {
                 }
                 try observe(.gameplay(event),&a.environment)
             },ownedCheckpoint:{ stage,match,input,crt,library in
+                guard checkpoints else { return }
                 try observe(.gameplayCheckpoint(stage,checkpoint(match,input,crt,library)),&a.environment)
             })
         }

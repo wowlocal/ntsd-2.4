@@ -13,6 +13,8 @@ public struct OriginalApplicationLoadedCycleSession {
               try pending.state.full.integer(at:0x5c,as:Int32.self) != 1 else { throw Boundary.requiresLoadedWorld }
         entry = pending;self.owners = owners;bindings = try .init(pending:owners.entry)
     }
+    /// `checkpoints: false` builds no owned snapshots and calls neither
+    /// `prologue` nor `checkpoint`; the final join still checks the result.
     @discardableResult
     public mutating func advance<Environment>(environment: inout Environment,
         dispatch: (OriginalLocalInputDispatch,inout OriginalMatchPreparation,inout Environment) throws -> Void = { _,_,_ in
@@ -23,6 +25,7 @@ public struct OriginalApplicationLoadedCycleSession {
         roundEvent: (OriginalMatchRoundEvent,inout Environment) throws -> Void = { _,_ in },
         prologue: (OriginalMatchPreparation,Session.State,Bool,[UInt8],[UInt8],inout Environment) throws -> Void = { _,_,_,_,_,_ in },
         checkpoint: (OriginalLoadedMatchEntry.Checkpoint,OriginalMatchPreparation,Session.State,[UInt8],inout Environment) throws -> Void = { _,_,_,_,_ in },
+        checkpoints: Bool = true,
         beforeCommit: (Input.PendingContinuation,inout Environment) throws -> Void = { _,_ in }) throws -> Input.PendingContinuation {
         guard pendingContinuation == nil else { throw Boundary.alreadyPrepared }
         var candidate = environment,state = entry.state
@@ -43,10 +46,12 @@ public struct OriginalApplicationLoadedCycleSession {
             if e.kind == .method { operations.append(.roundMethod(e)) };try roundEvent(e,&candidate)
         },prologue:{ match,input,isPaused,buffer,replay in
             paused = isPaused;commands = buffer;playback = replay
+            guard checkpoints else { return }
             var snapshot = base;try binding.store(match,context:input,in:&snapshot)
             try prologue(match,snapshot,isPaused,buffer,replay,&candidate)
         },checkpoint:{ phase,match,input,buffer in
             commands = buffer
+            guard checkpoints else { return }
             var snapshot = base;try binding.store(match,context:input,in:&snapshot)
             try checkpoint(phase,match,snapshot,buffer,&candidate)
         })

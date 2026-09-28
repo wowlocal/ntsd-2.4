@@ -1,0 +1,321 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T21:56:07.089579Z",
+ "parentHead": "94762ea",
+ "scope": "App tick speed: no unused per-stage snapshots, App Nap exemption, reproducible virtual clock",
+ "files": {
+  "native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift": "5614c605851a6e393f627712dc8c513711e7a7874f3572ed7e3cae428c5aba5a",
+  "native/Sources/NTSDCore/OriginalApplicationLoadedCycleSession.swift": "c1f4380d668cbdb31566508d3f0fe499847a56071c47aadbbd6b5c376508dfa8",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "11b90f8389c0e271457f26e99bc1f5bde4baea57ebb756020edeb5fbd42b9256",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "1f36f75e8aebfb3979d0f8c442117d1f7c1a27c15dec83ab30b0a321f70bd260",
+  "docs/evidence/application-tick-speed-capture.png": "0d92ab588b619ae1927271482b1c76e96b8646bd2b527241d5c4ead3456887a8"
+ },
+ "script": "cpu12 (see application-computer-vs.json)",
+ "captureComparison": {
+  "result": "byte-identical",
+  "captures": {
+   "b000300.png": "966c1fbc34355bd2a284d16371342368f8b4ca28c383fe345587b8413645bba9",
+   "b000600.png": "299e8c9b5025f23add5b9df6099b53dd1075863524030cbf234e1883ffd0bc34",
+   "b000900.png": "232d5d6cd22b80d551b8fedca57140c5101ad2c763dc9fcc193da9b8c0dc852e",
+   "b001200.png": "ec902e2e3459145c681c943dbd5f1de25e49cbb6e7a6a6f843109acf82a5560f",
+   "b001500.png": "2bd75d0a0ad4a2bed12393fae7de0b38e0e8111c0bf026d4918915baefd6f5f0"
+  },
+  "runs": [
+   "ref8",
+   "new8",
+   "refnap8",
+   "nap8"
+  ]
+ },
+ "runs": {
+  "parentRealClock": {
+   "binary": "parent 94762ea build",
+   "flags": "--script-clock gameplay",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 13.78,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 0
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 19.12,
+     "wallSeconds": 36.64,
+     "characterAI": 600,
+     "objectInputs": 0
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 19.47,
+     "wallSeconds": 36.87,
+     "characterAI": 900,
+     "objectInputs": 1
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 19.51,
+     "wallSeconds": 37.25,
+     "characterAI": 1200,
+     "objectInputs": 2
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 19.33,
+     "wallSeconds": 37.11,
+     "characterAI": 1500,
+     "objectInputs": 2
+    },
+    {
+     "bodies": 1800,
+     "busySeconds": 19.68,
+     "wallSeconds": 38.03,
+     "characterAI": 1800,
+     "objectInputs": 20
+    }
+   ]
+  },
+  "referenceVirtualAppNap": {
+   "flags": "--virtual-clock 123456789 8 --stage-checkpoints",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 12.7,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 121
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 19.29,
+     "wallSeconds": 212.15,
+     "characterAI": 600,
+     "objectInputs": 161
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 18.68,
+     "wallSeconds": 210.1,
+     "characterAI": 900,
+     "objectInputs": 184
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 18.64,
+     "wallSeconds": 210.95,
+     "characterAI": 1200,
+     "objectInputs": 1043
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 19.68,
+     "wallSeconds": 227.23,
+     "characterAI": 1500,
+     "objectInputs": 1268
+    }
+   ]
+  },
+  "newVirtualAppNap": {
+   "flags": "--virtual-clock 123456789 8",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 11.22,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 121
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 10.33,
+     "wallSeconds": 203.91,
+     "characterAI": 600,
+     "objectInputs": 161
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 10.91,
+     "wallSeconds": 202.34,
+     "characterAI": 900,
+     "objectInputs": 184
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 10.43,
+     "wallSeconds": 202.76,
+     "characterAI": 1200,
+     "objectInputs": 1043
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 11.0,
+     "wallSeconds": 218.45,
+     "characterAI": 1500,
+     "objectInputs": 1268
+    }
+   ]
+  },
+  "referenceVirtual": {
+   "flags": "--virtual-clock 123456789 8 --stage-checkpoints (App Nap exempt)",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 10.59,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 121
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 3.45,
+     "wallSeconds": 10.15,
+     "characterAI": 600,
+     "objectInputs": 161
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 3.49,
+     "wallSeconds": 10.27,
+     "characterAI": 900,
+     "objectInputs": 184
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 3.4,
+     "wallSeconds": 10.35,
+     "characterAI": 1200,
+     "objectInputs": 1043
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 3.31,
+     "wallSeconds": 10.81,
+     "characterAI": 1500,
+     "objectInputs": 1268
+    }
+   ]
+  },
+  "newVirtual": {
+   "flags": "--virtual-clock 123456789 8 (App Nap exempt)",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 10.74,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 121
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 2.5,
+     "wallSeconds": 9.66,
+     "characterAI": 600,
+     "objectInputs": 161
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 2.26,
+     "wallSeconds": 9.26,
+     "characterAI": 900,
+     "objectInputs": 184
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 2.26,
+     "wallSeconds": 9.51,
+     "characterAI": 1200,
+     "objectInputs": 1043
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 2.63,
+     "wallSeconds": 10.69,
+     "characterAI": 1500,
+     "objectInputs": 1268
+    }
+   ]
+  },
+  "newRealClock": {
+   "flags": "--script-clock gameplay (App Nap exempt)",
+   "per300": [
+    {
+     "bodies": 300,
+     "busySeconds": 10.74,
+     "wallSeconds": null,
+     "characterAI": 300,
+     "objectInputs": 0
+    },
+    {
+     "bodies": 600,
+     "busySeconds": 2.63,
+     "wallSeconds": 9.9,
+     "characterAI": 600,
+     "objectInputs": 0
+    },
+    {
+     "bodies": 900,
+     "busySeconds": 2.56,
+     "wallSeconds": 9.9,
+     "characterAI": 900,
+     "objectInputs": 1
+    },
+    {
+     "bodies": 1200,
+     "busySeconds": 2.55,
+     "wallSeconds": 9.9,
+     "characterAI": 1200,
+     "objectInputs": 1
+    },
+    {
+     "bodies": 1500,
+     "busySeconds": 2.48,
+     "wallSeconds": 9.9,
+     "characterAI": 1500,
+     "objectInputs": 1
+    },
+    {
+     "bodies": 1800,
+     "busySeconds": 2.44,
+     "wallSeconds": 9.9,
+     "characterAI": 1800,
+     "objectInputs": 38
+    }
+   ]
+  }
+ },
+ "profileParent": {
+  "sampleSeconds": 15,
+  "tickLoop": 4181,
+  "matchBindingsStore": 1707,
+  "consumeAndCreateNew": 1874,
+  "dictionaryDeinit": 622
+ },
+ "profileNew": {
+  "sampleSeconds": 15,
+  "clock": "virtual",
+  "tickLoop": 3285,
+  "frontReplay": 1024,
+  "coreAnimationCommit": 545,
+  "exchangeCursorCopies": 533,
+  "replayPacketWrite": 387,
+  "matchBindingsStore": 153
+ },
+ "realClockTicksPerSecond": 30.3,
+ "tests": {
+  "suites": [
+   "OriginalApplicationGameplayProviderTests",
+   "OriginalApplicationPausedGameplayTests",
+   "OriginalApplicationLoadedCycleTests",
+   "OriginalMacRuntimeLoadingTests"
+  ],
+  "tests": 10,
+  "failures": 0,
+  "wallMinutes": 26.9,
+  "workers": 3,
+  "stoppedSerialRun": "Active*/Host/LoadedMenu/Projection selection stopped after 64 min; results not observed"
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

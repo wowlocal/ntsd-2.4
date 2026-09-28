@@ -11,6 +11,10 @@ import NTSDMacPlatform
 /// `--script "N action args; ..."` runs scripted input at committed iteration N:
 /// `click X Y` (button held 10 iterations), `key VK` (held 10 iterations),
 /// `capture PATH`, `exit`. Counting uses committed outer iterations.
+/// `--virtual-clock BASE STEP` makes runs reproducible: timeGetTime answers
+/// BASE + STEP × iterations started, startup FILETIME and GetLocalTime use a
+/// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
+/// `--stage-checkpoints` builds the per-stage snapshots the app never uses.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -25,6 +29,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private var pressedModifiers: Set<UInt16> = []
     private var committed = 0, steps = 0, stopped = false, gameplayClock: (steps: Int,committed: Int)?,
         busy = 0.0, waited = 0
+    /// Windows does not throttle a background game's Sleep loop; App Nap would
+    /// stretch every scheduled iteration once the window is not frontmost.
+    private var activity: NSObjectProtocol?
     init(exitAfterStartup: Bool) {
         self.exitAfterStartup = exitAfterStartup
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
@@ -44,6 +51,22 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         print(String(decoding:data,as:UTF8.self)); fflush(stdout)
     }
     static func milliseconds() throws -> UInt32 { try OriginalMacStartupClock.milliseconds(OriginalMacStartupClock.monotonicSample()) }
+    private lazy var virtualClock: (base: UInt32,step: UInt32)? = {
+        guard let i = arguments.firstIndex(of:"--virtual-clock"),i+2 < arguments.count,
+              let base = UInt32(arguments[i+1]),let step = UInt32(arguments[i+2]) else { return nil }
+        return (base,step)
+    }()
+    static let virtualDate = Date(timeIntervalSince1970:1_767_225_600)
+    private func clock() throws -> UInt32 {
+        guard let v = virtualClock else { return try Self.milliseconds() }
+        return v.base &+ v.step &* UInt32(truncatingIfNeeded:steps)
+    }
+    private func startupEnvironment() -> OriginalMacRuntimeStartupService.Environment {
+        guard let v = virtualClock else { return .init() }
+        let fixed = OriginalMacStartupClock.Sample(seconds:Int64(Self.virtualDate.timeIntervalSince1970),nanoseconds:0)
+        return .init(monotonic:{ .init(seconds:Int64(v.base/1000),nanoseconds:Int64(v.base%1000)*1_000_000) },realtime:{ fixed })
+    }
+    private func cursor() -> (Int32,Int32) { virtualClock == nil ? Self.cursorPoint() : (0,0) }
     /// GetMessagePos: desktop coordinates with the main screen's top-left origin.
     static func cursorPoint() -> (Int32,Int32) {
         let p = NSEvent.mouseLocation,height = NSScreen.screens.first?.frame.maxY ?? 0
@@ -52,9 +75,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         MainActor.assumeIsolated {
             do {
+                activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],
+                                                                  reason:"Original game loop timing")
                 let package = try OriginalApplicationStartupInputs.bundled()
                 let overlay = try OriginalMacRuntimeOverlay.standard()
-                let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay)
+                let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment())
                 self.started = started
                 while try started.host.takeCommitted() != nil {}
                 let dates = started.host.snapshot.startup?.dates?.dates.map { String(decoding:$0.dropLast(),as:UTF8.self) } ?? []
@@ -63,7 +88,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
                     "musicOutput":"silent (WMA playback not implemented)"])
                 if exitAfterStartup { NSApp.terminate(nil); return }
-                let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:Self.milliseconds,point:Self.cursorPoint)
+                let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
+                                                      point:{ [unowned self] in self.cursor() })
                 self.menu = menu
                 try started.windows.setInput(started.window) { [weak self] event in self?.input(event) ?? false }
                 NSApp.activate(ignoringOtherApps:true)
@@ -135,8 +161,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 steps += 1
                 if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started) }
                 if first {
-                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),clock:Self.milliseconds)
+                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),
+                                                                    clock:{ [unowned self] in try self.clock() })
                     loading?.overlay = try OriginalMacRuntimeOverlay.standard()
+                    loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
+                    if virtualClock != nil { loading?.localDate = { Self.virtualDate } }
                 }
                 guard let loading else { return }
                 let sleeps = loading.sleeps.count
