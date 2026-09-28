@@ -31,6 +31,10 @@ public struct OriginalWaveOwnership {
     public let binding: OriginalWaveBinding, result: OriginalWaveLoadResult, domain: OriginalWaveRegionDomain
     public let legacy: OriginalWavePlatform?
     public let lease: OriginalWaveResourceLease?
+    /// All inputs are immutable, so a successful check holds for every copy;
+    /// failures are never cached and are re-raised by each call.
+    private final class Checked { var spans: [(token: UInt32,count: Int)]? }
+    private let checked = Checked()
     public init(binding: OriginalWaveBinding,result: OriginalWaveLoadResult,legacy: OriginalWavePlatform) {
         self.binding = binding;self.result = result;self.legacy = legacy
         domain = .addressed;lease = nil
@@ -55,6 +59,10 @@ public struct OriginalWaveOwnership {
     /// Complete source ownership checks remain here. Opaque owners deliberately
     /// return no address intervals, after proving their actual lease and regions.
     public func addressedRegions() throws -> [(token: UInt32,count: Int)] {
+        if let spans = checked.spans { return spans }
+        let spans = try checkRegions(); checked.spans = spans; return spans
+    }
+    private func checkRegions() throws -> [(token: UInt32,count: Int)] {
         guard result.exit == .returned,result.returned == 1,!result.temporaryLive,
             binding.device != 0,result.output != 0,result.temporary != nil else { throw Boundary.incomplete }
         if let p = legacy {

@@ -1,0 +1,397 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T19:27:07.487087Z",
+ "parentHead": "5986808",
+ "scope": "App: VS with one computer player; script clocks; wave ownership check cache",
+ "files": {
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "fa8d18202cedc57afb8ccd20ede5555028d7a5ce739577849fea5552eeaf8040",
+  "native/Sources/NTSDCore/OriginalWaveOwnership.swift": "1321ccbe6d2227a0947e03c92692a40f137adaba34ca2dfbd70e5280b8d5b369",
+  "docs/evidence/application-computer-vs-capture.png": "230ce33f9e3cdc9485b4c16c68e6b9bc568e3d827af941b2a307d7081840efc9"
+ },
+ "menuScript": "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 68; 1030 key 74; 1150 key 74; 1250 key 74; 1320 key 83; 1345 key 74; 1370 key 74; 1395 key 87; 1420 key 87; 1445 key 87; 1475 key 74; 1650 hold 65 70; 1675 hold 65 22; 1697 key 74; 1709 hold 65 48; 1735 key 74; 1747 hold 65 33; 1765 hold 65 53; 1800 hold 65 59; 1819 key 74; 1831 key 74; 1843 hold 83 12; 1853 key 75; 1868 hold 68 84; 1885 hold 68 55; 1897 hold 83 10; 1907 hold 83 37; 1917 key 75; 1932 hold 68 56; 1955 key 74; 1967 hold 68 25; 1979 hold 68 55; 2005 key 74; 2017 key 74; 2029 hold 68 45; 2041 key 74; 2053 hold 68 76; 2071 hold 68 61; 2101 key 74; 2113 hold 87 36; 2123 hold 65 55; 2157 key 74; 2169 hold 87 20; 2179 hold 83 24; 2189 hold 68 30; 2227 hold 83 33; 2237 key 74; 2249 hold 68 56; 2269 hold 83 37; 2279 hold 87 19; 2289 key 74; 2301 hold 83 14; 2311 hold 68 40; 2331 key 74; 2343 hold 68 41; 2364 key 75; 2379 hold 68 32; 2403 hold 83 39; 2413 hold 65 27; 2424 key 74; 2436 key 74; 2448 hold 87 27; 2458 key 74; 2470 hold 65 35; 2506 key 74; 2518 key 75; 2533 key 74; 2545 hold 83 16; 2555 hold 68 82; 2566 hold 68 51; 2596 hold 87 25; 2606 hold 65 52; 2624 hold 65 49; 2647 hold 87 20; 2657 hold 68 34; 2685 key 74; 2697 hold 87 25; 2707 hold 68 46; 2746 hold 87 20; 2756 hold 68 60; 2792 key 74; 2804 hold 68 54; 2824 hold 83 12; 2834 hold 83 40; 2844 key 74; 2856 hold 68 36; 2890 hold 87 37; 2900 hold 68 79; 2928 key 74; 2940 key 74; 2952 hold 65 47; 2991 hold 68 52; 3004 hold 68 48; 3031 hold 65 40; 3062 key 74; 3074 key 75; 3089 key 74; 3101 key 75; 3116 hold 83 10; 3126 hold 68 34; 3151 key 74; 3163 hold 65 25; 3184 hold 68 21; 3203 key 75; 3218 key 75; 3233 hold 68 78; 3255 hold 68 69; 3272 key 75; 3287 hold 83 13; 3297 hold 68 66; 3323 hold 83 37; 3333 key 74; 3345 key 74; 3357 key 74; 3369 hold 83 39; 3379 key 75; 3394 key 74; 3406 key 75; 3421 hold 65 42; 3453 hold 68 63; 3471 key 74; 3483 hold 87 10; 3493 key 74; 3505 hold 65 82; 3540 key 74; 3552 key 74; 3564 hold 65 72; 3601 hold 65 43; 3638 key 74; 3650 key 74; 3662 key 74; 3674 hold 68 59; 3713 hold 83 29; 3723 key 74; 3735 hold 68 66; 3766 hold 68 30; 3795 hold 68 42; 3814 hold 83 16; 3824 key 74; 3836 hold 68 31; 3848 key 74; 3860 hold 87 20; 3870 key 74; 3882 hold 68 22; 3911 hold 65 65; 3946 key 75; 3961 hold 65 83; 3992 key 74; 4004 hold 87 15; 4014 key 74; 4026 key 74; 4038 key 74; 4050 key 74; 4062 key 75; 4077 hold 68 71; 4115 key 74; 4127 hold 87 19; 4137 hold 68 61; 4164 key 74; 4176 hold 83 26; 4186 key 74; 4198 key 75; 4213 hold 68 21; 4231 hold 68 78; 4263 key 74; 4275 key 75; 4290 key 74; 4302 hold 65 39; 4328 hold 68 64; 4357 key 75; 4372 hold 83 25; 4382 hold 68 28; 4396 hold 87 19; 4406 hold 65 40; 4428 key 75; 4443 key 74; 4455 key 74; 4467 hold 83 10; 4477 key 74; 4489 hold 65 46; 4500 hold 87 13; 4510 hold 68 56; 4539 hold 87 33; 4549 hold 68 36; 4587 key 74; 4599 hold 68 20; 4632 hold 87 26; 4642 key 74; 4654 hold 68 81; 4680 hold 65 40; 4717 hold 83 27; 4727 key 74; 4739 hold 83 15; 4749 hold 68 23; 4767 hold 87 19; 4777 hold 87 12; 4787 hold 68 21; 4804 hold 65 81; 4843 key 74; 4855 hold 68 68; 4875 key 75; 4890 key 75; 4905 key 74; 4917 hold 68 65; 4936 hold 83 29; 4946 key 74; 4958 key 75; 4973 hold 68 59; 5008 hold 83 35; 5018 key 75; 5033 hold 83 38; 5043 hold 68 24; 5072 hold 68 65; 5111 hold 68 25; 5136 key 74; 5148 key 75; 5163 key 74; 5175 hold 68 29; 5195 key 75; 5210 hold 83 13; 5220 key 74; 5232 hold 87 12; 5242 key 75; 5257 key 74; 5269 key 74; 5281 hold 68 24; 5291 key 74; 5303 hold 68 51; 5341 key 74; 5353 hold 68 69; 5383 key 74; 5395 hold 68 83; 5407 key 75; 5422 hold 83 27; 5432 key 74; 5444 key 75; 5459 key 74; 5471 key 74; 5483 hold 65 81; 5521 key 74; 5533 hold 83 34; 5543 hold 83 20; 5553 key 75; 5568 hold 68 85; 5580 hold 68 56; 5611 hold 87 29; 5621 key 75; 5636 hold 65 31; 5668 hold 68 47; 5706 key 74; 5718 key 75; 5733 key 74; 5745 hold 68 46; 5760 hold 68 32; 5773 key 75; 5788 hold 68 39; 5827 key 74; 5839 key 74; 5851 hold 87 34; 5861 key 75; 5876 hold 65 53; 5887 key 74; 5899 key 74; 5911 key 74; 5923 key 75; 5938 key 75; 5953 hold 87 15; 5963 key 75; 5978 hold 65 40; 6009 hold 87 31; 6019 hold 83 13; 6029 key 75; 6044 key 75; 6059 hold 68 89; 6084 key 74; 6096 hold 68 71; 6132 hold 65 43; 6146 hold 68 50; 6167 key 74; 6179 hold 68 64; 6201 hold 68 34; 6241 hold 68 43; 6268 hold 65 35; 6284 hold 68 61; 6324 key 74; 6336 hold 83 35; 6346 key 74; 6358 hold 65 68; 6387 key 74; 6399 hold 68 37; 6423 hold 68 73; 6439 hold 68 26; 6477 hold 65 87; 6488 hold 68 50; 6517 hold 65 22; 6539 key 74; 6551 key 75; 6566 hold 65 37; 6581 key 74; 6593 hold 68 60; 6620 key 74; 6632 hold 68 89; 6663 hold 83 18; 6673 key 74; 6685 hold 87 27; 6695 hold 68 45; 6720 key 74; 6732 hold 68 45; 6747 hold 68 37; 6776 key 75; 6791 key 74; 6803 hold 65 26; 6838 key 75; 6853 hold 65 53; 6882 hold 68 55; 6898 key 74; 6910 key 75; 6925 key 74; 6937 key 75; 6952 hold 65 56; 6991 key 74; 7003 hold 68 66; 7015 hold 68 30; 7050 key 74; 7062 hold 83 16; 7072 key 75; 7087 hold 87 16; 7097 key 74; 7109 key 74; 7121 hold 65 21; 7159 hold 68 86; 7185 key 74; 7197 hold 68 63; 7228 hold 65 85\n",
+ "runs": [
+  {
+   "run": "cpu6",
+   "note": "pop-up needs two confirmations; start menu opens on Randomize"
+  },
+  {
+   "run": "cpu11",
+   "note": "committed clock froze at 2466 while ticks continued",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/20/50/48",
+      "2026/10/02/20/50/48"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.385609030723572
+    },
+    {
+     "cycles": 442,
+     "event": "matchLaunched",
+     "iterations": 1476
+    },
+    {
+     "cycles": 443,
+     "event": "gameplay",
+     "uptime": 901855.4025520834
+    },
+    {
+     "characterAI": 300,
+     "cycles": 742,
+     "event": "progress",
+     "gameplayBodies": 300,
+     "iterations": 2466,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b000300.png",
+     "uptime": 901866.2808126668
+    },
+    {
+     "characterAI": 600,
+     "cycles": 1042,
+     "event": "progress",
+     "gameplayBodies": 600,
+     "iterations": 2466,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b000600.png",
+     "uptime": 901898.9809765418
+    },
+    {
+     "characterAI": 900,
+     "cycles": 1342,
+     "event": "progress",
+     "gameplayBodies": 900,
+     "iterations": 2466,
+     "objectInputs": 1,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b000900.png",
+     "uptime": 901934.8343670417
+    },
+    {
+     "characterAI": 1200,
+     "cycles": 1642,
+     "event": "progress",
+     "gameplayBodies": 1200,
+     "iterations": 2466,
+     "objectInputs": 127,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b001200.png",
+     "uptime": 901970.9121571667
+    },
+    {
+     "characterAI": 1500,
+     "cycles": 1942,
+     "event": "progress",
+     "gameplayBodies": 1500,
+     "iterations": 2466,
+     "objectInputs": 132,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b001500.png",
+     "uptime": 902006.5063541251
+    },
+    {
+     "characterAI": 1800,
+     "cycles": 2242,
+     "event": "progress",
+     "gameplayBodies": 1800,
+     "iterations": 2466,
+     "objectInputs": 132,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b001800.png",
+     "uptime": 902043.2453973334
+    },
+    {
+     "characterAI": 2100,
+     "cycles": 2542,
+     "event": "progress",
+     "gameplayBodies": 2100,
+     "iterations": 2466,
+     "objectInputs": 132,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu11/b002100.png",
+     "uptime": 902079.2034940834
+    }
+   ]
+  },
+  {
+   "run": "cpu12",
+   "note": "--script-clock gameplay; computer knocks out both players by tick 1800 (capture)",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/21/02/01",
+      "2026/10/02/21/02/01"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.36408007144928
+    },
+    {
+     "cycles": 446,
+     "event": "matchLaunched",
+     "iterations": 1481
+    },
+    {
+     "cycles": 447,
+     "event": "gameplay",
+     "uptime": 902528.7542047917
+    },
+    {
+     "characterAI": 300,
+     "cycles": 746,
+     "event": "progress",
+     "gameplayBodies": 300,
+     "iterations": 2449,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b000300.png",
+     "uptime": 902540.1269885417
+    },
+    {
+     "characterAI": 600,
+     "cycles": 1046,
+     "event": "progress",
+     "gameplayBodies": 600,
+     "iterations": 2484,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b000600.png",
+     "uptime": 902577.3738855834
+    },
+    {
+     "characterAI": 900,
+     "cycles": 1346,
+     "event": "progress",
+     "gameplayBodies": 900,
+     "iterations": 2530,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b000900.png",
+     "uptime": 902614.2861539584
+    },
+    {
+     "characterAI": 1200,
+     "cycles": 1646,
+     "event": "progress",
+     "gameplayBodies": 1200,
+     "iterations": 2562,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b001200.png",
+     "uptime": 902651.2467783334
+    },
+    {
+     "characterAI": 1500,
+     "cycles": 1946,
+     "event": "progress",
+     "gameplayBodies": 1500,
+     "iterations": 2602,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b001500.png",
+     "uptime": 902688.9330895417
+    },
+    {
+     "characterAI": 1800,
+     "cycles": 2246,
+     "event": "progress",
+     "gameplayBodies": 1800,
+     "iterations": 2642,
+     "objectInputs": 0,
+     "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/cpu12/b001800.png",
+     "uptime": 902726.9110437084
+    }
+   ]
+  },
+  {
+   "run": "cpu13",
+   "note": "busy vs waited: ~62 ms per tick in complete(), Sleep 5 ms",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/21/12/16",
+      "2026/10/02/21/12/16"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.504729986190796
+    },
+    {
+     "cycles": 448,
+     "event": "matchLaunched",
+     "iterations": 1480
+    },
+    {
+     "cycles": 449,
+     "event": "gameplay",
+     "uptime": 903143.73884925
+    },
+    {
+     "busySeconds": 12.575909733772278,
+     "characterAI": 300,
+     "cycles": 748,
+     "event": "progress",
+     "gameplayBodies": 300,
+     "iterations": 2440,
+     "lastSleeps": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "objectInputs": 0,
+     "uptime": 903155.8496504584,
+     "waitedMilliseconds": 3635
+    },
+    {
+     "busySeconds": 30.78843355178833,
+     "characterAI": 600,
+     "cycles": 1048,
+     "event": "progress",
+     "gameplayBodies": 600,
+     "iterations": 2475,
+     "lastSleeps": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "objectInputs": 0,
+     "uptime": 903191.1974848334,
+     "waitedMilliseconds": 3935
+    },
+    {
+     "busySeconds": 47.71203327178955,
+     "characterAI": 900,
+     "cycles": 1348,
+     "event": "progress",
+     "gameplayBodies": 900,
+     "iterations": 2521,
+     "lastSleeps": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "objectInputs": 0,
+     "uptime": 903225.8083710417,
+     "waitedMilliseconds": 4235
+    },
+    {
+     "busySeconds": 67.33663737773895,
+     "characterAI": 1200,
+     "cycles": 1648,
+     "event": "progress",
+     "gameplayBodies": 1200,
+     "iterations": 2554,
+     "lastSleeps": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "objectInputs": 0,
+     "uptime": 903262.5906608751,
+     "waitedMilliseconds": 4535
+    },
+    {
+     "busySeconds": 86.91687202453613,
+     "characterAI": 1500,
+     "cycles": 1948,
+     "event": "progress",
+     "gameplayBodies": 1500,
+     "iterations": 2594,
+     "lastSleeps": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+     ],
+     "objectInputs": 0,
+     "uptime": 903299.9462825834,
+     "waitedMilliseconds": 4835
+    }
+   ]
+  }
+ ],
+ "profile": {
+  "sample": "10 s during a computer match",
+  "inclusiveMaxSamples": {
+   "iterate": 2436,
+   "complete": 1083,
+   "gameplay": 1077,
+   "GameplaySession.advance": 965,
+   "runCycle": 649,
+   "finish": 563,
+   "LoadedCycleSession.advance": 523,
+   "replay": 407,
+   "GameplayBody.apply": 53,
+   "CharacterAI.apply": 15
+  },
+  "fixed": "OriginalWaveOwnership.addressedRegions compared every runtime sound buffer per tick (Dictionary ==, up to ~0.4 s); now cached per immutable owner"
+ },
+ "tests": {
+  "filter": "OriginalLoadingAudioTests|OriginalApplicationLoadingPrefixTests|3 fast OriginalMacLoadingAudioTests|OriginalMacRuntimeLoadingTests",
+  "tests": 10,
+  "failures": 0,
+  "seconds": 614.17
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

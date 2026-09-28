@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[VS with a computer player in the app](research/APPLICATION_COMPUTER_VS.md):
+the one-computer menu path is scripted and the computer knocks out both
+players; new script clocks and tick-based progress/captures. Three fighters
+run ≈8 ticks/s (application plumbing); a per-tick sound-ownership recheck is
+now cached. Next: tick performance. [Evidence](evidence/application-computer-vs.json).
+
 [Special-move selector 403a40 for every character](research/APPLICATION_SPECIAL_MOVES.md):
 all 20 own-id blocks ported; two corpora of 7770 real character-AI calls (every
 character as owner) match Native byte for byte. Next: VS with computer players

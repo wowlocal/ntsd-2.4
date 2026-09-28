@@ -23,7 +23,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private var cycles = 0, gameplayBodies = 0
     private var script: [Int:[[String]]] = [:]
     private var pressedModifiers: Set<UInt16> = []
-    private var committed = 0, stopped = false
+    private var committed = 0, steps = 0, stopped = false, gameplayClock: (steps: Int,committed: Int)?,
+        busy = 0.0, waited = 0
     init(exitAfterStartup: Bool) {
         self.exitAfterStartup = exitAfterStartup
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
@@ -115,7 +116,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     menu.messages.mouse(0x200,x:click.x,y:click.y,buttons:0)
                     menu.messages.mouse(0x201,x:click.x,y:click.y,buttons:1)
                 }
-                try runScript(committed,menu,started)
+                // Default clock: committed message-loop iterations. `--script-clock all`
+                // counts every iteration, so input keeps flowing during gameplay ticks.
+                steps += 1
+                if let n = scriptStep(committedBranch:true) { try runScript(n,menu,started) }
                 // Hold the button across game ticks, as a player's click does.
                 if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
@@ -128,16 +132,39 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 schedule(delay)
             case .loading:
                 let begin = Date(),first = loading == nil
+                steps += 1
+                if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started) }
                 if first {
                     loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),clock:Self.milliseconds)
                     loading?.overlay = try OriginalMacRuntimeOverlay.standard()
                 }
                 guard let loading else { return }
                 let sleeps = loading.sleeps.count
+                let started0 = Date()
                 let completed = try loading.complete(first:first); cycles += 1
+                busy += Date().timeIntervalSince(started0)
                 switch completed {
                 case .launched: Self.emit(["event":"matchLaunched","iterations":committed,"cycles":cycles])
-                case .gameplay: gameplayBodies += 1; if gameplayBodies == 1 { Self.emit(["event":"gameplay","cycles":cycles,"uptime":ProcessInfo.processInfo.systemUptime]) }
+                case .gameplay:
+                    gameplayBodies += 1
+                    if gameplayBodies == 1 {
+                        gameplayClock = (steps,committed)
+                        Self.emit(["event":"gameplay","cycles":cycles,"uptime":ProcessInfo.processInfo.systemUptime])
+                    }
+                    // Script actions count committed menu iterations; long matches report by ticks.
+                    if gameplayBodies % 300 == 0 {
+                        var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
+                            "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
+                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6))]
+                        if let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
+                            let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
+                            try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:path)); event["path"] = path
+                        }
+                        Self.emit(event)
+                    }
+                    if let i = arguments.firstIndex(of:"--exit-after-bodies"),i+1 < arguments.count,let n = Int(arguments[i+1]),gameplayBodies >= n {
+                        NSApp.terminate(nil); return
+                    }
                 case .menu: break
                 }
                 if first {
@@ -145,9 +172,26 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"allocations":c.allocations,
                         "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
                 }
-                schedule(loading.sleeps.count > sleeps ? loading.sleeps.last! : 1)
+                let delay = loading.sleeps.count > sleeps ? loading.sleeps.last! : 1
+                waited += Int(delay); schedule(delay)
             }
         } catch { stop(error) }
+    }
+    /// `committed` (default): committed message-loop iterations, which stop
+    /// while gameplay ticks run without queued input. `all`: every iteration.
+    /// `gameplay`: committed until the first gameplay tick, then every iteration.
+    private var scriptClock: String {
+        guard let i = arguments.firstIndex(of:"--script-clock"),i+1 < arguments.count else { return "committed" }
+        return arguments[i+1]
+    }
+    private func scriptStep(committedBranch: Bool) -> Int? {
+        switch scriptClock {
+        case "all": return steps
+        case "gameplay":
+            if let start = gameplayClock { return start.committed + (steps - start.steps) }
+            return committedBranch ? committed : nil
+        default: return committedBranch ? committed : nil
+        }
     }
     @MainActor private func runScript(_ n: Int,_ menu: OriginalMacRuntimeMenu,_ started: OriginalMacRuntimeStartup.Started) throws {
         for words in script[n] ?? [] {
@@ -169,7 +213,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             case "capture" where words.count == 2:
                 try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
-                    "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
+                    "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1]])
             case "exit": NSApp.terminate(nil)
