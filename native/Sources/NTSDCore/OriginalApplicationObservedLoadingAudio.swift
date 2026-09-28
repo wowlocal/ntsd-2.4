@@ -47,6 +47,26 @@ public final class OriginalApplicationObservedLoadingAudio<Platform: OriginalApp
             }
         }
     }
+    /// Runtime delivery: each missing audio request is served inline on this
+    /// driver's exchange (`serve` must answer through `exchange`), so one attempt
+    /// runs the whole preparation instead of one attempt per request.
+    public func resumeInline(
+        prepare: (Host.LoadingContext,Platform,OriginalLoadingAudioContext) throws -> Host.LoadedOutcome,
+        beforePrepared: (Host.LoadedOutcome,Platform) throws -> Void = { _,_ in },
+        serve: @escaping (Exchange.Permit,Exchange) throws -> Void) throws -> Host.LoadedOutcome {
+        try attempt {
+            let exchange = self.exchange
+            let audio = OriginalLoadingAudioContext(domain:domain,cursor:try exchange.inlineCursor { try serve($0,exchange) })
+            return try host.prepareLoadedUntilBoundary(prepare:{ context,platform in
+                guard self.host.committedSequence == self.sequence,
+                    context.entry.isSameAttempt(as:self.entry) else { throw Boundary.staleLoading }
+                return try prepare(context,platform,audio)
+            },beforePrepared:{ outcome,platform in
+                try beforePrepared(outcome,platform)
+                _ = try self.exchange.finish(audio.cursor)
+            })
+        }
+    }
     public func beginService(_ permit: Exchange.Permit) throws { try attempt { try exchange.beginService(permit) } }
     public func answer(_ permit: Exchange.Permit,response: Exchange.Response,
         retaining resources: [any OriginalApplicationStartupResource] = []) throws {

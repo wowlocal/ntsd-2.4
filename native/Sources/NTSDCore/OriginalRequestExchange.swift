@@ -50,9 +50,13 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
     }
     /// Copies have independent positions. No mutable exchange/backend is held.
     public struct Cursor {
-        fileprivate let owner: Identity, receipts: [Receipt]
+        fileprivate let owner: Identity
+        fileprivate var receipts: [Receipt]
         public private(set) var position = 0
         fileprivate var pending: RequestNeeded?
+        /// Inline service: answers a missing request synchronously and records
+        /// its receipt instead of suspending the attempt. Nil for permit cursors.
+        fileprivate var inline: ((RequestNeeded) throws -> Receipt)?
         public var isSuspended: Bool { pending != nil }
         fileprivate init(owner: Identity, receipts: [Receipt]) {
             self.owner = owner; self.receipts = receipts
@@ -65,6 +69,10 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
                 position += 1; return receipt.response
             }
             let ticket = RequestNeeded(request: request, ordinal: position, owner: owner, revision: receipts.count)
+            if let inline {
+                let receipt = try inline(ticket)
+                receipts.append(receipt); position += 1; return receipt.response
+            }
             pending = ticket; throw ticket
         }
     }
@@ -84,6 +92,25 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
     }
     public var snapshot: Snapshot { locked { view() } }
 
+    /// Inline cursor over all current receipts. A missing request is claimed and
+    /// `serve` runs synchronously inside the Core attempt; it must begin service
+    /// and answer (or fail) on this exchange through the permit, as a permit
+    /// service would. The recorded receipt is reused by any later retry, so no
+    /// operation repeats; a failure ends the attempt and leaves the exchange
+    /// indeterminate. This trades suspension for per-request reruns of an attempt.
+    public func inlineCursor(_ serve: @escaping (Permit) throws -> Void) throws -> Cursor {
+        var cursor = try snapshot.cursor()
+        cursor.inline = { [unowned self] ticket in
+            let permit = try self.claim(ticket)
+            try serve(permit)
+            return try self.locked {
+                guard self.status == .open || self.status == .finished,self.active == nil,
+                      self.receipts.count == ticket.ordinal+1 else { throw Boundary.unconsumedReplies }
+                return self.receipts[ticket.ordinal]
+            }
+        }
+        return cursor
+    }
     /// Call after the Core attempt has unwound, before performing the operation.
     /// A claim is not success and supplies no numeric response to Core.
     public func claim(_ ticket: RequestNeeded) throws -> Permit {

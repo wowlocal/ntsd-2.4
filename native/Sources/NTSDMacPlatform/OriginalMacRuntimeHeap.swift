@@ -15,12 +15,16 @@ import NTSDCore
     /// Zero-count requests still receive a distinct nonzero address, as a
     /// successful allocator must. Counts over 256MiB are rejected explicitly.
     public func allocate(_ count: Int) throws -> OriginalInterfaceAllocation {
+        .init(address:try reserve(count),backing:[UInt8](repeating:0,count:count))
+    }
+    /// Address only, for callers whose Core owner materializes its own backing.
+    public func reserve(_ count: Int) throws -> UInt32 {
         guard count >= 0,count <= 0x10000000 else { throw Boundary.invalidCount(count) }
         let size = UInt64(max(count,1)),align = UInt64(Self.alignment)
         let start = UInt64(next),end = start+size
         guard end <= UInt64(Self.arena.upperBound) else { throw Boundary.exhausted(count) }
         next = UInt32((end+align-1)/align*align)
         blocks.append(.init(address:UInt32(start),count:count))
-        return .init(address:UInt32(start),backing:[UInt8](repeating:0,count:count))
+        return UInt32(start)
     }
 }

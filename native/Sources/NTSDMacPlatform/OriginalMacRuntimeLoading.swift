@@ -1,0 +1,248 @@
+import AppKit
+import NTSDCore
+
+/// Runtime loading after the menu requests it: common sounds, the whole
+/// catalog, the 400-slot pool, first input and the loaded menu, then the Host
+/// tail. Audio is served inline on the loading exchange (one attempt instead of
+/// one attempt per request). Other providers are runtime answers:
+/// - allocations: runtime heap addresses, zero backing (`allocationFill` 0);
+/// - bitmaps: real display-backend surfaces from the original packages; Core
+///   derives BITMAP fields itself, so replies carry results/outputs only;
+/// - files: packaged catalog bytes, declared 65536/4096 stream buffering;
+/// - clock: live; loading PeekMessage sees an empty queue (input stays queued);
+/// - draw/present results inside loading are declared 0 and are not rendered.
+@MainActor public final class OriginalMacRuntimeLoading {
+    public typealias P = OriginalApplicationPreparedStartupPlatform
+    public typealias Host = OriginalApplicationHostSession<P>
+    public typealias Catalog = OriginalApplicationCatalogSession
+    public typealias LoadedMenu = OriginalApplicationLoadedMenuSession
+    public enum Boundary: Error, Equatable { case missing(String), unexpected(String) }
+    public struct Counts: Equatable {
+        public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0
+        public var controls = 0, replayedDraws = 0, skippedDraws = 0
+    }
+    public private(set) var counts = Counts()
+    /// Sleep(ms) requested by Host tails; the app waits before the next iteration.
+    public private(set) var sleeps: [UInt32] = []
+    /// Graphics of the prepared input continuation: the requesting iteration's
+    /// staged effects (already performed through permits) and, on the first
+    /// load, the blocking loading's progress frames. Replay starts after them.
+    private var continuationGraphics = 0
+    let started: OriginalMacRuntimeStartup.Started
+    let clock: () throws -> UInt32
+    let startupInputs: OriginalApplicationStartupInputs
+    let catalogInputs: OriginalApplicationCatalogInputs, loadingInputs: OriginalApplicationLoadingInputs
+    let interfaceInputs: OriginalApplicationInterfaceInputs, menuInputs: OriginalApplicationMenuInputs
+    let arenaInputs: OriginalApplicationArenaInputs
+    let bitmapInputs: OriginalMacDisplayBackend.BitmapInputs
+    public init(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
+        catalogInputs: OriginalApplicationCatalogInputs,loadingInputs: OriginalApplicationLoadingInputs,
+        interfaceInputs: OriginalApplicationInterfaceInputs,menuInputs: OriginalApplicationMenuInputs,
+        arenaInputs: OriginalApplicationArenaInputs,clock: @escaping () throws -> UInt32) {
+        self.started = started; self.clock = clock; self.startupInputs = startupInputs
+        self.catalogInputs = catalogInputs; self.loadingInputs = loadingInputs
+        self.interfaceInputs = interfaceInputs; self.menuInputs = menuInputs; self.arenaInputs = arenaInputs
+        // Embedded DIB resources by name; bitmap files by path. Resource names
+        // are declared missing as files, as LR_LOADFROMFILE fails before the
+        // resource retry.
+        var resources: [String:OriginalApplicationStartupInputs.Bitmap] = [:]
+        var files: [String:OriginalMacDisplayBackend.BitmapInputs.File] = [:]
+        for source in [startupInputs.bitmaps,interfaceInputs.bitmaps,menuInputs.bitmaps,catalogInputs.bitmaps,arenaInputs.bitmaps] {
+            for (name,bitmap) in source {
+                if bitmap.bitmapFileHeader != nil { files[name] = .bitmap(bitmap) }
+                else { resources[name] = bitmap; if files[name] == nil { files[name] = .missing } }
+            }
+        }
+        bitmapInputs = .init(resources:resources,files:files)
+    }
+    public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
+        clock: @escaping () throws -> UInt32) throws -> OriginalMacRuntimeLoading {
+        try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(),loadingInputs:.bundled(),
+            interfaceInputs:.bundled(),menuInputs:.bundled(),arenaInputs:.bundled(),clock:clock)
+    }
+    func presentation(_ target: UInt32) throws -> OriginalMenuPresentationInput {
+        try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
+            "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
+            "queriedAudio":0,"audioVolume":0,"dcResult":OriginalMacRuntimeMenu.getDCFailure,"dc":0,"postResult":0]))
+    }
+    func bitmap(_ q: OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response {
+        counts.bitmapRequests += 1
+        let display = started.display
+        if q.kind == "message" || q.kind == "debug" { throw Boundary.unexpected("bitmap \(q.kind): \(q.strings.map { String(decoding:$0,as:UTF8.self) })") }
+        let served = try display.performBitmap(display.prepareBitmap(q,inputs:bitmapInputs))
+        return .init(result:served.response.result,output:served.response.output)
+    }
+    func wave(_ path: String) throws -> OriginalWaveFileInput {
+        if let bytes = try? loadingInputs.file(path) { return try OriginalMacRuntimeWave.input(path,bytes) }
+        guard let bytes = try catalogInputs.file(path) else { throw Boundary.missing(path) }
+        return try OriginalMacRuntimeWave.input(path,bytes)
+    }
+    func music(_ e: OriginalMusicEvent) throws -> OriginalMusicResponse {
+        counts.music += 1
+        if e.kind == .helper || e.kind == .format { return .init() }
+        return try started.runtime.music.answer(e)
+    }
+    func time() throws -> UInt32 { counts.times += 1; return try clock() }
+
+    /// Runs the whole loading preparation in one inline attempt and the Host
+    /// tail; returns the Host outcome of the tail or the pending match prelude.
+    public func run() throws -> Host.LoadedOutcome {
+        let host = started.host,heap = started.runtime.heap
+        guard let pending = host.pendingLoading,let startup = host.snapshot.startup,let sounds = startup.input?.sounds else { throw Boundary.missing("pending loading") }
+        let device = try pending.state.full.integer(at:0x44eecc-0x44d000,as:UInt32.self)
+        let owners = try sounds.loads.enumerated().map { i,result in
+            try started.audio.ownership(.init(i,OriginalMenuSoundStartup.paths[i],UInt32(0x45560c+i*4),device),result:result)
+        }
+        let startupSounds = try Catalog.StartupSounds(owner:sounds,waveOwners:owners,music:startup.output.music)
+        let driver = try OriginalApplicationObservedLoadingAudio<P>(host:host,domain:.opaque(started.audio.loadingDomain))
+        let service = OriginalMacAudioService(backend:started.audio)
+        let outcome = try driver.resumeInline(prepare:{ context,_,audio in
+            var loading = try context.entry.makeLoadingSession()
+            let common = try loading.prepareCommon(inputs:self.loadingInputs,prepareWave:{ i,path,destination,device in
+                audio.prepare(.init(i,path,destination,device),file:try self.wave(path))
+            },drawResult:0,presentationResult:0)
+            var catalog = try Catalog(pending:common,startup:startupSounds)
+            let resources = try Catalog.Resources(files:self.catalogInputs.files,bitmaps:self.catalogInputs.bitmaps,
+                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0)
+            let loaded = try catalog.load(resources:resources,makeControls:{
+                .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.reserve(count) },
+                    bitmap:{ try self.bitmap($0) },
+                    file:{ _,_ in
+                        self.counts.files += 1
+                        return .init(token:try heap.reserve(32),buffer:try heap.reserve(65536),descriptor:UInt32(self.counts.files+2),
+                            capacity:65536,readLimit:4096)
+                    },
+                    wavePreparation:{ q,device in
+                        audio.prepare(.init(q.index,q.path,UInt32(0x452948+q.index*4),device),file:try self.wave(q.path))
+                    },
+                    volume:{ binding,args in
+                        guard args.count == 2 else { throw Boundary.unexpected("volume arguments") }
+                        return try audio.volume(binding,buffer:args[0],value:Int32(bitPattern:args[1]))
+                    },
+                    time:{ try self.time() },
+                    message:{ name,_ in
+                        guard name == "PeekMessageA" else { throw Boundary.unexpected(name) }
+                        self.counts.messages += 1; return .init(name:name,response:.init(result:0))
+                    })
+            })
+            var pool = try LoadedMenu.Input.Pool(pending:loaded)
+            let pooled = try pool.prepare(inputs:self.interfaceInputs,makeControls:{
+                .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.allocate(count) },bitmap:{ try self.bitmap($0) })
+            })
+            var input = try LoadedMenu.Input(pending:pooled,arithmeticPrecision:.bits53),environment: Void = ()
+            let ready = try input.advance(environment:&environment,controlBoundary:{ q,_ in throw Boundary.unexpected("input control \(q)") })
+            self.continuationGraphics = ready.graphics.count
+            return .init(menu:try self.loadedMenu(ready,target:common.target))
+        },serve:{ permit,exchange in self.counts.audioRequests += 1; try service.serve(permit,on:exchange) })
+        return outcome
+    }
+    /// Winsock policy for a local game: WSAStartup was never called, so socket
+    /// requests fail with SOCKET_ERROR and write nothing. Declared, unobserved.
+    func control(_ q: OriginalInputControlRequest) throws -> OriginalInputControlResponse {
+        counts.controls += 1
+        switch q.kind {
+        case .asyncSelect,.ioctl: return .init(result:-1)
+        default: throw Boundary.unexpected("input control \(q.kind)")
+        }
+    }
+    func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
+        let heap = started.runtime.heap
+        var menu = try LoadedMenu(pending:ready),unit: Void = ()
+        return try menu.advanceUntilBoundary(inputs:menuInputs,environment:&unit,
+            screenInput:.init(dcResult:OriginalMacRuntimeMenu.getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
+            outputInput:presentation(target),
+            allocate:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
+            bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() })
+    }
+    /// A cached cycle after the first loading: the retained owners advance the
+    /// cycle's input step, then either gameplay (retained as gameplay input) or
+    /// the loaded menu; no catalog work repeats.
+    public func runCycle() throws -> Host.LoadedOutcome {
+        try started.host.prepareLoadedUntilBoundary(prepare:{ context,_ in
+            guard var cycle = context.cycle else { throw Boundary.missing("cached loaded cycle") }
+            var unit: Void = ()
+            let ready = try cycle.advance(environment:&unit,controlBoundary:{ q,_ in try self.control(q) })
+            self.continuationGraphics = ready.graphics.count
+            if ready.round.continuation == .gameplay { return .gameplayInput(ready) }
+            return .init(menu:try self.loadedMenu(ready,target:context.entry.target))
+        })
+    }
+    /// Complete one outer loading request: first load or cached cycle, then the
+    /// match launch or gameplay body when retained, then the Host tail and replay.
+    public enum Completed: Equatable { case menu, launched, gameplay }
+    public func complete(first: Bool) throws -> Completed {
+        let outcome = first ? try run() : try runCycle()
+        let completed: Completed
+        switch outcome {
+        case .returned: completed = .menu
+        case .matchPrelude: _ = try launch(); completed = .launched
+        case .gameplayInput: _ = try gameplay(); completed = .gameplay
+        }
+        guard case .committed = try finish() else { throw Boundary.unexpected("Host tail did not commit") }
+        return completed
+    }
+    /// GetLocalTime from the macOS local calendar (declared runtime source).
+    static func localTime(_ date: Date = Date()) -> OriginalLocalTime {
+        let c = Calendar(identifier:.gregorian).dateComponents(in:.current,from:date)
+        return .init(year:UInt16(c.year!),month:UInt16(c.month!),dayOfWeek:UInt16(c.weekday!-1),day:UInt16(c.day!),
+            hour:UInt16(c.hour!),minute:UInt16(c.minute!),second:UInt16(c.second!),milliseconds:UInt16((c.nanosecond ?? 0)/1_000_000))
+    }
+    /// The retained Start child: prelude, arena layers (packaged District),
+    /// music, 6.5 MB recording (runtime heap address) and the outer clock.
+    public func launch() throws -> LoadedMenu.PendingReturn {
+        let heap = started.runtime.heap
+        return try started.host.resumeMatchLaunch(prepare:{ pending,_ in
+            var session = try OriginalApplicationMatchLaunchSession(pending:pending),unit: Void = ()
+            // Replay keeps the cycle's continuation offset: the prelude's own draws
+            // (the final selection frame) were not committed and replay with the launch.
+            return try session.advance(environment:&unit,bitmaps:self.arenaInputs.bitmaps,outputInput:self.presentation(pending.loading.target),
+                allocateBitmap:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
+                bitmap:{ q,_ in try self.bitmap(q) },localTime:{ _ in Self.localTime() },music:{ e,_ in try self.music(e) },
+                allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
+                milliseconds:{ _ in try self.time() })
+        })
+    }
+    /// One retained gameplay body. DDBLTFX backing for fills is zero; replay
+    /// file output and music resume stay explicit boundaries until connected.
+    public func gameplay() throws -> LoadedMenu.PendingReturn {
+        try started.host.resumeGameplay(prepare:{ ready,_ in
+            var session = try OriginalApplicationGameplaySession(pending:ready),unit: Void = ()
+            return try session.advance(environment:&unit,outputInput:self.presentation(ready.loading.target),
+                fillBacking:{ [UInt8](repeating:0,count:100) })
+        })
+    }
+    /// The Host tail after a returned loaded menu (its single timeGetTime), then
+    /// the committed loaded batch's front draws replayed on the display: the
+    /// Core already recorded declared success for them. Text stays omitted.
+    public func finish() throws -> Host.Outcome {
+        let outcome = try started.host.finishLoadedMenu(perform:{ request,_ in
+            switch request.kind {
+            case .time: return .init(result:Int32(bitPattern:try self.time()))
+            case .sleep:
+                guard request.arguments.count == 1 else { throw Boundary.unexpected("tail Sleep arguments") }
+                self.sleeps.append(request.arguments[0]); return .init()
+            default: throw Boundary.unexpected("tail \(request.kind)")
+            }
+        })
+        while let batch = try started.host.takeCommitted() {
+            guard case .loaded(let commit) = batch.contents else { continue }
+            counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
+            try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
+        }
+        return outcome
+    }
+    func replay(_ commands: [OriginalApplicationGraphics.Command]) throws {
+        let display = started.display
+        for command in commands {
+            guard let e = command.event else { continue }
+            switch e.kind {
+            case "blit":
+                if OriginalMacRuntimeMenu.empty(e.blit) { counts.skippedDraws += 1; continue }
+            case "fill": break
+            case "method": guard let method = e.arguments.dropFirst().first,[8,0x14,0x2c].contains(method) else { continue }
+            default: continue
+            }
+            _ = try display.performFront(display.prepareFront(e)); counts.replayedDraws += 1
+        }
+    }
+}

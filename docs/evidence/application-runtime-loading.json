@@ -1,0 +1,304 @@
+{
+  "schema": "ntsd-application-runtime-loading-v1",
+  "UTC": "2026-09-28T13:32:52.528190+00:00",
+  "parentHead": "a1c5f3c3a1b29ab437c3b9cafceb6edb621d04b8",
+  "scope": "Inline exchange delivery and runtime loading/cached cycles in NTSDApp; Native/Mac execution only; no original executed.",
+  "plan": {
+    "path": "docs/research/APPLICATION_RUNTIME_LOADING_PLAN.md",
+    "bytes": 2973,
+    "sha256": "acc9076dfbbe4342b55085fe23e9b4fee8ecfe85f46a71313c4080df49b6ed83"
+  },
+  "files": [
+    {
+      "path": "native/Sources/NTSDCore/OriginalRequestExchange.swift",
+      "bytes": 9197,
+      "sha256": "2e1b85f5a0d8fabc59861a4d2a6ac39911b56092ef0a522bc16794df434f5541"
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationObservedLoadingAudio.swift",
+      "bytes": 4794,
+      "sha256": "357580a71794fa97fbb6783cf411e2aed6abb9794108ee7880e0513c844112ac"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift",
+      "bytes": 16482,
+      "sha256": "afb50dd9c771d92b0829d3f2246a2099d96270ab7a37ab200e9c4bb3fcaaaad2"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeHeap.swift",
+      "bytes": 1717,
+      "sha256": "7f1ecc1283c4419051a3c2a8ec308ba46999b9082022570f3662460c6c6f58a8"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeStartup.swift",
+      "bytes": 6909,
+      "sha256": "cd65bd83dc89d52a3e6b28373f0cb16d8287ad990d7a7edca5baeb28eda054db"
+    },
+    {
+      "path": "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift",
+      "bytes": 8838,
+      "sha256": "54106b8a21af36758d9d6437614f65cbd4c883051e076c40cc153fd79d9b9eb4"
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalMacRuntimeLoadingTests.swift",
+      "bytes": 6024,
+      "sha256": "4f925d429c9f51a8cb9b0a996976903f9676e9c181488021cfa8f4fcd524cf0d"
+    }
+  ],
+  "regressions": {
+    "run": "loading-regressions1 (before launch/gameplay routing edits)",
+    "suites": 8,
+    "results": [
+      {
+        "method": "OriginalApplicationObservedIterationTests testDecodedDefaultMessagesReturnDefWindowProcWithoutStores",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalApplicationObservedIterationTests testPreparedArraysCannotMixWithIterationPermits",
+        "outcome": "passed",
+        "seconds": 6.163
+      },
+      {
+        "method": "OriginalApplicationObservedIterationTests testWholeFirstMenuThroughIterationPermitsMatchesPreparedPath",
+        "outcome": "passed",
+        "seconds": 23.65
+      },
+      {
+        "method": "OriginalApplicationObservedStartupTests testActualMacClocksAtWholeCallerBoundaries",
+        "outcome": "passed",
+        "seconds": 1.359
+      },
+      {
+        "method": "OriginalApplicationObservedStartupTests testLateFailuresRetriesAndOwners",
+        "outcome": "passed",
+        "seconds": 25.984
+      },
+      {
+        "method": "OriginalApplicationObservedStartupTests testTypedRequestsAndProtocolBoundaries",
+        "outcome": "passed",
+        "seconds": 0.002
+      },
+      {
+        "method": "OriginalApplicationObservedStartupTests testWholeWinMainWithObservedRequests",
+        "outcome": "passed",
+        "seconds": 112.185
+      },
+      {
+        "method": "OriginalLoadingAudioTests testOwnershipDomainsAndOrderedCacheControls",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalLoadingAudioTests testWholeCommonAndInitialLoadingWithObservedReplies",
+        "outcome": "passed",
+        "seconds": 203.854
+      },
+      {
+        "method": "OriginalLoadingAudioTests testWholeSourceCatalogAndInterleavedObservedReplies",
+        "outcome": "passed",
+        "seconds": 79.966
+      },
+      {
+        "method": "OriginalMacLoadingAudioTests testFrontStorageAvoidsCompleteLoadingAllocations",
+        "outcome": "passed",
+        "seconds": 49.011
+      },
+      {
+        "method": "OriginalMacLoadingAudioTests testLateRetryProtocolAndRetainedOwners",
+        "outcome": "passed",
+        "seconds": 23.477
+      },
+      {
+        "method": "OriginalMacLoadingAudioTests testOwnedStartupCommonAndRegisteredBuffers",
+        "outcome": "passed",
+        "seconds": 26.684
+      },
+      {
+        "method": "OriginalMacRuntimeLoadingTests testInlineCursorRecordsReceiptsAndRetriesReuseThem",
+        "outcome": "passed",
+        "seconds": 0.0
+      },
+      {
+        "method": "OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt",
+        "outcome": "passed",
+        "seconds": 155.879
+      },
+      {
+        "method": "OriginalMacRuntimeMenuTests testMessageQueueKeyMapAndTranslation",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalMacRuntimeMenuTests testRuntimeFrontMenuIteratesAndAcceptsKeys",
+        "outcome": "passed",
+        "seconds": 10.597
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testDirectShowSuccessPathOwnsIdentitiesAndCounts",
+        "outcome": "passed",
+        "seconds": 0.0
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testHeapIsDisjointAlignedZeroAndBounded",
+        "outcome": "passed",
+        "seconds": 0.645
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testWholeWinMainWithRuntimeProvidersAndOverlay",
+        "outcome": "passed",
+        "seconds": 6.0
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testZoneRulesMatchWindowsDayInMonthForm",
+        "outcome": "passed",
+        "seconds": 0.003
+      },
+      {
+        "method": "OriginalWindowRequestExchangeTests testEveryWholeWindowRequestSuspendsAndRetainsOriginalFailures",
+        "outcome": "passed",
+        "seconds": 6.858
+      },
+      {
+        "method": "OriginalWindowRequestExchangeTests testLateWholeStartupFailuresRetryWithoutServingWindowAgain",
+        "outcome": "passed",
+        "seconds": 5.466
+      },
+      {
+        "method": "OriginalWindowRequestExchangeTests testProtocolRejectsWrongOwnersReentryAndClosedOrIncompleteWork",
+        "outcome": "passed",
+        "seconds": 0.0
+      },
+      {
+        "method": "OriginalWindowRequestExchangeTests testWholeWinMainParentsAndDistinctBoundariesUseSuspendedResponses",
+        "outcome": "passed",
+        "seconds": 16.344
+      }
+    ]
+  },
+  "finalLoadingTests": {
+    "run": "loading-tests7 (current code)",
+    "results": [
+      {
+        "method": "OriginalMacRuntimeLoadingTests testInlineCursorRecordsReceiptsAndRetriesReuseThem",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt",
+        "outcome": "passed",
+        "seconds": 157.538
+      }
+    ]
+  },
+  "earlierRounds": [
+    {
+      "log": "loading-tests1.log",
+      "lines": [
+        "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeLoadingTests.swift:35: error: -[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt] : failed: caught error: \"missing(\"pending loading\")\"",
+        "Test Case '-[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt]' failed (87.970 seconds).",
+        "Runtime loading stopped: missing(\"pending loading\") Counts(allocations: 0, bitmapRequests: 0, files: 0, audioRequests: 0, times: 0, messages: 0, music: 0)"
+      ]
+    },
+    {
+      "log": "loading-tests2.log",
+      "lines": [
+        "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeLoadingTests.swift:34: error: -[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt] : failed: caught error: \"allocationBudget\"",
+        "Test Case '-[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt]' failed (80.975 seconds).",
+        "Runtime loading stopped: allocationBudget Counts(allocations: 3099, bitmapRequests: 1932, files: 52, audioRequests: 257, times: 1358, messages: 553, music: 0)"
+      ]
+    },
+    {
+      "log": "loading-tests3.log",
+      "lines": [
+        "Runtime loading: 81.0s Counts(allocations: 16105, bitmapRequests: 12817, files: 621, audioRequests: 2072, times: 8465, messages: 3296, music: 2) after 0 iterations; capture /var/folders/5q/vc1kqfq132l48w03831tcfz00000gn/T/ntsd-runtime-loaded.png"
+      ]
+    },
+    {
+      "log": "loading-tests4.log",
+      "lines": [
+        "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeLoadingTests.swift:57: error: -[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt] : failed: caught error: \"unexpected(\"tail sleep\")\"",
+        "Test Case '-[NTSDCoreTests.OriginalMacRuntimeLoadingTests testStartLoadsCatalogPoolAndLoadedMenuInOneAttempt]' failed (500.655 seconds).",
+        "Runtime cycle stopped: unexpected(\"tail sleep\") Counts(allocations: 16105, bitmapRequests: 12817, files: 621, audioRequests: 2072, times: 8471, messages: 3296, music: 2, controls: 12, replayedDraws: 7218, skippedDraws: 3599) at Optional(NTSDCore.OriginalApplicationIterationRequest.graphics(NTSDCore."
+      ]
+    },
+    {
+      "log": "loading-tests5.log",
+      "lines": [
+        "Runtime first tail+replay 353.27s, 7186 draws",
+        "Runtime cycle 1: prepare 0.25s, tail+replay 0.25s",
+        "Runtime cycle 2: prepare 0.25s, tail+replay 0.25s",
+        "Runtime cycle 3: prepare 0.26s, tail+replay 0.25s"
+      ]
+    },
+    {
+      "log": "loading-tests6.log",
+      "lines": [
+        "Runtime first tail+replay 0.26s, 8 draws",
+        "Runtime cycle 1: prepare 0.25s, tail+replay 0.25s",
+        "Runtime cycle 2: prepare 0.27s, tail+replay 0.26s",
+        "Runtime cycle 3: prepare 0.25s, tail+replay 0.25s"
+      ]
+    }
+  ],
+  "app": {
+    "binary": "release",
+    "runs": [
+      {
+        "log": "original-loading1",
+        "output": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/15\\/36\",\"2026\\/10\\/02\\/15\\/15\\/36\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"emptyBlits\":36,\"event\":\"captured\",\"getDCFailures\":54,\"iterations\":80,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/app-loaded.png\",\"permits\":1011}"
+        ],
+        "outcome": "click posted down/up together; no loading (button must be held across a tick); script corrected"
+      },
+      {
+        "log": "original-loading2",
+        "output": [
+          "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/15\\/54\",\"2026\\/10\\/02\\/15\\/15\\/54\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+          "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":6.1469299793243408}",
+          "{\"emptyBlits\":17,\"event\":\"captured\",\"getDCFailures\":24,\"iterations\":80,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/app-loaded.png\",\"permits\":953}"
+        ],
+        "outcome": "loaded in 6.15s; mode menu captured"
+      }
+    ],
+    "capture": {
+      "path": "docs/evidence/application-runtime-loading-capture.png",
+      "bytes": 820579,
+      "sha256": "3b5fbd468b8a4d3901274c7305a2b6e31b438614a986a1a666df024c29edccb6"
+    }
+  },
+  "declaredRuntimePolicies": [
+    "inline audio delivery (receipts recorded, retries reuse)",
+    "heap addresses, zero allocation backing",
+    "display surfaces for all loading bitmaps; replies without writes",
+    "65536/4096 stream buffering",
+    "loading PeekMessage empty",
+    "loading draw results 0, progress frames not rendered",
+    "Winsock SOCKET_ERROR in cached cycles",
+    "tail Sleep recorded",
+    "replay only draws after the input continuation",
+    "runtime display budget 3 GiB"
+  ],
+  "notExercised": [
+    "match launch (launch()) and gameplay body (gameplay()) routing: compiled only; next card"
+  ],
+  "gates": {
+    "inlineCursor": true,
+    "oneAttemptLoading": true,
+    "cachedCycles": true,
+    "regressions": true,
+    "appLoading": true,
+    "independentReview": false,
+    "matchLaunch": false,
+    "gameplay": false,
+    "textRaster": false,
+    "musicOutput": false,
+    "deviceAcceptance": false,
+    "windows": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false
+}

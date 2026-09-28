@@ -15,18 +15,22 @@ Native методов, включая целый caller загрузка→ка�
 приложение показывает и ведёт оригинальное главное меню (permit-итерации,
 очередь сообщений из NSEvent, WndProc default по статическому разбору EXE);
 51 тест прошёл, [снимок окна](../evidence/application-runtime-menu-capture.png).
+[START → загрузка](APPLICATION_RUNTIME_LOADING.md): клик по START загружает весь
+каталог/pool/loaded menu за одну попытку (inline-ответы аудио; release 6.1с вместо
+≈45мин) и через кэшированные циклы показывает меню режимов;
+[снимок](../evidence/application-runtime-loading-capture.png).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) загрузка после
-START: permit-доставка перезапускает попытку на каждый запрос (проверенный caller
-загрузки — 2072 запроса, ≈45 мин), нужен дешёвый путь и runtime providers;
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) выбор режима/
+персонажей/арены через кэшированные циклы и `.matchPrelude`: runtime match launch
+(арена, replay, local time, музыка) и gameplay body не подключены;
 (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
 беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** доставка ответов загрузки без повторного прогона попытки на
-каждый запрос (сохраняя receipts/rollback) и runtime providers common/catalog/
-pool/loaded-menu — снимает препятствие (1) для перехода START → загрузка.
+**Следующая задача:** runtime match launch и gameplay body (resumeMatchLaunch/
+prepareLoadedUntilBoundary → resumeGameplay → tail → replay кадров) с живым вводом
+выбора VS Mode/Наруто/Саске/District — снимает препятствие (1).
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

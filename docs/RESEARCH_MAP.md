@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[START → loading → mode menu in the app](research/APPLICATION_RUNTIME_LOADING.md):
+inline exchange delivery runs the whole catalog/pool/loaded-menu load in one attempt
+(release 6.1s vs ≈45min permit path) on runtime providers; cached loaded cycles
+with committed-draw replay return to the original mode menu. Next: match launch
+and gameplay body. [Evidence](evidence/application-runtime-loading.json).
+
 [Live front menu in the app](research/APPLICATION_RUNTIME_MENU.md): whole-iteration
 permits (graphics+queue+WndProc), NSEvent message queue and statically decoded
 WndProc default messages let `NTSDNative --original` show and drive the original

@@ -6,12 +6,18 @@ import NTSDMacPlatform
 /// providers, then the front menu with live keyboard/mouse and clock input until
 /// the first loading request or an unsupported boundary, which is reported.
 /// Options: `--exit-after-startup`, `--capture-after N PATH` (window PNG after N
-/// committed menu iterations), `--exit-after-capture`.
+/// committed menu iterations), `--exit-after-capture`, `--click-at N X Y`
+/// (scripted left click at client point X,Y after N committed iterations).
+/// START runs the whole loading once (blocking, progress frames not shown);
+/// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     let exitAfterStartup: Bool
     private var started: OriginalMacRuntimeStartup.Started?
     private var menu: OriginalMacRuntimeMenu?
+    private var loading: OriginalMacRuntimeLoading?
     private var captureAfter: (count: Int,path: String)?
+    private var clickAt: (count: Int,x: Int32,y: Int32)?
+    private var cycles = 0, gameplayBodies = 0
     private var pressedModifiers: Set<UInt16> = []
     private var committed = 0, stopped = false
     init(exitAfterStartup: Bool) {
@@ -19,6 +25,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
             captureAfter = (n,arguments[i+2])
         }
+        if let i = arguments.firstIndex(of:"--click-at"),i+3 < arguments.count,let n = Int(arguments[i+1]),
+           let x = Int32(arguments[i+2]),let y = Int32(arguments[i+3]) { clickAt = (n,x,y) }
     }
     static func emit(_ value: [String:Any]) {
         guard let data = try? JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]) else { return }
@@ -93,6 +101,12 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             switch try menu.step() {
             case .committed:
                 committed += 1
+                if let click = clickAt,committed == click.count {
+                    menu.messages.mouse(0x200,x:click.x,y:click.y,buttons:0)
+                    menu.messages.mouse(0x201,x:click.x,y:click.y,buttons:1)
+                }
+                // Hold the button across game ticks, as a player's click does.
+                if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
                     try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:capture.path))
                     Self.emit(["event":"captured","iterations":committed,"path":capture.path,"permits":menu.requests,
@@ -102,9 +116,22 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? menu.messages.sleeps.last! : 1) : 0
                 schedule(delay)
             case .loading:
-                stopped = true
-                Self.emit(["event":"boundary","reason":"loading requested; runtime loading providers are not connected yet",
-                    "iterations":committed])
+                let begin = Date(),first = loading == nil
+                if first { loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),clock:Self.milliseconds) }
+                guard let loading else { return }
+                let sleeps = loading.sleeps.count
+                let completed = try loading.complete(first:first); cycles += 1
+                switch completed {
+                case .launched: Self.emit(["event":"matchLaunched","iterations":committed,"cycles":cycles])
+                case .gameplay: gameplayBodies += 1; if gameplayBodies == 1 { Self.emit(["event":"gameplay","cycles":cycles]) }
+                case .menu: break
+                }
+                if first {
+                    let c = loading.counts
+                    Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"allocations":c.allocations,
+                        "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
+                }
+                schedule(loading.sleeps.count > sleeps ? loading.sleeps.last! : 1)
             }
         } catch { stop(error) }
     }
