@@ -1,0 +1,131 @@
+{
+  "schema": "ntsd-wndproc-default-messages-v1",
+  "UTC": "2026-09-28T12:30:04.364421+00:00",
+  "exe": {
+    "path": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+    "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "bytes": 31715328
+  },
+  "level": "S (static read; no execution)",
+  "head": [
+    "0043b3d0 mov eax, dword ptr [esp + 8]",
+    "0043b3d4 cmp eax, 0x200",
+    "0043b3d9 mov ecx, dword ptr [esp + 0x10]",
+    "0043b3dd push ebx",
+    "0043b3de mov ebx, dword ptr [esp + 0x10]",
+    "0043b3e2 push ebp",
+    "0043b3e3 push esi",
+    "0043b3e4 mov esi, dword ptr [esp + 0x10]",
+    "0043b3e8 push edi",
+    "0043b3e9 ja 0x43b8c6",
+    "0043b3ef je 0x43b8af",
+    "0043b3f5 cmp eax, 0x20",
+    "0043b3f8 ja 0x43b4fd",
+    "0043b3fe je 0x43b4e3",
+    "0043b404 add eax, -2",
+    "0043b407 cmp eax, 0x1a",
+    "0043b40a ja 0x43bc24",
+    "0043b410 movzx eax, byte ptr [eax + 0x43bc58]",
+    "0043b417 jmp dword ptr [eax*4 + 0x43bc44]"
+  ],
+  "chain": [
+    "0043b4fd add eax, 0xffffff00",
+    "0043b502 cmp eax, 0x12",
+    "0043b505 ja 0x43bc24",
+    "0043b50b movzx edx, byte ptr [eax + 0x43bc88]",
+    "0043b512 jmp dword ptr [edx*4 + 0x43bc74]"
+  ],
+  "default": [
+    "0043bc24 mov ecx, dword ptr [esp + 0x20]",
+    "0043bc28 mov edx, dword ptr [esp + 0x18]",
+    "0043bc2c mov eax, dword ptr [esp + 0x14]",
+    "0043bc30 push ecx",
+    "0043bc31 push ebx",
+    "0043bc32 push edx",
+    "0043bc33 push eax",
+    "0043bc34 call dword ptr [0x4471f4]",
+    "0043bc3a pop edi",
+    "0043bc3b pop esi",
+    "0043bc3c pop ebp",
+    "0043bc3d pop ebx",
+    "0043bc3e ret 0x10"
+  ],
+  "byteTable": {
+    "address": "0x43bc88",
+    "bytes": [
+      0,
+      1,
+      4,
+      4,
+      4,
+      2,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      3
+    ]
+  },
+  "jumpTable": {
+    "address": "0x43bc74",
+    "targets": [
+      "0x43b531",
+      "0x43b833",
+      "0x43b83f",
+      "0x43b519",
+      "0x43bc24"
+    ]
+  },
+  "messages": {
+    "0x100": "0x43b531",
+    "0x101": "0x43b833",
+    "0x102": "0x43bc24",
+    "0x103": "0x43bc24",
+    "0x104": "0x43bc24",
+    "0x105": "0x43b83f",
+    "0x106": "0x43bc24",
+    "0x107": "0x43bc24",
+    "0x108": "0x43bc24",
+    "0x109": "0x43bc24",
+    "0x10a": "0x43bc24",
+    "0x10b": "0x43bc24",
+    "0x10c": "0x43bc24",
+    "0x10d": "0x43bc24",
+    "0x10e": "0x43bc24",
+    "0x10f": "0x43bc24",
+    "0x110": "0x43bc24",
+    "0x111": "0x43bc24",
+    "0x112": "0x43b519"
+  },
+  "defaultSet": [
+    "0x102",
+    "0x103",
+    "0x104",
+    "0x106",
+    "0x107",
+    "0x108",
+    "0x109",
+    "0x10a",
+    "0x10b",
+    "0x10c",
+    "0x10d",
+    "0x10e",
+    "0x10f",
+    "0x110",
+    "0x111"
+  ],
+  "defaultCallIAT": {
+    "slot": "0x4471f4",
+    "rva": "0x4be2c",
+    "importName": "DefWindowProcA"
+  },
+  "conclusion": "Messages 0x102-0x104 and 0x106-0x111 select entry4 = 0x43bc24, which pushes lParam, wParam(ebx), message and HWND, calls the DefWindowProcA import and returns its result with no global writes."
+}

@@ -79,8 +79,12 @@ public struct OriginalApplicationBootstrap {
         bitmap: ((Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         lifecycleProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
         surfaceProvider: ((OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response)? = nil,
-        frontProvider: ((Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil) throws -> Session.Outcome {
+        frontProvider: ((Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+        queueProvider: ((Session.Loop.Request) throws -> Session.Loop.Response)? = nil,
+        windowDefaultProvider: ((OriginalWindowInput.Request) throws -> Int32)? = nil) throws -> Session.Outcome {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
+        if queueProvider != nil && !queue.isEmpty { throw Session.Boundary.dependency("Observed queue requests cannot mix prepared response arrays") }
+        if windowDefaultProvider != nil && !windowDefault.isEmpty { throw Session.Boundary.dependency("Observed window requests cannot mix prepared response arrays") }
         if lifecycleProvider != nil && !lifecycle.isEmpty { throw Session.Boundary.dependency("Observed lifecycle requests cannot mix prepared response arrays") }
         if surfaceProvider != nil && !surface.isEmpty { throw Session.Boundary.dependency("Observed surface requests cannot mix prepared response arrays") }
         var qi = 0,wi = 0,si = 0,li = 0
@@ -94,9 +98,9 @@ public struct OriginalApplicationBootstrap {
             }
         }
         let result = try next.step(responses:responses,queue:{ q in
-            let r = try take(queue,&qi,"queue");try observe(.queueResponse(q,r));return r
+            let r = try queueProvider?(q) ?? take(queue,&qi,"queue");try observe(.queueResponse(q,r));return r
         },windowDefault:{ q in
-            let r = try take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
+            let r = try windowDefaultProvider?(q) ?? take(windowDefault,&wi,"window");try observe(.windowResponse(q,r));return r
         },surface:{ q in
             let r = try surfaceProvider?(q) ?? take(surface,&si,"surface");try observe(.surfaceResponse(q,r));return r
         },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in

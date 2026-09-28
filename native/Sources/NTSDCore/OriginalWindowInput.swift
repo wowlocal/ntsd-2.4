@@ -160,6 +160,10 @@ public enum OriginalWindowInput {
                 if down && set { try byte(start+index,1) }
                 else if !down && !set { try byte(start+index,0) }
             }
+        case 0x102...0x104,0x106...0x111:
+            // Static 43b4fd decode: byte table 43bc88 selects jump-table entry4
+            // (43bc74) = 43bc24, which only returns DefWindowProcA(hwnd,msg,w,l).
+            break
         default:throw error("Unrecovered window message")
         }
         let result: Int32

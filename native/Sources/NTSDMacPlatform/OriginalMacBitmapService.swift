@@ -30,6 +30,15 @@ public typealias OriginalMacBitmapRequest = OriginalBitmapRequest
             answer:{ try driver.answer(permit,response:.bitmap($0),retaining:$1) },
             fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
     }
+    public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,
+        on driver: OriginalApplicationObservedIteration<P>) throws {
+        guard case .graphics(.bitmap(_,let q)) = permit.request else {
+            throw OriginalMacDisplayBackend.Boundary.unsupported("iteration bitmap family")
+        }
+        try serve(q,begin:{ try driver.beginService(permit) },
+            answer:{ try driver.answer(permit,response:.graphics(.bitmap($0)),retaining:$1) },
+            fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
+    }
     private func serve(_ q: OriginalBitmapSurfaceLoading.Request,begin: () throws -> Void,
         answer: (Exchange.Response,[any OriginalApplicationStartupResource]) throws -> Void,
         fail: (String,[any OriginalApplicationStartupResource]) throws -> Void) throws {

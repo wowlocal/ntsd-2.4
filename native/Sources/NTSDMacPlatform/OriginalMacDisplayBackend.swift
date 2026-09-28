@@ -95,8 +95,19 @@ import NTSDCore
     public private(set) var allocationCount = 0
     public var allocatedBytes: Int { budget.allocated }
     public var retainedResources: [any OriginalApplicationStartupResource] { Array(live.values) }
-    public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024) {
-        self.windows = windows; budget = Budget(maximumBytes)
+    /// Declared live-app policies: fresh surfaces start as known black, and
+    /// presentation shows still-unknown pixels (e.g. RLE holes) as black. The
+    /// defaults keep unwritten pixels unknown, as the comparison tests require.
+    public let freshSurfacesKnownBlack: Bool, presentUnknownAsBlack: Bool
+    public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024,freshSurfacesKnownBlack: Bool = false,
+                presentUnknownAsBlack: Bool = false) {
+        self.windows = windows; budget = Budget(maximumBytes); self.freshSurfacesKnownBlack = freshSurfacesKnownBlack
+        self.presentUnknownAsBlack = presentUnknownAsBlack
+    }
+    private func storage(_ width: Int,_ height: Int) throws -> Storage {
+        let value = try Storage(width,height,budget)
+        if freshSurfacesKnownBlack { memset(value.known,1,value.count) }
+        return value
     }
     public nonisolated static func handles(_ q: Window.Request) -> Bool {
         ["directDrawCreate","cooperativeLevel","createSurface","createClipper","clipperWindow","setClipper","release","pixelFormat","blt"].contains(q.kind)
@@ -221,8 +232,13 @@ import NTSDCore
         try bytes.withUnsafeMutableBytes { destination in
             for row in 0..<h {
                 let start = (y+row)*data.width+x
-                guard UnsafeBufferPointer(start:data.known+start,count:w).allSatisfy({ $0 != 0 }) else { throw Boundary.unknownPixel }
-                destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:data.values+start,byteCount:w*4)
+                if UnsafeBufferPointer(start:data.known+start,count:w).allSatisfy({ $0 != 0 }) {
+                    destination.baseAddress!.advanced(by:row*w*4).copyMemory(from:data.values+start,byteCount:w*4)
+                } else {
+                    guard presentUnknownAsBlack else { throw Boundary.unknownPixel }
+                    let out = destination.baseAddress!.advanced(by:row*w*4).assumingMemoryBound(to:UInt32.self)
+                    for i in 0..<w { out[i] = data.known[start+i] != 0 ? data.values[start+i] : 0 }
+                }
             }
         }
         guard let provider = CGDataProvider(data:bytes as CFData),let space = CGColorSpace(name:CGColorSpace.sRGB),
@@ -259,7 +275,7 @@ import NTSDCore
             } else {
                 width = Int(try r.integer(at:12,as:UInt32.self));height = Int(try r.integer(at:8,as:UInt32.self));screen = nil
             }
-            let storage = try Storage(width,height,budget)
+            let storage = try self.storage(width,height)
             let s = try Surface(windows.identities.take(),primary ? .primary : .backbuffer,d,storage,screen)
             install(s);retained = [s];response = .init(output:s.token)
         case "createClipper":
@@ -452,7 +468,7 @@ extension OriginalMacDisplayBackend {
             owners = [b];response = .init(result:24,writes:[.init(offset:4,bytes:Array(bytes[4..<20]))])
         case "createSurface":
             let d = try resource(q.words[0],as:Draw.self),r = try record(q,108)
-            let storage = try Storage(Int(r.integer(at:12,as:UInt32.self)),Int(r.integer(at:8,as:UInt32.self)),budget)
+            let storage = try self.storage(Int(r.integer(at:12,as:UInt32.self)),Int(r.integer(at:8,as:UInt32.self)))
             let s = try Surface(windows.identities.take(),.offscreen,d,storage,nil)
             install(s);owners = [s];response = .init(output:s.token)
         case "restore":let s = try bitmapSurface(q.words[0]);owners = [s];response = .init()
@@ -568,7 +584,7 @@ extension OriginalMacDisplayBackend {
         let (x,y,w,h,_) = target.delivery,data = target.surface.storage!
         for row in y..<(y+h) { for column in x..<(x+w) {
             let isKnown = target.region?.contains(column,row) == true ? known(column,row) : data.known[row*data.width+column] != 0
-            guard isKnown else { throw Boundary.unknownPixel }
+            guard isKnown || presentUnknownAsBlack else { throw Boundary.unknownPixel }
         } }
     }
     private func frontCopy(_ destinationToken: UInt32,_ sourceToken: UInt32,

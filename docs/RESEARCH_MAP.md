@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Live front menu in the app](research/APPLICATION_RUNTIME_MENU.md): whole-iteration
+permits (graphics+queue+WndProc), NSEvent message queue and statically decoded
+WndProc default messages let `NTSDNative --original` show and drive the original
+menu. 51 tests pass incl. a differential check against the prepared path. Next:
+loading delivery without per-permit reruns, then loading providers.
+[Evidence](evidence/application-runtime-menu.json).
+
 [Runtime WinMain providers: the app starts the original application](research/APPLICATION_RUNTIME_STARTUP.md):
 `NTSDNative --original` runs WinMain to `.started` on Mac window/display/audio
 services plus runtime clock/zone/heap/COM/DirectShow/cursor/joystick/_write

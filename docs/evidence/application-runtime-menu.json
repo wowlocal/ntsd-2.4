@@ -1,0 +1,444 @@
+{
+  "schema": "ntsd-application-runtime-menu-v1",
+  "UTC": "2026-09-28T12:34:19.928753+00:00",
+  "parentHead": "743380c966ae7f2da75ae78dc9089af2bf5ac6e3",
+  "scope": "Whole-iteration permits, runtime message queue/input and live front menu in NTSDApp; Native/Mac execution plus one static EXE read; no original executed.",
+  "plan": {
+    "path": "docs/research/APPLICATION_RUNTIME_MENU_PLAN.md",
+    "bytes": 4868,
+    "sha256": "49909cc1246b25ce41ffaa5faff42cf5d552c6dfc5da90581302b3783698eb36"
+  },
+  "files": [
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationObservedIteration.swift",
+      "bytes": 7735,
+      "sha256": "6e96d61611c3b0a37bfd010245774980958a70ade3e881eea21ff362b7d400d7"
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationBootstrap.swift",
+      "bytes": 12022,
+      "sha256": "dcb238cc46e3bd1543f54bb565b9af497abd5d36b1dbf51adffb1334252e796b"
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationHostSession.swift",
+      "bytes": 21866,
+      "sha256": "e0e9270e826b3c82f3f74a3784ceeb01774929c914395643d1da949739aa534f"
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalApplicationPreparedStartupPlatform.swift",
+      "bytes": 16132,
+      "sha256": "442a4e426c916fb1582ad147553c3bc52b4320d086a9628408849be45ce0347c"
+    },
+    {
+      "path": "native/Sources/NTSDCore/OriginalWindowInput.swift",
+      "bytes": 9964,
+      "sha256": "edbcf756b7b8605d2977d696f22bed07a8946de896e3f74c945c2d097945dc70"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeMessages.swift",
+      "bytes": 9318,
+      "sha256": "09a13ae37f822a57df7232c2e9b181b184ebc6f06f56815bdd4d150064805ec8"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeMenu.swift",
+      "bytes": 7728,
+      "sha256": "fea6eb70d2b0b34c6546f763e48a7505aa9c037167475104120a137fe8edd429"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacFrontService.swift",
+      "bytes": 4051,
+      "sha256": "4ccd1e4059ff26831db319461961f7dab7f78f28c17c7a036d59d26c4cf04606"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacBitmapService.swift",
+      "bytes": 3736,
+      "sha256": "401214e4e6c7dd8089ac387c99e203d8d6a76defc9b87526f6398770dbd77659"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacWindowBackend.swift",
+      "bytes": 19418,
+      "sha256": "6cec26323adfc1102f3d98b591d0f44f97964e4e883e6b7a9dffab12cc8d779a"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacDisplayBackend.swift",
+      "bytes": 43669,
+      "sha256": "f789990c2fbb6d4332af474e3b1fbcf8f6996fac426ffe28fa8caadd3c824d36"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeStartup.swift",
+      "bytes": 6890,
+      "sha256": "0a974fad1ed864e439f06235725d1eeefb41d9c61d5332465b7ad9d4242a054d"
+    },
+    {
+      "path": "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift",
+      "bytes": 6880,
+      "sha256": "6f31080ed6850ba49c1577f2dca5cdc71fecd3b2f9cb49dd9deefa613b96b9d7"
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalApplicationObservedIterationTests.swift",
+      "bytes": 10426,
+      "sha256": "acc7d94cbf0759c202f55c0a5351227a0df2f69f0032ca207ab39bf68721c5a5"
+    },
+    {
+      "path": "native/Tests/NTSDCoreTests/OriginalMacRuntimeMenuTests.swift",
+      "bytes": 6320,
+      "sha256": "fffc7b2fbcfbc6bbf447b2a34f9ea879cb434f162cfaf10a2f66bed3a5397c26"
+    }
+  ],
+  "staticEvidence": {
+    "path": "docs/evidence/wndproc-default-messages.json",
+    "bytes": 3070,
+    "sha256": "b478d8456852da7a4f4a6f1ee46ddbf9da10e1bb33655e926ae3010280b1c19b"
+  },
+  "build": {
+    "toolchain": "Xcode Swift 6.4 swift-build, --build-system native, debug, build/swiftpm-app",
+    "errors": 0
+  },
+  "tests": {
+    "run": "menu-regressions1",
+    "suites": 13,
+    "executed": 51,
+    "passed": 51,
+    "seconds": 697.767,
+    "results": [
+      {
+        "method": "OriginalApplicationHostSessionTests testFirstMenuLateFailuresRetainEarlierHostCommits",
+        "outcome": "passed",
+        "seconds": 19.681
+      },
+      {
+        "method": "OriginalApplicationHostSessionTests testSamePreparedAttemptsRetryWithIndependentHostState",
+        "outcome": "passed",
+        "seconds": 5.134
+      },
+      {
+        "method": "OriginalApplicationHostSessionTests testStartupLateFailuresAndSharedCopyRejection",
+        "outcome": "passed",
+        "seconds": 1.411
+      },
+      {
+        "method": "OriginalApplicationHostSessionTests testWholeFirstMenuParentsUseHostCommitHandoff",
+        "outcome": "passed",
+        "seconds": 89.443
+      },
+      {
+        "method": "OriginalApplicationHostSessionTests testWholeInputChainsRetainActualHostLoadingTicket",
+        "outcome": "passed",
+        "seconds": 109.783
+      },
+      {
+        "method": "OriginalApplicationMenuInputTests testLateInputMenuAndReleaseFailuresRetainPreviousIterations",
+        "outcome": "passed",
+        "seconds": 25.087
+      },
+      {
+        "method": "OriginalApplicationMenuInputTests testOwnQueuedInputAndRepeatedMenusReachActualLoadingEntry",
+        "outcome": "passed",
+        "seconds": 110.217
+      },
+      {
+        "method": "OriginalApplicationMenuInputTests testSessionPreservesUnknownAliasesAndPublishesEffectsOnlyAfterCommit",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalApplicationMenuInputTests testSessionRejectsMissingAndDeadCurrentBitmapOwners",
+        "outcome": "passed",
+        "seconds": 4.7
+      },
+      {
+        "method": "OriginalApplicationObservedBitmapTests testLateFailuresRetryWithoutRepeatingPhysicalWork",
+        "outcome": "passed",
+        "seconds": 11.937
+      },
+      {
+        "method": "OriginalApplicationObservedBitmapTests testMissingResourceDiagnosticsRemainOrderedAcrossRollback",
+        "outcome": "passed",
+        "seconds": 5.05
+      },
+      {
+        "method": "OriginalApplicationObservedBitmapTests testObservedOutputBoundsAndAtomicRegistry",
+        "outcome": "passed",
+        "seconds": 1.14
+      },
+      {
+        "method": "OriginalApplicationObservedBitmapTests testProtocolStaleHostAndRetainedHistory",
+        "outcome": "passed",
+        "seconds": 12.403
+      },
+      {
+        "method": "OriginalApplicationObservedBitmapTests testWholeFrontRetainsPhysicalBitmapRepliesOnHost",
+        "outcome": "passed",
+        "seconds": 11.842
+      },
+      {
+        "method": "OriginalApplicationObservedGraphicsTests testLateFailuresRetryWholeIterationWithoutRepeatingService",
+        "outcome": "passed",
+        "seconds": 41.071
+      },
+      {
+        "method": "OriginalApplicationObservedGraphicsTests testProtocolFamiliesStaleHostCancellationAndIndeterminateService",
+        "outcome": "passed",
+        "seconds": 6.112
+      },
+      {
+        "method": "OriginalApplicationObservedGraphicsTests testRetainedHistoryInspectionCopiesAndContextResourceLifetime",
+        "outcome": "passed",
+        "seconds": 13.369
+      },
+      {
+        "method": "OriginalApplicationObservedGraphicsTests testVariableRepliesPreserveDCGenerationsAndActualPresentationResult",
+        "outcome": "passed",
+        "seconds": 15.206
+      },
+      {
+        "method": "OriginalApplicationObservedGraphicsTests testWholeMenuOrderedGraphicsMatchesPreparedStateAndActualBitmapWork",
+        "outcome": "passed",
+        "seconds": 67.765
+      },
+      {
+        "method": "OriginalApplicationObservedIterationTests testDecodedDefaultMessagesReturnDefWindowProcWithoutStores",
+        "outcome": "passed",
+        "seconds": 0.0
+      },
+      {
+        "method": "OriginalApplicationObservedIterationTests testPreparedArraysCannotMixWithIterationPermits",
+        "outcome": "passed",
+        "seconds": 4.941
+      },
+      {
+        "method": "OriginalApplicationObservedIterationTests testWholeFirstMenuThroughIterationPermitsMatchesPreparedPath",
+        "outcome": "passed",
+        "seconds": 23.957
+      },
+      {
+        "method": "OriginalMacDisplayBackendTests testLateRetryReleaseAndContextOwnership",
+        "outcome": "passed",
+        "seconds": 1.37
+      },
+      {
+        "method": "OriginalMacDisplayBackendTests testProtocolUnknownAndAllocationBoundaries",
+        "outcome": "passed",
+        "seconds": 1.003
+      },
+      {
+        "method": "OriginalMacDisplayBackendTests testWholeClearMasksPixelsAndAppKitViewReadback",
+        "outcome": "passed",
+        "seconds": 3.098
+      },
+      {
+        "method": "OriginalMacDisplayBackendTests testWholeStartupUsesOwnedDisplaySurfacesAndClipper",
+        "outcome": "passed",
+        "seconds": 1.271
+      },
+      {
+        "method": "OriginalMacFrontRasterTests testKnownFramePresentationClipsToOwnedWindowAndUnknownPreflightIsAtomic",
+        "outcome": "passed",
+        "seconds": 6.115
+      },
+      {
+        "method": "OriginalMacFrontRasterTests testLateWholeMenuFailuresDoNotRepeatPhysicalRaster",
+        "outcome": "passed",
+        "seconds": 26.283
+      },
+      {
+        "method": "OriginalMacFrontRasterTests testMaskedFillKeyAndMirrorCopyUseOwnedConstructorSurfaces",
+        "outcome": "passed",
+        "seconds": 1.103
+      },
+      {
+        "method": "OriginalMacFrontRasterTests testProtocolPreflightResourcesAndReleaseKeepDistinctOutcomes",
+        "outcome": "passed",
+        "seconds": 2.205
+      },
+      {
+        "method": "OriginalMacFrontRasterTests testWholeMenuPhysicalRasterRetainsUnknownCursorAndControlledTextBoundary",
+        "outcome": "passed",
+        "seconds": 13.062
+      },
+      {
+        "method": "OriginalMacRuntimeMenuTests testMessageQueueKeyMapAndTranslation",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalMacRuntimeMenuTests testRuntimeFrontMenuIteratesAndAcceptsKeys",
+        "outcome": "passed",
+        "seconds": 10.743
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testDirectShowSuccessPathOwnsIdentitiesAndCounts",
+        "outcome": "passed",
+        "seconds": 0.0
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testHeapIsDisjointAlignedZeroAndBounded",
+        "outcome": "passed",
+        "seconds": 0.667
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testWholeWinMainWithRuntimeProvidersAndOverlay",
+        "outcome": "passed",
+        "seconds": 6.083
+      },
+      {
+        "method": "OriginalMacRuntimeStartupTests testZoneRulesMatchWindowsDayInMonthForm",
+        "outcome": "passed",
+        "seconds": 0.001
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testPhysicalServiceRejectsForeignDuplicateAndCancelledPermits",
+        "outcome": "passed",
+        "seconds": 0.663
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testStartupLateFailureAndWindowDestruction",
+        "outcome": "passed",
+        "seconds": 1.378
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testWholeStartupUsesPhysicalWindowAndRetainsReplies",
+        "outcome": "passed",
+        "seconds": 1.045
+      },
+      {
+        "method": "OriginalMacWindowBackendTests testWindowGeometryAndResourceLifetimes",
+        "outcome": "passed",
+        "seconds": 1.048
+      },
+      {
+        "method": "OriginalMacWindowGeometryTests testGeometryPayloadOwnershipAndServiceProtocol",
+        "outcome": "passed",
+        "seconds": 5.049
+      },
+      {
+        "method": "OriginalMacWindowGeometryTests testIgnoredNumericGeometryRepliesAndWholeMoveRollback",
+        "outcome": "passed",
+        "seconds": 4.933
+      },
+      {
+        "method": "OriginalMacWindowGeometryTests testMoveLateFailureRetriesSavedGeometryAndRetainsHistory",
+        "outcome": "passed",
+        "seconds": 4.952
+      },
+      {
+        "method": "OriginalMacWindowGeometryTests testWholeMoveOwnsGeometryAndFollowingMenuPresentation",
+        "outcome": "passed",
+        "seconds": 11.745
+      },
+      {
+        "method": "OriginalWindowInputTests testLateCloseAndMissingReplayOwnershipRollBackWholeCallback",
+        "outcome": "passed",
+        "seconds": 0.232
+      },
+      {
+        "method": "OriginalWindowInputTests testTextIndexAliasLateFailureAndUnknownStorageRollBack",
+        "outcome": "passed",
+        "seconds": 0.227
+      },
+      {
+        "method": "OriginalWindowInputTests testWholeCallbacksOwnTextSequencesAndExactStoreOrder",
+        "outcome": "passed",
+        "seconds": 12.517
+      },
+      {
+        "method": "OriginalWindowLifecycleTests testDestroyOwnershipAndLateQuitRollBack",
+        "outcome": "passed",
+        "seconds": 0.083
+      },
+      {
+        "method": "OriginalWindowLifecycleTests testLateRecreationAndMissingBackingRollBackWholeCallback",
+        "outcome": "passed",
+        "seconds": 0.083
+      },
+      {
+        "method": "OriginalWindowLifecycleTests testWholeLifecycleOwnWindowsAndExactRequestStoreOrder",
+        "outcome": "passed",
+        "seconds": 0.553
+      }
+    ]
+  },
+  "earlierRounds": {
+    "note": "Runtime menu test rounds before the passing run, preserved as diagnoses (same mechanism):",
+    "rounds": [
+      {
+        "log": "menu-tests1.log",
+        "stops": [
+          "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeMenuTests.swift:69: error: -[NTSDCoreTests.OriginalMacRuntimeMenuTests testRuntimeFrontMenuIteratesAndAcceptsKeys] : XCTAssertTrue failed: threw error \"geometry\"",
+          "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeMenuTests.swift:69: error: -[NTSDCoreTests.OriginalMacRuntimeMenuTests testRuntimeFrontMenuIteratesAndAcceptsKeys] : XCTAssertTrue failed: threw error \"geometry\""
+        ]
+      },
+      {
+        "log": "menu-tests2.log",
+        "stops": [
+          "Runtime menu stopped: geometry at Optional(NTSDCore.OriginalApplicationIterationRequest.graphics(NTSDCore.OriginalMenuGraphicsRequest.front(NTSDCore.OriginalApplicationBootstrap.Stage.prefix, NTSDCore.OriginalFrontScreenEvent(kind: \"blit\", arguments: [], strings: [], fill: nil, read: nil, clip: nil, blit: Optional(NTSDCore.OriginalBitmapBlit(sourceSurface: 148, targetSurface: 6, source: [0, 0, 0, "
+        ]
+      },
+      {
+        "log": "menu-tests3.log",
+        "stops": [
+          "Runtime menu stopped: geometry at Optional(NTSDCore.OriginalApplicationIterationRequest.graphics(NTSDCore.OriginalMenuGraphicsRequest.front(NTSDCore.OriginalApplicationBootstrap.Stage.menu, NTSDCore.OriginalFrontScreenEvent(kind: \"method\", arguments: [5, 20, 4537548, 6, 0, 16777216, 0], strings: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], fill: nil, read: nil, clip: nil, blit: nil))))"
+        ]
+      },
+      {
+        "log": "menu-tests4.log",
+        "stops": [
+          "Runtime menu stopped: unknownPixel at Optional(NTSDCore.OriginalApplicationIterationRequest.graphics(NTSDCore.OriginalMenuGraphicsRequest.front(NTSDCore.OriginalApplicationBootstrap.Stage.menu, NTSDCore.OriginalFrontScreenEvent(kind: \"method\", arguments: [5, 20, 4537548, 6, 0, 16777216, 0], strings: [[83, 4, 0, 0, 61, 1, 0, 0, 109, 7, 0, 0, 99, 3, 0, 0]], fill: nil, read: nil, clip: nil, blit: nil"
+        ]
+      },
+      {
+        "log": "menu-tests5.log",
+        "stops": [
+          "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/OriginalMacRuntimeMenuTests.swift:87: error: -[NTSDCoreTests.OriginalMacRuntimeMenuTests testRuntimeFrontMenuIteratesAndAcceptsKeys] : XCTAssertEqual failed: (\"[5, 3, 256, 258, 257]\") is not equal to (\"[256, 258, 257]\")"
+        ]
+      },
+      {
+        "log": "menu-tests5.log",
+        "stops": [
+          "expected delivery list lacked the WM_SIZE/WM_MOVE bridge; test expectation corrected"
+        ]
+      }
+    ]
+  },
+  "app": {
+    "command": "NTSDNative --original --capture-after 60 <png> --exit-after-capture",
+    "exitCode": 0,
+    "output": [
+      "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/14\\/33\\/25\",\"2026\\/10\\/02\\/14\\/33\\/25\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+      "{\"emptyBlits\":116,\"event\":\"captured\",\"getDCFailures\":174,\"iterations\":60,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/app-menu.png\",\"permits\":1484}"
+    ],
+    "capture": {
+      "path": "docs/evidence/application-runtime-menu-capture.png",
+      "bytes": 826987,
+      "sha256": "12cb5e58b3cb90adc5fe68351aa815a45a6b2abdae24f295e3994b7fb8bfbe37"
+    },
+    "firstAttempt": "original-menu1: compile error in the scheduler left the startup-only binary running; stopped after 120s and corrected"
+  },
+  "declaredRuntimePolicies": [
+    "WM_SIZE then WM_MOVE queued first (CreateWindowEx sends them; startup model does not run them)",
+    "lifecycle DefWindowProc(WM_MOVE)=0; input DefWindowProc for key/char/mouse=0",
+    "GetDC E_FAIL (text omitted)",
+    "zero-area Blt -> DDERR_INVALIDRECT without pixels (unobserved; ignored by callers)",
+    "fresh surfaces known black; unknown pixels presented black",
+    "worker thread identities without running the network updater; lastError 0; ShellExecute result 42 (not performed)",
+    "US key map to VK/scan codes; Command/Option/Function unmapped; TranslateMessage posts WM_CHAR ahead of later input"
+  ],
+  "gates": {
+    "compile": true,
+    "differentialDriver": true,
+    "runtimeMenu": true,
+    "regressions": true,
+    "appLiveMenu": true,
+    "independentReview": false,
+    "textRaster": false,
+    "loadingProviders": false,
+    "musicOutput": false,
+    "escapeAndShutdown": false,
+    "deviceAcceptance": false,
+    "windows": false,
+    "fullMatch": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false
+}

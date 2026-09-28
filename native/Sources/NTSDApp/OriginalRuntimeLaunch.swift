@@ -3,16 +3,32 @@ import NTSDCore
 import NTSDMacPlatform
 
 /// `--original`: run the recovered WinMain on the real Mac services and runtime
-/// providers. The front-menu message loop is not connected yet; after startup
-/// the original window stays open without further game iterations.
+/// providers, then the front menu with live keyboard/mouse and clock input until
+/// the first loading request or an unsupported boundary, which is reported.
+/// Options: `--exit-after-startup`, `--capture-after N PATH` (window PNG after N
+/// committed menu iterations), `--exit-after-capture`.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     let exitAfterStartup: Bool
-    private var retained: Any?
-    init(exitAfterStartup: Bool) { self.exitAfterStartup = exitAfterStartup }
-
+    private var started: OriginalMacRuntimeStartup.Started?
+    private var menu: OriginalMacRuntimeMenu?
+    private var captureAfter: (count: Int,path: String)?
+    private var pressedModifiers: Set<UInt16> = []
+    private var committed = 0, stopped = false
+    init(exitAfterStartup: Bool) {
+        self.exitAfterStartup = exitAfterStartup
+        if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
+            captureAfter = (n,arguments[i+2])
+        }
+    }
     static func emit(_ value: [String:Any]) {
         guard let data = try? JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]) else { return }
         print(String(decoding:data,as:UTF8.self)); fflush(stdout)
+    }
+    static func milliseconds() throws -> UInt32 { try OriginalMacStartupClock.milliseconds(OriginalMacStartupClock.monotonicSample()) }
+    /// GetMessagePos: desktop coordinates with the main screen's top-left origin.
+    static func cursorPoint() -> (Int32,Int32) {
+        let p = NSEvent.mouseLocation,height = NSScreen.screens.first?.frame.maxY ?? 0
+        return (Int32(p.x.rounded(.down)),Int32((height-p.y).rounded(.down)))
     }
     func applicationDidFinishLaunching(_ notification: Notification) {
         MainActor.assumeIsolated {
@@ -20,22 +36,85 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let package = try OriginalApplicationStartupInputs.bundled()
                 let overlay = try OriginalMacRuntimeOverlay.standard()
                 let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay)
-                retained = started
+                self.started = started
+                while try started.host.takeCommitted() != nil {}
                 let dates = started.host.snapshot.startup?.dates?.dates.map { String(decoding:$0.dropLast(),as:UTF8.self) } ?? []
                 let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
-                    "musicOutput":"silent (WMA playback not implemented)","next":"front-menu message loop not connected"])
-                if exitAfterStartup { NSApp.terminate(nil) } else { NSApp.activate(ignoringOtherApps:true) }
-            } catch {
-                Self.emit(["event":"failed","error":String(reflecting:error)])
-                if !exitAfterStartup {
-                    let alert = NSAlert(); alert.messageText = "NTSD startup stopped"
-                    alert.informativeText = String(reflecting:error); alert.runModal()
-                }
-                exit(1)
-            }
+                    "musicOutput":"silent (WMA playback not implemented)"])
+                if exitAfterStartup { NSApp.terminate(nil); return }
+                let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:Self.milliseconds,point:Self.cursorPoint)
+                self.menu = menu
+                try started.windows.setInput(started.window) { [weak self] event in self?.input(event) ?? false }
+                NSApp.activate(ignoringOtherApps:true)
+                schedule(0)
+            } catch { stop(error) }
         }
+    }
+    @MainActor private func input(_ event: NSEvent) -> Bool {
+        guard let menu,let started,!stopped else { return false }
+        let messages = menu.messages
+        switch event.type {
+        case .keyDown,.keyUp:
+            guard let key = OriginalMacRuntimeKey.table[event.keyCode] else { return true }
+            messages.key(key,down:event.type == .keyDown,repeated:event.isARepeat,characters:event.characters)
+        case .flagsChanged:
+            guard let key = OriginalMacRuntimeKey.table[event.keyCode] else { return true }
+            let down = !pressedModifiers.contains(event.keyCode)
+            if down { pressedModifiers.insert(event.keyCode) } else { pressedModifiers.remove(event.keyCode) }
+            messages.key(key,down:down)
+        case .mouseMoved,.leftMouseDragged,.rightMouseDragged,.leftMouseDown,.leftMouseUp,.rightMouseDown,.rightMouseUp:
+            guard let (x,y) = try? started.windows.clientPoint(started.window,event) else { return true }
+            let pressed = NSEvent.pressedMouseButtons
+            let buttons = UInt32(pressed & 1 != 0 ? 1 : 0) | UInt32(pressed & 2 != 0 ? 2 : 0)
+            let message: UInt32
+            switch event.type {
+            case .leftMouseDown: message = 0x201
+            case .leftMouseUp: message = 0x202
+            case .rightMouseDown: message = 0x204
+            case .rightMouseUp: message = 0x205
+            default: message = 0x200
+            }
+            messages.mouse(message,x:x,y:y,buttons:buttons)
+        default: return false
+        }
+        return true
+    }
+    @MainActor private func schedule(_ milliseconds: UInt32) {
+        DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(milliseconds))) { [weak self] in
+            MainActor.assumeIsolated { self?.iterate() }
+        }
+    }
+    @MainActor private func iterate() {
+        guard let menu,let started,!stopped else { return }
+        let sleeps = menu.messages.sleeps.count
+        do {
+            switch try menu.step() {
+            case .committed:
+                committed += 1
+                if let capture = captureAfter,committed == capture.count {
+                    try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:capture.path))
+                    Self.emit(["event":"captured","iterations":committed,"path":capture.path,"permits":menu.requests,
+                        "getDCFailures":menu.textRequests,"emptyBlits":menu.emptyBlits])
+                    if arguments.contains("--exit-after-capture") { NSApp.terminate(nil); return }
+                }
+                let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? menu.messages.sleeps.last! : 1) : 0
+                schedule(delay)
+            case .loading:
+                stopped = true
+                Self.emit(["event":"boundary","reason":"loading requested; runtime loading providers are not connected yet",
+                    "iterations":committed])
+            }
+        } catch { stop(error) }
+    }
+    @MainActor private func stop(_ error: Error) {
+        stopped = true
+        Self.emit(["event":"boundary","error":String(reflecting:error),"iterations":committed,
+            "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
+        if exitAfterStartup || arguments.contains("--exit-after-capture") { exit(1) }
+        let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"
+        alert.informativeText = String(reflecting:error); alert.runModal()
     }
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }

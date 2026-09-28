@@ -59,6 +59,18 @@ import NTSDCore
     private final class ContentView: NSView {
         let cursor: NSCursor
         var image: CGImage?
+        /// Live-app input consumer; without one AppKit's default handling applies.
+        var input: ((NSEvent) -> Bool)?
+        override var acceptsFirstResponder: Bool { input != nil }
+        override func keyDown(with event: NSEvent) { if input?(event) != true { super.keyDown(with:event) } }
+        override func keyUp(with event: NSEvent) { if input?(event) != true { super.keyUp(with:event) } }
+        override func flagsChanged(with event: NSEvent) { if input?(event) != true { super.flagsChanged(with:event) } }
+        override func mouseDown(with event: NSEvent) { if input?(event) != true { super.mouseDown(with:event) } }
+        override func mouseUp(with event: NSEvent) { if input?(event) != true { super.mouseUp(with:event) } }
+        override func rightMouseDown(with event: NSEvent) { if input?(event) != true { super.rightMouseDown(with:event) } }
+        override func rightMouseUp(with event: NSEvent) { if input?(event) != true { super.rightMouseUp(with:event) } }
+        override func mouseMoved(with event: NSEvent) { if input?(event) != true { super.mouseMoved(with:event) } }
+        override func mouseDragged(with event: NSEvent) { if input?(event) != true { super.mouseDragged(with:event) } }
         override func draw(_ dirtyRect: NSRect) {
             guard let image else { return }
             NSGraphicsContext.saveGraphicsState(); defer { NSGraphicsContext.restoreGraphicsState() }
@@ -126,6 +138,29 @@ import NTSDCore
         guard !owner.closed,let view = owner.window.contentView,
               let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
         view.cacheDisplay(in:view.bounds,to:bitmap); return try OriginalMacViewCapture(bitmap)
+    }
+    /// Routes AppKit key/mouse events of the original window to a live consumer
+    /// (returns true when consumed) and makes the view first responder.
+    public func setInput(_ token: UInt32,_ consumer: @escaping (NSEvent) -> Bool) throws {
+        let owner = try lease(token)
+        guard !owner.closed,let view = owner.window.contentView as? ContentView else { throw Boundary.geometry }
+        view.input = consumer; owner.window.acceptsMouseMovedEvents = true; owner.window.makeFirstResponder(view)
+    }
+    /// Client-area point (top-left origin, logical points) of a window event.
+    public func clientPoint(_ token: UInt32,_ event: NSEvent) throws -> (Int32,Int32) {
+        let owner = try lease(token)
+        guard let view = owner.window.contentView else { throw Boundary.geometry }
+        let p = view.convert(event.locationInWindow,from:nil)
+        return (Int32(p.x.rounded(.down)),Int32(p.y.rounded(.down)))
+    }
+    /// PNG of the actual cached view rendering, for app-level inspection.
+    public func snapshotPNG(_ token: UInt32) throws -> Data {
+        let owner = try lease(token)
+        guard !owner.closed,let view = owner.window.contentView,
+              let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
+        view.cacheDisplay(in:view.bounds,to:bitmap)
+        guard let data = bitmap.representation(using:.png,properties:[:]) else { throw Boundary.geometry }
+        return data
     }
     /// Shared LoadCursor(0, IDC_ARROW) identity once the class cursor exists.
     public var arrowCursorToken: UInt32? { cursor?.token }

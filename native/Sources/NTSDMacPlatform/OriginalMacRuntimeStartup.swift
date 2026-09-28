@@ -76,7 +76,7 @@ public struct OriginalMacRuntimeOverlay {
         let driver = try Driver(platform:Platform(inputs:inputs,prepared:prepared(inputs)),instance:0x400000,show:10,initial:inputs.initial)
         let windows = OriginalMacWindowBackend(instance:0x400000)
         let windowService = OriginalMacWindowStartupService(driver:driver,backend:windows)
-        let display = OriginalMacDisplayBackend(windows:windows),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
+        let display = OriginalMacDisplayBackend(windows:windows,freshSurfacesKnownBlack:true,presentUnknownAsBlack:true),displayService = OriginalMacDisplayStartupService(driver:driver,backend:display)
         let audio = OriginalMacAudioBackend(windows:windows),audioService = OriginalMacAudioService(backend:audio)
         let runtime = OriginalMacRuntimeStartupService(windows:windows,heap:OriginalMacRuntimeHeap(),environment:environment)
         var requests: [(owner: String,kind: String)] = []

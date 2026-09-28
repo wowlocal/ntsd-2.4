@@ -21,6 +21,13 @@ import NTSDCore
             answer:{ try driver.answer(permit,response:$0,retaining:$1) },
             fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
     }
+    /// Whole-iteration permits: only the menu-graphics window/front family.
+    public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {
+        guard case .graphics(let q) = permit.request else { throw OriginalMacDisplayBackend.Boundary.unsupported("iteration non-graphics family") }
+        try serve(q,begin:{ try driver.beginService(permit) },
+            answer:{ try driver.answer(permit,response:.graphics($0),retaining:$1) },
+            fail:{ try driver.fail(permit,diagnostic:$0,retaining:$1) })
+    }
     public func serve(_ permit: E.Permit,on exchange: E) throws {
         try serve(permit.request,begin:{ try exchange.beginService(permit) },
             answer:{ try exchange.answer(permit,response:$0,retaining:$1) },

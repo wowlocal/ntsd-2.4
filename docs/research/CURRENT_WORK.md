@@ -11,19 +11,22 @@ Native методов, включая целый caller загрузка→ка�
 (866bf83; OriginalCatalog через LFS); NTSDApp всё ещё запускает Practice.
 Правка process prompts применена (d1a930e). [`NTSDNative --original`](APPLICATION_RUNTIME_STARTUP.md)
 проходит весь WinMain на Mac-службах и runtime providers (75 запросов, без
-корпусов); новые4 и сохранённые9 тестов прошли, review открыт.
+корпусов); новые4 и сохранённые9 тестов прошли, review открыт. [Живое меню](APPLICATION_RUNTIME_MENU.md):
+приложение показывает и ведёт оригинальное главное меню (permit-итерации,
+очередь сообщений из NSEvent, WndProc default по статическому разбору EXE);
+51 тест прошёл, [снимок окна](../evidence/application-runtime-menu-capture.png).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) цикл сообщений
-меню принимает peek/get/time/sleep только заранее подготовленным массивом —
-нет permit-драйвера для живого ввода/часов; (2) текст GDI не поддержан растром;
-(3) целый caller получает allocate/bitmap/file/
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) загрузка после
+START: permit-доставка перезапускает попытку на каждый запрос (проверенный caller
+загрузки — 2072 запроса, ≈45 мин), нужен дешёвый путь и runtime providers;
+(2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
 беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** permit-драйвер цикла сообщений по образцу lifecycle/bitmap
-итераций и runtime-служба ввода/часов для первых итераций меню в приложении —
-снимает препятствие (1), без которого живое управление недоступно.
+**Следующая задача:** доставка ответов загрузки без повторного прогона попытки на
+каждый запрос (сохраняя receipts/rollback) и runtime providers common/catalog/
+pool/loaded-menu — снимает препятствие (1) для перехода START → загрузка.
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

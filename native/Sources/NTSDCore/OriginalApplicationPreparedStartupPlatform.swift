@@ -6,7 +6,7 @@ public protocol OriginalApplicationStartupResource: AnyObject {}
 /// inputs before entering Core. Observations are prepared values or replies to
 /// a suspended whole-startup request serviced outside Core. This class performs no
 /// host IO and does not derive clock, allocation, codepage or device responses.
-public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform, OriginalApplicationObservedLifecyclePlatform, OriginalApplicationObservedGraphicsPlatform {
+public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicationWindowStartupPlatform, OriginalApplicationObservedStartupPlatform, OriginalApplicationObservedBitmapPlatform, OriginalApplicationObservedLifecyclePlatform, OriginalApplicationObservedGraphicsPlatform, OriginalApplicationObservedIterationPlatform {
     public enum Kind: String, CaseIterable, Equatable {
         case milliseconds, criticalSection, com, panelWrite, panelClose, panelAllocation
         case panelBitmap, panelDevice, filetime, timezone, calendarAllocation, zoneName
@@ -96,6 +96,7 @@ public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicati
     public var bitmapDelivery = OriginalBitmapDelivery()
     public var lifecycleDelivery = OriginalLifecycleDelivery()
     public var graphicsDelivery = OriginalMenuGraphicsDelivery()
+    public var iterationDelivery = OriginalApplicationIterationDelivery()
     public var snapshot: Snapshot { state }
     public var panelIO: OriginalWinMainStartup.PanelIO { prepared.panelIO }
     public var environmentTZ: [UInt8]? { prepared.environmentTZ }
@@ -107,7 +108,7 @@ public final class OriginalApplicationPreparedStartupPlatform: OriginalApplicati
     }
     public func stagedCopy() throws -> OriginalApplicationPreparedStartupPlatform {
         let copy = OriginalApplicationPreparedStartupPlatform(inputs:inputs,prepared:prepared)
-        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery; copy.graphicsDelivery = graphicsDelivery
+        copy.state = state; copy.windowExchange = windowExchange; copy.startupExchange = startupExchange; copy.bitmapDelivery = bitmapDelivery; copy.lifecycleDelivery = lifecycleDelivery; copy.graphicsDelivery = graphicsDelivery; copy.iterationDelivery = iterationDelivery
         return copy
     }
     private func take<T>(_ kind: Kind,_ values: [T],matching matches: (T) -> Bool = { _ in true }) throws -> T {
