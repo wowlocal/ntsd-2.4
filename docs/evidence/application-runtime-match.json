@@ -1,0 +1,151 @@
+{
+  "schema": "ntsd-application-runtime-match-v1",
+  "UTC": "2026-09-28T13:49:37.320447+00:00",
+  "parentHead": "c1567cb006fd7da626b9a55a8fcacd8a620acb62",
+  "scope": "Release NTSDNative --original driven by scripted clicks/keys from the front menu through VS Mode, character and background selection to match launch and gameplay bodies; Native/Mac only; no original executed.",
+  "files": [
+    {
+      "path": "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift",
+      "bytes": 11087,
+      "sha256": "4f480f82ef7babcdcdcc6646775a9429bdf0ba421664ab827707810fb4ede83c"
+    },
+    {
+      "path": "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift",
+      "bytes": 16482,
+      "sha256": "afb50dd9c771d92b0829d3f2246a2099d96270ab7a37ab200e9c4bb3fcaaaad2"
+    }
+  ],
+  "script": "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 74; 1130 key 83; 1155 key 74; 1180 key 74; 1205 key 87; 1230 key 87; 1255 key 87; 1285 key 74",
+  "inputMeaning": {
+    "click350_230": "START",
+    "click402_218": "VS Mode",
+    "key74": "P1 attack J",
+    "key68": "P1 right D",
+    "key100": "P2 attack numpad4",
+    "key39": "P2 right arrow",
+    "key83": "P1 down S",
+    "key87": "P1 up W",
+    "roster": "? -> Naruto (1 right) ; ? -> Naruto, Sakura, Kakashi, Sai, Sasuke (5 right)",
+    "background": "confirm on Background cycles 100 (random) -> 99 -> 0 (District)"
+  },
+  "runs": [
+    {
+      "log": "original-vs1.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/34\\/01\",\"2026\\/10\\/02\\/15\\/34\\/01\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.8850671052932739}",
+        "{\"cycles\":31,\"event\":\"captured\",\"iterations\":100,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/vs1.png\"}"
+      ]
+    },
+    {
+      "log": "original-vs2.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/34\\/23\",\"2026\\/10\\/02\\/15\\/34\\/23\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.4569940567016602}",
+        "{\"cycles\":39,\"event\":\"captured\",\"iterations\":140,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/vs2.png\"}"
+      ]
+    },
+    {
+      "log": "original-cs1.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/34\\/46\",\"2026\\/10\\/02\\/15\\/34\\/46\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.5087289810180664}",
+        "{\"cycles\":56,\"event\":\"captured\",\"iterations\":175,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/cs1.png\"}",
+        "{\"cycles\":66,\"event\":\"captured\",\"iterations\":200,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/cs2.png\"}",
+        "{\"cycles\":77,\"event\":\"captured\",\"iterations\":225,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/cs3.png\"}"
+      ]
+    },
+    {
+      "log": "original-m1.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/35\\/25\",\"2026\\/10\\/02\\/15\\/35\\/25\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.5249010324478149}",
+        "{\"cycles\":74,\"event\":\"captured\",\"iterations\":245,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m1.png\"}",
+        "{\"cycles\":123,\"event\":\"captured\",\"iterations\":400,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m2.png\"}",
+        "{\"cycles\":145,\"event\":\"captured\",\"iterations\":460,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m3.png\"}"
+      ]
+    },
+    {
+      "log": "original-m2.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/35\\/53\",\"2026\\/10\\/02\\/15\\/35\\/53\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.3402459621429443}",
+        "{\"cycles\":197,\"event\":\"captured\",\"iterations\":600,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m4.png\"}",
+        "{\"cycles\":235,\"event\":\"captured\",\"iterations\":700,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m5.png\"}",
+        "{\"cycles\":271,\"event\":\"captured\",\"iterations\":800,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m6.png\"}"
+      ]
+    },
+    {
+      "log": "original-m3.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/36\\/20\",\"2026\\/10\\/02\\/15\\/36\\/20\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.4728740453720093}",
+        "{\"cycles\":302,\"event\":\"captured\",\"iterations\":900,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m7.png\"}",
+        "{\"cycles\":347,\"event\":\"captured\",\"iterations\":1000,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/m8.png\"}"
+      ]
+    },
+    {
+      "log": "original-a1.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/36\\/51\",\"2026\\/10\\/02\\/15\\/36\\/51\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.4385699033737183}",
+        "{\"cycles\":387,\"event\":\"captured\",\"iterations\":1060,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/a1.png\"}",
+        "{\"cycles\":419,\"event\":\"captured\",\"iterations\":1130,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/a2.png\"}"
+      ]
+    },
+    {
+      "log": "original-f1.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/37\\/37\",\"2026\\/10\\/02\\/15\\/37\\/37\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":5.4800679683685303}",
+        "{\"cycles\":438,\"event\":\"captured\",\"iterations\":1180,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/f1.png\"}",
+        "{\"error\":\"NTSDMacPlatform.OriginalMacDisplayBackend.Boundary.unsupported(\\\"undeclared bitmap file: bg\\\\\\\\sys\\\\\\\\CastleRoof\\\\\\\\castle2.bmp\\\")\",\"event\":\"boundary\",\"iterations\":1191,\"request\":\"graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \\\"blt\\\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \"}"
+      ]
+    },
+    {
+      "log": "original-f2.log",
+      "output": [
+        "{\"attempts\":76,\"dates\":[\"2026\\/09\\/28\\/15\\/48\\/33\",\"2026\\/10\\/02\\/15\\/48\\/33\"],\"event\":\"started\",\"musicOutput\":\"silent (WMA playback not implemented)\",\"overlay\":\"\\/Users\\/michael\\/Library\\/Application Support\\/NTSD Native\",\"owners\":{\"audio\":22,\"display\":8,\"runtime\":34,\"window\":11},\"requests\":75,\"sequence\":1,\"window\":3}",
+        "{\"allocations\":16105,\"audioRequests\":2072,\"bitmapRequests\":12817,\"event\":\"loaded\",\"files\":621,\"seconds\":6.0659070014953613}",
+        "{\"cycles\":538,\"event\":\"captured\",\"iterations\":1280,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/f4.png\"}",
+        "{\"cycles\":544,\"event\":\"matchLaunched\",\"iterations\":1290}",
+        "{\"cycles\":545,\"event\":\"gameplay\"}",
+        "{\"cycles\":588,\"event\":\"captured\",\"iterations\":1360,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/f5.png\"}",
+        "{\"cycles\":665,\"event\":\"captured\",\"iterations\":1460,\"path\":\"\\/private\\/tmp\\/claude-501\\/-Users-michael-Developer-ntsd-2-4\\/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97\\/scratchpad\\/f6.png\"}"
+      ]
+    }
+  ],
+  "findings": [
+    "VS Mode opens the controls panel; its key names are GDI text (omitted)",
+    "random background chose CastleRoof; only District arena layers are packaged -> undeclared bitmap file boundary (run original-f1)",
+    "with District selected: matchLaunched at iteration 1290, gameplay bodies from cycle 545 (run original-f2)"
+  ],
+  "captures": [
+    {
+      "path": "docs/evidence/application-runtime-selection-capture.png",
+      "bytes": 300891,
+      "sha256": "3782af6357c4c3e2f9f66d6315482affa853fe5242a8a58c46d24cc922722599"
+    },
+    {
+      "path": "docs/evidence/application-runtime-match-capture.png",
+      "bytes": 229872,
+      "sha256": "cff6175d8794ae382bb1ceec1e2d771b0883286bcbf35c2bc685977fa1e47d29"
+    }
+  ],
+  "gates": {
+    "matchLaunch": true,
+    "gameplayBodies": true,
+    "playerInputInGameplay": false,
+    "fullMatch": false,
+    "automatedTest": false,
+    "independentReview": false,
+    "textRaster": false,
+    "musicOutput": false,
+    "otherArenas": false,
+    "deviceAcceptance": false,
+    "windows": false,
+    "fullGame": false
+  },
+  "EXEEnvelopeRecalculated": false,
+  "originalExecuted": false
+}

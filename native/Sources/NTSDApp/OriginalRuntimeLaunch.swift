@@ -8,6 +8,9 @@ import NTSDMacPlatform
 /// Options: `--exit-after-startup`, `--capture-after N PATH` (window PNG after N
 /// committed menu iterations), `--exit-after-capture`, `--click-at N X Y`
 /// (scripted left click at client point X,Y after N committed iterations).
+/// `--script "N action args; ..."` runs scripted input at committed iteration N:
+/// `click X Y` (button held 10 iterations), `key VK` (held 10 iterations),
+/// `capture PATH`, `exit`. Counting uses committed outer iterations.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -18,12 +21,19 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private var captureAfter: (count: Int,path: String)?
     private var clickAt: (count: Int,x: Int32,y: Int32)?
     private var cycles = 0, gameplayBodies = 0
+    private var script: [Int:[[String]]] = [:]
     private var pressedModifiers: Set<UInt16> = []
     private var committed = 0, stopped = false
     init(exitAfterStartup: Bool) {
         self.exitAfterStartup = exitAfterStartup
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
             captureAfter = (n,arguments[i+2])
+        }
+        if let i = arguments.firstIndex(of:"--script"),i+1 < arguments.count {
+            for entry in arguments[i+1].split(separator:";") {
+                let words = entry.split(separator:" ").map(String.init)
+                if let n = words.first.flatMap({ Int($0) }),words.count > 1 { script[n,default:[]].append(Array(words.dropFirst())) }
+            }
         }
         if let i = arguments.firstIndex(of:"--click-at"),i+3 < arguments.count,let n = Int(arguments[i+1]),
            let x = Int32(arguments[i+2]),let y = Int32(arguments[i+3]) { clickAt = (n,x,y) }
@@ -105,6 +115,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     menu.messages.mouse(0x200,x:click.x,y:click.y,buttons:0)
                     menu.messages.mouse(0x201,x:click.x,y:click.y,buttons:1)
                 }
+                try runScript(committed,menu,started)
                 // Hold the button across game ticks, as a player's click does.
                 if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
@@ -134,6 +145,28 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 schedule(loading.sleeps.count > sleeps ? loading.sleeps.last! : 1)
             }
         } catch { stop(error) }
+    }
+    @MainActor private func runScript(_ n: Int,_ menu: OriginalMacRuntimeMenu,_ started: OriginalMacRuntimeStartup.Started) throws {
+        for words in script[n] ?? [] {
+            switch words[0] {
+            case "click" where words.count == 3:
+                guard let x = Int32(words[1]),let y = Int32(words[2]) else { continue }
+                menu.messages.mouse(0x200,x:x,y:y,buttons:0); menu.messages.mouse(0x201,x:x,y:y,buttons:1)
+                script[n+10,default:[]].append(["release",words[1],words[2]])
+            case "release" where words.count == 3:
+                guard let x = Int32(words[1]),let y = Int32(words[2]) else { continue }
+                menu.messages.mouse(0x202,x:x,y:y,buttons:0)
+            case "key" where words.count == 2,"keyup" where words.count == 2:
+                guard let vk = UInt32(words[1]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
+                if words[0] == "key" { menu.messages.key(key,down:true); script[n+10,default:[]].append(["keyup",words[1]]) }
+                else { menu.messages.key(key,down:false) }
+            case "capture" where words.count == 2:
+                try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
+                Self.emit(["event":"captured","iterations":n,"cycles":cycles,"path":words[1]])
+            case "exit": NSApp.terminate(nil)
+            default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
+            }
+        }
     }
     @MainActor private func stop(_ error: Error) {
         stopped = true

@@ -19,18 +19,20 @@ Native методов, включая целый caller загрузка→ка�
 каталог/pool/loaded menu за одну попытку (inline-ответы аудио; release 6.1с вместо
 ≈45мин) и через кэшированные циклы показывает меню режимов;
 [снимок](../evidence/application-runtime-loading-capture.png).
+[Матч запущен](APPLICATION_RUNTIME_MATCH.md): сценарием клавиш/кликов игрока
+приложение проходит VS Mode → Наруто/Саске → 0 компьютеров → District → Fight!
+до retained match launch и gameplay bodies; [снимок матча](../evidence/application-runtime-match-capture.png).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
-**Препятствия матчу Наруто/Саске на District в приложении:** (1) выбор режима/
-персонажей/арены через кэшированные циклы и `.matchPrelude`: runtime match launch
-(арена, replay, local time, музыка) и gameplay body не подключены;
-(2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
+**Препятствия матчу Наруто/Саске на District в приложении:** (1) бой с живым
+вводом до KO, экран результата и возврат не проверены; автоматического теста
+этого пути нет; (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
 беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** runtime match launch и gameplay body (resumeMatchLaunch/
-prepareLoadedUntilBoundary → resumeGameplay → tail → replay кадров) с живым вводом
-выбора VS Mode/Наруто/Саске/District — снимает препятствие (1).
+**Следующая задача:** довести бой до конца: ввод игроков в gameplay, раунд/KO,
+экран результата и возврат в меню, затем автоматический тест этого пути —
+снимает препятствие (1) до полного матча.
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

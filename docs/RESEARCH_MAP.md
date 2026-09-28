@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Naruto vs Sasuke on District starts in the app](research/APPLICATION_RUNTIME_MATCH.md):
+scripted player input reaches VS Mode, character and background selection, the
+retained match launch and gameplay bodies; the District match renders with HUD
+and both fighters. Next: live fighting to KO and return; automated test.
+[Evidence](evidence/application-runtime-match.json).
+
 [START → loading → mode menu in the app](research/APPLICATION_RUNTIME_LOADING.md):
 inline exchange delivery runs the whole catalog/pool/loaded-menu load in one attempt
 (release 6.1s vs ≈45min permit path) on runtime providers; cached loaded cycles
