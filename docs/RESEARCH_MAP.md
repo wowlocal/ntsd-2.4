@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Object input 406ba0 in Native and the app](research/APPLICATION_OBJECT_INPUT.md):
+`OriginalObjectInput` covers every hit_Fa the original DAT uses (1,3,4,5,7,8,10,
+12,14). Two Unicorn corpora of 880 real calls after the verified first loading
+(CW027f, CW037f) match Native in RNG calls, constructors, globals, World and all
+Actors; 4 tests pass. The app serves object input (one request in each of
+three fights); fights without specials run ≈4700 ticks. Next: character AI 4094b0. [Evidence](evidence/application-object-input.json).
+
 [Naruto vs Sasuke on District starts in the app](research/APPLICATION_RUNTIME_MATCH.md):
 scripted player input reaches VS Mode, character and background selection, the
 retained match launch and gameplay bodies; the District match renders with HUD

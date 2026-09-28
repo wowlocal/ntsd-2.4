@@ -1,0 +1,385 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T15:01:31.653913Z",
+ "parentHead": "455afeb",
+ "scope": "Card: object input child 406ba0 in NTSDCore and the app cycle; plan docs/research/APPLICATION_OBJECT_INPUT_PLAN.md",
+ "files": {
+  "native/Sources/NTSDCore/OriginalObjectInput.swift": "97ddb73500b8cc931985e54546e5976213187f83fe68e0a894c415787eecedd2",
+  "native/Sources/NTSDReferenceChecks/ObjectInputReference.swift": "0dc57ff96a821a2acef7ccea9969f529c1e61778d946c11955c902b02425a870",
+  "native/Sources/NTSDCatalogCheck/main.swift": "96e2850074339a75a933bb6ac51e65155ab3b2731c88fdd7173685ecec4d1196",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "2d0972d5325b94250001d6e4b5a47eb36dc261919398b0bed5f50d50700acabd",
+  "native/Tests/NTSDCoreTests/OriginalObjectInputTests.swift": "75a20740767af395db8d3aea913e96bbd3e0e5ea7189a146f69c4729afcdcd93",
+  "tools/oracle_object_input.py": "e12716eaf381d757375488d224dce2223a63aed386d1bc948ce9cf0c92fbbe3f",
+  "native/Tests/NTSDCoreTests/Fixtures/original-object-input.json": "a1a78c3cc99684bb706edec872ae2cf790202d3b99725c01ba16b15a80452761",
+  "native/Tests/NTSDCoreTests/Fixtures/original-object-input-control.json": "bb3a7fc5b181baab26c776ea466f32b94647c8012fa98d486e70ccb142b2ec87",
+  "docs/evidence/object-input.json": "cb8f46b645b67e117c00948cdb052e43f2da87cc479e0165c283ac3c349cbc03",
+  "docs/evidence/object-input-control.json": "3cdc0852bcd9b120d3d93120cc4256ff8d16d68304902ef2262acfe6395ea01f",
+  "docs/evidence/application-object-input-capture.png": "7d1d9e2a3fe34212271a78f79d9d7f4dec18f417a166ede3108b70bf166298ad",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "4d115d238504790d8d373e2d0b4292dce4702ee9c3617ebbb009e8e95c308c5c"
+ },
+ "staticDecode": {
+  "range": "406ba0..408cae (403 basic blocks), helpers 406a20 spawn (hit_Fa 11 only), 4061d0 constructor, 417170 RNG (tag, range), 4034e0 abs",
+  "recoveredHitFa": [
+   1,
+   3,
+   4,
+   5,
+   7,
+   8,
+   10,
+   12,
+   14
+  ],
+  "datFrames": 248,
+  "unusedBoundaries": [
+   2,
+   6,
+   9,
+   11,
+   13,
+   "any other positive value",
+   "target -1 read by hit_Fa 4/7"
+  ]
+ },
+ "comparison": {
+  "main": "Object input matches original: 880 real 406ba0 calls (hit_Fa 1:138 3:42 4:40 5:40 7:66 8:40 10:40 12:381 14:93), 384 RNG draws, 215 constructors, 353760 records, 414085760 bytes/masks, 308 executed body blocks; full first loading 137 Objects",
+  "control": "Object input matches original: 880 real 406ba0 calls (hit_Fa 1:138 3:42 4:40 5:40 7:66 8:40 10:40 12:381 14:93), 383 RNG draws, 218 constructors, 353760 records, 414085760 bytes/masks, 309 executed body blocks; full first loading 137 Objects",
+  "precision": {
+   "main": "CW027f / bits53",
+   "control": "CW037f / bits64 over the control loading"
+  },
+  "undefinedReads": 0,
+  "oracleAsserts": [
+   "allowed code ranges only",
+   "callee-saved registers and ret 4",
+   "x87 TOP unchanged and tags empty after a declared empty stack",
+   "globals change only in RNG words 450bcc/450c34"
+  ]
+ },
+ "coverage": {
+  "executedUnion": 309,
+  "staticBlocks": 403,
+  "unexecuted": 105,
+  "byReason": {
+   "hit_Fa 11 spawn fan (unused)": [
+    "0x406be0"
+   ],
+   "hit_Fa 8: Object 225 absent from catalog (unreachable with original data)": [
+    "0x4074a0"
+   ],
+   "hit_Fa 13 (unused)": [
+    "0x40769a",
+    "0x4076e0",
+    "0x4076e6",
+    "0x4076fc",
+    "0x407711",
+    "0x407721",
+    "0x40772e",
+    "0x407733",
+    "0x407748",
+    "0x40775c",
+    "0x40776b",
+    "0x407778",
+    "0x40777e",
+    "0x407794",
+    "0x4077a9",
+    "0x4077b9",
+    "0x4077c6",
+    "0x4077cc",
+    "0x4077e2",
+    "0x4077f7",
+    "0x407807",
+    "0x407814",
+    "0x40781a",
+    "0x407830",
+    "0x407845",
+    "0x407855",
+    "0x407862",
+    "0x40787c",
+    "0x407888",
+    "0x40788f",
+    "0x407899",
+    "0x40789b",
+    "0x40789d",
+    "0x4078a6",
+    "0x4078bc",
+    "0x4078c0",
+    "0x4078ce",
+    "0x4078e0",
+    "0x4078ee",
+    "0x4078f7",
+    "0x407a79",
+    "0x407a99",
+    "0x407abe"
+   ],
+   "hit_Fa 5: Object 219 absent (unreachable)": [
+    "0x407b98"
+   ],
+   "hit_Fa 7: own Object id absent (unreachable)": [
+    "0x407dc5"
+   ],
+   "hit_Fa 2 frame selection (unused)": [
+    "0x408589",
+    "0x408594",
+    "0x4085a2",
+    "0x4085ab",
+    "0x4085bb",
+    "0x4085cf",
+    "0x4085d8",
+    "0x4085e1",
+    "0x4088d6",
+    "0x4088e9",
+    "0x4088ee",
+    "0x4088f7",
+    "0x408900"
+   ],
+   "hit_Fa 14 frame<10 (+50): no hit_Fa 14 frame below 10 in the DAT (unreachable)": [
+    "0x408613"
+   ],
+   "hit_Fa 6/9 fans (unused)": [
+    "0x408910",
+    "0x40891d",
+    "0x408925",
+    "0x408936",
+    "0x40893e",
+    "0x408948",
+    "0x408950",
+    "0x408960",
+    "0x40896b",
+    "0x408980",
+    "0x408999",
+    "0x4089a6",
+    "0x4089b0",
+    "0x4089bb",
+    "0x4089c8",
+    "0x4089cf",
+    "0x4089d9",
+    "0x4089db",
+    "0x4089dd",
+    "0x4089e6",
+    "0x4089ef",
+    "0x4089f9",
+    "0x4089fe",
+    "0x408a13",
+    "0x408a2d",
+    "0x408a37",
+    "0x408a40",
+    "0x408a4e",
+    "0x408a5c",
+    "0x408a61",
+    "0x408a6a",
+    "0x408b7d",
+    "0x408bd3",
+    "0x408bda",
+    "0x408c22",
+    "0x408c52",
+    "0x408c5c",
+    "0x408c7e",
+    "0x408c82",
+    "0x408c8d",
+    "0x408c91",
+    "0x408c96",
+    "0x408ca0",
+    "0x408cae"
+   ]
+  }
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "result": "x87 check failed on the first call: Unicorn tags registers valid after reset (0xd555), control tag 0xffd5 after a balanced call; fixed by declaring an empty tag word before each call"
+  },
+  {
+   "round": 2,
+   "result": "880+880 captured; Native stopped: game RNG table 0x44ff90 is zero after first loading, OriginalRandom.validate rejects it. A diagnostic run with validation skipped matched both corpora fully (384/383 draws, 215/218 constructors). Corpora replaced."
+  },
+  {
+   "round": 3,
+   "result": "first case declares a match-start table (VC80 rand()%255+1 x3000 + terminator, seeds 0x406BA0 / +17); both corpora match with validation on; fixtures accepted"
+  }
+ ],
+ "tests": {
+  "filter": "OriginalObjectInputTests|OriginalMacRuntimeLoadingTests",
+  "tests": 4,
+  "failures": 0,
+  "seconds": 298.71,
+  "rerunAfterCounter": {
+   "filter": "OriginalMacRuntimeLoadingTests",
+   "tests": 2,
+   "failures": 0,
+   "seconds": 159.81,
+   "note": "objectInputs counter added after the first test run; test build compiled"
+  }
+ },
+ "app": {
+  "build": "release NTSDNative with an objectInputs counter (no behaviour change); OriginalObjectInput source identical to the accepted one",
+  "runs": [
+   {
+    "run": "explore1",
+    "script": "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 74; 1130 key 83; 1155 key 74; 1180 key 74; 1205 key 87; 1230 key 87; 1255 key 87; 1285 key 74; 1400 hold 65 52; 1413 key 74; 1425 key 74; 1437 hold 87 13; 1447 key 74; 1459 key 76; 1462 key 83; 1465 key 75; 1484 key 75; 1499 key 76; 1502 key 83; 1505 key 75; 1524 hold 87 28; 1534 key 76; 1537 key 87; 1540 key 74; 1559 hold 65 68; 1590 hold 68 23; 1616 hold 68 83; 1643 hold 65 48; 1677 key 74; 1689 hold 65 73; 1725 key 76; 1728 key 68; 1731 key 74; 1750 key 75; 1765 hold 83 13; 1775 hold 83 26; 1785 key 76; 1788 key 65; 1791 key 75; 1810 hold 68 84; 1832 key 75; 1847 hold 65 71; 1870 hold 83 27; 1880 key 76; 1883 key 87; 1886 key 74; 1905 key 74; 1917 key 74; 1929 key 76; 1932 key 83; 1935 key 75; 1954 key 74; 1966 hold 65 59; 1998 key 76; 2001 key 83; 2004 key 74; 2023 hold 65 21; 2057 hold 65 71; 2083 key 74; 2095 key 76; 2098 key 87; 2101 key 75; 2120 key 76; 2123 key 68; 2126 key 75; 2145 key 76; 2148 key 65; 2151 key 74; 2170 key 74; 2182 hold 68 90; 2198 key 76; 2201 key 83; 2204 key 75; 2223 key 76; 2226 key 83; 2229 key 75; 2248 hold 68 78; 2277 hold 65 42; 2304 key 75; 2319 key 76; 2322 key 87; 2325 key 74; 2344 key 76; 2347 key 68; 2350 key 74; 2369 key 76; 2372 key 83; 2375 key 74; 2394 key 76; 2397 key 87; 2400 key 74; 2419 hold 65 64; 2438 hold 65 52; 2464 key 76; 2467 key 87; 2470 key 75; 2489 key 74; 2501 key 74; 2513 key 74; 2525 hold 68 63; 2548 key 76; 2551 key 87; 2554 key 74; 2573 hold 65 75; 2609 key 76; 2612 key 65; 2615 key 74; 2634 key 74; 2646 hold 65 77; 2678 key 74; 2690 key 74; 2702 key 76; 2705 key 83; 2708 key 74; 2727 key 74; 2739 hold 68 74; 2750 hold 87 40; 2760 hold 65 59; 2772 key 76; 2775 key 87; 2778 key 75; 2797 hold 83 28; 2807 hold 65 24; 2835 key 76; 2838 key 83; 2841 key 74; 2860 key 76; 2863 key 68; 2866 key 75; 2885 hold 65 46; 2913 hold 83 28; 2923 hold 65 69; 2942 key 74; 2954 hold 68 56; 2964 hold 68 37; 2984 key 74; 2996 hold 65 68; 3035 key 74; 3047 key 76; 3050 key 83; 3053 key 74; 3072 hold 65 30; 3086 hold 65 54; 3120 key 74; 3132 key 74; 3144 hold 68 63; 3157 hold 68 37; 3185 key 75; 3200 hold 65 72; 3212 key 74; 3224 key 76; 3227 key 65; 3230 key 74; 3249 key 74; 3261 key 75; 3276 key 76; 3279 key 83; 3282 key 74; 3301 key 75; 3316 hold 65 54; 3337 key 76; 3340 key 68; 3343 key 75; 3362 key 76; 3365 key 68; 3368 key 74; 3387 key 76; 3390 key 68; 3393 key 74; 3412 hold 65 25; 3428 hold 68 40; 3441 key 74; 3453 hold 87 33; 3463 key 76; 3466 key 83; 3469 key 75; 3488 key 76; 3491 key 87; 3494 key 75; 3513 hold 83 13; 3523 hold 68 25; 3533 hold 68 60; 3557 key 74; 3569 key 74; 3581 hold 68 78; 3594 hold 68 65; 3612 hold 65 59; 3628 hold 65 55; 3640 key 76; 3643 key 83; 3646 key 74; 3665 hold 83 40; 3675 hold 68 25; 3695 hold 68 51; 3715 hold 65 51; 3732 hold 65 71; 3744 hold 65 29; 3754 key 75; 3769 hold 68 83; 3794 key 76; 3797 key 65; 3800 key 74; 3819 key 74; 3831 key 76; 3834 key 68; 3837 key 74; 3856 hold 65 38; 3892 key 76; 3895 key 87; 3898 key 74; 3917 hold 83 14; 3927 key 76; 3930 key 65; 3933 key 74; 3952 key 76; 3955 key 65; 3958 key 74; 3977 hold 65 26; 4009 key 76; 4012 key 65; 4015 key 75; 4034 key 76; 4037 key 83; 4040 key 75; 4059 key 74; 4071 key 74; 4083 key 76; 4086 key 83; 4089 key 74; 4108 key 74; 4120 key 74; 4132 hold 65 73; 4160 hold 68 37; 4188 hold 68 55; 4210 key 75; 4225 hold 65 49; 4250 hold 68 84; 4288 key 75; 4303 key 74; 4315 hold 87 17; 4325 key 74; 4337 hold 87 32; 4347 key 74; 4359 key 75; 4374 key 76; 4377 key 87; 4380 key 74; 4399 hold 65 85; 4429 key 76; 4432 key 65; 4435 key 74; 4454 key 74; 4466 hold 83 15; 4476 hold 83 29; 4486 hold 65 85; 4514 key 74; 4526 hold 68 47; 4566 key 75; 4581 key 76; 4584 key 68; 4587 key 75; 4606 hold 83 22; 4616 key 74; 4628 hold 65 87; 4640 key 76; 4643 key 68; 4646 key 75; 4665 hold 87 40; 4675 key 76; 4678 key 68; 4681 key 75; 4700 key 76; 4703 key 65; 4706 key 75; 4725 key 76; 4728 key 83; 4731 key 75; 4750 hold 68 76; 4764 key 75; 4779 key 74; 4791 hold 68 88; 4814 key 76; 4817 key 87; 4820 key 75; 4839 hold 65 44; 4865 key 74; 4877 hold 65 53; 4893 hold 65 89; 4909 hold 68 77; 4944 key 76; 4947 key 65; 4950 key 75; 4969 key 74; 4981 key 76; 4984 key 65; 4987 key 75; 5006 hold 65 23; 5019 key 75; 5034 hold 68 37; 5046 key 74; 5058 key 75; 5073 key 74; 5085 key 74; 5097 key 74; 5109 key 74; 5121 hold 68 77; 5142 key 74; 5154 key 74; 5166 key 76; 5169 key 83; 5172 key 74; 5191 key 75; 5206 key 74; 5218 hold 65 55; 5248 key 75; 5263 key 76; 5266 key 65; 5269 key 75; 5288 key 75; 5303 key 74; 5315 key 76; 5318 key 87; 5321 key 74; 5340 key 74; 5352 hold 87 21; 5362 key 74; 5374 hold 83 22; 5384 key 74; 5396 key 75; 5411 key 76; 5414 key 68; 5417 key 75; 5436 key 76; 5439 key 65; 5442 key 75; 5461 key 75; 5476 key 74; 5488 key 75; 5503 key 75; 5518 key 76; 5521 key 87; 5524 key 74; 5543 key 76; 5546 key 68; 5549 key 75; 5568 key 76; 5571 key 83; 5574 key 75; 5593 hold 68 82; 5608 key 74; 5620 hold 65 74; 5632 key 74; 5644 hold 87 15; 5654 key 74; 5666 key 76; 5669 key 68; 5672 key 75; 5691 key 75; 5706 hold 68 46; 5732 hold 68 54; 5744 hold 68 79; 5770 key 75; 5785 hold 68 54; 5806 key 75; 5821 hold 68 42; 5846 key 76; 5849 key 87; 5852 key 74; 5871 hold 65 23; 5908 key 76; 5911 key 83; 5914 key 75; 5933 key 76; 5936 key 65; 5939 key 75; 5958 hold 65 76; 5986 key 76; 5989 key 65; 5992 key 75; 6011 key 74; 6023 hold 65 76; 6044 key 74; 6056 key 74; 6068 hold 65 59; 6080 hold 68 61; 6105 key 76; 6108 key 65; 6111 key 74; 6130 hold 65 47; 6161 hold 68 63; 6192 key 76; 6195 key 68; 6198 key 74; 6217 hold 68 49; 6242 key 74; 6254 key 76; 6257 key 65; 6260 key 74; 6279 key 76; 6282 key 83; 6285 key 75; 6304 hold 68 62; 6329 key 75; 6344 key 76; 6347 key 68; 6350 key 74; 6369 hold 65 81; 6389 key 76; 6392 key 87; 6395 key 74; 6414 key 74; 6426 key 76; 6429 key 65; 6432 key 74; 6451 hold 65 89; 6462 key 75; 6477 hold 65 79; 6507 key 76; 6510 key 68; 6513 key 74; 6532 key 74; 6544 key 74; 6556 hold 68 35; 6579 hold 65 83; 6609 hold 68 44; 6640 key 74; 6652 key 74; 6664 hold 68 51; 6681 hold 65 64; 6704 key 75; 6719 key 75; 6734 key 74; 6746 hold 68 90; 6769 key 74; 6781 hold 83 39; 6791 hold 83 33; 6801 key 75; 6816 key 76; 6819 key 68; 6822 key 75; 6841 hold 65 39; 6852 key 76; 6855 key 83; 6858 key 74; 6877 hold 65 85; 6902 key 74; 6914 hold 68 25; 6928 key 74; 6940 key 74; 6952 hold 68 77; 6962 hold 83 12; 6972 hold 68 30; 6991 hold 68 27; 7024 hold 65 53; 7059 key 74; 7071 hold 68 32; 7094 key 76; 7097 key 65; 7100 key 75; 7119 key 76; 7122 key 83; 7125 key 75; 7144 hold 68 87; 7171 hold 87 38; 7181 key 76; 7184 key 87; 7187 key 74; 7206 hold 68 86; 7226 hold 68 36; 7254 hold 68 88; 7274 key 74; 7286 key 74; 7298 hold 65 87; 7311 hold 68 61; 7339 hold 68 81; 7363 key 76; 7366 key 83; 7369 key 74; 7388 key 76; 7391 key 68; 7394 key 74; 7413 hold 68 52; 7448 hold 68 66; 7488 key 76; 7491 key 87; 7494 key 75; 7513 key 74; 7525 key 75; 7540 key 74; 7552 key 74; 7564 hold 68 48; 7592 hold 65 43; 7626 key 74; 7638 hold 87 35; 7648 hold 68 33; 7664 hold 65 29; 7699 key 76; 7702 key 65; 7705 key 75; 7724 hold 68 82; 7756 key 76; 7759 key 65; 7762 key 74; 7781 key 75; 7796 key 76; 7799 key 65; 7802 key 75; 7821 key 74; 7833 key 74; 7845 key 76; 7848 key 65; 7851 key 75; 7870 hold 83 23; 7880 hold 68 85; 7918 key 74; 7930 key 74; 7942 key 76; 7945 key 83; 7948 key 74; 7967 key 74; 7979 key 76; 7982 key 68; 7985 key 74; 8004 key 76; 8007 key 68; 8010 key 74; 8029 key 76; 8032 key 87; 8035 key 75; 8054 key 74; 8066 key 74; 8078 key 76; 8081 key 83; 8084 key 75; 8103 key 74; 8115 hold 68 37; 8142 key 76; 8145 key 65; 8148 key 75; 8167 key 75; 8182 key 76; 8185 key 68; 8188 key 75; 8207 key 74; 8219 hold 65 31; 8258 hold 65 69; 8276 key 74; 8288 key 76; 8291 key 87; 8294 key 75; 8313 key 76; 8316 key 83; 8319 key 75; 8338 key 76; 8341 key 83; 8344 key 75; 8363 hold 65 22; 8378 key 76; 8381 key 87; 8384 key 74; 8403 key 75; 8418 hold 68 53; 8458 key 74; 8470 hold 83 23; 8480 key 74; 8492 key 76; 8495 key 65; 8498 key 75; 8517 key 76; 8520 key 83; 8523 key 75; 8542 hold 65 46; 8582 hold 65 33; 8600 hold 65 71; 8630 hold 87 12; 8640 key 74; 8652 key 76; 8655 key 68; 8658 key 74; 8677 key 74; 8689 key 74; 8701 key 76; 8704 key 68; 8707 key 75; 8726 key 76; 8729 key 68; 8732 key 75; 8751 hold 87 25; 8761 key 76; 8764 key 68; 8767 key 74; 8786 hold 87 37; 8796 key 74; 8808 hold 83 31; 8818 key 74; 8830 key 76; 8833 key 68; 8836 key 75; 8855 hold 68 45; 8870 key 74; 8882 key 74; 8894 key 76; 8897 key 87; 8900 key 75; 8919 key 75; 8934 key 76; 8937 key 65; 8940 key 75; 8959 key 76; 8962 key 68; 8965 key 74; 8984 key 76; 8987 key 87; 8990 key 75; 9009 capture <scratch>/explore1.png; 9014 exit",
+    "withSpecials": true,
+    "events": [
+     {
+      "attempts": 76,
+      "dates": [
+       "2026/09/28/17/02/05",
+       "2026/10/02/17/02/05"
+      ],
+      "event": "started",
+      "musicOutput": "silent (WMA playback not implemented)",
+      "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+      "owners": {
+       "audio": 22,
+       "display": 8,
+       "runtime": 34,
+       "window": 11
+      },
+      "requests": 75,
+      "sequence": 1,
+      "window": 3
+     },
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "event": "loaded",
+      "files": 621,
+      "seconds": 7.381103992462158
+     },
+     {
+      "cycles": 464,
+      "event": "matchLaunched",
+      "iterations": 1288
+     },
+     {
+      "cycles": 465,
+      "event": "gameplay",
+      "uptime": 888135.7200448334
+     },
+     {
+      "error": "NTSDMacPlatform.OriginalMacRuntimeLoading.Boundary.unexpected(\"AI/object child characterAI slot 56 object 12 header6f4 33 frame 307\")",
+      "event": "boundary",
+      "iterations": 2266,
+      "objectInputs": 1,
+      "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+     }
+    ]
+   },
+   {
+    "run": "explore4",
+    "script": "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 74; 1130 key 83; 1155 key 74; 1180 key 74; 1205 key 87; 1230 key 87; 1255 key 87; 1285 key 74; 1400 hold 65 70; 1425 hold 65 22; 1447 key 74; 1459 hold 65 48; 1485 key 74; 1497 hold 65 33; 1515 hold 65 53; 1550 hold 65 59; 1569 key 74; 1581 key 74; 1593 hold 83 12; 1603 key 75; 1618 hold 68 84; 1635 hold 68 55; 1647 hold 83 10; 1657 hold 83 37; 1667 key 75; 1682 hold 68 56; 1705 key 74; 1717 hold 68 25; 1729 hold 68 55; 1755 key 74; 1767 key 74; 1779 hold 68 45; 1791 key 74; 1803 hold 68 76; 1821 hold 68 61; 1851 key 74; 1863 hold 87 36; 1873 hold 65 55; 1907 key 74; 1919 hold 87 20; 1929 hold 83 24; 1939 hold 68 30; 1977 hold 83 33; 1987 key 74; 1999 hold 68 56; 2019 hold 83 37; 2029 hold 87 19; 2039 key 74; 2051 hold 83 14; 2061 hold 68 40; 2081 key 74; 2093 hold 68 41; 2114 key 75; 2129 hold 68 32; 2153 hold 83 39; 2163 hold 65 27; 2174 key 74; 2186 key 74; 2198 hold 87 27; 2208 key 74; 2220 hold 65 35; 2256 key 74; 2268 key 75; 2283 key 74; 2295 hold 83 16; 2305 hold 68 82; 2316 hold 68 51; 2346 hold 87 25; 2356 hold 65 52; 2374 hold 65 49; 2397 hold 87 20; 2407 hold 68 34; 2435 key 74; 2447 hold 87 25; 2457 hold 68 46; 2496 hold 87 20; 2506 hold 68 60; 2542 key 74; 2554 hold 68 54; 2574 hold 83 12; 2584 hold 83 40; 2594 key 74; 2606 hold 68 36; 2640 hold 87 37; 2650 hold 68 79; 2678 key 74; 2690 key 74; 2702 hold 65 47; 2741 hold 68 52; 2754 hold 68 48; 2781 hold 65 40; 2812 key 74; 2824 key 75; 2839 key 74; 2851 key 75; 2866 hold 83 10; 2876 hold 68 34; 2901 key 74; 2913 hold 65 25; 2934 hold 68 21; 2953 key 75; 2968 key 75; 2983 hold 68 78; 3005 hold 68 69; 3022 key 75; 3037 hold 83 13; 3047 hold 68 66; 3073 hold 83 37; 3083 key 74; 3095 key 74; 3107 key 74; 3119 hold 83 39; 3129 key 75; 3144 key 74; 3156 key 75; 3171 hold 65 42; 3203 hold 68 63; 3221 key 74; 3233 hold 87 10; 3243 key 74; 3255 hold 65 82; 3290 key 74; 3302 key 74; 3314 hold 65 72; 3351 hold 65 43; 3388 key 74; 3400 key 74; 3412 key 74; 3424 hold 68 59; 3463 hold 83 29; 3473 key 74; 3485 hold 68 66; 3516 hold 68 30; 3545 hold 68 42; 3564 hold 83 16; 3574 key 74; 3586 hold 68 31; 3598 key 74; 3610 hold 87 20; 3620 key 74; 3632 hold 68 22; 3661 hold 65 65; 3696 key 75; 3711 hold 65 83; 3742 key 74; 3754 hold 87 15; 3764 key 74; 3776 key 74; 3788 key 74; 3800 key 74; 3812 key 75; 3827 hold 68 71; 3865 key 74; 3877 hold 87 19; 3887 hold 68 61; 3914 key 74; 3926 hold 83 26; 3936 key 74; 3948 key 75; 3963 hold 68 21; 3981 hold 68 78; 4013 key 74; 4025 key 75; 4040 key 74; 4052 hold 65 39; 4078 hold 68 64; 4107 key 75; 4122 hold 83 25; 4132 hold 68 28; 4146 hold 87 19; 4156 hold 65 40; 4178 key 75; 4193 key 74; 4205 key 74; 4217 hold 83 10; 4227 key 74; 4239 hold 65 46; 4250 hold 87 13; 4260 hold 68 56; 4289 hold 87 33; 4299 hold 68 36; 4337 key 74; 4349 hold 68 20; 4382 hold 87 26; 4392 key 74; 4404 hold 68 81; 4430 hold 65 40; 4467 hold 83 27; 4477 key 74; 4489 hold 83 15; 4499 hold 68 23; 4517 hold 87 19; 4527 hold 87 12; 4537 hold 68 21; 4554 hold 65 81; 4593 key 74; 4605 hold 68 68; 4625 key 75; 4640 key 75; 4655 key 74; 4667 hold 68 65; 4686 hold 83 29; 4696 key 74; 4708 key 75; 4723 hold 68 59; 4758 hold 83 35; 4768 key 75; 4783 hold 83 38; 4793 hold 68 24; 4822 hold 68 65; 4861 hold 68 25; 4886 key 74; 4898 key 75; 4913 key 74; 4925 hold 68 29; 4945 key 75; 4960 hold 83 13; 4970 key 74; 4982 hold 87 12; 4992 key 75; 5007 key 74; 5019 key 74; 5031 hold 68 24; 5041 key 74; 5053 hold 68 51; 5091 key 74; 5103 hold 68 69; 5133 key 74; 5145 hold 68 83; 5157 key 75; 5172 hold 83 27; 5182 key 74; 5194 key 75; 5209 key 74; 5221 key 74; 5233 hold 65 81; 5271 key 74; 5283 hold 83 34; 5293 hold 83 20; 5303 key 75; 5318 hold 68 85; 5330 hold 68 56; 5361 hold 87 29; 5371 key 75; 5386 hold 65 31; 5418 hold 68 47; 5456 key 74; 5468 key 75; 5483 key 74; 5495 hold 68 46; 5510 hold 68 32; 5523 key 75; 5538 hold 68 39; 5577 key 74; 5589 key 74; 5601 hold 87 34; 5611 key 75; 5626 hold 65 53; 5637 key 74; 5649 key 74; 5661 key 74; 5673 key 75; 5688 key 75; 5703 hold 87 15; 5713 key 75; 5728 hold 65 40; 5759 hold 87 31; 5769 hold 83 13; 5779 key 75; 5794 key 75; 5809 hold 68 89; 5834 key 74; 5846 hold 68 71; 5882 hold 65 43; 5896 hold 68 50; 5917 key 74; 5929 hold 68 64; 5951 hold 68 34; 5991 hold 68 43; 6018 hold 65 35; 6034 hold 68 61; 6074 key 74; 6086 hold 83 35; 6096 key 74; 6108 hold 65 68; 6137 key 74; 6149 hold 68 37; 6173 hold 68 73; 6189 hold 68 26; 6227 hold 65 87; 6238 hold 68 50; 6267 hold 65 22; 6289 key 74; 6301 key 75; 6316 hold 65 37; 6331 key 74; 6343 hold 68 60; 6370 key 74; 6382 hold 68 89; 6413 hold 83 18; 6423 key 74; 6435 hold 87 27; 6445 hold 68 45; 6470 key 74; 6482 hold 68 45; 6497 hold 68 37; 6526 key 75; 6541 key 74; 6553 hold 65 26; 6588 key 75; 6603 hold 65 53; 6632 hold 68 55; 6648 key 74; 6660 key 75; 6675 key 74; 6687 key 75; 6702 hold 65 56; 6741 key 74; 6753 hold 68 66; 6765 hold 68 30; 6800 key 74; 6812 hold 83 16; 6822 key 75; 6837 hold 87 16; 6847 key 74; 6859 key 74; 6871 hold 65 21; 6909 hold 68 86; 6935 key 74; 6947 hold 68 63; 6978 hold 65 85; 7010 capture <scratch>/explore4.png; 7015 exit",
+    "withSpecials": false,
+    "events": [
+     {
+      "attempts": 76,
+      "dates": [
+       "2026/09/28/17/02/05",
+       "2026/10/02/17/02/05"
+      ],
+      "event": "started",
+      "musicOutput": "silent (WMA playback not implemented)",
+      "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+      "owners": {
+       "audio": 22,
+       "display": 8,
+       "runtime": 34,
+       "window": 11
+      },
+      "requests": 75,
+      "sequence": 1,
+      "window": 3
+     },
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "event": "loaded",
+      "files": 621,
+      "seconds": 7.545642971992493
+     },
+     {
+      "cycles": 456,
+      "event": "matchLaunched",
+      "iterations": 1287
+     },
+     {
+      "cycles": 457,
+      "event": "gameplay",
+      "uptime": 888135.6365507917
+     },
+     {
+      "cycles": 5211,
+      "event": "captured",
+      "gameplayBodies": 4755,
+      "iterations": 7010,
+      "objectInputs": 1,
+      "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/explore4.png",
+      "uptime": 888292.5355373333
+     }
+    ]
+   },
+   {
+    "run": "explore5",
+    "script": "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 74; 1130 key 83; 1155 key 74; 1180 key 74; 1205 key 87; 1230 key 87; 1255 key 87; 1285 key 74; 1400 key 74; 1412 key 74; 1424 key 75; 1439 hold 87 36; 1449 key 74; 1461 hold 87 38; 1471 hold 68 80; 1508 hold 68 33; 1536 hold 68 47; 1559 hold 68 40; 1593 key 75; 1608 hold 68 76; 1622 hold 65 46; 1656 hold 65 41; 1675 hold 65 89; 1713 key 74; 1725 hold 68 45; 1765 hold 83 19; 1775 hold 68 41; 1814 hold 65 62; 1833 key 75; 1848 key 74; 1860 key 74; 1872 key 74; 1884 hold 68 59; 1909 key 74; 1921 hold 68 42; 1932 hold 65 65; 1969 key 74; 1981 key 74; 1993 key 74; 2005 hold 65 77; 2016 key 74; 2028 key 74; 2040 hold 87 34; 2050 hold 68 64; 2076 hold 68 52; 2110 key 74; 2122 key 74; 2134 key 75; 2149 hold 68 24; 2172 hold 87 16; 2182 hold 68 66; 2221 hold 68 89; 2233 hold 68 59; 2248 key 75; 2263 key 74; 2275 key 74; 2287 hold 68 40; 2320 hold 68 88; 2359 key 74; 2371 hold 68 64; 2407 hold 68 73; 2421 hold 68 24; 2456 key 74; 2468 key 75; 2483 hold 68 36; 2513 hold 83 13; 2523 hold 68 39; 2534 key 75; 2549 hold 68 41; 2575 key 74; 2587 key 74; 2599 key 74; 2611 key 74; 2623 hold 68 38; 2636 hold 68 42; 2666 hold 83 15; 2676 hold 68 85; 2711 key 74; 2723 key 74; 2735 hold 68 24; 2769 hold 68 55; 2805 key 74; 2817 key 75; 2832 key 74; 2844 hold 68 42; 2872 hold 83 27; 2882 key 75; 2897 hold 68 79; 2916 key 75; 2931 key 74; 2943 key 75; 2958 hold 68 64; 2991 hold 83 21; 3001 hold 87 37; 3011 hold 83 21; 3021 hold 87 26; 3031 hold 87 36; 3041 hold 68 56; 3073 hold 68 73; 3088 key 74; 3100 hold 83 19; 3110 key 74; 3122 key 75; 3137 key 74; 3149 key 74; 3161 hold 65 76; 3190 key 74; 3202 hold 68 43; 3232 key 74; 3244 hold 87 15; 3254 hold 65 34; 3274 hold 83 16; 3284 key 74; 3296 key 74; 3308 hold 68 29; 3336 hold 68 67; 3346 hold 68 72; 3383 hold 68 67; 3423 hold 68 58; 3436 hold 68 63; 3476 key 74; 3488 hold 87 23; 3498 key 74; 3510 key 74; 3522 key 74; 3534 key 74; 3546 hold 68 81; 3586 hold 65 31; 3607 key 75; 3622 key 74; 3634 hold 68 89; 3648 hold 68 68; 3671 key 74; 3683 hold 68 81; 3715 hold 65 53; 3748 hold 83 18; 3758 key 74; 3770 hold 68 82; 3809 hold 68 23; 3822 key 74; 3834 hold 87 19; 3844 hold 65 70; 3854 key 74; 3866 key 74; 3878 hold 68 24; 3895 key 74; 3907 key 75; 3922 key 74; 3934 hold 68 80; 3960 key 74; 3972 key 74; 3984 key 74; 3996 hold 65 58; 4015 key 74; 4027 hold 68 87; 4037 key 74; 4049 hold 68 36; 4060 hold 68 78; 4091 hold 87 10; 4101 key 74; 4113 key 75; 4128 key 74; 4140 key 74; 4152 hold 83 37; 4162 hold 83 25; 4172 hold 68 45; 4210 hold 65 58; 4246 hold 68 56; 4276 key 75; 4291 hold 87 15; 4301 key 74; 4313 key 74; 4325 key 74; 4337 hold 65 74; 4365 key 74; 4377 hold 68 49; 4395 key 75; 4410 key 75; 4425 key 74; 4437 hold 68 74; 4449 hold 83 11; 4459 hold 65 48; 4488 key 74; 4500 hold 87 19; 4510 key 74; 4522 key 74; 4534 hold 65 72; 4569 hold 68 47; 4580 key 74; 4592 key 74; 4604 key 74; 4616 hold 68 35; 4649 hold 68 37; 4659 key 74; 4671 hold 68 82; 4696 hold 68 67; 4735 hold 68 57; 4749 key 74; 4761 key 74; 4773 hold 68 90; 4802 hold 65 90; 4819 hold 68 86; 4833 key 75; 4848 hold 83 33; 4858 hold 65 22; 4888 hold 68 24; 4900 hold 83 17; 4910 hold 68 81; 4950 hold 68 23; 4977 key 74; 4989 hold 65 74; 5020 key 75; 5035 key 74; 5047 hold 68 82; 5083 hold 68 68; 5104 key 75; 5119 hold 68 64; 5154 hold 65 65; 5184 hold 68 75; 5224 hold 87 28; 5234 hold 87 33; 5244 hold 65 32; 5255 hold 65 45; 5266 key 74; 5278 hold 83 10; 5288 key 74; 5300 hold 68 74; 5320 key 74; 5332 hold 65 40; 5344 hold 68 80; 5358 key 74; 5370 hold 65 56; 5401 hold 68 24; 5422 hold 83 20; 5432 hold 87 31; 5442 key 74; 5454 key 75; 5469 hold 68 61; 5488 key 74; 5500 hold 65 24; 5516 key 74; 5528 key 74; 5540 key 74; 5552 key 74; 5564 hold 83 31; 5574 hold 68 66; 5593 hold 68 79; 5608 key 75; 5623 hold 65 25; 5653 key 74; 5665 key 74; 5677 hold 68 27; 5701 key 75; 5716 key 74; 5728 hold 68 86; 5756 hold 65 29; 5773 hold 83 12; 5783 hold 87 31; 5793 hold 65 83; 5815 key 75; 5830 hold 68 77; 5849 key 74; 5861 hold 87 15; 5871 key 74; 5883 key 74; 5895 hold 65 30; 5934 hold 65 31; 5961 hold 87 29; 5971 hold 68 47; 6000 hold 68 65; 6025 key 74; 6037 key 75; 6052 key 74; 6064 hold 65 59; 6096 key 74; 6108 key 75; 6123 hold 65 37; 6142 key 74; 6154 key 75; 6169 hold 68 60; 6183 hold 65 80; 6200 key 74; 6212 key 75; 6227 hold 87 18; 6237 hold 68 51; 6248 key 74; 6260 key 75; 6275 hold 87 12; 6285 key 74; 6297 hold 68 20; 6335 hold 65 23; 6359 hold 68 22; 6392 hold 68 54; 6405 key 75; 6420 hold 65 61; 6432 hold 65 53; 6457 key 74; 6469 hold 65 89; 6503 key 74; 6515 hold 65 26; 6529 key 75; 6544 key 74; 6556 hold 68 22; 6573 key 74; 6585 hold 65 62; 6606 hold 68 40; 6639 hold 83 26; 6649 key 74; 6661 key 74; 6673 hold 68 74; 6686 hold 68 49; 6710 key 74; 6722 hold 65 40; 6749 key 74; 6761 key 74; 6773 hold 65 73; 6804 hold 65 24; 6843 key 74; 6855 key 74; 6867 hold 83 24; 6877 hold 68 45; 6896 key 74; 6908 hold 65 66; 6929 key 75; 6944 key 75; 6959 key 74; 6971 hold 87 29; 6981 key 74; 6993 hold 65 50; 7018 capture <scratch>/explore5.png; 7023 exit",
+    "withSpecials": false,
+    "events": [
+     {
+      "attempts": 76,
+      "dates": [
+       "2026/09/28/17/02/05",
+       "2026/10/02/17/02/05"
+      ],
+      "event": "started",
+      "musicOutput": "silent (WMA playback not implemented)",
+      "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+      "owners": {
+       "audio": 22,
+       "display": 8,
+       "runtime": 34,
+       "window": 11
+      },
+      "requests": 75,
+      "sequence": 1,
+      "window": 3
+     },
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "event": "loaded",
+      "files": 621,
+      "seconds": 7.572551965713501
+     },
+     {
+      "cycles": 472,
+      "event": "matchLaunched",
+      "iterations": 1288
+     },
+     {
+      "cycles": 473,
+      "event": "gameplay",
+      "uptime": 888136.1787341251
+     },
+     {
+      "cycles": 5187,
+      "event": "captured",
+      "gameplayBodies": 4715,
+      "iterations": 7018,
+      "objectInputs": 1,
+      "path": "/private/tmp/claude-501/-Users-michael-Developer-ntsd-2-4/7ea5b99f-68d1-4a00-8aa2-0da4bd065e97/scratchpad/explore5.png",
+      "uptime": 888291.7568672084
+     }
+    ]
+   }
+  ],
+  "findings": [
+   "each run served exactly 1 object-input request",
+   "with specials: stopped at characterAI slot 56 object 12 id 33 (naruto_clone) frame 307, iteration 2266",
+   "without specials: 4755 and 4715 gameplay bodies, no boundary; capture (earlier run of the same script) shows items and NPCs",
+   "first exploration round (no counter) had the same outcomes: characterAI stop at iteration 1504; 4378/4688 bodies"
+  ]
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "Unicorn only (406ba0 and the verified first loading); no Windows run",
+ "review": "independent review open"
+}

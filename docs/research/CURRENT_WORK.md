@@ -22,19 +22,22 @@ Native методов, включая целый caller загрузка→ка�
 [Матч запущен](APPLICATION_RUNTIME_MATCH.md): сценарием клавиш/кликов игрока
 приложение проходит VS Mode → Наруто/Саске → 0 компьютеров → District → Fight!
 до retained match launch и gameplay bodies; [снимок матча](../evidence/application-runtime-match-capture.png).
+[Object input406ba0](APPLICATION_OBJECT_INPUT.md) перенесён в Core для всех hit_Fa
+из DAT (1,3,4,5,7,8,10,12,14): два корпуса по880 реальных вызовов после
+проверенной первой загрузки (CW027f и CW037f) совпали побайтно; 4 теста прошли;
+приложение обслуживает objectInput (по одному запросу в трёх боях), бои без спецприёмов идут ≈4700 тиков.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия матчу Наруто/Саске на District в приложении:** (1) живой ввод
 в бою работает (≈30 тиков/с), но Core останавливается на невосстановленном
-AI/object input child (`OriginalLocalInput.localInput`: characterAI/objectInput),
-например преследующий объект id219 `jan_chaseh.dat`; KO/результат/возврат и
-автотест не проверены; (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
+characterAI4094b0 для объектов type0 в слотах10..399 (например клон Наруто
+id33 после спецприёма); KO/результат/возврат и автотест не проверены; (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) музыка
 беззвучна (WMA); window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** восстановить контракт objectInput для кадров с +0x30>0
-(преследующие объекты вроде id219) по EXE и сохранённым корпусам, затем
-characterAI; без этого полный матч прерывается — препятствие (1).
+**Следующая задача:** восстановить characterAI4094b0 (≈2470 инструкций и
+помощник408cb0) статическим разбором и Unicorn-корпусом, как для406ba0, и
+подключить в цикл приложения — препятствие (1).
 EXE envelope не пересчитывался.
 
 Итерация завершена по указанию пользователя 2026-09-27;

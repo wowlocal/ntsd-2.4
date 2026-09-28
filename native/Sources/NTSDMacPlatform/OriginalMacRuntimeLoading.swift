@@ -18,7 +18,7 @@ import NTSDCore
     public typealias LoadedMenu = OriginalApplicationLoadedMenuSession
     public enum Boundary: Error, Equatable { case missing(String), unexpected(String) }
     public struct Counts: Equatable {
-        public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0
+        public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0, objectInputs = 0
         public var controls = 0, replayedDraws = 0, skippedDraws = 0
     }
     public private(set) var counts = Counts()
@@ -162,8 +162,9 @@ import NTSDCore
             guard var cycle = context.cycle else { throw Boundary.missing("cached loaded cycle") }
             var unit: Void = ()
             let ready = try cycle.advance(environment:&unit,dispatch:{ d,match,_ in
-                // AI/object input children are not recovered yet: report the object.
                 let slot = Int(d.arguments[0])
+                if d.kind == .objectInput { try OriginalObjectInput.apply(slot:slot,state:&match); self.counts.objectInputs += 1; return }
+                // Character AI (4094b0) is not recovered yet: report the object.
                 let index = try match.world.integer(at:0x194+slot*4,as:UInt32.self)
                 let actor = index < 400 ? match.actors[Int(index)] : nil
                 let object = try actor?.integer(at:0x368,as:UInt32.self) ?? UInt32.max

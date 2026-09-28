@@ -1,0 +1,12 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real406ba0(World,slot) called directly after verified first loading, under\ndeclared World/Actor/RNG stimuli bound to real loaded Objects and Frames. Every\nloaded non-character frame whose hit_Fa is one of the values used by the\noriginal DAT (1,3,4,5,7,8,10,12,14) is the called Object's current frame in at\nleast one case. The main corpus runs under the original startup CW027f; the\ncontrol corpus uses CW037f over the control loading (ramp backing, reversed\nActor storage). No game code is stubbed; the constructor memset stays the\nexisting host boundary. The first case declares a match-start RNG table.\nValues 2,6,9,11,13 are not stimulated.\n",
+  "corpus": "object-input-control.json",
+  "sha256": "0ba45f030aee783a5c0fba007815b7fed0ad3ee3a77ee544f7f496e424bfd05d",
+  "cases": 880,
+  "blocks": 309,
+  "nativeComparison": "Object input matches original: 880 real 406ba0 calls (hit_Fa 1:138 3:42 4:40 5:40 7:66 8:40 10:40 12:381 14:93), 383 RNG draws, 218 constructors, 353760 records, 414085760 bytes/masks, 309 executed body blocks; full first loading 137 Objects",
+  "fixture": "original-object-input-control.json",
+  "fixtureSHA256": "bb3a7fc5b181baab26c776ea466f32b94647c8012fa98d486e70ccb142b2ec87",
+  "fixtureBytes": 1780935
+}
