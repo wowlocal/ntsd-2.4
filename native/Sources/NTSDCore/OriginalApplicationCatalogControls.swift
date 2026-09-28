@@ -6,11 +6,15 @@ extension OriginalApplicationCatalogSession {
         public let files: [String:[UInt8]], bitmaps: [String:OriginalApplicationStartupInputs.Bitmap]
         public let presentation: OriginalMenuPresentationInput
         public let drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8
+        /// Declared runtime policy: the catalog block's registry, background and
+        /// stage backing counts as initialized with `allocationFill` (a fresh
+        /// large Windows heap block is demand-zero pages). Verification keeps false.
+        public let allocationDefined: Bool
         public init(files: [String:[UInt8]],bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
-                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8) throws {
+                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8,allocationDefined: Bool = false) throws {
             guard files[OriginalLoadingFiles.temporaryPath] == nil else { throw Boundary.input("External temporary file") }
             self.files = files;self.bitmaps = bitmaps;self.presentation = presentation
-            self.drawResult = drawResult;self.graphicsResult = graphicsResult;self.allocationFill = allocationFill
+            self.drawResult = drawResult;self.graphicsResult = graphicsResult;self.allocationFill = allocationFill;self.allocationDefined = allocationDefined
         }
     }
     /// A fresh provider belongs to one tentative attempt. Callbacks supply

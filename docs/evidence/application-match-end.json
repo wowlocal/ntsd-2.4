@@ -1,0 +1,367 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T17:15:17.428965Z",
+ "parentHead": "2c02e5b",
+ "scope": "Card: end of the District match in the app; plan docs/research/APPLICATION_MATCH_END_PLAN.md",
+ "files": {
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "565210b36b3ef41ae9c891faf184ad231df044069ffb85e76ae24a8b6cb4040f",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeStartup.swift": "8fbd6429f40a633b0556265330e07b1b079487e012fa18c9c9f30c2dbb3667b5",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "3bc889eef1a7d59c9813fadaddc7b05192c5aa6346f460734b139de026c99f5f",
+  "native/Sources/NTSDCore/OriginalApplicationEpilogueSession.swift": "6ec02a30c3a36aee66d455a5e69823ef58936d354fa3e2dcbf2f58e01f186a7b",
+  "native/Sources/NTSDCore/OriginalApplicationCatalogSession.swift": "e1a4c14609450a8d99254be241cd5b73f973e939c17191d32bc424b2d163d543",
+  "native/Sources/NTSDCore/OriginalApplicationCatalogControls.swift": "21682cf83162c18824f3220ea32ee56aed858bef659a3e4a45496343bc8f19f9",
+  "docs/evidence/application-match-end-summary-capture.png": "5020768cf715910ce14577e2eeefb0b50ffa46302f0dcfd6b1c5c86756b30a56",
+  "docs/evidence/application-match-end-selection-capture.png": "26069a0db8d114517a2a865040de854bdb13614b9843e4ae3821ef8aa483ff3e",
+  "docs/evidence/application-match-end-menu-capture.png": "edbd44fcc954296d2e2fe2e7e435531b75e494b77edc5e4b13cb09e3de2d4f2f"
+ },
+ "policies": {
+  "processorSignature": "0x600",
+  "replayFile": "recording\\<name> only, buffered, applied to overlay after Host commit",
+  "callerFormatter": "declared unknown 0x174-byte locals per body",
+  "catalogBacking": "registry/background/stage backing declared initialized zero in the runtime only"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "log": "end1",
+   "stop": "Result layout: Caller string backing unavailable",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/18/18/06",
+      "2026/10/02/18/18/06"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 6.107994914054871
+    },
+    {
+     "cycles": 536,
+     "event": "matchLaunched",
+     "iterations": 1288
+    },
+    {
+     "cycles": 537,
+     "event": "gameplay",
+     "uptime": 892697.7293346667
+    },
+    {
+     "characterAI": 1468,
+     "error": "Original state storage: Result layout: Caller string backing unavailable",
+     "event": "boundary",
+     "iterations": 3709,
+     "objectInputs": 105,
+     "refusedReplays": [],
+     "replayFiles": [],
+     "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "log": "end2",
+   "stop": "Selected input continuation (epilogue)",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/18/20/00",
+      "2026/10/02/18/20/00"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.843720078468323
+    },
+    {
+     "cycles": 540,
+     "event": "matchLaunched",
+     "iterations": 1287
+    },
+    {
+     "cycles": 541,
+     "event": "gameplay",
+     "uptime": 892810.9660830417
+    },
+    {
+     "characterAI": 2826,
+     "error": "NTSDCore.OriginalApplicationLoadedMenuSession.Boundary.dependency(\"Selected input continuation\")",
+     "event": "boundary",
+     "iterations": 3189,
+     "objectInputs": 0,
+     "refusedReplays": [],
+     "replayFiles": [
+      "recording\\20260928_182024_VS.lfr 10605"
+     ],
+     "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+    }
+   ]
+  },
+  {
+   "round": 3,
+   "log": "end3",
+   "stop": "State bytes have no recovered initialization: 0, 4 bytes (after a second match)",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/18/24/58",
+      "2026/10/02/18/24/58"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.824553966522217
+    },
+    {
+     "cycles": 548,
+     "event": "matchLaunched",
+     "iterations": 1288
+    },
+    {
+     "cycles": 549,
+     "event": "gameplay",
+     "uptime": 893109.6836687084
+    },
+    {
+     "cycles": 4142,
+     "event": "matchLaunched",
+     "iterations": 6418
+    },
+    {
+     "characterAI": 6123,
+     "error": "State bytes have no recovered initialization: 0, 4 bytes",
+     "event": "boundary",
+     "iterations": 8068,
+     "objectInputs": 54,
+     "refusedReplays": [],
+     "replayFiles": [
+      "recording\\20260928_182523_VS.lfr 11436",
+      "recording\\20260928_182721_VS.lfr 10684"
+     ],
+     "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+    }
+   ]
+  },
+  {
+   "round": 4,
+   "log": "end4",
+   "note": "diagnostic stderr stack: OriginalCharacterAIPass.background <- setup, index 100",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/18/35/02",
+      "2026/10/02/18/35/02"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 6.069432973861694
+    },
+    {
+     "cycles": 550,
+     "event": "matchLaunched",
+     "iterations": 1288
+    },
+    {
+     "cycles": 551,
+     "event": "gameplay",
+     "uptime": 893714.2590461667
+    },
+    {
+     "characterAI": 2665,
+     "error": "State bytes have no recovered initialization: 0, 4 bytes",
+     "event": "boundary",
+     "iterations": 7288,
+     "objectInputs": 62,
+     "refusedReplays": [],
+     "replayFiles": [
+      "recording\\20260928_183527_VS.lfr 10755"
+     ],
+     "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+    }
+   ]
+  },
+  {
+   "round": 5,
+   "log": "end5",
+   "note": "after catalog backing policy: no boundary until 900 s watchdog; captures show Character Selection and main menu",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/18/41/12",
+      "2026/10/02/18/41/12"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 5.934668064117432
+    },
+    {
+     "cycles": 550,
+     "event": "matchLaunched",
+     "iterations": 1287
+    },
+    {
+     "cycles": 551,
+     "event": "gameplay",
+     "uptime": 894083.9423430834
+    }
+   ]
+  },
+  {
+   "round": 6,
+   "log": "final",
+   "note": "clean release build: KO, replay, Summary (iteration 4260), second match at 4307, second replay; watchdog 560 s",
+   "events": [
+    {
+     "attempts": 76,
+     "dates": [
+      "2026/09/28/19/11/05",
+      "2026/10/02/19/11/05"
+     ],
+     "event": "started",
+     "musicOutput": "silent (WMA playback not implemented)",
+     "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+     "owners": {
+      "audio": 22,
+      "display": 8,
+      "runtime": 34,
+      "window": 11
+     },
+     "requests": 75,
+     "sequence": 1,
+     "window": 3
+    },
+    {
+     "allocations": 16105,
+     "audioRequests": 2072,
+     "bitmapRequests": 12817,
+     "event": "loaded",
+     "files": 621,
+     "seconds": 6.014726996421814
+    },
+    {
+     "cycles": 552,
+     "event": "matchLaunched",
+     "iterations": 1288
+    },
+    {
+     "cycles": 553,
+     "event": "gameplay",
+     "uptime": 895877.2593277501
+    },
+    {
+     "cycles": 2442,
+     "event": "matchLaunched",
+     "iterations": 4307
+    }
+   ]
+  }
+ ],
+ "replay": {
+  "path": "recording\\20260928_191130_VS.lfr",
+  "bytes": 10881,
+  "sha256": "47b77b22d20a5db4be4e1356872fabe602f27c7f8b17e657c7e0a3f70a316050",
+  "header": "7d2a000079a1f0e00fba50e6203af590",
+  "originalSample": {
+   "path": "recording/20260331_115752_Battle.lfr",
+   "bytes": 11310,
+   "header": "2a2c000079a1f0e10db61556c4396596"
+  }
+ },
+ "script": "fight1 (special moves) from application-object-input.json, plus capture actions",
+ "tests": {
+  "filter": "OriginalApplicationCatalogSessionTests|OriginalMacRuntimeLoadingTests",
+  "tests": 5,
+  "failures": 0,
+  "seconds": 543.26
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

@@ -46,6 +46,7 @@ public struct OriginalApplicationCatalogSession {
         public let volumeReplies: [Int32]
         public let messages: [MessageInput], presentation: OriginalMenuPresentationInput
         public let drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8
+        public var allocationDefined = false
         public init(files: [String:[UInt8]], bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
             allocationTokens: [UInt32], bitmapReplies: [API.Response], fileAllocations: [OriginalLoadingFileAllocation],
             waves: [OriginalWavePlatform], volumeReplies: [Int32], times: [UInt32], messages: [MessageInput],
@@ -113,7 +114,8 @@ public struct OriginalApplicationCatalogSession {
         afterChild: @escaping (OriginalCatalogChildObservation,Snapshot) throws -> Void = { _,_ in },
         beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
         let resources = try Resources(files:inputs.files,bitmaps:inputs.bitmaps,presentation:inputs.presentation,
-            drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill)
+            drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill,
+            allocationDefined:inputs.allocationDefined)
         return try load(resources:resources,makeControls:{ Self.fixedControls(inputs) },
                         observe:observe,afterChild:afterChild,beforeCommit:beforeCommit)
     }
@@ -188,7 +190,7 @@ public struct OriginalApplicationCatalogSession {
                 observedGlobalWrites:observedGlobalWrites,operations:operations,graphics:graphics)
         }
         func backing(_ count: Int) throws -> OriginalStateRecord {
-            try .init(bytes:[UInt8](repeating:inputs.allocationFill,count:count),defined:[Bool](repeating:false,count:count))
+            try .init(bytes:[UInt8](repeating:inputs.allocationFill,count:count),defined:[Bool](repeating:inputs.allocationDefined,count:count))
         }
         func emit(_ event: Observation) throws { try observe(event,state) }
         func effect(_ effect: Session.Effect) throws {

@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[End of the District match: milestone reached](research/APPLICATION_MATCH_END.md):
+after KO the app saves the original replay (`recording\*.lfr`), shows the
+Summary, runs the round epilogue and returns to Character Selection and the main
+menu; a new match starts. Remaining in that match: GDI text, music output,
+computer players' special moves. [Evidence](evidence/application-match-end.json).
+
 [Character AI 4094b0: the District fight reaches KO](research/APPLICATION_CHARACTER_AI.md):
 `OriginalCharacterAI` ports 4094b0 with 4034f0/408cb0 and the naruto_clone part
 of 403a40. Two corpora of 3770 real calls (CW027f legacy, CW037f SSE2) match

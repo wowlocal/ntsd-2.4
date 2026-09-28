@@ -12,7 +12,7 @@ public struct OriginalMacRuntimeOverlay {
         let support = try FileManager.default.url(for:.applicationSupportDirectory,in:.userDomainMask,appropriateFor:nil,create:true)
         return .init(root:support.appendingPathComponent("NTSD Native",isDirectory:true))
     }
-    func url(_ path: String) throws -> URL {
+    public func url(_ path: String) throws -> URL {
         let parts = path.split(separator:"\\",omittingEmptySubsequences:false)
         guard !parts.isEmpty,parts.allSatisfy({ !$0.isEmpty && $0 != "." && $0 != ".." && !$0.contains("/") }) else { throw Boundary.invalidPath(path) }
         return parts.reduce(root) { $0.appendingPathComponent(String($1)) }

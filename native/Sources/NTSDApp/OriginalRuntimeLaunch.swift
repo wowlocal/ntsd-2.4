@@ -128,7 +128,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 schedule(delay)
             case .loading:
                 let begin = Date(),first = loading == nil
-                if first { loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),clock:Self.milliseconds) }
+                if first {
+                    loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),clock:Self.milliseconds)
+                    loading?.overlay = try OriginalMacRuntimeOverlay.standard()
+                }
                 guard let loading else { return }
                 let sleeps = loading.sleeps.count
                 let completed = try loading.complete(first:first); cycles += 1
@@ -167,6 +170,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
                     "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
+            "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1]])
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
@@ -177,6 +181,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         stopped = true
         Self.emit(["event":"boundary","error":String(reflecting:error),"iterations":committed,
             "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
+            "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
             "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
         if exitAfterStartup || arguments.contains("--exit-after-capture") { exit(1) }
         let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"

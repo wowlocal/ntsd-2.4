@@ -5,7 +5,9 @@ import NTSDCore
 /// catalog, the 400-slot pool, first input and the loaded menu, then the Host
 /// tail. Audio is served inline on the loading exchange (one attempt instead of
 /// one attempt per request). Other providers are runtime answers:
-/// - allocations: runtime heap addresses, zero backing (`allocationFill` 0);
+/// - allocations: runtime heap addresses, zero backing (`allocationFill` 0); the
+///   catalog block's registry/background/stage backing is declared initialized
+///   zero (a fresh large Windows heap block is demand-zero pages);
 /// - bitmaps: real display-backend surfaces from the original packages; Core
 ///   derives BITMAP fields itself, so replies carry results/outputs only;
 /// - files: packaged catalog bytes, declared 65536/4096 stream buffering;
@@ -19,8 +21,21 @@ import NTSDCore
     public enum Boundary: Error, Equatable { case missing(String), unexpected(String) }
     public struct Counts: Equatable {
         public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0, objectInputs = 0, characterAI = 0
-        public var controls = 0, replayedDraws = 0, skippedDraws = 0
+        public var controls = 0, replayedDraws = 0, skippedDraws = 0, replayFiles = 0, musicResumes = 0, epilogues = 0
     }
+    /// Declared processor signature for the replay codec's lazy detection
+    /// (4428b0): only family bits 0xf00 ≥ 0x600 matter, which every x86 CPU
+    /// Windows runs on reports (Intel family 6, AMD family 0xf).
+    public static let processorSignature: UInt32 = 0x600
+    /// Writable files beside the original EXE; nil keeps replay output in memory.
+    public var overlay: OriginalMacRuntimeOverlay?
+    /// Replay files written by the gameplay body, applied only after the
+    /// enclosing Host batch commits (a discarded attempt writes nothing).
+    public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
+    private var pendingReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
+    private var openReplay: (path: String,bytes: [UInt8])?
+    /// Replay paths the declared file policy refused (reported, not hidden).
+    public private(set) var refusedReplayOpens: [String] = []
     public private(set) var counts = Counts()
     /// Sleep(ms) requested by Host tails; the app waits before the next iteration.
     public private(set) var sleeps: [UInt32] = []
@@ -103,7 +118,7 @@ import NTSDCore
             },drawResult:0,presentationResult:0)
             var catalog = try Catalog(pending:common,startup:startupSounds)
             let resources = try Catalog.Resources(files:self.catalogInputs.files,bitmaps:self.catalogInputs.bitmaps,
-                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0)
+                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0,allocationDefined:true)
             let loaded = try catalog.load(resources:resources,makeControls:{
                 .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.reserve(count) },
                     bitmap:{ try self.bitmap($0) },
@@ -177,8 +192,14 @@ import NTSDCore
                 throw Boundary.unexpected("AI/object child \(d.kind.rawValue) slot \(slot) object \(object) header6f4 \(id) frame \(frame)")
             },controlBoundary:{ q,_ in try self.control(q) })
             self.continuationGraphics = ready.graphics.count
-            if ready.round.continuation == .gameplay { return .gameplayInput(ready) }
-            return .init(menu:try self.loadedMenu(ready,target:context.entry.target))
+            switch ready.round.continuation {
+            case .gameplay,.pausedRendering: return .gameplayInput(ready)
+            case .epilogue:
+                self.counts.epilogues += 1
+                return .init(menu:.returned(try OriginalApplicationEpilogueSession.finish(pending:ready,
+                    outputInput:self.presentation(ready.loading.target))))
+            case .menu: return .init(menu:try self.loadedMenu(ready,target:context.entry.target))
+            }
         })
     }
     /// Complete one outer loading request: first load or cached cycle, then the
@@ -219,11 +240,42 @@ import NTSDCore
     /// One retained gameplay body. DDBLTFX backing for fills is zero; replay
     /// file output and music resume stay explicit boundaries until connected.
     public func gameplay() throws -> LoadedMenu.PendingReturn {
-        try started.host.resumeGameplay(prepare:{ ready,_ in
+        let heap = started.runtime.heap
+        return try started.host.resumeGameplay(prepare:{ ready,_ in
+            self.pendingReplays = []; self.openReplay = nil
             var session = try OriginalApplicationGameplaySession(pending:ready),unit: Void = ()
-            return try session.advance(environment:&unit,outputInput:self.presentation(ready.loading.target),
-                fillBacking:{ [UInt8](repeating:0,count:100) })
+            // The caller's formatter locals (root44c..5bf): declared unknown
+            // backing each body; formatting must produce every byte it reads.
+            let caller = try OriginalGameplayBody.Caller(formatter:.init(
+                bytes:[UInt8](repeating:0,count:OriginalResultLayout.localSize),
+                defined:[Bool](repeating:false,count:OriginalResultLayout.localSize)))
+            return try session.advance(environment:&unit,outputInput:self.presentation(ready.loading.target),caller:caller,
+                fillBacking:{ [UInt8](repeating:0,count:100) },
+                allocate:{ _ in self.counts.allocations += 1; return try heap.reserve(OriginalReplayWriter.capacity) },
+                processorSignature:{ _ in Self.processorSignature },
+                open:{ q,_ in self.replayOpen(q) },write:{ bytes,_ in self.replayWrite(bytes) },close:{ _ in self.replayClose() },
+                resumeMusic:{ control,_ in
+                    self.counts.musicResumes += 1
+                    return try self.music(.init(.method,[control,0x1c])).result
+                })
         })
+    }
+    /// _wfsopen(path,"wb",0x40) on a path relative to the EXE directory. The
+    /// package's own folders (such as `recording`) exist beside the EXE; other
+    /// or malformed paths fail as a missing directory would.
+    func replayOpen(_ q: OriginalReplayFileOutput.OpenRequest) -> Bool {
+        let path = String(decoding:q.path,as:UTF16.self)
+        guard q.mode == [0x77,0x62],openReplay == nil,let overlay,(try? overlay.url(path)) != nil,
+              path.split(separator:"\\").count == 2,path.lowercased().hasPrefix("recording\\") else { refusedReplayOpens.append(path); return false }
+        openReplay = (path,[]); return true
+    }
+    func replayWrite(_ bytes: [UInt8]) -> Int32 {
+        guard openReplay != nil else { return -1 }
+        openReplay!.bytes += bytes; return Int32(bytes.count)
+    }
+    func replayClose() -> Int32 {
+        guard let file = openReplay else { return -1 }
+        pendingReplays.append(.init(path:file.path,bytes:file.bytes)); openReplay = nil; return 0
     }
     /// The Host tail after a returned loaded menu (its single timeGetTime), then
     /// the committed loaded batch's front draws replayed on the display: the
@@ -242,6 +294,10 @@ import NTSDCore
             guard case .loaded(let commit) = batch.contents else { continue }
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
+        }
+        if case .committed = outcome, !pendingReplays.isEmpty {
+            try overlay?.apply(pendingReplays)
+            savedReplays += pendingReplays; counts.replayFiles += pendingReplays.count; pendingReplays = []
         }
         return outcome
     }
