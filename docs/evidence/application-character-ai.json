@@ -1,0 +1,271 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T16:15:12.730987Z",
+ "parentHead": "855e206",
+ "scope": "Card: character AI 4094b0 in NTSDCore and the app cycle; plan docs/research/APPLICATION_CHARACTER_AI_PLAN.md",
+ "files": {
+  "native/Sources/NTSDCore/OriginalCharacterAI.swift": "59e34395458e03bfcd8fbc774ecdd7132abe23b84ca1dcdc77c948c0eec60abe",
+  "native/Sources/NTSDReferenceChecks/CharacterAIReference.swift": "bf40e2bdfef34262002f39484b09365ac0aff4d6339d0ce6b690efbcfa89e22d",
+  "native/Sources/NTSDCatalogCheck/main.swift": "925ceaa3ddcc5a5090a5059ca983c7612996ef3300c206f8eccf6f8ecc879c0d",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "182a18091dcc77dd24000e46ef68cbb1da6dd155dc096eea7434adda5de4ef63",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "9023533a7185f1db3250b11f5c3e30aced74fa272d6fe8629af689cbbcae6338",
+  "native/Tests/NTSDCoreTests/OriginalCharacterAITests.swift": "bbdc084ef013d5c0b831006f61e009f6ea8a51eac6d09a6dc32bb96e519e2838",
+  "tools/oracle_character_ai.py": "c6cb9df4f927d5d56c3cef79984582ceea835d9989fd18d8471400ff7b226f0c",
+  "native/Tests/NTSDCoreTests/Fixtures/original-character-ai.json": "0d09445d8aefc80ef1f0345dccbee84c6a3bdd2fddf773c4828a974e7c0c6f64",
+  "native/Tests/NTSDCoreTests/Fixtures/original-character-ai-control.json": "541b3470d11b19962e6ce4934c90479409dce32cf4e2bea95e876e7440be42d3",
+  "docs/evidence/character-ai.json": "a67d3c78ca9607fa9f70d9aec46edf3531ee7ef0153e5f91216f244e67437863",
+  "docs/evidence/character-ai-control.json": "c3f4eba157fae759919d12d3744bd088c56f04b2e2ff4ce9331dd40b18b79642",
+  "docs/evidence/application-character-ai-ko-capture.png": "0963024104e173be967b96266d9dc0122928db254ec2d5e722e616a41e8b56f2"
+ },
+ "staticDecode": {
+  "routines": {
+   "4094b0": "2467 instructions",
+   "4034f0": "356",
+   "408cb0": "552",
+   "403a40": "2720 (entry roll, id-33 block, fall-through recovered)",
+   "4061a0": "strictly-between",
+   "4450d0": "float to int (legacy/SSE2)"
+  },
+  "unrecoveredSpecialMoveOwners": [
+   1,
+   2,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   32,
+   34,
+   35,
+   36,
+   38,
+   39,
+   50,
+   51,
+   52
+  ],
+  "declaredPolicy": "no target with Actor+0x404 set: EXE compares z with an Object pointer (World+0x7d4 read as Actor 400); Native decides far, boundary if |z| >= 0x8000"
+ },
+ "comparison": {
+  "main": "Character AI matches original: 3770 real 4094b0 calls (owner ids 1:4 2:4 3:99 4:2 5:1 6:2 7:7 8:1 9:9 10:3 11:2 12:101 13:103 14:101 15:105 16:116 17:102 18:112 19:98 20:111 21:101 22:103 23:85 24:98 25:94 30:98 31:213 32:4 33:1374 34:2 35:2 36:4 37:97 38:1 39:3 50:5 51:6 52:6 55:102 56:92 57:90 58:107; modes 0:484 1:1314 2:489 3:528 4:955), 7510 RNG draws, 1515540 records, 1773981040 bytes/masks, 918 executed blocks; full first loading 137 Objects",
+  "control": "Character AI matches original: 3770 real 4094b0 calls (owner ids 1:1 3:94 4:4 5:2 6:2 7:7 8:5 9:9 11:1 12:103 13:103 14:103 15:84 16:104 17:108 18:103 19:100 20:95 21:93 22:96 23:85 24:97 25:92 30:122 31:193 32:12 33:1398 35:1 36:3 37:111 38:3 39:3 50:8 51:6 52:5 55:116 56:97 57:103 58:98; modes 0:498 1:1292 2:505 3:500 4:975), 7800 RNG draws, 1515540 records, 1773981040 bytes/masks, 916 executed blocks; full first loading 137 Objects",
+  "undefinedReads": 0,
+  "precision": {
+   "main": "CW027f, legacy 445106 conversion",
+   "control": "CW037f, SSE2 flag 45971c=1, control loading"
+  },
+  "oracleAsserts": [
+   "allowed code ranges only",
+   "callee-saved registers, ret 8",
+   "x87 TOP unchanged, tags empty after a declared empty stack",
+   "globals change only in 450bcc/450c34 and 44f604..44f61c"
+  ]
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "cases": 1320,
+   "result": "both corpora matched on first comparison; coverage showed gaps in pickup, weapon, band, idle-frame, clone-facing paths"
+  },
+  {
+   "round": 2,
+   "cases": 2770,
+   "result": "added families pickup/weapon/band/clone/idle/walk2/far404; both matched"
+  },
+  {
+   "round": 3,
+   "cases": 3770,
+   "result": "added weapon2/approach2/item2/remember; both matched; accepted"
+  }
+ ],
+ "coverage": {
+  "4094b0": {
+   "blocks": 616,
+   "uncoveredInScope": [
+    "0x40a4dc",
+    "0x40a4f4",
+    "0x40a50c",
+    "0x40a534",
+    "0x40a54e",
+    "0x40a8d9",
+    "0x40a8e9",
+    "0x40abae",
+    "0x40afb0",
+    "0x40b7f1",
+    "0x40ba3d"
+   ]
+  },
+  "4034f0": {
+   "blocks": 79,
+   "uncoveredInScope": [
+    "0x40383d",
+    "0x40384d",
+    "0x403885",
+    "0x4038b1",
+    "0x4038dc",
+    "0x403902",
+    "0x403919",
+    "0x403920",
+    "0x403948",
+    "0x403978",
+    "0x40398d",
+    "0x403999",
+    "0x4039a2",
+    "0x4039b2",
+    "0x4039ba",
+    "0x4039c2",
+    "0x4039d6",
+    "0x4039dd",
+    "0x403a18",
+    "0x403a21",
+    "0x403a2a"
+   ]
+  },
+  "408cb0": {
+   "blocks": 108,
+   "uncoveredInScope": [
+    "0x408d1d",
+    "0x408ee4",
+    "0x40941f",
+    "0x40942b",
+    "0x409443",
+    "0x40945d",
+    "0x409473"
+   ]
+  },
+  "403a40": {
+   "blocks": 580,
+   "uncoveredInScope": []
+  }
+ },
+ "coverageNotes": [
+  "0x40a4dc..0x40a54e: heal ball choice only for owners 2/34 (deferred)",
+  "4034f0 uncovered blocks: owners 34 and 1 only (deferred)",
+  "408cb0 0x40941f..0x409473: 0xd8/0xd9 command only for owners 2/34 (deferred); 0x408d1d padding; 0x408ee4 rand outcome",
+  "0x40a8d9/0x40a8e9: object 122 has no state-1004 frames in the DAT",
+  "0x40b7f1: catalog-pointer x test never reached under the pointer rule",
+  "0x40afb0, 0x40ba3d: rare RNG outcomes; 0x40abae: needs coordinates below -900"
+ ],
+ "tests": {
+  "filter": "OriginalCharacterAITests|OriginalMacRuntimeLoadingTests",
+  "tests": 4,
+  "failures": 0,
+  "seconds": 339.61
+ },
+ "app": {
+  "build": "release NTSDNative, same OriginalCharacterAI source as accepted",
+  "script": "fight1 (special moves) from application-object-input.json",
+  "runs": [
+   {
+    "run": "clone1",
+    "events": [
+     {
+      "attempts": 76,
+      "dates": [
+       "2026/09/28/17/31/33",
+       "2026/10/02/17/31/33"
+      ],
+      "event": "started",
+      "musicOutput": "silent (WMA playback not implemented)",
+      "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+      "owners": {
+       "audio": 22,
+       "display": 8,
+       "runtime": 34,
+       "window": 11
+      },
+      "requests": 75,
+      "sequence": 1,
+      "window": 3
+     },
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "event": "loaded",
+      "files": 621,
+      "seconds": 6.445421934127808
+     },
+     {
+      "cycles": 424,
+      "event": "matchLaunched",
+      "iterations": 1290
+     },
+     {
+      "cycles": 425,
+      "event": "gameplay",
+      "uptime": 889900.4736050001
+     },
+     {
+      "characterAI": 6285,
+      "error": "NTSDCore.OriginalApplicationLoadedMenuSession.Boundary.dependency(\"Gameplay replay codec allocation\")",
+      "event": "boundary",
+      "iterations": 4915,
+      "objectInputs": 519,
+      "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+     }
+    ]
+   },
+   {
+    "run": "clone2",
+    "events": [
+     {
+      "attempts": 76,
+      "dates": [
+       "2026/09/28/17/55/34",
+       "2026/10/02/17/55/34"
+      ],
+      "event": "started",
+      "musicOutput": "silent (WMA playback not implemented)",
+      "overlay": "/Users/michael/Library/Application Support/NTSD Native",
+      "owners": {
+       "audio": 22,
+       "display": 8,
+       "runtime": 34,
+       "window": 11
+      },
+      "requests": 75,
+      "sequence": 1,
+      "window": 3
+     },
+     {
+      "allocations": 16105,
+      "audioRequests": 2072,
+      "bitmapRequests": 12817,
+      "event": "loaded",
+      "files": 621,
+      "seconds": 6.369394063949585
+     },
+     {
+      "cycles": 414,
+      "event": "matchLaunched",
+      "iterations": 1291
+     },
+     {
+      "cycles": 415,
+      "event": "gameplay",
+      "uptime": 891341.8645438751
+     },
+     {
+      "characterAI": 2465,
+      "error": "NTSDCore.OriginalApplicationLoadedMenuSession.Boundary.dependency(\"Gameplay replay codec allocation\")",
+      "event": "boundary",
+      "iterations": 3694,
+      "objectInputs": 0,
+      "request": "graphics(NTSDCore.OriginalMenuGraphicsRequest.window(NTSDCore.OriginalWindowInitialization.Request(kind: \"blt\", words: [6, 0, 0, 0, 16778240], strings: [], bytes: Optional([100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "
+     }
+    ]
+   }
+  ],
+  "findings": [
+   "clone1: 6285 character AI and 519 object input requests, stop at iteration 4915: Gameplay replay codec allocation",
+   "clone2 (same script, periodic captures): 2465 character AI requests, stop at iteration 3694 with the same dependency; the capture at 3650 shows Sasuke knocked out (empty HP) and Naruto standing"
+  ]
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "Unicorn only (4094b0 and the verified first loading)",
+ "review": "independent review open"
+}

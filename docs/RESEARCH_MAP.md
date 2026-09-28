@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Character AI 4094b0: the District fight reaches KO](research/APPLICATION_CHARACTER_AI.md):
+`OriginalCharacterAI` ports 4094b0 with 4034f0/408cb0 and the naruto_clone part
+of 403a40. Two corpora of 3770 real calls (CW027f legacy, CW037f SSE2) match
+Native byte for byte; 4 tests pass. In the app Naruto's clones fight Sasuke to
+KO; the next stop is the end-of-match replay save. [Evidence](evidence/application-character-ai.json).
+
 [Object input 406ba0 in Native and the app](research/APPLICATION_OBJECT_INPUT.md):
 `OriginalObjectInput` covers every hit_Fa the original DAT uses (1,3,4,5,7,8,10,
 12,14). Two Unicorn corpora of 880 real calls after the verified first loading

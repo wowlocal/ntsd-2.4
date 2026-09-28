@@ -1,0 +1,12 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real4094b0(World,slot,mode) called directly after verified first loading,\nunder declared World/Actor/global stimuli bound to real loaded Objects and\nFrames. The AI's own Object is a character whose 403a40 special-move block is\nrecovered (naruto_clone id33) or absent (ids 3,12..25,30,31,37,55..58);\nidle cases (no target, where 403a40 is never reached) use any character.\nTargets are real characters (standing and lying frames), projectiles (state\n3000), items and healing balls. The main corpus runs under CW027f with the\nlegacy float conversion; the control corpus uses CW037f, the control loading\nand the SSE2 conversion flag45971c. The first case declares a match-start RNG\ntable. No game code is stubbed; the constructor memset stays a host boundary.\n",
+  "corpus": "character-ai-control.json",
+  "sha256": "cd9b180dcb8c482873dac628fa9b0b43f039842ae10223442f7413246340d29a",
+  "cases": 3770,
+  "blocks": 916,
+  "nativeComparison": "Character AI matches original: 3770 real 4094b0 calls (owner ids 1:1 3:94 4:4 5:2 6:2 7:7 8:5 9:9 11:1 12:103 13:103 14:103 15:84 16:104 17:108 18:103 19:100 20:95 21:93 22:96 23:85 24:97 25:92 30:122 31:193 32:12 33:1398 35:1 36:3 37:111 38:3 39:3 50:8 51:6 52:5 55:116 56:97 57:103 58:98; modes 0:498 1:1292 2:505 3:500 4:975), 7800 RNG draws, 1515540 records, 1773981040 bytes/masks, 916 executed blocks; full first loading 137 Objects",
+  "fixture": "original-character-ai-control.json",
+  "fixtureSHA256": "541b3470d11b19962e6ce4934c90479409dce32cf4e2bea95e876e7440be42d3",
+  "fixtureBytes": 5902744
+}

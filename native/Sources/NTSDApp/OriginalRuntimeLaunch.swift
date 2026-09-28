@@ -166,7 +166,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             case "capture" where words.count == 2:
                 try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
-                    "objectInputs":loading?.counts.objectInputs ?? 0,
+                    "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1]])
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
@@ -176,7 +176,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     @MainActor private func stop(_ error: Error) {
         stopped = true
         Self.emit(["event":"boundary","error":String(reflecting:error),"iterations":committed,
-            "objectInputs":loading?.counts.objectInputs ?? 0,
+            "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
         if exitAfterStartup || arguments.contains("--exit-after-capture") { exit(1) }
         let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"
