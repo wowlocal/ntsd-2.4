@@ -1,0 +1,130 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T17:53:38.968613Z",
+ "parentHead": "0a77527",
+ "scope": "Card: every own-id block of the special-move selector 403a40",
+ "files": {
+  "native/Sources/NTSDCore/OriginalCharacterAI.swift": "ac9af9371836135a1d7697d1e693f39dc70de0dec77184e3600223c9cfd7196a",
+  "native/Sources/NTSDCore/OriginalCharacterAISpecial.swift": "ceb51e44718b328015f28627577d9f22b45dfb4eaa969d4f6c71a01b2c2c03d6",
+  "tools/oracle_character_ai.py": "686491c449716772df9b1bab06ca54ac60907235de2b14176b3dd4dd79656525",
+  "native/Tests/NTSDCoreTests/Fixtures/original-character-ai.json": "81268f543dfc954c1544ae91da031abce44fa34ee5529590b7277f927d4e892d",
+  "native/Tests/NTSDCoreTests/Fixtures/original-character-ai-control.json": "4c793183672838dcddb1e982e75afe47b5213101f180f4ae123816951505afc8",
+  "docs/evidence/character-ai.json": "1b8ffa26e7ef919777badd521b4b3197d124cbc9711c966deb68bdb7359a1eb1",
+  "docs/evidence/character-ai-control.json": "e9469c582d4b176bc922400e4316981e322a7247712d296c213e2d7d694a5836"
+ },
+ "blocks": {
+  "1": "sakura 403e83..4041e4",
+  "2": "naruto 403a7e..403e83",
+  "4": "sai",
+  "5": "shino",
+  "6": "Hsasori",
+  "7": "rock_lee (+tails 404aa5..404ae3)",
+  "8": "chiyo",
+  "9": "itachi",
+  "10": "deidara",
+  "11": "sasuke",
+  "32": "hunter",
+  "33": "naruto_clone",
+  "34": "kidomaru",
+  "35": "sakon",
+  "36": "tayuya",
+  "38": "sasuke_cs2",
+  "39": "sand_creature",
+  "50": "pein",
+  "51": "sasori",
+  "52": "kyubi"
+ },
+ "quirks": [
+  "Sasuke/Deidara: facing 1 with target left returns 1 without a command",
+  "Tayuya: returns 1 after scanning slots 0..99 even without a command",
+  "Kyubi claw: returns 1 even if the target is not on the right",
+  "Hsasori jump, Rock Lee z steering, Deidara 0xdb/0xda stores continue the chain (return 0)"
+ ],
+ "comparison": {
+  "main": "Character AI matches original: 7770 real 4094b0 calls (owner ids 1:262 2:249 3:49 4:258 5:257 6:261 7:253 8:270 9:251 10:271 11:254 12:64 13:57 14:48 15:67 16:61 17:58 18:65 19:67 20:51 21:44 22:60 23:46 24:63 25:52 30:58 31:149 32:266 33:1536 34:255 35:257 36:256 37:54 38:258 39:240 50:249 51:259 52:269 55:57 56:56 57:55 58:58; modes 0:1815 1:2019 2:1114 3:1206 4:1616), 36176 RNG draws, 3123540 records, 3656189040 bytes/masks, 1584 executed blocks; full first loading 137 Objects",
+  "control": "Character AI matches original: 7770 real 4094b0 calls (owner ids 1:267 2:245 3:58 4:253 5:266 6:244 7:274 8:258 9:253 10:257 11:253 12:63 13:57 14:66 15:67 16:73 17:57 18:45 19:54 20:61 21:60 22:55 23:49 24:45 25:56 30:61 31:133 32:263 33:1543 34:249 35:258 36:267 37:46 38:253 39:253 50:260 51:251 52:252 55:60 56:67 57:69 58:49; modes 0:1831 1:2055 2:1130 3:1163 4:1591), 36317 RNG draws, 3123540 records, 3656189040 bytes/masks, 1602 executed blocks; full first loading 137 Objects",
+  "undefinedReads": 0
+ },
+ "coverage": {
+  "4094b0": {
+   "blocks": 616,
+   "uncovered": [
+    "0x40a50c",
+    "0x40a534",
+    "0x40a54e",
+    "0x40a8d9",
+    "0x40a8e9",
+    "0x40abae",
+    "0x40b7f1",
+    "0x40baa7"
+   ]
+  },
+  "4034f0": {
+   "blocks": 79,
+   "uncovered": []
+  },
+  "408cb0": {
+   "blocks": 108,
+   "uncovered": [
+    "0x408d1d",
+    "0x40941f",
+    "0x40942b",
+    "0x409443",
+    "0x40945d",
+    "0x409473"
+   ]
+  },
+  "403a40": {
+   "blocks": 580,
+   "uncovered": [
+    "0x403c81",
+    "0x403c8a",
+    "0x403c96",
+    "0x403f28",
+    "0x40401c",
+    "0x404025",
+    "0x404032",
+    "0x4040be",
+    "0x40419b",
+    "0x404260",
+    "0x404357",
+    "0x4043f7",
+    "0x4047d8",
+    "0x40486c",
+    "0x40488f",
+    "0x404b92",
+    "0x404caa",
+    "0x404ce3",
+    "0x404cf0",
+    "0x404d90",
+    "0x404f29",
+    "0x404fc6",
+    "0x4050e0",
+    "0x4050e9",
+    "0x405120",
+    "0x405133",
+    "0x4057f2",
+    "0x4058a6",
+    "0x4058e0",
+    "0x4058e2",
+    "0x4058e4",
+    "0x4058ed",
+    "0x405904",
+    "0x405a1d",
+    "0x405b41",
+    "0x405d7d",
+    "0x405f96"
+   ]
+  }
+ },
+ "tests": {
+  "filter": "OriginalCharacterAITests",
+  "tests": 2,
+  "failures": 0,
+  "seconds": 314.14
+ },
+ "app": "not yet: a computer-player run needs its own menu script (first attempt ended at the main menu under CPU contention)",
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "Unicorn only",
+ "review": "independent review open"
+}

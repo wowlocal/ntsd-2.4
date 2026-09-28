@@ -5,9 +5,9 @@
 # ///
 """Real4094b0(World,slot,mode) called directly after verified first loading,
 under declared World/Actor/global stimuli bound to real loaded Objects and
-Frames. The AI's own Object is a character whose 403a40 special-move block is
-recovered (naruto_clone id33) or absent (ids 3,12..25,30,31,37,55..58);
-idle cases (no target, where 403a40 is never reached) use any character.
+Frames. Owners are real characters; a dedicated family enters the
+special-move selector 403a40 for every own-id block (level 0 makes its entry
+roll always succeed) across distance, chakra, health and frame thresholds.
 Targets are real characters (standing and lying frames), projectiles (state
 3000), items and healing balls. The main corpus runs under CW027f with the
 legacy float conversion; the control corpus uses CW037f, the control loading
@@ -29,7 +29,8 @@ from unicorn.x86_const import UC_X86_REG_ECX, UC_X86_REG_ESP, UC_X86_REG_FPCW, U
 BODIES = [(0x4094B0, 0x40BBE3), (0x403A40, 0x406197), (0x4034F0, 0x403A3F), (0x408CB0, 0x4094A3)]
 ALLOWED = BODIES + [(0x417170, 0x4171BD), (0x4034E0, 0x4034EB), (0x4061A0, 0x4061C5), (0x4450D0, 0x44517B)]
 WORDS = {0x450BCC, 0x450C34, 0x44F604, 0x44F608, 0x44F60C, 0x44F610, 0x44F614, 0x44F618, 0x44F61C}
-UNRECOVERED = {1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 32, 34, 35, 36, 38, 39, 50, 51, 52}
+UNRECOVERED = set()  # every 403a40 block is ported
+SPECIAL_IDS = [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 32, 33, 34, 35, 36, 38, 39, 50, 51, 52]
 
 
 class CharacterAI(ObjectInput):
@@ -98,7 +99,8 @@ class CharacterAI(ObjectInput):
         objects = []
         for n, a in enumerate(self.object_addresses):
             frames = [self.s32(a + 0x7A4 + f * 0x178 + 8) for f in range(400)]
-            objects.append(dict(ordinal=n, type=self.s32(a + 0x6F8), id=self.s32(a + 0x6F4), states=frames))
+            nexts = [self.s32(a + 0x7A4 + f * 0x178 + 0x2C) for f in range(400)]
+            objects.append(dict(ordinal=n, type=self.s32(a + 0x6F8), id=self.s32(a + 0x6F4), states=frames, nexts=nexts))
         by_id = {o['id']: o for o in objects}
         chars = [o for o in objects if o['type'] == 0]
         owners = [o for o in chars if o['id'] not in UNRECOVERED]
@@ -306,10 +308,85 @@ class CharacterAI(ObjectInput):
                             bindings=[dict(slot=k, object=o, frame=f) for k, (o, f) in sorted(bindings.items())])
             return s, mode, stimulus
 
+        DX = [0, 5, 20, 39, 41, 44, 46, 49, 51, 59, 61, 74, 76, 79, 81, 84, 86, 89, 91, 99, 101, 119, 121, 129, 131, 149, 151,
+              159, 161, 169, 171, 199, 201, 239, 241, 249, 251, 269, 271, 279, 281, 299, 301, 349, 351, 369, 371, 399, 401, 499,
+              501, 549, 551, 649, 651, 699, 701, 899, 901, 949, 951, 1199, 1201]
+        DZ = [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 19, 20, 21, 24, 25, 29, 30, 31, 34, 35, 39, 40, 49, 50, 51, 54, 55, 59,
+              60, 64, 65, 69, 70, 71, 149, 150, 151, 169, 170, 171, 199, 200, 201, 239, 240, 241, 249, 250, 251]
+        MPS = [0, 50, 75, 76, 99, 100, 101, 120, 121, 125, 126, 150, 151, 170, 171, 200, 201, 220, 221, 250, 251, 260, 261,
+               300, 301, 320, 321, 350, 351, 360, 361, 450, 451, 500, 501]
+        windows = {7: list(range(255, 262)) + list(range(268, 283)), 1: list(range(260, 290)), 51: list(range(266, 280)), 10: [271]}
+        pein_frames = [(o['ordinal'], f) for o in chars for f in (263, 264) if o['states'][f] != 0]
+
+        def special_scenario(owner):
+            s = R.choice([10, 15, 19]) if R.random() < 0.1 else R.randrange(20, 400)
+            activity, bindings, writes = [0] * 400, {}, []
+
+            def put(slot, offset, raw):
+                writes.append(dict(slot=slot, offset=offset, bytes=raw))
+            own = frames(owner)
+            oid = owner['id']
+            if oid in windows and R.random() < 0.5:
+                f = R.choice(windows[oid])
+            elif oid == 11 and R.random() < 0.4:
+                f = R.choice([f for f in range(400) if owner['nexts'][f] == 290] or own)
+            elif oid == 6 and R.random() < 0.4:
+                f = R.choice(frames(owner, {9}) or own)
+            else:
+                f = R.choice([f for f in own if owner['states'][f] in (0, 1, 2, 3, 7)] or own)
+            bindings[s] = (owner['ordinal'], f)
+            activity[s] = 1
+            sx, sz, team = R.randint(300, 1500), R.randint(200, 500), R.choice([1, 2, 3, 0])
+            mode = R.choice([0, 0, 2, 3, 4, 1])
+            enemy_team = 5 if mode == 1 else (team + 1) % 4
+            for o, v in ((0x10, sx), (0x14, R.choice([0, 0, -10])), (0x18, sz), (0x8, 0), (0x2FC, R.choice([50, 139, 140, 200, 280, 299, 300, 400, 500])),
+                         (0x300, R.choice([500, 500, 450])), (0x304, 500), (0x308, R.choice(MPS)), (0x364, team), (0x2F4, -1),
+                         (0x3E8, 0), (0x3EC, 0), (0x3F0, 0), (0x3F4, 0), (0x404, R.choice([0, 0, 0, 1])), (0x3FC, -1000), (0x400, -1000), (0x360, -1)):
+                put(s, o, i32(v))
+            put(s, 0x40, d(R.choice([0.0, 3.0, -3.0, 10.0, -10.0, 25.0])))
+            put(s, 0x80, bytes([R.choice([0, 1, 0, 1, 2])]).hex())
+            holding = R.random() < 0.1
+            put(s, 0x98, i32(1 if holding else 0))
+            k = R.choice([k for k in (range(0, 10) if R.random() < 0.3 else range(10, 400)) if k != s])
+            state = R.choice([3, 8, 11, 12, 13, 16, 18, 1, 2, 0, 7])
+            pool = by_state.get(state) or standing
+            bindings[k] = R.choice(pein_frames) if pein_frames and R.random() < 0.1 else R.choice(pool)
+            activity[k] = 1
+            for o, v in ((0x10, sx + R.choice([1, -1]) * R.choice(DX)), (0x14, R.choice([0, 0, -10, -45])), (0x18, sz + R.choice([1, -1]) * R.choice(DZ)),
+                         (0x2FC, R.choice([500, 300, 100, 50])), (0x308, R.choice([0, 171, 221, 500])), (0x364, enemy_team), (0x8, 0), (0x98, 0)):
+                put(k, o, i32(v))
+            put(k, 0x40, d(R.choice([0.0, 4.0, -4.0, 12.0])))
+            put(k, 0x80, bytes([R.choice([0, 1])]).hex())
+            if oid in (2, 34, 36, 10) and R.random() < 0.6:
+                for _ in range(R.choice([1, 2, 3])):
+                    free = [a for a in (range(0, 20) if oid != 36 or R.random() < 0.5 else range(0, 100)) if a not in bindings]
+                    if not free:
+                        break
+                    a = R.choice(free)
+                    bindings[a] = R.choice(standing)
+                    activity[a] = R.choice([1, 1, 2])
+                    for o, v in ((0x10, sx + R.choice([1, -1]) * R.choice([0, 3, 4, 5, 6, 100, 249, 251, 400])), (0x18, sz + R.choice([0, 20, 59, 61])),
+                                 (0x2FC, R.choice([50, 139, 140, 200, 280, 299, 300, 409, 411, 500, 0])), (0x300, 500), (0x364, team), (0x8, 0), (0x98, 0)):
+                        put(a, o, i32(v))
+            held = R.choice([a for a in range(400) if a not in bindings])
+            bindings[held] = R.choice(items)
+            put(s, 0x9C, i32(held))
+            g = [dict(address=0x450BAC, bytes=i32(0)), dict(address=0x450BB4, bytes=i32(0)), dict(address=0x44D024, bytes=i32(R.randrange(0, 17)))]
+            if R.random() < 0.8:
+                g.append(dict(address=0x450C2C, bytes=i32(1)))
+            else:
+                g += [dict(address=0x450C2C, bytes=i32(0)), dict(address=0x450C30, bytes=i32(R.choice([0, 1, 2, 3])))]
+            if R.random() < 0.5:
+                g.append(dict(address=0x450BCC, bytes=struct.pack('<I', R.randrange(3000)).hex()))
+                g.append(dict(address=0x450C34, bytes=struct.pack('<I', R.randrange(1234)).hex()))
+            stimulus = dict(globals=g, world=[dict(offset=4, bytes=bytes(activity).hex())], actors=writes,
+                            bindings=[dict(slot=a, object=o, frame=f) for a, (o, f) in sorted(bindings.items())])
+            return s, mode, stimulus
+
         cases = []
         plan = [('scripted', 40), ('walk', 80), ('fight', 500), ('mixed', 500), ('items', 200),
                 ('pickup', 300), ('weapon', 400), ('band', 200), ('clone', 200), ('idle', 150), ('walk2', 100), ('far404', 100),
-                ('weapon2', 300), ('approach2', 250), ('item2', 250), ('remember', 200)]
+                ('weapon2', 300), ('approach2', 250), ('item2', 250), ('remember', 200), ('special', 4000)]
         for family, total in plan:
             for index in range(total):
                 owner = by_id[33] if index % 3 == 0 else R.choice(owners)
@@ -319,7 +396,10 @@ class CharacterAI(ObjectInput):
                     owner = by_id[31] if index % 2 == 0 else R.choice(owners)
                 elif family == 'clone':
                     owner = by_id[33]
-                s, mode, stimulus = scenario(owner, family)
+                if family == 'special':
+                    s, mode, stimulus = special_scenario(by_id[SPECIAL_IDS[index % len(SPECIAL_IDS)]])
+                else:
+                    s, mode, stimulus = scenario(owner, family)
                 if not cases:
                     stimulus['globals'].insert(0, table_write)
                 cases.append(self.ai(f'{family}-{index}', s, mode, stimulus, cw, sse2))

@@ -1,12 +1,12 @@
 {
   "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
-  "scope": "Real4094b0(World,slot,mode) called directly after verified first loading,\nunder declared World/Actor/global stimuli bound to real loaded Objects and\nFrames. The AI's own Object is a character whose 403a40 special-move block is\nrecovered (naruto_clone id33) or absent (ids 3,12..25,30,31,37,55..58);\nidle cases (no target, where 403a40 is never reached) use any character.\nTargets are real characters (standing and lying frames), projectiles (state\n3000), items and healing balls. The main corpus runs under CW027f with the\nlegacy float conversion; the control corpus uses CW037f, the control loading\nand the SSE2 conversion flag45971c. The first case declares a match-start RNG\ntable. No game code is stubbed; the constructor memset stays a host boundary.\n",
+  "scope": "Real4094b0(World,slot,mode) called directly after verified first loading,\nunder declared World/Actor/global stimuli bound to real loaded Objects and\nFrames. Owners are real characters; a dedicated family enters the\nspecial-move selector 403a40 for every own-id block (level 0 makes its entry\nroll always succeed) across distance, chakra, health and frame thresholds.\nTargets are real characters (standing and lying frames), projectiles (state\n3000), items and healing balls. The main corpus runs under CW027f with the\nlegacy float conversion; the control corpus uses CW037f, the control loading\nand the SSE2 conversion flag45971c. The first case declares a match-start RNG\ntable. No game code is stubbed; the constructor memset stays a host boundary.\n",
   "corpus": "character-ai.json",
-  "sha256": "f9175c59db932d43a8bca7e280bb6f202e8ffe7dbbb3dd55739bb4a527ab8f64",
-  "cases": 3770,
-  "blocks": 918,
-  "nativeComparison": "Character AI matches original: 3770 real 4094b0 calls (owner ids 1:4 2:4 3:99 4:2 5:1 6:2 7:7 8:1 9:9 10:3 11:2 12:101 13:103 14:101 15:105 16:116 17:102 18:112 19:98 20:111 21:101 22:103 23:85 24:98 25:94 30:98 31:213 32:4 33:1374 34:2 35:2 36:4 37:97 38:1 39:3 50:5 51:6 52:6 55:102 56:92 57:90 58:107; modes 0:484 1:1314 2:489 3:528 4:955), 7510 RNG draws, 1515540 records, 1773981040 bytes/masks, 918 executed blocks; full first loading 137 Objects",
+  "sha256": "782556b7da78e51f25607171269859348a4d81f15dc6711ab555900af5079a78",
+  "cases": 7770,
+  "blocks": 1584,
+  "nativeComparison": "Character AI matches original: 7770 real 4094b0 calls (owner ids 1:262 2:249 3:49 4:258 5:257 6:261 7:253 8:270 9:251 10:271 11:254 12:64 13:57 14:48 15:67 16:61 17:58 18:65 19:67 20:51 21:44 22:60 23:46 24:63 25:52 30:58 31:149 32:266 33:1536 34:255 35:257 36:256 37:54 38:258 39:240 50:249 51:259 52:269 55:57 56:56 57:55 58:58; modes 0:1815 1:2019 2:1114 3:1206 4:1616), 36176 RNG draws, 3123540 records, 3656189040 bytes/masks, 1584 executed blocks; full first loading 137 Objects",
   "fixture": "original-character-ai.json",
-  "fixtureSHA256": "0d09445d8aefc80ef1f0345dccbee84c6a3bdd2fddf773c4828a974e7c0c6f64",
-  "fixtureBytes": 5643148
+  "fixtureSHA256": "81268f543dfc954c1544ae91da031abce44fa34ee5529590b7277f927d4e892d",
+  "fixtureBytes": 11028316
 }

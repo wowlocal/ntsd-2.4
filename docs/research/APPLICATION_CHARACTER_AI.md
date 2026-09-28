@@ -13,6 +13,9 @@ fall-through. Owners whose 403a40 block is not recovered (ids 1, 2, 4..11, 32,
 34..36, 38, 39, 50..52) stop explicitly when that block is reached; everything
 else they do (idle, walking, items) runs. The app's cycle serves character AI.
 
+*Update:* the remaining 403a40 blocks were ported afterwards; see
+[special moves](APPLICATION_SPECIAL_MOVES.md). The fixtures were re-captured there.
+
 - **Comparison:** two corpora of 3770 real 4094b0 calls each after the
   verified first loading: CW027f with the legacy float conversion, and CW037f
   over the control loading with the SSE2 conversion flag. Owners: naruto_clone

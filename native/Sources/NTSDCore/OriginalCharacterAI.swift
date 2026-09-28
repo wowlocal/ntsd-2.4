@@ -6,14 +6,9 @@ public enum OriginalCharacterAIEvent: Equatable {
 /// 10..399 whose Object type is 0. It emulates a player: the current button
 /// bytes (Actor+0xcd up, ce down, cf left, d0 right, d1 attack, d2 jump,
 /// d3 defend) and their previous copies (c6..cc), plus special-move command
-/// bytes 0xd6..0xd9. Helpers 4034f0 and 408cb0 are complete. In the
-/// special-move selector 403a40 only the entry roll, the naruto_clone (id 33)
-/// block and the fall-through are recovered; the blocks for the other ids
-/// stop as explicit boundaries.
+/// bytes 0xd4..0xdc. Helpers 4034f0, 408cb0 and the special-move selector
+/// 403a40 (every own-id block) are complete.
 public enum OriginalCharacterAI {
-    /// Own Object ids with an unrecovered 403a40 block.
-    public static let unrecoveredSpecialMoveIDs: Set<Int32> = [1,2,4,5,6,7,8,9,10,11,32,34,35,36,38,39,50,51,52]
-
     public static func apply(slot: Int,mode: Int32,state: inout OriginalMatchPreparation,sse2: Bool = false,
                              observe: (OriginalCharacterAIEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog
@@ -499,22 +494,33 @@ struct OriginalCharacterAIPass {
         if try abs(i(t,0x18) &- i(s,0x18)) <= 3, try abs(i(t,0x10) &- i(s,0x10)) <= 6 { try release(s,.attack); try press(s,.attack) }
     }
 
-    /// 403a40 (partial): entry roll, the naruto_clone block, fall-through.
+    /// 403a40: the entry roll, then the block for the AI's own Object id.
     mutating func special(_ s: Int,_ t: Int,slot: Int,_ l: Locals) throws -> Bool {
         if try draw(0x3c,g(0x44f618) &+ 1) > 0 { return false }
         let own = try id(s)
-        if OriginalCharacterAI.unrecoveredSpecialMoveIDs.contains(own) {
-            throw OriginalLoaderError.outsideVerifiedDomain("Character AI special moves for Object id \(own) are not recovered")
+        switch own {
+        case 1: return try sakura1(s,t,l)
+        case 2: return try naruto2(s,t,slot: slot,l)
+        case 4: return try sai4(s,t)
+        case 5: return try shino5(s,t)
+        case 6: return try hsasori6(s,t)
+        case 7: return try lee7(s,t,l)
+        case 8: return try chiyo8(s,t,l)
+        case 9: return try itachi9(s,t,l)
+        case 10: return try deidara10(s,t,slot: slot,l)
+        case 11: return try sasuke11(s,t,l)
+        case 32: return try hunter32(s,t,l)
+        case 33: return try clone33(s,t,l)
+        case 34: return try kidomaru34(s,slot: slot,l)
+        case 35: return try sakon35(s,t)
+        case 36: return try tayuya36(s,t)
+        case 38: return try sasukeCS38(s,t)
+        case 39: return try sand39(s,t)
+        case 50: return try pein50(s,t)
+        case 51: return try sasori51(s,t)
+        case 52: return try kyubi52(s,t,l)
+        default: return false
         }
-        guard own == 33 else { return false }
-        if try draw(0x6c,5) == 0 || l.tState == 16 || l.tState == 8 {
-            let tx = try i(t,0x10)
-            if try abs(ftol(s,0x40) &- i(s,0x10) &+ tx) < 60, try abs(i(t,0x18) &- i(s,0x18)) < 7, try i(s,0x308) > 150 {
-                let f = try facing(s),sx = try i(s,0x10)
-                if (f == 0 && sx < tx) || (f == 1 && sx > tx) { try byte(s,0xd6,3); return true }
-            }
-        }
-        return false
     }
 
     /// 408cb0: weapon use; false ends the AI for this call.

@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Special-move selector 403a40 for every character](research/APPLICATION_SPECIAL_MOVES.md):
+all 20 own-id blocks ported; two corpora of 7770 real character-AI calls (every
+character as owner) match Native byte for byte. Next: VS with computer players
+in the app. [Evidence](evidence/application-special-moves.json).
+
 [End of the District match: milestone reached](research/APPLICATION_MATCH_END.md):
 after KO the app saves the original replay (`recording\*.lfr`), shows the
 Summary, runs the round epilogue and returns to Character Selection and the main
