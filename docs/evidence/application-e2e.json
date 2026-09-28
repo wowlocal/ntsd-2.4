@@ -1,0 +1,38 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-28T23:11:15.620294Z",
+ "parentHead": "83f65a6",
+ "scope": "End-to-end app check of a whole computer-VS match under the virtual clock",
+ "files": {
+  "tools/app_e2e.py": "ed8cb5bb70fcab8e645aa5111ce43e7acf2d2a74e70ac224739952816509a9f3",
+  "tools/app_e2e_computer_vs.script": "5dbc1d97b89da43e0c5342f2197c2f62d8b1fe70b743e4181ee6e23840ff9080",
+  "tools/app_e2e_reference.json": "f3e7e3912ae453e23c2e7fe160ca315dc89720f8bfea39ee689cd6ac12e57a66",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "64a3d91f48ec80fadd8636847dc70d17a27e4f78edf83228cc0485a591425ee4"
+ },
+ "command": "python3 tools/app_e2e.py [--build] [--record]",
+ "runs": [
+  {
+   "run": "record",
+   "result": "recorded",
+   "seconds": 77.6
+  },
+  {
+   "run": "verify",
+   "result": "pass",
+   "seconds": 77.0,
+   "milestones": 6,
+   "progress": 6
+  }
+ ],
+ "negative": [
+  "progress objectInputs +1 -> differs [progress]",
+  "replay hash changed -> differs [overlayFiles]"
+ ],
+ "exploratory": {
+  "e2e1": "no key after script: Summary shown over running game; bodies continued to 6914 by step 30000",
+  "e2e2": "Jump at step 9000: epilogue 1 at body 1826, Character Selection with start menu"
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

@@ -1,0 +1,116 @@
+{
+ "backingScale": 2,
+ "boundary": null,
+ "exitCode": 0,
+ "milestones": [
+  {
+   "attempts": 76,
+   "dates": [
+    "2026/01/01/01/00/00",
+    "2026/01/05/01/00/00"
+   ],
+   "event": "started",
+   "requests": 75
+  },
+  {
+   "allocations": 16105,
+   "audioRequests": 2072,
+   "bitmapRequests": 12817,
+   "event": "loaded",
+   "files": 621
+  },
+  {
+   "cycles": 464,
+   "event": "matchLaunched",
+   "iterations": 1476
+  },
+  {
+   "cycles": 465,
+   "event": "gameplay"
+  },
+  {
+   "cycles": 2291,
+   "epilogues": 1,
+   "event": "menu",
+   "gameplayBodies": 1826,
+   "iterations": 7186,
+   "refusedReplays": [],
+   "replayFiles": [
+    "recording\\20260101_010000_VS.lfr 11044"
+   ]
+  },
+  {
+   "capture": "f472c8bb20693dfcaef7797e8b43c2bada8b8ca99b4009bc025ed0401c4c6289",
+   "event": "captured",
+   "iterations": 9100,
+   "musicPlaying": true,
+   "track": "bgm\\boss1.wma"
+  }
+ ],
+ "overlayFiles": {
+  "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+  "recording/20260101_010000_VS.lfr": "2e98755f4bf0ff9d71284fdedba6af1e59d3cf13fe44c5e6cd49ff9819b77ff6"
+ },
+ "progress": [
+  {
+   "bodies": 300,
+   "capture": "966c1fbc34355bd2a284d16371342368f8b4ca28c383fe345587b8413645bba9",
+   "characterAI": 300,
+   "cycles": 764,
+   "iterations": 2414,
+   "musicPlaying": true,
+   "objectInputs": 121,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 600,
+   "capture": "299e8c9b5025f23add5b9df6099b53dd1075863524030cbf234e1883ffd0bc34",
+   "characterAI": 600,
+   "cycles": 1064,
+   "iterations": 3351,
+   "musicPlaying": true,
+   "objectInputs": 161,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 900,
+   "capture": "232d5d6cd22b80d551b8fedca57140c5101ad2c763dc9fcc193da9b8c0dc852e",
+   "characterAI": 900,
+   "cycles": 1364,
+   "iterations": 4289,
+   "musicPlaying": true,
+   "objectInputs": 184,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1200,
+   "capture": "ec902e2e3459145c681c943dbd5f1de25e49cbb6e7a6a6f843109acf82a5560f",
+   "characterAI": 1200,
+   "cycles": 1664,
+   "iterations": 5226,
+   "musicPlaying": true,
+   "objectInputs": 1043,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1500,
+   "capture": "2bd75d0a0ad4a2bed12393fae7de0b38e0e8111c0bf026d4918915baefd6f5f0",
+   "characterAI": 1500,
+   "cycles": 1964,
+   "iterations": 6164,
+   "musicPlaying": true,
+   "objectInputs": 1268,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1800,
+   "capture": "6c7f9609be5eeab36a64c2f2613f6eaabd73b7d71734344be09efa3e8a3bee14",
+   "characterAI": 1800,
+   "cycles": 2264,
+   "iterations": 7101,
+   "musicPlaying": true,
+   "objectInputs": 1287,
+   "track": "bgm\\boss1.wma"
+  }
+ ]
+}

@@ -17,6 +17,8 @@ import NTSDMacPlatform
 /// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
 /// `--stage-checkpoints` builds the per-stage snapshots the app never uses.
 /// `--mute-music` plays the original tracks at zero output gain.
+/// `--overlay DIR` keeps user files (settings, replays) in DIR instead of
+/// Application Support, for automated runs.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -81,7 +83,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],
                                                                   reason:"Original game loop timing")
                 let package = try OriginalApplicationStartupInputs.bundled()
-                let overlay = try OriginalMacRuntimeOverlay.standard()
+                let overlay = try overlayRoot()
                 let started = try OriginalMacRuntimeStartup.run(inputs:package,overlay:overlay,environment:startupEnvironment())
                 self.started = started
                 while try started.host.takeCommitted() != nil {}
@@ -92,7 +94,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
-                    "musicOutput":"packaged ALAC tracks; graph-event looping"])
+                    "musicOutput":"packaged ALAC tracks; graph-event looping",
+                    "backingScale":(try? started.windows.observation(started.window).backingScale) ?? 0])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })
@@ -170,7 +173,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 if first {
                     loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),
                                                                     clock:{ [unowned self] in try self.clock() })
-                    loading?.overlay = try OriginalMacRuntimeOverlay.standard()
+                    loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     if virtualClock != nil { loading?.localDate = { Self.virtualDate } }
                 }
@@ -182,7 +185,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 switch completed {
                 case .launched: Self.emit(["event":"matchLaunched","iterations":committed,"cycles":cycles])
                 case .gameplay:
-                    gameplayBodies += 1
+                    gameplayBodies += 1; inMatch = true
                     if gameplayBodies == 1 {
                         gameplayClock = (steps,committed)
                         Self.emit(["event":"gameplay","cycles":cycles,"uptime":ProcessInfo.processInfo.systemUptime])
@@ -201,7 +204,15 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     if let i = arguments.firstIndex(of:"--exit-after-bodies"),i+1 < arguments.count,let n = Int(arguments[i+1]),gameplayBodies >= n {
                         NSApp.terminate(nil); return
                     }
-                case .menu: break
+                case .menu:
+                    // The first loaded menu step after a match (epilogue, selection).
+                    if inMatch {
+                        inMatch = false
+                        let c = loading.counts
+                        Self.emit(["event":"menu","cycles":cycles,"iterations":committed,"gameplayBodies":gameplayBodies,
+                            "epilogues":c.epilogues,"replayFiles":loading.savedReplays.map { "\($0.path) \($0.bytes.count)" },
+                            "refusedReplays":loading.refusedReplayOpens,"uptime":ProcessInfo.processInfo.systemUptime])
+                    }
                 }
                 if first {
                     let c = loading.counts
@@ -259,7 +270,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    private var musicEnds = 0, musicNotifications = 0
+    private var musicEnds = 0, musicNotifications = 0, inMatch = false
     /// Committed graph state to the output; a finished track queues EC_COMPLETE
     /// and posts the registered notification for the next iteration's WndProc.
     @MainActor private func presentMusic(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu) throws {
@@ -270,6 +281,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         guard let n = started.runtime.music.complete(graph) else { return }
         guard n.window == menu.messages.window else { throw OriginalMacRuntimeMessages.Boundary.arguments("graph notify window") }
         menu.messages.post(n.message,0,n.lParam); musicNotifications += 1
+    }
+    private func overlayRoot() throws -> OriginalMacRuntimeOverlay {
+        guard let i = arguments.firstIndex(of:"--overlay"),i+1 < arguments.count else { return try .standard() }
+        return .init(root:URL(fileURLWithPath:arguments[i+1],isDirectory:true))
     }
     @MainActor private func musicReport() -> [String:Any] {
         guard let s = music?.state else { return [:] }

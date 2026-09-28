@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[End-to-end app check](research/APPLICATION_E2E.md): `tools/app_e2e.py` replays a
+whole computer-VS match (WinMain → loading → fight → KO → replay → Summary →
+epilogue → Character Selection) on the release app under `--virtual-clock`
+with a temporary `--overlay`, and compares milestones, capture hashes and
+overlay files with `tools/app_e2e_reference.json`. [Evidence](evidence/application-e2e.json).
+
 [Constant-cost iterations](research/APPLICATION_ITERATION_HISTORY.md): the
 request deliveries' retained cursor history is a persistent list, so copying a
 platform per attempt no longer grows with the session; idle menu iterations
