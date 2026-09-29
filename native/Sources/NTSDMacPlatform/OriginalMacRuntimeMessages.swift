@@ -71,8 +71,9 @@ public struct OriginalMacRuntimeKey: Equatable {
     public var messageBox: (([UInt8],[UInt8],UInt32) throws -> Int32)?
     /// COM Release of a sound or music object (IUnknown::Release, offset 8).
     public var release: ((UInt32) throws -> Void)?
-    /// ShellExecuteA(NULL, "open", file, …): the app opens or records the file.
-    public var shell: (([UInt8]) throws -> Void)?
+    /// ShellExecuteA(NULL, verb, file, …) with verb "open" (a URL) or
+    /// "explore" (a game-directory folder): the app opens or records it.
+    public var shell: (([UInt8],[UInt8]) throws -> Void)?
     /// DestroyWindow completed (WM_NCDESTROY answered): the app hides its window.
     public var destroyedWindow: () -> Void = {}
     public private(set) var destroyed = false
@@ -175,10 +176,10 @@ public struct OriginalMacRuntimeKey: Equatable {
             post(q.arguments[1],q.arguments[2],q.arguments[3]); return 1
         case .postQuit: try require(q.arguments.count == 1); post(0x12,q.arguments[0],0); return 0
         case .shell:
-            // ShellExecuteA(NULL, "open", file, NULL, NULL, SW_SHOWNORMAL) → 42 (> 32).
-            try require(q.arguments == [0,0,0,1] && q.strings.count == 2 && q.strings[0] == Array("open".utf8))
+            // ShellExecuteA(NULL, "open" | "explore", file, NULL, NULL, SW_SHOWNORMAL) → 42 (> 32).
+            try require(q.arguments == [0,0,0,1] && q.strings.count == 2 && [Array("open".utf8),Array("explore".utf8)].contains(q.strings[0]))
             guard let shell else { throw Boundary.unsupported("ShellExecuteA") }
-            try shell(q.strings[1]); return 42
+            try shell(q.strings[0],q.strings[1]); return 42
         }
     }
     public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {

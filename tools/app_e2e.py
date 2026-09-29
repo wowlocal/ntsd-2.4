@@ -208,6 +208,34 @@ def online_check(timeout, app=APP):
         return ok, {"exitCode": done.returncode, "messageBoxes": boxes, "opened": opened}
 
 
+RECORDING_OPENED = [["explore", "recording"], ["open", "http://www.littlefighter.com/record"],
+                    ["open", "http://www.littlefighter.com/challenge"], ["open", "http://littlefighter.com"]]
+
+
+def recording_check(timeout, app=APP):
+    """Front menu → RECORDING INFO: the name field (nine Backspaces, "naruto"),
+    the recording flag off, the folder and help buttons, OK (saved), page 8's
+    link and OK; OFFICIAL WEBSITE then proves the main menu is back. The
+    overlay's data\\control.txt is the packaged file with those two lines
+    changed, in Windows text form."""
+    packaged = (ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/control.txt").read_bytes()
+    expected = packaged.replace(b"0\r\n1\r\n<No name>\r\n", b"0\r\n0\r\nnaruto\r\n", 1)
+    keys = [8] * 9 + [78, 65, 82, 85, 84, 79]
+    script = "20 click 410 322; 80 click 400 216; " + "".join(f"{100 + 20 * i} key {k}; " for i, k in enumerate(keys)) \
+        + "440 click 288 400; 480 click 512 400; 520 click 256 472; 560 click 288 424; 620 click 256 360; 660 click 336 392; 720 click 410 352; 780 exit"
+    with tempfile.TemporaryDirectory(prefix="ntsd-recording-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script", script],
+                              capture_output=True, text=True, timeout=timeout)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        opened = [[e.get("verb"), e["file"]] for e in events if e.get("event") == "shellOpen"]
+        saved = Path(scratch, "data", "control.txt")
+        written = saved.read_bytes() if saved.exists() else None
+        ok = (done.returncode == 0 and expected != packaged and written == expected and opened == RECORDING_OPENED
+              and not any(e.get("event") == "boundary" for e in events))
+        return ok, {"exitCode": done.returncode, "opened": opened, "saved": written is not None, "matches": written == expected}
+
+
 def summarize(events, captures, overlay):
     out = {"milestones": [], "progress": [], "boundary": None}
     for e in events:
@@ -290,6 +318,9 @@ def main():
             ok, detail = online_check(args.timeout, args.app)
             if not ok:
                 problems.append("online"); reference["online"] = {"messageBoxes": ONLINE_BOXES, "opened": ONLINE_OPENED}; observed["online"] = detail
+            ok, detail = recording_check(args.timeout, args.app)
+            if not ok:
+                problems.append("recording"); reference["recording"] = {"opened": RECORDING_OPENED, "control.txt": "name naruto, recording off"}; observed["recording"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:

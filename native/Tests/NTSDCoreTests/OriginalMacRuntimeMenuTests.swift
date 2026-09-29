@@ -61,9 +61,11 @@ import XCTest
         XCTAssertEqual(types,[4,0]); XCTAssertThrowsError(try m.answer(.init(.message,[9,0],[[],[]])))
         // OFFICIAL WEBSITE: ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL) → 42.
         XCTAssertThrowsError(try m.answer(.init(.shell,[0,0,0,1],[Array("open".utf8),Array("http://littlefighter.com".utf8)])))
-        var opened: [[UInt8]] = []; m.shell = { opened.append($0) }
+        var opened: [[UInt8]] = []; m.shell = { opened += [$0,$1] }
         XCTAssertEqual(try m.answer(.init(.shell,[0,0,0,1],[Array("open".utf8),Array("http://littlefighter.com".utf8)])),42)
-        XCTAssertEqual(opened,[Array("http://littlefighter.com".utf8)])
+        // RECORDING INFO's folder button: ShellExecuteA(NULL, "explore", "recording", …).
+        XCTAssertEqual(try m.answer(.init(.shell,[0,0,0,1],[Array("explore".utf8),Array("recording".utf8)])),42)
+        XCTAssertEqual(opened,[Array("open".utf8),Array("http://littlefighter.com".utf8),Array("explore".utf8),Array("recording".utf8)])
         XCTAssertThrowsError(try m.answer(.init(.shell,[0,0,0,1],[Array("print".utf8),[]])))
         XCTAssertEqual(try m.answer(.init(.method,[0x55,8])),0); XCTAssertEqual(released,[0x55])
         XCTAssertThrowsError(try m.answer(.init(.method,[0x55,0x30])))

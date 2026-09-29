@@ -195,8 +195,39 @@ and email the same frame's font terminator removes it again; OK saves before
 its sound and keeps the background for page 8; Cancel re-reads before its
 sound.
 
-Remaining: F3b — selectors 7 and 8 in the app (the "explore" of "recording"
-needs a declared policy); the 402b60 network startup and network play stay
-declared absent.
+## F3b — RECORDING INFO in the app (2026-09-29)
+
+The session's alternate runs selectors 6, 7 and 8 through one branch with the
+same per-iteration inputs (data\control.txt for the 423480 reload,
+GetKeyState(VK_CAPITAL), the 423230 writer's output as an effect, Sleep and
+ShellExecuteA after the screen returns); the font's Blt answers are the ones
+its blit events emitted. The runtime's ShellExecuteA answer now passes the
+verb: "open" of a URL as before, and "explore" of a game-directory folder.
+
+Declared policy (Windows shell, not the EXE): "explore" of "recording" opens
+the overlay's `recording` folder in Finder, creating it as the shipped game
+has it; scripted runs only report `shellOpen` with the verb. The result stays
+42.
+
+**App:** RECORDING INFO shows the original page with its bitmap-font fields
+("<No name>", "<No info>", "<No email>"), the recording check box and the
+links. Selecting the name, nine Backspaces and "naruto" edit it with the
+cursor shown; the check box turns recording off; the folder, help and OK
+buttons work; OK writes control.txt equal to the packaged file with those two
+lines changed ("0" and "naruto", CRLF) and opens page 8 (LF2 Mission
+Challenge), whose link opens the challenge page and whose OK returns to the
+main menu with its background reloaded.
+
+**Checks:** `tools/app_e2e.py`'s vs scenario gains this recording check
+(the file byte for byte and the four `shellOpen` requests in order). The
+whole e2e set passes (vs with the quit, website, controls, online and
+recording checks, mission, demo, war, playback, tournament, team-tournament).
+The bootstrap, host-session, menu-input, observed-iteration,
+observed-startup, Mac runtime-menu (now with the "explore" answer) and
+runtime-startup suites and the RECORDING INFO comparison pass (31).
+
+Remaining: the 402b60 network startup and network play stay declared absent,
+and with them selector 4 (428808), which the client sets at 428730 only after
+a successful connection. Every other front-menu item now runs in the app.
 
 EXE envelope not recalculated.

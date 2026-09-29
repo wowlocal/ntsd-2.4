@@ -542,32 +542,42 @@ public struct OriginalApplicationMenuSession {
                     },alternate:{ state,selector in
                         stage = .menu
                         try point(.alternate,combined(state))
-                        if selector == 6 {
-                            // CONTROL SETTINGS (APPLICATION_FRONT_MENU_ITEMS.md F2): GetKeyState,
-                            // the 423480 reload and the 423230 writer use this iteration's
-                            // inputs; the written file is an effect; Sleep and
-                            // ShellExecuteA run when the screen returns.
+                        if (6...8).contains(selector) {
+                            // CONTROL SETTINGS (6) and RECORDING INFO (7, 8;
+                            // APPLICATION_FRONT_MENU_ITEMS.md F2, F3): GetKeyState, the 423480
+                            // reload and the 423230 writer use this iteration's inputs; the
+                            // written file is an effect; Sleep and ShellExecuteA run when the
+                            // screen returns.
                             var calls: [OriginalFrontScreenEvent] = []
-                            try OriginalFrontControlSettings.advance(globals:&state,memory:&memory,
-                                input:.init(target:game.target,dcResult:responses.dcResult,dc:responses.dc),draw:draw,
-                                keyState:{ _ in responses.capsLock },reload:{ s in
-                                    guard let bytes = responses.controlFile else { throw Boundary.dependency("Control settings file") }
-                                    var scratch = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x1f4),defined:[Bool](repeating:false,count:0x1f4))
-                                    // Declared tokens: the FILE and the helper's own scratch are never dereferenced.
-                                    guard try OriginalSettingsLoading.loadAndContinueStartup(globals:&s,scratch:&scratch,translatedBytes:bytes,
-                                        file:1,scratchAddress:0x10000000,flagClearValue:nil) == .ready else { throw Boundary.dependency("Control settings reload") }
-                                },write:{ s in
-                                    var output = try OriginalBufferedTextOutput(backing:[UInt8](repeating:0,count:4096)),written: [UInt8] = []
-                                    let result = try OriginalSettingsWriting.run(globals:&s,output:&output,available:true,
-                                        write:{ bytes in written += bytes;return Int32(bytes.count) },close:{ 0 })
-                                    try emit(.settingsFile(written));return result
-                                },observe:{ e in
-                                    switch e.kind {
-                                    case "keyState","format","call","return":if initialization == nil { try observe(e) }
-                                    case "sleep","shell":calls.append(e);if initialization == nil { try observe(e) }
-                                    default:try event(e)
-                                    }
-                                })
+                            let screen = OriginalFrontControlSettings.Input(target:game.target,dcResult:responses.dcResult,dc:responses.dc)
+                            func reload(_ s: inout OriginalStateRecord) throws {
+                                guard let bytes = responses.controlFile else { throw Boundary.dependency("Control settings file") }
+                                var scratch = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x1f4),defined:[Bool](repeating:false,count:0x1f4))
+                                // Declared tokens: the FILE and the helper's own scratch are never dereferenced.
+                                guard try OriginalSettingsLoading.loadAndContinueStartup(globals:&s,scratch:&scratch,translatedBytes:bytes,
+                                    file:1,scratchAddress:0x10000000,flagClearValue:nil) == .ready else { throw Boundary.dependency("Control settings reload") }
+                            }
+                            func write(_ s: inout OriginalStateRecord) throws -> OriginalSettingsWriting.Result {
+                                var output = try OriginalBufferedTextOutput(backing:[UInt8](repeating:0,count:4096)),written: [UInt8] = []
+                                let result = try OriginalSettingsWriting.run(globals:&s,output:&output,available:true,
+                                    write:{ bytes in written += bytes;return Int32(bytes.count) },close:{ 0 })
+                                try emit(.settingsFile(written));return result
+                            }
+                            func screenEvent(_ e: OriginalFrontScreenEvent) throws {
+                                switch e.kind {
+                                case "keyState","format","call","return","fontPass","stringWrite":if initialization == nil { try observe(e) }
+                                case "sleep","shell":calls.append(e);if initialization == nil { try observe(e) }
+                                default:try event(e)
+                                }
+                            }
+                            if selector == 6 {
+                                try OriginalFrontControlSettings.advance(globals:&state,memory:&memory,input:screen,draw:draw,
+                                    keyState:{ _ in responses.capsLock },reload:reload,write:write,observe:screenEvent)
+                            } else {
+                                // The font's Blt answers are the ones its blit events just emitted.
+                                try OriginalFrontRecordingInfo.advance(selector:selector,globals:&state,memory:&memory,input:screen,draw:draw,
+                                    blit:{ _ in lastBltResult },keyState:{ _ in responses.capsLock },reload:reload,write:write,observe:screenEvent)
+                            }
                             for c in calls {
                                 if c.kind == "sleep" { _ = try queue(.init(.sleep,c.arguments));try emit(.sleep(c.arguments[0])) }
                                 else { _ = try windowDefault(.init(.shell,c.arguments,c.strings)) }

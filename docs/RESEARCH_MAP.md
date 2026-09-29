@@ -10,7 +10,7 @@ ported and matches 106 real cases in full ([evidence](evidence/front-control-set
 in the app, rebinding a key and OK save data\control.txt to the overlay and the
 new key works after a relaunch. F3: RECORDING INFO and its page 8 are ported
 and match 129 real cases in full ([evidence](evidence/front-recording-info.json));
-app wiring is next.
+in the app the recording name/flag are saved and page 8's links and OK work.
 
 [ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
 quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real

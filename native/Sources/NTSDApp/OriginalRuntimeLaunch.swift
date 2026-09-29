@@ -124,12 +124,19 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 if arguments.contains("--script") { menu.capsLock = { 0 } }
                 self.menu = menu; menu.sounds = sounds
                 menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
-                // OFFICIAL WEBSITE: the default browser opens the URL; scripted
-                // runs only report it.
-                menu.messages.shell = { [unowned self] file in
-                    let text = String(decoding:file,as:UTF8.self)
-                    Self.emit(["event":"shellOpen","file":text,"iterations":self.committed])
-                    if !arguments.contains("--script"),let url = URL(string:text) { NSWorkspace.shared.open(url) }
+                // "open" of a URL (OFFICIAL WEBSITE and the other links): the default
+                // browser opens it. "explore" of a game-directory folder (RECORDING
+                // INFO's "recording"): Finder opens that overlay folder, created as the
+                // shipped game has it. Scripted runs only report either.
+                menu.messages.shell = { [unowned self] verb,file in
+                    let text = String(decoding:file,as:UTF8.self),action = String(decoding:verb,as:UTF8.self)
+                    Self.emit(["event":"shellOpen","verb":action,"file":text,"iterations":self.committed])
+                    if arguments.contains("--script") { return }
+                    if action == "explore" {
+                        let folder = try overlay.url(text)
+                        try FileManager.default.createDirectory(at:folder,withIntermediateDirectories:true)
+                        NSWorkspace.shared.open(folder)
+                    } else if let url = URL(string:text) { NSWorkspace.shared.open(url) }
                 }
                 menu.messages.destroyedWindow = { [unowned self] in
                     Self.emit(["event":"windowDestroyed","iterations":self.committed])
