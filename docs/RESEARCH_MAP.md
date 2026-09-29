@@ -4,8 +4,9 @@
 Demo soak found the original's unchecked reads of a heal ball's frame 1000
 (beyond its Object allocation); declared policy: a Frame wholly outside the
 allocation (≥ 400 or ≤ −7) reads as zero, also for held items a wpoint's
-weaponact lets go. The soak now runs sixteen matches (next: an undefined
-8-byte read at offset 80).
+weaponact lets go. [Unwritten Object header words](research/APPLICATION_OBJECT_HEADER_DEFAULTS.md):
+the scheduler's frame-212 jump reads of an Object without jump fields read as
+zero (declared). The Demo soak completes 60,000 bodies (27 matches).
 
 [Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/

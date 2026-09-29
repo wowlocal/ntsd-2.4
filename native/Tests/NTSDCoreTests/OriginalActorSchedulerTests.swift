@@ -105,6 +105,34 @@ final class OriginalActorSchedulerTests: XCTestCase {
         print("ACTOR SCHEDULER", corpus.cases.count, "whole calls and", eventCount, "ordered sound requests compared")
     }
 
+    /// APPLICATION_OBJECT_HEADER_DEFAULTS.md: a frame-212 jump of an Object whose
+    /// DAT names no jump fields reads the unwritten header words as zero.
+    func testUnwrittenJumpHeaderWordsReadAsZero() throws {
+        func run(_ header: OriginalStateRecord) throws -> OriginalStateRecord {
+            var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0, count: OriginalStateRecord.actorSize))
+            var globals = try zero(OriginalMatchPreparation.globalSize)
+            try actor.write(Int32(211), at: 0x70);try actor.write(Int32(211), at: 0x74);try actor.write(Int32(2), at: 0x88)
+            try actor.writeBinary64(7.5, at: 0x48)
+            var current = try zero(0x178), next = try zero(0x178)
+            try current.write(Int32(3005), at: 8);try current.write(Int32(1), at: 0xc);try current.write(Int32(212), at: 0x10)
+            try next.write(Int32(3005), at: 8);try next.write(Int32(1), at: 0xc);try next.write(Int32(213), at: 0x10)
+            try OriginalActorScheduler.apply(actor: &actor, header: header, globals: &globals, mode: 0, slot: 60, frame: { number in
+                number == 211 ? current : number == 212 ? next : try zero(0x178)
+            })
+            return actor
+        }
+        // The loader's header for a DAT without jump fields: only id/type written.
+        var header = try OriginalStateRecord(bytes: [UInt8](repeating: 0xa5, count: 0x7a4), defined: [Bool](repeating: false, count: 0x7a4))
+        try header.write(Int32(204), at: 0x6f4);try header.write(Int32(3), at: 0x6f8)
+        for offset in stride(from: 0x90, through: 0xac, by: 4) { try header.write(Int32(offset < 0xa4 ? 0 : -1), at: offset) }
+        let actor = try run(header)
+        XCTAssertEqual(try actor.integer(at: 0x70, as: Int32.self), 212)
+        XCTAssertEqual(try actor.binary64(at: 0x48).bitPattern, 0)
+        // A partly written word stays a boundary.
+        var partial = header;try partial.write(UInt8(0), at: 0x50)
+        XCTAssertThrowsError(try run(partial))
+    }
+
     func testLateFrameFailureRollsBackEarlierSoundAndCounters() throws {
         var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0xa5, count: OriginalStateRecord.actorSize))
         var header = try zero(0x7a4), globals = try zero(OriginalMatchPreparation.globalSize)

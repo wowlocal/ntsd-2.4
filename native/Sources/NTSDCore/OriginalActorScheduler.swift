@@ -56,7 +56,13 @@ public enum OriginalActorScheduler {
             }
         }
         mutating func jumpVelocity(_ destination: Int, _ source: Int, negative: Bool = false) throws {
-            let value = try header.binary64(at: source)
+            // Declared policy (APPLICATION_OBJECT_HEADER_DEFAULTS.md, not the EXE): the
+            // loader writes jump_height/distance/distancez only for Objects whose DAT
+            // names them; for others (chars\wind.dat's flying 211→212) the original
+            // reads its Object allocation's initial content, declared zero. A partly
+            // written word stays a boundary.
+            let unwritten = header.defined.indices.contains(source+7) && !header.defined[source..<source+8].contains(true)
+            let value = unwritten ? 0 : try header.binary64(at: source)
             guard !value.isNaN else {
                 throw OriginalStateError.invalidStorage("Scheduler x87 NaN load/store payload is outside the verified domain")
             }
