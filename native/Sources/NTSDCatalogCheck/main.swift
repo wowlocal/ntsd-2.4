@@ -178,6 +178,13 @@ do {
         print("Mission stage matches original: \(r.cases) real 437860 calls (\(families)), \(r.random) RNG draws, \(r.calls) callee calls, \(r.constructors) constructors, \(r.records) records, \(r.bytes) bytes\(r.strict ? "/masks" : " (values)"), \(r.blocks) executed body blocks; full first loading \(r.initial.catalog.catalog.objects) Objects")
         exit(0)
     }
+    if CommandLine.arguments.count == 6, CommandLine.arguments[1] == "--replay-playback" {
+        let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
+        let r = try ReplayPlaybackReference.compare(input: values[0],loading: values[1],catalog: values[2],sounds: values[3])
+        let families = r.families.keys.sorted().map { "\($0):\(r.families[$0]!)" }.joined(separator: " ")
+        print("Replay playback matches original: \(r.cases) real 43dfa0 calls (\(families)), \(r.calls) callee calls, \(r.constructors) constructors, \(r.records) records, \(r.bytes) bytes/masks, \(r.blocks) executed body blocks; full first loading \(r.initial.catalog.catalog.objects) Objects")
+        exit(0)
+    }
     if CommandLine.arguments.count == 6, CommandLine.arguments[1] == "--war-battle" {
         let values = try CommandLine.arguments.dropFirst(2).map { try Data(contentsOf: URL(fileURLWithPath: $0)) }
         let r = try WarBattleReference.compare(input: values[0],loading: values[1],catalog: values[2],sounds: values[3])

@@ -1,0 +1,12 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real43dfa0(0x451160, World+4, World+0x194, catalog) \u2014 the playback start \u2014\ncalled directly after the verified first loading, with 4588ac pointing at a\ndecompressed recording written by the app (VS, War, Mission Stage 1) or a\ndeclared variant (absent Object IDs, arena 99, mode changes, empty seats,\nother RNG/War fields). Callees 40c0e0 (release a background's layers),\n40c030 (load a background's layers) and 4025b0 (play 44eed0) are recorded\nboundaries; the Actor constructor 4061d0 and memset execute. Globals, the\nrecording buffer, World and every Actor are compared. Main CW027f; control\nCW037f over the control loading. APPLICATION_PLAYBACK_PLAN.md P2.\n",
+  "corpus": "replay-playback.json",
+  "sha256": "4355af856a4efa0eba45b7a0a083f8d0e92a16de8db0a0c57488d1b700b10c51",
+  "cases": 84,
+  "blocks": 76,
+  "nativeComparison": "Replay playback matches original: 84 real 43dfa0 calls (mission:28 vs:28 war:28), 1564 callee calls, 33597 constructors, 33936 records, 584894016 bytes/masks, 76 executed body blocks; full first loading 137 Objects",
+  "fixture": "original-replay-playback.json",
+  "fixtureSHA256": "88da440de5249b4c295edd90f99e3d4a02454483d5b805885b581d18e08e54b0",
+  "fixtureBytes": 92327
+}
