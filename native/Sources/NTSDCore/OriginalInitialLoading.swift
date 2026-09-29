@@ -45,13 +45,13 @@ public struct OriginalInitialLoading {
     public let commonSounds: [OriginalWaveLoadResult], interface: OriginalInitialInterfaceLoading
     public let paused: Bool, commands: [UInt8]
 
-    /// Non-playback prologue; signed32-bit wrap/remainder is the original x86 rule.
+    /// 41bcd0..41bdce: the phase/pause prologue and, while a recording plays
+    /// (450b84), its controls; signed 32-bit wrap/remainder is the original x86 rule.
     public static func begin(globals: inout OriginalStateRecord,
                              store: (Int, [UInt8]) throws -> Void = { _, _ in }) throws -> Bool {
         let base = OriginalMatchPreparation.globalBase
-        guard globals.bytes.count == OriginalMatchPreparation.globalSize,
-              try globals.integer(at: 0x450b84-base, as: Int32.self) == 0 else {
-            throw OriginalStateError.invalidStorage("Initial loading playback prologue is not recovered")
+        guard globals.bytes.count == OriginalMatchPreparation.globalSize else {
+            throw OriginalStateError.invalidStorage("Initial loading global extent")
         }
         var candidate = globals
         func write(_ value: UInt32, _ address: Int) throws {
@@ -65,8 +65,42 @@ public struct OriginalInitialLoading {
             try write(candidate.integer(at: 0x44fcb0-base, as: UInt32.self),0x44fb60)
         }
         let paused = try candidate.integer(at: 0x450bfc-base, as: Int32.self) == 1
+        if try candidate.integer(at: 0x450b84-base, as: Int32.self) != 0 { try playbackControls() }
         globals = candidate
         return paused
+
+        /// 41bd31..41c04b: F6 toggles 44d030 (its key byte reset to "up").
+        /// Left/Right take the playback camera (450b74) from the following
+        /// camera (x 450bc4, speed 450bc8) and steer it by 5; Down gives it back.
+        /// While taken, its x 450b7c advances by the speed 450b78, which decays
+        /// to 6/7 (the camera step 450b7c/450b74 is OriginalWorldCamera's).
+        func playbackControls() throws {
+            func key(_ code: Int) throws -> UInt8 { try candidate.integer(at: 0x455378+code-base, as: UInt8.self) }
+            func g(_ address: Int) throws -> Int32 { try candidate.integer(at: address-base, as: Int32.self) }
+            func set(_ address: Int, _ value: Int32) throws { try write(UInt32(bitPattern: value), address) }
+            if try key(0x75) == 0x64 {
+                let toggled = 1 &- (try g(0x44d030))
+                try candidate.write(UInt8(0x75), at: 0x4553ed-base); try store(0x4553ed, [0x75])
+                try set(0x44d030, toggled)
+            }
+            let left = try key(0x25), right = try key(0x27)
+            var speed: Int32
+            if left == 0x64 || right == 0x64 {
+                if try g(0x450b74) == 0 {
+                    try set(0x450b7c, g(0x450bc4)); speed = try g(0x450bc8); try set(0x450b74, 1)
+                } else { speed = try g(0x450b78) }
+                if left == 0x64 { speed = speed &- 5 }
+                if right == 0x64 { speed = speed &+ 5 }
+            } else { speed = try g(0x450b78) }
+            if try key(0x28) == 0x64 {
+                try set(0x450b74, 0); try set(0x450b78, 0)
+            } else if try g(0x450b74) == 0 {
+                try set(0x450b78, 0)
+            } else {
+                try set(0x450b7c, g(0x450b7c) &+ speed)
+                try set(0x450b78, (speed &* 6)/7)
+            }
+        }
     }
 
     public static func load(globals initialGlobals: OriginalStateRecord, world: OriginalStateRecord,

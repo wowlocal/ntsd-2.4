@@ -320,7 +320,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             "objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
             "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
-        if exitAfterStartup || arguments.contains("--exit-after-capture") { exit(1) }
+        // Scripted runs report the boundary and end; only interactive runs show it.
+        if exitAfterStartup || arguments.contains("--exit-after-capture") || arguments.contains("--script") { exit(1) }
         let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"
         alert.informativeText = String(reflecting:error); alert.runModal()
     }

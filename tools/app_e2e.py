@@ -9,7 +9,8 @@ progress with character AI/object input counts and window captures, the
 return to the menus with its epilogue and replay file, music) are compared
 with tools/app_e2e_reference.json; `--record` writes that reference instead.
 A second run chooses Quit on the main menu and requires WM_QUIT to end the
-process with code 0. The original is not executed. Captures are PNGs of the window rendering and
+process with code 0. Mission, War, Demo and Playback Recording scenarios
+compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
 depend on the window's backing scale, which the reference records.
 """
 import argparse
@@ -40,6 +41,21 @@ WAR = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 
 # its closing window ends the Demo and returns to the main menu.
 DEMO = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 83; 200 key 83; 225 key 74; "
         + "".join(f"{t} key 75; " for t in range(1000, 7001, 20)) + "7200 capture {captures}/demo-exit.png; 7300 exit")
+# Playback Recording: the VS scenario's own recording (carried by the loader
+# fixture) is chosen in place of the file dialog and plays; F4 ends it and
+# returns to the main menu with the saved settings restored.
+PLAYBACK = ("20 click 350 230; 60 click 402 218; " + "".join(f"{100 + 25 * i} key 83; " for i in range(6))
+            + "250 key 74; 9000 key 115; 9600 capture {captures}/after-f4.png; 9700 exit")
+LOADER_FIXTURE = ROOT / "native/Tests/NTSDCoreTests/Fixtures/original-replay-loader.json"
+
+
+def playback_file(scratch):
+    import base64
+    path = scratch / "20260101_010000_VS.lfr"
+    path.write_bytes(base64.b64decode(json.loads(LOADER_FIXTURE.read_text())["recordings"]["vs"]))
+    return ["--playback-file", str(path)]
+
+
 SCENARIOS = {
     "vs": dict(reference=REFERENCE, extra=[], script=lambda captures: SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)),
     "mission": dict(reference=ROOT / "tools/app_e2e_mission_reference.json", extra=["--exit-after-bodies", "1800"],
@@ -48,6 +64,8 @@ SCENARIOS = {
                  script=lambda captures: DEMO.replace("{captures}", str(captures))),
     "war": dict(reference=ROOT / "tools/app_e2e_war_reference.json", extra=[],
                 script=lambda captures: WAR.format(jump=14000, settings=14300, end=14400, captures=captures)),
+    "playback": dict(reference=ROOT / "tools/app_e2e_playback_reference.json", extra=playback_file,
+                     script=lambda captures: PLAYBACK.replace("{captures}", str(captures))),
 }
 
 
@@ -66,8 +84,9 @@ def run(timeout, app=APP, scenario="vs"):
         scratch = Path(scratch); overlay = scratch / "overlay"; captures = scratch / "captures"
         overlay.mkdir(); captures.mkdir()
         setup = SCENARIOS[scenario]
+        extra = setup["extra"](scratch) if callable(setup["extra"]) else setup["extra"]
         command = [str(app), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
-                   "--script-clock", "gameplay", "--body-captures", str(captures), *setup["extra"], "--script", setup["script"](captures)]
+                   "--script-clock", "gameplay", "--body-captures", str(captures), *extra, "--script", setup["script"](captures)]
         done = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
         events = []
         for line in done.stdout.splitlines():
@@ -120,6 +139,10 @@ def summarize(events, captures, overlay):
             m = e.get("music", {})
             out["milestones"].append({"event": kind, "iterations": e["iterations"], "capture": sha(e["path"]),
                                       "track": m.get("track"), "musicPlaying": m.get("playing")})
+        elif kind == "playbackDialog":
+            out["milestones"].append({"event": kind, "file": Path(e["file"]).name, "iterations": e["iterations"]})
+        elif kind == "playbackAlert":
+            out["milestones"].append({"event": kind, "text": e["text"], "iterations": e["iterations"]})
         elif kind == "boundary":
             out["boundary"] = e.get("error")
     out["overlayFiles"] = {str(p.relative_to(overlay)): sha(p) for p in sorted(overlay.rglob("*")) if p.is_file()}

@@ -1,0 +1,127 @@
+{
+ "backingScale": 2,
+ "boundary": null,
+ "exitCode": 0,
+ "milestones": [
+  {
+   "attempts": 76,
+   "dates": [
+    "2026/01/01/01/00/00",
+    "2026/01/05/01/00/00"
+   ],
+   "event": "started",
+   "requests": 75
+  },
+  {
+   "allocations": 16105,
+   "audioRequests": 2072,
+   "bitmapRequests": 12817,
+   "event": "loaded",
+   "files": 621
+  },
+  {
+   "event": "playbackDialog",
+   "file": "20260101_010000_VS.lfr",
+   "iterations": 251
+  },
+  {
+   "cycles": 73,
+   "event": "gameplay"
+  },
+  {
+   "cycles": 2194,
+   "epilogues": 0,
+   "event": "menu",
+   "gameplayBodies": 2121,
+   "iterations": 6883,
+   "refusedReplays": [],
+   "replayFiles": []
+  },
+  {
+   "capture": "0f8a23c08708574014586575ca467cc31e53613316e95b1896a1c8c792618a14",
+   "event": "captured",
+   "iterations": 9600,
+   "musicPlaying": true,
+   "track": "bgm\\boss1.wma"
+  }
+ ],
+ "overlayFiles": {
+  "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e"
+ },
+ "progress": [
+  {
+   "bodies": 300,
+   "capture": "a91923d01435f2be57c5c066e821884b8f32963af6d1a6ce900fb13e2e81d129",
+   "characterAI": 300,
+   "cycles": 372,
+   "iterations": 1189,
+   "musicPlaying": true,
+   "objectInputs": 121,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 600,
+   "capture": "d15fe7b70aa8b705ddd6a433a86f5e83a53ed63af9d6061ddb1da65024f25085",
+   "characterAI": 600,
+   "cycles": 672,
+   "iterations": 2126,
+   "musicPlaying": true,
+   "objectInputs": 161,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 900,
+   "capture": "b9eeda97a8a37ab10677135463492f4c964e91a88152265ebb4b93f4ee357836",
+   "characterAI": 900,
+   "cycles": 972,
+   "iterations": 3064,
+   "musicPlaying": true,
+   "objectInputs": 184,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1200,
+   "capture": "6083743d54acf02866a1db4cbbd28629a51f41a4eccad97db608ce672efe8891",
+   "characterAI": 1200,
+   "cycles": 1272,
+   "iterations": 4001,
+   "musicPlaying": true,
+   "objectInputs": 1043,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1500,
+   "capture": "ce92688d38d93de9d2420efd8a375b69e09f65d68afce79798bb353cb02bff0c",
+   "characterAI": 1500,
+   "cycles": 1572,
+   "iterations": 4939,
+   "musicPlaying": true,
+   "objectInputs": 1268,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 1800,
+   "capture": "6c7f9609be5eeab36a64c2f2613f6eaabd73b7d71734344be09efa3e8a3bee14",
+   "characterAI": 1800,
+   "cycles": 1872,
+   "iterations": 5876,
+   "musicPlaying": true,
+   "objectInputs": 1287,
+   "track": "bgm\\boss1.wma"
+  },
+  {
+   "bodies": 2100,
+   "capture": "7f8c9b57fecae4c77898a6143b5e0ffa1a47fb5c3393dee9eed8fd19f668f819",
+   "characterAI": 2100,
+   "cycles": 2172,
+   "iterations": 6814,
+   "musicPlaying": true,
+   "objectInputs": 1288,
+   "track": "bgm\\boss1.wma"
+  }
+ ],
+ "resources": [
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+ ]
+}

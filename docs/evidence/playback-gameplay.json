@@ -1,0 +1,109 @@
+{
+ "scope": "Playback gameplay check (APPLICATION_PLAYBACK_PLAN.md P4): the release app\nrecords the e2e computer-VS match, then plays that recording back through\nPlayback Recording (`--playback-file`) and quits it with F4. Body captures at\nthe same gameplay bodies are compared: every pixel outside the playback\nindicator rows (window y >= 500: time, mode text and the key help bar the\noriginal draws only while a recording plays) must be identical. Both runs are\nNative; the original is not executed. Writes docs/evidence/playback-gameplay.json.\n",
+ "recordingSHA256": "2e98755f4bf0ff9d71284fdedba6af1e59d3cf13fe44c5e6cd49ff9819b77ff6",
+ "replayExit": 0,
+ "boundary": null,
+ "replayMenu": {
+  "gameplayBodies": 2121,
+  "iterations": 6883,
+  "epilogues": 0
+ },
+ "replayOverlayFiles": [
+  "data/adinfo.txt"
+ ],
+ "indicatorTop": 500,
+ "frames": [
+  {
+   "capture": "b000300.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": [
+    8,
+    1020,
+    1584,
+    1096
+   ],
+   "identical": false
+  },
+  {
+   "capture": "b000600.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": [
+    8,
+    1020,
+    1584,
+    1096
+   ],
+   "identical": false
+  },
+  {
+   "capture": "b000900.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": [
+    8,
+    1020,
+    1584,
+    1096
+   ],
+   "identical": false
+  },
+  {
+   "capture": "b001200.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": [
+    8,
+    1020,
+    1584,
+    1096
+   ],
+   "identical": false
+  },
+  {
+   "capture": "b001500.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": [
+    8,
+    1020,
+    1584,
+    1096
+   ],
+   "identical": false
+  },
+  {
+   "capture": "b001800.png",
+   "replayed": true,
+   "size": [
+    1588,
+    1100
+   ],
+   "upperDifference": null,
+   "fullDifference": null,
+   "identical": true
+  }
+ ],
+ "result": "pass"
+}

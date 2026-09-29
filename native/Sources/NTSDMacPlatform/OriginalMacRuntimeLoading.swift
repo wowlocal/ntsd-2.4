@@ -175,6 +175,9 @@ import UniformTypeIdentifiers
         counts.controls += 1
         switch q.kind {
         case .asyncSelect,.ioctl: return .init(result:-1)
+        // Hotkey (416c70..416fad), playback-restore and input-reset notices:
+        // Core performs their effects; nothing is asked of the platform.
+        case .action,.restorePlayback,.inputReset: return .init()
         default: throw Boundary.unexpected("input control \(q.kind)")
         }
     }
@@ -312,9 +315,11 @@ import UniformTypeIdentifiers
             var session = try OriginalApplicationGameplaySession(pending:ready),unit: Void = ()
             // The caller's formatter locals (root44c..5bf): declared unknown
             // backing each body; formatting must produce every byte it reads.
+            // Root SP+0x68, the playback indicator's destination, is stored at
+            // 41bce4 from 41bc90's own argument: this body's draw target.
             let caller = try OriginalGameplayBody.Caller(formatter:.init(
                 bytes:[UInt8](repeating:0,count:OriginalResultLayout.localSize),
-                defined:[Bool](repeating:false,count:OriginalResultLayout.localSize)))
+                defined:[Bool](repeating:false,count:OriginalResultLayout.localSize)),indicatorTarget:ready.loading.target)
             return try session.advance(environment:&unit,outputInput:self.presentation(ready.loading.target),caller:caller,
                 fillBacking:{ [UInt8](repeating:0,count:100) },
                 allocate:{ _ in self.counts.allocations += 1; return try heap.reserve(OriginalReplayWriter.capacity) },

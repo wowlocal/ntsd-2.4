@@ -4,8 +4,13 @@
 is in Core with zlib 1.1.4's inflate; 27 real calls (MSVCP80 ifstream, the
 EXE's zlib) match, including the original's reported 1000-byte overflow on
 damaged files. P2: the playback start 43dfa0 matches two corpora of 84 real
-calls with masks; its version checks and War decode are ported.
-[Evidence](evidence/playback-loader.json), [start](evidence/replay-playback.json).
+calls with masks; its version checks and War decode are ported. P3: the
+branch 43249c runs in the app. P4: the playback prologue 41bd24..41bdce (F6,
+playback camera) matches 600 real cases; a recorded VS match plays back
+pixel-identical to the recording outside the playback bar, and F4 returns to
+the main menu (`app_e2e.py --scenario playback`).
+[Evidence](evidence/playback-loader.json), [start](evidence/replay-playback.json),
+[gameplay](evidence/playback-gameplay.json).
 
 [Demo](research/APPLICATION_DEMO.md): 4025d0 (Demo music) is in Core and
 matches 102 real cases; the Demo start runs in the app with arena surfaces and

@@ -105,10 +105,67 @@ scripted runs record alerts and never show panels. The app reports
 `playbackDialog` and `playbackAlert` events.
 
 **App:** main menu → Playback Recording with the VS recording: the recording
-loads, the match is rebuilt and the checks pass (menu 0); the next tick stops
-at 41bd24's playback prologue ("Initial loading playback prologue is not
-recovered", P4). A damaged file shows "Loading error!  Recording file may be
+loads, the match is rebuilt and the checks pass (menu 0); the next tick stopped
+at 41bd24's playback prologue (then unported; see P4). A damaged file shows "Loading error!  Recording file may be
 corrupted!!", a missing file "File path error! …", and a cancelled dialog
 returns to the mode screen with Playback Recording highlighted.
+
+## P4 — playing a recording
+
+**Prologue 41bd24..41bdce.** While a recording plays (450b84), each tick's
+prologue in `OriginalInitialLoading.begin` now runs the playback controls
+instead of refusing: F6 (key byte 0x75 'd') toggles 44d030 (the time/mode
+information) and resets its key byte to 'u'; Left/Right take the playback
+camera (450b74) from the following camera (x 450bc4, speed 450bc8) and steer
+it by ±5; Down gives it back; while taken, its x 450b7c advances by the speed
+450b78, which decays to 6/7 (signed 32-bit, x86 division). The camera step
+itself was already in `OriginalWorldCamera`.
+
+Oracle: `tools/oracle_playback_prologue.py` runs the real span over the pinned
+EXE image in Unicorn 2.1.4 (it touches only globals and restores ESI from its
+frame): 600 cases over the key bytes ('d', 'u', 0, other), 44d030, the camera
+words (including wrap-prone values) and 450b84 = 0; 49 blocks. Every stored
+word, key byte and write span matches (`OriginalPlaybackPrologueTests`,
+[evidence](../evidence/playback-prologue.json)).
+
+**Runtime.** The playback indicator (41bc90 → 423a70 frame 24 at 67,534, the
+key help bar) draws to root SP+0x68, stored at 41bce4 from 41bc90's own
+argument — the body's draw target, now passed as the gameplay Caller's
+`indicatorTarget`. The shared hotkey bodies 416c70..416fad (416cd0 is F4's quit)
+report `.action`, `.restorePlayback` and
+`.inputReset` notices whose effects Core performs; the Mac runtime answers them
+without platform work. Their sound requests (416c70/416ca0) remain an
+unserved boundary. Scripted runs that reach a boundary now exit (code 1)
+instead of showing a modal alert.
+
+**Comparison.** `tools/compare_playback_gameplay.py` records the e2e
+computer-VS match on the release app, then plays that recording back through
+Playback Recording and quits it with F4. Body captures 300, 600, 900, 1200
+and 1500 are pixel-identical above window row 500; the only differing pixels
+(window y 510..548) are the playback indicator — the key help bar and the
+"00:50 / 00:54 … VS mode (Difficult)" information. Once the match is
+decided and its timer 450bdc reaches 101, the result code
+(`OriginalResultRecording`) clears 450b84; the indicator goes and body 1800
+(the Summary) is identical in full. F4 then runs 416cd0 (mode 6, the saved
+settings restored from 458588.., menu 10): the main menu returns with
+Playback Recording highlighted (gameplay body 2121, no boundary, no new
+recording written). [Evidence](../evidence/playback-gameplay.json); both runs
+are Native — this checks playback against the recorded match, while the
+routines it runs were each compared with the original before.
+
+**E2E.** `tools/app_e2e.py --scenario playback` replays the VS scenario's
+recording (carried by the loader fixture, SHA-256 2e98755f…) and quits with
+F4; its reference (`tools/app_e2e_playback_reference.json`) holds the
+dialog answer, the menu return, seven body captures and the final main-menu
+capture. The existing vs, mission, demo and war scenarios still pass. The
+recording's track (`bgm\boss1.wma`) keeps playing on the main menu after F4:
+neither 416cd0 nor the mode screen plays music; this path's music is not
+compared with the original separately.
+
+**Tests:** `OriginalPlaybackPrologueTests` 1/1; with the initial-loading,
+replay (file input/output, initialization, tick, playback, writer,
+compression), playback-information, input-control, gameplay body/control,
+initialized-gameplay, loaded-menu, Mac runtime-loading, display-backend and
+front-raster suites: 40/40 pass.
 
 EXE envelope not recalculated.
