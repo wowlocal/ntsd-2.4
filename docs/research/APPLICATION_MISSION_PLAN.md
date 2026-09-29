@@ -53,6 +53,33 @@ mode 4, War, calls `43a860(target)`).
   4025b0, 402130, 402100, 402020 — most already recovered in Core
   (ADDRESS_BOOK); 437400, 4389a0, 438ad0 are new.
 
+## Helpers (static)
+
+- **437400(slot, index)**, ret 8: first seat 20..399 neither active nor in
+  4514e0, else slot[index] = −1. HP = slot +0xb4, scaled by a double for
+  difficulty −1 or 2 (not for id 300). Id 1000: next of a 10-entry table at
+  44d324 (index 44d34c; at 10 or −1 fifty RNG swaps, tags 0x10f/0x110);
+  id 3000: 30 + RNG(2, 0x111); id 3001: RNG(7, 0x112) = 0 → id 32 with 4×HP,
+  else 30 + RNG(2, 0x113). The catalog Object with that id (none → −1) is
+  bound to the seat after 4061d0; z = arena zTop + RNG(zBottom − zTop,
+  0x114); x = slot +0xb0 + RNG(300, 0x115), or (x = −1000) RNG(2, 0x116):
+  bound + 150 + RNG(300, 0x117) or −150 − RNG(300, 0x118); lives/+0x314/
+  +0x310 from +0xbc/+0xc0/+0xc4; HP/max/+0x304 = HP, MP 500, +0x354 = seat;
+  type ∉ {0,5}: state 0, team 0, y −300; else state 20, facing by bound,
+  frame +0xc8, team 5, y +0xcc; id 0x7a: HP 200; slot +0 += 1.
+- **436fc0** (next stage, ret): stage += 1; 450b9c = 0x46; 450ba8, 450bac,
+  450bc8, 450bc4 = 0; 44fb6c, 44f880 = −1; each active type-0 Actor: x =
+  50 + RNG(30, 0x10d), max HP += (difficulty+2)·50 capped at +0x304, HP =
+  max, MP 500, frame adjustments (to be read).
+- The 450ba8 ≥ 3 tail (to 43899d): the set wipe to 20, then the next set
+  (stage = (s/10+1)·10, 450b98 = 1, 450bdc = 350) or, after set 4, the
+  ending menu 300.
+
+**Oracle boundaries:** 43f010, 415160, 401290 (+ sprintf format), 401a30,
+402020, 402100 and 4061d0's allocations are already accepted elsewhere; the
+harness records their calls (arguments, return, stack cleanup) instead of
+executing device code, and Native must produce the same call sequence.
+
 ## Steps
 
 1. Finish the static decode (437860 tail 438311..4388ac, 437400, 4389a0,
