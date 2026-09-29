@@ -31,7 +31,7 @@ def run(name, script, extra):
     subprocess.run(["rm", "-rf", str(folder)], check=True)
     overlay, captures = folder / "overlay", folder / "captures"
     overlay.mkdir(parents=True); captures.mkdir()
-    command = [str(APP), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
+    command = [str(APP), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
                "--script-clock", "gameplay", "--body-captures", str(captures), *extra,
                "--script", script.replace("{captures}", str(captures))]
     done = subprocess.run(command, capture_output=True, text=True, timeout=1800)

@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Sound effects](research/APPLICATION_SOUND_EFFECTS.md): committed DirectSound
+buffer methods now play through a voice model under the declared DirectSound
+policy (gain, pan, focus, linear resampling); a VS match performs 1835 calls
+with none rejected, and the `LF2.NET` cheat sound is no longer a boundary.
+[Evidence](evidence/application-sound-effects.json).
+
 [Tournaments](research/APPLICATION_TOURNAMENT.md): the bracket and the
 preparations 434349/436747 are wired into the app; the human's 1-on-1 or
 2-on-2 match plays, the bracket decides the other pairings, and the Winner

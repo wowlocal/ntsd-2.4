@@ -101,7 +101,7 @@ def run(timeout, app=APP, scenario="vs"):
         overlay.mkdir(); captures.mkdir()
         setup = SCENARIOS[scenario]
         extra = setup["extra"](scratch) if callable(setup["extra"]) else setup["extra"]
-        command = [str(app), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
+        command = [str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
                    "--script-clock", "gameplay", "--body-captures", str(captures), *extra, "--script", setup["script"](captures)]
         done = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
         events = []
@@ -120,7 +120,7 @@ def quit_check(timeout, app=APP):
     with tempfile.TemporaryDirectory(prefix="ntsd-quit-") as scratch:
         downs = "; ".join(f"{100 + 25 * i} key 83" for i in range(7))
         script = f"20 click 350 230; 60 click 402 218; {downs}; 275 key 74; 2000 exit"
-        done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--overlay", scratch,
+        done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--mute-sounds", "--overlay", scratch,
                                "--virtual-clock", "123456789", "8", "--script", script],
                               capture_output=True, text=True, timeout=timeout)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]

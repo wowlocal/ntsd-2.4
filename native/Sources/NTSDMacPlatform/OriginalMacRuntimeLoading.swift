@@ -50,6 +50,8 @@ import UniformTypeIdentifiers
     public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
     /// PostQuitMessage codes of committed batches not yet posted as WM_QUIT.
     public var quitCodes: [UInt32] = []
+    /// DirectSound buffer methods of committed loaded batches play here.
+    public var sounds: OriginalMacSoundEffects?
     private var pendingReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
     private var openReplay: (path: String,bytes: [UInt8])?
     /// Replay paths the declared file policy refused (reported, not hidden).
@@ -177,7 +179,9 @@ import UniformTypeIdentifiers
         case .asyncSelect,.ioctl: return .init(result:-1)
         // Hotkey (416c70..416fad), playback-restore and input-reset notices:
         // Core performs their effects; nothing is asked of the platform.
-        case .action,.restorePlayback,.inputReset: return .init()
+        // A hotkey's sound request is a notice and its buffer methods play
+        // when the batch commits (their results are ignored).
+        case .action,.restorePlayback,.inputReset,.soundRequest,.method: return .init()
         default: throw Boundary.unexpected("input control \(q.kind)")
         }
     }
@@ -383,6 +387,10 @@ import UniformTypeIdentifiers
             for case .front(let e,_,_) in commit.operations where e.kind == "postQuit" { quitCodes.append(e.arguments[0]) }
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
+            if let sounds {
+                let music = started.runtime.music
+                for call in try OriginalMacSoundEffects.calls(commit.operations,music:{ music.interface($0) != nil }) { try sounds.perform(call) }
+            }
         }
         if case .committed = outcome, !pendingReplays.isEmpty {
             try overlay?.apply(pendingReplays)

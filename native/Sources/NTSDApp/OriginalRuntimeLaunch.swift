@@ -17,6 +17,7 @@ import NTSDMacPlatform
 /// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
 /// `--stage-checkpoints` builds the per-stage snapshots the app never uses.
 /// `--mute-music` plays the original tracks at zero output gain.
+/// `--mute-sounds` keeps the WAV sound-effect voices at zero output gain.
 /// `--overlay DIR` keeps user files (settings, replays) in DIR instead of
 /// Application Support, for automated runs.
 /// START runs the whole loading once (blocking, progress frames not shown);
@@ -37,6 +38,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     /// stretch every scheduled iteration once the window is not frontmost.
     private var activity: NSObjectProtocol?
     private var music: OriginalMacMusicOutput?
+    /// DirectSound buffer voices (APPLICATION_SOUND_EFFECTS_PLAN.md) and their
+    /// output; a missing output device leaves the voices running silently.
+    private var sounds: OriginalMacSoundEffects?
+    private var soundOutput: OriginalMacSoundOutput?, soundOutputError: String?
     init(exitAfterStartup: Bool) {
         self.exitAfterStartup = exitAfterStartup
         if let i = arguments.firstIndex(of:"--capture-after"),i+2 < arguments.count,let n = Int(arguments[i+1]) {
@@ -90,17 +95,30 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let music = try OriginalMacMusicOutput.bundled()
                 music.muted = arguments.contains("--mute-music"); self.music = music
                 try music.present(started.runtime.music.presented())
+                let sounds = OriginalMacSoundEffects.backed(by:started.audio); self.sounds = sounds
+                do {
+                    let output = try OriginalMacSoundOutput(effects:sounds)
+                    output.muted = arguments.contains("--mute-sounds"); output.focused = NSApp.isActive; soundOutput = output
+                    // DirectSound focus (see OriginalMacSoundOutput): the app's
+                    // single window is foreground exactly while the app is active.
+                    for (name,active) in [(NSApplication.didBecomeActiveNotification,true),(NSApplication.didResignActiveNotification,false)] {
+                        NotificationCenter.default.addObserver(forName:name,object:nil,queue:.main) { [weak self] _ in
+                            MainActor.assumeIsolated { self?.soundOutput?.focused = active }
+                        }
+                    }
+                } catch { soundOutputError = String(reflecting:error) }
                 let dates = started.host.snapshot.startup?.dates?.dates.map { String(decoding:$0.dropLast(),as:UTF8.self) } ?? []
                 let owners = Dictionary(grouping:started.requests,by:\.owner).mapValues(\.count)
                 Self.emit(["event":"started","sequence":started.sequence,"window":started.window,"requests":started.requests.count,
                     "owners":owners,"attempts":started.attempts,"dates":dates,"overlay":overlay.root.path,
                     "musicOutput":"packaged ALAC tracks; graph-event looping",
+                    "soundOutput":soundOutputError ?? (soundOutput?.muted == true ? "muted" : "default output"),
                     "backingScale":(try? started.windows.observation(started.window).backingScale) ?? 0,
                     "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory().path) ?? "",OriginalMacMusicOutput.directory()?.path ?? ""]])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })
-                self.menu = menu
+                self.menu = menu; menu.sounds = sounds
                 try started.windows.setInput(started.window) { [weak self] event in self?.input(event) ?? false }
                 NSApp.activate(ignoringOtherApps:true)
                 schedule(0)
@@ -181,6 +199,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                                                                     clock:{ [unowned self] in try self.clock() })
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
+                    loading?.sounds = sounds
                     // Playback Recording: `--playback-file PATH` answers the open
                     // dialog once; scripted runs never show panels or alerts.
                     if let i = arguments.firstIndex(of:"--playback-file"),i+1 < arguments.count { loading?.playbackFile = arguments[i+1] }
@@ -204,7 +223,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
-                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport()]
+                            "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
+                            "sounds":soundReport()]
                         if let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
                             try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:path)); event["path"] = path
@@ -284,7 +304,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
-                    "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport()])
+                    "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport(),"sounds":soundReport()])
             case "musicend": music?.finishTrack()
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
@@ -306,6 +326,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private func overlayRoot() throws -> OriginalMacRuntimeOverlay {
         guard let i = arguments.firstIndex(of:"--overlay"),i+1 < arguments.count else { return try .standard() }
         return .init(root:URL(fileURLWithPath:arguments[i+1],isDirectory:true))
+    }
+    @MainActor private func soundReport() -> [String:Any] {
+        let r = sounds?.rendered ?? .init(),a = sounds?.activity ?? (playing:0,looping:0)
+        return ["performed":sounds?.performed ?? 0,"rejected":sounds?.rejected ?? 0,"playing":a.playing,"looping":a.looping,
+                "renderedFrames":r.frames,"audibleFrames":r.audible,"peak":(Double(r.peak)*1000).rounded()/1000]
     }
     @MainActor private func musicReport() -> [String:Any] {
         guard let s = music?.state else { return [:] }

@@ -1,0 +1,63 @@
+{
+ "date": "2026-09-29",
+ "scope": "APPLICATION_SOUND_EFFECTS.md: WAV sound effects performed from committed DirectSound buffer methods under the declared DirectSound policy; release app with --mute-sounds (voices render at zero output gain). The original is not executed.",
+ "computerVS": {
+  "script": "tools/app_e2e_computer_vs.script + e2e tail",
+  "sounds": {
+   "audibleFrames": 8783682,
+   "looping": 0,
+   "peak": 3.368,
+   "performed": 1835,
+   "playing": 0,
+   "rejected": 0,
+   "renderedFrames": 13962752
+  },
+  "boundary": null
+ },
+ "cheatLF2NET": {
+  "without": {
+   "audibleFrames": 83905,
+   "looping": 0,
+   "peak": 0.943,
+   "performed": 3,
+   "playing": 0,
+   "rejected": 0,
+   "renderedFrames": 2074112
+  },
+  "withKeys": {
+   "audibleFrames": 414137,
+   "looping": 0,
+   "peak": 0.943,
+   "performed": 6,
+   "playing": 1,
+   "rejected": 0,
+   "renderedFrames": 1945600
+  },
+  "keys": "L F 2 . N E T on the mode menu (steps 150..300)"
+ },
+ "bufferCreationFlags": "0xe0 (CTRLFREQUENCY|CTRLPAN|CTRLVOLUME), no GLOBALFOCUS/STICKYFOCUS: output silent while the app is inactive",
+ "e2e": {
+  "result": "pass",
+  "scenarios": [
+   "vs",
+   "mission",
+   "demo",
+   "war",
+   "playback",
+   "tournament",
+   "team-tournament"
+  ],
+  "quitCheck": "pass",
+  "referencesChanged": false
+ },
+ "tests": {
+  "OriginalMacSoundEffectsTests": "6/6",
+  "Mac music/audio/runtime menu/loading/startup suites": "20/20"
+ },
+ "openItems": [
+  "listening check on a device",
+  "Windows comparison",
+  "round music stop methods (Mission) are delivered to no one"
+ ],
+ "exeEnvelope": "not recalculated"
+}

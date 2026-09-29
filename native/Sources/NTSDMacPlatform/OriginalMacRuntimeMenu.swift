@@ -21,6 +21,8 @@ import NTSDCore
             b.source[2] <= b.source[0] || b.source[3] <= b.source[1]
     }
     public let host: Host, messages: OriginalMacRuntimeMessages, music: OriginalMacRuntimeMusic
+    /// DirectSound buffer methods of committed iterations are performed here.
+    public var sounds: OriginalMacSoundEffects?
     public let bitmap: OriginalMacBitmapService, front: OriginalMacFrontService
     public let initialization: OriginalApplicationBootstrap.MenuInputs
     /// OutputDebugStringA text and MessageBoxA (text, caption) requests seen so far.
@@ -79,7 +81,8 @@ import NTSDCore
             responses:.init(draw:0,presentation:0,sound:0,release:0,dcResult:Self.getDCFailure,dc:0),queue:[])
     }
     /// One committed iteration (or `.loading`). Committed batches are drained;
-    /// their device effects were already performed when their permits were served.
+    /// their device effects were already performed when their permits were
+    /// served, except sound methods, which have no permit and play on commit.
     public func step(maximumRequests: Int = 20000) throws -> Host.Outcome {
         let driver = Driver(host:host)
         for _ in 0..<maximumRequests {
@@ -108,7 +111,10 @@ import NTSDCore
                 }
             case .advanced(let outcome):
                 iterations += 1
-                while try host.takeCommitted() != nil {}
+                while let batch = try host.takeCommitted() {
+                    guard let sounds,case .iteration(let committed) = batch.contents else { continue }
+                    for call in try OriginalMacSoundEffects.calls(committed.effects) { try sounds.perform(call) }
+                }
                 return outcome
             }
         }
