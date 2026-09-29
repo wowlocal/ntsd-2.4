@@ -89,6 +89,41 @@ is 42 (> 32, success).
   cleanup) and returns to the main menu. Checks: app run through every
   action (no boundary; the box order WSAStartup(), InitWinSock(), socket());
   e2e `online_check`; the network-menu, front-menu and runtime suites.
-- **F3 — RECORDING INFO (selector 7).** Likewise.
+- **F3 — RECORDING INFO (selectors 7 and 8).** Static reading (4290f3..4295e9,
+  4295e9..42972c): title 4511a0 frame 1 (0x9b, 0x37), panel 4511a4 frame 0
+  (0x2c, 0x93). A click (44d060 0, 457580 1) at x 0xd2..0x2da selects the
+  edited field 4511c4 by y — 0xcf..0xe1 name 44fd18, 0xe8..0x12e info 44f900,
+  0x135..0x147 email 44f890 — and any other click clears it. With a field
+  selected, keys 0..0xf9 flagged 'd' go through 422f60: Return becomes '\n'
+  (skipped while the field is empty), Backspace removes the last byte, other
+  characters append; no length check (the fields are truncated only by
+  423a70's in-place terminator). The three fields are drawn by 423a70 (x 0xd5,
+  y 0xd1/0xea/0x137, 64 columns, 1/4/1 lines, style and cursor = selected).
+  The recording flag 450be4 draws frame 6 at (0x11f, 0x185) when set; hover
+  0x11f..0x132 × 0x186..0x199 draws frame 5 and a click toggles it (1 − v).
+  "recording" folder button 0x185..0x2dc × 0x184..0x19a (frame 7): sound,
+  Sleep(300), ShellExecuteA(NULL, "explore", "recording", NULL, NULL, 1). Help
+  0x2c..0x1e3 × 0x1cd..0x1e4 (frame 2, else 1): sound, Sleep(300), "open"
+  `http://www.littlefighter.com/record`. Cancel 0x193..0x22e × 0x1a0..0x1b8
+  (frame 12): 423480 reload, sound 455614, selector 0, 44d780 −1, 423910.
+  OK 0xe7..0x182 × 0x1a0..0x1b8 (frame 13): 423230 write, sound 455610,
+  selector 8 (background kept). Selector 8: title frame 1 (0x9b, 0x4b), panel
+  frame 3 (0x2c, 0xa7); link 0x60..0x27f × 0x15c..0x174 (frame 4): sound,
+  Sleep(300) through ESI (the Sleep import loaded at 4275c5), "open"
+  `http://www.littlefighter.com/challenge`; OK 0x13e..0x1d8 × 0x17e..0x196
+  (frame 13): sound 455610, selector 0, 44d780 −1, 423910.
+  F3a oracle: the F2 harness entered with 44d064 = 7 or 8; 423a70/423940 and
+  the other callees on the same CPU; the same declared boundaries. Cases: idle
+  (flag 0/1), every region's edges and outside neighbours, field selection and
+  clearing, typing into each field (Caps Lock on/off, digits, space, Return in
+  empty and non-empty fields, Backspace in empty and non-empty fields, a key
+  with no character, several keys in one frame, a name at the 64-column
+  limit, a full four-line info), the flag toggle both ways, the folder and
+  help buttons, Cancel over two read chunkings, OK over the writer's outcomes;
+  selector 8's idle, hovers, link and OK. Native `OriginalFrontRecordingInfo`
+  composing the ported helpers (`OriginalBitmapFont` .fourPass), a reference
+  check and tests. F3b: the session's alternate for 7 and 8; declared policy
+  for "explore" of "recording" (open the overlay's recording folder; scripted
+  runs report it); app and e2e checks.
 
 EXE envelope not recalculated.

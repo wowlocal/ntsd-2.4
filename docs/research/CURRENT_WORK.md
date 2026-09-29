@@ -128,14 +128,19 @@ Winsock объявлен неинициализированным (socket() INVA
 SOCKET_ERROR, прочие запросы — граница). В приложении: ожидание соперника с
 анимацией точек, ввод адреса, Enter → исходное окно «socket()»/«Client Error»,
 ссылка на форум, cancel → главное меню (сценарий online в e2e).
+F3 RECORDING INFO (селекторы 7 и 8, 4290f3..42972c) перенесён
+(`OriginalFrontRecordingInfo`): имя/инфо/email записи рисуются растровым
+шрифтом 423a70, флаг записи 450be4, папка recording, OK → страница 8;
+129 реальных случаев (и control-вариант) совпали целиком: 181119 событий,
+снимки после представления и возврата.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** F3 RECORDING INFO (селектор7, 4290f3..): статическое
-чтение, oracle на харнессе фронт-экрана, перенос, подключение. Для текста GDI
+**Следующая задача:** F3b — селекторы 7 и 8 в приложении (объявленная
+политика для ShellExecuteA "explore" "recording": папка recording в overlay). Для текста GDI
 нужен выбор шрифта пользователем (приблизительный Mac-шрифт или пусто).
 EXE envelope не пересчитывался.
 

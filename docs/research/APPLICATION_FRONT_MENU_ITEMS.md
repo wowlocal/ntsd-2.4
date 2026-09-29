@@ -153,7 +153,50 @@ menu-input, observed-iteration, observed-startup, Mac runtime-menu and
 runtime-startup suites pass (29). The network-menu, client and exit sources
 are unchanged, so their accepted comparisons were not rerun.
 
-Remaining: F3 RECORDING INFO (selector 7); the 402b60 network startup and
-network play stay declared absent.
+## F3 — RECORDING INFO: port and comparison (2026-09-29)
+
+Static reading in the plan (F3). RECORDING INFO edits the recording author
+name (44fd18), a four-line info (44f900) and an email (44f890) — the three
+strings control.txt ends with — and the recording flag 450be4; OK saves the
+settings and opens page 8 (the LF2 "challenge" link and OK), Cancel re-reads
+them. The fields are drawn with the bitmap font 423a70, not GDI text.
+
+`OriginalFrontRecordingInfo` (Core) ports both selectors, composing the
+recovered helpers (423a70 `OriginalBitmapFont` .fourPass, 422f60 key
+characters with GetKeyState, 401a30 sound, 423910/43ef50 release); bitmap
+drawing, the font's Blt results, GetKeyState, the 423480 reload and the
+423230 writer are the caller's, Sleep and ShellExecuteA events.
+
+Oracle `tools/oracle_front_recording_info.py` subclasses the accepted CONTROL
+SETTINGS harness with the selector as a parameter (44d064 = 7 or 8 through the
+original dispatch; 423a70/423940 on the same CPU; the same declared
+boundaries): 129 cases — idle with the flag off and on, every region's edges
+and outside neighbours, field selection and clearing (each field's edges,
+gaps, a held-only frame), typing into each field (Caps Lock on/off, a digit,
+space, '.', F1, Return into empty and non-empty fields (twice each), Backspace into empty
+and non-empty fields, four keys in one frame), a 63- and 64-character name,
+a full four-line info, a 70-character info line, a key with no field, the flag
+toggled both ways, the folder and help buttons, OK over the writer's outcomes,
+Cancel over two read chunkings; page 8's idle, edges, link and OK (17 cases);
+plus the control variant. `FrontRecordingInfoReference` replays the completion
+parent and every case: all 181,119 events (18,108 draws and Blts, 16 key
+states, 2 settings writes, 2 reloads with 108 file events, 3 links) and the
+presentation and return snapshots match in both corpora
+([evidence](../evidence/front-recording-info.json),
+[control](../evidence/front-recording-info-control.json)) on the first native
+run. The native font's own `fontPass`/`stringWrite` observations are skipped
+by the reference; the terminators they describe are in the snapshots. A
+corpus with one altered draw coordinate fails at that case's event.
+
+Recovered behaviour worth noting: fields have no length check (the font's
+terminator truncates them to 64 columns per line, 1 or 4 lines, in the same
+frame); Return appends '\n' to any non-empty field, but in the one-line name
+and email the same frame's font terminator removes it again; OK saves before
+its sound and keeps the background for page 8; Cancel re-reads before its
+sound.
+
+Remaining: F3b — selectors 7 and 8 in the app (the "explore" of "recording"
+needs a declared policy); the 402b60 network startup and network play stay
+declared absent.
 
 EXE envelope not recalculated.
