@@ -241,9 +241,15 @@ import XCTest
         XCTAssertThrowsError(try other.setup.display.performFront(prepared)) { XCTAssertEqual($0 as? B.Boundary,.foreignPreparation) }
         XCTAssertEqual(try b.pixels(back),before);_ = try b.performFront(prepared)
         XCTAssertThrowsError(try b.performFront(prepared)) { XCTAssertEqual($0 as? B.Boundary,.repeatedPreparation) }
-        let pixels = try b.pixels(back),count = b.frontOperations.count
-        for invalid in [try fill(back,1,[0,0,0,1]),try fill(back,1,[-1,0,1,1]),try fill(back,1,[0,0,795,550]),
-            try blt(back,back,[0,0,2,2],[0,0,2,2]),Event("getDC",[back]),Event("method",[back,0x2c,0,1])] {
+        let pixels = try b.pixels(back)
+        // DirectDraw Blt/fill with an empty or out-of-surface rectangle:
+        // DDERR_INVALIDRECT and no pixel change.
+        for rejected in [try fill(back,1,[0,0,0,1]),try fill(back,1,[-1,0,1,1]),try fill(back,1,[0,0,795,550])] {
+            XCTAssertEqual(try b.performFront(b.prepareFront(rejected)).response.result,B.invalidRect)
+        }
+        XCTAssertEqual(try b.pixels(back),pixels)
+        let count = b.frontOperations.count
+        for invalid in [try blt(back,back,[0,0,2,2],[0,0,2,2]),Event("getDC",[back]),Event("method",[back,0x2c,0,1])] {
             XCTAssertThrowsError(try b.prepareFront(invalid))
         }
         XCTAssertEqual(try b.pixels(back),pixels);XCTAssertEqual(b.frontOperations.count,count)

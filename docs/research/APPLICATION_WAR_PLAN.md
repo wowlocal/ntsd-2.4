@@ -14,7 +14,7 @@ Still unported: the War post-draw child 43a860 (a boundary in
 The original runs only inside Unicorn oracles. Stages W1–W4 are each committed
 after they pass their own checks.
 
-## W1 — character screen, mode 4 (this stage)
+## W1 — character screen, mode 4
 
 Static reading of the character screen inside 41bc90 (mode pointer at
 [esp+0x1c]) gives these mode-4 differences after the human seats:

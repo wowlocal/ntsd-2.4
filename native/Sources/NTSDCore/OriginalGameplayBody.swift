@@ -167,7 +167,32 @@ public enum OriginalGameplayBody {
             })
             return true
         }
-        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, observe: { event in
+        // War battle logic (mode4): status lines through the surface-text
+        // renderer, preset labels through the bitmap font from their bytes.
+        func war(_ state: inout OriginalMatchPreparation) throws -> Bool {
+            // Font resources, target and viewport are not written by 43a860.
+            let globals = state.globals
+            try OriginalWarBattle.apply(state: &state, observe: { event in
+                guard case .call(let c) = event else { return }
+                let a = c.arguments.map { Int32(bitPattern: $0) }
+                switch c.kind {
+                case .text:
+                    guard a.count == 5 else { throw OriginalStateError.invalidStorage("War text call") }
+                    _ = try OriginalSurfaceText.draw(c.text, target: c.arguments[0], background: c.arguments[1], color: c.arguments[2],
+                        x: a[3], y: a[4], dcResult: presentation.dcResult, dc: presentation.dc, renderer: textRenderer,
+                        observe: { try observe(.impulses($0)) })
+                case .format:break
+                case .bitmapFont:
+                    guard a.count == 6 else { throw OriginalStateError.invalidStorage("War label call") }
+                    var label = try OriginalStateRecord(bytes: c.text+[0], defined: [Bool](repeating: true, count: c.text.count+1))
+                    try OriginalBitmapFont.draw(.fourPass, text: &label, x: a[0], y: a[1], columns: a[2], lines: a[3], style: a[4],
+                        cursor: c.arguments[5], globals: globals, resourceBitmap: resourceBitmap, performBlit: performBlit,
+                        observe: { try observe(.drawing(.impulses, $0)) })
+                }
+            })
+            return true
+        }
+        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, war: { try war(&$0) }, observe: { event in
             // This original diagnostic sprintf writes root48c. If full backing
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.

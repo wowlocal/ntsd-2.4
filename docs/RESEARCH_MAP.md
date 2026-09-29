@@ -2,9 +2,10 @@
 
 [War](research/APPLICATION_WAR.md): the mode-4 character screen (teams 1..2,
 the last computer's excluded team, the settings skip) is in Core; a 226-call
-Unicorn chain from the fresh mode-4 parent matches fully. The app runs War
-setup and War start to the first battle body (43a860 pending, W3).
-[Evidence](evidence/application-war-selection.json).
+Unicorn chain from the fresh mode-4 parent matches fully. The War battle
+logic 43a860 is in Core: two strict corpora of 1410 real calls match bytes and
+masks. War plays in the app to its Summary and back to the War settings.
+[Evidence](evidence/application-war.json).
 
 [Mission Mode](research/APPLICATION_MISSION.md): the stage logic 437860 with 437400
 and 436fc0 is in Core and composed into the gameplay post-draw; two strict

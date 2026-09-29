@@ -21,7 +21,7 @@ import NTSDCore
     public enum Boundary: Error, Equatable { case missing(String), unexpected(String) }
     public struct Counts: Equatable {
         public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0, objectInputs = 0, characterAI = 0
-        public var controls = 0, replayedDraws = 0, skippedDraws = 0, replayFiles = 0, musicResumes = 0, epilogues = 0
+        public var controls = 0, replayedDraws = 0, skippedDraws = 0, rejectedDraws = 0, replayFiles = 0, musicResumes = 0, epilogues = 0
     }
     /// Declared processor signature for the replay codec's lazy detection
     /// (4428b0): only family bits 0xf00 ≥ 0x600 matter, which every x86 CPU
@@ -340,7 +340,10 @@ import NTSDCore
             case "method": guard let method = e.arguments.dropFirst().first,[8,0x14,0x2c].contains(method) else { continue }
             default: continue
             }
-            _ = try display.performFront(display.prepareFront(e)); counts.replayedDraws += 1
+            // Core recorded declared success; the recovered callers ignore the
+            // result, so a DDERR_INVALIDRECT Blt only leaves the pixels unchanged.
+            let served = try display.performFront(display.prepareFront(e)); counts.replayedDraws += 1
+            if served.response.result == OriginalMacDisplayBackend.invalidRect { counts.rejectedDraws += 1 }
         }
     }
 }

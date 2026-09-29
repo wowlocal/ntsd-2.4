@@ -1,0 +1,155 @@
+{
+ "backingScale": 2,
+ "boundary": null,
+ "exitCode": 0,
+ "milestones": [
+  {
+   "attempts": 76,
+   "dates": [
+    "2026/01/01/01/00/00",
+    "2026/01/05/01/00/00"
+   ],
+   "event": "started",
+   "requests": 75
+  },
+  {
+   "allocations": 16105,
+   "audioRequests": 2072,
+   "bitmapRequests": 12817,
+   "event": "loaded",
+   "files": 621
+  },
+  {
+   "cycles": 505,
+   "event": "gameplay"
+  },
+  {
+   "cycles": 3513,
+   "epilogues": 1,
+   "event": "menu",
+   "gameplayBodies": 3008,
+   "iterations": 11004,
+   "refusedReplays": [],
+   "replayFiles": [
+    "recording\\20260101_010000_Battle.lfr 10180"
+   ]
+  },
+  {
+   "capture": "e2952446c6eb04a5d0a4e918e86584782c576fe3e9ea7c76842684ca1953a8bf",
+   "event": "captured",
+   "iterations": 14300,
+   "musicPlaying": true,
+   "track": "bgm\\stage5.wma"
+  }
+ ],
+ "overlayFiles": {
+  "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+  "recording/20260101_010000_Battle.lfr": "c25edba79c4fa2bef5e9647f9add9dbd58679a3f5aae99156ecfac5052ed8fb7"
+ },
+ "progress": [
+  {
+   "bodies": 300,
+   "capture": "2cf676a5e606a397ae9628ba1b2ae30cf2f4cb5a0dd1089462c495b176e51ebf",
+   "characterAI": 5357,
+   "cycles": 804,
+   "iterations": 2539,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 600,
+   "capture": "116945f65ab9f2f2e488168577381a4b79486becbaf8aa77a8df370af087ee12",
+   "characterAI": 10186,
+   "cycles": 1104,
+   "iterations": 3476,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 900,
+   "capture": "4afc8a0e48feea0d45bff759a0c7470e0cbbd7c2276d1f45b755afa982016e0c",
+   "characterAI": 14170,
+   "cycles": 1404,
+   "iterations": 4414,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 1200,
+   "capture": "b96edb7a80ef161846d5d98261236c0ce939003a2056b316ba72187a373d93ac",
+   "characterAI": 16177,
+   "cycles": 1704,
+   "iterations": 5351,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 1500,
+   "capture": "b9ab3e221fc7d30eeaa9ba4c4cf96bb43336ed883a0d8780070189f4bd9e5a43",
+   "characterAI": 17744,
+   "cycles": 2004,
+   "iterations": 6289,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 1800,
+   "capture": "1cf022ef3889a59f2216ed87d8d9467f68dcd1b36e56efef76d58c3f707fc6bf",
+   "characterAI": 19549,
+   "cycles": 2304,
+   "iterations": 7226,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 2100,
+   "capture": "cc83a658f39f8d37b90f976af5812714eca69e2231aa967eb26f79fbfa2f744e",
+   "characterAI": 20821,
+   "cycles": 2604,
+   "iterations": 8164,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 2400,
+   "capture": "ba2be930902d04aa272f3df1b898abf63b5aec2761924730f696064698371633",
+   "characterAI": 22045,
+   "cycles": 2904,
+   "iterations": 9101,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 2700,
+   "capture": "48df4a9c2a0a7f4197110aac899ee8493d249897a7fc4671ebfea5a850c903f4",
+   "characterAI": 23245,
+   "cycles": 3204,
+   "iterations": 10039,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  },
+  {
+   "bodies": 3000,
+   "capture": "3c3c761ba7d2fa9b656cc8066adf9fc4d653a5c9072f10d0ee1a232e79b35045",
+   "characterAI": 24445,
+   "cycles": 3504,
+   "iterations": 10976,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage5.wma"
+  }
+ ],
+ "resources": [
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+ ]
+}

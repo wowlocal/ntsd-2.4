@@ -48,5 +48,66 @@
     "e2e": "tools/app_e2e.py --scenario all: vs pass, mission pass, quit pass (147 s)"
   },
   "windowsVerified": false,
-  "envelopeRecalculated": false
+  "envelopeRecalculated": false,
+  "w3": {
+    "oracle": "tools/oracle_war_battle.py",
+    "accept": "tools/accept_war_battle.py",
+    "corpora": [
+      {
+        "corpus": "war-battle.json",
+        "sha256": "e5e24b5b31690316f9206ec8bc07448a6b92177ef995c488a8def96b1d886f7f",
+        "cases": 1410,
+        "fixture": "original-war-battle.json",
+        "fixtureSHA256": "69272e1ffd85186aab12c585f3afda09fc7981bb224b1de7ee1b74f9a6a896f2",
+        "nativeComparison": "War battle matches original: 1410 real 43a860 calls (count:250 full:60 kinds:250 labels:200 over:150 spawn:500), 10885 RNG draws, 10766 callee calls, 10885 constructors, 566820 records, 663478320 bytes/masks, 177 executed body blocks; full first loading 137 Objects"
+      },
+      {
+        "corpus": "war-battle-control.json",
+        "sha256": "ef7204712fc22aa34f44223d25435e6de50e12c9a8e74af4165bdc758c8047e9",
+        "cases": 1410,
+        "fixture": "original-war-battle-control.json",
+        "fixtureSHA256": "c5395658d831bd92774de4a3268149fef0beab921591dceab61f4744cd8db2a7",
+        "nativeComparison": "War battle matches original: 1410 real 43a860 calls (count:250 full:60 kinds:250 labels:200 over:150 spawn:500), 10995 RNG draws, 10765 callee calls, 10995 constructors, 566820 records, 663478320 bytes/masks, 177 executed body blocks; full first loading 137 Objects"
+      }
+    ],
+    "coverage": {
+      "staticLeaders": 173,
+      "executed": 171,
+      "missing": [
+        "0x43a90d (padding)",
+        "0x43aa09 (padding)"
+      ]
+    }
+  },
+  "w4": {
+    "bltRule": "DDERR_INVALIDRECT for empty or out-of-surface Blt/fill rectangles (Mac display backend); presentation unchanged",
+    "firstStop": {
+      "sourceRect": [
+        560,
+        538,
+        639,
+        559
+      ],
+      "sheet": [
+        800,
+        484
+      ]
+    },
+    "e2e": {
+      "scenario": "war",
+      "reference": "tools/app_e2e_war_reference.json",
+      "milestones": [
+        "started",
+        "loaded",
+        "gameplay",
+        "menu",
+        "captured"
+      ],
+      "recording": "recording/20260101_010000_Battle.lfr (10180 bytes)"
+    },
+    "captures": {
+      "battle": "docs/evidence/application-war-battle-capture.png",
+      "summary": "docs/evidence/application-war-summary-capture.png"
+    }
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real43a860(World; unused) \u2014 the War battle logic: troop counts per side and\nunit type, reserve spawns into free seats 20..399, the battle-over flag 451b7c,\nthe two status lines and the preset labels in 451c80 \u2014 called directly after\nthe verified first loading, on the loaded catalog's real Objects and arenas.\nStimuli declare the War unit tables (44d350 IDs, 44d6a8 reserves, 44d700 limits,\n44d37c count), display/strength/multiplier globals, arena, and seats with their\nside/team/HP bound to real Objects. The accepted callees 401290 (surface text)\nand 423a70 (bitmap font) are recorded boundaries (arguments and text); sprintf\nexecutes the pinned VC80 DLL; RNG 417170, the Actor constructor 4061d0 and the\ncookie check 4450b2 execute. Main corpus CW027f; control CW037f over the control\nloading. APPLICATION_WAR_PLAN.md W3.\n",
+  "corpus": "war-battle-control.json",
+  "sha256": "ef7204712fc22aa34f44223d25435e6de50e12c9a8e74af4165bdc758c8047e9",
+  "cases": 1410,
+  "blocks": 177,
+  "nativeComparison": "War battle matches original: 1410 real 43a860 calls (count:250 full:60 kinds:250 labels:200 over:150 spawn:500), 10995 RNG draws, 10765 callee calls, 10995 constructors, 566820 records, 663478320 bytes/masks, 177 executed body blocks; full first loading 137 Objects",
+  "fixture": "original-war-battle-control.json",
+  "fixtureSHA256": "c5395658d831bd92774de4a3268149fef0beab921591dceab61f4744cd8db2a7",
+  "fixtureBytes": 6388508
+}

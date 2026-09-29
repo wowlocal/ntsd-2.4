@@ -30,10 +30,18 @@ TAIL = "9000 key 74; 9100 capture {captures}/selection.png; 9200 exit"
 # enemy has knocked the idle player out and the Summary is shown.
 MISSION = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 74; 175 key 74; 200 key 68; 225 key 74; "
            "250 key 74; 1000 key 74; 1100 key 87; 1125 key 87; 1160 key 74; 30000 exit")
+# War: one human (Naruto) and one computer, War setup defaults, Fight!; the
+# troops fight until the Summary, Jump returns to the War settings.
+WAR = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 83; 200 key 74; "
+       "250 key 74; 275 key 68; 300 key 74; 325 key 74; 400 key 75; 425 key 75; 450 key 75; 475 key 75; "
+       "1000 key 74; 1100 key 68; 1150 key 74; 1200 key 74; 1400 key 74; 1450 key 87; 1500 key 87; 1600 key 74; "
+       "{jump} key 74; {settings} capture {captures}/war-settings.png; {end} exit")
 SCENARIOS = {
     "vs": dict(reference=REFERENCE, extra=[], script=lambda captures: SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)),
     "mission": dict(reference=ROOT / "tools/app_e2e_mission_reference.json", extra=["--exit-after-bodies", "1800"],
                     script=lambda captures: MISSION),
+    "war": dict(reference=ROOT / "tools/app_e2e_war_reference.json", extra=[],
+                script=lambda captures: WAR.format(jump=14000, settings=14300, end=14400, captures=captures)),
 }
 
 

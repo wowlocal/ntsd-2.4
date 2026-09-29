@@ -70,10 +70,77 @@ post-draw child: "Post-draw: original mode4 child is not recovered" (W3).
 GDI text (names, counts) is still not rasterized (open font decision).
 `tools/app_e2e.py` (VS, Mission, Quit) still passes.
 
-## W3 — War battle logic 43a860 (in progress)
+## W3 — War battle logic 43a860
 
-Static reading: see the plan; port `OriginalWarBattle`, oracle
-`tools/oracle_war_battle.py`, reference `WarBattleReference`
-(`NTSDCatalogCheck --war-battle`).
+`OriginalWarBattle.apply(state:observe:)` (NTSDCore) ports 43a860(World;
+unused), called by the post-draw 41f4ce when mode 451160 is 4:
+
+- counts live troops (seats ≥ 20, side 344 = 1/2, unit IDs 30..39 except 38,
+  122, 123) per side and unit type into the 2×11 caller array, and living
+  characters (type 0, HP > 0) with their HP per team 364;
+- for each side (s = 0, then s = count) and unit type with a reserve (44d6a8)
+  and fewer alive than the on-screen limit (44d700): the first free seat
+  20..399, the first Object with the unit ID, the Actor constructor 4061d0,
+  position (x −100/50 on side 1, arena width +100/−50 on side 2, z from RNG
+  417170 tag 0x128 over the arena's z range), HP by unit ID (36: 250; 37/35/32:
+  200; 39/33: 150; 34: 100; 31/30: 50; 122: 200; else 500; side-1 characters
+  also 318 = 140, 114 for unit 37), side/team, and one reserve taken;
+- sums the reserves of the first count−2 unit types per side and sets the
+  battle-over flag 451b7c unless both sides have reserves or both have living
+  characters;
+- reports the two status lines ("Man: %3d     HP: %4d     Reserve: %3d     Die: %3d",
+  VC80 sprintf into its stack, 401290 at (10,110) and (450,110)) and builds the
+  preset/strength/defense labels in 451c80 (451bb8 for "Defense: %d.%d") for
+  the bitmap font 423a70 (style 1 at x 10, style 2 right-aligned at 0x311).
+
+A unit count of 0 does not terminate in the original (the side loop never
+advances); the port refuses it, as it refuses counts beyond the 2×11 caller
+array.
+
+**Oracle** `tools/oracle_war_battle.py`: 43a860 called directly after the
+verified first loading (main CW027f; control CW037f over the control loading)
+with families spawn 500, count 250 (unit counts −1..11), kinds 250 (other
+Objects' IDs, including type 1..6 and absent IDs), full 60 (no free seat), over
+150, labels 200 (display −2..7, strengths −1..3, multipliers incl. 0, −150,
+1234). Callees 401290/423a70 are recorded boundaries; sprintf runs the pinned
+VC80 DLL (two new whitelisted formats); RNG, constructor and cookie check
+execute. Coverage: 171 of 173 static leaders; the two others are alignment
+padding (43a90d, 43aa09).
+
+**Comparison** (`NTSDCatalogCheck --war-battle`, `OriginalWarBattleTests`):
+both corpora of 1410 real calls match on the first comparison with exact bytes
+and initialization masks on globals, World and all 400 Actors: main 10885 RNG
+draws/constructors and 10766 callee calls, control 10995/10765; 566820
+records, 663478320 bytes/masks each. Stack text pointers are not compared;
+the text bytes are.
+
+## W4 — War in the app
+
+The gameplay body composes 43a860 at the post-draw mode-4 child: status lines
+through the surface-text renderer, labels through `OriginalBitmapFont` from
+their bytes (a label never exceeds one 64-column line, so the font's
+terminator store is the existing NUL).
+
+**Blt rule (Mac display backend).** The first War battle stopped on a troop
+sprite frame whose source rectangle lies outside its 800×484 sheet
+([560,538)–(639,559)). DirectDraw's Blt/fill rejects such a rectangle with
+DDERR_INVALIDRECT and changes no pixels; the backend now answers blits and
+fills with an empty or out-of-surface rectangle that way (presentation to the
+primary is unchanged), extending the existing zero-area policy. Core records
+declared success for gameplay draws and the recovered callers ignore the
+result; the runtime counts these as `rejectedDraws`.
+
+**App:** main menu → War → Naruto + one computer → War setup → Fight!: the
+troops fight ([capture](../evidence/application-war-battle-capture.png)),
+the battle ends with the Summary ([capture](../evidence/application-war-summary-capture.png)),
+the War recording `recording\20260101_010000_Battle.lfr` (10180 bytes) is
+saved, and Jump returns to the War settings. `tools/app_e2e.py` gains a `war`
+scenario (reference recorded and reproduced); VS, Mission and Quit still pass.
+The status lines stay invisible until GDI text is rasterized (open font
+decision).
+
+**Tests:** `OriginalWarBattleTests` 2/2 and `OriginalWorldImpulsesTests` 3/3
+(parallel), `OriginalMacFrontRasterTests` 5/5 (the fill-rejection contract is
+updated), `tools/app_e2e.py --scenario all` (VS, Mission, War, Quit) pass.
 
 EXE envelope not recalculated.

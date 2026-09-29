@@ -557,6 +557,18 @@ extension OriginalMacDisplayBackend {
     }
     private enum FrontAction {
         case fill(FrontTarget,UInt32), copy(FrontCopy), release(Surface)
+        /// DirectDraw Blt with a rectangle outside its surface (or empty):
+        /// DDERR_INVALIDRECT, no pixels change.
+        case rejected([Surface])
+    }
+    public static let invalidRect = Int32(bitPattern:0x88760096)
+    /// Whether a Blt rectangle (nil: whole surface) lies inside the surface with
+    /// a positive area; a malformed rectangle stays a boundary.
+    private func frontRectInside(_ values: [Int32]?,_ surface: Surface) throws -> Bool {
+        guard let values else { return surface.width > 0 && surface.height > 0 }
+        guard values.count == 4 else { throw Boundary.geometry }
+        return values[0] >= 0 && values[1] >= 0 && values[2] > values[0] && values[3] > values[1] &&
+            Int(values[2]) <= surface.width && Int(values[3]) <= surface.height
     }
     private func frontRect(_ values: [Int32]?,_ surface: Surface) throws -> FrontRect {
         let r: FrontRect
@@ -627,10 +639,16 @@ extension OriginalMacDisplayBackend {
             let r = try OriginalStateRecord(bytes:f.effects,defined:f.defined)
             guard try r.integer(at:0,as:UInt32.self) == 100 else { throw Boundary.arguments("front fill size") }
             let color = try r.integer(at:80,as:UInt32.self),s = try frontSurface(f.target)
+            if try s.kind != .primary && !frontRectInside(f.rectangle,s) { return .rejected([s]) }
             let target = try frontTarget(s,frontRect(f.rectangle,s))
             try frontKnown(target) { _,_ in true };return .fill(target,color)
         case "blit":
             guard q.arguments.isEmpty,q.strings.isEmpty,q.fill == nil,let b = q.blit else { throw Boundary.arguments("front bitmap Blt") }
+            guard b.flags & 0x1000000 != 0,b.flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
+            let target = try frontSurface(b.targetSurface),src = try frontSurface(b.sourceSurface)
+            if try target.kind != .primary && src.kind != .primary && (!frontRectInside(b.destination,target) || !frontRectInside(b.source,src)) {
+                return .rejected([target,src])
+            }
             return .copy(try frontCopy(b.targetSurface,b.sourceSurface,destination:b.destination,source:b.source,flags:b.flags,effects:b.effects))
         case "method":
             guard q.arguments.count >= 2,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front method") }
@@ -687,6 +705,8 @@ extension OriginalMacDisplayBackend {
             owners = [copy.target.surface,copy.source];response = .init(result:0)
         case .release(let s):
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
+        case .rejected(let surfaces):
+            owners = surfaces;response = .init(result:Self.invalidRect)
         }
         frontOperations.append(.init(request:prepared.request,response:response))
         return .init(response:response,resources:owners)
