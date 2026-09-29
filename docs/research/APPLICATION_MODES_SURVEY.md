@@ -29,3 +29,21 @@ loop, WinMain's return and the app's termination), then Mission Mode's mode1
 post-draw child (EXE recovery with an oracle), War/Demo selection
 continuations, Playback, and the Tournament inputs. EXE envelope not
 recalculated.
+
+## In-match function keys (2026-09-29)
+
+All seven modes above now run in the app (their cards are in RESEARCH_MAP).
+A probe of the keys the EXE reads during a match (flags 4553e8..4553f0, F1–F9)
+in the VS scenario's match (`--script-clock gameplay`): F1 pauses with the
+original PAUSE banner and resumes, F2 steps while paused, F5 toggles the speed
+flag 44d02c (the loop's 3 ms / 33 ms interval) and back, F6, F7, F8 and F9 run
+(F7–F9 have no visible effect here, as without LF2's cheat), and F4 returns to
+the main menu. No boundary in 323 bodies ([pause capture](../evidence/application-match-pause-capture.png)).
+A first attempt without `--script-clock gameplay` delivered no key into the
+match — the default script clock counts menu iterations, which stop during a
+match — and is not evidence of a stall.
+
+The WndProc's remaining messages (43b3d0 jump table) are not obstacles:
+WM_ACTIVATEAPP only calls OutputDebugStringA("Active App!\n") before
+DefWindowProc, and WM_SETCURSOR hides the cursor only when 458430 is set.
+EXE envelope not recalculated.
