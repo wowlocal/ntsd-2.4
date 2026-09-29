@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Game modes survey](research/APPLICATION_MODES_SURVEY.md): first stops of the
+other modes in the app — Mission (post-draw mode1 child), War/Demo (match
+selection continuation), Playback (unreturned loading), Quit (postQuit);
+Tournament screens are alive. [Evidence](evidence/application-modes-survey.json).
+
 [All arenas](research/APPLICATION_ARENAS.md): `tools/package_match_arenas.py`
 packages the deferred layers of all 17 registered backgrounds (228 BMPs,
 LFS); each background and Random launches and plays in the app.

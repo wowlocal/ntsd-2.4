@@ -1,0 +1,43 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-29T00:11:36.477772Z",
+ "parentHead": "ddf98d1",
+ "scope": "Survey of game modes other than VS in the app: first stops",
+ "flags": "--original --exit-after-capture --mute-music --overlay TMP --virtual-clock 123456789 8 --script-clock gameplay --exit-after-bodies 600",
+ "script": "20 click 350 230; 60 click 402 218; Down x i from step 100 every 25; Attack; +50 Attack; +75 Right; +100 Attack; +125 Attack; 1000 Attack; 1100 Up; 1125 Up; 1160 Attack",
+ "modes": {
+  "2": null,
+  "3": null,
+  "4": {
+   "iterations": 795,
+   "error": "Original state storage: Match selection: Other mode selection continuation"
+  },
+  "5": {
+   "iterations": 229,
+   "error": "Original state storage: Match selection: Other mode selection continuation"
+  },
+  "6": {
+   "iterations": 251,
+   "error": "NTSDCore.OriginalApplicationHostSession<NTSDCore.OriginalApplicationPreparedStartupPlatform>.Boundary.unreturnedLoading"
+  },
+  "7": {
+   "iterations": 276,
+   "error": "NTSDCore.OriginalApplicationLoadedMenuSession.Boundary.dependency(\"Front operation postQuit\")"
+  },
+  "1": {
+   "iterations": 1167,
+   "error": "Original state storage: Post-draw: original mode1 child is not recovered (run without --exit-after-capture; report from the app log before the alert)"
+  }
+ },
+ "alive": {
+  "2": "Tournament settings screen through 3000 steps",
+  "3": "Team Tournament settings through 3000 steps"
+ },
+ "capture": {
+  "path": "docs/evidence/application-modes-survey-capture.png",
+  "sha256": "68c7367763470e2aeeb18d57ece91022611d56ab70664371d001a369b8442c92"
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

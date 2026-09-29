@@ -55,16 +55,18 @@ CW037f/SSE2) совпали побайтно, 4 теста прошли. В пр
 проходит эту проверку с `--original` только на своих Contents/Resources (музыка
 теперь тоже установлена); копия .app без ресурсов дерева сборки — pass.
 [Все арены](APPLICATION_ARENAS.md): упакованы слои всех 17 фонов (228 BMP); каждый
-фон и Random запускают матч и играют в приложении.
+фон и Random запускают матч и играют в приложении. [Обзор режимов](APPLICATION_MODES_SURVEY.md):
+первые границы Mission (дочерний mode1 после отрисовки), War/Demo (продолжение
+выбора), Playback (незавершённая загрузка), Quit (postQuit); турниры живы.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** режимы кроме VS — пройти из главного меню в Stage,
-Battle/Championship и прочие режимы в приложении до первой границы и закрыть
-её. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
+**Следующая задача:** Quit из главного меню: postQuit в loaded menu, WM_QUIT
+через цикл сообщений, возврат WinMain и завершение приложения; затем mode1
+Mission (41f4ac..41f545) с oracle. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
 или пусто).
 EXE envelope не пересчитывался.
 
