@@ -1,5 +1,9 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
+WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/
+InitWinSock() errors (no network) and stops at the unwired network menu.
+
 [ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
 quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real
 calls; ESC asks "Are you sure to quit?" with Yes/No and the close button ends

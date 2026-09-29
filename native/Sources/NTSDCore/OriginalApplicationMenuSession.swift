@@ -269,6 +269,10 @@ public struct OriginalApplicationMenuSession {
                 guard initialization != nil && stage == .prefix else { throw Boundary.dependency("Menu format") }
             case "enter","leave":if initialization != nil { try emit(.startupFront(e)) }
             case "write","writeLocal","read","clip","draw","text","stringLength","soundRequest","randomTable","panel": break
+            // Main menu (APPLICATION_FRONT_MENU_ITEMS_PLAN.md F1): WSAStartup is
+            // answered by the declared network input (wVersion 0); MessageBoxA,
+            // Sleep and ShellExecuteA are performed when the main menu returns.
+            case "startup","message","shell","sleep": break
             default: throw Boundary.dependency("Menu operation "+e.kind)
             }
             if initialization != nil && stage != .menu { try bootstrapObserve(.front(stage,e)) }
@@ -518,10 +522,28 @@ public struct OriginalApplicationMenuSession {
                             // Network replies are unavailable to this session.
                             // Its first network request is rejected by event().
                             let input = OriginalMainMenuInput(targetSurface:game.target,panelWord:nil,network:.init(startupResult:0,version:0,hostnameResult:0,hostname:[],hostEntryAddress:0,addresses:[],socketResult:0,asyncResult:0,bindResult:0,listenResult:0))
+                            var calls: [OriginalMainMenuEvent] = []
                             let end = try OriginalMainMenu.run(world:&w,globals:&state,crt:&random,input:input,store:store,worldStored:worldStore,observe:{ e in
                                 if e.kind == .bitmap { try event(.init("draw",e.arguments));try draw(e.arguments) }
-                                else { try event(.init(e.kind.rawValue,e.arguments,e.strings)) }
+                                else {
+                                    try event(.init(e.kind.rawValue,e.arguments,e.strings))
+                                    if [.message,.sleep,.shell].contains(e.kind) { calls.append(e) }
+                                }
                             })
+                            // Their results are unused and no platform call follows them
+                            // inside the main menu: the window channel (MessageBoxA,
+                            // ShellExecuteA) and the queue (Sleep) serve them in order.
+                            for c in calls {
+                                switch c.kind {
+                                case .message: _ = try windowDefault(.init(.message,c.arguments,c.strings))
+                                case .shell: _ = try windowDefault(.init(.shell,c.arguments,c.strings))
+                                default:
+                                    guard c.arguments.count == 1 else { throw Boundary.dependency("Menu Sleep") }
+                                    _ = try queue(.init(.sleep,c.arguments)); try emit(.sleep(c.arguments[0]))
+                                }
+                            }
+                            // 402b60's failures return before the frame is presented.
+                            if end == .returnWithoutPresentation { return }
                             guard end == .present else { throw Boundary.dependency("Main menu return") }
                             presentation = .tail
                         } else { presentation = entry == .worldOne ? .worldOne : .tail }

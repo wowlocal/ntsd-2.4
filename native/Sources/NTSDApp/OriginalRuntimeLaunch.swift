@@ -122,6 +122,13 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                                                       point:{ [unowned self] in self.cursor() })
                 self.menu = menu; menu.sounds = sounds
                 menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
+                // OFFICIAL WEBSITE: the default browser opens the URL; scripted
+                // runs only report it.
+                menu.messages.shell = { [unowned self] file in
+                    let text = String(decoding:file,as:UTF8.self)
+                    Self.emit(["event":"shellOpen","file":text,"iterations":self.committed])
+                    if !arguments.contains("--script"),let url = URL(string:text) { NSWorkspace.shared.open(url) }
+                }
                 menu.messages.destroyedWindow = { [unowned self] in
                     Self.emit(["event":"windowDestroyed","iterations":self.committed])
                     try? started.windows.hide(started.window)

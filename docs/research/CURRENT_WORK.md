@@ -108,22 +108,23 @@ WM_DESTROY (освобождение + PostQuitMessage, если 458434 = 0), WM
 WM_NCDESTROY, WM_SYSCOMMAND — 74 реальных вызова совпали; ESC показывает
 «Are you sure to quit?» с Yes/No (No — игра продолжается, Yes — выход с кодом0),
 кнопка закрытия окна идёт через SC_CLOSE → WM_CLOSE → WM_DESTROY → WM_QUIT.
+[Пункты стартового меню](APPLICATION_FRONT_MENU_ITEMS.md), F1: OFFICIAL WEBSITE
+открывает http://littlefighter.com (ShellExecuteA); ONLINE GAME показывает
+исходные окна «WSAStartup()» и «InitWinSock()» (сеть не предоставляется:
+объявленный wVersion 0), затем останавливается на неподключённом сетевом меню.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** пункты стартового меню кроме START останавливаются на
-границах (проверено в приложении 2026-09-29): CONTROL SETTINGS и RECORDING INFO —
-«Menu continuation otherSelector» (селекторы фронт-меню кроме 0 и −3 не
-перенесены), OFFICIAL WEBSITE — «Menu operation sleep», ONLINE GAME — «Menu
-operation startup». Первым — CONTROL SETTINGS (настройка клавиш нужна для игры):
-статическое чтение селекторов фронт-меню, план, oracle, перенос. Затем
-WM_ACTIVATEAPP/SETCURSOR и пересоздание окна (458434), текст GDI (решение
-пользователя о шрифте), прослушивание на устройстве, чистый Mac. Замечено:
-tournament e2e один раз разошёлся в вехах под нагрузкой (вероятно, реальный конец
-музыкального трека; не проверено). Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
+**Следующая задача:** F2 CONTROL SETTINGS (селектор6, 4289c4..4290f3; статическое
+чтение записано в APPLICATION_FRONT_MENU_ITEMS.md): oracle на существующем
+харнессе фронт-экрана, перенос, подключение; затем F1b сетевое меню (селекторы
+1–3 перенесены, не подключены), F3 RECORDING INFO (селектор7). Текст GDI
+(решение пользователя о шрифте) делает эти экраны почти пустыми. Замечено:
+e2e изредка расходится только в хеше снимка окна (счётчики совпадают) — гонка
+снимка; снимки теперь сохраняются в build/research/e2e/<сценарий>/. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
 или пусто).
 EXE envelope не пересчитывался.
 

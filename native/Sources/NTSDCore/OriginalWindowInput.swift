@@ -11,7 +11,9 @@ public enum OriginalWindowInput {
         }
     }
     public struct Request: Codable, Equatable, Sendable {
-        public enum Kind: String, Codable, Sendable { case windowDefault, message, method, free, postMessage, postQuit }
+        /// `shell` is ShellExecuteA from the main menu's OFFICIAL WEBSITE, carried
+        /// on the same window-thread channel.
+        public enum Kind: String, Codable, Sendable { case windowDefault, message, method, free, postMessage, postQuit, shell }
         public let kind: Kind, arguments: [UInt32], strings: [[UInt8]]
         public init(_ kind: Kind, _ arguments: [UInt32] = [], _ strings: [[UInt8]] = []) {
             self.kind = kind; self.arguments = arguments; self.strings = strings

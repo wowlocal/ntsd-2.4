@@ -18,6 +18,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -96,10 +97,17 @@ def build():
                     "-c", "release", "--product", "NTSDNative"], cwd=ROOT, check=True)
 
 
+KEPT = ROOT / "build/research/e2e"
+
+
 def run(timeout, app=APP, scenario="vs"):
     with tempfile.TemporaryDirectory(prefix="ntsd-e2e-") as scratch:
-        scratch = Path(scratch); overlay = scratch / "overlay"; captures = scratch / "captures"
-        overlay.mkdir(); captures.mkdir()
+        scratch = Path(scratch); overlay = scratch / "overlay"
+        # Captures stay in build/research/e2e/<scenario> (replaced each run) so a
+        # differing capture hash can be inspected; nothing else depends on them.
+        captures = KEPT / scenario / "captures"
+        shutil.rmtree(captures, ignore_errors=True); captures.mkdir(parents=True)
+        overlay.mkdir()
         setup = SCENARIOS[scenario]
         extra = setup["extra"](scratch) if callable(setup["extra"]) else setup["extra"]
         command = [str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
@@ -142,6 +150,19 @@ def quit_check(timeout, app=APP):
                   and not any(e.get("event") == "boundary" for e in events))
             results[name] = (ok, {"exitCode": done.returncode, "quit": quits, "messageBoxes": boxes})
     return all(ok for ok, _ in results.values()), {k: v for k, (_, v) in results.items()}
+
+
+def website_check(timeout, app=APP):
+    """Front menu → OFFICIAL WEBSITE: ShellExecuteA("open", the URL), reported
+    by scripted runs instead of opening a browser; the menu keeps running."""
+    with tempfile.TemporaryDirectory(prefix="ntsd-web-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script", "20 click 410 352; 120 exit"],
+                              capture_output=True, text=True, timeout=timeout)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        opened = [e["file"] for e in events if e.get("event") == "shellOpen"]
+        ok = done.returncode == 0 and opened == ["http://littlefighter.com"] and not any(e.get("event") == "boundary" for e in events)
+        return ok, {"exitCode": done.returncode, "opened": opened}
 
 
 def summarize(events, captures, overlay):
@@ -217,6 +238,9 @@ def main():
             ok, detail = quit_check(args.timeout, args.app)
             if not ok:
                 problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0) on every quit path"; observed["quit"] = detail
+            ok, detail = website_check(args.timeout, args.app)
+            if not ok:
+                problems.append("website"); reference["website"] = "one shellOpen of http://littlefighter.com, exit 0"; observed["website"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:
