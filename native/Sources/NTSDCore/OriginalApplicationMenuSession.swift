@@ -91,9 +91,17 @@ public struct OriginalApplicationMenuSession {
 
     public struct Responses {
         public let draw: Int32, presentation: Int32, sound: Int32, release: Int32, dcResult: Int32, dc: UInt32
-        public init(draw: Int32,presentation: Int32,sound: Int32,release: Int32,dcResult: Int32,dc: UInt32) {
+        /// data\control.txt as 423480 reads it (text mode, CRLF → LF) and
+        /// GetKeyState(VK_CAPITAL) for this iteration (CONTROL SETTINGS).
+        public let controlFile: [UInt8]?, capsLock: Int32
+        /// operator new(0x1f50) for a front background reloaded after the first
+        /// iteration (a selector screen released it); unused offers stay free.
+        public let background: OriginalInterfaceAllocation?
+        public init(draw: Int32,presentation: Int32,sound: Int32,release: Int32,dcResult: Int32,dc: UInt32,
+                    controlFile: [UInt8]? = nil,capsLock: Int32 = 0,background: OriginalInterfaceAllocation? = nil) {
             self.draw = draw; self.presentation = presentation; self.sound = sound
             self.release = release; self.dcResult = dcResult; self.dc = dc
+            self.controlFile = controlFile; self.capsLock = capsLock; self.background = background
         }
     }
 
@@ -119,6 +127,8 @@ public struct OriginalApplicationMenuSession {
         case lifecycle(OriginalWindowInitialization.Request,OriginalWindowInitialization.Response)
         case startupFront(OriginalFrontScreenEvent)
         case startupGraphics(OriginalFrontScreenEvent,result: Int32)
+        /// 423230's complete data\control.txt (as written, LF line ends).
+        case settingsFile([UInt8])
     }
     public enum Checkpoint: String {
         case dispatch, world, prefix, panel, body, alternate, main, tail, worldReturn, dispatchReturn
@@ -254,7 +264,7 @@ public struct OriginalApplicationMenuSession {
                 if frontProvider == nil || stage != .body {
                     try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
                 }
-            case "setBackgroundMode","setTextColor","textOut","releaseDC":
+            case "setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
                 if frontProvider == nil || stage != .body {
                     if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
                     else { try emit(.graphics(e,result:responses.draw)) }
@@ -262,11 +272,12 @@ public struct OriginalApplicationMenuSession {
             case "free":
                 guard e.arguments.count == 1 else { throw Boundary.dependency("Menu free request") }
                 try emit(.free(e.arguments[0]))
+            case "timer" where initialization == nil && stage == .prefix: break // the queue's timeGetTime
             case "timer","createThread","lastError":
                 guard initialization != nil && stage == .prefix else { throw Boundary.dependency("Menu operation "+e.kind) }
                 try emit(.startupFront(e))
             case "format","allocate","construct":
-                guard initialization != nil && stage == .prefix else { throw Boundary.dependency("Menu format") }
+                guard stage == .prefix else { throw Boundary.dependency("Menu format") }
             case "enter","leave":if initialization != nil { try emit(.startupFront(e)) }
             case "write","writeLocal","read","clip","draw","text","stringLength","soundRequest","randomTable","panel": break
             // Main menu (APPLICATION_FRONT_MENU_ITEMS_PLAN.md F1): WSAStartup is
@@ -377,7 +388,7 @@ public struct OriginalApplicationMenuSession {
                     }
                     func construct(_ allocation: OriginalInterfaceAllocation,_ device: UInt32,_ path: String,
                                    _ at: OriginalApplicationBootstrap.Stage) throws -> (OriginalLoadedBitmap,UInt32) {
-                        guard let input = initialization else { throw Boundary.dependency("Initial bitmap inputs") }
+                        guard initializationBitmap != nil || initialization != nil else { throw Boundary.dependency("Initial bitmap inputs") }
                         var created: UInt32?
                         let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:false,
                             backing:allocation.backing,device:device,flags:0x40,context:&created,perform:{ q,cursor in
@@ -387,6 +398,7 @@ public struct OriginalApplicationMenuSession {
                                     guard var bindings = bitmapInputs else { throw Boundary.dependency("Observed bitmap input provenance") }
                                     response = try bindings.observed(q,response:actual);bitmapInputs = bindings
                                 } else {
+                                    guard let input = initialization else { throw Boundary.dependency("Initial bitmap inputs") }
                                     let replies = at == .resources ? input.frontResponses : input.backgroundResponses
                                     let index = at == .resources ? frontAPIIndex : backgroundAPIIndex
                                     guard index < replies.count else { throw Boundary.dependency("Initial bitmap response") }
@@ -476,23 +488,24 @@ public struct OriginalApplicationMenuSession {
                             input = .init(drawTarget:game.target,milliseconds:first.milliseconds,threadHandle:first.threadHandle,
                                 threadID:first.threadID,lastError:first.lastError,fillResult:first.fillResult,drawResults:first.drawResults)
                         } else {
-                            input = .init(drawTarget:game.target,milliseconds:0,threadHandle:0,threadID:0,lastError:0,fillResult:responses.draw,drawResults:[responses.draw])
+                            // 4237e0 reads timeGetTime only to choose a reloaded MENU_BACK.
+                            let reload = try state.integer(at:0x41ac,as:UInt32.self) == 0
+                            let milliseconds = reload ? UInt32(bitPattern:try queue(.init(.time)).result) : 0
+                            input = .init(drawTarget:game.target,milliseconds:milliseconds,threadHandle:0,threadID:0,lastError:0,fillResult:responses.draw,drawResults:[responses.draw])
                         }
                         let oldKeys = Set(screen.bitmaps.keys)
                         let end = try screen.advance(globals:&state,input:input,fillBacking:[UInt8](repeating:0,count:100),allocate:{
-                            guard let first = initialization else { throw Boundary.dependency("Menu background allocation") }
-                            let allocation = first.backgroundAllocation
+                            guard let allocation = initialization?.backgroundAllocation ?? responses.background else { throw Boundary.dependency("Menu background allocation") }
                             try bootstrapObserve(.allocateBackground(allocation))
                             guard allocation.address == 0 || memory.allocations[allocation.address] == nil else { throw Boundary.bitmapOwnership(allocation.address) }
                             try emit(.allocate(allocation.address,allocation.backing));return allocation
                         },source:{ _ in throw Boundary.dependency("Menu background source") },constructBitmap:{ allocation,device,path in
                             try construct(allocation,device,path,.prefix)
                         },observe:event)
-                        if initialization != nil {
-                            let fresh = screen.bitmaps.filter { !oldKeys.contains($0.key) }
-                            try adopt(fresh,screen.surfaces.filter { fresh[$0.key] != nil })
-                            try bootstrapObserve(.prefixReturn(end,combined(state),screen))
-                        }
+                        // First load or a later reload: the new background joins the owned registry.
+                        let fresh = screen.bitmaps.filter { !oldKeys.contains($0.key) }
+                        try adopt(fresh,screen.surfaces.filter { fresh[$0.key] != nil })
+                        if initialization != nil { try bootstrapObserve(.prefixReturn(end,combined(state),screen)) }
                         return end
                     },update:{ state in
                         stage = .body
@@ -514,6 +527,38 @@ public struct OriginalApplicationMenuSession {
                     },alternate:{ state,selector in
                         stage = .menu
                         try point(.alternate,combined(state))
+                        if selector == 6 {
+                            // CONTROL SETTINGS (APPLICATION_FRONT_MENU_ITEMS.md F2): GetKeyState,
+                            // the 423480 reload and the 423230 writer use this iteration's
+                            // inputs; the written file is an effect; Sleep and
+                            // ShellExecuteA run when the screen returns.
+                            var calls: [OriginalFrontScreenEvent] = []
+                            try OriginalFrontControlSettings.advance(globals:&state,memory:&memory,
+                                input:.init(target:game.target,dcResult:responses.dcResult,dc:responses.dc),draw:draw,
+                                keyState:{ _ in responses.capsLock },reload:{ s in
+                                    guard let bytes = responses.controlFile else { throw Boundary.dependency("Control settings file") }
+                                    var scratch = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x1f4),defined:[Bool](repeating:false,count:0x1f4))
+                                    // Declared tokens: the FILE and the helper's own scratch are never dereferenced.
+                                    guard try OriginalSettingsLoading.loadAndContinueStartup(globals:&s,scratch:&scratch,translatedBytes:bytes,
+                                        file:1,scratchAddress:0x10000000,flagClearValue:nil) == .ready else { throw Boundary.dependency("Control settings reload") }
+                                },write:{ s in
+                                    var output = try OriginalBufferedTextOutput(backing:[UInt8](repeating:0,count:4096)),written: [UInt8] = []
+                                    let result = try OriginalSettingsWriting.run(globals:&s,output:&output,available:true,
+                                        write:{ bytes in written += bytes;return Int32(bytes.count) },close:{ 0 })
+                                    try emit(.settingsFile(written));return result
+                                },observe:{ e in
+                                    switch e.kind {
+                                    case "keyState","format","call","return":if initialization == nil { try observe(e) }
+                                    case "sleep","shell":calls.append(e);if initialization == nil { try observe(e) }
+                                    default:try event(e)
+                                    }
+                                })
+                            for c in calls {
+                                if c.kind == "sleep" { _ = try queue(.init(.sleep,c.arguments));try emit(.sleep(c.arguments[0])) }
+                                else { _ = try windowDefault(.init(.shell,c.arguments,c.strings)) }
+                            }
+                            return .presentation
+                        }
                         return try OriginalFrontScreenAlternate.advance(globals:&state,input:.init(selector:selector,drawTarget:game.target,timers:[],methodResult:0,drawResults:[responses.draw],fillResult:0,threadHandle:0,threadID:0,lastError:0),draw:draw,fill:{ _ in throw Boundary.dependency("Alternate fill") },writeSettings:{ _ in throw Boundary.dependency("Alternate settings write") },observe:event)
                     },completion:{ entry,w,state in
                         let presentation: OriginalMenuPresentationEntry

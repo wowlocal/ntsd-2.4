@@ -6,7 +6,8 @@ InitWinSock() errors (no network) and stops at the unwired network menu.
 Scripted runs now ignore real pointer/keyboard events; the packaged app passes
 the whole e2e set on its own resources. F2: CONTROL SETTINGS (selector 6) is
 ported and matches 106 real cases in full ([evidence](evidence/front-control-settings.json));
-its app wiring is next.
+in the app, rebinding a key and OK save data\control.txt to the overlay and the
+new key works after a relaunch.
 
 [ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
 quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real

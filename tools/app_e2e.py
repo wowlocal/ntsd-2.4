@@ -165,6 +165,25 @@ def website_check(timeout, app=APP):
         return ok, {"exitCode": done.returncode, "opened": opened}
 
 
+def controls_check(timeout, app=APP):
+    """Front menu → CONTROL SETTINGS: player 1's "up" cell, Q, OK. The overlay's
+    data\\control.txt is the packaged file with that key changed (87 → 81) in
+    Windows text form, and the menu keeps running (background reloaded)."""
+    packaged = (ROOT / "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/data/control.txt").read_bytes()
+    expected = packaged.replace(b"0 87 83 65", b"0 81 83 65", 1)
+    with tempfile.TemporaryDirectory(prefix="ntsd-controls-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script",
+                               "20 click 410 292; 60 click 250 290; 100 key 81; 140 click 480 450; 220 exit"],
+                              capture_output=True, text=True, timeout=timeout)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        saved = Path(scratch, "data", "control.txt")
+        written = saved.read_bytes() if saved.exists() else None
+        ok = (done.returncode == 0 and expected != packaged and written == expected
+              and not any(e.get("event") == "boundary" for e in events))
+        return ok, {"exitCode": done.returncode, "saved": written is not None, "matches": written == expected}
+
+
 def summarize(events, captures, overlay):
     out = {"milestones": [], "progress": [], "boundary": None}
     for e in events:
@@ -241,6 +260,9 @@ def main():
             ok, detail = website_check(args.timeout, args.app)
             if not ok:
                 problems.append("website"); reference["website"] = "one shellOpen of http://littlefighter.com, exit 0"; observed["website"] = detail
+            ok, detail = controls_check(args.timeout, args.app)
+            if not ok:
+                problems.append("controls"); reference["controls"] = "control.txt saved with P1 up = 81, exit 0"; observed["controls"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:

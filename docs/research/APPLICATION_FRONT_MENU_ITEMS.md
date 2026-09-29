@@ -85,8 +85,35 @@ settings four times and plays its sound four times; the help link has no
 click reset; joysticks cannot rebind the four direction rows; name editing
 ignores Return and keys past ten characters without consuming them.
 
-Next: F2b — the session's alternate for selector 6 (reload file bytes and the
-writer through the existing settings providers), then app checks.
+## F2b — CONTROL SETTINGS in the app (2026-09-29)
+
+The session's alternate runs `OriginalFrontControlSettings` for selector 6 and
+returns to presentation. Per-iteration inputs (`Responses`): data\control.txt
+as 423480 reads it and GetKeyState(VK_CAPITAL). The 423230 writer's output is
+an effect (`settingsFile`); the reload reads the current file; Sleep and
+ShellExecuteA (the help link) run when the screen returns. The front
+background, released on OK/Cancel, is reloaded on the next frame as the
+original does: the prelude asks the queue for timeGetTime only when 4511ac is
+0 (to choose MENU_BACK%d), takes a 0x1f50 allocation the runtime offers, builds
+the bitmap through the observed bitmap provider and adopts it.
+
+Declared policy (Windows text mode and file system, not the EXE): the game
+directory is the overlay; data\control.txt is read from the overlay when the
+player has saved settings, else from the package, CRLF → LF; OK writes the
+overlay's copy with LF → CRLF. Scripted runs answer GetKeyState with Caps Lock
+off; interactive runs report the real toggle.
+
+**App:** CONTROL SETTINGS opens with the original bitmaps (devices: keyboard,
+keyboard, joystick 1, joystick 2 from control.txt; names and key labels are
+GDI text, still blank); selecting player 1's "up", pressing Q and OK writes a
+control.txt equal to the packaged file with that one key changed (87 → 81), in
+CRLF form, and returns to the front menu with a new background. After a
+relaunch on that overlay, Q moves the mode-menu cursor up and W no longer
+does. `tools/app_e2e.py`'s vs scenario now also runs this controls check; the
+whole e2e set passes (vs with the quit, website and controls checks, mission,
+demo, war, playback, tournament, team-tournament). The bootstrap, host-session,
+observed-iteration, menu-input, front-screen, front-menu, settings-loading,
+CONTROL SETTINGS and Mac runtime-menu suites pass (34).
 
 Remaining: F1b — wire `OriginalNetworkMenu` (selectors 1–3, ported) with a
 declared no-network client, so ONLINE GAME reaches its menu and Back;

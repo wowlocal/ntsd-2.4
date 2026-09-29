@@ -119,7 +119,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     "resources":[(try? OriginalApplicationCatalogInputs.bundledDirectory().path) ?? "",OriginalMacMusicOutput.directory()?.path ?? ""]])
                 if exitAfterStartup { NSApp.terminate(nil); return }
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
-                                                      point:{ [unowned self] in self.cursor() })
+                                                      point:{ [unowned self] in self.cursor() },overlay:overlay)
+                // Scripted runs answer GetKeyState(VK_CAPITAL) with Caps Lock off.
+                if arguments.contains("--script") { menu.capsLock = { 0 } }
                 self.menu = menu; menu.sounds = sounds
                 menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
                 // OFFICIAL WEBSITE: the default browser opens the URL; scripted
