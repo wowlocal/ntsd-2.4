@@ -367,59 +367,96 @@ public struct OriginalApplicationLoadedMenuSession {
             try adopted(fresh,in:&owned)
             state.war = memory;return exit
         }
-        func warStart(_ scene: inout OriginalMatchPreparation,_ owned: inout OriginalMenuPresentationMemory,
-                      _ musicOwner: inout OriginalMusicMemory) throws {
-            guard let localTimeReply,let replayReply else { throw Boundary.dependency("War start providers") }
+        /// Arena layers for a preparation that owns the memory during its call:
+        /// wrappers come from `.arena(n)` allocations and releases are checked
+        /// against their owners; adoption and release apply after `body`.
+        func stagedArena(_ scene: inout OriginalMatchPreparation,_ owned: inout OriginalMenuPresentationMemory,
+                         _ body: (inout OriginalMatchPreparation,inout OriginalMenuPresentationMemory,
+                                  (String,Bool) throws -> OriginalLoadedBitmap?,(Int,OriginalLoadedBitmap) throws -> Void) throws -> Void) throws {
             var owners = scene.bitmapOwners,surfaceOwners = scene.bitmapSurfaceOwners
             var nextOrdinal = scene.bitmaps.count,layer = 0
             let device = try scene.globals.integer(at:0x457578-0x44d000,as:UInt32.self)
-            // The preparation owns the memory during its call (recording); arena
-            // wrapper adoption and release are staged and applied afterwards.
             let current = owned
             var arena: [UInt32:OriginalLoadedBitmap] = [:],released: [UInt32] = []
-            try OriginalWarPreparation.prepare(state:&scene,memory:&owned,
-                localTime:{
-                    let time = try localTimeReply(&self.environment);self.operations.append(.localTime(time));return time
-                },constructBitmap:{ path,optional,_ in
-                    let allocation = try self.allocate(.arena(layer));layer += 1
-                    guard allocation.address != 0 else { return nil }
-                    var context: Void = ()
-                    let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,
-                        backing:allocation.backing,device:device,flags:0x40,context:&context,perform:{ q,_ in try self.bitmap(q) })
-                    arena[allocation.address] = bitmap
-                    owners[nextOrdinal] = allocation.address;surfaceOwners[nextOrdinal] = self.surfaces[allocation.address];nextOrdinal += 1
-                    return bitmap
-                },releaseBitmap:{ ordinal,bitmap in
-                    guard let wrapper = owners[ordinal],let allocation = current.allocations[wrapper],allocation.live,!released.contains(wrapper) else {
-                        throw Boundary.dependency("Arena release wrapper owner")
-                    }
-                    let surface = try allocation.storage.integer(at:0,as:UInt32.self)
-                    var normalized = allocation.storage;try normalized.write(UInt32(surface == 0 ? 0 : 1),at:0)
-                    guard normalized == bitmap.storage else { throw Boundary.owner(wrapper) }
-                    var context: Void = ()
-                    try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context,perform:{ q,_ in
-                        if q.kind == "free" { try self.emit(.free(wrapper));return .init() }
-                        return try self.bitmap(q)
-                    })
-                    released.append(wrapper)
-                },resumeMusic:{ globals in
-                    try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&musicOwner,request:self.music)
-                },allocateReplay:{ count in
-                    let address = try replayReply(count,&self.environment)
-                    try self.claim(address,count);self.operations.append(.recordingAllocation(address,count))
-                    return address
-                },observe:{ e in
-                    switch e.kind {
-                    case "free":
-                        guard e.arguments.count == 1 else { throw Boundary.dependency("Recording free") }
-                        try self.front(.init("free",[e.arguments[0]]))
-                    case "localTime","format","releaseLayers","loadLayers","reconstruct","resetInput","replayEntry","calloc","random","candidates":break
-                    default:throw Boundary.dependency("War start event "+e.kind)
-                    }
+            try body(&scene,&owned,{ path,optional in
+                let allocation = try self.allocate(.arena(layer));layer += 1
+                guard allocation.address != 0 else { return nil }
+                var context: Void = ()
+                let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,
+                    backing:allocation.backing,device:device,flags:0x40,context:&context,perform:{ q,_ in try self.bitmap(q) })
+                arena[allocation.address] = bitmap
+                owners[nextOrdinal] = allocation.address;surfaceOwners[nextOrdinal] = self.surfaces[allocation.address];nextOrdinal += 1
+                return bitmap
+            },{ ordinal,bitmap in
+                guard let wrapper = owners[ordinal],let allocation = current.allocations[wrapper],allocation.live,!released.contains(wrapper) else {
+                    throw Boundary.dependency("Arena release wrapper owner")
+                }
+                let surface = try allocation.storage.integer(at:0,as:UInt32.self)
+                var normalized = allocation.storage;try normalized.write(UInt32(surface == 0 ? 0 : 1),at:0)
+                guard normalized == bitmap.storage else { throw Boundary.owner(wrapper) }
+                var context: Void = ()
+                try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context,perform:{ q,_ in
+                    if q.kind == "free" { try self.emit(.free(wrapper));return .init() }
+                    return try self.bitmap(q)
                 })
+                released.append(wrapper)
+            })
             for wrapper in released { owned.allocations[wrapper]?.live = false }
             try adopted(arena,in:&owned)
             scene.bitmapOwners = owners;scene.bitmapSurfaceOwners = surfaceOwners
+        }
+        func localTime() throws -> OriginalLocalTime {
+            guard let localTimeReply else { throw Boundary.dependency("Local time provider") }
+            let time = try localTimeReply(&environment);operations.append(.localTime(time));return time
+        }
+        func allocateRecording(_ count: Int) throws -> UInt32 {
+            guard let replayReply else { throw Boundary.dependency("Recording allocation provider") }
+            let address = try replayReply(count,&environment)
+            try claim(address,count);operations.append(.recordingAllocation(address,count))
+            return address
+        }
+        /// A preparation's recording free and sounds (the Tournament's computer
+        /// join, 0x45560c) go to the front; its other events are internal.
+        /// Unknown kinds stay boundaries.
+        func preparationEvent(_ e: OriginalFrontScreenEvent,_ name: String) throws {
+            switch e.kind {
+            case "free":
+                guard e.arguments.count == 1 else { throw Boundary.dependency("Recording free") }
+                try front(.init("free",[e.arguments[0]]))
+            case "soundRequest","soundMethod":try front(e)
+            case "localTime","format","releaseLayers","loadLayers","reconstruct","resetInput","replayEntry","calloc","random","candidates":break
+            default:throw Boundary.dependency(name+" event "+e.kind)
+            }
+        }
+        func warStart(_ scene: inout OriginalMatchPreparation,_ owned: inout OriginalMenuPresentationMemory,
+                      _ musicOwner: inout OriginalMusicMemory) throws {
+            guard localTimeReply != nil,replayReply != nil else { throw Boundary.dependency("War start providers") }
+            try stagedArena(&scene,&owned) { scene,owned,construct,release in
+                try OriginalWarPreparation.prepare(state:&scene,memory:&owned,localTime:localTime,
+                    constructBitmap:{ path,optional,_ in try construct(path,optional) },releaseBitmap:release,
+                    resumeMusic:{ globals in
+                        try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&musicOwner,request:self.music)
+                    },allocateReplay:allocateRecording,observe:{ try preparationEvent($0,"War start") })
+            }
+        }
+        /// Tournament 434349..4347c5 or Team Tournament 436747..436afd, called by
+        /// the bracket (menus 26..29 / 126..129) with the same owners as War.
+        /// Their contract has no null arena allocation: that is a boundary.
+        func bracketStart(_ scene: inout OriginalMatchPreparation,_ owned: inout OriginalMenuPresentationMemory,team: Bool) throws {
+            guard localTimeReply != nil,replayReply != nil else { throw Boundary.dependency("Tournament start providers") }
+            try stagedArena(&scene,&owned) { scene,owned,construct,release in
+                let constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap = { path,optional,_ in
+                    guard let bitmap = try construct(path,optional) else { throw Boundary.dependency("Tournament arena allocation") }
+                    return bitmap
+                }
+                if team {
+                    try OriginalTeamTournamentPreparation.prepare(state:&scene,memory:&owned,localTime:localTime,constructBitmap:constructBitmap,
+                        releaseBitmap:release,allocateReplay:allocateRecording,observe:{ try preparationEvent($0,"Team Tournament start") })
+                } else {
+                    try OriginalTournamentPreparation.prepare(state:&scene,memory:&owned,localTime:localTime,constructBitmap:constructBitmap,
+                        releaseBitmap:release,allocateReplay:allocateRecording,observe:{ try preparationEvent($0,"Tournament start") })
+                }
+            }
         }
         /// 43249c..4328cc: input reset, Sleep(300), GetOpenFileNameA, the previous
         /// playback buffer freed (43d280), `.txt` through ShellExecuteA, the loader
@@ -575,6 +612,26 @@ public struct OriginalApplicationLoadedMenuSession {
                     checkpoint:{ point,current in
                         selectionLocals = point.locals
                         try self.observe(.characterCheckpoint(point,current),&self.environment)
+                    },tournamentStage:{ scene,locals,library,initialize in
+                        try OriginalTournamentBracket.advance(state:&scene,locals:&locals,libraryText:&library,initialize:initialize,
+                            target:self.target,fillBacking:[UInt8](repeating:0,count:100),
+                            resumeMusic:{ g in try OriginalMusicPlayback.resumeMatch(globals:&g,memory:&musicOwner,request:self.music) },
+                            prepare:{ value in try self.bracketStart(&value,&owned,team:false);return true },
+                            draw:{ request,g in try self.characterDraw(request,g,owned) },observe:front,
+                            checkpoint:{ point,current in
+                                selectionLocals = point.locals
+                                try self.observe(.characterCheckpoint(point,current),&self.environment)
+                            })
+                    },teamTournamentStage:{ scene,locals,library,initialize in
+                        try OriginalTeamTournamentBracket.advance(state:&scene,locals:&locals,libraryText:&library,initialize:initialize,
+                            target:self.target,fillBacking:[UInt8](repeating:0,count:100),
+                            resumeMusic:{ g in try OriginalMusicPlayback.resumeMatch(globals:&g,memory:&musicOwner,request:self.music) },
+                            prepare:{ value in try self.bracketStart(&value,&owned,team:true);return true },
+                            draw:{ request,g in try self.characterDraw(request,g,owned) },observe:front,
+                            checkpoint:{ point,current in
+                                selectionLocals = point.locals
+                                try self.observe(.characterCheckpoint(point,current),&self.environment)
+                            })
                     },warStage:{ scene,library in
                         try self.war(&scene,&library,&owned,&musicOwner)
                     },demo:demo,matchPrelude:{ confirmation = $0 })

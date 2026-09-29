@@ -1,0 +1,98 @@
+{
+ "date": "2026-09-29",
+ "scope": "APPLICATION_TOURNAMENT.md: Tournament and Team Tournament wired into the app (bracket, preparation, match, winner, main menu). Native release app only; the original is not executed.",
+ "e2e": {
+  "result": "pass",
+  "scenarios": [
+   "vs",
+   "mission",
+   "demo",
+   "war",
+   "playback",
+   "tournament",
+   "team-tournament"
+  ],
+  "quitCheck": "pass"
+ },
+ "tests": {
+  "suites": [
+   "OriginalApplicationLoadedMenuTests",
+   "OriginalLibTournamentSetupTests",
+   "OriginalLibTeamTournamentSetupTests"
+  ],
+  "result": "9/9 pass"
+ },
+ "references": {
+  "tournament": {
+   "reference": "tools/app_e2e_tournament_reference.json",
+   "sha256": "d1501257b814d0084d1d2e1a6c8cac78e7a9dcccc59254d997a81da31878de06",
+   "exitCode": 0,
+   "boundary": null,
+   "menu": [
+    {
+     "gameplayBodies": 1832,
+     "iterations": 7280,
+     "epilogues": 1,
+     "replayFiles": [
+      "recording\\20260101_010000_1on1_Prelminar.lfr 10113"
+     ]
+    }
+   ],
+   "captures": [
+    {
+     "iterations": 12000,
+     "capture": "215daed6e400086e1d92385015e77dd495c6e5815a8c8ddf8458290f4de793d9",
+     "track": "bgm\\stage1.wma"
+    },
+    {
+     "iterations": 13500,
+     "capture": "c1e29d59c12c5796fb313a82e8c4df26e1a67682b8023669b5631f86d8356dde",
+     "track": "bgm\\main.wma"
+    }
+   ],
+   "overlayFiles": {
+    "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+    "recording/20260101_010000_1on1_Prelminar.lfr": "5408b223054a7d817d623f6dd722be15cbd23ae7cb34a505b7d7a1dd80912727"
+   }
+  },
+  "team-tournament": {
+   "reference": "tools/app_e2e_team_tournament_reference.json",
+   "sha256": "70ed72ecb21a3d515115630a77bdff80a4561a5c7368d62e60fa3a3f28a03df3",
+   "exitCode": 0,
+   "boundary": null,
+   "menu": [
+    {
+     "gameplayBodies": 1856,
+     "iterations": 7354,
+     "epilogues": 1,
+     "replayFiles": [
+      "recording\\20260101_010000_2on2_SemiFinal.lfr 10174"
+     ]
+    }
+   ],
+   "captures": [
+    {
+     "iterations": 10000,
+     "capture": "b01a2ce1137d2db5dbfd893fcc425d08885b5062496f10e2a7e16c90a37d1529",
+     "track": "bgm\\stage1.wma"
+    },
+    {
+     "iterations": 10500,
+     "capture": "b4757437342fd95f6decd2280851f129439f92666ca1006aa4833f89218c2fb1",
+     "track": "bgm\\main.wma"
+    }
+   ],
+   "overlayFiles": {
+    "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+    "recording/20260101_010000_2on2_SemiFinal.lfr": "8369352a0bf58804f782ae75b5b8ef7d2396419046abef9de59101bda7842ad9"
+   }
+  }
+ },
+ "captures": {
+  "application-tournament-settings-capture.png": "427ac4db5cb49949b0f7a0205bc3ab2aedb92144d3bdd4e6351ddd2c394cf95a",
+  "application-tournament-winner-capture.png": "215daed6e400086e1d92385015e77dd495c6e5815a8c8ddf8458290f4de793d9",
+  "application-team-tournament-battle-capture.png": "27a0debc4a9fb4d3f392e6484b79b967008d1af4a7f21e189f4390896e9b7f83",
+  "application-team-tournament-winner-capture.png": "b01a2ce1137d2db5dbfd893fcc425d08885b5062496f10e2a7e16c90a37d1529"
+ },
+ "exeEnvelope": "not recalculated"
+}

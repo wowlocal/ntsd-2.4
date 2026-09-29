@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Tournaments](research/APPLICATION_TOURNAMENT.md): the bracket and the
+preparations 434349/436747 are wired into the app; the human's 1-on-1 or
+2-on-2 match plays, the bracket decides the other pairings, and the Winner
+screen returns to the main menu (e2e `tournament`, `team-tournament`).
+[Evidence](evidence/application-tournament.json).
+
 [Playback](research/APPLICATION_PLAYBACK.md) P1: the recording loader 43e620
 is in Core with zlib 1.1.4's inflate; 27 real calls (MSVCP80 ifstream, the
 EXE's zlib) match, including the original's reported 1000-byte overflow on

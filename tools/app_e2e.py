@@ -9,8 +9,8 @@ progress with character AI/object input counts and window captures, the
 return to the menus with its epilogue and replay file, music) are compared
 with tools/app_e2e_reference.json; `--record` writes that reference instead.
 A second run chooses Quit on the main menu and requires WM_QUIT to end the
-process with code 0. Mission, War, Demo and Playback Recording scenarios
-compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
+process with code 0. Mission, War, Demo, Playback Recording, Tournament and
+Team Tournament scenarios compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
 depend on the window's backing scale, which the reference records.
 """
 import argparse
@@ -47,6 +47,18 @@ DEMO = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83;
 PLAYBACK = ("20 click 350 230; 60 click 402 218; " + "".join(f"{100 + 25 * i} key 83; " for i in range(6))
             + "250 key 74; 9000 key 115; 9600 capture {captures}/after-f4.png; 9700 exit")
 LOADER_FIXTURE = ROOT / "native/Tests/NTSDCoreTests/Fixtures/original-replay-loader.json"
+# Tournament / Team Tournament: fighter 1 is the first character as Human,
+# the other seven Random computers; No at "Shuffle the order?", Fight!, the
+# human's device (Attack), Yes at "Is the setting ok?". The human's match is
+# played; the bracket then decides the computer pairings, shows the Winner,
+# and Attack returns to the main menu.
+BRACKET_SETUP = ("250 key 68; 275 key 74; 300 key 68; 325 key 74; " + "".join(f"{t} key 74; {t + 25} key 74; " for t in range(350, 700, 50))
+                 + "800 key 68; 825 key 74; 900 key 87; 925 key 87; 975 key 74; 1400 key 74; 1500 key 68; 1550 key 74; ")
+TOURNAMENT = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 74; " + BRACKET_SETUP
+              + "9100 key 74; 12000 capture {captures}/winner.png; 13100 key 74; 13500 capture {captures}/menu.png; 13600 exit")
+TEAM_TOURNAMENT = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 74; " + BRACKET_SETUP
+                   + "9100 key 68; 9200 key 74; 9600 key 68; 9700 key 74; 10000 capture {captures}/winner.png; "
+                   + "10100 key 68; 10200 key 74; 10500 capture {captures}/menu.png; 10600 exit")
 
 
 def playback_file(scratch):
@@ -66,6 +78,10 @@ SCENARIOS = {
                 script=lambda captures: WAR.format(jump=14000, settings=14300, end=14400, captures=captures)),
     "playback": dict(reference=ROOT / "tools/app_e2e_playback_reference.json", extra=playback_file,
                      script=lambda captures: PLAYBACK.replace("{captures}", str(captures))),
+    "tournament": dict(reference=ROOT / "tools/app_e2e_tournament_reference.json", extra=[],
+                       script=lambda captures: TOURNAMENT.replace("{captures}", str(captures))),
+    "team-tournament": dict(reference=ROOT / "tools/app_e2e_team_tournament_reference.json", extra=[],
+                            script=lambda captures: TEAM_TOURNAMENT.replace("{captures}", str(captures))),
 }
 
 
