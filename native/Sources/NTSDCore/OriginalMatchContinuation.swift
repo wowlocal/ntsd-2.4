@@ -7,6 +7,23 @@ public enum OriginalMatchContinuationEvent {
     case candidates(seat: Int, ordinals: [Int])
 }
 
+/// Demo start (42d789 with 450c2c = 1) owners supplied by an application:
+/// 4025d0's track register (ECX residue of the preceding text call, see
+/// `OriginalMusicPlayback.selectDemoTrack`), the 4025b0 play of 44eed0 and the
+/// arena layer surfaces (construct/release). Without them the branch keeps its
+/// earlier contract: music must be off and layers use the supplied bitmap inputs.
+public struct OriginalDemoStartProviders {
+    public let musicTrack: Int32
+    public let playMusic: (inout OriginalStateRecord) throws -> Void
+    public let constructBitmap: (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?
+    public let releaseBitmap: (Int,OriginalLoadedBitmap) throws -> Void
+    public init(musicTrack: Int32,playMusic: @escaping (inout OriginalStateRecord) throws -> Void,
+                constructBitmap: @escaping (String,Bool,[UInt8]) throws -> OriginalLoadedBitmap?,
+                releaseBitmap: @escaping (Int,OriginalLoadedBitmap) throws -> Void) {
+        self.musicTrack = musicTrack;self.playMusic = playMusic;self.constructBitmap = constructBitmap;self.releaseBitmap = releaseBitmap
+    }
+}
+
 extension OriginalMatchPreparation {
     /// Shared42b660/42ca80/42d840/42dfd0 roster rule. Rebuild after each seat;
     /// inactive selections also exclude their ordinals. Source IDs are signed.
@@ -23,15 +40,17 @@ extension OriginalMatchPreparation {
     /// needs no SEH/cookie wrapper; the oracle separately checks the real return.
     public mutating func continueMenu(confirmation: Int32, bitmapFill: UInt8 = 0xa5,
                                       bitmapSource: (String) throws -> OriginalBitmapInput,
+                                      demo: OriginalDemoStartProviders? = nil,
                                       observe: (OriginalMatchContinuationEvent) throws -> Void = { _ in }) throws {
         var candidate = self
         try candidate.consumeContinuation(confirmation: confirmation, bitmapFill: bitmapFill,
-                                           bitmapSource: bitmapSource, observe: observe)
+                                           bitmapSource: bitmapSource, demo: demo, observe: observe)
         self = candidate
     }
 
     private mutating func consumeContinuation(confirmation: Int32, bitmapFill: UInt8,
                                                bitmapSource: (String) throws -> OriginalBitmapInput,
+                                               demo: OriginalDemoStartProviders?,
                                                observe: (OriginalMatchContinuationEvent) throws -> Void) throws {
         guard actors.count == 400, backgrounds.count == 101 else { throw Self.error("Continuation storage") }
         let mode = try global(0x451160), action = try global(0x44d06c)
@@ -67,7 +86,11 @@ extension OriginalMatchPreparation {
         }
         if try global(0x450c2c) == 1 {
             try observe(.musicSelection)
-            guard try global(0x44d010) == 0 else { throw Self.error("Enabled 4025d0 music selection") }
+            if try global(0x44d010) != 0 {
+                guard let demo else { throw Self.error("Enabled 4025d0 music selection") }
+                _ = try OriginalMusicPlayback.selectDemoTrack(demo.musicTrack, globals: &globals, draw: draw)
+                try demo.playMusic(&globals)
+            }
             try setGlobal(0x44d020, 0)
             for slot in 0..<400 { try world.write(UInt8(0), at: 4+slot) }
             try setGlobal(0x44d028, 1)
@@ -126,11 +149,13 @@ extension OriginalMatchPreparation {
             for address in stride(from: 0x450c04, through: 0x450c28, by: 4) { try setGlobal(address, 0) }
             for index in 0..<Int(count) {
                 try observe(.state(.releaseLayers(index)))
-                releasedBitmapOrder += try backgroundLoader.releaseLayers(in: &backgrounds[index])
+                if let demo { releasedBitmapOrder += try backgroundLoader.releaseLayersWithSurface(in: &backgrounds[index], releaseBitmap: demo.releaseBitmap) }
+                else { releasedBitmapOrder += try backgroundLoader.releaseLayers(in: &backgrounds[index]) }
             }
             if background != 99 {
                 try observe(.state(.loadLayers(Int(background))))
-                try backgroundLoader.loadLayers(in: &backgrounds[Int(background)], bitmapFill: bitmapFill, bitmapSource: bitmapSource)
+                if let demo { try backgroundLoader.loadLayersWithSurface(in: &backgrounds[Int(background)], constructBitmap: demo.constructBitmap) }
+                else { try backgroundLoader.loadLayers(in: &backgrounds[Int(background)], bitmapFill: bitmapFill, bitmapSource: bitmapSource) }
             }
             try setGlobal(0x44d034, 1); try setGlobal(0x450bbc, 0)
             let resource = try globals.integer(at: 0x455608-Self.globalBase, as: UInt32.self)

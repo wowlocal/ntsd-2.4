@@ -96,9 +96,11 @@ public struct OriginalApplicationLoadedMenuSession {
         checkpoint: @escaping (String,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_ in },
         localTime: ((inout Environment) throws -> OriginalLocalTime)? = nil,
         allocateReplay: ((Int,inout Environment) throws -> UInt32)? = nil,
+        demoMusicTrack: Int32? = nil,
         beforeCommit: (Outcome,inout Environment) throws -> Void = { _,_ in }) throws -> Outcome {
         guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
         let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint,localTime,allocateReplay)
+        a.demoMusicTrack = demoMusicTrack
         let result = try a.run()
         try beforeCommit(result,&a.environment)
         switch result {
@@ -116,6 +118,8 @@ public struct OriginalApplicationLoadedMenuSession {
         let clock: (inout E) throws -> UInt32
         /// War start (43a21f) providers: GetLocalTime and the recording calloc.
         let localTimeReply: ((inout E) throws -> OriginalLocalTime)?,replayReply: ((Int,inout E) throws -> UInt32)?
+        /// 4025d0's ECX at the Demo start (declared by the platform; nil: boundary).
+        var demoMusicTrack: Int32?
         let observe: (Observation,inout E) throws -> Void,checkpoint: (String,OriginalStateRecord,inout E) throws -> Void
         var environment: E,state: State,model: OriginalMatchPreparation
         var audio: OriginalMusicMemory,resources = OriginalMenuResourceLoading()
@@ -433,6 +437,38 @@ public struct OriginalApplicationLoadedMenuSession {
                 character.globals = globals;character.world = world
                 var selectionLocals: [Int:Int32] = [:]
                 var confirmation: Int32?
+                // Demo start (42d789): arena layers with this session's owners,
+                // the configured track through 4025b0 and 4025d0's declared ECX.
+                var demoOwners = character.bitmapOwners,demoSurfaceOwners = character.bitmapSurfaceOwners
+                var demoNext = character.bitmaps.count,demoLayer = 0,demoUsed = false
+                let device = try globals.integer(at:0x457578-0x44d000,as:UInt32.self)
+                let demo = demoMusicTrack.map { track in OriginalDemoStartProviders(musicTrack:track,playMusic:{ g in
+                    try OriginalMusicPlayback.resumeMatch(globals:&g,memory:&musicOwner,request:self.music)
+                },constructBitmap:{ path,optional,_ in
+                    demoUsed = true
+                    let allocation = try self.allocate(.arena(demoLayer));demoLayer += 1
+                    guard allocation.address != 0 else { return nil }
+                    var context: Void = ()
+                    let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,
+                        backing:allocation.backing,device:device,flags:0x40,context:&context,perform:{ q,_ in try self.bitmap(q) })
+                    try self.adopted([allocation.address:bitmap],in:&owned)
+                    demoOwners[demoNext] = allocation.address;demoSurfaceOwners[demoNext] = self.surfaces[allocation.address];demoNext += 1
+                    return bitmap
+                },releaseBitmap:{ ordinal,bitmap in
+                    demoUsed = true
+                    guard let wrapper = demoOwners[ordinal],var allocation = owned.allocations[wrapper],allocation.live else {
+                        throw Boundary.dependency("Arena release wrapper owner")
+                    }
+                    let surface = try allocation.storage.integer(at:0,as:UInt32.self)
+                    var normalized = allocation.storage;try normalized.write(UInt32(surface == 0 ? 0 : 1),at:0)
+                    guard normalized == bitmap.storage else { throw Boundary.owner(wrapper) }
+                    var context: Void = ()
+                    try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context,perform:{ q,_ in
+                        if q.kind == "free" { try self.emit(.free(wrapper));return .init() }
+                        return try self.bitmap(q)
+                    })
+                    allocation.live = false;owned.allocations[wrapper] = allocation
+                }) }
                 let result = try OriginalMatchSelection.advanceWithLibrary(state:&character,libraryText:&text,
                     selectionAtEntry:startup.resources.selectionAtEntry,target:target,input:screenInput,
                     fillBacking:{ [UInt8](repeating:0,count:100) },
@@ -442,7 +478,8 @@ public struct OriginalApplicationLoadedMenuSession {
                         try self.observe(.characterCheckpoint(point,current),&self.environment)
                     },warStage:{ scene,library in
                         try self.war(&scene,&library,&owned,&musicOwner)
-                    },matchPrelude:{ confirmation = $0 })
+                    },demo:demo,matchPrelude:{ confirmation = $0 })
+                if demoUsed { character.bitmapOwners = demoOwners;character.bitmapSurfaceOwners = demoSurfaceOwners }
                 model = character;world = character.world;globals = character.globals
                 if result == .matchPrelude {
                     guard let confirmation else { throw Boundary.dependency("Selection confirmation owner") }

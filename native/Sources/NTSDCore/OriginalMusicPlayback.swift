@@ -71,6 +71,27 @@ public enum OriginalMusicPlayback {
         if !path.isEmpty { try play(path,globals: &globals,memory: &memory,request: request,store: store) }
     }
 
+    /// 4025d0's track table (447744..4476d4), copied with its NUL.
+    public static let demoTracks: [Int32:String] = [1:"bgm\\main.wma",2:"bgm\\stage1.wma",3:"bgm\\stage2.wma",4:"bgm\\stage3.wma",
+        5:"bgm\\stage4.wma",6:"bgm\\stage5.wma",7:"bgm\\boss1.wma",8:"bgm\\boss2.wma"]
+    /// Whole4025d0 up to its jump to4025b0, called only by the Demo start (42d7a1).
+    /// `track` is ECX at entry: the function spills it with `push ecx` and no
+    /// argument is pushed, so the caller must supply that register explicitly.
+    /// Music off (44d010 = 0) returns false with no write; otherwise track 0
+    /// draws RNG tag 2 over 8 (+1), tracks 1..8 copy their path to 44eed0, and
+    /// any other value keeps the configured path. The caller then plays 44eed0
+    /// (4025b0, `resumeMatch`).
+    public static func selectDemoTrack(_ track: Int32, globals: inout OriginalStateRecord,
+                                       draw: (Int32, Int32) throws -> Int32) throws -> Bool {
+        guard try word(globals,0x44d010) != 0 else { return false }
+        var state = globals,value = track
+        if value == 0 { value = try draw(2,8) &+ 1 }
+        if let path = demoTracks[value] {
+            for (i,b) in (Array(path.utf8)+[0]).enumerated() { try state.write(b,at: 0x44eed0-base+i) }
+        }
+        globals = state;return true
+    }
+
     /// Whole401d30, shared by track replacement and application shutdown.
     public static func release(globals: inout OriginalStateRecord, request: Request,
                                wrote: (Int, UInt32) throws -> Void = { _,_ in }) throws {

@@ -36,10 +36,16 @@ WAR = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 
        "250 key 74; 275 key 68; 300 key 74; 325 key 74; 400 key 75; 425 key 75; 450 key 75; 475 key 75; "
        "1000 key 74; 1100 key 68; 1150 key 74; 1200 key 74; 1400 key 74; 1450 key 87; 1500 key 87; 1600 key 74; "
        "{jump} key 74; {settings} capture {captures}/war-settings.png; {end} exit")
+# Demo: the first automatic match (eight computers) plays; Jump pressed through
+# its closing window ends the Demo and returns to the main menu.
+DEMO = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 83; 200 key 83; 225 key 74; "
+        + "".join(f"{t} key 75; " for t in range(1000, 7001, 20)) + "7200 capture {captures}/demo-exit.png; 7300 exit")
 SCENARIOS = {
     "vs": dict(reference=REFERENCE, extra=[], script=lambda captures: SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)),
     "mission": dict(reference=ROOT / "tools/app_e2e_mission_reference.json", extra=["--exit-after-bodies", "1800"],
                     script=lambda captures: MISSION),
+    "demo": dict(reference=ROOT / "tools/app_e2e_demo_reference.json", extra=[],
+                 script=lambda captures: DEMO.replace("{captures}", str(captures))),
     "war": dict(reference=ROOT / "tools/app_e2e_war_reference.json", extra=[],
                 script=lambda captures: WAR.format(jump=14000, settings=14300, end=14400, captures=captures)),
 }

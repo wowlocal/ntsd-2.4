@@ -112,7 +112,7 @@ enum OriginalComputerSelection {
             try write(0x44d06c,2);try write(0x4512c8,3)
         }
         let mode = try word(0x451160)
-        guard [0,1,4].contains(mode) else { throw error("Other modes") }
+        guard [0,1,4,5].contains(mode) else { throw error("Other modes") }
         for offset in [0x34,0x28,0x38,0x2c,0x30] { local[offset] = 0 }
         if try word(0x4512c8) == 2 {
             for seat in 0..<8 where try candidate.world.integer(at:4+seat,as:UInt8.self) != 0 {
@@ -127,9 +127,10 @@ enum OriginalComputerSelection {
                 if !matched { try write(latch,0) }
             }
         }
+        // 42ba84: a signed count <= 0 (the -100 sentinel of a Demo) draws none.
         let count = try word(0x44d070)
-        guard (0...8).contains(count) else { throw error("Computer count extent") }
-        for i in 0..<Int(count) {
+        guard count <= 8 else { throw error("Computer count extent") }
+        for i in 0..<Int(max(0,count)) {
             let seat = try computer(Int32(i))
             if try status(seat) > 11 { try faceAndName(seat,0x9b9bff) }
             if try status(seat) > 12 { try teamText(seat,0x9b9bff) }

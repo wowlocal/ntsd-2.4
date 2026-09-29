@@ -1,0 +1,3561 @@
+{
+ "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+ "scope": "Real4025d0 \u2014 the Demo's music selection, reached only from 42d7a1 \u2014 over the\npinned EXE image in controlled Unicorn2.1.4. Its track is read from the slot\nits own `push ecx` fills, i.e. ECX at entry (no argument is pushed; at 42d7a1\nECX is the residue of the preceding text call). Cases cover music disabled\n(44d010 = 0), tracks 0 (RNG 417170 tag 2 over 8), 1..8 and other values, empty\nand non-empty prior paths in 44eed0, and several RNG states. 417170 executes;\n402020 (music play) is a recorded boundary with its path. Every data-section\nwrite is recorded. APPLICATION_DEMO_PLAN.md.\n",
+ "table": "5dbea0371a33b3cfdd0da9f40aa7b87ce8ec868440ea031d5e03ed3268c547d50cb91d54db8cf4aaf2faa74c2df494e0143460cb4053373959b0cc7af610f4f18346b0d86afcf898aec4a08435f822326347293fd0d732303b4a88cffaad0aaf1390edaa3553f8934a5dd8704cd29ce7980278bcf38fcd1270ada73cf04aa0dcef9cec20d2706f46630f9856c03cfea65a8ee69651a6a825c60c34c1772918fdb042c988f9491e117b732e6f827d8ccdb2ee1195b25c24e3f16a3e52d29c1547542ba3a40a670985f77b69ea2975c96c90779af2880367f90a24d657eb0efba4b9d51da78267776da1691e68ee95fec7c65128de6481dbc90ae5162dccf7fab3a5155fbc077bf5c32857a68030e5b9580a78637c7ed3afe9513296a1a76cfdc73f11167f63685436992f5ebcf07f4c4af53ff8e12f0a5621a25ef5fa4e0ebb681543ef820308a7aaed32a6995590c9fd0ac89b9a78c68470a69357703a17a8cd96f9a14976c7c638fcf2628aa65b8d09268e0225fbc0b48668d1e0ae07d101e79759e24df2284f2985d87cf455b6323392dce3f5ffc3254a58e7be557220c4d85258ed7bd1bd21fd27216134718c1c7878d5ff7270ae585547fd9e77e375b476e04082b58fb2deea695aff94b1dbed8ae76c17775b7593f3ed8c329e615a594dc430e650cc4571d4346aced86fb5114d52ebefd2759f61a9e7613146966afe1a621cde15cf45075ad5064536a8c0b3d80e6e54c692c711aa351f565d54d7b3d08249b8bf7f188c49fd3b60d8feb7c6fa55e4908baf1c33e0b7ba60498de44a955054c381e9b8b8a544e7225c39e97e33c696764c6ce21ee837fe11e1da6ad9455daad3ff4032822721420d55403655b5e49adca70970ec95e088b0f278553eed1e0fbfd45627a5b8f1cf2a47231607eb95dc1daf6fb17dec424a87bb452496d06a97e28b264c23f9796d072d93939572249f14eda7a4f0a5ce0866f145ed45667eb11e26cbea3f3f5a4bb4f4e5ca4719bd7724dae25eae30de5e9fbca1d872577b99d49809e0810f9fec468195ef2364f54c3366738461ac2db809b8a4a1880465e26dcd429eb52636a8d5a7c0c8760ec35c2a74ce537571d95afcf3bf19b6fda4f455a2ff2aedf1f0ac7fb1a830d4817fb6f5d9121a1d076758db7484a3700b850afae5ee9c7b1883f662de329310dfe9410ae4fabb4fabbc9b06312eb7ec273830d25e61a3f9ef88db26dfe874c47ca2b45bd16caf47cfa7e3e4971664a7fed1cb53c4cb7ec2837b8371da7aea4c61b29de2d4ec80011b55c1df863dc7def74a9279c64685f5934068f1e93720cbc9825d9f94a84f4065d91b6852461716a57d0fc4030f2079141adcd69b9753a528e127912d6d4d0a3d2c2aefc2fa1994542d213812854bf4aab4025671b3d5031f0305bf2b2fc1a962a87bec94462de5027df9dbf9ae99d3b49bd02862c90ed287fb533414830aac4d0f725b76b7c0d7e075a2ba3934ae47c0411589573c76456f46c37a5ea514e42401c3370d045a7f58827365c0e3454293f9eeb9ae111e4f15425aa57475e2684786f9857183103302759ceef42c2b7d2380d07f3af0252a6eb0ee4cb5f40e13468c72cc2e308e0dac8121eeafa4bff59bf00323c02a4453233a2f05744bc18067e0de97c3aa18ecdbc056823d8379eadb4da36f7b2f458b11669c7178c23c1524b6c47327b77e76c42ee8c6de28605ff8fa1f37981784d8c7a48baffccb50f5aaa67ff2bf3fac11d12a56e04a91149db844b9cdba98f5838c47a4e7b178e68c5cab3a2e68cb1c6723f97179a7e5c33197d48d8c77152018d585e442377e79084d25f8bf738fde6709c5613914edb569c5be84ce588b9ce9d2f99beca6ba19d948568fc4235c18460d99a153a016435b26f85e77dc241a0b63a16f990a2b663aca662a61afa9817a6666fef8d2ef595f4fd9afe975a7d9581a60587e61f21c2007e044ba4616e5bd857f9e62232f78908ea1600e8803b2eac17a23d31f5804cbe035327d855f26128c9e75cbffadb6cee1efab52714a8fa7d61d70d82ac67cbef237175602e937b7d25fce74c8e7bebffc4b21a57c32eeb1085536cddc4d7940899d6df844bc2137e0424a2052fecb4bc81da4fd6c15e1f13b15bb79081f82d82884049cc6067e5cf6acd81566b7ae9cdfb16ed2f6700f9609321e25ec1232d603ebfcfa7c9382b50865c322c27c4fa4113a0aa1c6e5b090bd69ce1ec421b84d0435cbd246db6e95381aa3931757a417614ed76af8bb9694d95791b537ecd892c8a9bbe6fd739c93e3d9e740097bbc6c86650bb2215c201c91fe01c36636e93fa2f2eafd6f97f88b9a1b54fcb13c39606edd2a8343d546e3ccc6879ee4e5573396a2cae159a8829c9bb37d261e144ff3367913e7db5892ed2a7867a73784200f5fa920e2f12bcf29df62519cce1e48eab2db74f156baa17ff844353d5bc257bae9e106d1df4507d892c68b433a1d80cc6b0fd2b49678a7a0bdb9d946be72a55e5705ea07bec465168fe3c081c7f4eae61b8184ca71acea1e305111acc50cc4697e338edc2017bb116b2457c3d42e0bc73284b7ce319bc48b3ee56d5d46a9848e66ef863107d26d3ceb530a78b376fa45d34ce963152a24ba09b352cb8b894842cf22bfe6eaadf14f8c216714a61f677657736fac4ce08a4862def8ead48f863f291574e4b98558c57aa2d10f6a9b93b74976f05201708e0ed4ecec36d3c1cc851a783895d159bd5d98500163a806522a6837e801c929dab01d4991abb24bb7557bdff16807cc589a7d077f11849a0eb0277b29eb36812e922a41994c09fafb345a4258ce23a76f43f4852c9c12bbc4f3af6bd2c3c792d9dc22078f1ce74460ed797bfb3fdf56e0647bf0b88dd9eb865fda16dfc4759ac37e5cb24e28d1bec08f4dcbbc36efe89acac452ad6eda5579a3b9eb1b2928fbe628e63d867b3d238b6c80545231f412a30c3716645084c455368e4223b2bdbbd24e8006be2916d1441a6e1fc432082b12fd6d8b0cc53dabe8cdd2d2eea50984a6aa9e4ece453bcd03f1aa947241352f12bb35e828675b9d95e5b0ba434b50241cb9e83d64e9febc7293fa078ce7fbbee52492c48ed0aed5cf40887b3d6fcc0d7b3dbddcfe37a96b52df56a79ab5d11edf5bba9be9a0762fa1e0ec7acce32cd323ba2c9bf3cb75c7757dec8f74bd1d336a48984fb97b692a278ea502b57b12b285f9794deacd90e3c2569eb9c8943a0c7f954ba3d0882f6d92572e3e8f909309a9881d2663e720f7b599820599d57a57b0b224c05573e44129093740c47e3a5729b844412b48b95eddb861b4bc22206921d32ab2c2eb9c12443aa2ff962785c2321fd09ee89ee716de69b7f0db98e3ba8bed186ae7a55a71d0c00853196fe5970714549d15212ac1efa6b74473e27265393ddcbb66589793d0bab47ab33ec1c1fdb51a087c0bf4a8da2dc79e56aaea2b0c411adfb5bf40d1d7082715a180f35302e51e063f97adb580018053aa1de16f783da7f2211cb7a890cb122af2a9c98311c78ea5528b3077d3e6b01a6aee5fb986370ef4c62fd0b938ed5ea10b2a052b3dc4d25bfea94aa0dbe9578de2d5dd36d27b8d4a1ac25649201ca54aa27e5c482c8b02fb613c4189b4d72daeb48dcfb40c99983d602103412c463ad345a0f9fc190de9c26b12c92b0cc298ded7d29829f763d477b59a892d58201d54d212fa10d2fc894d617c902527ffb967946a8f2b6eef1d0b09828f3e2fa087c5fdd7f26939d5169e5a5033bb5b2b6071099801f65c9bff6b9cb02cca5386648650fa65974553779c45e7c55394a2920f26aa2c6d410540728701ed497a4f5355a307ce4d8078cb1262204ff8520789b0b36dc690310f53d9b35256d8eb40a659290c9ce0080ae1ad46db4adaa83f34b0c9b3f709d461e545e188d7b90863e71b63a1af4a0f10bf01d9fea5ca3d76b349d6d45b24686654b7a20cdd4f3d01d109abdd5fa9dbd71c045975c4c14c195b991d2b814fbccd3219dd484425122dd374acdd753ec873e40fd6abfe59255937a4b1956ea0368a4636cc2d5d662038119167c22ff044b73b62b5139ed02bae04d2fe761ace4b540b3f812cec6414bd61fa2d303f4a4f3df09e2fa0648ad5d2336e413470350b262e495b402c14ae98d02da8d04c76816291cb50d0010e2f4369288bb9d155133e13cb1362c70e47671e8a54cfee4a05c7d8d2f89d9c06584303",
+ "blocks": [
+  4203952,
+  4203959,
+  4203961,
+  4203966,
+  4203971,
+  4203972,
+  4203984,
+  4203985,
+  4203992,
+  4203998,
+  4204001,
+  4204003,
+  4204005,
+  4204007,
+  4204009,
+  4204014,
+  4204017,
+  4204020,
+  4204023,
+  4204025,
+  4204030,
+  4204036,
+  4204042,
+  4204047,
+  4204052,
+  4204057,
+  4204063,
+  4204069,
+  4204072,
+  4204077,
+  4204080,
+  4204082,
+  4204088,
+  4204094,
+  4204099,
+  4204105,
+  4204112,
+  4204118,
+  4204124,
+  4204129,
+  4204136,
+  4204142,
+  4204145,
+  4204150,
+  4204153,
+  4204155,
+  4204160,
+  4204166,
+  4204172,
+  4204177,
+  4204183,
+  4204189,
+  4204195,
+  4204201,
+  4204207,
+  4204213,
+  4204216,
+  4204221,
+  4204224,
+  4204226,
+  4204232,
+  4204237,
+  4204243,
+  4204249,
+  4204256,
+  4204261,
+  4204266,
+  4204272,
+  4204279,
+  4204284,
+  4204287,
+  4204292,
+  4204295,
+  4204297,
+  4204303,
+  4204309,
+  4204314,
+  4204320,
+  4204327,
+  4204333,
+  4204339,
+  4204344,
+  4204351,
+  4204357,
+  4204360,
+  4204365,
+  4204368,
+  4204370,
+  4204375,
+  4204381,
+  4204387,
+  4204392,
+  4204398,
+  4204404,
+  4204410,
+  4204416,
+  4204422,
+  4204428,
+  4204431,
+  4204436,
+  4204439,
+  4204441,
+  4204447,
+  4204452,
+  4204458,
+  4204464,
+  4204471,
+  4204476,
+  4204482,
+  4204489,
+  4204492,
+  4204497,
+  4204500,
+  4204502,
+  4204507,
+  4204513,
+  4204519,
+  4204524,
+  4204530,
+  4204536,
+  4204542,
+  4204548,
+  4204551,
+  4204556,
+  4204557,
+  4288880,
+  4288881,
+  4288885,
+  4288887,
+  4288893,
+  4288898,
+  4288901,
+  4288902,
+  4288907,
+  4288909,
+  4288914,
+  4288917,
+  4288918,
+  4288923,
+  4288925,
+  4288926,
+  4288928,
+  4288929,
+  4288935,
+  4288942,
+  4288944,
+  4288950,
+  4288951,
+  4288953,
+  4288954,
+  4288956
+ ],
+ "cases": [
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1702,
+    "counter": 819
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1702,
+    "counter": 819
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1243,
+    "counter": 442
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1243,
+    "counter": 442
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1711,
+    "counter": 1200
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1711,
+    "counter": 1200
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "78",
+    "index": 1602,
+    "counter": 800
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1602,
+    "counter": 800
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1710,
+    "counter": 351
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1710,
+    "counter": 351
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 787,
+    "counter": 541
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 787,
+    "counter": 541
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "",
+    "index": 564,
+    "counter": 711
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 564,
+    "counter": 711
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1178,
+    "counter": 1081
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1178,
+    "counter": 1081
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "",
+    "index": 2800,
+    "counter": 1206
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2800,
+    "counter": 1206
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "78",
+    "index": 2757,
+    "counter": 135
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2757,
+    "counter": 135
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 423,
+    "counter": 1218
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 423,
+    "counter": 1218
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 0,
+    "prior": "",
+    "index": 1834,
+    "counter": 964
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1834,
+    "counter": 964
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 1,
+    "prior": "78",
+    "index": 1624,
+    "counter": 637
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1624,
+    "counter": 637
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 2,
+    "prior": "",
+    "index": 2738,
+    "counter": 818
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2738,
+    "counter": 818
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 3,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 6,
+    "counter": 599
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 6,
+    "counter": 599
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 4,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 311,
+    "counter": 232
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 311,
+    "counter": 232
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 5,
+    "prior": "",
+    "index": 428,
+    "counter": 20
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 428,
+    "counter": 20
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 6,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1429,
+    "counter": 892
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1429,
+    "counter": 892
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 7,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 714,
+    "counter": 683
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 714,
+    "counter": 683
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 8,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 207,
+    "counter": 1012
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 207,
+    "counter": 1012
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 1,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1936,
+    "counter": 684
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1936,
+    "counter": 684
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 2,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2997,
+    "counter": 221
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2997,
+    "counter": 221
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 3,
+    "prior": "",
+    "index": 2046,
+    "counter": 470
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2046,
+    "counter": 470
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 4,
+    "prior": "",
+    "index": 602,
+    "counter": 715
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 602,
+    "counter": 715
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 5,
+    "prior": "78",
+    "index": 2665,
+    "counter": 91
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2665,
+    "counter": 91
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 6,
+    "prior": "",
+    "index": 552,
+    "counter": 414
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 552,
+    "counter": 414
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 7,
+    "prior": "78",
+    "index": 2299,
+    "counter": 43
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2299,
+    "counter": 43
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 8,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 680,
+    "counter": 608
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 680,
+    "counter": 608
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 9,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 430,
+    "counter": 1194
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 430,
+    "counter": 1194
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": -1,
+    "prior": "",
+    "index": 424,
+    "counter": 81
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 424,
+    "counter": 81
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 2147483647,
+    "prior": "",
+    "index": 1034,
+    "counter": 494
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1034,
+    "counter": 494
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 305419896,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1878,
+    "counter": 708
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1878,
+    "counter": 708
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": -8,
+    "prior": "78",
+    "index": 2264,
+    "counter": 697
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2264,
+    "counter": 697
+   }
+  },
+  {
+   "before": {
+    "enabled": 0,
+    "track": 100,
+    "prior": "78",
+    "index": 2756,
+    "counter": 251
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2756,
+    "counter": 251
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "",
+    "index": 2151,
+    "counter": 922
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "68080000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "9b030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2152,
+    "counter": 923
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "78",
+    "index": 2308,
+    "counter": 1178
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "05090000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "9b040000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2309,
+    "counter": 1179
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "78",
+    "index": 2615,
+    "counter": 1130
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "380a0000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "6b040000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2616,
+    "counter": 1131
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "",
+    "index": 481,
+    "counter": 102
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "e2010000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "67000000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 482,
+    "counter": 103
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "",
+    "index": 1250,
+    "counter": 616
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "e3040000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "69020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1251,
+    "counter": 617
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "78",
+    "index": 1656,
+    "counter": 927
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65322e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "79060000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "a0030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1657,
+    "counter": 928
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 723,
+    "counter": 521
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "d4020000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "0a020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 724,
+    "counter": 522
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1523,
+    "counter": 89
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "f4050000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "5a000000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1524,
+    "counter": 90
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 2132,
+    "counter": 671
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "55080000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "a0020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2133,
+    "counter": 672
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1248,
+    "counter": 886
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "e1040000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "77030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1249,
+    "counter": 887
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "",
+    "index": 1837,
+    "counter": 18
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    },
+    {
+     "address": 4525004,
+     "bytes": "2e070000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "13000000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1838,
+    "counter": 19
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1425,
+    "counter": 704
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "92050000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "c1020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1426,
+    "counter": 705
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 1,
+    "prior": "",
+    "index": 2704,
+    "counter": 192
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "6d61696e"
+    },
+    {
+     "address": 4517592,
+     "bytes": "2e776d61"
+    },
+    {
+     "address": 4517596,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2704,
+    "counter": 192
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 2,
+    "prior": "78",
+    "index": 2164,
+    "counter": 631
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2164,
+    "counter": 631
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 3,
+    "prior": "",
+    "index": 2951,
+    "counter": 410
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65322e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2951,
+    "counter": 410
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 4,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 541,
+    "counter": 122
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 541,
+    "counter": 122
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 5,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2551,
+    "counter": 599
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2551,
+    "counter": 599
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 6,
+    "prior": "78",
+    "index": 1513,
+    "counter": 1190
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1513,
+    "counter": 1190
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 7,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1442,
+    "counter": 312
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d610000a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1442,
+    "counter": 312
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 8,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1506,
+    "counter": 188
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1506,
+    "counter": 188
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 1,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 911,
+    "counter": 1004
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "6d61696e"
+    },
+    {
+     "address": 4517592,
+     "bytes": "2e776d61"
+    },
+    {
+     "address": 4517596,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 911,
+    "counter": 1004
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 2,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2782,
+    "counter": 281
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2782,
+    "counter": 281
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 3,
+    "prior": "",
+    "index": 867,
+    "counter": 1038
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65322e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 867,
+    "counter": 1038
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 4,
+    "prior": "78",
+    "index": 1135,
+    "counter": 875
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1135,
+    "counter": 875
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 5,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2740,
+    "counter": 277
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2740,
+    "counter": 277
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 6,
+    "prior": "",
+    "index": 1622,
+    "counter": 686
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1622,
+    "counter": 686
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 7,
+    "prior": "78",
+    "index": 353,
+    "counter": 377
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 353,
+    "counter": 377
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 8,
+    "prior": "",
+    "index": 121,
+    "counter": 868
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 121,
+    "counter": 868
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 9,
+    "prior": "",
+    "index": 1415,
+    "counter": 1198
+   },
+   "calls": [],
+   "writes": [],
+   "after": {
+    "path": "00a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1415,
+    "counter": 1198
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": -1,
+    "prior": "78",
+    "index": 2009,
+    "counter": 633
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "78"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2009,
+    "counter": 633
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 2147483647,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1419,
+    "counter": 115
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1419,
+    "counter": 115
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 305419896,
+    "prior": "78",
+    "index": 699,
+    "counter": 422
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "78"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 699,
+    "counter": 422
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": -8,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 2497,
+    "counter": 1177
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2497,
+    "counter": 1177
+   }
+  },
+  {
+   "before": {
+    "enabled": 1,
+    "track": 100,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 474,
+    "counter": 64
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 474,
+    "counter": 64
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 327,
+    "counter": 758
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "48010000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "f7020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 328,
+    "counter": 759
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "",
+    "index": 463,
+    "counter": 956
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "d0010000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "bd030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 464,
+    "counter": 957
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "",
+    "index": 371,
+    "counter": 1197
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "74010000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "ae040000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 372,
+    "counter": 1198
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "",
+    "index": 2108,
+    "counter": 228
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "6d61696e"
+    },
+    {
+     "address": 4517592,
+     "bytes": "2e776d61"
+    },
+    {
+     "address": 4517596,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "3d080000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "e5000000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2109,
+    "counter": 229
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2184,
+    "counter": 699
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    },
+    {
+     "address": 4525004,
+     "bytes": "89080000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "bc020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2185,
+    "counter": 700
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 157,
+    "counter": 68
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "9e000000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "45000000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 158,
+    "counter": 69
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 2763,
+    "counter": 661
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    },
+    {
+     "address": 4525004,
+     "bytes": "cc0a0000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "96020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d610000a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2764,
+    "counter": 662
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1636,
+    "counter": 358
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "65060000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "67010000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1637,
+    "counter": 359
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "",
+    "index": 692,
+    "counter": 966
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "b5020000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "c7030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 693,
+    "counter": 967
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "",
+    "index": 2499,
+    "counter": 588
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "c4090000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "4d020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2500,
+    "counter": 589
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 724,
+    "counter": 656
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    },
+    {
+     "address": 4525004,
+     "bytes": "d5020000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "91020000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 725,
+    "counter": 657
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 0,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1531,
+    "counter": 1020
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    },
+    {
+     "address": 4525004,
+     "bytes": "fc050000"
+    },
+    {
+     "address": 4525108,
+     "bytes": "fd030000"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1532,
+    "counter": 1021
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 1,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1335,
+    "counter": 367
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "6d61696e"
+    },
+    {
+     "address": 4517592,
+     "bytes": "2e776d61"
+    },
+    {
+     "address": 4517596,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1335,
+    "counter": 367
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 2,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 914,
+    "counter": 154
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 914,
+    "counter": 154
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 3,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 947,
+    "counter": 779
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65322e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 947,
+    "counter": 779
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 4,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 402,
+    "counter": 424
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 402,
+    "counter": 424
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 5,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2955,
+    "counter": 1033
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2955,
+    "counter": 1033
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 6,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1247,
+    "counter": 552
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1247,
+    "counter": 552
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 7,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1046,
+    "counter": 859
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1046,
+    "counter": 859
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 8,
+    "prior": "",
+    "index": 1702,
+    "counter": 549
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1702,
+    "counter": 549
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 1,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2840,
+    "counter": 529
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "6d61696e"
+    },
+    {
+     "address": 4517592,
+     "bytes": "2e776d61"
+    },
+    {
+     "address": 4517596,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2840,
+    "counter": 529
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 2,
+    "prior": "78",
+    "index": 2185,
+    "counter": 1115
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65312e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765312e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2185,
+    "counter": 1115
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 3,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 836,
+    "counter": 778
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65322e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 836,
+    "counter": 778
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 4,
+    "prior": "",
+    "index": 2978,
+    "counter": 1233
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65332e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2978,
+    "counter": 1233
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 5,
+    "prior": "78",
+    "index": 1919,
+    "counter": 1051
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765342e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65342e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765342e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1919,
+    "counter": 1051
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 6,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 1148,
+    "counter": 188
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765352e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "73746167"
+    },
+    {
+     "address": 4517592,
+     "bytes": "65352e77"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6d61"
+    },
+    {
+     "address": 4517598,
+     "bytes": "00"
+    }
+   ],
+   "after": {
+    "path": "62676d5c7374616765352e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1148,
+    "counter": 188
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 7,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 2572,
+    "counter": 1020
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373312e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "312e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373312e776d610000a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2572,
+    "counter": 1020
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 8,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 686,
+    "counter": 584
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c626f7373322e776d61"
+    }
+   ],
+   "writes": [
+    {
+     "address": 4517584,
+     "bytes": "62676d5c"
+    },
+    {
+     "address": 4517588,
+     "bytes": "626f7373"
+    },
+    {
+     "address": 4517592,
+     "bytes": "322e776d"
+    },
+    {
+     "address": 4517596,
+     "bytes": "6100"
+    }
+   ],
+   "after": {
+    "path": "62676d5c626f7373322e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 686,
+    "counter": 584
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 9,
+    "prior": "62676d5c6d61696e2e776d61",
+    "index": 2761,
+    "counter": 328
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c6d61696e2e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c6d61696e2e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2761,
+    "counter": 328
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": -1,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 724,
+    "counter": 1061
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 724,
+    "counter": 1061
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 2147483647,
+    "prior": "78",
+    "index": 528,
+    "counter": 566
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "78"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 528,
+    "counter": 566
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 305419896,
+    "prior": "78",
+    "index": 673,
+    "counter": 917
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "78"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 673,
+    "counter": 917
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": -8,
+    "prior": "78",
+    "index": 2732,
+    "counter": 1052
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "78"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "7800a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 2732,
+    "counter": 1052
+   }
+  },
+  {
+   "before": {
+    "enabled": 7,
+    "track": 100,
+    "prior": "62676d5c7374616765332e776d61",
+    "index": 1005,
+    "counter": 906
+   },
+   "calls": [
+    {
+     "kind": "music",
+     "caller": 4203971,
+     "argument": 4517584,
+     "path": "62676d5c7374616765332e776d61"
+    }
+   ],
+   "writes": [],
+   "after": {
+    "path": "62676d5c7374616765332e776d6100a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+    "index": 1005,
+    "counter": 906
+   }
+  }
+ ]
+}

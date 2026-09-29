@@ -177,8 +177,16 @@ import NTSDCore
             bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() },
             // War start (43a21f) prepares its match inside the menu call.
             localTime:{ _ in Self.localTime(self.localDate()) },
-            allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) })
+            allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
+            demoMusicTrack:Self.demoMusicResidue)
     }
+    /// Declared runtime policy for the Demo start: 4025d0 reads its track from
+    /// ECX, the residue of lib.dll's text replacement (10001298), whose last
+    /// instruction before returning is DirectDraw's GetDC (failure) or
+    /// ReleaseDC. That register is unknown on Windows; the app declares a value
+    /// outside 0..8 (the E_FAIL of its own GetDC), so the configured track in
+    /// 44eed0 plays and no RNG draw is taken. APPLICATION_DEMO.md.
+    static let demoMusicResidue = OriginalMacRuntimeMenu.getDCFailure
     /// A cached cycle after the first loading: the retained owners advance the
     /// cycle's input step, then either gameplay (retained as gameplay input) or
     /// the loaded menu; no catalog work repeats.

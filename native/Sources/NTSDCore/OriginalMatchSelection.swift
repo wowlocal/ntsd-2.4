@@ -21,9 +21,10 @@ public enum OriginalMatchSelection {
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
         warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
+        demo: OriginalDemoStartProviders? = nil,
         matchPrelude: (Int32) throws -> Void = { _ in }) throws -> OriginalCharacterScreenExit {
         var library: OriginalLibSurfaceText? = libraryText
-        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage,matchPrelude:matchPrelude)
+        let end = try advanceCommon(state:&state,libraryText:&library,selectionAtEntry:selectionAtEntry,target:target,input:input,fillBacking:fillBacking,draw:draw,observe:observe,checkpoint:checkpoint,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage,demo:demo,matchPrelude:matchPrelude)
         libraryText = library!;return end
     }
 
@@ -35,11 +36,12 @@ public enum OriginalMatchSelection {
         tournamentStage: OriginalTournamentBracket.Continuation = OriginalTournamentBracket.unavailable,
         teamTournamentStage: OriginalTeamTournamentBracket.Continuation = OriginalTeamTournamentBracket.unavailable,
         warStage: OriginalWarSetup.Continuation = { _,_ in .selectionStage },
+        demo: OriginalDemoStartProviders? = nil,
         matchPrelude: (Int32) throws -> Void = { _ in }) throws -> OriginalCharacterScreenExit {
         try OriginalCharacterScreen.advanceCommon(state: &state,libraryText:&libraryText,selectionAtEntry: selectionAtEntry,target: target,input: input,
             fillBacking: fillBacking(),draw: draw,observe: observe,checkpoint: checkpoint,includeTailCheckpoint: true,tournamentStage:tournamentStage,teamTournamentStage:teamTournamentStage,warStage:warStage,selectionStage: { candidate,local,library in
                 try continueSelection(state: &candidate,locals: &local,libraryText:&library,target: target,input: input,
-                    fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint,matchPrelude:matchPrelude)
+                    fillBacking: fillBacking,draw: draw,observe: observe,checkpoint: checkpoint,demo: demo,matchPrelude:matchPrelude)
             })
     }
 
@@ -48,6 +50,7 @@ public enum OriginalMatchSelection {
         draw: (OriginalCharacterScreenDraw,OriginalStateRecord) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void,
         checkpoint: (OriginalCharacterScreenCheckpoint,OriginalMatchPreparation) throws -> Void,
+        demo: OriginalDemoStartProviders?,
         matchPrelude: (Int32) throws -> Void) throws -> OriginalCharacterScreenExit {
         var candidate = state,local = locals,library = libraryText
         func error(_ message: String) -> OriginalStateError { .invalidStorage("Match selection: "+message) }
@@ -92,7 +95,9 @@ public enum OriginalMatchSelection {
                 color: 0xffffff,backing: fillBacking());try observe(event)
         }
         let mode = try word(0x451160)
-        guard [0,1,4].contains(mode),try word(0x450c2c) == 0 else { throw error("Other mode selection continuation") }
+        // VS/Stage/War outside a Demo; the Demo (mode5) runs with 450c2c = 1.
+        let automatic = try word(0x450c2c)
+        guard [0,1,4].contains(mode) && automatic == 0 || mode == 5 && automatic == 1 else { throw error("Other mode selection continuation") }
         if try word(0x4512c8) == 1 {
             try mark(0x42b296);try write(0x451220,0);try bitmap(0x44fd88,218,215)
             var inactive: Int32 = 0,teams = [Int32](repeating: 0,count: 5)
@@ -209,10 +214,16 @@ public enum OriginalMatchSelection {
             }
             try mark(confirmation == 0 ? 0x42d789 : 0x42d706)
             let action = try word(0x44d06c)
-            try candidate.continueMenu(confirmation: confirmation,bitmapSource: { _ in throw error("Unexpected bitmap loading") },observe: { e in
+            try candidate.continueMenu(confirmation: confirmation,bitmapSource: { _ in throw error("Unexpected bitmap loading") },demo: demo,observe: { e in
                 switch e {
                 case .device(.soundRequest(let loop)):try observe(.init("soundRequest",[loop ? 1 : 0]))
                 case .device(.soundMethod(let resource,let offset,let args)):try observe(.init("soundMethod",[resource,UInt32(offset)]+args))
+                case .device(.fillRectangle(let resource,let x,let y,let width,let height,let color)):
+                    // Demo start clears the whole target before its first battle frame.
+                    var event = OriginalFrontScreenEvent("fill")
+                    event.fill = try OriginalSurfaceFilling.request(target: resource,x: x,y: y,width: width,height: height,color: color,backing: fillBacking())
+                    try observe(event)
+                case .musicSelection,.state(.reconstruct),.state(.releaseLayers),.state(.loadLayers):break
                 case .state(.resetInput):break // Real431c70 state writes are performed by continueMenu.
                 case .candidates(let seat,let ordinals):try observe(.init("candidates",[UInt32(seat)]+ordinals.map(UInt32.init)))
                 case .state(.random(let stream,let range,let result,let beforeIndex,let beforeCounter,let index,let counter)):

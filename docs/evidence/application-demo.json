@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-29",
+  "plan": "docs/research/APPLICATION_DEMO_PLAN.md",
+  "result": "docs/research/APPLICATION_DEMO.md",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "oracle": {
+    "tool": "tools/oracle_demo_music.py",
+    "evidence": "docs/evidence/demo-music.json",
+    "cases": 102,
+    "blocks": 151,
+    "sha256": "1e2ebbbdbb854e18529b22cef1a044729cf7032632b252f5758be11d14ef9a3b",
+    "comparison": "OriginalDemoMusicTests"
+  },
+  "policy": {
+    "name": "4025d0 ECX residue",
+    "value": "E_FAIL (outside 0..8)",
+    "effect": "configured 44eed0 track, no RNG draw",
+    "windowsVerified": false
+  },
+  "app": {
+    "e2e": "tools/app_e2e.py --scenario demo",
+    "reference": "tools/app_e2e_demo_reference.json",
+    "demoTracks": [
+      "bgm\\stage1.wma",
+      "bgm\\stage5.wma"
+    ],
+    "exitBody": 945,
+    "captures": {
+      "demo": "docs/evidence/application-demo-capture.png",
+      "exit": "docs/evidence/application-demo-exit-capture.png"
+    }
+  },
+  "envelopeRecalculated": false
+}

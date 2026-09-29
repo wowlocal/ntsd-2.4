@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Demo](research/APPLICATION_DEMO.md): 4025d0 (Demo music) is in Core and
+matches 102 real cases; the Demo start runs in the app with arena surfaces and
+music, Demo matches repeat, and Jump at a match's end returns to the main
+menu. 4025d0's ECX residue is a declared policy. [Evidence](evidence/application-demo.json).
+
 [War](research/APPLICATION_WAR.md): the mode-4 character screen (teams 1..2,
 the last computer's excluded team, the settings skip) is in Core; a 226-call
 Unicorn chain from the fresh mode-4 parent matches fully. The War battle
