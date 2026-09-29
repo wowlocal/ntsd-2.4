@@ -96,3 +96,16 @@ executing device code, and Native must produce the same call sequence.
    or its end; captures and events.
 
 EXE envelope not recalculated.
+
+## Amendments during the round
+
+- Written global and stage bytes are tracked (strict masks); stimuli write the
+  catalog through the tracked host path. The first value-only corpus lacked
+  both and served only as early feedback.
+- Coverage families added after the first corpus: player frames 16..18,
+  owners and +0x98 for the next-stage cleanup, a missing slot id, x = −1000,
+  goto phases, a phase music path, equal phase bounds, banner timers 102/202,
+  the set wipe at 20, survival stages 50–59 and a declared synthetic survival
+  stage (its phase-1 bound defined after the strict check found it read).
+- The app run reached lib.dll's Actor+0x7b4 transform write; its declared
+  runtime-heap destination is part of this card (see the result).

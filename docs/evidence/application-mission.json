@@ -1,0 +1,82 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-29T04:37:12.652375Z",
+ "parentHead": "734e8ec",
+ "scope": "Mission Mode stage logic 437860/437400/436fc0 in Core, composed into the gameplay post-draw; lib.dll +7b4 runtime-heap destination",
+ "files": {
+  "native/Sources/NTSDCore/OriginalMissionStage.swift": "d3d9234a5a07e8b9be087e3715407085be79154246a1f90138520497af6a9118",
+  "native/Sources/NTSDCore/OriginalMatchPreparation.swift": "2c768c96ff265f7deabdfd3d307bf6a24f2c1f147bfd2104186a0012616d3be0",
+  "native/Sources/NTSDCore/OriginalPostDrawImpulses.swift": "487c3934390c2c08386b89c1d33d2b5cd33b9a41ff9f22b3c2a224f3c037440b",
+  "native/Sources/NTSDCore/OriginalGameplayBody.swift": "3c3c2cebf23770d5296f4fa1802ab414d89eaf7895eccb47bd2b0929b5cd4aa1",
+  "native/Sources/NTSDCore/OriginalApplicationGameplaySession.swift": "75197f6ef3ac9155595ae8bf863c433f28cf00fa8dfe0df5e0c179d57dbd47f3",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "d7657c325a6bbb3b746f79f6bafbb66433f4288567e697c3e684d92ae5a53ee9",
+  "native/Sources/NTSDReferenceChecks/MissionStageReference.swift": "457080379bb5338e8e313ee723bfba49b38224264ca151d4d04b375d469d74b5",
+  "native/Tests/NTSDCoreTests/OriginalMissionStageTests.swift": "8c3c890cdd30d0813057920cd03ac01e9ce3549deddc0ee99d74ec3d22c4da5f",
+  "tools/oracle_mission_stage.py": "8930e217a392e67ceea326f9dffa3573f69a6232ba2a581d6df74577afe03e60",
+  "tools/accept_mission_stage.py": "ca4472d9cc03c249390b72357cd25997aa0c4475dffb665ae35bd10a6462e78e",
+  "tools/app_e2e.py": "deadaf5df6a319ba14a8db396d5cf718e90b2164b43cc66bdf2d804a8289a3b3",
+  "tools/app_e2e_mission_reference.json": "47d075af6123db83ba184d86b1c1f77ad2a52ce6a15fbc1ee26eb6b9850eb5da",
+  "native/Tests/NTSDCoreTests/Fixtures/original-mission-stage.json": "554df1635a731bf642dc088c21d15fc517d600365f36ad5aecceadd0c962b6b1",
+  "native/Tests/NTSDCoreTests/Fixtures/original-mission-stage-control.json": "61e8dc963275214e5aa89343a1e3e3270dae731e1e9779597ea103ba7edca082",
+  "docs/evidence/application-mission-capture.png": "09c811e3312a85c2937598ab5c99f3715a80b892e3a2c2e4ee9a88cd56592d2c"
+ },
+ "corpora": {
+  "main": {
+   "corpus": "mission-stage.json",
+   "sha256": "6074f380e5dcaf7ec91756ba756672ca841db989fb8ec7b6c426175ef13e570d",
+   "cases": 2960,
+   "blocks": 400,
+   "nativeComparison": "Mission stage matches original: 2960 real 437860 calls (banner:400 bound:400 end:300 phase:900 pressure:60 refill:80 set:300 start:400 survival:120), 91550 RNG draws, 27371 callee calls, 16008 constructors, 1195822 records, 9362941936 bytes/masks, 400 executed body blocks; full first loading 137 Objects"
+  },
+  "control": {
+   "corpus": "mission-stage-control.json",
+   "sha256": "cff91109af1b25770b653e3b127de86972a63023c2af2edfc1ae40d4f16f777a",
+   "cases": 2960,
+   "blocks": 395,
+   "nativeComparison": "Mission stage matches original: 2960 real 437860 calls (banner:400 bound:400 end:300 phase:900 pressure:60 refill:80 set:300 start:400 survival:120), 103095 RNG draws, 27062 callee calls, 15719 constructors, 1195821 records, 9361591528 bytes/masks, 395 executed body blocks; full first loading 137 Objects"
+  }
+ },
+ "staticLeaders": 405,
+ "missingMain": [
+  "0x437109",
+  "0x43718a",
+  "0x437f4a",
+  "0x4381eb",
+  "0x43828c",
+  "0x4387e1",
+  "0x43896c"
+ ],
+ "app": {
+  "flags": "--mute-music --virtual-clock 123456789 8, Mission Mode, player 1 Naruto, 0 computers",
+  "firstRun": "stopped after ~260 AI ticks at Library transform +7b4: Unavailable destination backing",
+  "withPolicy": "3000 bodies without boundary; Stage 1-1 banner, library dialogue, KO of the idle player, Summary Lose (Dead)",
+  "e2e": "tools/app_e2e.py --scenario mission recorded and reproduced; vs scenario passes"
+ },
+ "staticScan": {
+  "dllWrites7b4": [
+   "10001112"
+  ],
+  "readersOf": [
+   "none for Actor +0x7b4/+0x38c/+0x390/+0x394/+0x2b4 in EXE or lib.dll (EXE +0x7b4 operands index Object frame 0)"
+  ]
+ },
+ "tests": {
+  "mission": {
+   "tests": 2,
+   "failures": 0,
+   "seconds": 624.7
+  },
+  "composition": {
+   "tests": 16,
+   "failures": 0,
+   "minutes": 55.7
+  },
+  "music": {
+   "tests": 6,
+   "failures": 0
+  }
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "Unicorn oracle only",
+ "review": "independent review open"
+}

@@ -26,6 +26,15 @@ SCRIPT = ROOT / "tools/app_e2e_computer_vs.script"
 REFERENCE = ROOT / "tools/app_e2e_reference.json"
 # Summary is up by step 9000 at this clock; Jump continues to the selection.
 TAIL = "9000 key 74; 9100 capture {captures}/selection.png; 9200 exit"
+# Mission Mode: player 1 (Naruto), no computers, Fight!; Stage 1-1 until the
+# enemy has knocked the idle player out and the Summary is shown.
+MISSION = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 74; 175 key 74; 200 key 68; 225 key 74; "
+           "250 key 74; 1000 key 74; 1100 key 87; 1125 key 87; 1160 key 74; 30000 exit")
+SCENARIOS = {
+    "vs": dict(reference=REFERENCE, extra=[], script=lambda captures: SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)),
+    "mission": dict(reference=ROOT / "tools/app_e2e_mission_reference.json", extra=["--exit-after-bodies", "1800"],
+                    script=lambda captures: MISSION),
+}
 
 
 def sha(path):
@@ -38,13 +47,13 @@ def build():
                     "-c", "release", "--product", "NTSDNative"], cwd=ROOT, check=True)
 
 
-def run(timeout, app=APP):
+def run(timeout, app=APP, scenario="vs"):
     with tempfile.TemporaryDirectory(prefix="ntsd-e2e-") as scratch:
         scratch = Path(scratch); overlay = scratch / "overlay"; captures = scratch / "captures"
         overlay.mkdir(); captures.mkdir()
-        script = SCRIPT.read_text().strip() + "; " + TAIL.format(captures=captures)
+        setup = SCENARIOS[scenario]
         command = [str(app), "--original", "--mute-music", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
-                   "--script-clock", "gameplay", "--body-captures", str(captures), "--script", script]
+                   "--script-clock", "gameplay", "--body-captures", str(captures), *setup["extra"], "--script", setup["script"](captures)]
         done = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
         events = []
         for line in done.stdout.splitlines():
@@ -118,29 +127,34 @@ def main():
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--app", type=Path, default=APP, help="Executable to run, e.g. the packaged .app's")
     parser.add_argument("--skip-quit", action="store_true", help="Do not run the main-menu Quit check")
+    parser.add_argument("--scenario", choices=["all", *SCENARIOS], default="all")
     args = parser.parse_args()
     if args.build:
         build()
-    observed = run(args.timeout, args.app)
-    if args.record:
-        REFERENCE.write_text(json.dumps(observed, indent=1, sort_keys=True) + "\n")
-        print(json.dumps({"recorded": str(REFERENCE.relative_to(ROOT)), "progress": len(observed["progress"]),
-                          "milestones": len(observed["milestones"]), "boundary": observed["boundary"]}))
-        return
-    reference = json.loads(REFERENCE.read_text())
-    if reference.get("backingScale") != observed.get("backingScale"):
-        print(json.dumps({"result": "incomparable", "reason": "display backing scale differs from the reference"}))
-        sys.exit(2)
-    problems = compare(reference, observed)
-    if not args.skip_quit:
-        ok, detail = quit_check(args.timeout, args.app)
-        if not ok:
-            problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0)"; observed["quit"] = detail
-    print(json.dumps({"result": "pass" if not problems else "fail", "differs": problems, "resources": observed.get("resources"),
-                      "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
-    if problems:
+    failed = False
+    for name in (SCENARIOS if args.scenario == "all" else [args.scenario]):
+        path = SCENARIOS[name]["reference"]
+        observed = run(args.timeout, args.app, name)
+        if args.record:
+            path.write_text(json.dumps(observed, indent=1, sort_keys=True) + "\n")
+            print(json.dumps({"scenario": name, "recorded": str(path.relative_to(ROOT)), "progress": len(observed["progress"]),
+                              "milestones": len(observed["milestones"]), "boundary": observed["boundary"]}))
+            continue
+        reference = json.loads(path.read_text())
+        if reference.get("backingScale") != observed.get("backingScale"):
+            print(json.dumps({"scenario": name, "result": "incomparable", "reason": "display backing scale differs from the reference"}))
+            sys.exit(2)
+        problems = compare(reference, observed)
+        if name == "vs" and not args.skip_quit:
+            ok, detail = quit_check(args.timeout, args.app)
+            if not ok:
+                problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0)"; observed["quit"] = detail
+        print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
+                          "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:
             print(f"--- {key}\nreference: {json.dumps(reference.get(key))[:2000]}\nobserved:  {json.dumps(observed.get(key))[:2000]}")
+        failed = failed or bool(problems)
+    if failed:
         sys.exit(1)
 
 

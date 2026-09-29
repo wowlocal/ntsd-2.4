@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Mission Mode](research/APPLICATION_MISSION.md): the stage logic 437860 with 437400
+and 436fc0 is in Core and composed into the gameplay post-draw; two strict
+Unicorn corpora of 2960 real calls match bytes and masks (400/405 leaders).
+Stage 1-1 plays in the app to its Summary; lib.dll's Actor+0x7b4 write has a
+declared runtime-heap destination. [Evidence](evidence/application-mission.json).
+
 [Quit](research/APPLICATION_QUIT.md): Quit in the loaded main menu ends the app
 (PostQuitMessage recorded, WM_QUIT posted after commit, loop `.quit(0)`, exit
 0); part of `tools/app_e2e.py`. [Evidence](evidence/application-quit.json).

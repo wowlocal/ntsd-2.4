@@ -1,0 +1,12 @@
+{
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "scope": "Real437860(World; target, 0x44d020) \u2014 the Mission Mode stage logic with its\nown helpers 437400 (phase spawn) and 436fc0 (next stage) \u2014 called directly\nafter the verified first loading, on the loaded catalog's real stage records.\nStimuli declare stage/phase/banner/wipe/end globals, spawn-slot runtime words\nof the current phase, players (seats 0..19) and listed enemies bound to real\nObjects. The already accepted callees 43f010 (bitmap draw), 415160 (fill),\n401290 (surface text), 401a30 (sound), 402020 (music) and 402100 (music stop)\nare recorded boundaries (arguments, text, return with their stack cleanup);\nsprintf executes the pinned VC80 DLL. RNG 417170, the Actor constructor 4061d0\n(memset boundary) and ftol 4450d0 execute. Main corpus CW027f; control CW037f\nover the control loading.\n",
+  "corpus": "mission-stage-control.json",
+  "sha256": "cff91109af1b25770b653e3b127de86972a63023c2af2edfc1ae40d4f16f777a",
+  "cases": 2960,
+  "blocks": 395,
+  "nativeComparison": "Mission stage matches original: 2960 real 437860 calls (banner:400 bound:400 end:300 phase:900 pressure:60 refill:80 set:300 start:400 survival:120), 103095 RNG draws, 27062 callee calls, 15719 constructors, 1195821 records, 9361591528 bytes/masks, 395 executed body blocks; full first loading 137 Objects",
+  "fixture": "original-mission-stage-control.json",
+  "fixtureSHA256": "61e8dc963275214e5aa89343a1e3e3270dae731e1e9779597ea103ba7edca082",
+  "fixtureBytes": 11614144
+}

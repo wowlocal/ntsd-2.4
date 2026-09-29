@@ -45,10 +45,14 @@ public struct OriginalApplicationGameplaySession {
         resumeMusic: @escaping (UInt32,inout Environment) throws -> Int32 = { _,_ in
             throw Menu.Boundary.dependency("Gameplay command music resume")
         },
+        music: @escaping (OriginalMusicEvent,inout Environment) throws -> OriginalMusicResponse = { _,_ in
+            throw Menu.Boundary.dependency("Gameplay music request")
+        },
         observe: @escaping (Menu.Observation,inout Environment) throws -> Void = { _,_ in },
         pausedObserve: @escaping (OriginalPausedGameplay.Stage,OriginalFrontScreenEvent,inout Environment) throws -> Void = { _,_,_ in },
         pausedCheckpoint: @escaping (OriginalPausedGameplay.Stage,Menu.Snapshot,inout Environment) throws -> Void = { _,_,_ in },
         checkpoints: Bool = true,
+        transformBacking: ((OriginalApplicationMatchBindings) throws -> OriginalLibTransformBacking)? = nil,
         beforeCommit: (Menu.PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> Menu.PendingReturn {
         guard pendingReturn == nil else { throw Menu.Boundary.alreadyPrepared }
         let a = try Menu.Attempt(entry,.init(bitmaps:[:]),environment,
@@ -64,8 +68,11 @@ public struct OriginalApplicationGameplaySession {
             Array(catalog.snapshot.sounds.buffers.values)).map(\.output).filter { $0 != 0 })
         var drainingSound = false
         var model = entry.match,context = entry.inputContext,random = entry.state.random,local = caller
-        let library = OriginalGameplayBody.Library(text:entry.state.libraryText,hits:entry.state.libraryHits,
-                                                   transforms:entry.state.libraryTransforms)
+        // A state without destinations for lib.dll's Actor+7b4 write takes the
+        // caller's declared backing (LIB_TRANSFORMS); a declared one is retained.
+        var transforms = entry.state.libraryTransforms
+        if transforms.destinations.isEmpty,let transformBacking { transforms = try transformBacking(a.bindings) }
+        let library = OriginalGameplayBody.Library(text:entry.state.libraryText,hits:entry.state.libraryHits,transforms:transforms)
         func resource(_ token: UInt32) throws -> (OriginalStateRecord,UInt32) {
             var record: OriginalStateRecord
             let surface: UInt32
@@ -149,7 +156,9 @@ public struct OriginalApplicationGameplaySession {
             },close:{
                 let value = try close(&a.environment);a.operations.append(.gameplayClose(value));return value
             },
-            soundRequest:sound,observe:{ event in
+            soundRequest:sound,music:{ e in
+                let r = try music(e,&a.environment);a.operations.append(.music(e,r));return r
+            },observe:{ event in
                 switch event {
                 case .drawing(let stage,let e):
                     try front(e,stage == .output)

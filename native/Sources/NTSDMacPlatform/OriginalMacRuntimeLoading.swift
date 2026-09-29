@@ -264,8 +264,25 @@ import NTSDCore
                 resumeMusic:{ control,_ in
                     self.counts.musicResumes += 1
                     return try self.music(.init(.method,[control,0x1c])).result
-                },checkpoints:self.stageCheckpoints)
+                },music:{ e,_ in try self.music(e) },checkpoints:self.stageCheckpoints,
+                transformBacking:{ try Self.transformBacking($0.actorTokens) })
         })
+    }
+    /// Runtime heap policy for lib.dll's write through Actor+0x7b4
+    /// (LIB_TRANSFORMS): Actors are consecutive 0x420-byte runtime heap blocks,
+    /// so the write lands in the next Actor at +0x394; the last Actor's goes to
+    /// a declared record standing for the following block. Neither the EXE nor
+    /// the DLL reads these bytes (static scan), so only ownership is modeled.
+    static func transformBacking(_ tokens: [UInt32]) throws -> OriginalLibTransformBacking {
+        guard tokens.count == 400,zip(tokens,tokens.dropFirst()).allSatisfy({ $1 &- $0 == 0x420 }) else {
+            throw Boundary.unexpected("Actor runtime heap blocks are not consecutive")
+        }
+        var destinations: [Int:OriginalLibTransformBacking.Destination] = [:]
+        for i in 0..<399 { destinations[i] = .actor(index:i+1,offset:0x394) }
+        destinations[399] = .external(index:0,offset:0x394)
+        let following = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x420),defined:[Bool](repeating:false,count:0x420))
+        return .init(destinations:destinations,actorAddressTokens:Dictionary(uniqueKeysWithValues:tokens.enumerated().map { ($0.offset,$0.element) }),
+                     externalRecords:[following])
     }
     /// _wfsopen(path,"wb",0x40) on a path relative to the EXE directory. The
     /// package's own folders (such as `recording`) exist beside the EXE; other

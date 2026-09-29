@@ -40,6 +40,9 @@ public struct OriginalMatchPreparation {
     /// Frame mutations are exposed separately by frameAllocations.
     public var loadedObjects: [OriginalLoadedObject] { catalog.objects }
     public internal(set) var backgrounds: [OriginalStateRecord]
+    /// Mission stage records (catalog 7d0 + s·149b08). The stage logic writes
+    /// spawn-slot runtime words here, as the original writes its catalog.
+    public internal(set) var stages: [OriginalStateRecord]
     public var bitmaps: [OriginalLoadedBitmap] { backgroundLoader.bitmaps }
     public var releasedBitmaps: Set<Int> { backgroundLoader.releasedBitmaps }
     public internal(set) var releasedBitmapOrder: [Int] = []
@@ -68,8 +71,15 @@ public struct OriginalMatchPreparation {
         self.world = world; self.actors = actors; self.globals = globals
         self.interface = interface
         backgrounds = catalog.backgrounds
+        stages = catalog.stages
         backgroundLoader = OriginalBackgroundLoader()
         backgroundLoader.resources = catalog.resources
+    }
+
+    /// Declared stage-record input for controlled comparisons of the stage logic.
+    public mutating func writeStage(_ stage: Int,offset: Int,bytes: [UInt8]) throws {
+        guard stages.indices.contains(stage) else { throw Self.error("Stage input binding") }
+        for (i,b) in bytes.enumerated() { try stages[stage].write(b,at: offset+i) }
     }
 
     /// Declared background input for controlled preparation boundaries.

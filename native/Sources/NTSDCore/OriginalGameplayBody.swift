@@ -67,6 +67,7 @@ public enum OriginalGameplayBody {
         open: (OriginalReplayFileOutput.OpenRequest) throws -> Bool,
         write: ([UInt8]) throws -> Int32, close: () throws -> Int32,
         soundRequest: OriginalQueuedSound.Request,
+        music: OriginalMusicPlayback.Request = { _ in throw OriginalStateError.invalidStorage("Gameplay music request provider") },
         observe: (Event) throws -> Void = { _ in },
         checkpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom) throws -> Void = { _,_,_,_ in },
         ownedCheckpoint: (Stage, OriginalMatchPreparation, OriginalInputControlContext, OriginalCRTRandom, Library?) throws -> Void = { _,_,_,_,_ in }) throws -> Library? {
@@ -126,7 +127,47 @@ public enum OriginalGameplayBody {
             surface: surface, resourceBitmap: resourceBitmap, performBlit: performBlit,
             observe: { try observe(.drawing(.drawing, $0)) })
         try emitCheckpoint(.drawing, next, owned, random)
-        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, observe: { event in
+        // Mission stage logic (mode1): its callee calls become the gameplay
+        // body's own draws, fills, text, sounds and music requests.
+        func mission(_ state: inout OriginalMatchPreparation) throws -> Bool {
+            let globals = state.globals
+            func g(_ address: Int) throws -> Int32 { try globals.integer(at: address-0x44d000, as: Int32.self) }
+            try OriginalMissionStage.apply(state: &state, target: target, sse2: sse2, observe: { event in
+                guard case .call(let c) = event else { return }
+                let a = c.arguments.map { Int32(bitPattern: $0) }
+                switch c.kind {
+                case .bitmapDraw:
+                    guard let holder = c.this, a.count == 6 else { throw OriginalStateError.invalidStorage("Mission bitmap call") }
+                    let (record, source) = try resourceBitmap(holder)
+                    let width = try g(0x44d78c), height = try g(0x44d790)
+                    let input = OriginalBitmapDrawInput(x: a[0], y: a[1], frame: a[2], colorKey: c.arguments[3], mirrored: c.arguments[4],
+                        sourceSurface: source, targetSurface: c.arguments[5], viewportWidth: width, viewportHeight: height)
+                    try OriginalBitmapDrawing.draw(input, bitmap: record, observeRead: { r in
+                        var e = OriginalFrontScreenEvent("read"); e.read = r; try observe(.drawing(.impulses, e))
+                    }, observeClip: { clip in
+                        var e = OriginalFrontScreenEvent("clip"); e.clip = clip; try observe(.drawing(.impulses, e))
+                    }, perform: { b in
+                        var e = OriginalFrontScreenEvent("blit"); e.blit = b; try observe(.drawing(.impulses, e)); return try performBlit(b)
+                    })
+                case .fill:
+                    let request = try OriginalSurfaceFilling.request(target: UInt32(bitPattern: g(0x455608)), x: a[0], y: a[1],
+                        width: a[2], height: a[3], color: c.arguments[4], backing: fillBacking())
+                    var e = OriginalFrontScreenEvent("fill"); e.fill = request; try observe(.drawing(.impulses, e)); _ = try performFill(request)
+                case .text:
+                    _ = try OriginalSurfaceText.draw(c.text ?? [], target: c.arguments[0], background: c.arguments[2], color: c.arguments[3],
+                        x: a[4], y: a[5], dcResult: presentation.dcResult, dc: presentation.dc, renderer: textRenderer,
+                        observe: { try observe(.impulses($0)) })
+                case .format:break
+                case .sound:
+                    guard let buffer = c.this else { throw OriginalStateError.invalidStorage("Mission sound call") }
+                    try OriginalQueuedSound.play(bufferWordAddress: buffer, loop: c.arguments[0], globals: globals, request: soundRequest)
+                case .musicStop:try OriginalMusicPlayback.stop(globals: globals, request: music)
+                case .music:throw OriginalStateError.invalidStorage("Mission phase music (stage.dat has no music: entries) is not connected")
+                }
+            })
+            return true
+        }
+        try OriginalPostDrawImpulses.apply(state: &next, dcResult: presentation.dcResult, dc: presentation.dc, textRenderer: textRenderer, mission: { try mission(&$0) }, observe: { event in
             // This original diagnostic sprintf writes root48c. If full backing
             // is known, retain its own output for the later overlapping users.
             // A nil backing remains unavailable, never filled from a fixture.
