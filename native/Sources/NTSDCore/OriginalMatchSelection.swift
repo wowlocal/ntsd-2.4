@@ -92,7 +92,7 @@ public enum OriginalMatchSelection {
                 color: 0xffffff,backing: fillBacking());try observe(event)
         }
         let mode = try word(0x451160)
-        guard (0...1).contains(mode),try word(0x450c2c) == 0 else { throw error("Other mode selection continuation") }
+        guard [0,1,4].contains(mode),try word(0x450c2c) == 0 else { throw error("Other mode selection continuation") }
         if try word(0x4512c8) == 1 {
             try mark(0x42b296);try write(0x451220,0);try bitmap(0x44fd88,218,215)
             var inactive: Int32 = 0,teams = [Int32](repeating: 0,count: 5)
@@ -157,7 +157,10 @@ public enum OriginalMatchSelection {
             try mark(0x42b964)
             try OriginalComputerSelection.advance(state:&candidate,locals:&local,libraryText:&library,target:target,input:input,draw:draw,observe:observe)
         }
-        if try word(0x4512c8) == 3 {
+        if try word(0x4512c8) == 3 && mode == 4 {
+            // 42cb8c: War leaves before the settings screen through42e0b6.
+            try mark(0x42cb86)
+        } else if try word(0x4512c8) == 3 {
             try mark(0x42cb86)
             for offset in [0x34,0x20,0x30,0x38,0x18] { local[offset] = 0 }
             try bitmap(0x451178,3,3,8);try bitmap(0x451178,3,159,15,1)

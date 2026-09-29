@@ -1,0 +1,37 @@
+{
+  "scope": "Retained War (mode4) character screen: humans, mode4 teams, computer count,\ncomputer characters/teams and the settings skip through42e0b6.\nReuses the accepted retained selection harness (oracle_lib_selection_stage.Selection):\npinned NTSD EXE/lib/VC80/DAT/BMP/DIBs in controlled Unicorn2.1.4/CW023f, actual\n41bc90 prologue and declared4229cc continuation per call, all World/400 Actor/\nglobals/DC/stack retained between calls. Starts from the fresh initialize-mode-4\nparent. Ends at the call that sets4512c8=3 (mode4 leaves before the settings\nscreen); the following menu200 War setup is a separate accepted study.\nAPPLICATION_WAR_PLAN.md W1.",
+  "tool": "tools/oracle_war_selection.py",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "libSHA256": "28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba",
+  "crtSHA256": "c3ac989c8489a23bb96400b1856f5325ffc67e844f04651ea5d61bc20a991c6d",
+  "capture": "build/research/war-selection/capture1.json",
+  "captureBytes": 904000273,
+  "captureSHA256": "20096e6924224fe25c5da70214b019056ba54224050d7eb8e2908c07cb047b98",
+  "cases": 226,
+  "chains": {
+    "main": 116,
+    "control": 110
+  },
+  "events": 35229,
+  "ends": [
+    "returned"
+  ],
+  "fixture": {
+    "index": "original-war-selection.json",
+    "indexSHA256": "cb5002155207372d7a3d25cb55049a155b3320217a155358c792e82631cda92a",
+    "parts": [
+      {
+        "name": "original-war-selection-part0.json",
+        "bytes": 61192400,
+        "sha256": "4368d5c9e7fd38da57e8fa81fd0eafb562349c9ede8cb16af9f2eca9cd9c0dda"
+      },
+      {
+        "name": "original-war-selection-part1.json",
+        "bytes": 54581080,
+        "sha256": "585ba53e35d23d5cef79e5897d87db50597016ef92d6b56b1ec5db81a5e2011e"
+      }
+    ]
+  },
+  "nativeComparison": "OriginalLibSelectionStageTests.testWarComputerSelectionWithLibraryText",
+  "windowsVerified": false
+}

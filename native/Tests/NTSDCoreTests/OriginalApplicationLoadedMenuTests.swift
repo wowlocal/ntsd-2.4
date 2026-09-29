@@ -44,7 +44,7 @@ final class OriginalApplicationLoadedMenuTests: XCTestCase {
         func pattern(_ count: Int) -> [UInt8] { (0..<count).map { reverse ? UInt8(truncatingIfNeeded:$0) : 0xa5 } }
         mutating func allocate(_ kind: S.AllocationKind,_ count: Int) throws -> OriginalInterfaceAllocation {
             let i: Int
-            switch kind { case .menu(let value):i = value;case .background:i = 11;case .arena:throw Stop.unexpected("Arena allocation in menu") }
+            switch kind { case .menu(let value):i = value;case .background:i = 11;case .arena:throw Stop.unexpected("Arena allocation in menu");case .war:throw Stop.unexpected("War allocation in menu") }
             XCTAssertEqual(i,index+1);XCTAssertEqual(count,0x1f50);index = i
             if stop == "allocate10" && i == 10 { throw Stop.injected("allocate10") }
             if i == 0,let overlap { return .init(address:overlap,backing:pattern(count)) }

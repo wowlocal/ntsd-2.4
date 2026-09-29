@@ -46,15 +46,15 @@ final class OriginalLibSelectionStageTests: XCTestCase {
         var decoded: [String:[UInt8]] = [:]
         let catalog: OriginalLoadedCatalog
         var portraitAddresses: [Int:UInt32] = [:]
-        init() throws {
-            let url = try ProcessInfo.processInfo.environment["NTSD_LIB_SELECTION_STAGE"].map { URL(fileURLWithPath:$0) }
-                ?? XCTUnwrap(Bundle.module.url(forResource:"original-lib-selection-stage",withExtension:"json",subdirectory:"Fixtures"))
+        init(fixture: String = "original-lib-selection-stage",environment: String = "NTSD_LIB_SELECTION_STAGE",expectedCases: Int = 252) throws {
+            let url = try ProcessInfo.processInfo.environment[environment].map { URL(fileURLWithPath:$0) }
+                ?? XCTUnwrap(Bundle.module.url(forResource:fixture,withExtension:"json",subdirectory:"Fixtures"))
             let envelope=try Data(contentsOf:url)
             let data: Data
             if let parts=try? JSONDecoder().decode(Transport.self,from:envelope) {
                 var deflate=Data()
                 for name in parts.deflateParts {
-                    guard !name.contains("/"),name.hasPrefix("original-lib-selection-stage-part") else { throw Stop.unexpected }
+                    guard !name.contains("/"),name.hasPrefix(fixture+"-part") else { throw Stop.unexpected }
                     let bytes=try Data(contentsOf:url.deletingLastPathComponent().appendingPathComponent(name))
                     deflate.append(try MatchPreparationReference.unpack(bytes,maximumCount:60_000_000))
                 }
@@ -71,10 +71,10 @@ final class OriginalLibSelectionStageTests: XCTestCase {
             let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-lib-selection-"+UUID().uuidString+".json")
             try JSONSerialization.data(withJSONObject:projected).write(to:temporary)
             defer { try? FileManager.default.removeItem(at:temporary) }
-            startup = try Base.Resources(url:temporary,expectedCases:252)
+            startup = try Base.Resources(url:temporary,expectedCases:expectedCases)
             XCTAssertEqual(corpus.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
             XCTAssertEqual(corpus.libSHA256,"28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba")
-            XCTAssertEqual(corpus.cases.count,252)
+            XCTAssertEqual(corpus.cases.count,expectedCases)
             XCTAssertEqual(corpus.worldAddress,0x22000020);XCTAssertEqual(corpus.bitmapAddress,0x27000020)
             XCTAssertEqual(corpus.target,0x26006000);XCTAssertEqual(corpus.libraryAddress,0x36000000)
             XCTAssertEqual(corpus.stackAddress,0x10000000);XCTAssertEqual(corpus.entrySP,0x1000f000);XCTAssertEqual(corpus.tailSP,0x1000e9bc)
@@ -328,7 +328,9 @@ final class OriginalLibSelectionStageTests: XCTestCase {
                     XCTAssertEqual(expected.kind,"character-0x"+String(point.pc,radix:16));XCTAssertEqual(eventIndex,expected.eventCount)
                     if point.pc == 0x42a25a { XCTAssertEqual(expected.seat,UInt32(point.seat)) }
                     var expectedLocals=try XCTUnwrap(expected.locals).reduce(into:[Int:Int32]()) { $0[Int($1.key)!]=Int32(bitPattern:$1.value) }
-                    if point.pc == 0x42cb86,let cursor=expectedLocals[0x38],UInt32(bitPattern:cursor)==c.worldAddress+0x1b4 {
+                    // War (mode4) skips the settings block that clears it, so the
+                    // retained cursor also reaches the tail checkpoints.
+                    if [0x42cb86,0x42e0b6,0x42e0d2].contains(point.pc),let cursor=expectedLocals[0x38],UInt32(bitPattern:cursor)==c.worldAddress+0x1b4 {
                         expectedLocals[0x38]=0x1b4 // semantic World cursor, never imported backing
                     }
                     XCTAssertEqual(point.locals,expectedLocals,item.spec.label+" caller locals at "+String(point.pc,radix:16))
@@ -376,6 +378,24 @@ final class OriginalLibSelectionStageTests: XCTestCase {
                 XCTAssertEqual(try (0..<2).map { try g.integer(at:0x451248+$0*4-base,as:Int32.self) },[17,21])
                 XCTAssertEqual(try (0..<2).map { try g.integer(at:0x451288+$0*4-base,as:Int32.self) },[3,3])
                 XCTAssertEqual(try g.integer(at:0x44d078-base,as:Int32.self),115)
+            }
+        }
+        XCTAssertGreaterThan(events,10_000)
+    }
+    /// Mode4 chain (APPLICATION_WAR_PLAN W1): mode4 teams for humans and
+    /// computers, the last computer's excluded team and the settings skip.
+    func testWarComputerSelectionWithLibraryText() throws {
+        let r=try Resources(fixture:"original-war-selection",environment:"NTSD_WAR_SELECTION",expectedCases:226)
+        var retained: Retained?,events=0
+        for item in r.corpus.cases {
+            if item.spec.chain != true { retained=nil }
+            events += try run(item,r,&retained)
+            XCTAssertEqual(item.end,"returned")
+            if item.spec.label.hasPrefix("cpu3-ready") {
+                let s=try XCTUnwrap(retained).prepared,g=s.globals,base=OriginalMatchPreparation.globalBase
+                XCTAssertEqual(try g.integer(at:0x451160-base,as:Int32.self),4)
+                XCTAssertEqual(try g.integer(at:0x4512c8-base,as:Int32.self),3)
+                XCTAssertEqual(try (0..<5).map { try g.integer(at:0x451288+$0*4-base,as:Int32.self) },[3,3,13,13,13])
             }
         }
         XCTAssertGreaterThan(events,10_000)

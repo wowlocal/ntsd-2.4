@@ -80,7 +80,7 @@ import NTSDCore
     public static func bundled(_ started: OriginalMacRuntimeStartup.Started,startupInputs: OriginalApplicationStartupInputs,
         clock: @escaping () throws -> UInt32) throws -> OriginalMacRuntimeLoading {
         try .init(started,startupInputs:startupInputs,catalogInputs:.bundled(),loadingInputs:.bundled(),
-            interfaceInputs:.bundled(),menuInputs:.bundled(),arenaInputs:.bundled(),clock:clock)
+            interfaceInputs:.bundled(),menuInputs:.bundledWithWar(),arenaInputs:.bundled(),clock:clock)
     }
     func presentation(_ target: UInt32) throws -> OriginalMenuPresentationInput {
         try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
@@ -170,11 +170,14 @@ import NTSDCore
     func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
         let heap = started.runtime.heap
         var menu = try LoadedMenu(pending:ready),unit: Void = ()
-        return try menu.advanceUntilBoundary(inputs:menuInputs,environment:&unit,
+        return try menu.advanceUntilBoundary(inputs:menuInputs.adding(arenaInputs.bitmaps),environment:&unit,
             screenInput:.init(dcResult:OriginalMacRuntimeMenu.getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
             outputInput:presentation(target),
             allocate:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
-            bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() })
+            bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() },
+            // War start (43a21f) prepares its match inside the menu call.
+            localTime:{ _ in Self.localTime(self.localDate()) },
+            allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) })
     }
     /// A cached cycle after the first loading: the retained owners advance the
     /// cycle's input step, then either gameplay (retained as gameplay input) or

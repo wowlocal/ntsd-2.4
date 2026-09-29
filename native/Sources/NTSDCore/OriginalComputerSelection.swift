@@ -1,4 +1,4 @@
-/// VS/Stage computer selection42b964..42cb86. Ordinary catalog/Actor ownership is
+/// VS/Stage/War computer selection42b964..42cb86. Ordinary catalog/Actor ownership is
 /// semantic; no original caller stack, private pointer or EXE runs natively.
 /// The caller stages state and external events through the complete menu call.
 enum OriginalComputerSelection {
@@ -112,7 +112,7 @@ enum OriginalComputerSelection {
             try write(0x44d06c,2);try write(0x4512c8,3)
         }
         let mode = try word(0x451160)
-        guard (0...1).contains(mode) else { throw error("Other modes") }
+        guard [0,1,4].contains(mode) else { throw error("Other modes") }
         for offset in [0x34,0x28,0x38,0x2c,0x30] { local[offset] = 0 }
         if try word(0x4512c8) == 2 {
             for seat in 0..<8 where try candidate.world.integer(at:4+seat,as:UInt8.self) != 0 {
@@ -169,7 +169,7 @@ enum OriginalComputerSelection {
         index = try word(0x4511fc);seat = try computer(index)
         if try status(seat) == 12 {
             var excluded: Int32 = -1
-            if mode == 0 && index == count &- 1 {
+            if (mode == 0 || mode == 4) && index == count &- 1 {
                 for other in 0..<8 where try other != seat && status(other)%10 == 3 {
                     let value = try team(other)
                     if value == 0 { excluded = -2 }
@@ -177,7 +177,10 @@ enum OriginalComputerSelection {
                     else if excluded >= 0 && excluded != value { excluded = -2 }
                 }
             }
-            if try team(seat) == excluded { try setTeam(seat,(team(seat) &+ 1)%5) }
+            // 42c511: War also keeps computers on teams1..2 every team frame;
+            // Right below has no such filter until the next frame.
+            func forbidden(_ value: Int32) -> Bool { value == excluded || (mode == 4 && (value == 0 || value > 2)) }
+            while try forbidden(team(seat)) { try setTeam(seat,(team(seat) &+ 1)%5) }
             try teamText(seat,color())
             if local[0x38] != 0 {
                 try setTeam(seat,(team(seat) &+ 1)%5)
@@ -185,7 +188,7 @@ enum OriginalComputerSelection {
             }
             if local[0x28] != 0 {
                 var next = try team(seat) &- 1;if next < 0 { next = 4 };try setTeam(seat,next)
-                if next == excluded { next &-= 1;if next < 0 { next = 4 };try setTeam(seat,next) }
+                while forbidden(next) { next &-= 1;if next < 0 { next = 4 };try setTeam(seat,next) }
             }
             if local[0x2c] != 0 {
                 try sound(0x45560c);try setStatus(seat,13)

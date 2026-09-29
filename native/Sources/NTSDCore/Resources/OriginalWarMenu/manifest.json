@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "entries": [
+    {
+      "name": "BATTLEMODE",
+      "path": "BATTLEMODE.dib",
+      "count": 1030532,
+      "sha256": "eecdb5733680380be3b098197c3e2092128bec15bfd412b87307225bf1e7b154"
+    },
+    {
+      "name": "BATTLETROOPS",
+      "path": "BATTLETROOPS.dib",
+      "count": 23298,
+      "sha256": "3fcde3fad92bed95d2cbba012b254480b685d7808f26bdf4fb015139d35890de"
+    }
+  ]
+}

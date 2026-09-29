@@ -9,7 +9,7 @@ public struct OriginalApplicationLoadedMenuSession {
     public enum Boundary: Error, Equatable {
         case alreadyPrepared, dependency(String), overlap(UInt32), owner(UInt32)
     }
-    public enum AllocationKind: Equatable { case menu(Int), background, arena(Int) }
+    public enum AllocationKind: Equatable { case menu(Int), background, arena(Int), war(Int) }
     public enum Operation: Equatable {
         case preceding(Input.Operation), menu(Session.Effect)
         case music(OriginalMusicEvent,OriginalMusicResponse)
@@ -78,7 +78,7 @@ public struct OriginalApplicationLoadedMenuSession {
         checkpoint: @escaping (String,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_ in },
         beforeCommit: (PendingReturn,inout Environment) throws -> Void = { _,_ in }) throws -> PendingReturn {
         guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
-        let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint)
+        let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint,nil,nil)
         guard case .returned(let result) = try a.run() else { throw Boundary.dependency("Match prelude requires retained continuation") }
         try beforeCommit(result,&a.environment)
         pendingReturn = result;environment = a.environment;return result
@@ -94,9 +94,11 @@ public struct OriginalApplicationLoadedMenuSession {
         milliseconds: @escaping (inout Environment) throws -> UInt32,
         observe: @escaping (Observation,inout Environment) throws -> Void = { _,_ in },
         checkpoint: @escaping (String,OriginalStateRecord,inout Environment) throws -> Void = { _,_,_ in },
+        localTime: ((inout Environment) throws -> OriginalLocalTime)? = nil,
+        allocateReplay: ((Int,inout Environment) throws -> UInt32)? = nil,
         beforeCommit: (Outcome,inout Environment) throws -> Void = { _,_ in }) throws -> Outcome {
         guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
-        let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint)
+        let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint,localTime,allocateReplay)
         let result = try a.run()
         try beforeCommit(result,&a.environment)
         switch result {
@@ -112,6 +114,8 @@ public struct OriginalApplicationLoadedMenuSession {
         let bitmapReply: (API.Request,inout E) throws -> API.Response
         let musicReply: (OriginalMusicEvent,inout E) throws -> OriginalMusicResponse
         let clock: (inout E) throws -> UInt32
+        /// War start (43a21f) providers: GetLocalTime and the recording calloc.
+        let localTimeReply: ((inout E) throws -> OriginalLocalTime)?,replayReply: ((Int,inout E) throws -> UInt32)?
         let observe: (Observation,inout E) throws -> Void,checkpoint: (String,OriginalStateRecord,inout E) throws -> Void
         var environment: E,state: State,model: OriginalMatchPreparation
         var audio: OriginalMusicMemory,resources = OriginalMenuResourceLoading()
@@ -127,7 +131,10 @@ public struct OriginalApplicationLoadedMenuSession {
              _ time: @escaping (inout E) throws -> UInt32,
              _ observe: @escaping (Observation,inout E) throws -> Void,
              _ checkpoint: @escaping (String,OriginalStateRecord,inout E) throws -> Void,
+             _ localTime: ((inout E) throws -> OriginalLocalTime)? = nil,
+             _ replay: ((Int,inout E) throws -> UInt32)? = nil,
              resuming: PendingMatchPrelude? = nil) throws {
+            localTimeReply = localTime;replayReply = replay
             self.entry = entry;environment = env;state = resuming?.snapshot.state ?? entry.state
             model = resuming?.snapshot.match ?? entry.match;audio = resuming?.snapshot.music ?? entry.music
             resources = resuming?.snapshot.resources ?? entry.menuResources
@@ -251,7 +258,7 @@ public struct OriginalApplicationLoadedMenuSession {
                 // after this batch commits.
                 guard e.arguments.count == 1,e.strings.isEmpty else { throw Boundary.dependency("PostQuitMessage") }
                 operations.append(.front(e,0,nil))
-            case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
+            case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic","warFrame":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
             try observe(.front(e),&environment)
@@ -292,6 +299,105 @@ public struct OriginalApplicationLoadedMenuSession {
                     observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try self.front(e) },
                     perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try self.front(e);return self.screenInput.drawResults[0] })
             }
+        }
+        /// The retained surface of a War bitmap: this call's CreateSurface, or the
+        /// adopted owner from an earlier call.
+        func warSurface(_ token: UInt32,_ owned: OriginalMenuPresentationMemory) throws -> UInt32 {
+            if let surface = surfaces[token] { return surface }
+            guard let a = owned.allocations[token],a.live else { throw Boundary.owner(token) }
+            return try a.storage.integer(at:0,as:UInt32.self)
+        }
+        /// Menu200..219 (438b40): War bitmaps come from the War memory, whose
+        /// BATTLEMODE geometry the setup rewrites; other draws use the menu path.
+        func warDraw(_ request: OriginalCharacterScreenDraw,_ globals: OriginalStateRecord,
+                     _ owned: OriginalMenuPresentationMemory,_ war: OriginalWarMenuMemory) throws {
+            guard case .menu(let token) = request.bitmap,let bitmap = war.bitmaps[token] else {
+                return try characterDraw(request,globals,owned)
+            }
+            let args = [token,UInt32(bitPattern:request.x),UInt32(bitPattern:request.y),
+                        UInt32(bitPattern:request.frame),request.colorKey,0,request.target]
+            try front(.init("draw",args))
+            let surface = try bitmap.storage.integer(at:0,as:UInt32.self) == 0 ? 0 : warSurface(token,owned)
+            let input = try OriginalBitmapDrawInput(x:request.x,y:request.y,frame:request.frame,colorKey:request.colorKey,
+                mirrored:0,sourceSurface:surface,targetSurface:request.target,
+                viewportWidth:globals.integer(at:0x78c,as:Int32.self),viewportHeight:globals.integer(at:0x790,as:Int32.self))
+            _ = try OriginalBitmapDrawing.draw(input,bitmap:bitmap.storage,
+                observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try self.front(e) },
+                observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try self.front(e) },
+                perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try self.front(e);return self.screenInput.drawResults[0] })
+        }
+        /// Mode4 menus200..219 and, on Start, the War preparation43a21f..43a769
+        /// with this session's arena, music and recording owners.
+        func war(_ scene: inout OriginalMatchPreparation,_ library: inout OriginalLibSurfaceText?,
+                 _ owned: inout OriginalMenuPresentationMemory,_ musicOwner: inout OriginalMusicMemory) throws -> OriginalCharacterScreenExit {
+            var memory = state.war,context: Void = ()
+            let exit = try OriginalWarSetup.advanceWithSurfaceLoading(state:&scene,memory:&memory,libraryText:&library,environment:&context,
+                target:target,input:screenInput,fillBacking:[UInt8](repeating:0,count:100),
+                allocate:{ i,_ in try self.allocate(.war(i)) },perform:{ q,_ in try self.bitmap(q) },
+                bitmapStorage:{ token,_ in
+                    guard let a = owned.allocations[token],a.live else { throw Boundary.owner(token) }
+                    return a.storage
+                },draw:{ request,globals,war,_ in try self.warDraw(request,globals,owned,war) },
+                observe:{ e,_ in try self.front(e) },resourceEvent:{ e,_ in try self.observe(.resource(e),&self.environment) },
+                prepare:{ value,_,_ in try self.warStart(&value,&owned,&musicOwner);return true })
+            // New War wrappers become owned allocations with their live surfaces.
+            let fresh = memory.bitmaps.filter { owned.allocations[$0.key] == nil }
+            try adopted(fresh,in:&owned)
+            state.war = memory;return exit
+        }
+        func warStart(_ scene: inout OriginalMatchPreparation,_ owned: inout OriginalMenuPresentationMemory,
+                      _ musicOwner: inout OriginalMusicMemory) throws {
+            guard let localTimeReply,let replayReply else { throw Boundary.dependency("War start providers") }
+            var owners = scene.bitmapOwners,surfaceOwners = scene.bitmapSurfaceOwners
+            var nextOrdinal = scene.bitmaps.count,layer = 0
+            let device = try scene.globals.integer(at:0x457578-0x44d000,as:UInt32.self)
+            // The preparation owns the memory during its call (recording); arena
+            // wrapper adoption and release are staged and applied afterwards.
+            let current = owned
+            var arena: [UInt32:OriginalLoadedBitmap] = [:],released: [UInt32] = []
+            try OriginalWarPreparation.prepare(state:&scene,memory:&owned,
+                localTime:{
+                    let time = try localTimeReply(&self.environment);self.operations.append(.localTime(time));return time
+                },constructBitmap:{ path,optional,_ in
+                    let allocation = try self.allocate(.arena(layer));layer += 1
+                    guard allocation.address != 0 else { return nil }
+                    var context: Void = ()
+                    let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path:path,optional:optional,
+                        backing:allocation.backing,device:device,flags:0x40,context:&context,perform:{ q,_ in try self.bitmap(q) })
+                    arena[allocation.address] = bitmap
+                    owners[nextOrdinal] = allocation.address;surfaceOwners[nextOrdinal] = self.surfaces[allocation.address];nextOrdinal += 1
+                    return bitmap
+                },releaseBitmap:{ ordinal,bitmap in
+                    guard let wrapper = owners[ordinal],let allocation = current.allocations[wrapper],allocation.live,!released.contains(wrapper) else {
+                        throw Boundary.dependency("Arena release wrapper owner")
+                    }
+                    let surface = try allocation.storage.integer(at:0,as:UInt32.self)
+                    var normalized = allocation.storage;try normalized.write(UInt32(surface == 0 ? 0 : 1),at:0)
+                    guard normalized == bitmap.storage else { throw Boundary.owner(wrapper) }
+                    var context: Void = ()
+                    try OriginalBitmapRelease.release(bitmap,wrapper:wrapper,surface:surface,context:&context,perform:{ q,_ in
+                        if q.kind == "free" { try self.emit(.free(wrapper));return .init() }
+                        return try self.bitmap(q)
+                    })
+                    released.append(wrapper)
+                },resumeMusic:{ globals in
+                    try OriginalMusicPlayback.resumeMatch(globals:&globals,memory:&musicOwner,request:self.music)
+                },allocateReplay:{ count in
+                    let address = try replayReply(count,&self.environment)
+                    try self.claim(address,count);self.operations.append(.recordingAllocation(address,count))
+                    return address
+                },observe:{ e in
+                    switch e.kind {
+                    case "free":
+                        guard e.arguments.count == 1 else { throw Boundary.dependency("Recording free") }
+                        try self.front(.init("free",[e.arguments[0]]))
+                    case "localTime","format","releaseLayers","loadLayers","reconstruct","resetInput","replayEntry","calloc","random","candidates":break
+                    default:throw Boundary.dependency("War start event "+e.kind)
+                    }
+                })
+            for wrapper in released { owned.allocations[wrapper]?.live = false }
+            try adopted(arena,in:&owned)
+            scene.bitmapOwners = owners;scene.bitmapSurfaceOwners = surfaceOwners
         }
         func run() throws -> Outcome {
             var dummy: Void = ()
@@ -334,6 +440,8 @@ public struct OriginalApplicationLoadedMenuSession {
                     checkpoint:{ point,current in
                         selectionLocals = point.locals
                         try self.observe(.characterCheckpoint(point,current),&self.environment)
+                    },warStage:{ scene,library in
+                        try self.war(&scene,&library,&owned,&musicOwner)
                     },matchPrelude:{ confirmation = $0 })
                 model = character;world = character.world;globals = character.globals
                 if result == .matchPrelude {
@@ -358,6 +466,8 @@ public struct OriginalApplicationLoadedMenuSession {
 
             }
             model.world = world;model.globals = globals;state.memory = owned;state.libraryText = text
+            // War start (43a21f) replaces the recording pointer 4588a8.
+            try state.replace(0xb8a8,owned.replayPointers)
             local = scratch;audio = musicOwner;resources = images
             let final = try snapshot(globals,audio,resources)
             if end == .returned { dispatcher = try OriginalApplicationDispatchEntry.finishWorldCall(globals:final.state.full) }

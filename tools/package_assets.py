@@ -32,6 +32,10 @@ shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalLoadingInterfa
 shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalCharacterMenu",
                 destination.parent / "OriginalCharacterMenu", dirs_exist_ok=True)
 
+# Original War setup DIBs (tools/package_war_menu.py), constructed by the War menu.
+shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalWarMenu",
+                destination.parent / "OriginalWarMenu", dirs_exist_ok=True)
+
 # Deferred original arena images consumed by the owned match launch.
 shutil.copytree(ROOT / "native/Sources/NTSDCore/Resources/OriginalMatchArenas",
                 destination.parent / "OriginalMatchArenas", dirs_exist_ok=True)

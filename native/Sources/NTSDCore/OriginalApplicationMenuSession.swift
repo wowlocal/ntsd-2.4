@@ -25,6 +25,8 @@ public struct OriginalApplicationMenuSession {
         public var libraryHits = OriginalLibHitState()
         public var libraryTransforms = OriginalLibTransformBacking()
         public var libraryText: OriginalLibSurfaceText
+        /// War setup bitmaps/Object bindings retained across438b40 calls.
+        public var war = OriginalWarMenuMemory()
         public var random: OriginalCRTRandom
         public var screenBody: OriginalFrontScreenBody.StartupResult?
         public internal(set) var settings: OriginalSettingsLoading.StartupResult?

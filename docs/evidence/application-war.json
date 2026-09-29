@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-29",
+  "plan": "docs/research/APPLICATION_WAR_PLAN.md",
+  "result": "docs/research/APPLICATION_WAR.md",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "w1": {
+    "oracle": "tools/oracle_war_selection.py",
+    "evidence": "docs/evidence/application-war-selection.json",
+    "cases": 226,
+    "comparison": "OriginalLibSelectionStageTests.testWarComputerSelectionWithLibraryText passed 497.5 s (installed fixture)",
+    "vsRegression": "OriginalLibSelectionStageTests.testRetainedComputerAndArenaSelectionWithLibraryText passed 579.0 s"
+  },
+  "w2": {
+    "warMenuPackage": {
+      "tool": "tools/package_war_menu.py",
+      "manifestSHA256": "784c222b2313833f37219eae36b2424a61d4d0f2f257e5aaff083a82aaa5406a",
+      "entries": [
+        {
+          "name": "BATTLEMODE",
+          "path": "BATTLEMODE.dib",
+          "count": 1030532,
+          "sha256": "eecdb5733680380be3b098197c3e2092128bec15bfd412b87307225bf1e7b154"
+        },
+        {
+          "name": "BATTLETROOPS",
+          "path": "BATTLETROOPS.dib",
+          "count": 23298,
+          "sha256": "3fcde3fad92bed95d2cbba012b254480b685d7808f26bdf4fb015139d35890de"
+        }
+      ]
+    },
+    "app": {
+      "command": "NTSDNative --original --exit-after-capture --mute-music --virtual-clock 123456789 8 --script-clock gameplay",
+      "script": "20 click 350 230; 60 click 402 218; 100/125/150/175 key 83; 200 key 74; 250 key 74; 275 key 68; 300 key 74; 325 key 74; 400..475 key 75 x4; 1000 key 74; 1100 key 68; 1150 key 74; 1200 key 74; 1400 key 74; 1450 key 87; 1500 key 87; 1600 key 74",
+      "loaded": {
+        "seconds": 6.1,
+        "files": 621
+      },
+      "boundary": {
+        "iterations": 1604,
+        "error": "Original state storage: Post-draw: original mode4 child is not recovered"
+      },
+      "captures": {
+        "setup": "docs/evidence/application-war-setup-capture.png",
+        "settings": "docs/evidence/application-war-settings-capture.png"
+      }
+    },
+    "e2e": "tools/app_e2e.py --scenario all: vs pass, mission pass, quit pass (147 s)"
+  },
+  "windowsVerified": false,
+  "envelopeRecalculated": false
+}
