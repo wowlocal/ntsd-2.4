@@ -45,3 +45,9 @@ Launched without arguments the app still starts the Practice engine;
 start the original runtime by default is a product decision for the user.
 Clean-Mac (other user, no Xcode/LFS checkout) not tested. EXE envelope not
 recalculated.
+
+**Re-check 2026-09-29:** `tools/build-native.sh` (2 min 42 s, `codesign --verify
+--deep --strict` passes, 1.6 GB, Contents/Resources now also holds
+OriginalWarMenu) and `tools/app_e2e.py --app "build/NTSD Native.app/Contents/MacOS/NTSDNative"`
+for vs (with the quit and website checks), mission, demo, war, playback,
+tournament and team-tournament: all pass, every resource path inside the app.

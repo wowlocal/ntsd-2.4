@@ -147,6 +147,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     }
     @MainActor private func input(_ event: NSEvent) -> Bool {
         guard let menu,let started,!stopped else { return false }
+        // Scripted runs take keyboard and mouse input from their script only:
+        // a real pointer crossing the window would otherwise move the game's
+        // cursor and change the run (seen as rare e2e capture mismatches).
+        if arguments.contains("--script") { return true }
         let messages = menu.messages
         switch event.type {
         case .keyDown,.keyUp:

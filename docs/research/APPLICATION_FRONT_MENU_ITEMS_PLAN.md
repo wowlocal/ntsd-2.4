@@ -42,8 +42,30 @@ is 42 (> 32, success).
   request kind — the queue channel for Sleep) and a non-presenting return.
   Checks: app runs of both items (no boundary; the error box; the URL request),
   the e2e set.
-- **F2 — CONTROL SETTINGS (selector 6).** Static reading of 4289c4..4290f3
-  and its callees, oracle on the front-screen harness, port, app wiring.
+- **F2 — CONTROL SETTINGS (selector 6).** Static reading in
+  APPLICATION_FRONT_MENU_ITEMS.md. Every callee is already ported and
+  compared: 422b00 key name (`OriginalKeyName`), 422f60 key character with
+  GetKeyState(VK_CAPITAL) (`OriginalMenuCharacter`), 423480 settings reload
+  (`OriginalSettingsLoading`), 423230 settings write (`OriginalSettingsWriting`),
+  423910/43ef50 background release (`OriginalMenuPresentation`), 401290 text,
+  401a30 sound, 43f010/43ef70 bitmap drawing, VC80 sprintf.
+  Control table (from the code): player p's words at 44fb70 + 80·p — word 0
+  the device (keyboard 0, else a joystick whose four button bytes are at
+  453fc4 + 48·device), cells 1 + 20·p + row for the seven rows; keyboard keys
+  in 44fb70[cell], joystick buttons in 44fb7c[cell].
+  Oracle: a subclass of `oracle_front_screen_alternate.py`'s harness that
+  enters 4275cb with EAX = 6 and runs through the dispatch chain to
+  presentation 42873e; the callees execute on the same CPU; GetKeyState,
+  Sleep, ShellExecuteA, fopen/fclose/_read (reload), the writer's FILE and
+  free stay declared boundaries. Cases: hover and click of every region
+  (help link, four device cells, four names, 28 key cells, OK, Cancel);
+  device cycling; name editing (letters with Caps Lock on/off, backspace,
+  return, the 10-character limit, non-letter keys); key capture (keyboard
+  VKs, none pressed, joystick buttons 0–3, none); OK over the writer's
+  outcomes; Cancel over reload outcomes (present, absent); null bitmaps.
+  Native: `OriginalFrontControlSettings` composing the ported helpers, a
+  reference check over the corpus, then the session's alternate for
+  selector 6.
 - **F3 — RECORDING INFO (selector 7).** Likewise.
 
 EXE envelope not recalculated.

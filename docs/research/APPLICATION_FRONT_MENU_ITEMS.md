@@ -28,9 +28,13 @@ the ownerless box and ShellExecuteA answers; the main-menu, network-menu,
 bootstrap, host-session, observed-iteration and menu-input suites pass (17).
 The e2e set passes except one intermittent Mission mismatch: only the body-1800
 capture hash differed (every counter, iteration and the music state were
-equal) and two reruns matched exactly — as with the earlier tournament
-mismatch, the window snapshot, not the game, varies. The harness now keeps
-each scenario's captures in `build/research/e2e/<scenario>/` for diagnosis.
+equal) and two reruns matched exactly. The harness now keeps each
+scenario's captures in `build/research/e2e/<scenario>/`; the next mismatch
+(tournament's main-menu capture) showed the game's cursor at the real
+pointer's position: AppKit mouse events reached scripted runs. Scripted runs
+now take keyboard and mouse input from their script only (the app ignores
+real events when `--script` is given); the whole set then passed on the
+release app and on the rebuilt packaged app.
 
 **F2 static reading (selector 6, 4289c4..4290f3):** title and panel bitmaps;
 a help link (46..540 × 475..498: sound, Sleep(300), ShellExecuteA "open"

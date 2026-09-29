@@ -3,6 +3,8 @@
 [Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/
 InitWinSock() errors (no network) and stops at the unwired network menu.
+Scripted runs now ignore real pointer/keyboard events; the packaged app passes
+the whole e2e set on its own resources.
 
 [ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
 quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real
