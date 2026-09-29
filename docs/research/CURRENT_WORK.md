@@ -58,15 +58,17 @@ CW037f/SSE2) совпали побайтно, 4 теста прошли. В пр
 фон и Random запускают матч и играют в приложении. [Обзор режимов](APPLICATION_MODES_SURVEY.md):
 первые границы Mission (дочерний mode1 после отрисовки), War/Demo (продолжение
 выбора), Playback (незавершённая загрузка), Quit (postQuit); турниры живы.
+[Quit](APPLICATION_QUIT.md) из главного меню завершает приложение (PostQuitMessage →
+WM_QUIT → код 0); проверяется в `tools/app_e2e.py`.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** Quit из главного меню: postQuit в loaded menu, WM_QUIT
-через цикл сообщений, возврат WinMain и завершение приложения; затем mode1
-Mission (41f4ac..41f545) с oracle. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
+**Следующая задача:** Mission Mode: восстановить дочерний mode1 после отрисовки
+(41f4ac..41f545) — статический разбор, oracle Unicorn, порт в Core, корпуса,
+затем прогон Mission в приложении до следующей границы. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
 или пусто).
 EXE envelope не пересчитывался.
 

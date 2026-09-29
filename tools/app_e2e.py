@@ -8,7 +8,8 @@ the Summary. The observed milestones (startup, loading, match launch, tick
 progress with character AI/object input counts and window captures, the
 return to the menus with its epilogue and replay file, music) are compared
 with tools/app_e2e_reference.json; `--record` writes that reference instead.
-The original is not executed. Captures are PNGs of the window rendering and
+A second run chooses Quit on the main menu and requires WM_QUIT to end the
+process with code 0. The original is not executed. Captures are PNGs of the window rendering and
 depend on the window's backing scale, which the reference records.
 """
 import argparse
@@ -54,6 +55,20 @@ def run(timeout, app=APP):
         observed = summarize(events, captures, overlay)
         observed["exitCode"] = done.returncode
         return observed
+
+
+def quit_check(timeout, app=APP):
+    """Main menu → Quit: PostQuitMessage, WM_QUIT through the loop, exit 0."""
+    with tempfile.TemporaryDirectory(prefix="ntsd-quit-") as scratch:
+        downs = "; ".join(f"{100 + 25 * i} key 83" for i in range(7))
+        script = f"20 click 350 230; 60 click 402 218; {downs}; 275 key 74; 2000 exit"
+        done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script", script],
+                              capture_output=True, text=True, timeout=timeout)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        quits = [e for e in events if e.get("event") == "quit"]
+        ok = done.returncode == 0 and len(quits) == 1 and quits[0]["code"] == 0 and not any(e.get("event") == "boundary" for e in events)
+        return ok, {"exitCode": done.returncode, "quit": quits}
 
 
 def summarize(events, captures, overlay):
@@ -102,6 +117,7 @@ def main():
     parser.add_argument("--record", action="store_true", help="Write the reference from this run")
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--app", type=Path, default=APP, help="Executable to run, e.g. the packaged .app's")
+    parser.add_argument("--skip-quit", action="store_true", help="Do not run the main-menu Quit check")
     args = parser.parse_args()
     if args.build:
         build()
@@ -116,6 +132,10 @@ def main():
         print(json.dumps({"result": "incomparable", "reason": "display backing scale differs from the reference"}))
         sys.exit(2)
     problems = compare(reference, observed)
+    if not args.skip_quit:
+        ok, detail = quit_check(args.timeout, args.app)
+        if not ok:
+            problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0)"; observed["quit"] = detail
     print(json.dumps({"result": "pass" if not problems else "fail", "differs": problems, "resources": observed.get("resources"),
                       "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
     if problems:

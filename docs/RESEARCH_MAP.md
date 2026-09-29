@@ -1,5 +1,9 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Quit](research/APPLICATION_QUIT.md): Quit in the loaded main menu ends the app
+(PostQuitMessage recorded, WM_QUIT posted after commit, loop `.quit(0)`, exit
+0); part of `tools/app_e2e.py`. [Evidence](evidence/application-quit.json).
+
 [Game modes survey](research/APPLICATION_MODES_SURVEY.md): first stops of the
 other modes in the app — Mission (post-draw mode1 child), War/Demo (match
 selection continuation), Playback (unreturned loading), Quit (postQuit);

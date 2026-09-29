@@ -146,7 +146,12 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         let sleeps = menu.messages.sleeps.count
         do {
             switch try menu.step() {
-            case .committed:
+            case .committed(_,let result):
+                if case .quit(let code) = result {
+                    // The loop returned WM_QUIT's wParam: WinMain ends.
+                    Self.emit(["event":"quit","code":code,"iterations":committed,"uptime":ProcessInfo.processInfo.systemUptime])
+                    stopped = true; exit(Int32(bitPattern:code))
+                }
                 committed += 1
                 if let click = clickAt,committed == click.count {
                     menu.messages.mouse(0x200,x:click.x,y:click.y,buttons:0)
@@ -221,6 +226,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                         "bitmapRequests":c.bitmapRequests,"files":c.files,"audioRequests":c.audioRequests])
                 }
                 try presentMusic(started,menu)
+                // PostQuitMessage: WM_QUIT behind the already posted messages.
+                for code in loading.quitCodes { menu.messages.post(0x12,code,0) }
+                loading.quitCodes = []
                 let delay = loading.sleeps.count > sleeps ? loading.sleeps.last! : 1
                 waited += Int(delay); schedule(delay)
             }

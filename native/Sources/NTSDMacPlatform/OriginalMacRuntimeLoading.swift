@@ -37,6 +37,8 @@ import NTSDCore
     /// Replay files written by the gameplay body, applied only after the
     /// enclosing Host batch commits (a discarded attempt writes nothing).
     public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
+    /// PostQuitMessage codes of committed batches not yet posted as WM_QUIT.
+    public var quitCodes: [UInt32] = []
     private var pendingReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
     private var openReplay: (path: String,bytes: [UInt8])?
     /// Replay paths the declared file policy refused (reported, not hidden).
@@ -297,6 +299,7 @@ import NTSDCore
         })
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
+            for case .front(let e,_,_) in commit.operations where e.kind == "postQuit" { quitCodes.append(e.arguments[0]) }
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
         }

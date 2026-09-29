@@ -1,0 +1,39 @@
+{
+ "schema": "ntsd-evidence/1",
+ "UTC": "2026-09-29T00:31:03.880641Z",
+ "parentHead": "ef592b4",
+ "scope": "Quit from the loaded main menu: PostQuitMessage, WM_QUIT through the message loop, app exit",
+ "files": {
+  "native/Sources/NTSDCore/OriginalApplicationLoadedMenuSession.swift": "6c7d4c8cc893381ecbaa5946443fbaf603c4977c0bfc32f39dfdfa50048994d6",
+  "native/Sources/NTSDMacPlatform/OriginalMacRuntimeLoading.swift": "773e657f5026c619a34982a2c0b40459609c037e529c7d4e41b2662e16fa048c",
+  "native/Sources/NTSDApp/OriginalRuntimeLaunch.swift": "5f79eda5d47e0fb67f03d315cdabab30d6397e2b4766139eda360baeeb8556d2",
+  "tools/app_e2e.py": "109f2db7724d701f847597cd7ad56b79b9342e8c390489f656a3b4ed36194347",
+  "docs/evidence/application-quit-capture.png": "e34d3bb545caa08c5d35fff5ae9435f515b0cdc86d11a135944a145cf32ec0ec"
+ },
+ "run": {
+  "flags": "--original --exit-after-capture --mute-music --overlay TMP --virtual-clock 123456789 8",
+  "script": "Down x7 from step 100 every 25; 275 Attack",
+  "result": {
+   "event": "quit",
+   "code": 0,
+   "iterations": 276,
+   "exitStatus": 0,
+   "boundary": null
+  }
+ },
+ "tests": {
+  "e2e": "pass (match and quit)",
+  "suites": [
+   "OriginalApplicationLoadedMenuTests",
+   "OriginalMacRuntimeLoadingTests",
+   "OriginalMacRuntimeMenuTests"
+  ],
+  "tests": 10,
+  "failures": 0,
+  "wallMinutes": 7.7,
+  "workers": 3
+ },
+ "EXEEnvelopeRecalculated": false,
+ "originalExecuted": "none",
+ "review": "independent review open"
+}

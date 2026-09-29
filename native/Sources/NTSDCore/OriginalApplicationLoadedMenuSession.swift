@@ -246,6 +246,11 @@ public struct OriginalApplicationLoadedMenuSession {
             case "shell":operations.append(.front(e,Int32(bitPattern:screenInput.shellResult),nil))
             case "postMessage":operations.append(.front(e,outputInput.postResult,nil))
             case "enter","leave":operations.append(.front(e,0,nil))
+            case "postQuit":
+                // PostQuitMessage(code) is void; the platform posts WM_QUIT only
+                // after this batch commits.
+                guard e.arguments.count == 1,e.strings.isEmpty else { throw Boundary.dependency("PostQuitMessage") }
+                operations.append(.front(e,0,nil))
             case "width","rectangle","labelWrite","fontPass","stringWrite","localWrite","formatWrite","infoWrite","infoText","stage","queueWrite","play","dispatcherWrite","write","read","clip","draw","text","stringLength","soundRequest","format","panel","keyName","timer","call","return","allocate","construct","candidates","random","musicConfiguration","stopMusic":break
             default:throw Boundary.dependency("Front operation "+e.kind)
             }
