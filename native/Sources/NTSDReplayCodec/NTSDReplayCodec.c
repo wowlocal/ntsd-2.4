@@ -87,3 +87,33 @@ void ntsd_replay_codec_compress(uint8_t *destination, uint32_t capacity,
         if (context.allocations[i]) { ++result->unreleasedCount; free(context.allocations[i]); }
     }
 }
+
+int32_t ntsd_replay_codec_uncompress(uint8_t *destination, uint32_t *length,
+    uint32_t *produced, const uint8_t *source, uint32_t sourceCount) {
+    /* The body of the vendored uncompr.c uncompress, unchanged, with the
+     * stream's total_out also reported on failure (bytes written before an
+     * error are not otherwise visible). */
+    CodecContext *previous = current; current = NULL;
+    z_stream stream;
+    int err;
+    *produced = 0;
+    stream.next_in = (Bytef*)source;
+    stream.avail_in = (uInt)sourceCount;
+    stream.next_out = destination;
+    stream.avail_out = (uInt)*length;
+    stream.zalloc = (alloc_func)0;
+    stream.zfree = (free_func)0;
+    err = inflateInit(&stream);
+    if (err != Z_OK) { current = previous; return err; }
+    err = inflate(&stream, Z_FINISH);
+    *produced = (uint32_t)stream.total_out;
+    if (err != Z_STREAM_END) {
+        inflateEnd(&stream);
+        current = previous;
+        return err == Z_OK ? Z_BUF_ERROR : err;
+    }
+    *length = (uint32_t)stream.total_out;
+    err = inflateEnd(&stream);
+    current = previous;
+    return err;
+}

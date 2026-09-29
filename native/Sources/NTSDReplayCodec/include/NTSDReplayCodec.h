@@ -29,4 +29,10 @@ typedef struct {
 void ntsd_replay_codec_compress(uint8_t *destination, uint32_t capacity,
     const uint8_t *source, uint32_t sourceCount, int32_t level, uint32_t failAt,
     NTSDReplayCodecResult *result);
+/* zlib 1.1.4 uncompress, the EXE's 43f4d0 used by the playback loader 43e620.
+ * *length is the destination capacity on entry and, as in zlib, the produced
+ * length only on success; *produced is the bytes written in every case.
+ * Returns the zlib status. Allocations are not observed. */
+int32_t ntsd_replay_codec_uncompress(uint8_t *destination, uint32_t *length,
+    uint32_t *produced, const uint8_t *source, uint32_t sourceCount);
 #endif

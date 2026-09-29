@@ -42,6 +42,58 @@
     "zlib.h": {
       "originalSHA256": "7388aeb8cc550dcbc158fd43dc90ee900f5fc6a3d055ceaf4c83aa441e6d387f",
       "vendoredSHA256": "7388aeb8cc550dcbc158fd43dc90ee900f5fc6a3d055ceaf4c83aa441e6d387f"
+    },
+    "infblock.c": {
+      "originalSHA256": "282797dee3077d40cbe492428c2eab75b04b496b854b180b3e85140f8ad58394",
+      "vendoredSHA256": "282797dee3077d40cbe492428c2eab75b04b496b854b180b3e85140f8ad58394"
+    },
+    "infblock.h": {
+      "originalSHA256": "8e2b864ee159b0e8bc6ca7a9ac71369b3dc06588ea0d6c2b9e8b2d2248ef8004",
+      "vendoredSHA256": "8e2b864ee159b0e8bc6ca7a9ac71369b3dc06588ea0d6c2b9e8b2d2248ef8004"
+    },
+    "infcodes.c": {
+      "originalSHA256": "524e1f47ad64638cd2fd6dd163a8290b313f4d65968e20bd4e05860e1c4d0a4b",
+      "vendoredSHA256": "524e1f47ad64638cd2fd6dd163a8290b313f4d65968e20bd4e05860e1c4d0a4b"
+    },
+    "infcodes.h": {
+      "originalSHA256": "665310317ceba2af7032fd50d16eaf191f0ae0c805af712f9f9f655807355c89",
+      "vendoredSHA256": "665310317ceba2af7032fd50d16eaf191f0ae0c805af712f9f9f655807355c89"
+    },
+    "inffast.c": {
+      "originalSHA256": "1043e4300e9a81e7897ebac507f4cbd75bdcdabd0a77410538404d5076f151f9",
+      "vendoredSHA256": "1043e4300e9a81e7897ebac507f4cbd75bdcdabd0a77410538404d5076f151f9"
+    },
+    "inffast.h": {
+      "originalSHA256": "d446d816a4416c849c7e706c583f2f6500ebaa7840d60f4ce2d81a05363e5a35",
+      "vendoredSHA256": "d446d816a4416c849c7e706c583f2f6500ebaa7840d60f4ce2d81a05363e5a35"
+    },
+    "inffixed.h": {
+      "originalSHA256": "2a28f6ec7a9042b31ee2f214aff62a8ae9ab079a584e278a8e7e0f156b329d9e",
+      "vendoredSHA256": "2a28f6ec7a9042b31ee2f214aff62a8ae9ab079a584e278a8e7e0f156b329d9e"
+    },
+    "inflate.c": {
+      "originalSHA256": "ae643f81db42e3664ac56050146dc90212aba4f450aadcb8ed54908b494887d4",
+      "vendoredSHA256": "ae643f81db42e3664ac56050146dc90212aba4f450aadcb8ed54908b494887d4"
+    },
+    "inftrees.c": {
+      "originalSHA256": "43ac236f9a64e933ec06e5bde627e9bb2bda553f6db4b605ecff6862347cbf84",
+      "vendoredSHA256": "43ac236f9a64e933ec06e5bde627e9bb2bda553f6db4b605ecff6862347cbf84"
+    },
+    "inftrees.h": {
+      "originalSHA256": "52e1dac5dbd3fa922273adea9dae6c6b8c74acc58e1254f6af0bd47691ec36af",
+      "vendoredSHA256": "52e1dac5dbd3fa922273adea9dae6c6b8c74acc58e1254f6af0bd47691ec36af"
+    },
+    "infutil.c": {
+      "originalSHA256": "a098f985bdaaddfb9aee665f2dceb1cd6bb07ce997c19908f96b9d13984eeb29",
+      "vendoredSHA256": "a098f985bdaaddfb9aee665f2dceb1cd6bb07ce997c19908f96b9d13984eeb29"
+    },
+    "infutil.h": {
+      "originalSHA256": "e235b2fae8e43eb084c8cccd765a1ea8ebceb9cbfe2f6c3852c1cc4caed340ee",
+      "vendoredSHA256": "e235b2fae8e43eb084c8cccd765a1ea8ebceb9cbfe2f6c3852c1cc4caed340ee"
+    },
+    "uncompr.c": {
+      "originalSHA256": "31d19ae0f3284924d97d770525c0f2b9e5d4384f0d3ef90aa56a618a1fe7b565",
+      "vendoredSHA256": "31d19ae0f3284924d97d770525c0f2b9e5d4384f0d3ef90aa56a618a1fe7b565"
     }
   }
 }

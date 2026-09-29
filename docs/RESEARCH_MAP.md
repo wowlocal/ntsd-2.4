@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Playback](research/APPLICATION_PLAYBACK.md) P1: the recording loader 43e620
+is in Core with zlib 1.1.4's inflate; 27 real calls (MSVCP80 ifstream, the
+EXE's zlib) match, including the original's reported 1000-byte overflow on
+damaged files. [Evidence](evidence/playback-loader.json).
+
 [Demo](research/APPLICATION_DEMO.md): 4025d0 (Demo music) is in Core and
 matches 102 real cases; the Demo start runs in the app with arena surfaces and
 music, Demo matches repeat, and Jump at a match's end returns to the main
