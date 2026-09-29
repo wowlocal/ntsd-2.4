@@ -39,16 +39,17 @@ struct OriginalCPointPass {
     //current frame has been negated. -1..-5 address the retained Object header.
     //Only a complete known extent is exposed; its initialization mask is kept.
     //
-    //Frames ≥ 400 lie wholly beyond the 0x25360-byte Object allocation: the
-    //original reads them unchecked (cpoints 418c30/4187b0, drawing 41a5a0), e.g.
-    //a kind-8 heal ball its hit sent to frame 1000 before the post-draw pass
-    //removes it. That is other Windows heap memory, not recovered. Declared
-    //policy (APPLICATION_OUT_OF_OBJECT_FRAMES.md, not the EXE): it reads as zero
-    //bytes, an absent Frame. Frames ≤ −6 overlap the allocation start and stay
-    //a boundary.
+    //Frames ≥ 400 or ≤ −7 lie wholly outside the 0x25360-byte Object allocation:
+    //the original reads them unchecked (cpoints 418c30/4187b0, links 417f80,
+    //drawing 41a5a0, the post-draw scheduler), e.g. a kind-8 heal ball its hit
+    //sent to frame 1000, or an item a wpoint's weaponact 1000/9998/−888 gave up.
+    //That is other Windows heap memory, not recovered. Declared policy
+    //(APPLICATION_OUT_OF_OBJECT_FRAMES.md, not the EXE): it reads as zero bytes,
+    //an absent Frame. Frame −6 straddles the allocation start: a boundary.
     static let beyondAllocation = try! OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+    static func outsideAllocation(_ number: Int32) -> Bool { number >= 400 || number <= -7 }
     static func headerFrame(_ number: Int32,header: OriginalStateRecord,object: Int,site: String) throws -> OriginalStateRecord {
-        if number >= 400 { return beyondAllocation }
+        if outsideAllocation(number) { return beyondAllocation }
         let offset = Int(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
         guard offset <= header.bytes.count-0x178 else {
             throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.bytes.count) bytes)")

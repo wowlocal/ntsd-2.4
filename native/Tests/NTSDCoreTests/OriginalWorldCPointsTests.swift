@@ -31,8 +31,8 @@ final class OriginalWorldCPointsTests: XCTestCase {
         let bytes = Array(hex.utf8);XCTAssertEqual(bytes.count%2,0)
         for i in stride(from: 0,to: bytes.count,by: 2) { try record.write(XCTUnwrap(UInt8(String(decoding: bytes[i..<i+2],as: UTF8.self),radix: 16)),at: offset+i/2) }
     }
-    /// APPLICATION_OUT_OF_OBJECT_FRAMES.md: a Frame ≥ 400, wholly beyond the
-    /// 0x25360-byte Object allocation, is declared zero; inside it is still read.
+    /// APPLICATION_OUT_OF_OBJECT_FRAMES.md: a Frame wholly outside the 0x25360-byte
+    /// Object allocation (≥ 400 or ≤ −7) is declared zero; inside it is still read.
     func testOutOfObjectFrameKindIsDeclaredZero() throws {
         func defined(_ n: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: n),defined: [Bool](repeating: true,count: n)) }
         var world = try OriginalStateRecord.worldPrefix(over: [UInt8](repeating: 0,count: 0x7d8))
@@ -49,12 +49,12 @@ final class OriginalWorldCPointsTests: XCTestCase {
                 return try OriginalCPointPass.headerFrame(f,header: header,object: 0,site: "test")
             })
         }
-        for current: Int32 in [1000,400,Int32.max] {
+        for current: Int32 in [1000,400,Int32.max,-7,-888,Int32.min] {
             var p = try pass(current);let before = p.actors
             try p.actions(retainedPartnerSlot: nil);XCTAssertEqual(p.actors,before,"frame \(current)")
             try p.placement();XCTAssertEqual(p.actors,before,"placement frame \(current)")
         }
-        // Frames ≤ −6 overlap the allocation start: still a boundary.
+        // Frame −6 straddles the allocation start: still a boundary.
         var below = try pass(-6);XCTAssertThrowsError(try below.actions(retainedPartnerSlot: nil))
         // Frame -5 is the recovered header alias (kind 0 there); 399 is read: kind 2 with no reciprocal owner.
         var alias = try pass(-5);let before = alias.actors;try alias.actions(retainedPartnerSlot: nil);XCTAssertEqual(alias.actors,before)

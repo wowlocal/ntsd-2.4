@@ -14,6 +14,9 @@ public enum OriginalWorldLinks {
             header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") };return catalog.objects[index].header
             },frame: { index,number in
+                // A held item a wpoint's weaponact sends outside its Object allocation
+                // (1000, 9998, −888): the declared zero Frame (OriginalCPointPass).
+                if OriginalCPointPass.outsideAllocation(number) && catalog.objects.indices.contains(index) { return OriginalCPointPass.beyondAllocation }
                 guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding (Object \(index), frame \(number))") }
                 return catalog.objects[index].frameStorage[Int(number)]
             },background: { index in

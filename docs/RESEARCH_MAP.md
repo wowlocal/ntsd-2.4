@@ -2,8 +2,10 @@
 
 [Frames outside the Object](research/APPLICATION_OUT_OF_OBJECT_FRAMES.md): a
 Demo soak found the original's unchecked reads of a heal ball's frame 1000
-(beyond its Object allocation); declared policy: frames ≥ 400 read as zero.
-The soak now runs twelve matches to a World-links boundary (next card).
+(beyond its Object allocation); declared policy: a Frame wholly outside the
+allocation (≥ 400 or ≤ −7) reads as zero, also for held items a wpoint's
+weaponact lets go. The soak now runs sixteen matches (next: an undefined
+8-byte read at offset 80).
 
 [Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/

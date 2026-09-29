@@ -54,4 +54,10 @@ allocation) is still read (kind 2 with an unlinked owner falls to frame 212).
 The accepted cpoint, camera, drawing and impulse corpora pass unchanged. The
 Demo soak past the failure point; the e2e set.
 
+Extension (same day): World links 417f80 reads a held item's Frame chosen by
+its holder's wpoint weaponact (1000, 9998, −888 in the loaded DATs). The rule
+covers every Frame wholly outside the allocation (f ≥ 400 or f ≤ −7) in the
+shared fallback, the World-links lookup and the post-draw lifecycle; −6
+straddles the start and stays a boundary.
+
 EXE envelope not recalculated.

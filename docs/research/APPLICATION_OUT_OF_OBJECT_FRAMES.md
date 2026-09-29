@@ -38,4 +38,25 @@ The same soak now plays through twelve Demo matches (≈25,590 bodies) and
 stops at a different place, "World links: Frame binding" (417f80, held
 items) — the next card. The whole e2e set passes unchanged.
 
+## Held items given up by a wpoint (2026-09-29)
+
+The soak's next stop was World links 417f80, "Frame binding (Object 49, frame
+1000)": Object 49 is `chars\weapon8.dat` (id 123, a drink). The links pass
+sets a held item's frame to its holder's wpoint `weaponact` and reads that
+Frame (centers, the held wpoint) unchecked. 41 wpoints in the loaded DATs use
+a weaponact outside 0..<400 — 1000 in many characters' frame 274/279 and
+others, 9998 (Nckakuzu frame 361), −888 (Sakon frames 235..239, 247, 248) —
+to let the item go.
+
+The declared rule is now stated for any Frame wholly outside the allocation:
+f ≥ 400 or f ≤ −7 (frame −7 ends at −0x12c). Frame −6 straddles the
+allocation start and stays a boundary. The World-links lookup and the
+post-draw lifecycle use the same fallback; the item is then positioned from a
+zero Frame for that tick and deactivated by the post-draw opoint continuation
+(frame outside 0..<400). The unit test adds −7, −888 and INT_MIN. The links,
+cpoint, post-draw, gameplay-lifecycle and drawing corpora and the whole e2e
+set pass unchanged. The Demo soak now plays sixteen matches (≈32,400 bodies)
+to a different stop: an 8-byte read of undefined bytes at offset 80 (next
+card).
+
 EXE envelope not recalculated.
