@@ -51,6 +51,43 @@ Cancel (0x244, 0x1b9, frame 12: sound 455614, 423480, selector 0, 44d780 =
 −1, 423910) and OK (0x198, 0x1b9, frame 13: sound 455610, 423230 settings
 write, selector 0, 44d780 = −1, 423910).
 
+## F2 — CONTROL SETTINGS: port and comparison (2026-09-29)
+
+`OriginalFrontControlSettings` (Core) ports 4289c4..4290ee: the shared
+recovered helpers run inside it (401290 text, 401a30 sound, 422b00 key
+names, 422f60 key characters with GetKeyState, sprintf "Button: %d",
+423910/43ef50 background release) and report their events; bitmap drawing,
+GetKeyState, the 423480 reload and the 423230 writer are the caller's, Sleep
+and ShellExecuteA are events. `OriginalSettingsLoading.loadAndContinueStartup`
+takes `flagClearValue: nil` for a caller without the startup flag store.
+
+Oracle `tools/oracle_front_control_settings.py` extends the accepted front-menu
+completion harness (a fresh prologue, 4275bc with 44d064 = 6 through the
+original selector dispatch, presentation and the real return; GetKeyState a
+declared boundary; 423480's file boundaries with its own caller frame):
+106 cases — idle and hovers, device cycling, names, 56 key cells over keyboard
+and joystick devices, key and button capture, name editing (Caps Lock, digits,
+space, backspace, return, the 10-character limit, a non-character key), the
+help link, OK over the writer's outcomes and Cancel over two read chunkings;
+plus the control variant (reverse resources, ramp backing).
+`FrontControlSettingsReference` replays the completion parent and then every
+case: all 29,076 events (872 draws, 3,392 text outputs, 435 formats, 17 sound
+requests, 8 settings writes, 8 reloads with 432 file events, the help link)
+and the presentation and return snapshots (globals, World, CRT, pointers,
+bitmap ownership) match — both corpora
+([evidence](../evidence/front-control-settings.json),
+[control](../evidence/front-control-settings-control.json)). A corpus with one
+altered text coordinate fails at that case.
+
+Recovered behaviour worth noting: a click on OK or Cancel is handled once per
+player (the check sits in the player loop), so it writes (or re-reads) the
+settings four times and plays its sound four times; the help link has no
+click reset; joysticks cannot rebind the four direction rows; name editing
+ignores Return and keys past ten characters without consuming them.
+
+Next: F2b — the session's alternate for selector 6 (reload file bytes and the
+writer through the existing settings providers), then app checks.
+
 Remaining: F1b — wire `OriginalNetworkMenu` (selectors 1–3, ported) with a
 declared no-network client, so ONLINE GAME reaches its menu and Back;
 F2 CONTROL SETTINGS (selector 6); F3 RECORDING INFO (selector 7).

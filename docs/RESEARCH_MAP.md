@@ -4,7 +4,9 @@
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/
 InitWinSock() errors (no network) and stops at the unwired network menu.
 Scripted runs now ignore real pointer/keyboard events; the packaged app passes
-the whole e2e set on its own resources.
+the whole e2e set on its own resources. F2: CONTROL SETTINGS (selector 6) is
+ported and matches 106 real cases in full ([evidence](evidence/front-control-settings.json));
+its app wiring is next.
 
 [ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
 quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real

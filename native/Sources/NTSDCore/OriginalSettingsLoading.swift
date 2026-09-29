@@ -34,7 +34,7 @@ public enum OriginalSettingsLoading {
     }
 
     public static func loadAndContinueStartup(globals: inout OriginalStateRecord, scratch: inout OriginalStateRecord,
-        translatedBytes: [UInt8], file: UInt32, scratchAddress: UInt32, closeResult: Int32 = 0, flagClearValue: UInt32 = 0,
+        translatedBytes: [UInt8], file: UInt32, scratchAddress: UInt32, closeResult: Int32 = 0, flagClearValue: UInt32? = 0,
         requireDefinedStrings: Bool = false,
         observe: (OriginalSettingsEvent,OriginalStateRecord,OriginalStateRecord) throws -> Void = { _,_,_ in }) throws -> Continuation {
         let base = OriginalMatchPreparation.globalBase
@@ -135,7 +135,8 @@ public enum OriginalSettingsLoading {
         var returned = OriginalSettingsEvent(.settingsReturn);returned.result = UInt32(bitPattern: closeResult);try emit(returned)
         // 427092 stores caller EBX, which is zero in the natural resource path.
         // A supplied caller after an interrupted helper need not still have zero.
-        try parentWrite(0x44d068,wordBytes(flagClearValue))
+        // nil: another caller (CONTROL SETTINGS' Cancel, 429028) with no such store.
+        if let flagClearValue { try parentWrite(0x44d068,wordBytes(flagClearValue)) }
         globals = state;scratch = temporary;return .ready
     }
 }
