@@ -67,14 +67,15 @@ final class OriginalWindowInputTests: XCTestCase {
             }
         }
     }
-    private func resources() throws -> Resources {
+    private func resources(_ name: String = "original-window-input.json",environment: String = "NTSD_WINDOW_INPUT_CORPUS",
+                           cases: Int = 4372) throws -> Resources {
         let url: URL
-        if let p = ProcessInfo.processInfo.environment["NTSD_WINDOW_INPUT_CORPUS"] { url = URL(fileURLWithPath: p) }
-        else { url = try XCTUnwrap(Bundle.module.url(forResource: "original-window-input.json",withExtension: nil,subdirectory: "Fixtures")) }
+        if let p = ProcessInfo.processInfo.environment[environment] { url = URL(fileURLWithPath: p) }
+        else { url = try XCTUnwrap(Bundle.module.url(forResource: name,withExtension: nil,subdirectory: "Fixtures")) }
         let c = try JSONDecoder().decode(Corpus.self,from: MatchPreparationReference.unpack(Data(contentsOf: url),maximumCount: 128_000_000))
         XCTAssertEqual(c.exeSHA256,"3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c")
         XCTAssertEqual(c.libSHA256,"28d4f1b07992e058840bdac04d8ba44d6f037a248e29d962712bf44bcf90baba")
-        XCTAssertFalse(c.limited);XCTAssertEqual(c.cases.count,4372)
+        XCTAssertFalse(c.limited);XCTAssertEqual(c.cases.count,cases)
         return Resources(c)
     }
     private func input(_ c: Sample) -> OriginalWindowInput.Message {
@@ -126,6 +127,37 @@ final class OriginalWindowInputTests: XCTestCase {
         XCTAssertEqual(callbacks,4369);XCTAssertEqual(constructors,3);XCTAssertEqual(retained,385)
         XCTAssertEqual(requests,5908);XCTAssertEqual(stores,23835)
         print("WINDOW INPUT \(callbacks) whole callbacks \(constructors) constructors \(retained) own retained calls \(requests) requests \(stores) ordered stores")
+    }
+    /// 43b3d0's quit path from tools/oracle_window_close.py: WM_DESTROY (release
+    /// helpers, PostQuitMessage unless 458434), WM_CLOSE, WM_NCDESTROY and
+    /// WM_SYSCOMMAND. Every request, ordered store, write mask, result and
+    /// after-state (APPLICATION_WINDOW_CLOSE_PLAN.md C1).
+    func testQuitPathMessagesMatchTheOriginal() throws {
+        let r = try resources("original-window-close.json",environment: "NTSD_WINDOW_CLOSE_CORPUS",cases: 74)
+        var requests: [OriginalWindowInput.Request.Kind:Int] = [:],stores = 0
+        for c in r.corpus.cases {
+            var globals = try r.record(c.before.globals),local = try r.record(c.before.local),memory = try r.memory(c.before)
+            var cursor = 0
+            var masks = [[UInt8](repeating: 0,count: OriginalMatchPreparation.globalSize),[UInt8](repeating: 0,count: OriginalWindowInput.localCount),[UInt8](repeating: 0,count: 8)]
+            let result = try OriginalWindowInput.receive(input(c),globals: &globals,local: &local,memory: &memory,request: { request in
+                guard cursor < c.actions.count,let event = c.actions[cursor].event else { throw OriginalStateError.invalidStorage("Unexpected request case\(c.index) \(request.kind)") }
+                XCTAssertEqual(request,event.request,"Case\(c.index) action\(cursor)")
+                cursor += 1;requests[request.kind,default: 0] += 1;return event.result
+            },store: { address,bytes in
+                guard cursor < c.actions.count else { throw OriginalStateError.invalidStorage("Extra store case\(c.index)") }
+                XCTAssertEqual(c.actions[cursor],.init(kind: "store",address: address,bytes: bytes,event: nil),"Case\(c.index) action\(cursor)")
+                cursor += 1;stores += 1
+                let region = address >= 0x4588a8 ? 2 : address >= OriginalWindowInput.localBase ? 1 : 0
+                let offset = address-[OriginalMatchPreparation.globalBase,OriginalWindowInput.localBase,0x4588a8][region]
+                for i in 0..<bytes.count { masks[region][offset+i] = 1 }
+            })
+            XCTAssertEqual(UInt32(bitPattern: result),c.result,"Case\(c.index) result")
+            XCTAssertEqual(cursor,c.actions.count,"Case\(c.index) action count")
+            for i in 0..<3 { XCTAssertEqual(masks[i],try r.blob(c.writeMasks[i]),"Case\(c.index) region\(i) write mask") }
+            try r.check(globals,local,memory,c.after,"\(c.index) after")
+        }
+        XCTAssertEqual(requests[.postQuit],29);XCTAssertEqual(requests.values.reduce(0,+),6131)
+        print("WINDOW CLOSE 74 callbacks \(requests) \(stores) ordered stores")
     }
     func testLateCloseAndMissingReplayOwnershipRollBackWholeCallback() throws {
         enum Stop: Error { case close }

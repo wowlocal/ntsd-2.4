@@ -10,8 +10,10 @@ import NTSDMacPlatform
 /// (scripted left click at client point X,Y after N committed iterations).
 /// `--script "N action args; ..."` runs scripted input at committed iteration N:
 /// `click X Y` (button held 10 iterations), `key VK` (held 10 iterations),
-/// `capture PATH`, `musicend` (the current track ends now), `exit`. Counting
-/// uses committed outer iterations.
+/// `capture PATH`, `musicend` (the current track ends now), `answer yes|no|ok`
+/// (the next MessageBoxA's button; scripted runs never show the box and stop
+/// at a boundary without one), `close` (the window's close button), `exit`.
+/// Counting uses committed outer iterations.
 /// `--virtual-clock BASE STEP` makes runs reproducible: timeGetTime answers
 /// BASE + STEP × iterations started, startup FILETIME and GetLocalTime use a
 /// fixed date (2026-01-01 00:00 UTC) and GetMessagePos answers (0,0).
@@ -119,7 +121,18 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let menu = try OriginalMacRuntimeMenu(started,inputs:package,clock:{ [unowned self] in try self.clock() },
                                                       point:{ [unowned self] in self.cursor() })
                 self.menu = menu; menu.sounds = sounds
+                menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
+                menu.messages.destroyedWindow = { [unowned self] in
+                    Self.emit(["event":"windowDestroyed","iterations":self.committed])
+                    try? started.windows.hide(started.window)
+                }
                 try started.windows.setInput(started.window) { [weak self] event in self?.input(event) ?? false }
+                // The close button is the game's WM_SYSCOMMAND(SC_CLOSE); after a
+                // boundary stop it closes the app directly.
+                try started.windows.setCloseRequest(started.window) { [weak self] in
+                    guard let self,!self.stopped else { return true }
+                    self.menu?.messages.close(); return false
+                }
                 NSApp.activate(ignoringOtherApps:true)
                 schedule(0)
             } catch { stop(error) }
@@ -306,6 +319,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
                     "uptime":ProcessInfo.processInfo.systemUptime,"path":words[1],"music":musicReport(),"sounds":soundReport()])
             case "musicend": music?.finishTrack()
+            case "answer" where words.count == 2 && ["yes","no","ok"].contains(words[1]): messageAnswers.append(words[1])
+            case "close": menu.messages.close()
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
@@ -326,6 +341,35 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private func overlayRoot() throws -> OriginalMacRuntimeOverlay {
         guard let i = arguments.firstIndex(of:"--overlay"),i+1 < arguments.count else { return try .standard() }
         return .init(root:URL(fileURLWithPath:arguments[i+1],isDirectory:true))
+    }
+    /// Scripted MessageBoxA buttons, in order (`answer` script action).
+    private var messageAnswers: [String] = []
+    /// MessageBoxA: MB_OK → IDOK, MB_YESNO → IDYES/IDNO (declared Windows
+    /// return values). Interactive runs show an alert with those buttons.
+    @MainActor private func messageBox(_ text: [UInt8],_ caption: [UInt8],_ type: UInt32) throws -> Int32 {
+        struct Unanswered: Error { let text: String, type: UInt32 }
+        let buttons: [(String,Int32)]
+        switch type & 0xf {
+        case 0: buttons = [("ok",1)]
+        case 4: buttons = [("yes",6),("no",7)]
+        default: throw Unanswered(text:String(decoding:text,as:UTF8.self),type:type)
+        }
+        let answer: Int32
+        if arguments.contains("--script") {
+            guard !messageAnswers.isEmpty,let chosen = buttons.first(where: { $0.0 == messageAnswers[0] }) else {
+                throw Unanswered(text:String(decoding:text,as:UTF8.self),type:type)
+            }
+            messageAnswers.removeFirst(); answer = chosen.1
+        } else {
+            let alert = NSAlert(); alert.messageText = String(decoding:caption,as:UTF8.self)
+            alert.informativeText = String(decoding:text,as:UTF8.self)
+            for (title,_) in buttons { alert.addButton(withTitle:title.capitalized == "Ok" ? "OK" : title.capitalized) }
+            let index = alert.runModal().rawValue-NSApplication.ModalResponse.alertFirstButtonReturn.rawValue
+            answer = buttons[max(0,min(buttons.count-1,index))].1
+        }
+        Self.emit(["event":"messageBox","text":String(decoding:text,as:UTF8.self),"caption":String(decoding:caption,as:UTF8.self),
+                   "type":type,"answer":answer,"iterations":committed])
+        return answer
     }
     @MainActor private func soundReport() -> [String:Any] {
         let r = sounds?.rendered ?? .init(),a = sounds?.activity ?? (playing:0,looping:0)
@@ -350,5 +394,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"
         alert.informativeText = String(reflecting:error); alert.runModal()
     }
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+    /// The game ends at its own WM_QUIT (after DestroyWindow hid the window);
+    /// only a run stopped at a boundary ends with its window.
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        MainActor.assumeIsolated { stopped }
+    }
 }

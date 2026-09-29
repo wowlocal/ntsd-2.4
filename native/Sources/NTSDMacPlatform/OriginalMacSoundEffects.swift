@@ -109,6 +109,11 @@ public final class OriginalMacSoundEffects: @unchecked Sendable {
         if !accepted { rejected += 1 }
     }
 
+    /// IUnknown::Release of a buffer (the original's quit path): its voice stops.
+    public func release(_ buffer: UInt32) {
+        state.withLock { v in if let i = v.index[buffer] { v.entries[i].voice.playing = false } }
+    }
+
     /// Channel gains for a voice.
     public static func gains(volume: Int32, pan: Int32) -> (left: Float, right: Float) {
         let g = OriginalMacMusicOutput.gain(volume)

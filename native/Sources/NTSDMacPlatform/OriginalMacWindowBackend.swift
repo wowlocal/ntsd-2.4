@@ -42,7 +42,7 @@ import NTSDCore
     public final class WindowLease: OriginalApplicationStartupResource {
         public let token: UInt32
         fileprivate let window: NSWindow, windowClass: ClassLease
-        fileprivate var closed = false
+        fileprivate var closed = false, closeDelegate: CloseDelegate?
         fileprivate init(_ token: UInt32,_ window: NSWindow,_ windowClass: ClassLease) {
             self.token = token; self.window = window; self.windowClass = windowClass
         }
@@ -51,6 +51,12 @@ import NTSDCore
             let retainedWindow = window
             DispatchQueue.main.async { retainedWindow.close() }
         }
+    }
+    /// The close button asks; the game decides (WM_SYSCOMMAND/SC_CLOSE).
+    fileprivate final class CloseDelegate: NSObject, NSWindowDelegate {
+        let shouldClose: () -> Bool
+        init(_ shouldClose: @escaping () -> Bool) { self.shouldClose = shouldClose }
+        func windowShouldClose(_ sender: NSWindow) -> Bool { shouldClose() }
     }
     private final class WeakWindow {
         weak var value: WindowLease?
@@ -146,6 +152,14 @@ import NTSDCore
         guard !owner.closed,let view = owner.window.contentView as? ContentView else { throw Boundary.geometry }
         view.input = consumer; owner.window.acceptsMouseMovedEvents = true; owner.window.makeFirstResponder(view)
     }
+    /// The close button calls `handler`; true lets AppKit close the window.
+    public func setCloseRequest(_ token: UInt32,_ handler: @escaping () -> Bool) throws {
+        let owner = try lease(token)
+        guard !owner.closed else { throw Boundary.geometry }
+        let delegate = CloseDelegate(handler); owner.closeDelegate = delegate; owner.window.delegate = delegate
+    }
+    /// DestroyWindow's visible effect: the window leaves the screen.
+    public func hide(_ token: UInt32) throws { try lease(token).window.orderOut(nil) }
     /// Client-area point (top-left origin, logical points) of a window event.
     public func clientPoint(_ token: UInt32,_ event: NSEvent) throws -> (Int32,Int32) {
         let owner = try lease(token)

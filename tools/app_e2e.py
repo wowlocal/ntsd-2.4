@@ -8,8 +8,9 @@ the Summary. The observed milestones (startup, loading, match launch, tick
 progress with character AI/object input counts and window captures, the
 return to the menus with its epilogue and replay file, music) are compared
 with tools/app_e2e_reference.json; `--record` writes that reference instead.
-A second run chooses Quit on the main menu and requires WM_QUIT to end the
-process with code 0. Mission, War, Demo, Playback Recording, Tournament and
+Further runs end the game on each quit path — Quit on the main menu, ESC
+(No, then Yes) and the window's close button — and require WM_QUIT to end
+the process with code 0. Mission, War, Demo, Playback Recording, Tournament and
 Team Tournament scenarios compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
 depend on the window's backing scale, which the reference records.
 """
@@ -115,18 +116,32 @@ def run(timeout, app=APP, scenario="vs"):
         return observed
 
 
+# Quit paths (APPLICATION_QUIT.md, APPLICATION_WINDOW_CLOSE.md): the loaded main
+# menu's Quit; ESC answered No (the game continues) then Yes on the mode menu;
+# the window's close button on the front menu. Each ends with WM_QUIT, code 0.
+QUITS = {
+    "menu": ("20 click 350 230; 60 click 402 218; " + "; ".join(f"{100 + 25 * i} key 83" for i in range(7))
+             + "; 275 key 74; 2000 exit", []),
+    "escape": ("20 click 350 230; 60 click 402 218; 140 answer no; 150 key 27; 240 answer yes; 250 key 27; 2000 exit", [7, 6]),
+    "close": ("20 close; 2000 exit", []),
+}
+
+
 def quit_check(timeout, app=APP):
-    """Main menu → Quit: PostQuitMessage, WM_QUIT through the loop, exit 0."""
-    with tempfile.TemporaryDirectory(prefix="ntsd-quit-") as scratch:
-        downs = "; ".join(f"{100 + 25 * i} key 83" for i in range(7))
-        script = f"20 click 350 230; 60 click 402 218; {downs}; 275 key 74; 2000 exit"
-        done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--mute-sounds", "--overlay", scratch,
-                               "--virtual-clock", "123456789", "8", "--script", script],
-                              capture_output=True, text=True, timeout=timeout)
-        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
-        quits = [e for e in events if e.get("event") == "quit"]
-        ok = done.returncode == 0 and len(quits) == 1 and quits[0]["code"] == 0 and not any(e.get("event") == "boundary" for e in events)
-        return ok, {"exitCode": done.returncode, "quit": quits}
+    """Every quit path: PostQuitMessage, WM_QUIT through the loop, exit 0."""
+    results = {}
+    for name, (script, answers) in QUITS.items():
+        with tempfile.TemporaryDirectory(prefix="ntsd-quit-") as scratch:
+            done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                                   "--virtual-clock", "123456789", "8", "--script", script],
+                                  capture_output=True, text=True, timeout=timeout)
+            events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+            quits = [e for e in events if e.get("event") == "quit"]
+            boxes = [e["answer"] for e in events if e.get("event") == "messageBox"]
+            ok = (done.returncode == 0 and len(quits) == 1 and quits[0]["code"] == 0 and boxes == answers
+                  and not any(e.get("event") == "boundary" for e in events))
+            results[name] = (ok, {"exitCode": done.returncode, "quit": quits, "messageBoxes": boxes})
+    return all(ok for ok, _ in results.values()), {k: v for k, (_, v) in results.items()}
 
 
 def summarize(events, captures, overlay):
@@ -201,7 +216,7 @@ def main():
         if name == "vs" and not args.skip_quit:
             ok, detail = quit_check(args.timeout, args.app)
             if not ok:
-                problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0)"; observed["quit"] = detail
+                problems.append("quit"); reference["quit"] = "exit 0 with one quit event (code 0) on every quit path"; observed["quit"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:

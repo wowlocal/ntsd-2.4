@@ -328,10 +328,13 @@ public struct OriginalApplicationMenuSession {
                                 guard q.kind == .windowDefault else { return try graph(q) }
                                 return .init(result:try windowDefault(.init(.windowDefault,q.arguments)))
                             })
-                        } else { result = try OriginalWindowInput.receive(input,globals:&g,local:&local,memory:&owned.memory,request:{ q in
-                            guard q.kind == .windowDefault else { throw Boundary.dependency("Menu window "+q.kind.rawValue) }
-                            return try windowDefault(q)
-                        },store:store) }
+                        } else {
+                            // Every WndProc platform call — DefWindowProcA, and the quit
+                            // path's MessageBoxA, Release, free, PostMessageA and
+                            // PostQuitMessage — is answered on the window channel.
+                            result = try OriginalWindowInput.receive(input,globals:&g,local:&local,memory:&owned.memory,
+                                request:{ q in try windowDefault(q) },store:store)
+                        }
                         owned.graphics = graphics
                         try owned.replace(0,g); try owned.replace(Self.outerStart,local)
                         try owned.mergeAliases(counter:oldCounter)

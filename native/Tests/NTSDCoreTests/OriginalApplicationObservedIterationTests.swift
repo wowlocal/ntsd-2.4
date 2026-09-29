@@ -143,10 +143,16 @@ import XCTest
             XCTAssertEqual(requests,[.init(.windowDefault,[7,UInt32(message),0x61,0x1e0001])])
         }
         XCTAssertEqual(globals.bytes,before.0); XCTAssertEqual(local.bytes,before.1)
-        // Their own recovered handlers are the lifecycle model, not this default route.
-        for message: UInt32 in [0x105,0x112] {
-            XCTAssertThrowsError(try OriginalWindowInput.receive(.init(window:7,message:message,wParam:0,lParam:0),
-                globals:&globals,local:&local,memory:&memory,request:{ _ in 0 }),"\(message)")
+        // WM_SYSKEYUP's own handler is outside this route.
+        XCTAssertThrowsError(try OriginalWindowInput.receive(.init(window:7,message:0x105,wParam:0,lParam:0),
+            globals:&globals,local:&local,memory:&memory,request:{ _ in 0 }),"261")
+        // WM_SYSCOMMAND (43b519, APPLICATION_WINDOW_CLOSE.md): SC_KEYMENU returns 1
+        // without a request; other commands take this default route.
+        for (command,expected) in [(UInt32(0xf100),[OriginalWindowInput.Request]()),(0xf060,[.init(.windowDefault,[7,0x112,0xf060,0])])] {
+            var requests: [OriginalWindowInput.Request] = []
+            let result = try OriginalWindowInput.receive(.init(window:7,message:0x112,wParam:command,lParam:0),
+                globals:&globals,local:&local,memory:&memory,request:{ q in requests.append(q);return -123 })
+            XCTAssertEqual(result,command == 0xf100 ? 1 : -123); XCTAssertEqual(requests,expected)
         }
     }
 }

@@ -1,0 +1,11 @@
+{
+  "scope": "Execute the original WndProc 43b3d0 for its quit path: WM_DESTROY (43b4ba:\n4019b0 sound release, 401d30 music release, 43d2a0 replay buffers, then\nPostQuitMessage(0) unless 458434), and the DefWindowProcA messages WM_CLOSE,\nWM_NCDESTROY and WM_SYSCOMMAND (SC_KEYMENU answered 1 at 43b519). The\naccepted window-input harness (oracle_window_input.py, same pinned EXE/lib,\nUnicorn 2.1.4, installer parent, declared COM/free/DefWindowProcA results)\nruns each call; PostQuitMessage is an added recorded boundary. A new corpus;\nthe accepted window-input corpus is unchanged. APPLICATION_WINDOW_CLOSE_PLAN.md C1.\n",
+  "corpus": "build/original/window-close.json",
+  "sha256": "6a5bcb04ee0743dcc0b4d5b91bd8ecc873c493d2e69aa586f6de47ee6294c044",
+  "bytes": 1479746,
+  "cases": 74,
+  "events": 6131,
+  "postQuit": 29,
+  "nativeComparison": "pass: OriginalWindowInputTests.testQuitPathMessagesMatchTheOriginal \u2014 74 callbacks, every request (5984 Release, 100 free, 29 PostQuitMessage, 18 DefWindowProcA), 248 ordered stores, write masks, results and after-states",
+  "fixture": "native/Tests/NTSDCoreTests/Fixtures/original-window-close.json"
+}

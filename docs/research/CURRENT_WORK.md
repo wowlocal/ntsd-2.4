@@ -103,16 +103,21 @@ GLOBALFOCUS). VS-матч: 1835 вызовов, 0 отклонено; чит `LF
 put_CurrentPosition) при коммите отдаются музыкальному runtime — в Mission
 музыка останавливается на таймере80 после поражения, как у оригинала (эталон
 mission изменился только в двух полях `musicPlaying`).
+[ESC и закрытие окна](APPLICATION_WINDOW_CLOSE.md): WndProc 43b3d0 дополнен
+WM_DESTROY (освобождение + PostQuitMessage, если 458434 = 0), WM_CLOSE,
+WM_NCDESTROY, WM_SYSCOMMAND — 74 реальных вызова совпали; ESC показывает
+«Are you sure to quit?» с Yes/No (No — игра продолжается, Yes — выход с кодом0),
+кнопка закрытия окна идёт через SC_CLOSE → WM_CLOSE → WM_DESTROY → WM_QUIT.
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** ESC «Are you sure to quit?» (MessageBoxA MB_YESNO сейчас
-отвечается IDOK, выход невозможен) и закрытие окна: WM_CLOSE → DefWindowProc →
-WM_DESTROY 43b4ba (4019b0 звук, 401d30 музыка, 43d2a0 буферы повторов,
-PostQuitMessage(0) если 458434 = 0) → WM_QUIT. Затем прослушивание на устройстве. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
+**Следующая задача:** выбрать по препятствиям: WM_ACTIVATEAPP/SETCURSOR и
+пересоздание окна (458434, Alt+Enter), текст GDI (решение пользователя о
+шрифте), прослушивание на устройстве, чистый Mac. Замечено: длинные e2e-сценарии
+зависят от реального конца музыкальных треков под нагрузкой. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
 или пусто).
 EXE envelope не пересчитывался.
 

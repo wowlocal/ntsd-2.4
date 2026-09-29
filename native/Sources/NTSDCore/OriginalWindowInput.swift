@@ -1,5 +1,6 @@
-/// Whole43b3d0 input-message callbacks. Platform responses are explicit; this
-/// does not execute the other WndProc messages or import a Windows runtime.
+/// Whole43b3d0 input-message callbacks and its quit path (WM_DESTROY, WM_CLOSE,
+/// WM_NCDESTROY, WM_SYSCOMMAND). Platform responses are explicit; this does
+/// not execute the other WndProc messages or import a Windows runtime.
 public enum OriginalWindowInput {
     public static let localBase = 0x458440
     public static let localCount = 0x140
@@ -10,7 +11,7 @@ public enum OriginalWindowInput {
         }
     }
     public struct Request: Codable, Equatable, Sendable {
-        public enum Kind: String, Codable, Sendable { case windowDefault, message, method, free, postMessage }
+        public enum Kind: String, Codable, Sendable { case windowDefault, message, method, free, postMessage, postQuit }
         public let kind: Kind, arguments: [UInt32], strings: [[UInt8]]
         public init(_ kind: Kind, _ arguments: [UInt32] = [], _ strings: [[UInt8]] = []) {
             self.kind = kind; self.arguments = arguments; self.strings = strings
@@ -120,6 +121,18 @@ public enum OriginalWindowInput {
             if y < (top &* 3 &+ bottom)/4 { try byte(address+24,1) }
             else if y > (top &+ bottom &* 3)/4 { try byte(address+25,1) }
         }
+        /// 4019b0, 401d30 and 43d2a0: shared by ESC's IDYES branch and WM_DESTROY.
+        func release() throws {
+            try OriginalMenuPresentation.releaseResources(globals: &state,memory: &owned,observe: { event in
+                let kind: Request.Kind
+                switch event.kind {
+                case .method:kind = .method
+                case .free:kind = .free
+                default:throw error("Unexpected shutdown operation")
+                }
+                _ = try request(.init(kind,event.arguments,event.strings))
+            },wrote: { address,value in try store(address,little(value)) })
+        }
         var returned: Int32?
         switch input.message {
         case 0x100,0x101:
@@ -135,20 +148,24 @@ public enum OriginalWindowInput {
                     let answer = try request(.init(.message,[input.window,4],
                         [Array("Are you sure to quit?".utf8),Array("LF2".utf8)]))
                     if answer == 6 {
-                        try OriginalMenuPresentation.releaseResources(globals: &state,memory: &owned,observe: { event in
-                            let kind: Request.Kind
-                            switch event.kind {
-                            case .method:kind = .method
-                            case .free:kind = .free
-                            default:throw error("Unexpected shutdown operation")
-                            }
-                            _ = try request(.init(kind,event.arguments,event.strings))
-                        },wrote: { address,value in try store(address,little(value)) })
+                        try release()
                         _ = try request(.init(.postMessage,[input.window,0x10,0,0]))
                     }
                     returned = 0
                 }
             }
+        case 2:
+            // 43b4ba WM_DESTROY: the release helpers, then PostQuitMessage(0)
+            // unless 458434 (set around a window recreation) is nonzero.
+            try release()
+            if try word(0x458434) == 0 { _ = try request(.init(.postQuit,[0])) }
+            returned = 0
+        case 0x10,0x82:
+            // WM_CLOSE and WM_NCDESTROY: jump-table default 43bc24.
+            break
+        case 0x112:
+            // 43b519: SC_KEYMENU is swallowed; other commands reach DefWindowProcA.
+            if input.wParam == 0xf100 { returned = 1 }
         case 0x200...0x205:try mouse(input.message,input.lParam,globals: &state,store: store)
         case 0x3a0:try position(0x453fd8)
         case 0x3a1:try position(0x454008)

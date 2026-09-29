@@ -36,8 +36,10 @@ public struct OriginalMacRuntimeKey: Equatable {
 /// The application thread's message queue for the original window, fed from
 /// AppKit events and served to whole-iteration permits. Declared runtime
 /// behavior; not a Windows observation. Only messages the recovered WndProc
-/// accepts are generated: WM_KEYDOWN/KEYUP/CHAR, mouse 200/201/202/204/205 and
-/// the music graph notification registered with SetNotifyWindow (0x400).
+/// accepts are generated: WM_KEYDOWN/KEYUP/CHAR, mouse 200/201/202/204/205,
+/// the music graph notification registered with SetNotifyWindow (0x400), and
+/// the quit path (APPLICATION_WINDOW_CLOSE_PLAN.md): WM_SYSCOMMAND(SC_CLOSE)
+/// from the close button, WM_CLOSE, WM_DESTROY, WM_NCDESTROY and WM_QUIT.
 @MainActor public final class OriginalMacRuntimeMessages {
     public typealias Loop = OriginalApplicationMessageLoop
     public enum Boundary: Error, Equatable { case unsupported(String), emptyGet, arguments(String) }
@@ -55,8 +57,25 @@ public struct OriginalMacRuntimeKey: Equatable {
     }
     func now() -> UInt32 { (try? clock()) ?? 0 }
     public func post(_ message: UInt32,_ wParam: UInt32,_ lParam: UInt32) {
+        // A destroyed window receives nothing; WM_QUIT belongs to the thread.
+        guard !destroyed || message == 0x12 else { return }
         let (x,y) = point(); queue.append(.init(message:message,wParam:wParam,lParam:lParam,time:now(),x:x,y:y))
     }
+    /// Messages Windows sends synchronously from DefWindowProcA; here they are
+    /// the next queued messages, dispatched before any game tick.
+    private func next(_ messages: [UInt32]) {
+        let (x,y) = point()
+        queue.insert(contentsOf:messages.map { Message(message:$0,wParam:0,lParam:0,time:now(),x:x,y:y) },at:0)
+    }
+    /// MessageBoxA(text, caption, type) → IDOK/IDYES/IDNO; set by the app.
+    public var messageBox: (([UInt8],[UInt8],UInt32) throws -> Int32)?
+    /// COM Release of a sound or music object (IUnknown::Release, offset 8).
+    public var release: ((UInt32) throws -> Void)?
+    /// DestroyWindow completed (WM_NCDESTROY answered): the app hides its window.
+    public var destroyedWindow: () -> Void = {}
+    public private(set) var destroyed = false
+    /// The window's close button: WM_SYSCOMMAND with SC_CLOSE.
+    public func close() { post(0x112,0xf060,0) }
     /// lParam: repeat 1, scan code, extended bit24, previous-state bit30, transition bit31.
     public func key(_ key: OriginalMacRuntimeKey,down isDown: Bool,repeated: Bool = false,characters: String? = nil) {
         let base = 1 | key.scan << 16 | (key.extended ? 1 << 24 : 0)
@@ -120,12 +139,39 @@ public struct OriginalMacRuntimeKey: Equatable {
         case .gameDispatch,.recoverSurface: throw Boundary.unsupported(q.kind.rawValue)
         }
     }
-    /// DefWindowProcA for the generated key/char/mouse and graph messages returns 0.
+    /// DefWindowProcA for the generated key/char/mouse and graph messages
+    /// returns 0. The quit path follows the declared Windows behaviour of
+    /// APPLICATION_WINDOW_CLOSE_PLAN.md: SC_CLOSE delivers WM_CLOSE, WM_CLOSE
+    /// destroys the window (WM_DESTROY, WM_NCDESTROY), messages queued for the
+    /// destroyed window are dropped, PostQuitMessage queues WM_QUIT.
     public func answer(_ q: OriginalWindowInput.Request) throws -> Int32 {
-        guard q.kind == .windowDefault,q.arguments.count == 4,q.arguments[0] == window else { throw Boundary.unsupported("window \(q.kind)") }
-        let message = q.arguments[1]
-        guard [0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400].contains(message) else { throw Boundary.unsupported("DefWindowProc \(message)") }
-        return 0
+        func require(_ valid: Bool) throws { if !valid { throw Boundary.arguments("\(q.kind) \(q.arguments)") } }
+        switch q.kind {
+        case .windowDefault:
+            try require(q.arguments.count == 4 && q.arguments[0] == window)
+            switch q.arguments[1] {
+            case 0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400: return 0
+            case 0x112 where q.arguments[2] & 0xfff0 == 0xf060: next([0x10]); return 0
+            case 0x10:
+                try require(!destroyed)
+                destroyed = true; queue.removeAll { $0.message != 0x12 }; next([2,0x82]); return 0
+            case 0x82: destroyedWindow(); return 0
+            default: throw Boundary.unsupported("DefWindowProc \(q.arguments[1])")
+            }
+        case .message:
+            try require(q.arguments.count == 2 && q.arguments[0] == window && q.strings.count == 2)
+            guard let messageBox else { throw Boundary.unsupported("MessageBoxA") }
+            return try messageBox(q.strings[0],q.strings[1],q.arguments[1])
+        case .method:
+            try require(q.arguments.count == 2 && q.arguments[1] == 8 && q.strings.isEmpty)
+            guard let release else { throw Boundary.unsupported("Release") }
+            try release(q.arguments[0]); return 0
+        case .free: try require(q.arguments.count == 1); return 0
+        case .postMessage:
+            try require(q.arguments.count == 4 && q.arguments[0] == window)
+            post(q.arguments[1],q.arguments[2],q.arguments[3]); return 1
+        case .postQuit: try require(q.arguments.count == 1); post(0x12,q.arguments[0],0); return 0
+        }
     }
     public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {
         if case .graphics = permit.request { throw Boundary.unsupported("graphics family") }

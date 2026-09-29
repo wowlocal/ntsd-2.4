@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[ESC and window close](research/APPLICATION_WINDOW_CLOSE.md): the WndProc's
+quit path (WM_DESTROY, WM_CLOSE, WM_NCDESTROY, WM_SYSCOMMAND) matches 74 real
+calls; ESC asks "Are you sure to quit?" with Yes/No and the close button ends
+the game through WM_QUIT, code 0. [Evidence](evidence/window-close.json).
+
 [Sound effects](research/APPLICATION_SOUND_EFFECTS.md): committed DirectSound
 buffer methods now play through a voice model under the declared DirectSound
 policy (gain, pan, focus, linear resampling); a VS match performs 1835 calls

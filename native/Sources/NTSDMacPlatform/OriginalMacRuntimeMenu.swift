@@ -75,6 +75,14 @@ import NTSDCore
                 if q.kind == "debug" { d.debug.append(q.strings[0]); return .init(result:0) }
                 d.messages.append(q.strings); d.present(q.strings[0],q.strings[1]); return .init(result:1)
             })
+        // Release on the quit path: DirectShow interfaces to the music runtime,
+        // sound buffers stop their voices, the DirectSound device has no state.
+        let music = started.runtime.music,audio = started.audio
+        messages.release = { [weak self] token in
+            if music.interface(token) != nil { _ = try music.answer(.init(.method,[token,8])); return }
+            if (try? audio.observation(token)) != nil { self?.sounds?.release(token); return }
+            guard audio.deviceTokens.contains(token) else { throw Boundary.unserved("Release \(token)") }
+        }
     }
     func inputs(_ state: Host.Session.State) -> Host.Inputs {
         .init(initialization:state.settings == nil ? initialization : nil,

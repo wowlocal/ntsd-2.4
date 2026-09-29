@@ -33,14 +33,47 @@ import XCTest
         XCTAssertEqual(m.queue.map(\.wParam),[0x61,0x41,0x41])
         XCTAssertEqual(m.queue.map(\.lParam),[0x001e0001,0x401e0001,0xc01e0001])
         XCTAssertEqual(try m.answer(.init(.windowDefault,[7,0x102,0x61,0x1e0001])),0)
-        XCTAssertThrowsError(try m.answer(.init(.windowDefault,[7,0x10,0,0])))
-        XCTAssertThrowsError(try m.answer(.init(.message,[7,4],[[],[]])))
+        XCTAssertThrowsError(try m.answer(.init(.windowDefault,[7,0x1c,0,0])))
+        XCTAssertThrowsError(try m.answer(.init(.message,[7,4],[[],[]]))) // no MessageBoxA answerer
         XCTAssertEqual(try m.answer(.init(.time)).result,1025)
         XCTAssertEqual(try m.answer(.init(.sleep,[16])),.init()); XCTAssertEqual(m.sleeps,[16])
         // Arrow keys have no character; moves coalesce while pending.
         let up = try XCTUnwrap(Key.table[0x7e]); m.key(up,down:true,characters:"\u{f700}")
         m.mouse(0x200,x:1,y:2,buttons:0); m.mouse(0x200,x:3,y:4,buttons:1)
         XCTAssertEqual(m.queue.suffix(2).map(\.lParam),[0x01480001,0x00040003])
+    }
+
+    /// APPLICATION_WINDOW_CLOSE_PLAN.md: MessageBoxA, Release and free answers;
+    /// the close button's SC_CLOSE delivers WM_CLOSE; DefWindowProcA(WM_CLOSE)
+    /// destroys the window (queued input dropped, WM_DESTROY and WM_NCDESTROY
+    /// next, later input ignored); PostQuitMessage queues WM_QUIT, which
+    /// GetMessage returns as 0.
+    func testQuitPathAnswersFollowTheDeclaredWindowsBehaviour() throws {
+        let m = Messages(window:7,clock:{ 1 })
+        var boxes: [[UInt8]] = [],types: [UInt32] = [],released: [UInt32] = [],destroyed = 0
+        m.messageBox = { text,caption,type in boxes += [text,caption]; types.append(type); return 7 }
+        m.release = { released.append($0) }
+        m.destroyedWindow = { destroyed += 1 }
+        XCTAssertEqual(try m.answer(.init(.message,[7,4],[Array("Are you sure to quit?".utf8),Array("LF2".utf8)])),7)
+        XCTAssertEqual(boxes,[Array("Are you sure to quit?".utf8),Array("LF2".utf8)]); XCTAssertEqual(types,[4])
+        XCTAssertEqual(try m.answer(.init(.method,[0x55,8])),0); XCTAssertEqual(released,[0x55])
+        XCTAssertThrowsError(try m.answer(.init(.method,[0x55,0x30])))
+        XCTAssertEqual(try m.answer(.init(.free,[0x1000])),0)
+        let a = try XCTUnwrap(Key.table[0x00])
+        m.key(a,down:true); m.close()
+        XCTAssertEqual(m.queue.map(\.message),[0x100,0x112]); XCTAssertEqual(m.queue.last?.wParam,0xf060)
+        XCTAssertEqual(try m.answer(.init(.windowDefault,[7,0x112,0xf060,0])),0)
+        XCTAssertEqual(m.queue.map(\.message),[0x10,0x100,0x112])
+        XCTAssertThrowsError(try m.answer(.init(.windowDefault,[7,0x112,0xf020,0])))
+        XCTAssertEqual(try m.answer(.init(.postMessage,[7,0x10,0,0])),1); XCTAssertEqual(m.queue.last?.message,0x10)
+        XCTAssertEqual(try m.answer(.init(.windowDefault,[7,0x10,0,0])),0)
+        XCTAssertTrue(m.destroyed); XCTAssertEqual(m.queue.map(\.message),[2,0x82])
+        XCTAssertThrowsError(try m.answer(.init(.windowDefault,[7,0x10,0,0])))
+        m.key(a,down:false); m.mouse(0x200,x:1,y:1,buttons:0); m.close()
+        XCTAssertEqual(m.queue.map(\.message),[2,0x82])
+        XCTAssertEqual(try m.answer(.init(.postQuit,[0])),0); XCTAssertEqual(m.queue.map(\.message),[2,0x82,0x12])
+        XCTAssertEqual(try m.answer(.init(.windowDefault,[7,0x82,0,0])),0); XCTAssertEqual(destroyed,1)
+        XCTAssertEqual(try (0..<3).map { _ in try m.answer(.init(.get,[0,0,0])).result },[1,1,0])
     }
 
     func startup(_ root: URL) throws -> (OriginalMacRuntimeStartup.Started,OriginalApplicationStartupInputs) {
