@@ -32,6 +32,9 @@ public struct OriginalApplicationMenuSession {
         public internal(set) var settings: OriginalSettingsLoading.StartupResult?
         public internal(set) var bitmapInputs: OriginalApplicationBitmapInputs?
         public internal(set) var graphics: OriginalApplicationGraphics?
+        /// The network menu's 51 hostname bytes at World+7d8 (NETWORK_MENU.md),
+        /// unknown until selector 1→3 writes them.
+        public internal(set) var hostname: OriginalStateRecord?
 
         /// Adopt the already constructed menu parent exactly once. Surface
         /// tokens come from its own CreateSurface responses, never snapshots.
@@ -369,7 +372,7 @@ public struct OriginalApplicationMenuSession {
                     var g = try State.slice(owned.full,0,Self.globalCount)
                     var resources = owned.front, screen = owned.earlyScreen, library = owned.libraryText
                     var random = owned.random, memory = owned.memory, body = owned.screenBody
-                    var settings = owned.settings
+                    var settings = owned.settings,hostname = owned.hostname,bodyLocal: OriginalStateRecord?
                     var frontSurfaces: [UInt32:UInt32] = [:]
                     var frontAPIIndex = 0,backgroundAPIIndex = 0
                     // Drawing callbacks run while presentation borrows memory.
@@ -435,7 +438,19 @@ public struct OriginalApplicationMenuSession {
                         let input = OriginalBitmapDrawInput(x:Int32(bitPattern:args[1]),y:Int32(bitPattern:args[2]),frame:Int32(bitPattern:args[3]),colorKey:args[4],mirrored:args[5],sourceSurface:surface,targetSurface:args[6],viewportWidth:width,viewportHeight:height)
                         _ = try OriginalBitmapDrawing.draw(input,bitmap:canonical,observeRead:{ r in var e = OriginalFrontScreenEvent("read");e.read = r;try event(e) },observeClip:{ c in var e = OriginalFrontScreenEvent("clip");e.clip = c;try event(e) },perform:{ b in var e = OriginalFrontScreenEvent("blit");e.blit = b;try event(e);return lastBltResult })
                     }
-                    let continuation = try OriginalFrontMenuLoop.run(world:&world,globals:&g,initialize:{ w,state in
+                    func present(_ presentation: OriginalMenuPresentationEntry,_ w: inout OriginalStateRecord,_ state: inout OriginalStateRecord) throws {
+                        if presentation == .tail { try point(.tail,combined(state,w)) }
+                        let input = OriginalMenuPresentationInput(targetSurface:game.target,methodResult:responses.presentation,queryResult:0,audioGetResult:0,audioSetResult:0,queriedAudio:0,audioVolume:0,dcResult:0,dc:0,postResult:0)
+                        try OriginalMenuPresentation.applyWithLibrary(presentation,input:input,world:&w,globals:&state,memory:&memory,libraryText:&library,store:store,worldStored:worldStore,observe:{ e in
+                            if e.kind == .bitmap { try event(.init("draw",e.arguments));try draw(e.arguments) }
+                            else {
+                                guard e.kind == .method || e.kind == .free else { throw Boundary.dependency("Menu presentation "+e.kind.rawValue) }
+                                try event(.init(e.kind.rawValue,e.arguments,e.strings))
+                                if e.kind == .free { drawing[e.arguments[0]]?.live = false }
+                            }
+                        })
+                    }
+                    var continuation = try OriginalFrontMenuLoop.run(world:&world,globals:&g,initialize:{ w,state in
                         let result = try resources.load(world:w,globals:&state,allocate:{ index in
                             guard let input = initialization else { throw Boundary.dependency("Menu resource allocation") }
                             guard index < input.frontAllocations.count,settings == nil else { throw Boundary.dependency("Initial front allocation lifetime") }
@@ -521,7 +536,7 @@ public struct OriginalApplicationMenuSession {
                             } },textDidRespond:{ q,r in
                                 try emit(.frontAPI(.init(q.kind.rawValue,q.arguments,q.strings),r))
                             },observe:event)
-                        try bodyProduced(output); body = output
+                        try bodyProduced(output); body = output; bodyLocal = output.local
                         if initialization != nil { try bootstrapObserve(.bodyReturn(output,combined(state),library)) }
                         return output.continuation
                     },alternate:{ state,selector in
@@ -592,20 +607,79 @@ public struct OriginalApplicationMenuSession {
                             guard end == .present else { throw Boundary.dependency("Main menu return") }
                             presentation = .tail
                         } else { presentation = entry == .worldOne ? .worldOne : .tail }
-                        if presentation == .tail { try point(.tail,combined(state,w)) }
-                        let input = OriginalMenuPresentationInput(targetSurface:game.target,methodResult:responses.presentation,queryResult:0,audioGetResult:0,audioSetResult:0,queriedAudio:0,audioVolume:0,dcResult:0,dc:0,postResult:0)
-                        try OriginalMenuPresentation.applyWithLibrary(presentation,input:input,world:&w,globals:&state,memory:&memory,libraryText:&library,store:store,worldStored:worldStore,observe:{ e in
-                            if e.kind == .bitmap { try event(.init("draw",e.arguments));try draw(e.arguments) }
-                            else {
-                                guard e.kind == .method || e.kind == .free else { throw Boundary.dependency("Menu presentation "+e.kind.rawValue) }
-                                try event(.init(e.kind.rawValue,e.arguments,e.strings))
-                                if e.kind == .free { drawing[e.arguments[0]]?.live = false }
-                            }
-                        })
+                        try present(presentation,&w,&state)
                     })
+                    if continuation == .otherSelector {
+                        // The network menu (APPLICATION_FRONT_MENU_ITEMS_PLAN.md F1b): the
+                        // actual 427ca7 continuation, its body, then the real tail or
+                        // epilogue. Winsock answers as after a failed WSAStartup (declared:
+                        // no network play); MessageBoxA, Sleep and ShellExecuteA run when
+                        // the body returns, before the presentation, as in F1.
+                        let selector = try g.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self)
+                        guard (1...3).contains(selector) else { throw Boundary.dependency("Menu selector \(selector)") }
+                        stage = .menu
+                        var host = try hostname ?? .init(bytes:[UInt8](repeating:0,count:51),defined:[Bool](repeating:false,count:51))
+                        // Caller-local bytes from callerSP+14; only this call's body writes are known.
+                        var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x400),defined:[Bool](repeating:false,count:0x400))
+                        if let bodyLocal { for i in 0x14..<bodyLocal.bytes.count where bodyLocal.defined[i] { try local.write(bodyLocal.bytes[i],at:i-0x14) } }
+                        enum Call { case window(OriginalWindowInput.Request),sleep([UInt32]) }
+                        var calls: [Call] = []
+                        func box(_ bytes: [UInt8]) throws {
+                            let parts = bytes.split(separator:0,omittingEmptySubsequences:false)
+                            guard parts.count == 3,parts[2].isEmpty else { throw Boundary.dependency("Network MessageBoxA text") }
+                            calls.append(.window(.init(.message,[0,0],[Array(parts[0]),Array(parts[1])])))
+                        }
+                        func refused(_ kind: String) throws -> Int32 {
+                            switch kind {
+                            case "socket","closeSocket","cleanup","sendTo","connect","send","receive":return -1
+                            default:throw Boundary.dependency("Winsock "+kind)
+                            }
+                        }
+                        let end = try OriginalNetworkMenu.run(world:&world,hostname:&host,globals:&g,local:&local,libraryText:&library,memory:&memory,
+                            input:.init(selector:selector,worldAddress:0x458b00,drawTarget:game.target,dcResult:responses.dcResult,dc:responses.dc),
+                            background:{ _,_ in throw Boundary.dependency("Network menu background") },
+                            draw:{ args,_ in try draw(args) },fill:{ a in
+                                guard a.count == 6 else { throw Boundary.dependency("Network menu fill") }
+                                var e = OriginalFrontScreenEvent("fill")
+                                e.fill = try OriginalSurfaceFilling.request(target:a[0],x:Int32(bitPattern:a[1]),y:Int32(bitPattern:a[2]),width:Int32(bitPattern:a[3]),height:Int32(bitPattern:a[4]),color:a[5],backing:[UInt8](repeating:0,count:100))
+                                try event(e)
+                            },timer:{ UInt32(bitPattern:try queue(.init(.time)).result) },keyState:{ _ in responses.capsLock },
+                            client:{ s,l,w in try OriginalNetworkClient.attempt(globals:&s,local:&l,world:w,request:{ r in
+                                switch r.kind {
+                                case .message:try box(r.bytes);return .init(result:1)
+                                case .sleep:calls.append(.sleep(r.arguments));return .init()
+                                default:return .init(result:try refused(r.kind.rawValue))
+                                }
+                            }) },exit:{ s in
+                                var frame = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:256),defined:[Bool](repeating:false,count:256))
+                                _ = try OriginalNetworkExit.run(globals:&s,local:&frame,request:{ r in
+                                    if r.kind == .message { try box(r.bytes);return 1 }
+                                    return try refused(r.kind.rawValue)
+                                })
+                            },observe:{ e in
+                                switch e.kind {
+                                case "format","keyState","timer","fillRequest":try observe(e)
+                                case "sleep":calls.append(.sleep(e.arguments));try observe(e)
+                                case "shell":calls.append(.window(.init(.shell,e.arguments,e.strings)));try observe(e)
+                                default:try event(e)
+                                }
+                            })
+                        hostname = host
+                        for c in calls {
+                            switch c {
+                            case .sleep(let arguments):
+                                guard arguments.count == 1 else { throw Boundary.dependency("Network menu Sleep") }
+                                _ = try queue(.init(.sleep,arguments));try emit(.sleep(arguments[0]))
+                            case .window(let q):_ = try windowDefault(q)
+                            }
+                        }
+                        try present(end == .presentation ? .tail : .epilogue,&world,&g)
+                        continuation = .returned
+                    }
                     let resultRecord = try combined(g,world)
                     owned.full = resultRecord; owned.front = resources; owned.earlyScreen = screen
                     owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings;owned.bitmapInputs = bitmapInputs;owned.graphics = graphics
+                    owned.hostname = hostname
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
                         guard let loopContinuation else { throw Boundary.dependency("Missing loading loop continuation") }

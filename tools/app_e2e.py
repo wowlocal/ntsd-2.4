@@ -184,6 +184,30 @@ def controls_check(timeout, app=APP):
         return ok, {"exitCode": done.returncode, "saved": written is not None, "matches": written == expected}
 
 
+ONLINE_BOXES = ["WSAStartup()", "InitWinSock()", "socket()"]
+ONLINE_OPENED = ["http://lf2.net/forum", "http://littlefighter.com"]
+
+
+def online_check(timeout, app=APP):
+    """Front menu → ONLINE GAME without network play: the two startup error
+    boxes, the forum link, client (a typed hostname, Enter, the "socket()"
+    box, Back), host (waiting, Back), Cancel; OFFICIAL WEBSITE then proves the
+    main menu is back."""
+    with tempfile.TemporaryDirectory(prefix="ntsd-online-") as scratch:
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script",
+                               "15 answer ok; 16 answer ok; 20 click 410 262; 60 click 500 490; 100 click 400 318; "
+                               "130 key 65; 145 answer ok; 150 key 13; 240 click 480 370; 280 click 400 287; "
+                               "360 click 400 373; 400 click 400 348; 440 click 410 352; 520 exit"],
+                              capture_output=True, text=True, timeout=timeout)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        boxes = [e["text"] for e in events if e.get("event") == "messageBox"]
+        opened = [e["file"] for e in events if e.get("event") == "shellOpen"]
+        ok = (done.returncode == 0 and boxes == ONLINE_BOXES and opened == ONLINE_OPENED
+              and not any(e.get("event") == "boundary" for e in events))
+        return ok, {"exitCode": done.returncode, "messageBoxes": boxes, "opened": opened}
+
+
 def summarize(events, captures, overlay):
     out = {"milestones": [], "progress": [], "boundary": None}
     for e in events:
@@ -263,6 +287,9 @@ def main():
             ok, detail = controls_check(args.timeout, args.app)
             if not ok:
                 problems.append("controls"); reference["controls"] = "control.txt saved with P1 up = 81, exit 0"; observed["controls"] = detail
+            ok, detail = online_check(args.timeout, args.app)
+            if not ok:
+                problems.append("online"); reference["online"] = {"messageBoxes": ONLINE_BOXES, "opened": ONLINE_OPENED}; observed["online"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:

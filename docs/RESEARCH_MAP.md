@@ -2,7 +2,8 @@
 
 [Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/
-InitWinSock() errors (no network) and stops at the unwired network menu.
+InitWinSock() errors (no network), then the network menu (F1b: host waiting,
+the client prompt with the original socket() error, the forum link, cancel).
 Scripted runs now ignore real pointer/keyboard events; the packaged app passes
 the whole e2e set on its own resources. F2: CONTROL SETTINGS (selector 6) is
 ported and matches 106 real cases in full ([evidence](evidence/front-control-settings.json));

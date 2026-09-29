@@ -66,6 +66,29 @@ is 42 (> 32, success).
   Native: `OriginalFrontControlSettings` composing the ported helpers, a
   reference check over the corpus, then the session's alternate for
   selector 6.
+- **F1b — the network menu (selectors 1–3).** `OriginalNetworkMenu` is ported
+  and compared ([NETWORK_MENU](NETWORK_MENU.md)); its accepted composition is
+  the front loop's actual 427ca7 continuation (`otherSelector`), the menu body,
+  then the real presentation (42873e tail) or epilogue (4287de, a return without
+  presentation). The session follows that composition after
+  `OriginalFrontMenuLoop.run` returns `otherSelector` with selector 1–3, then
+  returns as the other menu paths do. Owned storage: the 51 hostname bytes at
+  World+7d8 (unknown until 1→3 writes them) persist in the session state; the
+  caller-local 0x400 bytes (callerSP+14) are fresh each call apart from the
+  bytes this call's body wrote (as the reference joins them). Inputs: timeGetTime
+  on the queue, GetKeyState(VK_CAPITAL) from the iteration's responses, the
+  DDBLTFX backing as the prelude's. Declared policy (no network play, Winsock
+  as after a failed WSAStartup — not the EXE): socket() INVALID_SOCKET,
+  closesocket/WSACleanup/connect/send/recv/sendto SOCKET_ERROR, host lookups
+  NULL; MessageBoxA, Sleep and ShellExecuteA (forum link) run after the body
+  returns, as in F1. Expected app behaviour, from the ported code: choice
+  screen; host waits with its dot animation until Back; client edits the
+  hostname, Enter draws Connecting, the next frame shows the original
+  "socket()" / "Client Error" box and returns without presentation; Cancel
+  releases the background, runs 402d70 (listener 0: closesocket, clear,
+  cleanup) and returns to the main menu. Checks: app run through every
+  action (no boundary; the box order WSAStartup(), InitWinSock(), socket());
+  e2e `online_check`; the network-menu, front-menu and runtime suites.
 - **F3 — RECORDING INFO (selector 7).** Likewise.
 
 EXE envelope not recalculated.

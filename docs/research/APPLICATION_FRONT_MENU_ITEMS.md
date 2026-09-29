@@ -115,8 +115,45 @@ demo, war, playback, tournament, team-tournament). The bootstrap, host-session,
 observed-iteration, menu-input, front-screen, front-menu, settings-loading,
 CONTROL SETTINGS and Mac runtime-menu suites pass (34).
 
-Remaining: F1b — wire `OriginalNetworkMenu` (selectors 1–3, ported) with a
-declared no-network client, so ONLINE GAME reaches its menu and Back;
-F2 CONTROL SETTINGS (selector 6); F3 RECORDING INFO (selector 7).
+## F1b — the network menu in the app (2026-09-29)
+
+When the front loop returns its actual 427ca7 continuation with selector 1–3,
+the session runs `OriginalNetworkMenu` and then the real presentation: the
+42873e tail, or the 4287de epilogue (no presentation), as the accepted
+reference composes them; the iteration then returns like the other menu paths.
+The presentation code is shared with the loop's completion. The 51 hostname
+bytes at World+7d8 are session state (unknown until 1→3 writes them); the
+0x400 caller-local bytes are fresh each call except the bytes this call's
+body wrote. timeGetTime comes from the queue, GetKeyState(VK_CAPITAL) from the
+iteration's responses, the fill's DDBLTFX backing is the prelude's.
+
+Declared policy (no network play; Winsock as after the failed WSAStartup, not
+the EXE): socket() returns INVALID_SOCKET; closesocket, WSACleanup, connect,
+send, recv and sendto return SOCKET_ERROR; any other Winsock request (host
+lookups, inet_addr, htons — unreachable once socket() fails) is a boundary.
+MessageBoxA, Sleep and ShellExecuteA run after the body returns, before the
+presentation, on the window channel and the queue as in F1.
+
+**App:** ONLINE GAME shows the two startup boxes, then the network screen
+(Waiting for Opponent / Connect to Opponent / cancel, the LF2 forum banner).
+The banner opens `http://lf2.net/forum`. Connect shows the address prompt;
+typing and Enter draw Connecting, and the next frame shows the original
+"socket()" box (caption "Client Error") and returns without presenting;
+cancel goes back. Waiting shows the timer-driven dot animation until cancel.
+The network screen's cancel releases the background, runs 402d70 (listener 0:
+closesocket, clear, WSACleanup) and returns to the main menu, whose background
+is reloaded. The typed address and the IP text are GDI text, still blank.
+
+**Checks:** `tools/app_e2e.py`'s vs scenario gains an online check (boxes
+"WSAStartup()", "InitWinSock()", "socket()"; opened the forum, then
+OFFICIAL WEBSITE from the main menu; exit 0, no boundary). The whole e2e set
+passes (vs with the quit, website, controls and online checks, mission, demo,
+war, playback, tournament, team-tournament). The bootstrap, host-session,
+menu-input, observed-iteration, observed-startup, Mac runtime-menu and
+runtime-startup suites pass (29). The network-menu, client and exit sources
+are unchanged, so their accepted comparisons were not rerun.
+
+Remaining: F3 RECORDING INFO (selector 7); the 402b60 network startup and
+network play stay declared absent.
 
 EXE envelope not recalculated.
