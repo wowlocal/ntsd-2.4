@@ -14,7 +14,7 @@ public enum OriginalWorldLinks {
             header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") };return catalog.objects[index].header
             },frame: { index,number in
-                guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
+                guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding (Object \(index), frame \(number))") }
                 return catalog.objects[index].frameStorage[Int(number)]
             },background: { index in
                 guard backgrounds.indices.contains(Int(index)) else { throw error("Background binding") };return backgrounds[Int(index)]

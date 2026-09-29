@@ -31,6 +31,36 @@ final class OriginalWorldCPointsTests: XCTestCase {
         let bytes = Array(hex.utf8);XCTAssertEqual(bytes.count%2,0)
         for i in stride(from: 0,to: bytes.count,by: 2) { try record.write(XCTUnwrap(UInt8(String(decoding: bytes[i..<i+2],as: UTF8.self),radix: 16)),at: offset+i/2) }
     }
+    /// APPLICATION_OUT_OF_OBJECT_FRAMES.md: a Frame ≥ 400, wholly beyond the
+    /// 0x25360-byte Object allocation, is declared zero; inside it is still read.
+    func testOutOfObjectFrameKindIsDeclaredZero() throws {
+        func defined(_ n: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: n),defined: [Bool](repeating: true,count: n)) }
+        var world = try OriginalStateRecord.worldPrefix(over: [UInt8](repeating: 0,count: 0x7d8))
+        try world.write(UInt8(1),at: 4);try world.write(UInt32(0),at: 0x194)
+        var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0,count: 0x420))
+        try actor.write(Int32(0),at: 0x368);try actor.write(Int32(211),at: 0x7c)
+        let header = try defined(0x7a4),globals = try defined(OriginalMatchPreparation.globalSize)
+        var frames = try (0..<400).map { _ in try defined(0x178) }
+        try frames[399].write(Int32(2),at: 0x88)
+        func pass(_ current: Int32) throws -> OriginalCPointPass {
+            var a = actor;try a.write(current,at: 0x70)
+            return OriginalCPointPass(world: world,actors: [a],globals: globals,header: { _ in header },frame: { _,f in
+                if (0..<400).contains(f) { return frames[Int(f)] }
+                return try OriginalCPointPass.headerFrame(f,header: header,object: 0,site: "test")
+            })
+        }
+        for current: Int32 in [1000,400,Int32.max] {
+            var p = try pass(current);let before = p.actors
+            try p.actions(retainedPartnerSlot: nil);XCTAssertEqual(p.actors,before,"frame \(current)")
+            try p.placement();XCTAssertEqual(p.actors,before,"placement frame \(current)")
+        }
+        // Frames ≤ −6 overlap the allocation start: still a boundary.
+        var below = try pass(-6);XCTAssertThrowsError(try below.actions(retainedPartnerSlot: nil))
+        // Frame -5 is the recovered header alias (kind 0 there); 399 is read: kind 2 with no reciprocal owner.
+        var alias = try pass(-5);let before = alias.actors;try alias.actions(retainedPartnerSlot: nil);XCTAssertEqual(alias.actors,before)
+        var inside = try pass(399);try inside.actions(retainedPartnerSlot: nil)
+        XCTAssertEqual(try inside.actors[0].integer(at: 0x70,as: Int32.self),212)
+    }
     func testWholeActionsPlacementAndCaller() throws {
         let url: URL
         if let path = ProcessInfo.processInfo.environment["NTSD_WORLD_CPOINTS_CORPUS"] { url = URL(fileURLWithPath: path) }
@@ -70,7 +100,7 @@ final class OriginalWorldCPointsTests: XCTestCase {
             for p in item.globals ?? [] { try patch(&globals,p.offset-0x44d000,p.bytes) }
             var pass = OriginalCPointPass(world: world,actors: actors,globals: globals,header: { ownHeaders[$0] },frame: { obj,n in
                 if (0..<400).contains(n) { return ownFrames[obj][Int(n)] }
-                return try OriginalCPointPass.headerFrame(n,header: ownHeaders[obj])
+                return try OriginalCPointPass.headerFrame(n,header: ownHeaders[obj],object: obj,site: "test")
             })
             do {
                 if item.stage == "actions" || item.stage == "caller" { try pass.actions(retainedPartnerSlot: item.retainedPartnerSlot ?? 0) }

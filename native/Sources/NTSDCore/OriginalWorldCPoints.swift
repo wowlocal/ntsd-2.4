@@ -6,7 +6,7 @@ public enum OriginalWorldCPoints {
                              observe: (OriginalWorldLinksEvent) throws -> Void = { _ in },
                              afterStage: (Stage,OriginalMatchPreparation) throws -> Void = { _,_ in },
                              afterDepth: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
-        var next = state
+        var next = state,stage = Stage.actions
         let catalog = state.catalog
         var pass = OriginalCPointPass(world: next.world,actors: next.actors,globals: next.globals,
             header: { n in
@@ -15,13 +15,13 @@ public enum OriginalWorldCPoints {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Cpoint Frame binding") }
                 if catalog.objects[n].frameStorage.indices.contains(Int(f)) { return catalog.objects[n].frameStorage[Int(f)] }
-                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header)
+                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "cpoint "+stage.rawValue)
             })
         try pass.actions(retainedPartnerSlot: retainedPartnerSlot)
         next.actors = pass.actors;next.globals = pass.globals;try afterStage(.actions,next)
-        try pass.placement()
+        stage = .placement;try pass.placement()
         next.actors = pass.actors;next.globals = pass.globals;try afterStage(.placement,next)
-        try pass.cleanup()
+        stage = .cleanup;try pass.cleanup()
         next.actors = pass.actors;next.globals = pass.globals;try afterStage(.cleanup,next)
         try OriginalWorldLinks.apply(state: &next,sse2Conversion: sse2Conversion,observe: observe,afterDepth: afterDepth)
         try afterStage(.attachments,next)
@@ -38,9 +38,21 @@ struct OriginalCPointPass {
     //418a8a indexes the caught cpoint with raw signed vaction even after the
     //current frame has been negated. -1..-5 address the retained Object header.
     //Only a complete known extent is exposed; its initialization mask is kept.
-    static func headerFrame(_ number: Int32,header: OriginalStateRecord) throws -> OriginalStateRecord {
+    //
+    //Frames ≥ 400 lie wholly beyond the 0x25360-byte Object allocation: the
+    //original reads them unchecked (cpoints 418c30/4187b0, drawing 41a5a0), e.g.
+    //a kind-8 heal ball its hit sent to frame 1000 before the post-draw pass
+    //removes it. That is other Windows heap memory, not recovered. Declared
+    //policy (APPLICATION_OUT_OF_OBJECT_FRAMES.md, not the EXE): it reads as zero
+    //bytes, an absent Frame. Frames ≤ −6 overlap the allocation start and stay
+    //a boundary.
+    static let beyondAllocation = try! OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+    static func headerFrame(_ number: Int32,header: OriginalStateRecord,object: Int,site: String) throws -> OriginalStateRecord {
+        if number >= 400 { return beyondAllocation }
         let offset = Int(UInt32(bitPattern: Int32(0x7a4) &+ number &* 0x178))
-        guard offset <= header.bytes.count-0x178 else { throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage") }
+        guard offset <= header.bytes.count-0x178 else {
+            throw OriginalStateError.invalidStorage("Cpoint Frame outside known Object storage (\(site): Object \(object), frame \(number), header \(header.bytes.count) bytes)")
+        }
         return try OriginalStateRecord(bytes: Array(header.bytes[offset..<offset+0x178]),defined: Array(header.defined[offset..<offset+0x178]))
     }
     func active(_ slot: Int) throws -> UInt8 { try world.integer(at: 4+slot,as: UInt8.self) }

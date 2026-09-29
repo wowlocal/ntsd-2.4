@@ -18,7 +18,7 @@ public enum OriginalWorldDrawing {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n) else { throw error("Frame binding") }
                 if catalog.objects[n].frameStorage.indices.contains(Int(f)) { return catalog.objects[n].frameStorage[Int(f)] }
-                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header)
+                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "drawing")
             },catalogBitmap: { token in
                 guard token != 0,Int(token)-1 < bitmaps.count,!released.contains(Int(token)-1) else { throw error("Bitmap binding") }
                 return try (bitmaps[Int(token)-1].storage,surface(Int(token)-1))

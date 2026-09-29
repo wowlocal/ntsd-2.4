@@ -16,7 +16,7 @@ public enum OriginalWorldCamera {
             },frame: { n,f in
                 guard catalog.objects.indices.contains(n) else { throw error("Frame binding") }
                 if catalog.objects[n].frameStorage.indices.contains(Int(f)) { return catalog.objects[n].frameStorage[Int(f)] }
-                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header)
+                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "camera")
             },background: { n in
                 guard backgrounds.indices.contains(Int(n)) else { throw error("Background binding") };return backgrounds[Int(n)]
             })

@@ -31,6 +31,10 @@ public enum OriginalPostDrawLifecycle {
             objectCount: registry.integer(at: 0, as: Int32.self), header: { index in
                 guard catalog.objects.indices.contains(index) else { throw error("Object binding") }; return catalog.objects[index].header
             }, frame: { index, number in
+                // An actor its hit sent to frame ≥ 400 this tick (a kind-8 dvx) reaches the
+                // prefix and scheduler before the opoint continuation deactivates it: the
+                // declared zero Frame of OriginalCPointPass.beyondAllocation.
+                if number >= 400 && catalog.objects.indices.contains(index) { return OriginalCPointPass.beyondAllocation }
                 guard catalog.objects.indices.contains(index), catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
                 return catalog.objects[index].frameStorage[Int(number)]
             }, observe: observe)

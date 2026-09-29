@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Frames outside the Object](research/APPLICATION_OUT_OF_OBJECT_FRAMES.md): a
+Demo soak found the original's unchecked reads of a heal ball's frame 1000
+(beyond its Object allocation); declared policy: frames ≥ 400 read as zero.
+The soak now runs twelve matches to a World-links boundary (next card).
+
 [Front-menu items](research/APPLICATION_FRONT_MENU_ITEMS.md) F1: OFFICIAL
 WEBSITE opens its URL; ONLINE GAME shows the original's WSAStartup()/
 InitWinSock() errors (no network), then the network menu (F1b: host waiting,
