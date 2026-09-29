@@ -99,17 +99,20 @@ DirectSound (усиление 10^(v/2000), панорама, линейная п
 AVAudioEngine; без фокуса окна эффекты молчат (флаги буфера 0xe0 без
 GLOBALFOCUS). VS-матч: 1835 вызовов, 0 отклонено; чит `LF2.NET` больше не
 граница. `--mute-sounds` для сценариев; e2e без изменений эталонов.
+[Музыка раунда](APPLICATION_ROUND_MUSIC.md): методы DirectShow раунда (Stop,
+put_CurrentPosition) при коммите отдаются музыкальному runtime — в Mission
+музыка останавливается на таймере80 после поражения, как у оригинала (эталон
+mission изменился только в двух полях `musicPlaying`).
 **Jobs:** queue51788 terminal0/absent (all167); finalizer96393 terminal0/absent;
 source59727 terminal0. Живых jobs и pins на root нет.
 **Препятствия к остальной игре:** (1) `.app` без аргументов запускает Practice,
 оригинальный runtime — только с `--original` (решение пользователя); (2) текст GDI не поддержан растром; (3) целый caller получает allocate/bitmap/file/
 time/message каталога, pool/loaded-menu environment и ввод меню из сохранённых
 ответов (`OriginalMacLoadingAudioTests.swift`:51–79,231–241,295–301); (4) window/input/audio на устройстве, Windows, clean-Mac не проверены.
-**Следующая задача:** методы музыки раунда (Mission, mode1: IMediaControl::Stop
-и put_CurrentPosition) никуда не доставляются — музыка в приложении не
-останавливается, где оригинал её останавливает; подать их в музыкальный
-runtime. Затем выход из главного меню ESC и закрытие окна; прослушивание на
-устройстве. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
+**Следующая задача:** ESC «Are you sure to quit?» (MessageBoxA MB_YESNO сейчас
+отвечается IDOK, выход невозможен) и закрытие окна: WM_CLOSE → DefWindowProc →
+WM_DESTROY 43b4ba (4019b0 звук, 401d30 музыка, 43d2a0 буферы повторов,
+PostQuitMessage(0) если 458434 = 0) → WM_QUIT. Затем прослушивание на устройстве. Для текста GDI нужен выбор шрифта пользователем (приблизительный Mac-шрифт
 или пусто).
 EXE envelope не пересчитывался.
 

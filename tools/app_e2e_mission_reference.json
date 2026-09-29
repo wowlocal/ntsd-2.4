@@ -80,7 +80,7 @@
    "characterAI": 1499,
    "cycles": 1864,
    "iterations": 5851,
-   "musicPlaying": true,
+   "musicPlaying": false,
    "objectInputs": 165,
    "track": "bgm\\main.wma"
   },
@@ -90,7 +90,7 @@
    "characterAI": 1799,
    "cycles": 2164,
    "iterations": 6789,
-   "musicPlaying": true,
+   "musicPlaying": false,
    "objectInputs": 165,
    "track": "bgm\\main.wma"
   }

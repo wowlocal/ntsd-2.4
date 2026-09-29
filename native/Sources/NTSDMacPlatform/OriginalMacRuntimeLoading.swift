@@ -387,6 +387,7 @@ import UniformTypeIdentifiers
             for case .front(let e,_,_) in commit.operations where e.kind == "postQuit" { quitCodes.append(e.arguments[0]) }
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
+            try answerRoundMusic(commit.operations)
             if let sounds {
                 let music = started.runtime.music
                 for call in try OriginalMacSoundEffects.calls(commit.operations,music:{ music.interface($0) != nil }) { try sounds.perform(call) }
@@ -397,6 +398,23 @@ import UniformTypeIdentifiers
             savedReplays += pendingReplays; counts.replayFiles += pendingReplays.count; pendingReplays = []
         }
         return outcome
+    }
+    /// Round and control methods on music interface tokens — the round's
+    /// music stop (IMediaControl::Stop, put_CurrentPosition) — reach the
+    /// music runtime when their batch commits. Core already declared their
+    /// results (0, ignored as by the original); the output follows the graph.
+    func answerRoundMusic(_ operations: [LoadedMenu.Operation]) throws {
+        let music = started.runtime.music
+        for case .preceding(let input) in operations {
+            let words: [UInt32]
+            switch input {
+            case .roundMethod(let e) where e.kind == .method: words = e.arguments
+            case .control(let q,_) where q.kind == .method: words = q.arguments
+            default: continue
+            }
+            guard let token = words.first,music.interface(token) != nil else { continue }
+            _ = try music.answer(.init(.method,words)); counts.music += 1
+        }
     }
     func replay(_ commands: [OriginalApplicationGraphics.Command]) throws {
         let display = started.display

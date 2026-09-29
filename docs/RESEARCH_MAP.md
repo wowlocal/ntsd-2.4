@@ -4,7 +4,9 @@
 buffer methods now play through a voice model under the declared DirectSound
 policy (gain, pan, focus, linear resampling); a VS match performs 1835 calls
 with none rejected, and the `LF2.NET` cheat sound is no longer a boundary.
-[Evidence](evidence/application-sound-effects.json).
+[Evidence](evidence/application-sound-effects.json). The round's DirectShow
+music stop now reaches the music runtime ([round music](research/APPLICATION_ROUND_MUSIC.md)):
+Mission music stops at timer 80 after a defeat.
 
 [Tournaments](research/APPLICATION_TOURNAMENT.md): the bracket and the
 preparations 434349/436747 are wired into the app; the human's 1-on-1 or

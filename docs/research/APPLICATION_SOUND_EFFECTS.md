@@ -54,8 +54,9 @@ Mission e2e first stopped there, on music token 9).
 tools pass it. Progress and capture events report `sounds` (performed,
 rejected, playing, looping, rendered/audible frames, peak).
 
-Found gap, not changed here: those round music methods are delivered to no
-one, so the app's Mission music keeps playing where the original stops it.
+Found gap, not changed here: those round music methods were delivered to no
+one, so the app's Mission music kept playing where the original stops it —
+fixed by the next card, [round music stop](APPLICATION_ROUND_MUSIC.md).
 
 ## E3 — checks
 
