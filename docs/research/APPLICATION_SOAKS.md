@@ -29,6 +29,13 @@ Diagnosis used temporary stderr dumps (actor slot and fields, stage names)
 that were removed before each commit; the committed error messages now name
 the stage, Object and frame for the Frame lookups involved.
 
+## War (Battle mode)
+
+Script: the e2e War start (one human, one computer, War setup defaults,
+Fight!) and then, every 14,000 steps, Jump on the Summary, Attack on the War
+setup, Up, Up, Attack (Fight!). 60,000 bodies: 14 battles on changing arenas,
+1,285,766 character-AI calls, no stop.
+
 ## Mission (Stage mode) with three computer allies
 
 Script: Mission, player 1 Naruto, `1000 key 68; 1025 key 68; 1050 key 68;
