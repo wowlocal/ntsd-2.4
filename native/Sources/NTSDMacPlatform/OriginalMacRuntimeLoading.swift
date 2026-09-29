@@ -1,5 +1,6 @@
 import AppKit
 import NTSDCore
+import UniformTypeIdentifiers
 
 /// Runtime loading after the menu requests it: common sounds, the whole
 /// catalog, the 400-slot pool, first input and the loaded menu, then the Host
@@ -31,6 +32,16 @@ import NTSDCore
     public var overlay: OriginalMacRuntimeOverlay?
     /// GetLocalTime's source date; the app pins it for reproducible runs.
     public var localDate: () -> Date = { Date() }
+    /// Playback Recording's GetOpenFileNameA: a scripted path (used once), else
+    /// an open panel on the overlay's recording folder when interactive, else
+    /// a cancelled dialog.
+    public var playbackFile: String?
+    public var playbackInteractive = false
+    /// MessageBoxA texts and ShellExecuteA documents of this run, in order.
+    public private(set) var playbackAlerts: [String] = []
+    /// GetOpenFileNameA requests and their answers (nil: cancelled), in order.
+    public private(set) var playbackDialogs: [String?] = []
+    public private(set) var openedDocuments: [String] = []
     /// Per-stage owned snapshots of gameplay bodies and loaded cycles. The app
     /// never consumes them; `true` runs the unchanged observation path.
     public var stageCheckpoints = false
@@ -178,7 +189,44 @@ import NTSDCore
             // War start (43a21f) prepares its match inside the menu call.
             localTime:{ _ in Self.localTime(self.localDate()) },
             allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
-            demoMusicTrack:Self.demoMusicResidue)
+            demoMusicTrack:Self.demoMusicResidue,
+            playback:.init(choose:{ _ in self.chooseRecording() },
+                read:{ path,_ in FileManager.default.contents(atPath:path).map { [UInt8]($0) } },
+                alert:{ message,_ in self.alert(message) },open:{ path,_ in self.openDocument(path) }))
+    }
+    func chooseRecording() -> String? {
+        let answer = answerDialog()
+        playbackDialogs.append(answer)
+        return answer
+    }
+    private func answerDialog() -> String? {
+        if let file = playbackFile { playbackFile = nil; return file }
+        guard playbackInteractive else { return nil }
+        let directory = try? overlay?.url("recording")
+        return MainActor.assumeIsolated {
+            let panel = NSOpenPanel()
+            panel.title = "Open"
+            panel.allowedContentTypes = ["lfr","txt"].compactMap { UTType(filenameExtension:$0) }
+            panel.canChooseDirectories = false; panel.allowsMultipleSelection = false
+            if let directory { panel.directoryURL = directory }
+            return panel.runModal() == .OK ? panel.url?.path : nil
+        }
+    }
+    /// MessageBoxA(NULL, text, NULL, MB_OK): Windows titles it "Error".
+    func alert(_ message: [UInt8]) {
+        let text = String(decoding:message,as:UTF8.self)
+        playbackAlerts.append(text)
+        guard playbackInteractive else { return }
+        MainActor.assumeIsolated {
+            let alert = NSAlert()
+            alert.messageText = "Error"; alert.informativeText = text
+            alert.runModal()
+        }
+    }
+    func openDocument(_ path: String) {
+        openedDocuments.append(path)
+        guard playbackInteractive else { return }
+        MainActor.assumeIsolated { _ = NSWorkspace.shared.open(URL(fileURLWithPath:path)) }
     }
     /// Declared runtime policy for the Demo start: 4025d0 reads its track from
     /// ECX, the residue of lib.dll's text replacement (10001298), whose last

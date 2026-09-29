@@ -85,4 +85,30 @@ callee calls and 33597 constructors, control 1565 and 33593; 33936 records,
 The War decode is checked against the writer's packing
 (`OriginalReplayPlaybackStartTests`, round trip and both rejection texts).
 
+## P3 — the playback branch in the app
+
+`OriginalModeScreen` takes an optional playback composition: where it stopped
+before 43249c it now runs the branch and continues its own tail (4328db), as
+the original does. `OriginalApplicationLoadedMenuSession` composes 43249c..
+4328cc: 431c70 input reset, Sleep(300), GetOpenFileNameA, 43d280 on 4588ac, a
+`.txt` choice through ShellExecuteA, the loader, 43dfa0 with this session's
+arena-layer surfaces and music owner, and the checks; messages go to
+MessageBoxA. The recording buffer is a runtime heap allocation owned by the
+presentation memory at 4588ac; the backups become the session's saved-playback
+record (stored at 0xb588 of the full state).
+
+The Mac runtime provides those services: `--playback-file PATH` answers the
+dialog once; interactive runs show an open panel on the overlay's
+`recording` folder (`*.lfr`, `*.txt`), an alert titled "Error" for
+MessageBoxA (Windows' caption for NULL) and the system opener for `.txt`;
+scripted runs record alerts and never show panels. The app reports
+`playbackDialog` and `playbackAlert` events.
+
+**App:** main menu → Playback Recording with the VS recording: the recording
+loads, the match is rebuilt and the checks pass (menu 0); the next tick stops
+at 41bd24's playback prologue ("Initial loading playback prologue is not
+recovered", P4). A damaged file shows "Loading error!  Recording file may be
+corrupted!!", a missing file "File path error! …", and a cancelled dialog
+returns to the mode screen with Playback Recording highlighted.
+
 EXE envelope not recalculated.

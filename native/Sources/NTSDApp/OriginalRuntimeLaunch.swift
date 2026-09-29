@@ -181,6 +181,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                                                                     clock:{ [unowned self] in try self.clock() })
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
+                    // Playback Recording: `--playback-file PATH` answers the open
+                    // dialog once; scripted runs never show panels or alerts.
+                    if let i = arguments.firstIndex(of:"--playback-file"),i+1 < arguments.count { loading?.playbackFile = arguments[i+1] }
+                    loading?.playbackInteractive = !arguments.contains("--script")
                     if virtualClock != nil { loading?.localDate = { Self.virtualDate } }
                 }
                 guard let loading else { return }
@@ -219,6 +223,14 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                             "epilogues":c.epilogues,"replayFiles":loading.savedReplays.map { "\($0.path) \($0.bytes.count)" },
                             "refusedReplays":loading.refusedReplayOpens,"uptime":ProcessInfo.processInfo.systemUptime])
                     }
+                }
+                if loading.playbackDialogs.count > reportedDialogs {
+                    for answer in loading.playbackDialogs[reportedDialogs...] { Self.emit(["event":"playbackDialog","file":answer ?? "","iterations":committed]) }
+                    reportedDialogs = loading.playbackDialogs.count
+                }
+                if loading.playbackAlerts.count > reportedAlerts {
+                    for text in loading.playbackAlerts[reportedAlerts...] { Self.emit(["event":"playbackAlert","text":text,"iterations":committed]) }
+                    reportedAlerts = loading.playbackAlerts.count
                 }
                 if first {
                     let c = loading.counts
@@ -279,7 +291,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    private var musicEnds = 0, musicNotifications = 0, inMatch = false
+    private var musicEnds = 0, musicNotifications = 0, inMatch = false, reportedAlerts = 0, reportedDialogs = 0
     /// Committed graph state to the output; a finished track queues EC_COMPLETE
     /// and posts the registered notification for the next iteration's WndProc.
     @MainActor private func presentMusic(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu) throws {

@@ -56,6 +56,19 @@ public struct OriginalApplicationLoadedMenuSession {
     public enum Outcome {
         case returned(PendingReturn), matchPrelude(PendingMatchPrelude)
     }
+    /// Playback Recording (43249c) platform services: GetOpenFileNameA (nil:
+    /// cancelled), the file behind 43e620's ifstream (nil: does not open),
+    /// MessageBoxA(0, text, 0, 0) and ShellExecuteA(open) for a `.txt` choice.
+    public struct PlaybackServices<Environment> {
+        public let choose: (inout Environment) throws -> String?
+        public let read: (String,inout Environment) throws -> [UInt8]?
+        public let alert: ([UInt8],inout Environment) throws -> Void
+        public let open: (String,inout Environment) throws -> Void
+        public init(choose: @escaping (inout Environment) throws -> String?,read: @escaping (String,inout Environment) throws -> [UInt8]?,
+                    alert: @escaping ([UInt8],inout Environment) throws -> Void,open: @escaping (String,inout Environment) throws -> Void) {
+            self.choose = choose;self.read = read;self.alert = alert;self.open = open
+        }
+    }
     public let entry: Input.PendingContinuation
     public private(set) var pendingReturn: PendingReturn?
     public private(set) var pendingMatchPrelude: PendingMatchPrelude?
@@ -97,10 +110,11 @@ public struct OriginalApplicationLoadedMenuSession {
         localTime: ((inout Environment) throws -> OriginalLocalTime)? = nil,
         allocateReplay: ((Int,inout Environment) throws -> UInt32)? = nil,
         demoMusicTrack: Int32? = nil,
+        playback: PlaybackServices<Environment>? = nil,
         beforeCommit: (Outcome,inout Environment) throws -> Void = { _,_ in }) throws -> Outcome {
         guard pendingReturn == nil,pendingMatchPrelude == nil else { throw Boundary.alreadyPrepared }
         let a = try Attempt(entry,inputs,environment,screenInput,outputInput,allocate,bitmap,music,milliseconds,observe,checkpoint,localTime,allocateReplay)
-        a.demoMusicTrack = demoMusicTrack
+        a.demoMusicTrack = demoMusicTrack;a.playback = playback
         let result = try a.run()
         try beforeCommit(result,&a.environment)
         switch result {
@@ -120,6 +134,9 @@ public struct OriginalApplicationLoadedMenuSession {
         let localTimeReply: ((inout E) throws -> OriginalLocalTime)?,replayReply: ((Int,inout E) throws -> UInt32)?
         /// 4025d0's ECX at the Demo start (declared by the platform; nil: boundary).
         var demoMusicTrack: Int32?
+        var playback: PlaybackServices<E>?
+        /// 458588..4588a8 after a playback start in this call (stored by the snapshot).
+        var savedPlayback: OriginalStateRecord?
         let observe: (Observation,inout E) throws -> Void,checkpoint: (String,OriginalStateRecord,inout E) throws -> Void
         var environment: E,state: State,model: OriginalMatchPreparation
         var audio: OriginalMusicMemory,resources = OriginalMenuResourceLoading()
@@ -224,6 +241,7 @@ public struct OriginalApplicationLoadedMenuSession {
             var own = state,match = model,context = entry.inputContext
             match.globals = globals;if let world { match.world = world }
             context.memory = memory ?? state.memory
+            if let savedPlayback { context.savedPlayback = savedPlayback }
             try bindings.store(match,context:context,in:&own)
             return .init(state:own,match:match,music:music,resources:images,backgrounds:backgrounds,local:local,operations:operations)
         }
@@ -403,6 +421,83 @@ public struct OriginalApplicationLoadedMenuSession {
             try adopted(arena,in:&owned)
             scene.bitmapOwners = owners;scene.bitmapSurfaceOwners = surfaceOwners
         }
+        /// 43249c..4328cc: input reset, Sleep(300), GetOpenFileNameA, the previous
+        /// playback buffer freed (43d280), `.txt` through ShellExecuteA, the loader
+        /// 43e620, the playback start 43dfa0 with this session's arena/music owners,
+        /// and its checks. Messages go to MessageBoxA. The mode screen then
+        /// continues its own tail.
+        func playbackBranch(_ globals: inout OriginalStateRecord,_ owned: inout OriginalMenuPresentationMemory,
+                            _ musicOwner: inout OriginalMusicMemory,_ services: PlaybackServices<E>) throws {
+            var scene = model;scene.globals = globals
+            func done() { globals = scene.globals;model = scene }
+            try scene.resetOriginalInput()
+            try front(.init("sleep",[300]))
+            guard let path = try services.choose(&environment) else { return done() }
+            // 43d280(4588ac): free a previous playback buffer.
+            let old = try owned.replayPointers.integer(at: 4,as: UInt32.self)
+            if old != 0 {
+                guard var allocation = owned.allocations[old],allocation.live else { throw Boundary.owner(old) }
+                try front(.init("free",[old]));allocation.live = false;owned.allocations[old] = allocation
+                try owned.replayPointers.write(UInt32(0),at: 4)
+            }
+            let name = Array(path.utf8)
+            if name.count > 4 && name[name.count-4] == 0x2e && [0x74,0x54].contains(name[name.count-3])
+                && [0x78,0x58].contains(name[name.count-2]) && [0x74,0x54].contains(name[name.count-1]) {
+                try services.open(path,&environment);return done()
+            }
+            let file = try services.read(path,&environment)
+            let loaded = try OriginalReplayFileInput.load(file: file,globals: &scene.globals)
+            guard loaded.status == 1,let bytes = loaded.recording else {
+                if let message = OriginalReplayPlayback.loaderMessage(loaded.status) { try services.alert(message,&environment) }
+                return done()
+            }
+            guard let replayReply else { throw Boundary.dependency("Playback buffer allocation") }
+            let address = try replayReply(bytes.count,&environment)
+            try claim(address,bytes.count);operations.append(.recordingAllocation(address,bytes.count))
+            try owned.replayPointers.write(address,at: 4)
+            var recording = try OriginalStateRecord(bytes: bytes,defined: [Bool](repeating: true,count: bytes.count))
+            var saved = savedPlayback ?? entry.inputContext.savedPlayback
+            let device = try scene.globals.integer(at: 0x457578-0x44d000,as: UInt32.self)
+            var owners = scene.bitmapOwners,surfaceOwners = scene.bitmapSurfaceOwners
+            var nextOrdinal = scene.bitmaps.count,layer = 0
+            scene.releasedBitmapOrder = []
+            try OriginalReplayPlayback.prepare(state: &scene,recording: &recording,saved: &saved,releaseLayers: { index,s in
+                s.releasedBitmapOrder += try s.backgroundLoader.releaseLayersWithSurface(in: &s.backgrounds[index]) { ordinal,bitmap in
+                    guard let wrapper = owners[ordinal],var allocation = owned.allocations[wrapper],allocation.live else {
+                        throw Boundary.dependency("Arena release wrapper owner")
+                    }
+                    let surface = try allocation.storage.integer(at: 0,as: UInt32.self)
+                    var normalized = allocation.storage;try normalized.write(UInt32(surface == 0 ? 0 : 1),at: 0)
+                    guard normalized == bitmap.storage else { throw Boundary.owner(wrapper) }
+                    var context: Void = ()
+                    try OriginalBitmapRelease.release(bitmap,wrapper: wrapper,surface: surface,context: &context,perform: { q,_ in
+                        if q.kind == "free" { try self.emit(.free(wrapper));return .init() }
+                        return try self.bitmap(q)
+                    })
+                    allocation.live = false;owned.allocations[wrapper] = allocation
+                }
+            },loadLayers: { index,s in
+                try s.backgroundLoader.loadLayersWithSurface(in: &s.backgrounds[index]) { path,optional,_ in
+                    let allocation = try self.allocate(.arena(layer));layer += 1
+                    guard allocation.address != 0 else { return nil }
+                    var context: Void = ()
+                    let bitmap = try OriginalBitmapConstructor.constructWithSurfaceLoading(path: path,optional: optional,
+                        backing: allocation.backing,device: device,flags: 0x40,context: &context,perform: { q,_ in try self.bitmap(q) })
+                    try self.adopted([allocation.address:bitmap],in: &owned)
+                    owners[nextOrdinal] = allocation.address;surfaceOwners[nextOrdinal] = self.surfaces[allocation.address];nextOrdinal += 1
+                    return bitmap
+                }
+            },playMusic: { s in
+                try OriginalMusicPlayback.resumeMatch(globals: &s.globals,memory: &musicOwner,request: self.music)
+            })
+            scene.bitmapOwners = owners;scene.bitmapSurfaceOwners = surfaceOwners
+            owned.allocations[address] = .init(storage: recording)
+            savedPlayback = saved
+            if case .rejected(let message) = try OriginalReplayPlayback.start(recording: recording,globals: &scene.globals) {
+                try services.alert(message,&environment)
+            }
+            done()
+        }
         func run() throws -> Outcome {
             var dummy: Void = ()
             var globals = model.globals,world = model.world,owned = state.memory,text = state.libraryText,scratch = local
@@ -431,7 +526,11 @@ public struct OriginalApplicationLoadedMenuSession {
                     if let b = result.bitmap { self.backgrounds[result.address] = b;try self.adopted([result.address:b],in:&m) }
                 },update:{ g in
                     _ = try OriginalMenuPanelUpdate.run(globals:&g,content:{ _ in throw Boundary.dependency("Panel content IO") },bitmap:{ _ in throw Boundary.dependency("Panel bitmap IO") },write:{ _,_ in throw Boundary.dependency("Panel write IO") },observe:{ e,_ in try self.front(.init(e.kind,e.arguments)) })
-                },milliseconds:milliseconds,draw:draw,observe:front)
+                },milliseconds:milliseconds,draw:draw,playback:playback.map { services in { g,m in
+                    try self.playbackBranch(&g,&m,&musicOwner,services)
+                } },observe:front)
+                // A playback start rebuilt the World and Actors in the model.
+                world = model.world
             } else {
                 var character = model
                 character.globals = globals;character.world = world

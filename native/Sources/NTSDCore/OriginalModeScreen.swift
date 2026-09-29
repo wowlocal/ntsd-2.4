@@ -64,11 +64,12 @@ public enum OriginalModeScreen {
         update: (inout OriginalStateRecord) throws -> Void,
         milliseconds: () throws -> UInt32,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
+        playback: ((inout OriginalStateRecord,inout OriginalMenuPresentationMemory) throws -> Void)? = nil,
         observe: (OriginalFrontScreenEvent) throws -> Void = { _ in }) throws -> OriginalModeScreenExit {
         var text: OriginalLibSurfaceText? = libraryText
         let result = try execute(world:world,actors:actors,globals:&globals,memory:&memory,local:&local,
             libraryText:&text,worldAddress:worldAddress,target:target,input:input,fillBacking:fillBacking,
-            background:background,update:update,panel:{ state,owned in
+            background:background,update:update,playback:playback,panel:{ state,owned in
                 _ = try OriginalMenuPanelDrawing.draw(globals:&state,target:target,
                     previous:{ try $0.integer(at:0x4513c4-OriginalMatchPreparation.globalBase,as:Int32.self) },
                     bitmap:{ address in
@@ -89,6 +90,7 @@ public enum OriginalModeScreen {
         input: OriginalFrontScreenBodyInput, fillBacking: [UInt8],
         background: (inout OriginalStateRecord,inout OriginalMenuPresentationMemory) throws -> Void,
         update: (inout OriginalStateRecord) throws -> Void,
+        playback: ((inout OriginalStateRecord,inout OriginalMenuPresentationMemory) throws -> Void)? = nil,
         panel: (inout OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         draw: ([UInt32],OriginalStateRecord,OriginalMenuPresentationMemory) throws -> Void,
         observe: (OriginalFrontScreenEvent) throws -> Void) throws -> OriginalModeScreenExit {
@@ -180,7 +182,12 @@ public enum OriginalModeScreen {
         let selection = try OriginalModeSelection.advance(world: world,actors: actors,globals: &state,memory: &owned) {
             try emit($0.kind.rawValue,$0.arguments)
         }
-        if selection == .playback { return finish(.playback) }
+        // 43249c..4328cc: the Playback Recording branch, then the common tail
+        // 4328db. Without a caller composition this stays an explicit exit.
+        if selection == .playback {
+            guard let playback else { return finish(.playback) }
+            try playback(&state,&owned)
+        }
         try emit("panel",[0x4513c4,target]);try panel(&state,owned)
         if try word(0x4513c0) > 0 {
             try bitmap(0x45117c,5,39,7)
