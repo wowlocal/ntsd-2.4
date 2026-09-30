@@ -58,3 +58,12 @@ the frame/header policies): `tools/build-native.sh` builds the app and
 passes every scenario — vs with the quit, website, controls, online and
 recording checks, mission, demo, war, playback, tournament and team-tournament
 — with every resource path inside the app (OriginalCatalog, OriginalMusic).
+
+**Bundle icon (2026-09-30):** `tools/make_app_icon.py` (standard library only)
+decodes the pinned EXE's only icon — group 121, one 32×32 24-bit image with its
+AND mask, the icon Windows shows for the game — scales it by whole factors with
+nearest-neighbour sampling into the `iconutil` sizes and writes
+`Contents/Resources/AppIcon.icns`; `tools/build-native.sh` sets
+`CFBundleIconFile`. The runtime's LoadIconA answer is unchanged (the EXE asks
+for group 32512, which it does not contain). The packaged app builds, passes
+`codesign --verify --deep --strict` and runs.
