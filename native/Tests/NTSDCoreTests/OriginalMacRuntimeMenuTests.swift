@@ -95,11 +95,14 @@ import XCTest
         XCTAssertEqual(types,[4,0]); XCTAssertThrowsError(try m.answer(.init(.message,[9,0],[[],[]])))
         // OFFICIAL WEBSITE: ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL) → 42.
         XCTAssertThrowsError(try m.answer(.init(.shell,[0,0,0,1],[Array("open".utf8),Array("http://littlefighter.com".utf8)])))
-        var opened: [[UInt8]] = []; m.shell = { opened += [$0,$1] }
+        var opened: [[UInt8]] = [],delays: [UInt32] = []; m.shell = { opened += [$0,$1]; delays.append($2) }
         XCTAssertEqual(try m.answer(.init(.shell,[0,0,0,1],[Array("open".utf8),Array("http://littlefighter.com".utf8)])),42)
         // RECORDING INFO's folder button: ShellExecuteA(NULL, "explore", "recording", …).
         XCTAssertEqual(try m.answer(.init(.shell,[0,0,0,1],[Array("explore".utf8),Array("recording".utf8)])),42)
         XCTAssertEqual(opened,[Array("open".utf8),Array("http://littlefighter.com".utf8),Array("explore".utf8),Array("recording".utf8)])
+        // Committed deferred calls: ShellExecuteA after its screen's Sleep.
+        try m.deferred(.init(.shell,[0,0,0,1],[Array("open".utf8),Array("http://littlefighter.com".utf8)]),afterMilliseconds:300)
+        XCTAssertEqual(delays,[0,0,300]); XCTAssertThrowsError(try m.deferred(.init(.postQuit,[0]),afterMilliseconds:0))
         XCTAssertThrowsError(try m.answer(.init(.shell,[0,0,0,1],[Array("print".utf8),[]])))
         XCTAssertEqual(try m.answer(.init(.method,[0x55,8])),0); XCTAssertEqual(released,[0x55])
         XCTAssertThrowsError(try m.answer(.init(.method,[0x55,0x30])))

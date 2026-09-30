@@ -235,7 +235,14 @@ extension OriginalMacSoundEffects {
         engine.attach(node)
         engine.connect(node,to:engine.mainMixerNode,format:format)
         try engine.start()
+        // An output hardware change (headphones, another device) stops the engine;
+        // restart it so the effects keep sounding. The mixer converts the rate.
+        configuration = NotificationCenter.default.addObserver(forName:.AVAudioEngineConfigurationChange,object:engine,queue:.main) { [weak self] _ in
+            MainActor.assumeIsolated { try? self?.engine.start() }
+        }
     }
+    private var configuration: NSObjectProtocol?
+    deinit { if let configuration { NotificationCenter.default.removeObserver(configuration) } }
     /// Formed outside the main actor: the render block runs on the audio thread.
     private nonisolated static func source(_ effects: OriginalMacSoundEffects,rate: Double,format: AVAudioFormat) -> AVAudioSourceNode {
         AVAudioSourceNode(format:format) { _,_,frameCount,list -> OSStatus in

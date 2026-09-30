@@ -228,6 +228,27 @@ The bootstrap, host-session, menu-input, observed-iteration,
 observed-startup, Mac runtime-menu (now with the "explore" answer) and
 runtime-startup suites and the RECORDING INFO comparison pass (31).
 
+## Independent review: call order (2026-09-30)
+
+A review of F1 and the sound-effects card found that the menus' platform calls
+ran in a different order from the original: MessageBoxA and ShellExecuteA were
+served while the iteration ran, but the iteration's sound methods (401a30's
+Stop/SetCurrentPosition/Play) only at commit, so ONLINE GAME's click sounded
+after both error boxes were dismissed and OFFICIAL WEBSITE opened the browser
+before its click sound; Sleep(300) was only recorded, and the next iteration
+waited for the last Sleep rather than their sum. Now these calls — whose results
+the original ignores and after which the screen makes no further platform call
+(the main menu's boxes and link, the network menu's boxes and forum link, the
+CONTROL SETTINGS and RECORDING INFO links) — are commit effects
+(`deferredWindow`), performed after the iteration's sound methods in the
+original's order; a ShellExecuteA waits for the Sleep time before it (the app
+reports it as `afterMilliseconds` and opens the target after that delay), and
+the next iteration waits for the sum of the iteration's Sleeps, as the
+original's blocked thread does. ESC's box, whose answer the WndProc uses, stays
+synchronous. The runtime tests, the website, online, controls and recording
+checks and the whole e2e set pass; the website's ShellExecuteA reports
+`afterMilliseconds` 300.
+
 Remaining: the 402b60 network startup and network play stay declared absent,
 and with them selector 4 (428808), which the client sets at 428730 only after
 a successful connection. Every other front-menu item now runs in the app.

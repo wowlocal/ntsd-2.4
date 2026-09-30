@@ -169,15 +169,17 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // browser opens it. "explore" of a game-directory folder (RECORDING
                 // INFO's "recording"): Finder opens that overlay folder, created as the
                 // shipped game has it. Scripted runs only report either.
-                menu.messages.shell = { [unowned self] verb,file in
+                menu.messages.shell = { [unowned self] verb,file,delay in
                     let text = String(decoding:file,as:UTF8.self),action = String(decoding:verb,as:UTF8.self)
-                    Self.emit(["event":"shellOpen","verb":action,"file":text,"iterations":self.committed])
+                    Self.emit(["event":"shellOpen","verb":action,"file":text,"afterMilliseconds":delay,"iterations":self.committed])
                     if arguments.contains("--script") { return }
+                    let target: URL
                     if action == "explore" {
-                        let folder = try overlay.url(text)
-                        try FileManager.default.createDirectory(at:folder,withIntermediateDirectories:true)
-                        NSWorkspace.shared.open(folder)
-                    } else if let url = URL(string:text) { NSWorkspace.shared.open(url) }
+                        target = try overlay.url(text)
+                        try FileManager.default.createDirectory(at:target,withIntermediateDirectories:true)
+                    } else if let url = URL(string:text) { target = url } else { return }
+                    // The original's Sleep before ShellExecuteA (the click sound plays meanwhile).
+                    DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(delay))) { NSWorkspace.shared.open(target) }
                 }
                 menu.messages.destroyedWindow = { [unowned self] in
                     Self.emit(["event":"windowDestroyed","iterations":self.committed])
@@ -265,7 +267,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     if arguments.contains("--exit-after-capture") { NSApp.terminate(nil); return }
                 }
                 try presentMusic(started,menu)
-                let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? menu.messages.sleeps.last! : 1) : 0
+                // The original's thread slept every Sleep of the iteration (a menu's
+                // Sleep(300) as well as the loop's own), so the next one waits their sum.
+                let slept = menu.messages.sleeps.dropFirst(sleeps).reduce(UInt32(0),&+)
+                let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? slept : 1) : 0
                 schedule(delay)
             case .loading:
                 let begin = Date(),first = loading == nil

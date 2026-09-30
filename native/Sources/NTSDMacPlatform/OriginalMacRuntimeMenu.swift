@@ -153,6 +153,16 @@ import NTSDCore
                         try overlay?.apply([.init(path:"data\\control.txt",bytes:Self.textWrite(bytes))])
                     }
                     if let sounds { for call in try OriginalMacSoundEffects.calls(committed.effects) { try sounds.perform(call) } }
+                    // Window calls the original makes after this iteration's sounds; a
+                    // ShellExecuteA waits for the Sleep time that precedes it.
+                    var slept: UInt32 = 0
+                    for effect in committed.effects {
+                        switch effect {
+                        case .sleep(let milliseconds): slept &+= milliseconds
+                        case .deferredWindow(let q): try messages.deferred(q,afterMilliseconds:slept)
+                        default: break
+                        }
+                    }
                 }
                 return outcome
             }

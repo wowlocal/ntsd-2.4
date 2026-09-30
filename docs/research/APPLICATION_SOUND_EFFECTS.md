@@ -80,3 +80,12 @@ fixed by the next card, [round music stop](APPLICATION_ROUND_MUSIC.md).
 device and a Windows comparison remain open.
 
 EXE envelope not recalculated.
+
+**Review (2026-09-30):** an independent review confirmed the DirectSound
+semantics (vtable offsets, DSBPLAY_LOOPING, volume and pan ranges and signs,
+byte positions, Stop keeping the cursor, Play on a playing buffer, 8/16-bit and
+mono handling, resampling across the loop point, locking) and found that the
+output engine was never restarted after an audio hardware change, which leaves
+the effects silent for the rest of the session. `OriginalMacSoundOutput` now
+restarts its engine on `AVAudioEngineConfigurationChange`. It also found the
+menus' call order issue fixed in APPLICATION_FRONT_MENU_ITEMS.md.

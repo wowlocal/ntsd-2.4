@@ -72,8 +72,9 @@ public struct OriginalMacRuntimeKey: Equatable {
     /// COM Release of a sound or music object (IUnknown::Release, offset 8).
     public var release: ((UInt32) throws -> Void)?
     /// ShellExecuteA(NULL, verb, file, …) with verb "open" (a URL) or
-    /// "explore" (a game-directory folder): the app opens or records it.
-    public var shell: (([UInt8],[UInt8]) throws -> Void)?
+    /// "explore" (a game-directory folder): the app opens or records it, after
+    /// the given milliseconds of the original's preceding Sleep.
+    public var shell: (([UInt8],[UInt8],UInt32) throws -> Void)?
     /// DestroyWindow completed (WM_NCDESTROY answered): the app hides its window.
     public var destroyedWindow: () -> Void = {}
     public private(set) var destroyed = false
@@ -198,7 +199,21 @@ public struct OriginalMacRuntimeKey: Equatable {
             // ShellExecuteA(NULL, "open" | "explore", file, NULL, NULL, SW_SHOWNORMAL) → 42 (> 32).
             try require(q.arguments == [0,0,0,1] && q.strings.count == 2 && [Array("open".utf8),Array("explore".utf8)].contains(q.strings[0]))
             guard let shell else { throw Boundary.unsupported("ShellExecuteA") }
-            try shell(q.strings[0],q.strings[1]); return 42
+            try shell(q.strings[0],q.strings[1],0); return 42
+        }
+    }
+    /// A committed `deferredWindow` effect: MessageBoxA as `answer` (its result is
+    /// unused), ShellExecuteA after the milliseconds its screen slept before it.
+    public func deferred(_ q: OriginalWindowInput.Request,afterMilliseconds delay: UInt32) throws {
+        switch q.kind {
+        case .message: _ = try answer(q)
+        case .shell:
+            guard q.arguments == [0,0,0,1],q.strings.count == 2,[Array("open".utf8),Array("explore".utf8)].contains(q.strings[0]) else {
+                throw Boundary.arguments("deferred ShellExecuteA")
+            }
+            guard let shell else { throw Boundary.unsupported("ShellExecuteA") }
+            try shell(q.strings[0],q.strings[1],delay)
+        default: throw Boundary.unsupported("deferred \(q.kind)")
         }
     }
     public func serve<P>(_ permit: OriginalApplicationIterationExchange.Permit,on driver: OriginalApplicationObservedIteration<P>) throws {

@@ -129,6 +129,11 @@ public struct OriginalApplicationMenuSession {
         case startupGraphics(OriginalFrontScreenEvent,result: Int32)
         /// 423230's complete data\control.txt (as written, LF line ends).
         case settingsFile([UInt8])
+        /// A window-channel call whose result the original ignores and after which
+        /// its screen makes no further platform call (the menus' MessageBoxA and
+        /// ShellExecuteA): performed at commit, in effect order after the
+        /// iteration's sound methods, as the original's own call order has it.
+        case deferredWindow(OriginalWindowInput.Request)
     }
     public enum Checkpoint: String {
         case dispatch, world, prefix, panel, body, alternate, main, tail, worldReturn, dispatchReturn
@@ -577,7 +582,7 @@ public struct OriginalApplicationMenuSession {
                             }
                             for c in calls {
                                 if c.kind == "sleep" { _ = try queue(.init(.sleep,c.arguments));try emit(.sleep(c.arguments[0])) }
-                                else { _ = try windowDefault(.init(.shell,c.arguments,c.strings)) }
+                                else { try emit(.deferredWindow(.init(.shell,c.arguments,c.strings))) }
                             }
                             return .presentation
                         }
@@ -598,12 +603,13 @@ public struct OriginalApplicationMenuSession {
                                 }
                             })
                             // Their results are unused and no platform call follows them
-                            // inside the main menu: the window channel (MessageBoxA,
-                            // ShellExecuteA) and the queue (Sleep) serve them in order.
+                            // inside the main menu: Sleep is served on the queue now, and
+                            // MessageBoxA/ShellExecuteA become commit effects after the
+                            // iteration's sounds (`deferredWindow`), in the original order.
                             for c in calls {
                                 switch c.kind {
-                                case .message: _ = try windowDefault(.init(.message,c.arguments,c.strings))
-                                case .shell: _ = try windowDefault(.init(.shell,c.arguments,c.strings))
+                                case .message: try emit(.deferredWindow(.init(.message,c.arguments,c.strings)))
+                                case .shell: try emit(.deferredWindow(.init(.shell,c.arguments,c.strings)))
                                 default:
                                     guard c.arguments.count == 1 else { throw Boundary.dependency("Menu Sleep") }
                                     _ = try queue(.init(.sleep,c.arguments)); try emit(.sleep(c.arguments[0]))
@@ -679,7 +685,7 @@ public struct OriginalApplicationMenuSession {
                             case .sleep(let arguments):
                                 guard arguments.count == 1 else { throw Boundary.dependency("Network menu Sleep") }
                                 _ = try queue(.init(.sleep,arguments));try emit(.sleep(arguments[0]))
-                            case .window(let q):_ = try windowDefault(q)
+                            case .window(let q):try emit(.deferredWindow(q))
                             }
                         }
                         try present(end == .presentation ? .tail : .epilogue,&world,&g)
