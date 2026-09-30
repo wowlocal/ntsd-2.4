@@ -19,8 +19,11 @@ Two causes, both outside the game logic:
    throttled the app's scheduled iterations and CPU (≈7 % CPU and ≈210 s per
    300 bodies in the virtual-clock runs; the same work takes 3.4 s
    unthrottled). Windows does not throttle a background game's Sleep loop;
-   the app now holds a `userInitiated`/`latencyCritical` activity for its
-   lifetime (declared host policy).
+   the app now holds a `userInitiatedAllowingIdleSystemSleep`/`latencyCritical`
+   activity for its lifetime (declared host policy). Plain `userInitiated`
+   also kept the Mac from idle-sleeping, which the original (no
+   SetThreadExecutionState) does not do; see the review in
+   [APPLICATION_MATCH_END.md](APPLICATION_MATCH_END.md#independent-review-2026-09-30).
 2. **Unused per-stage snapshots (≈30 % of the remaining work).** Every
    gameplay body built an owned snapshot at each of its 19 stages and every
    loaded cycle at its prologue and 6 checkpoints; each copied the 16 k-entry

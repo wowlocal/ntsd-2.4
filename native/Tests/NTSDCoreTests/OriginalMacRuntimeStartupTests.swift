@@ -51,6 +51,32 @@ import XCTest
         XCTAssertThrowsError(try heap.allocate(0x10000000)) { XCTAssertEqual($0 as? OriginalMacRuntimeHeap.Boundary,.exhausted(0x10000000)) }
     }
 
+    func testHeapReusesOnlyFreedReplayBlocksOfTheSameSize() throws {
+        let heap = OriginalMacRuntimeHeap()
+        let recording = try heap.reserveReplay(0x630e18),writer = try heap.reserveReplay(0x631200)
+        let ordinary = try heap.reserve(0x630e18),used = heap.used
+        func record(_ count: Int) throws -> OriginalStateRecord { try .init(bytes:[UInt8](repeating:0,count:count),defined:[Bool](repeating:true,count:count)) }
+        var memory = OriginalMenuPresentationMemory(replayPointers:try record(8))
+        memory.allocations[recording] = .init(storage:try record(16))
+        memory.allocations[writer] = .init(storage:try record(16),live:false)
+        memory.allocations[ordinary] = .init(storage:try record(16),live:false)
+        heap.collect(memory)
+        // A live recording and a freed non-replay block stay out; the freed writer buffer comes back once.
+        let second = try heap.reserveReplay(0x630e18)
+        XCTAssertFalse([recording,writer,ordinary].contains(second))
+        XCTAssertEqual(try heap.reserveReplay(0x631200),writer)
+        XCTAssertNotEqual(try heap.reserveReplay(0x631200),writer)
+        memory.allocations[recording]?.live = false; memory.allocations[second] = .init(storage:try record(16),live:false)
+        heap.collect(memory)
+        XCTAssertEqual(try heap.reserveReplay(0x630e18),min(recording,second))
+        XCTAssertEqual(try heap.reserveReplay(0x630e18),max(recording,second))
+        // Unknown addresses (no Core record) are never taken.
+        heap.collect(OriginalMenuPresentationMemory(replayPointers:try record(8)))
+        let before = heap.used
+        XCTAssertGreaterThan(try heap.reserveReplay(0x631200),ordinary)
+        XCTAssertGreaterThan(heap.used,before); XCTAssertGreaterThan(before,used)
+    }
+
     func testDirectShowSuccessPathOwnsIdentitiesAndCounts() throws {
         let music = OriginalMacRuntimeMusic(identities:.init(),heap:.init())
         func iid(_ first: UInt8) -> [UInt8] { [first]+OriginalMacRuntimeMusic.iidTail }

@@ -50,6 +50,13 @@ import UniformTypeIdentifiers
     public private(set) var savedReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
     /// PostQuitMessage codes of committed batches not yet posted as WM_QUIT.
     public var quitCodes: [UInt32] = []
+    /// ShellExecuteA of the screens after START (mode screen and panel links,
+    /// Playback's folder): the app's handler, given the milliseconds of the
+    /// screen's Sleep before it. Set by the app, as for the front menu.
+    public var shell: (([UInt8],[UInt8],UInt32) throws -> Void)?
+    /// Replay files the platform could not write; the original's failing
+    /// fopen/fwrite leaves the game running (declared).
+    public private(set) var failedReplayWrites: [String] = []
     /// DirectSound buffer methods of committed loaded batches play here.
     public var sounds: OriginalMacSoundEffects?
     private var pendingReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
@@ -187,6 +194,7 @@ import UniformTypeIdentifiers
     }
     func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
         let heap = started.runtime.heap
+        heap.collect(ready.state.memory)
         var menu = try LoadedMenu(pending:ready),unit: Void = ()
         return try menu.advanceUntilBoundary(inputs:menuInputs.adding(arenaInputs.bitmaps),environment:&unit,
             screenInput:.init(dcResult:OriginalMacRuntimeMenu.getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
@@ -195,7 +203,7 @@ import UniformTypeIdentifiers
             bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() },
             // War start (43a21f) prepares its match inside the menu call.
             localTime:{ _ in Self.localTime(self.localDate()) },
-            allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
+            allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserveReplay(count) },
             demoMusicTrack:Self.demoMusicResidue,
             playback:.init(choose:{ _ in self.chooseRecording() },
                 read:{ path,_ in FileManager.default.contents(atPath:path).map { [UInt8]($0) } },
@@ -300,13 +308,14 @@ import UniformTypeIdentifiers
     public func launch() throws -> LoadedMenu.PendingReturn {
         let heap = started.runtime.heap
         return try started.host.resumeMatchLaunch(prepare:{ pending,_ in
+            heap.collect(pending.snapshot.state.memory)
             var session = try OriginalApplicationMatchLaunchSession(pending:pending),unit: Void = ()
             // Replay keeps the cycle's continuation offset: the prelude's own draws
             // (the final selection frame) were not committed and replay with the launch.
             return try session.advance(environment:&unit,bitmaps:self.arenaInputs.bitmaps,outputInput:self.presentation(pending.loading.target),
                 allocateBitmap:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
                 bitmap:{ q,_ in try self.bitmap(q) },localTime:{ _ in Self.localTime(self.localDate()) },music:{ e,_ in try self.music(e) },
-                allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserve(count) },
+                allocateReplay:{ count,_ in self.counts.allocations += 1; return try heap.reserveReplay(count) },
                 milliseconds:{ _ in try self.time() })
         })
     }
@@ -316,6 +325,7 @@ import UniformTypeIdentifiers
         let heap = started.runtime.heap
         return try started.host.resumeGameplay(prepare:{ ready,_ in
             self.pendingReplays = []; self.openReplay = nil
+            heap.collect(ready.state.memory)
             var session = try OriginalApplicationGameplaySession(pending:ready),unit: Void = ()
             // The caller's formatter locals (root44c..5bf): declared unknown
             // backing each body; formatting must produce every byte it reads.
@@ -326,7 +336,7 @@ import UniformTypeIdentifiers
                 defined:[Bool](repeating:false,count:OriginalResultLayout.localSize)),indicatorTarget:ready.loading.target)
             return try session.advance(environment:&unit,outputInput:self.presentation(ready.loading.target),caller:caller,
                 fillBacking:{ [UInt8](repeating:0,count:100) },
-                allocate:{ _ in self.counts.allocations += 1; return try heap.reserve(OriginalReplayWriter.capacity) },
+                allocate:{ _ in self.counts.allocations += 1; return try heap.reserveReplay(OriginalReplayWriter.capacity) },
                 processorSignature:{ _ in Self.processorSignature },
                 open:{ q,_ in self.replayOpen(q) },write:{ bytes,_ in self.replayWrite(bytes) },close:{ _ in self.replayClose() },
                 resumeMusic:{ control,_ in
@@ -384,7 +394,20 @@ import UniformTypeIdentifiers
         })
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
-            for case .front(let e,_,_) in commit.operations where e.kind == "postQuit" { quitCodes.append(e.arguments[0]) }
+            var slept: UInt32 = 0
+            for case .front(let e,_,_) in commit.operations {
+                switch e.kind {
+                case "postQuit": quitCodes.append(e.arguments[0])
+                // The screen's own Sleep (300 before a link or a mode) blocks the original's thread.
+                case "sleep" where e.arguments.count == 1: sleeps.append(e.arguments[0]); slept &+= e.arguments[0]
+                case "shell":
+                    guard e.arguments == [0,0,0,1],e.strings.count == 2,[Array("open".utf8),Array("explore".utf8)].contains(e.strings[0]) else {
+                        throw Boundary.unexpected("ShellExecuteA \(e.arguments)")
+                    }
+                    try shell?(e.strings[0],e.strings[1],slept)
+                default: break
+                }
+            }
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
             try answerRoundMusic(commit.operations)
@@ -394,8 +417,11 @@ import UniformTypeIdentifiers
             }
         }
         if case .committed = outcome, !pendingReplays.isEmpty {
-            try overlay?.apply(pendingReplays)
-            savedReplays += pendingReplays; counts.replayFiles += pendingReplays.count; pendingReplays = []
+            do {
+                try overlay?.apply(pendingReplays)
+                savedReplays += pendingReplays; counts.replayFiles += pendingReplays.count
+            } catch { failedReplayWrites += pendingReplays.map { "\($0.path): \(error)" } }
+            pendingReplays = []
         }
         return outcome
     }

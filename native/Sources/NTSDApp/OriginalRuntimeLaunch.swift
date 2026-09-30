@@ -120,7 +120,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         MainActor.assumeIsolated {
             do {
-                activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiated,.latencyCritical],
+                // Timer precision without App Nap, but the Mac may still idle-sleep: the
+                // original never calls SetThreadExecutionState.
+                activity = ProcessInfo.processInfo.beginActivity(options:[.userInitiatedAllowingIdleSystemSleep,.latencyCritical],
                                                                   reason:"Original game loop timing")
                 let package = try OriginalApplicationStartupInputs.bundled()
                 let overlay = try overlayRoot()
@@ -271,7 +273,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // The original's thread slept every Sleep of the iteration (a menu's
                 // Sleep(300) as well as the loop's own), so the next one waits their sum.
                 let slept = menu.messages.sleeps.dropFirst(sleeps).reduce(UInt32(0),&+)
-                let delay = menu.messages.queue.isEmpty ? (menu.messages.sleeps.count > sleeps ? slept : 1) : 0
+                // An iteration that slept keeps its Sleep even if a message is now queued.
+                let delay = menu.messages.sleeps.count > sleeps ? slept : (menu.messages.queue.isEmpty ? 1 : 0)
                 schedule(delay)
             case .loading:
                 let begin = Date(),first = loading == nil
@@ -283,6 +286,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     loading?.overlay = try overlayRoot()
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     loading?.sounds = sounds
+                    loading?.shell = menu.messages.shell
                     // Playback Recording: `--playback-file PATH` answers the open
                     // dialog once; scripted runs never show panels or alerts.
                     if let i = arguments.firstIndex(of:"--playback-file"),i+1 < arguments.count { loading?.playbackFile = arguments[i+1] }
@@ -324,7 +328,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                         let c = loading.counts
                         Self.emit(["event":"menu","cycles":cycles,"iterations":committed,"gameplayBodies":gameplayBodies,
                             "epilogues":c.epilogues,"replayFiles":loading.savedReplays.map { "\($0.path) \($0.bytes.count)" },
-                            "refusedReplays":loading.refusedReplayOpens,"uptime":ProcessInfo.processInfo.systemUptime])
+                            "refusedReplays":loading.refusedReplayOpens,"failedReplayWrites":loading.failedReplayWrites,"heapBytes":started.runtime.heap.used,"uptime":ProcessInfo.processInfo.systemUptime])
                     }
                 }
                 if loading.playbackDialogs.count > reportedDialogs {
@@ -344,7 +348,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // PostQuitMessage: WM_QUIT behind the already posted messages.
                 for code in loading.quitCodes { menu.messages.post(0x12,code,0) }
                 loading.quitCodes = []
-                let delay = loading.sleeps.count > sleeps ? loading.sleeps.last! : 1
+                // Every Sleep of the iteration (the Host tail's and a screen's own).
+                let delay = loading.sleeps.count > sleeps ? loading.sleeps.dropFirst(sleeps).reduce(UInt32(0),&+) : 1
                 waited += Int(delay); schedule(delay)
             }
         } catch { stop(error) }

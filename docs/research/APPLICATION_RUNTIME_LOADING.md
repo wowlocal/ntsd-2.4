@@ -64,3 +64,11 @@ path needs ≈45 min for the same 2072 audio requests.
    local time, music) and gameplay ticks are not connected.
 2. GDI text, music output, loading progress frames, shutdown paths, device/
    Windows acceptance, full match and game. EXE envelope not recalculated.
+
+## Independent review (2026-09-30)
+
+A review of loading, match end and pacing found that the screens after START
+(mode screen, panel links, Playback's folder) recorded their `ShellExecuteA`
+and `Sleep(300)` but the app carried out neither. Both now run when the batch
+commits, as on the front menu. Details and checks are in
+[APPLICATION_MATCH_END.md](APPLICATION_MATCH_END.md#independent-review-2026-09-30).

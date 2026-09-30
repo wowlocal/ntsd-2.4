@@ -59,3 +59,59 @@ output (silent), and special moves of computer-controlled characters.
 2. GDI text raster (needs a font decision), music output, other arenas'
    packaged layers, shutdown paths, automated end-to-end test,
    device/Windows acceptance. EXE envelope not recalculated.
+
+## Independent review (2026-09-30)
+
+A review of loading, match end and pacing (c1567cb, 0a77527, 9d33d8d and
+3ea0cd3) found no defect in replay file naming or contents, the return to
+character selection, or tick timing (no drift; the original's catch-up and
+dropped ticks are kept). It raised six issues, all fixed:
+
+1. **Idle sleep.** The App Nap exemption used `userInitiated`, which also
+   stops the Mac from idle-sleeping; the original never calls
+   SetThreadExecutionState. It is now `userInitiatedAllowingIdleSystemSleep`
+   with `latencyCritical`.
+2. **Links after START.** `ShellExecuteA` on the mode screen, the panel links
+   and Playback's folder was recorded as successful but not carried out. The
+   loaded batch's `shell` operations now go to the front menu's handler when
+   the batch commits (verb `open` or `explore`; anything else is a boundary),
+   delayed by the screen's preceding `Sleep`.
+3. **Sleep(300) after START.** The screens' own `Sleep(300)` was recorded but
+   the next iteration waited only for the Host tail's `Sleep`. It now waits
+   for every `Sleep` of the committed batch, summed.
+4. **Failed replay write.** An error writing `recording\*.lfr` after the
+   commit stopped the app. It is now reported (`failedReplayWrites` in the
+   `menu` event) and the game goes on (declared policy: the original's failing
+   `fopen`/`fwrite` leaves the game running; the file is lost).
+5. **Heap addresses.** Each match reserved a new 0x630e18-byte recording and
+   each KO a new 0x631200-byte writer buffer in the never-reused 1 GiB arena:
+   13.1 MB per recorded match, about 66 matches in one session. Declared
+   policy: the runtime heap reuses a replay block (recording, playback buffer,
+   writer buffer) for a replay request of the same size once the Core memory
+   the next call starts from marks it freed; live and unknown blocks are never
+   reused. Core's own checks are unchanged: a claim still refuses a live
+   range and the writer a live alias. Growth is now 120,272 bytes per match
+   (15 arena bitmap wrappers of 0x1f50, which Core's adoption rule keeps new),
+   about 7,500 matches from the 167 MB used after the first one.
+6. **Sleep with a queued message.** An iteration that slept dropped its
+   delay when a message was queued in the same iteration. The delay is now
+   the iteration's `Sleep` whenever it slept.
+
+**Checks:**
+
+- Mode screen after START: three link clicks give three `shellOpen` events,
+  each 300 ms after its click.
+- VS with `recording` in the overlay as a file: the `menu` event lists the
+  failed write, the match returns to selection and the app exits 0.
+- Five VS matches in a row: the `menu` event's `heapBytes` is 166,772,512
+  after the first match, then +120,272 per match (+13,104,624 before).
+  The recording and writer addresses are the same in every match.
+  The five replay files match the earlier binary's sizes (11044, 10268,
+  10234, 10201, 10203 bytes).
+- New heap test (live, freed, unknown and other-size blocks).
+- Mac runtime tests (12) pass.
+- The whole e2e set passes: vs with its quit, website, controls, online and
+  recording checks, mission, demo, war, playback, tournament, team-tournament
+  and joystick.
+
+EXE envelope not recalculated.
