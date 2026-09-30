@@ -58,11 +58,23 @@ cooperative level, display mode, the flip chain) get declared answers.
 - Also: `OriginalMacWindowBackend` validates only the windowed CreateWindowEx
   (style 0x10cb0000, metrics 7/8/4); the popup (WS_POPUP, WS_EX_TOPMOST,
   metrics 0/1) and the exclusive DirectDraw requests are new backend work.
-- DestroyWindow during the recreation delivers WM_DESTROY to 43b3d0, whose
-  handler runs the shared release helpers (4019b0, 401d30, 43d2a0) before
-  skipping PostQuitMessage (458434 ≠ 0); what those helpers release while the
-  game continues has to be read before FS2 lands.
+- DestroyWindow during the recreation delivers WM_DESTROY to 43b3d0. Its
+  handler runs the shared release helpers, ported as
+  `OriginalMenuPresentation.releaseResources`: the DirectSound device, the
+  DirectShow music graph and the two replay-recording buffers are released,
+  then PostQuitMessage is skipped (458434 ≠ 0). Nothing re-creates them, so in
+  the original a toggle leaves the game running without sound effects, music
+  or recording buffers. `OriginalDisplayDestruction` emits DestroyWindow as a
+  platform request and, like `OriginalWindowLifecycle`, deliberately does not
+  model the nested WM_DESTROY/WM_NCDESTROY (or the creation-time WM_SIZE/
+  WM_MOVE) Windows delivers synchronously; FS2 needs that nested delivery in
+  Core, with the enclosing state and rollback.
 
-Status: scoped, not started; FS1 and FS2 land together, then FS3.
+**User decision needed before FS1/FS2:** reproduce Alt+Enter faithfully (the
+game's own window/DirectDraw recreation, including its loss of sound, music
+and recording buffers), or offer macOS full screen for the window without the
+game's involvement (the image scaled, nothing released), or both.
+
+Status: scoped; implementation waits for that decision.
 
 EXE envelope not recalculated.
