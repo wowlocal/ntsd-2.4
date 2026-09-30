@@ -44,4 +44,13 @@ menu on "Fight!".
 - Recorded once, then a second run: `pass` (6 milestones, 6 progress points).
 - `compare` flags a changed object-input count and a changed replay hash.
 
+## Time zone (2026-09-30)
+
+GetLocalTime is answered in the Mac's time zone, and it names the replay files:
+the references were recorded in UTC+1, so the virtual clock's 00:00 UTC gives
+`20260101_010000`. An independent review noted that the references therefore
+matched only on a machine in UTC+1. `tools/app_e2e.py` now starts every app
+run with `TZ=Etc/GMT-1`; the vs scenario passes when the script itself runs in
+a shell set to `TZ=Asia/Tokyo`.
+
 EXE envelope not recalculated.

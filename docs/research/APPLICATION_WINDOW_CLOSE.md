@@ -69,4 +69,26 @@ Not modelled (declared): the activation messages DestroyWindow sends (the
 WndProc only logs WM_ACTIVATEAPP), WM_DESTROY delivered synchronously inside
 DefWindowProcA (here the next queued message, before any game tick).
 
+## Independent review (2026-09-30)
+
+A review against the EXE's dispatch tables (43bc58/43bc44, 43bc88/43bc74),
+WM_DESTROY (43b4ba: 4019b0, 401d30, 43d2a0, then PostQuitMessage(0) unless
+[458434] ≠ 0), WM_SYSCOMMAND (43b519, wParam compared to 0xf100 unmasked),
+ESC (43b7f2) and the message loop's WM_QUIT return found no code defect. It
+found one Windows behaviour missing from the list above, now declared:
+
+- **Messages during a message box.** On Windows, MessageBoxA's modal loop
+  keeps sending the thread's messages to the game's window procedure: the
+  music graph notification 0x400, joystick moves, WM_CHAR. The app shows the
+  box with a modal `NSAlert`; controller samples and music callbacks only
+  queue their messages, which the window procedure receives after the box
+  closes. For example, a track that ends while "Are you sure to quit?" is
+  showing stays silent until the player answers No. Delivering them during
+  the box would need the window procedure to run inside the Core iteration
+  that asked for the box; not done.
+
+The plan's declared ordering (PostMessageA(WM_CLOSE) behind queued input,
+where Windows takes posted messages before input) stays as declared; the
+queue is normally empty after the modal box.
+
 EXE envelope not recalculated.

@@ -17,6 +17,7 @@ depend on the window's backing scale, which the reference records.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -27,6 +28,9 @@ ROOT = Path(__file__).resolve().parents[1]
 APP = ROOT / "build/swiftpm-app/release/NTSDNative"
 SCRIPT = ROOT / "tools/app_e2e_computer_vs.script"
 REFERENCE = ROOT / "tools/app_e2e_reference.json"
+# GetLocalTime is answered in the Mac's time zone and names the replay files;
+# the references were recorded in UTC+1 (virtual clock 00:00 UTC → 010000).
+APP_ENV = {**os.environ, "TZ": "Etc/GMT-1"}
 # Summary is up by step 9000 at this clock; Jump continues to the selection.
 TAIL = "9000 key 74; 9100 capture {captures}/selection.png; 9200 exit"
 # Mission Mode: player 1 (Naruto), no computers, Fight!; Stage 1-1 until the
@@ -132,7 +136,7 @@ def run(timeout, app=APP, scenario="vs"):
         extra = setup["extra"](scratch) if callable(setup["extra"]) else setup["extra"]
         command = [str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay), "--virtual-clock", "123456789", "8",
                    "--script-clock", "gameplay", "--body-captures", str(captures), *extra, "--script", setup["script"](captures)]
-        done = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+        done = subprocess.run(command, capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = []
         for line in done.stdout.splitlines():
             try:
@@ -162,7 +166,7 @@ def quit_check(timeout, app=APP):
         with tempfile.TemporaryDirectory(prefix="ntsd-quit-") as scratch:
             done = subprocess.run([str(app), "--original", "--exit-after-capture", "--mute-music", "--mute-sounds", "--overlay", scratch,
                                    "--virtual-clock", "123456789", "8", "--script", script],
-                                  capture_output=True, text=True, timeout=timeout)
+                                  capture_output=True, text=True, timeout=timeout, env=APP_ENV)
             events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
             quits = [e for e in events if e.get("event") == "quit"]
             boxes = [e["answer"] for e in events if e.get("event") == "messageBox"]
@@ -178,7 +182,7 @@ def website_check(timeout, app=APP):
     with tempfile.TemporaryDirectory(prefix="ntsd-web-") as scratch:
         done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
                                "--virtual-clock", "123456789", "8", "--script", "20 click 410 352; 120 exit"],
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
         opened = [e["file"] for e in events if e.get("event") == "shellOpen"]
         ok = done.returncode == 0 and opened == ["http://littlefighter.com"] and not any(e.get("event") == "boundary" for e in events)
@@ -195,7 +199,7 @@ def controls_check(timeout, app=APP):
         done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
                                "--virtual-clock", "123456789", "8", "--script",
                                "20 click 410 292; 60 click 250 290; 100 key 81; 140 click 480 450; 220 exit"],
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
         saved = Path(scratch, "data", "control.txt")
         written = saved.read_bytes() if saved.exists() else None
@@ -219,7 +223,7 @@ def online_check(timeout, app=APP):
                                "15 answer ok; 16 answer ok; 20 click 410 262; 60 click 500 490; 100 click 400 318; "
                                "130 key 65; 145 answer ok; 150 key 13; 240 click 480 370; 280 click 400 287; "
                                "360 click 400 373; 400 click 400 348; 440 click 410 352; 520 exit"],
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
         boxes = [e["text"] for e in events if e.get("event") == "messageBox"]
         opened = [e["file"] for e in events if e.get("event") == "shellOpen"]
@@ -246,7 +250,7 @@ def recording_check(timeout, app=APP):
     with tempfile.TemporaryDirectory(prefix="ntsd-recording-") as scratch:
         done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
                                "--virtual-clock", "123456789", "8", "--script", script],
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
         events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
         opened = [[e.get("verb"), e["file"]] for e in events if e.get("event") == "shellOpen"]
         saved = Path(scratch, "data", "control.txt")

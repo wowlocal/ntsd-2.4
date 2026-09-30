@@ -59,7 +59,8 @@ public enum OriginalActorScheduler {
             // Declared policy (APPLICATION_OBJECT_HEADER_DEFAULTS.md, not the EXE): the
             // loader writes jump_height/distance/distancez only for Objects whose DAT
             // names them; for others (chars\wind.dat's flying 211→212) the original
-            // reads its Object allocation's initial content, declared zero. A partly
+            // reads its Object allocation's initial content (unknown: the heap may
+            // reuse freed WAV buffers), declared zero — an arbitrary value. A partly
             // written word stays a boundary.
             let unwritten = header.defined.indices.contains(source+7) && !header.defined[source..<source+8].contains(true)
             let value = unwritten ? 0 : try header.binary64(at: source)
