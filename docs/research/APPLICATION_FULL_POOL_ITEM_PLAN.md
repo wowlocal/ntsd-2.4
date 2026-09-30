@@ -37,9 +37,29 @@ reconstructed, activated or written. The RNG stream, the candidate scan and
 every other part of the pass are unchanged. A supplied retained slot (the
 oracle fixtures' controlled caller scratch) keeps its recovered behaviour.
 
-The requested-items path (4214d5, global 450bb8 = 1, caller SP+34) is not
-changed. Its frame word is shared with loop counters earlier in the same
-tick, so it needs its own trace; it stays a boundary.
+The requested-items path (4214d5, caller SP+34) is traced separately in the
+addendum below.
+
+## Addendum: the requested-items path (2026-09-30)
+
+F8 in VS (helper 416f10 sets 450bb8 = 1; allowed when 451160 = 0 or with
+the cheat on) and library stage requests (450bb8 = 3) run the requested-items
+pass (4214d5..421799), which keeps its slot in the body's frame word SP+34
+(−0x5d4). Pressing F8 repeatedly can fill the pool, and then the first
+attempt of a pass reads the incoming word. A flow-sensitive walk shows its
+writers inside the lifecycle loop 41f550..4214cf are per-slot branches:
+80-step countdowns that end at 0 (41fdc9/41fe59, 4213c3/421497), a slot
+counter that ends at 400 (420e89), the catalog Object table pointer
+(World+7d4) stepped by 4 (41f706/41f71e, 41fd2f/41fd47, 4211f6/421212 and
+similar) and other register stores (41fedc, 420537, 420ccf, 420d61, 420f89).
+The incoming value is the last such write across the 400 slots. It can be 0
+(the original would then rebuild slot 0, a player, as the item), 400 (the
+word after the Actor table) or an address (a fault). It is not modelled.
+
+Declared policy, the same as for the random drop: while the pass has no known
+slot (none found free and none created earlier in the same pass), an attempt
+is skipped after its four coordinate draws. Once a slot is known, full-pool
+attempts reuse it as recovered.
 
 ## Checks
 
