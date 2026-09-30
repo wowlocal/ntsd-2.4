@@ -81,6 +81,13 @@ held 60 steps) and attacking every 150 steps, each ran 30,000 bodies:
 | 5-1 | no stop |
 | Survival Stage | no stop |
 
+2026-09-30, the same script with `--virtual-clock 987654321 8` and 150,000
+bodies: Survival Stage ran all 150,000 with no stop. Stage 4-1 stopped at body
+≈23,700 in the contact pass on `chars\chakra.dat` at frame 1000
+([contacts](APPLICATION_OUT_OF_OBJECT_FRAMES.md#contacts-2026-09-30), now read as
+an absent Frame); with that fix it passed 106,200 bodies and 6 returns with no
+stop (run still going at commit time).
+
 ## VS session: many recorded matches (2026-09-30)
 
 Script: the e2e VS match (`tools/app_e2e_computer_vs.script`), Jump at the

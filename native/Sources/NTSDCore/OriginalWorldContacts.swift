@@ -22,8 +22,11 @@ public enum OriginalWorldContacts {
                 guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Contact Object binding") }
                 return catalog.objects[n].header
             },frame: { n,f in
-                guard catalog.objects.indices.contains(n),catalog.objects[n].frameStorage.indices.contains(Int(f)) else { throw OriginalStateError.invalidStorage("Contact Frame binding") }
-                return catalog.objects[n].frameStorage[Int(f)]
+                guard catalog.objects.indices.contains(n) else { throw OriginalStateError.invalidStorage("Contact Frame binding") }
+                if catalog.objects[n].frameStorage.indices.contains(Int(f)) { return catalog.objects[n].frameStorage[Int(f)] }
+                //419380 reads Object+7a4+f·178 unchecked, like the cpoints: a Frame
+                //wholly outside the Object reads as absent (APPLICATION_OUT_OF_OBJECT_FRAMES.md).
+                return try OriginalCPointPass.headerFrame(f,header: catalog.objects[n].header,object: n,site: "contacts")
             },heapWord: { try memory.word($0) },bundledLibrary: bundledLibrary,observe: observe)
     }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,

@@ -88,4 +88,21 @@ lifecycle, drawing, cpoint-chain and camera corpora pass (21 tests), the
 whole e2e set passes and the Demo soak runs 60,000 bodies (27 matches)
 without a stop.
 
+## Contacts (2026-09-30)
+
+A Stage 4-1 soak with three computer allies and `--virtual-clock 987654321 8`
+stopped at body ≈23,700 in the contact pass (419380, `OriginalWorldContacts`):
+`chars\chakra.dat` (id 437, type 1, catalog Object 109) at frame 1000
+(temporary diagnostic, removed). 419380 reads the frame's state (+7ac), bdy
+count (+88c) and itr count (+8cc) at Object + f·178 with no range check, like
+the cpoint sites. Its Frame lookup now falls back to the same
+`OriginalCPointPass.headerFrame`: a Frame wholly outside the Object reads as
+the absent Frame (no itr, no bdy, so no contact), frames −5..−1 read the
+header's bytes, and 400 and −6 stay boundaries.
+
+The other Frame lookups that still stop outside `frameStorage` (physics
+`OriginalWorldPhysics`, control `OriginalWorldControl`, commands, the post-draw
+slot prefix and opoint, character AI and object input) are unchanged. No soak
+has reached them; each needs its own check of the EXE site.
+
 EXE envelope not recalculated.
