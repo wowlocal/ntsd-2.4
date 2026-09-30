@@ -15,7 +15,7 @@ that dvx between contacts and the cpoint pass. The original then reads that
 Frame unchecked in cpoint actions (418c7b, 4192e8), cpoint placement (4187ed),
 the draw loop (41a6ae, 41a6d0, then the picture) and the post-draw slot prefix
 and scheduler, before its opoint continuation deactivates frames outside
-0..<400. Frame 1000 is +0x5c3e4 into a 0x25360-byte Object allocation.
+0..<400. Frame 1000 is +0x5c464 into a 0x25360-byte Object allocation (corrected below).
 
 ## Declared policy
 
@@ -58,5 +58,34 @@ cpoint, post-draw, gameplay-lifecycle and drawing corpora and the whole e2e
 set pass unchanged. The Demo soak now plays sixteen matches (≈32,400 bodies)
 to a different stop: an 8-byte read of undefined bytes at offset 80 (next
 card).
+
+## Correction after independent review (2026-09-30)
+
+An independent review of the policy commits found three errors, all
+confirmed and fixed:
+
+- **Geometry.** Frame f starts at Object+0x7a4+f·0x178 (the state word read at
+  [obj+0x7ac] in 41a6ae and 40da97), so frame 400 starts at +0x25324 and its
+  first 0x3c bytes are the Object's name tail inside the allocation; frame
+  1000 starts at +0x5c464 (its cpoint kind at +0x5c4ec), not the +0x5c3e4
+  stated above. "Wholly outside" is therefore f ≥ 401 or f ≤ −7; frames 400
+  and −6 straddle the allocation's ends and stay boundaries. No shipped DAT
+  refers to frame 400.
+- **The absent Frame.** All-zero bytes gave sound index 0, so the scheduler
+  (40da50..40da6b) queued catalog sound 0 whenever such an actor's frame
+  changed. The declared record is now the EXE's own Frame constructor state
+  (40bbf0: presence 0, sound −1) with its untouched bytes zero — an absent
+  Frame as the loader makes them.
+- **Effects.** With that Frame's state 0, the scheduler sends an airborne
+  actor (y < 0) to frame 212 (40da86..40daa5) instead of letting it be
+  deactivated; only an actor on the ground keeps 1000 and is deactivated by
+  the opoint continuation. Both follow from the declared Frame, not from the
+  earlier claim that every such actor is removed in the same pass. A
+  scheduler test covers both cases and the absence of a sound.
+
+After the fixes the world-cpoint, links, scheduler, post-draw, gameplay
+lifecycle, drawing, cpoint-chain and camera corpora pass (21 tests), the
+whole e2e set passes and the Demo soak runs 60,000 bodies (27 matches)
+without a stop.
 
 EXE envelope not recalculated.

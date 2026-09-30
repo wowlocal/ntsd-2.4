@@ -25,13 +25,15 @@ characters whose heal balls use this path. The original is not executed.
   the current frame's kind (4187ed `== 1`) and the partner's (`== 2`) the
   same way (found by the soak after the first four were declared). Objects are 0x25360-byte
   allocations (41265b..4126a8); frame f's kind word is at +0x82c + f·0x178, so
-  f ≥ 400 or f ≤ −6 lies outside the allocation (f = 1000: +0x5c46c). Those
+  f ≥ 400 or f ≤ −6 lies outside the allocation (f = 1000: +0x5c4ec; the
+  first draft wrote +0x5c46c — corrected below). Those
   bytes are other Windows heap memory whose contents are not recovered.
 
 ## Declared policy (not the EXE)
 
-A Frame ≥ 400 lies wholly beyond the Object allocation (frame 400 starts at
-+0x253a4 > 0x25360) and reads as zero bytes — an absent Frame. One rule in the
+A Frame ≥ 400 lies wholly beyond the Object allocation (first draft; wrong:
+frame 400 starts at +0x25324 and straddles the end — see the correction below)
+and reads as zero bytes — an absent Frame. One rule in the
 shared Frame fallback (`OriginalCPointPass.headerFrame`, used by the cpoint,
 camera and drawing stages): the cpoint kinds are then 0 (no cpoint); the draw
 loop 41a5a0, which also reads such a Frame unchecked (41a69f..41a6d0 state
@@ -59,5 +61,11 @@ its holder's wpoint weaponact (1000, 9998, −888 in the loaded DATs). The rule
 covers every Frame wholly outside the allocation (f ≥ 400 or f ≤ −7) in the
 shared fallback, the World-links lookup and the post-draw lifecycle; −6
 straddles the start and stays a boundary.
+
+Correction (2026-09-30, independent review): frame f starts at
+Object+0x7a4+f·0x178, so frame 400 starts at +0x25324 (straddling the end)
+and frame 1000's kind word is at +0x5c4ec; the rule covers f ≥ 401 or f ≤ −7
+and the declared Frame is the EXE's absent-Frame constructor state (sound −1).
+See the results document.
 
 EXE envelope not recalculated.

@@ -105,6 +105,27 @@ final class OriginalActorSchedulerTests: XCTestCase {
         print("ACTOR SCHEDULER", corpus.cases.count, "whole calls and", eventCount, "ordered sound requests compared")
     }
 
+    /// APPLICATION_OUT_OF_OBJECT_FRAMES.md: an actor sent to frame 1000 meets the
+    /// declared absent Frame in the scheduler — no sound (−1), no transition; on
+    /// the ground it keeps 1000 (the opoint continuation then deactivates it),
+    /// in the air state 0 sends it to 212 as the original's code does for such a Frame.
+    func testActorAtFrameOutsideTheObjectMeetsTheAbsentFrame() throws {
+        func run(y: Int32) throws -> (OriginalStateRecord,Int) {
+            var actor = try OriginalStateRecord.actor(over: [UInt8](repeating: 0, count: OriginalStateRecord.actorSize))
+            var globals = try zero(OriginalMatchPreparation.globalSize), sounds = 0
+            try actor.write(Int32(1000), at: 0x70);try actor.write(Int32(211), at: 0x74);try actor.write(y, at: 0x14)
+            let header = try zero(0x7a4)
+            try OriginalActorScheduler.apply(actor: &actor, header: header, globals: &globals, mode: 0, slot: 60, frame: { number in
+                number >= 401 ? OriginalCPointPass.beyondAllocation : try zero(0x178)
+            }, observe: { _ in sounds += 1 })
+            return (actor,sounds)
+        }
+        let (ground,groundSounds) = try run(y: 0)
+        XCTAssertEqual(try ground.integer(at: 0x70, as: Int32.self), 1000);XCTAssertEqual(groundSounds, 0)
+        let (air,airSounds) = try run(y: -30)
+        XCTAssertEqual(try air.integer(at: 0x70, as: Int32.self), 212);XCTAssertEqual(airSounds, 0)
+    }
+
     /// APPLICATION_OBJECT_HEADER_DEFAULTS.md: a frame-212 jump of an Object whose
     /// DAT names no jump fields reads the unwritten header words as zero.
     func testUnwrittenJumpHeaderWordsReadAsZero() throws {
