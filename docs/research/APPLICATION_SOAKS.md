@@ -116,4 +116,9 @@ build with `-enable-testing` (separate scratch path
 `build/swiftpm-test-release`): 3323.9 s, the whole-catalog test 3293.3 s. A
 debug run of that test was stopped after 3 h, still in catalog loading.
 
+Demo afterwards (the Demo script above, 50,000 bodies, 23 matches, footprint
+sampled every minute for 27 minutes): no stop; footprint 2.0 GB at every
+sample, RSS +4 MB per minute (4.20 → 4.31 GB), logical heap +≈120 KB per
+match.
+
 EXE envelope not recalculated.
