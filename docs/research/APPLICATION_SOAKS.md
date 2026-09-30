@@ -73,4 +73,45 @@ held 60 steps) and attacking every 150 steps, each ran 30,000 bodies:
 | 5-1 | no stop |
 | Survival Stage | no stop |
 
+## VS session: many recorded matches (2026-09-30)
+
+Script: the e2e VS match (`tools/app_e2e_computer_vs.script`), Jump at the
+Summary, the same selection again from step 9100, then Attack every 400
+steps, which starts each next match from the selection. Every match writes
+its replay file.
+
+| Run | Result |
+| --- | --- |
+| 66 matches, 113,425 bodies | no stop, no failed replay write; logical heap 174.6 MB (+120,272 bytes per match after the first; [replay block reuse](APPLICATION_MATCH_END.md#independent-review-2026-09-30)) |
+| 20 matches, footprint sampled every minute | the process grew linearly: 2.0 → 3.2 GB footprint, RSS +72 MB per minute (≈1 match per minute, ≈40 KB per gameplay body) |
+
+Two unbounded logs caused the growth, found by counting them in a
+temporary `menu` event field (removed):
+
+1. **Display operation logs.** `OriginalMacDisplayBackend` appended every
+   served front draw (≈130 per gameplay body: 714,587 after three matches),
+   every window-graphics operation and every bitmap operation to arrays that
+   only tests read. The backend now takes `keepsOperationLogs` (default
+   true); the live app passes false and keeps only the counts
+   (`frontOperationCount`, `operationCount`, `bitmapOperationCount`).
+   RSS growth fell to ≈12 MB per minute.
+2. **Retained iteration cursors.** `OriginalApplicationIterationDelivery`
+   kept every earlier nonempty iteration cursor (≈9,000 per match) so that
+   the resources its receipts retain stay alive
+   ([iteration history](APPLICATION_ITERATION_HISTORY.md)). The message
+   loop's queue and DefWindowProc answers retain no resources, so every
+   gameplay tick's cursor was kept for nothing. Only cursors with a receipt
+   that retains a resource are kept now; the purpose is unchanged.
+
+With both: 10 matches, footprint 2.0 GB at every sample (to 0.1 GB) and RSS
++4–7 MB per minute, likely pages of mapped files being read in. Checks: a
+new `OriginalApplicationIterationDeliveryTests` (resource-free cursors are
+not kept, a resource-holding one and its resource are); the runtime menu
+test now asserts the live display keeps counts and no logs. The observed
+iteration, graphics, bitmap, window-geometry, runtime-menu, retained-history
+and delivery suites pass (26 tests), as do the display, front-raster, bitmap
+and Mac runtime suites (25) and the whole e2e set. The whole-catalog
+loading-audio test (≈45 min when last passed) was still running at commit
+time; its result is reported separately.
+
 EXE envelope not recalculated.

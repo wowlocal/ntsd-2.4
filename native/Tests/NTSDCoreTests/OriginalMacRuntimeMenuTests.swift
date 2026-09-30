@@ -155,7 +155,10 @@ import XCTest
         for _ in 0..<5 { guard try step() else { throw Stop.limit } }
         XCTAssertEqual(menu.diagnostics.debug.map { String(decoding:$0,as:UTF8.self) },["LoadGameArt: Art loaded.\n"])
         XCTAssertTrue(menu.diagnostics.messages.isEmpty)
-        XCTAssertGreaterThan(started.display.frontOperations.count,0)
+        XCTAssertGreaterThan(started.display.frontOperationCount,0)
+        // The live app counts served operations but keeps no logs of them.
+        XCTAssertTrue(started.display.frontOperations.isEmpty && started.display.operations.isEmpty && started.display.bitmapOperations.isEmpty)
+        XCTAssertGreaterThan(started.display.operationCount+started.display.bitmapOperationCount,0)
         XCTAssertFalse(menu.messages.sleeps.isEmpty)
         let png = try started.windows.snapshotPNG(started.window)
         let capture = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-runtime-menu.png")
@@ -168,7 +171,7 @@ import XCTest
         XCTAssertEqual(menu.messages.delivered.map(\.message),[5,3,0x100,0x102,0x101])
         XCTAssertTrue(menu.messages.queue.isEmpty)
         print("Runtime menu:",committed,"committed iterations,",menu.requests,"permits,",menu.textRequests,"GetDC failures, loading",loading,
-            "front operations",started.display.frontOperations.count,"capture",capture.path)
+            "front operations",started.display.frontOperationCount,"capture",capture.path)
     }
 
     /// The end of the menu track: EC_COMPLETE and the registered 0x400 go through

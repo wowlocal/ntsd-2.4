@@ -33,4 +33,14 @@ replaces the four arrays. Retention, copy independence and
   300..1500 stay byte-identical to the tick-speed reference, busy ≈2.5 s per
   300 bodies as before. [Evidence](../evidence/application-iteration-history.json).
 
+## Resource-free iterations (2026-09-30)
+
+A long VS session showed the iteration history growing by ≈9,000 cursors
+per match: every gameplay tick is a nonempty message-loop iteration, and all
+were kept. Their queue and DefWindowProc receipts retain no resources, so
+`OriginalApplicationIterationDelivery` now keeps an earlier cursor only when
+one of its receipts retains a resource (`Cursor.retainsResources`). The
+bitmap, menu-graphics and lifecycle deliveries are unchanged. Measurements
+are in [APPLICATION_SOAKS.md](APPLICATION_SOAKS.md#vs-session-many-recorded-matches-2026-09-30).
+
 EXE envelope not recalculated.

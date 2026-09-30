@@ -29,15 +29,18 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
 }
 public typealias OriginalApplicationIterationExchange = OriginalRequestExchange<OriginalApplicationIterationRequest, any OriginalApplicationStartupResource>
 
-/// One staged value cursor plus earlier nonempty iterations, whose receipt
-/// resources stay alive through copied platform/delivery contexts.
+/// One staged value cursor plus earlier nonempty iterations whose receipts
+/// hold resources, which stay alive through copied platform/delivery contexts.
+/// An iteration whose receipts hold none (the message loop's queue and
+/// DefWindowProc requests, every gameplay tick) is not kept: it has nothing to
+/// keep alive, and keeping it grew the app by ≈12 MB per match.
 public struct OriginalApplicationIterationDelivery {
     public private(set) var cursor: OriginalApplicationIterationExchange.Cursor?
     private var earlier = OriginalRetainedHistory<OriginalApplicationIterationExchange.Cursor>()
     public var retainedIterationCount: Int { earlier.count }
     public init() {}
     public mutating func begin(_ cursor: OriginalApplicationIterationExchange.Cursor) {
-        if let old = self.cursor,old.position > 0 { earlier.append(old) }
+        if let old = self.cursor,old.position > 0,old.retainsResources { earlier.append(old) }
         self.cursor = cursor
     }
     public mutating func response(for request: OriginalApplicationIterationRequest) throws -> OriginalApplicationIterationRequest.Reply {

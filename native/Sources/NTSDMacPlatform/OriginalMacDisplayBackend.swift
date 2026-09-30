@@ -87,8 +87,11 @@ import NTSDCore
     }
     public let windows: OriginalMacWindowBackend
     private var bitmapModule: Resource?
+    /// Served operations in order, kept only with `keepsOperationLogs`; the
+    /// counts are always kept.
     public private(set) var bitmapOperations: [BitmapOperation] = []
     public private(set) var frontOperations: [FrontOperation] = []
+    public private(set) var operationCount = 0, bitmapOperationCount = 0, frontOperationCount = 0
     private let identity = Identity(), budget: Budget
     private var live: [UInt32:Resource] = [:], history: [UInt32:WeakResource] = [:]
     public private(set) var operations: [Operation] = []
@@ -99,10 +102,13 @@ import NTSDCore
     /// presentation shows still-unknown pixels (e.g. RLE holes) as black. The
     /// defaults keep unwritten pixels unknown, as the comparison tests require.
     public let freshSurfacesKnownBlack: Bool, presentUnknownAsBlack: Bool
+    /// The live app keeps no operation logs: a match replays ≈130 draws per
+    /// gameplay body, so a log would grow without bound.
+    public let keepsOperationLogs: Bool
     public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024,freshSurfacesKnownBlack: Bool = false,
-                presentUnknownAsBlack: Bool = false) {
+                presentUnknownAsBlack: Bool = false,keepsOperationLogs: Bool = true) {
         self.windows = windows; budget = Budget(maximumBytes); self.freshSurfacesKnownBlack = freshSurfacesKnownBlack
-        self.presentUnknownAsBlack = presentUnknownAsBlack
+        self.presentUnknownAsBlack = presentUnknownAsBlack; self.keepsOperationLogs = keepsOperationLogs
     }
     private func storage(_ width: Int,_ height: Int) throws -> Storage {
         let value = try Storage(width,height,budget)
@@ -307,7 +313,8 @@ import NTSDCore
             retained = [s];response = .init()
         default:throw Boundary.unsupported(q.kind)
         }
-        operations.append(.init(request:q,response:response));return .init(response:response,resources:retained)
+        operationCount += 1; if keepsOperationLogs { operations.append(.init(request:q,response:response)) }
+        return .init(response:response,resources:retained)
     }
 }
 
@@ -517,7 +524,8 @@ extension OriginalMacDisplayBackend {
             let r = try resource(q.words[0],as:Resource.self);release(r);owners = [r];response = .init(result:Int32(bitPattern:r.references))
         default:throw Boundary.unsupported(q.kind)
         }
-        bitmapOperations.append(.init(request:q,response:response));return .init(response:response,resources:owners)
+        bitmapOperationCount += 1; if keepsOperationLogs { bitmapOperations.append(.init(request:q,response:response)) }
+        return .init(response:response,resources:owners)
     }
 }
 
@@ -708,7 +716,7 @@ extension OriginalMacDisplayBackend {
         case .rejected(let surfaces):
             owners = surfaces;response = .init(result:Self.invalidRect)
         }
-        frontOperations.append(.init(request:prepared.request,response:response))
+        frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:prepared.request,response:response)) }
         return .init(response:response,resources:owners)
     }
 }

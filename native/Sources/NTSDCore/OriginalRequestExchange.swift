@@ -58,6 +58,8 @@ public final class OriginalRequestExchange<Input: OriginalExchangeRequest, Resou
         /// its receipt instead of suspending the attempt. Nil for permit cursors.
         fileprivate var inline: ((RequestNeeded) throws -> Receipt)?
         public var isSuspended: Bool { pending != nil }
+        /// Whether any receipt keeps a resource alive.
+        public var retainsResources: Bool { receipts.contains { !$0.resources.isEmpty } }
         fileprivate init(owner: Identity, receipts: [Receipt]) {
             self.owner = owner; self.receipts = receipts
         }
