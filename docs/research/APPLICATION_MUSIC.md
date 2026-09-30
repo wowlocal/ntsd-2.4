@@ -81,3 +81,25 @@ the recovered WndProc callback restarts it, as in the original (stage 2).
 The `.app` packaging for `--original` still relies on SwiftPM resource
 bundles in the build directory (Core catalog and music alike). No device
 listening test or Windows audio comparison. EXE envelope not recalculated.
+
+**Review (2026-09-30):** an independent review confirmed the DirectShow
+answers (method offsets, put_CurrentPosition word order, volume, E_ABORT on an
+empty GetEvent, EC_COMPLETE with the graph still running, SetNotifyFlags(0),
+the 401e90 callback order) and found two defects, both fixed:
+
+- **Determinism.** A track's end was timed by AVAudioPlayer on the wall clock
+  even with `--virtual-clock`; its EC_COMPLETE message then took an iteration
+  at a machine-dependent point, shifting later script steps, the virtual time
+  and the loop counter on long runs. With a virtual clock the output now keeps
+  the position in virtual time (advancing while the graph runs, held while it
+  is stopped, reset by seeks) and ends the track there; the real player's end
+  is ignored. The e2e set passes unchanged (no scenario had crossed a track end
+  in a way its references recorded).
+- **A late end report.** The finish callback hopped asynchronously to the main
+  thread, so a seek in between could be overtaken and leave the track marked
+  ended; it is now handled synchronously when AVAudioPlayer calls it on the main
+  thread (its usual thread).
+
+The review found nothing definite in the Demo start (its declared ECX value is
+used only as "outside 0..8"; the doc's "E_FAIL of its own GetDC" is only the
+reason for the chosen constant) or in the Mission app wiring.

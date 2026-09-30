@@ -26,6 +26,11 @@ import Foundation
     public private(set) var unresolved: [[UInt8]] = []
     /// Automated runs keep real playback state at zero output gain.
     public var muted = false
+    /// Scripted runs with a virtual clock (seconds): a track's position and its
+    /// end follow that clock, not the real player, so the EC_COMPLETE message
+    /// reaches the same iteration on every machine.
+    public var virtualSeconds: (() -> Double)?
+    private var virtualBase: Double = 0, virtualStart: Double?
 
     public init(tracks: [String:URL],load: @escaping (URL,@escaping () -> Void) throws -> Player) {
         self.tracks = tracks; self.load = load
@@ -67,29 +72,47 @@ import Foundation
         if state.graph != graph || name != track {
             player?.pause(); loads += 1
             let current = loads
-            player = try load(url) { [weak self] in self?.end(current) }
-            graph = state.graph; track = name; seeks = -1; ended = false
+            player = try load(url) { [weak self] in
+                // With a virtual clock the end is computed below, not by the real player.
+                guard self?.virtualSeconds == nil else { return }
+                self?.end(current)
+            }
+            graph = state.graph; track = name; seeks = -1; ended = false; virtualBase = 0; virtualStart = nil
         }
         guard let player else { return }
         if state.seeks != seeks {
             if state.seeks > 0 { player.currentTime = min(state.position,player.duration) }
             seeks = state.seeks; ended = false
+            virtualBase = state.seeks > 0 ? min(state.position,player.duration) : 0; virtualStart = nil
         }
         player.volume = muted ? 0 : Self.gain(state.volume)
+        if let now = virtualSeconds?() {
+            if state.running && !ended {
+                if virtualStart == nil { virtualStart = now }
+                if virtualBase + (now - (virtualStart ?? now)) >= player.duration { end(loads) }
+            } else if let start = virtualStart { virtualBase += now - start; virtualStart = nil }
+        }
         if state.running && !ended { if !player.isPlaying { player.play() } }
         else if player.isPlaying { player.pause() }
     }
     private func end(_ load: Int) {
         guard load == loads,!ended else { return }
-        ended = true; pendingEnd = graph
+        ended = true; pendingEnd = graph; virtualStart = nil
     }
     /// The graph whose track ended since the last call (reported once).
     public func takeEnded() -> UInt32? { defer { pendingEnd = nil }; return pendingEnd }
     /// Test hook for automated runs: the current track ends now.
     public func finishTrack() { player?.pause(); end(loads) }
     public var state: State? {
-        graph.map { .init(graph:$0,track:track,playing:player?.isPlaying ?? false,ended:ended,
-                          gain:player?.volume ?? 0,time:player?.currentTime ?? 0) }
+        graph.map { g in
+            // With a virtual clock the report follows the virtual position, not the real player.
+            if let now = virtualSeconds?(),player != nil {
+                let time = virtualBase + (virtualStart.map { now - $0 } ?? 0)
+                return .init(graph:g,track:track,playing:virtualStart != nil,ended:ended,gain:player?.volume ?? 0,time:time)
+            }
+            return .init(graph:g,track:track,playing:player?.isPlaying ?? false,ended:ended,
+                         gain:player?.volume ?? 0,time:player?.currentTime ?? 0)
+        }
     }
     private final class AudioPlayer: NSObject, Player, AVAudioPlayerDelegate {
         let player: AVAudioPlayer, ended: () -> Void
@@ -104,7 +127,10 @@ import Foundation
         func play() { player.play() }
         func pause() { player.pause() }
         nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer,successfully flag: Bool) {
-            DispatchQueue.main.async { MainActor.assumeIsolated { self.ended() } }
+            // On the main thread (as AVAudioPlayer calls it) the end is recorded at once, so
+            // no later seek of the same iteration can be overtaken by a stale end.
+            if Thread.isMainThread { MainActor.assumeIsolated { self.ended() } }
+            else { DispatchQueue.main.async { MainActor.assumeIsolated { self.ended() } } }
         }
     }
 }

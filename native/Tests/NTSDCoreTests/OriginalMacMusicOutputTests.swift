@@ -69,6 +69,29 @@ import XCTest
         XCTAssertEqual(music.presented()?.graph,second.graph); XCTAssertNotEqual(second.graph,first.graph)
     }
 
+    /// With a virtual clock the end follows virtual time: the real player's end
+    /// is ignored, pauses hold the position, seeks reset it.
+    func testVirtualClockDecidesTheTrackEnd() throws {
+        var players: [Recorder] = [],ends: [() -> Void] = [],now = 0.0
+        let output = Output(tracks:["bgm\\main.wma":URL(fileURLWithPath:"/main.caf")]) { url,ended in
+            let r = Recorder(url,duration:100); players.append(r); ends.append(ended); return r
+        }
+        output.virtualSeconds = { now }
+        typealias P = OriginalMacRuntimeMusic.Presented
+        func present(running: Bool,seeks: Int = 0,position: Double = 0) throws {
+            try output.present(P(graph:1,file:Array("bgm\\main.wma".utf8),running:running,volume:0,seeks:seeks,position:position))
+        }
+        try present(running:true); now = 60; try present(running:true)
+        ends[0](); XCTAssertNil(output.takeEnded())                       // the real player's end: ignored
+        XCTAssertEqual(output.state?.time ?? -1,60,accuracy:1e-9); XCTAssertEqual(output.state?.playing,true)
+        try present(running:false); now = 500; try present(running:false) // a pause holds the position
+        try present(running:true); now = 539; try present(running:true); XCTAssertNil(output.takeEnded())
+        now = 540; try present(running:true); XCTAssertEqual(output.takeEnded(),1); XCTAssertEqual(output.state?.ended,true)
+        now = 600; try present(running:true,seeks:1,position:90)          // the original's seek restarts it
+        XCTAssertEqual(output.state?.ended,false); now = 609; try present(running:true,seeks:1,position:90)
+        XCTAssertNil(output.takeEnded()); now = 610; try present(running:true,seeks:1,position:90); XCTAssertEqual(output.takeEnded(),1)
+    }
+
     func testOutputFollowsGraphStateAndStaysSilentAfterTheEnd() throws {
         let main = URL(fileURLWithPath:"/main.caf"),boss = URL(fileURLWithPath:"/boss1.caf")
         var players: [Recorder] = [],ends: [() -> Void] = []

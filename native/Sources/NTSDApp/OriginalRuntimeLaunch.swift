@@ -129,6 +129,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 while try started.host.takeCommitted() != nil {}
                 let music = try OriginalMacMusicOutput.bundled()
                 music.muted = arguments.contains("--mute-music"); self.music = music
+                if virtualClock != nil { music.virtualSeconds = { [unowned self] in Double((try? self.clock()) ?? 0)/1000 } }
                 try music.present(started.runtime.music.presented())
                 let sounds = OriginalMacSoundEffects.backed(by:started.audio); self.sounds = sounds
                 do {
