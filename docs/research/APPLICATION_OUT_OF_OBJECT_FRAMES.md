@@ -100,9 +100,33 @@ the cpoint sites. Its Frame lookup now falls back to the same
 the absent Frame (no itr, no bdy, so no contact), frames −5..−1 read the
 header's bytes, and 400 and −6 stay boundaries.
 
-The other Frame lookups that still stop outside `frameStorage` (physics
-`OriginalWorldPhysics`, control `OriginalWorldControl`, commands, the post-draw
-slot prefix and opoint, character AI and object input) are unchanged. No soak
-has reached them; each needs its own check of the EXE site.
+**The other Frame lookups (static trace, 2026-09-30).** Frames ≥ 401 arise
+only between the hit pass (kind-8 dvx 1000), the links (weaponact 1000/9998/
+−888) or the scheduler (next 1000/1250) and the post-draw opoint continuation.
+At 41fb26..41fb48 that continuation sets frames 1100..1299 to 0, and sends
+frames < 0 or ≥ 400 to 4213a9 (frame 0, deactivated). Every frame write after
+it is small: opoint child actions 0..396, Object 998's 0/2/4, particles, and
+the constructor's 0. Control writes only constants or counters, and 40e2d0
+commits only present targets and maps 999 to 0. Hence:
+
+| Lookup | EXE | Unchecked | Frame ≥ 401 reachable |
+| --- | --- | --- | --- |
+| contacts (`OriginalWorldContacts`) | 419380 | yes | yes, right after the links 41eed3 (this soak) |
+| physics (`OriginalWorldPhysics`) | 41e634, 40e490 | yes | no: only control runs before it in the tick |
+| control (`OriginalWorldControl`) | 41e339, 413080, 412800..412f40 | yes | no: first gameplay stage |
+| commands | 4214d5..421a15 | yes | no: after the lifecycle |
+| post-draw slot prefix | 41f550..41fb0b | yes | yes, but the gameplay path already uses the fallback (`OriginalPostDrawLifecycle`); the throwing public overloads have no callers |
+| post-draw opoint | 41fb0b..4203b4 | parent range-checked at 41fb26..41fb48; child unchecked | no: the child's frame is an opoint action |
+| character-AI special | 403a40 | yes | no |
+| object input | 419dfb gate, 406ba0 | yes | no: slots 10..399 of type ≠ 0 |
+
+These stay boundaries: reaching one would mean the trace missed a writer.
+Applying the fallback there would not be neutral, because the absent Frame's
+state 0 is the standing state. Control would run standing input and physics
+would land an actor instead of dropping it. The character-AI and local-input
+lookups (`OriginalCharacterAI.swift:61`, `OriginalLocalInput.swift:105`) run
+at the start of the tick and are likewise not reachable. The lifecycle and
+links fallbacks use `outsideAllocation` only, so frames −5..−1 still stop
+there.
 
 EXE envelope not recalculated.
