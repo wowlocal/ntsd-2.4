@@ -110,8 +110,10 @@ not kept, a resource-holding one and its resource are); the runtime menu
 test now asserts the live display keeps counts and no logs. The observed
 iteration, graphics, bitmap, window-geometry, runtime-menu, retained-history
 and delivery suites pass (26 tests), as do the display, front-raster, bitmap
-and Mac runtime suites (25) and the whole e2e set. The whole-catalog
-loading-audio test (≈45 min when last passed) was still running at commit
-time; its result is reported separately.
+and Mac runtime suites (25) and the whole e2e set. The loading-audio
+suite (4, including the whole-catalog Host test) passes on a release test
+build with `-enable-testing` (separate scratch path
+`build/swiftpm-test-release`): 3323.9 s, the whole-catalog test 3293.3 s. A
+debug run of that test was stopped after 3 h, still in catalog loading.
 
 EXE envelope not recalculated.
