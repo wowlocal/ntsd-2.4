@@ -51,3 +51,10 @@ recalculated.
 OriginalWarMenu) and `tools/app_e2e.py --app "build/NTSD Native.app/Contents/MacOS/NTSDNative"`
 for vs (with the quit and website checks), mission, demo, war, playback,
 tournament and team-tournament: all pass, every resource path inside the app.
+
+**Re-check 2026-09-30** (after the front-menu screens, the network menu and
+the frame/header policies): `tools/build-native.sh` builds the app and
+`tools/app_e2e.py --app "build/NTSD Native.app/Contents/MacOS/NTSDNative"`
+passes every scenario — vs with the quit, website, controls, online and
+recording checks, mission, demo, war, playback, tournament and team-tournament
+— with every resource path inside the app (OriginalCatalog, OriginalMusic).
