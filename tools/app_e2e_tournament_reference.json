@@ -38,7 +38,7 @@
    "capture": "215daed6e400086e1d92385015e77dd495c6e5815a8c8ddf8458290f4de793d9",
    "event": "captured",
    "iterations": 12000,
-   "musicPlaying": true,
+   "musicPlaying": false,
    "track": "bgm\\stage1.wma"
   },
   {

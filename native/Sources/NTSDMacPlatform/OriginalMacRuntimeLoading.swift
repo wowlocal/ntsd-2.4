@@ -399,17 +399,19 @@ import UniformTypeIdentifiers
         }
         return outcome
     }
-    /// Round and control methods on music interface tokens — the round's
-    /// music stop (IMediaControl::Stop, put_CurrentPosition) — reach the
-    /// music runtime when their batch commits. Core already declared their
-    /// results (0, ignored as by the original); the output follows the graph.
+    /// Methods on music interface tokens — the round's music stop and the
+    /// front screens' 402100 stop (a tournament's Winner screen, Music: OFF),
+    /// i.e. IMediaControl::Stop and put_CurrentPosition — reach the music
+    /// runtime when their batch commits, in operation order. Core already
+    /// declared their results (0, ignored as by the original).
     func answerRoundMusic(_ operations: [LoadedMenu.Operation]) throws {
         let music = started.runtime.music
-        for case .preceding(let input) in operations {
+        for operation in operations {
             let words: [UInt32]
-            switch input {
-            case .roundMethod(let e) where e.kind == .method: words = e.arguments
-            case .control(let q,_) where q.kind == .method: words = q.arguments
+            switch operation {
+            case .preceding(.roundMethod(let e)) where e.kind == .method: words = e.arguments
+            case .preceding(.control(let q,_)) where q.kind == .method: words = q.arguments
+            case .front(let e,_,_) where e.kind == "musicMethod": words = e.arguments
             default: continue
             }
             guard let token = words.first,music.interface(token) != nil else { continue }

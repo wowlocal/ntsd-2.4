@@ -21,3 +21,15 @@ reference (vs with the Quit check, mission, demo, war, playback, tournament,
 team-tournament); `OriginalMacRuntimeLoadingTests` 2/2.
 
 EXE envelope not recalculated.
+
+**Review (2026-09-30):** an independent review found that the same 402100
+music stop issued from front screens never reached the music runtime: a
+tournament's (and team tournament's) Winner screen (0x4349b6..0x4349c7,
+0x436e8a) and choosing Music: OFF on a settings screen (0x402549) report it as
+front `musicMethod` events, which the Mac runtime ignored — so the music kept
+playing where the original is silent. `answerRoundMusic` now forwards those
+events too, in operation order. The two tournament e2e references had recorded
+the wrong state; re-recorded, each changes in exactly one field, the Winner
+capture's `musicPlaying` true → false. The review found nothing definite in
+the playback prologue, the tournament preparation or the scripted-input
+isolation.
