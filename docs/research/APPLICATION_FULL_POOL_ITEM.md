@@ -40,6 +40,10 @@ restored; see the plan's addendum.
   heap 168.4 MB at the end).
 - A VS match with F8 pressed every 20 steps for 2,500 steps plays with no
   stop; it did not reach a requested-items pass that starts on a full pool.
+  A second run pressed F8 every 20 steps for 28,300 steps (1,415 presses)
+  and also exited without a stop. It did not record how long the match lasted
+  (the idle human may have been knocked out early), so reachability in play
+  stays open.
 - The whole e2e set passes.
 
 EXE envelope not recalculated.
