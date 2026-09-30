@@ -70,4 +70,28 @@ setup inputs.
 Known gaps, unchanged: GDI text (Background/Difficulty values, Summary
 numbers, names) is empty; the hotkey sounds 416c70/416ca0 are unserved.
 
+## Independent review (2026-09-30)
+
+A review against the EXE (434349..4347c5, 436747..436afd and the seat scan
+434366..4343b2) found no defect in the wiring. Neither preparation calls a
+music routine, so leaving out `resumeMusic` is right. After 434349 the EXE
+falls through to 4347c5 with 44d020 = 0, as the port's `prepare → true`
+does. The computer-join sounds reach the front, and a null arena allocation
+is a boundary. The Winner-screen music stop it noted was already fixed in
+446da3f. Two test issues:
+
+- **Second human match untested.** In both scenarios the human lost round 1,
+  so `stagedArena`'s release (the previous arena and the old recording, freed
+  before a second human match) never ran. New scenario `tournament-win`: the
+  human attacks through the Preliminary and wins. Attack on the Summary, then
+  at the bracket Attack on "Please choose your control device" and Yes start
+  the Semi-final. The human loses it
+  ([capture](../evidence/application-tournament-win-semifinal-capture.png)),
+  and Attack returns to the bracket. There is no boundary: two `menu` events
+  (1104 and 2520 bodies) and the files `…_1on1_Prelminar.lfr` and
+  `…_1on1_SemiFinal.lfr`. The second match added 120,240 bytes of heap
+  addresses (the replay blocks were reused). Recorded, then re-run: pass.
+- **Time zone.** The replay file names follow the Mac's time zone; the e2e
+  runs now pin UTC+1 ([APPLICATION_E2E.md](APPLICATION_E2E.md)).
+
 EXE envelope not recalculated.

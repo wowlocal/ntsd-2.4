@@ -1,0 +1,155 @@
+{
+ "backingScale": 2,
+ "boundary": null,
+ "exitCode": 0,
+ "milestones": [
+  {
+   "attempts": 76,
+   "dates": [
+    "2026/01/01/01/00/00",
+    "2026/01/05/01/00/00"
+   ],
+   "event": "started",
+   "requests": 75
+  },
+  {
+   "allocations": 16105,
+   "audioRequests": 2072,
+   "bitmapRequests": 12817,
+   "event": "loaded",
+   "files": 621
+  },
+  {
+   "cycles": 489,
+   "event": "gameplay"
+  },
+  {
+   "cycles": 1593,
+   "epilogues": 1,
+   "event": "menu",
+   "gameplayBodies": 1104,
+   "iterations": 5004,
+   "refusedReplays": [],
+   "replayFiles": [
+    "recording\\20260101_010000_1on1_Prelminar.lfr 10381"
+   ]
+  },
+  {
+   "capture": "2f16d75d8ccf7937988c0dabbf136a4434537f86aa76976517a340e0ee3caef4",
+   "event": "captured",
+   "iterations": 13500,
+   "musicPlaying": true,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "cycles": 3411,
+   "epilogues": 2,
+   "event": "menu",
+   "gameplayBodies": 2520,
+   "iterations": 10686,
+   "refusedReplays": [],
+   "replayFiles": [
+    "recording\\20260101_010000_1on1_Prelminar.lfr 10381",
+    "recording\\20260101_010000_1on1_SemiFinal.lfr 10436"
+   ]
+  },
+  {
+   "capture": "893c7a4096d1e8a7970962a69df5bf55bca6ba4f4fffd089bcff1e250be4c3c3",
+   "event": "captured",
+   "iterations": 14500,
+   "musicPlaying": false,
+   "track": "bgm\\stage1.wma"
+  }
+ ],
+ "overlayFiles": {
+  "data/adinfo.txt": "bbbc625958095740ae6f64a671c1673b5b1be1dad8a02de5e1c19b99528b759e",
+  "recording/20260101_010000_1on1_Prelminar.lfr": "24b262b9986de0923fe57d4982c731f6727764da375db49a76f7fee45adfccfb",
+  "recording/20260101_010000_1on1_SemiFinal.lfr": "830d14ab8eda082a49dd31b9ee69713d9c66c2180300b174a93094f2f2dfa033"
+ },
+ "progress": [
+  {
+   "bodies": 300,
+   "capture": "88a590e673e37b173acbbcbfe339dbac5fcb66b50f5a4009fb2341f680b1d512",
+   "characterAI": 300,
+   "cycles": 788,
+   "iterations": 2489,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 600,
+   "capture": "d935ac249672eba14f1756fe5f9fb3bdc21cf0726f07374884eee2082f2cf90a",
+   "characterAI": 600,
+   "cycles": 1088,
+   "iterations": 3426,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 900,
+   "capture": "8fdcbcbd3efa3ceb260a62162dc05e3a0bd508f88ef87c8566ed06c120a664bc",
+   "characterAI": 900,
+   "cycles": 1388,
+   "iterations": 4364,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 1200,
+   "capture": "d38f1e67ad36a24b8de2ac6fc5ffdc5c652e5c357449dbd71d7ae799279092f5",
+   "characterAI": 1202,
+   "cycles": 2090,
+   "iterations": 6558,
+   "musicPlaying": true,
+   "objectInputs": 0,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 1500,
+   "capture": "e9d7fe983ebd6f34083ee830108d3075c295a8b132ee071ce1da1a87107e4ac4",
+   "characterAI": 1502,
+   "cycles": 2390,
+   "iterations": 7495,
+   "musicPlaying": true,
+   "objectInputs": 16,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 1800,
+   "capture": "4e5f1060531272455d096f7f2f0c9137083dcf5a5168615845c8fee010911b6e",
+   "characterAI": 1802,
+   "cycles": 2690,
+   "iterations": 8433,
+   "musicPlaying": true,
+   "objectInputs": 17,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 2100,
+   "capture": "1cb255a88ceb82b6c1c974173df7c0bd9ff99be3e743c01ec98dd348ed570e83",
+   "characterAI": 2102,
+   "cycles": 2990,
+   "iterations": 9370,
+   "musicPlaying": true,
+   "objectInputs": 17,
+   "track": "bgm\\stage1.wma"
+  },
+  {
+   "bodies": 2400,
+   "capture": "b817f4c42797aedcd7479dad066c46efdcaf72f7936eec6e7f908905ddc0d65c",
+   "characterAI": 2402,
+   "cycles": 3290,
+   "iterations": 10308,
+   "musicPlaying": true,
+   "objectInputs": 18,
+   "track": "bgm\\stage1.wma"
+  }
+ ],
+ "resources": [
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
+ ]
+}

@@ -10,8 +10,8 @@ return to the menus with its epilogue and replay file, music) are compared
 with tools/app_e2e_reference.json; `--record` writes that reference instead.
 Further runs end the game on each quit path — Quit on the main menu, ESC
 (No, then Yes) and the window's close button — and require WM_QUIT to end
-the process with code 0. Mission, War, Demo, Playback Recording, Tournament and
-Team Tournament scenarios compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
+the process with code 0. Mission, War, Demo, Playback Recording, Tournament (lost
+and won in round 1) and Team Tournament scenarios compare with their own references. The original is not executed. Captures are PNGs of the window rendering and
 depend on the window's backing scale, which the reference records.
 """
 import argparse
@@ -62,6 +62,26 @@ BRACKET_SETUP = ("250 key 68; 275 key 74; 300 key 68; 325 key 74; " + "".join(f"
                  + "800 key 68; 825 key 74; 900 key 87; 925 key 87; 975 key 74; 1400 key 74; 1500 key 68; 1550 key 74; ")
 TOURNAMENT = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 74; " + BRACKET_SETUP
               + "9100 key 74; 12000 capture {captures}/winner.png; 13100 key 74; 13500 capture {captures}/menu.png; 13600 exit")
+
+
+def attack_run(start, end):
+    """Attack every 20 steps with a short Right and Left hold in each 200."""
+    steps = []
+    for t in range(start, end, 20):
+        k = (t - 1700) // 20
+        steps.append(f"{t} hold 68 12" if k % 10 == 3 else f"{t} hold 65 12" if k % 10 == 8 else f"{t} key 74")
+    return "; ".join(steps) + "; "
+
+
+# Tournament won in round 1: the same setup, the human attacks through the
+# Preliminary and wins; Attack on the Summary, then at the bracket the human's
+# device (Attack) and Yes (Right, Attack) start the Semi-final — the second
+# human match, whose start releases the previous arena and recording. The
+# human loses it; Attack on its Summary returns to the bracket.
+TOURNAMENT_WIN = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 74; " + BRACKET_SETUP
+                  + attack_run(1700, 6000) + "6100 key 74; 7600 key 74; 7700 key 68; 7760 key 74; "
+                  + attack_run(7900, 13000) + "13500 capture {captures}/semifinal-summary.png; 13600 key 74; "
+                  + "14500 capture {captures}/bracket.png; 14600 exit")
 TEAM_TOURNAMENT = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 74; " + BRACKET_SETUP
                    + "9100 key 68; 9200 key 74; 9600 key 68; 9700 key 74; 10000 capture {captures}/winner.png; "
                    + "10100 key 68; 10200 key 74; 10500 capture {captures}/menu.png; 10600 exit")
@@ -104,6 +124,8 @@ SCENARIOS = {
                      script=lambda captures: PLAYBACK.replace("{captures}", str(captures))),
     "tournament": dict(reference=ROOT / "tools/app_e2e_tournament_reference.json", extra=[],
                        script=lambda captures: TOURNAMENT.replace("{captures}", str(captures))),
+    "tournament-win": dict(reference=ROOT / "tools/app_e2e_tournament_win_reference.json", extra=[],
+                           script=lambda captures: TOURNAMENT_WIN.replace("{captures}", str(captures))),
     "team-tournament": dict(reference=ROOT / "tools/app_e2e_team_tournament_reference.json", extra=[],
                             script=lambda captures: TEAM_TOURNAMENT.replace("{captures}", str(captures))),
     "joystick": dict(reference=ROOT / "tools/app_e2e_joystick_reference.json", extra=["--joysticks", "2", "--exit-after-bodies", "900"],
