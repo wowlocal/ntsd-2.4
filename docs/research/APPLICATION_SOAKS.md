@@ -57,4 +57,20 @@ centre and the computer allies do not engage it; with no boundary this is
 gameplay for this input, not a port stop. Soaking later stages needs a script
 that selects them deliberately (the Stage option is GDI text, drawn blank).
 
+### Chosen stages
+
+On the start menu the Stage row is one below Randomize, and each Attack there
+moves to the next stage group (the value is GDI text, but the stage's own
+"STAGE x-y" banner confirms it): 1 press → 2-1, 2 → 3-1, 3 → 4-1, 4 → 5-1,
+5 → Survival. With three computer allies and the human walking right (Right
+held 60 steps) and attacking every 150 steps, each ran 30,000 bodies:
+
+| Stage | Result |
+| --- | --- |
+| 2-1 (its story dialogue drawn by the library) | no stop; the team lost, Summary "Lose (Dead)" |
+| 3-1 | no stop |
+| 4-1 (many shadow clones on screen) | no stop |
+| 5-1 | no stop |
+| Survival Stage | no stop |
+
 EXE envelope not recalculated.
