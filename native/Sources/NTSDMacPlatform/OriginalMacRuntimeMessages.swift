@@ -111,12 +111,14 @@ public struct OriginalMacRuntimeKey: Equatable {
     }
     /// Last posted position and buttons of each captured joystick.
     private var joysticks: [UInt32:(x: UInt32,y: UInt32,buttons: UInt32)] = [:]
+    /// Joysticks 43bf10 found connected (and captured) at startup.
+    public var capturedJoysticks: UInt32 = 0
     /// A joystick sample (APPLICATION_JOYSTICKS_PLAN.md): joySetCapture's
     /// messages — MM_JOYnMOVE when an axis moved by more than the threshold
     /// (100, set by 43bf10), MM_JOYnBUTTONDOWN/UP for changed buttons 1..4
     /// with their JOY_BUTTONnCHG bits; lParam holds x | y<<16.
     public func joystick(_ id: UInt32,x: UInt32,y: UInt32,buttons: UInt32) {
-        guard id < 2 else { return }
+        guard id < min(capturedJoysticks,2) else { return }
         let last = joysticks[id] ?? (x:32767,y:32767,buttons:0),state = buttons & 0xf
         let packed = (x & 0xffff) | (y & 0xffff) << 16
         let moved = x.magnitude(from:last.x) > 100 || y.magnitude(from:last.y) > 100

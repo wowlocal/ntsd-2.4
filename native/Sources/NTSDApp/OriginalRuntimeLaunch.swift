@@ -77,7 +77,14 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     /// Joysticks connected at launch (APPLICATION_JOYSTICKS_PLAN.md): the first
     /// two extended game controllers, or `--joysticks N` (0...2) for scripted runs.
     /// The original probes its joysticks only at startup, so this is fixed.
-    private lazy var controllers: [GCController] = Array(GCController.controllers().filter { $0.extendedGamepad != nil }.prefix(2))
+    private lazy var controllers: [GCController] = {
+        // Already-connected controllers are enumerated asynchronously after launch;
+        // give GameController up to 0.5 s to report one before 43bf10's single probe.
+        func found() -> [GCController] { GCController.controllers().filter { $0.extendedGamepad != nil } }
+        let deadline = Date().addingTimeInterval(0.5)
+        while found().isEmpty && Date() < deadline { RunLoop.current.run(mode:.default,before:Date().addingTimeInterval(0.05)) }
+        return Array(found().prefix(2))
+    }()
     private var joystickCount: Int {
         if arguments.contains("--script") {
             guard let i = arguments.firstIndex(of:"--joysticks"),i+1 < arguments.count,let n = Int(arguments[i+1]) else { return 0 }
@@ -149,10 +156,13 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Scripted runs answer GetKeyState(VK_CAPITAL) with Caps Lock off.
                 if arguments.contains("--script") { menu.capsLock = { 0 } }
                 self.menu = menu; menu.sounds = sounds
+                menu.messages.capturedJoysticks = UInt32(joystickCount)
                 if !arguments.contains("--script") && !controllers.isEmpty {
-                    Timer.scheduledTimer(withTimeInterval:0.025,repeats:true) { [weak self] _ in
+                    // Common modes: sampling continues while a window is dragged or a menu tracks.
+                    let timer = Timer(timeInterval:0.025,repeats:true) { [weak self] _ in
                         MainActor.assumeIsolated { self?.sampleControllers() }
                     }
+                    RunLoop.main.add(timer,forMode:.common)
                 }
                 menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
                 // "open" of a URL (OFFICIAL WEBSITE and the other links): the default
@@ -198,6 +208,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             messages.key(key,down:event.type == .keyDown,repeated:event.isARepeat,characters:event.characters)
         case .flagsChanged:
             guard let key = OriginalMacRuntimeKey.table[event.keyCode] else { return true }
+            // Caps Lock reports one flagsChanged per toggle and none on release: each
+            // is a whole physical press (down, then up), as Windows sees the key.
+            if key.vk == 0x14 { messages.key(key,down:true); messages.key(key,down:false); return true }
             let down = !pressedModifiers.contains(event.keyCode)
             if down { pressedModifiers.insert(event.keyCode) } else { pressedModifiers.remove(event.keyCode) }
             messages.key(key,down:down)

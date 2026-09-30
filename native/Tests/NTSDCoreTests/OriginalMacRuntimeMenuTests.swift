@@ -28,6 +28,8 @@ import XCTest
         XCTAssertEqual(try [36,40,44,48,60].map { try record.integer(at:$0,as:UInt32.self) },[0,65535,0,65535,4])
 
         let m = Messages(window:7,clock:{ 1000 },point:{ (0,0) })
+        m.joystick(0,x:65535,y:0,buttons:1); XCTAssertTrue(m.queue.isEmpty)              // nothing captured yet
+        m.capturedJoysticks = 2
         m.joystick(0,x:32767,y:32767,buttons:0); XCTAssertTrue(m.queue.isEmpty)          // centred, as probed
         m.joystick(0,x:32867,y:32767,buttons:0); XCTAssertTrue(m.queue.isEmpty)          // within the threshold 100
         m.joystick(0,x:65535,y:32767,buttons:0)

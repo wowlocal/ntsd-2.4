@@ -42,4 +42,30 @@ Not tested: a physical controller (none attached here); the GameController
 mapping is compiled and linked but has only been exercised through the same
 runtime entry point the scripted samples use.
 
+## Independent review (2026-09-30)
+
+A review of the CONTROL SETTINGS port and wiring and of this card found no
+defect in the ported screen or in the MM_JOY semantics (wParam current buttons
+| JOY_BUTTONnCHG, lParam x | y<<16, moves relative to the last posted position
+past the threshold, JOYINFOEX/JOYCAPSA offsets). It raised four issues, all
+fixed:
+
+- **Caps Lock.** macOS reports one flagsChanged per Caps Lock toggle and none
+  on release; the app's modifier handling made VK_CAPITAL stay down while Caps
+  Lock was on, so CONTROL SETTINGS' key capture would bind CapsLock (0x14, the
+  lowest pressed VK) and nothing else. Each Caps Lock event is now a whole
+  press (down, then up), as a physical press is on Windows.
+- **Controllers at launch.** Already-connected controllers are enumerated
+  asynchronously; interactive runs now give GameController up to 0.5 s to
+  report one before the single startup probe.
+- **Undeclared IDs.** `joystick()` now ignores IDs at or above the number
+  43bf10 captured (`capturedJoysticks`), so a script cannot drive a joystick
+  that was answered as unplugged.
+- **Run-loop mode.** The 25 ms sampling timer runs in the common modes and so
+  continues while a window is dragged or a menu tracks.
+
+The runtime tests (5), the joystick and vs e2e scenarios and an interactive
+launch pass; the Caps Lock and discovery changes act only on real input and
+are otherwise untested here.
+
 EXE envelope not recalculated.
