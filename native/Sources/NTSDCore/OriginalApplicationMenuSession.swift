@@ -32,9 +32,6 @@ public struct OriginalApplicationMenuSession {
         public internal(set) var settings: OriginalSettingsLoading.StartupResult?
         public internal(set) var bitmapInputs: OriginalApplicationBitmapInputs?
         public internal(set) var graphics: OriginalApplicationGraphics?
-        /// The network menu's 51 hostname bytes at World+7d8 (NETWORK_MENU.md),
-        /// unknown until selector 1→3 writes them.
-        public internal(set) var hostname: OriginalStateRecord?
 
         /// Adopt the already constructed menu parent exactly once. Surface
         /// tokens come from its own CreateSurface responses, never snapshots.
@@ -372,7 +369,7 @@ public struct OriginalApplicationMenuSession {
                     var g = try State.slice(owned.full,0,Self.globalCount)
                     var resources = owned.front, screen = owned.earlyScreen, library = owned.libraryText
                     var random = owned.random, memory = owned.memory, body = owned.screenBody
-                    var settings = owned.settings,hostname = owned.hostname,bodyLocal: OriginalStateRecord?
+                    var settings = owned.settings,networkHost: OriginalStateRecord?,bodyLocal: OriginalStateRecord?
                     var frontSurfaces: [UInt32:UInt32] = [:]
                     var frontAPIIndex = 0,backgroundAPIIndex = 0
                     // Drawing callbacks run while presentation borrows memory.
@@ -628,7 +625,9 @@ public struct OriginalApplicationMenuSession {
                         let selector = try g.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self)
                         guard (1...3).contains(selector) else { throw Boundary.dependency("Menu selector \(selector)") }
                         stage = .menu
-                        var host = try hostname ?? .init(bytes:[UInt8](repeating:0,count:51),defined:[Bool](repeating:false,count:51))
+                        // The 51 hostname bytes at World+7d8 (NETWORK_MENU.md) follow the World
+                        // prefix in the canonical record (4592d8): read and write them there.
+                        var host = try State.slice(owned.full,Self.worldStart+0x7d8,51)
                         // Caller-local bytes from callerSP+14; only this call's body writes are known.
                         var local = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:0x400),defined:[Bool](repeating:false,count:0x400))
                         if let bodyLocal { for i in 0x14..<bodyLocal.bytes.count where bodyLocal.defined[i] { try local.write(bodyLocal.bytes[i],at:i-0x14) } }
@@ -674,7 +673,7 @@ public struct OriginalApplicationMenuSession {
                                 default:try event(e)
                                 }
                             })
-                        hostname = host
+                        networkHost = host
                         for c in calls {
                             switch c {
                             case .sleep(let arguments):
@@ -689,7 +688,7 @@ public struct OriginalApplicationMenuSession {
                     let resultRecord = try combined(g,world)
                     owned.full = resultRecord; owned.front = resources; owned.earlyScreen = screen
                     owned.libraryText = library; owned.random = random; owned.memory = memory; owned.screenBody = body; owned.settings = settings;owned.bitmapInputs = bitmapInputs;owned.graphics = graphics
-                    owned.hostname = hostname
+                    if let networkHost { try owned.replace(Self.worldStart+0x7d8,networkHost) }
                     try owned.replace(Self.replayStart,memory.replayPointers)
                     if continuation == .loading {
                         guard let loopContinuation else { throw Boundary.dependency("Missing loading loop continuation") }

@@ -122,7 +122,9 @@ the session runs `OriginalNetworkMenu` and then the real presentation: the
 42873e tail, or the 4287de epilogue (no presentation), as the accepted
 reference composes them; the iteration then returns like the other menu paths.
 The presentation code is shared with the loop's completion. The 51 hostname
-bytes at World+7d8 are session state (unknown until 1→3 writes them); the
+bytes at World+7d8 (4592d8) are read from and written back to the session's
+canonical record, where they follow the World prefix (first kept as a
+separate field; an independent review noted the duplicate, 2026-09-30); the
 0x400 caller-local bytes are fresh each call except the bytes this call's
 body wrote. timeGetTime comes from the queue, GetKeyState(VK_CAPITAL) from the
 iteration's responses, the fill's DDBLTFX backing is the prelude's.
