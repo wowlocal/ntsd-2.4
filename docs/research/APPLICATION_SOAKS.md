@@ -42,7 +42,8 @@ at the random item drop with every object slot taken
 policy; the stopped run's footprint samples were 1.9–2.0 GB). Afterwards:
 50,000 bodies, 14 battles, no stop. With another seed (`--virtual-clock
 987654321 8`): 150,000 bodies, 41 battles, 2,230,739 character-AI calls, no
-stop; logical heap 171.1 MB at the last return.
+stop; logical heap 171.1 MB at the last return. A third seed (`314159265 8`):
+150,000 bodies, 44 battles, no stop.
 
 ## Mission (Stage mode) with three computer allies
 
@@ -131,6 +132,9 @@ suite (4, including the whole-catalog Host test) passes on a release test
 build with `-enable-testing` (separate scratch path
 `build/swiftpm-test-release`): 3323.9 s, the whole-catalog test 3293.3 s. A
 debug run of that test was stopped after 3 h, still in catalog loading.
+
+2026-10-01, two more seeds (`--virtual-clock 222333444 8` and `555666777 8`),
+200,000 bodies each: 87 and 89 matches, no stop.
 
 Demo afterwards (the Demo script above, 50,000 bodies, 23 matches, footprint
 sampled every minute for 27 minutes): no stop; footprint 2.0 GB at every
