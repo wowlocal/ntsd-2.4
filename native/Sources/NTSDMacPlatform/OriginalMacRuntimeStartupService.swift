@@ -16,17 +16,23 @@ import NTSDCore
         public var monotonic: () throws -> OriginalMacStartupClock.Sample
         public var realtime: () throws -> OriginalMacStartupClock.Sample
         public var zone: () -> TimeZone
+        /// Joysticks 0..<n are connected at startup (APPLICATION_JOYSTICKS_PLAN.md).
+        public var joysticks: Int
         public init(monotonic: @escaping () throws -> OriginalMacStartupClock.Sample = OriginalMacStartupClock.monotonicSample,
                     realtime: @escaping () throws -> OriginalMacStartupClock.Sample = OriginalMacStartupClock.realtimeSample,
-                    zone: @escaping () -> TimeZone = { TimeZone.current }) {
-            self.monotonic = monotonic; self.realtime = realtime; self.zone = zone
+                    zone: @escaping () -> TimeZone = { TimeZone.current },joysticks: Int = 0) {
+            self.monotonic = monotonic; self.realtime = realtime; self.zone = zone; self.joysticks = joysticks
         }
     }
     /// A file replacement staged by a served request, applied after commit.
     public struct FileEffect: Equatable { public let path: String, bytes: [UInt8] }
     public struct Served: Equatable { public let request: String }
-    /// WinMM joystick policy: standard driver present, no device attached.
+    /// WinMM joystick policy: standard driver present; IDs below the declared
+    /// count are connected game controllers, the others unplugged.
     public static let joystickDevices: UInt32 = 16, joystickUnplugged: UInt32 = 167
+    /// Declared joystick axis range (JOYCAPS wXmin..wXmax, wYmin..wYmax) and centre.
+    public static let joystickRange: ClosedRange<UInt32> = 0...65535, joystickCentre: UInt32 = 32767
+    private static func little(_ value: UInt32) -> [UInt8] { (0..<4).map { UInt8(truncatingIfNeeded: value >> ($0*8)) } }
     public let heap: OriginalMacRuntimeHeap, music: OriginalMacRuntimeMusic
     private let windows: OriginalMacWindowBackend, environment: Environment
     private var panelBytes: [UInt8]?
@@ -90,8 +96,25 @@ import NTSDCore
         case .joystick(let q):
             switch q.kind {
             case "numberDevices": try require(q.arguments.isEmpty,"joyGetNumDevs"); return .joystick(.init(result:Self.joystickDevices))
-            case "position": try require(q.arguments.count == 1 && q.arguments[0] < 2,"joyGetPosEx"); return .joystick(.init(result:Self.joystickUnplugged))
-            default: throw Boundary.unsupported("joystick \(q.kind) without a device")
+            case "position":
+                try require(q.arguments.count == 1 && q.arguments[0] < 2,"joyGetPosEx")
+                guard Int(q.arguments[0]) < environment.joysticks else { return .joystick(.init(result:Self.joystickUnplugged)) }
+                // JOY_RETURNX|Y|BUTTONS: a centred stick, no button pressed.
+                return .joystick(.init(result:0,writes:[.init(offset:8,bytes:Self.little(Self.joystickCentre)),.init(offset:12,bytes:Self.little(Self.joystickCentre)),
+                    .init(offset:32,bytes:Self.little(0)),.init(offset:36,bytes:Self.little(0))]))
+            case "threshold":
+                try require(q.arguments.count == 2 && Int(q.arguments[0]) < environment.joysticks,"joySetThreshold"); return .joystick(.init(result:0))
+            case "capture":
+                try require(q.arguments.count == 4 && Int(q.arguments[1]) < environment.joysticks,"joySetCapture"); return .joystick(.init(result:0))
+            case "capabilities":
+                try require(q.arguments.count == 2 && q.arguments[1] == 404 && Int(q.arguments[0]) < environment.joysticks,"joyGetDevCapsA")
+                // JOYCAPSA: zero apart from the X/Y ranges (+36..+48) and four buttons (+60).
+                var caps = [UInt8](repeating:0,count:404)
+                for (offset,value) in [(36,Self.joystickRange.lowerBound),(40,Self.joystickRange.upperBound),(44,Self.joystickRange.lowerBound),(48,Self.joystickRange.upperBound),(60,UInt32(4))] {
+                    caps.replaceSubrange(offset..<offset+4,with:Self.little(value))
+                }
+                return .joystick(.init(result:0,writes:[.init(offset:0,bytes:caps)]))
+            default: throw Boundary.unsupported("joystick \(q.kind)")
             }
         case .window(let q) where q.kind == "debug":
             try require(q.words.isEmpty && q.strings.count == 1 && q.bytes == nil,"OutputDebugStringA")

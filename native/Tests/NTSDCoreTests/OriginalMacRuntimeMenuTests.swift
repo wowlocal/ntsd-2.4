@@ -9,6 +9,38 @@ import XCTest
     typealias Key = OriginalMacRuntimeKey
     enum Stop: Error { case limit }
 
+    /// APPLICATION_JOYSTICKS_PLAN.md: declared joysticks answer 43bf10's WinMM
+    /// probes; samples become joySetCapture's MM_JOY messages.
+    func testJoystickStartupAnswersAndCaptureMessages() throws {
+        let service = OriginalMacRuntimeStartupService(windows:OriginalMacWindowBackend(instance:0x400000),heap:OriginalMacRuntimeHeap(),
+                                                       environment:.init(joysticks:1))
+        func joystick(_ kind: String,_ arguments: [UInt32]) throws -> OriginalInputStartup.Response {
+            guard case .joystick(let r) = try service.answer(.joystick(.init(kind,arguments))) else { throw Stop.limit }
+            return r
+        }
+        XCTAssertEqual(try joystick("numberDevices",[]).result,16)
+        XCTAssertEqual(try joystick("position",[0]).result,0); XCTAssertEqual(try joystick("position",[1]).result,167)
+        XCTAssertEqual(try joystick("threshold",[0,100]).result,0); XCTAssertEqual(try joystick("capture",[7,0,25,1]).result,0)
+        XCTAssertThrowsError(try joystick("capture",[7,1,25,1]))
+        let caps = try joystick("capabilities",[0,404]); XCTAssertEqual(caps.result,0)
+        let bytes = try XCTUnwrap(caps.writes.first).bytes; XCTAssertEqual(bytes.count,404)
+        let record = try OriginalStateRecord(bytes:bytes,defined:Array(repeating:true,count:404))
+        XCTAssertEqual(try [36,40,44,48,60].map { try record.integer(at:$0,as:UInt32.self) },[0,65535,0,65535,4])
+
+        let m = Messages(window:7,clock:{ 1000 },point:{ (0,0) })
+        m.joystick(0,x:32767,y:32767,buttons:0); XCTAssertTrue(m.queue.isEmpty)          // centred, as probed
+        m.joystick(0,x:32867,y:32767,buttons:0); XCTAssertTrue(m.queue.isEmpty)          // within the threshold 100
+        m.joystick(0,x:65535,y:32767,buttons:0)
+        m.joystick(0,x:65535,y:32767,buttons:1)
+        m.joystick(0,x:65535,y:32767,buttons:0)
+        m.joystick(1,x:0,y:0,buttons:0b1010)
+        m.joystick(2,x:0,y:0,buttons:1)                                                   // no third joystick
+        XCTAssertEqual(m.queue.map(\.message),[0x3a0,0x3b5,0x3b7,0x3a1,0x3b6])
+        XCTAssertEqual(m.queue.map(\.wParam),[0,0x101,0x100,0b1010,0b1010 | 0b1010 << 8])
+        XCTAssertEqual(m.queue.map(\.lParam),[0x7fff_ffff,0x7fff_ffff,0x7fff_ffff,0,0])
+        for message: UInt32 in [0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8] { XCTAssertEqual(try m.answer(.init(.windowDefault,[7,message,0,0])),0) }
+    }
+
     func testMessageQueueKeyMapAndTranslation() throws {
         var now: UInt32 = 1000
         let m = Messages(window:7,clock:{ now += 5; return now },point:{ (-3,40) })

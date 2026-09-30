@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Joysticks](research/APPLICATION_JOYSTICKS.md): macOS game controllers
+connected at launch serve as the original's joysticks 0/1 (declared WinMM
+answers and MM_JOY capture messages); a whole VS match plays with joystick 1
+(e2e `joystick`).
+
 [Frames outside the Object](research/APPLICATION_OUT_OF_OBJECT_FRAMES.md): a
 Demo soak found the original's unchecked reads of a heal ball's frame 1000
 (beyond its Object allocation); declared policy: a Frame wholly outside the

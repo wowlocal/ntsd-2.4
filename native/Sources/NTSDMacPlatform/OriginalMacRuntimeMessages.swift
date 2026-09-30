@@ -109,6 +109,23 @@ public struct OriginalMacRuntimeKey: Equatable {
         }
         post(message,buttons,packed)
     }
+    /// Last posted position and buttons of each captured joystick.
+    private var joysticks: [UInt32:(x: UInt32,y: UInt32,buttons: UInt32)] = [:]
+    /// A joystick sample (APPLICATION_JOYSTICKS_PLAN.md): joySetCapture's
+    /// messages — MM_JOYnMOVE when an axis moved by more than the threshold
+    /// (100, set by 43bf10), MM_JOYnBUTTONDOWN/UP for changed buttons 1..4
+    /// with their JOY_BUTTONnCHG bits; lParam holds x | y<<16.
+    public func joystick(_ id: UInt32,x: UInt32,y: UInt32,buttons: UInt32) {
+        guard id < 2 else { return }
+        let last = joysticks[id] ?? (x:32767,y:32767,buttons:0),state = buttons & 0xf
+        let packed = (x & 0xffff) | (y & 0xffff) << 16
+        let moved = x.magnitude(from:last.x) > 100 || y.magnitude(from:last.y) > 100
+        if moved { post(0x3a0+id,state,packed) }
+        let pressed = state & ~last.buttons,released = last.buttons & ~state
+        if pressed != 0 { post(0x3b5+id,state | pressed << 8,packed) }
+        if released != 0 { post(0x3b7+id,state | released << 8,packed) }
+        joysticks[id] = (x:moved ? x : last.x,y:moved ? y : last.y,buttons:state)
+    }
     func bytes(_ m: Message) -> [UInt8] {
         [window,m.message,m.wParam,m.lParam,m.time,UInt32(bitPattern:m.x),UInt32(bitPattern:m.y)].flatMap { w in (0..<4).map { UInt8(truncatingIfNeeded:w >> ($0*8)) } }
     }
@@ -153,7 +170,7 @@ public struct OriginalMacRuntimeKey: Equatable {
         case .windowDefault:
             try require(q.arguments.count == 4 && q.arguments[0] == window)
             switch q.arguments[1] {
-            case 0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400: return 0
+            case 0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400,0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8: return 0
             case 0x112 where q.arguments[2] & 0xfff0 == 0xf060: next([0x10]); return 0
             case 0x10:
                 try require(!destroyed)
@@ -193,4 +210,8 @@ public struct OriginalMacRuntimeKey: Equatable {
             }
         } catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
     }
+}
+
+private extension UInt32 {
+    func magnitude(from other: UInt32) -> UInt32 { self > other ? self - other : other - self }
 }

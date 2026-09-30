@@ -1,4 +1,5 @@
 import AppKit
+import GameController
 import NTSDCore
 import NTSDMacPlatform
 
@@ -73,10 +74,35 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         guard let v = virtualClock else { return try Self.milliseconds() }
         return v.base &+ v.step &* UInt32(truncatingIfNeeded:steps)
     }
+    /// Joysticks connected at launch (APPLICATION_JOYSTICKS_PLAN.md): the first
+    /// two extended game controllers, or `--joysticks N` (0...2) for scripted runs.
+    /// The original probes its joysticks only at startup, so this is fixed.
+    private lazy var controllers: [GCController] = Array(GCController.controllers().filter { $0.extendedGamepad != nil }.prefix(2))
+    private var joystickCount: Int {
+        if arguments.contains("--script") {
+            guard let i = arguments.firstIndex(of:"--joysticks"),i+1 < arguments.count,let n = Int(arguments[i+1]) else { return 0 }
+            return max(0,min(2,n))
+        }
+        return controllers.count
+    }
+    /// joySetCapture's 25 ms period: sample each controller and let the runtime
+    /// post the MM_JOY messages its threshold and button changes call for.
+    @MainActor private func sampleControllers() {
+        guard let menu,!stopped else { return }
+        for (id,controller) in controllers.enumerated() {
+            guard let pad = controller.extendedGamepad else { continue }
+            var dx = pad.leftThumbstick.xAxis.value,dy = pad.leftThumbstick.yAxis.value
+            if pad.dpad.xAxis.value != 0 { dx = pad.dpad.xAxis.value }
+            if pad.dpad.yAxis.value != 0 { dy = pad.dpad.yAxis.value }
+            func axis(_ v: Float) -> UInt32 { UInt32(((max(-1,min(1,v))+1)/2*65535).rounded()) }
+            let buttons = [pad.buttonA,pad.buttonB,pad.buttonX,pad.buttonY].enumerated().reduce(UInt32(0)) { $0 | ($1.element.isPressed ? 1 << UInt32($1.offset) : 0) }
+            menu.messages.joystick(UInt32(id),x:axis(dx),y:axis(-dy),buttons:buttons)
+        }
+    }
     private func startupEnvironment() -> OriginalMacRuntimeStartupService.Environment {
-        guard let v = virtualClock else { return .init() }
+        guard let v = virtualClock else { return .init(joysticks:joystickCount) }
         let fixed = OriginalMacStartupClock.Sample(seconds:Int64(Self.virtualDate.timeIntervalSince1970),nanoseconds:0)
-        return .init(monotonic:{ .init(seconds:Int64(v.base/1000),nanoseconds:Int64(v.base%1000)*1_000_000) },realtime:{ fixed })
+        return .init(monotonic:{ .init(seconds:Int64(v.base/1000),nanoseconds:Int64(v.base%1000)*1_000_000) },realtime:{ fixed },joysticks:joystickCount)
     }
     private func cursor() -> (Int32,Int32) { virtualClock == nil ? Self.cursorPoint() : (0,0) }
     /// GetMessagePos: desktop coordinates with the main screen's top-left origin.
@@ -123,6 +149,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Scripted runs answer GetKeyState(VK_CAPITAL) with Caps Lock off.
                 if arguments.contains("--script") { menu.capsLock = { 0 } }
                 self.menu = menu; menu.sounds = sounds
+                if !arguments.contains("--script") && !controllers.isEmpty {
+                    Timer.scheduledTimer(withTimeInterval:0.025,repeats:true) { [weak self] _ in
+                        MainActor.assumeIsolated { self?.sampleControllers() }
+                    }
+                }
                 menu.messages.messageBox = { [unowned self] text,caption,type in try self.messageBox(text,caption,type) }
                 // "open" of a URL (OFFICIAL WEBSITE and the other links): the default
                 // browser opens it. "explore" of a game-directory folder (RECORDING
@@ -332,6 +363,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             case "hold" where words.count == 3:
                 guard let vk = UInt32(words[1]),let n2 = Int(words[2]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
                 menu.messages.key(key,down:true); script[n+n2,default:[]].append(["keyup",words[1]])
+            case "joy" where words.count == 5:
+                // A joystick sample (id x y buttons), as joySetCapture reports one.
+                guard let id = UInt32(words[1]),let x = UInt32(words[2]),let y = UInt32(words[3]),let b = UInt32(words[4]) else { continue }
+                menu.messages.joystick(id,x:x,y:y,buttons:b)
             case "capture" where words.count == 2:
                 try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,

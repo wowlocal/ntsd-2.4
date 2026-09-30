@@ -63,6 +63,24 @@ TEAM_TOURNAMENT = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 
                    + "10100 key 68; 10200 key 74; 10500 capture {captures}/menu.png; 10600 exit")
 
 
+def joystick_script(captures):
+    """VS played entirely with joystick 1 (--joysticks 2): player 3 (whose
+    default device is joystick 1) joins, picks and confirms, accepts one
+    computer, walks the start menu to Fight! and then fights with stick and
+    button 1 until the body limit."""
+    c = 32767
+    def tap(t, x=c, y=c, b=0):
+        return [f"{t} joy 0 {x} {y} {b}", f"{t + 8} joy 0 {c} {c} 0"]
+    steps = ["20 click 350 230", "60 click 402 218", "100 key 74"]
+    steps += tap(150, b=1) + tap(175, x=65535) + tap(200, b=1) + tap(225, b=1)
+    steps += tap(1030, b=1) + tap(1150, b=1) + tap(1250, b=1)
+    steps += tap(1320, y=65535) + tap(1345, b=1) + tap(1370, b=1) + tap(1395, y=0) + tap(1420, y=0) + tap(1445, y=0) + tap(1475, b=1)
+    for t in range(1700, 2600, 60):
+        steps += tap(t, x=65535 if (t // 60) % 3 else 0) + tap(t + 25, b=1)
+    steps += [f"2600 capture {captures}/joystick-match.png", "2700 exit"]
+    return "; ".join(steps)
+
+
 def playback_file(scratch):
     import base64
     path = scratch / "20260101_010000_VS.lfr"
@@ -84,6 +102,8 @@ SCENARIOS = {
                        script=lambda captures: TOURNAMENT.replace("{captures}", str(captures))),
     "team-tournament": dict(reference=ROOT / "tools/app_e2e_team_tournament_reference.json", extra=[],
                             script=lambda captures: TEAM_TOURNAMENT.replace("{captures}", str(captures))),
+    "joystick": dict(reference=ROOT / "tools/app_e2e_joystick_reference.json", extra=["--joysticks", "2", "--exit-after-bodies", "900"],
+                     script=joystick_script),
 }
 
 
