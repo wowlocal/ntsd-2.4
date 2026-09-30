@@ -40,7 +40,9 @@ setup, Up, Up, Attack (Fight!). 60,000 bodies: 14 battles on changing arenas,
 at the random item drop with every object slot taken
 ([full-pool item drop](APPLICATION_FULL_POOL_ITEM.md), now a declared
 policy; the stopped run's footprint samples were 1.9–2.0 GB). Afterwards:
-50,000 bodies, 14 battles, no stop.
+50,000 bodies, 14 battles, no stop. With another seed (`--virtual-clock
+987654321 8`): 150,000 bodies, 41 battles, 2,230,739 character-AI calls, no
+stop; logical heap 171.1 MB at the last return.
 
 ## Mission (Stage mode) with three computer allies
 
