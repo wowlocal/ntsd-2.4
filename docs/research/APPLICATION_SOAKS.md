@@ -86,7 +86,8 @@ bodies: Survival Stage ran all 150,000 with no stop. Stage 4-1 stopped at body
 ≈23,700 in the contact pass on `chars\chakra.dat` at frame 1000
 ([contacts](APPLICATION_OUT_OF_OBJECT_FRAMES.md#contacts-2026-09-30), now read as
 an absent Frame); with that fix it ran all 150,000 bodies, 8 returns, with no
-stop.
+stop. Stages 2-1, 3-1 and 5-1 with the same seed: 150,000 bodies each (10, 13
+and 16 returns), no stop.
 
 ## VS session: many recorded matches (2026-09-30)
 
