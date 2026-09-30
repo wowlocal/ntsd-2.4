@@ -52,9 +52,14 @@ extension OriginalHitPass {
             let z0 = coarseZ &* (span/30),fineZ = try draw(153,30,observe: observe)
             let z = try fineZ &+ bg.integer(at: 4,as: Int32.self) &+ z0 &+ 30
             let selected = try draw(154,Int32(candidates.count),observe: observe)
-            //41ef92 retains caller scratch when the pool is full; it does not
-            //skip spawning. Its value must come from that caller's prior writes.
-            guard let slot = free ?? retainedSpawnSlot.map(Int.init) else { throw OriginalStateError.invalidStorage("Item spawn needs retained caller slot provenance") }
+            //41ef92 leaves the body's frame word [esp+4c] unwritten when the pool
+            //is full, and the spawn reads it (41f12f). Its only earlier writers in
+            //41bc90 store an Object pointer (41df2d) or −3−World (41e99b); otherwise
+            //it is stack left between ticks, so the Windows value is unknown. A
+            //caller that supplies it keeps the recovered behaviour. Declared policy
+            //(APPLICATION_FULL_POOL_ITEM.md, not the EXE): without it the spawn is
+            //skipped after its draws.
+            if let slot = free ?? retainedSpawnSlot.map(Int.init) {
             let created = try index(slot),object = candidates[Int(selected)]
             try observe(.reconstruct(slot: slot));try actors[created].reconstructActor()
             try put(created,0x368,Int32(object));try number(created,0x58,Double(x));try number(created,0x60,-500)
@@ -65,6 +70,7 @@ extension OriginalHitPass {
             if try h(index(slot),0x6f4) == 122 { try put(index(slot),0x2fc,200) }
             for (integer,binary) in [(0x10,0x58),(0x14,0x60),(0x18,0x68)] { try put(index(slot),integer,OriginalCoordinateConversion.integer(v(index(slot),binary),sse2: sse2)) }
             try put(index(slot),0x354,99)
+            }
         }
         for slot in 0..<400 where try world.integer(at: 4+slot,as: UInt8.self) != 0 {
             if try h(index(slot),0x6f8) > 0 { try resolve(slot,observe: observe);try afterHit(slot,actors[index(slot)]) }

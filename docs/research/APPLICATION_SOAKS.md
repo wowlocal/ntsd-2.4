@@ -36,6 +36,12 @@ Fight!) and then, every 14,000 steps, Jump on the Summary, Attack on the War
 setup, Up, Up, Attack (Fight!). 60,000 bodies: 14 battles on changing arenas,
 1,285,766 character-AI calls, no stop.
 
+2026-09-30, the same script after the memory fixes: the third battle stopped
+at the random item drop with every object slot taken
+([full-pool item drop](APPLICATION_FULL_POOL_ITEM.md), now a declared
+policy; the stopped run's footprint samples were 1.9–2.0 GB). Afterwards:
+50,000 bodies, 14 battles, no stop.
+
 ## Mission (Stage mode) with three computer allies
 
 Script: Mission, player 1 Naruto, `1000 key 68; 1025 key 68; 1050 key 68;

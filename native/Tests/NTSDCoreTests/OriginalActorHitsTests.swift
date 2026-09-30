@@ -58,6 +58,7 @@ final class OriginalActorHitsTests: XCTestCase {
         XCTAssertEqual(c.ids,[2,7,8,51]);XCTAssertEqual(c.cases.count,7845)
         XCTAssertEqual(c.cases.filter { $0.caller == true }.count,150)
         func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
+        var skippedSpawns = 0
         var headers: [OriginalStateRecord] = [],frames: [[OriginalStateRecord]] = []
         for id in c.ids {
             var h = try defined(0x7a4)
@@ -115,6 +116,26 @@ final class OriginalActorHitsTests: XCTestCase {
                 case let .reconstruct(slot): events.append(.init(kind: "reconstruct",arguments: [UInt32(slot)]))
                 }
             }
+            if item.caller == true,item.retainedSpawnSlot != nil {
+                // Declared policy (APPLICATION_FULL_POOL_ITEM.md): without a supplied
+                // retained slot, a full pool skips the spawn after the same draws.
+                var bg = try defined(0x990)
+                for p in item.background ?? [] { try patch(&bg,p.offset,p.bytes) }
+                var skipped = pass,own: [Event] = []
+                try skipped.advance(retainedSpawnSlot: nil,background: { _ in bg },observe: { event in
+                    switch event {
+                    case let .random(stream,range,result): own.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:))))
+                    case let .reconstruct(slot): own.append(.init(kind: "reconstruct",arguments: [UInt32(slot)]))
+                    default: own.append(.init(kind: "other",arguments: []))
+                    }
+                })
+                let rebuilt = item.events.firstIndex { $0.kind == "reconstruct" }
+                if !own.contains(where: { $0.kind == "reconstruct" }),let rebuilt {
+                    let draws = item.events.prefix(rebuilt).filter { $0.kind == "random" }
+                    XCTAssertEqual(Array(own.prefix(draws.count)),Array(draws),item.label+" skipped-spawn draws")
+                    skippedSpawns += 1
+                }
+            }
             do {
                 if item.caller == true {
                     var bg = try defined(0x990)
@@ -137,6 +158,7 @@ final class OriginalActorHitsTests: XCTestCase {
             XCTAssertEqual(MatchPreparationReference.digest(Data(globals.bytes)),item.globalsSHA256,item.label+" globals")
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
         }
-        print("WORLD HITS",c.cases.count,"whole pools compared")
+        XCTAssertGreaterThan(skippedSpawns,0,"no full-pool case exercised the skipped spawn")
+        print("WORLD HITS",c.cases.count,"whole pools compared,",skippedSpawns,"full-pool spawns skipped without a retained slot")
     }
 }

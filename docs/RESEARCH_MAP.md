@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Full-pool item drop](research/APPLICATION_FULL_POOL_ITEM.md): a War soak
+reached the hit pass's random item drop with every object slot taken; the
+original then reads an unwritten frame word (unknown on Windows). Declared:
+the spawn is skipped after its draws. [Soaks](research/APPLICATION_SOAKS.md)
+also found the app growing ≈65 MB per minute (display operation logs,
+resource-free iteration cursors); both fixed.
+
 [Joysticks](research/APPLICATION_JOYSTICKS.md): macOS game controllers
 connected at launch serve as the original's joysticks 0/1 (declared WinMM
 answers and MM_JOY capture messages); a whole VS match plays with joystick 1
