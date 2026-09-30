@@ -46,18 +46,23 @@ cooperative level, display mode, the flip chain) get declared answers.
 - **FS3** — presentation in full screen (present mode 2, Flip) and the
   NSWindow full-screen transition; app checks both directions, e2e set.
 
-- **FS4 (dependency found)** — releasing the DirectDraw object invalidates
-  every sprite surface; the original's later Blt/Flip failures take the
-  surface-lost recovery path (the loop's `recoverSurface`), which the app
-  session still rejects ("Application surface recovery"). The recovery path
-  (restore and reload of the surfaces) must be recovered and ported before
-  FS2/FS3 can land; FS1 alone would turn Alt+Enter into a boundary, so FS1
-  lands with FS2.
+- **Not a dependency (corrected 2026-09-30):** 401a80 releases only the target
+  surface 455608, the primary 455634 and the DirectDraw object 457578; the
+  sprite surfaces are never released or reloaded (their own references keep
+  them valid across the recreation). The loop's surface recovery 43e890 is
+  43e860 (IDirectDrawSurface::Restore of primary and target; ≥ 0 or
+  DDERR_WRONGMODE is success) and otherwise the same recreation as Alt+Enter;
+  it runs only when the dispatcher reports a lost surface, which the Mac
+  surfaces never do (declared). An earlier draft of this plan assumed the
+  sprites had to be reloaded; the static reading above replaces it.
 - Also: `OriginalMacWindowBackend` validates only the windowed CreateWindowEx
   (style 0x10cb0000, metrics 7/8/4); the popup (WS_POPUP, WS_EX_TOPMOST,
   metrics 0/1) and the exclusive DirectDraw requests are new backend work.
+- DestroyWindow during the recreation delivers WM_DESTROY to 43b3d0, whose
+  handler runs the shared release helpers (4019b0, 401d30, 43d2a0) before
+  skipping PostQuitMessage (458434 ≠ 0); what those helpers release while the
+  game continues has to be read before FS2 lands.
 
-Status: scoped, not started; the order is FS4 (surface recovery), then FS1+FS2,
-then FS3.
+Status: scoped, not started; FS1 and FS2 land together, then FS3.
 
 EXE envelope not recalculated.
