@@ -114,4 +114,12 @@ dropped ticks are kept). It raised six issues, all fixed:
   recording checks, mission, demo, war, playback, tournament, team-tournament
   and joystick.
 
+**Follow-up (2026-09-30).** A second review noted that Playback's ShellExecuteA
+of a chosen `.txt` still ran inside the loaded-menu attempt, before its
+Sleep(300), not at commit as item 2 says. It is now queued during the attempt
+(cleared at each loaded-menu start), opened when the batch commits after that
+batch's Sleep, and reported as a `playbackOpen` event. Playback with
+`--playback-file notes.txt` gives `playbackDialog` then `playbackOpen` and
+exits 0. The Mac runtime tests (12) pass.
+
 EXE envelope not recalculated.

@@ -42,6 +42,9 @@ import UniformTypeIdentifiers
     /// GetOpenFileNameA requests and their answers (nil: cancelled), in order.
     public private(set) var playbackDialogs: [String?] = []
     public private(set) var openedDocuments: [String] = []
+    /// Playback's ShellExecuteA of a chosen .txt: its result is ignored, so it
+    /// is performed when the loaded batch commits, after that batch's Sleep.
+    private var pendingDocuments: [String] = []
     /// Per-stage owned snapshots of gameplay bodies and loaded cycles. The app
     /// never consumes them; `true` runs the unchanged observation path.
     public var stageCheckpoints = false
@@ -195,6 +198,7 @@ import UniformTypeIdentifiers
     func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
         let heap = started.runtime.heap
         heap.collect(ready.state.memory)
+        pendingDocuments = []
         var menu = try LoadedMenu(pending:ready),unit: Void = ()
         return try menu.advanceUntilBoundary(inputs:menuInputs.adding(arenaInputs.bitmaps),environment:&unit,
             screenInput:.init(dcResult:OriginalMacRuntimeMenu.getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
@@ -238,11 +242,7 @@ import UniformTypeIdentifiers
             alert.runModal()
         }
     }
-    func openDocument(_ path: String) {
-        openedDocuments.append(path)
-        guard playbackInteractive else { return }
-        MainActor.assumeIsolated { _ = NSWorkspace.shared.open(URL(fileURLWithPath:path)) }
-    }
+    func openDocument(_ path: String) { pendingDocuments.append(path) }
     /// Declared runtime policy for the Demo start: 4025d0 reads its track from
     /// ECX, the residue of lib.dll's text replacement (10001298), whose last
     /// instruction before returning is DirectDraw's GetDC (failure) or
@@ -408,6 +408,14 @@ import UniformTypeIdentifiers
                 default: break
                 }
             }
+            // Playback's Sleep(300) precedes its dialog and the open.
+            for path in pendingDocuments {
+                openedDocuments.append(path)
+                if playbackInteractive {
+                    DispatchQueue.main.asyncAfter(deadline:.now() + .milliseconds(Int(slept))) { _ = NSWorkspace.shared.open(URL(fileURLWithPath:path)) }
+                }
+            }
+            pendingDocuments = []
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
             try answerRoundMusic(commit.operations)

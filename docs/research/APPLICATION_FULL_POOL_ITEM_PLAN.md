@@ -37,29 +37,35 @@ reconstructed, activated or written. The RNG stream, the candidate scan and
 every other part of the pass are unchanged. A supplied retained slot (the
 oracle fixtures' controlled caller scratch) keeps its recovered behaviour.
 
-The requested-items path (4214d5, caller SP+34) is traced separately in the
-addendum below.
+The requested-items path (4214d5, caller SP+34) is traced in the addendum
+below; it stays a boundary.
 
-## Addendum: the requested-items path (2026-09-30)
+## Addendum: the requested-items path (2026-09-30, corrected)
 
-F8 in VS (helper 416f10 sets 450bb8 = 1; allowed when 451160 = 0 or with
-the cheat on) and library stage requests (450bb8 = 3) run the requested-items
+F8 in VS (helper 416f10 sets 450bb8 = 1; allowed when 451160 = 0 or with the
+cheat on) and library stage requests (450bb8 = 3) run the requested-items
 pass (4214d5..421799), which keeps its slot in the body's frame word SP+34
-(−0x5d4). Pressing F8 repeatedly can fill the pool, and then the first
-attempt of a pass reads the incoming word. A flow-sensitive walk shows its
-writers inside the lifecycle loop 41f550..4214cf are per-slot branches:
-80-step countdowns that end at 0 (41fdc9/41fe59, 4213c3/421497), a slot
-counter that ends at 400 (420e89), the catalog Object table pointer
-(World+7d4) stepped by 4 (41f706/41f71e, 41fd2f/41fd47, 4211f6/421212 and
-similar) and other register stores (41fedc, 420537, 420ccf, 420d61, 420f89).
-The incoming value is the last such write across the 400 slots. It can be 0
-(the original would then rebuild slot 0, a player, as the item), 400 (the
-word after the Actor table) or an address (a fault). It is not modelled.
+(−0x5d4). Its first attempt on a full pool reads the word's incoming value.
 
-Declared policy, the same as for the random drop: while the pass has no known
-slot (none found free and none created earlier in the same pass), an attempt
-is skipped after its four coordinate draws. Once a slot is known, full-pool
-attempts reuse it as recovered.
+d26e412 declared a skip here, calling that value unknown. An independent
+review showed it is not. At 41f2c7 every call writes −4 − World into the
+word unconditionally, and then the lifecycle loop 41f550..4214cf overwrites it
+per slot. The writers are:
+
+- 80-step countdowns that end at 0 (41fdc9/41fe59, 4213c3/421497);
+- a slot counter that ends at 400 (420e89);
+- the catalog Object table pointer stepped by 4;
+- −(rand(15)/2) at 41f82b, one of 0..−7;
+- other register stores.
+
+So the incoming value comes from the current call's own state. When it is 0
+the original deterministically rebuilds slot 0, a player, as the item; a
+skip would depart from known EXE behaviour. The skip was reverted and the
+explicit boundary restored. Reaching it needs a pool filled by F8, which a
+2,500-step F8 run in VS did not do. A faithful port needs the word modelled
+through the lifecycle loop, with a declared policy only for its
+address-derived values (−4 − World, Object-table pointers), which depend on
+Windows heap addresses. That is a separate card.
 
 ## Checks
 

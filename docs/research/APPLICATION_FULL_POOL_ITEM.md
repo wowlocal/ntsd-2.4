@@ -20,14 +20,13 @@ slot, `OriginalWorldHits` skips the spawn after all of its draws (146, the
 activated or written, and the rest of the pass is unchanged. A supplied
 retained slot keeps the recovered behaviour.
 
-**Requested items (addendum).** F8 in VS and library stage requests run the
-requested-items pass (4214d5..421799). Its first attempt on a full pool reads
-caller SP+34. That word's incoming value is the last write in the lifecycle
-loop: a countdown's 0 (the original would rebuild slot 0, a player), a slot
-counter's 400, an Object-table pointer or another register store. The same
-declared policy applies: while the pass has no known slot, an attempt is
-skipped after its four coordinate draws; once one is known, full-pool
-attempts reuse it as recovered.
+**Requested items (corrected).** d26e412 applied the same skip to the
+requested-items pass (F8, library requests). An independent review found
+that its slot word is not unknown. 41f2c7 writes −4 − World on every call,
+and the lifecycle loop then overwrites it (countdowns ending at 0, a counter
+ending at 400, Object-table pointers, −(rand(15)/2)). A value of 0 makes the
+original rebuild slot 0. The skip was reverted and the explicit boundary
+restored; see the plan's addendum.
 
 **Checks:**
 
@@ -39,13 +38,8 @@ attempts reuse it as recovered.
   and `OriginalGameplayHitsTests` pass (7 tests in all).
 - The same War soak now runs 50,000 bodies, 14 battles, with no stop (logical
   heap 168.4 MB at the end).
-- `OriginalPostDrawCommandsTests` and `OriginalLibStageCommandsTests`: the
-  full-pool test (F8 and library request) now expects the four coordinate
-  draws, no rebuilt slot and no retained slot; all 12 tests of the commands
-  suites pass. A VS match with F8 pressed every 20 steps for 2,500 steps plays
-  with no stop, but it did not reach a pass that starts on a full pool (the
-  build with the old boundary also ran through), so that path is covered by
-  the unit tests only.
+- A VS match with F8 pressed every 20 steps for 2,500 steps plays with no
+  stop; it did not reach a requested-items pass that starts on a full pool.
 - The whole e2e set passes.
 
 EXE envelope not recalculated.

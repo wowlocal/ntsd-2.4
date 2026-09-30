@@ -339,6 +339,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     for text in loading.playbackAlerts[reportedAlerts...] { Self.emit(["event":"playbackAlert","text":text,"iterations":committed]) }
                     reportedAlerts = loading.playbackAlerts.count
                 }
+                if loading.openedDocuments.count > reportedDocuments {
+                    for path in loading.openedDocuments[reportedDocuments...] { Self.emit(["event":"playbackOpen","file":path,"iterations":committed]) }
+                    reportedDocuments = loading.openedDocuments.count
+                }
                 if first {
                     let c = loading.counts
                     Self.emit(["event":"loaded","seconds":Date().timeIntervalSince(begin),"allocations":c.allocations,
@@ -405,7 +409,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    private var musicEnds = 0, musicNotifications = 0, inMatch = false, reportedAlerts = 0, reportedDialogs = 0
+    private var musicEnds = 0, musicNotifications = 0, inMatch = false, reportedAlerts = 0, reportedDialogs = 0, reportedDocuments = 0
     /// Committed graph state to the output; a finished track queues EC_COMPLETE
     /// and posts the registered notification for the next iteration's WndProc.
     @MainActor private func presentMusic(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu) throws {

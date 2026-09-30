@@ -148,23 +148,24 @@ final class OriginalPostDrawCommandsTests: XCTestCase {
         return (world, bootstrap.actors, globals, header, frame, bg)
     }
 
-    func testFullPoolWithoutKnownSlotSkipsAfterCoordinateDraws() throws {
-        // Declared policy (APPLICATION_FULL_POOL_ITEM.md): the unknown caller
-        // word is not read; the attempt is skipped after its four draws.
+    func testFullPoolRequiresRetainedSlotOnlyAfterCoordinateDraws() throws {
         var (world, actors, globals, header, frame, bg) = try prepared()
         for slot in 50..<400 { try world.write(UInt8(1), at: 4+slot) }
         try globals.write(Int32(1), at: 0x450bb8-0x44d000)
-        let beforeWorld = world, beforeActors = actors
+        let beforeWorld = world, beforeActors = actors, beforeGlobals = globals
         var retained: Int32?, events: [OriginalPostDrawCommandEvent] = []
-        try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
+        XCTAssertThrowsError(try OriginalPostDrawCommands.apply(world: &world, actors: &actors, globals: &globals,
             retainedSpawnSlot: &retained, sse2: false, objectCount: 1, header: { _ in header }, frame: { _, _ in frame },
-            background: { _ in bg }, observe: { events.append($0) })
+            background: { _ in bg }, observe: { events.append($0) })) { error in
+                guard case let OriginalStateError.invalidStorage(message) = error else { return XCTFail("Unexpected error: \(error)") }
+                XCTAssertEqual(message, "Post-draw commands: Retained caller slot provenance")
+            }
         XCTAssertEqual(events.count, 4)
         for (event, stream) in zip(events, 209...212) {
             guard case let .random(actualStream, range, _) = event else { return XCTFail("Expected coordinate RNG") }
             XCTAssertEqual(actualStream, Int32(stream)); XCTAssertEqual(range, 30)
         }
-        XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors)
+        XCTAssertEqual(world, beforeWorld); XCTAssertEqual(actors, beforeActors); XCTAssertEqual(globals, beforeGlobals)
         XCTAssertNil(retained)
         // A catalog with no candidates does not consume the unknown caller word.
         try header.write(Int32(200), at: 0x6f4); events.removeAll()

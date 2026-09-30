@@ -94,11 +94,7 @@ public enum OriginalPostDrawCommands {
             for candidate in candidates {
                 if let free = try (50..<400).first(where: { try active($0) == 0 }) { retainedSlot = Int32(free) }
                 // Even a full pool consumes all four draws before reading the
-                // retained slot (caller SP+34). Its incoming value is the last
-                // lifecycle-loop write (a countdown's 0, a slot counter's 400,
-                // an Object-table pointer, …), not modelled. Declared policy
-                // (APPLICATION_FULL_POOL_ITEM.md, not the EXE): while the pass
-                // has no known slot, the attempt is skipped after its draws.
+                // retained slot. Do not skip the attempt or invent an index.
                 let arena = try global(0x44d024), coarseX = try draw(209, 30)
                 let width = try background(arena).integer(at: 0, as: Int32.self)
                 let x0 = coarseX &* ((width &- 60)/30), fineX = try draw(210, 30)
@@ -106,7 +102,7 @@ public enum OriginalPostDrawCommands {
                 let span = try bg.integer(at: 8, as: Int32.self) &- bg.integer(at: 4, as: Int32.self) &- 60
                 let z0 = coarseZ &* (span/30), fineZ = try draw(212, 30)
                 let z = try fineZ &+ background(arena).integer(at: 4, as: Int32.self) &+ z0 &+ 30
-                guard let retainedSlot else { continue }
+                guard let retainedSlot else { throw error("Retained caller slot provenance") }
                 let slot = Int(retainedSlot), actor = try index(slot)
                 try observe(.reconstruct(slot: slot)); try actors[actor].reconstructActor()
                 try put(actor, 0x368, Int32(candidate))
