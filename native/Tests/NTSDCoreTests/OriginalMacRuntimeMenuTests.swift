@@ -49,7 +49,7 @@ import XCTest
         XCTAssertEqual(Key.table[0x00],Key(0x41,0x1e)); XCTAssertEqual(Key.table[0x7e],Key(0x26,0x48,true))
         XCTAssertEqual(Key.table[0x7a],Key(0x70,0x3b)); XCTAssertEqual(Key.table[0x6f],Key(0x7b,0x58))
         XCTAssertEqual(Key.table[0x24],Key(0x0d,0x1c)); XCTAssertEqual(Key.table[0x1d],Key(0x30,0x0b))
-        XCTAssertEqual(Set(Key.table.values.map(\.vk)).count,Key.table.count-3) // shift/control pairs and both Returns share VKs
+        XCTAssertEqual(Set(Key.table.values.map(\.vk)).count,Key.table.count-4) // shift/control/option pairs and both Returns share VKs
         XCTAssertEqual(try m.answer(.init(.peek,[0,0,0,0])),.init(result:0))
         XCTAssertThrowsError(try m.answer(.init(.get,[0,0,0])))
         m.key(try XCTUnwrap(Key.table[0x00]),down:true,characters:"a")
@@ -75,6 +75,52 @@ import XCTest
         let up = try XCTUnwrap(Key.table[0x7e]); m.key(up,down:true,characters:"\u{f700}")
         m.mouse(0x200,x:1,y:2,buttons:0); m.mouse(0x200,x:3,y:4,buttons:1)
         XCTAssertEqual(m.queue.suffix(2).map(\.lParam),[0x01480001,0x00040003])
+    }
+
+    /// APPLICATION_FULL_SCREEN_PLAN.md (declared): Option is Alt; keys while it is
+    /// held are WM_SYSKEY* with bit 29; WM_SYSCHAR from TranslateMessage; SC_KEYMENU
+    /// after Alt alone, SC_CLOSE on Alt+F4; DefWindowProc on a former window is 0.
+    func testSystemKeysFollowWindows() throws {
+        var now: UInt32 = 1000
+        let m = Messages(window:7,clock:{ now += 5; return now })
+        let alt = try XCTUnwrap(Key.table[0x3a]),enter = try XCTUnwrap(Key.table[0x24])
+        XCTAssertEqual(alt,Key(0x12,0x38));XCTAssertEqual(Key.table[0x3d],Key(0x12,0x38,true))
+        func drain() throws -> [(UInt32,UInt32,UInt32)] {
+            var out: [(UInt32,UInt32,UInt32)] = []
+            while !m.queue.isEmpty {
+                let get = try m.answer(.init(.get,[0,0,0]))
+                let r = try OriginalStateRecord(bytes:get.writes[0].bytes,defined:Array(repeating:true,count:28))
+                _ = try m.answer(.init(.translate,message:r))
+                let message = try r.integer(at:4,as:UInt32.self),w = try r.integer(at:8,as:UInt32.self),l = try r.integer(at:12,as:UInt32.self)
+                out.append((message,w,l))
+                if (0x104...0x106).contains(message) { _ = try m.answer(.init(.windowDefault,[7,message,w,l])) }
+            }
+            return out
+        }
+        // Alt+Enter: SYSKEYDOWN Alt, SYSKEYDOWN Enter (+ WM_SYSCHAR \r), SYSKEYUP Enter, SYSKEYUP Alt (bit 29 clear).
+        m.key(alt,down:true);m.key(enter,down:true,characters:"\r");m.key(enter,down:false);m.key(alt,down:false)
+        let a = try drain()
+        XCTAssertEqual(a.map(\.0),[0x104,0x104,0x106,0x105,0x105])
+        XCTAssertEqual(a.map(\.1),[0x12,0x0d,0x0d,0x0d,0x12])
+        XCTAssertEqual(a.map(\.2),[0x20380001,0x201c0001,0x201c0001,0xe01c0001,0xc0380001])
+        // Alt alone: SC_KEYMENU follows its SYSKEYUP (the game swallows it, 43b519).
+        m.key(alt,down:true);m.key(alt,down:false)
+        let b = try drain()
+        XCTAssertEqual(b.map(\.0),[0x104,0x105,0x112]);XCTAssertEqual(b.last?.1,0xf100)
+        // Alt+F4: SC_CLOSE right after its SYSKEYDOWN.
+        let f4 = try XCTUnwrap(Key.table[0x76])
+        m.key(alt,down:true);m.key(f4,down:true)
+        let c = try drain()
+        XCTAssertEqual(c.map(\.0),[0x104,0x104,0x112]);XCTAssertEqual(c.last?.1,0xf060)
+        m.key(f4,down:false);m.key(alt,down:false);_ = try drain()
+        // Without Alt, keys stay WM_KEYDOWN/UP.
+        m.key(enter,down:true,characters:"\r");m.key(enter,down:false)
+        XCTAssertEqual(try drain().map(\.0),[0x100,0x102,0x101])
+        // After a recreation the old HWND answers DefWindowProc with 0.
+        m.window = 9
+        XCTAssertEqual(try m.answer(.init(.windowDefault,[7,0x105,0x0d,0])),0)
+        XCTAssertEqual(m.formerWindows,[7])
+        XCTAssertThrowsError(try m.answer(.init(.windowDefault,[8,0x100,0,0])))
     }
 
     /// APPLICATION_WINDOW_CLOSE_PLAN.md: MessageBoxA, Release and free answers;

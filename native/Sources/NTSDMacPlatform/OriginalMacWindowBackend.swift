@@ -43,6 +43,10 @@ import NTSDCore
         public let token: UInt32
         fileprivate let window: NSWindow, windowClass: ClassLease
         fileprivate var closed = false, closeDelegate: CloseDelegate?
+        /// The full-screen popup of an Alt+Enter recreation shows the game's
+        /// image scaled to fit (declared, APPLICATION_FULL_SCREEN_PLAN.md).
+        public fileprivate(set) var fullScreen = false
+        fileprivate var contentSize: CGSize?
         fileprivate init(_ token: UInt32,_ window: NSWindow,_ windowClass: ClassLease) {
             self.token = token; self.window = window; self.windowClass = windowClass
         }
@@ -81,7 +85,16 @@ import NTSDCore
             guard let image else { return }
             NSGraphicsContext.saveGraphicsState(); defer { NSGraphicsContext.restoreGraphicsState() }
             NSGraphicsContext.current?.imageInterpolation = .none
-            NSImage(cgImage:image,size:bounds.size).draw(in:bounds,from:.zero,operation:.copy,fraction:1,respectFlipped:true,hints:nil)
+            let size = CGSize(width:image.width,height:image.height),target = Self.fit(size,in:bounds)
+            if target != bounds { NSColor.black.setFill(); bounds.fill() }
+            NSImage(cgImage:image,size:size).draw(in:target,from:.zero,operation:.copy,fraction:1,respectFlipped:true,hints:nil)
+        }
+        /// The image's aspect-kept placement, centred (the whole bounds when equal).
+        static func fit(_ size: CGSize,in bounds: CGRect) -> CGRect {
+            guard size.width > 0,size.height > 0,size != bounds.size else { return bounds }
+            let scale = min(bounds.width/size.width,bounds.height/size.height)
+            let w = size.width*scale,h = size.height*scale
+            return .init(x:bounds.midX-w/2,y:bounds.midY-h/2,width:w,height:h)
         }
         init(frame: CGRect,cursor: NSCursor) { self.cursor = cursor; super.init(frame:frame) }
         required init?(coder: NSCoder) { fatalError("Programmatic original window only") }
@@ -134,9 +147,13 @@ import NTSDCore
     public func display(_ image: CGImage,in token: UInt32) throws {
         let owner = try lease(token)
         guard !owner.closed,let view = owner.window.contentView as? ContentView,
-              CGFloat(image.width) == view.bounds.width,CGFloat(image.height) == view.bounds.height else { throw Boundary.geometry }
+              owner.fullScreen || (CGFloat(image.width) == view.bounds.width && CGFloat(image.height) == view.bounds.height) else { throw Boundary.geometry }
+        owner.contentSize = CGSize(width:image.width,height:image.height)
         view.image = image; view.needsDisplay = true; owner.window.displayIfNeeded()
     }
+    /// Called with a window created after the first one (Alt+Enter), so its
+    /// owner can move input and close handling to it.
+    public var created: ((UInt32) -> Void)?
     /// Actual AppKit view rendering for device checks, distinct from framebuffer
     /// bytes and from a screenshot of the physical display.
     public func captureView(_ token: UInt32) throws -> OriginalMacViewCapture {
@@ -164,12 +181,23 @@ import NTSDCore
     public func clientPoint(_ token: UInt32,_ event: NSEvent) throws -> (Int32,Int32) {
         let owner = try lease(token)
         guard let view = owner.window.contentView else { throw Boundary.geometry }
-        let p = view.convert(event.locationInWindow,from:nil)
+        var p = view.convert(event.locationInWindow,from:nil)
+        if owner.fullScreen,let size = owner.contentSize {
+            // Back through the aspect-kept scaling to the game's client points.
+            let target = ContentView.fit(size,in:view.bounds)
+            p = .init(x:(p.x-target.minX)*size.width/target.width,y:(p.y-target.minY)*size.height/target.height)
+        }
         return (Int32(p.x.rounded(.down)),Int32(p.y.rounded(.down)))
     }
     /// PNG of the actual cached view rendering, for app-level inspection.
     public func snapshotPNG(_ token: UInt32) throws -> Data {
         let owner = try lease(token)
+        // Full screen: the presented game frame itself, not the screen-sized
+        // scaled view, so captures do not depend on the display.
+        if owner.fullScreen,let image = (owner.window.contentView as? ContentView)?.image {
+            guard let data = NSBitmapImageRep(cgImage:image).representation(using:.png,properties:[:]) else { throw Boundary.geometry }
+            return data
+        }
         guard !owner.closed,let view = owner.window.contentView,
               let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
         view.cacheDisplay(in:view.bounds,to:bitmap)
@@ -198,19 +226,33 @@ import NTSDCore
         if q.kind != "createWindow" { try require(q.strings.isEmpty) }
         switch q.kind {
         case "clientRect","screenPoint": try validateGeometry(q)
-        case "metric": try require(q.words.count == 1 && [7,8,4].contains(q.words[0]))
+        case "metric": try require(q.words.count == 1 && [0,1,7,8,4].contains(q.words[0]))
         case "icon": try require(q.words == [instance,0x7f00])
         case "cursor": try require(q.words == [0,0x7f00])
         case "registerClass":
             try require(q.words.isEmpty)
+            if windowClass != nil {
+                // 43bdd0's registration again (Alt+Enter): the full-screen helper
+                // leaves hCursor (offset 24) as undefined stack backing.
+                guard let b = q.bytes,let mask = q.defined,b.count == 40,mask.count == 40 else { throw Boundary.arguments(q.kind) }
+                let words = stride(from:0,to:40,by:4).map { o in (0..<4).reduce(UInt32(0)) { $0 | UInt32(b[o+$1]) << ($1*8) } }
+                try require((0..<40).allSatisfy { mask[$0] || (24..<28).contains($0) })
+                try require(words[0..<6] == [3,0x43b3d0,0,0,instance,0] && words[7...] == [0,0x447634,0x447634])
+                try require(!mask[24] || words[6] == cursor?.token)
+                break
+            }
             let words = try classWords(q)
             guard let cursor else { throw Boundary.unknownOwner(words[6]) }
             try require(words == [3,0x43b3d0,0,0,instance,0,cursor.token,0,0x447634,0x447634])
         case "createWindow":
             try require(q.words.count == 12 && q.strings.count == 2)
             let w = q.words
-            try require(w[0] == 0 && w[1] == 0x447634 && w[2] == 0x447620 && w[3] == 0x10cb0000 &&
-                w[4] == 0x80000000 && w[5] == 5 && w[8] == 0 && w[9] == 0 && w[10] == instance && w[11] == 0)
+            // 401b00 (windowed, WS_OVERLAPPEDWINDOW-like 10cb0000) or 401bf0 (full
+            // screen: WS_EX_TOPMOST, WS_POPUP at 0,0 with the screen metrics).
+            let popup = w[0] == 8 && w[3] == 0x80000000 && w[4] == 0 && w[5] == 0
+            if popup { try require(w[6] == UInt32(try metric(0)) && w[7] == UInt32(try metric(1))) }
+            try require(w[1] == 0x447634 && w[2] == 0x447620 && w[8] == 0 && w[9] == 0 && w[10] == instance && w[11] == 0)
+            try require(popup || (w[0] == 0 && w[3] == 0x10cb0000 && w[4] == 0x80000000 && w[5] == 5))
             try require(q.strings[0] == Array("Marti".utf8) && q.strings[1] == Array("Little Fighter 2".utf8))
             guard w[6] > 0,w[7] > 0,w[6] <= UInt32(Int32.max),w[7] <= UInt32(Int32.max) else { throw Boundary.geometry }
             guard windowClass != nil else { throw Boundary.arguments("unregistered class") }
@@ -221,7 +263,17 @@ import NTSDCore
         default: throw Boundary.unsupported(q.kind)
         }
     }
+    /// SM_CXSCREEN/SM_CYSCREEN: the main display in logical points (declared).
+    private func screenSize() throws -> CGSize {
+        guard let screen = NSScreen.screens.first else { throw Boundary.geometry }
+        return screen.frame.size
+    }
     private func metric(_ index: UInt32) throws -> Int32 {
+        if index == 0 || index == 1 {
+            let size = try screenSize(),value = index == 0 ? size.width : size.height
+            guard value.isFinite,value > 0,value <= CGFloat(Int32.max),value.rounded(.towardZero) == value else { throw Boundary.geometry }
+            return Int32(value)
+        }
         let client = NSRect(x:100,y:100,width:256,height:256)
         let frame = NSWindow.frameRect(forContentRect:client,styleMask:Self.style)
         let x = client.minX-frame.minX,y = client.minY-frame.minY
@@ -256,17 +308,31 @@ import NTSDCore
                 resources = [value]; result = .init(result:Int32(bitPattern:value.token))
             }
         case "createWindow":
-            let frame = NSRect(x:0,y:0,width:CGFloat(q.words[6]),height:CGFloat(q.words[7]))
-            let content = NSWindow.contentRect(forFrameRect:frame,styleMask:Self.style)
-            guard content.width > 0,content.height > 0 else { throw Boundary.geometry }
+            let popup = q.words[3] == 0x80000000
             let id = try token(),cls = windowClass!
-            let window = NSWindow(contentRect:content,styleMask:Self.style,backing:.buffered,defer:false)
+            let window: NSWindow
+            if popup {
+                // Declared full screen: a borderless window over the main display,
+                // above the menu bar, hidden while another app is active.
+                guard let screen = NSScreen.screens.first else { throw Boundary.geometry }
+                window = NSWindow(contentRect:screen.frame,styleMask:[.borderless],backing:.buffered,defer:false,screen:screen)
+                window.level = NSWindow.Level(rawValue:NSWindow.Level.mainMenu.rawValue+1)
+                window.hidesOnDeactivate = true; window.backgroundColor = .black
+                window.contentView = ContentView(frame:NSRect(origin:.zero,size:screen.frame.size),cursor:cls.cursor.cursor)
+            } else {
+                let frame = NSRect(x:0,y:0,width:CGFloat(q.words[6]),height:CGFloat(q.words[7]))
+                let content = NSWindow.contentRect(forFrameRect:frame,styleMask:Self.style)
+                guard content.width > 0,content.height > 0 else { throw Boundary.geometry }
+                window = NSWindow(contentRect:content,styleMask:Self.style,backing:.buffered,defer:false)
+                window.contentView = ContentView(frame:NSRect(origin:.zero,size:content.size),cursor:cls.cursor.cursor)
+                window.center()
+            }
             window.colorSpace = .sRGB // Match the explicitly sRGB native image/backing policy.
             window.isReleasedWhenClosed = false; window.title = String(decoding:q.strings[1],as:UTF8.self)
-            window.contentView = ContentView(frame:NSRect(origin:.zero,size:content.size),cursor:cls.cursor.cursor)
-            let owner = WindowLease(id,window,cls)
+            let owner = WindowLease(id,window,cls); owner.fullScreen = popup
             windows[id] = WeakWindow(owner); resources = [owner]; createdWindowCount += 1
-            window.center(); window.orderFront(nil) // Source requests WS_VISIBLE.
+            window.orderFront(nil) // Source requests WS_VISIBLE.
+            if createdWindowCount > 1 { created?(id) }
             result = .init(result:Int32(bitPattern:id))
         case "updateWindow","showWindow","destroyWindow":
             if q.words[0] == 0 { result = .init(result:0) }

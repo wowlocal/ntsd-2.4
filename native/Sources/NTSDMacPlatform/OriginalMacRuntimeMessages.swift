@@ -2,7 +2,7 @@ import AppKit
 import NTSDCore
 
 /// Windows keyboard identity of a macOS key: virtual key, set-1 scan code and
-/// the extended-key flag. US layout; Command/Option/Function are not mapped.
+/// the extended-key flag. US layout; Option is Alt; Command/Function are not mapped.
 public struct OriginalMacRuntimeKey: Equatable {
     public let vk: UInt32, scan: UInt32, extended: Bool
     public init(_ vk: UInt32,_ scan: UInt32,_ extended: Bool = false) { self.vk = vk; self.scan = scan; self.extended = extended }
@@ -25,7 +25,9 @@ public struct OriginalMacRuntimeKey: Equatable {
             (0x72,0x2d,0x52,true),(0x52,0x60,0x52,false),(0x53,0x61,0x4f,false),(0x54,0x62,0x50,false),(0x55,0x63,0x51,false),
             (0x56,0x64,0x4b,false),(0x57,0x65,0x4c,false),(0x58,0x66,0x4d,false),(0x59,0x67,0x47,false),(0x5b,0x68,0x48,false),
             (0x5c,0x69,0x49,false),(0x41,0x6e,0x53,false),(0x43,0x6a,0x37,false),(0x45,0x6b,0x4e,false),(0x4e,0x6d,0x4a,false),
-            (0x4b,0x6f,0x35,true),(0x4c,0x0d,0x1c,true)]
+            (0x4b,0x6f,0x35,true),(0x4c,0x0d,0x1c,true),
+            // Option is Alt (VK_MENU); the right one is the extended key.
+            (0x3a,0x12,0x38,false),(0x3d,0x12,0x38,true)]
         for (code,vk,scan,ext) in others { t[code] = .init(vk,scan,ext) }
         let functions: [(UInt16,UInt32)] = [(0x7a,0),(0x78,1),(0x63,2),(0x76,3),(0x60,4),(0x61,5),(0x62,6),(0x64,7),(0x65,8),(0x6d,9),(0x67,10),(0x6f,11)]
         for (code,i) in functions { t[code] = .init(0x70+i,i < 10 ? 0x3b+i : 0x57+(i-10)) }
@@ -46,7 +48,10 @@ public struct OriginalMacRuntimeKey: Equatable {
     public struct Message: Equatable {
         public let message: UInt32, wParam: UInt32, lParam: UInt32, time: UInt32, x: Int32, y: Int32
     }
-    public let window: UInt32
+    /// The original window; Alt+Enter's recreation replaces it (APPLICATION_FULL_SCREEN_PLAN.md).
+    public var window: UInt32 { didSet { if oldValue != window { formerWindows.insert(oldValue) } } }
+    /// Windows DestroyWindow ended; DefWindowProcA on them returns 0 (invalid HWND).
+    public private(set) var formerWindows: Set<UInt32> = []
     private let clock: () throws -> UInt32, point: () -> (Int32,Int32)
     public private(set) var queue: [Message] = []
     public private(set) var sleeps: [UInt32] = []
@@ -63,10 +68,13 @@ public struct OriginalMacRuntimeKey: Equatable {
     }
     /// Messages Windows sends synchronously from DefWindowProcA; here they are
     /// the next queued messages, dispatched before any game tick.
-    private func next(_ messages: [UInt32]) {
+    private func next(_ messages: [UInt32],wParam: UInt32 = 0) {
         let (x,y) = point()
-        queue.insert(contentsOf:messages.map { Message(message:$0,wParam:0,lParam:0,time:now(),x:x,y:y) },at:0)
+        queue.insert(contentsOf:messages.map { Message(message:$0,wParam:wParam,lParam:0,time:now(),x:x,y:y) },at:0)
     }
+    /// The system key whose release alone opens the window menu: Alt or F10
+    /// pressed with no other key since (DefWindowProcA then sends SC_KEYMENU).
+    private var menuKey: UInt32?
     /// MessageBoxA(text, caption, type) → IDOK/IDYES/IDNO; set by the app.
     public var messageBox: (([UInt8],[UInt8],UInt32) throws -> Int32)?
     /// COM Release of a sound or music object (IUnknown::Release, offset 8).
@@ -80,16 +88,23 @@ public struct OriginalMacRuntimeKey: Equatable {
     public private(set) var destroyed = false
     /// The window's close button: WM_SYSCOMMAND with SC_CLOSE.
     public func close() { post(0x112,0xf060,0) }
-    /// lParam: repeat 1, scan code, extended bit24, previous-state bit30, transition bit31.
+    /// lParam: repeat 1, scan code, extended bit24, context bit29 (Alt held),
+    /// previous-state bit30, transition bit31. Alt (VK_MENU), F10 and every key
+    /// while Alt is held are system keys: WM_SYSKEYDOWN/UP (declared,
+    /// APPLICATION_FULL_SCREEN_PLAN.md); releasing Alt itself has bit29 clear.
     public func key(_ key: OriginalMacRuntimeKey,down isDown: Bool,repeated: Bool = false,characters: String? = nil) {
-        let base = 1 | key.scan << 16 | (key.extended ? 1 << 24 : 0)
+        let alt = down.contains(0x12) || (key.vk == 0x12 && isDown)
+        let system = alt || key.vk == 0x79
+        let context: UInt32 = alt && !(key.vk == 0x12 && !isDown) ? 1 << 29 : 0
+        let base = 1 | key.scan << 16 | (key.extended ? 1 << 24 : 0) | context
         if isDown {
             let previous = repeated || down.contains(key.vk)
+            if !previous { menuKey = key.vk == 0x12 || (key.vk == 0x79 && !alt) ? key.vk : nil }
             down.insert(key.vk)
-            post(0x100,key.vk,base | (previous ? 1 << 30 : 0))
+            post(system ? 0x104 : 0x100,key.vk,base | (previous ? 1 << 30 : 0))
             pendingCharacter[key.vk] = Self.character(key,characters)
         } else {
-            down.remove(key.vk); post(0x101,key.vk,base | 1 << 30 | 1 << 31)
+            down.remove(key.vk); post(system ? 0x105 : 0x101,key.vk,base | 1 << 30 | 1 << 31)
         }
     }
     private var pendingCharacter: [UInt32:UInt32?] = [:]
@@ -148,10 +163,10 @@ public struct OriginalMacRuntimeKey: Equatable {
             let r = try OriginalStateRecord(bytes:bytes,defined:Array(repeating:true,count:28))
             let message = try r.integer(at:4,as:UInt32.self),wParam = try r.integer(at:8,as:UInt32.self),lParam = try r.integer(at:12,as:UInt32.self)
             guard (0x100...0x105).contains(message) else { return .init(result:0) }
-            if message == 0x100,let value = pendingCharacter[wParam] ?? nil {
-                // Posted WM_CHAR precedes later hardware input.
+            if message == 0x100 || message == 0x104,let value = pendingCharacter[wParam] ?? nil {
+                // Posted WM_CHAR / WM_SYSCHAR precedes later hardware input.
                 let (x,y) = point()
-                queue.insert(.init(message:0x102,wParam:value,lParam:lParam,time:now(),x:x,y:y),at:0)
+                queue.insert(.init(message:message == 0x104 ? 0x106 : 0x102,wParam:value,lParam:lParam,time:now(),x:x,y:y),at:0)
             }
             return .init(result:1)
         case .dispatchMessage: return .init()
@@ -171,9 +186,19 @@ public struct OriginalMacRuntimeKey: Equatable {
         func require(_ valid: Bool) throws { if !valid { throw Boundary.arguments("\(q.kind) \(q.arguments)") } }
         switch q.kind {
         case .windowDefault:
-            try require(q.arguments.count == 4 && q.arguments[0] == window)
+            try require(q.arguments.count == 4)
+            if formerWindows.contains(q.arguments[0]) { return 0 }
+            try require(q.arguments[0] == window)
             switch q.arguments[1] {
-            case 0x100,0x101,0x102,0x200,0x201,0x202,0x204,0x205,0x400,0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8: return 0
+            case 3,0x100,0x101,0x102,0x106,0x200,0x201,0x202,0x204,0x205,0x400,0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8: return 0
+            // System keys (declared, APPLICATION_FULL_SCREEN_PLAN.md): Alt+F4 sends
+            // SC_CLOSE; Alt or F10 released alone sends SC_KEYMENU; nothing else.
+            case 0x104:
+                if q.arguments[2] == 0x73 && q.arguments[3] & 1 << 29 != 0 { next([0x112],wParam:0xf060) }
+                return 0
+            case 0x105:
+                if q.arguments[2] == menuKey { menuKey = nil; next([0x112],wParam:0xf100) }
+                return 0
             case 0x112 where q.arguments[2] & 0xfff0 == 0xf060: next([0x10]); return 0
             case 0x10:
                 try require(!destroyed)

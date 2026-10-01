@@ -213,6 +213,39 @@ import XCTest
         XCTAssertThrowsError(try b.prepareFront(.init("textOut",[dc2,0,0,1],[Array("x".utf8)])))
     }
 
+    /// Alt+Enter's full-screen display (APPLICATION_FULL_SCREEN_PLAN.md, declared):
+    /// exclusive level, DD_OK display mode, a flip chain, Flip swapping memory,
+    /// and Blt from a surface of the released DirectDraw object.
+    func testFullScreenFlipChainSwapsAndDrawsReleasedObjectSurfaces() throws {
+        let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(oldDraw,_,back,_) = try D().ids(r)
+        let window = r.setup.controls.window
+        func call(_ q: OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response { try b.perform(b.prepare(q)).response }
+        _ = try perform(b,fill(back,0x445566,[0,0,794,550]))
+        let draw = try XCTUnwrap(call(.init("directDrawCreate",[0,0x457578,0])).output)
+        XCTAssertThrowsError(try b.prepare(.init("displayMode",[draw,794,550,8]))) // only after the exclusive level
+        _ = try call(.init("cooperativeLevel",[draw,window,0x11]))
+        XCTAssertEqual(try call(.init("displayMode",[draw,794,550,8])).result,0)
+        var description = try OriginalStateRecord(bytes:Array(repeating:0,count:108),defined:Array(repeating:true,count:108))
+        for (offset,value): (Int,UInt32) in [(0,108),(4,0x21),(8,550),(12,794),(20,1),(104,0x4218)] { try description.write(value,at:offset) }
+        let primary = try XCTUnwrap(call(.init("createSurface",[draw,0x455634,0],structure:description)).output)
+        let flipping = try XCTUnwrap(call(.init("attachedSurface",[primary,4,0x455608])).output)
+        XCTAssertEqual(try b.pixels(primary).width,794);XCTAssertEqual(try b.pixels(flipping).height,550)
+        // The old object is released; its surface still draws into the new chain.
+        _ = try call(.init("release",[oldDraw]))
+        _ = try perform(b,fill(flipping,0x101010,[0,0,794,550]))
+        _ = try perform(b,blt(back,flipping,[0,0,4,4],[2,2,6,6],key:false))
+        let frame = try b.pixels(flipping).values
+        XCTAssertEqual(frame[2*794+2],0x445566)
+        XCTAssertEqual(try perform(b,.init("method",[primary,0x2c,0,1])).response.result,0)
+        XCTAssertEqual(try b.pixels(primary).values,frame)
+        XCTAssertFalse(try b.pixels(flipping).defined.contains(true)) // the old front's never-drawn memory
+        _ = try perform(b,fill(flipping,0x202020,[0,0,794,550]))
+        _ = try perform(b,.init("method",[primary,0x2c,0,1]))
+        XCTAssertEqual(try b.pixels(primary).values,Array(repeating:0x202020,count:794*550))
+        XCTAssertEqual(try b.pixels(flipping).values,frame)
+        XCTAssertThrowsError(try b.prepareFront(.init("method",[flipping,0x2c,0,1]))) // Flip needs the chain's primary
+    }
+
     func testMaskedFillKeyAndMirrorCopyUseOwnedConstructorSurfaces() throws {
         let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
         let colors: [UInt32] = [0,0xff0000,0xff00,0xff,0x110022,0,0x334455,0]

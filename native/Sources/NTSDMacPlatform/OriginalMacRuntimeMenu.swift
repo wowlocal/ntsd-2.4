@@ -129,9 +129,12 @@ import NTSDCore
                     // GDI text through the display's surface DC (APPLICATION_GDI_TEXT_PLAN.md).
                     textRequests += 1; try front.serve(permit,on:driver)
                 case .graphics(.window(let q)) where q.kind == "windowDefault":
-                    // Lifecycle DefWindowProcA; WM_MOVE is the only generated caller.
-                    guard q.words.count == 4,q.words[0] == messages.window,q.words[1] == 3 else { throw Boundary.unserved("DefWindowProc \(q.words)") }
-                    try driver.beginService(permit); try driver.answer(permit,response:.graphics(.window(.init(result:0))))
+                    // Lifecycle DefWindowProcA: WM_MOVE, and WM_SYSKEYUP other than
+                    // Alt+Enter (SC_KEYMENU after Alt alone), on the queue's rules.
+                    guard q.words.count == 4,q.words[0] == messages.window || messages.formerWindows.contains(q.words[0]),
+                          [3,0x105].contains(q.words[1]) else { throw Boundary.unserved("DefWindowProc \(q.words)") }
+                    let result = try messages.answer(OriginalWindowInput.Request(.windowDefault,q.words))
+                    try driver.beginService(permit); try driver.answer(permit,response:.graphics(.window(.init(result:result))))
                 case .graphics(.front(_,let q)) where q.kind == "blit" && Self.empty(q.blit):
                     // Zero-area draws follow from untouched zero wrapper words (+0c/negative frames).
                     emptyBlits += 1

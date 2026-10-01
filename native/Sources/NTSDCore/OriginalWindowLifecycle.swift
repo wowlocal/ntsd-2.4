@@ -9,10 +9,15 @@ public enum OriginalWindowLifecycle {
     private static func bytes(_ value: UInt32) -> [UInt8] {
         (0..<4).map { UInt8(truncatingIfNeeded: value >> ($0*8)) }
     }
+    /// `deliver` receives the messages DestroyWindow sends synchronously to
+    /// 43b3d0 during an Alt+Enter recreation (WM_DESTROY, then WM_NCDESTROY),
+    /// on the enclosing state; the default delivers nothing, as the earlier
+    /// whole-return model did (APPLICATION_FULL_SCREEN_PLAN.md).
     public static func receive(_ input: OriginalWindowInput.Message,
         globals: inout OriginalStateRecord, memory: inout OriginalMenuPresentationMemory,
         backing: (String, Int) throws -> [UInt8], perform: (Request) throws -> Response,
-        store: OriginalWindowInput.Store = { _,_ in }) throws -> Int32 {
+        store: OriginalWindowInput.Store = { _,_ in },
+        deliver: (OriginalWindowInput.Message, inout OriginalStateRecord, inout OriginalMenuPresentationMemory) throws -> Int32 = { _,_,_ in 0 }) throws -> Int32 {
         guard globals.bytes.count == OriginalMatchPreparation.globalSize else { throw error("Globals extent") }
         var state = globals, owned = memory
         func word(_ address: Int) throws -> UInt32 { try state.integer(at: address-base,as: UInt32.self) }
@@ -72,7 +77,14 @@ public enum OriginalWindowLifecycle {
                 if try word(0x44d794) != 0 {
                     let fullscreen = try word(0x458430) == 0
                     try put(0x458434,1);try put(0x458430,fullscreen ? 1 : 0)
+                    let window = try word(0x4546f4)
                     try OriginalDisplayDestruction.destroy(globals: &state,perform: perform,store: store)
+                    // DestroyWindow (401a80's last call) sends WM_DESTROY and then
+                    // WM_NCDESTROY to 43b3d0 before it returns.
+                    if window != 0 {
+                        _ = try deliver(.init(window: window,message: 2,wParam: 0,lParam: 0),&state,&owned)
+                        _ = try deliver(.init(window: window,message: 0x82,wParam: 0,lParam: 0),&state,&owned)
+                    }
                     _ = try OriginalWindowInitialization.configure(globals: &state,backing: backing,perform: perform,store: store)
                     //43bdd0 returns0/1, so its signed-negative debug branch
                     //cannot run. Even0 still reaches ShowWindow and flag clear.

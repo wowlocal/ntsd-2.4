@@ -1,5 +1,12 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Alt+Enter](research/APPLICATION_FULL_SCREEN.md): the original's own window and
+DirectDraw recreation (WM_SYSKEYUP 43b83f, nested WM_DESTROY, full-screen
+popup, flip chain, Flip). Its losses are reproduced: sound effects for the
+session, and the recording buffers, so a toggle mid-match is the original's
+null-pointer crash, stopped as a "Source fault". Windows answers that the EXE
+does not fix are declared.
+
 [GDI text](research/APPLICATION_GDI_TEXT.md): the app draws the original's
 TextOut strings (Summary numbers, HUD, menu values, CONTROL SETTINGS) through
 a surface DC on the display. The font is a temporary deviation: the macOS

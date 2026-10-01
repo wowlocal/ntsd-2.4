@@ -22,7 +22,14 @@ extension OriginalInputControlContext {
     /// An address outside that allocation is unsupported, never silently clamped.
     private func replayRange(pointerOffset: Int, offset: UInt32, count: Int) throws -> (UInt32, Int) {
         let pointer = try memory.replayPointers.integer(at: pointerOffset,as: UInt32.self)
-        guard pointer != 0, let allocation = memory.allocations[pointer], allocation.live else {
+        // 43db40/43dc50 do not test the pointer, only 450b80/450b84. After
+        // Alt+Enter's WM_DESTROY freed the buffers (pointer 0) the original
+        // accesses tick*10+0x2b38 in the never-mapped null page: an access
+        // violation, i.e. a crash of the original itself (APPLICATION_FULL_SCREEN.md).
+        guard pointer != 0 else {
+            throw OriginalStateError.invalidStorage("Source fault: the original accesses its freed replay buffer through a null pointer (\(pointerOffset == 0 ? "4588a8 recording" : "4588ac playback")); Windows ends the game with an access violation here")
+        }
+        guard let allocation = memory.allocations[pointer], allocation.live else {
             throw OriginalStateError.invalidStorage("Replay tick buffer ownership")
         }
         let address = pointer &+ offset

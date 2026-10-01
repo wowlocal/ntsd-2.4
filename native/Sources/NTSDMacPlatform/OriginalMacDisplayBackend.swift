@@ -38,6 +38,9 @@ import NTSDCore
     }
     private final class Draw: Resource {
         var window: OriginalMacWindowBackend.WindowLease?
+        /// Exclusive full-screen level (0x11) and its declared display mode
+        /// (APPLICATION_FULL_SCREEN_PLAN.md: answered DD_OK, shown scaled).
+        var exclusive = false, mode: (width: Int,height: Int)?
         init(_ token: UInt32) { super.init(token,.display) }
     }
     /// Accounting may be released when a retained context dies off-main.
@@ -71,6 +74,8 @@ import NTSDCore
         let draw: Draw, width: Int, height: Int, screen: CGRect?
         var storage: Storage?, clipper: Clipper?
         var activeBitmapDC: UInt32?, sourceColorKey: [UInt32]?
+        /// A flipping primary's back buffers, in chain order.
+        var chain: [Surface] = []
         init(_ token: UInt32,_ kind: Kind,_ draw: Draw,_ storage: Storage,_ screen: CGRect?) {
             self.draw = draw; self.storage = storage; self.screen = screen
             width = storage.width; height = storage.height; super.init(token,kind)
@@ -124,7 +129,7 @@ import NTSDCore
         return value
     }
     public nonisolated static func handles(_ q: Window.Request) -> Bool {
-        ["directDrawCreate","cooperativeLevel","createSurface","createClipper","clipperWindow","setClipper","release","pixelFormat","blt"].contains(q.kind)
+        ["directDrawCreate","cooperativeLevel","displayMode","createSurface","attachedSurface","createClipper","clipperWindow","setClipper","release","pixelFormat","blt"].contains(q.kind)
     }
     public func lease(_ token: UInt32) throws -> Resource {
         guard let resource = history[token]?.value else { throw Boundary.owner(token) }; return resource
@@ -169,14 +174,27 @@ import NTSDCore
         switch q.kind {
         case "directDrawCreate": try require(q.words == [0,0x457578,0])
         case "cooperativeLevel":
-            try require(q.words.count == 3 && q.words[2] == 8)
+            // DDSCL_NORMAL (windowed) or DDSCL_EXCLUSIVE|DDSCL_FULLSCREEN (Alt+Enter).
+            try require(q.words.count == 3 && (q.words[2] == 8 || q.words[2] == 0x11))
             _ = try resource(q.words[0],as:Draw.self); _ = try windows.lease(q.words[1])
+        case "displayMode":
+            try require(q.words.count == 4 && q.words[3] == 8 && q.words[1] > 0 && q.words[2] > 0 &&
+                q.words[1] <= 0x4000 && q.words[2] <= 0x4000)
+            try require(try resource(q.words[0],as:Draw.self).exclusive)
+        case "attachedSurface":
+            // GetAttachedSurface(DDSCAPS_BACKBUFFER) of a flipping primary.
+            try require(q.words.count == 3 && q.words[1] == 4 && q.words[2] == 0x455608)
+            try require(!(try resource(q.words[0],as:Surface.self)).chain.isEmpty)
         case "createSurface":
             try require(q.words.count == 3 && q.words[2] == 0)
             let draw = try resource(q.words[0],as:Draw.self);try require(draw.window != nil)
             let r = try record(q,108),flags = try r.integer(at:4,as:UInt32.self),caps = try r.integer(at:104,as:UInt32.self)
             try require(try r.integer(at:0,as:UInt32.self) == 108)
-            if flags == 1 && caps == 0x200 { try require(q.words[1] == 0x455634) }
+            if flags == 0x21 && caps == 0x4218 {
+                // 401380's flip chain: primary, flip, complex, video memory, 1 or 2 back buffers.
+                try require(q.words[1] == 0x455634 && draw.exclusive && draw.mode != nil)
+                try require([1,2].contains(try r.integer(at:20,as:UInt32.self)))
+            } else if flags == 1 && caps == 0x200 { try require(q.words[1] == 0x455634) }
             else if flags == 7 && caps == 0x40 {
                 try require(q.words[1] == 0x455608)
                 try require(try r.integer(at:8,as:UInt32.self) > 0 && r.integer(at:12,as:UInt32.self) > 0)
@@ -223,6 +241,7 @@ import NTSDCore
         if r.references == 0 {
             if let s = r as? Surface {
                 if let c = s.clipper { s.clipper = nil; release(c) }; s.storage = nil
+                let chain = s.chain; s.chain = []; for back in chain { release(back) }
             }
             live.removeValue(forKey:r.token)
         }
@@ -231,6 +250,7 @@ import NTSDCore
     /// limits writes/delivery to our own window. No desktop pixels are sampled.
     private func rectangle(_ s: Surface) throws -> (Int,Int,Int,Int,UInt32?) {
         if s.kind == .backbuffer || s.kind == .offscreen { return (0,0,s.width,s.height,nil) }
+        if s.screen == nil,s.draw.exclusive,let window = s.draw.window { return (0,0,s.width,s.height,window.token) }
         guard let clipper = s.clipper,let window = clipper.window,let screen = s.screen else { throw Boundary.unsupported("primary without native window clipper") }
         guard clipper.references > 0 else { throw Boundary.released(clipper.token) }
         let geometry = try windows.displayGeometry(window.token)
@@ -278,12 +298,30 @@ import NTSDCore
             let d = try Draw(windows.identities.take()); install(d);retained = [d];response = .init(output:d.token)
         case "cooperativeLevel":
             let d = try resource(q.words[0],as:Draw.self),w = try windows.lease(q.words[1])
-            _ = try windows.displayGeometry(w.token);d.window = w;retained = [d,w];response = .init()
+            _ = try windows.displayGeometry(w.token);d.window = w;d.exclusive = q.words[2] == 0x11;retained = [d,w];response = .init()
+        case "displayMode":
+            let d = try resource(q.words[0],as:Draw.self)
+            d.mode = (Int(q.words[1]),Int(q.words[2]));retained = [d];response = .init()
+        case "attachedSurface":
+            let primary = try resource(q.words[0],as:Surface.self),back = primary.chain[0]
+            guard back.references < UInt32.max else { throw Boundary.referenceOverflow }
+            back.references += 1;retained = [primary,back];response = .init(output:back.token)
+        case "createSurface" where try record(q,108).integer(at:4,as:UInt32.self) == 0x21:
+            let d = try resource(q.words[0],as:Draw.self),r = try record(q,108),(width,height) = d.mode!
+            let s = try Surface(windows.identities.take(),.primary,d,self.storage(width,height),nil)
+            for _ in 0..<Int(try r.integer(at:20,as:UInt32.self)) {
+                let back = try Surface(windows.identities.take(),.backbuffer,d,self.storage(width,height),nil)
+                install(back);s.chain.append(back)
+            }
+            install(s);retained = [s]+s.chain;response = .init(output:s.token)
         case "createSurface":
             let d = try resource(q.words[0],as:Draw.self),r = try record(q,108)
             let primary = try r.integer(at:104,as:UInt32.self) == 0x200
             let width: Int,height: Int,screen: CGRect?
-            if primary {
+            if primary,let mode = d.mode,d.exclusive {
+                // The fake flipper in full screen: a mode-sized primary, no desktop.
+                (width,height) = mode;screen = nil
+            } else if primary {
                 let geometry = try windows.displayGeometry(d.window!.token)
                 (width,height) = try dimensions(geometry.screen.size);screen = geometry.screen
             } else {
@@ -572,7 +610,7 @@ extension OriginalMacDisplayBackend {
         }
     }
     private enum FrontAction {
-        case fill(FrontTarget,UInt32), copy(FrontCopy), release(Surface), text(TextStep)
+        case fill(FrontTarget,UInt32), copy(FrontCopy), release(Surface), text(TextStep), flip(Surface)
         /// DirectDraw Blt with a rectangle outside its surface (or empty):
         /// DDERR_INVALIDRECT, no pixels change.
         case rejected([Surface])
@@ -678,7 +716,9 @@ extension OriginalMacDisplayBackend {
         guard flags & 0x1000000 != 0,flags & ~UInt32(0x1008800) == 0 else { throw Boundary.unsupported("front Blt flags") }
         let target = try frontSurface(destinationToken),src = try frontSurface(sourceToken)
         guard target !== src else { throw Boundary.unsupported("same-surface Blt") }
-        guard target.draw === src.draw else { throw Boundary.arguments("cross-display Blt") }
+        // Sprites of the DirectDraw object Alt+Enter released keep their own
+        // references and are drawn to the new target (declared, FULL_SCREEN_PLAN 2).
+        guard target.draw === src.draw || src.draw.references == 0 else { throw Boundary.arguments("cross-display Blt") }
         guard src.kind != .primary else { throw Boundary.unsupported("primary Blt source") }
         let d = try frontRect(destination,target),s = try frontRect(source,src)
         guard d.width == s.width,d.height == s.height else { throw Boundary.unsupported("front stretching") }
@@ -730,6 +770,13 @@ extension OriginalMacDisplayBackend {
             if a[1] == 8 {
                 guard a.count == 2,q.strings.isEmpty else { throw Boundary.arguments("front Release") }
                 try validate(.init("release",[a[0]]));return .release(try frontSurface(a[0]))
+            }
+            if a[1] == 0x2c {
+                // IDirectDrawSurface::Flip(NULL, flags) on a flipping primary (present mode 2).
+                guard a.count == 4,a[2] == 0,q.strings.isEmpty else { throw Boundary.arguments("front Flip") }
+                let primary = try frontSurface(a[0])
+                guard !primary.chain.isEmpty,primary.draw.window != nil else { throw Boundary.unsupported("Flip without a flip chain") }
+                return .flip(primary)
             }
             guard a[1] == 0x14 else { throw Boundary.unsupported("front surface method") }
             guard a.count == 7,a[6] == 0 else { throw Boundary.arguments("front presentation") }
@@ -806,6 +853,14 @@ extension OriginalMacDisplayBackend {
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
         case .rejected(let surfaces):
             owners = surfaces;response = .init(result:Self.invalidRect)
+        case .flip(let primary):
+            // The chain's memory rotates: the front shows the first back buffer, each
+            // back buffer takes the next one's, the last takes the old front's.
+            let surfaces = [primary]+primary.chain,storages = surfaces.map(\.storage)
+            for (i,s) in surfaces.enumerated() { s.storage = storages[(i+1)%surfaces.count] }
+            let data = primary.storage!,window = primary.draw.window!.token
+            try windows.display(image(data,(0,0,data.width,data.height,window)),in:window)
+            owners = surfaces;response = .init(result:0)
         case .text(let step):
             switch step {
             case .acquire(let s):

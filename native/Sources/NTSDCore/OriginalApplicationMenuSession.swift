@@ -345,11 +345,16 @@ public struct OriginalApplicationMenuSession {
                         var g = try State.slice(owned.full,0,Self.globalCount)
                         var local = try State.slice(owned.full,Self.outerStart,0x140)
                         let result: Int32
-                        if input.message == 3 || input.message == 5 {
+                        if input.message == 3 || input.message == 5 || input.message == 0x105 {
+                            // WM_SYSKEYUP is 43b83f (Alt+Enter recreation). Its 43bdd0
+                            // stack frames are fresh, undefined backing.
                             result = try OriginalWindowLifecycle.receive(input,globals:&g,memory:&owned.memory,
-                                backing:{ _,_ in throw Boundary.dependency("Initial resize backing") },perform:{ q in
+                                backing:{ _,count in [UInt8](repeating:0,count:count) },perform:{ q in
                                     let r = try lifecycle(q);try emit(.lifecycle(q,r));return r
-                                },store:store)
+                                },store:store,deliver:{ message,globals,memory in
+                                    try OriginalWindowInput.receive(message,globals:&globals,local:&local,memory:&memory,
+                                        request:{ q in try windowDefault(q) },store:store)
+                                })
                         } else if input.message == 0x400 {
                             // 401e90's own stack frame: fresh undefined backing each call,
                             // no global writes; only DefWindowProc joins the window provider.

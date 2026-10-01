@@ -77,4 +77,57 @@ game's involvement (the image scaled, nothing released), or both.
 
 Status: scoped; implementation waits for that decision.
 
+## Decision and declared answers (2026-10-01)
+
+User decision: reproduce Alt+Enter as the original does. A standard macOS full
+screen may be added separately, without the game's involvement.
+
+What is recovered and reproduced exactly:
+
+- the WndProc route of WM_SYSKEYUP(VK_RETURN) (43b83f);
+- the 458430/458434 toggling;
+- 401a80's releases and DestroyWindow;
+- the synchronous WM_DESTROY (43b4ba), which releases the DirectSound device,
+  the music graph and both recording buffers, and skips PostQuitMessage;
+- the recreation by 43bdd0: a popup at screen size and a new DirectDraw;
+- in full screen: exclusive level 0x11, SetDisplayMode(44d78c, 44d790, 8),
+  which is (794, 550, 8) from .data, a flip chain of 2 then 1, or the fake
+  flipper;
+- present mode 2 (Flip).
+
+Neither the sound and music devices nor the recording buffers are recreated,
+so after a toggle the game runs silent and records nothing, as on Windows.
+
+Windows behaviour that the EXE does not fix, and that no observation is
+available for, is declared here, not the EXE:
+
+1. **SetDisplayMode(794, 550, 8).** No such 8-bit mode exists on ordinary
+   hardware. Whether a given Windows version emulates it is unknown. The code
+   only continues usefully on success, so the Mac answers DD_OK. The game's
+   image is shown in macOS full screen, scaled to fit with its aspect kept.
+   Surfaces keep the native XRGB format: no 8-bit conversion and no palette.
+2. **Sprite surfaces from the released DirectDraw object.** They are never
+   reloaded (static reading above), so the game relies on Blt from them to
+   the new target. The Mac allows that Blt; a cross-object Blt stays a
+   boundary everywhere else.
+3. **RegisterClassA again.** The class "Marti" still exists after
+   DestroyWindow, so RegisterClassA returns 0 (ERROR_CLASS_ALREADY_EXISTS,
+   documented Windows behaviour). The result is ignored.
+4. **SM_CXSCREEN and SM_CYSCREEN.** The main display's size in points.
+5. **System keys.** Option is Alt (VK_MENU, scan 0x38, right Option
+   extended). While it is held, key transitions are WM_SYSKEYDOWN/UP with
+   lParam bit 29; releasing Alt itself is WM_SYSKEYUP(VK_MENU) with bit 29
+   clear. TranslateMessage turns WM_SYSKEYDOWN of a character key into
+   WM_SYSCHAR. DefWindowProc sends WM_SYSCOMMAND(SC_KEYMENU) after Alt
+   released alone, which the game swallows (43b519), and SC_CLOSE for
+   Alt+F4 (Windows behaviour). For anything else it does nothing; in
+   particular the default beep for an unmatched Alt+key is not played.
+
+## Stage order
+
+FS1 (system keys) and FS2 (the recreation) land together. FS1 alone would
+route Alt+Enter into a recreation the Mac cannot serve, a regression from
+today's ignored Option key. FS3 (Flip presentation) is needed for full screen
+to show anything, so it lands with them.
+
 EXE envelope not recalculated.

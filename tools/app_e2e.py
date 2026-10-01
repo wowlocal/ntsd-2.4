@@ -124,6 +124,12 @@ SCENARIOS = {
                      script=lambda captures: PLAYBACK.replace("{captures}", str(captures))),
     "tournament": dict(reference=ROOT / "tools/app_e2e_tournament_reference.json", extra=[],
                        script=lambda captures: TOURNAMENT.replace("{captures}", str(captures))),
+    # Alt+Enter as the original (APPLICATION_FULL_SCREEN.md): toggled at the VS
+    # selection, the match plays in full screen (Flip, sound device released,
+    # a fresh recording), Jump at the Summary, Alt+Enter back to the window.
+    "altenter": dict(reference=ROOT / "tools/app_e2e_altenter_reference.json", extra=[],
+                     script=lambda captures: SCRIPT.read_text().strip() + "; 600 hold 18 40; 610 key 13; 9000 key 74; "
+                     + f"9100 hold 18 40; 9110 key 13; 9300 capture {captures}/windowed.png; 9400 exit"),
     "tournament-win": dict(reference=ROOT / "tools/app_e2e_tournament_win_reference.json", extra=[],
                            script=lambda captures: TOURNAMENT_WIN.replace("{captures}", str(captures))),
     "team-tournament": dict(reference=ROOT / "tools/app_e2e_team_tournament_reference.json", extra=[],
@@ -254,6 +260,21 @@ def online_check(timeout, app=APP):
         return ok, {"exitCode": done.returncode, "messageBoxes": boxes, "opened": opened}
 
 
+def altenter_fault_check(timeout, app=APP):
+    """Alt+Enter in the middle of a recorded VS fight: WM_DESTROY frees the
+    recording buffer and the next recorded tick writes through its null
+    pointer, the original's own crash; the app stops there as a source fault."""
+    with tempfile.TemporaryDirectory(prefix="ntsd-altenter-") as scratch:
+        script = SCRIPT.read_text().strip() + "; 2000 hold 18 40; 2010 key 13; 3000 exit"
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+                               "--virtual-clock", "123456789", "8", "--script-clock", "gameplay", "--script", script],
+                              capture_output=True, text=True, timeout=timeout, env=APP_ENV)
+        events = [json.loads(l) for l in done.stdout.splitlines() if l.startswith("{")]
+        faults = [e.get("error", "") for e in events if e.get("event") == "boundary"]
+        ok = done.returncode == 1 and len(faults) == 1 and "Source fault" in faults[0] and "4588a8" in faults[0]
+        return ok, {"exitCode": done.returncode, "boundaries": [f[:160] for f in faults]}
+
+
 RECORDING_OPENED = [["explore", "recording"], ["open", "http://www.littlefighter.com/record"],
                     ["open", "http://www.littlefighter.com/challenge"], ["open", "http://littlefighter.com"]]
 
@@ -367,6 +388,10 @@ def main():
             ok, detail = recording_check(args.timeout, args.app)
             if not ok:
                 problems.append("recording"); reference["recording"] = {"opened": RECORDING_OPENED, "control.txt": "name naruto, recording off"}; observed["recording"] = detail
+        if name == "altenter":
+            ok, detail = altenter_fault_check(args.timeout, args.app)
+            if not ok:
+                problems.append("fault"); reference["fault"] = "exit 1 at one Source fault boundary (4588a8)"; observed["fault"] = detail
         print(json.dumps({"scenario": name, "result": "pass" if not problems else "fail", "differs": problems,
                           "resources": observed.get("resources"), "progress": len(observed["progress"]), "milestones": len(observed["milestones"])}))
         for key in problems:

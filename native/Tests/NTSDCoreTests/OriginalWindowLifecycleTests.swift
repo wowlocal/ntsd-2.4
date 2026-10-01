@@ -114,6 +114,38 @@ final class OriginalWindowLifecycleTests: XCTestCase {
         XCTAssertEqual(callbacks,318);XCTAssertEqual(initializations,2);XCTAssertEqual(retained,18)
         print("WINDOW LIFECYCLE \(callbacks) whole callbacks \(initializations) initializations \(retained) own retained calls \(requests) requests \(stores) ordered stores")
     }
+    /// Alt+Enter (APPLICATION_FULL_SCREEN_PLAN.md): DestroyWindow's synchronous
+    /// WM_DESTROY and WM_NCDESTROY reach `deliver` on the enclosing state, after
+    /// DestroyWindow and before the 43bdd0 recreation (full-screen branch here).
+    func testAltEnterDeliversNestedDestroyBeforeRecreation() throws {
+        let base = OriginalMatchPreparation.globalBase
+        var globals = try OriginalStateRecord(bytes: Array(repeating: 0,count: OriginalMatchPreparation.globalSize),
+                                              defined: Array(repeating: true,count: OriginalMatchPreparation.globalSize))
+        try globals.write(UInt32(1),at: 0x44d794-base);try globals.write(UInt32(0x77),at: 0x4546f4-base)
+        var memory = OriginalMenuPresentationMemory(replayPointers: try .init(bytes: Array(repeating: 0,count: 8),defined: Array(repeating: true,count: 8)))
+        var order: [String] = []
+        let result = try OriginalWindowLifecycle.receive(.init(window: 0x77,message: 0x105,wParam: 13,lParam: 0),
+            globals: &globals,memory: &memory,backing: { _,count in Array(repeating: 0,count: count) },perform: { q in
+                order.append(q.kind == "metric" ? "metric \(q.words[0])" : q.kind)
+                switch q.kind {
+                case "destroyWindow": return .init(result: 1)
+                case "metric": return .init(result: q.words[0] == 0 ? 800 : 600)
+                default: return .init() // createWindow 0: 43bdd0 stops after it
+                }
+            },deliver: { message,state,_ in
+                order.append("deliver \(message.message)")
+                XCTAssertEqual(message.window,0x77)
+                XCTAssertEqual(try state.integer(at: 0x458434-base,as: UInt32.self),1)
+                try state.write(UInt32(0x5a),at: 0x44d200-base);return 0
+            })
+        XCTAssertEqual(order,["debug","destroyWindow","deliver 2","deliver 130","icon","registerClass","metric 1","metric 0",
+                              "createWindow","showWindow","windowDefault"])
+        XCTAssertEqual(result,0)
+        XCTAssertEqual(try globals.integer(at: 0x458430-base,as: UInt32.self),1)
+        XCTAssertEqual(try globals.integer(at: 0x458434-base,as: UInt32.self),0)
+        XCTAssertEqual(try globals.integer(at: 0x44d200-base,as: UInt32.self),0x5a)
+    }
+
     func testLateRecreationAndMissingBackingRollBackWholeCallback() throws {
         enum Stop: Error { case late }
         let r = try resources(), c = try XCTUnwrap(r.corpus.cases.first { $0.spec.label == "recreate-ownership" && $0.spec.mode == 0 && $0.spec.resources == 7 })

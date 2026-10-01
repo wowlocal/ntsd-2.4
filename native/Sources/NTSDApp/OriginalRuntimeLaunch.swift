@@ -59,6 +59,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         if let i = arguments.firstIndex(of:"--click-at"),i+3 < arguments.count,let n = Int(arguments[i+1]),
            let x = Int32(arguments[i+2]),let y = Int32(arguments[i+3]) { clickAt = (n,x,y) }
     }
+    /// The key a script VK names: of several Mac keys with one VK (left/right
+    /// Shift, Control, Option; Return/Enter) the lowest key code, so runs repeat.
+    static func scriptKey(_ vk: UInt32) -> OriginalMacRuntimeKey? {
+        OriginalMacRuntimeKey.table.filter { $0.value.vk == vk }.min { $0.key < $1.key }?.value
+    }
     static func emit(_ value: [String:Any]) {
         guard let data = try? JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]) else { return }
         print(String(decoding:data,as:UTF8.self)); fflush(stdout)
@@ -186,18 +191,31 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 }
                 menu.messages.destroyedWindow = { [unowned self] in
                     Self.emit(["event":"windowDestroyed","iterations":self.committed])
-                    try? started.windows.hide(started.window)
+                    try? started.windows.hide(self.gameWindow)
                 }
-                try started.windows.setInput(started.window) { [weak self] event in self?.input(event) ?? false }
-                // The close button is the game's WM_SYSCOMMAND(SC_CLOSE); after a
-                // boundary stop it closes the app directly.
-                try started.windows.setCloseRequest(started.window) { [weak self] in
-                    guard let self,!self.stopped else { return true }
-                    self.menu?.messages.close(); return false
+                gameWindow = started.window
+                try attach(started.window)
+                // Alt+Enter's recreation (APPLICATION_FULL_SCREEN_PLAN.md): the new
+                // window becomes the game's, for messages, input and captures.
+                started.windows.created = { [weak self] token in
+                    guard let self else { return }
+                    self.gameWindow = token; self.menu?.messages.window = token
+                    Self.emit(["event":"windowCreated","window":token,"iterations":self.committed])
+                    do { try self.attach(token) } catch { self.stop(error) }
                 }
                 NSApp.activate(ignoringOtherApps:true)
                 schedule(0)
             } catch { stop(error) }
+        }
+    }
+    /// The original window's input and close handling: the close button is the
+    /// game's WM_SYSCOMMAND(SC_CLOSE); after a boundary stop it closes the app.
+    @MainActor private func attach(_ window: UInt32) throws {
+        guard let started else { return }
+        try started.windows.setInput(window) { [weak self] event in self?.input(event) ?? false }
+        try started.windows.setCloseRequest(window) { [weak self] in
+            guard let self,!self.stopped else { return true }
+            self.menu?.messages.close(); return false
         }
     }
     @MainActor private func input(_ event: NSEvent) -> Bool {
@@ -210,7 +228,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         switch event.type {
         case .keyDown,.keyUp:
             guard let key = OriginalMacRuntimeKey.table[event.keyCode] else { return true }
-            messages.key(key,down:event.type == .keyDown,repeated:event.isARepeat,characters:event.characters)
+            // With Option (Alt) held, WM_SYSCHAR carries the unmodified character.
+            messages.key(key,down:event.type == .keyDown,repeated:event.isARepeat,
+                         characters:event.modifierFlags.contains(.option) ? event.charactersIgnoringModifiers : event.characters)
         case .flagsChanged:
             guard let key = OriginalMacRuntimeKey.table[event.keyCode] else { return true }
             // Caps Lock reports one flagsChanged per toggle and none on release: each
@@ -220,7 +240,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             if down { pressedModifiers.insert(event.keyCode) } else { pressedModifiers.remove(event.keyCode) }
             messages.key(key,down:down)
         case .mouseMoved,.leftMouseDragged,.rightMouseDragged,.leftMouseDown,.leftMouseUp,.rightMouseDown,.rightMouseUp:
-            guard let (x,y) = try? started.windows.clientPoint(started.window,event) else { return true }
+            guard let (x,y) = try? started.windows.clientPoint(gameWindow,event) else { return true }
             let pressed = NSEvent.pressedMouseButtons
             let buttons = UInt32(pressed & 1 != 0 ? 1 : 0) | UInt32(pressed & 2 != 0 ? 2 : 0)
             let message: UInt32
@@ -264,7 +284,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Hold the button across game ticks, as a player's click does.
                 if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
-                    try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:capture.path))
+                    try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:capture.path))
                     Self.emit(["event":"captured","iterations":committed,"path":capture.path,"permits":menu.requests,
                         "getDCFailures":menu.textRequests,"emptyBlits":menu.emptyBlits])
                     if arguments.contains("--exit-after-capture") { NSApp.terminate(nil); return }
@@ -314,7 +334,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                             "sounds":soundReport()]
                         if let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
-                            try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:path)); event["path"] = path
+                            try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:path)); event["path"] = path
                         }
                         Self.emit(event)
                     }
@@ -385,18 +405,18 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 guard let x = Int32(words[1]),let y = Int32(words[2]) else { continue }
                 menu.messages.mouse(0x202,x:x,y:y,buttons:0)
             case "key" where words.count == 2,"keyup" where words.count == 2:
-                guard let vk = UInt32(words[1]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
+                guard let vk = UInt32(words[1]),let key = Self.scriptKey(vk) else { continue }
                 if words[0] == "key" { menu.messages.key(key,down:true); script[n+10,default:[]].append(["keyup",words[1]]) }
                 else { menu.messages.key(key,down:false) }
             case "hold" where words.count == 3:
-                guard let vk = UInt32(words[1]),let n2 = Int(words[2]),let key = OriginalMacRuntimeKey.table.values.first(where: { $0.vk == vk }) else { continue }
+                guard let vk = UInt32(words[1]),let n2 = Int(words[2]),let key = Self.scriptKey(vk) else { continue }
                 menu.messages.key(key,down:true); script[n+n2,default:[]].append(["keyup",words[1]])
             case "joy" where words.count == 5:
                 // A joystick sample (id x y buttons), as joySetCapture reports one.
                 guard let id = UInt32(words[1]),let x = UInt32(words[2]),let y = UInt32(words[3]),let b = UInt32(words[4]) else { continue }
                 menu.messages.joystick(id,x:x,y:y,buttons:b)
             case "capture" where words.count == 2:
-                try started.windows.snapshotPNG(started.window).write(to:URL(fileURLWithPath:words[1]))
+                try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:words[1]))
                 Self.emit(["event":"captured","iterations":n,"cycles":cycles,"gameplayBodies":gameplayBodies,
                     "lastSleeps":Array(loading?.sleeps.suffix(8) ?? []),"menuSleeps":Array(menu.messages.sleeps.suffix(8)),"objectInputs":loading?.counts.objectInputs ?? 0,"characterAI":loading?.counts.characterAI ?? 0,
             "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? [],"refusedReplays":loading?.refusedReplayOpens ?? [],
@@ -409,6 +429,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+    /// The current original window (replaced by an Alt+Enter recreation).
+    private var gameWindow: UInt32 = 0
     private var musicEnds = 0, musicNotifications = 0, inMatch = false, reportedAlerts = 0, reportedDialogs = 0, reportedDocuments = 0
     /// Committed graph state to the output; a finished track queues EC_COMPLETE
     /// and posts the registered notification for the next iteration's WndProc.
@@ -474,8 +496,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             "request":menu?.lastRequest.map { String(describing:$0).prefix(400) }.map(String.init) ?? ""])
         // Scripted runs report the boundary and end; only interactive runs show it.
         if exitAfterStartup || arguments.contains("--exit-after-capture") || arguments.contains("--script") { exit(1) }
-        let alert = NSAlert(); alert.messageText = "NTSD stopped at an unsupported boundary"
-        alert.informativeText = String(reflecting:error); alert.runModal()
+        let alert = NSAlert(),text = String(reflecting:error)
+        // A source fault is the original's own crash at this point, reproduced
+        // as a stop; anything else is a part of the game not yet supported.
+        alert.messageText = text.contains("Source fault") ? "The original game crashes here" : "NTSD stopped at an unsupported boundary"
+        alert.informativeText = text; alert.runModal()
     }
     /// The game ends at its own WM_QUIT (after DestroyWindow hid the window);
     /// only a run stopped at a boundary ends with its window.
