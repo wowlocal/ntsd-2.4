@@ -86,4 +86,32 @@ byte is a boundary until a code page is declared.
   "Background: Random", "Difficulty: Difficult", "Music: Random", unit counts,
   "Defense: x1.0").
 
+## Addendum: code-page survey (2026-10-01)
+
+Which bytes ≥ 0x80 can reach TextOutA, where the app's ASCII-only text is a
+boundary?
+
+- **Shipped data.** The game's own decoder (`tools/import_ntsd.decode_dat`)
+  decodes all 191 DAT and TXT files of the distribution:
+  - all 62 `name:` values are ASCII;
+  - the only non-ASCII bytes inside any file are the UTF-16 byte-order mark of
+    `movelist @ credits.txt`, which the game does not read;
+  - 356 high bytes follow each file's last `<frame_end>`/`layer_end`. These
+    are trailing bytes after the data, not text.
+- **The EXE's and lib.dll's own strings.** No string in their .rdata/.data
+  sections contains a high byte. The 13 apparent hits are binary64 constants
+  stored next to ASCII strings ("Waiting for opponent...", "Man: %3d
+  HP: %4d …").
+- **Dynamic text.** Numbers, dates and recording names are formatted from
+  ASCII. Typed names are ASCII too: the app posts WM_CHAR only for 0x20..0x7e
+  and control characters (an existing declared policy). A non-ASCII typed
+  character produces no WM_CHAR.
+
+So no shipped content and no input the app accepts reaches the ASCII
+boundary. The remaining way is a user-supplied `control.txt` whose names hold
+high bytes, for example one copied from a non-English Windows install. There
+the original would draw them in that system's ANSI code page, which the game
+does not record. The boundary stays until such a file is reported; then a
+code page can be declared for it.
+
 EXE envelope not recalculated.
