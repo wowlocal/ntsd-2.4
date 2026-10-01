@@ -38,6 +38,16 @@ separate run IDs. Count correction rounds across renamed tasks; reuse configured
 tools and run required comparisons after cheap checks. The supplement takes
 precedence over older process guidance; fidelity, review and live pins remain binding.
 
+User update, 2026-10-01: during an active full-port task, continue to the next
+permitted task after each checked increment. Networking and the rest of the
+declared scope are already authorized; size or difficulty does not require a
+new scope decision. A missing manual/device check blocks only its dependent
+work and acceptance. Keep other permitted work moving while awaiting input.
+Before reporting the whole goal blocked, identify why no remaining independent
+task can progress, with evidence and the exact input needed. Follow the
+[continuation rules](docs/research/WORKFLOW.md#автономное-продолжение-и-участие-пользователя);
+user stops, tool lifecycle rules, budgets, safety refusals and live pins still apply.
+
 ## Authoritative reference
 
 - Use only the original Windows NTSD distribution as the behavioral reference.
