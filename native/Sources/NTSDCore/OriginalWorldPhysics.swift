@@ -9,7 +9,8 @@ public enum OriginalWorldPhysicsEvent: Equatable {
 public enum OriginalWorldPhysics {
     public static func apply(state: inout OriginalMatchPreparation,
                              observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
-                             afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+                             afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                             respawned: () throws -> Void = {}) throws {
         let catalog = state.catalog
         guard try state.world.integer(at: 0x7d4,as: UInt32.self) == 0,let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
         try apply(world: &state.world,actors: &state.actors,globals: &state.globals,precision: state.arithmeticPrecision,objectCount: registry.integer(at: 0,as: Int32.self),header: { index in
@@ -17,13 +18,14 @@ public enum OriginalWorldPhysics {
         },frame: { index,number in
             guard catalog.objects.indices.contains(index),catalog.objects[index].frameStorage.indices.contains(Int(number)) else { throw error("Frame binding") }
             return catalog.objects[index].frameStorage[Int(number)]
-        },observe: observe,afterActorPhysics: afterActorPhysics)
+        },observe: observe,afterActorPhysics: afterActorPhysics,respawned: respawned)
     }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("World physics: "+text) }
     static func apply(world: inout OriginalStateRecord,actors: inout [OriginalStateRecord],globals: inout OriginalStateRecord,
                       precision: OriginalArithmeticPrecision = .bits64,objectCount: Int32,header: (Int) throws -> OriginalStateRecord,frame: (Int,Int32) throws -> OriginalStateRecord,
                       observe: (OriginalWorldPhysicsEvent) throws -> Void = { _ in },
-                      afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
+                      afterActorPhysics: (Int,OriginalStateRecord) throws -> Void = { _,_ in },
+                      respawned: () throws -> Void = {}) throws {
         var ownedWorld = world,pool = actors,owned = globals
         func active(_ slot: Int) throws -> UInt8 { try ownedWorld.integer(at: 4+slot,as: UInt8.self) }
         func index(_ slot: Int) throws -> Int {
@@ -75,6 +77,7 @@ public enum OriginalWorldPhysics {
                 } else if try i(a,0x30c) < 2 { try ownedWorld.write(UInt8(0),at: 4+slot) }
                 else {
                     try pool[a].write(i(a,0x30c) &- 1,at: 0x30c)
+                    try respawned() // 41e99b: the hit pass's word [esp+4c] becomes −3 − World
                     var x: Int32 = 0,z: Int32 = 0,count: Int32 = 0
                     for other in 0..<400 where try other != slot && active(other) == 1 {
                         let b = try index(other)

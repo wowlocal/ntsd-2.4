@@ -23,6 +23,28 @@ final class OriginalWorldPhysicsTests: XCTestCase {
         XCTAssertEqual(draws,[.random(slot: 0,stream: 144,range: 51,result: 2)])
         XCTAssertEqual(actors,beforeActors);XCTAssertEqual(globals,beforeGlobals);XCTAssertEqual(world,beforeWorld)
     }
+    /// APPLICATION_HIT_ITEM_SLOT_PLAN.md: a completed reserve respawn (one ally)
+    /// reports 41e99b, which leaves −3 − World in the hit pass's word.
+    func testRespawnReportsTheHitWordStore() throws {
+        let bootstrap = try OriginalWorldBootstrap(worldBacking: [UInt8](repeating: 0xa5,count: 0x7d8),
+            actorBacking: [[UInt8]](repeating: [UInt8](repeating: 0xa5,count: 0x420),count: 400),selector: 2)
+        var world = bootstrap.world,actors = bootstrap.actors
+        try world.write(UInt8(1),at: 4);try world.write(UInt8(1),at: 5)
+        for (offset,value): (Int,Int32) in [(0xb4,1),(0x70,300),(0x2fc,0),(0x2f4,0),(8,1),(0x30c,2),(0x314,0)] { try actors[0].write(value,at: offset) }
+        for (offset,value): (Int,Int32) in [(0x70,300),(0x2fc,100),(0x2f4,-1),(8,0),(0x10,400),(0x18,300)] { try actors[1].write(value,at: offset) }
+        var globals = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0xb440),defined: [Bool](repeating: true,count: 0xb440))
+        for i in 0..<3000 { try globals.write(UInt8(1),at: 0x44ff90-0x44d000+i) }
+        let header = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x7a4),defined: [Bool](repeating: true,count: 0x7a4))
+        var frame = try OriginalStateRecord(bytes: [UInt8](repeating: 0,count: 0x178),defined: [Bool](repeating: true,count: 0x178))
+        try frame.write(Int32(14),at: 8)
+        var respawns = 0
+        try OriginalWorldPhysics.apply(world: &world,actors: &actors,globals: &globals,objectCount: 1,header: { _ in header },frame: { _,_ in frame },
+            respawned: { respawns += 1 })
+        XCTAssertEqual(respawns,1)
+        XCTAssertEqual(try actors[0].integer(at: 0x30c,as: Int32.self),1)
+        XCTAssertEqual(OriginalRequestSlotWord.respawn(),.value(Int32(bitPattern: 0xffba74fd)))
+        XCTAssertEqual(OriginalRequestSlotWord.entry(Int32(bitPattern: 0xffba74fd)),0xff2f6088)
+    }
     private struct Patch: Decodable {
         let offset: Int,bytes: String
         init(from decoder: Decoder) throws { var c = try decoder.unkeyedContainer();offset = try c.decode(Int.self);bytes = try c.decode(String.self) }

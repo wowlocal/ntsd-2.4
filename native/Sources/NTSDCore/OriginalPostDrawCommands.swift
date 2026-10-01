@@ -144,7 +144,7 @@ public enum OriginalPostDrawCommands {
             case nil: throw error("Retained caller slot provenance")
             case .value(let value) where (0..<400).contains(value): return Int(value)
             case .value(let value):
-                let entry = OriginalRequestSlotWord.world &+ 0x194 &+ 4 &* UInt32(bitPattern: value)
+                let entry = OriginalRequestSlotWord.entry(value)
                 if entry >= 0x8000_0000 {
                     throw OriginalStateError.invalidStorage("Source fault: on a full pool the requested item takes slot \(value) from SP+34; "
                         + "its Actor-table entry 0x\(String(entry, radix: 16)) lies outside the 2 GB user address space of the "

@@ -91,19 +91,24 @@ public enum OriginalGameplayBody {
         }
         try OriginalWorldControl.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.control(slot: $0, $1)) })
         try emitCheckpoint(.control, next, owned, random)
-        try OriginalWorldPhysics.apply(state: &next, observe: { try observe(.physics($0)) })
+        // The hit pass's item word [esp+4c]: only a reserve respawn writes it
+        // earlier in this call (APPLICATION_HIT_ITEM_SLOT_PLAN.md).
+        var itemSlot: OriginalRequestSlotWord?
+        try OriginalWorldPhysics.apply(state: &next, observe: { try observe(.physics($0)) },
+            respawned: { itemSlot = .respawn() })
         try emitCheckpoint(.physics, next, owned, random)
         try OriginalWorldLinks.apply(state: &next, sse2Conversion: sse2, observe: { try observe(.links(.links, $0)) })
         try emitCheckpoint(.links, next, owned, random)
         try OriginalWorldContacts.apply(state: &next, bundledLibrary: library != nil, observe: { try observe(.contacts($0)) })
         try emitCheckpoint(.contacts, next, owned, random)
-        // The full-pool item's root4c and incoming cpoint partner currently
-        // have no whole-body native producer. Children retain nil until used.
+        // The full-pool item's root4c has one producer in this call, a reserve
+        // respawn (above); otherwise it and the incoming cpoint partner have no
+        // whole-body native producer, and children retain nil until used.
         if installed != nil {
-            try OriginalLibWorldHits.apply(state:&next,crt:&random,library:&installed!.hits,sse2:sse2,
+            try OriginalLibWorldHits.apply(state:&next,crt:&random,library:&installed!.hits,itemSlot:itemSlot,sse2:sse2,
                                           observe:{ try observe(.hits($0)) })
         } else {
-            try OriginalWorldHits.apply(state: &next, crt: &random, sse2: sse2, observe: { try observe(.hits($0)) })
+            try OriginalWorldHits.apply(state: &next, crt: &random, itemSlot: itemSlot, sse2: sse2, observe: { try observe(.hits($0)) })
         }
         try emitCheckpoint(.hits, next, owned, random)
         try OriginalWorldCPoints.apply(state: &next, sse2Conversion: sse2,

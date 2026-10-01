@@ -2,12 +2,12 @@
 /// No second contact collection occurs between these two ascending passes.
 public enum OriginalWorldHits {
     public static func apply(state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom,
-                             retainedSpawnSlot: Int32? = nil,sse2: Bool = false,
+                             retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
                              observe: (OriginalHitEvent) throws -> Void = { _ in },
                              afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         var pass = try OriginalActorHits.makePass(state: state,crt: crt,sse2: sse2)
         let backgrounds = state.backgrounds
-        try pass.advance(retainedSpawnSlot: retainedSpawnSlot,background: { n in
+        try pass.advance(retainedSpawnSlot: retainedSpawnSlot,itemSlot: itemSlot,background: { n in
             guard backgrounds.indices.contains(Int(n)) else { throw OriginalStateError.invalidStorage("Hit item background binding") }
             return backgrounds[Int(n)]
         },observe: observe,afterHit: afterHit)
@@ -15,7 +15,7 @@ public enum OriginalWorldHits {
     }
 }
 extension OriginalHitPass {
-    mutating func advance(retainedSpawnSlot: Int32? = nil,background: (Int32) throws -> OriginalStateRecord,
+    mutating func advance(retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,background: (Int32) throws -> OriginalStateRecord,
                           observe: (OriginalHitEvent) throws -> Void = { _ in },
                           afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         try globals.write(Int32(0),at: 0x45115c-0x44d000)
@@ -59,6 +59,17 @@ extension OriginalHitPass {
             //caller that supplies it keeps the recovered behaviour. Declared policy
             //(APPLICATION_FULL_POOL_ITEM.md, not the EXE): without it the spawn is
             //skipped after its draws.
+            // A reserve respawn earlier in this call (41e99b) leaves −3 − World
+            // there (APPLICATION_HIT_ITEM_SLOT_PLAN.md): its Actor-table entry is
+            // outside the 2 GB user space of the fixed-base, non-LAA EXE.
+            if free == nil && retainedSpawnSlot == nil, case .value(let word)? = itemSlot {
+                let entry = OriginalRequestSlotWord.entry(word)
+                if entry >= 0x8000_0000 {
+                    throw OriginalStateError.invalidStorage("Source fault: on a full pool the random item takes slot \(word) from [esp+4c], "
+                        + "left by this tick's reserve respawn; its Actor-table entry 0x\(String(entry, radix: 16)) lies outside the 2 GB "
+                        + "user address space of the fixed-base, non-large-address-aware EXE, so Windows ends the game with an access violation here")
+                }
+            }
             if let slot = free ?? retainedSpawnSlot.map(Int.init) {
             let created = try index(slot),object = candidates[Int(selected)]
             try observe(.reconstruct(slot: slot));try actors[created].reconstructActor()

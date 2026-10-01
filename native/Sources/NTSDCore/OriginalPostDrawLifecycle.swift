@@ -21,6 +21,11 @@ public enum OriginalRequestSlotWord: Equatable {
     public static let world: UInt32 = 0x458b00
     /// 41f2c7 stores −4 − World on every call before the lifecycle loop.
     public static func initial(world: UInt32 = world) -> Self { .value(Int32(bitPattern: 0 &- 4 &- world)) }
+    /// 41e99b stores −3 − World into the hit pass's word [esp+4c] on a
+    /// reserve respawn (APPLICATION_HIT_ITEM_SLOT_PLAN.md).
+    public static func respawn(world: UInt32 = world) -> Self { .value(Int32(bitPattern: 0 &- 3 &- world)) }
+    /// World + 0x194 + 4·value, the Actor-table entry a numeric word reads.
+    public static func entry(_ value: Int32, world: UInt32 = world) -> UInt32 { world &+ 0x194 &+ 4 &* UInt32(bitPattern: value) }
 }
 
 public struct OriginalPostDrawScratch: Equatable {

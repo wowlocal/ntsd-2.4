@@ -86,10 +86,11 @@ EXE. That sharpens one of the two in-call writers above:
 - When neither ran in the call, the word holds what the Windows calls
   between ticks left at that depth, which nothing determines.
 
-Not modelled yet: the declared skip still covers all three. Modelling it would
-carry this word through the passes before 41ef94, as the F8 word is carried
-through the lifecycle loop. The frame-word trace reports depth conflicts in
-41cc25..41d70e, so that stretch needs a separate check first.
+Modelled 2026-10-01 in [the hit pass's item word](APPLICATION_HIT_ITEM_SLOT.md):
+a respawn in the same call makes the full-pool drop the original's access
+violation. 41df2d turned out never to precede the drop, since its call goes to
+the round epilogue. The depth conflicts are tracer artifacts of callee-cleaned
+calls. The declared skip stays for the unknown word.
 
 ## Checks
 

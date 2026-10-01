@@ -43,12 +43,12 @@ public enum OriginalLibActorHits {
 /// Whole two-pass caller retains its item creation and live slot order.
 public enum OriginalLibWorldHits {
     public static func apply(state: inout OriginalMatchPreparation,crt: inout OriginalCRTRandom,
-                             library: inout OriginalLibHitState,retainedSpawnSlot: Int32? = nil,sse2: Bool = false,
+                             library: inout OriginalLibHitState,retainedSpawnSlot: Int32? = nil,itemSlot: OriginalRequestSlotWord? = nil,sse2: Bool = false,
                              observe: (OriginalHitEvent) throws -> Void = { _ in },
                              afterHit: (Int,OriginalStateRecord) throws -> Void = { _,_ in }) throws {
         var pass = try OriginalActorHits.makePass(state: state,crt: crt,sse2: sse2,library: library)
         let backgrounds = state.backgrounds
-        try pass.advance(retainedSpawnSlot: retainedSpawnSlot,background: { n in
+        try pass.advance(retainedSpawnSlot: retainedSpawnSlot,itemSlot: itemSlot,background: { n in
             guard backgrounds.indices.contains(Int(n)) else { throw OriginalStateError.invalidStorage("Library hit background binding") }
             return backgrounds[Int(n)]
         },observe: observe,afterHit: afterHit)

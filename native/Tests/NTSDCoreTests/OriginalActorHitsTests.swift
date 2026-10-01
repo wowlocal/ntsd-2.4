@@ -58,7 +58,7 @@ final class OriginalActorHitsTests: XCTestCase {
         XCTAssertEqual(c.ids,[2,7,8,51]);XCTAssertEqual(c.cases.count,7845)
         XCTAssertEqual(c.cases.filter { $0.caller == true }.count,150)
         func defined(_ size: Int) throws -> OriginalStateRecord { try .init(bytes: [UInt8](repeating: 0,count: size),defined: [Bool](repeating: true,count: size)) }
-        var skippedSpawns = 0
+        var skippedSpawns = 0,respawnFaults = 0
         var headers: [OriginalStateRecord] = [],frames: [[OriginalStateRecord]] = []
         for id in c.ids {
             var h = try defined(0x7a4)
@@ -134,6 +134,17 @@ final class OriginalActorHitsTests: XCTestCase {
                     let draws = item.events.prefix(rebuilt).filter { $0.kind == "random" }
                     XCTAssertEqual(Array(own.prefix(draws.count)),Array(draws),item.label+" skipped-spawn draws")
                     skippedSpawns += 1
+                    // APPLICATION_HIT_ITEM_SLOT_PLAN.md: after a reserve respawn the word
+                    // is −3 − World, the original's access violation after the same draws.
+                    var faulted = pass,drawn: [Event] = []
+                    XCTAssertThrowsError(try faulted.advance(retainedSpawnSlot: nil,itemSlot: .respawn(),background: { _ in bg },observe: { event in
+                        if case let .random(stream,range,result) = event { drawn.append(.init(kind: "random",arguments: [stream,range,result].map(UInt32.init(bitPattern:)))) }
+                    })) { error in
+                        guard case let OriginalStateError.invalidStorage(text) = error else { return XCTFail("\(error)") }
+                        XCTAssertTrue(text.hasPrefix("Source fault:") && text.contains("0xff2f6088"),item.label+" "+text)
+                    }
+                    XCTAssertEqual(Array(drawn.prefix(draws.count)),Array(draws),item.label+" respawn-fault draws")
+                    respawnFaults += 1
                 }
             }
             do {
@@ -159,6 +170,7 @@ final class OriginalActorHitsTests: XCTestCase {
             XCTAssertTrue(globals.defined.allSatisfy { $0 });XCTAssertEqual(events,item.events,item.label+" events")
         }
         XCTAssertGreaterThan(skippedSpawns,0,"no full-pool case exercised the skipped spawn")
+        XCTAssertEqual(respawnFaults,skippedSpawns,"every full-pool case faults after a respawn")
         print("WORLD HITS",c.cases.count,"whole pools compared,",skippedSpawns,"full-pool spawns skipped without a retained slot")
     }
 }
