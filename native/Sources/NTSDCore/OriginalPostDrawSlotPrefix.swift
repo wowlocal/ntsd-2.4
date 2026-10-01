@@ -72,14 +72,27 @@ public enum OriginalPostDrawSlotPrefix {
                       library: inout OriginalLibTransformBacking?,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
+        var requestSlot: OriginalRequestSlotWord?
+        return try apply(world: &world, actors: &actors, globals: &globals, slot: slot, retainedObjectIndex: &retainedObjectIndex,
+            requestSlot: &requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: observe)
+    }
+
+    /// The same prefix with the body's frame word SP+34 (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+    @discardableResult
+    static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
+                      slot: Int, retainedObjectIndex: inout Int32?, requestSlot: inout OriginalRequestSlotWord?, objectCount: Int32,
+                      library: inout OriginalLibTransformBacking?,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> Bool {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(world: world, actors: actors, globals: globals, retained: retainedObjectIndex,
+                    var body = Body(world: world, actors: actors, globals: globals, retained: retainedObjectIndex, requestSlot: requestSlot,
                                     slot: slot, objectCount: objectCount, library: library, header: headers, frame: frames, observe: observer)
                     let active = try body.run()
                     world = body.world; actors = body.actors; globals = body.globals; retainedObjectIndex = body.retained; library = body.library
+                    requestSlot = body.requestSlot
                     return active
                 }
             }
@@ -89,6 +102,7 @@ public enum OriginalPostDrawSlotPrefix {
     private struct Body {
         var world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord
         var retained: Int32?
+        var requestSlot: OriginalRequestSlotWord?
         let slot: Int, objectCount: Int32
         var library: OriginalLibTransformBacking?
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
@@ -156,9 +170,10 @@ public enum OriginalPostDrawSlotPrefix {
                 if ordinal == 0 || ordinal == 2 { let value = try draw(158, 2); try number(child, 0x50, Double(value)+3) }
                 else if ordinal == 1 || ordinal == 3 { let value = try draw(159, 2); try number(child, 0x50, -3-Double(value)) }
                 else { try number(child, 0x50, 1) }
-                if ordinal < 2 { let value = try draw(160, 3); try number(child, 0x40, -10-Double(value)) }
-                else if ordinal < 4 { let value = try draw(161, 3); try number(child, 0x40, Double(value)+10) }
-                else { let value = try draw(162, 7); try number(child, 0x40, Double(value)-3) }
+                //41f8e9/41f914/41f933 convert the raw draw through SP+34, its last writer here.
+                if ordinal < 2 { let value = try draw(160, 3); try number(child, 0x40, -10-Double(value)); requestSlot = .value(value) }
+                else if ordinal < 4 { let value = try draw(161, 3); try number(child, 0x40, Double(value)+10); requestSlot = .value(value) }
+                else { let value = try draw(162, 7); try number(child, 0x40, Double(value)-3); requestSlot = .value(value) }
                 let nextFrame = try draw(164, 4); try put(child, 0x70, nextFrame)
                 let facing = try draw(165, 2); try actors[child].write(UInt8(truncatingIfNeeded: facing), at: 0x80)
             }

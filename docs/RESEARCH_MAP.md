@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[F8 on a full pool](research/APPLICATION_REQUESTED_ITEMS_SLOT.md): the body's
+frame word SP+34 modelled from 41f2c7 through every writer of the lifecycle
+loop. A slot number is rebuilt as in the original, and −4 − World is the
+original's own access violation (World is static at 0x458b00, the EXE is
+fixed-base). Heap-derived values are a declared stop.
+
 [Alt+Enter](research/APPLICATION_FULL_SCREEN.md): the original's own window and
 DirectDraw recreation (WM_SYSKEYUP 43b83f, nested WM_DESTROY, full-screen
 popup, flip chain, Flip). Its losses are reproduced: sound effects for the

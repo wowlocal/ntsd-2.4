@@ -660,10 +660,12 @@ public enum MatchLaunchReference {
                                                 helpers += result.helpers;events += result.events;impulsePasses += 1
                                                 if let lifecycle {
                                                     let result = try GameplayLifecycleReference.compare(lifecycle.cases[0],state: &state,
-                                                        actorAddresses: c.actorAddresses,snapshot: snapshot)
+                                                        actorAddresses: c.actorAddresses,worldAddress: c.worldAddress,snapshot: snapshot)
                                                     helpers += result.helpers;events += result.events;lifecyclePasses += 1
+                                                    let lifecycleWord = result.requestSlot
                                                     if let commands {
-                                                        let result = try GameplayCommandsReference.compare(commands.cases[0],state: &state,snapshot: snapshot)
+                                                        let result = try GameplayCommandsReference.compare(commands.cases[0],state: &state,
+                                                            requestSlot: lifecycleWord,snapshot: snapshot)
                                                         helpers += result.helpers;events += result.events;commandPasses += 1
                                                         if let hud {
                                                             let result = try GameplayHUDReference.compare(hud.cases[0],state: &state,resourceBitmap: { token in

@@ -13,6 +13,7 @@ enum GameplayCommandsReference {
     struct Result { let helpers: Int,events: Int }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Gameplay commands reference: "+text) }
     static func compare(_ section: MatchLaunchReference.Control.Section,state: inout OriginalMatchPreparation,
+                        requestSlot: OriginalRequestSlotWord?,
                         snapshot: (OriginalMatchPreparation,MatchLaunchReference.State,String) throws -> Void) throws -> Result {
         guard let input = section.commands,section.end.pc == 0x421a15,section.end.sp == 0x1000e9bc,
               section.before.frameHeap != nil,section.after.frameHeap != nil,
@@ -24,6 +25,9 @@ enum GameplayCommandsReference {
         guard input.retainedOffset == 0x34,input.retainedBefore == input.retainedAfter,input.scratchAccesses.isEmpty else {
             throw error("Retained caller slot needs provenance")
         }
+        // The modelled SP+34 after the lifecycle loop must be the word the
+        // original left at 4214d5 (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+        guard requestSlot == .value(Int32(bitPattern: input.retainedBefore)) else { throw error("Lifecycle SP+34 model") }
         try snapshot(state,section.before,"own commands before")
         // Do not import arbitrary original caller-stack backing as a native
         // fallback. This source path proves the word is never consumed.

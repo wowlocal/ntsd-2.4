@@ -209,13 +209,15 @@ public enum OriginalGameplayBody {
         // Keep each live slot's known producers inside the same original loop.
         // Earlier caller words whose complete lifetimes are unrecovered remain
         // nil; these are not seeded or carried between separate match calls.
-        var scratch = OriginalPostDrawScratch()
+        // SP+34 is known: 41f2c7 stores −4 − World on every call.
+        var scratch = OriginalPostDrawScratch(requestSlot: .initial())
         let transforms = try OriginalPostDrawLifecycle.apply(state: &next, scratch: &scratch, sse2: sse2, library: installed?.transforms,
             observe: { try observe(.lifecycle($0)) })
         if let transforms { installed!.transforms = transforms }
         try emitCheckpoint(.lifecycle, next, owned, random)
-        var spawn: Int32?
-        try OriginalPostDrawCommands.apply(state: &next, retainedSpawnSlot: &spawn, sse2: sse2,
+        // SP+34 as the loop left it: 41f2c7's −4 − World or the loop's last writer.
+        var spawn = scratch.requestSlot
+        try OriginalPostDrawCommands.apply(state: &next, requestSlot: &spawn, sse2: sse2,
             observe: { try observe(.commands($0)) })
         try emitCheckpoint(.commands, next, owned, random)
         try OriginalWorldHUD.apply(state: &next, surface: surface, resourceBitmap: resourceBitmap,

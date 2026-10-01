@@ -7,12 +7,32 @@ public enum OriginalPostDrawLifecycleEvent: Equatable {
 
 /// Retained caller words, separate from World/Actor state. Unknown Object indices
 /// are required only when a failed catalog search actually dereferences them.
+/// The gameplay body's frame word SP+34 (frame −0x5d4), which the requested-items
+/// pass reads as its slot on a full pool (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+/// Values the Core computes are `.value`; the catalog table cursor and Actor
+/// addresses depend on Windows heap addresses and stay symbolic.
+public enum OriginalRequestSlotWord: Equatable {
+    case value(Int32)
+    /// The catalog's Object table base + 4·index.
+    case catalogCursor(Int32)
+    /// The Actor allocation of this slot.
+    case actor(Int)
+    /// The static World of the fixed-base EXE (no relocations).
+    public static let world: UInt32 = 0x458b00
+    /// 41f2c7 stores −4 − World on every call before the lifecycle loop.
+    public static func initial(world: UInt32 = world) -> Self { .value(Int32(bitPattern: 0 &- 4 &- world)) }
+}
+
 public struct OriginalPostDrawScratch: Equatable {
     public var fireSlot: Int32?, fireObject: Int32?, deathSlot: Int32?, weaponSlot: Int32?, weaponObject: Int32?, particleObject: Int32?
+    /// SP+34; nil where the caller's value is not known.
+    public var requestSlot: OriginalRequestSlotWord?
     public init(fireSlot: Int32? = nil, fireObject: Int32? = nil, deathSlot: Int32? = nil,
-                weaponSlot: Int32? = nil, weaponObject: Int32? = nil, particleObject: Int32? = nil) {
+                weaponSlot: Int32? = nil, weaponObject: Int32? = nil, particleObject: Int32? = nil,
+                requestSlot: OriginalRequestSlotWord? = nil) {
         self.fireSlot = fireSlot; self.fireObject = fireObject; self.deathSlot = deathSlot
         self.weaponSlot = weaponSlot; self.weaponObject = weaponObject; self.particleObject = particleObject
+        self.requestSlot = requestSlot
     }
 }
 
@@ -134,6 +154,7 @@ public enum OriginalPostDrawLifecycle {
                 if let found = try find(999) { scratch.weaponObject = found }
                 guard let retained = scratch.weaponObject else { throw error("Weapon Object index provenance") }
                 let child = try construct(selected, retained)
+                scratch.requestSlot = .actor(selected) // 420537
                 let rx = try draw(166, 7); try put(child, 0x10, rx &+ i(parent, 0x10) &- 3)
                 let ry = try draw(167, 7); try put(child, 0x14, ry &+ i(parent, 0x14) &- 3)
                 try put(child, 0x18, i(parent, 0x18))
@@ -183,8 +204,11 @@ public enum OriginalPostDrawLifecycle {
             if command == 0 { return }
             for offset in [0x418, 0x414, 0x410, 0x40c, 0x408] { try put(parent, offset, 0) }
             let selected = try free(), object = try find(998)
+            // 420c7b/420c97 step SP+34 through the catalog table even without a free slot.
+            if objectCount > 0 { scratch.requestSlot = .catalogCursor(object ?? objectCount) }
             guard let selected, let object else { return }
             let child = try construct(selected, object)
+            scratch.requestSlot = .value(400) // 420d61 = 0, then 420e89 counts the slot loop to 400
             try put(child, 0x10, i(parent, 0x10)); try put(child, 0x14, 0); try put(child, 0x18, i(parent, 0x18))
             try put(child, 0x70, Int32(command-100))
             for (integer, value) in [(0x18, 0x68), (0x14, 0x60), (0x10, 0x58)] { try number(child, value, Double(i(child, integer))) }
@@ -211,6 +235,7 @@ public enum OriginalPostDrawLifecycle {
                     for n in 0..<15 {
                         guard let selected = try free() else { break }
                         let child = try construct(selected, object); try copyParticleCoordinates(parent, child)
+                        scratch.requestSlot = .actor(selected) // 420f89
                         let py = try decimal(parent, 0x60), ry = try draw(199, 29)
                         try number(child, 0x60, (py-x(Double(ry))).double)
                         let rx = try draw(200, 39)
@@ -230,7 +255,9 @@ public enum OriginalPostDrawLifecycle {
                 else { count = 7 }
                 for _ in 0..<count {
                     guard let selected = try free() else { break }
-                    if let found = try find(999) { scratch.fireObject = found }
+                    let found = try find(999)
+                    if objectCount > 0 { scratch.requestSlot = .catalogCursor(found ?? objectCount) } // 4211f6/421212
+                    if let found { scratch.fireObject = found }
                     guard let object = scratch.fireObject else { throw error("Fire Object index provenance") }
                     let child = try construct(selected, object); try copyParticleCoordinates(parent, child)
                     let py = try decimal(parent, 0x60), ry = try draw(204, 29)
@@ -257,11 +284,11 @@ public enum OriginalPostDrawLifecycle {
             }
             if prefix {
                 let active = try OriginalPostDrawSlotPrefix.apply(world: &world, actors: &actors, globals: &globals, slot: slot,
-                    retainedObjectIndex: &scratch.particleObject, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)
+                    retainedObjectIndex: &scratch.particleObject, requestSlot: &scratch.requestSlot, objectCount: objectCount, library: &library, header: header, frame: frame, observe: converted)
                 if !active { return }
             }
             let continuation = try OriginalPostDrawOpoint.apply(world: &world, actors: &actors, slot: slot,
-                precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame, observe: converted)
+                requestSlot: &scratch.requestSlot, precision: precision, sse2: sse2, objectCount: objectCount, header: header, frame: frame, observe: converted)
             if continuation == .nextSlot { return }
             let parent = try index(slot)
             if try continuation == .weaponCreation && !weapon(parent) { try command(parent) }

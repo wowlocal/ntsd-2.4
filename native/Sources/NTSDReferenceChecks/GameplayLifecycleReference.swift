@@ -10,10 +10,10 @@ enum GameplayLifecycleReference {
         let fpcw: UInt16,fpswBefore: UInt16,fpswAfter: UInt16,fptagBefore: UInt16,fptagAfter: UInt16,sse2: UInt32
         let events: [Event]
     }
-    struct Result { let helpers: Int,events: Int }
+    struct Result { let helpers: Int,events: Int,requestSlot: OriginalRequestSlotWord? }
     private static func error(_ text: String) -> OriginalStateError { .invalidStorage("Gameplay lifecycle reference: "+text) }
     static func compare(_ section: MatchLaunchReference.Control.Section,state: inout OriginalMatchPreparation,
-                        actorAddresses: [UInt32],
+                        actorAddresses: [UInt32],worldAddress: UInt32,
                         snapshot: (OriginalMatchPreparation,MatchLaunchReference.State,String) throws -> Void) throws -> Result {
         guard let input = section.lifecycle,section.end.pc == 0x4214d5,section.end.sp == 0x1000e9bc,
               section.before.frameHeap != nil,section.after.frameHeap != nil,
@@ -41,7 +41,8 @@ enum GameplayLifecycleReference {
             }
         }
         try snapshot(state,section.before,"own lifecycle before")
-        var scratch = OriginalPostDrawScratch(),events: [Input.Event] = []
+        // SP+34 starts as 41f2c7 writes it for this corpus's World.
+        var scratch = OriginalPostDrawScratch(requestSlot: .initial(world: worldAddress)),events: [Input.Event] = []
         try OriginalPostDrawLifecycle.apply(state: &state,scratch: &scratch,sse2: input.sse2 != 0,observe: { event in
             switch event {
             case let .reconstruct(slot,created): events.append(.init(kind: "reconstruct",slot: slot,arguments: [UInt32(created)]))
@@ -50,8 +51,9 @@ enum GameplayLifecycleReference {
             case let .builtinSound(slot,x,index): events.append(.init(kind: "builtinSound",slot: slot,arguments: [x,index].map(UInt32.init(bitPattern:))))
             }
         })
-        guard scratch == OriginalPostDrawScratch(),events == input.events else { throw error("Retained scratch/ordered events") }
+        var others = scratch;others.requestSlot = nil
+        guard others == OriginalPostDrawScratch(),events == input.events else { throw error("Retained scratch/ordered events") }
         try snapshot(state,section.after,"own lifecycle after")
-        return .init(helpers: section.helpers.count,events: events.count)
+        return .init(helpers: section.helpers.count,events: events.count,requestSlot: scratch.requestSlot)
     }
 }

@@ -8,14 +8,23 @@ public enum OriginalPostDrawCommandEvent: Equatable {
 /// to the following HUD caller. All state and retained caller slot commit
 /// atomically; observers must buffer device requests until the tick commits.
 public enum OriginalPostDrawCommands {
+    /// A caller-supplied numeric slot word (the oracle harnesses' controlled SP+34).
     public static func apply(state: inout OriginalMatchPreparation, retainedSpawnSlot: inout Int32?,
+                             sse2: Bool = false, library: OriginalLibStageCommands? = nil,
+                             observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+        var word = retainedSpawnSlot.map(OriginalRequestSlotWord.value)
+        try apply(state: &state, requestSlot: &word, sse2: sse2, library: library, observe: observe)
+        if case .value(let slot) = word { retainedSpawnSlot = slot }
+    }
+    /// The body's SP+34 as the lifecycle loop left it (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+    public static func apply(state: inout OriginalMatchPreparation, requestSlot: inout OriginalRequestSlotWord?,
                              sse2: Bool = false, library: OriginalLibStageCommands? = nil,
                              observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
         let catalog = state.catalog, backgrounds = state.backgrounds
         let installedLibrary = library ?? state.libraryCommands
         guard try state.world.integer(at: 0x7d4, as: UInt32.self) == 0,
               let registry = catalog.registry.records[0x4d82380] else { throw error("Catalog binding") }
-        try apply(world: &state.world, actors: &state.actors, globals: &state.globals, retainedSpawnSlot: &retainedSpawnSlot,
+        try apply(world: &state.world, actors: &state.actors, globals: &state.globals, requestSlot: &requestSlot,
             sse2: sse2, objectCount: registry.integer(at: 0, as: Int32.self), library: installedLibrary, header: { n in
                 guard catalog.objects.indices.contains(n) else { throw error("Object binding") }; return catalog.objects[n].header
             }, frame: { n, f in
@@ -31,14 +40,24 @@ public enum OriginalPostDrawCommands {
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       background: (Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
+        var word = retainedSpawnSlot.map(OriginalRequestSlotWord.value)
+        try apply(world: &world, actors: &actors, globals: &globals, requestSlot: &word, sse2: sse2, objectCount: objectCount,
+                  library: library, header: header, frame: frame, background: background, observe: observe)
+        if case .value(let slot) = word { retainedSpawnSlot = slot }
+    }
+    static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], globals: inout OriginalStateRecord,
+                      requestSlot: inout OriginalRequestSlotWord?, sse2: Bool, objectCount: Int32, library: OriginalLibStageCommands? = nil,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      background: (Int32) throws -> OriginalStateRecord,
+                      observe: (OriginalPostDrawCommandEvent) throws -> Void = { _ in }) throws {
         try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(background) { backgrounds in
                     try withoutActuallyEscaping(observe) { observer in
-                        var body = Body(world: world, actors: actors, globals: globals, retainedSlot: retainedSpawnSlot,
+                        var body = Body(world: world, actors: actors, globals: globals, requestSlot: requestSlot,
                             sse2: sse2, objectCount: objectCount, library: library, header: headers, frame: frames, background: backgrounds, observe: observer)
                         try body.run()
-                        world = body.world; actors = body.actors; globals = body.globals; retainedSpawnSlot = body.retainedSlot
+                        world = body.world; actors = body.actors; globals = body.globals; requestSlot = body.requestSlot
                     }
                 }
             }
@@ -46,7 +65,7 @@ public enum OriginalPostDrawCommands {
     }
     private struct Body {
         var world: OriginalStateRecord, actors: [OriginalStateRecord], globals: OriginalStateRecord
-        var retainedSlot: Int32?
+        var requestSlot: OriginalRequestSlotWord?
         let sse2: Bool, objectCount: Int32
         let library: OriginalLibStageCommands?
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
@@ -92,7 +111,7 @@ public enum OriginalPostDrawCommands {
                 }
             }
             for candidate in candidates {
-                if let free = try (50..<400).first(where: { try active($0) == 0 }) { retainedSlot = Int32(free) }
+                if let free = try (50..<400).first(where: { try active($0) == 0 }) { requestSlot = .value(Int32(free)) }
                 // Even a full pool consumes all four draws before reading the
                 // retained slot. Do not skip the attempt or invent an index.
                 let arena = try global(0x44d024), coarseX = try draw(209, 30)
@@ -102,8 +121,7 @@ public enum OriginalPostDrawCommands {
                 let span = try bg.integer(at: 8, as: Int32.self) &- bg.integer(at: 4, as: Int32.self) &- 60
                 let z0 = coarseZ &* (span/30), fineZ = try draw(212, 30)
                 let z = try fineZ &+ background(arena).integer(at: 4, as: Int32.self) &+ z0 &+ 30
-                guard let retainedSlot else { throw error("Retained caller slot provenance") }
-                let slot = Int(retainedSlot), actor = try index(slot)
+                let slot = try requestedSlot(), actor = try index(slot)
                 try observe(.reconstruct(slot: slot)); try actors[actor].reconstructActor()
                 try put(actor, 0x368, Int32(candidate))
                 try actors[actor].writeBinary64(Double(x), at: 0x58)
@@ -117,6 +135,28 @@ public enum OriginalPostDrawCommands {
                     let a = try index(slot)
                     try put(a, integer, OriginalCoordinateConversion.integer(actors[a].binary64(at: binary), sse2: sse2))
                 }
+            }
+        }
+        /// 421651 reads SP+34 as the slot. On a full pool it is the lifecycle's
+        /// last write; World + 0x194 + 4·word is the Actor-table entry read.
+        func requestedSlot() throws -> Int {
+            switch requestSlot {
+            case nil: throw error("Retained caller slot provenance")
+            case .value(let value) where (0..<400).contains(value): return Int(value)
+            case .value(let value):
+                let entry = OriginalRequestSlotWord.world &+ 0x194 &+ 4 &* UInt32(bitPattern: value)
+                if entry >= 0x8000_0000 {
+                    throw OriginalStateError.invalidStorage("Source fault: on a full pool the requested item takes slot \(value) from SP+34; "
+                        + "its Actor-table entry 0x\(String(entry, radix: 16)) lies outside the 2 GB user address space of the "
+                        + "fixed-base, non-large-address-aware EXE, so Windows ends the game with an access violation here")
+                }
+                let what = value == 400 ? "400, so the Actor-table read is World+0x7d4, the catalog pointer"
+                    : "\(value), so the Actor-table read is 0x\(String(entry, radix: 16))"
+                throw error("Requested item on a full pool: SP+34 holds \(what); the original rebuilds memory the port does not hold (declared stop)")
+            case .catalogCursor(let index):
+                throw error("Requested item on a full pool: SP+34 holds the catalog table cursor at index \(index), a Windows heap address (declared stop)")
+            case .actor(let slot):
+                throw error("Requested item on a full pool: SP+34 holds the Actor address of slot \(slot), a Windows heap address (declared stop)")
             }
         }
         mutating func recover(_ slot: Int) throws {

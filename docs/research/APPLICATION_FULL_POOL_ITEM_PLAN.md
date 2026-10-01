@@ -65,7 +65,10 @@ explicit boundary restored. Reaching it needs a pool filled by F8, which a
 2,500-step F8 run in VS did not do. A faithful port needs the word modelled
 through the lifecycle loop, with a declared policy only for its
 address-derived values (−4 − World, Object-table pointers), which depend on
-Windows heap addresses. That is a separate card.
+Windows heap addresses. That is a separate card. Done 2026-10-01 in
+[the requested-items slot word](APPLICATION_REQUESTED_ITEMS_SLOT.md). World
+turned out to be static (0x458b00), so −4 − World is an exact source fault,
+not a policy.
 
 ## Checks
 

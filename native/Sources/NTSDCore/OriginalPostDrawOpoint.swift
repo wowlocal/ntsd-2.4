@@ -31,14 +31,25 @@ public enum OriginalPostDrawOpoint {
                       precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
                       header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
                       observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> OriginalPostDrawOpointContinuation {
+        var requestSlot: OriginalRequestSlotWord?
+        return try apply(world: &world, actors: &actors, slot: slot, requestSlot: &requestSlot, precision: precision, sse2: sse2,
+                         objectCount: objectCount, header: header, frame: frame, observe: observe)
+    }
+
+    /// The same continuation with the body's frame word SP+34 (APPLICATION_REQUESTED_ITEMS_SLOT_PLAN.md).
+    static func apply(world: inout OriginalStateRecord, actors: inout [OriginalStateRecord], slot: Int,
+                      requestSlot: inout OriginalRequestSlotWord?,
+                      precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32,
+                      header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord,
+                      observe: (OriginalPostDrawSlotEvent) throws -> Void = { _ in }) throws -> OriginalPostDrawOpointContinuation {
         guard (0..<400).contains(slot) else { throw error("Slot extent") }
         return try withoutActuallyEscaping(header) { headers in
             try withoutActuallyEscaping(frame) { frames in
                 try withoutActuallyEscaping(observe) { observer in
-                    var body = Body(world: world, actors: actors, slot: slot, precision: precision, sse2: sse2,
+                    var body = Body(world: world, actors: actors, requestSlot: requestSlot, slot: slot, precision: precision, sse2: sse2,
                                     objectCount: objectCount, header: headers, frame: frames, observe: observer)
                     let result = try body.run()
-                    world = body.world; actors = body.actors
+                    world = body.world; actors = body.actors; requestSlot = body.requestSlot
                     return result
                 }
             }
@@ -46,6 +57,7 @@ public enum OriginalPostDrawOpoint {
     }
     private struct Body {
         var world: OriginalStateRecord, actors: [OriginalStateRecord]
+        var requestSlot: OriginalRequestSlotWord?
         let slot: Int, precision: OriginalArithmeticPrecision, sse2: Bool, objectCount: Int32
         let header: (Int) throws -> OriginalStateRecord, frame: (Int, Int32) throws -> OriginalStateRecord
         let observe: (OriginalPostDrawSlotEvent) throws -> Void
@@ -83,6 +95,7 @@ public enum OriginalPostDrawOpoint {
                     if try i(actor, 0x2f4) == Int32(slot) { try put(actor, 8, 1100 &- i(parent, 0x70)) }
                 }
                 try put(parent, 8, 1100 &- i(parent, 0x70)); try put(parent, 0x70, 0)
+                requestSlot = .value(0) // 4213c3..421497: the unrolled loop counts SP+34 down to 0.
                 return .nextSlot
             }
             if initialFrame < 0 || initialFrame >= 400 {
@@ -109,6 +122,8 @@ public enum OriginalPostDrawOpoint {
                 //Both searches run in the original, but catalog reads do not
                 //modify state. A failed search stops the whole opoint attempt.
                 let free = try (50..<400).first { try active($0) == 0 }, replacement = try find(op(0x70))
+                // 41fd2f/41fd47 step SP+34 through the catalog table even without a free slot.
+                if objectCount > 0 { requestSlot = .catalogCursor(replacement.map(Int32.init) ?? objectCount) }
                 guard let free, let replacement else { break }
                 created.append(free)
                 let child = try index(free), selected = try header(replacement)
@@ -125,6 +140,8 @@ public enum OriginalPostDrawOpoint {
                 let centerX = try now.integer(at: 0x50, as: Int32.self)
                 let px = try b(parent, 0x80) == 0 ? i(parent, 0x10) &- centerX &+ op(0x5c) : centerX &- op(0x5c) &+ i(parent, 0x10)
                 try put(child, 0x10, px); try put(child, 0x14, y)
+                // 41fdc9..41fe59 count SP+34 down to 0; 41fedc then stores y when the parent faces left.
+                requestSlot = .value(try b(parent, 0x80) == 0 ? 0 : y)
                 try put(child, 0x364, i(parent, 0x364))
                 try number(child, 0x68, (decimal(parent, 0x68)+x(1)).double)
                 try number(child, 0x60, Double(i(child, 0x14)))
