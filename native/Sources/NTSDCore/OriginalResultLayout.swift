@@ -107,7 +107,7 @@ public enum OriginalResultLayout {
                     let slot = try active(seat) ? seat : seat+10
                     try localWrite(0x58, UInt32(slot))
                     let object = Int(try actor(slot).integer(at: 0x368, as: UInt32.self))
-                    try picture(header(object).integer(at: 0x728, as: UInt32.self), catalog: true, x: 165, y: row)
+                    try picture(OriginalObjectLoader.smallPicture(header(object), slot: slot), catalog: true, x: 165, y: row)
                     var label: [UInt8] = [67, 111, 109, 0]
                     for (offset, byte) in label.enumerated() { try localWrite(0x3c+UInt32(offset), UInt32(byte), size: 1) }
                     if slot < 10 {

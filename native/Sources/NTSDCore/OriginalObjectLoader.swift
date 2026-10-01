@@ -95,6 +95,20 @@ public struct OriginalObjectLoader {
     public var soundBytes: [UInt8] { sounds.bytes }
     public init() {}
 
+    /// Header +728, the `small:` picture pointer the HUD and the Summary pass to
+    /// 43f010 as its `this`. The loader writes it only for a `small:` tag. An
+    /// Object without one (an item rebuilt into a player slot, e.g. by F8 on a
+    /// full pool) keeps the separately allocated Object's heap contents there,
+    /// which nothing determines: a declared stop that names the case.
+    public static func smallPicture(_ header: OriginalStateRecord, slot: Int) throws -> UInt32 {
+        do { return try header.integer(at: 0x728, as: UInt32.self) }
+        catch OriginalStateError.undefinedBytes {
+            throw OriginalStateError.invalidStorage("The Object in slot \(slot) has no small: picture (an item in a player panel slot, "
+                + "e.g. rebuilt by F8 on a full pool); the original draws through its never-written header pointer +728, "
+                + "whose Windows heap contents decide (declared stop)")
+        }
+    }
+
     /// Header bitmap pointers use global bitmap index + 1; zero is reserved for
     /// null in this model. Weapon string pointers use their field ordinal + 1.
     /// These explicit encodings differ from the bootstrap's non-null slot ordinals.

@@ -97,7 +97,7 @@ public enum OriginalWorldHUD {
             else if try active(cell+10) { slot = cell+10 }
             else { continue }
             let object = Int(try actor(slot).integer(at: 0x368, as: UInt32.self))
-            try picture(header(object).integer(at: 0x728, as: UInt32.self), catalog: true, x: x+9, y: y+7, frame: -1, key: 0)
+            try picture(OriginalObjectLoader.smallPicture(header(object), slot: slot), catalog: true, x: x+9, y: y+7, frame: -1, key: 0)
             if try i(slot, 0x2fc) > 0 {
                 try bar(width(i(slot, 0x300)), row: 30, x: x+57, y: y+16)
                 try bar(width(i(slot, 0x2fc)), row: 20, x: x+57, y: y+16)

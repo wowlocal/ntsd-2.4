@@ -175,4 +175,17 @@ final class OriginalRequestSlotWordTests: XCTestCase {
         var open = p; try open.world.write(UInt8(0), at: 4+120); let saved = p; p = open
         XCTAssertEqual(try run(.initial()).0, .value(120)); p = saved
     }
+
+    /// An item rebuilt into a player slot has no small: picture; the HUD and the
+    /// Summary then read a header pointer the loader never wrote.
+    func testItemInAPlayerSlotHasNoSmallPicture() throws {
+        var header = try OriginalStateRecord(bytes: [UInt8](repeating: 0, count: 0x7a4), defined: [Bool](repeating: false, count: 0x7a4))
+        XCTAssertThrowsError(try OriginalObjectLoader.smallPicture(header, slot: 3)) { error in
+            guard case let OriginalStateError.invalidStorage(text) = error else { return XCTFail("\(error)") }
+            XCTAssertTrue(text.hasPrefix("The Object in slot 3 has no small: picture"))
+            XCTAssertTrue(text.hasSuffix("(declared stop)"))
+        }
+        try header.write(UInt32(42), at: 0x728)
+        XCTAssertEqual(try OriginalObjectLoader.smallPicture(header, slot: 3), 42)
+    }
 }

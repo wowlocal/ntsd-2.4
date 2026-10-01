@@ -70,6 +70,27 @@ Windows heap addresses. That is a separate card. Done 2026-10-01 in
 turned out to be static (0x458b00), so −4 − World is an exact source fault,
 not a policy.
 
+## Note: the hit-pass word with a static World (2026-10-01)
+
+The [requested-items work](APPLICATION_REQUESTED_ITEMS_SLOT.md) established
+that World is the static 0x458b00 of a fixed-base, non-large-address-aware
+EXE. That sharpens one of the two in-call writers above:
+
+- 41e99b, on the path where an Actor's +30c counter is at least 2 (decremented
+  at 41e982), stores −3 − World together with −4 − World and −2 − World. Read
+  as a slot, it sends the Actor-table read to 0x458c94 + 4·(−3 − 0x458b00),
+  in the upper half of the address space. A full-pool drop after it in the
+  same call is therefore the original's own access violation, as with F8.
+- 41df2d stores an Object pointer from the catalog table, a Windows heap
+  address, so it stays a declared case.
+- When neither ran in the call, the word holds what the Windows calls
+  between ticks left at that depth, which nothing determines.
+
+Not modelled yet: the declared skip still covers all three. Modelling it would
+carry this word through the passes before 41ef94, as the F8 word is carried
+through the lifecycle loop. The frame-word trace reports depth conflicts in
+41cc25..41d70e, so that stretch needs a separate check first.
+
 ## Checks
 
 - A unit test: a full pool with no retained slot consumes the same draws and

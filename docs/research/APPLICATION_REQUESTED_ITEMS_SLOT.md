@@ -74,7 +74,24 @@ modelled word to equal the observed one.
   playback, tournament, altenter with its fault check, tournament-win,
   team-tournament, joystick).
 
-Not done: an app run that fills the pool and presses F8 (filling 350 slots
-through play has not been reached; the outcomes are covered by the unit tests
-above), and Windows observations of the declared stops. EXE envelope not
+## In real play (2026-10-01)
+
+A VS fight with no player input, F8 every 12 ticks and F7 every 50 ticks to
+refill HP so the match does not end. After 88 F8 presses (2560 iterations)
+the pool is full ([capture](../evidence/application-f8-full-pool.png)). The
+next F8 finds no free slot. SP+34 holds a slot number, 0 here, and slot 0,
+player 1's Naruto, is rebuilt as an item, as the original does.
+
+The next HUD pass then draws panel 0. It passes the Object's `small:`
+picture pointer (header +728) to 43f010 as `this`, and 43f010 reads [this+c]
+with no null check. Item Objects have no `small:`, so the loader never writes
++728. Each Object is its own heap allocation of about 150 KB, below the size
+where Windows hands out fresh zeroed pages, so the field holds whatever the
+Windows heap left there. The app now stops there with a named declared stop
+(`OriginalObjectLoader.smallPicture`, used by the HUD and the Summary),
+replacing "State bytes have no recovered initialization: 1832". A unit test
+covers the stop and a written value. The world-HUD and result-layout suites
+pass, and so does the whole e2e set, unchanged.
+
+Not done: Windows observations of the declared stops. EXE envelope not
 recalculated.
