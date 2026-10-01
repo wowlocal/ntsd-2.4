@@ -249,7 +249,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 }
 
-if arguments.contains("--original") {
+/// The app opens the original game (user decision 2026-10-01). The practice
+/// laboratory and its inspectors run only when one of their options is given;
+/// `--original` is still accepted and changes nothing.
+let laboratoryOptions = ["--practice","--movement","--inspect","--verify-data","--data","--assets","--screenshot",
+                         "--capture-state","--practice-preview"]
+if !laboratoryOptions.contains(where: arguments.contains) {
     let app = NSApplication.shared; app.setActivationPolicy(.regular)
     let delegate = OriginalRuntimeDelegate(exitAfterStartup: arguments.contains("--exit-after-startup"))
     app.delegate = delegate

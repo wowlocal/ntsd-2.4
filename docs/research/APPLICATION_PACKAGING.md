@@ -40,9 +40,11 @@ duplicated the 634 MB catalog and was reverted before any commit.
 
 ## Open
 
-Launched without arguments the app still starts the Practice engine;
-`--original` selects the original runtime. Whether the shipped app should
-start the original runtime by default is a product decision for the user.
+Since 2026-10-01 (user decision) the app opens the original game when
+launched without arguments. The Practice laboratory needs `--practice` or one
+of its own options (`--movement`, `--inspect`, `--verify-data`, …), and
+`--original` is still accepted. A bundle launch with `--exit-after-startup`
+emits `started`; `--verify-data` still loads 137 objects.
 Clean-Mac (other user, no Xcode/LFS checkout) not tested. EXE envelope not
 recalculated.
 

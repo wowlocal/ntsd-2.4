@@ -165,13 +165,20 @@ Requires macOS 14+, Xcode command-line tools, Python 3 and restored Git LFS asse
 ```bash
 ./tools/fetch-assets.sh          # only if original assets are still LFS pointers
 ./run-native.sh --build
-./run-native.sh
+./run-native.sh                  # the original game
+./run-native.sh --practice       # the earlier practice laboratory
 ```
+
+`./run-native.sh` (or opening the app) runs the original game: the recovered
+WinMain on Mac services, its menus, modes and matches. The practice
+laboratory below needs `--practice` (or one of its own options).
 
 The build produces **`build/NTSD Native.app`** for the host architecture (verified
 on Apple Silicon). It bundles original BMP/WAV assets and imported data. No browser
 engine, Windows executable, Wine, CrossOver or emulator is present in the app.
 Rebuild with `--build` after source or data changes.
+
+### Practice laboratory (`--practice`)
 
 | Key | Action |
 | --- | --- |
