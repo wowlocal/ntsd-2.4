@@ -38,7 +38,7 @@
    "replayFiles": []
   },
   {
-   "capture": "0f8a23c08708574014586575ca467cc31e53613316e95b1896a1c8c792618a14",
+   "capture": "88b81db9e8cba850734786ef58882ca421db96b6efccabfd6ddfc3e8ae043c1a",
    "event": "captured",
    "iterations": 9600,
    "musicPlaying": true,
@@ -101,7 +101,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "6c7f9609be5eeab36a64c2f2613f6eaabd73b7d71734344be09efa3e8a3bee14",
+   "capture": "64498ab7c02ec6c19bed8702df908b2e6a99db57aa7e9e58f25371d147460c55",
    "characterAI": 1800,
    "cycles": 1872,
    "iterations": 5876,
@@ -111,7 +111,7 @@
   },
   {
    "bodies": 2100,
-   "capture": "7f8c9b57fecae4c77898a6143b5e0ffa1a47fb5c3393dee9eed8fd19f668f819",
+   "capture": "1ddcd30075c05c2a159c6b617667571cab98f7456f14bcdf2353d1f5557c60f4",
    "characterAI": 2100,
    "cycles": 2172,
    "iterations": 6814,

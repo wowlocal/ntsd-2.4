@@ -1,5 +1,11 @@
 # Карта исследования и переноса NTSD 2.4
 
+[GDI text](research/APPLICATION_GDI_TEXT.md): the app draws the original's
+TextOut strings (Summary numbers, HUD, menu values, CONTROL SETTINGS) through
+a surface DC on the display. The font is a temporary deviation: the macOS
+system font instead of Windows' SYSTEM_FONT, which neither EXE nor lib.dll
+replaces. Position, colour and background mode follow the original.
+
 [Full-pool item drop](research/APPLICATION_FULL_POOL_ITEM.md): a War soak
 reached the hit pass's random item drop with every object slot taken; the
 original then reads an unwritten frame word (unknown on Windows). Declared:

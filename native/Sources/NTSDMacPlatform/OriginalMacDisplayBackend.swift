@@ -94,6 +94,14 @@ import NTSDCore
     public private(set) var operationCount = 0, bitmapOperationCount = 0, frontOperationCount = 0
     private let identity = Identity(), budget: Budget
     private var live: [UInt32:Resource] = [:], history: [UInt32:WeakResource] = [:]
+    /// The surface DC that TextOut draws through (APPLICATION_GDI_TEXT_PLAN.md).
+    /// One at a time: both text routines release their DC before the next.
+    private final class TextDC {
+        let surface: Surface
+        var opaque = true, background: UInt32 = 0xffffff, color: UInt32 = 0
+        init(_ surface: Surface) { self.surface = surface }
+    }
+    private var textDC: TextDC?
     public private(set) var operations: [Operation] = []
     public private(set) var allocationCount = 0
     public var allocatedBytes: Int { budget.allocated }
@@ -564,12 +572,70 @@ extension OriginalMacDisplayBackend {
         }
     }
     private enum FrontAction {
-        case fill(FrontTarget,UInt32), copy(FrontCopy), release(Surface)
+        case fill(FrontTarget,UInt32), copy(FrontCopy), release(Surface), text(TextStep)
         /// DirectDraw Blt with a rectangle outside its surface (or empty):
         /// DDERR_INVALIDRECT, no pixels change.
         case rejected([Surface])
     }
     public static let invalidRect = Int32(bitPattern:0x88760096)
+    private enum TextStep { case acquire(Surface), mode(Bool), background(UInt32), color(UInt32), out(Int,Int,[UInt8]), release }
+    /// The declared HDC of a surface's text DC (an opaque handle to the Core).
+    public static let textDCHandle: UInt32 = 0x0d0c0001
+    /// GDI's default SYSTEM_FONT cell at 96 DPI: 16 px high, ascent 13,
+    /// internal leading 3, so a 13 px em with the baseline 13 px below the top.
+    public static let textCell = 16, textAscent = 13
+    /// One TextOutA's glyph pixels (no smoothing): `bits[row*width+column]` is
+    /// set for the cell pixel (column−originX, row−originY); `advance` is the
+    /// text extent's width.
+    public struct TextMask: Equatable {
+        public let advance: Int, originX: Int, originY: Int, width: Int, height: Int, bits: [UInt8]
+    }
+    /// Declared temporary stand-in for SYSTEM_FONT (user decision 2026-10-01):
+    /// the macOS system font, bold, 13 px em, baseline at the cell's +13.
+    public static func textMask(_ bytes: [UInt8]) -> TextMask {
+        let font = NSFont.systemFont(ofSize:CGFloat(textCell-3),weight:.bold)
+        let attributes: [NSAttributedString.Key:Any] = [.font:font,
+            NSAttributedString.Key(kCTForegroundColorAttributeName as String):CGColor(gray:1,alpha:1)]
+        let line = CTLineCreateWithAttributedString(NSAttributedString(string:String(decoding:bytes,as:UTF8.self),attributes:attributes))
+        let advance = max(0,Int(CTLineGetTypographicBounds(line,nil,nil,nil).rounded()))
+        let margin = 4,width = advance+2*margin,height = textCell+2*margin
+        var bits = [UInt8](repeating:0,count:width*height)
+        bits.withUnsafeMutableBytes { raw in
+            guard let context = CGContext(data:raw.baseAddress,width:width,height:height,bitsPerComponent:8,bytesPerRow:width,
+                                          space:CGColorSpaceCreateDeviceGray(),bitmapInfo:CGImageAlphaInfo.none.rawValue) else { return }
+            context.setAllowsAntialiasing(false); context.setShouldAntialias(false)
+            context.setAllowsFontSmoothing(false); context.setShouldSmoothFonts(false)
+            // Memory row 0 is the image top; the cell spans rows margin..<margin+16.
+            context.textPosition = CGPoint(x:margin,y:margin+textCell-textAscent)
+            CTLineDraw(line,context)
+        }
+        return .init(advance:advance,originX:margin,originY:margin,width:width,height:height,bits:bits.map { $0 >= 128 ? 1 : 0 })
+    }
+    /// A COLORREF (0x00BBGGRR) as the native XRGB surface value.
+    static func xrgb(_ color: UInt32) -> UInt32 { (color & 0xff) << 16 | (color & 0xff00) | (color >> 16) & 0xff }
+    private func heldDC(_ dc: UInt32) throws -> TextDC {
+        guard let textDC,dc == Self.textDCHandle else { throw Boundary.owner(dc) }
+        return textDC
+    }
+    private func drawText(_ bytes: [UInt8],x: Int,y: Int,_ dc: TextDC) throws {
+        let s = dc.surface
+        guard let data = s.storage else { throw Boundary.released(s.token) }
+        let mask = Self.textMask(bytes),background = Self.xrgb(dc.background),color = Self.xrgb(dc.color)
+        func set(_ column: Int,_ row: Int,_ value: UInt32) {
+            guard column >= 0,row >= 0,column < data.width,row < data.height else { return }
+            let i = row*data.width+column;data.values[i] = value.littleEndian;data.known[i] = 1
+        }
+        if dc.opaque { for row in 0..<Self.textCell { for column in 0..<mask.advance { set(x+column,y+row,background) } } }
+        for row in 0..<mask.height { for column in 0..<mask.width where mask.bits[row*mask.width+column] != 0 {
+            set(x+column-mask.originX,y+row-mask.originY,color)
+        } }
+        let left = max(0,x-mask.originX),top = max(0,y-mask.originY)
+        let right = min(data.width,x-mask.originX+mask.width),bottom = min(data.height,y-mask.originY+mask.height)
+        if left < right,top < bottom {
+            let target = try frontTarget(s,.init(left:left,top:top,right:right,bottom:bottom))
+            if let window = target.delivery.4 { try windows.display(image(data,target.delivery),in:window) }
+        }
+    }
     /// Whether a Blt rectangle (nil: whole surface) lies inside the surface with
     /// a positive area; a malformed rectangle stays a boundary.
     private func frontRectInside(_ values: [Int32]?,_ surface: Surface) throws -> Bool {
@@ -591,7 +657,7 @@ extension OriginalMacDisplayBackend {
     private func frontSurface(_ token: UInt32) throws -> Surface {
         let s = try resource(token,as:Surface.self)
         guard s.storage != nil else { throw Boundary.released(token) }
-        guard s.activeBitmapDC == nil else { throw Boundary.unsupported("surface DC still acquired") }
+        guard s.activeBitmapDC == nil,textDC?.surface !== s else { throw Boundary.unsupported("surface DC still acquired") }
         return s
     }
     private func frontTarget(_ surface: Surface,_ destination: FrontRect) throws -> FrontTarget {
@@ -677,6 +743,31 @@ extension OriginalMacDisplayBackend {
             let destination = try rect(a[2]),source = try rect(a[4])
             guard strings.next() == nil else { throw Boundary.arguments("extra front rectangle") }
             return .copy(try frontCopy(a[0],a[3],destination:destination,source:source,flags:a[5],effects:nil))
+        case "getDC":
+            guard q.arguments.count == 1,q.strings.isEmpty,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front GetDC") }
+            guard textDC == nil else { throw Boundary.unsupported("second surface DC") }
+            return .text(.acquire(try frontSurface(q.arguments[0])))
+        case "setBackgroundMode","setBackgroundColor","setTextColor":
+            guard q.arguments.count == 2,q.strings.isEmpty,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front "+q.kind) }
+            _ = try heldDC(q.arguments[0])
+            let value = q.arguments[1]
+            if q.kind == "setBackgroundMode" {
+                guard value == 1 || value == 2 else { throw Boundary.unsupported("background mode \(value)") }
+                return .text(.mode(value == 2))
+            }
+            guard value <= 0xffffff else { throw Boundary.unsupported("COLORREF \(value)") }
+            return .text(q.kind == "setTextColor" ? .color(value) : .background(value))
+        case "textOut":
+            guard q.arguments.count == 4,q.strings.count == 1,q.fill == nil,q.blit == nil,
+                  q.strings[0].count == Int(q.arguments[3]) else { throw Boundary.arguments("front TextOut") }
+            _ = try heldDC(q.arguments[0])
+            // Until the strings are surveyed for a code page, only ASCII is drawn.
+            guard q.strings[0].allSatisfy({ $0 >= 0x20 && $0 < 0x7f }) else { throw Boundary.unsupported("non-ASCII TextOut") }
+            return .text(.out(Int(Int32(bitPattern:q.arguments[1])),Int(Int32(bitPattern:q.arguments[2])),q.strings[0]))
+        case "releaseDC":
+            guard q.arguments.count == 2,q.strings.isEmpty,q.fill == nil,q.blit == nil else { throw Boundary.arguments("front ReleaseDC") }
+            guard try heldDC(q.arguments[1]).surface.token == q.arguments[0] else { throw Boundary.owner(q.arguments[0]) }
+            return .text(.release)
         default:throw Boundary.unsupported("front "+q.kind)
         }
     }
@@ -715,6 +806,26 @@ extension OriginalMacDisplayBackend {
             release(s);owners = [s];response = .init(result:Int32(bitPattern:s.references))
         case .rejected(let surfaces):
             owners = surfaces;response = .init(result:Self.invalidRect)
+        case .text(let step):
+            switch step {
+            case .acquire(let s):
+                textDC = TextDC(s);owners = [s];response = .init(result:0,output:Self.textDCHandle)
+            case .mode(let opaque):
+                let dc = textDC!,previous: Int32 = dc.opaque ? 2 : 1
+                dc.opaque = opaque;owners = [dc.surface];response = .init(result:previous)
+            case .background(let value):
+                let dc = textDC!,previous = dc.background
+                dc.background = value;owners = [dc.surface];response = .init(result:Int32(bitPattern:previous))
+            case .color(let value):
+                let dc = textDC!,previous = dc.color
+                dc.color = value;owners = [dc.surface];response = .init(result:Int32(bitPattern:previous))
+            case let .out(x,y,bytes):
+                let dc = textDC!
+                try drawText(bytes,x:x,y:y,dc);owners = [dc.surface];response = .init(result:1)
+            case .release:
+                let dc = textDC!
+                textDC = nil;owners = [dc.surface];response = .init(result:0)
+            }
         }
         frontOperationCount += 1; if keepsOperationLogs { frontOperations.append(.init(request:prepared.request,response:response)) }
         return .init(response:response,resources:owners)

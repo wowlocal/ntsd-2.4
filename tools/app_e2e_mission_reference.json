@@ -36,7 +36,7 @@
  "progress": [
   {
    "bodies": 300,
-   "capture": "8a1ff7a439c2ffe85a84f6f4a04220c90036dd26293fc484c20b6507eb0fd9ef",
+   "capture": "a84f747579b661a477e9569afa3e37a31eb25e25e97689793c08a5d9d76ce4ad",
    "characterAI": 299,
    "cycles": 664,
    "iterations": 2101,
@@ -46,7 +46,7 @@
   },
   {
    "bodies": 600,
-   "capture": "a0900692198bd84ace5090b0e77f7c02fca7ba5ddfbab614f39e30f7d450b4b0",
+   "capture": "91f24cc7ec05771b4534e9dbf549f84e7b2533dcb5b2f26716303772ab48e1c1",
    "characterAI": 599,
    "cycles": 964,
    "iterations": 3039,
@@ -56,7 +56,7 @@
   },
   {
    "bodies": 900,
-   "capture": "cabc31849bddbff88937698d827e21abcac6cfc20c4f48a6633e0a6b98ca3d31",
+   "capture": "ebdd0669c88e63291628cd226607f1c6343d045c1038a6d0a708b61c01ff78f2",
    "characterAI": 899,
    "cycles": 1264,
    "iterations": 3976,
@@ -66,7 +66,7 @@
   },
   {
    "bodies": 1200,
-   "capture": "2e60d9780f3019fcbe8a81555ddd2f853db641f12b248397f90ece5d1d9d08bf",
+   "capture": "4bd31caccce3cd5270588f680ff947f260367227d4f6ceaccf5588fd7e70317b",
    "characterAI": 1199,
    "cycles": 1564,
    "iterations": 4914,
@@ -76,7 +76,7 @@
   },
   {
    "bodies": 1500,
-   "capture": "ae46e4f027f34edd898ecd7926231843c0744187e13a25cf22f91d80e7f22ef1",
+   "capture": "e1dbd218b8e323c2eb8af60972f9e9ae9bf490e0ddd09e2884c2db534f44cb97",
    "characterAI": 1499,
    "cycles": 1864,
    "iterations": 5851,
@@ -86,7 +86,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "684050e51412a0db8dc0325cfd15648ce6261dfb0c87bb75b52292283f3a0a30",
+   "capture": "975be3222e099f2d97209ed5ecd9ba1501b1297e6cd160a3486dec1bf9ea243d",
    "characterAI": 1799,
    "cycles": 2164,
    "iterations": 6789,

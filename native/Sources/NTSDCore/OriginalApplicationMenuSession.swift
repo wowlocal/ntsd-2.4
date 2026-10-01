@@ -267,11 +267,21 @@ public struct OriginalApplicationMenuSession {
                 // The installed body response callback already emitted its
                 // terminal effect. Keep this original event as observation.
                 if frontProvider == nil || stage != .body {
-                    try emit(.getDC(e,result:stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult,output:stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc))
+                    let result = stage == .body ? initialization?.body.dcResult ?? responses.dcResult : responses.dcResult
+                    let output = stage == .body ? initialization?.body.dc ?? responses.dc : responses.dc
+                    // The EXE's own 401290 decided on the prepared reply. With a
+                    // provider the device performs that GetDC in order; any other
+                    // device answer is a boundary (APPLICATION_GDI_TEXT_PLAN.md).
+                    if let reply = try frontProvider?(stage,e) {
+                        guard reply.result == result,result < 0 || reply.output == output else { throw Boundary.dependency("Declared GetDC reply") }
+                        try emit(.frontAPI(e,reply))
+                    } else { try emit(.getDC(e,result:result,output:output)) }
                 }
             case "setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
                 if frontProvider == nil || stage != .body {
-                    if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
+                    // Their results are ignored by both text routines.
+                    if let reply = try frontProvider?(stage,e) { try emit(.frontAPI(e,reply)) }
+                    else if let input = initialization,stage == .body { try emit(.startupGraphics(e,result:input.body.methodResult)) }
                     else { try emit(.graphics(e,result:responses.draw)) }
                 }
             case "free":

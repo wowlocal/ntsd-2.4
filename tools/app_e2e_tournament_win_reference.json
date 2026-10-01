@@ -35,7 +35,7 @@
    ]
   },
   {
-   "capture": "2f16d75d8ccf7937988c0dabbf136a4434537f86aa76976517a340e0ee3caef4",
+   "capture": "3ac3d26296ec7e26dda28162b3795520804a430aca660af9530429f70634eb3d",
    "event": "captured",
    "iterations": 13500,
    "musicPlaying": true,
@@ -54,7 +54,7 @@
    ]
   },
   {
-   "capture": "893c7a4096d1e8a7970962a69df5bf55bca6ba4f4fffd089bcff1e250be4c3c3",
+   "capture": "7ade184dadf19e2feb8ffaad248cb4884a9d6feaaec5a1f9203c8d96eabdaac0",
    "event": "captured",
    "iterations": 14500,
    "musicPlaying": false,
@@ -99,7 +99,7 @@
   },
   {
    "bodies": 1200,
-   "capture": "d38f1e67ad36a24b8de2ac6fc5ffdc5c652e5c357449dbd71d7ae799279092f5",
+   "capture": "30a02bde41a233022e49483af45665af2f9cf9d141d00473f842be6ab009fe0c",
    "characterAI": 1202,
    "cycles": 2090,
    "iterations": 6558,

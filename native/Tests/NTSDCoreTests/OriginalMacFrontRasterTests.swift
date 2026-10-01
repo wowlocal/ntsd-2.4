@@ -89,10 +89,9 @@ import XCTest
                     case .window:try service.serve(permit,on:driver);windowIndex += 1
                     case .front(_,let q):
                         if q.kind == "getDC" {
-                            let count = r.setup.display.frontOperations.count
-                            XCTAssertThrowsError(try service.serve(permit,on:driver)) { XCTAssertEqual($0 as? B.Boundary,.unsupported("front getDC")) }
-                            XCTAssertFalse(driver.exchangeSnapshot.serviceStarted);XCTAssertEqual(r.setup.display.frontOperations.count,count)
-                            // Declared negative GetDC; no GDI execution or glyph assumption.
+                            // Declared negative GetDC for this Core comparison profile; the
+                            // backend is not asked, so no DC is held. The backend's own text
+                            // path is testSurfaceTextDrawsBothRoutinesWithTheDeclaredFont.
                             try driver.beginService(permit);try driver.answer(permit,response:.front(.init(result:-7,output:0x12345678)));negative += 1
                         } else if q.kind == "method" && q.arguments[1] == 0x14 {
                             let primary = try D().ids(r).1,pixels = try r.setup.display.pixels(primary),count = r.setup.display.frontOperations.count
@@ -144,7 +143,7 @@ import XCTest
         XCTAssertEqual(actual,receipts)
         print("Whole menu actual nontext raster",pixels.width,pixels.height,"known",mask.filter { $0 }.count,"unknown",mask.filter { !$0 }.count)
     }
-    func testWholeMenuPhysicalRasterRetainsUnknownCursorAndControlledTextBoundary() throws {
+    func testWholeMenuPhysicalRasterRetainsUnknownCursorWithDeclaredNegativeText() throws {
         let run = try whole();defer { try? D().close(run.startup) };try checkFrame(run)
     }
     func testLateWholeMenuFailuresDoNotRepeatPhysicalRaster() throws {
@@ -173,6 +172,47 @@ import XCTest
         for (i,v) in [1,1,0,1].enumerated() { try data.write(UInt8(v),at:48+i) }
         return try .init(dib:data.bytes)
     }
+    /// GDI text (APPLICATION_GDI_TEXT_PLAN.md): the library routine's transparent
+    /// TextOut, the EXE routine's opaque extent box, results and boundaries.
+    func testSurfaceTextDrawsBothRoutinesWithTheDeclaredFont() throws {
+        let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(_,_,back,_) = try D().ids(r)
+        let base: UInt32 = 0xabcdef
+        _ = try perform(b,fill(back,base,[0,0,794,550]))
+        // Library route: GetDC, SetBkMode(TRANSPARENT), SetTextColor, TextOut, ReleaseDC.
+        let dc = try XCTUnwrap(perform(b,.init("getDC",[back])).response.output)
+        XCTAssertEqual(dc,B.textDCHandle)
+        XCTAssertThrowsError(try b.prepareFront(.init("getDC",[back])))
+        XCTAssertThrowsError(try b.prepareFront(try fill(back,0,[0,0,4,4])))
+        XCTAssertEqual(try perform(b,.init("setBackgroundMode",[dc,1])).response.result,2)
+        XCTAssertEqual(try perform(b,.init("setTextColor",[dc,0x0000ff])).response.result,0)
+        XCTAssertThrowsError(try b.prepareFront(.init("setTextColor",[dc &+ 1,0])))
+        XCTAssertThrowsError(try b.prepareFront(.init("textOut",[dc,0,0,1],[[0xa4]])))
+        XCTAssertEqual(try perform(b,.init("textOut",[dc,10,20,2],[Array("Hi".utf8)])).response.result,1)
+        XCTAssertEqual(try perform(b,.init("releaseDC",[back,dc])).response.result,0)
+        let mask = B.textMask(Array("Hi".utf8)),p = try b.pixels(back)
+        XCTAssertGreaterThan(mask.advance,0);XCTAssertGreaterThan(mask.bits.filter { $0 != 0 }.count,0)
+        for y in 0..<p.height { for x in 0..<p.width {
+            let mx = x-10+mask.originX,my = y-20+mask.originY
+            let glyph = mx >= 0 && my >= 0 && mx < mask.width && my < mask.height && mask.bits[my*mask.width+mx] != 0
+            XCTAssertEqual(p.values[y*p.width+x],glyph ? 0xff0000 : base)
+        } }
+        // Glyphs stay inside the 16 px cell (ascent 13): nothing above y 20.
+        for x in 0..<p.width { for y in 0..<20 { XCTAssertEqual(p.values[y*p.width+x],base) } }
+        // EXE route: GetDC, SetBkColor, SetTextColor, TextOut in the default OPAQUE mode.
+        let dc2 = try XCTUnwrap(perform(b,.init("getDC",[back])).response.output)
+        XCTAssertEqual(try perform(b,.init("setBackgroundColor",[dc2,0x602010])).response.result,Int32(0xffffff))
+        _ = try perform(b,.init("setTextColor",[dc2,0xffffff]))
+        _ = try perform(b,.init("textOut",[dc2,UInt32(bitPattern:-3),100,1],[Array("W".utf8)]))
+        _ = try perform(b,.init("releaseDC",[back,dc2]))
+        let w = B.textMask(Array("W".utf8)),q = try b.pixels(back)
+        for y in 100..<116 { for x in 0..<(w.advance-3) {
+            let mx = x+3+w.originX,my = y-100+w.originY,glyph = mask.width > 0 && w.bits[my*w.width+mx] != 0
+            XCTAssertEqual(q.values[y*q.width+x],glyph ? 0xffffff : 0x102060)
+        } }
+        XCTAssertEqual(q.values[116*q.width],base)
+        XCTAssertThrowsError(try b.prepareFront(.init("textOut",[dc2,0,0,1],[Array("x".utf8)])))
+    }
+
     func testMaskedFillKeyAndMirrorCopyUseOwnedConstructorSurfaces() throws {
         let r = try D().run(late:false);defer { try? D().close(r) };let b = r.setup.display,(device,_,back,_) = try D().ids(r)
         let colors: [UInt32] = [0,0xff0000,0xff00,0xff,0x110022,0,0x334455,0]
@@ -249,7 +289,8 @@ import XCTest
         }
         XCTAssertEqual(try b.pixels(back),pixels)
         let count = b.frontOperations.count
-        for invalid in [try blt(back,back,[0,0,2,2],[0,0,2,2]),Event("getDC",[back]),Event("method",[back,0x2c,0,1])] {
+        // GetDC is served for GDI text (APPLICATION_GDI_TEXT_PLAN.md); a malformed one is not.
+        for invalid in [try blt(back,back,[0,0,2,2],[0,0,2,2]),Event("getDC",[back,1]),Event("method",[back,0x2c,0,1])] {
             XCTAssertThrowsError(try b.prepareFront(invalid))
         }
         XCTAssertEqual(try b.pixels(back),pixels);XCTAssertEqual(b.frontOperations.count,count)

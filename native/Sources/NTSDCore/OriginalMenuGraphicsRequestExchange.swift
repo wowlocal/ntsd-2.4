@@ -16,7 +16,7 @@ public enum OriginalMenuGraphicsRequest: OriginalExchangeRequest {
         case let (.front(_,q),.front(r)):
             switch q.kind {
             case "getDC":return r.result < 0 || r.output != nil
-            case "blit","fill","method","setBackgroundMode","setTextColor","textOut","releaseDC":return true
+            case "blit","fill","method","setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":return true
             default:return false
             }
         default:return false

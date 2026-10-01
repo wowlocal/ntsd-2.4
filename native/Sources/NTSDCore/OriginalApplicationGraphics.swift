@@ -238,7 +238,8 @@ public struct OriginalApplicationGraphics: Equatable {
                 currentTextDCs[token] = nextTextGeneration;nextTextGeneration += 1
                 bindings.append(.init(role:"created",ref:ref));dcToken = token
             }
-        case "setBackgroundMode","setTextColor","textOut","releaseDC":
+        // SetBkColor is the EXE's own 401290 (the library routine uses SetBkMode).
+        case "setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
             let token = try arg(e.kind == "releaseDC" ? 1 : 0);dcToken = token
             guard let i = currentTextDCs[token],var lease = textLeases[i] else { throw Boundary.dc(token) }
             if e.kind == "releaseDC" {

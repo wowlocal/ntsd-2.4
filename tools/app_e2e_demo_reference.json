@@ -33,7 +33,7 @@
    "replayFiles": []
   },
   {
-   "capture": "e91dc19de0942daf2ebec0b2b6e42b24e428d17870c0b1bdd1882f351683b18a",
+   "capture": "892b16d862d2476823698b946324854c6b4d629915904ceacb01ef578f652e2f",
    "event": "captured",
    "iterations": 7200,
    "musicPlaying": true,
@@ -46,7 +46,7 @@
  "progress": [
   {
    "bodies": 300,
-   "capture": "7984cc12527c23f9a80b1812b5d4e3cdfa81a9a69a5b433dcebedfb1518a0830",
+   "capture": "45be9fc5d0afe184479d218a84cc565c0cac156ed028742a760005fd3cc82fbe",
    "characterAI": 1200,
    "cycles": 365,
    "iterations": 1167,
@@ -56,7 +56,7 @@
   },
   {
    "bodies": 600,
-   "capture": "14988bab26fa660ad77eb499a206b3d07b71505bf2028cf8bd214560b087d7bc",
+   "capture": "4d783705a209bf17bf75de757f37873ce2c027f00bd5e04649c76cd5a6f8e8d0",
    "characterAI": 2400,
    "cycles": 665,
    "iterations": 2104,
@@ -66,7 +66,7 @@
   },
   {
    "bodies": 900,
-   "capture": "1bb1864fa0622249a22893c3507178e6a2aef045d3aba119df0c7e78b9208b55",
+   "capture": "2143968d80dfc0604b40d4dc985dd3e77f55e0464cdfa932458fc758a249a745",
    "characterAI": 3600,
    "cycles": 965,
    "iterations": 3043,

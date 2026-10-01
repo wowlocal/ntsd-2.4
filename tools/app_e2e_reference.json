@@ -40,7 +40,7 @@
    ]
   },
   {
-   "capture": "f472c8bb20693dfcaef7797e8b43c2bada8b8ca99b4009bc025ed0401c4c6289",
+   "capture": "7a7f8931ab97b7ecea4c7c4add113df274da717f0e0e4f1b7e4fee5bbce92d5b",
    "event": "captured",
    "iterations": 9100,
    "musicPlaying": true,
@@ -104,7 +104,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "6c7f9609be5eeab36a64c2f2613f6eaabd73b7d71734344be09efa3e8a3bee14",
+   "capture": "3aa4190f9dcb80d71a906996d8642a938be300c429abbb827b7c91b6e6a041a5",
    "characterAI": 1800,
    "cycles": 2264,
    "iterations": 7101,
@@ -112,5 +112,9 @@
    "objectInputs": 1287,
    "track": "bgm\\boss1.wma"
   }
+ ],
+ "resources": [
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDCore.bundle/OriginalCatalog",
+  "/Users/michael/Developer/ntsd-2.4/build/swiftpm-app/arm64-apple-macosx/release/NTSDNative_NTSDMacPlatform.bundle/OriginalMusic"
  ]
 }

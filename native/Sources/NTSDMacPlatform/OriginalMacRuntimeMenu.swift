@@ -73,7 +73,7 @@ import NTSDCore
         return .init(settings:.init(bytes:try controlFile ?? inputs.controlBytes(),file:file,scratchAddress:scratch,closeResult:0),
             prefix:.init(drawTarget:0,milliseconds:milliseconds,threadHandle:try ids.take(),threadID:try ids.take(),
                 lastError:0,fillResult:0,drawResults:[0]),
-            body:.init(dcResult:getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
+            body:.init(dcResult:0,dc:OriginalMacDisplayBackend.textDCHandle,methodResult:0,drawResults:[0],shellResult:42),
             frontAllocations:front,backgroundAllocation:background,frontResponses:[],backgroundResponses:[],
             bitmapResources:inputs.bitmaps)
     }
@@ -111,7 +111,7 @@ import NTSDCore
     func inputs(_ state: Host.Session.State) throws -> Host.Inputs {
         if state.settings != nil,background == nil { background = try heap.allocate(0x1f50) }
         return .init(initialization:state.settings == nil ? initialization : nil,
-            responses:.init(draw:0,presentation:0,sound:0,release:0,dcResult:Self.getDCFailure,dc:0,controlFile:controlFile,
+            responses:.init(draw:0,presentation:0,sound:0,release:0,dcResult:0,dc:OriginalMacDisplayBackend.textDCHandle,controlFile:controlFile,
                             capsLock:capsLock(),background:state.settings == nil ? nil : background),queue:[])
     }
     /// One committed iteration (or `.loading`). Committed batches are drained;
@@ -126,8 +126,8 @@ import NTSDCore
                 switch permit.request {
                 case .graphics(.bitmap): try bitmap.serve(permit,on:driver)
                 case .graphics(.front(_,let q)) where q.kind == "getDC":
-                    textRequests += 1
-                    try driver.beginService(permit); try driver.answer(permit,response:.graphics(.front(.init(result:Self.getDCFailure))))
+                    // GDI text through the display's surface DC (APPLICATION_GDI_TEXT_PLAN.md).
+                    textRequests += 1; try front.serve(permit,on:driver)
                 case .graphics(.window(let q)) where q.kind == "windowDefault":
                     // Lifecycle DefWindowProcA; WM_MOVE is the only generated caller.
                     guard q.words.count == 4,q.words[0] == messages.window,q.words[1] == 3 else { throw Boundary.unserved("DefWindowProc \(q.words)") }

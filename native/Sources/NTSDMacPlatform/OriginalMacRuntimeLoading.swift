@@ -22,7 +22,7 @@ import UniformTypeIdentifiers
     public enum Boundary: Error, Equatable { case missing(String), unexpected(String) }
     public struct Counts: Equatable {
         public var allocations = 0, bitmapRequests = 0, files = 0, audioRequests = 0, times = 0, messages = 0, music = 0, objectInputs = 0, characterAI = 0
-        public var controls = 0, replayedDraws = 0, skippedDraws = 0, rejectedDraws = 0, replayFiles = 0, musicResumes = 0, epilogues = 0
+        public var controls = 0, replayedDraws = 0, skippedDraws = 0, rejectedDraws = 0, replayFiles = 0, musicResumes = 0, epilogues = 0, replayedText = 0
     }
     /// Declared processor signature for the replay codec's lazy detection
     /// (4428b0): only family bits 0xf00 ≥ 0x600 matter, which every x86 CPU
@@ -108,7 +108,7 @@ import UniformTypeIdentifiers
     func presentation(_ target: UInt32) throws -> OriginalMenuPresentationInput {
         try JSONDecoder().decode(OriginalMenuPresentationInput.self,from:JSONSerialization.data(withJSONObject:[
             "targetSurface":target,"methodResult":0,"queryResult":0,"audioGetResult":0,"audioSetResult":0,
-            "queriedAudio":0,"audioVolume":0,"dcResult":OriginalMacRuntimeMenu.getDCFailure,"dc":0,"postResult":0]))
+            "queriedAudio":0,"audioVolume":0,"dcResult":0,"dc":OriginalMacDisplayBackend.textDCHandle,"postResult":0]))
     }
     func bitmap(_ q: OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response {
         counts.bitmapRequests += 1
@@ -201,7 +201,7 @@ import UniformTypeIdentifiers
         pendingDocuments = []
         var menu = try LoadedMenu(pending:ready),unit: Void = ()
         return try menu.advanceUntilBoundary(inputs:menuInputs.adding(arenaInputs.bitmaps),environment:&unit,
-            screenInput:.init(dcResult:OriginalMacRuntimeMenu.getDCFailure,dc:0,methodResult:0,drawResults:[0],shellResult:42),
+            screenInput:.init(dcResult:0,dc:OriginalMacDisplayBackend.textDCHandle,methodResult:0,drawResults:[0],shellResult:42),
             outputInput:presentation(target),
             allocate:{ _,count,_ in self.counts.allocations += 1; return try heap.allocate(count) },
             bitmap:{ q,_ in try self.bitmap(q) },music:{ e,_ in try self.music(e) },milliseconds:{ _ in try self.time() },
@@ -247,8 +247,10 @@ import UniformTypeIdentifiers
     /// ECX, the residue of lib.dll's text replacement (10001298), whose last
     /// instruction before returning is DirectDraw's GetDC (failure) or
     /// ReleaseDC. That register is unknown on Windows; the app declares a value
-    /// outside 0..8 (the E_FAIL of its own GetDC), so the configured track in
-    /// 44eed0 plays and no RNG draw is taken. APPLICATION_DEMO.md.
+    /// outside 0..8, so the configured track in 44eed0 plays and no RNG draw is
+    /// taken (APPLICATION_DEMO.md). Since GetDC succeeds (GDI text), the residue
+    /// would come from ReleaseDC, equally unknown; the value stays a temporary
+    /// placeholder (user decision 2026-10-01).
     static let demoMusicResidue = OriginalMacRuntimeMenu.getDCFailure
     /// A cached cycle after the first loading: the retained owners advance the
     /// cycle's input step, then either gameplay (retained as gameplay input) or
@@ -461,6 +463,12 @@ import UniformTypeIdentifiers
                 if OriginalMacRuntimeMenu.empty(e.blit) { counts.skippedDraws += 1; continue }
             case "fill": break
             case "method": guard let method = e.arguments.dropFirst().first,[8,0x14,0x2c].contains(method) else { continue }
+            // GDI text: the Core declared GetDC success with the display's DC
+            // handle; each call replays in order (APPLICATION_GDI_TEXT_PLAN.md).
+            case "getDC","setBackgroundMode","setBackgroundColor","setTextColor","textOut","releaseDC":
+                let served = try display.performFront(display.prepareFront(e))
+                if e.kind == "getDC",served.response.output != OriginalMacDisplayBackend.textDCHandle { throw Boundary.unexpected("text DC") }
+                counts.replayedText += 1; continue
             default: continue
             }
             // Core recorded declared success; the recovered callers ignore the
