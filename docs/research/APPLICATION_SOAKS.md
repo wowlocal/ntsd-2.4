@@ -25,6 +25,9 @@ Script: `20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83;
 The last three runs (different seeds, so different random characters and
 arenas) cover 181 Demo matches — 400,000 bodies — without a stop.
 
+2026-10-01, a fourth seed (`--virtual-clock 271828182 8`, `--no-network`):
+100,000 bodies, 44 matches, 699,768 character-AI calls, no stop.
+
 Diagnosis used temporary stderr dumps (actor slot and fields, stage names)
 that were removed before each commit; the committed error messages now name
 the stage, Object and frame for the Frame lookups involved.
@@ -44,6 +47,12 @@ policy; the stopped run's footprint samples were 1.9–2.0 GB). Afterwards:
 987654321 8`): 150,000 bodies, 41 battles, 2,230,739 character-AI calls, no
 stop; logical heap 171.1 MB at the last return. A third seed (`314159265 8`):
 150,000 bodies, 44 battles, no stop.
+
+2026-10-01, after the [hit pass's item word](APPLICATION_HIT_ITEM_SLOT.md)
+change, the same script (default seed, `--no-network`): 60,000 bodies, 8
+returns, 1,652,679 character-AI calls, no stop. The run used the working tree
+with the user-deferred, uncommitted network changes, which stay inactive
+without ONLINE GAME.
 
 ## Mission (Stage mode) with three computer allies
 
@@ -89,6 +98,12 @@ bodies: Survival Stage ran all 150,000 with no stop. Stage 4-1 stopped at body
 an absent Frame); with that fix it ran all 150,000 bodies, 8 returns, with no
 stop. Stages 2-1, 3-1 and 5-1 with the same seed: 150,000 bodies each (10, 13
 and 16 returns), no stop.
+
+2026-10-01, Stage 4-1 again with a new seed (`--virtual-clock 271828182 8`,
+`--no-network`) after the [hit pass's item word](APPLICATION_HIT_ITEM_SLOT.md)
+change. The start menu opens on Randomize, so the run goes Down to Stage,
+Attack ×3, then Up ×3 to Fight!, with the same three allies, Right and Attack.
+It ran all 100,000 bodies, 2 returns, 844,087 character-AI calls, no stop.
 
 ## VS session: many recorded matches (2026-09-30)
 
