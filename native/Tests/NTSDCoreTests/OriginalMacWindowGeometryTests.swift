@@ -279,4 +279,46 @@ import XCTest
         XCTAssertThrowsError(try app.step(responses:input.responses,queue:input.queue,windowDefault:[],surface:[],lifecycle:[.init(bytes:bytes([0,0]))]))
         B.same(try XCTUnwrap(app.session),old);XCTAssertEqual(backend.operations.count,operations)
     }
+
+    /// APPLICATION_MAC_FULL_SCREEN_PLAN.md (declared): in macOS full screen the
+    /// game keeps its windowed client; the view only scales, and mouse points
+    /// map back through the fit. Releasing the hold follows the window again.
+    func testMacFullScreenHoldsTheWindowedClient() throws {
+        let r = try ready(),backend = r.run.setup.window.backend,w = try window(r.run),token = r.run.setup.controls.window
+        defer { try? D().close(r.run) }
+        func image(_ width: Int,_ height: Int) throws -> CGImage {
+            let context = try XCTUnwrap(CGContext(data:nil,width:width,height:height,bitsPerComponent:8,bytesPerRow:0,
+                space:try XCTUnwrap(CGColorSpace(name:CGColorSpace.sRGB)),bitmapInfo:CGImageAlphaInfo.noneSkipFirst.rawValue))
+            context.setFillColor(red:0.2,green:0.4,blue:0.6,alpha:1); context.fill(CGRect(x:0,y:0,width:width,height:height))
+            return try XCTUnwrap(context.makeImage())
+        }
+        let before = try backend.displayGeometry(token),rect = try rectangle(w)
+        let width = Int(rect[2]-rect[0]),height = Int(rect[3]-rect[1])
+        try backend.holdForMacFullScreen(token,true)
+        // What macOS full screen does to the window: a larger client elsewhere.
+        w.setContentSize(.init(width:width*2,height:height*2)); w.setFrameOrigin(.init(x:w.frame.minX+40,y:w.frame.minY-30))
+        XCTAssertEqual(try backend.displayGeometry(token),before)
+        let client = try backend.perform(backend.prepare(API.Request("clientRect",[token,0x453ccc],structure:try record([0,0,0,0],known:false))))
+        XCTAssertEqual(client.response,.init(result:1,bytes:bytes([0,0,Int32(width),Int32(height)])))
+        let point = try backend.perform(backend.prepare(API.Request("screenPoint",[token,0x453ccc],structure:try record([5,7]))))
+        XCTAssertEqual(point.response,.init(result:1,bytes:bytes([rect[0]+5,rect[1]+7])))
+        try backend.display(try image(width,height),in:token)
+        XCTAssertThrowsError(try backend.display(try image(width*2,height*2),in:token))
+        let snapshot = try XCTUnwrap(NSBitmapImageRep(data:try backend.snapshotPNG(token)))
+        XCTAssertEqual([snapshot.pixelsWide,snapshot.pixelsHigh],[width,height])
+        // The view is twice the client, so its point (200,100) is the client's (100,50).
+        let view = try XCTUnwrap(w.contentView)
+        let location = view.convert(NSPoint(x:200,y:100),to:nil)
+        let event = try XCTUnwrap(NSEvent.mouseEvent(with:.leftMouseDown,location:location,modifierFlags:[],timestamp:0,
+            windowNumber:w.windowNumber,context:nil,eventNumber:0,clickCount:1,pressure:1))
+        let mapped = try backend.clientPoint(token,event)
+        XCTAssertEqual([mapped.0,mapped.1],[100,50])
+        // Entering twice keeps the first hold; leaving follows the live window.
+        try backend.holdForMacFullScreen(token,true); XCTAssertEqual(try backend.displayGeometry(token),before)
+        try backend.holdForMacFullScreen(token,false)
+        XCTAssertNotEqual(try backend.displayGeometry(token),before)
+        let live = try backend.perform(backend.prepare(API.Request("clientRect",[token,0x453ccc],structure:try record([0,0,0,0],known:false))))
+        XCTAssertEqual(live.response,.init(result:1,bytes:bytes([0,0,Int32(width*2),Int32(height*2)])))
+        XCTAssertThrowsError(try backend.display(try image(width,height),in:token))
+    }
 }

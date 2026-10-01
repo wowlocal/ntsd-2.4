@@ -47,10 +47,18 @@ import NTSDCore
         /// image scaled to fit (declared, APPLICATION_FULL_SCREEN_PLAN.md).
         public fileprivate(set) var fullScreen = false
         fileprivate var contentSize: CGSize?
+        /// Standard macOS full screen (APPLICATION_MAC_FULL_SCREEN_PLAN.md,
+        /// declared): the windowed geometry the game keeps seeing while the
+        /// view only scales. nil outside macOS full screen.
+        public fileprivate(set) var held: DisplayGeometry?
+        fileprivate var observers: [NSObjectProtocol] = []
+        /// Either full screen shows the image scaled to fit.
+        fileprivate var scaled: Bool { fullScreen || held != nil }
         fileprivate init(_ token: UInt32,_ window: NSWindow,_ windowClass: ClassLease) {
             self.token = token; self.window = window; self.windowClass = windowClass
         }
         deinit {
+            observers.forEach(NotificationCenter.default.removeObserver)
             guard !closed else { return }
             let retainedWindow = window
             DispatchQueue.main.async { retainedWindow.close() }
@@ -139,6 +147,7 @@ import NTSDCore
     }
     public func displayGeometry(_ token: UInt32) throws -> DisplayGeometry {
         let owner = try lease(token)
+        if let held = owner.held,!owner.closed { return held }
         guard !owner.closed,let screen = owner.window.screen,let view = owner.window.contentView else { throw Boundary.geometry }
         return .init(screen:screen.frame,clientOnScreen:owner.window.convertToScreen(view.convert(view.bounds,to:nil)))
     }
@@ -147,7 +156,9 @@ import NTSDCore
     public func display(_ image: CGImage,in token: UInt32) throws {
         let owner = try lease(token)
         guard !owner.closed,let view = owner.window.contentView as? ContentView,
-              owner.fullScreen || (CGFloat(image.width) == view.bounds.width && CGFloat(image.height) == view.bounds.height) else { throw Boundary.geometry }
+              owner.fullScreen || CGSize(width:image.width,height:image.height) == (owner.held?.clientOnScreen.size ?? view.bounds.size) else {
+            throw Boundary.geometry
+        }
         owner.contentSize = CGSize(width:image.width,height:image.height)
         view.image = image; view.needsDisplay = true; owner.window.displayIfNeeded()
     }
@@ -175,6 +186,22 @@ import NTSDCore
         guard !owner.closed else { throw Boundary.geometry }
         let delegate = CloseDelegate(handler); owner.closeDelegate = delegate; owner.window.delegate = delegate
     }
+    /// Enters or leaves the held geometry of macOS full screen. The window's
+    /// will-enter/did-exit notifications call this; it sends the game nothing.
+    public func holdForMacFullScreen(_ token: UInt32,_ entering: Bool) throws {
+        let owner = try lease(token)
+        guard !owner.closed,!owner.fullScreen else { throw Boundary.geometry }
+        if entering {
+            guard owner.held == nil else { return }
+            owner.held = try displayGeometry(token)
+        } else { owner.held = nil }
+    }
+    /// The standard macOS full-screen toggle of the game's window.
+    public func toggleMacFullScreen(_ token: UInt32) throws {
+        let owner = try lease(token)
+        guard !owner.closed,!owner.fullScreen else { throw Boundary.geometry }
+        owner.window.toggleFullScreen(nil)
+    }
     /// DestroyWindow's visible effect: the window leaves the screen.
     public func hide(_ token: UInt32) throws { try lease(token).window.orderOut(nil) }
     /// Client-area point (top-left origin, logical points) of a window event.
@@ -182,7 +209,7 @@ import NTSDCore
         let owner = try lease(token)
         guard let view = owner.window.contentView else { throw Boundary.geometry }
         var p = view.convert(event.locationInWindow,from:nil)
-        if owner.fullScreen,let size = owner.contentSize {
+        if owner.scaled,let size = owner.contentSize {
             // Back through the aspect-kept scaling to the game's client points.
             let target = ContentView.fit(size,in:view.bounds)
             p = .init(x:(p.x-target.minX)*size.width/target.width,y:(p.y-target.minY)*size.height/target.height)
@@ -194,10 +221,15 @@ import NTSDCore
         let owner = try lease(token)
         // Full screen: the presented game frame itself, not the screen-sized
         // scaled view, so captures do not depend on the display.
-        if owner.fullScreen,let image = (owner.window.contentView as? ContentView)?.image {
+        if owner.scaled,let image = (owner.window.contentView as? ContentView)?.image {
             guard let data = NSBitmapImageRep(cgImage:image).representation(using:.png,properties:[:]) else { throw Boundary.geometry }
             return data
         }
+        return try viewPNG(token)
+    }
+    /// PNG of the view as AppKit renders it, scaled in either full screen.
+    public func viewPNG(_ token: UInt32) throws -> Data {
+        let owner = try lease(token)
         guard !owner.closed,let view = owner.window.contentView,
               let bitmap = view.bitmapImageRepForCachingDisplay(in:view.bounds) else { throw Boundary.geometry }
         view.cacheDisplay(in:view.bounds,to:bitmap)
@@ -325,11 +357,18 @@ import NTSDCore
                 guard content.width > 0,content.height > 0 else { throw Boundary.geometry }
                 window = NSWindow(contentRect:content,styleMask:Self.style,backing:.buffered,defer:false)
                 window.contentView = ContentView(frame:NSRect(origin:.zero,size:content.size),cursor:cls.cursor.cursor)
-                window.center()
+                window.center(); window.collectionBehavior.insert(.fullScreenPrimary)
             }
             window.colorSpace = .sRGB // Match the explicitly sRGB native image/backing policy.
             window.isReleasedWhenClosed = false; window.title = String(decoding:q.strings[1],as:UTF8.self)
             let owner = WindowLease(id,window,cls); owner.fullScreen = popup
+            if !popup {
+                for (name,entering) in [(NSWindow.willEnterFullScreenNotification,true),(NSWindow.didExitFullScreenNotification,false)] {
+                    owner.observers.append(NotificationCenter.default.addObserver(forName:name,object:window,queue:.main) { [weak self] _ in
+                        MainActor.assumeIsolated { try? self?.holdForMacFullScreen(id,entering) }
+                    })
+                }
+            }
             windows[id] = WeakWindow(owner); resources = [owner]; createdWindowCount += 1
             window.orderFront(nil) // Source requests WS_VISIBLE.
             if createdWindowCount > 1 { created?(id) }
@@ -378,7 +417,18 @@ extension OriginalMacWindowBackend {
         guard !owner.closed,let view = owner.window.contentView as? ContentView,
               view.bounds.origin == .zero,view.bounds.size == view.frame.size else { throw Boundary.geometry }
         let values: [Int32]
-        if q.kind == "clientRect" {
+        if let held = owner.held {
+            // macOS full screen: the client the game had in its window.
+            let client = held.clientInDesktop
+            if q.kind == "clientRect" {
+                values = [0,0,try Self.geometryInteger(client.width),try Self.geometryInteger(client.height)]
+            } else {
+                guard let bytes = q.bytes,let mask = q.defined else { throw Boundary.geometry }
+                let input = try OriginalStateRecord(bytes:bytes,defined:mask)
+                values = [try Self.geometryInteger(client.minX+CGFloat(try input.integer(at:0,as:Int32.self))),
+                          try Self.geometryInteger(client.minY+CGFloat(try input.integer(at:4,as:Int32.self)))]
+            }
+        } else if q.kind == "clientRect" {
             guard view.bounds.width >= 0,view.bounds.height >= 0 else { throw Boundary.geometry }
             values = [0,0,try Self.geometryInteger(view.bounds.width),try Self.geometryInteger(view.bounds.height)]
         } else {

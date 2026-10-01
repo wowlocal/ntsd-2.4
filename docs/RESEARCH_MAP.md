@@ -1,5 +1,10 @@
 # Карта исследования и переноса NTSD 2.4
 
+[macOS full screen](research/APPLICATION_MAC_FULL_SCREEN.md): the standard
+toggle for the game window. The game keeps its held windowed geometry and the
+view scales (a declared Mac policy, separate from the original's Alt+Enter).
+The real transition is still unobserved.
+
 [F8 on a full pool](research/APPLICATION_REQUESTED_ITEMS_SLOT.md): the body's
 frame word SP+34 modelled from 41f2c7 through every writer of the lifecycle
 loop. A slot number is rebuilt as in the original, and −4 − World is the

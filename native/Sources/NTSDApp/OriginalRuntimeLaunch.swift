@@ -203,9 +203,26 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     Self.emit(["event":"windowCreated","window":token,"iterations":self.committed])
                     do { try self.attach(token) } catch { self.stop(error) }
                 }
+                Self.installMenu()
                 NSApp.activate(ignoringOtherApps:true)
                 schedule(0)
             } catch { stop(error) }
+        }
+    }
+    /// The app menu and a View menu with the standard macOS full-screen toggle
+    /// (⌃⌘F; APPLICATION_MAC_FULL_SCREEN_PLAN.md). The game takes no part in it.
+    @MainActor private static func installMenu() {
+        let bar = NSMenu(),app = NSMenuItem(),view = NSMenuItem(title:"View",action:nil,keyEquivalent:"")
+        app.submenu = NSMenu(); bar.addItem(app)
+        let viewMenu = NSMenu(title:"View"); view.submenu = viewMenu; bar.addItem(view)
+        let toggle = NSMenuItem(title:"Enter Full Screen",action:#selector(NSWindow.toggleFullScreen(_:)),keyEquivalent:"f")
+        toggle.keyEquivalentModifierMask = [.control,.command]; viewMenu.addItem(toggle)
+        NSApp.mainMenu = bar
+        for (name,entered) in [(NSWindow.didEnterFullScreenNotification,true),(NSWindow.didExitFullScreenNotification,false)] {
+            NotificationCenter.default.addObserver(forName:name,object:nil,queue:.main) { note in
+                let size = (note.object as? NSWindow)?.contentView?.bounds.size ?? .zero
+                emit(["event":"macFullScreen","entered":entered,"client":[Int(size.width),Int(size.height)]])
+            }
         }
     }
     /// The original window's input and close handling: the close button is the
@@ -424,6 +441,10 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             case "musicend": music?.finishTrack()
             case "answer" where words.count == 2 && ["yes","no","ok"].contains(words[1]): messageAnswers.append(words[1])
             case "close": menu.messages.close()
+            case "fullscreen": try started.windows.toggleMacFullScreen(gameWindow)
+            case "captureview" where words.count == 2:
+                try started.windows.viewPNG(gameWindow).write(to:URL(fileURLWithPath:words[1]))
+                Self.emit(["event":"capturedView","iterations":n,"path":words[1]])
             case "exit": NSApp.terminate(nil)
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
