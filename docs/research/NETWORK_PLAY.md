@@ -2,6 +2,25 @@
 
 [Plan](NETWORK_PLAY_PLAN.md). The original is not executed.
 
+## Deferred by the user (2026-10-01)
+
+Networking remains in the full scope, but the user has deferred it in favour
+of independent work outside networking. N1 is preserved in commit `7727346`.
+Partial N2 integration remains uncommitted, including the new
+`OriginalMacRuntimeNetwork.swift`; preserve these changes without treating
+them as an accepted increment or including them in unrelated commits.
+The session reports an app build and limited probes, but these do not establish
+N2 acceptance or validate all current working files. N3–N5 remain open.
+
+Claude Code recorded a safety refusal during N2 work at
+2026-10-01T18:06:07.306Z. The withheld output and exact trigger are unknown;
+nearby file reads do not establish the cause. The
+[incident record](../evidence/claude-code-network-safety-2026-10-01.json)
+preserves public messages and identifiers. Do not retry or reroute the affected
+operation. Deferring networking does not resolve that refusal, and it must not
+resume automatically after another task. Continue independent permitted work
+under [CURRENT_WORK](CURRENT_WORK.md).
+
 ## N1: Mac Winsock service (2026-10-01)
 
 `OriginalMacWinsock` (NTSDMacPlatform) gives the original's WSOCK32 calls BSD
