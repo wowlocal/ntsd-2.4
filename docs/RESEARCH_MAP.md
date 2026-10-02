@@ -123,7 +123,8 @@ LFS); each background and Random launches and plays in the app.
 [Packaged app](research/APPLICATION_PACKAGING.md): `build/NTSD Native.app` plays
 the end-to-end match with `--original` from its own Contents/Resources (music
 now installed like the Core inputs); a clone without the build tree's resource
-bundles passes too. Default launch is still Practice (user decision).
+bundles passes too. Default launch is the original game (user decision
+2026-10-01, 80c83c1). [Scope reconciliation 2026-10-02](research/SCOPE_RECONCILIATION_2026-10-02.md).
 [Evidence](evidence/application-packaging.json).
 
 [End-to-end app check](research/APPLICATION_E2E.md): `tools/app_e2e.py` replays a
