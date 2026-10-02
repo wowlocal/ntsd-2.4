@@ -119,3 +119,42 @@ Begin the first permitted concrete task found. Independent review stays
 distinct from author checks; unavailable review is recorded, not invented.
 If no permitted work remains after this reconciliation, report the supported
 blockers rather than adding more unguided soaks or preparation stages.
+
+### Result (2026-10-02)
+
+The gate's conditions are met; review stays open. Evidence:
+[application-offline-acceptance-20261002.json](../evidence/application-offline-acceptance-20261002.json).
+
+1. **Earlier inputs.** The hit-word checks and the three soaks compiled the
+   same hit-word bytes now in the candidate (all eight files are identical).
+   They were linked with 15 excluded working-tree files (the deferred N2 WIP
+   and foreign doc edits), and their online check used the uncommitted
+   `--no-network` option. They stay evidence for those inputs and do not
+   transfer. The checks were re-run once on the candidate. The soaks were not,
+   since the gate does not require them.
+2. **Candidate.** A detached worktree of 2d6a7e5 (tree 912c0101), which
+   includes 7d592f9, on task-owned X5 storage (APFS UUID verified, 129 GiB
+   free, 40 GiB bound). It was created with LFS smudging off, and then all
+   3,025 needed LFS objects (`native/`, the clean distribution) were checked
+   out from the local store, with no network. There are no pointer files and
+   no tracked changes. The excluded WIP stays in the original tree untouched
+   (its diff digest is recorded). There are no Swift package dependencies.
+   Toolchain: Swift 6.4 / Xcode 27.0 (27A266a).
+3. **Validation, once.** `tools/build-native.sh` (exit 0, 2 min 47 s). In the
+   release test build, the 38 hit/physics/gameplay/requested-slot tests pass,
+   and the hit corpus compares 7,845 pools with its full-pool case checked
+   both ways. The candidate's own e2e runner (HEAD), with the committed
+   references, passes all ten scenarios on the bundle's executable,
+   including the saved failed-Winsock online check. Nothing touched the
+   network or executed the original.
+4. **Provenance.**
+   - Binary SHA-256 `ec5afcc1…228f2`.
+   - Catalog package manifest `fd42d041…`, the same as the main tree's bundle
+     from the same inputs.
+   - `codesign --verify --deep --strict`: valid; ad-hoc signature
+     (`local.ntsd.native`).
+   - The app read its resources from the bundle (`OriginalCatalog`,
+     `OriginalMusic`).
+
+   These are host bundle checks: they are not clean-Mac acceptance and they
+   are separate from the Native comparison corpora.
