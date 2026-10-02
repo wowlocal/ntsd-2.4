@@ -1,0 +1,170 @@
+{
+  "date": "2026-10-02",
+  "recordedUTC": "2026-10-02T20:18:05.136279+00:00",
+  "reviewedBaseCommit": "4f65fa40eba0099f88b51694b2256dfe611f8aff",
+  "status": "Independent review complete; P2 corrected and checked; bounded native networking goal accepted",
+  "reviewer": {
+    "agent": "/root/network_review",
+    "model": "gpt-6-astra",
+    "reasoning": "xhigh",
+    "authorization": "Explicit user response: Да, запусти независимое ревью",
+    "readOnly": true,
+    "report": "docs/research/NETWORK_PLAY_REVIEW_2026-10-02.md",
+    "finalVerdict": "P2 closed; no remaining blocking findings in declared N1-N5 scope"
+  },
+  "finding": {
+    "severity": "P2",
+    "mechanism": "Input error dialogs were immediate, but shutdown methods/posts deferred to finish; later dialog or replay fault reordered/dropped effects",
+    "sourceEvidence": "original-input-control.json case2384 receive-1-[0]: message6, releases7..425, close428, next message429",
+    "correction": "Existing receipt journal performs control methods/posts in source order; music output synchronized within service; commit skips delivered control effects; source recording fault preserved"
+  },
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/network-review-20261002",
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-review-20261002/artifact-manifest.json",
+    "SHA256": "5ea1856b8583342a3fb3af91216f15c9d8aaa39c66e40dda15ce99bf4cd10a17",
+    "files": 90,
+    "bytes": 24954147
+  },
+  "checks": {
+    "recordedUTC": "2026-10-02T20:14:22.890534+00:00",
+    "tests": {
+      "run": "run2",
+      "passed": 19,
+      "failed": 0
+    },
+    "appDisconnects": "disconnect-results.json",
+    "offline": {
+      "job": "offline1/job.json",
+      "noNetwork": true,
+      "vsProblems": [],
+      "expectedUnchanged": true
+    },
+    "codePinsMatch": 643,
+    "binary": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+      "SHA256": "1ae78a5eded902c1c0236b285e8143aaef87ce4d6c5a8f7d195316d641a84c2a",
+      "codePins": "candidate2-inputs.json",
+      "count": 643
+    },
+    "oldFailure": "run1: new test used State.globals instead of State.full slice; corrected test only"
+  },
+  "appChecks": [
+    {
+      "name": "client-match-close1",
+      "status": "terminal",
+      "binarySHA256": "1ae78a5eded902c1c0236b285e8143aaef87ce4d6c5a8f7d195316d641a84c2a",
+      "result": "PASS: declared original quit/disconnect outcomes observed; all messages, source-fault boundaries and wire replies retained",
+      "roles": {
+        "host": {
+          "exitCode": 1,
+          "messages": [
+            "Connection Lost!"
+          ],
+          "boundaries": [
+            "Original state storage: Source fault: the original accesses its freed replay buffer through a null pointer (4588a8 recording); Windows ends the game with an access violation here"
+          ],
+          "quit": false
+        },
+        "client": {
+          "exitCode": 0,
+          "messages": [],
+          "boundaries": [],
+          "quit": true
+        }
+      }
+    },
+    {
+      "name": "client-selection-close1",
+      "status": "terminal",
+      "binarySHA256": "1ae78a5eded902c1c0236b285e8143aaef87ce4d6c5a8f7d195316d641a84c2a",
+      "result": "PASS: declared original quit/disconnect outcomes observed; all messages, source-fault boundaries and wire replies retained",
+      "roles": {
+        "host": {
+          "exitCode": 0,
+          "messages": [
+            "Connection Lost!"
+          ],
+          "boundaries": [],
+          "quit": true
+        },
+        "client": {
+          "exitCode": 0,
+          "messages": [],
+          "boundaries": [],
+          "quit": true
+        }
+      }
+    },
+    {
+      "name": "host-match-close1",
+      "status": "terminal",
+      "binarySHA256": "1ae78a5eded902c1c0236b285e8143aaef87ce4d6c5a8f7d195316d641a84c2a",
+      "result": "PASS: declared original quit/disconnect outcomes observed; all messages, source-fault boundaries and wire replies retained",
+      "roles": {
+        "host": {
+          "exitCode": 0,
+          "messages": [],
+          "boundaries": [],
+          "quit": true
+        },
+        "client": {
+          "exitCode": 1,
+          "messages": [
+            "Connection Lost!"
+          ],
+          "boundaries": [
+            "Original state storage: Source fault: the original accesses its freed replay buffer through a null pointer (4588a8 recording); Windows ends the game with an access violation here"
+          ],
+          "quit": false
+        }
+      }
+    },
+    {
+      "name": "host-selection-close1",
+      "status": "terminal",
+      "binarySHA256": "1ae78a5eded902c1c0236b285e8143aaef87ce4d6c5a8f7d195316d641a84c2a",
+      "result": "PASS: declared original quit/disconnect outcomes observed; all messages, source-fault boundaries and wire replies retained",
+      "roles": {
+        "host": {
+          "exitCode": 0,
+          "messages": [],
+          "boundaries": [],
+          "quit": true
+        },
+        "client": {
+          "exitCode": 0,
+          "messages": [
+            "Connection Lost!"
+          ],
+          "boundaries": [],
+          "quit": true
+        }
+      }
+    }
+  ],
+  "preservedFailure": "run1 compile failure in new test: State.globals absent; candidate2 uses existing State.slice(full,0,globalSize); application code unchanged",
+  "sourceExpectedMasksComparatorsChanged": false,
+  "newOriginalExecution": false,
+  "fullN4CaptureRepeated": false,
+  "reviewedRetainedEvidence": [
+    "network-service-reset-20261002.json",
+    "network-service-lifetime-20261002.json",
+    "network-client-lookup-20261002.json",
+    "network-app-host-20261002.json",
+    "network-app-client-20261002.json",
+    "network-app-match-20261002.json",
+    "network-app-exit-20261002.json",
+    "network-merge-20261002.json",
+    "network-client-disconnect-20261002.json"
+  ],
+  "goalAcceptance": "Native localhost: UI host/client, original handshake and selection, Naruto/Sasuke District to Summary, role-aware transport/RNG/state/replays, errors/disconnect/exit, affected offline regressions, independent review",
+  "openExternalOrDeclaredBoundaries": [
+    "Actual Windows interoperability",
+    "Clean-Mac/package/device acceptance",
+    "Unknown partial-handshake caller backing",
+    "Original per-process CRT spark X/Y differ; shared state comparison retains documented scope",
+    "Virtual-clock state.playing may remain true after present(nil); fake Player pause verified; muted app runs do not establish audible output"
+  ],
+  "jobs": "All finite builds/tests/apps terminal; app identities checked absent; no original execution or capture job started",
+  "EXEEnvelopeRecalculated": false
+}

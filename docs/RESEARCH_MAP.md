@@ -19,8 +19,11 @@ now uses the live service: Cancel/reentry, FD_CLOSE, window close and abrupt
 peer loss pass their declared original outcomes. Loaded-menu disconnect quits
 normally; a recorded-match disconnect retains the original freed-buffer fault.
 The discovered runtime sound-device release bug is fixed. Final no-network menu
-and full offline VS e2e pass. Independent integration/comparison review remains
-open; actual Windows interoperability is a separate unobserved gate.
+and full offline VS e2e pass. [Independent review](research/NETWORK_PLAY_REVIEW_2026-10-02.md)
+checked N1–N5 and the comparisons, finding one shutdown-order defect. Control
+releases/posts now run through receipts before later dialogs or source faults;
+19 tests, four app disconnects and offline/no-network checks pass. Actual
+Windows interoperability is a separate unobserved gate.
 
 [macOS full screen](research/APPLICATION_MAC_FULL_SCREEN.md): the standard
 toggle for the game window. The game keeps its held windowed geometry and the

@@ -1,9 +1,10 @@
 import AVFoundation
 import Foundation
 
-/// Plays the packaged original tracks for the committed DirectShow graph state
-/// (`OriginalMacRuntimeMusic.presented()`); nothing plays from an uncommitted
-/// attempt. Tracks are the lossless ALAC decodes of `bgm/*.wma` made by
+/// Plays the packaged original tracks for the delivered DirectShow graph state
+/// (`OriginalMacRuntimeMusic.presented()`): committed batches and explicitly
+/// serviced input-control receipts, including shutdown before a source fault.
+/// Tracks are the lossless ALAC decodes of `bgm/*.wma` made by
 /// tools/package_music.py. A graph that reached the end of its track stays
 /// silent until it seeks, as a running DirectShow graph does.
 @MainActor public final class OriginalMacMusicOutput {

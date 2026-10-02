@@ -88,6 +88,101 @@ import XCTest
         XCTAssertThrowsError(try loading.performSound(.init(buffer:device,method:8,arguments:[1]),on:sounds))
         XCTAssertThrowsError(try loading.performSound(.init(buffer:UInt32.max,method:8,arguments:[]),on:sounds))
     }
+    /// INPUT_CONTROL's error path calls the shared shutdown before examining
+    /// the next header. The source can then fault while writing its freed
+    /// recording buffer; neither shutdown nor the close posts depend on finish.
+    func testControlShutdownPrecedesNextDialogAndSurvivesRecordingFault() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-control-order-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try OriginalMacRuntimeMenuTests().startup(root)
+        let loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:package,clock:{ 5000 })
+        let network = OriginalMacRuntimeNetwork();loading.network = network
+        XCTAssertEqual(network.winsock.startup(0x101).result,0)
+        defer { _ = network.winsock.cleanup() }
+        let sounds = OriginalMacSoundEffects.backed(by:started.audio);loading.sounds = sounds
+        let buffers = started.audio.bufferTokens.sorted()
+        let playing = try XCTUnwrap(buffers.first),unused = try XCTUnwrap(buffers.dropFirst().first)
+        let device = try XCTUnwrap(started.audio.deviceTokens.first)
+        try sounds.perform(.init(buffer:playing,method:0x30,arguments:[0,0,1]))
+
+        var globals = try OriginalApplicationMenuSession.State.slice(
+            XCTUnwrap(started.host.snapshot.session).state.full,0,OriginalMatchPreparation.globalSize)
+        let music = started.runtime.music
+        // Dispose the startup graph through the recovered release helper, then
+        // supply owned interfaces for the controlled shutdown case.
+        try OriginalMusicPlayback.release(globals:&globals,request:{ try music.answer($0) })
+        let graph = try OriginalMacMusicOutputTests().play(music,"bgm\\main.wma",volume:0)
+        for (address,token) in [(0x44f04c,graph.position),(0x44f048,graph.event),(0x44f044,graph.control),(0x44f040,graph.graph),
+            (0x44eecc,device),(0x458438,UInt32(1)),(0x45843c,UInt32(1)),(0x452948,playing),(0x451db0,unused)] {
+            try globals.write(token,at:address-OriginalMatchPreparation.globalBase)
+        }
+        let player = OriginalMacMusicOutputTests.Recorder(URL(fileURLWithPath:"/main.caf"),duration:100)
+        let output = OriginalMacMusicOutput(tracks:["bgm\\main.wma":player.url]) { _,_ in player }
+        try output.present(music.presented());XCTAssertTrue(player.isPlaying)
+        loading.presentControlMusic = { try output.present(music.presented()) }
+        var events: [String] = []
+        loading.messageBox = { _,_,_ in
+            if events.isEmpty { XCTAssertEqual(sounds.voice(playing)?.playing,true);XCTAssertTrue(player.isPlaying) }
+            else { XCTAssertEqual(events,["message","post"]);XCTAssertEqual(sounds.voice(playing)?.playing,false);XCTAssertFalse(player.isPlaying) }
+            events.append("message");return 1
+        }
+        loading.postMessage = { message,wParam,lParam in
+            XCTAssertEqual([message,wParam,lParam],[0x10,0,0])
+            XCTAssertEqual(sounds.voice(playing)?.playing,false);XCTAssertFalse(player.isPlaying)
+            XCTAssertNil(sounds.voice(unused));XCTAssertNil(sounds.voice(device))
+            events.append("post")
+        }
+        let zero = try OriginalStateRecord(bytes:[0,0,0,0,0,0,0,0],defined:Array(repeating:true,count:8))
+        var memory = OriginalMenuPresentationMemory(replayPointers:zero)
+        for (offset,token) in [(0,UInt32(0x30000000)),(4,UInt32(0x30000100))] {
+            try memory.replayPointers.write(token,at:offset)
+            memory.allocations[token] = .init(storage:zero)
+        }
+        let originalGlobals = globals,originalMemory = memory
+        func attempt() throws {
+            try loading.beginInputControl()
+            for text: UInt32 in [0x4493b4,0x449384] {
+                _ = try loading.control(.init(.message,[0,text,0x447850,0]))
+                try OriginalMenuPresentation.shutdown(globals:&globals,memory:&memory) { e in
+                    let kind: OriginalInputControlRequest.Kind
+                    switch e.kind { case .method:kind = .method;case .free:kind = .free;case .postMessage:kind = .postMessage;default:throw Stop.limit }
+                    _ = try loading.control(.init(kind,e.arguments,e.strings))
+                }
+            }
+            var context = OriginalInputControlContext(savedPlayback:zero,memory:memory)
+            XCTAssertThrowsError(try context.recordReplayPacket(tick:1,commands:Array(repeating:0,count:10),observe:{ _ in })) {
+                XCTAssertTrue(String(describing:$0).contains("4588a8 recording"))
+            }
+        }
+        try attempt()
+        XCTAssertEqual(events,["message","post","message","post"])
+        XCTAssertTrue(memory.allocations.values.allSatisfy { !$0.live })
+        XCTAssertNil(music.presented());XCTAssertFalse(player.isPlaying)
+        let musicCalls = music.operations.count,playerCalls = player.log
+        // Recompute the same failed owned attempt: requests use receipts even
+        // though the music interfaces were released on the first attempt.
+        globals = originalGlobals;memory = originalMemory
+        try attempt()
+        XCTAssertEqual(events,["message","post","message","post"])
+        XCTAssertEqual(music.operations.count,musicCalls);XCTAssertEqual(player.log,playerCalls)
+        // No Host finish/commit was called; the original recording fault remains.
+    }
+    func testControlMusicOutputFailureIsTerminalAndNotRetried() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-control-music-failure-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try OriginalMacRuntimeMenuTests().startup(root)
+        let loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:package,clock:{ 5000 })
+        let network = OriginalMacRuntimeNetwork();loading.network = network
+        XCTAssertEqual(network.winsock.startup(0x101).result,0);defer { _ = network.winsock.cleanup() }
+        let graph = try OriginalMacMusicOutputTests().play(started.runtime.music,"bgm\\main.wma",volume:0)
+        var calls = 0
+        loading.presentControlMusic = { calls += 1;throw Stop.limit }
+        try loading.beginInputControl()
+        XCTAssertThrowsError(try loading.control(.init(.method,[graph.position,8])))
+        let performed = started.runtime.music.operations.count
+        XCTAssertThrowsError(try loading.beginInputControl())
+        XCTAssertEqual(calls,1);XCTAssertEqual(started.runtime.music.operations.count,performed)
+    }
     func testInlineCursorRecordsReceiptsAndRetriesReuseThem() throws {
         typealias E = OriginalStartupRequestExchange
         let e = E(); var served = 0

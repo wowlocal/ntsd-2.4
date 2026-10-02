@@ -3,12 +3,15 @@
 [Plan](NETWORK_PLAY_PLAN.md). Platform integration reuses the recovered rules;
 the N3 addendum below records its new bounded original selector-4 comparison.
 
-## Current next step (2026-10-02)
+## Current review and checked scope (2026-10-02)
 
 N1–N5 are implemented and checked in their declared scopes below. Host/client,
 a full match to Summary, exit/disconnection and affected offline regressions
-have evidence. Independent review of the integration and comparison scope is
-still open; actual Windows interoperability remains a separate unobserved gate.
+have evidence. [Independent review](NETWORK_PLAY_REVIEW_2026-10-02.md) checked
+the integration, N3 stimulus mapping and N4 comparisons/raw Actor records. Its
+one P2 shutdown-order finding is corrected; the follow-up found no new issues.
+All19 affected tests, four app disconnect scenarios and no-network/offline VS
+passed. Actual Windows interoperability remains a separate unobserved gate.
 The earlier blanket hold on N2–N5 was an unsupported interpretation of the saved
 Claude incident and has been removed at the user's request. The exact withheld
 operation remains unknown; the incident record is preserved without treating it
@@ -17,7 +20,33 @@ occurred during the N1 checks. General WORKFLOW refusal handling still applies.
 
 Two native apps now complete the Naruto/Sasuke District match to visible
 Summary with checked transport, shared state/RNG and role-aware recordings.
-Independent review and Windows interoperability are open.
+Windows interoperability and clean-Mac/device acceptance remain open.
+
+### Independent review correction
+
+At4f65fa4, control error dialogs ran inline, while sound/music releases and
+PostMessage waited for commit. The reviewer found that a second dialog could
+precede the first shutdown, and the source recording fault could prevent the
+effects entirely. Existing INPUT_CONTROL case2384 records the contrary order.
+
+Control methods/posts now share the existing receipt journal with socket IO
+and dialogs. Music output follows each serviced music method immediately;
+no window or graph queue is pumped there. A service failure is terminal, a retry
+reuses replies, and commit skips the already delivered control effects while
+retaining round/front effects. The original null recording fault remains.
+
+Run1 preserves a compile error in the new test's access to startup storage;
+run2 uses the existing full-record slice, with unchanged assertions.19 tests
+pass, including shared shutdown between two dialogs, sound.voice/fake Player stop,
+subsequent recordReplayPacket fault without finish, retry, and failed output
+callback. Four unchanged UI scenarios pass on binary1ae78a5e…: each side closing
+before the match gives both quit0; during recorded play the peer shows exactly
+one Connection Lost! then the established4588a8 source fault. No-network UI and
+full offline VS retain all reference hashes. Current643 source pins match.
+The reviewer inspected their saved results and closed P2 with no remaining
+blocking finding in the native localhost scope. No N4 recapture was required.
+See the [review report](NETWORK_PLAY_REVIEW_2026-10-02.md) and
+[evidence](../evidence/network-review-20261002.json).
 
 ## N5 exit integration (2026-10-02)
 
@@ -592,15 +621,15 @@ The network deferral is lifted. Current implementation and remaining checks:
 
 | Required result | Current code/evidence | Remaining dependency |
 | --- | --- | --- |
-| N2 host greeting from the app | Menu listener and 0x401 consumer implemented; 17 tests and separate native-process greeting probe pass | Independent review remains open; use this retained session for N3/N4 |
-| N3 client connects through the UI | Implemented through iteration permits; two native processes reach World2 over127.0.0.1 with complementary roles/seats and identical RNG | Independent review open; retain this session for N4 |
-| N4 synchronized match to Summary | Two native apps complete1070 gameplay bodies to visible Summary; transport, World, shared Actor state/RNG and role-aware replays checked | Independent review open; original local CRT spark coordinates are declared separately |
-| N5 exit/disconnect/errors | Live exit provider; Cancel/reentry, FD_CLOSE, window close and peer loss checked; original recorded-match source fault retained | Independent review open; actual Windows outcomes unobserved |
-| Offline behavior and Windows comparison | Candidate5 no-network menu and full offline VS e2e pass unchanged expectations | Windows interoperability stays separately open |
+| N2 host greeting from the app | Menu listener and 0x401 consumer implemented; retained tests/app evidence reviewed | Actual Windows outcomes unobserved |
+| N3 client connects through the UI | Two native processes reach World2 over127.0.0.1 with complementary seats/RNG; selector4 and its comparator reviewed | Unknown partial-handshake backing stays an explicit boundary |
+| N4 synchronized match to Summary | Complete native match, wire/state/replays checked; comparators and actual Actor differences independently reviewed | Original local CRT spark coordinates are declared separately; Windows unobserved |
+| N5 exit/disconnect/errors | Live exit and peer-loss outcomes checked; review found and corrected inline shutdown order;19 tests and four fresh app cases pass | Original recorded-match fault retained; actual Windows outcomes unobserved |
+| Offline behavior and Windows comparison | Current corrected binary passes no-network UI and full offline VS with unchanged references | Windows interoperability stays separately open |
 
-The declared N1–N5 integration and functional checks are complete; independent
-review is the next acceptance step. Repeating successful tests or offline soaks
-would not supply that review. The earlier requirement for external clarification
+The declared N1–N5 integration and functional checks are complete. Independent
+review and the resulting correction are recorded above; old dated run notes
+retain their original review status. The earlier requirement for external clarification
 before any N2–N5 work was based on an unsupported expansion of the unknown
 refusal scope and is withdrawn.
 

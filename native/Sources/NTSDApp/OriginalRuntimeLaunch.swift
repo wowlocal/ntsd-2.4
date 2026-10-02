@@ -373,6 +373,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     loading?.network = menu.network
                     loading?.messageBox = menu.messages.messageBox
                     loading?.postMessage = { [weak menu] message,wParam,lParam in menu?.messages.post(message,wParam,lParam) }
+                    loading?.presentControlMusic = { [weak self] in
+                        try self?.music?.present(started.runtime.music.presented())
+                    }
                     // Playback Recording: `--playback-file PATH` answers the open
                     // dialog once; scripted runs never show panels or alerts.
                     if let i = arguments.firstIndex(of:"--playback-file"),i+1 < arguments.count { loading?.playbackFile = arguments[i+1] }

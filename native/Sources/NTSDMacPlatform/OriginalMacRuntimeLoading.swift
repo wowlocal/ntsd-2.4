@@ -61,6 +61,9 @@ import UniformTypeIdentifiers
     public var network: OriginalMacRuntimeNetwork?
     public var messageBox: (([UInt8],[UInt8],UInt32) throws -> Int32)?
     public var postMessage: ((UInt32,UInt32,UInt32) -> Void)?
+    /// An inline control method is already serviced even if a later source
+    /// fault prevents commit. Synchronize the player before the next request.
+    public var presentControlMusic: (() throws -> Void)?
     private struct ControlRequest: OriginalExchangeRequest {
         let value: OriginalInputControlRequest
         func accepts(_ response: OriginalInputControlResponse) -> Bool { true }
@@ -71,7 +74,8 @@ import UniformTypeIdentifiers
     /// Replay files the platform could not write; the original's failing
     /// fopen/fwrite leaves the game running (declared).
     public private(set) var failedReplayWrites: [String] = []
-    /// DirectSound buffer methods of committed loaded batches play here.
+    /// DirectSound methods: receipt-backed input calls play inline; other
+    /// loaded-batch methods play on commit.
     public var sounds: OriginalMacSoundEffects?
     private var pendingReplays: [OriginalMacRuntimeStartupService.FileEffect] = []
     private var openReplay: (path: String,bytes: [UInt8])?
@@ -211,7 +215,7 @@ import UniformTypeIdentifiers
     func control(_ q: OriginalInputControlRequest) throws -> OriginalInputControlResponse {
         counts.controls += 1
         switch q.kind {
-        case .asyncSelect,.ioctl,.send,.receive,.message:
+        case .asyncSelect,.ioctl,.send,.receive,.message,.method,.postMessage:
             if var cursor = controlCursor {
                 let response = try cursor.response(for:.init(value:q));controlCursor = cursor;return response
             }
@@ -231,13 +235,21 @@ import UniformTypeIdentifiers
             return .init(result:try messageBox(OriginalMacRuntimeNetwork.controlError(q.arguments[1]),Array("Error".utf8),0))
         case .postMessage:
             guard q.arguments.count == 4,q.arguments[1] == 0x10,q.arguments[2] == 0,q.arguments[3] == 0 else { throw Boundary.unexpected("control PostMessageA") }
-            return .init(result:1) // Queued only when the enclosing batch commits.
+            if controlCursor != nil { postMessage?(q.arguments[1],q.arguments[2],q.arguments[3]) }
+            return .init(result:1)
+        case .method:
+            if controlCursor != nil {
+                let call = try OriginalMacSoundEffects.call(q.arguments)
+                if started.runtime.music.interface(call.buffer) != nil {
+                    _ = try started.runtime.music.answer(.init(.method,q.arguments)); counts.music += 1
+                    try presentControlMusic?()
+                } else if let sounds { try performSound(call,on:sounds) }
+            }
+            return .init() // The original ignores these method results.
         case .free:return .init() // Core owns the freed record; heap.collect adopts it.
         // Hotkey (416c70..416fad), playback-restore and input-reset notices:
         // Core performs their effects; nothing is asked of the platform.
-        // A hotkey's sound request is a notice and its buffer methods play
-        // when the batch commits (their results are ignored).
-        case .action,.restorePlayback,.inputReset,.soundRequest,.method: return .init()
+        case .action,.restorePlayback,.inputReset,.soundRequest: return .init()
         }
     }
     func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
@@ -431,6 +443,7 @@ import UniformTypeIdentifiers
     /// the committed loaded batch's front draws replayed on the display: the
     /// Core already recorded declared success for them. Text stays omitted.
     public func finish() throws -> Host.Outcome {
+        let controlEffectsDelivered = controlCursor != nil
         let outcome = try started.host.finishLoadedMenu(perform:{ request,_ in
             switch request.kind {
             case .time: return .init(result:Int32(bitPattern:try self.time()))
@@ -472,6 +485,10 @@ import UniformTypeIdentifiers
             // Preserve the recorded order across sound/music releases and the
             // final close post, as well as ordinary round and hotkey methods.
             for operation in commit.operations {
+                // These effects already ran in source order in their receipts,
+                // including before a later dialog or a failed Core attempt.
+                if controlEffectsDelivered,case .preceding(.control(let q,_)) = operation,
+                   q.kind == .method || q.kind == .postMessage { continue }
                 try answerRoundMusic([operation])
                 if let sounds {
                     let music = started.runtime.music
