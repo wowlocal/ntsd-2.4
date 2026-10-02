@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "task": "network-service-reset-20261002",
+  "recordedUTC": "2026-10-02T15:36:03.591777+00:00",
+  "baseHead": "0356f06baac8a2be7639b737da221d9c853e9e0e",
+  "originalExecuted": false,
+  "appExecuted": false,
+  "windowsObserved": false,
+  "networkScope": "Two task-owned IPv4 TCP peers on loopback; ephemeral port; existing OriginalMacWinsock N1 service only. Application message routing and original reference harnesses not executed.",
+  "safetyIncident": "docs/evidence/claude-code-network-safety-2026-10-01.json",
+  "safetyStatus": "open; withheld operation and exact trigger unknown; no N2/0x401 route continuation",
+  "storage": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002",
+    "uuid": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "filesystem": "APFS",
+    "taskBoundGiB": 12,
+    "reserveGiB": 40,
+    "freeGiBAfter": 97.129
+  },
+  "commands": {
+    "test": "swift test --package-path native --scratch-path /Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build -c release -Xswiftc -enable-testing --filter OriginalMacWinsockTests"
+  },
+  "runs": [
+    {
+      "id": "run1",
+      "exit": 1,
+      "buildSeconds": 339.62,
+      "tests": 4,
+      "failures": 2,
+      "result": "Both abortive-close orders reported lParam 32 instead of (10054 << 16) | 32. Three retained tests passed."
+    },
+    {
+      "id": "run2",
+      "exit": 0,
+      "buildSeconds": 171.6,
+      "testSeconds": 0.264,
+      "tests": 4,
+      "failures": 0,
+      "result": "Both reset orders, notification-before-recv, exactly one close notification, receive failure, plus three retained service regressions."
+    }
+  ],
+  "artifacts": {
+    "before-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/before-OriginalMacWinsockTests.swift",
+      "sha256": "40aca59dfca22407b20051f4cc6223cb8fe27449b2e21d02611b84dca8e3ec8c",
+      "bytes": 9700
+    },
+    "run1-job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/run1-job.json",
+      "sha256": "16008ed76e171011ac6c2a1ada6d60d947e87e92eaf2b5fe64c715d0cdf5c11b",
+      "bytes": 1208
+    },
+    "after-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/after-inputs.json",
+      "sha256": "d3fce1fea64b8b39da082c5f256d70296af42da4e99b90bb40960713ac1c741d",
+      "bytes": 90768
+    },
+    "before-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/before-OriginalMacWinsock.swift",
+      "sha256": "b9adc2be9900f2c9652445129c9b6715df1aa3b0bf7b096dd1e8eb9aff06beb2",
+      "bytes": 15965
+    },
+    "run1.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/run1.log",
+      "sha256": "9cc43f7a46e36d9ea2f22a60fa7e2fdcb48f9db1e1c08be2cdfce317fd8341e5",
+      "bytes": 42144
+    },
+    "run2.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/run2.log",
+      "sha256": "86e250e20b95ef686126168a77a84138aeb89ecbdfad85746f50a33eaa6228a3",
+      "bytes": 16893
+    },
+    "after-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/after-OriginalMacWinsock.swift",
+      "sha256": "e57ea2fdf86384aaff98a952f44126aeda82029a97242901eef4e4e234369aed",
+      "bytes": 16872
+    },
+    "after-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/after-OriginalMacWinsockTests.swift",
+      "sha256": "2cd594a46d35582f43684dec9debe0bb43d631dae3d5456f993c355e68fa9d7a",
+      "bytes": 9835
+    },
+    "before-worktree.diff": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/before-worktree.diff",
+      "sha256": "4317e966db7c0ddb37e04f6c40c315cbea8c8e20735450963387df5a2913fcd7",
+      "bytes": 71801
+    },
+    "run2-job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/run2-job.json",
+      "sha256": "a47c8e8531ef54e012f737173a80cf4bb4deeaf97887200f1db0c022707cbebd",
+      "bytes": 908
+    },
+    "before-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/before-inputs.json",
+      "sha256": "4e83f172b8d88967a91b32a3fd3d0408c0126ddc806c7b628b17634bd71c3f72",
+      "bytes": 90614
+    }
+  },
+  "checkedSources": {
+    "native/Tests/NTSDCoreTests/OriginalMacWinsockTests.swift": "2cd594a46d35582f43684dec9debe0bb43d631dae3d5456f993c355e68fa9d7a",
+    "native/Sources/NTSDMacPlatform/OriginalMacWinsock.swift": "e57ea2fdf86384aaff98a952f44126aeda82029a97242901eef4e4e234369aed"
+  },
+  "sources": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsaasyncselect",
+    "https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-recv",
+    "docs/research/NETWORK_NOTIFICATION.md"
+  ],
+  "limits": [
+    "Independent review remains open.",
+    "The build used the pinned dirty worktree, including previously unaccepted networking changes; only the N1 tests ran. This is not N2 integration, offline app reacceptance, or a validated committed app package.",
+    "Pre-existing interface-address changes remain unstaged and separate from this correction.",
+    "No host/client app match, full synchronization, end-to-end disconnect path or Windows interoperability acceptance.",
+    "Descriptor lifetime after dispatch-source cancellation is a separate remaining N1 issue."
+  ]
+}

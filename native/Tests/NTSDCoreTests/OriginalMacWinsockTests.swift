@@ -99,4 +99,68 @@ final class OriginalMacWinsockTests: XCTestCase {
         XCTAssertEqual(w.send(0x9999, [1]), W.socketError); XCTAssertEqual(w.lastError, 10038)
         XCTAssertEqual(w.cleanup(), 0); XCTAssertTrue(w.openHandles.isEmpty)
     }
+
+    /// A TCP reset must remain an error when the service's readiness probe
+    /// observes it before recv, and must still notify if recv observes it first.
+    func testAbortivePeerClosePreservesReceiveErrorAndNotification() throws {
+        for notificationFirst in [true, false] {
+            let w = W(); _ = w.startup(0x101)
+            defer { _ = w.cleanup() }
+            let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
+            XCTAssertEqual(w.listen(listener, backlog: 1), 0)
+            let port = try XCTUnwrap(w.boundPort(listener))
+
+            // A task-owned loopback peer uses SO_LINGER to request an abortive
+            // close. This is a real macOS socket check, not Windows observation.
+            let peer = Darwin.socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
+            XCTAssertGreaterThanOrEqual(peer, 0)
+            guard peer >= 0 else { return }
+            var peerClosed = false
+            defer { if !peerClosed { Darwin.close(peer) } }
+            var address = sockaddr_in()
+            address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+            address.sin_family = sa_family_t(AF_INET)
+            address.sin_port = port.bigEndian; address.sin_addr.s_addr = 0x0100007f
+            let connected = withUnsafePointer(to: &address) {
+                $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                    Darwin.connect(peer, $0, socklen_t(MemoryLayout<sockaddr_in>.size))
+                }
+            }
+            XCTAssertEqual(connected, 0)
+            guard connected == 0 else { return }
+            let server = w.accept(listener)
+            XCTAssertNotEqual(server, W.invalidSocket)
+            XCTAssertEqual(w.close(listener), 0)
+            var notes: [W.Notification] = []
+            w.post = { notes.append($0) }
+            XCTAssertEqual(w.asyncSelect(server, window: 7, message: 0x401, events: 0x20), 0)
+            var abortive = linger(l_onoff: 1, l_linger: 0)
+            XCTAssertEqual(setsockopt(peer, SOL_SOCKET, SO_LINGER, &abortive,
+                                      socklen_t(MemoryLayout<linger>.size)), 0)
+            XCTAssertEqual(Darwin.close(peer), 0); peerClosed = true
+
+            if notificationFirst {
+                spin { !notes.isEmpty }
+                XCTAssertFalse(notes.isEmpty, "Reset notification must not require a preceding game recv")
+            }
+            // Do not pump the main queue here: this also exercises recv before
+            // the dispatch source has had a chance to consume the kernel error.
+            let deadline = Date().addingTimeInterval(5)
+            var received: (result: Int32, bytes: [UInt8]) = (W.socketError, [])
+            repeat {
+                received = w.receive(server, capacity: 22)
+                if received.result != W.socketError || w.lastError != W.wouldBlock { break }
+                Thread.sleep(forTimeInterval: 0.001)
+            } while Date() < deadline
+            XCTAssertEqual(received.result, W.socketError)
+            XCTAssertEqual(received.bytes, [])
+            XCTAssertEqual(w.lastError, 10054) // WSAECONNRESET
+            spin { !notes.isEmpty }
+            XCTAssertEqual(notes, [.init(window: 7, message: 0x401, socket: server,
+                                         lParam: (10054 << 16) | 32)])
+            RunLoop.main.run(until: Date().addingTimeInterval(0.03))
+            XCTAssertEqual(notes.count, 1)
+        }
+    }
 }

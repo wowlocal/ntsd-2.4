@@ -19,6 +19,7 @@ public final class OriginalMacWinsock {
     public static let socketError: Int32 = -1
     public static let invalidSocket: UInt32 = 0xffff_ffff
     public static let wouldBlock: Int32 = 10035 // WSAEWOULDBLOCK
+    private static let connectionReset: Int32 = 10054 // WSAECONNRESET
     public enum Event: UInt32 { case read = 1, write = 2, accept = 8, connect = 16, close = 32 }
     /// A window message the original's WndProc receives (wParam = socket,
     /// lParam = event | error << 16).
@@ -29,6 +30,9 @@ public final class OriginalMacWinsock {
     private final class Socket {
         let fd: Int32
         var nonBlocking = false, listening = false, closeReported = false
+        // A kernel error observed by either recv or the readiness probe must
+        // remain visible to the other consumer until this socket is closed.
+        var reset = false
         var selection: Selection?
         var source: DispatchSourceRead?, suspended = false
         init(_ fd: Int32) { self.fd = fd }
@@ -165,10 +169,13 @@ public final class OriginalMacWinsock {
     public func receive(_ handle: UInt32, capacity: Int) -> (result: Int32, bytes: [UInt8]) {
         guard let s = lookup(handle) else { return (Self.socketError, []) }
         guard capacity > 0 else { return (0, []) }
+        if s.reset { lastError = Self.connectionReset; return (Self.socketError, []) }
         var buffer = [UInt8](repeating: 0, count: capacity)
         let n = buffer.withUnsafeMutableBytes { Darwin.recv(s.fd, $0.baseAddress, capacity, 0) }
+        let error = errno
+        if n < 0 && error == ECONNRESET { s.reset = true }
         rearm(s)
-        guard n >= 0 else { return (fail(Self.socketError), []) }
+        guard n >= 0 else { return (fail(Self.socketError, error: error), []) }
         return (Int32(n), Array(buffer.prefix(n)))
     }
     public func close(_ handle: UInt32) -> Int32 {
@@ -211,8 +218,8 @@ public final class OriginalMacWinsock {
         guard let s = sockets[handle] else { lastError = 10038; return nil } // WSAENOTSOCK
         return s
     }
-    private func fail<T>(_ value: T) -> T {
-        lastError = errno == EWOULDBLOCK || errno == EAGAIN || errno == EINPROGRESS ? Self.wouldBlock : 10000 + errno
+    private func fail<T>(_ value: T, error: Int32 = errno) -> T {
+        lastError = error == EWOULDBLOCK || error == EAGAIN || error == EINPROGRESS ? Self.wouldBlock : 10000 + error
         return value
     }
     private func setNonBlocking(_ s: Socket, _ on: Bool) -> Int32 {
@@ -240,16 +247,24 @@ public final class OriginalMacWinsock {
             if selection.events & Event.accept.rawValue != 0 { deliver(.accept) } else { pause(s) }
             return
         }
+        if s.reset { reportClose(handle, s, selection, error: Self.connectionReset); return }
         var byte: UInt8 = 0
         let n = Darwin.recv(s.fd, &byte, 1, MSG_PEEK | MSG_DONTWAIT)
         if n == 0 {
-            stopWatching(s)
-            if selection.events & Event.close.rawValue != 0 && !s.closeReported {
-                s.closeReported = true
-                post?(.init(window: selection.window, message: selection.message, socket: handle, lParam: Event.close.rawValue))
-            }
+            reportClose(handle, s, selection, error: 0)
+        } else if n < 0 && errno == ECONNRESET {
+            s.reset = true
+            reportClose(handle, s, selection, error: Self.connectionReset)
         } else if n > 0 && selection.events & Event.read.rawValue != 0 { deliver(.read) }
         else if n > 0 { pause(s) } // data waits for recv; FD_CLOSE comes after it is read
+    }
+    private func reportClose(_ handle: UInt32, _ s: Socket, _ selection: Selection, error: Int32) {
+        stopWatching(s)
+        if selection.events & Event.close.rawValue != 0 && !s.closeReported {
+            s.closeReported = true
+            post?(.init(window: selection.window, message: selection.message, socket: handle,
+                        lParam: Event.close.rawValue | (UInt32(bitPattern: error) << 16)))
+        }
     }
     private func pause(_ s: Socket) { if let source = s.source, !s.suspended { source.suspend(); s.suspended = true } }
     private func rearm(_ s: Socket) { if let source = s.source, s.suspended { s.suspended = false; source.resume() } }
