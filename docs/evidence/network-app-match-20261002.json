@@ -1,0 +1,391 @@
+{
+  "date": "2026-10-02",
+  "recordedUTC": "2026-10-02T18:18:11.175342+00:00",
+  "status": "N4 implemented and checked; independent review open; N5 next",
+  "baseCommit": "c573f107740e1b4732e9d73761fce49b74c7114e",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/network-app-match-20261002",
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-app-match-20261002/artifact-manifest.json",
+    "SHA256": "935d7b50627a5f8d156458ac84fe5f1822df31ffbda206dbd3a009048f27896f"
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+    "SHA256": "327f8421e32c03342e73f5ddf2df4d08e7f539d5fa627adc34decad24ca02e78"
+  },
+  "source": {
+    "EXE": "/Users/michael/Developer/ntsd-2.4/downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+    "SHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "newExecution": false,
+    "contracts": [
+      "INPUT_CONTROL",
+      "LOCAL_INPUT",
+      "RECEIVED_INPUT",
+      "REPLAY_TICK",
+      "WORLD_HITS",
+      "STATE_LAYOUT"
+    ],
+    "environment": "two native macOS processes using real TCP127.0.0.1; loopback resolver response explicit; distinct startup seeds; TZ Etc/GMT-1"
+  },
+  "codePins": {
+    "manifest": "candidate3-inputs.json",
+    "count": 649,
+    "allRechecked": true
+  },
+  "fixturePins": {
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-control-control.json": "eed910a682485e2c7f495221639c9c30fdcbd0e70ba43a778d7705f3d4d6e9aa",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-control.json": "2c061671f590ff20a840d8702d48e61af1fd2a773bd2690cfb2f3966cec69228",
+    "native/Tests/NTSDCoreTests/Fixtures/original-local-input-control.json": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c",
+    "native/Tests/NTSDCoreTests/Fixtures/original-local-input.json": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a",
+    "native/Tests/NTSDCoreTests/Fixtures/original-object-input-control.json": "bb3a7fc5b181baab26c776ea466f32b94647c8012fa98d486e70ccb142b2ec87",
+    "native/Tests/NTSDCoreTests/Fixtures/original-received-input-control.json": "91d85c147cfdb1b783c379185ded6e8c23f224a5ceb106658f1536a5767c1c32",
+    "native/Tests/NTSDCoreTests/Fixtures/original-received-input.json": "45936dc1c564360c0326aabce9a3f2542a8847e36f56d2f0f0b200d14feca2b6",
+    "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick-control.json": "12486a1b17ca1797608473196df1be699435c54cc99247a03ac232b143d32281",
+    "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick.json": "e2cf3289867093e3b98742c9291e785e54d336e7a5af626dafc61e1b51d0701d"
+  },
+  "runtimeTests": {
+    "uniquePassing": 3,
+    "run1": "Build190.83s; generic receipts and offline loading/cached cycle passed; new test failed nonblocking accept readiness (8 assertions), preserved",
+    "run2": "Build178.64s; only corrected socket test passed1.905s; app/platform/Core unchanged",
+    "build3": "Diagnostic CLI only; build107.08s passed"
+  },
+  "stateComparison": {
+    "status": "PASS with declared original per-process spark coordinates",
+    "cycles": 1672,
+    "gameplayBodies": 1070,
+    "packetsPerDirection": 836,
+    "allWorldBytesAndMasksEqual": true,
+    "allActorMasksEqual": true,
+    "allActorBytesOutsideSparkXYEqual": true,
+    "allObservedRNGFrameHPResultFieldsEqual": true,
+    "firstSparkDifferenceCycle": 880,
+    "sparkWordDifferenceCounts": {
+      "0x370": 793,
+      "0x398": 745
+    },
+    "maxSparkCoordinateDifference": 8,
+    "examples": [
+      {
+        "cycle": 880,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      },
+      {
+        "cycle": 881,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      },
+      {
+        "cycle": 882,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      },
+      {
+        "cycle": 883,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      },
+      {
+        "cycle": 884,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      },
+      {
+        "cycle": 885,
+        "actor": 4,
+        "words": [
+          [
+            "0x370",
+            -4,
+            0
+          ],
+          [
+            "0x398",
+            409,
+            412
+          ]
+        ]
+      }
+    ],
+    "final": {
+      "actorsSHA256": "ac524832c79a4e5f4b063a8431db44a5ffc445f2c0bf43c7651c7af9b9ffd176",
+      "arena": 0,
+      "bodies": 1070,
+      "completion": "gameplay",
+      "cycle": 1672,
+      "fighters": [
+        {
+          "actor": 0,
+          "frame": 3,
+          "hp": 500,
+          "id": 2,
+          "seat": 0
+        },
+        {
+          "actor": 4,
+          "frame": 231,
+          "hp": -6,
+          "id": 11,
+          "seat": 4
+        }
+      ],
+      "inputSequence": 36,
+      "kind": "state",
+      "menu": 0,
+      "mode": 0,
+      "phase": 0,
+      "receivedBytes": 18392,
+      "rngCounter": 1120,
+      "rngIndex": 1305,
+      "roundTimer": 144,
+      "sentPackets": 836,
+      "winner": 10,
+      "worldSHA256": "42fc4f433bb9255ed21b2c2b26d9ab2a659463e4ef509bb9a11526f0874d569c"
+    },
+    "seconds": 8.099456833
+  },
+  "replayComparison": {
+    "status": "PASS with exact original local/remote recording semantics",
+    "recordedTicks": 1027,
+    "differingRoleBytes": 4104,
+    "everyRecordedPacketReconstructedFromActualWireBytes": true,
+    "everyOtherReplayByteEqual": true,
+    "files": {
+      "host": {
+        "file": "/Volumes/X5/ntsd-2.4-research/network-app-match-20261002/match2/host-overlay/recording/20260101_010000_VS.lfr",
+        "bytes": 10285,
+        "SHA256": "1e56c72850773218d15c193c2617349c4a95bbe19d1a022a67d19115cf4e04f9",
+        "decodedSHA256": "2adb3bb90dfbe6e54e955402d8de2cfa1c66e029ac562bf611960b980bdbea96"
+      },
+      "client": {
+        "file": "/Volumes/X5/ntsd-2.4-research/network-app-match-20261002/match2/client-overlay/recording/20260101_010000_VS.lfr",
+        "bytes": 10249,
+        "SHA256": "8f78851f79ef7365ef3db6de27964ddcd5764795501d88710f404c6862686416",
+        "decodedSHA256": "ac5e217d3132462d49cfd6537540c50dd82473f02a17140fab0ce00a25bfe604"
+      }
+    },
+    "sourceContracts": [
+      "LOCAL_INPUT.md: local commands OR seven masks into fresh zero output; outgoing template bit0 stays1",
+      "RECEIVED_INPUT.md: remote status==-1 replaces complete command byte including bit0",
+      "REPLAY_TICK.md: all10 bytes recorded each unpaused tick at2b38+10*tick; nonzero phase leaves fresh command buffer zero"
+    ]
+  },
+  "offlineVS": {
+    "result": "PASS",
+    "differences": [],
+    "backingScaleEqual": true
+  },
+  "summaries": {
+    "observed": true,
+    "cycles": 1672,
+    "gameplayBodies": 1070,
+    "timer": 144,
+    "naruto": {
+      "seat": 0,
+      "sourceID": 2,
+      "kills": 1,
+      "attack": 560,
+      "hpLost": 0,
+      "status": "Win (Alive)"
+    },
+    "sasuke": {
+      "seat": 4,
+      "sourceID": 11,
+      "kills": 0,
+      "attack": 0,
+      "hpLost": 560,
+      "status": "Lose (Dead)"
+    },
+    "time": "00:34"
+  },
+  "diagnostics": {
+    "probe1": "35 loaded states identical",
+    "probe2": "650 loaded states including48 gameplay bodies identical",
+    "match1": "1070 bodies completed; unclassified Actor digest differences and skipped Summary at350; preserved, not accepted as visible Summary",
+    "match2": "All owned records retained; only Actor4+370/+398 cosmetic CRT coordinates differ, max8px; visible Summary on both"
+  },
+  "comparisonScope": {
+    "world": "all bytes and masks each1672 cycles",
+    "actors": "all400 records and masks every cycle; identify original local spark X/Y separately, no altered bytes",
+    "globals": "declared mode/menu/phase/RNG index/counter/round timer/winner/arena/input sequence; role/local device/time globals not equality criterion; raw globals retained",
+    "replay": "all1027 packets reconstructed exactly from actual wire/local-vs-remote contracts; every other decoded byte equal"
+  },
+  "jobs": {
+    "run1-job.json": {
+      "status": "terminal",
+      "exitCode": 1,
+      "processExitCodes": [],
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build",
+        "-c",
+        "release",
+        "-Xswiftc",
+        "-enable-testing",
+        "--filter",
+        "OriginalMacRuntimeLoadingTests"
+      ]
+    },
+    "run2-job.json": {
+      "status": "terminal",
+      "exitCode": 0,
+      "processExitCodes": [],
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build",
+        "-c",
+        "release",
+        "-Xswiftc",
+        "-enable-testing",
+        "--filter",
+        "OriginalMacRuntimeLoadingTests/testNetworkInputRetryKeepsReceiptsWithoutRepeatingSocketIO"
+      ]
+    },
+    "build3-job.json": {
+      "status": "terminal",
+      "exitCode": 0,
+      "processExitCodes": [],
+      "command": [
+        "swift",
+        "build",
+        "--package-path",
+        "native",
+        "--scratch-path",
+        "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build",
+        "-c",
+        "release",
+        "-Xswiftc",
+        "-enable-testing",
+        "--product",
+        "NTSDNative"
+      ]
+    },
+    "probe1/job.json": {
+      "status": "terminal",
+      "exitCode": null,
+      "processExitCodes": [
+        0,
+        0
+      ],
+      "command": null
+    },
+    "probe2/job.json": {
+      "status": "terminal",
+      "exitCode": null,
+      "processExitCodes": [
+        0,
+        0
+      ],
+      "command": null
+    },
+    "match1/job.json": {
+      "status": "terminal",
+      "exitCode": null,
+      "processExitCodes": [
+        0,
+        0
+      ],
+      "command": null
+    },
+    "match2/job.json": {
+      "status": "terminal",
+      "exitCode": null,
+      "processExitCodes": [
+        0,
+        0
+      ],
+      "command": null
+    },
+    "offline-vs-job.json": {
+      "status": "terminal",
+      "exitCode": 0,
+      "processExitCodes": [],
+      "command": [
+        "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+        "--original",
+        "--mute-music",
+        "--mute-sounds",
+        "--overlay",
+        "/var/folders/5q/vc1kqfq132l48w03831tcfz00000gn/T/ntsd-e2e-feifyy14/overlay",
+        "--virtual-clock",
+        "123456789",
+        "8",
+        "--script-clock",
+        "gameplay",
+        "--body-captures",
+        "/Volumes/X5/ntsd-2.4-research/network-app-match-20261002/offline-captures/vs/captures",
+        "--script",
+        "20 click 350 230; 60 click 402 218; 100 key 74; 150 key 74; 175 key 68; 200 key 74; 225 key 74; 250 key 100; 275 key 39; 300 key 39; 325 key 39; 350 key 39; 375 key 39; 405 key 100; 430 key 100; 1000 key 68; 1030 key 74; 1150 key 74; 1250 key 74; 1320 key 83; 1345 key 74; 1370 key 74; 1395 key 87; 1420 key 87; 1445 key 87; 1475 key 74; 1650 hold 65 70; 1675 hold 65 22; 1697 key 74; 1709 hold 65 48; 1735 key 74; 1747 hold 65 33; 1765 hold 65 53; 1800 hold 65 59; 1819 key 74; 1831 key 74; 1843 hold 83 12; 1853 key 75; 1868 hold 68 84; 1885 hold 68 55; 1897 hold 83 10; 1907 hold 83 37; 1917 key 75; 1932 hold 68 56; 1955 key 74; 1967 hold 68 25; 1979 hold 68 55; 2005 key 74; 2017 key 74; 2029 hold 68 45; 2041 key 74; 2053 hold 68 76; 2071 hold 68 61; 2101 key 74; 2113 hold 87 36; 2123 hold 65 55; 2157 key 74; 2169 hold 87 20; 2179 hold 83 24; 2189 hold 68 30; 2227 hold 83 33; 2237 key 74; 2249 hold 68 56; 2269 hold 83 37; 2279 hold 87 19; 2289 key 74; 2301 hold 83 14; 2311 hold 68 40; 2331 key 74; 2343 hold 68 41; 2364 key 75; 2379 hold 68 32; 2403 hold 83 39; 2413 hold 65 27; 2424 key 74; 2436 key 74; 2448 hold 87 27; 2458 key 74; 2470 hold 65 35; 2506 key 74; 2518 key 75; 2533 key 74; 2545 hold 83 16; 2555 hold 68 82; 2566 hold 68 51; 2596 hold 87 25; 2606 hold 65 52; 2624 hold 65 49; 2647 hold 87 20; 2657 hold 68 34; 2685 key 74; 2697 hold 87 25; 2707 hold 68 46; 2746 hold 87 20; 2756 hold 68 60; 2792 key 74; 2804 hold 68 54; 2824 hold 83 12; 2834 hold 83 40; 2844 key 74; 2856 hold 68 36; 2890 hold 87 37; 2900 hold 68 79; 2928 key 74; 2940 key 74; 2952 hold 65 47; 2991 hold 68 52; 3004 hold 68 48; 3031 hold 65 40; 3062 key 74; 3074 key 75; 3089 key 74; 3101 key 75; 3116 hold 83 10; 3126 hold 68 34; 3151 key 74; 3163 hold 65 25; 3184 hold 68 21; 3203 key 75; 3218 key 75; 3233 hold 68 78; 3255 hold 68 69; 3272 key 75; 3287 hold 83 13; 3297 hold 68 66; 3323 hold 83 37; 3333 key 74; 3345 key 74; 3357 key 74; 3369 hold 83 39; 3379 key 75; 3394 key 74; 3406 key 75; 3421 hold 65 42; 3453 hold 68 63; 3471 key 74; 3483 hold 87 10; 3493 key 74; 3505 hold 65 82; 3540 key 74; 3552 key 74; 3564 hold 65 72; 3601 hold 65 43; 3638 key 74; 3650 key 74; 3662 key 74; 3674 hold 68 59; 3713 hold 83 29; 3723 key 74; 3735 hold 68 66; 3766 hold 68 30; 3795 hold 68 42; 3814 hold 83 16; 3824 key 74; 3836 hold 68 31; 3848 key 74; 3860 hold 87 20; 3870 key 74; 3882 hold 68 22; 3911 hold 65 65; 3946 key 75; 3961 hold 65 83; 3992 key 74; 4004 hold 87 15; 4014 key 74; 4026 key 74; 4038 key 74; 4050 key 74; 4062 key 75; 4077 hold 68 71; 4115 key 74; 4127 hold 87 19; 4137 hold 68 61; 4164 key 74; 4176 hold 83 26; 4186 key 74; 4198 key 75; 4213 hold 68 21; 4231 hold 68 78; 4263 key 74; 4275 key 75; 4290 key 74; 4302 hold 65 39; 4328 hold 68 64; 4357 key 75; 4372 hold 83 25; 4382 hold 68 28; 4396 hold 87 19; 4406 hold 65 40; 4428 key 75; 4443 key 74; 4455 key 74; 4467 hold 83 10; 4477 key 74; 4489 hold 65 46; 4500 hold 87 13; 4510 hold 68 56; 4539 hold 87 33; 4549 hold 68 36; 4587 key 74; 4599 hold 68 20; 4632 hold 87 26; 4642 key 74; 4654 hold 68 81; 4680 hold 65 40; 4717 hold 83 27; 4727 key 74; 4739 hold 83 15; 4749 hold 68 23; 4767 hold 87 19; 4777 hold 87 12; 4787 hold 68 21; 4804 hold 65 81; 4843 key 74; 4855 hold 68 68; 4875 key 75; 4890 key 75; 4905 key 74; 4917 hold 68 65; 4936 hold 83 29; 4946 key 74; 4958 key 75; 4973 hold 68 59; 5008 hold 83 35; 5018 key 75; 5033 hold 83 38; 5043 hold 68 24; 5072 hold 68 65; 5111 hold 68 25; 5136 key 74; 5148 key 75; 5163 key 74; 5175 hold 68 29; 5195 key 75; 5210 hold 83 13; 5220 key 74; 5232 hold 87 12; 5242 key 75; 5257 key 74; 5269 key 74; 5281 hold 68 24; 5291 key 74; 5303 hold 68 51; 5341 key 74; 5353 hold 68 69; 5383 key 74; 5395 hold 68 83; 5407 key 75; 5422 hold 83 27; 5432 key 74; 5444 key 75; 5459 key 74; 5471 key 74; 5483 hold 65 81; 5521 key 74; 5533 hold 83 34; 5543 hold 83 20; 5553 key 75; 5568 hold 68 85; 5580 hold 68 56; 5611 hold 87 29; 5621 key 75; 5636 hold 65 31; 5668 hold 68 47; 5706 key 74; 5718 key 75; 5733 key 74; 5745 hold 68 46; 5760 hold 68 32; 5773 key 75; 5788 hold 68 39; 5827 key 74; 5839 key 74; 5851 hold 87 34; 5861 key 75; 5876 hold 65 53; 5887 key 74; 5899 key 74; 5911 key 74; 5923 key 75; 5938 key 75; 5953 hold 87 15; 5963 key 75; 5978 hold 65 40; 6009 hold 87 31; 6019 hold 83 13; 6029 key 75; 6044 key 75; 6059 hold 68 89; 6084 key 74; 6096 hold 68 71; 6132 hold 65 43; 6146 hold 68 50; 6167 key 74; 6179 hold 68 64; 6201 hold 68 34; 6241 hold 68 43; 6268 hold 65 35; 6284 hold 68 61; 6324 key 74; 6336 hold 83 35; 6346 key 74; 6358 hold 65 68; 6387 key 74; 6399 hold 68 37; 6423 hold 68 73; 6439 hold 68 26; 6477 hold 65 87; 6488 hold 68 50; 6517 hold 65 22; 6539 key 74; 6551 key 75; 6566 hold 65 37; 6581 key 74; 6593 hold 68 60; 6620 key 74; 6632 hold 68 89; 6663 hold 83 18; 6673 key 74; 6685 hold 87 27; 6695 hold 68 45; 6720 key 74; 6732 hold 68 45; 6747 hold 68 37; 6776 key 75; 6791 key 74; 6803 hold 65 26; 6838 key 75; 6853 hold 65 53; 6882 hold 68 55; 6898 key 74; 6910 key 75; 6925 key 74; 6937 key 75; 6952 hold 65 56; 6991 key 74; 7003 hold 68 66; 7015 hold 68 30; 7050 key 74; 7062 hold 83 16; 7072 key 75; 7087 hold 87 16; 7097 key 74; 7109 key 74; 7121 hold 65 21; 7159 hold 68 86; 7185 key 74; 7197 hold 68 63; 7228 hold 65 85; 9000 key 74; 9100 capture /Volumes/X5/ntsd-2.4-research/network-app-match-20261002/offline-captures/vs/captures/selection.png; 9200 exit"
+      ]
+    }
+  },
+  "open": [
+    "N5 menu exit/cancellation/disconnection and original shutdown/error handling",
+    "Independent integration/comparator review (no self-review acceptance)",
+    "Actual Windows interoperability",
+    "Clean Mac/device checks"
+  ],
+  "EXEEnvelopeRecalculated": false
+}

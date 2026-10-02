@@ -57,6 +57,17 @@ import UniformTypeIdentifiers
     /// Playback's folder): the app's handler, given the milliseconds of the
     /// screen's Sleep before it. Set by the app, as for the front menu.
     public var shell: (([UInt8],[UInt8],UInt32) throws -> Void)?
+    /// The same live sockets used by the front-menu handshake.
+    public var network: OriginalMacRuntimeNetwork?
+    public var messageBox: (([UInt8],[UInt8],UInt32) throws -> Int32)?
+    public var postMessage: ((UInt32,UInt32,UInt32) -> Void)?
+    private struct ControlRequest: OriginalExchangeRequest {
+        let value: OriginalInputControlRequest
+        func accepts(_ response: OriginalInputControlResponse) -> Bool { true }
+    }
+    private typealias ControlExchange = OriginalRequestExchange<ControlRequest,Void>
+    private var controlDelivery: (sequence:UInt64,exchange:ControlExchange)?
+    private var controlCursor: ControlExchange.Cursor?
     /// Replay files the platform could not write; the original's failing
     /// fopen/fwrite leaves the game running (declared).
     public private(set) var failedReplayWrites: [String] = []
@@ -175,24 +186,58 @@ import UniformTypeIdentifiers
                 .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.allocate(count) },bitmap:{ try self.bitmap($0) })
             })
             var input = try LoadedMenu.Input(pending:pooled,arithmeticPrecision:.bits53),environment: Void = ()
-            let ready = try input.advance(environment:&environment,controlBoundary:{ q,_ in throw Boundary.unexpected("input control \(q)") })
+            try self.beginInputControl()
+            let ready = try input.advance(environment:&environment,controlBoundary:{ q,_ in try self.control(q) })
             self.continuationGraphics = ready.graphics.count
             return .init(menu:try self.loadedMenu(ready,target:common.target))
         },serve:{ permit,exchange in self.counts.audioRequests += 1; try service.serve(permit,on:exchange) })
         return outcome
     }
-    /// Winsock policy for a local game: WSAStartup was never called, so socket
-    /// requests fail with SOCKET_ERROR and write nothing. Declared, unobserved.
+    /// One receipt journal per owned input call. A failed Core attempt can
+    /// recompute against the same replies; IO already serviced is not repeated.
+    /// The completed outer commit releases the journal instead of accumulating
+    /// a session-long log. Offline calls keep the existing failed-socket policy.
+    func beginInputControl() throws {
+        guard network?.winsock.started == true else { return }
+        let sequence = started.host.committedSequence
+        if controlDelivery?.sequence != sequence { controlDelivery = (sequence,ControlExchange()) }
+        guard let exchange = controlDelivery?.exchange else { throw Boundary.missing("control exchange") }
+        controlCursor = try exchange.inlineCursor { [unowned self] permit in
+            try exchange.beginService(permit)
+            do { try exchange.answer(permit,response:try self.performControl(permit.request.value)) }
+            catch { try exchange.fail(permit,diagnostic:String(reflecting:error));throw error }
+        }
+    }
     func control(_ q: OriginalInputControlRequest) throws -> OriginalInputControlResponse {
         counts.controls += 1
         switch q.kind {
-        case .asyncSelect,.ioctl: return .init(result:-1)
+        case .asyncSelect,.ioctl,.send,.receive,.message:
+            if var cursor = controlCursor {
+                let response = try cursor.response(for:.init(value:q));controlCursor = cursor;return response
+            }
+        default:break
+        }
+        return try performControl(q)
+    }
+    private func performControl(_ q: OriginalInputControlRequest) throws -> OriginalInputControlResponse {
+        switch q.kind {
+        case .asyncSelect,.ioctl,.send,.receive:
+            if let network { return try network.answer(q) }
+            guard q.kind == .asyncSelect || q.kind == .ioctl else { throw Boundary.unexpected("offline input control \(q.kind)") }
+            return .init(result:-1)
+        case .message:
+            guard q.arguments.count == 4,q.arguments[0] == 0,q.arguments[2] == 0x447850,q.arguments[3] == 0,q.data.isEmpty,
+                  let messageBox else { throw Boundary.unexpected("control MessageBoxA") }
+            return .init(result:try messageBox(OriginalMacRuntimeNetwork.controlError(q.arguments[1]),Array("Error".utf8),0))
+        case .postMessage:
+            guard q.arguments.count == 4,q.arguments[1] == 0x10,q.arguments[2] == 0,q.arguments[3] == 0 else { throw Boundary.unexpected("control PostMessageA") }
+            return .init(result:1) // Queued only when the enclosing batch commits.
+        case .free:return .init() // Core owns the freed record; heap.collect adopts it.
         // Hotkey (416c70..416fad), playback-restore and input-reset notices:
         // Core performs their effects; nothing is asked of the platform.
         // A hotkey's sound request is a notice and its buffer methods play
         // when the batch commits (their results are ignored).
         case .action,.restorePlayback,.inputReset,.soundRequest,.method: return .init()
-        default: throw Boundary.unexpected("input control \(q.kind)")
         }
     }
     func loadedMenu(_ ready: LoadedMenu.Input.PendingContinuation,target: UInt32) throws -> LoadedMenu.Outcome {
@@ -256,7 +301,8 @@ import UniformTypeIdentifiers
     /// cycle's input step, then either gameplay (retained as gameplay input) or
     /// the loaded menu; no catalog work repeats.
     public func runCycle() throws -> Host.LoadedOutcome {
-        try started.host.prepareLoadedUntilBoundary(prepare:{ context,_ in
+        try beginInputControl()
+        return try started.host.prepareLoadedUntilBoundary(prepare:{ context,_ in
             guard var cycle = context.cycle else { throw Boundary.missing("cached loaded cycle") }
             var unit: Void = ()
             let ready = try cycle.advance(environment:&unit,dispatch:{ d,match,_ in
@@ -394,6 +440,9 @@ import UniformTypeIdentifiers
             default: throw Boundary.unexpected("tail \(request.kind)")
             }
         })
+        if case .committed = outcome,let exchange = controlDelivery?.exchange,let cursor = controlCursor {
+            _ = try exchange.finish(cursor);controlCursor = nil;controlDelivery = nil
+        }
         while let batch = try started.host.takeCommitted() {
             guard case .loaded(let commit) = batch.contents else { continue }
             var slept: UInt32 = 0
@@ -424,6 +473,9 @@ import UniformTypeIdentifiers
             if let sounds {
                 let music = started.runtime.music
                 for call in try OriginalMacSoundEffects.calls(commit.operations,music:{ music.interface($0) != nil }) { try sounds.perform(call) }
+            }
+            for case .preceding(.control(let q,_)) in commit.operations where q.kind == .postMessage {
+                postMessage?(q.arguments[1],q.arguments[2],q.arguments[3])
             }
         }
         if case .committed = outcome, !pendingReplays.isEmpty {

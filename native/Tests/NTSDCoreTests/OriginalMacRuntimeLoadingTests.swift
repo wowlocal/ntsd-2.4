@@ -6,6 +6,66 @@ import XCTest
 /// START → loading on runtime providers with inline audio delivery.
 @MainActor final class OriginalMacRuntimeLoadingTests: XCTestCase {
     enum Stop: Error { case limit }
+    /// Actual localhost IO is performed once even if the owned input attempt
+    /// is recomputed. Short receives retain their original boundaries/replies.
+    func testNetworkInputRetryKeepsReceiptsWithoutRepeatingSocketIO() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-control-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try OriginalMacRuntimeMenuTests().startup(root)
+        let loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:package,clock:{ 5000 })
+        let network = OriginalMacRuntimeNetwork(),w = network.winsock
+        var notes: [OriginalMacWinsock.Notification] = []
+        w.post = { notes.append($0) }
+        loading.network = network
+        XCTAssertEqual(w.startup(0x101).result,0)
+        defer { _ = w.cleanup() }
+        let listener = w.socket(family:AF_INET,type:SOCK_STREAM,protocol:IPPROTO_TCP)
+        XCTAssertEqual(w.bind(listener,address:0x0100007f,port:0),0)
+        XCTAssertEqual(w.listen(listener,backlog:1),0)
+        XCTAssertEqual(w.asyncSelect(listener,window:7,message:0x401,events:0x38),0)
+        let peer = w.socket(family:AF_INET,type:SOCK_STREAM,protocol:IPPROTO_TCP)
+        XCTAssertEqual(w.connect(peer,address:0x0100007f,port:try XCTUnwrap(w.boundPort(listener))),0)
+        let deadline = Date().addingTimeInterval(3)
+        while notes.isEmpty && Date() < deadline { RunLoop.main.run(until:Date().addingTimeInterval(0.01)) }
+        XCTAssertEqual(notes,[.init(window:7,message:0x401,socket:listener,lParam:8)])
+        let server = w.accept(listener)
+        guard server != OriginalMacWinsock.invalidSocket else { return XCTFail("Own listener was not ready: \(w.lastError)") }
+        XCTAssertEqual(w.close(listener),0)
+        let outgoing = Array(UInt8(0)..<22),incoming = Array(UInt8(80)..<102)
+        let requests: [OriginalInputControlRequest] = [
+            .init(.asyncSelect,[listener,7,0,0]),.init(.asyncSelect,[server,7,0,0]),
+            .init(.ioctl,[listener,0x8004667e,0]),.init(.ioctl,[server,0x8004667e,1],[[0,0,0,0]]),
+            .init(.send,[server,22,0],[outgoing]),.init(.receive,[server,0,22,0]),
+            .init(.receive,[server,10,12,0]),.init(.message,[0,0x4493b4,0x447850,0])]
+        var messages = 0
+        loading.messageBox = { text,caption,flags in
+            XCTAssertEqual(text,Array("Connection Lost!".utf8));XCTAssertEqual(caption,Array("Error".utf8));XCTAssertEqual(flags,0)
+            messages += 1;return 1
+        }
+        try loading.beginInputControl()
+        var replies: [OriginalInputControlResponse] = []
+        for (index,request) in requests.enumerated() {
+            if index == 5 { XCTAssertEqual(w.send(peer,Array(incoming.prefix(10))),10) }
+            if index == 6 { XCTAssertEqual(w.send(peer,Array(incoming.suffix(12))),12) }
+            replies.append(try loading.control(request))
+        }
+        XCTAssertEqual(replies.map(\.result),[-1,0,-1,0,22,10,12,1])
+        XCTAssertEqual(replies[5].bytes+replies[6].bytes,incoming)
+        XCTAssertEqual(w.receive(peer,capacity:22).bytes,outgoing)
+        XCTAssertEqual(network.controlRequestCount,7);XCTAssertEqual(messages,1)
+        // A failed enclosing calculation retries the same call at the same Host
+        // sequence. No peer sends again, so a repeated blocking recv would hang.
+        try loading.beginInputControl()
+        XCTAssertEqual(try requests.map { try loading.control($0) },replies)
+        XCTAssertEqual(network.controlRequestCount,7);XCTAssertEqual(messages,1)
+        XCTAssertEqual(network.sentControlPackets,1);XCTAssertEqual(network.receivedControlBytes,22)
+        XCTAssertEqual(w.setNonBlocking(peer,true),0)
+        XCTAssertEqual(w.receive(peer,capacity:22).result,OriginalMacWinsock.socketError)
+        XCTAssertEqual(w.lastError,OriginalMacWinsock.wouldBlock)
+        // A service failure marks this journal terminal rather than retrying IO.
+        XCTAssertThrowsError(try loading.control(.init(.send,[server,23,0],[outgoing])))
+        XCTAssertThrowsError(try loading.beginInputControl())
+    }
     func testInlineCursorRecordsReceiptsAndRetriesReuseThem() throws {
         typealias E = OriginalStartupRequestExchange
         let e = E(); var served = 0

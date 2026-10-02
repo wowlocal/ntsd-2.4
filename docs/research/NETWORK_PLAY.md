@@ -5,17 +5,108 @@ the N3 addendum below records its new bounded original selector-4 comparison.
 
 ## Current next step (2026-10-02)
 
-N2 and N3 are implemented and checked below; continue N4 game input exchange
-using the same live service and the recovered input-control contract.
+N1–N4 are implemented and checked in their declared scopes below. Continue N5
+exit/disconnection through the same retained live service.
 The earlier blanket hold on N2–N5 was an unsupported interpretation of the saved
 Claude incident and has been removed at the user's request. The exact withheld
 operation remains unknown; the incident record is preserved without treating it
 as evidence that all network integration is prohibited. No new safety refusal
 occurred during the N1 checks. General WORKFLOW refusal handling still applies.
 
-Next result: both connected apps enter selection, exchange original input
-packets and complete the Naruto/Sasuke District match to Summary. N5 exit and
-disconnect behavior follows. N1–N3 checks do not establish whole-match acceptance.
+Two native apps now complete the Naruto/Sasuke District match to visible
+Summary with checked transport, shared state/RNG and role-aware recordings.
+N5 exit/disconnection, independent review and Windows interoperability are open.
+
+## N4 match integration (2026-10-02)
+
+Continue the live N2/N3 session into the existing INPUT_CONTROL contract:
+the same owned Mac service answers cancellation, FIONBIO, send22 and receive
+fragments. Core retains role-dependent ordering, packet contents, checks and
+error shutdown. No new original execution or source rule is proposed. The
+fixed error strings were read from the pinned EXE into the task artifact
+`input-error-strings.json`; the trailing space in44939c is preserved.
+
+Platform effects use one existing OriginalRequestExchange receipt journal per
+owned input call/Host sequence. A recalculation consumes its previous replies;
+the successful enclosing commit releases them. MessageBox is answered once,
+and shutdown PostMessage is queued at commit. Normal play stores no packet log.
+An explicit app trace streams actual socket replies and committed World/Actor
+digests, RNG indices, arena and result counters for two-process checks.
+`--loaded-script` supplies normal window input on a loaded-cycle clock;
+it does not modify game state. `--exit-after-summary` is a diagnostic stop.
+
+Finite checks: a real localhost input-provider test covers short10+12 receives,
+retry without duplicate sends/receives or dialogs, and terminal service failure;
+existing runtime loading tests cover offline loading/cached cycles. Then two
+native processes use UI host/client connection, Naruto/Sasuke selection and
+District, run to Summary and compare transported packets, RNG and shared game
+state/results. Any role-dependent difference must be explained by existing
+source evidence before claiming synchronization. A bounded preliminary UI
+probe establishes selection inputs; it cannot establish match acceptance.
+Retain old input-control corpora and all prior failures unchanged. Core's
+input-control algorithm is unchanged; no repeated expensive corpus capture.
+
+Task-owned X5 outputs: `network-app-match-20261002`, verified APFS UUID
+3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548; scope records89.37GiB free,12GiB new
+output bound,40GiB X5/6GiB internal reserves. Reuse the terminal
+network-service-reset build cache. Build900s/test300s/probe600s limits;
+candidate pins and separate failure/run IDs retained. This increment changes
+MacRuntimeNetwork, MacRuntimeLoading, OriginalRuntimeLaunch and its runtime
+loading tests. Independent review is open. N5 exit/disconnection and actual
+Windows interoperability remain separate.
+
+### N4 checked result
+
+The same original22-byte control exchanges now drive two live apps from mode
+selection through Naruto(id2)/Sasuke(id11), zero computers and District(arena0)
+to Summary. In `match2`, both processes returned0 after1672 loaded cycles,
+1070 gameplay bodies and836 packets in each direction. Both visible summaries
+show P1/Naruto1 kill,560 attack,0 HP lost, Win(Alive); P5/Sasuke0 kills,
+560 HP lost, Lose(Dead),34 seconds. Every transmitted packet matches the
+opposite receive; the client sends first and the host receives first.
+
+All1672 full World byte/mask records, all400 Actor masks and every Actor byte
+outside original spark coordinates agree at every committed cycle. Actual
+differences are only Actor4+370/+398, first at cycle880, maximum8 pixels.
+These are CRT-random X/Y spark offsets, per [WORLD_HITS](WORLD_HITS.md)
+43187a..431ac4 and [STATE_LAYOUT](STATE_LAYOUT.md), separate from synchronized
+417170 table RNG. Both app startup seeds intentionally differ; no source rule
+or byte was changed to make the processes equal. RNG indices/counters, HP,
+frames, arena, sequence, result timer and winner all agree. Raw unnormalized
+records remain available for review; the comparison's declared scope is
+shared game state plus these identified local visual differences.
+
+Both files decode to6491672 bytes. All1027 recorded10-byte commands reconstruct
+exactly from actual packets and the local/remote seat mapping. The4104 differing
+bytes are precisely bit0 of remote commands in phase0: local input ORs seven
+buttons into zero commands, remote input copies the whole received byte whose
+template bit0 is1. This is [LOCAL_INPUT](LOCAL_INPUT.md) / [RECEIVED_INPUT](RECEIVED_INPUT.md),
+not a replay corruption fix. Every other replay byte, including result stats,
+RNG, names and HP checksums, matches. Raw files and decodes are not normalized.
+
+Checks and preserved corrections:
+- `run1`: build190.83s; generic receipt and offline loading/cached-cycle tests
+  pass; the new test incorrectly called nonblocking accept before FD_ACCEPT,
+  then closing the listener reset its peer. Preserve the eight assertions.
+- `run2`: only that new test changed to await the owned notification; passes
+  in1.905s after178.64s build. It checks10+12-byte receives, no duplicate IO or
+  dialog on retry, and terminal failed service. Platform/Core inputs unchanged.
+- `probe1`:35 loaded cycles; `probe2`:650 cycles including48 gameplay bodies,
+  all observed fields equal, normal exits. These established UI input timing.
+- `match1`: game finished and results agreed, but full Actor hashes differed
+  at first hit, and held Attack skipped Summary at timer350. Preserve it as
+  diagnostic, not the accepted Summary capture. `match2` ends attacks after
+  the killing press and captures full owned records for every cycle. The app
+  diagnostic now requires144<=timer<350. Build3 passed107.08s. No Core changes.
+- The existing offline VS e2e comparator passes all its saved exit, milestones,
+  progress, image and recording hashes at the same display scale. No reference
+  updated. Three unique runtime-loading tests are green across run1/run2.
+
+[Evidence](../evidence/network-app-match-20261002.json) records code/fixture,
+artifact and binary hashes, commands, terminal jobs and comparison scope.
+Independent review of integration and comparison remains open; author analysis
+is not independent review. N5 is the next increment. No new EXE execution or
+Windows observation; EXE envelope not recalculated.
 
 ## N2 host integration (2026-10-02)
 
@@ -360,12 +451,12 @@ working code, so the goal's whole-match criterion is not satisfied:
 | --- | --- | --- |
 | N2 host greeting from the app | Menu listener and 0x401 consumer implemented; 17 tests and separate native-process greeting probe pass | Independent review remains open; use this retained session for N3/N4 |
 | N3 client connects through the UI | Implemented through iteration permits; two native processes reach World2 over127.0.0.1 with complementary roles/seats and identical RNG | Independent review open; retain this session for N4 |
-| N4 synchronized match to Summary | The loading control provider still returns -1 for asyncSelect/ioctl and has no send/receive implementation | Live session state from N2/N3, game input exchange, then two-app synchronization evidence |
+| N4 synchronized match to Summary | Two native apps complete1070 gameplay bodies to visible Summary; transport, World, shared Actor state/RNG and role-aware replays checked | Independent review open; original local CRT spark coordinates are declared separately |
 | N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE notification route is implemented; refused client connect is checked | Wire exit requests and check actual disconnection/exit scenarios |
 | Offline behavior and Windows comparison | Prior offline acceptance has its own pinned inputs; new service tests execute no app. Windows was not observed | Recheck affected app paths after integration; Windows interoperability stays separately open |
 
-The next implementation increment is N4, as described above. Repeating successful
-N1–N3 tests or offline soaks would not supply the missing app integration. The
+The next implementation increment is N5, as described above. Repeating successful
+N1–N4 tests or offline soaks would not supply the missing app integration. The
 earlier requirement for external clarification before any N2–N5 work was based
 on an unsupported expansion of the unknown refusal scope and is withdrawn.
 

@@ -1,4 +1,5 @@
 import AppKit
+import CryptoKit
 import GameController
 import NTSDCore
 import NTSDMacPlatform
@@ -27,6 +28,12 @@ import NTSDMacPlatform
 /// controlled two-process checks. All socket IO remains real localhost TCP.
 /// `--network-ready-state PATH` records owned state once at the first connected
 /// loading boundary; `--exit-after-network-ready` stops there before loading.
+/// `--loaded-script "N action args; ..."` uses completed loaded cycles as its
+/// clock, independently of the front-menu handshake's scripted iterations.
+/// `--network-trace PATH` streams socket replies and committed loaded-state
+/// digests; `--summary-capture PATH --exit-after-summary` ends on the result.
+/// `--network-state-cycles N,N` adds full owned Actor/global bytes and masks
+/// to those trace checkpoints when diagnosing a state difference.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -39,6 +46,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private var cycles = 0, gameplayBodies = 0
     private var networkReadyRecorded = false
     private var script: [Int:[[String]]] = [:]
+    private var loadedScript: [Int:[[String]]] = [:]
+    private var networkTrace: FileHandle?
+    private var networkStateCycles: Set<Int> = []
     private var pressedModifiers: Set<UInt16> = []
     private var committed = 0, steps = 0, stopped = false, gameplayClock: (steps: Int,committed: Int)?,
         busy = 0.0, waited = 0
@@ -60,6 +70,15 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let words = entry.split(separator:" ").map(String.init)
                 if let n = words.first.flatMap({ Int($0) }),words.count > 1 { script[n,default:[]].append(Array(words.dropFirst())) }
             }
+        }
+        if let i = arguments.firstIndex(of:"--loaded-script"),i+1 < arguments.count {
+            for entry in arguments[i+1].split(separator:";") {
+                let words = entry.split(separator:" ").map(String.init)
+                if let n = words.first.flatMap({ Int($0) }),words.count > 1 { loadedScript[n,default:[]].append(Array(words.dropFirst())) }
+            }
+        }
+        if let i = arguments.firstIndex(of:"--network-state-cycles"),i+1 < arguments.count {
+            networkStateCycles = Set(arguments[i+1].split(separator:",").compactMap { Int($0) })
         }
         if let i = arguments.firstIndex(of:"--click-at"),i+3 < arguments.count,let n = Int(arguments[i+1]),
            let x = Int32(arguments[i+2]),let y = Int32(arguments[i+3]) { clickAt = (n,x,y) }
@@ -174,6 +193,15 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 if !arguments.contains("--no-network") {
                     let network = OriginalMacRuntimeNetwork(localAddresses:arguments.contains("--network-loopback") ? [0x0100007f] : nil); menu.network = network
                     network.winsock.post = { [weak menu] n in menu?.messages.post(n.message,n.socket,n.lParam) }
+                    if let i = arguments.firstIndex(of:"--network-trace"),i+1 < arguments.count {
+                        let url = URL(fileURLWithPath:arguments[i+1])
+                        try Data().write(to:url,options:.withoutOverwriting)
+                        networkTrace = try FileHandle(forWritingTo:url)
+                        network.observeControl = { [unowned self] q,r in
+                            try self.trace(["kind":"io","cycle":self.cycles,"request":q.kind.rawValue,
+                                "arguments":q.arguments,"data":q.data,"result":r.result,"bytes":r.bytes])
+                        }
+                    }
                 }
                 menu.messages.capturedJoysticks = UInt32(joystickCount)
                 if !arguments.contains("--script") && !controllers.isEmpty {
@@ -308,7 +336,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Default clock: committed message-loop iterations. `--script-clock all`
                 // counts every iteration, so input keeps flowing during gameplay ticks.
                 steps += 1
-                if let n = scriptStep(committedBranch:true) { try runScript(n,menu,started) }
+                if let n = scriptStep(committedBranch:true) { try runScript(n,menu,started,timeline:&script) }
                 // Hold the button across game ticks, as a player's click does.
                 if let click = clickAt,committed == click.count+15 { menu.messages.mouse(0x202,x:click.x,y:click.y,buttons:0) }
                 if let capture = captureAfter,committed == capture.count {
@@ -328,7 +356,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 if try recordNetworkReady(started,menu) { return }
                 let begin = Date(),first = loading == nil
                 steps += 1
-                if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started) }
+                if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started,timeline:&script) }
+                try runScript(cycles,menu,started,timeline:&loadedScript)
                 if first {
                     loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:try OriginalApplicationStartupInputs.bundled(),
                                                                     clock:{ [unowned self] in try self.clock() })
@@ -336,6 +365,9 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     loading?.stageCheckpoints = arguments.contains("--stage-checkpoints")
                     loading?.sounds = sounds
                     loading?.shell = menu.messages.shell
+                    loading?.network = menu.network
+                    loading?.messageBox = menu.messages.messageBox
+                    loading?.postMessage = { [weak menu] message,wParam,lParam in menu?.messages.post(message,wParam,lParam) }
                     // Playback Recording: `--playback-file PATH` answers the open
                     // dialog once; scripted runs never show panels or alerts.
                     if let i = arguments.firstIndex(of:"--playback-file"),i+1 < arguments.count { loading?.playbackFile = arguments[i+1] }
@@ -380,6 +412,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                             "refusedReplays":loading.refusedReplayOpens,"failedReplayWrites":loading.failedReplayWrites,"heapBytes":started.runtime.heap.used,"uptime":ProcessInfo.processInfo.systemUptime])
                     }
                 }
+                try traceLoaded(started,menu,completed)
+                if try captureSummary(started) { return }
                 if loading.playbackDialogs.count > reportedDialogs {
                     for answer in loading.playbackDialogs[reportedDialogs...] { Self.emit(["event":"playbackDialog","file":answer ?? "","iterations":committed]) }
                     reportedDialogs = loading.playbackDialogs.count
@@ -451,23 +485,23 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
         default: return committedBranch ? committed : nil
         }
     }
-    @MainActor private func runScript(_ n: Int,_ menu: OriginalMacRuntimeMenu,_ started: OriginalMacRuntimeStartup.Started) throws {
-        for words in script[n] ?? [] {
+    @MainActor private func runScript(_ n: Int,_ menu: OriginalMacRuntimeMenu,_ started: OriginalMacRuntimeStartup.Started,timeline: inout [Int:[[String]]]) throws {
+        for words in timeline[n] ?? [] {
             switch words[0] {
             case "click" where words.count == 3:
                 guard let x = Int32(words[1]),let y = Int32(words[2]) else { continue }
                 menu.messages.mouse(0x200,x:x,y:y,buttons:0); menu.messages.mouse(0x201,x:x,y:y,buttons:1)
-                script[n+10,default:[]].append(["release",words[1],words[2]])
+                timeline[n+10,default:[]].append(["release",words[1],words[2]])
             case "release" where words.count == 3:
                 guard let x = Int32(words[1]),let y = Int32(words[2]) else { continue }
                 menu.messages.mouse(0x202,x:x,y:y,buttons:0)
             case "key" where words.count == 2,"keyup" where words.count == 2:
                 guard let vk = UInt32(words[1]),let key = Self.scriptKey(vk) else { continue }
-                if words[0] == "key" { menu.messages.key(key,down:true); script[n+10,default:[]].append(["keyup",words[1]]) }
+                if words[0] == "key" { menu.messages.key(key,down:true); timeline[n+10,default:[]].append(["keyup",words[1]]) }
                 else { menu.messages.key(key,down:false) }
             case "hold" where words.count == 3:
                 guard let vk = UInt32(words[1]),let n2 = Int(words[2]),let key = Self.scriptKey(vk) else { continue }
-                menu.messages.key(key,down:true); script[n+n2,default:[]].append(["keyup",words[1]])
+                menu.messages.key(key,down:true); timeline[n+n2,default:[]].append(["keyup",words[1]])
             case "joy" where words.count == 5:
                 // A joystick sample (id x y buttons), as joySetCapture reports one.
                 guard let id = UInt32(words[1]),let x = UInt32(words[2]),let y = UInt32(words[3]),let b = UInt32(words[4]) else { continue }
@@ -489,6 +523,57 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             default: Self.emit(["event":"scriptIgnored","entry":words.joined(separator:" ")])
             }
         }
+    }
+    private func trace(_ value: [String:Any]) throws {
+        guard let networkTrace else { return }
+        var data = try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]);data.append(10)
+        try networkTrace.write(contentsOf:data)
+    }
+    @MainActor private func traceLoaded(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu,_ completed: OriginalMacRuntimeLoading.Completed) throws {
+        guard networkTrace != nil,let model = started.host.snapshot.session?.loadedOwners?.match else { return }
+        let base = OriginalMatchPreparation.globalBase
+        func digest(_ records: [OriginalStateRecord]) -> String {
+            var hash = SHA256()
+            for record in records {
+                hash.update(data:Data(record.bytes));hash.update(data:Data(record.defined.map { $0 ? UInt8(1) : 0 }))
+            }
+            return hash.finalize().map { String(format:"%02x",$0) }.joined()
+        }
+        var fighters: [[String:Int]] = []
+        for seat in 0..<20 where try model.world.integer(at:4+seat,as:UInt8.self) != 0 {
+            let slot = Int(try model.world.integer(at:0x194+4*seat,as:UInt32.self))
+            guard model.actors.indices.contains(slot) else { throw OriginalStateError.invalidStorage("Network trace Actor binding") }
+            let actor = model.actors[slot],object = Int(try actor.integer(at:0x368,as:UInt32.self))
+            guard model.loadedObjects.indices.contains(object) else { throw OriginalStateError.invalidStorage("Network trace Object binding") }
+            fighters.append(["seat":seat,"actor":slot,"id":Int(try model.loadedObjects[object].header.integer(at:0x6f4,as:Int32.self)),
+                             "frame":Int(try actor.integer(at:0x70,as:Int32.self)),"hp":Int(try actor.integer(at:0x2fc,as:Int32.self))])
+        }
+        var value: [String:Any] = ["kind":"state","cycle":cycles,"completion":String(describing:completed),"bodies":gameplayBodies,
+            "worldSHA256":digest([model.world]),"actorsSHA256":digest(model.actors),"fighters":fighters,
+            "worldBytes":Data(model.world.bytes).base64EncodedString(),"worldDefined":Data(model.world.defined.map { $0 ? UInt8(1) : 0 }).base64EncodedString(),
+            "sentPackets":menu.network?.sentControlPackets ?? 0,"receivedBytes":menu.network?.receivedControlBytes ?? 0]
+        for (name,address) in [("mode",0x451160),("menu",0x44d020),("phase",0x450b90),("rngIndex",0x450bcc),
+                               ("rngCounter",0x450c34),("roundTimer",0x450bdc),("winner",0x450bf8),("arena",0x44fb6c),("inputSequence",0x450bf0)] {
+            value[name] = try model.globals.integer(at:address-base,as:Int32.self)
+        }
+        if networkStateCycles.contains(cycles) {
+            func record(_ r: OriginalStateRecord) -> [String:String] {
+                ["bytes":Data(r.bytes).base64EncodedString(),"defined":Data(r.defined.map { $0 ? UInt8(1) : 0 }).base64EncodedString()]
+            }
+            value["actors"] = model.actors.map(record);value["globals"] = record(model.globals)
+        }
+        try trace(value)
+    }
+    @MainActor private func captureSummary(_ started: OriginalMacRuntimeStartup.Started) throws -> Bool {
+        guard arguments.contains("--exit-after-summary"),gameplayBodies > 0,
+              let model = started.host.snapshot.session?.loadedOwners?.match,
+              try (144..<350).contains(model.globals.integer(at:0x450bdc-OriginalMatchPreparation.globalBase,as:Int32.self)) else { return false }
+        if let i = arguments.firstIndex(of:"--summary-capture"),i+1 < arguments.count {
+            try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:arguments[i+1]))
+        }
+        Self.emit(["event":"summary","cycles":cycles,"gameplayBodies":gameplayBodies,
+            "replayFiles":loading?.savedReplays.map { "\($0.path) \($0.bytes.count)" } ?? []])
+        stopped = true;NSApp.terminate(nil);return true
     }
     /// The current original window (replaced by an Alt+Enter recreation).
     private var gameWindow: UInt32 = 0

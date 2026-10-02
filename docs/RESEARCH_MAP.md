@@ -1,12 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
-[Network client integration](research/NETWORK_PLAY.md#n3-client-integration-2026-10-02):
-two native apps connect through their menus over real loopback TCP and reach
-World2 with checked roles, complementary seats, names and the same RNG table.
-The complete selector-4 screen matches 51 original caller cases in a new
-additive corpus; old menu comparisons remain. Independent implementation and
-comparator review stay open. N4 game input exchange and N5 exit/disconnection
-are next; this is not full-match or Windows interoperability acceptance.
+[Network match integration](research/NETWORK_PLAY.md#n4-match-integration-2026-10-02):
+two native apps connect through their menus, select Naruto/Sasuke on District
+and complete1070 gameplay bodies to visible Summary.836 packets each direction,
+all World/masks and shared Actor state/RNG/results agree. Only local CRT spark
+X/Y differ (original contract); all1027 replay commands reconstruct from wire
+bytes with the original local/remote bit0 distinction. Offline VS e2e passes.
+Independent integration/comparison review remains open. N5 exit/disconnection
+is next; actual Windows interoperability is a separate unobserved gate.
 
 [macOS full screen](research/APPLICATION_MAC_FULL_SCREEN.md): the standard
 toggle for the game window. The game keeps its held windowed geometry and the

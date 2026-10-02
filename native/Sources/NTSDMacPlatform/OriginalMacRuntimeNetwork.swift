@@ -13,11 +13,62 @@ public final class OriginalMacRuntimeNetwork {
     public private(set) var requests: [OriginalMainMenuEvent] = []
     public private(set) var notificationRequestCount = 0
     public private(set) var clientRequestCount = 0
+    public private(set) var controlRequestCount = 0
+    public private(set) var sentControlPackets = 0,receivedControlBytes = 0
+    /// Optional streaming diagnostic; normal play retains no packet history.
+    public var observeControl: ((OriginalInputControlRequest,OriginalInputControlResponse) throws -> Void)?
     /// An explicit local-address response for controlled app tests. The normal
     /// app uses the Mac resolver; the engine still selects and binds its address.
     private let localAddresses: [UInt32]?
     public init(localAddresses: [UInt32]? = nil) { self.localAddresses = localAddresses }
     public enum Boundary: Error, Equatable { case malformed(String) }
+
+    /// 41c5e5's platform operations. Core owns the22-byte packet loop and all
+    /// ordering/checks; each receive returns only the bytes the OS delivered.
+    public func answer(_ q: OriginalInputControlRequest) throws -> OriginalInputControlResponse {
+        let a = q.arguments
+        controlRequestCount += 1
+        func reply(_ value: OriginalInputControlResponse) throws -> OriginalInputControlResponse {
+            try observeControl?(q,value);return value
+        }
+        switch q.kind {
+        case .asyncSelect:
+            guard a.count == 4,a[2] == 0,a[3] == 0,q.data.isEmpty else { throw Boundary.malformed("control asyncSelect") }
+            return try reply(.init(result:winsock.asyncSelect(a[0],window:a[1],message:0,events:0)))
+        case .ioctl:
+            guard a.count == 3,a[1] == 0x8004667e else { throw Boundary.malformed("control ioctl") }
+            if a[2] == 0 {
+                guard q.data.isEmpty else { throw Boundary.malformed("control null ioctl") }
+                return try reply(.init(result:-1)) // Actual NULL argp is not a zero-valued word.
+            }
+            guard a[2] == 1,q.data == [[0,0,0,0]] else { throw Boundary.malformed("control ioctl value") }
+            return try reply(.init(result:winsock.setNonBlocking(a[0],false)))
+        case .send:
+            guard a.count == 3,a[1] == 22,a[2] == 0,q.data.count == 1,q.data[0].count == 22 else { throw Boundary.malformed("control send") }
+            let result = winsock.send(a[0],q.data[0]);sentControlPackets += 1
+            return try reply(.init(result:result))
+        case .receive:
+            guard a.count == 4,a[1] < 22,a[2] == 22-a[1],a[3] == 0,q.data.isEmpty else { throw Boundary.malformed("control receive") }
+            let result = winsock.receive(a[0],capacity:Int(a[2]));receivedControlBytes += result.bytes.count
+            return try reply(.init(result:result.result,bytes:result.bytes))
+        default: throw Boundary.malformed("control socket family")
+        }
+    }
+
+    /// Fixed strings in the pinned EXE, read statically for INPUT_CONTROL.
+    /// The two version messages intentionally differ by one trailing space.
+    static func controlError(_ address: UInt32) throws -> [UInt8] {
+        let text: String
+        switch address {
+        case 0x4493b4:text = "Connection Lost!"
+        case 0x44939c:text = "Version not matched! "
+        case 0x449324:text = "Version not matched!"
+        case 0x449384:text = "Synchronisation Error!"
+        case 0x449340:text = "Data Error! You and your opponent have different set of data files."
+        default:throw Boundary.malformed("control error text")
+        }
+        return Array(text.utf8)
+    }
 
     /// Original428420's replies. A successful lookup carries its first owned
     /// address; short/error receives are returned exactly as the OS supplies.
