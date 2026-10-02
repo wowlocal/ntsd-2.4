@@ -11,9 +11,10 @@ player and the match time are equal. The scenes at the Summary (bodies, items,
 positions) also look the same in the captures. This is the first check of
 whole-match equivalence rather than of single functions.
 
-The recordings could not be exchanged as they are. Each program rejected the
-other's files, because the catalog checksum differs (see below). The
-comparison used copies in which only that field was changed.
+At the time of the comparison the recordings could not be exchanged as they
+are: each program rejected the other's files because the catalog checksums
+differed (see below; now fixed). The comparison used copies in which only that
+field was changed.
 
 | Recording | Written by | Mode | Time | Result |
 | --- | --- | --- | --- | --- |
@@ -72,12 +73,14 @@ What is excluded so far:
   They account for the text/raw difference of 13 818, not for the gap.
 - **Locale.** `setlocale` is not imported.
 
-The gap of 781 476 is about 404 `<frame>` tokens (1934 each). The next step is
-a bisection on the real runtime. A clone with a reduced `data.txt` is launched
-under CrossOver, START is clicked, and 44f620 is read with `winedbg`; the
-port's per-file sums (`OriginalLoadedCatalog` onChild) give the other side.
-The driver is ready (`goal-100-20261002/checksum-bisect`). It needs an
-unlocked screen for the START click.
+**Resolved 2026-10-02** ([catalog checksum](APPLICATION_CATALOG_CHECKSUM.md), on
+main). With START set in memory and a `winedbg` breakpoint at the object
+loader, the original turned out to be ahead by exactly 5239 (`<frame_end>`) per
+object and 3749 (`layer_end`) per background. Its DAT decoder 4148a0 loses each
+file's final character to VC80's `fscanf("%c")` lookahead, so the loader counts
+the last token twice. The app now models this. A fresh Mac recording plays in
+the original as it is, and the app plays the original's recordings, with equal
+Summaries.
 
 ## Method
 
@@ -90,8 +93,8 @@ unlocked screen for the START click.
 - **Mac side.** The Mac recordings and their Summaries come from
   `tools/crossplay_replays.py` (virtual clock 123456789, the e2e scripts).
   Original recordings were played with `--playback-file` and body captures.
-- **Driving the original.** Cua Driver 0.32.0 does it without the user
-  (`tools/crossover_drive`):
+- **Driving the original.** Cua Driver 0.32.0 does it without the user, and
+  `winedbg` reads and writes its memory (`tools/crossover_drive`):
   - window screenshots;
   - a background click to place the game's own cursor, then a foreground click
     at the same point;
