@@ -1,0 +1,117 @@
+{
+ "app": "build/swiftpm-app/release/NTSDNative (work/goal-100 worktree, origin/main 2de19e8 + coverage tools)",
+ "appSHA256": "1039b554fcc300f540378d6d4e6c76e6b500981d42af23a3ed883cc433bc6b9f",
+ "scenarios": {
+  "vs": {
+   "exitCode": 0,
+   "replays": [
+    {
+     "path": "recording/20260101_010000_VS.lfr",
+     "bytes": 11044,
+     "sha256": "2e98755f4bf0ff9d71284fdedba6af1e59d3cf13fe44c5e6cd49ff9819b77ff6",
+     "copy": "docs/evidence/crossplay-replays-20261002/vs-20260101_010000_VS.lfr"
+    }
+   ],
+   "boundaries": [],
+   "captures": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png",
+    "b001800.png",
+    "selection.png"
+   ]
+  },
+  "war": {
+   "exitCode": 0,
+   "replays": [
+    {
+     "path": "recording/20260101_010000_Battle.lfr",
+     "bytes": 10180,
+     "sha256": "c25edba79c4fa2bef5e9647f9add9dbd58679a3f5aae99156ecfac5052ed8fb7",
+     "copy": "docs/evidence/crossplay-replays-20261002/war-20260101_010000_Battle.lfr"
+    }
+   ],
+   "boundaries": [],
+   "captures": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png",
+    "b001800.png",
+    "b002100.png",
+    "b002400.png",
+    "b002700.png",
+    "b003000.png",
+    "war-settings.png"
+   ]
+  },
+  "mission": {
+   "exitCode": 0,
+   "replays": [
+    {
+     "path": "recording/20260101_010000_Stage_1.lfr",
+     "bytes": 10068,
+     "sha256": "3242cd71d6ccbbfa40419099693060c4fe9c6b3184ea1364f0248cfe0e8ed76b",
+     "copy": "docs/evidence/crossplay-replays-20261002/mission-20260101_010000_Stage_1.lfr"
+    }
+   ],
+   "boundaries": [],
+   "captures": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png",
+    "b001800.png"
+   ]
+  },
+  "tournament": {
+   "exitCode": 0,
+   "replays": [
+    {
+     "path": "recording/20260101_010000_1on1_Prelminar.lfr",
+     "bytes": 10113,
+     "sha256": "5408b223054a7d817d623f6dd722be15cbd23ae7cb34a505b7d7a1dd80912727",
+     "copy": "docs/evidence/crossplay-replays-20261002/tournament-20260101_010000_1on1_Prelminar.lfr"
+    }
+   ],
+   "boundaries": [],
+   "captures": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png",
+    "b001800.png",
+    "menu.png",
+    "winner.png"
+   ]
+  },
+  "team-tournament": {
+   "exitCode": 0,
+   "replays": [
+    {
+     "path": "recording/20260101_010000_2on2_SemiFinal.lfr",
+     "bytes": 10174,
+     "sha256": "8369352a0bf58804f782ae75b5b8ef7d2396419046abef9de59101bda7842ad9",
+     "copy": "docs/evidence/crossplay-replays-20261002/team-tournament-20260101_010000_2on2_SemiFinal.lfr"
+    }
+   ],
+   "boundaries": [],
+   "captures": [
+    "b000300.png",
+    "b000600.png",
+    "b000900.png",
+    "b001200.png",
+    "b001500.png",
+    "b001800.png",
+    "menu.png",
+    "winner.png"
+   ]
+  }
+ },
+ "note": "Mac-side recordings for CROSSOVER_REPLAY_CROSSPLAY_PLAN.md; the mission run exits after 1,800 gameplay bodies, so its recording ends mid-stage."
+}
