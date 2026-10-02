@@ -14,9 +14,9 @@ import XCTest
         let driver: Driver,window: W.Service,controls: W.Controls,display: Backend,service: Service
     }
     struct Run { let setup: Setup,host: Driver.Host }
-    func setup(maximumBytes: Int = 256*1024*1024) throws -> Setup {
+    func setup(maximumBytes: Int = 256*1024*1024,rleHolesReadPaletteZero: Bool = false) throws -> Setup {
         let (driver,window,controls) = try W().setup()
-        let display = Backend(windows:window.backend,maximumBytes:maximumBytes)
+        let display = Backend(windows:window.backend,maximumBytes:maximumBytes,rleHolesReadPaletteZero:rleHolesReadPaletteZero)
         return .init(driver:driver,window:window,controls:controls,display:display,service:Service(driver:driver,backend:display))
     }
     func answer(_ permit: E.Permit,_ s: Setup) throws {
@@ -28,8 +28,8 @@ import XCTest
             s.controls.values.windowIndex += 1;s.controls.values.calls += 1
         } else { try W().service(permit,s.driver,s.window,s.controls) }
     }
-    func run(late: Bool) throws -> Run {
-        let s = try setup();var failed = false
+    func run(late: Bool,rleHolesReadPaletteZero: Bool = false) throws -> Run {
+        let s = try setup(rleHolesReadPaletteZero:rleHolesReadPaletteZero);var failed = false
         for _ in 0..<1000 {
             do {
                 switch try s.driver.resume(beforeCommit:{ _,_,_ in if late && !failed { throw W.P.Trial.late } }) {

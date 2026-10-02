@@ -114,6 +114,22 @@ retain their declared scopes. All owned processes are terminal.115 task files,
 24,890,527 bytes, are pinned on X5. Independent review remains open; no additional
 native soak is warranted by these results. EXE envelope was not recalculated.
 
+### Merge with the concurrent display fix
+
+The N5 commitfc98199 push found origin/main ahead at55fd92d (the separate
+[RLE-hole policy](APPLICATION_RLE_HOLES.md)). They merge without conflicts;
+no N5 implementation file changes. Remote code, evidence and its ten updated
+capture-reference files are retained byte for byte; the old N5 expectations
+and results remain pinned in its own evidence.
+
+[Merge verification](../evidence/network-merge-20261002.json): the combined
+release build passes18 affected bitmap/display and network-exit/audio-release
+methods. Explicit no-network UI and full offline VS e2e pass the remote-owned
+RLE-updated references. All643 source pins match. The change affects bitmap
+presentation, so repeating the unchanged network protocol/state runs is not
+required. Independent networking review and actual Windows interoperability
+remain open. The earlier RLE observation was under CrossOver, not Windows.
+
 ## N4 match integration (2026-10-02)
 
 Continue the live N2/N3 session into the existing INPUT_CONTROL contract:

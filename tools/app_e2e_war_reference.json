@@ -49,7 +49,7 @@
  "progress": [
   {
    "bodies": 300,
-   "capture": "30700667b22129153415c119ca78405731fecbfb6c2e7777a16a078de1f997de",
+   "capture": "100bfcbd26c8da37d26cbc908e20d692914feffa5f9787ac355ee5ffa0f2e7df",
    "characterAI": 5357,
    "cycles": 804,
    "iterations": 2539,
@@ -59,7 +59,7 @@
   },
   {
    "bodies": 600,
-   "capture": "912598df7b2e506d080ce8c2b13d88a8afa19461766db0458c0b6eedca674bc9",
+   "capture": "a405a33c660a114d6c5f47173281dd138dbbb5528b6e006ad86e1b7cffa3592c",
    "characterAI": 10186,
    "cycles": 1104,
    "iterations": 3476,
@@ -69,7 +69,7 @@
   },
   {
    "bodies": 900,
-   "capture": "818c5790ff7838a695efe1dd2dcc74a6f760f9050e0d2fcc36da4b92e1ed49c7",
+   "capture": "129060dfa33968585ba1f19a8cf9485616e5842e938cd8a554de5e78f0577ae2",
    "characterAI": 14170,
    "cycles": 1404,
    "iterations": 4414,
@@ -79,7 +79,7 @@
   },
   {
    "bodies": 1200,
-   "capture": "f5d27f816a707a9d78eb9c5316473f4d153e9a1a0a2fdf4aefec73374323b936",
+   "capture": "d2cb0f31e9e99804fef1120468fbe7b735193401284892f1d8bb62a5c3d1fdac",
    "characterAI": 16177,
    "cycles": 1704,
    "iterations": 5351,
@@ -89,7 +89,7 @@
   },
   {
    "bodies": 1500,
-   "capture": "6dc7ba1e83693b4974ea6a3f8180374ec2ce9e5b03d9a436969a7c4fc1dec2ae",
+   "capture": "97e4f3b6839e95fbcbde297c2fcf2c51d4168cba7f387a4b70283da7f1904148",
    "characterAI": 17744,
    "cycles": 2004,
    "iterations": 6289,
@@ -99,7 +99,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "427e620f095637ecbc66953e5adc2c7647f0fe78484624bae04b6dfbb181230a",
+   "capture": "211cda77be37b1b6c2508761edf131b6ed716aae236fc2d479f838f847015d60",
    "characterAI": 19549,
    "cycles": 2304,
    "iterations": 7226,
@@ -109,7 +109,7 @@
   },
   {
    "bodies": 2100,
-   "capture": "f729dbf61f6f728d89d00cdcdca1b9bc270cabaf92721615bc8b53ef233c8326",
+   "capture": "493e88d6d58b568dc6fdd03ae5ad05699978b8c00eb74c0e785f0ffd4d3b0d52",
    "characterAI": 20821,
    "cycles": 2604,
    "iterations": 8164,
@@ -119,7 +119,7 @@
   },
   {
    "bodies": 2400,
-   "capture": "2fd416b82e0e441ed246f81238af6697869bc9d75f043a4b479c62699662d1bb",
+   "capture": "415ada26b676a8c9234c96d4b859bbdf74108fe6477c81fe78302140c69f70e3",
    "characterAI": 22045,
    "cycles": 2904,
    "iterations": 9101,
@@ -129,7 +129,7 @@
   },
   {
    "bodies": 2700,
-   "capture": "18bfa2291f8995fe9ed588c9b0d5f3a86fabe1d785e0a276196f5cadeef268d7",
+   "capture": "66e9e33c9b22f89f2a6520e1e78c820312822612e247f3c95e009638f28f7908",
    "characterAI": 23245,
    "cycles": 3204,
    "iterations": 10039,
@@ -139,7 +139,7 @@
   },
   {
    "bodies": 3000,
-   "capture": "b8974a5e29a03c149edbbc9fca50eb8f1122fa82de78420287a26fe9430223a8",
+   "capture": "9a72fc7df09cf70a1d34925059c7a5a356f3d75e7d0d85f1ca5a5b893ff9f22f",
    "characterAI": 24445,
    "cycles": 3504,
    "iterations": 10976,

@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-02",
+  "recordedUTC": "2026-10-02T19:19:21.860217+00:00",
+  "status": "merge implementation and machine checks complete; independent network review open",
+  "parents": [
+    "fc981994219e51bf2c602b386123e766116d077d",
+    "55fd92d67e00947aa955bb6c7b673b835f5f4fb9"
+  ],
+  "cause": "N5 post-commit push rejected because concurrent RLE live display-policy correction advanced origin/main",
+  "implementation": "Clean Git merge; remote source/evidence and ten e2e reference files preserved byte for byte; all N5 implementation files unchanged",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/network-merge-20261002",
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-merge-20261002/artifact-manifest.json",
+    "SHA256": "8f02e09beed63bea06e2117056f46b097ee884f637a42ba1a6d7d1e344e6e639",
+    "files": 26,
+    "bytes": 2658607
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+    "SHA256": "1d7cc4c07155eec9f17099ee2cc8024085b92f0990d263e7089b02874d571970"
+  },
+  "sourcePins": {
+    "path": "candidate1-inputs.json",
+    "count": 643,
+    "verified": true
+  },
+  "referencePins": {
+    "tools/app_e2e_demo_reference.json": "f8c9c019a71d4d3161bc179eb5d4a629ac287441eeb07ae88d55f1ddabfb6006",
+    "tools/app_e2e_war_reference.json": "0d908071f3fdc6816497919ff2b98b6a74379f435a30b3cbb8987faf3e2aaa1a",
+    "tools/app_e2e_tournament_reference.json": "683d81ed3757547ac35d8ccb6a97e726be0e1c8f253a8f17f60bf7c02de13cc2",
+    "tools/app_e2e_playback_reference.json": "d7dbb812e6970ca30ee44f8f1c691ef4e985afb6c84c24659a815185276e01e7",
+    "tools/app_e2e_mission_reference.json": "6301f7b0697c01b9f3f7a08bc5d0e4e788f972c2001e309636648f2b353b46c2",
+    "tools/app_e2e_altenter_reference.json": "4195272386de6aef091e1a30e3cdfbb5e33b159e36ce6406d4c8b8167a9a40b6",
+    "tools/app_e2e_team_tournament_reference.json": "4dc5d87180af6a34c4dfdf4d07252e871bba8f8cf52f102126c2c02a3f6cd784",
+    "tools/app_e2e_reference.json": "26578fed14697dd7e00ec9ce5f254c9e1193e14540232c260939a27998553e7d",
+    "tools/app_e2e_joystick_reference.json": "67acd39ba835ee4a6cc2b80b3e5ee8107cdd0978bb7142c423549829a7a54c7a",
+    "tools/app_e2e_tournament_win_reference.json": "c097fd7249f4c86098570533fa81a20265e68e731d789d1144af56d2fb5c2050"
+  },
+  "checks": {
+    "run1": {
+      "methods": 18,
+      "failures": 0,
+      "job": "run1-job.json",
+      "scope": "DIB/catalog pixels, Mac bitmap/display backend, both live network-exit tests and committed audio-release test"
+    },
+    "offline1": {
+      "explicitNoNetworkMenu": "pass",
+      "fullVS": "pass; exit, milestones, progress, capture and recording/overlay hashes equal the remote-owned RLE-updated references",
+      "job": "offline1/job.json"
+    }
+  },
+  "priorEvidence": "N1-N5 actual networking results remain tied to their original pins; this merge changes live bitmap presentation only, and adds no protocol or gameplay rule",
+  "unrelatedWork": "Restored the exact owned stash; staged merge tree stayed unchanged. Added/deleted lines for both unrelated documentation paths match the pre-merge patch exactly. Full-byte snapshots and before/after patches remain in the artifact root; temporary owned stash dropped after verification.",
+  "open": [
+    "Independent networking integration/comparison review (one-agent authorization requested)",
+    "Actual Windows interoperability; RLE reference observation was under CrossOver, not Windows"
+  ],
+  "newOriginalExecution": false,
+  "EXEEnvelopeRecalculated": false
+}
