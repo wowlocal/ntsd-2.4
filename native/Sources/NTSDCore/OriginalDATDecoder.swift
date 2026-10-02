@@ -36,7 +36,10 @@ public enum OriginalDATDecoder {
     /// 40f0c2..40f124 chooses by the last three filename bytes, without checking
     /// for a dot or a plaintext marker. 4148a0 advances the key during all 123
     /// skipped header bytes, then writes through a temporary text-mode stream.
-    public static func decode(_ source: [UInt8], fileName: String, translation: OriginalFileTranslation) throws -> String {
+    /// `scanfLookahead`: the source's final character is not decoded, as with
+    /// VC80's fscanf("%c") lookahead (OriginalLoadingFiles.scanfLookahead).
+    public static func decode(_ source: [UInt8], fileName: String, translation: OriginalFileTranslation,
+                              scanfLookahead: Bool = false) throws -> String {
         let encrypted = try encrypted(fileName)
         guard !source.starts(with: Array("version https://git-lfs.github.com/spec/v1".utf8)) else {
             throw OriginalLoaderError.outsideVerifiedDomain("Git LFS pointer is not original game data")
@@ -45,7 +48,8 @@ public enum OriginalDATDecoder {
         let logical: [UInt8]
         if encrypted {
             guard input.count >= 123 else { throw OriginalLoaderError.outsideVerifiedDomain("Truncated DAT header") }
-            let decoded = input.dropFirst(123).enumerated().map { byte($0.element, at: $0.offset + 123) }
+            let body = scanfLookahead ? input.dropFirst(123).dropLast() : input.dropFirst(123)
+            let decoded = body.enumerated().map { byte($0.element, at: $0.offset + 123) }
             logical = translation.read(translation.write(decoded))
         } else { logical = input }
         return String(String.UnicodeScalarView(logical.map { UnicodeScalar($0) }))

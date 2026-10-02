@@ -11,7 +11,8 @@ import UniformTypeIdentifiers
 ///   zero (a fresh large Windows heap block is demand-zero pages);
 /// - bitmaps: real display-backend surfaces from the original packages; Core
 ///   derives BITMAP fields itself, so replies carry results/outputs only;
-/// - files: packaged catalog bytes, declared 65536/4096 stream buffering;
+/// - files: packaged catalog bytes, declared 65536/4096 stream buffering, and
+///   VC80's fscanf("%c") lookahead in the DAT decoder (catalog checksum 1ec3356);
 /// - clock: live; loading PeekMessage sees an empty queue (input stays queued);
 /// - draw/present results inside loading are declared 0 and are not rendered.
 @MainActor public final class OriginalMacRuntimeLoading {
@@ -163,7 +164,7 @@ import UniformTypeIdentifiers
             },drawResult:0,presentationResult:0)
             var catalog = try Catalog(pending:common,startup:startupSounds)
             let resources = try Catalog.Resources(files:self.catalogInputs.files,bitmaps:self.catalogInputs.bitmaps,
-                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0,allocationDefined:true)
+                presentation:self.presentation(common.target),drawResult:0,graphicsResult:0,allocationFill:0,allocationDefined:true,scanfLookahead:true)
             let loaded = try catalog.load(resources:resources,makeControls:{
                 .init(allocate:{ _,count in self.counts.allocations += 1; return try heap.reserve(count) },
                     bitmap:{ try self.bitmap($0) },

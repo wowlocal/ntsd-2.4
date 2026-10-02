@@ -1,5 +1,14 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Catalog checksum](research/APPLICATION_CATALOG_CHECKSUM.md): recordings are
+now interchangeable with the original. The port's catalog checksum was
+`0x1e046b2`, the original's `0x1ec3356`. The 4148a0 DAT decoder loses each
+file's final character to VC80's `fscanf("%c")` lookahead, so the loader
+counts the last token (`<frame_end>`, `layer_end`) twice. This was found by
+reading 44f620 in the running original under CrossOver with `winedbg`. The
+app now models it; the original accepts a fresh Mac recording and the app
+plays the original's, with equal Summaries.
+
 [RLE holes](research/APPLICATION_RLE_HOLES.md): the black box under "Com",
 "P1" and the Summary names is gone. The bitmap fonts `WORDS0`..`WORDS5` (and
 `LF2_CURSOR`) are RLE8 resources with unwritten pixels. The app now reads

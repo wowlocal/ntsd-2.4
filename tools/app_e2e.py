@@ -47,12 +47,12 @@ WAR = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 
 # its closing window ends the Demo and returns to the main menu.
 DEMO = ("20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 83; 200 key 83; 225 key 74; "
         + "".join(f"{t} key 75; " for t in range(1000, 7001, 20)) + "7200 capture {captures}/demo-exit.png; 7300 exit")
-# Playback Recording: the VS scenario's own recording (carried by the loader
-# fixture) is chosen in place of the file dialog and plays; F4 ends it and
-# returns to the main menu with the saved settings restored.
+# Playback Recording: a VS recording written by the original (ORIGINAL_RECORDING)
+# is chosen in place of the file dialog and plays to its Summary, the same one
+# the original shows for it; F4 ends it and returns to the main menu with the
+# saved settings restored.
 PLAYBACK = ("20 click 350 230; 60 click 402 218; " + "".join(f"{100 + 25 * i} key 83; " for i in range(6))
             + "250 key 74; 9000 key 115; 9600 capture {captures}/after-f4.png; 9700 exit")
-LOADER_FIXTURE = ROOT / "native/Tests/NTSDCoreTests/Fixtures/original-replay-loader.json"
 # Tournament / Team Tournament: fighter 1 is the first character as Human,
 # the other seven Random computers; No at "Shuffle the order?", Fight!, the
 # human's device (Attack), Yes at "Is the setting ok?". The human's match is
@@ -105,10 +105,15 @@ def joystick_script(captures):
     return "; ".join(steps)
 
 
+# A recording the original wrote (distribution, VS). Earlier Mac recordings
+# carry the pre-fix catalog checksum and are rejected like in the original
+# (APPLICATION_CATALOG_CHECKSUM.md).
+ORIGINAL_RECORDING = ROOT / "downloads/NTSD_2.4_2.0a/NTSD 2.4_2.0a/recording/20260331_012329_VS.lfr"
+
+
 def playback_file(scratch):
-    import base64
-    path = scratch / "20260101_010000_VS.lfr"
-    path.write_bytes(base64.b64decode(json.loads(LOADER_FIXTURE.read_text())["recordings"]["vs"]))
+    path = scratch / ORIGINAL_RECORDING.name
+    path.write_bytes(ORIGINAL_RECORDING.read_bytes())
     return ["--playback-file", str(path)]
 
 

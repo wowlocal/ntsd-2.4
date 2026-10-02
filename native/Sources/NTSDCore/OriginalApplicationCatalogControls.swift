@@ -10,11 +10,18 @@ extension OriginalApplicationCatalogSession {
         /// stage backing counts as initialized with `allocationFill` (a fresh
         /// large Windows heap block is demand-zero pages). Verification keeps false.
         public let allocationDefined: Bool
+        /// Declared runtime policy: VC80's fscanf("%c") lookahead in 4148a0, so a
+        /// decoded DAT lacks its source's final character, as the original shows
+        /// under CrossOver (OriginalLoadingFiles.scanfLookahead). Verification keeps
+        /// false: the catalog corpora declared the decoder without it.
+        public let scanfLookahead: Bool
         public init(files: [String:[UInt8]],bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
-                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8,allocationDefined: Bool = false) throws {
+                    presentation: OriginalMenuPresentationInput,drawResult: Int32,graphicsResult: Int32,allocationFill: UInt8,allocationDefined: Bool = false,
+                    scanfLookahead: Bool = false) throws {
             guard files[OriginalLoadingFiles.temporaryPath] == nil else { throw Boundary.input("External temporary file") }
             self.files = files;self.bitmaps = bitmaps;self.presentation = presentation
             self.drawResult = drawResult;self.graphicsResult = graphicsResult;self.allocationFill = allocationFill;self.allocationDefined = allocationDefined
+            self.scanfLookahead = scanfLookahead
         }
     }
     /// A fresh provider belongs to one tentative attempt. Callbacks supply

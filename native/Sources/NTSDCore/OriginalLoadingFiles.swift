@@ -44,7 +44,16 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
     public private(set) var order: [UInt32] = []
     public private(set) var decoderReturns: [Int32] = []
     public let translation: OriginalFileTranslation
-    public init(translation: OriginalFileTranslation) { self.translation = translation }
+    /// VC80's fscanf("%c") reads one character ahead and pushes it back. At the
+    /// stream's last character that lookahead meets end of file, so 4148a0's
+    /// feof test ends the loop before the character is decoded: the temporary
+    /// file lacks the source's final character. Observed under CrossOver
+    /// (APPLICATION_CATALOG_CHECKSUM.md). Off reproduces the declared decoder of
+    /// the earlier catalog corpora.
+    public let scanfLookahead: Bool
+    public init(translation: OriginalFileTranslation, scanfLookahead: Bool = false) {
+        self.translation = translation; self.scanfLookahead = scanfLookahead
+    }
 
     public mutating func open(_ path: String, mode: String, source: Source, allocate: Allocate,
                               observe: Observe = { _ in }) throws -> UInt32 {
@@ -141,6 +150,11 @@ public struct OriginalLoadingFiles: Equatable, Sendable {
         }
         var position = 123
         while let byte = try candidate.character(input, observe: observe) {
+            if scanfLookahead {
+                let next = candidate.streams[input]!.position
+                try candidate.scannerAccess(input, position: next, observe: observe)
+                if candidate.streams[input]!.eof && next == candidate.streams[input]!.input.count { break }
+            }
             try candidate.write([OriginalDATDecoder.byte(byte, at: position)], to: output, observe: observe)
             position += 1
         }

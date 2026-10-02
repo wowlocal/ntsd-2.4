@@ -46,7 +46,7 @@ public struct OriginalApplicationCatalogSession {
         public let volumeReplies: [Int32]
         public let messages: [MessageInput], presentation: OriginalMenuPresentationInput
         public let drawResult: Int32, graphicsResult: Int32, allocationFill: UInt8
-        public var allocationDefined = false
+        public var allocationDefined = false, scanfLookahead = false
         public init(files: [String:[UInt8]], bitmaps: [String:OriginalApplicationStartupInputs.Bitmap],
             allocationTokens: [UInt32], bitmapReplies: [API.Response], fileAllocations: [OriginalLoadingFileAllocation],
             waves: [OriginalWavePlatform], volumeReplies: [Int32], times: [UInt32], messages: [MessageInput],
@@ -115,7 +115,7 @@ public struct OriginalApplicationCatalogSession {
         beforeCommit: (PendingPool) throws -> Void = { _ in }) throws -> PendingPool {
         let resources = try Resources(files:inputs.files,bitmaps:inputs.bitmaps,presentation:inputs.presentation,
             drawResult:inputs.drawResult,graphicsResult:inputs.graphicsResult,allocationFill:inputs.allocationFill,
-            allocationDefined:inputs.allocationDefined)
+            allocationDefined:inputs.allocationDefined,scanfLookahead:inputs.scanfLookahead)
         return try load(resources:resources,makeControls:{ Self.fixedControls(inputs) },
                         observe:observe,afterChild:afterChild,beforeCommit:beforeCommit)
     }
@@ -370,7 +370,7 @@ public struct OriginalApplicationCatalogSession {
             let token = try allocate(.catalog,Int(entry.allocationBytes)),name = "data\\data.txt"
             try emit(.catalogEntry(token,name,entry.target))
             let bg = try backing(OriginalBackgroundLoader.recordSize),stage = try backing(OriginalStageLoader.stageSize)
-            let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text),fileName:name,
+            let result = try OriginalLoadedCatalog.loadWithFiles(files:.init(translation:.text,scanfLookahead:inputs.scanfLookahead),fileName:name,
                 initialChecksum:word(0x44f620),initialSoundBytes:Array(state.full.bytes[(0x455638-0x44d000)..<(0x458438-0x44d000)]),
                 fill:inputs.allocationFill,parentBacking:parent,backgroundBacking:Array(repeating:bg,count:101),stageBacking:Array(repeating:stage,count:60),
                 fileSource:file,fileAllocation:{ path,mode in

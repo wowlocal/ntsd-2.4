@@ -1,0 +1,260 @@
+{
+ "date": "2026-10-02",
+ "card": "docs/research/APPLICATION_CATALOG_CHECKSUM.md",
+ "values": {
+  "original": "0x1ec3356",
+  "portBeforeFix": "0x1e046b2",
+  "portAfterFix": "0x1ec3356",
+  "arithmetic": "31475378 + 137*5239 (<frame_end>) + 17*3749 (layer_end) = 32256854"
+ },
+ "originalEnvironment": {
+  "crossover": "26.3, bottle NTSD24XP",
+  "clone": "checksum-bisect/nomusic: verified game copy with .data 44d010 (music flag) = 0 in the EXE file at 0x4d010; one byte differs",
+  "start": "winedbg writes 4546f0=350, 453cdc=230, 457580=1 at the main menu",
+  "reads": "winedbg x /x 0x44f620"
+ },
+ "controlRun": {
+  "fullCatalog": "0x1ec3356 (same as all original recordings)"
+ },
+ "runningChecksumAtObjectLoader40ef70": [
+  {
+   "objectIndex": 0,
+   "path": "chars\\pein.dat",
+   "original": 2654,
+   "portBeforeFix": 2654,
+   "difference": 0
+  },
+  {
+   "objectIndex": 10,
+   "path": "chars\\sakon.dat",
+   "original": 4550432,
+   "portBeforeFix": 4498042,
+   "difference": 52390
+  },
+  {
+   "objectIndex": 20,
+   "path": "chars\\sai.dat",
+   "original": 8877734,
+   "portBeforeFix": 8772954,
+   "difference": 104780
+  },
+  {
+   "objectIndex": 30,
+   "path": "chars\\chiyo.dat",
+   "original": 13893540,
+   "portBeforeFix": 13736370,
+   "difference": 157170
+  },
+  {
+   "objectIndex": 40,
+   "path": "chars\\orochimaru.dat",
+   "original": 18764296,
+   "portBeforeFix": 18554736,
+   "difference": 209560
+  },
+  {
+   "objectIndex": 50,
+   "path": "chars\\weapon9.dat",
+   "original": 20677470,
+   "portBeforeFix": 20415520,
+   "difference": 261950
+  },
+  {
+   "objectIndex": 60,
+   "path": "chars\\blood3.dat",
+   "original": 21950490,
+   "portBeforeFix": 21636150,
+   "difference": 314340
+  },
+  {
+   "objectIndex": 70,
+   "path": "chars\\area.dat",
+   "original": 23959769,
+   "portBeforeFix": 23593039,
+   "difference": 366730
+  },
+  {
+   "objectIndex": 80,
+   "path": "chars\\big_boom.dat",
+   "original": 25320315,
+   "portBeforeFix": 24901195,
+   "difference": 419120
+  },
+  {
+   "objectIndex": 90,
+   "path": "chars\\summon.dat",
+   "original": 26468121,
+   "portBeforeFix": 25996611,
+   "difference": 471510
+  },
+  {
+   "objectIndex": 100,
+   "path": "chars\\mother_puppet.dat",
+   "original": 27372243,
+   "portBeforeFix": 26848343,
+   "difference": 523900
+  },
+  {
+   "objectIndex": 110,
+   "path": "chars\\spider.dat",
+   "original": 28667628,
+   "portBeforeFix": 28091338,
+   "difference": 576290
+  },
+  {
+   "objectIndex": 120,
+   "path": "chars\\jiroubou_rock.dat",
+   "original": 29937028,
+   "portBeforeFix": 29308348,
+   "difference": 628680
+  },
+  {
+   "objectIndex": 130,
+   "path": "chars\\100_puppets_c.dat",
+   "original": 30920444,
+   "portBeforeFix": 30239374,
+   "difference": 681070
+  }
+ ],
+ "temporaryFileAfter4148a0": [
+  {
+   "object": "chars\\pein.dat",
+   "originalTemporaryBytes": 74270,
+   "portTemporaryBytesBeforeFix": 74271,
+   "equalExceptFinalByte": true,
+   "originalEndsWith": "<frame_end>\r\n"
+  },
+  {
+   "object": "chars\\kyubi.dat",
+   "originalTemporaryBytes": 102185,
+   "portTemporaryBytesBeforeFix": 102186,
+   "equalExceptFinalByte": true,
+   "originalEndsWith": "<frame_end>\r\n"
+  },
+  {
+   "object": "chars\\sasuke_cs2.dat",
+   "originalTemporaryBytes": 89244,
+   "portTemporaryBytesBeforeFix": 89245,
+   "equalExceptFinalByte": true,
+   "originalEndsWith": "<frame_end>\r\n"
+  }
+ ],
+ "decoder": {
+  "address": "4148a0",
+  "formatString": "%c (0x448928)",
+  "modes": {
+   "source": "r",
+   "temporary": "w (data\\temporary.txt)"
+  },
+  "lookahead": "fscanf(%c) reads one character ahead; at the last character feof is true, so the loop does not decode it"
+ },
+ "catalogFilesWithoutCrlfTail": [
+  "chars/firen_ball.dat",
+  "chars/firzen_chasei.dat",
+  "chars/firzen_ball.dat",
+  "chars/firzen_chasef.dat",
+  "chars/deep_chop.dat",
+  "chars/template.dat (none in data.txt)"
+ ],
+ "tests": {
+  "OriginalCatalogChecksumTests": "3 pass (lookahead 0x1ec3356; declared 31475378; decoder/file session drop only the final character)",
+  "slowSuitesRelease": {
+   "OriginalApplicationCatalogSessionTests": 3,
+   "OriginalApplicationCatalogFullTests": 3,
+   "OriginalLoadedCatalogFilesTests": 5,
+   "OriginalLoadedCatalogTests": 3,
+   "OriginalCatalogPrecisionTests": 2,
+   "OriginalLoadingFilesTests": 4
+  }
+ },
+ "e2e": {
+  "changed": {
+   "vs": "recording hash",
+   "mission": "recording hash",
+   "war": "recording hash",
+   "tournament": "recording hash",
+   "altenter": "recording hash",
+   "tournament-win": "recording hashes and replayFiles sizes",
+   "team-tournament": "recording hash and replayFiles size",
+   "playback": "re-recorded: plays downloads/NTSD_2.4_2.0a/.../20260331_012329_VS.lfr"
+  },
+  "unchanged": [
+   "demo",
+   "joystick"
+  ],
+  "allOtherFieldsEqual": true
+ },
+ "crossplayWithoutPatching": [
+  {
+   "recording": "20260331_012329_VS.lfr (original, distribution)",
+   "playedIn": "Mac app e2e playback and the original under CrossOver",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      1,
+      630,
+      725,
+      305,
+      0,
+      "Win (Alive)"
+     ],
+     [
+      "Com",
+      0,
+      725,
+      630,
+      250,
+      3,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "00:59"
+   },
+   "result": "equal"
+  },
+  {
+   "recording": "Mac app VS after the fix (sha256 c1ab012d9a90057cc952ef360e1de8a78f4787c1b0d2754275470899ab520eab)",
+   "checksum": "0x1ec3356",
+   "decodedDifferenceFromPreFixRecording": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "the original under CrossOver, unpatched: accepted",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      1,
+      985,
+      780,
+      275,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "P2",
+      0,
+      30,
+      960,
+      0,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      1,
+      1270,
+      545,
+      1165,
+      6,
+      "Win (Alive)"
+     ]
+    ],
+    "time": "00:54"
+   },
+   "result": "equal to the Mac app's own Summary"
+  }
+ ]
+}
