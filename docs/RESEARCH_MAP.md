@@ -1,5 +1,20 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Stage ENDING](research/STAGE_ENDING.md): a cleared Stage no longer stops at
+menu 300. 437220 is the ENDING screen: pages of the ENDING sheet with 13-band
+wipes, a seat's Attack turns the page, and after page 4 the game returns to
+menu 10 with the input reset. `OriginalStageEnding` matches 581 Unicorn cases
+of the real 437220/431c70 (7171 calls, 39 186 written bytes), and the
+character screen's dispatcher runs it. The live app has not yet reached it in
+a run.
+
+[Replay cross-play](research/CROSSOVER_REPLAY_CROSSPLAY.md): nine whole matches
+of every mode, recorded by the Mac app or the original, end with equal Summary
+rows and times in both programs. Cua Driver drives the original under
+CrossOver, and `winedbg` reads its memory. This is what found the catalog
+checksum gap. Plan to 100%: [GOAL_100](GOAL_100.md); EXE coverage:
+[measurement](research/EXE_COVERAGE_2026-10-02.md).
+
 [Catalog checksum](research/APPLICATION_CATALOG_CHECKSUM.md): recordings are
 now interchangeable with the original. The port's catalog checksum was
 `0x1e046b2`, the original's `0x1ec3356`. The 4148a0 DAT decoder loses each
