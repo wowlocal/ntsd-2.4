@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[Network client integration](research/NETWORK_PLAY.md#n3-client-integration-2026-10-02):
+two native apps connect through their menus over real loopback TCP and reach
+World2 with checked roles, complementary seats, names and the same RNG table.
+The complete selector-4 screen matches 51 original caller cases in a new
+additive corpus; old menu comparisons remain. Independent implementation and
+comparator review stay open. N4 game input exchange and N5 exit/disconnection
+are next; this is not full-match or Windows interoperability acceptance.
+
 [macOS full screen](research/APPLICATION_MAC_FULL_SCREEN.md): the standard
 toggle for the game window. The game keeps its held windowed geometry and the
 view scales (a declared Mac policy, separate from the original's Alt+Enter).

@@ -1,21 +1,21 @@
 # Network play in the app — results
 
-[Plan](NETWORK_PLAY_PLAN.md). The original is not executed.
+[Plan](NETWORK_PLAY_PLAN.md). Platform integration reuses the recovered rules;
+the N3 addendum below records its new bounded original selector-4 comparison.
 
 ## Current next step (2026-10-02)
 
-N2 is implemented and checked below; continue N3 client integration using the
-existing service and recovered client contract.
+N2 and N3 are implemented and checked below; continue N4 game input exchange
+using the same live service and the recovered input-control contract.
 The earlier blanket hold on N2–N5 was an unsupported interpretation of the saved
 Claude incident and has been removed at the user's request. The exact withheld
 operation remains unknown; the incident record is preserved without treating it
 as evidence that all network integration is prohibited. No new safety refusal
 occurred during the N1 checks. General WORKFLOW refusal handling still applies.
 
-Next result: the app client performs its own lookup/connect/handshake through
-iteration permits and two native apps retain their connected roles and RNG.
-Then continue N4–N5 to a complete two-app match. N1/N2 checks do not establish
-whole-match acceptance.
+Next result: both connected apps enter selection, exchange original input
+packets and complete the Naruto/Sasuke District match to Summary. N5 exit and
+disconnect behavior follows. N1–N3 checks do not establish whole-match acceptance.
 
 ## N2 host integration (2026-10-02)
 
@@ -69,6 +69,109 @@ choice screen and did not launch a match. The retained `--no-network` error
 scenario passed unchanged. This checks the pinned SwiftPM binary, not a clean
 shipping package. All owned runs are terminal; N3–N5, the complete match,
 Windows interoperability and independent review remain open.
+
+## N3 client integration (2026-10-02)
+
+N2 is committed in `1e600db`. The next increment connects the existing
+`OriginalNetworkClient` requests through the same iteration receipts, including
+the client's two inline 500 ms sleeps. Preserve single-read/ignored-error
+semantics, owned hostname/hostent outputs and the current no-network fallback.
+The client provider is implemented and the results are recorded below; the
+exit provider remains a stand-in.
+
+Reading the current consumer exposed one additional reachable gap: the accepted
+client stores selector 4 at 428730, but `OriginalNetworkMenu` and its application
+guard handle only 1–3. A bounded static disassembly of the pinned EXE confirms
+the missing screen at 428808..4289bf: bit 4/timer4511d0/phase4511cc updates occur
+before drawing; the IP text uses caller-local root+2e8; the waiting frame is 11.
+The Back hitbox can write selector 1 without a sound call. After drawing the
+dots, 4289b9 unconditionally writes World=1 and jumps to the existing 42873e
+tail, including when Back was clicked. This is static evidence, not a new
+original execution or a completed source comparison. Implement the complete
+screen and validate the new caller continuation; do not jump straight to loading.
+
+Task-owned inputs and disassembly are in
+`/Volumes/X5/ntsd-2.4-research/network-app-client-20261002` (`scope.json`).
+X5 mount/UUID/writable APFS and free space were verified; the scope retains
+40 GiB external and 6 GiB internal reserves with at most 12 GiB new output.
+The earlier 428700 disassembly begins inside an instruction; its leading decode
+is not evidence. Use aligned 428710 onward and the separate 428808 entry.
+No source bytes, previous harnesses, fixtures or expected states were changed.
+Required checks are the existing client comparison, the new selector-4 whole
+caller continuation, and two native app instances through their own handshake
+with role/name/RNG evidence. Full-match/N4/N5 and Windows checks remain separate.
+
+**Selector-4 capture, 2026-10-02:** `tools/oracle_network_ready.py` extends the
+existing observer without changing its retained producer or guest instructions.
+The declared original EXE/lib/VC80 run uses controlled API replies on Unicorn;
+this is not actual Windows or TCP. Finite scope: the retained UI/cancel path,
+a successful client followed by its own selector-4 output, timer flags and
+150/151 boundary, signed phases/wrap, Back hitbox/held-state controls, and the
+actual World1→World2→loading caller continuation. Each body is bounded to one
+million instructions, each capture to 300 seconds and 512 MiB output.
+
+Source1 hit its instruction bound on a controlled reconnect after 15 calls.
+Source2 preserved the terminal PC4285d2 and preceding requests: the old
+producer's generic 77-byte reply fills the remote names with ASCII `0`, so no
+name terminators exist. A subsequent original overlapping string copy propagates
+those bytes. This is a bounded incomplete run, not a returned comparison or an
+observed memory fault. Both versions, logs and completed checkpoints are kept.
+Source3 supplies underscore-padded names, as a real peer packet does, in its
+declared replies; it also records the new screen's CPU writes in the same event
+schema. No previous corpus/expected value was edited.
+
+Source3 completed 51 calls in 2.7 seconds. The existing source/transport auditor
+verified all blobs, instruction bytes, store reconstruction, caller returns,
+218 prior fixture pins and 23 vendor files; no unknown caller-local reads were
+reported by its existing client observer. The new regular fixture is
+`original-network-ready.json` (raw 10,563,338 bytes; packed 6,239,764 bytes).
+Its source, parts, producer/tool pins and audit are retained in the task's X5
+directory. Independent review remains open. Native comparison and two-process
+app verification are running next; this capture alone does not validate N3.
+
+For the native app check, `--network-loopback` explicitly supplies 127.0.0.1 as
+the platform's local hostname response. The unchanged engine selects/binds that
+address; transport remains real TCP. Normal launch retains the Mac resolver.
+`--network-ready-state PATH` writes one bounded diagnostic of owned roles,
+seats, names and RNG at the first connected loading boundary; an optional
+`--exit-after-network-ready` ends there. Neither option supplies an after-state.
+
+**Native run1:** build 334.19 seconds; 17 of 18 tests passed. The new comparison
+reached the declared World-phase stimulus and failed in the comparator, which
+unconditionally applied every stimulus to globals: source address22000020 was
+incorrectly translated to global offset21bb3020. The saved failure and old
+comparator are retained. The correction routes only a four-byte input at the
+declared World base to the owned World; all complete state, mask, event and
+caller assertions remain. Neither the source3 fixture nor gameplay code changed.
+The corrected comparison and the two retained FrontMenuLoop corpora are run2;
+independent review of this comparator extension is open.
+
+**Two-process probe:** two independent `NTSDNative --original` processes opened
+ONLINE GAME, chose host/client and entered 127.0.0.1 through scripted key events.
+Separate overlays supplied Host1–4 and Peer1–4; distinct virtual clock seeds
+were used. Both processes reached World2 before loading and exited0. Host role2
+and client role1 had complementary local/remote seat tables, all eight supplied
+names and identical 3001-byte RNG. Host used exactly nine notification requests;
+client used exactly eleven client requests. No boundary or message box occurred.
+The local-address override is declared above; no game state was injected.
+Evidence and commands: `pair1/job.json` in the task directory.
+
+A separate client tried its own loopback endpoint held by a task-owned bound
+socket with no listener. It produced `Can't connect to server`, consumed the
+scripted OK and continued to exit0 (`refused1/job.json`). The retained
+`--no-network` error scenario also passed (`offline-online-check.json`).
+These checks validate the pinned SwiftPM app, not a shipping/clean-Mac package,
+full match or actual Windows interoperability.
+
+**Result:** [evidence](../evidence/network-app-client-20261002.json). Run2 built
+in 75.28 seconds and all five tests passed in 18.464 seconds: the new 51-call
+comparison, all seven retained network-menu fixtures, the library parent, and
+both 119-call FrontMenuLoop corpora. The 17 passing run1 methods retain their
+declared scope; the only correction was the reference input mapping above.
+All 642 Swift pins still match candidate2 and the checked app binary is unchanged
+by the reference-only rebuild. All owned jobs are terminal and their PIDs absent.
+Independent implementation/comparator review remains open; EXE envelope was
+not recalculated. The next increment is N4, not another successful N3 rerun.
 
 ## Resumed priority and independent N1 correction (2026-10-02)
 
@@ -256,13 +359,13 @@ working code, so the goal's whole-match criterion is not satisfied:
 | Required result | Current code/evidence | Remaining dependency |
 | --- | --- | --- |
 | N2 host greeting from the app | Menu listener and 0x401 consumer implemented; 17 tests and separate native-process greeting probe pass | Independent review remains open; use this retained session for N3/N4 |
-| N3 client connects through the UI | Menu client calls still use `refused()`; `OriginalMacRuntimeNetwork.answer` handles only main-menu requests | Connect the real client requests to the shared socket service and preserve delivery/terminal-failure semantics |
+| N3 client connects through the UI | Implemented through iteration permits; two native processes reach World2 over127.0.0.1 with complementary roles/seats and identical RNG | Independent review open; retain this session for N4 |
 | N4 synchronized match to Summary | The loading control provider still returns -1 for asyncSelect/ioctl and has no send/receive implementation | Live session state from N2/N3, game input exchange, then two-app synchronization evidence |
-| N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE delivery needs the unfinished notification route | The same app socket/session routing plus actual failure/exit scenarios |
+| N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE notification route is implemented; refused client connect is checked | Wire exit requests and check actual disconnection/exit scenarios |
 | Offline behavior and Windows comparison | Prior offline acceptance has its own pinned inputs; new service tests execute no app. Windows was not observed | Recheck affected app paths after integration; Windows interoperability stays separately open |
 
-The next implementation increment is N3, as described above. Repeating successful
-N1 tests or offline soaks would not supply the missing app integration. The
+The next implementation increment is N4, as described above. Repeating successful
+N1–N3 tests or offline soaks would not supply the missing app integration. The
 earlier requirement for external clarification before any N2–N5 work was based
 on an unsupported expansion of the unknown refusal scope and is withdrawn.
 

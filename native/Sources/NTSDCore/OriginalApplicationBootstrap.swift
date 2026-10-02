@@ -84,7 +84,8 @@ public struct OriginalApplicationBootstrap {
         windowDefaultProvider: ((OriginalWindowInput.Request) throws -> Int32)? = nil,
         graphProvider: ((OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response)? = nil,
         networkProvider: OriginalMenuNetworkProvider? = nil,
-        socketProvider: ((OriginalNetworkNotification.Request) throws -> OriginalNetworkNotification.Response)? = nil) throws -> Session.Outcome {
+        socketProvider: ((OriginalNetworkNotification.Request) throws -> OriginalNetworkNotification.Response)? = nil,
+        clientProvider: ((OriginalNetworkClient.Request) throws -> OriginalNetworkClient.Response)? = nil) throws -> Session.Outcome {
         guard var next = session,startup != nil else { throw Boundary.notStarted }
         if queueProvider != nil && !queue.isEmpty { throw Session.Boundary.dependency("Observed queue requests cannot mix prepared response arrays") }
         if windowDefaultProvider != nil && !windowDefault.isEmpty { throw Session.Boundary.dependency("Observed window requests cannot mix prepared response arrays") }
@@ -109,7 +110,7 @@ public struct OriginalApplicationBootstrap {
         },observe:menuObserve,graphicsObserve:graphicsObserve,checkpoint:checkpoint,bodyProduced:bodyProduced,beforeCommit:{ loop,state in
             try requireConsumed()
             try beforeCommit(loop,state)
-        },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,networkProvider:networkProvider,socketProvider:socketProvider,bootstrapObserve:observe,lifecycle:{ q in
+        },initialization:inputs,initializationBitmap:bitmap,frontProvider:frontProvider,networkProvider:networkProvider,socketProvider:socketProvider,clientProvider:clientProvider,bootstrapObserve:observe,lifecycle:{ q in
             let r = try lifecycleProvider?(q) ?? take(lifecycle,&li,"lifecycle");try observe(.lifecycleResponse(q,r));return r
         },graph:{ q in
             guard let graphProvider else { throw Session.Boundary.dependency("Bootstrap graph events") }

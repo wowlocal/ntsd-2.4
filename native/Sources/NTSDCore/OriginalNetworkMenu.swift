@@ -1,4 +1,5 @@
-/// Network selector1/2/3 bodies427ca7..42873e/4287de. Hostname storage is
+/// Network selectors1–4, including428808..4289bf's connected-client screen.
+/// Hostname storage is
 /// separate from the previously recovered World prefix; callers must own its
 /// provenance. Shared original helpers perform background, text, sound, exit
 /// and deferred client connection. No host text mapping or networking is used.
@@ -72,11 +73,34 @@ public enum OriginalNetworkMenu {
         func commit(_ end: Continuation) -> Continuation {
             world = ownWorld;hostname = host;globals = state;local = scratch;libraryText = text;memory = owned;return end
         }
-        guard (1...3).contains(input.selector) else { return commit(.otherSelector) }
+        guard (1...4).contains(input.selector) else { return commit(.otherSelector) }
+        // Unlike selector2, selector4 updates its animation before drawing the
+        // background. Both its first clock and subsequent elapsed check run.
+        if input.selector == 4 {
+            if try byte(0x4511f0) & 4 == 0 { try put(0x4511f0,word(0x4511f0) | 4);try put(0x4511d0,Int32(bitPattern:clock())) }
+            if try clock() &- bits(word(0x4511d0)) > 150 {
+                try put(0x4511cc,(word(0x4511cc) &+ 1)%14);try put(0x4511d0,Int32(bitPattern:clock()))
+            }
+        }
         if try word(0x4511ac) == 0 { try background(&state,&owned) }
         try bitmap(0x4511ac,0,0,-1);try bitmap(0x4511a0,155,105,1)
         try bitmap(0x4511a0,253,222,3);try bitmap(0x4511a0,253,335,14)
-        try formatted(" Your IP Address: %s",Array(" Your IP Address: ".utf8)+string(state,0x44f340-base),rootOffset: 0x158,x: 289,y: 251)
+        try formatted(" Your IP Address: %s",Array(" Your IP Address: ".utf8)+string(state,0x44f340-base),rootOffset: input.selector == 4 ? 0x2e8 : 0x158,x: 289,y: 251)
+        if input.selector == 4 {
+            try bitmap(0x4511a0,236,290,11)
+            if try inside(322,472,361,386) {
+                try bitmap(0x4511a0,322,361,12)
+                if try clicked() { try put(0x44d064,1) }
+            }
+            var i: Int32 = 0,x: Int32 = 281
+            while try i < word(0x4511cc) {
+                let args = try [bits(word(0x455608)),bits(x),342,5,12,0x577fd7]
+                try event("fillRequest",args);try fill(args);i = i &+ 1;x = x &+ 20
+            }
+            // 4289b9 is unconditional, even if Back just changed the selector.
+            try ownWorld.write(Int32(1),at:0);try event("write",[input.worldAddress,4,1])
+            return commit(.presentation)
+        }
         if input.selector == 1 {
             if try inside(368,790,449,536) {
                 try bitmap(0x45117c,368,449,3,0)

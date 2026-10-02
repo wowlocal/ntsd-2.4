@@ -158,6 +158,11 @@ import NTSDCore
                     try driver.beginService(permit)
                     do { try driver.answer(permit,response:.socket(try network.answer(q))) }
                     catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
+                case .client(let q):
+                    guard let network else { throw Boundary.unserved("client \(q.kind)") }
+                    try driver.beginService(permit)
+                    do { try driver.answer(permit,response:.client(try network.answer(q))) }
+                    catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
                 }
             case .advanced(let outcome):
                 iterations += 1

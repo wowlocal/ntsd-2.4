@@ -205,6 +205,7 @@ public struct OriginalApplicationMenuSession {
         frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
         networkProvider: OriginalMenuNetworkProvider? = nil,
         socketProvider: ((OriginalNetworkNotification.Request) throws -> OriginalNetworkNotification.Response)? = nil,
+        clientProvider: ((OriginalNetworkClient.Request) throws -> OriginalNetworkClient.Response)? = nil,
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") },
         graph: (OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response = { _ in throw Boundary.dependency("Menu graph events") }) throws -> Outcome {
@@ -670,7 +671,7 @@ public struct OriginalApplicationMenuSession {
                         // no network play); MessageBoxA, Sleep and ShellExecuteA run when
                         // the body returns, before the presentation, as in F1.
                         let selector = try g.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self)
-                        guard (1...3).contains(selector) else { throw Boundary.dependency("Menu selector \(selector)") }
+                        guard (1...4).contains(selector) else { throw Boundary.dependency("Menu selector \(selector)") }
                         stage = .menu
                         // The 51 hostname bytes at World+7d8 (NETWORK_MENU.md) follow the World
                         // prefix in the canonical record (4592d8): read and write them there.
@@ -701,6 +702,14 @@ public struct OriginalApplicationMenuSession {
                                 try event(e)
                             },timer:{ UInt32(bitPattern:try queue(.init(.time)).result) },keyState:{ _ in responses.capsLock },
                             client:{ s,l,w in try OriginalNetworkClient.attempt(globals:&s,local:&l,world:w,request:{ r in
+                                if let clientProvider {
+                                    if r.kind == .message {
+                                        let parts = r.bytes.split(separator:0,omittingEmptySubsequences:false)
+                                        guard parts.count == 3,parts[2].isEmpty else { throw Boundary.dependency("Client MessageBoxA text") }
+                                        return .init(result:try windowDefault(.init(.message,r.arguments,[Array(parts[0]),Array(parts[1])])))
+                                    }
+                                    return try clientProvider(r)
+                                }
                                 switch r.kind {
                                 case .message:try box(r.bytes);return .init(result:1)
                                 case .sleep:calls.append(.sleep(r.arguments));return .init()

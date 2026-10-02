@@ -164,8 +164,15 @@ public enum FrontMenuLoopReference {
             guard caseIndex != 0 || item.stimulus.isEmpty else { throw error("Natural next call") }
             for w in item.stimulus {
                 let hex = Array(w.bytes);guard hex.count%2 == 0 else { throw error("Stimulus extent") }
+                // The selector-4 matrix explicitly sets the owned World phase
+                // at whole-caller entry. This is a declared input at the same
+                // source address used by the parent, not a global or after-state.
+                let worldPhase = w.address == 0x22000020
+                guard !worldPhase || hex.count == 8 else { throw error("World phase stimulus extent") }
                 for i in stride(from: 0,to: hex.count,by: 2) {
-                    guard let b = UInt8(String(hex[i...i+1]),radix: 16) else { throw error("Stimulus byte") };try state.write(b,at: Int(w.address)-OriginalMatchPreparation.globalBase+i/2)
+                    guard let b = UInt8(String(hex[i...i+1]),radix: 16) else { throw error("Stimulus byte") }
+                    if worldPhase { try world.write(b,at:i/2) }
+                    else { try state.write(b,at: Int(w.address)-OriginalMatchPreparation.globalBase+i/2) }
                 }
             }
             let beforeWorld = world,width = try state.integer(at: 0x44d78c-OriginalMatchPreparation.globalBase,as: Int32.self),height = try state.integer(at: 0x44d790-OriginalMatchPreparation.globalBase,as: Int32.self)

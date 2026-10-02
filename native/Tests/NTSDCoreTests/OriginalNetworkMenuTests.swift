@@ -34,6 +34,10 @@ final class OriginalNetworkMenuTests: XCTestCase {
         else { paths = try ["original-network-menu","original-network-menu-control","original-network-menu-partial-greeting","original-network-menu-partial-flags","original-network-menu-partial-names","original-network-menu-sound","original-network-menu-sound-control"].map { try XCTUnwrap(Bundle.module.url(forResource: $0+".json",withExtension: nil,subdirectory: "Fixtures")).path } }
         for path in paths { try compareOwnCorpus(path) }
     }
+    func testConnectedClientScreenAndWholeLoadingContinuation() throws {
+        let path = try XCTUnwrap(Bundle.module.url(forResource:"original-network-ready.json",withExtension:nil,subdirectory:"Fixtures")).path
+        try compareOwnCorpus(path)
+    }
     private func compareOwnCorpus(_ path: String) throws {
         let raw = try MatchPreparationReference.unpack(Data(contentsOf: URL(fileURLWithPath: path)),maximumCount: 128_000_000),document = try XCTUnwrap(JSONSerialization.jsonObject(with: raw) as? [String:Any])
         let calls = try XCTUnwrap(document["calls"] as? [[String:Any]])

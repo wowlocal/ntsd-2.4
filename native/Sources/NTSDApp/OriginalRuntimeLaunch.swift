@@ -23,6 +23,10 @@ import NTSDMacPlatform
 /// `--mute-sounds` keeps the WAV sound-effect voices at zero output gain.
 /// `--overlay DIR` keeps user files (settings, replays) in DIR instead of
 /// Application Support, for automated runs.
+/// `--network-loopback` supplies 127.0.0.1 as the local hostname's address for
+/// controlled two-process checks. All socket IO remains real localhost TCP.
+/// `--network-ready-state PATH` records owned state once at the first connected
+/// loading boundary; `--exit-after-network-ready` stops there before loading.
 /// START runs the whole loading once (blocking, progress frames not shown);
 /// later screens return through cached loaded cycles.
 final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
@@ -33,6 +37,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
     private var captureAfter: (count: Int,path: String)?
     private var clickAt: (count: Int,x: Int32,y: Int32)?
     private var cycles = 0, gameplayBodies = 0
+    private var networkReadyRecorded = false
     private var script: [Int:[[String]]] = [:]
     private var pressedModifiers: Set<UInt16> = []
     private var committed = 0, steps = 0, stopped = false, gameplayClock: (steps: Int,committed: Int)?,
@@ -167,7 +172,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Live Winsock for ONLINE GAME (NETWORK_PLAY_PLAN.md); --no-network
                 // keeps the declared stand-in (WSAStartup answers wVersion 0).
                 if !arguments.contains("--no-network") {
-                    let network = OriginalMacRuntimeNetwork(); menu.network = network
+                    let network = OriginalMacRuntimeNetwork(localAddresses:arguments.contains("--network-loopback") ? [0x0100007f] : nil); menu.network = network
                     network.winsock.post = { [weak menu] n in menu?.messages.post(n.message,n.socket,n.lParam) }
                 }
                 menu.messages.capturedJoysticks = UInt32(joystickCount)
@@ -320,6 +325,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 let delay = menu.messages.sleeps.count > sleeps ? slept : (menu.messages.queue.isEmpty ? 1 : 0)
                 schedule(delay)
             case .loading:
+                if try recordNetworkReady(started,menu) { return }
                 let begin = Date(),first = loading == nil
                 steps += 1
                 if let n = scriptStep(committedBranch:false) { try runScript(n,menu,started) }
@@ -400,6 +406,34 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 waited += Int(delay); schedule(delay)
             }
         } catch { stop(error) }
+    }
+    /// A single bounded diagnostic of committed owned state. It never supplies
+    /// game inputs or another process's expected state.
+    @MainActor private func recordNetworkReady(_ started: OriginalMacRuntimeStartup.Started,_ menu: OriginalMacRuntimeMenu) throws -> Bool {
+        guard !networkReadyRecorded,let i = arguments.firstIndex(of:"--network-ready-state"),i+1 < arguments.count,
+              let state = started.host.snapshot.session?.state else { return false }
+        let base = OriginalMatchPreparation.globalBase
+        let role = try state.full.integer(at:0x44f1af-base,as:UInt8.self)
+        guard role == 1 || role == 2 else { return false }
+        func bytes(_ address: Int,_ count: Int) throws -> [UInt8] {
+            let range = (address-base)..<(address-base+count)
+            guard state.full.defined[range].allSatisfy({ $0 }) else { throw OriginalStateError.invalidStorage("Network ready diagnostic: undefined bytes") }
+            return Array(state.full.bytes[range])
+        }
+        let value: [String:Any] = ["role":role,"iterations":committed,
+            "world":try state.full.integer(at:0x458b00-base,as:UInt32.self),
+            "selector":try state.full.integer(at:0x44d064-base,as:UInt32.self),
+            "socket":try state.full.integer(at:0x44f46c-base,as:UInt32.self),
+            "localAddress":try bytes(0x44f590,4),"names":try bytes(0x44fcc0,88),
+            "seats":try (0..<8).map { try state.full.integer(at:0x450b4c-base+4*$0,as:Int32.self) },
+            "rng":try bytes(0x44ff90,3001),"notificationRequests":menu.network?.notificationRequestCount ?? 0,
+            "clientRequests":menu.network?.clientRequestCount ?? 0]
+        let path = arguments[i+1]
+        try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys]).write(to:URL(fileURLWithPath:path),options:.atomic)
+        networkReadyRecorded = true
+        Self.emit(["event":"networkReady","role":role,"path":path,"iterations":committed])
+        if arguments.contains("--exit-after-network-ready") { stopped = true; NSApp.terminate(nil); return true }
+        return false
     }
     /// `committed` (default): committed message-loop iterations, which stop
     /// while gameplay ticks run without queued input. `all`: every iteration.

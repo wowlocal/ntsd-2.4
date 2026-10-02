@@ -1,0 +1,262 @@
+{
+  "dateUTC": "2026-10-02T17:29:25.964311+00:00",
+  "scope": "N3 recovered client request delivery and selector4 own UI continuation; two native apps through their own loopback handshake to World2 before loading",
+  "baseHEAD": "1e600db1361ffc1a356caf196f2101356c7ae2ff",
+  "status": "implemented and checked; independent review open",
+  "reference": {
+    "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "source": "original EXE/lib/VC80 on existing Unicorn environment; platform replies declared"
+  },
+  "source": {
+    "attempts": 3,
+    "completedAttempt": 3,
+    "calls": 51,
+    "networkBodies": 46,
+    "selector4Screens": 33,
+    "actualSelector4InstructionStarts": 120,
+    "failures": "source1/2 incomplete at instruction budget during repeated connection with generic unterminated peer names; preserved; source3 uses explicitly valid padded-name response"
+  },
+  "native": {
+    "run1": {
+      "tests": 18,
+      "passed": 17,
+      "failures": 1,
+      "buildSeconds": 334.19,
+      "testSeconds": 36.865
+    },
+    "correction": "Comparator routed explicit World phase stimulus to globals; corrected exact four-byte World-address input mapping, preserving all expected/full-state/mask/events checks",
+    "run2": {
+      "tests": 5,
+      "passed": 5,
+      "buildSeconds": 75.28,
+      "testSeconds": 18.464
+    },
+    "sourcePinsUnchanged": 642
+  },
+  "app": {
+    "binary": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+      "bytes": 16546024,
+      "sha256": "9eced0692bb73e32789ca1cd4093d276320b2976bd2ce42631c86b551c1b0dad"
+    },
+    "paired": "PASS: two native app processes connected through UI over 127.0.0.1, reached loading with own host/client roles, complementary seats, shared names and identical 3001-byte RNG table",
+    "rngSHA256": "5352f941c619060669587370c1974685877d4899a6ad0d1b165f54ecd4aa89c7",
+    "roles": [
+      2,
+      1
+    ],
+    "worlds": [
+      2,
+      2
+    ],
+    "networkRequests": [
+      9,
+      11
+    ],
+    "failure": "PASS: real refused localhost connect produced the original error box, accepted OK and continued to scripted exit0",
+    "offlineNoNetworkPassed": true,
+    "loopbackPolicy": "explicit --network-loopback supplies local resolver response127.0.0.1; real TCP and unchanged engine address selection"
+  },
+  "fixture": {
+    "path": "/Users/michael/Developer/ntsd-2.4/native/Tests/NTSDCoreTests/Fixtures/original-network-ready.json",
+    "bytes": 6239764,
+    "sha256": "16b1408f3c4fc384136e8bfd2ced2a76c129c3941dde84aa8214cc60b59b67bb"
+  },
+  "artifacts": [
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/scope.json",
+      "bytes": 740,
+      "sha256": "efeb3542bc3d32333999eed7d985cc5037acfadcccfca2390b288eb81fe59b39"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source1-inputs.json",
+      "bytes": 72426,
+      "sha256": "7c5c12515abd13b3942e9c9614a8f9f234ce54298950e6f5c520f22d88f6b182"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source1-producer.py",
+      "bytes": 5950,
+      "sha256": "2f7d268b061ff9d66ae2573a18724170e2ded54fe934e0e3782efb1118b879b6"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source1-job.json",
+      "bytes": 564,
+      "sha256": "e1e132789bfa5f833f18734883ad1585af915bb8d74d73f99c4e215035afdf15"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source1.log",
+      "bytes": 1902,
+      "sha256": "9af79d4b1fee5908a7f401030970cb615e166c04ead16ce7f26b8ebc84ca7971"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source2-inputs.json",
+      "bytes": 72149,
+      "sha256": "59324fd84531ad6b8d3308e86a077a24abee6e85d345ec311af5ed4e3c17f66e"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source2-producer.py",
+      "bytes": 6511,
+      "sha256": "8acd8eb795752ebdd86391702d08c3ac585838a7f254e73023299348d0eb7b13"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source2-job.json",
+      "bytes": 747,
+      "sha256": "4967037a2d2d3e313b118f035bb9902da2306f8a9af7cfcdb523e96e9be181f5"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source2.log",
+      "bytes": 2019,
+      "sha256": "00dd1bf7ad3052e02ee7cb177625c2daf0762f79290aba03ca7ea5041bb295cc"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source2-diagnosis.txt",
+      "bytes": 584,
+      "sha256": "abb24a1fbde0b2a9d59b5cf4e1a64c1b4835586f1f45b28776e376a31f4ac7c0"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3-inputs.json",
+      "bytes": 72149,
+      "sha256": "772941b1b45ff996eba79be452844a1729cd31f3b3cd8512d77afdfadf50883d"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3-producer.py",
+      "bytes": 7544,
+      "sha256": "23fed61829768f4548e510e9834befe9f4d452f1a75ec2d8a564dd9d6f6e0852"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3-job.json",
+      "bytes": 747,
+      "sha256": "90d50f2f37bcc95a7e34ea9d4b2eb2496f22907867bee5d7d06479c1bb4bf706"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3.json",
+      "bytes": 10563338,
+      "sha256": "d3cf343c073325ea1fff2cbe814df5e8f1d7423181862330d4d68dac217a0dd8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3-audit.json",
+      "bytes": 2045,
+      "sha256": "39d860f22c936bb4eb5e25831215a997fd501f8577d784fc04a71e82045d560b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/source3.log",
+      "bytes": 3970,
+      "sha256": "9c07c83fd0dac5026ca18403e48ab6acd56e35e0272d63c6573f449dd3948123"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/candidate1-inputs.json",
+      "bytes": 87373,
+      "sha256": "cf61124118b4f94709b4981b096dd8ab831f24c5c2ef23d8e772980349776a15"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/candidate1.diff",
+      "bytes": 27973,
+      "sha256": "b10ca1f4f5595e5d05ba5215916c55c7e913b06f8273fbd161f5df2843f0c4cb"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run1-job.json",
+      "bytes": 1103,
+      "sha256": "51987b68ea3abd06739c67ce861ed281f17ee87e6312a93b75560f18193cb5b9"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run1.log",
+      "bytes": 46468,
+      "sha256": "9165568b0cfd323f148b5d84e8751b6726390aa0b92f5e72edab8c0eeb1082b4"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run1-FrontMenuLoopReference.swift",
+      "bytes": 32104,
+      "sha256": "e5593afe50a96dcfcbfb9c885867a3aeae7a71ae2be9e50d37516a78c11ac1cb"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run1-diagnosis.txt",
+      "bytes": 540,
+      "sha256": "58586d66c5e7ece0f6f5d2ed9b12e3a32c9756940b7469dc441130c33bbe6124"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/candidate2-inputs.json",
+      "bytes": 87373,
+      "sha256": "b02c99beda019e54f278310d54a77ea3e16d0eb0042a6c38807f5b9021254ec8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/candidate2-FrontMenuLoopReference.swift",
+      "bytes": 32599,
+      "sha256": "8b02e90bca8f758508ad498c8f78a0fb7b8c5a46ae11baed376fd6673801222b"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run2-job.json",
+      "bytes": 891,
+      "sha256": "a3cfd7b733e983f4dd9ad763160780bb1072d574dd3e1ff298db6babb7f629b8"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/run2.log",
+      "bytes": 23824,
+      "sha256": "b49bfd05d718e9f4e367e6379915eec7d3a6b8922210315d8b30ff1a6d445fa2"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/syntax1.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/syntax2.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair_probe.py",
+      "bytes": 5014,
+      "sha256": "3df18460e09bbe36c15cafc631a859d3cf352a2458ec4dc944d547610e18adb3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair1/job.json",
+      "bytes": 6092,
+      "sha256": "a69d98c1ce952eabb588259027278ddcc6567c5276ba2aed1b71b11543722938"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair1/host.json",
+      "bytes": 11143,
+      "sha256": "ba5d2c689b7bdca6fd9d705cfe9f65f4c0ecf51d2a24c72ce5d2ab26a30b22ee"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair1/client.json",
+      "bytes": 11144,
+      "sha256": "d2bc844ac2399e422ff38287d09c899344e3cded7f7862827ecf0a465b90bd4f"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair1/host.log",
+      "bytes": 874,
+      "sha256": "bccc3527b0bc0d82dbdb9337a8c5520592d6559afad629c17312e25731822a75"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/pair1/client.log",
+      "bytes": 878,
+      "sha256": "ab6fe315af78802613f3523e1882f337a85c1b43fb0daf8f2c1f12ff66307c6d"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/refused1/job.json",
+      "bytes": 2720,
+      "sha256": "3566e0135800773339e8e78290b84929f856baeda91953b604a5dc2617bb40df"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/refused1/app.log",
+      "bytes": 843,
+      "sha256": "c7550ec74075b1e3f38d4b702cc241836d363b68f24b629ba93bfc61a27cd2d3"
+    },
+    {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-app-client-20261002/offline-online-check.json",
+      "bytes": 237,
+      "sha256": "891b65450db9e7b1cb6962fd721f057c4735568fd2787d9d0b43ac76e4d46955"
+    }
+  ],
+  "processes": "all task-owned source/build/test/app jobs terminal and recorded PIDs absent at final check",
+  "open": [
+    "N4 game input exchange, selection and complete match",
+    "N5 exits/disconnections and remaining error behavior",
+    "Independent implementation/comparator review",
+    "Actual Windows interoperability",
+    "Clean-Mac shipping package verification"
+  ],
+  "next": "N4 wire OriginalInputControl requests to the same live service and verify two-app input/RNG/state to Summary",
+  "exeEnvelope": "not recalculated"
+}

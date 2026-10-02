@@ -12,6 +12,7 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
         case graph(OriginalGraphEvents.Response)
         case network(OriginalMenuNetworkReply)
         case socket(OriginalNetworkNotification.Response)
+        case client(OriginalNetworkClient.Response)
     }
     case graphics(OriginalMenuGraphicsRequest)
     case queue(Loop.Request)
@@ -22,13 +23,15 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
     case network(OriginalMainMenuEvent)
     /// Socket IO and ordered sleeps inside the WndProc 0x401 callback.
     case socket(OriginalNetworkNotification.Request)
+    /// The deferred client lookup/connect/handshake, including its sleeps.
+    case client(OriginalNetworkClient.Request)
     public func accepts(_ response: Reply) -> Bool {
         switch (self,response) {
         case let (.graphics(q),.graphics(r)):return q.accepts(r)
         case let (.queue(q),.queue(r)):
             // Only message retrieval owns MSG output writes.
             return r.writes.isEmpty || q.kind == .peek || q.kind == .get
-        case (.windowDefault,.windowDefault),(.graph,.graph),(.network,.network),(.socket,.socket):return true
+        case (.windowDefault,.windowDefault),(.graph,.graph),(.network,.network),(.socket,.socket),(.client,.client):return true
         default:return false
         }
     }
@@ -132,7 +135,10 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                 } : nil,socket:{ q,p in
                     guard case .socket(let r) = try p.iterationDelivery.response(for:.socket(q)) else { throw Boundary.invalidResponse }
                     return r
-                },beforePublication:{ p in
+                },client:network ? { q,p in
+                    guard case .client(let r) = try p.iterationDelivery.response(for:.client(q)) else { throw Boundary.invalidResponse }
+                    return r
+                } : nil,beforePublication:{ p in
                     try beforePublication(p)
                     guard let consumed = p.iterationDelivery.cursor else { throw Boundary.missingCursor }
                     _ = try self.exchange.finish(consumed)
