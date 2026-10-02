@@ -1,0 +1,507 @@
+{
+ "date": "2026-10-02",
+ "plan": "docs/research/CROSSOVER_REPLAY_CROSSPLAY_PLAN.md",
+ "card": "docs/research/CROSSOVER_REPLAY_CROSSPLAY.md",
+ "environment": {
+  "crossover": "26.3 trial, bottle NTSD24XP (winxp, Wow64)",
+  "game": "APFS clone of the verified copy, 1595 files re-verified against game-copy1.json",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "macApp": {
+   "path": "goal-100 worktree build/swiftpm-app/release/NTSDNative (before the RLE-hole fix)",
+   "sha256": "1039b554fcc300f540378d6d4e6c76e6b500981d42af23a3ed883cc433bc6b9f"
+  },
+  "driver": "Cua Driver 0.32.0: screenshots, foreground clicks after placing the game cursor, held keys via CGEvent.postToPid; music error OK each match"
+ },
+ "checksum": {
+  "field": "+0x744 of the decoded recording, compared with 44f620 at playback start (4326c7)",
+  "original": {
+   "value": "0x1ec3356",
+   "decimal": 32256854,
+   "sources": [
+    "all four original recordings",
+    "winedbg read of 0x44f620 in the running original: 01ec3356"
+   ]
+  },
+  "port": {
+   "value": "0x1e046b2",
+   "decimal": 31475378,
+   "sources": [
+    "all five Mac recordings",
+    "port loader over the distribution files (text); raw: 31461560"
+   ]
+  },
+  "consequence": "each program rejects the other's recordings with the 'data files different' MessageBox; the Mac app rejects the distribution's own three recordings (run: crossplay-mac-playback/origvs-unpatched)",
+  "patchedCopies": "only bytes +0x744..+0x746 of the decoded recording differ; recompressed with zlib and re-keyed"
+ },
+ "recordings": [
+  {
+   "recording": "20260101_010000_VS.lfr",
+   "origin": "Mac app",
+   "sha256": "2e98755f4bf0ff9d71284fdedba6af1e59d3cf13fe44c5e6cd49ff9819b77ff6",
+   "checksumField": "0x1e046b2",
+   "patchedCopy": "20260101_010000_VS_sum1ec3356.lfr",
+   "patchedSHA256": "158799dd0869d4375295c831f6761cfa5c393aed76c097d83aa4e2792376716a",
+   "patchedChecksum": "0x1ec3356",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: patched copy; Mac: own e2e run",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      1,
+      985,
+      780,
+      275,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "P2",
+      0,
+      30,
+      960,
+      0,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      1,
+      1270,
+      545,
+      1165,
+      6,
+      "Win (Alive)"
+     ]
+    ],
+    "time": "00:54"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-mac-20260101-VS-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-set/vs/captures/b001800.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-mac-20260101-VS-on-original.jpg"
+  },
+  {
+   "recording": "20260101_010000_Battle.lfr",
+   "origin": "Mac app",
+   "sha256": "c25edba79c4fa2bef5e9647f9add9dbd58679a3f5aae99156ecfac5052ed8fb7",
+   "checksumField": "0x1e046b2",
+   "patchedCopy": "20260101_010000_Battle_sum1ec3356.lfr",
+   "patchedSHA256": "d780163d61afb22454c79be0fd30289cd2f9e6cb9038ffff4ea56c4064653e8d",
+   "patchedChecksum": "0x1ec3356",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: patched copy; Mac: own e2e run",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      0,
+      657,
+      0,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      6,
+      1186,
+      383,
+      1692,
+      2,
+      "Win (Alive)"
+     ]
+    ],
+    "teams": [
+     [
+      17,
+      2640
+     ],
+     [
+      5,
+      6705
+     ]
+    ],
+    "time": "01:19"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-mac-20260101-Battle-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-set/war/captures/b003000.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-mac-20260101-Battle-on-original.jpg"
+  },
+  {
+   "recording": "20260101_010000_Stage_1.lfr",
+   "origin": "Mac app",
+   "sha256": "3242cd71d6ccbbfa40419099693060c4fe9c6b3184ea1364f0248cfe0e8ed76b",
+   "checksumField": "0x1e046b2",
+   "patchedCopy": "20260101_010000_Stage_1_sum1ec3356.lfr",
+   "patchedSHA256": "95ec6d0a87ebac00218a6aea1a0b0e1358f139ba8b77dc0be891176e9ae4e21d",
+   "patchedChecksum": "0x1ec3356",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: patched copy; Mac: own e2e run",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      0,
+      686,
+      0,
+      0,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "00:45"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-mac-20260101-Stage_1-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-set/mission/captures/b001500.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-mac-20260101-Stage_1-on-original.jpg"
+  },
+  {
+   "recording": "20260101_010000_1on1_Prelminar.lfr",
+   "origin": "Mac app",
+   "sha256": "5408b223054a7d817d623f6dd722be15cbd23ae7cb34a505b7d7a1dd80912727",
+   "checksumField": "0x1e046b2",
+   "patchedCopy": "20260101_010000_1on1_Prelminar_sum1ec3356.lfr",
+   "patchedSHA256": "6612e60b6af03c9026d4e350ff3a12e75afaa0533a2fb245534cefc1be1d32e9",
+   "patchedChecksum": "0x1ec3356",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: patched copy; Mac: own e2e run",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      0,
+      600,
+      0,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      1,
+      725,
+      125,
+      75,
+      5,
+      "Win (Alive)"
+     ]
+    ],
+    "time": "00:29"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-mac-20260101-1on1-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-set/tournament/captures/b001200.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-mac-20260101-1on1-on-original.jpg"
+  },
+  {
+   "recording": "20260101_010000_2on2_SemiFinal.lfr",
+   "origin": "Mac app",
+   "sha256": "8369352a0bf58804f782ae75b5b8ef7d2396419046abef9de59101bda7842ad9",
+   "checksumField": "0x1e046b2",
+   "patchedCopy": "20260101_010000_2on2_SemiFinal_sum1ec3356.lfr",
+   "patchedSHA256": "2a8e45d4501cac015dbcd44ef24240d1635833e1dfc0a51239c13b3a2369bb37",
+   "patchedChecksum": "0x1ec3356",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: patched copy; Mac: own e2e run",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      0,
+      660,
+      0,
+      0,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      1,
+      390,
+      575,
+      275,
+      1,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      0,
+      490,
+      245,
+      970,
+      3,
+      "Win (Alive)"
+     ],
+     [
+      "Com",
+      1,
+      620,
+      20,
+      0,
+      5,
+      "Win (Alive)"
+     ]
+    ],
+    "time": "00:52"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-mac-20260101-2on2-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-set/team-tournament/captures/b001800.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-mac-20260101-2on2-on-original.jpg"
+  },
+  {
+   "recording": "20260927_093914_VS.lfr",
+   "origin": "original under CrossOver (2026-09-27)",
+   "sha256": "e048291644e2099d3f2f2fe19675cb2f99e12aa1b057913d41af4333e25d6cc5",
+   "checksumField": "0x1ec3356",
+   "patchedCopy": "20260927_093914_VS_sum1e046b2.lfr",
+   "patchedSHA256": "1d6378c9be6e66b3917a2961e2bfa2ab708859fe3e09e6b39dcdb16c577bde58",
+   "patchedChecksum": "0x1e046b2",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: unpatched; Mac: patched copy",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      1,
+      625,
+      409,
+      195,
+      1,
+      "Win (Alive)"
+     ],
+     [
+      "Com",
+      0,
+      409,
+      625,
+      200,
+      6,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "00:47"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-orig-20260927-VS-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-mac-playback/origvs/captures/b001500.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-orig-20260927-VS-on-original.jpg"
+  },
+  {
+   "recording": "20260331_115445_Stage_1.lfr",
+   "origin": "distribution",
+   "sha256": "9555710ff6b79e624d6f97a5d2373ae7b4d46135d5e9f45940b787f4e1663630",
+   "checksumField": "0x1ec3356",
+   "patchedCopy": "20260331_115445_Stage_1_sum1e046b2.lfr",
+   "patchedSHA256": "7bddaf32d628288749d732920425165fa5d40b394d221e99fbae2c4c909bfaff",
+   "patchedChecksum": "0x1e046b2",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: unpatched; Mac: patched copy",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      205,
+      568,
+      200,
+      3,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "00:37"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-dist-20260331_115445-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-mac-playback/20260331_115445_Stage_1/captures/b006000.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-dist-20260331_115445-on-original.jpg"
+  },
+  {
+   "recording": "20260331_115533_Stage_1.lfr",
+   "origin": "distribution",
+   "sha256": "44c24f47029756066318dc1a0180af68474d2dff7f5af9ce821d03d325ea647a",
+   "checksumField": "0x1ec3356",
+   "patchedCopy": "20260331_115533_Stage_1_sum1e046b2.lfr",
+   "patchedSHA256": "9a26844688920943e24eed7637af074f7734c18532b76d8855a752268908d28f",
+   "patchedChecksum": "0x1e046b2",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: unpatched; Mac: patched copy",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      130,
+      632,
+      550,
+      1,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "00:58"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-dist-20260331_115533-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-mac-playback/20260331_115533_Stage_1/captures/b006000.png",
+   "result": "equal",
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-dist-20260331_115533-on-original.jpg"
+  },
+  {
+   "recording": "20260331_115752_Battle.lfr",
+   "origin": "distribution",
+   "sha256": "b73d9d28ae1dbd96b6b156d4a65d9e94b39b97e179d39ec0808ad704ebef3040",
+   "checksumField": "0x1ec3356",
+   "patchedCopy": "20260331_115752_Battle_sum1e046b2.lfr",
+   "patchedSHA256": "1392ad5baa7e78d8d07dc41e30df4ae7ed7a0975aaf94625227de5e219965fc6",
+   "patchedChecksum": "0x1e046b2",
+   "decodedBytesDiffering": [
+    "0x744",
+    "0x745",
+    "0x746"
+   ],
+   "playedIn": "original: unpatched; Mac: patched copy",
+   "summary": {
+    "rows": [
+     [
+      "P1",
+      0,
+      315,
+      575,
+      345,
+      0,
+      "Win (Dead)"
+     ],
+     [
+      "Com",
+      3,
+      787,
+      590,
+      520,
+      0,
+      "Win (Dead)"
+     ],
+     [
+      "Com",
+      2,
+      345,
+      566,
+      200,
+      1,
+      "Win (Dead)"
+     ],
+     [
+      "Com",
+      7,
+      1090,
+      484,
+      1885,
+      1,
+      "Win (Alive)"
+     ],
+     [
+      "Com",
+      1,
+      335,
+      673,
+      385,
+      1,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      0,
+      185,
+      666,
+      670,
+      2,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      0,
+      215,
+      543,
+      360,
+      2,
+      "Lose (Dead)"
+     ],
+     [
+      "Com",
+      3,
+      760,
+      618,
+      230,
+      0,
+      "Lose (Dead)"
+     ]
+    ],
+    "time": "01:16"
+   },
+   "originalCapture": "goal-100-20261002/cua-trial1/summary-dist-20260331_115752-on-original.png",
+   "macCapture": "goal-100-20261002/crossplay-mac-playback/20260331_115752_Battle/captures/b002400.png",
+   "result": "player rows and time equal; team totals differ by session history",
+   "teamTotals": {
+    "original": [
+     [
+      29,
+      13043
+     ],
+     [
+      18,
+      18518
+     ]
+    ],
+    "mac": [
+     [
+      12,
+      10403
+     ],
+     [
+      13,
+      11813
+     ]
+    ],
+    "explanation": "the original session had played the Mac War replay first (17/2640, 5/6705); 451b64..451b70 are zeroed only by the War setup screen (438dab..438dbd, port OriginalWarSetup), which playback skips, in both programs; the Mac run was a fresh session"
+   },
+   "originalCaptureInRepo": "docs/evidence/crossover-replay-crossplay-20261002/summary-dist-20260331_115752-on-original.jpg"
+  }
+ ],
+ "tools": {
+  "patch": "tools/lfr_checksum.py",
+  "drive": "tools/crossover_drive/ (cua.py, keyhold.swift, frames.sh)"
+ }
+}
