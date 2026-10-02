@@ -124,8 +124,15 @@ public final class OriginalMacWinsock {
         return (0, bytes + [0])
     }
     /// gethostbyname's IPv4 list as in-memory address words (127.0.0.1 is
-    /// 0x0100007f); nil when the name does not resolve.
+    /// 0x0100007f); nil when the name does not resolve. For this machine's own
+    /// name Windows lists its interface addresses (declared): the up,
+    /// non-loopback IPv4 interfaces in system order, not a DNS answer that
+    /// can be loopback on macOS.
     public func hostAddresses(_ name: [UInt8]) -> [UInt32]? {
+        let own = hostName(capacity: 256)
+        if own.result == 0, Array(own.name.dropLast()) == Array(name.prefix { $0 != 0 }), let local = Self.interfaceAddresses(), !local.isEmpty {
+            return local
+        }
         var hints = addrinfo(); hints.ai_family = AF_INET; hints.ai_socktype = SOCK_STREAM
         var list: UnsafeMutablePointer<addrinfo>?
         let text = String(decoding: name.prefix { $0 != 0 }, as: UTF8.self)
@@ -164,6 +171,23 @@ public final class OriginalMacWinsock {
             index += 1
         }
         guard !words.isEmpty else { lastError = 11004; return nil }
+        return words
+    }
+    /// The up, non-loopback IPv4 interface addresses (getifaddrs order).
+    public static func interfaceAddresses() -> [UInt32]? {
+        var list: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&list) == 0, let first = list else { return nil }
+        defer { freeifaddrs(first) }
+        var words: [UInt32] = [], cursor: UnsafeMutablePointer<ifaddrs>? = first
+        while let node = cursor {
+            let flags = Int32(node.pointee.ifa_flags)
+            if let address = node.pointee.ifa_addr, address.pointee.sa_family == sa_family_t(AF_INET),
+               flags & IFF_UP != 0, flags & IFF_LOOPBACK == 0 {
+                let word = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { $0.pointee.sin_addr.s_addr }
+                if !words.contains(word) { words.append(word) }
+            }
+            cursor = node.pointee.ifa_next
+        }
         return words
     }
     /// inet_addr: dotted decimal to an address word, INADDR_NONE when invalid.

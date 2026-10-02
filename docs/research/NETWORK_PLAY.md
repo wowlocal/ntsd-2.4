@@ -165,6 +165,56 @@ main-menu requests. Connecting the recovered client, match and exit providers,
 and the held N2 notification route, remains the required next integration work.
 No standalone N1 check substitutes for that work or resolves the saved refusal.
 
+## Preserved N1 interface lookup promoted (2026-10-02)
+
+The pre-existing own-host interface lookup and its five-line test addition are
+now included in the N1 increment, without changing their bytes. The saved
+pre-refusal progress message explicitly reported this part implemented before
+starting N2b. For the exact hostname returned by macOS, the service supplies
+up, non-loopback IPv4 interface addresses in system order, with a DNS fallback
+if the list is unavailable/empty. This is a declared Mac platform policy; it
+does not establish what a particular Windows machine would return.
+
+[Promotion evidence](../evidence/network-service-interface-promotion-20261002.json)
+reuses run4's eight passing service tests: all 668 actual source pins still
+match, including the complete service and test files. No successful check was
+rerun. The retained own-interface assertions are conditional on an available
+non-loopback interface; no new branch-coverage or independent-review claim.
+N2 application changes and unrelated files remain separate WIP.
+
+## Remaining integration and continuation boundary (2026-10-02)
+
+The network deferral is lifted. The following gaps are present in the current
+working code, so the goal's whole-match criterion is not satisfied:
+
+| Required result | Current code/evidence | Remaining dependency |
+| --- | --- | --- |
+| N2 host greeting from the app | `OriginalApplicationMenuSession` routes graph message 0x400, but has no `OriginalNetworkNotification` consumer; `OriginalRuntimeLaunch` already queues service notifications | Finish the held window/socket request routing |
+| N3 client connects through the UI | Menu client calls still use `refused()`; `OriginalMacRuntimeNetwork.answer` handles only main-menu requests | Connect the real client requests to the shared socket service and preserve delivery/terminal-failure semantics |
+| N4 synchronized match to Summary | The loading control provider still returns -1 for asyncSelect/ioctl and has no send/receive implementation | Live session state from N2/N3, game input exchange, then two-app synchronization evidence |
+| N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE delivery needs the unfinished notification route | The same app socket/session routing plus actual failure/exit scenarios |
+| Offline behavior and Windows comparison | Prior offline acceptance has its own pinned inputs; new service tests execute no app. Windows was not observed | Recheck affected app paths after integration; Windows interoperability stays separately open |
+
+The saved refusal does not identify the withheld operation or establish its
+cause. The original goal explicitly requires establishing permissibility under
+WORKFLOW before resuming the affected integration. Available evidence does not
+establish that continuing its shared socket/window request path, including its
+client/match/exit consumers, is independent of that unfinished operation. Those
+paths remain held; the standalone N1 corrections and promotion do not resolve
+that constraint. No broad prohibition on network APIs is inferred.
+
+The finite independent service work identified during this continuation is
+complete at its stated check/review limits. Repeating successful N1 tests or
+offline soaks would not supply the missing app integration or resolve the
+incident. All new build/test jobs are terminal, with no owned live app/listener.
+The same continuation constraint has remained open through the reset turn,
+the lifetime/lookup turn and this audit. Asked for a review outcome or a
+clarification of the affected operation, the user replied “я не знаю” on
+2026-10-02; no new evidence of the refusal's scope is available. Required
+external change: evidence allowing a substantive review of the refused operation
+and a permitted continuation decision under WORKFLOW. Neither a new model nor
+another goal restart supplies that evidence. No support message has been sent.
+
 ## Deferred by the user (2026-10-01)
 
 Networking remains in the full scope, but the user has deferred it in favour

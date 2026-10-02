@@ -30,6 +30,11 @@ final class OriginalMacWinsockTests: XCTestCase {
         let (named, name) = w.hostName(capacity: 256)
         XCTAssertEqual(named, 0); XCTAssertEqual(name.last, 0); XCTAssertGreaterThan(name.count, 1)
         XCTAssertEqual(w.hostAddresses(Array("localhost".utf8))?.contains(0x0100007f), true)
+        // The own name lists interface addresses, never loopback (when any interface is up).
+        if let local = W.interfaceAddresses(), !local.isEmpty {
+            XCTAssertEqual(w.hostAddresses(Array(name.dropLast())), local)
+            XCTAssertFalse(local.contains { $0 & 0xff == 127 })
+        }
         XCTAssertEqual(W.address(Array("127.0.0.1".utf8)+[0]), 0x0100007f)
         XCTAssertEqual(W.address(Array("192.168.1.20".utf8)), 0x1401a8c0)
         XCTAssertEqual(W.address(Array("12345".utf8)), 0xffff_ffff)

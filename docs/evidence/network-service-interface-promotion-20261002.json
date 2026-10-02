@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "task": "network-service-interface-promotion-20261002",
+  "recordedUTC": "2026-10-02T16:11:50.142798+00:00",
+  "baseHead": "f86676e43d1790c32bbb88ae32b66939aed43b52",
+  "operation": "Commit the preserved own-host interface lookup and its test from before the Claude refusal. No implementation or reference change; no new execution.",
+  "sourceBeforeRefusal": "docs/evidence/claude-code-network-safety-2026-10-01.json#lastVisibleProgress",
+  "reusedEvidence": "docs/evidence/network-client-lookup-20261002.json",
+  "checkedSources": {
+    "native/Tests/NTSDCoreTests/OriginalMacWinsockTests.swift": "02bf4d8e16dadcad63f131682c8e096e2f8f788e095bb0d7c67727d0a08806cc",
+    "native/Sources/NTSDMacPlatform/OriginalMacWinsock.swift": "f8d4272c41a2b2a2569c4c6fa32b3381e11e809ea41b6009811ebda60229e43d"
+  },
+  "verification": "All 668 candidate source pins remain identical to the completed 8-test run4. git diff/index inspected.",
+  "limits": [
+    "A declared macOS interface-selection policy; no observation of the Windows resolver.",
+    "The own-interface assertions in the retained test are conditional on an available non-loopback interface; no new branch-coverage claim.",
+    "Independent review remains open.",
+    "N2 WIP and other files are preserved separately; no app/network integration or match acceptance.",
+    "The saved refusal remains open and its exact trigger unknown."
+  ]
+}
