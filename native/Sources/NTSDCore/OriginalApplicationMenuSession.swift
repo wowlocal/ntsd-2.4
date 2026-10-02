@@ -203,6 +203,8 @@ public struct OriginalApplicationMenuSession {
         initialization: OriginalApplicationBootstrap.MenuInputs? = nil,
         initializationBitmap: ((OriginalApplicationBootstrap.Stage,OriginalBitmapSurfaceLoading.Request) throws -> OriginalBitmapSurfaceLoading.Response)? = nil,
         frontProvider: ((OriginalApplicationBootstrap.Stage,OriginalFrontScreenEvent) throws -> OriginalLibSurfaceText.Response)? = nil,
+        networkProvider: OriginalMenuNetworkProvider? = nil,
+        socketProvider: ((OriginalNetworkNotification.Request) throws -> OriginalNetworkNotification.Response)? = nil,
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") },
         graph: (OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response = { _ in throw Boundary.dependency("Menu graph events") }) throws -> Outcome {
@@ -299,6 +301,10 @@ public struct OriginalApplicationMenuSession {
             // answered by the declared network input (wVersion 0); MessageBoxA,
             // Sleep and ShellExecuteA are performed when the main menu returns.
             case "startup","message","shell","sleep": break
+            // With a live network provider (NETWORK_PLAY_PLAN.md N2) 402b60's
+            // requests are answered as they are made and recorded here.
+            case "hostname","hostLookup","htons","addressText","formatAddress","socket","asyncSelect","bind","listen","closeSocket":
+                guard networkProvider != nil else { throw Boundary.dependency("Menu operation "+e.kind) }
             default: throw Boundary.dependency("Menu operation "+e.kind)
             }
             if initialization != nil && stage != .menu { try bootstrapObserve(.front(stage,e)) }
@@ -362,6 +368,25 @@ public struct OriginalApplicationMenuSession {
                             result = try OriginalGraphEvents.receive(input,globals:g,local:&frame,request:{ q in
                                 guard q.kind == .windowDefault else { return try graph(q) }
                                 return .init(result:try windowDefault(.init(.windowDefault,q.arguments)))
+                            })
+                        } else if input.message == 0x401 {
+                            // 402ec0 owns fresh local storage. Only its writes make bytes
+                            // known; the saved caller frame is not its backing.
+                            var frame = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:160),defined:[Bool](repeating:false,count:160))
+                            result = try OriginalNetworkNotification.receive(input,globals:&g,local:&frame,request:{ q in
+                                switch q.kind {
+                                case .windowDefault:
+                                    return .init(result:try windowDefault(.init(.windowDefault,q.arguments)))
+                                case .message:
+                                    let parts = q.bytes.split(separator:0,omittingEmptySubsequences:false)
+                                    guard parts.count == 3,parts[2].isEmpty else { throw Boundary.dependency("Notification MessageBoxA text") }
+                                    return .init(result:try windowDefault(.init(.message,q.arguments,[Array(parts[0]),Array(parts[1])])))
+                                default:
+                                    guard let socketProvider else { throw Boundary.dependency("Menu socket notification") }
+                                    return try socketProvider(q)
+                                }
+                            },store:{ region,offset,bytes in
+                                if region == .globals { try store(OriginalMatchPreparation.globalBase+offset,bytes) }
                             })
                         } else {
                             // Every WndProc platform call — DefWindowProcA, and the quit
@@ -606,11 +631,12 @@ public struct OriginalApplicationMenuSession {
                         let presentation: OriginalMenuPresentationEntry
                         if entry == .main {
                             try point(.main,combined(state,w))
-                            // Network replies are unavailable to this session.
-                            // Its first network request is rejected by event().
+                            // Without a network provider WSAStartup answers wVersion 0
+                            // (the declared no-network stand-in); with one, 402b60's
+                            // requests are answered live (NETWORK_PLAY_PLAN.md N2).
                             let input = OriginalMainMenuInput(targetSurface:game.target,panelWord:nil,network:.init(startupResult:0,version:0,hostnameResult:0,hostname:[],hostEntryAddress:0,addresses:[],socketResult:0,asyncResult:0,bindResult:0,listenResult:0))
                             var calls: [OriginalMainMenuEvent] = []
-                            let end = try OriginalMainMenu.run(world:&w,globals:&state,crt:&random,input:input,store:store,worldStored:worldStore,observe:{ e in
+                            let end = try OriginalMainMenu.run(world:&w,globals:&state,crt:&random,input:input,network:networkProvider,store:store,worldStored:worldStore,observe:{ e in
                                 if e.kind == .bitmap { try event(.init("draw",e.arguments));try draw(e.arguments) }
                                 else {
                                     try event(.init(e.kind.rawValue,e.arguments,e.strings))

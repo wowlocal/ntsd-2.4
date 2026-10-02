@@ -190,7 +190,7 @@ public struct OriginalMacRuntimeKey: Equatable {
             if formerWindows.contains(q.arguments[0]) { return 0 }
             try require(q.arguments[0] == window)
             switch q.arguments[1] {
-            case 3,0x100,0x101,0x102,0x106,0x200,0x201,0x202,0x204,0x205,0x400,0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8: return 0
+            case 3,0x100,0x101,0x102,0x106,0x200,0x201,0x202,0x204,0x205,0x400,0x401,0x3a0,0x3a1,0x3b5,0x3b6,0x3b7,0x3b8: return 0
             // System keys (declared, APPLICATION_FULL_SCREEN_PLAN.md): Alt+F4 sends
             // SC_CLOSE; Alt or F10 released alone sends SC_KEYMENU; nothing else.
             case 0x104:
@@ -248,7 +248,7 @@ public struct OriginalMacRuntimeKey: Equatable {
             switch permit.request {
             case .queue(let q): try driver.answer(permit,response:.queue(try answer(q)))
             case .windowDefault(let q): try driver.answer(permit,response:.windowDefault(try answer(q)))
-            case .graphics,.graph: throw Boundary.unsupported("graphics/graph family")
+            case .graphics,.graph,.network,.socket: throw Boundary.unsupported("graphics/graph/network/socket family")
             }
         } catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
     }

@@ -10,19 +10,25 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
         case queue(Loop.Response)
         case windowDefault(Int32)
         case graph(OriginalGraphEvents.Response)
+        case network(OriginalMenuNetworkReply)
+        case socket(OriginalNetworkNotification.Response)
     }
     case graphics(OriginalMenuGraphicsRequest)
     case queue(Loop.Request)
     case windowDefault(OriginalWindowInput.Request)
     /// GetEvent/FreeEventParams/seek of the WndProc graph callback.
     case graph(OriginalGraphEvents.Request)
+    /// 402b60's Winsock requests and row 2's bind/listen (NETWORK_PLAY_PLAN.md N2).
+    case network(OriginalMainMenuEvent)
+    /// Socket IO and ordered sleeps inside the WndProc 0x401 callback.
+    case socket(OriginalNetworkNotification.Request)
     public func accepts(_ response: Reply) -> Bool {
         switch (self,response) {
         case let (.graphics(q),.graphics(r)):return q.accepts(r)
         case let (.queue(q),.queue(r)):
             // Only message retrieval owns MSG output writes.
             return r.writes.isEmpty || q.kind == .peek || q.kind == .get
-        case (.windowDefault,.windowDefault),(.graph,.graph):return true
+        case (.windowDefault,.windowDefault),(.graph,.graph),(.network,.network),(.socket,.socket):return true
         default:return false
         }
     }
@@ -86,7 +92,8 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
         checkpoint: (Host.Session.Checkpoint, OriginalStateRecord, Int32?) throws -> Void = { _,_,_ in },
         bodyProduced: (OriginalFrontScreenBody.StartupResult) throws -> Void = { _ in },
         beforeCommit: (Host.Session.Loop, Host.Session.State) throws -> Void = { _,_ in },
-        beforePublication: (Platform) throws -> Void = { _ in }) throws -> Outcome {
+        beforePublication: (Platform) throws -> Void = { _ in },
+        network: Bool = false) throws -> Outcome {
         try attempt {
             let cursor = try exchange.snapshot.cursor()
             func graphics(_ q: OriginalMenuGraphicsRequest,_ p: Platform) throws -> OriginalMenuGraphicsRequest.Reply {
@@ -118,6 +125,12 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                     return r
                 },graph:{ q,p in
                     guard case .graph(let r) = try p.iterationDelivery.response(for:.graph(q)) else { throw Boundary.invalidResponse }
+                    return r
+                },network:network ? { e,p in
+                    guard case .network(let r) = try p.iterationDelivery.response(for:.network(e)) else { throw Boundary.invalidResponse }
+                    return r
+                } : nil,socket:{ q,p in
+                    guard case .socket(let r) = try p.iterationDelivery.response(for:.socket(q)) else { throw Boundary.invalidResponse }
                     return r
                 },beforePublication:{ p in
                     try beforePublication(p)

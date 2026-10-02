@@ -4,17 +4,71 @@
 
 ## Current next step (2026-10-02)
 
-Continue N2 application integration using the existing service and preserved WIP.
+N2 is implemented and checked below; continue N3 client integration using the
+existing service and recovered client contract.
 The earlier blanket hold on N2–N5 was an unsupported interpretation of the saved
 Claude incident and has been removed at the user's request. The exact withheld
 operation remains unknown; the incident record is preserved without treating it
 as evidence that all network integration is prohibited. No new safety refusal
 occurred during the N1 checks. General WORKFLOW refusal handling still applies.
 
-Next result: host creation from the menu, delivery of message 0x401 to
-`OriginalNetworkNotification`, and the original greeting exchange with a local
-test client. Then continue N3–N5 to a complete two-app match. Eight N1 service
-tests pass; they do not establish application or whole-match acceptance.
+Next result: the app client performs its own lookup/connect/handshake through
+iteration permits and two native apps retain their connected roles and RNG.
+Then continue N4–N5 to a complete two-app match. N1/N2 checks do not establish
+whole-match acceptance.
+
+## N2 host integration (2026-10-02)
+
+Connect the already compared `OriginalNetworkNotification` (415 saved whole
+callbacks in NETWORK_NOTIFICATION) to the application's message loop and the
+existing Mac service. Reference artifacts and contracts are unchanged; no new
+original execution. Fresh callback locals remain undefined until written.
+Socket operations and their in-handshake sleeps use iteration permits, so
+replaying a suspended Core attempt cannot duplicate a send or accept. Messages
+and DefWindowProc use the existing window channel. A provider failure after
+external IO remains terminal; it is not a successful rollback of that IO.
+
+Checks: syntax first, then retained notification/menu/iteration tests and a new
+whole-iteration route/order/replay test, plus a native host probe on port 12345
+with a task-owned localhost peer. The app must send the original greeting,
+names and RNG bytes and retain its own accepted state. No Windows or full-match
+acceptance is claimed by this stage. Independent review remains open.
+
+Owned paths: the application Bootstrap/Host/Menu/ObservedIteration provider
+chain, Mac runtime Network/Menu/Messages, their tests, and this result/handoff.
+Preserve existing unfinished N2 input changes and unrelated work. Storage:
+`/Volumes/X5/ntsd-2.4-research/network-app-host-20261002`; mounted writable APFS
+UUID verified, 89.4 GiB free, at most 12 GiB new output, retaining 40 GiB external
+and 6 GiB internal. Reuse the terminal network-service-reset SwiftPM cache.
+Build bound 15 minutes, selected tests 5 minutes, host probe 60 seconds; at most
+three correction rounds before diagnosis. A separate goal-100 worktree app was
+observed running and is not owned or changed by this task.
+
+**Result:** [evidence](../evidence/network-app-host-20261002.json). The existing
+N2 main-menu WIP is integrated with the new 0x401 route, socket permit/reply and
+Mac request provider. Undefined 160-byte locals are owned by the callback;
+global writes return through the enclosing session. MessageBox and default
+window handling stay on the window channel. The Mac provider executes the
+original 3000/500/500 ms waits before the next IO.
+
+Run1 built in 319.83 s; all 17 selected tests passed in 39.413 s. The new runtime
+test creates the host from menu input and exchanges actual bytes with its own
+local peer. It verifies the nine IO/sleep requests, exact greeting/names/RNG,
+stored socket/roles/names and unchanged remaining bytes/masks. A deliberately
+late publication failure then resumes the same journal without repeating IO.
+READ/CONNECT/CLOSE keep their message-box-only semantics. Retained main-menu,
+network-menu, whole-notification and iteration/menu tests also passed; all 669
+candidate code pins remained unchanged.
+
+A separate `NTSDNative --original` process created its listener from ONLINE
+GAME, sent 14+77+3001 bytes to a peer on the same Mac, and exited 0 via its script
+with no boundary or message box. The original selected local interface
+100.123.168.127, so this was not a 127.0.0.1 bind. The whole-menu test additionally
+selected the Host screen; the separate process probe stayed in the ONLINE
+choice screen and did not launch a match. The retained `--no-network` error
+scenario passed unchanged. This checks the pinned SwiftPM binary, not a clean
+shipping package. All owned runs are terminal; N3–N5, the complete match,
+Windows interoperability and independent review remain open.
 
 ## Resumed priority and independent N1 correction (2026-10-02)
 
@@ -201,13 +255,13 @@ working code, so the goal's whole-match criterion is not satisfied:
 
 | Required result | Current code/evidence | Remaining dependency |
 | --- | --- | --- |
-| N2 host greeting from the app | `OriginalApplicationMenuSession` routes graph message 0x400, but has no `OriginalNetworkNotification` consumer; `OriginalRuntimeLaunch` already queues service notifications | Finish the window/socket request routing |
+| N2 host greeting from the app | Menu listener and 0x401 consumer implemented; 17 tests and separate native-process greeting probe pass | Independent review remains open; use this retained session for N3/N4 |
 | N3 client connects through the UI | Menu client calls still use `refused()`; `OriginalMacRuntimeNetwork.answer` handles only main-menu requests | Connect the real client requests to the shared socket service and preserve delivery/terminal-failure semantics |
 | N4 synchronized match to Summary | The loading control provider still returns -1 for asyncSelect/ioctl and has no send/receive implementation | Live session state from N2/N3, game input exchange, then two-app synchronization evidence |
 | N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE delivery needs the unfinished notification route | The same app socket/session routing plus actual failure/exit scenarios |
 | Offline behavior and Windows comparison | Prior offline acceptance has its own pinned inputs; new service tests execute no app. Windows was not observed | Recheck affected app paths after integration; Windows interoperability stays separately open |
 
-The next implementation increment is N2, as described above. Repeating successful
+The next implementation increment is N3, as described above. Repeating successful
 N1 tests or offline soaks would not supply the missing app integration. The
 earlier requirement for external clarification before any N2–N5 work was based
 on an unsupported expansion of the unknown refusal scope and is withdrawn.

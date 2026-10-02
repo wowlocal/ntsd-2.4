@@ -246,7 +246,7 @@ def online_check(timeout, app=APP):
     box, Back), host (waiting, Back), Cancel; OFFICIAL WEBSITE then proves the
     main menu is back."""
     with tempfile.TemporaryDirectory(prefix="ntsd-online-") as scratch:
-        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--overlay", scratch,
+        done = subprocess.run([str(app), "--original", "--mute-music", "--mute-sounds", "--no-network", "--overlay", scratch,
                                "--virtual-clock", "123456789", "8", "--script",
                                "15 answer ok; 16 answer ok; 20 click 410 262; 60 click 500 490; 100 click 400 318; "
                                "130 key 65; 145 answer ok; 150 key 13; 240 click 480 370; 280 click 400 287; "

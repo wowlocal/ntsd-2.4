@@ -22,11 +22,24 @@ public struct OriginalMenuNetworkInput: Codable, Equatable, Sendable {
     public struct Address: Codable, Equatable, Sendable {
         public let word: UInt32
         public let text: [UInt8]
+        public init(word: UInt32, text: [UInt8]) { self.word = word; self.text = text }
     }
     public let startupResult: Int32, version: UInt16, hostnameResult: Int32
     public let hostname: [UInt8], hostEntryAddress: UInt32, addresses: [Address]
     public let socketResult: UInt32, asyncResult: Int32, bindResult: Int32, listenResult: Int32
 }
+
+/// A live Winsock reply for 402b60 and row 2's bind/listen (NETWORK_PLAY_PLAN.md
+/// N2). `word` is WSAStartup's wVersion, gethostbyname's hostent token or the
+/// socket handle; `bytes` is gethostname's name; `addresses` the host list.
+public struct OriginalMenuNetworkReply: Equatable, Sendable {
+    public var result: Int32, word: UInt32, bytes: [UInt8], addresses: [OriginalMenuNetworkInput.Address]
+    public init(result: Int32 = 0, word: UInt32 = 0, bytes: [UInt8] = [], addresses: [OriginalMenuNetworkInput.Address] = []) {
+        self.result = result; self.word = word; self.bytes = bytes; self.addresses = addresses
+    }
+}
+/// Answers each Winsock request event in order, when it is made.
+public typealias OriginalMenuNetworkProvider = (OriginalMainMenuEvent) throws -> OriginalMenuNetworkReply
 
 public struct OriginalMainMenuInput: Codable, Equatable, Sendable {
     public let targetSurface: UInt32
@@ -69,11 +82,12 @@ extension OriginalMatchPreparation {
 public enum OriginalMainMenu {
     public static func run(world: inout OriginalStateRecord,globals: inout OriginalStateRecord,
         crt: inout OriginalCRTRandom,input: OriginalMainMenuInput,
+        network: OriginalMenuNetworkProvider? = nil,
         store: @escaping OriginalWindowInput.Store = { _,_ in },
         worldStored: @escaping (Int,UInt32) throws -> Void = { _,_ in },
         observe: (OriginalMainMenuEvent) throws -> Void = { _ in }) throws -> OriginalMainMenuExit {
         guard world.bytes.count == OriginalStateRecord.worldPrefixSize,globals.bytes.count == OriginalMatchPreparation.globalSize else { throw OriginalStateError.invalidStorage("Main menu storage sizes") }
-        var execution = Execution(world: world,globals: globals,store:store,worldStored:worldStored),random = crt
+        var execution = Execution(world: world,globals: globals,store:store,worldStored:worldStored,live:network),random = crt
         let result = try execution.consumeMainMenu(crt: &random,input: input,observe: observe)
         world = execution.world;globals = execution.globals;crt = random;return result
     }
@@ -81,7 +95,28 @@ public enum OriginalMainMenu {
         var world: OriginalStateRecord,globals: OriginalStateRecord
         let store: OriginalWindowInput.Store
         let worldStored: (Int,UInt32) throws -> Void
+        /// Live Winsock answers; nil answers from the supplied input.
+        let live: OriginalMenuNetworkProvider?
+        /// gethostbyname's list, as answered.
+        var hostAddresses: [OriginalMenuNetworkInput.Address] = []
         static let globalBase = OriginalMatchPreparation.globalBase
+        /// Emits one Winsock request and answers it.
+        func ask(_ kind: OriginalMainMenuEvent.Kind, _ words: [UInt32] = [], _ strings: [[UInt8]] = [],
+                 _ input: OriginalMenuNetworkInput, observe: (OriginalMainMenuEvent) throws -> Void) throws -> OriginalMenuNetworkReply {
+            let e = OriginalMainMenuEvent(kind, words, strings)
+            try observe(e)
+            if let live { return try live(e) }
+            switch kind {
+            case .startup: return .init(result: input.startupResult, word: UInt32(input.version))
+            case .hostname: return .init(result: input.hostnameResult, bytes: input.hostname)
+            case .hostLookup: return .init(word: input.hostEntryAddress, addresses: input.addresses)
+            case .socket: return .init(word: input.socketResult)
+            case .asyncSelect: return .init(result: input.asyncResult)
+            case .bind: return .init(result: input.bindResult)
+            case .listen: return .init(result: input.listenResult)
+            default: return .init()
+            }
+        }
         static func error(_ text: String) -> OriginalStateError { .invalidStorage("Main menu: "+text) }
         func global(_ address: Int) throws -> Int32 { try globals.integer(at: address-Self.globalBase,as: Int32.self) }
         mutating func setGlobal(_ address: Int,_ value: Int32) throws {
@@ -156,22 +191,20 @@ public enum OriginalMainMenu {
                 }
                 for i in 0..<200 { try globals.write(UInt8(0), at: 0x44f340-Self.globalBase+i) }
                 let address = try globals.integer(at: 0x44f264-Self.globalBase, as: UInt32.self)
-                guard let selected = input.network.addresses.first(where: { $0.word == address }), selected.text.count < 200 else {
+                guard let selected = hostAddresses.first(where: { $0.word == address }), selected.text.count < 200 else {
                     throw Self.error("Menu address text boundary")
                 }
                 try event(.addressText, [address], [selected.text])
                 for (i, byte) in (selected.text+[0]).enumerated() { try globals.write(byte, at: 0x44f340-Self.globalBase+i) }
                 let socket = try globals.integer(at: 0x44f1b4-Self.globalBase, as: UInt32.self)
                 let sockaddr = Array(globals.bytes[(0x44f58c-Self.globalBase)..<(0x44f59c-Self.globalBase)])
-                try event(.bind, [socket, 16], [sockaddr])
-                if input.network.bindResult == -1 {
-                    try event(.closeSocket, [socket])
+                if try ask(.bind, [socket, 16], [sockaddr], input.network, observe: observe).result == -1 {
+                    _ = try ask(.closeSocket, [socket], [], input.network, observe: observe)
                     return .returnWithoutPresentation
                 }
-                try event(.listen, [socket, 5])
-                if input.network.listenResult == -1 {
+                if try ask(.listen, [socket, 5], [], input.network, observe: observe).result == -1 {
                     try message("Listening() error")
-                    try event(.closeSocket, [socket])
+                    _ = try ask(.closeSocket, [socket], [], input.network, observe: observe)
                     return .returnWithoutPresentation
                 }
             case 3: try setGlobal(0x44d064, 6)
@@ -201,18 +234,18 @@ public enum OriginalMainMenu {
         func checkString(_ bytes: [UInt8], maximum: Int) throws {
             guard bytes.count <= maximum, !bytes.contains(0) else { throw Self.error("Network C-string boundary") }
         }
-        try event(.startup, [0x101])
         // WSAStartup's return is ignored; the original checks wVersion instead.
-        guard input.version == 0x101 else { try message("WSAStartup()"); return false }
-        try event(.hostname, [256])
-        guard input.hostnameResult != -1 else { try message("gethostname()"); return false }
-        try checkString(input.hostname, maximum: 255)
-        try event(.hostLookup, [], [input.hostname])
-        try globals.write(input.hostEntryAddress, at: 0x44f2d4-Self.globalBase)
-        guard input.hostEntryAddress != 0 else { try message("gethostbyname()"); return false }
-        guard !input.addresses.isEmpty else { throw Self.error("Empty successful host address list") }
+        guard try ask(.startup, [0x101], [], input, observe: observe).word == 0x101 else { try message("WSAStartup()"); return false }
+        let named = try ask(.hostname, [256], [], input, observe: observe)
+        guard named.result != -1 else { try message("gethostname()"); return false }
+        try checkString(named.bytes, maximum: 255)
+        let lookup = try ask(.hostLookup, [], [named.bytes], input, observe: observe)
+        try globals.write(lookup.word, at: 0x44f2d4-Self.globalBase)
+        guard lookup.word != 0 else { try message("gethostbyname()"); return false }
+        guard !lookup.addresses.isEmpty else { throw Self.error("Empty successful host address list") }
+        hostAddresses = lookup.addresses
         var selectedIndex = 0
-        for (index, address) in input.addresses.enumerated() {
+        for (index, address) in lookup.addresses.enumerated() {
             try checkString(address.text, maximum: 1023)
             _ = try port(0)
             try event(.addressText, [address.word], [address.text])
@@ -222,17 +255,18 @@ public enum OriginalMainMenu {
             let excluded = ["10.", "192.168", "169.254", "127"].contains { address.text.starts(with: $0.utf8) }
             if !excluded { selectedIndex = index; break }
         }
-        let address = input.addresses[selectedIndex].word
+        let address = lookup.addresses[selectedIndex].word
         try globals.write(UInt16(2), at: 0x44f260-Self.globalBase)
         try globals.write(address, at: 0x44f264-Self.globalBase)
         try globals.write(port(5000), at: 0x44f262-Self.globalBase)
         try setGlobal(0x44f1b4, 0); try setGlobal(0x44f1b0, 0)
-        try event(.socket, [2, 1, 6])
-        try globals.write(input.socketResult, at: 0x44f1b4-Self.globalBase)
-        guard input.socketResult != UInt32.max else { try message("socket()"); return false }
+        let socket = try ask(.socket, [2, 1, 6], [], input, observe: observe).word
+        try globals.write(socket, at: 0x44f1b4-Self.globalBase)
+        guard socket != UInt32.max else { try message("socket()"); return false }
         let window = try globals.integer(at: 0x4546f4-Self.globalBase, as: UInt32.self)
-        try event(.asyncSelect, [input.socketResult, window, 0x401, 0x38])
-        guard input.asyncResult == 0 else { try message("WSAAsyncSelect()"); return false }
+        guard try ask(.asyncSelect, [socket, window, 0x401, 0x38], [], input, observe: observe).result == 0 else {
+            try message("WSAAsyncSelect()"); return false
+        }
         try globals.write(UInt16(2), at: 0x44f58c-Self.globalBase)
         try globals.write(address, at: 0x44f590-Self.globalBase)
         try globals.write(port(12345), at: 0x44f58e-Self.globalBase)

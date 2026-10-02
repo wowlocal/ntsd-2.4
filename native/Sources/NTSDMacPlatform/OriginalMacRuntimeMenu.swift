@@ -46,6 +46,9 @@ import NTSDCore
     }
     static func textWrite(_ bytes: [UInt8]) -> [UInt8] { bytes.flatMap { $0 == 10 ? [13,10] : [$0] } }
     public let bitmap: OriginalMacBitmapService, front: OriginalMacFrontService
+    /// Live Winsock for ONLINE GAME (NETWORK_PLAY_PLAN.md N2); nil keeps the
+    /// declared no-network stand-in (WSAStartup wVersion 0).
+    public var network: OriginalMacRuntimeNetwork?
     public let initialization: OriginalApplicationBootstrap.MenuInputs
     /// OutputDebugStringA text and MessageBoxA (text, caption) requests seen so far.
     public final class Diagnostics {
@@ -120,7 +123,7 @@ import NTSDCore
     public func step(maximumRequests: Int = 20000) throws -> Host.Outcome {
         let driver = Driver(host:host)
         for _ in 0..<maximumRequests {
-            switch try driver.resume(prepare:{ _,state in try self.inputs(state) }) {
+            switch try driver.resume(prepare:{ _,state in try self.inputs(state) },network:network != nil) {
             case .request(let permit):
                 requests += 1; lastRequest = permit.request
                 switch permit.request {
@@ -144,6 +147,16 @@ import NTSDCore
                 case .graph(let q):
                     try driver.beginService(permit)
                     do { try driver.answer(permit,response:.graph(try music.graph(q))) }
+                    catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
+                case .network(let e):
+                    guard let network else { throw Boundary.unserved("network \(e.kind)") }
+                    try driver.beginService(permit)
+                    do { try driver.answer(permit,response:.network(try network.answer(e))) }
+                    catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
+                case .socket(let q):
+                    guard let network else { throw Boundary.unserved("socket \(q.kind)") }
+                    try driver.beginService(permit)
+                    do { try driver.answer(permit,response:.socket(try network.answer(q))) }
                     catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
                 }
             case .advanced(let outcome):

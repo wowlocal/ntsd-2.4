@@ -164,6 +164,12 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                 // Scripted runs answer GetKeyState(VK_CAPITAL) with Caps Lock off.
                 if arguments.contains("--script") { menu.capsLock = { 0 } }
                 self.menu = menu; menu.sounds = sounds
+                // Live Winsock for ONLINE GAME (NETWORK_PLAY_PLAN.md); --no-network
+                // keeps the declared stand-in (WSAStartup answers wVersion 0).
+                if !arguments.contains("--no-network") {
+                    let network = OriginalMacRuntimeNetwork(); menu.network = network
+                    network.winsock.post = { [weak menu] n in menu?.messages.post(n.message,n.socket,n.lParam) }
+                }
                 menu.messages.capturedJoysticks = UInt32(joystickCount)
                 if !arguments.contains("--script") && !controllers.isEmpty {
                     // Common modes: sampling continues while a window is dragged or a menu tracks.

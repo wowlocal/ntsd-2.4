@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "task": "network-app-host-20261002",
+  "recordedUTC": "2026-10-02T16:47:08.790363+00:00",
+  "baseHead": "a4fb48cc4dbf337aeef84dd3d85b5fff350b6daf",
+  "scope": "N2 menu listener and WndProc 0x401 through observed iteration permits to the Mac socket service; no new original execution",
+  "artifactDirectory": "/Volumes/X5/ntsd-2.4-research/network-app-host-20261002",
+  "artifactSHA256": {
+    "before-inputs.json": "d09637d71f6d328388f465f01995b98186c51f433454619e33c3defa4a2cae12",
+    "before-worktree.diff": "4656b0194907c05bc9fa0bf898df2c8bb60e0c0a6135ac46d73736eedda13758",
+    "candidate1-inputs.json": "038d12e56cc4fd42fa0aa2b2d877ba3abda32f8fcc411cfb0b0109c23c73b699",
+    "candidate1-worktree.diff": "05dc7c77669609c833a88ea71c1384b7e26b7fe1563ec2ab0768747c6355a17b",
+    "syntax.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run1-job.json": "549ff300dda134d2932535c4fee87f2036ad74bb6c4434fcb034241193ee98c7",
+    "run1.log": "710893386514c46ea1c1c826fce76851a884f601be73ade60d52fd21fe1b9d5c",
+    "probe.py": "bf1d71b607bfa2fa231e5a0d0968cfec4f07748402cc8dc5f5010e4804cb57d8",
+    "probe-run.log": "1dfa13c3c5aedf1d03fba93680d75372958d5612adc37e7f724c2355369adb2e",
+    "app-probe-job.json": "2d4730f9637f01d60c5f49aadefed0d5e6cc824598e1a0522571c37093a2b372",
+    "app-probe.log": "e3e8a661d79a422e7e0df7c6bce96c609f245935f8b086542983283fa0704ffa",
+    "app-host-packets.bin": "c075b7f02ecd3b41f7c5aaeb0d30c5fdaf843d89d730e1e9149dd120eb2c4f36",
+    "offline-online-check.json": "891b65450db9e7b1cb6962fd721f057c4735568fd2787d9d0b43ac76e4d46955"
+  },
+  "checks": {
+    "syntax": "11 Swift files parsed; git diff check clean",
+    "selectedTests": {
+      "count": 17,
+      "failures": 0,
+      "buildSeconds": 319.83,
+      "testSeconds": 39.413,
+      "sourcePinsUnchanged": 669,
+      "session": 91723,
+      "exitCode": 0
+    },
+    "nativeHostProbe": {
+      "pid": 9846,
+      "terminal": true,
+      "exitCode": 0,
+      "binarySHA256": "7c017fd6aee95748f7ff90c143b9cccece08398b982d867550edc28716548983",
+      "listener": "100.123.168.127:12345",
+      "peer": "same Mac, selected local interface address; not 127.0.0.1",
+      "receivedBytes": 3092,
+      "greeting": "u can connect plus NUL",
+      "nameBytes": 77,
+      "rngBytes": 3001,
+      "scriptedMenu": "ONLINE GAME; clean scripted exit without loading a match"
+    },
+    "offlineOnlineErrorScenario": {
+      "passed": true,
+      "observed": {
+        "exitCode": 0,
+        "messageBoxes": [
+          "WSAStartup()",
+          "InitWinSock()",
+          "socket()"
+        ],
+        "opened": [
+          "http://lf2.net/forum",
+          "http://littlefighter.com"
+        ]
+      }
+    }
+  },
+  "coverage": [
+    "Runtime startup and host selection via mouse messages",
+    "Whole callback request order, three real sleeps and exact peer bytes",
+    "Late publication validation retries the same journal with no repeated accept/send",
+    "Own accepted socket, roles, names and unchanged remaining state/masks",
+    "READ/CONNECT/CLOSE notification boxes on the window channel",
+    "Retained main-menu, network-menu and 415-notification comparison suites"
+  ],
+  "limits": [
+    "N3 client and N4 match are not integrated; N5 exit still uses stand-in",
+    "Independent review remains open",
+    "No Windows interoperability or whole network match",
+    "The app is the current source-pinned SwiftPM binary; clean shipping package acceptance is separate",
+    "Historical incident and prior failures/evidence unchanged"
+  ]
+}
