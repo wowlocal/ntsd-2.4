@@ -1,0 +1,75 @@
+{
+ "date": "2026-10-02",
+ "card": "docs/research/STAGE_ENDING.md",
+ "function": "437220",
+ "caller": "429e7a..429e91",
+ "tail": "42e0d2",
+ "oracle": {
+  "tool": "tools/oracle_stage_ending.py",
+  "unicorn": "2.1.4",
+  "exeSHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+  "real": [
+   "437220",
+   "431c70"
+  ],
+  "recorded": [
+   "43f010 (bitmap draw)",
+   "415160 (fill)"
+  ],
+  "performed": [
+   "4450a0 memset"
+  ]
+ },
+ "fixture": {
+  "path": "native/Tests/NTSDCoreTests/Fixtures/original-stage-ending.json",
+  "sha256": "cfdb2f8545dc4abcf99e5277f07fa8b24e25eedd684043a820aa482f9bfd662c",
+  "cases": 581,
+  "calls": 7171,
+  "writtenBytes": 39186
+ },
+ "frames": [
+  [
+   0,
+   0,
+   402,
+   66
+  ],
+  [
+   0,
+   67,
+   402,
+   91
+  ],
+  [
+   0,
+   159,
+   402,
+   156
+  ],
+  [
+   0,
+   316,
+   419,
+   169
+  ],
+  [
+   0,
+   486,
+   419,
+   65
+  ],
+  [
+   403,
+   53,
+   15,
+   13
+  ]
+ ],
+ "tests": {
+  "OriginalStageEndingTests": "1 pass: 581 cases, 7171 calls, 39186 written bytes",
+  "OriginalStageFinaleTests": "2 pass: four pages open/close through the dispatcher and return to menu 10 with the input reset; levels 1/2 start at frame 0"
+ },
+ "open": [
+  "the live app has not reached menu 300 in a run"
+ ]
+}

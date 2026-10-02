@@ -158,7 +158,28 @@ public enum OriginalCharacterScreen {
             if result == .returned && includeTailCheckpoint { try mark(0x42e0d2) }
             return finish(result)
         }
-        guard try !(mode == 5 && word(0x450c2c) == 0),![10,300].contains(menu),
+        if try menu == 300 && !(mode == 5 && word(0x450c2c) == 0) {
+            // 429e7a..429e91: the Stage ENDING screen, then the common tail. 437220
+            // writes neither the ENDING token, the back buffer nor other draw inputs.
+            let endingToken = UInt32(bitPattern:try word(0x451190)),backBuffer = UInt32(bitPattern:try word(0x455608))
+            let drawGlobals = candidate.globals
+            var ending = candidate
+            try OriginalStageEnding.advance(state:&ending,target:target,ending:OriginalStageEnding.endingSheet()) { e in
+                switch e {
+                case let .draw(x,y,frame,surface):
+                    try draw(.init(bitmap:.menu(endingToken),x:x,y:y,target:surface,frame:frame,colorKey:0),drawGlobals)
+                case let .fill(x,y,width,height,color):
+                    var filled = OriginalFrontScreenEvent("fill")
+                    filled.fill = try OriginalSurfaceFilling.request(target:backBuffer,x:x,y:y,width:width,height:height,color:color,backing:fillBacking)
+                    try observe(filled)
+                case .resetInput: break
+                }
+            }
+            candidate = ending
+            if includeTailCheckpoint { try mark(0x42e0d2) }
+            return finish(.returned)
+        }
+        guard try !(mode == 5 && word(0x450c2c) == 0),menu != 10,
               !(20...50).contains(menu),!(120...150).contains(menu) else { throw error("Other menu dispatcher") }
         if menu == 3 {
             for seat in 0..<8 {
