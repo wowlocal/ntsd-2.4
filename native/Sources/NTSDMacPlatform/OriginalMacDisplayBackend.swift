@@ -112,16 +112,23 @@ import NTSDCore
     public var allocatedBytes: Int { budget.allocated }
     public var retainedResources: [any OriginalApplicationStartupResource] { Array(live.values) }
     /// Declared live-app policies: fresh surfaces start as known black, and
-    /// presentation shows still-unknown pixels (e.g. RLE holes) as black. The
-    /// defaults keep unwritten pixels unknown, as the comparison tests require.
+    /// presentation shows still-unknown pixels as black. The defaults keep
+    /// unwritten pixels unknown, as the comparison tests require.
     public let freshSurfacesKnownBlack: Bool, presentUnknownAsBlack: Bool
+    /// Declared live-app policy: an RLE8 hole reads as palette entry 0. The
+    /// LR_CREATEDIBSECTION bitmap starts zero-filled and the RLE stream never
+    /// writes its holes, so StretchBlt copies index 0. With the WORDS keys
+    /// (black, palette 0) the holes then key out, as observed under CrossOver
+    /// (APPLICATION_RLE_HOLES.md); unknown holes would present as black boxes.
+    public let rleHolesReadPaletteZero: Bool
     /// The live app keeps no operation logs: a match replays ≈130 draws per
     /// gameplay body, so a log would grow without bound.
     public let keepsOperationLogs: Bool
     public init(windows: OriginalMacWindowBackend,maximumBytes: Int = 256*1024*1024,freshSurfacesKnownBlack: Bool = false,
-                presentUnknownAsBlack: Bool = false,keepsOperationLogs: Bool = true) {
+                presentUnknownAsBlack: Bool = false,rleHolesReadPaletteZero: Bool = false,keepsOperationLogs: Bool = true) {
         self.windows = windows; budget = Budget(maximumBytes); self.freshSurfacesKnownBlack = freshSurfacesKnownBlack
-        self.presentUnknownAsBlack = presentUnknownAsBlack; self.keepsOperationLogs = keepsOperationLogs
+        self.presentUnknownAsBlack = presentUnknownAsBlack; self.rleHolesReadPaletteZero = rleHolesReadPaletteZero
+        self.keepsOperationLogs = keepsOperationLogs
     }
     private func storage(_ width: Int,_ height: Int) throws -> Storage {
         let value = try Storage(width,height,budget)
@@ -545,9 +552,13 @@ extension OriginalMacDisplayBackend {
             let dc = try resource(q.words[0],as:SurfaceDC.self),memory = try resource(q.words[5],as:MemoryDC.self)
             let p = memory.selected.input!.pixels,s = dc.surface,data = s.storage!
             let (x,y,w,h) = try bitmapRect(q.words[1],q.words[2],q.words[3],q.words[4],s.width,s.height)
-            let sx = Int(q.words[6]),sy = Int(q.words[7])
+            let sx = Int(q.words[6]),sy = Int(q.words[7]),hole = rleHolesReadPaletteZero ? p.paletteZero : nil
             for row in 0..<h { for column in 0..<w {
                 let a = (sy+row)*p.width+sx+column,b = (y+row)*data.width+x+column,i = a*3
+                if !p.defined[a],let hole {
+                    data.values[b] = (UInt32(hole[0]) << 16 | UInt32(hole[1]) << 8 | UInt32(hole[2])).littleEndian
+                    data.known[b] = 1;continue
+                }
                 data.values[b] = (UInt32(p.rgb[i]) << 16 | UInt32(p.rgb[i+1]) << 8 | UInt32(p.rgb[i+2])).littleEndian
                 data.known[b] = p.defined[a] ? 1 : 0
             } }

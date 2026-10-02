@@ -8,6 +8,9 @@ public struct OriginalDIBPixels: Equatable {
     public let pixelOffset: Int
     public let rgb: [UInt8]
     public let defined: [Bool]
+    /// RLE8 only: palette entry 0 as RGB, the color a zero-filled 8-bit
+    /// destination shows at a hole. A source fact, not a Windows claim.
+    public let paletteZero: [UInt8]?
 
     /// The pixel budget is a caller allocation boundary, not an original rule.
     public init(dib: [UInt8], maximumPixels: Int = 16_777_216, pixelOffset: Int? = nil) throws {
@@ -91,6 +94,7 @@ public struct OriginalDIBPixels: Equatable {
             // EOB ends decoding. Declared stream padding/tails remain raw DIB data.
         }
         self.width = width;self.height = height;self.pixelOffset = start;self.rgb = rgb;self.defined = defined
+        paletteZero = compression == 1 ? [dib[42],dib[41],dib[40]] : nil
     }
 
     public func color(x: Int,y: Int) throws -> [UInt8] {

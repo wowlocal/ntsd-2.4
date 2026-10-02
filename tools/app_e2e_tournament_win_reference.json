@@ -35,7 +35,7 @@
    ]
   },
   {
-   "capture": "3ac3d26296ec7e26dda28162b3795520804a430aca660af9530429f70634eb3d",
+   "capture": "b1c289d839f68137d4d655495376fd62757f74a3bf823bc6ba3c2e33faa46623",
    "event": "captured",
    "iterations": 13500,
    "musicPlaying": true,
@@ -69,7 +69,7 @@
  "progress": [
   {
    "bodies": 300,
-   "capture": "88a590e673e37b173acbbcbfe339dbac5fcb66b50f5a4009fb2341f680b1d512",
+   "capture": "d65ae5f2340051334ecfad4b73b122a022597c3d1a33aaa5ef90f5a3768c1772",
    "characterAI": 300,
    "cycles": 788,
    "iterations": 2489,
@@ -79,7 +79,7 @@
   },
   {
    "bodies": 600,
-   "capture": "d935ac249672eba14f1756fe5f9fb3bdc21cf0726f07374884eee2082f2cf90a",
+   "capture": "8fc85f4df34e67247078ec4b6a2a8d192b2e249d0eca240ed7b11cfdfa9e0e81",
    "characterAI": 600,
    "cycles": 1088,
    "iterations": 3426,
@@ -89,7 +89,7 @@
   },
   {
    "bodies": 900,
-   "capture": "8fdcbcbd3efa3ceb260a62162dc05e3a0bd508f88ef87c8566ed06c120a664bc",
+   "capture": "66b742531a5f6ccffe0a5903ae32b034facdee176cd4e7a46f958d6ef74c9531",
    "characterAI": 900,
    "cycles": 1388,
    "iterations": 4364,
@@ -99,7 +99,7 @@
   },
   {
    "bodies": 1200,
-   "capture": "30a02bde41a233022e49483af45665af2f9cf9d141d00473f842be6ab009fe0c",
+   "capture": "8f2c4054d3157cd5b13372ead6fe2f6601522f2e6527919b4b5d62aaba854bed",
    "characterAI": 1202,
    "cycles": 2090,
    "iterations": 6558,
@@ -109,7 +109,7 @@
   },
   {
    "bodies": 1500,
-   "capture": "e9d7fe983ebd6f34083ee830108d3075c295a8b132ee071ce1da1a87107e4ac4",
+   "capture": "41f9a68543c9fea8f01167cc9635bf0f7859eac5490c97fdd0184f3b30abb3f7",
    "characterAI": 1502,
    "cycles": 2390,
    "iterations": 7495,
@@ -119,7 +119,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "4e5f1060531272455d096f7f2f0c9137083dcf5a5168615845c8fee010911b6e",
+   "capture": "d3d5bb96bf78819e048bddff8bed0e4667bda04311ac22f92fc2878e31d00b6a",
    "characterAI": 1802,
    "cycles": 2690,
    "iterations": 8433,
@@ -129,7 +129,7 @@
   },
   {
    "bodies": 2100,
-   "capture": "1cb255a88ceb82b6c1c974173df7c0bd9ff99be3e743c01ec98dd348ed570e83",
+   "capture": "be4723fe9bc7ed4c1e1dd15177ce420800f2c4d8d5373392b26f90310be8c825",
    "characterAI": 2102,
    "cycles": 2990,
    "iterations": 9370,
@@ -139,7 +139,7 @@
   },
   {
    "bodies": 2400,
-   "capture": "b817f4c42797aedcd7479dad066c46efdcaf72f7936eec6e7f908905ddc0d65c",
+   "capture": "9f9924f60878f62f91a00defeebf26b733c83c97d2d96898f84d6c0e72901fbc",
    "characterAI": 2402,
    "cycles": 3290,
    "iterations": 10308,

@@ -1,5 +1,13 @@
 # Карта исследования и переноса NTSD 2.4
 
+[RLE holes](research/APPLICATION_RLE_HOLES.md): the black box under "Com",
+"P1" and the Summary names is gone. The bitmap fonts `WORDS0`..`WORDS5` (and
+`LF2_CURSOR`) are RLE8 resources with unwritten pixels. The app now reads
+those pixels as palette entry 0, as LoadImage's zero-filled DIB section
+does; black is then removed by the font key. This matches the original under
+CrossOver. All ten e2e scenarios differ only in capture hashes, and only at
+pixels that were black before.
+
 [Network match integration](research/NETWORK_PLAY.md#n4-match-integration-2026-10-02):
 two native apps connect through their menus, select Naruto/Sasuke on District
 and complete1070 gameplay bodies to visible Summary.836 packets each direction,

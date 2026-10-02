@@ -161,6 +161,28 @@ import XCTest
         XCTAssertEqual(try call(s,.init("release",[token])).result,0)
         withExtendedLifetime(e) {}
     }
+    /// APPLICATION_RLE_HOLES.md: with the live-app policy an RLE hole reads as
+    /// palette entry 0 (here blue, to tell it from black); without it the hole
+    /// stays unknown. Written pixels are unchanged either way.
+    func testRLEHoleReadsPaletteZeroUnderTheLivePolicy() throws {
+        var dib = try OriginalStateRecord(bytes:Array(repeating:0,count:52),defined:Array(repeating:true,count:52))
+        try dib.write(UInt32(40),at:0);try dib.write(Int32(2),at:4);try dib.write(Int32(1),at:8)
+        try dib.write(UInt16(1),at:12);try dib.write(UInt16(8),at:14);try dib.write(UInt32(1),at:16)
+        try dib.write(UInt32(4),at:20);try dib.write(UInt32(2),at:32)
+        try dib.write(UInt8(255),at:40);try dib.write(UInt8(255),at:46)
+        for (i,v) in [1,1,0,1].enumerated().map({ ($0.offset,UInt8($0.element)) }) { try dib.write(v,at:48+i) }
+        XCTAssertEqual(try OriginalDIBPixels(dib:dib.bytes).paletteZero,[0,0,255])
+        for policy in [false,true] {
+            let d = D(),r = try d.run(late:false,rleHolesReadPaletteZero:policy);defer { try? d.close(r) }
+            let input = try OriginalApplicationStartupInputs.Bitmap(dib:dib.bytes)
+            let s = S(backend:r.setup.display,inputs:.init(resources:["control":input],files:["control":.missing]))
+            let (_,e) = try construct(s,"control",d.ids(r).0),token = try surface(e)
+            let pixels = try s.backend.pixels(token)
+            XCTAssertEqual(pixels.values,[0xff0000,policy ? 0x0000ff : 0]);XCTAssertEqual(pixels.defined,[true,policy])
+            XCTAssertEqual(try call(s,.init("release",[token])).result,0)
+            withExtendedLifetime(e) {}
+        }
+    }
     func ticket(_ e: E,_ q: Q) throws -> E.Permit {
         var c = try e.snapshot.cursor()
         do { _ = try c.response(for:.init(q));throw Stop.limit }

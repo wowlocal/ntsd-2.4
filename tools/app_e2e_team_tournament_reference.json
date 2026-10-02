@@ -42,7 +42,7 @@
    "track": "bgm\\stage1.wma"
   },
   {
-   "capture": "eb25b23895045ba28cc7b02e67c2d249f4545377edf33bf583f4bc09067a7739",
+   "capture": "88f28ba1da757b3ff104da9bfd2b2c1340c75c0cd7cee8859cfb474e7f06edec",
    "event": "captured",
    "iterations": 10500,
    "musicPlaying": true,
@@ -56,7 +56,7 @@
  "progress": [
   {
    "bodies": 300,
-   "capture": "21d2bc56295f3ba7703e9d1a361f6ba16151128135533bad70109089e27e1c5e",
+   "capture": "bf0b7ef320bf636e5e6d8bf9b3d51bd7dc6c2999a6f4f27c255c85d3cb9dc642",
    "characterAI": 930,
    "cycles": 788,
    "iterations": 2489,
@@ -66,7 +66,7 @@
   },
   {
    "bodies": 600,
-   "capture": "27a0debc4a9fb4d3f392e6484b79b967008d1af4a7f21e189f4390896e9b7f83",
+   "capture": "6dfdbd21178c6f04c553c04813ab357b1fa6e83ffb8f4c9cd7c64bd0c7440f87",
    "characterAI": 1903,
    "cycles": 1088,
    "iterations": 3426,
@@ -76,7 +76,7 @@
   },
   {
    "bodies": 900,
-   "capture": "7f81e8bdbccca2bcfa3d708ab038de39e8d28aa1e1b6b5c0fc434b1b47c314a1",
+   "capture": "83171ab701c8c1df3ba8779ed59b9f50d48aca0703ba2e6dd891fc2f01ae26fa",
    "characterAI": 2833,
    "cycles": 1388,
    "iterations": 4364,
@@ -86,7 +86,7 @@
   },
   {
    "bodies": 1200,
-   "capture": "c0968f9583f2bbc4f2a0573d7bb7dcf10452bba825fca680fc5f73b1ba3b1faf",
+   "capture": "46988af1717aef94971f77f75d71fcf56d558bdf8d7317fb7e76de4c52cb637d",
    "characterAI": 3819,
    "cycles": 1688,
    "iterations": 5301,
@@ -96,7 +96,7 @@
   },
   {
    "bodies": 1500,
-   "capture": "63a3c6659dae981459d8507ff81df8877f547038f96642f9d72e4ea42d270f12",
+   "capture": "662201f3eb9125431875996c416e181c48af53e4b1293fff5739ef5514716922",
    "characterAI": 4762,
    "cycles": 1988,
    "iterations": 6239,
@@ -106,7 +106,7 @@
   },
   {
    "bodies": 1800,
-   "capture": "8b7be38abb681e19a6621493d951dd786210f6f0d02a64dc0459973a8c22ea38",
+   "capture": "7478c265680b59cb170185b4cd2e7999ea92c73c778fe5680043334ebf42b58c",
    "characterAI": 5662,
    "cycles": 2288,
    "iterations": 7176,

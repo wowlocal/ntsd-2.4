@@ -1,0 +1,365 @@
+{
+ "date": "2026-10-02",
+ "card": "docs/research/APPLICATION_RLE_HOLES.md",
+ "builds": {
+  "baseline": "4d1799790284c6a17fadc1bdeab61c62d91cf69a9c9dfab38e2d9d1fdd57b44e",
+  "fixed": "69c0037a079ed5b8b0e00565992d69e790bff5d88820e4d931a7a9adfcbb4d24",
+  "note": "same tree; baseline built with rleHolesReadPaletteZero:false in OriginalMacRuntimeStartup"
+ },
+ "run": "tools/app_e2e.run for every scenario, quit/website/controls/online/recording checks not run (--skip-quit equivalent: they open no capture and the online check uses sockets)",
+ "rleHoles": {
+  "WORDS0": 21187,
+  "WORDS1": 20800,
+  "WORDS2": 20800,
+  "WORDS3": 20801,
+  "WORDS4": 20801,
+  "WORDS5": 20801,
+  "LF2_CURSOR": 101,
+  "paletteZero": "black in all seven",
+  "otherRLEFiles": "sprite/sys/nckakuzu_water.bmp has no holes"
+ },
+ "scenarios": {
+  "vs": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 7592,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 7592,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 7576,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 7380,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 7348,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 10048,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "selection.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "mission": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 7100,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 7068,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 7100,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 6988,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 7576,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 7576,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "demo": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 5512,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 5992,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 5992,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "demo-exit.png": {
+     "changedPixels": 404,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "war": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 22628,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 21952,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 18744,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 15504,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 17800,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 15300,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002100.png": {
+     "changedPixels": 15300,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002400.png": {
+     "changedPixels": 16876,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002700.png": {
+     "changedPixels": 16876,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b003000.png": {
+     "changedPixels": 16876,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "war-settings.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "playback": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "after-f4.png": {
+     "changedPixels": 404,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000300.png": {
+     "changedPixels": 11452,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 11348,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 11012,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 10964,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 11048,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 10048,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002100.png": {
+     "changedPixels": 10048,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "tournament": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 7124,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 6988,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 8748,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 8748,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 8748,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 8748,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "menu.png": {
+     "changedPixels": 404,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "winner.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "altenter": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 1898,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 1898,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 1894,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 1845,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 1837,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 2512,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "windowed.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "tournament-win": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 7124,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 7052,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 6732,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 7124,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 6952,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 7124,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002100.png": {
+     "changedPixels": 7124,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b002400.png": {
+     "changedPixels": 6744,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "bracket.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "semifinal-summary.png": {
+     "changedPixels": 8368,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "team-tournament": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "b000300.png": {
+     "changedPixels": 8484,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000600.png": {
+     "changedPixels": 8572,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b000900.png": {
+     "changedPixels": 8764,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001200.png": {
+     "changedPixels": 8764,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001500.png": {
+     "changedPixels": 8344,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "b001800.png": {
+     "changedPixels": 11424,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "menu.png": {
+     "changedPixels": 404,
+     "changedPixelsNotBlackBefore": 0
+    },
+    "winner.png": {
+     "changedPixels": 0,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  },
+  "joystick": {
+   "baselineMatchesOldReference": true,
+   "fieldsOtherThanCaptureHashesEqual": true,
+   "captures": {
+    "joystick-match.png": {
+     "changedPixels": 6948,
+     "changedPixelsNotBlackBefore": 0
+    }
+   }
+  }
+ },
+ "referenceUpdate": "64 capture hashes in tools/app_e2e_*_reference.json replaced by the fixed build's; no other field changed",
+ "crossOverObservation": "goal-100-20261002/cua-trial1: the original's Com/P1/Summary labels have no box (CrossOver 26.3, Wine)"
+}
