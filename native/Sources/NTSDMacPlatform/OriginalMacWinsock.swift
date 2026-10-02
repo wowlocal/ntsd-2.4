@@ -141,6 +141,31 @@ public final class OriginalMacWinsock {
         }
         return words.isEmpty ? nil : words
     }
+    /// gethostbyaddr(raw IPv4, 4, AF_INET), used by the client's name-lookup
+    /// fallback. Copy the resolver's borrowed storage before the next lookup.
+    public func hostAddresses(address: UInt32) -> [UInt32]? {
+        guard started else { lastError = 10093; return nil } // WSANOTINITIALISED
+        var raw = address
+        let entry = withUnsafePointer(to: &raw) { Darwin.gethostbyaddr($0, 4, AF_INET) }
+        guard let entry else {
+            switch h_errno {
+            case HOST_NOT_FOUND: lastError = 11001
+            case TRY_AGAIN: lastError = 11002
+            case NO_DATA: lastError = 11004
+            default: lastError = 11003 // WSANO_RECOVERY
+            }
+            return nil
+        }
+        guard entry.pointee.h_addrtype == AF_INET, entry.pointee.h_length == 4,
+              let addresses = entry.pointee.h_addr_list else { lastError = 11004; return nil }
+        var words: [UInt32] = [], index = 0
+        while let bytes = addresses[index] {
+            words.append(UnsafeRawPointer(bytes).loadUnaligned(as: UInt32.self))
+            index += 1
+        }
+        guard !words.isEmpty else { lastError = 11004; return nil }
+        return words
+    }
     /// inet_addr: dotted decimal to an address word, INADDR_NONE when invalid.
     public static func address(_ text: [UInt8]) -> UInt32 {
         let parts = String(decoding: text.prefix { $0 != 0 }, as: UTF8.self).split(separator: ".", omittingEmptySubsequences: false)

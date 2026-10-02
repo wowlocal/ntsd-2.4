@@ -120,6 +120,51 @@ name lookup, but the Mac service currently exposes only name lookup. Establish
 and implement that platform response from the existing client contract before
 any integration; this does not resume the held application notification route.
 
+## N1 reverse lookup for the client fallback (2026-10-02)
+
+Independent missing platform response, following the checked lifetime increment.
+The recovered [client contract](NETWORK_CLIENT.md#connection-and-storage-order)
+requests gethostbyaddr(raw4,4,AF_INET) after a null gethostbyname result and uses
+the returned first IPv4 address. N1 currently has no reverse-lookup method.
+Implement it with the Mac resolver, copying its borrowed address list into
+owned Swift words before any later lookup. The platform result can be nil;
+an unresolved address must not be turned into a successful host entry.
+Reference game rules and immutable corpora are unchanged.
+
+API evidence: Microsoft's
+[gethostbyaddr contract](https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-gethostbyaddr)
+and Apple's [resolver manual](https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/endhostent.3.html),
+plus the installed macOS SDK netdb.h for hostent layout and HOST_NOT_FOUND /
+TRY_AGAIN / NO_RECOVERY / NO_DATA constants. Resolver policy and available names
+are supplied by macOS; Windows/NetBIOS equivalence is not claimed.
+
+Finite check: a new N1 test resolves the local hosts entry 127.0.0.1, retains its
+value across another resolver call, and checks the uninitialized/cleaned-up
+service errors; retain all seven existing N1 tests. No external host is queried,
+no original or native game/client action is executed. Integration into the
+application client provider remains open alongside the held N2 route; a service
+test cannot establish the app's fallback behavior. Independent review is open.
+
+Own service/test/addendum/evidence paths only; keep previous interface-address
+and N2 WIP separate. Logs and code pins:
+`/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002`; reuse the terminal
+SwiftPM cache at `network-service-reset-20261002/build`. X5 APFS UUID revalidated,
+97.1 GiB free; at most 2 GiB additional output, keeping 40 GiB external/6 GiB
+internal reserves. Build at most 15 minutes, selected tests at most 60 seconds.
+
+**Result:** [evidence](../evidence/network-client-lookup-20261002.json).
+Syntax, standalone Swift type checking and diff checks passed; run4 passed
+all eight N1 tests. The new overload copies the complete IPv4 address list,
+returns nil when the resolver fails, and maps the documented resolver errors.
+The actual loopback result and service initialization boundaries were checked;
+environmental lookup failures and Windows/NetBIOS equivalence were not observed.
+The pre-existing interface-address WIP remains separate. Code inspection confirms
+that `OriginalApplicationMenuSession` still answers client/exit socket operations
+through its `refused()` stand-in, and `OriginalMacRuntimeNetwork` only serves
+main-menu requests. Connecting the recovered client, match and exit providers,
+and the held N2 notification route, remains the required next integration work.
+No standalone N1 check substitutes for that work or resolves the saved refusal.
+
 ## Deferred by the user (2026-10-01)
 
 Networking remains in the full scope, but the user has deferred it in favour

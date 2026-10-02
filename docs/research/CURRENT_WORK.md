@@ -11,9 +11,14 @@
 прошли. Проверены закреплённые dirty-входы, не весь пакет приложения; независимый
 review открыт. [Исправлен lifetime дескриптора после отмены DispatchSource](NETWORK_PLAY.md#n1-descriptor-lifetime-correction-2026-10-02):
 семь N1-тестов прошли, включая close/rebind внутри уведомления и 32 цикла
-cancel/close/cleanup; независимый concurrency review открыт. Следующая независимая
-задача — отсутствующий Mac-ответ gethostbyaddr для существующего client fallback
-(OriginalNetworkClient.hostByAddress), по восстановленному контракту.
+cancel/close/cleanup; независимый concurrency review открыт.
+[Добавлен Mac-ответ gethostbyaddr](NETWORK_PLAY.md#n1-reverse-lookup-for-the-client-fallback-2026-10-02)
+для восстановленного client fallback: восемь N1-тестов прошли. В приложении
+client/exit всё ещё используют `refused()`, Mac-provider отвечает только главным
+пунктам меню. Следующий необходимый результат — подключение client/match/exit
+и оконного notification route; допустимость продолжения затронутой отказом
+интеграции по WORKFLOW пока не установлена. Самостоятельные N1-проверки этого
+ограничения не снимают и не подтверждают сетевой матч.
 Маршрутизация N2/0x401 не возобновлена; прежний WIP сохранён. Проверки этой
 коррекции не означают приёмку N2–N5 или разрешение затронутой отказом операции.
 

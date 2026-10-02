@@ -261,4 +261,18 @@ final class OriginalMacWinsockTests: XCTestCase {
         RunLoop.main.run(until: Date().addingTimeInterval(0.03))
         XCTAssertTrue(notes.isEmpty)
     }
+
+    func testReverseLookupOwnsIPv4ResultAndRequiresStartup() throws {
+        let w = W()
+        XCTAssertNil(w.hostAddresses(address: 0x0100007f)); XCTAssertEqual(w.lastError, 10093)
+        XCTAssertEqual(w.startup(0x101).result, 0)
+        defer { if w.started { _ = w.cleanup() } }
+        let addresses = try XCTUnwrap(w.hostAddresses(address: 0x0100007f))
+        XCTAssertEqual(addresses, [0x0100007f]) // the checked local hosts entry
+        _ = w.hostAddresses(Array("localhost".utf8))
+        _ = w.hostAddresses(address: 0x0100007f)
+        XCTAssertEqual(addresses, [0x0100007f]) // no borrowed hostent storage
+        XCTAssertEqual(w.cleanup(), 0)
+        XCTAssertNil(w.hostAddresses(address: 0x0100007f)); XCTAssertEqual(w.lastError, 10093)
+    }
 }

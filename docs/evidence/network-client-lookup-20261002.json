@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "task": "network-client-lookup-20261002",
+  "baseHead": "88f3da9f3b8d7df51f82ade9621801915c9cef44",
+  "recordedUTC": "2026-10-02T16:02:14.397459+00:00",
+  "originalExecuted": false,
+  "appExecuted": false,
+  "windowsObserved": false,
+  "scope": "Independent N1 platform response for the recovered client hostByAddress fallback. Real resolver target is the local hosts entry 127.0.0.1. No application client action or N2 routing executed.",
+  "safetyIncident": "docs/evidence/claude-code-network-safety-2026-10-01.json",
+  "safetyStatus": "open; exact withheld operation and trigger unknown",
+  "storage": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002",
+    "apfsUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "reusedTerminalCache": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build",
+    "additionalBoundGiB": 2,
+    "reserveGiB": 40,
+    "freeGiBAfter": 97.099
+  },
+  "checks": {
+    "syntaxAndDiff": "pass",
+    "typecheck": "swiftc -typecheck -swift-version 5 with task-owned module cache; exit 0",
+    "command": "swift test --package-path native --scratch-path /Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build -c release -Xswiftc -enable-testing --filter OriginalMacWinsockTests",
+    "run": "run4",
+    "buildSeconds": 166.88,
+    "tests": 8,
+    "failures": 0,
+    "testSeconds": 0.483,
+    "cases": "Retained seven N1 tests plus reverse IPv4 lookup, owned result across later lookups, and calls before startup / after cleanup."
+  },
+  "artifacts": {
+    "before-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/before-OriginalMacWinsockTests.swift",
+      "sha256": "d686fa7d5cd9d4effb83ca8f8c708238ea6714b563b8c5844022003aa2834727",
+      "bytes": 15216
+    },
+    "candidate-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/candidate-OriginalMacWinsockTests.swift",
+      "sha256": "02bf4d8e16dadcad63f131682c8e096e2f8f788e095bb0d7c67727d0a08806cc",
+      "bytes": 15982
+    },
+    "run4.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/run4.log",
+      "sha256": "72e82d2ff32bf4b04ed8b75b19d7fe9128eeb14625dc7f9251cdeb30dd6819de",
+      "bytes": 17817
+    },
+    "before-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/before-OriginalMacWinsock.swift",
+      "sha256": "6996229f819f09a5b0d6aecb8e6e89524b401f4f80e8b3019e72d5d76c612b6f",
+      "bytes": 18959
+    },
+    "typecheck.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "candidate-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/candidate-inputs.json",
+      "sha256": "7f2eef8e0e30e32ad890461ded56913b406b61c7a2dd923105c2af696c6a699c",
+      "bytes": 90760
+    },
+    "before-CURRENT_WORK.md": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/before-CURRENT_WORK.md",
+      "sha256": "be31f05f9fa46394c505b85b7da57c995d18b7993eb3f1f927597674f7742c3b",
+      "bytes": 235027
+    },
+    "before-worktree.diff": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/before-worktree.diff",
+      "sha256": "045f6b04e6bd3440d1cd31ae5a8c494b59adb310ef4d19f9afc774dd8090beab",
+      "bytes": 65031
+    },
+    "before-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/before-inputs.json",
+      "sha256": "182051a56bc561dd6a735f736e58bca2b89be9eb1223a23fa055b7dc7e1b1be7",
+      "bytes": 90614
+    },
+    "run4-job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/run4-job.json",
+      "sha256": "edabe37405966cc8dc71549bc02d69d8d3bbbc288713dd4a59d637800adfe1c6",
+      "bytes": 912
+    },
+    "candidate-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/candidate-OriginalMacWinsock.swift",
+      "sha256": "f8d4272c41a2b2a2569c4c6fa32b3381e11e809ea41b6009811ebda60229e43d",
+      "bytes": 20153
+    }
+  },
+  "checkedSources": {
+    "native/Tests/NTSDCoreTests/OriginalMacWinsockTests.swift": "02bf4d8e16dadcad63f131682c8e096e2f8f788e095bb0d7c67727d0a08806cc",
+    "native/Sources/NTSDMacPlatform/OriginalMacWinsock.swift": "f8d4272c41a2b2a2569c4c6fa32b3381e11e809ea41b6009811ebda60229e43d"
+  },
+  "sources": [
+    "docs/research/NETWORK_CLIENT.md#connection-and-storage-order",
+    "https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-gethostbyaddr",
+    "https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/endhostent.3.html"
+  ],
+  "limits": [
+    "Independent review remains open.",
+    "Windows/NetBIOS behavior and environmental reverse-lookup failure modes are not observed.",
+    "Application menu still uses the refused() stand-in for client/exit requests; this helper is not yet connected there.",
+    "Actual dirty build inputs are pinned; no N2 integration, committed app package, full match, or offline e2e acceptance is claimed.",
+    "Existing interface-address WIP remains separate."
+  ],
+  "stagingCorrection": {
+    "firstPatch": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/stage-lookup.patch",
+    "result": "Index dry-run rejected adjacent unstaged interface-address context; index was unchanged.",
+    "correctedPatch": "/Volumes/X5/ntsd-2.4-research/network-client-lookup-20261002/stage-lookup2.patch",
+    "change": "Build the intended service index from HEAD plus only the new reverse-lookup method; preserve interface-address WIP. No code, test or expected-result changes."
+  }
+}
