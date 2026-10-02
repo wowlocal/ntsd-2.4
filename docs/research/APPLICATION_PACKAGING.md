@@ -69,3 +69,53 @@ nearest-neighbour sampling into the `iconutil` sizes and writes
 `CFBundleIconFile`. The runtime's LoadIconA answer is unchanged (the EXE asks
 for group 32512, which it does not contain). The packaged app builds, passes
 `codesign --verify --deep --strict` and runs.
+
+## Offline acceptance follow-up (2026-10-02)
+
+**Status:** queued; no new build, execution or acceptance is claimed here.
+**Consumer and result:** a self-contained offline app including `7d592f9`,
+with reproducible inputs and validation that does not depend on deferred N2.
+The [hit-word card](APPLICATION_HIT_ITEM_SLOT.md) records 38 tests and e2e on
+a working tree containing uncommitted network changes; its online-menu check
+uses an uncommitted `--no-network` option. The [subsequent soaks](APPLICATION_SOAKS.md)
+retain that limitation. These results remain evidence for their original inputs.
+
+1. Identify the exact source, runner, resource and binary inputs of those
+   checks. Inspect saved records first. Determine which results apply to the
+   offline candidate and which require a new check because inputs differ.
+2. Prepare an isolated candidate with the completed offline changes and
+   `7d592f9`. A HEAD-only checkout is not proof of complete inputs: verify
+   required generated resources, LFS files and relevant working inputs.
+   Preserve all unrelated files and deferred network WIP in the original tree;
+   do not delete, revert, stash or include that WIP in the candidate's commit.
+   Record the actual input manifest and the basis for each included change.
+3. Reuse the existing builder, asset packager and e2e runner. Before build IO,
+   verify X5 and its reserves, process pins, task limits and the candidate's
+   resource layout. Then do cheap checks before costly validation. Validate
+   the applicable hit-word regressions and offline app scenarios once for the
+   pinned inputs. The existing failed-Winsock menu check belongs to the saved
+   offline implementation; do not use N2's dirty runner or execute live
+   networking, host/client probes or the refused notification integration.
+4. Establish the built binary's provenance, package contents, signature check
+   and resource paths from the app. Reuse valid results only for the same
+   relevant inputs; preserve expected values and capture differences instead
+   of re-recording references. Report app/package checks separately from Native
+   comparison. This host's bundle checks do not establish clean-Mac acceptance.
+
+**Gate:** the offline candidate, binary and package have identified inputs;
+the required applicable checks pass;
+deferred network work and historical results are preserved. A failure keeps
+the gate open and gets a correction within this mechanism. Use existing
+task/job/evidence formats; this follow-up does not add a validation framework.
+No original execution or network retry is authorized by this follow-up;
+the [Claude refusal](../evidence/claude-code-network-safety-2026-10-01.json) stays open.
+
+**Next after this gate:** reconcile the currently open review and full-scope
+criteria with later evidence in the existing cards/map. Classify each as
+verified, implemented with a specific missing check, an implementation gap,
+or externally blocked with evidence. Stale status text alone proves neither
+completion nor a current gap; three clean soaks do not prove full coverage.
+Begin the first permitted concrete task found. Independent review stays
+distinct from author checks; unavailable review is recorded, not invented.
+If no permitted work remains after this reconciliation, report the supported
+blockers rather than adding more unguided soaks or preparation stages.
