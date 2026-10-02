@@ -201,6 +201,11 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                             try self.trace(["kind":"io","cycle":self.cycles,"request":q.kind.rawValue,
                                 "arguments":q.arguments,"data":q.data,"result":r.result,"bytes":r.bytes])
                         }
+                        network.observeExit = { [unowned self,weak network] q,r in
+                            try self.trace(["kind":"exit","cycle":self.cycles,"request":q.kind.rawValue,
+                                "arguments":q.arguments,"bytes":q.bytes,"result":r,
+                                "openHandles":network?.winsock.openHandles.sorted() ?? [],"started":network?.winsock.started ?? false])
+                        }
                     }
                 }
                 menu.messages.capturedJoysticks = UInt32(joystickCount)

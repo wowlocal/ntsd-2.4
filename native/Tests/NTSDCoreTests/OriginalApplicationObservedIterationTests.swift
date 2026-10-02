@@ -47,7 +47,7 @@ import XCTest
                         if q.kind == "getDC" { pass += 1 }
                         // Existing controlled profile replies, not GDI/device observations.
                         try driver.beginService(permit); try driver.answer(permit,response:.graphics(.front(G().reply(q,.normal,pass))))
-                    case .graph,.network,.socket,.client: throw Stop.limit
+                    case .graph,.network,.socket,.client,.networkExit: throw Stop.limit
                     }
                 case .advanced(let outcome):
                     guard case .committed(let sequence,_) = outcome else { throw Stop.limit }

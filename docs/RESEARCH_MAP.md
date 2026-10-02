@@ -6,8 +6,13 @@ and complete1070 gameplay bodies to visible Summary.836 packets each direction,
 all World/masks and shared Actor state/RNG/results agree. Only local CRT spark
 X/Y differ (original contract); all1027 replay commands reconstruct from wire
 bytes with the original local/remote bit0 distinction. Offline VS e2e passes.
-Independent integration/comparison review remains open. N5 exit/disconnection
-is next; actual Windows interoperability is a separate unobserved gate.
+[N5 exit/disconnection](research/NETWORK_PLAY.md#n5-exit-integration-2026-10-02)
+now uses the live service: Cancel/reentry, FD_CLOSE, window close and abrupt
+peer loss pass their declared original outcomes. Loaded-menu disconnect quits
+normally; a recorded-match disconnect retains the original freed-buffer fault.
+The discovered runtime sound-device release bug is fixed. Final no-network menu
+and full offline VS e2e pass. Independent integration/comparison review remains
+open; actual Windows interoperability is a separate unobserved gate.
 
 [macOS full screen](research/APPLICATION_MAC_FULL_SCREEN.md): the standard
 toggle for the game window. The game keeps its held windowed geometry and the

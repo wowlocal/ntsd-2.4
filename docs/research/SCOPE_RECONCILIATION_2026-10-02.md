@@ -1,5 +1,17 @@
 # Full-scope reconciliation (2026-10-02)
 
+## Later networking update (2026-10-02)
+
+The deferral was lifted and the unsupported blanket networking hold removed.
+[N1–N5](NETWORK_PLAY.md) are now implemented and checked: two native apps reach
+Summary in a full Naruto/Sasuke District match; exit/disconnection and affected
+offline checks pass their declared outcomes. Independent review and actual
+Windows interoperability remain open. The table and conclusion below are the
+preserved earlier reconciliation, not a current instruction to defer networking.
+See [CURRENT_WORK](CURRENT_WORK.md) for the active handoff.
+
+## Earlier offline reconciliation
+
 The "Next after this gate" step of the
 [offline acceptance follow-up](APPLICATION_PACKAGING.md#offline-acceptance-follow-up-2026-10-02):
 CONTINUE_GOAL's full-scope criteria and the open reviews, reconciled with the

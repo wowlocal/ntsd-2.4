@@ -469,13 +469,19 @@ import UniformTypeIdentifiers
             pendingDocuments = []
             counts.skippedDraws += min(continuationGraphics,commit.graphics.count)
             try replay(Array(commit.graphics.dropFirst(continuationGraphics)))
-            try answerRoundMusic(commit.operations)
-            if let sounds {
-                let music = started.runtime.music
-                for call in try OriginalMacSoundEffects.calls(commit.operations,music:{ music.interface($0) != nil }) { try sounds.perform(call) }
-            }
-            for case .preceding(.control(let q,_)) in commit.operations where q.kind == .postMessage {
-                postMessage?(q.arguments[1],q.arguments[2],q.arguments[3])
+            // Preserve the recorded order across sound/music releases and the
+            // final close post, as well as ordinary round and hotkey methods.
+            for operation in commit.operations {
+                try answerRoundMusic([operation])
+                if let sounds {
+                    let music = started.runtime.music
+                    for call in try OriginalMacSoundEffects.calls([operation],music:{ music.interface($0) != nil }) {
+                        try performSound(call,on:sounds)
+                    }
+                }
+                if case .preceding(.control(let q,_)) = operation,q.kind == .postMessage {
+                    postMessage?(q.arguments[1],q.arguments[2],q.arguments[3])
+                }
             }
         }
         if case .committed = outcome, !pendingReplays.isEmpty {
@@ -486,6 +492,16 @@ import UniformTypeIdentifiers
             pendingReplays = []
         }
         return outcome
+    }
+    /// Input shutdown carries IUnknown::Release for both secondary buffers and
+    /// the DirectSound device. Use the same release policy as window shutdown;
+    /// a device has no PCM voice and an unused buffer need not load its samples.
+    func performSound(_ call: OriginalMacSoundEffects.Call,on sounds: OriginalMacSoundEffects) throws {
+        guard call.method == 8 else { try sounds.perform(call);return }
+        guard call.arguments.isEmpty else { throw Boundary.unexpected("sound Release arguments") }
+        if started.audio.deviceTokens.contains(call.buffer) { return }
+        _ = try started.audio.observation(call.buffer)
+        sounds.release(call.buffer)
     }
     /// Methods on music interface tokens — the round's music stop and the
     /// front screens' 402100 stop (a tournament's Winner screen, Music: OFF),

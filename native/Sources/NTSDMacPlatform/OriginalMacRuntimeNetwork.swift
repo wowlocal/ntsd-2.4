@@ -14,14 +14,37 @@ public final class OriginalMacRuntimeNetwork {
     public private(set) var notificationRequestCount = 0
     public private(set) var clientRequestCount = 0
     public private(set) var controlRequestCount = 0
+    public private(set) var exitRequestCount = 0
     public private(set) var sentControlPackets = 0,receivedControlBytes = 0
     /// Optional streaming diagnostic; normal play retains no packet history.
     public var observeControl: ((OriginalInputControlRequest,OriginalInputControlResponse) throws -> Void)?
+    public var observeExit: ((OriginalNetworkExit.Request,Int32) throws -> Void)?
     /// An explicit local-address response for controlled app tests. The normal
     /// app uses the Mac resolver; the engine still selects and binds its address.
     private let localAddresses: [UInt32]?
     public init(localAddresses: [UInt32]? = nil) { self.localAddresses = localAddresses }
     public enum Boundary: Error, Equatable { case malformed(String) }
+
+    /// 402d70 keeps its recovered gates, raw address suffix and error branches.
+    /// The stream sendto destination is ignored, as in the declared Winsock policy.
+    public func answer(_ q: OriginalNetworkExit.Request) throws -> Int32 {
+        let a = q.arguments,result: Int32
+        exitRequestCount += 1
+        switch q.kind {
+        case .sendTo:
+            guard a.count == 4,(20...24).contains(a[1]),a[2] == 0,a[3] == 16,
+                  q.bytes.count == Int(a[1])+16 else { throw Boundary.malformed("exit sendTo") }
+            result = winsock.sendTo(a[0],Array(q.bytes.prefix(Int(a[1]))))
+        case .closeSocket:
+            guard a.count == 1,q.bytes.isEmpty else { throw Boundary.malformed("exit closeSocket") }
+            result = winsock.close(a[0])
+        case .cleanup:
+            guard a.isEmpty,q.bytes.isEmpty else { throw Boundary.malformed("exit cleanup") }
+            result = winsock.cleanup()
+        case .message:throw Boundary.malformed("exit message requires window channel")
+        }
+        try observeExit?(q,result);return result
+    }
 
     /// 41c5e5's platform operations. Core owns the22-byte packet loop and all
     /// ordering/checks; each receive returns only the bytes the OS delivered.

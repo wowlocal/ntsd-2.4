@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-02",
+  "recordedUTC": "2026-10-02T19:01:01.854059+00:00",
+  "status": "implemented and checked; independent integration/contract review open",
+  "baseCommit": "73f8d22ae586b53940bd0b66a38d5d72d856ee69",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/network-app-exit-20261002",
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-app-exit-20261002/artifact-manifest.json",
+    "SHA256": "5802f0348d7d7690c52b6bb72976dc4046c422fc1e5272aca8352b4a319c43ad",
+    "files": 115,
+    "bytes": 24890527
+  },
+  "binary": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build/release/NTSDNative",
+    "SHA256": "2dac984ae52223519706cd8f1989496027c89fe4184e22c72a61c70e8f86fd12"
+  },
+  "codePins": {
+    "manifest": "candidate5-inputs.json",
+    "count": 643,
+    "allRechecked": true,
+    "deliveryDelta": {
+      "manifest": "delivery-inputs.json",
+      "diff": "delivery-comment-only.diff",
+      "change": "Move existing music doc comment to its function; every non-doc-comment line is identical to candidate5; no new build needed"
+    }
+  },
+  "fixturePins": {
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-client.json": "9af4be05dbe727fa426aceeceb479ffdc87a2ae0e0af3a6ee4565b178e16558e",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-exit.json": "889b9c97786e2bf91231fc20b15d994460bb79077b7c949baf97a180745c07f3",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-control.json": "5689184fddf142700973bf14eb221431a6be729537cacdde67e9c33314f02eff",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-flags.json": "7896b6dbaa7f33a949b50a644747292d5cebd9a58aa7c92f37cc0194846a33a6",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-greeting.json": "23dab897a3cccb15505edae95e4d716187c4940ccdccae4ce0cdd62de0220090",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-partial-names.json": "659ad2c8a3e14f50ae8a94d0678e3b6ebdb51239c6f3831b185433d98dcbc685",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-sound-control.json": "f3a5e94074efb8effea0f29e57ffd9b8cddb3dfd01ab6313c600fd8a4b5027c9",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu-sound.json": "3dc61537c4d92885c2338de413bb4c7d5cd3d3f0233e4ee9afd92b141691aa03",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-menu.json": "7ebbf1d61069da477a1f8d8a4227523142f3cf6bb81b312d97a7d5b3450651d8",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-notification.json": "c3e967399f3a7cf7f96b149bc8ed4eb1cbeba9fa118f0fb2d7019560996fbca7",
+    "native/Tests/NTSDCoreTests/Fixtures/original-network-ready.json": "16b1408f3c4fc384136e8bfd2ced2a76c129c3941dde84aa8214cc60b59b67bb",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-control-control.json": "eed910a682485e2c7f495221639c9c30fdcbd0e70ba43a778d7705f3d4d6e9aa",
+    "native/Tests/NTSDCoreTests/Fixtures/original-input-control.json": "2c061671f590ff20a840d8702d48e61af1fd2a773bd2690cfb2f3966cec69228",
+    "native/Tests/NTSDCoreTests/Fixtures/original-local-input-control.json": "6a28972a95462e70ec153f346f138174ff8f79686be140afe2c64ad698a99b1c",
+    "native/Tests/NTSDCoreTests/Fixtures/original-local-input.json": "636cf7423cef9df8f2c0c860fe9b14e5254583cefdff753ecdcb0679d19c027a",
+    "native/Tests/NTSDCoreTests/Fixtures/original-object-input-control.json": "bb3a7fc5b181baab26c776ea466f32b94647c8012fa98d486e70ccb142b2ec87",
+    "native/Tests/NTSDCoreTests/Fixtures/original-received-input-control.json": "91d85c147cfdb1b783c379185ded6e8c23f224a5ceb106658f1536a5767c1c32",
+    "native/Tests/NTSDCoreTests/Fixtures/original-received-input.json": "45936dc1c564360c0326aabce9a3f2542a8847e36f56d2f0f0b200d14feca2b6",
+    "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick-control.json": "12486a1b17ca1797608473196df1be699435c54cc99247a03ac232b143d32281",
+    "native/Tests/NTSDCoreTests/Fixtures/original-replay-tick.json": "e2cf3289867093e3b98742c9291e785e54d336e7a5af626dafc61e1b51d0701d"
+  },
+  "implementation": [
+    "OriginalNetworkExit live sendTo/closeSocket/cleanup via existing iteration receipt journal; MessageBox through window permit",
+    "Original Mac runtime input-shutdown releases recognize buffers and device; committed sound/music/close requests retain recorded order",
+    "Optional exit trace streams OS responses and handle/startup state; no normal-play trace retention"
+  ],
+  "source": {
+    "EXE_SHA256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c",
+    "studies": [
+      "NETWORK_EXIT",
+      "NETWORK_MENU",
+      "NETWORK_NOTIFICATION",
+      "INPUT_CONTROL",
+      "REPLAY_TICK"
+    ],
+    "newOriginalExecution": false,
+    "WindowsObserved": false
+  },
+  "tests": {
+    "uniqueSuccessfulMethods": 24,
+    "run2": "13 passing methods: retained Exit/Menu/ObservedIteration/Host and new whole exit on real sockets. One new reentry helper failed; preserved.",
+    "run3": "corrected menu click helper passes after allowing presentation to copy released button to previous-button word; application rules unchanged",
+    "run4": "four runtime-loading and six sound methods pass, including buffer/device release correction",
+    "run5": "four runtime-loading methods pass after preserving committed method/post order; unchanged six standalone sound methods retain run4"
+  },
+  "appProbes": {
+    "cancel1": "PASS: real UI ONLINE GAME, host-wait Back, Cancel, reentry, Cancel. Two listeners released; exactly close/cleanup twice, handles empty and started false.",
+    "fd-close1": "PASS: actual3092-byte host greeting then owned peer EOF while selector1 remains. One FD_CLOSE / Handle Message box; exit0.",
+    "selection-close2": "PASS: client window closes; host recv0 and one Connection Lost!; both receive WM_QUIT and exit0.",
+    "match-close1": "PASS: Naruto/Sasuke District,199 bodies both. Client window closes/quit0; host recv0, one Connection Lost!, then known Source fault through null4588a8 recording pointer, exit1.",
+    "match-kill1": "PASS: controlled SIGKILL of owned client after198 bodies; host199 bodies, recv0, one Connection Lost!, same Source fault exit1. This run observed EOF, not TCP reset."
+  },
+  "probeInputs": {
+    "cancel1_and_fd_close1": "candidate2 app (before the independent loaded-batch correction); their menu/provider dependencies are unchanged in candidate5",
+    "selection_close2_match_close1_match_kill1_offline1": "candidate5 app hash above"
+  },
+  "offline": {
+    "explicitNoNetworkMenu": "PASS: original WSAStartup()/InitWinSock()/socket() errors and links/cancel agree",
+    "fullVS": "PASS: unchanged frozen exit/milestones/progress/capture/recording/overlay expectations",
+    "job": "offline1/job.json"
+  },
+  "preservedFailures": [
+    "run1: exhaustive switch omitted networkExit; compile failure",
+    "run2: test sent next click before prior-button state reset; four assertions in one method",
+    "selection-close1: native sound dispatcher rejected input-shutdown COM Release method8"
+  ],
+  "diagnostics": [
+    "run1-diagnosis.txt",
+    "run2-diagnosis.txt",
+    "selection-close1-diagnosis.txt",
+    "candidate5-rationale.txt",
+    "disconnect-results.json",
+    "terminal-audit.json"
+  ],
+  "open": [
+    "Independent review of N1–N5 platform integration and N4 comparison scope",
+    "Actual interoperability with the original Windows game; host/device/network-policy differences remain unobserved"
+  ],
+  "goalCriteria": [
+    "N2/N3 host/client through app UI and original handshake: retained",
+    "N4 full Naruto/Sasuke District match to Summary with role-aware commands, shared RNG/state/results: retained in network-app-match-20261002.json",
+    "N5 cancel, exit, peer EOF, connection errors: checked; original recorded-match fault preserved",
+    "Affected offline VS and explicit no-network regression: pass"
+  ],
+  "jobs": "All N5 owned builds/tests/apps terminal; no new original capture; no background app remains",
+  "EXEEnvelopeRecalculated": false
+}

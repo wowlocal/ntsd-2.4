@@ -248,7 +248,7 @@ public struct OriginalMacRuntimeKey: Equatable {
             switch permit.request {
             case .queue(let q): try driver.answer(permit,response:.queue(try answer(q)))
             case .windowDefault(let q): try driver.answer(permit,response:.windowDefault(try answer(q)))
-            case .graphics,.graph,.network,.socket,.client: throw Boundary.unsupported("graphics/graph/network/socket/client family")
+            case .graphics,.graph,.network,.socket,.client,.networkExit: throw Boundary.unsupported("graphics/graph/network/socket/client/exit family")
             }
         } catch { try driver.fail(permit,diagnostic:String(reflecting:error)); throw error }
     }

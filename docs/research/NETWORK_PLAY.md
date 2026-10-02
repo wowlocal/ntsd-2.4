@@ -5,8 +5,10 @@ the N3 addendum below records its new bounded original selector-4 comparison.
 
 ## Current next step (2026-10-02)
 
-N1–N4 are implemented and checked in their declared scopes below. Continue N5
-exit/disconnection through the same retained live service.
+N1–N5 are implemented and checked in their declared scopes below. Host/client,
+a full match to Summary, exit/disconnection and affected offline regressions
+have evidence. Independent review of the integration and comparison scope is
+still open; actual Windows interoperability remains a separate unobserved gate.
 The earlier blanket hold on N2–N5 was an unsupported interpretation of the saved
 Claude incident and has been removed at the user's request. The exact withheld
 operation remains unknown; the incident record is preserved without treating it
@@ -15,7 +17,102 @@ occurred during the N1 checks. General WORKFLOW refusal handling still applies.
 
 Two native apps now complete the Naruto/Sasuke District match to visible
 Summary with checked transport, shared state/RNG and role-aware recordings.
-N5 exit/disconnection, independent review and Windows interoperability are open.
+Independent review and Windows interoperability are open.
+
+## N5 exit integration (2026-10-02)
+
+N4 is committed in73f8d22. The existing whole402d70 NETWORK_EXIT contract now
+receives live socket responses via a new family in the same iteration journal:
+MenuSession → Bootstrap → Host → ObservedIteration → MacRuntimeMenu → Network.
+MessageBox uses the window permit before the next close request. Numeric errors
+keep the original branches and retained globals. No Core exit algorithm or
+source expected data changes. The no-network provider remains the old stand-in.
+
+Finite checks: actual ONLINE GAME Cancel and reentry binds/releases the same
+localhost port; controlled whole-exit calls on connected/unconnected owned
+sockets cover the exact raw127 address suffix and early send error without
+cleanup. Required regressions: existing NetworkExit corpus, whole network menu,
+observed iteration and N2 host through the extended permit path. Then app probes
+cover Cancel/reentry, FD_CLOSE before input control cancels notifications,
+an actual game-window close and peer loss during a loaded match. The received
+error/shutdown path must preserve original messages and source faults rather
+than assume graceful recovery. N3's refused connection and N4's full match
+remain evidence on their unchanged dependencies; repeat only an affected gate.
+
+Task outputs: verified writable APFS X5 UUID3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548,
+`network-app-exit-20261002`,8GiB output bound,40GiB reserve (scope records free
+bytes), build900s/tests300s/probe180s. Reuse the terminal network-service-reset
+build cache. Preserve every run/candidate and unrelated historical changes.
+No new original execution; real TCP endpoints belong to the task on localhost.
+Implementation/contract review remains open; Windows interoperability separate.
+
+Run1 retained a compile failure from the new request family missing in the
+window service's exhaustive switch; candidate2 rejects that family there, as
+with the other socket providers. Run2 built in260.76s:13 of14 methods passed,
+including all retained whole-exit/menu/host/iteration comparisons and the new
+live send/error case. Its new Cancel/reentry helper missed a presentation frame
+between button-up and the next click:44d060 still held the previous down bit.
+Candidate3 waits for the existing OriginalMenuPresentation tail to copy the
+released button into44d060; only that test changes. Run3 selects that method.
+All candidates, logs and diagnoses remain in the task directory; no source
+expected bytes, masks or application behavior changed for these corrections.
+
+Run3 passed the corrected click test (0.692s); the actual app Cancel/reentry
+and real-peer FD_CLOSE probes passed. selection-close1 exposed a separate
+runtime defect: after Connection Lost!, the committed input-shutdown Release
+was sent to the sound-buffer playback dispatcher, which rejects method8.
+Candidate4 dispatches that method through the existing window-shutdown policy:
+validate the audio owner, stop an existing buffer voice without loading PCM,
+and treat the device separately. Core shutdown and packet rules are unchanged.
+The failed probe and pre-run4 diagnosis are retained; the correction mechanism
+has been reviewed after three rounds. Run4 selects the affected runtime-loading
+and sound suites, including a playing/unused-buffer/device release regression.
+Then repeat selection-close, run the two match-disconnect probes, and recheck
+both the explicit no-network menu and the old offline VS e2e. The earlier
+Cancel/FD_CLOSE results do not depend on this loaded-batch-only correction.
+
+Run4 passed all10 selected methods. Before app acceptance, inspection also found
+that the existing loaded-batch dispatcher grouped all music calls before sound
+calls, reversing their shutdown release order. Candidate5 walks the recorded
+operations once, serving each music/sound method and close post in place. The
+same dispatchers and Core records are retained. Run5 selects the four affected
+runtime-loading methods; the six unchanged standalone sound tests retain run4.
+
+### N5 result
+
+[Evidence](../evidence/network-app-exit-20261002.json). Run5 passed the four
+runtime-loading methods after the ordered dispatch correction. Across the
+increment,24 unique methods passed on their recorded component pins:13 inrun2,
+the corrected reentry test inrun3, six unchanged sound tests inrun4 and four
+runtime-loading tests inrun5.20 network/input/replay fixtures remain unchanged.
+All643 Swift/Package pins were rechecked; the delivery delta only moves an
+existing doc comment to its matching method, with all code lines identical. No source expected/mask changes.
+
+The actual app probes reached these outcomes:
+
+| Probe | Observed outcome |
+| --- | --- |
+| ONLINE GAME → host waiting → Back → Cancel → reenter → Cancel | Two real listeners released; exactly close/cleanup twice; handles empty and startup false |
+| Peer EOF after3092-byte greeting, before input control cancels notifications | Exactly one original FD_CLOSE / Handle Message box; app exit0 |
+| Client closes its window at loaded mode selection | Host recv0, Connection Lost!, then normal WM_QUIT; both exit0 |
+| Client closes during Naruto/Sasuke on District | Both reached199 gameplay bodies; client quit0; host recv0, Connection Lost!, then source recording fault, exit1 |
+| Owned client SIGKILL after198 bodies | Host reached199 bodies, recv0 and the same message/source fault; client exit−9. This run observed EOF, not TCP reset |
+
+The recorded-match fault follows the existing INPUT_CONTROL → shared shutdown
+→ REPLAY_TICK contract: shutdown frees and zeros4588a8, then the original caller
+continues into recording. Native reports this established Source fault; it does
+not invent graceful recovery. This is recovered code plus the actual native
+path, not a new observation on Windows. The pre-match shutdown bug is fixed;
+selection-close1 remains a failed native run, separately from source faults.
+
+The explicit --no-network menu/error scenario and full offline VS e2e passed
+on candidate5 (binary2dac984a…): unchanged milestones, progress, captures,
+recording and overlay hashes. Cancel/FD_CLOSE used the earlier N5 binary, with
+identical relevant menu/transport components; the later correction touches only
+loaded-batch audio/close delivery. N3 refused-connect and N4 full-match evidence
+retain their declared scopes. All owned processes are terminal.115 task files,
+24,890,527 bytes, are pinned on X5. Independent review remains open; no additional
+native soak is warranted by these results. EXE envelope was not recalculated.
 
 ## N4 match integration (2026-10-02)
 
@@ -444,21 +541,21 @@ N2 application changes and unrelated files remain separate WIP.
 
 ## Remaining integration (2026-10-02)
 
-The network deferral is lifted. The following gaps are present in the current
-working code, so the goal's whole-match criterion is not satisfied:
+The network deferral is lifted. Current implementation and remaining checks:
 
 | Required result | Current code/evidence | Remaining dependency |
 | --- | --- | --- |
 | N2 host greeting from the app | Menu listener and 0x401 consumer implemented; 17 tests and separate native-process greeting probe pass | Independent review remains open; use this retained session for N3/N4 |
 | N3 client connects through the UI | Implemented through iteration permits; two native processes reach World2 over127.0.0.1 with complementary roles/seats and identical RNG | Independent review open; retain this session for N4 |
 | N4 synchronized match to Summary | Two native apps complete1070 gameplay bodies to visible Summary; transport, World, shared Actor state/RNG and role-aware replays checked | Independent review open; original local CRT spark coordinates are declared separately |
-| N5 exit/disconnect/errors | Menu exit uses `refused()`; FD_CLOSE notification route is implemented; refused client connect is checked | Wire exit requests and check actual disconnection/exit scenarios |
-| Offline behavior and Windows comparison | Prior offline acceptance has its own pinned inputs; new service tests execute no app. Windows was not observed | Recheck affected app paths after integration; Windows interoperability stays separately open |
+| N5 exit/disconnect/errors | Live exit provider; Cancel/reentry, FD_CLOSE, window close and peer loss checked; original recorded-match source fault retained | Independent review open; actual Windows outcomes unobserved |
+| Offline behavior and Windows comparison | Candidate5 no-network menu and full offline VS e2e pass unchanged expectations | Windows interoperability stays separately open |
 
-The next implementation increment is N5, as described above. Repeating successful
-N1–N4 tests or offline soaks would not supply the missing app integration. The
-earlier requirement for external clarification before any N2–N5 work was based
-on an unsupported expansion of the unknown refusal scope and is withdrawn.
+The declared N1–N5 integration and functional checks are complete; independent
+review is the next acceptance step. Repeating successful tests or offline soaks
+would not supply that review. The earlier requirement for external clarification
+before any N2–N5 work was based on an unsupported expansion of the unknown
+refusal scope and is withdrawn.
 
 ## Deferred by the user (2026-10-01)
 

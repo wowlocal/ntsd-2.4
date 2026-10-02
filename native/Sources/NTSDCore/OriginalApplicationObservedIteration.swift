@@ -13,6 +13,7 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
         case network(OriginalMenuNetworkReply)
         case socket(OriginalNetworkNotification.Response)
         case client(OriginalNetworkClient.Response)
+        case networkExit(Int32)
     }
     case graphics(OriginalMenuGraphicsRequest)
     case queue(Loop.Request)
@@ -25,13 +26,15 @@ public enum OriginalApplicationIterationRequest: OriginalExchangeRequest {
     case socket(OriginalNetworkNotification.Request)
     /// The deferred client lookup/connect/handshake, including its sleeps.
     case client(OriginalNetworkClient.Request)
+    /// 402d70's exit notice, close and cleanup; messages use the window channel.
+    case networkExit(OriginalNetworkExit.Request)
     public func accepts(_ response: Reply) -> Bool {
         switch (self,response) {
         case let (.graphics(q),.graphics(r)):return q.accepts(r)
         case let (.queue(q),.queue(r)):
             // Only message retrieval owns MSG output writes.
             return r.writes.isEmpty || q.kind == .peek || q.kind == .get
-        case (.windowDefault,.windowDefault),(.graph,.graph),(.network,.network),(.socket,.socket),(.client,.client):return true
+        case (.windowDefault,.windowDefault),(.graph,.graph),(.network,.network),(.socket,.socket),(.client,.client),(.networkExit,.networkExit):return true
         default:return false
         }
     }
@@ -137,6 +140,9 @@ public final class OriginalApplicationObservedIteration<Platform: OriginalApplic
                     return r
                 },client:network ? { q,p in
                     guard case .client(let r) = try p.iterationDelivery.response(for:.client(q)) else { throw Boundary.invalidResponse }
+                    return r
+                } : nil,networkExit:network ? { q,p in
+                    guard case .networkExit(let r) = try p.iterationDelivery.response(for:.networkExit(q)) else { throw Boundary.invalidResponse }
                     return r
                 } : nil,beforePublication:{ p in
                     try beforePublication(p)

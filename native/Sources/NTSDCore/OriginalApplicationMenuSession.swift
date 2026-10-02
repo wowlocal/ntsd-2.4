@@ -206,6 +206,7 @@ public struct OriginalApplicationMenuSession {
         networkProvider: OriginalMenuNetworkProvider? = nil,
         socketProvider: ((OriginalNetworkNotification.Request) throws -> OriginalNetworkNotification.Response)? = nil,
         clientProvider: ((OriginalNetworkClient.Request) throws -> OriginalNetworkClient.Response)? = nil,
+        networkExitProvider: ((OriginalNetworkExit.Request) throws -> Int32)? = nil,
         bootstrapObserve: @escaping (OriginalApplicationBootstrap.Observation) throws -> Void = { _ in },
         lifecycle: (OriginalWindowInitialization.Request) throws -> OriginalWindowInitialization.Response = { _ in throw Boundary.dependency("Menu lifecycle") },
         graph: (OriginalGraphEvents.Request) throws -> OriginalGraphEvents.Response = { _ in throw Boundary.dependency("Menu graph events") }) throws -> Outcome {
@@ -667,9 +668,8 @@ public struct OriginalApplicationMenuSession {
                     if continuation == .otherSelector {
                         // The network menu (APPLICATION_FRONT_MENU_ITEMS_PLAN.md F1b): the
                         // actual 427ca7 continuation, its body, then the real tail or
-                        // epilogue. Winsock answers as after a failed WSAStartup (declared:
-                        // no network play); MessageBoxA, Sleep and ShellExecuteA run when
-                        // the body returns, before the presentation, as in F1.
+                        // epilogue. Supplied live providers use iteration receipts;
+                        // absent providers keep the declared no-network stand-in.
                         let selector = try g.integer(at:0x44d064-OriginalMatchPreparation.globalBase,as:Int32.self)
                         guard (1...4).contains(selector) else { throw Boundary.dependency("Menu selector \(selector)") }
                         stage = .menu
@@ -718,6 +718,14 @@ public struct OriginalApplicationMenuSession {
                             }) },exit:{ s in
                                 var frame = try OriginalStateRecord(bytes:[UInt8](repeating:0,count:256),defined:[Bool](repeating:false,count:256))
                                 _ = try OriginalNetworkExit.run(globals:&s,local:&frame,request:{ r in
+                                    if let networkExitProvider {
+                                        if r.kind == .message {
+                                            let parts = r.bytes.split(separator:0,omittingEmptySubsequences:false)
+                                            guard parts.count == 3,parts[2].isEmpty else { throw Boundary.dependency("Exit MessageBoxA text") }
+                                            return try windowDefault(.init(.message,r.arguments,[Array(parts[0]),Array(parts[1])]))
+                                        }
+                                        return try networkExitProvider(r)
+                                    }
                                     if r.kind == .message { try box(r.bytes);return 1 }
                                     return try refused(r.kind.rawValue)
                                 })

@@ -66,6 +66,28 @@ import XCTest
         XCTAssertThrowsError(try loading.control(.init(.send,[server,23,0],[outgoing])))
         XCTAssertThrowsError(try loading.beginInputControl())
     }
+    /// Network mismatch shutdown releases secondary buffers and then the
+    /// device. A device must never be interpreted as PCM or a buffer method.
+    func testCommittedShutdownReleasesPlayingAndUnusedAudio() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("ntsd-control-release-\(UUID().uuidString)",isDirectory:true)
+        defer { try? FileManager.default.removeItem(at:root) }
+        let (started,package) = try OriginalMacRuntimeMenuTests().startup(root)
+        let loading = try OriginalMacRuntimeLoading.bundled(started,startupInputs:package,clock:{ 5000 })
+        let sounds = OriginalMacSoundEffects.backed(by:started.audio)
+        let buffers = started.audio.bufferTokens.sorted()
+        XCTAssertGreaterThanOrEqual(buffers.count,2)
+        let playing = buffers[0],unused = buffers[1],device = try XCTUnwrap(started.audio.deviceTokens.first)
+        try loading.performSound(.init(buffer:playing,method:0x30,arguments:[0,0,1]),on:sounds)
+        XCTAssertEqual(sounds.voice(playing)?.playing,true)
+        for token in [playing,unused,device] {
+            try loading.performSound(.init(buffer:token,method:8,arguments:[]),on:sounds)
+        }
+        XCTAssertEqual(sounds.voice(playing)?.playing,false)
+        XCTAssertNil(sounds.voice(unused));XCTAssertNil(sounds.voice(device))
+        XCTAssertEqual(sounds.performed,1)
+        XCTAssertThrowsError(try loading.performSound(.init(buffer:device,method:8,arguments:[1]),on:sounds))
+        XCTAssertThrowsError(try loading.performSound(.init(buffer:UInt32.max,method:8,arguments:[]),on:sounds))
+    }
     func testInlineCursorRecordsReceiptsAndRetriesReuseThem() throws {
         typealias E = OriginalStartupRequestExchange
         let e = E(); var served = 0

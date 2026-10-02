@@ -205,6 +205,7 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
         network: ((OriginalMainMenuEvent, Platform) throws -> OriginalMenuNetworkReply)? = nil,
         socket: ((OriginalNetworkNotification.Request, Platform) throws -> OriginalNetworkNotification.Response)? = nil,
         client: ((OriginalNetworkClient.Request, Platform) throws -> OriginalNetworkClient.Response)? = nil,
+        networkExit: ((OriginalNetworkExit.Request, Platform) throws -> Int32)? = nil,
         beforePublication: (Platform) throws -> Void = { _ in },
         expectedSequence: UInt64? = nil) throws -> Outcome {
         try attempt {
@@ -228,7 +229,8 @@ public final class OriginalApplicationHostSession<Platform: OriginalApplicationS
                 graphProvider: graph.map { callback in { q in try callback(q,candidate) } },
                 networkProvider: network.map { callback in { e in try callback(e,candidate) } },
                 socketProvider: socket.map { callback in { q in try callback(q,candidate) } },
-                clientProvider: client.map { callback in { q in try callback(q,candidate) } })
+                clientProvider: client.map { callback in { q in try callback(q,candidate) } },
+                networkExitProvider: networkExit.map { callback in { q in try callback(q,candidate) } })
             switch result {
             case .committed(let value):
                 let context = try DeliveryContext(application: next, platform: candidate)
