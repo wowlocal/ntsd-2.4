@@ -114,6 +114,37 @@ retain their declared scopes. All owned processes are terminal.115 task files,
 24,890,527 bytes, are pinned on X5. Independent review remains open; no additional
 native soak is warranted by these results. EXE envelope was not recalculated.
 
+### N5 client-side disconnection follow-up (2026-10-02)
+
+Completion audit found that the N5 app probes closed the client: they establish
+role2's receive-before-send shutdown. INPUT_CONTROL has a separate role1 order
+(send before receive); its error exit has source-corpus coverage but no actual
+app-disconnect observation yet. Two finite probes close the host through its
+window, first at loaded selection and then after198 Naruto/Sasuke District
+bodies. Expected client outcomes derive from the unchanged contract: one
+Connection Lost!, then quit0 before recording or the known4588a8 recording
+Source fault during the match. Host quit0 is checked independently.
+
+Use the exact retained pair_probe.py, with only new UI scripts/expected role
+outcomes. Current binary1d7cc4c0… and all643 code pins match the checked merge;
+no rebuild, new original execution, source/mask/comparator change or extra soak.
+Verified APFS X5 tasknetwork-client-disconnect-20261002:1GiB output limit,
+40GiB reserve,180s per probe. Preserve failures; independent review remains open.
+
+**Result:** [evidence and requirement audit](../evidence/network-client-disconnect-20261002.json).
+Both probes passed on the unchanged checked merge binary. At loaded selection,
+the host quits0; role1 sends22 then receives−1 at cycle51, shows one Connection
+Lost!, destroys its window and quits0. In the recorded match both reached199
+bodies; host quits0; role1 sends22 then receives−1 at cycle801, shows the same
+message, then reports the established4588a8 recording Source fault (exit1).
+The trace establishes a socket read error, not its unrecorded OS errno/reset
+packet. No code, expected, mask or comparator changes; no extra build/original
+execution. The prior N5 role2 cases received EOF0; both role orders now have
+actual app error-exit observations. All processes are terminal,643 source pins
+remain exact. The finite functional requirement audit is complete; independent
+review is still required for full acceptance, with the one-agent request pending.
+
+
 ### Merge with the concurrent display fix
 
 The N5 commitfc98199 push found origin/main ahead at55fd92d (the separate

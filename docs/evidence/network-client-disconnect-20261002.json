@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-02",
+  "recordedUTC": "2026-10-02T19:31:26.125413+00:00",
+  "baseCommit": "451a244bb59e16d2a264542a4dfd88e6b32424f4",
+  "status": "role1 disconnect app boundary checked; independent review open",
+  "reason": "Prior N5 probes closed client and observed role2 shutdown. Source role1 sends before receive; its app-level error exit still needed a direct observation.",
+  "artifactRoot": "/Volumes/X5/ntsd-2.4-research/network-client-disconnect-20261002",
+  "artifactManifest": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-client-disconnect-20261002/artifact-manifest.json",
+    "SHA256": "d808e1db79a7766d46487b67086c23837ad2cb95294df6d0ee161d8ad8be097e",
+    "files": 31,
+    "bytes": 11153592
+  },
+  "binarySHA256": "1d7cc4c07155eec9f17099ee2cc8024085b92f0990d263e7089b02874d571970",
+  "codePins": {
+    "path": "code-pins.json",
+    "count": 643,
+    "allMatchCheckedMerge": true
+  },
+  "runner": {
+    "path": "pair_probe.py",
+    "source": "network-app-exit-20261002/pair_probe.py",
+    "SHA256": "e6c1d6172f1fec58bb5f951dff439b431942707daea84d31e437fb578c7d0049",
+    "unchanged": true
+  },
+  "checks": {
+    "host-selection-close1": "Host window closes and quits0. Client send22 then recv-1 at cycle51, exactly one Connection Lost!, window destroyed then WM_QUIT/exit0.",
+    "host-match-close1": "Both reach199 gameplay bodies, Naruto/Sasuke on District. Host window closes and quits0. Client send22 then recv-1 at cycle801, exactly one Connection Lost! followed by the existing Source fault at freed/null4588a8 recording pointer, exit1."
+  },
+  "classification": "Actual native TCP read errors (-1) were observed. The OS errno/TCP reset packet was not separately captured, so only the returned error is claimed. Original error/continuation rules come from INPUT_CONTROL and REPLAY_TICK; no new Windows observation.",
+  "newCode": false,
+  "newBuild": false,
+  "newOriginalExecution": false,
+  "changedExpectedOrMasks": false,
+  "goalAudit": {
+    "1_host_client_UI": "N2/N3 app jobs retained; actual listener and paired UI handshakes are also prerequisites of both new probes",
+    "2_handshake_selection_match": "N3 complementary seats/names/shared3001-byte RNG and N4 full Naruto/Sasuke District match; both new probes validate handshake and the match probe validates game reachability",
+    "3_synchronized_inputs_RNG_state": "N4 state/replay comparisons: all1672 World states/masks,400Actor masks/bytes outside documented per-process CRT spark X/Y,836 actual22-byte packets per direction,1027 role-aware replay commands,shared RNG/frame/HP/results",
+    "4_match_end_exit_disconnect_errors": "N4 visible Summary; N3 refused connect; N5 Cancel/reentry,FD_CLOSE,client close/kill; this increment observes host close with role1 error shutdown before and during recording",
+    "offline_regressions": "Same binary as checked merge: explicit no-network UI and full VS e2e match remote-owned RLE references; no changed dependency warrants another run",
+    "original_fidelity": "Existing source contracts and declared platform policies retained; unknown-storage boundaries, source faults and previous failures preserved",
+    "Windows_interoperability": "Unobserved, explicitly separate from native localhost criterion",
+    "independent_review": "Required by WORKFLOW/PROGRESS_RULES and still incomplete. One reviewer authorization requested in previous goal turn; no user answer in this continuation. This author audit does not count as independent review."
+  },
+  "jobs": "Both finite probes terminal; each original child PID/start identity verified absent",
+  "open": [
+    "Independent N1-N5 integration and N4 comparator review",
+    "Actual Windows interoperability (separate external check)"
+  ],
+  "EXEEnvelopeRecalculated": false
+}
