@@ -163,4 +163,102 @@ final class OriginalMacWinsockTests: XCTestCase {
             XCTAssertEqual(notes.count, 1)
         }
     }
+
+    func testCloseInsideAcceptNotificationAllowsImmediatePortReuse() throws {
+        let w = W(); _ = w.startup(0x101)
+        defer { w.post = nil; _ = w.cleanup() }
+        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
+        XCTAssertEqual(w.listen(listener, backlog: 1), 0)
+        let port = try XCTUnwrap(w.boundPort(listener))
+        var accepted: UInt32?, replacement: UInt32?
+        w.post = { note in
+            XCTAssertTrue(Thread.isMainThread)
+            XCTAssertEqual(note.socket, listener); XCTAssertEqual(note.lParam, 8)
+            accepted = w.accept(listener)
+            XCTAssertNotEqual(accepted, W.invalidSocket)
+            XCTAssertEqual(w.close(listener), 0)
+            // No main-queue turn occurs between close and this bind/listen.
+            let next = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            XCTAssertEqual(w.bind(next, address: 0x0100007f, port: port), 0)
+            XCTAssertEqual(w.listen(next, backlog: 1), 0)
+            replacement = next
+        }
+        XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0x401, events: 8), 0)
+        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), 0)
+        spin { replacement != nil }
+        XCTAssertNotNil(replacement)
+        let server = try XCTUnwrap(accepted)
+        XCTAssertEqual(w.send(client, [17, 21]), 2)
+        var packet: [UInt8] = []
+        spin { let r = w.receive(server, capacity: 2-packet.count); packet += r.bytes; return packet.count == 2 }
+        XCTAssertEqual(packet, [17, 21])
+        w.post = nil // Break the test callback's ownership of the service.
+    }
+
+    func testReplacingSelectionAndRearmingAfterAlreadyReadData() throws {
+        let w = W(); _ = w.startup(0x101)
+        defer { _ = w.cleanup() }
+        let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: 0), 0)
+        XCTAssertEqual(w.listen(listener, backlog: 1), 0)
+        let port = try XCTUnwrap(w.boundPort(listener))
+        let client = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+        XCTAssertEqual(w.connect(client, address: 0x0100007f, port: port), 0)
+        let server = w.accept(listener)
+        XCTAssertNotEqual(server, W.invalidSocket)
+        XCTAssertEqual(w.close(listener), 0)
+        var notes: [W.Notification] = []
+        w.post = { XCTAssertTrue(Thread.isMainThread); notes.append($0) }
+        XCTAssertEqual(w.asyncSelect(server, window: 7, message: 0x401, events: 1), 0)
+        XCTAssertEqual(w.send(client, [1, 2]), 2)
+        // Let readiness run without delivering a game notification yet.
+        Thread.sleep(forTimeInterval: 0.03)
+        XCTAssertTrue(notes.isEmpty)
+        XCTAssertEqual(w.asyncSelect(server, window: 9, message: 0x402, events: 1), 0)
+        let expected = W.Notification(window: 9, message: 0x402, socket: server, lParam: 1)
+        spin { !notes.isEmpty }; XCTAssertEqual(notes, [expected])
+        XCTAssertEqual(w.receive(server, capacity: 1).bytes, [1])
+        spin { notes.count >= 2 }; XCTAssertEqual(notes, [expected, expected])
+        XCTAssertEqual(w.receive(server, capacity: 1).bytes, [2])
+
+        // Consume data before the main queue handles its readiness. The stale
+        // observation must rearm rather than leave subsequent data unwatched.
+        XCTAssertEqual(w.send(client, [3]), 1)
+        Thread.sleep(forTimeInterval: 0.03)
+        XCTAssertEqual(w.receive(server, capacity: 1).bytes, [3])
+        RunLoop.main.run(until: Date().addingTimeInterval(0.03))
+        XCTAssertEqual(notes, [expected, expected])
+        XCTAssertEqual(w.send(client, [4]), 1)
+        spin { notes.count >= 3 }; XCTAssertEqual(notes, [expected, expected, expected])
+        XCTAssertEqual(w.receive(server, capacity: 1).bytes, [4])
+    }
+
+    func testCancelCloseAndCleanupReusePortWithoutPumpingMainQueue() throws {
+        let w = W(); _ = w.startup(0x101)
+        defer { _ = w.cleanup() }
+        var notes: [W.Notification] = []
+        w.post = { notes.append($0) }
+        var port: UInt16 = 0
+        for i in 0..<32 {
+            let listener = w.socket(family: AF_INET, type: SOCK_STREAM, protocol: IPPROTO_TCP)
+            XCTAssertEqual(w.bind(listener, address: 0x0100007f, port: port), 0)
+            XCTAssertEqual(w.listen(listener, backlog: 1), 0)
+            port = try XCTUnwrap(w.boundPort(listener))
+            XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0x401, events: 8), 0)
+            if i % 3 == 0 {
+                XCTAssertEqual(w.asyncSelect(listener, window: 7, message: 0, events: 0), 0)
+                XCTAssertEqual(w.setNonBlocking(listener, false), 0)
+                XCTAssertEqual(w.close(listener), 0)
+            } else if i % 3 == 1 {
+                XCTAssertEqual(w.close(listener), 0)
+            } else {
+                XCTAssertEqual(w.cleanup(), 0); XCTAssertEqual(w.startup(0x101).result, 0)
+            }
+            XCTAssertTrue(w.openHandles.isEmpty)
+        }
+        RunLoop.main.run(until: Date().addingTimeInterval(0.03))
+        XCTAssertTrue(notes.isEmpty)
+    }
 }

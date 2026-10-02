@@ -66,6 +66,60 @@ Review and correct this lifetime without changing the game's close ordering or
 resuming the held N2 routing operation. A repeated successful reset test alone
 does not establish safety of that separate lifetime.
 
+## N1 descriptor lifetime correction (2026-10-02)
+
+Independent continuation of the transport correction above; the held N2 route
+and the unknown refusal trigger remain unchanged. Target: the Mac service's
+own descriptors during cancellation, replacement of a selection, close and
+cleanup. No original EXE, reference harness, application callback router or
+game session is run. Consumer: the existing public N1 API. Its blocking close
+must release the socket before the caller proceeds, without deferring an OS
+close until the game next pumps its main queue.
+
+The current immediate `cancel(); close(fd)` violates Apple's cancellation
+contract cited above. The correction will use a private readiness queue and
+a cancellation completion barrier. Readiness is coalesced while a main-queue
+callback is pending; only the current observation may inspect the descriptor.
+All game state, recv probes and notifications remain on the main queue. The
+readiness queue never waits for the main queue, so closing from a notification
+can wait for cancellation without deadlocking. Independent review is open;
+static ownership/ordering evidence is separate from finite race-window tests.
+
+Cases: retain the four N1 tests, add close-and-rebind inside an accept callback,
+replacement of a read selection and rearming after partial/stale reads, and
+32 select/cancel/close or cleanup cycles with immediate port reuse before the
+main queue is pumped. Inspect and fix failures within this mechanism; original
+expectations and corpora remain immutable. This follows the two reset runs
+(one failing, one passing), not a reset of the correction history.
+
+Paths owned: Winsock service/test, this addendum, CURRENT_WORK and evidence;
+pre-existing interface-address and application WIP remain separate. New logs
+and code pins use `/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002`.
+Reuse the previous terminal SwiftPM build cache (not a pinned reference artifact)
+at `network-service-reset-20261002/build`, preserving all prior logs and inputs.
+X5 writable APFS UUID revalidated with 97.1 GiB free; at most 4 GiB additional
+outputs, retaining the 40 GiB X5/6 GiB internal reserves. Build limit 15 minutes,
+tests 60 seconds; existing SwiftPM/XCTest target and N1 test selection.
+
+**Result:** [evidence](../evidence/network-service-lifetime-20261002.json).
+Syntax and diff checks passed. Run3 built in 168.74 seconds; all seven tests
+passed in 0.483 seconds. The private `ReadObservation` serializes suspend/rearm/
+cancel with a lock, signals a completion group from its cancellation handler,
+and never waits for the main queue. Close waits for that group before releasing
+the descriptor; notification code can therefore close/rebind immediately.
+Main-queue deliveries retain a weak observation and check its identity before
+probing a socket. A stale ready indication after a game recv rearms observation;
+accept also captures errno before rearming. Existing packet/partial-read/reset
+checks remain green. Prior logs and code pins remain intact; the actual dirty
+inputs are pinned, and unrelated WIP is not staged. Independent concurrency
+review remains open; finite tests do not prove every scheduler interleaving.
+
+Next independent client prerequisite found by reading the existing code:
+`OriginalNetworkClient.attempt` requests `hostByAddress(raw4,4,2)` after a failed
+name lookup, but the Mac service currently exposes only name lookup. Establish
+and implement that platform response from the existing client contract before
+any integration; this does not resume the held application notification route.
+
 ## Deferred by the user (2026-10-01)
 
 Networking remains in the full scope, but the user has deferred it in favour

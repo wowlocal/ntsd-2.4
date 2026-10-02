@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "task": "network-service-lifetime-20261002",
+  "baseHead": "735c49e6ec1028c9c9430e6eb081ca90c8065406",
+  "recordedUTC": "2026-10-02T15:52:17.241153+00:00",
+  "originalExecuted": false,
+  "appExecuted": false,
+  "windowsObserved": false,
+  "scope": "N1 descriptor observation, cancellation, immediate close, selection replacement, cleanup; task-owned loopback sockets only. No N2 routing or original execution.",
+  "safetyIncident": "docs/evidence/claude-code-network-safety-2026-10-01.json",
+  "safetyStatus": "Open, exact trigger unknown; independent N1 correction does not clear it.",
+  "storage": {
+    "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002",
+    "apfsUUID": "3A4F5FA6-DC86-4C6E-87E2-EAC2C2D72548",
+    "reusedTerminalCache": "/Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build",
+    "additionalBoundGiB": 4,
+    "reserveGiB": 40,
+    "freeGiBAfter": 97.128
+  },
+  "checks": {
+    "syntax": "swiftc -frontend -parse: service and test; exit 0",
+    "diff": "git diff --check: exit 0",
+    "command": "swift test --package-path native --scratch-path /Volumes/X5/ntsd-2.4-research/network-service-reset-20261002/build -c release -Xswiftc -enable-testing --filter OriginalMacWinsockTests",
+    "run": "run3 (follows reset run1 failure and run2 success)",
+    "exit": 0,
+    "buildSeconds": 168.74,
+    "testSeconds": 0.483,
+    "tests": 7,
+    "failures": 0,
+    "cases": [
+      "All four previous Winsock service tests, including both TCP reset orders.",
+      "Close from accept notification, bind/listen on same port without another main-queue turn, accepted peer still exchanges bytes.",
+      "Replace unprocessed read observation, exact new-window/message callbacks, partial reads and rearming after data was already read.",
+      "32 cancellation/close/cleanup cycles with immediate port reuse without main-queue pumping."
+    ]
+  },
+  "ownershipArgument": [
+    "ReadObservation owns a DispatchSource on a private serial queue.",
+    "A lock serializes suspension, rearming and cancellation; source cancellation resumes a suspended source first.",
+    "The cancellation handler leaves a group after Dispatch releases the descriptor. close waits for that group before Darwin.close.",
+    "Worker handler only pauses and enqueues; it never waits for the main queue.",
+    "Only main-queue code reads socket/game state or calls post. Queued work verifies observation identity; cancelled/replaced observations do not inspect the descriptor.",
+    "accept and receive preserve errno before rearming."
+  ],
+  "artifacts": {
+    "before-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/before-OriginalMacWinsockTests.swift",
+      "sha256": "2cd594a46d35582f43684dec9debe0bb43d631dae3d5456f993c355e68fa9d7a",
+      "bytes": 9835
+    },
+    "candidate-OriginalMacWinsockTests.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/candidate-OriginalMacWinsockTests.swift",
+      "sha256": "d686fa7d5cd9d4effb83ca8f8c708238ea6714b563b8c5844022003aa2834727",
+      "bytes": 15216
+    },
+    "before-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/before-OriginalMacWinsock.swift",
+      "sha256": "e57ea2fdf86384aaff98a952f44126aeda82029a97242901eef4e4e234369aed",
+      "bytes": 16872
+    },
+    "run3.log": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/run3.log",
+      "sha256": "aed7fcd85a5219e972f45ab80549cded5a1a504d5efb453046d791f7fa23479f",
+      "bytes": 17617
+    },
+    "candidate-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/candidate-inputs.json",
+      "sha256": "96f4c3680361a27c956b94ef506eadd8614d3e75713a385e62c8e411bb333d0d",
+      "bytes": 90760
+    },
+    "before-CURRENT_WORK.md": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/before-CURRENT_WORK.md",
+      "sha256": "ff78b766c9fe9b48a810f28d1d0465319ef8e76cedfaeccd3372e6cdc7e937d1",
+      "bytes": 234624
+    },
+    "before-worktree.diff": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/before-worktree.diff",
+      "sha256": "67dbbb23c411060eb85eb119635c8997d02283742b217d053c7dcabb46f032ef",
+      "bytes": 65028
+    },
+    "run3-job.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/run3-job.json",
+      "sha256": "04eb3bcd50dbae6d1394c213f26d9686ce46ac7c1ebde676b401401f2ed1e98e",
+      "bytes": 916
+    },
+    "before-inputs.json": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/before-inputs.json",
+      "sha256": "e4cecab56e49c30165b568f27a0d5c5a87e5b68e1e19fd4298982a477d04b0cf",
+      "bytes": 90614
+    },
+    "candidate-OriginalMacWinsock.swift": {
+      "path": "/Volumes/X5/ntsd-2.4-research/network-service-lifetime-20261002/candidate-OriginalMacWinsock.swift",
+      "sha256": "6996229f819f09a5b0d6aecb8e6e89524b401f4f80e8b3019e72d5d76c612b6f",
+      "bytes": 18959
+    }
+  },
+  "checkedSources": {
+    "native/Tests/NTSDCoreTests/OriginalMacWinsockTests.swift": "d686fa7d5cd9d4effb83ca8f8c708238ea6714b563b8c5844022003aa2834727",
+    "native/Sources/NTSDMacPlatform/OriginalMacWinsock.swift": "6996229f819f09a5b0d6aecb8e6e89524b401f4f80e8b3019e72d5d76c612b6f"
+  },
+  "sources": [
+    "https://developer.apple.com/documentation/dispatch/dispatch_source_set_cancel_handler",
+    "https://developer.apple.com/library/archive/documentation/General/Conceptual/ConcurrencyProgrammingGuide/GCDWorkQueues/GCDWorkQueues.html",
+    "docs/research/NETWORK_PLAY_PLAN.md",
+    "docs/research/NETWORK_NOTIFICATION.md"
+  ],
+  "limits": [
+    "Independent ownership/concurrency review remains open; the author argument is not independent review.",
+    "Finite loopback tests do not prove every scheduler interleaving. No crash was deliberately manufactured.",
+    "Actual dirty inputs are pinned; this is N1 service verification, not acceptance of N2 WIP or a committed packaged game.",
+    "Existing interface-address changes remain outside this commit.",
+    "Full host/client app match, synchronization, app error/exit paths and Windows interoperability remain unverified."
+  ]
+}

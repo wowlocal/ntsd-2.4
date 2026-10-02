@@ -1,5 +1,6 @@
 import Darwin
 import Dispatch
+import Foundation
 
 /// Winsock 1.1 for the original's network code over BSD sockets
 /// (NETWORK_PLAY_PLAN.md N1). The operations follow what the EXE calls through
@@ -14,7 +15,8 @@ import Dispatch
 /// - recv returns what has arrived (0 on an orderly close, −1 on error);
 /// - bind may reuse a port in TIME_WAIT (SO_REUSEADDR, Windows' default
 ///   behaviour); send never raises SIGPIPE (SO_NOSIGPIPE).
-/// Notifications are delivered on the main queue through `post`.
+/// The game calls this service on the main thread. Notifications are delivered
+/// on the main queue through `post`; only readiness observation runs elsewhere.
 public final class OriginalMacWinsock {
     public static let socketError: Int32 = -1
     public static let invalidSocket: UInt32 = 0xffff_ffff
@@ -34,8 +36,52 @@ public final class OriginalMacWinsock {
         // remain visible to the other consumer until this socket is closed.
         var reset = false
         var selection: Selection?
-        var source: DispatchSourceRead?, suspended = false
+        var observation: ReadObservation?
         init(_ fd: Int32) { self.fd = fd }
+    }
+    /// Keeps source cancellation independent of the game's main queue. The
+    /// completion barrier lets close release the descriptor synchronously,
+    /// after Dispatch has relinquished it, even inside a `post` callback.
+    private final class ReadObservation {
+        private static let queue = DispatchQueue(label: "NTSD.Winsock.readiness")
+        private let source: DispatchSourceRead
+        private let lock = NSLock()
+        private let finished = DispatchGroup()
+        private var suspended = false, cancelled = false
+
+        init(_ fd: Int32, ready: @escaping (ReadObservation) -> Void) {
+            source = DispatchSource.makeReadSource(fileDescriptor: fd, queue: Self.queue)
+            finished.enter()
+            let completion = finished
+            source.setCancelHandler { completion.leave() }
+            source.setEventHandler { [weak self] in
+                guard let self, self.pause() else { return }
+                // One pending delivery per arm; unread data must not flood
+                // the main queue while the game is sleeping or receiving.
+                ready(self)
+            }
+            source.resume()
+        }
+        @discardableResult func pause() -> Bool {
+            lock.lock(); defer { lock.unlock() }
+            guard !cancelled, !suspended else { return false }
+            source.suspend(); suspended = true; return true
+        }
+        func rearm() {
+            lock.lock(); defer { lock.unlock() }
+            guard !cancelled, suspended else { return }
+            suspended = false; source.resume()
+        }
+        func cancelAndWait() {
+            lock.lock()
+            if !cancelled {
+                cancelled = true
+                if suspended { suspended = false; source.resume() }
+                source.cancel()
+            }
+            lock.unlock()
+            finished.wait()
+        }
     }
     private var sockets: [UInt32: Socket] = [:]
     private var nextHandle: UInt32 = 0x100
@@ -140,8 +186,9 @@ public final class OriginalMacWinsock {
     public func accept(_ handle: UInt32) -> UInt32 {
         guard let s = lookup(handle) else { return Self.invalidSocket }
         let fd = Darwin.accept(s.fd, nil, nil)
+        let error = errno
         rearm(s)
-        guard fd >= 0 else { return fail(Self.invalidSocket) }
+        guard fd >= 0 else { return fail(Self.invalidSocket, error: error) }
         let accepted = adopt(fd), child = sockets[accepted]!
         if s.nonBlocking { _ = setNonBlocking(child, true) }
         if let selection = s.selection { select(accepted, child, selection) }
@@ -231,12 +278,13 @@ public final class OriginalMacWinsock {
         s.selection = selection
         let watched = Event.accept.rawValue | Event.read.rawValue | Event.close.rawValue
         guard selection.events & watched != 0 else { return }
-        let source = DispatchSource.makeReadSource(fileDescriptor: s.fd, queue: .main)
-        source.setEventHandler { [weak self, weak s] in
-            guard let self, let s, let selection = s.selection else { return }
-            self.readable(handle, s, selection)
+        s.observation = ReadObservation(s.fd) { [weak self, weak s] observation in
+            DispatchQueue.main.async { [weak self, weak s, weak observation] in
+                guard let self, let s, let observation,
+                      s.observation === observation, let selection = s.selection else { return }
+                self.readable(handle, s, selection)
+            }
         }
-        s.source = source; source.resume()
     }
     private func readable(_ handle: UInt32, _ s: Socket, _ selection: Selection) {
         func deliver(_ event: Event) {
@@ -257,6 +305,7 @@ public final class OriginalMacWinsock {
             reportClose(handle, s, selection, error: Self.connectionReset)
         } else if n > 0 && selection.events & Event.read.rawValue != 0 { deliver(.read) }
         else if n > 0 { pause(s) } // data waits for recv; FD_CLOSE comes after it is read
+        else { rearm(s) } // a preceding game recv may have consumed the ready data
     }
     private func reportClose(_ handle: UInt32, _ s: Socket, _ selection: Selection, error: Int32) {
         stopWatching(s)
@@ -266,12 +315,12 @@ public final class OriginalMacWinsock {
                         lParam: Event.close.rawValue | (UInt32(bitPattern: error) << 16)))
         }
     }
-    private func pause(_ s: Socket) { if let source = s.source, !s.suspended { source.suspend(); s.suspended = true } }
-    private func rearm(_ s: Socket) { if let source = s.source, s.suspended { s.suspended = false; source.resume() } }
+    private func pause(_ s: Socket) { s.observation?.pause() }
+    private func rearm(_ s: Socket) { s.observation?.rearm() }
     private func stopWatching(_ s: Socket) {
-        guard let source = s.source else { return }
-        if s.suspended { s.suspended = false; source.resume() }
-        source.cancel(); s.source = nil
+        guard let observation = s.observation else { return }
+        s.observation = nil // invalidate already-enqueued main-queue deliveries
+        observation.cancelAndWait()
     }
     private func release(_ s: Socket) { stopWatching(s); Darwin.close(s.fd) }
     private static func socketAddress(_ address: UInt32, _ port: UInt16) -> sockaddr_in {
