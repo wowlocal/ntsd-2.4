@@ -1,0 +1,331 @@
+{
+ "date": "2026-10-02",
+ "branch": "analysis/exe-coverage-20261002",
+ "base": "0356f06",
+ "originalExecuted": false,
+ "exe": {
+  "path": "downloads/NTSD_2.4_2.0a_clean/NTSD 2.4_2.0a/NTSD 2.4.exe",
+  "sha256": "3f7ac67c5890ef979ee24a6dae5528056e7f631725c292cf9cb0a928ebeff71c"
+ },
+ "method": {
+  "universe": "tools/exe_coverage_universe.py: recursive descent from the entry, direct calls/jumps, jump tables and data-section code pointers",
+  "executed": "tools/exe_coverage_executed.py: instruction-keyed subtrees (instruction lists, PCs) and, separately, entry/returnPC/pc/address fields in fixtures, evidence and raw corpora (build/original, read-only)",
+  "traces": "tools/exe_coverage_traces.py: pc/returnPC/entry of every part of build/research/application-catalog-candidate1-nominal.traces (read-only)",
+  "scopes": "function entries named in fixture/evidence scope fields (corpora of real calls of that function)",
+  "report": "tools/exe_coverage_report.py"
+ },
+ "inputs": {
+  "fixtures": "native/Tests/NTSDCoreTests/Fixtures (406 files, 4.3 GB)",
+  "evidence": "docs/evidence/*.json",
+  "rawCorpora": "build/original (23,092 JSON, 8.5 GB) in the main tree, read only",
+  "catalogTrace": "42,318 parts, all scanned"
+ },
+ "universe": {
+  "instructions": 72199,
+  "bytes": 274600,
+  "functions": 373,
+  "text": [
+   4198400,
+   4481802
+  ]
+ },
+ "partitions": {
+  "thunksFrom": 4453246,
+  "zlib": [
+   4453376,
+   4477088
+  ],
+  "runtimeFrom": 4477088
+ },
+ "table": {
+  "game": {
+   "instructions": 63694,
+   "bytes": 248355,
+   "functions": 174,
+   "fixtures (all Native test resources)": {
+    "instructions": 29965,
+    "bytes": 119895,
+    "percentInstructions": 47.0,
+    "percentBytes": 48.3,
+    "functionsTouched": 139
+   },
+   "fixtures named in Native code": {
+    "instructions": 28008,
+    "bytes": 112283,
+    "percentInstructions": 44.0,
+    "percentBytes": 45.2,
+    "functionsTouched": 136
+   },
+   "evidence files": {
+    "instructions": 4631,
+    "bytes": 17848,
+    "percentInstructions": 7.3,
+    "percentBytes": 7.2,
+    "functionsTouched": 79
+   },
+   "raw oracle corpora (build/original)": {
+    "instructions": 21485,
+    "bytes": 85299,
+    "percentInstructions": 33.7,
+    "percentBytes": 34.3,
+    "functionsTouched": 136
+   },
+   "catalog trace PCs (build/research)": {
+    "instructions": 2029,
+    "bytes": 6676,
+    "percentInstructions": 3.2,
+    "percentBytes": 2.7,
+    "functionsTouched": 14
+   },
+   "all saved records": {
+    "instructions": 32735,
+    "bytes": 130426,
+    "percentInstructions": 51.4,
+    "percentBytes": 52.5,
+    "functionsTouched": 147
+   },
+   "functions with recorded execution or a compared corpus": {
+    "functions": 157,
+    "instructionsInThem": 58845,
+    "percentInstructions": 92.4
+   },
+   "cited in the Swift port (ranges only)": {
+    "instructions": 32961,
+    "percentInstructions": 51.7
+   },
+   "cited in the Swift port": {
+    "functions": 151,
+    "instructions": 60164,
+    "percentInstructions": 94.5
+   },
+   "cited in research or port": {
+    "functions": 160,
+    "instructions": 62318,
+    "percentInstructions": 97.8
+   }
+  },
+  "zlib": {
+   "instructions": 7413,
+   "bytes": 22808,
+   "functions": 59,
+   "fixtures (all Native test resources)": {
+    "instructions": 3536,
+    "bytes": 11391,
+    "percentInstructions": 47.7,
+    "percentBytes": 49.9,
+    "functionsTouched": 36
+   },
+   "fixtures named in Native code": {
+    "instructions": 3536,
+    "bytes": 11391,
+    "percentInstructions": 47.7,
+    "percentBytes": 49.9,
+    "functionsTouched": 36
+   },
+   "evidence files": {
+    "instructions": 1,
+    "bytes": 2,
+    "percentInstructions": 0.0,
+    "percentBytes": 0.0,
+    "functionsTouched": 1
+   },
+   "raw oracle corpora (build/original)": {
+    "instructions": 3536,
+    "bytes": 11391,
+    "percentInstructions": 47.7,
+    "percentBytes": 49.9,
+    "functionsTouched": 36
+   },
+   "catalog trace PCs (build/research)": {
+    "instructions": 0,
+    "bytes": 0,
+    "percentInstructions": 0.0,
+    "percentBytes": 0.0,
+    "functionsTouched": 0
+   },
+   "all saved records": {
+    "instructions": 3536,
+    "bytes": 11391,
+    "percentInstructions": 47.7,
+    "percentBytes": 49.9,
+    "functionsTouched": 36
+   },
+   "functions with recorded execution or a compared corpus": {
+    "functions": 36,
+    "instructionsInThem": 3895,
+    "percentInstructions": 52.5
+   },
+   "cited in the Swift port (ranges only)": {
+    "instructions": 0,
+    "percentInstructions": 0.0
+   },
+   "cited in the Swift port": {
+    "functions": 3,
+    "instructions": 100,
+    "percentInstructions": 1.3
+   },
+   "cited in research or port": {
+    "functions": 12,
+    "instructions": 1200,
+    "percentInstructions": 16.2
+   }
+  },
+  "runtime": {
+   "instructions": 1057,
+   "bytes": 3227,
+   "functions": 105,
+   "fixtures (all Native test resources)": {
+    "instructions": 104,
+    "bytes": 419,
+    "percentInstructions": 9.8,
+    "percentBytes": 13.0,
+    "functionsTouched": 7
+   },
+   "fixtures named in Native code": {
+    "instructions": 104,
+    "bytes": 419,
+    "percentInstructions": 9.8,
+    "percentBytes": 13.0,
+    "functionsTouched": 7
+   },
+   "evidence files": {
+    "instructions": 54,
+    "bytes": 175,
+    "percentInstructions": 5.1,
+    "percentBytes": 5.4,
+    "functionsTouched": 4
+   },
+   "raw oracle corpora (build/original)": {
+    "instructions": 104,
+    "bytes": 419,
+    "percentInstructions": 9.8,
+    "percentBytes": 13.0,
+    "functionsTouched": 7
+   },
+   "catalog trace PCs (build/research)": {
+    "instructions": 1,
+    "bytes": 2,
+    "percentInstructions": 0.1,
+    "percentBytes": 0.1,
+    "functionsTouched": 1
+   },
+   "all saved records": {
+    "instructions": 104,
+    "bytes": 419,
+    "percentInstructions": 9.8,
+    "percentBytes": 13.0,
+    "functionsTouched": 7
+   },
+   "functions with recorded execution or a compared corpus": {
+    "functions": 7,
+    "instructionsInThem": 266,
+    "percentInstructions": 25.2
+   },
+   "cited in the Swift port (ranges only)": {
+    "instructions": 0,
+    "percentInstructions": 0.0
+   },
+   "cited in the Swift port": {
+    "functions": 4,
+    "instructions": 53,
+    "percentInstructions": 5.0
+   },
+   "cited in research or port": {
+    "functions": 11,
+    "instructions": 348,
+    "percentInstructions": 32.9
+   }
+  },
+  "thunks": {
+   "instructions": 35,
+   "bytes": 210,
+   "functions": 35,
+   "fixtures (all Native test resources)": {
+    "instructions": 18,
+    "bytes": 108,
+    "percentInstructions": 51.4,
+    "percentBytes": 51.4,
+    "functionsTouched": 18
+   },
+   "fixtures named in Native code": {
+    "instructions": 18,
+    "bytes": 108,
+    "percentInstructions": 51.4,
+    "percentBytes": 51.4,
+    "functionsTouched": 18
+   },
+   "evidence files": {
+    "instructions": 2,
+    "bytes": 12,
+    "percentInstructions": 5.7,
+    "percentBytes": 5.7,
+    "functionsTouched": 2
+   },
+   "raw oracle corpora (build/original)": {
+    "instructions": 17,
+    "bytes": 102,
+    "percentInstructions": 48.6,
+    "percentBytes": 48.6,
+    "functionsTouched": 17
+   },
+   "catalog trace PCs (build/research)": {
+    "instructions": 0,
+    "bytes": 0,
+    "percentInstructions": 0.0,
+    "percentBytes": 0.0,
+    "functionsTouched": 0
+   },
+   "all saved records": {
+    "instructions": 18,
+    "bytes": 108,
+    "percentInstructions": 51.4,
+    "percentBytes": 51.4,
+    "functionsTouched": 18
+   },
+   "functions with recorded execution or a compared corpus": {
+    "functions": 18,
+    "instructionsInThem": 18,
+    "percentInstructions": 51.4
+   },
+   "cited in the Swift port (ranges only)": {
+    "instructions": 18,
+    "percentInstructions": 51.4
+   },
+   "cited in the Swift port": {
+    "functions": 1,
+    "instructions": 18,
+    "percentInstructions": 51.4
+   },
+   "cited in research or port": {
+    "functions": 8,
+    "instructions": 22,
+    "percentInstructions": 62.9
+   }
+  }
+ },
+ "uncoveredGameFunctions": {
+  "portedInsideComparedCallers": {
+   "0x408cb0": 538,
+   "0x4034f0": 357,
+   "0x4061a0": 15,
+   "0x43e620 (own 27-call corpus)": 161,
+   "0x4389a0": 130,
+   "0x438ad0": 48
+  },
+  "developerModes": {
+   "0x4151d0 (dispatcher mode 1: data.txt loader/editor)": 1731,
+   "0x414b70 (mode 2)": 346,
+   "0x4143d0": 29
+  },
+  "undocumentedOrUnported": {
+   "0x40d0a0": 749,
+   "0x414450": 265,
+   "0x4146b0": 157,
+   "0x437220": 147,
+   "0x406a20 (documented, not ported)": 98,
+   "0x40bfb0": 43,
+   "0x415140": 8,
+   "0x40d940": 7
+  }
+ }
+}
