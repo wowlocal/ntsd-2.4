@@ -563,7 +563,8 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
             "worldBytes":Data(model.world.bytes).base64EncodedString(),"worldDefined":Data(model.world.defined.map { $0 ? UInt8(1) : 0 }).base64EncodedString(),
             "sentPackets":menu.network?.sentControlPackets ?? 0,"receivedBytes":menu.network?.receivedControlBytes ?? 0]
         for (name,address) in [("mode",0x451160),("menu",0x44d020),("phase",0x450b90),("rngIndex",0x450bcc),
-                               ("rngCounter",0x450c34),("roundTimer",0x450bdc),("winner",0x450bf8),("arena",0x44fb6c),("inputSequence",0x450bf0)] {
+                               ("rngCounter",0x450c34),("roundTimer",0x450bdc),("winner",0x450bf8),("arena",0x44fb6c),("inputSequence",0x450bf0),
+                               ("clock",0x450bbc),("phase12",0x450bd0),("phase3",0x450bd4),("phase2",0x450bd8)] {
             value[name] = try model.globals.integer(at:address-base,as:Int32.self)
         }
         if networkStateCycles.contains(cycles) {

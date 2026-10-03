@@ -23,7 +23,8 @@ BG = ['District', 'SandCountry', 'Cave', 'Deep', 'Hideout', 'Rain', 'SnowCountry
 def main(batch, out, description):
     key = lfr_checksum.writer_key(EXE); cases = []
     for d in sorted((p for p in Path(batch).iterdir() if p.is_dir() and p.name.isdigit()), key=lambda p: int(p.name)):
-        recs = sorted((d / "overlay").rglob("*.lfr"))
+        # record_original.py keeps the original's recording beside the dumps.
+        recs = sorted(d.glob("*.lfr")) or sorted((d / "overlay").rglob("*.lfr"))
         if not recs or not (d / "original.json").exists(): cases.append(dict(seed=int(d.name), result="incomplete")); continue
         raw = recs[-1].read_bytes(); r = lfr_checksum.decode(raw, key); bg = struct.unpack_from("<i", r, 0x1A4)[0]
         buf = io.StringIO()

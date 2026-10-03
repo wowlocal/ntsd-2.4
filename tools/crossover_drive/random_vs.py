@@ -4,7 +4,7 @@ all with Random characters on a Random background, then the original under
 CrossOver plays the recording and both Summaries are compared from memory.
 
 usage: random_vs.py OUT_DIR SEED [SEED...] [--mode vs|stage|war] [--computers N] [--rerolls K]
-                    [--background-steps N...] [--difficulty-steps N...]
+                    [--background-steps N...] [--difficulty-steps N...] [--p1 idle|walk] [--mac-only]
 
 Per seed: the app runs with `--virtual-clock SEED 8`; P1 joins as Random and
 stays idle; the final menu's Randomize is pressed K times before Fight!. The
@@ -65,7 +65,15 @@ def war_script(seed):
     return "; ".join(steps), settings
 
 
-def script(computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0):
+def walk(t, end=300000):
+    """P1 walks right and attacks: Right held 45 steps, then Attack, every 60
+    steps of the gameplay script clock. A Stage advances only when a fighter
+    walks on at GO, so idle P1 with computer allies stalls once the phase is
+    clear; with P1 walking the run ends when P1 is knocked out."""
+    return [f"{u} hold 68 45; {u + 50} key 74" for u in range(t, end, 60)]
+
+
+def script(computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0, p1="idle"):
     """P1 joins as Random and stays idle. VS starts with one computer and Stage
     with none; D adds one. On the final menu the marker starts at Randomize
     (line 2) and each J acts on its line: 2 rerolls the Random fighters, 3
@@ -86,15 +94,17 @@ def script(computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0
     # The exit is only a backstop: --exit-after-summary ends the run. The
     # gameplay script clock counts loop iterations (about 3.3 per tick), and a
     # Stage run with allies can last far beyond 60000.
-    steps += [f"{t + 50} key 74", "900000 exit"]
+    steps.append(f"{t + 50} key 74")
+    if p1 == "walk": steps += walk(t + 400)
+    steps.append("900000 exit")
     return "; ".join(steps)
 
 
-def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0, mac_only=False):
+def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty_steps=0, mac_only=False, p1="idle"):
     d = out / str(seed); d.mkdir(parents=True, exist_ok=True); overlay = d / "overlay"; overlay.mkdir(exist_ok=True)
     mac = d / "mac.json"
     if mode == "war": text, settings = war_script(seed)
-    else: text, settings = script(computers, rerolls, background_steps, mode, difficulty_steps), None
+    else: text, settings = script(computers, rerolls, background_steps, mode, difficulty_steps, p1), None
     if not mac.exists():
         done = subprocess.run([str(APP), "--original", "--mute-music", "--mute-sounds", "--no-activate", "--overlay", str(overlay),
                                "--virtual-clock", str(seed), "8", "--script-clock", "gameplay", "--exit-after-summary",
@@ -104,7 +114,7 @@ def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty
         (d / "mac.stdout").write_text(done.stdout + done.stderr)
     recordings = sorted(overlay.rglob("*.lfr"))
     if settings is not None: (d / "war-settings.json").write_text(json.dumps(settings, indent=1))
-    result = dict(seed=seed, mode=mode, computers=computers, rerolls=rerolls, backgroundSteps=background_steps, difficultySteps=difficulty_steps, recording=[str(r) for r in recordings])
+    result = dict(seed=seed, mode=mode, p1=p1, computers=computers, rerolls=rerolls, backgroundSteps=background_steps, difficultySteps=difficulty_steps, recording=[str(r) for r in recordings])
     if not mac.exists() or not recordings:
         result["result"] = "no Mac summary or recording"; return result
     if mac_only: result["result"] = "Mac only"; return result
@@ -131,12 +141,13 @@ def main():
     p.add_argument("--difficulty-steps", type=int, nargs="*", default=[], help="per seed: J presses on the Difficulty line")
     p.add_argument("--mode", choices=sorted(PREFIX), default="vs")
     p.add_argument("--mac-only", action="store_true", help="record and dump on the Mac only (the original runs later)")
+    p.add_argument("--p1", choices=["idle", "walk"], default="idle", help="P1 stays idle or walks right and attacks")
     a = p.parse_args(); out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     results = []
     for i, seed in enumerate(a.seeds):
         steps = a.background_steps[i] if i < len(a.background_steps) else 0
         difficulty = a.difficulty_steps[i] if i < len(a.difficulty_steps) else 0
-        r = run(out, seed, a.computers, a.rerolls, steps, a.mode, difficulty, a.mac_only); results.append(r)
+        r = run(out, seed, a.computers, a.rerolls, steps, a.mode, difficulty, a.mac_only, a.p1); results.append(r)
         print(seed, r["result"], [s["id"] for s in r.get("mac", {}).get("seats", [])], flush=True)
         if not a.mac_only: (out / "results.json").write_text(json.dumps(results, indent=1))
 
