@@ -136,6 +136,15 @@ user's approval to push. Until then, keep the other phases moving.
   and keep at least 20 GiB free there and on the internal volume. SDK installs
   may use the default SwiftPM location on the internal volume. No build trees on
   T7 (ExFAT has no symlinks).
+- Run macOS tests in the project's release test path:
+  `xcrun --toolchain XcodeDefault swift-build --package-path native --scratch-path build/swiftpm-test-release --build-system native -c release --build-tests -Xswiftc -enable-testing`,
+  then `swift-test … --skip-build --filter …`. Plain `swift test` in
+  `native/.build` uses swift-build and created an 11 GB `out/Products/Debug`
+  tree on 2026-10-03. That tree was removed again to restore the internal
+  volume's reserve.
+- Linux tests cross-build with the generated glibc SDK
+  `ntsd-6.4.0-ubuntu24.04-aarch64`; the static musl SDK has no XCTest. Run
+  them in the `swift:6.4.0-noble` container, which supplies the Swift runtime.
 - At most three failed rounds per mechanism; then diagnose before the next run.
 - Long builds and test runs go to the background with recorded PID and command.
   A quiet log is not a stopped job.
@@ -152,31 +161,30 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | P2b clock | `OriginalMacStartupClock` imports Darwin/Glibc/Musl/Android per OS with unchanged calls. **`NTSDCore` now cross-compiles for Linux** (aarch64 debug and release, x86_64 debug). `NTSDReferenceChecks` stops at `import Compression`. | macOS clock test `testActualMacClocksAtWholeCallerBoundaries`; Xcode release build; Linux build logs `p2b-*` | 65c6916 |
 | 2026-10-03 | P2c inflate | `FixtureInflate.decode` keeps the `compression_decode_buffer(COMPRESSION_ZLIB)` contract. It uses `Compression` on Apple platforms and SDK zlib (new `CZlib` system-library target) elsewhere. Four reference checks and two tests call it; the pinned replay codec is untouched. **All nine check executables cross-compile for Linux aarch64.** | `FixtureInflateTests` with `NTSD_FIXTURE_INFLATE_ALL=1`: zlib equals Compression on all 1,934 fixture blobs (38 zlib-wrapped, header/trailer stripped as their test does), 3,157,901,771 packed / 18,326,948,532 inflated bytes, plus truncation for blobs ≤4 MiB. 21 regression tests (Object, Stage, Background, Bootstrap, WindowInput, CatalogDIBPixels, CatalogSession, LibWarFaultRejection) in the release test build; Xcode release build | 699f9ec |
 | 2026-10-03 | P1 package | The manifest is portable on non-Apple hosts or with `NTSD_PORTABLE=1`; it then drops `NTSDMacPlatform`, `NTSDApp`/`NTSDNative` and the 19 test files now under `Tests/NTSDCoreTests/Mac/` (`git mv`, same target on macOS). The manifest cache honours the variable (16 ↔ 14 targets). Linux builds all portable targets. **The static musl SDK has no XCTest or swift-testing**, so the Linux test build needs a glibc SDK. | macOS: debug build with tests; `swift test list` = 696 tests = 696 `func test` declarations, and all 19 moved classes have full method counts; Xcode release build. Linux aarch64 `NTSD_PORTABLE=1` build of every portable target. Linux test build: `no such module 'XCTest'` (log `p1-linux-aarch64-tests-debug.log`) | 48db790 |
-| 2026-10-03 | P0-W Swift side | The official 6.4.0 Windows installer unpacks on this Mac. From its WiX Burn bundle come the x86_64/aarch64 `Windows.sdk` (Foundation, Dispatch, WinSDK, XCTest) and the runtime DLLs. **Blocked:** linking also needs the MSVC CRT and Windows SDK, which only come with acceptance of Microsoft's license (asked). | attached container SHA-512 equals the burn manifest; two earlier offset attempts failed and are recorded. [evidence](../evidence/crossplatform-p0w-20261003.json) | this commit |
+| 2026-10-03 | P0-W Swift side | The official 6.4.0 Windows installer unpacks on this Mac. From its WiX Burn bundle come the x86_64/aarch64 `Windows.sdk` (Foundation, Dispatch, WinSDK, XCTest) and the runtime DLLs. **Blocked:** linking also needs the MSVC CRT and Windows SDK, which only come with acceptance of Microsoft's license (asked). | attached container SHA-512 equals the burn manifest; two earlier offset attempts failed and are recorded. [evidence](../evidence/crossplatform-p0w-20261003.json) | 6203799 |
+| 2026-10-03 | P0-L2 glibc SDK | `swift-sdk-generator` (6.4.0 tag) built the Ubuntu 24.04 aarch64 SDK `ntsd-6.4.0-ubuntu24.04-aarch64`, with XCTest and swift-testing, from `swift:6.4.0-noble`. **The portable test suite now cross-compiles for Linux.** Test-only changes: Linux-only no-argument inits for 252 suites (suites construct each other), a pass-through `autoreleasepool`, and one bridge cast removed. **First Linux run: 12 original-reference tests pass** (whole Stage table, Object streams, Bootstrap pools, Background, SHA-256). | XCTest smoke and glibc probe equal to macOS; six build rounds recorded; touched tests pass on macOS (6); Linux debug run 12/12 in 466 s. [evidence](../evidence/crossplatform-p0l2-20261003.json) | this commit |
 
 ## Next task
 
-P0-L2, the glibc Linux SDK with XCTest. Build `swift-sdk-generator` at its
-`swift-6.4.0-RELEASE` tag (clone under
-`/Volumes/X5/ntsd-2.4-research/crossplatform/tools`). Generate an Ubuntu 24.04
-aarch64 SDK from the official `swift:6.4.0` image (`--with-docker`,
-`--no-host-toolchain`; the installed 6.4.0 toolchain is the host).
+P3, the headless Linux determinism run.
 
-- Install the SDK and confirm that XCTest and swift-testing are in it.
-- Gate: the probe and an XCTest smoke package cross-built and run in a
-  `swift:6.4.0` container. Then
-  `NTSD_PORTABLE=1 swift build --build-tests` for the package. Record any test
-  helpers that leak across the `Mac/` boundary and fix them by moving files
-  only.
-
-The custom-image route (`--from-container-image` with extra packages) is how
-P7 adds SDL3 to this SDK.
+- Cross-build the portable tests in **release** (debug took 466 s for 12
+  tests) with `-Xswiftc -enable-testing`, matching the macOS release test
+  build.
+- Run the whole portable suite in `swift:6.4.0-noble` with
+  `tools/crossplatform/linux-test-run.sh`, one suite per container in the
+  background, logging pass/fail/time per suite.
+- Compare with macOS. Every failure is a recorded mismatch with its first
+  differing value, never a changed expectation.
+- Suites that need Mac-only inputs or long environment-gated corpora: record
+  them as skipped with their reason.
 
 Following tasks:
 
-- P3: run the cross-built portable tests and check executables in a container
-  on the same fixtures and compare with macOS. The test bundle copies 4.3 GB of
-  fixtures per triple, so watch the X5 reserve.
+- P3 x86_64: repeat on `x86_64` with a second generated SDK. Rosetta is a
+  test harness; label it so.
+- P5: the shared runtime extraction on macOS can start in parallel with long
+  Linux runs.
 - P0-W: the Swift side is extracted (see ledger). The MSVC CRT and Windows
   SDK still need the user's acceptance of Microsoft's license
   (`xwin --accept-license`); asked 2026-10-03, awaiting an answer.
