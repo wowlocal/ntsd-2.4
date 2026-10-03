@@ -168,19 +168,22 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | P0-L2 glibc SDK | `swift-sdk-generator` (6.4.0 tag) built the Ubuntu 24.04 aarch64 SDK `ntsd-6.4.0-ubuntu24.04-aarch64`, with XCTest and swift-testing, from `swift:6.4.0-noble`. **The portable test suite now cross-compiles for Linux.** Test-only changes: Linux-only no-argument inits for 252 suites (suites construct each other), a pass-through `autoreleasepool`, and one bridge cast removed. **First Linux run: 12 original-reference tests pass** (whole Stage table, Object streams, Bootstrap pools, Background, SHA-256). | XCTest smoke and glibc probe equal to macOS; six build rounds recorded; touched tests pass on macOS (6); Linux debug run 12/12 in 466 s. [evidence](../evidence/crossplatform-p0l2-20261003.json) | ebb9adc |
 | 2026-10-03 | P3 (running) | Full portable run in `swift:6.4.0-noble`, release build. The first pass exposed one test-harness difference: Darwin `NSDictionary` treats JSON `true` as `1`, corelibs does not, which broke the Active* parent lookup. Fixed by `sameJSONObject` (Darwin path unchanged); the run resumed on the fixed binary. | macOS 10/10 affected tests; the helper equals Darwin on 18 JSON cases in Linux. Results so far: `/Volumes/X5/ntsd-2.4-research/crossplatform/p3-aarch64-release/results.jsonl` | 503af05 |
 | 2026-10-03 | P5 step 1 | New portable target `NTSDRuntime` (Core only), re-exported by NTSDMacPlatform. IdentityPool, Heap, Zone and RuntimeMessages moved with `git mv`; `take()` became public and RuntimeMessages' unused AppKit import was dropped. [Design](CROSS_PLATFORM_RUNTIME.md) | release test build; RuntimeMenu, RuntimeStartup, ObservedIteration 14/14; `swift test list` = 696; Xcode release build; Linux `NTSD_PORTABLE=1` build of `NTSDRuntime` | fb61a77 |
-| 2026-10-03 | P5 step 2 | The sound mixer (voices, positions, loop, volume/pan, render, call decoding) moved to `NTSDRuntime`; `backed(by:)` and the AVAudioEngine output stay in `OriginalMacSoundOutput.swift`. `OriginalRuntimeLock` is `OSAllocatedUnfairLock` on Darwin and an NSLock class elsewhere. The volume law `gain` moved to the mixer, and `OriginalMacMusicOutput.gain` forwards to it. Its `pow` is libm-dependent on other hosts; that is audio output, not simulation. | SoundEffects 6, MusicOutput 7, LoadingAudio 3 (the 55-minute whole-catalog test was not rerun; the code moved unchanged) = 16/16 on a fresh test build; 696 listed; Xcode release; Linux `NTSDRuntime`. The first gate run was invalid: the test build failed and `--skip-build` reran the step-1 binary. The gate script now aborts on a failed test build | this commit |
+| 2026-10-03 | P5 step 2 | The sound mixer (voices, positions, loop, volume/pan, render, call decoding) moved to `NTSDRuntime`; `backed(by:)` and the AVAudioEngine output stay in `OriginalMacSoundOutput.swift`. `OriginalRuntimeLock` is `OSAllocatedUnfairLock` on Darwin and an NSLock class elsewhere. The volume law `gain` moved to the mixer, and `OriginalMacMusicOutput.gain` forwards to it. Its `pow` is libm-dependent on other hosts; that is audio output, not simulation. | SoundEffects 6, MusicOutput 7, LoadingAudio 3 (the 55-minute whole-catalog test was not rerun; the code moved unchanged) = 16/16 on a fresh test build; 696 listed; Xcode release; Linux `NTSDRuntime`. The first gate run was invalid: the test build failed and `--skip-build` reran the step-1 binary. The gate script now aborts on a failed test build | 56ac79e |
+| 2026-10-03 | P5 step 3 | Music sequencing moved to `NTSDRuntime`: `OriginalMacMusicOutput` (graph state, seeks, virtual clock, end events over the `Player` protocol) and `OriginalMacRuntimeMusic` (DirectShow answers). The AVAudioPlayer adapter and bundled-track lookup stay in `OriginalMacMusicPlayer.swift`. The MessageBoxA presenter is now a required init argument, and the Mac `init(identities:heap:)` supplies the same NSAlert, so a host cannot silently lose it. | MusicOutput, RuntimeLoading, RuntimeStartup 18/18 on a fresh test build; 696 listed; Xcode release; Linux `NTSDRuntime`. The first attempt stopped at the test build (missing `@testable import NTSDRuntime`), as the gate now requires | this commit |
 
 ## Next task
 
-P5 step 3, music sequencing ([design](CROSS_PLATFORM_RUNTIME.md)).
+P5 step 4, the window seam ([design](CROSS_PLATFORM_RUNTIME.md)).
 
-- Move the platform-free part of `OriginalMacMusicOutput` (graph state,
-  seeks, the virtual clock and end events around the `Player` protocol) and
-  `OriginalMacRuntimeMusic` into `NTSDRuntime`.
-- Keep the AVAudioPlayer wrapper, `Bundle.module` lookup and the NSAlert
-  default `present` in NTSDMacPlatform, installed by the Mac startup.
-- Gate: MusicOutput and RuntimeLoading tests on a fresh test build, 696
-  listed, Xcode release, Linux `NTSDRuntime`.
+- Define `OriginalRuntimeWindowing` in `NTSDRuntime`: identities, lease, display
+  geometry, `present(OriginalFramebuffer, in:)`, the cursor token and retained
+  resources.
+- Make `OriginalMacWindowBackend` conform; its `present` builds the same sRGB
+  `noneSkipFirst|byteOrder32Little` CGImage as today.
+- Don't move the display backend yet (step 5).
+- Gate: WindowBackend, WindowGeometry, DisplayColor and DisplayBackend tests on
+  a fresh test build; 696 listed; Xcode release; Linux `NTSDRuntime`.
+- Step 5 adds the app e2e captures to the gate.
 
 Following tasks:
 

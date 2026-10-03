@@ -2,6 +2,7 @@ import AVFoundation
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 /// Music output follows only the committed DirectShow graph state; the packaged
 /// tracks are the manifest's lossless decodes.

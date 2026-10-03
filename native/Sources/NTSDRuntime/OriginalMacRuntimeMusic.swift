@@ -1,4 +1,4 @@
-import AppKit
+import Foundation
 import NTSDCore
 
 /// Runtime answers for the recovered DirectShow music calls. Graph and interface
@@ -38,13 +38,12 @@ import NTSDCore
     private var owners: [UInt32:(graph: UInt32,interface: Interface)] = [:]
     public private(set) var operations: [Operation] = []
     public private(set) var messages: [[[UInt8]]] = []
-    /// Presents MessageBoxA text; the default shows a modal alert.
-    public var present: ([UInt8],[UInt8]) -> Void = { text,caption in
-        let alert = NSAlert(); alert.messageText = String(decoding:caption,as:UTF8.self)
-        alert.informativeText = String(decoding:text,as:UTF8.self); alert.runModal()
-    }
-    public init(identities: OriginalMacResourceIdentityPool,heap: OriginalMacRuntimeHeap) {
-        self.identities = identities; self.heap = heap
+    /// Presents MessageBoxA text (text, caption). Each host supplies its own; the
+    /// Mac platform's `init(identities:heap:)` shows a modal alert.
+    public var present: ([UInt8],[UInt8]) -> Void
+    public init(identities: OriginalMacResourceIdentityPool,heap: OriginalMacRuntimeHeap,
+                present: @escaping ([UInt8],[UInt8]) -> Void) {
+        self.identities = identities; self.heap = heap; self.present = present
     }
     public func interface(_ pointer: UInt32) -> Interface? { owners[pointer]?.interface }
     public func renderedFile(_ pointer: UInt32) -> [UInt8]? {
