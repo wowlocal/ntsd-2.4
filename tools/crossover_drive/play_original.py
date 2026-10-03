@@ -27,6 +27,7 @@ import wd  # noqa: E402
 DEFAULT_CLONE = Path("/Volumes/X5/ntsd-2.4-research/goal-100-20261002/checksum-bisect/nomusic/NTSD 2.4_2.0a")
 LAUNCHER = "/Users/michael/Developer/ntsd-2.4/run-ntsd24.sh"
 KEYHOLD = HERE / "keyhold"
+LOCK = Path("/Volumes/X5/ntsd-2.4-research/goal-100-20261002/crossplay-loop/original.lock")
 VK = {**{c: v for c, v in zip("asdfhgzxcv", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])}, "b": 11, "q": 12, "w": 13, "e": 14, "r": 15,
       "y": 16, "t": 17, "1": 18, "2": 19, "3": 20, "4": 21, "6": 22, "5": 23, "9": 25, "7": 26, "8": 28, "0": 29,
       "o": 31, "u": 32, "i": 34, "p": 35, "l": 37, "j": 38, "k": 40, "n": 45, "m": 46, ".": 47, "\n": 36}
@@ -55,24 +56,21 @@ def titles():
     return [w["title"] for w in cua.call("list_windows", {})["windows"] if w["app_name"] == "NTSD 2.4.exe" and w["is_on_screen"]]
 
 
-LOCK = Path("/Volumes/X5/ntsd-2.4-research/goal-100-20261002/crossplay-loop/original.lock")
-
-
-def main(recording, out, clone=DEFAULT_CLONE, timeout=900):
-    # One original at a time: a second instance of the same clone confuses the
-    # pid lookup and the window filter.
+def lock():
+    """One original at a time: a second instance of the same clone confuses
+    the pid lookup and the window filter. Held until the process exits or the
+    returned file is closed."""
     import fcntl
     LOCK.parent.mkdir(parents=True, exist_ok=True)
-    lock = open(LOCK, "w"); fcntl.flock(lock, fcntl.LOCK_EX)
+    f = open(LOCK, "w"); fcntl.flock(f, fcntl.LOCK_EX); return f
+
+
+def start(clone):
+    """Launch the clone, press START through memory and wait for the catalog;
+    the mode menu is then up. Returns (launcher, wine pid)."""
     os.environ.setdefault("CUA_SESSION", "play-" + time.strftime("%H%M%S"))
     if not KEYHOLD.exists():
         subprocess.run(["/usr/bin/swiftc", "-O", str(HERE / "keyhold.swift"), "-o", str(KEYHOLD)], check=True)
-    clone = Path(clone); folder = clone / "recording"
-    # Digits only and no extension: Wine types the dialog's text through the
-    # current macOS keyboard layout, and digits are the same in every layout.
-    for old in (folder / "1", folder / "1.lfr"):
-        if old.exists(): old.unlink()
-    name = "1"; shutil.copy(recording, folder / name)
     env = dict(os.environ, CX_BOTTLE_PATH=wd.BOTTLES, BOTTLE="NTSD24XP", GAME_DIR=str(clone), EXE_PATH=str(clone / "NTSD 2.4.exe"))
     launcher = subprocess.Popen([LAUNCHER], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
@@ -88,6 +86,36 @@ def main(recording, out, clone=DEFAULT_CLONE, timeout=900):
             if word(pid, 0x44F620) == 0x1EC3356: break
         else: raise SystemExit("catalog not loaded")
         time.sleep(3)
+        return launcher, pid
+    except BaseException:
+        stop(clone, launcher); raise
+
+
+def stop(clone, launcher):
+    for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():
+        if str(clone).replace("/", "\\") in line or str(clone) in line:
+            subprocess.run(["kill", line.split()[0]])
+    launcher.wait(timeout=30)
+
+
+def wait_clock(pid):
+    """The match clock 450bbc must run; otherwise the match never started."""
+    for _ in range(30):
+        time.sleep(2)
+        if (word(pid, 0x450BBC) or 0) > 30: return
+    raise SystemExit("match did not start")
+
+
+def main(recording, out, clone=DEFAULT_CLONE, timeout=900):
+    held = lock()
+    clone = Path(clone); folder = clone / "recording"
+    # Digits only and no extension: Wine types the dialog's text through the
+    # current macOS keyboard layout, and digits are the same in every layout.
+    for old in (folder / "1", folder / "1.lfr"):
+        if old.exists(): old.unlink()
+    name = "1"; shutil.copy(recording, folder / name)
+    launcher, pid = start(clone)
+    try:
         keys(pid, [1] * 6 + [38])                       # mode menu: S x6 to Playback Recording, J
         for _ in range(20):
             time.sleep(1)
@@ -100,17 +128,10 @@ def main(recording, out, clone=DEFAULT_CLONE, timeout=900):
             t = titles()
             if "Error" in t: raise SystemExit("recording rejected by the original")
             if "Open" not in t: break
-        # The match clock 450bbc must run; otherwise the playback never started.
-        for _ in range(30):
-            time.sleep(2)
-            if (word(pid, 0x450BBC) or 0) > 30: break
-        else: raise SystemExit("playback did not start")
+        wait_clock(pid)
         summary_original.main(out, timeout=timeout)
     finally:
-        for line in subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout.splitlines():
-            if str(clone).replace("/", "\\") in line or str(clone) in line:
-                subprocess.run(["kill", line.split()[0]])
-        launcher.wait(timeout=30)
+        stop(clone, launcher); held.close()
 
 
 if __name__ == "__main__":

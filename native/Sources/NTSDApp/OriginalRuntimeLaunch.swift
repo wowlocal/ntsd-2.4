@@ -32,6 +32,8 @@ import NTSDMacPlatform
 /// clock, independently of the front-menu handshake's scripted iterations.
 /// `--network-trace PATH` streams socket replies and committed loaded-state
 /// digests; `--summary-capture PATH --exit-after-summary` ends on the result.
+/// `--no-activate` leaves the frontmost app active, for runs beside the
+/// CrossOver original, which takes keys only while its window is in front.
 /// `--network-state-cycles N,N` adds full owned Actor/global bytes and masks
 /// to those trace checkpoints when diagnosing a state difference.
 /// START runs the whole loading once (blocking, progress frames not shown);
@@ -248,7 +250,7 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                     do { try self.attach(token) } catch { self.stop(error) }
                 }
                 Self.installMenu()
-                NSApp.activate(ignoringOtherApps:true)
+                if !arguments.contains("--no-activate") { NSApp.activate(ignoringOtherApps:true) }
                 schedule(0)
             } catch { stop(error) }
         }

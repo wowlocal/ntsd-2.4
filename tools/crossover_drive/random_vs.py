@@ -96,7 +96,7 @@ def run(out, seed, computers, rerolls, background_steps=0, mode="vs", difficulty
     if mode == "war": text, settings = war_script(seed)
     else: text, settings = script(computers, rerolls, background_steps, mode, difficulty_steps), None
     if not mac.exists():
-        done = subprocess.run([str(APP), "--original", "--mute-music", "--mute-sounds", "--overlay", str(overlay),
+        done = subprocess.run([str(APP), "--original", "--mute-music", "--mute-sounds", "--no-activate", "--overlay", str(overlay),
                                "--virtual-clock", str(seed), "8", "--script-clock", "gameplay", "--exit-after-summary",
                                "--summary-json", str(mac), "--summary-capture", str(d / "mac-summary.png"),
                                "--script", text], capture_output=True, text=True, timeout=7200,
