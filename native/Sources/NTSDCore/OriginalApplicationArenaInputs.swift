@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Original deferred arena BMP files of all 17 registered backgrounds
 /// (tools/package_match_arenas.py); the launch reads the selected one's.

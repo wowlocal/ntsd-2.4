@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Immutable original common WAV bytes, acquired before the Core attempt.
 /// Platform replies and loaded PCM/after-state never enter this resource package.

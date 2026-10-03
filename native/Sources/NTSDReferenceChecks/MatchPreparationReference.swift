@@ -1,6 +1,8 @@
 import Foundation
 import Compression
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import NTSDCore
 
 /// Rebuilds and verifies the full native catalog once, then continues through

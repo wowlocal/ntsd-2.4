@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Immutable embedded game DIBs. Package IO completes before the tentative pool
 /// continuation; expected pixels, EXE execution and platform writes are absent.

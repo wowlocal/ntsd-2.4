@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import NTSDCore
 
 /// Independent comparison with full original 0x990 BG records and 0x1f50

@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import XCTest
 @testable import NTSDCore
 @testable import NTSDReferenceChecks

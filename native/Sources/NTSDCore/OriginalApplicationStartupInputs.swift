@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Immutable original-derived data for the declared WinMain entry. Loading the
 /// package is host IO before a Core attempt; subsequent access reads owned bytes.

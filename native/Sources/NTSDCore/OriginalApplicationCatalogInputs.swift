@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 
 /// Original catalog/media bytes acquired before a Core attempt. Device replies,
 /// decoded DAT state and comparison records are not part of this package.

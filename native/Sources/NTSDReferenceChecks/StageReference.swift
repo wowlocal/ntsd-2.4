@@ -1,6 +1,8 @@
 import Foundation
 import Compression
+#if canImport(CryptoKit)
 import CryptoKit
+#endif
 import NTSDCore
 
 /// Development-only lossless storage comparison. Compression is solely the
