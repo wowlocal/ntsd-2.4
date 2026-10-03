@@ -148,26 +148,30 @@ user's approval to push. Until then, keep the other phases moving.
 | --- | --- | --- | --- | --- |
 | 2026-10-03 | — | Plan and inventory written | text/links only | c753d7c |
 | 2026-10-03 | P0 Linux | Static Linux SDK 6.4.0 installed; probe cross-built for aarch64/x86_64 musl and run in containers. Output equals macOS except `os`/`crypto`. First `NTSDCore` Linux build stops at `import CryptoKit`. | probe compare; Core build log | c649bac |
-| 2026-10-03 | P2a digest | `PortableSHA256` (FIPS 180-4) in Core, exported as `SHA256` only where CryptoKit is missing. CryptoKit imports are conditional in Core (6), reference checks (6) and tests (7); Apple builds still use CryptoKit. The Linux Core build passes CryptoKit and stops at `import Darwin`. | macOS `PortableSHA256Tests`: vectors, lengths 0–200 split into regions, 1,528 packaged files / 874,627,316 bytes equal to CryptoKit; Xcode release build. First compile attempt failed on exclusivity (log `p2a-macos-sha-test.log`) | this commit |
+| 2026-10-03 | P2a digest | `PortableSHA256` (FIPS 180-4) in Core, exported as `SHA256` only where CryptoKit is missing. CryptoKit imports are conditional in Core (6), reference checks (6) and tests (7); Apple builds still use CryptoKit. The Linux Core build passes CryptoKit and stops at `import Darwin`. | macOS `PortableSHA256Tests`: vectors, lengths 0–200 split into regions, 1,528 packaged files / 874,627,316 bytes equal to CryptoKit; Xcode release build. First compile attempt failed on exclusivity (log `p2a-macos-sha-test.log`) | 4547acc |
+| 2026-10-03 | P2b clock | `OriginalMacStartupClock` imports Darwin/Glibc/Musl/Android per OS with unchanged calls. **`NTSDCore` now cross-compiles for Linux** (aarch64 debug and release, x86_64 debug). `NTSDReferenceChecks` stops at `import Compression`. | macOS clock test `testActualMacClocksAtWholeCallerBoundaries`; Xcode release build; Linux build logs `p2b-*` | this commit |
 
 ## Next task
 
-P2b, the host clock. `NTSDCore/OriginalMacStartupClock.swift` imports
-`Darwin` for `clock_gettime(CLOCK_MONOTONIC_RAW / CLOCK_REALTIME)`.
+P2c, raw-deflate decode for the reference checks and tests. Four reference
+checks and two test files call
+`compression_decode_buffer(..., COMPRESSION_ZLIB)` into a buffer of `count+1`
+bytes and compare the returned length with `count`.
 
-- Import the C library per OS (Darwin, Glibc, Musl, Android) and keep the same
-  calls; Linux has both clocks.
-- Windows gets its own branch in P4. It may answer `.milliseconds` from WinMM
-  `timeGetTime`, the original's own source.
-- Gate: macOS release build and the existing clock tests unchanged, then a
-  Linux aarch64 `NTSDCore` build. Record the next errors.
+- Add one helper with that contract: bytes written, the capacity when the output
+  is truncated, 0 on error.
+- It uses `Compression` on Apple platforms. Elsewhere it uses a system zlib
+  module (raw inflate, `inflateInit2` with window bits -15), declared only for
+  non-Apple platforms in `Package.swift`.
+- Gate: a macOS test proving the zlib path (built on macOS against the SDK's
+  libz) equals `Compression` on every compressed fixture blob, plus the
+  existing reference-check tests. Also the Xcode release build and Linux builds
+  of `NTSDReferenceChecks` and the check executables.
 
 Following tasks:
 
-- P2c: raw-deflate decode for the reference checks and tests. Keep Apple's
-  `Compression` on Apple platforms; elsewhere use the SDK's system zlib
-  (`zlib.h`/`libz.a` ship in the static Linux SDK). The pinned replay codec
-  stays untouched.
+- P3 preparation: the portable test subset needs the package split (P1)
+  first, because `NTSDCoreTests` depends on `NTSDMacPlatform`.
 - P1: package graph split.
 - P0-W: Windows SDK. The Swift parts unpack from the 2.1 GB installer with
   sevenzip/msitools. The MSVC CRT and Windows SDK need the user's acceptance of

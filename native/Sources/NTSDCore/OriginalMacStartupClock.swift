@@ -1,4 +1,12 @@
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#elseif canImport(Android)
+import Android
+#endif
 
 /// Host IO boundary. Call only while servicing a returned startup permit, never
 /// from a Core transaction or its observers. macOS clock origin/resolution is not
