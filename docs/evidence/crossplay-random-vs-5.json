@@ -1,0 +1,1274 @@
+{
+ "date": "2026-10-03",
+ "loop": "docs/CROSSPLAY_LOOP.md",
+ "description": "Random VS, P1 idle plus 7 computers (8 fighters); difficulty chosen with J on the Difficulty line (1 press: Easy, 2: Normal, 0: Difficult), District with 2 presses on the Background line",
+ "comparison": "every Summary field per seat, ticks, winner, mode, War totals; HP as Alive/Dead (regenerating HP of a living fighter is a note)",
+ "cases": [
+  {
+   "seed": 51,
+   "background": "District",
+   "difficulty": 2,
+   "recordingSHA256": "d8b8f74792541ab680c8d7580276f4594c0c4e43324e8a026475fc3bfed9566f",
+   "result": "equal (seat 13 hp 62 vs 69)",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -3,
+      "hpLost": 679,
+      "id": 5,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 370,
+      "hp": -2,
+      "hpLost": 565,
+      "id": 25,
+      "kill": 0,
+      "mp": 80,
+      "picking": 2,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 213,
+      "hp": -6,
+      "hpLost": 601,
+      "id": 18,
+      "kill": 0,
+      "mp": 290,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1945,
+      "hp": 62,
+      "hpLost": 635,
+      "id": 16,
+      "kill": 3,
+      "mp": 585,
+      "picking": 9,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 195,
+      "hp": -50,
+      "hpLost": 643,
+      "id": 14,
+      "kill": 1,
+      "mp": 0,
+      "picking": 3,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 533,
+      "hp": -22,
+      "hpLost": 646,
+      "id": 22,
+      "kill": 1,
+      "mp": 235,
+      "picking": 6,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1312,
+      "hp": -4,
+      "hpLost": 809,
+      "id": 51,
+      "kill": 0,
+      "mp": 1909,
+      "picking": 15,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 165,
+      "hp": -43,
+      "hpLost": 635,
+      "id": 2,
+      "kill": 0,
+      "mp": 895,
+      "picking": 4,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 2764,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 23
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -3,
+      "hpLost": 679,
+      "id": 5,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 370,
+      "hp": -2,
+      "hpLost": 565,
+      "id": 25,
+      "kill": 0,
+      "mp": 80,
+      "picking": 2,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 213,
+      "hp": -6,
+      "hpLost": 601,
+      "id": 18,
+      "kill": 0,
+      "mp": 290,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1945,
+      "hp": 69,
+      "hpLost": 635,
+      "id": 16,
+      "kill": 3,
+      "mp": 585,
+      "picking": 9,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 195,
+      "hp": -50,
+      "hpLost": 643,
+      "id": 14,
+      "kill": 1,
+      "mp": 0,
+      "picking": 3,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 533,
+      "hp": -22,
+      "hpLost": 646,
+      "id": 22,
+      "kill": 1,
+      "mp": 235,
+      "picking": 6,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1312,
+      "hp": -4,
+      "hpLost": 809,
+      "id": 51,
+      "kill": 0,
+      "mp": 1909,
+      "picking": 15,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 165,
+      "hp": -43,
+      "hpLost": 635,
+      "id": 2,
+      "kill": 0,
+      "mp": 895,
+      "picking": 4,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 2764,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 23
+   }
+  },
+  {
+   "seed": 52,
+   "background": "SnowCountry",
+   "difficulty": 2,
+   "recordingSHA256": "b99d4539fa17b57d8a07d1e43eb70e2de9b5cb8f9150410913d898aa8e487ab4",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -15,
+      "hpLost": 630,
+      "id": 23,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 275,
+      "hp": -48,
+      "hpLost": 650,
+      "id": 19,
+      "kill": 0,
+      "mp": 160,
+      "picking": 4,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 974,
+      "hp": 352,
+      "hpLost": 465,
+      "id": 24,
+      "kill": 3,
+      "mp": 595,
+      "picking": 5,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 398,
+      "hp": -64,
+      "hpLost": 633,
+      "id": 20,
+      "kill": 0,
+      "mp": 280,
+      "picking": 1,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 531,
+      "hp": -2,
+      "hpLost": 600,
+      "id": 18,
+      "kill": 0,
+      "mp": 495,
+      "picking": 1,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 1029,
+      "hp": -9,
+      "hpLost": 631,
+      "id": 2,
+      "kill": 1,
+      "mp": 745,
+      "picking": 2,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1397,
+      "hp": -34,
+      "hpLost": 674,
+      "id": 14,
+      "kill": 1,
+      "mp": 220,
+      "picking": 1,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 376,
+      "hp": -3,
+      "hpLost": 697,
+      "id": 5,
+      "kill": 1,
+      "mp": 460,
+      "picking": 4,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 2539,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -15,
+      "hpLost": 630,
+      "id": 23,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 275,
+      "hp": -48,
+      "hpLost": 650,
+      "id": 19,
+      "kill": 0,
+      "mp": 160,
+      "picking": 4,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 974,
+      "hp": 352,
+      "hpLost": 465,
+      "id": 24,
+      "kill": 3,
+      "mp": 595,
+      "picking": 5,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 398,
+      "hp": -64,
+      "hpLost": 633,
+      "id": 20,
+      "kill": 0,
+      "mp": 280,
+      "picking": 1,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 531,
+      "hp": -2,
+      "hpLost": 600,
+      "id": 18,
+      "kill": 0,
+      "mp": 495,
+      "picking": 1,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 1029,
+      "hp": -9,
+      "hpLost": 631,
+      "id": 2,
+      "kill": 1,
+      "mp": 745,
+      "picking": 2,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1397,
+      "hp": -34,
+      "hpLost": 674,
+      "id": 14,
+      "kill": 1,
+      "mp": 220,
+      "picking": 1,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 376,
+      "hp": -3,
+      "hpLost": 697,
+      "id": 5,
+      "kill": 1,
+      "mp": 460,
+      "picking": 4,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 2539,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   }
+  },
+  {
+   "seed": 53,
+   "background": "Hideout",
+   "difficulty": 1,
+   "recordingSHA256": "3879ee56be10507eddb80cc525fd019a81530aa610dfbd10a2c5ffe40cda59f9",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -97,
+      "hpLost": 655,
+      "id": 12,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 725,
+      "hp": -46,
+      "hpLost": 680,
+      "id": 7,
+      "kill": 2,
+      "mp": 714,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 1228,
+      "hp": 373,
+      "hpLost": 434,
+      "id": 23,
+      "kill": 3,
+      "mp": 155,
+      "picking": 1,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 345,
+      "hp": -4,
+      "hpLost": 610,
+      "id": 3,
+      "kill": 1,
+      "mp": 490,
+      "picking": 7,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 830,
+      "hp": -77,
+      "hpLost": 700,
+      "id": 4,
+      "kill": 0,
+      "mp": 1095,
+      "picking": 7,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 565,
+      "hp": -58,
+      "hpLost": 640,
+      "id": 25,
+      "kill": 0,
+      "mp": 0,
+      "picking": 7,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 765,
+      "hp": -12,
+      "hpLost": 620,
+      "id": 13,
+      "kill": 1,
+      "mp": 668,
+      "picking": 0,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 472,
+      "hp": -44,
+      "hpLost": 629,
+      "id": 2,
+      "kill": 0,
+      "mp": 670,
+      "picking": 3,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 1832,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -97,
+      "hpLost": 655,
+      "id": 12,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 725,
+      "hp": -46,
+      "hpLost": 680,
+      "id": 7,
+      "kill": 2,
+      "mp": 714,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 1228,
+      "hp": 373,
+      "hpLost": 434,
+      "id": 23,
+      "kill": 3,
+      "mp": 155,
+      "picking": 1,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 345,
+      "hp": -4,
+      "hpLost": 610,
+      "id": 3,
+      "kill": 1,
+      "mp": 490,
+      "picking": 7,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 830,
+      "hp": -77,
+      "hpLost": 700,
+      "id": 4,
+      "kill": 0,
+      "mp": 1095,
+      "picking": 7,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 565,
+      "hp": -58,
+      "hpLost": 640,
+      "id": 25,
+      "kill": 0,
+      "mp": 0,
+      "picking": 7,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 765,
+      "hp": -12,
+      "hpLost": 620,
+      "id": 13,
+      "kill": 1,
+      "mp": 668,
+      "picking": 0,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 472,
+      "hp": -44,
+      "hpLost": 629,
+      "id": 2,
+      "kill": 0,
+      "mp": 670,
+      "picking": 3,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 1832,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   }
+  },
+  {
+   "seed": 54,
+   "background": "District",
+   "difficulty": 1,
+   "recordingSHA256": "4256c74570d03a7cb09382b2dd24c6adf77241fabf82214ba222e36418dbb161",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -12,
+      "hpLost": 620,
+      "id": 21,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 817,
+      "hp": -142,
+      "hpLost": 1296,
+      "id": 8,
+      "kill": 1,
+      "mp": 1190,
+      "picking": 4,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 671,
+      "hp": -39,
+      "hpLost": 805,
+      "id": 22,
+      "kill": 0,
+      "mp": 795,
+      "picking": 6,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1008,
+      "hp": -21,
+      "hpLost": 768,
+      "id": 5,
+      "kill": 2,
+      "mp": 515,
+      "picking": 6,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 2333,
+      "hp": 181,
+      "hpLost": 991,
+      "id": 23,
+      "kill": 4,
+      "mp": 200,
+      "picking": 6,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 505,
+      "hp": -48,
+      "hpLost": 698,
+      "id": 19,
+      "kill": 0,
+      "mp": 420,
+      "picking": 6,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1100,
+      "hp": -4,
+      "hpLost": 856,
+      "id": 3,
+      "kill": 1,
+      "mp": 540,
+      "picking": 5,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 260,
+      "hp": -45,
+      "hpLost": 660,
+      "id": 14,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 3749,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 24
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -12,
+      "hpLost": 620,
+      "id": 21,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 817,
+      "hp": -142,
+      "hpLost": 1296,
+      "id": 8,
+      "kill": 1,
+      "mp": 1190,
+      "picking": 4,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 671,
+      "hp": -39,
+      "hpLost": 805,
+      "id": 22,
+      "kill": 0,
+      "mp": 795,
+      "picking": 6,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1008,
+      "hp": -21,
+      "hpLost": 768,
+      "id": 5,
+      "kill": 2,
+      "mp": 515,
+      "picking": 6,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 2333,
+      "hp": 181,
+      "hpLost": 991,
+      "id": 23,
+      "kill": 4,
+      "mp": 200,
+      "picking": 6,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 505,
+      "hp": -48,
+      "hpLost": 698,
+      "id": 19,
+      "kill": 0,
+      "mp": 420,
+      "picking": 6,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1100,
+      "hp": -4,
+      "hpLost": 856,
+      "id": 3,
+      "kill": 1,
+      "mp": 540,
+      "picking": 5,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 260,
+      "hp": -45,
+      "hpLost": 660,
+      "id": 14,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 3749,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 24
+   }
+  },
+  {
+   "seed": 55,
+   "background": "CastleRoof",
+   "difficulty": 0,
+   "recordingSHA256": "1c4b860aa5996a8e7cee36cdf0bba99686e21a54a24997818ec9487fc5da681e",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -1,
+      "hpLost": 598,
+      "id": 22,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 1013,
+      "hp": -21,
+      "hpLost": 690,
+      "id": 4,
+      "kill": 0,
+      "mp": 1005,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 1274,
+      "hp": 231,
+      "hpLost": 835,
+      "id": 23,
+      "kill": 4,
+      "mp": 90,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 760,
+      "hp": -11,
+      "hpLost": 685,
+      "id": 17,
+      "kill": 0,
+      "mp": 858,
+      "picking": 3,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 200,
+      "hp": -28,
+      "hpLost": 610,
+      "id": 15,
+      "kill": 0,
+      "mp": 750,
+      "picking": 0,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 671,
+      "hp": -7,
+      "hpLost": 962,
+      "id": 3,
+      "kill": 0,
+      "mp": 1180,
+      "picking": 4,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1140,
+      "hp": -52,
+      "hpLost": 685,
+      "id": 9,
+      "kill": 2,
+      "mp": 1375,
+      "picking": 1,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 986,
+      "hp": -8,
+      "hpLost": 1039,
+      "id": 2,
+      "kill": 1,
+      "mp": 2144,
+      "picking": 8,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 2678,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -1,
+      "hpLost": 598,
+      "id": 22,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 1013,
+      "hp": -21,
+      "hpLost": 690,
+      "id": 4,
+      "kill": 0,
+      "mp": 1005,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 1274,
+      "hp": 231,
+      "hpLost": 835,
+      "id": 23,
+      "kill": 4,
+      "mp": 90,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 760,
+      "hp": -11,
+      "hpLost": 685,
+      "id": 17,
+      "kill": 0,
+      "mp": 858,
+      "picking": 3,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 200,
+      "hp": -28,
+      "hpLost": 610,
+      "id": 15,
+      "kill": 0,
+      "mp": 750,
+      "picking": 0,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 671,
+      "hp": -7,
+      "hpLost": 962,
+      "id": 3,
+      "kill": 0,
+      "mp": 1180,
+      "picking": 4,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 1140,
+      "hp": -52,
+      "hpLost": 685,
+      "id": 9,
+      "kill": 2,
+      "mp": 1375,
+      "picking": 1,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 986,
+      "hp": -8,
+      "hpLost": 1039,
+      "id": 2,
+      "kill": 1,
+      "mp": 2144,
+      "picking": 8,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 2678,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 22
+   }
+  },
+  {
+   "seed": 56,
+   "background": "Forest",
+   "difficulty": 0,
+   "recordingSHA256": "b2ec0213b332c4b428f862f97739a2c62934170c33027afe7b5ef86892f1cb7d",
+   "result": "equal (seat 14 hp 272 vs 276)",
+   "equal": true,
+   "mac": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -50,
+      "hpLost": 635,
+      "id": 20,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 700,
+      "hp": -42,
+      "hpLost": 635,
+      "id": 2,
+      "kill": 0,
+      "mp": 750,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 675,
+      "hp": -1,
+      "hpLost": 657,
+      "id": 22,
+      "kill": 2,
+      "mp": 690,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1087,
+      "hp": -50,
+      "hpLost": 690,
+      "id": 18,
+      "kill": 2,
+      "mp": 395,
+      "picking": 1,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 875,
+      "hp": 272,
+      "hpLost": 396,
+      "id": 12,
+      "kill": 2,
+      "mp": 682,
+      "picking": 5,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 760,
+      "hp": -173,
+      "hpLost": 776,
+      "id": 9,
+      "kill": 1,
+      "mp": 885,
+      "picking": 0,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 662,
+      "hp": -15,
+      "hpLost": 620,
+      "id": 1,
+      "kill": 0,
+      "mp": 1215,
+      "picking": 0,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 270,
+      "hp": -41,
+      "hpLost": 620,
+      "id": 14,
+      "kill": 0,
+      "mp": 100,
+      "picking": 0,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "ticks": 2109,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 24
+   },
+   "original": {
+    "mode": 0,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -50,
+      "hpLost": 635,
+      "id": 20,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 10
+     },
+     {
+      "attack": 700,
+      "hp": -42,
+      "hpLost": 635,
+      "id": 2,
+      "kill": 0,
+      "mp": 750,
+      "picking": 3,
+      "seat": 11,
+      "team": 21
+     },
+     {
+      "attack": 675,
+      "hp": -1,
+      "hpLost": 657,
+      "id": 22,
+      "kill": 2,
+      "mp": 690,
+      "picking": 3,
+      "seat": 12,
+      "team": 22
+     },
+     {
+      "attack": 1087,
+      "hp": -50,
+      "hpLost": 690,
+      "id": 18,
+      "kill": 2,
+      "mp": 395,
+      "picking": 1,
+      "seat": 13,
+      "team": 23
+     },
+     {
+      "attack": 875,
+      "hp": 276,
+      "hpLost": 396,
+      "id": 12,
+      "kill": 2,
+      "mp": 682,
+      "picking": 5,
+      "seat": 14,
+      "team": 24
+     },
+     {
+      "attack": 760,
+      "hp": -173,
+      "hpLost": 776,
+      "id": 9,
+      "kill": 1,
+      "mp": 885,
+      "picking": 0,
+      "seat": 15,
+      "team": 25
+     },
+     {
+      "attack": 662,
+      "hp": -15,
+      "hpLost": 620,
+      "id": 1,
+      "kill": 0,
+      "mp": 1215,
+      "picking": 0,
+      "seat": 16,
+      "team": 26
+     },
+     {
+      "attack": 270,
+      "hp": -41,
+      "hpLost": 620,
+      "id": 14,
+      "kill": 0,
+      "mp": 100,
+      "picking": 0,
+      "seat": 17,
+      "team": 27
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 2109,
+    "war": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "winner": 24
+   }
+  }
+ ]
+}
