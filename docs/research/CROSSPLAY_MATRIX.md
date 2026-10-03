@@ -108,6 +108,7 @@ Grassland, Path.
 | Строка | Статус |
 | --- | --- |
 | Stage: 25 стадий, 138 фаз; дальше 1-1 | … Stage 5-1 с тремя союзниками совпала (`crossplay-loop/stg1/35`); с бездействующим P1 союзники останавливаются у GO, поэтому дальше P1 идёт вправо и бьёт (`--p1 walk`) |
+| Stage: Survival (пятое нажатие на строке Stage) | ✓ поведение одинаково: в `data/stage.dat` NTSD 2.4 25 стадий (id 0–4 … 40–44), стадии 50 нет; оба показывают «Survival Stage» без врагов (Man: 0) и не заканчиваются, пока P1 жив ([оригинал](../evidence/crossplay-survival-original.jpg), [Mac](../evidence/crossplay-survival-mac.jpg)) |
 | Stage: финал (меню 300, ENDING) в живом приложении | — |
 | Tournament: весь турнир, а не только матч игрока | — |
 | Team Tournament: весь турнир | — |
