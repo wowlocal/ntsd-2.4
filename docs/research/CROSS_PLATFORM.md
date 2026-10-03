@@ -53,12 +53,28 @@ in the tree are listed under "Verified starting point".
 
 ## Cross-compilation toolchains
 
+Established in P0 ([evidence](../evidence/crossplatform-p0-20261003.json)):
+
+- The macOS reference build stays on Xcode's Swift 6.4 via
+  `xcrun --toolchain XcodeDefault swift` (as in `tools/build-native.sh`).
+- Cross builds use the open-source 6.4.0 toolchain at
+  `~/Library/Developer/Toolchains/swift-6.4.0-RELEASE.xctoolchain/usr/bin/swift`.
+  It matches the Xcode compiler version and the installed
+  `swift-6.4.0-RELEASE_static-linux-0.1.0` SDK.
+- Do not use the swiftly default on PATH (6.3.3): it fails against this macOS
+  SDK with `unknown argument: '-target-arch-variant'`. Keep only one SDK per
+  triple; two make `--swift-sdk <triple>` ambiguous.
+- Swift 6.4 uses swift-build by default. Products land in
+  `<scratch>/out/Products/<Config>-staticlinux-<arch>`; locate them with
+  `--show-bin-path`.
+- Cross-built probe: `tools/crossplatform/probe`.
+
 | Target | SDK built on this Mac | Test harness here | Real observation |
 | --- | --- | --- | --- |
-| Linux x86_64/aarch64, headless | Swift Static Linux SDK 6.3.3 (musl), checksum from swift.org, same version as the host toolchain | OrbStack container; aarch64 native, x86_64 under Rosetta | Linux host |
+| Linux x86_64/aarch64, headless | Swift Static Linux SDK 6.4.0 (musl), checksum from swift.org's releases API — **working** | OrbStack container; aarch64 native, x86_64 under Rosetta | Linux host |
 | Linux desktop (SDL3) | glibc Swift SDK (e.g. `swift-sdk-generator` from an Ubuntu 24.04 image), since static musl cannot `dlopen` SDL's video/audio drivers; SDL3 built for that sysroot | container with virtual display/audio for smoke runs | Linux desktop |
-| Windows x86_64 (arm64 later) | `*-unknown-windows-msvc`: Windows SDK headers/libs plus the Swift Windows runtime; feasibility with 6.3.3 is unproven and is P0's question | CrossOver/Wine, test only | Windows PC |
-| Android arm64 | installed `swift-6.3.3-RELEASE_android` + NDK | emulator/device | device |
+| Windows x86_64 (arm64 later) | `*-unknown-windows-msvc`: Windows SDK headers/libs plus the Swift Windows runtime; swift.org publishes no Windows SDK bundle for 6.4.0 (installer/Docker only), so feasibility is unproven and is P0-W's question | CrossOver/Wine, test only | Windows PC |
+| Android arm64 | `swift-6.3.3-RELEASE_android` installed; move to the 6.4.0 Android SDK + NDK | emulator/device | device |
 | iPadOS | Xcode iOS SDK | simulator | device |
 
 If Windows cross-compilation proves infeasible, record the evidence. The fallback
@@ -130,11 +146,27 @@ user's approval to push. Until then, keep the other phases moving.
 
 | Date | Phase | Result | Checks | Commit |
 | --- | --- | --- | --- | --- |
-| 2026-10-03 | — | Plan and inventory written | text/links only | this commit |
+| 2026-10-03 | — | Plan and inventory written | text/links only | c753d7c |
+| 2026-10-03 | P0 Linux | Static Linux SDK 6.4.0 installed; probe cross-built for aarch64/x86_64 musl and run in containers. Output equals macOS except `os`/`crypto`. First `NTSDCore` Linux build stops at `import CryptoKit`. | probe compare; Core build log | this commit |
 
 ## Next task
 
-P0: install the Swift Static Linux SDK matching 6.3.3 (verify its checksum),
-cross-build and run a Foundation/Dispatch probe for `aarch64-swift-linux-musl`
-in an OrbStack container, then try `swift build --target NTSDCore` for that
-triple and record the first failures.
+P2a, the digest provider. Core uses CryptoKit only in six identical helpers:
+`SHA256.hash(data:).map { String(format:"%02x",$0) }` checks the integrity of
+packaged inputs. NTSDReferenceChecks and the tests also import CryptoKit. Steps:
+
+- Keep CryptoKit on Apple platforms with `#if canImport(CryptoKit)`.
+- Elsewhere, provide an in-tree SHA-256 with the same call shape. This avoids
+  pulling a new package into the macOS release build.
+- Gate: a macOS test proving the in-tree digest equals CryptoKit's on every
+  file under `native/Sources/NTSDCore/Resources` and on the standard vectors.
+  Also a macOS Xcode release build of the package, and a Linux aarch64 build of
+  `NTSDCore` that now gets past CryptoKit. Record the next errors.
+
+Following tasks:
+
+- P2b: per-OS clock for `OriginalMacStartupClock.swift`.
+- P2c: raw-deflate decode for the reference checks via the vendored zlib 1.1.4
+  inflate instead of `Compression`.
+- P1: package graph split.
+- P0-W: Windows SDK extraction feasibility.
