@@ -175,22 +175,22 @@ user's approval to push. Until then, keep the other phases moving.
 | 2026-10-03 | P5 step 5 | **The display backend (≈900 lines) moved to `NTSDRuntime`.** It talks to windows through `OriginalRuntimeWindowing` (identities, `windowLease`, `displayGeometry`, `present(OriginalFramebuffer,in:)`); the five presentations now call `present` with the same bytes. CoreText glyph masks are injected (`textMask:`), and the Mac convenience `init(windows:)` supplies them. `image(_:) -> CGImage`, `cgImage()`, `macWindows` (used by FrontService) and the window-protocol conformance live in `OriginalMacDisplayImage.swift`. DisplayGeometry is the runtime struct. Bitmap/Front/DisplayStartup services stay Mac for now. | 51 tests (display, color, bitmap, front raster, window, geometry, framebuffer, observed bitmap/graphics/iteration, runtime startup/menu) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime` (object rebuilt). **Full app e2e: 9/10, the same as baseline** (only the pre-existing playback alert) | c5f5e0b |
 | 2026-10-04 | P5 step 6 | The audio backend and AudioService moved to `NTSDRuntime`. A portable float `Samples` store replaces `AVAudioPCMBuffer`, keeping `ready` = frames > 0 and the byte budget. The AVAudioFormat/PCMBuffer allocation failure path is gone, since those inputs are already validated. The runtime exposes `samples(_:)`; the Mac `pcmSnapshot` builds the same standard-format AVAudioPCMBuffer from it. `windowClosed(_:)` was added to `OriginalRuntimeWindowing`. | 34 tests (AudioBackend, SoundEffects, LoadingAudio ×3, RuntimeStartup, Menu, Loading, ObservedIteration) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline | 08e6f4f |
 | 2026-10-04 | P5 step 7 (narrowed) | DisplayStartupService and BitmapService moved to `NTSDRuntime` unchanged; they only use runtime types. RuntimeStartupService needs the window request model (`prepare`/`perform` with the Mac `Prepared`), and RuntimeNetwork needs a Winsock provider, so both wait for their steps. | BitmapBackend, ObservedBitmap, RuntimeStartup, RuntimeMenu, ObservedIteration 24/24 on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`. e2e not rerun: pure file move, no code change | 1dcf183 |
-| 2026-10-04 | P3 memory | The heavy `Lib*` suites (LibSelectionCommands, LibSelectionStage, LibStageMode, LibTeamTournamentBracket/Preparation, so far) are OOM-killed on Linux even alone. `OriginalLibStageModeTests` peaks at 4.1 GB RSS on macOS (release, 64 s, passes), but in the container it grows 0.26→8.3 GiB in 21 s and is killed at the 11.7 GiB OrbStack VM limit (`OOMKilled=true`). `MALLOC_ARENA_MAX=2` changes nothing. Its fixture setup decodes a 1.19 GB JSON corpus with `JSONDecoder`, then parses it again into a full `JSONSerialization` `[String: Any]` tree, which corelibs Foundation represents far less compactly. Options: (a) rework these tests' corpus loading to avoid full trees, or (b) a larger VM, which is the user's OrbStack setting and restarts their containers. Asked the user. | samples `logs/mem-linux-LibStageMode*.tsv`, `logs/mem-macos-LibStageMode.log` | this commit |
+| 2026-10-04 | P3 memory | The heavy `Lib*` suites (LibSelectionCommands, LibSelectionStage, LibStageMode, LibTeamTournamentBracket/Preparation, so far) are OOM-killed on Linux even alone. `OriginalLibStageModeTests` peaks at 4.1 GB RSS on macOS (release, 64 s, passes), but in the container it grows 0.26→8.3 GiB in 21 s and is killed at the 11.7 GiB OrbStack VM limit (`OOMKilled=true`). `MALLOC_ARENA_MAX=2` changes nothing. Its fixture setup decodes a 1.19 GB JSON corpus with `JSONDecoder`, then parses it again into a full `JSONSerialization` `[String: Any]` tree, which corelibs Foundation represents far less compactly. Options: (a) rework these tests' corpus loading to avoid full trees, or (b) a larger VM, which is the user's OrbStack setting and restarts their containers. Asked the user. | samples `logs/mem-linux-LibStageMode*.tsv`, `logs/mem-macos-LibStageMode.log` | 6cdb5c2 |
+| 2026-10-04 | P5 step 8 | **The window request model moved to `NTSDRuntime`.** `OriginalRuntimeWindowBackend` now owns: tokens; cursor, class and window leases; request validation; the `perform` dispatch with its order; operations; metrics rules; held/full-screen geometry; present checks. It drives an `OriginalRuntimeWindowHost` (screen size, frame metric, cursor, create, windowCreated, orderFront, update, show, close, nonisolated `released`, client bounds/frame, display geometry, desktop point, present). `OriginalMacWindowHost` reproduces the AppKit code line for line. `OriginalMacWindowBackend` is now a typealias; Mac-only services (observation, `display(CGImage)`, capture, input, close request, macOS full screen, hide, clientPoint, PNG snapshots) are extensions. The lease keeps the host strongly, so a released open window is still closed after the backend is gone. | 51 tests (window, geometry, display, color, framebuffer, front raster, startup, menu, observed ×3, audio) on a fresh test build; 697 listed; Xcode release; Linux `NTSDRuntime`; full app e2e 9/10 = baseline, including altenter | this commit |
 
 ## Next task
 
-P3 memory finding. With `--jobs 1`, `OriginalLibSelectionCommandsTests`,
-`OriginalLibSelectionStageTests` and `OriginalLibStageModeTests` are still
-killed (exit 137) after about 40 s in the 11.7 GiB OrbStack VM.
+P5 step 9, the startup services. With the window model portable,
+`OriginalMacRuntimeStartupService`, `OriginalMacWindowStartupService` and
+`OriginalMacWindowGeometryService` only use runtime types, so they should move.
 
-- Measure each suite's peak memory on macOS (`/usr/bin/time -l` with an
-  xctest filter) and in the container (cgroup peak or `docker stats`).
-- Find what allocates: a corelibs Foundation JSON path is the suspect.
-- Fix the test harness if it is the cause. If not, record the requirement and
-  ask the user before changing OrbStack's memory setting.
-
-Then P5 step 8, the window request model (the prerequisite for
-RuntimeStartupService and P6).
+- Then split `OriginalMacRuntimeStartup`: a runtime composition with an
+  injected window host, plus the Mac wrapper (`NSApplication.shared`,
+  Application Support path).
+- Gate: startup/menu/window tests on a fresh test build, 697 listed, Xcode
+  release, Linux `NTSDRuntime`, full app e2e = baseline.
+- Still pending: the P3 memory decision (user), the Windows UCRT headers and
+  the Winsock provider (step 10).
 
 Following tasks:
 
