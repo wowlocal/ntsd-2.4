@@ -60,9 +60,7 @@ import Foundation
         return .init(tracks:tracks) { url,ended in try AudioPlayer(url,ended:ended) }
     }
     /// IBasicAudio volume in hundredths of a decibel; −10000 is silence.
-    nonisolated public static func gain(_ volume: Int32) -> Float {
-        volume <= -10000 ? 0 : Float(pow(10,Double(min(volume,0))/2000))
-    }
+    nonisolated public static func gain(_ volume: Int32) -> Float { OriginalMacSoundEffects.gain(volume) }
     public func present(_ state: OriginalMacRuntimeMusic.Presented?) throws {
         guard let state,let file = state.file else { player?.pause(); return }
         let name = String(decoding:file,as:UTF8.self).lowercased()

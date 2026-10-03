@@ -1,6 +1,7 @@
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 /// DirectSound buffer semantics declared in APPLICATION_SOUND_EFFECTS_PLAN.md:
 /// the helpers' Stop/SetCurrentPosition/Play/SetPan/SetVolume sequences, the

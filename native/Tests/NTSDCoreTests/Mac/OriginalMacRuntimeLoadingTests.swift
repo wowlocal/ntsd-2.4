@@ -2,6 +2,7 @@ import AppKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 /// START → loading on runtime providers with inline audio delivery.
 @MainActor final class OriginalMacRuntimeLoadingTests: XCTestCase {
