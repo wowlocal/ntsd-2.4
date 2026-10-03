@@ -12,7 +12,7 @@ let portable = true
 
 let macProducts: [Product] = portable ? [] : [.executable(name: "NTSDNative", targets: ["NTSDApp"])]
 let macTargets: [Target] = portable ? [] : [
-    .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore"], resources: [.copy("Resources/OriginalMusic")],
+    .target(name: "NTSDMacPlatform", dependencies: ["NTSDCore", "NTSDRuntime"], resources: [.copy("Resources/OriginalMusic")],
             linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("AVFoundation")]),
     .executableTarget(name: "NTSDApp", dependencies: ["NTSDCore", "NTSDMacPlatform"],
                       linkerSettings: [.linkedFramework("AppKit"), .linkedFramework("SpriteKit"),
@@ -37,6 +37,7 @@ let package = Package(
                 publicHeadersPath: "include", cSettings: [.unsafeFlags(["-Wno-deprecated-non-prototype"])]),
         .target(name: "NTSDCore", dependencies: ["NTSDReplayCodec"], resources: [.copy("Resources/OriginalStartup"), .copy("Resources/OriginalCommonSounds"), .copy("Resources/OriginalLoadingInterface"), .copy("Resources/OriginalCharacterMenu"), .copy("Resources/OriginalWarMenu"), .copy("Resources/OriginalMatchArenas"), .copy("Resources/OriginalCatalog")]),
         .systemLibrary(name: "CZlib", path: "Sources/CZlib"),
+        .target(name: "NTSDRuntime", dependencies: ["NTSDCore"]),
         .target(name: "NTSDReferenceChecks", dependencies: ["NTSDCore", "CZlib"]),
         .executableTarget(name: "NTSDBootstrapCheck", dependencies: ["NTSDReferenceChecks"]),
         .executableTarget(name: "NTSDCatalogCheck", dependencies: ["NTSDReferenceChecks"]),
@@ -47,7 +48,7 @@ let package = Package(
         .executableTarget(name: "NTSDMovementCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDCombatCheck", dependencies: ["NTSDCore"]),
         .executableTarget(name: "NTSDStateCheck", dependencies: ["NTSDCore"]),
-        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "CZlib"] + macTestDependencies,
+        .testTarget(name: "NTSDCoreTests", dependencies: ["NTSDCore", "NTSDReferenceChecks", "NTSDRuntime", "CZlib"] + macTestDependencies,
                     exclude: portable ? ["Mac"] : [], resources: [.copy("Fixtures")])
     ],
     swiftLanguageModes: [.v5]

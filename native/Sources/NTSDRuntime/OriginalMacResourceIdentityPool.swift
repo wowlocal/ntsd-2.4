@@ -4,7 +4,7 @@
     public enum Boundary: Error { case exhausted }
     private var next: UInt32 = 1
     public init() {}
-    func take() throws -> UInt32 {
+    public func take() throws -> UInt32 {
         guard next != 0 else { throw Boundary.exhausted }
         let result = next; next &+= 1; return result
     }

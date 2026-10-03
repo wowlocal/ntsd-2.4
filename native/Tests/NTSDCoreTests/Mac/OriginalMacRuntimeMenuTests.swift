@@ -2,6 +2,7 @@ import AppKit
 import XCTest
 @testable import NTSDCore
 @testable import NTSDMacPlatform
+@testable import NTSDRuntime
 
 /// Live front menu on runtime providers: no corpus reply reaches Native.
 @MainActor final class OriginalMacRuntimeMenuTests: XCTestCase {

@@ -1,4 +1,4 @@
-import AppKit
+import Foundation
 import NTSDCore
 
 /// Windows keyboard identity of a macOS key: virtual key, set-1 scan code and
