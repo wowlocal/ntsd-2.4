@@ -1,0 +1,484 @@
+{
+ "date": "2026-10-03",
+ "loop": "docs/CROSSPLAY_LOOP.md",
+ "description": "War: P1 Naruto and one computer, Defense multipliers and troop counts drawn from the seed on the settings screen (random_vs.py --mode war; each case's war-settings.json). Seeds 42 and 44 failed first while instances of the original were being killed by hand during the run (42 ended at 34282 ticks, 44 never reached its Summary); replayed alone, both match, and sample_original.py found 42 equal at every 1000th tick and 44 at every 200th",
+ "comparison": "every Summary field per seat, ticks, winner, mode, War totals; HP as Alive/Dead (regenerating HP of a living fighter is a note)",
+ "cases": [
+  {
+   "seed": 41,
+   "background": "SandCountry",
+   "difficulty": 0,
+   "recordingSHA256": "72d686d1b5a5ccca7be18a31df8c2f4618bb2cdd55c36e8c9957396e90e5dac2",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -9,
+      "hpLost": 776,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 168,
+      "hp": 437,
+      "hpLost": 181,
+      "id": 2,
+      "kill": 1,
+      "mp": 1450,
+      "picking": 0,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "ticks": 3820,
+    "war": [
+     28,
+     21,
+     6241,
+     26275
+    ],
+    "winner": 2
+   },
+   "original": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -9,
+      "hpLost": 776,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 168,
+      "hp": 437,
+      "hpLost": 181,
+      "id": 2,
+      "kill": 1,
+      "mp": 1450,
+      "picking": 0,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 3820,
+    "war": [
+     28,
+     21,
+     6241,
+     26275
+    ],
+    "winner": 2
+   },
+   "settings": [
+    "squad 1 defense +0.5",
+    "squad 1 defense +0.5",
+    "squad 1 defense +0.5",
+    "squad 2 defense +0.5",
+    "squad 2 defense +0.5",
+    "section 1 +5",
+    "section 1 -1",
+    "section 1 +1",
+    "section 1 -1",
+    "section 1 +1",
+    "section 1 +5",
+    "section 1 -1",
+    "section 2 +5",
+    "section 2 +1",
+    "section 2 +1",
+    "section 2 -1",
+    "section 2 -1",
+    "section 2 -1",
+    "section 3 +5",
+    "section 3 +1",
+    "section 3 +1",
+    "section 3 +5",
+    "section 3 -1",
+    "section 4 +1",
+    "section 4 +1",
+    "section 4 -1",
+    "section 4 -1",
+    "section 4 -1",
+    "section 4 +5"
+   ]
+  },
+  {
+   "seed": 42,
+   "background": "Deep",
+   "difficulty": 0,
+   "recordingSHA256": "2862f8897414d4ad1147885d7a0ecbf74697bf40a90f1211ddc5a9484825ab00",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -20,
+      "hpLost": 851,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 137,
+      "hp": -3,
+      "hpLost": 560,
+      "id": 2,
+      "kill": 0,
+      "mp": 495,
+      "picking": 0,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "ticks": 35272,
+    "war": [
+     11,
+     48,
+     76604,
+     12767
+    ],
+    "winner": 2
+   },
+   "original": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -20,
+      "hpLost": 851,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 137,
+      "hp": -3,
+      "hpLost": 560,
+      "id": 2,
+      "kill": 0,
+      "mp": 495,
+      "picking": 0,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 35272,
+    "war": [
+     11,
+     48,
+     76604,
+     12767
+    ],
+    "winner": 2
+   },
+   "settings": [
+    "section 1 +1",
+    "section 1 -1",
+    "section 1 -1",
+    "section 1 +5",
+    "section 2 -1",
+    "section 2 -1",
+    "section 2 -1",
+    "section 2 -1",
+    "section 2 +5",
+    "section 2 +5",
+    "section 2 -1",
+    "section 3 +1",
+    "section 3 +5",
+    "section 3 +1",
+    "section 3 +1",
+    "section 3 +1",
+    "section 3 +5",
+    "section 4 +1",
+    "section 4 +1",
+    "section 4 -1",
+    "section 4 +1",
+    "section 4 +5",
+    "section 4 -1",
+    "section 4 +5",
+    "section 4 -1"
+   ]
+  },
+  {
+   "seed": 43,
+   "background": "Rain",
+   "difficulty": 0,
+   "recordingSHA256": "6b8e9671b7c79051f8bee963833ff1e5d5bb3cea067cb601933df23120d1e38a",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": 478,
+      "hpLost": 90,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 1234,
+      "hp": -54,
+      "hpLost": 849,
+      "id": 2,
+      "kill": 2,
+      "mp": 2230,
+      "picking": 2,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "ticks": 3210,
+    "war": [
+     13,
+     20,
+     21175,
+     41887
+    ],
+    "winner": 1
+   },
+   "original": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": 478,
+      "hpLost": 90,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 1234,
+      "hp": -54,
+      "hpLost": 849,
+      "id": 2,
+      "kill": 2,
+      "mp": 2230,
+      "picking": 2,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 3210,
+    "war": [
+     13,
+     20,
+     21175,
+     41887
+    ],
+    "winner": 1
+   },
+   "settings": [
+    "squad 2 defense +0.5",
+    "squad 2 defense +0.5",
+    "section 1 +5",
+    "section 1 +1",
+    "section 1 +5",
+    "section 1 -1",
+    "section 1 +5",
+    "section 1 -1",
+    "section 1 -1",
+    "section 1 +5",
+    "section 1 -1",
+    "section 2 +1",
+    "section 2 -1",
+    "section 2 -1",
+    "section 2 +5",
+    "section 2 +5",
+    "section 2 +5",
+    "section 3 -1",
+    "section 3 +5",
+    "section 3 +5",
+    "section 3 -1",
+    "section 3 -1",
+    "section 3 +1",
+    "section 3 -1",
+    "section 3 +5",
+    "section 4 -1",
+    "section 4 +1",
+    "section 4 +1",
+    "section 4 -1",
+    "section 4 -1"
+   ]
+  },
+  {
+   "seed": 44,
+   "background": "built-in 99",
+   "difficulty": 0,
+   "recordingSHA256": "e8e2d017414d39309f6af774155bbf495a3dc4d8ac98441e1376dceb86899945",
+   "result": "equal",
+   "equal": true,
+   "mac": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -23,
+      "hpLost": 756,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 960,
+      "hp": 477,
+      "hpLost": 97,
+      "id": 2,
+      "kill": 6,
+      "mp": 1349,
+      "picking": 2,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "ticks": 4440,
+    "war": [
+     20,
+     12,
+     17458,
+     2634
+    ],
+    "winner": 2
+   },
+   "original": {
+    "mode": 4,
+    "seats": [
+     {
+      "attack": 0,
+      "hp": -23,
+      "hpLost": 756,
+      "id": 2,
+      "kill": 0,
+      "mp": 0,
+      "picking": 0,
+      "seat": 0,
+      "team": 1
+     },
+     {
+      "attack": 960,
+      "hp": 477,
+      "hpLost": 97,
+      "id": 2,
+      "kill": 6,
+      "mp": 1349,
+      "picking": 2,
+      "seat": 11,
+      "team": 2
+     }
+    ],
+    "summaryTimer": 144,
+    "ticks": 4440,
+    "war": [
+     20,
+     12,
+     17458,
+     2634
+    ],
+    "winner": 2
+   },
+   "settings": [
+    "squad 1 defense +0.5",
+    "squad 1 defense +0.5",
+    "squad 1 defense +0.5",
+    "squad 2 defense +0.5",
+    "squad 2 defense +0.5",
+    "squad 2 defense +0.5",
+    "squad 2 defense +0.5",
+    "section 1 -1",
+    "section 1 +5",
+    "section 1 +1",
+    "section 1 -1",
+    "section 2 -1",
+    "section 2 +1",
+    "section 2 +5",
+    "section 2 -1",
+    "section 2 +5",
+    "section 2 +1",
+    "section 2 +1",
+    "section 2 +1",
+    "section 2 +1",
+    "section 2 -1",
+    "section 3 -1",
+    "section 3 -1",
+    "section 3 +1",
+    "section 3 +1",
+    "section 3 +1",
+    "section 3 +1",
+    "section 4 +5",
+    "section 4 +5",
+    "section 4 +5",
+    "section 4 +1",
+    "section 4 +5"
+   ]
+  }
+ ],
+ "firstRun42": {
+  "mode": 4,
+  "seats": [
+   {
+    "attack": 0,
+    "hp": -20,
+    "hpLost": 851,
+    "id": 2,
+    "kill": 0,
+    "mp": 0,
+    "picking": 0,
+    "seat": 0,
+    "team": 1
+   },
+   {
+    "attack": 137,
+    "hp": -3,
+    "hpLost": 560,
+    "id": 2,
+    "kill": 0,
+    "mp": 495,
+    "picking": 0,
+    "seat": 11,
+    "team": 2
+   }
+  ],
+  "summaryTimer": 144,
+  "ticks": 34282,
+  "war": [
+   11,
+   48,
+   77311,
+   12727
+  ],
+  "winner": 2
+ }
+}

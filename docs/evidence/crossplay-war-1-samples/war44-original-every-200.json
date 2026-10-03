@@ -1,0 +1,354 @@
+[
+{
+"tick": 200,
+"rngIndex": 1228,
+"rngCounter": 496,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+1,
+1,
+391,
+210
+],
+"roundTimer": 0,
+"active": 45
+},
+{
+"tick": 400,
+"rngIndex": 77,
+"rngCounter": 985,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+5,
+2,
+1026,
+355
+],
+"roundTimer": 0,
+"active": 42
+},
+{
+"tick": 600,
+"rngIndex": 572,
+"rngCounter": 120,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+7,
+5,
+1830,
+790
+],
+"roundTimer": 0,
+"active": 32
+},
+{
+"tick": 800,
+"rngIndex": 2345,
+"rngCounter": 1,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+9,
+6,
+2450,
+1270
+],
+"roundTimer": 0,
+"active": 50
+},
+{
+"tick": 1000,
+"rngIndex": 1941,
+"rngCounter": 3,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+12,
+8,
+3805,
+1769
+],
+"roundTimer": 0,
+"active": 36
+},
+{
+"tick": 1200,
+"rngIndex": 2013,
+"rngCounter": 821,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+14,
+11,
+5940,
+2458
+],
+"roundTimer": 0,
+"active": 150
+},
+{
+"tick": 1400,
+"rngIndex": 1552,
+"rngCounter": 1106,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+16,
+11,
+15639,
+2503
+],
+"roundTimer": 0,
+"active": 24
+},
+{
+"tick": 1600,
+"rngIndex": 471,
+"rngCounter": 579,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+16,
+12,
+16450,
+2614
+],
+"roundTimer": 0,
+"active": 18
+},
+{
+"tick": 1800,
+"rngIndex": 1588,
+"rngCounter": 1186,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+17,
+12,
+16698,
+2629
+],
+"roundTimer": 0,
+"active": 14
+},
+{
+"tick": 2000,
+"rngIndex": 1612,
+"rngCounter": 700,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+19,
+12,
+16780,
+2634
+],
+"roundTimer": 0,
+"active": 12
+},
+{
+"tick": 2200,
+"rngIndex": 1101,
+"rngCounter": 1083,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+19,
+12,
+16806,
+2634
+],
+"roundTimer": 0,
+"active": 14
+},
+{
+"tick": 2400,
+"rngIndex": 916,
+"rngCounter": 1090,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+19,
+12,
+16872,
+2634
+],
+"roundTimer": 0,
+"active": 14
+},
+{
+"tick": 2600,
+"rngIndex": 2606,
+"rngCounter": 1206,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+19,
+12,
+16926,
+2634
+],
+"roundTimer": 0,
+"active": 31
+},
+{
+"tick": 2800,
+"rngIndex": 2465,
+"rngCounter": 725,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+19,
+12,
+16986,
+2634
+],
+"roundTimer": 0,
+"active": 17
+},
+{
+"tick": 3000,
+"rngIndex": 2674,
+"rngCounter": 1126,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+19,
+12,
+17040,
+2634
+],
+"roundTimer": 0,
+"active": 18
+},
+{
+"tick": 3200,
+"rngIndex": 125,
+"rngCounter": 3,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+19,
+12,
+17084,
+2634
+],
+"roundTimer": 0,
+"active": 22
+},
+{
+"tick": 3400,
+"rngIndex": 132,
+"rngCounter": 904,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+19,
+12,
+17138,
+2634
+],
+"roundTimer": 0,
+"active": 13
+},
+{
+"tick": 3600,
+"rngIndex": 490,
+"rngCounter": 922,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+19,
+12,
+17192,
+2634
+],
+"roundTimer": 0,
+"active": 11
+},
+{
+"tick": 3800,
+"rngIndex": 2053,
+"rngCounter": 911,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+19,
+12,
+17224,
+2634
+],
+"roundTimer": 0,
+"active": 15
+},
+{
+"tick": 4000,
+"rngIndex": 1194,
+"rngCounter": 244,
+"phase12": 5,
+"phase3": 2,
+"phase2": 1,
+"war": [
+19,
+12,
+17302,
+2634
+],
+"roundTimer": 0,
+"active": 11
+},
+{
+"tick": 4200,
+"rngIndex": 1299,
+"rngCounter": 9,
+"phase12": 1,
+"phase3": 1,
+"phase2": 1,
+"war": [
+19,
+12,
+17382,
+2634
+],
+"roundTimer": 0,
+"active": 12
+},
+{
+"tick": 4400,
+"rngIndex": 2318,
+"rngCounter": 156,
+"phase12": 9,
+"phase3": 0,
+"phase2": 1,
+"war": [
+20,
+12,
+17458,
+2634
+],
+"roundTimer": 60,
+"active": 12
+}
+]
