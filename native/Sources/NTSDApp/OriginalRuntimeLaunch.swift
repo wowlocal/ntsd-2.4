@@ -398,12 +398,20 @@ final class OriginalRuntimeDelegate: NSObject, NSApplicationDelegate {
                         Self.emit(["event":"gameplay","cycles":cycles,"uptime":ProcessInfo.processInfo.systemUptime])
                     }
                     // Script actions count committed menu iterations; long matches report by ticks.
+                    // `--body-captures DIR` writes the window every 300 bodies, or
+                    // every N with `--body-capture-every N` (frames for a side-by-side).
+                    let every = arguments.firstIndex(of:"--body-capture-every").flatMap { $0+1 < arguments.count ? Int(arguments[$0+1]) : nil } ?? 300
+                    if gameplayBodies % every == 0,gameplayBodies % 300 != 0,
+                       let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
+                        let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
+                        try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:path))
+                    }
                     if gameplayBodies % 300 == 0 {
                         var event: [String:Any] = ["event":"progress","gameplayBodies":gameplayBodies,"cycles":cycles,"iterations":committed,
                             "characterAI":loading.counts.characterAI,"objectInputs":loading.counts.objectInputs,"uptime":ProcessInfo.processInfo.systemUptime,
                             "busySeconds":busy,"waitedMilliseconds":waited,"lastSleeps":Array(loading.sleeps.suffix(6)),"music":musicReport(),
                             "sounds":soundReport()]
-                        if let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
+                        if gameplayBodies % every == 0,let i = arguments.firstIndex(of:"--body-captures"),i+1 < arguments.count {
                             let path = "\(arguments[i+1])/b\(String(format:"%06d",gameplayBodies)).png"
                             try started.windows.snapshotPNG(gameWindow).write(to:URL(fileURLWithPath:path)); event["path"] = path
                         }

@@ -1,0 +1,2442 @@
+{
+ "date": "2026-10-03",
+ "clip": {
+  "gif": "docs/media/demo-side-by-side.gif",
+  "gifTicks": [
+   603,
+   837,
+   3
+  ],
+  "mp4": "docs/media/demo-side-by-side.mp4",
+  "mp4Ticks": [
+   150,
+   879,
+   3
+  ],
+  "still": "docs/media/demo-tick-600.png"
+ },
+ "mac": {
+  "command": "NTSDNative --original --mute-music --mute-sounds --no-activate --virtual-clock 777 8 --script-clock gameplay --exit-after-bodies 1203 --body-captures DIR --body-capture-every 3 --network-trace TRACE --script '20 click 350 230; 60 click 402 218; 100 key 83; 125 key 83; 150 key 83; 175 key 83; 200 key 83; 225 key 74; 900000 exit'",
+  "appCommit": "2e2992b"
+ },
+ "original": {
+  "command": "tools/crossover_drive/demo_frames.py DIR 777 TRACE 150 3 1050",
+  "exe": "NTSD 2.4.exe, no-music diagnostic clone (.data 44d010 = 0), CrossOver 26.3 bottle NTSD24XP",
+  "setup": "random table at 44ff90 replaced by the Mac's (VC80 srand(777), 3000 draws), 450bd0 set to the Mac's 6 at the first tick, music ERROR box clicked away and J released"
+ },
+ "comparison": "per frame: the original's random index 450bcc and counter 450c34 at the tick's 421cdc entry against the Mac trace row with clock = tick + 1; frame T of both shows the same tick (PSNR peak at equal tick numbers)",
+ "equalFrom": 150,
+ "equalTo": 879,
+ "firstDifferentTick": 882,
+ "note": "this run of the original parts from the Mac between ticks 879 and 882 (not localized; an earlier run of the same Demo matched the Mac's match length, 2649 ticks); the clip stays inside the verified range",
+ "frames": [
+  {
+   "tick": 150,
+   "rngIndex": 243,
+   "rngCounter": 73,
+   "macIndex": 243,
+   "macCounter": 73,
+   "equal": true
+  },
+  {
+   "tick": 153,
+   "rngIndex": 380,
+   "rngCounter": 210,
+   "macIndex": 380,
+   "macCounter": 210,
+   "equal": true
+  },
+  {
+   "tick": 156,
+   "rngIndex": 545,
+   "rngCounter": 375,
+   "macIndex": 545,
+   "macCounter": 375,
+   "equal": true
+  },
+  {
+   "tick": 159,
+   "rngIndex": 719,
+   "rngCounter": 549,
+   "macIndex": 719,
+   "macCounter": 549,
+   "equal": true
+  },
+  {
+   "tick": 162,
+   "rngIndex": 890,
+   "rngCounter": 720,
+   "macIndex": 890,
+   "macCounter": 720,
+   "equal": true
+  },
+  {
+   "tick": 165,
+   "rngIndex": 1062,
+   "rngCounter": 892,
+   "macIndex": 1062,
+   "macCounter": 892,
+   "equal": true
+  },
+  {
+   "tick": 168,
+   "rngIndex": 1226,
+   "rngCounter": 1056,
+   "macIndex": 1226,
+   "macCounter": 1056,
+   "equal": true
+  },
+  {
+   "tick": 171,
+   "rngIndex": 1388,
+   "rngCounter": 1218,
+   "macIndex": 1388,
+   "macCounter": 1218,
+   "equal": true
+  },
+  {
+   "tick": 174,
+   "rngIndex": 1553,
+   "rngCounter": 149,
+   "macIndex": 1553,
+   "macCounter": 149,
+   "equal": true
+  },
+  {
+   "tick": 177,
+   "rngIndex": 1720,
+   "rngCounter": 316,
+   "macIndex": 1720,
+   "macCounter": 316,
+   "equal": true
+  },
+  {
+   "tick": 180,
+   "rngIndex": 1920,
+   "rngCounter": 516,
+   "macIndex": 1920,
+   "macCounter": 516,
+   "equal": true
+  },
+  {
+   "tick": 183,
+   "rngIndex": 2121,
+   "rngCounter": 717,
+   "macIndex": 2121,
+   "macCounter": 717,
+   "equal": true
+  },
+  {
+   "tick": 186,
+   "rngIndex": 2320,
+   "rngCounter": 916,
+   "macIndex": 2320,
+   "macCounter": 916,
+   "equal": true
+  },
+  {
+   "tick": 189,
+   "rngIndex": 2513,
+   "rngCounter": 1109,
+   "macIndex": 2513,
+   "macCounter": 1109,
+   "equal": true
+  },
+  {
+   "tick": 192,
+   "rngIndex": 2715,
+   "rngCounter": 77,
+   "macIndex": 2715,
+   "macCounter": 77,
+   "equal": true
+  },
+  {
+   "tick": 195,
+   "rngIndex": 2932,
+   "rngCounter": 294,
+   "macIndex": 2932,
+   "macCounter": 294,
+   "equal": true
+  },
+  {
+   "tick": 198,
+   "rngIndex": 143,
+   "rngCounter": 505,
+   "macIndex": 143,
+   "macCounter": 505,
+   "equal": true
+  },
+  {
+   "tick": 201,
+   "rngIndex": 350,
+   "rngCounter": 712,
+   "macIndex": 350,
+   "macCounter": 712,
+   "equal": true
+  },
+  {
+   "tick": 204,
+   "rngIndex": 560,
+   "rngCounter": 922,
+   "macIndex": 560,
+   "macCounter": 922,
+   "equal": true
+  },
+  {
+   "tick": 207,
+   "rngIndex": 768,
+   "rngCounter": 1130,
+   "macIndex": 768,
+   "macCounter": 1130,
+   "equal": true
+  },
+  {
+   "tick": 210,
+   "rngIndex": 954,
+   "rngCounter": 82,
+   "macIndex": 954,
+   "macCounter": 82,
+   "equal": true
+  },
+  {
+   "tick": 213,
+   "rngIndex": 1154,
+   "rngCounter": 282,
+   "macIndex": 1154,
+   "macCounter": 282,
+   "equal": true
+  },
+  {
+   "tick": 216,
+   "rngIndex": 1355,
+   "rngCounter": 483,
+   "macIndex": 1355,
+   "macCounter": 483,
+   "equal": true
+  },
+  {
+   "tick": 219,
+   "rngIndex": 1527,
+   "rngCounter": 655,
+   "macIndex": 1527,
+   "macCounter": 655,
+   "equal": true
+  },
+  {
+   "tick": 222,
+   "rngIndex": 1696,
+   "rngCounter": 824,
+   "macIndex": 1696,
+   "macCounter": 824,
+   "equal": true
+  },
+  {
+   "tick": 225,
+   "rngIndex": 1907,
+   "rngCounter": 1035,
+   "macIndex": 1907,
+   "macCounter": 1035,
+   "equal": true
+  },
+  {
+   "tick": 228,
+   "rngIndex": 2040,
+   "rngCounter": 1168,
+   "macIndex": 2040,
+   "macCounter": 1168,
+   "equal": true
+  },
+  {
+   "tick": 231,
+   "rngIndex": 2170,
+   "rngCounter": 64,
+   "macIndex": 2170,
+   "macCounter": 64,
+   "equal": true
+  },
+  {
+   "tick": 234,
+   "rngIndex": 2287,
+   "rngCounter": 181,
+   "macIndex": 2287,
+   "macCounter": 181,
+   "equal": true
+  },
+  {
+   "tick": 237,
+   "rngIndex": 2420,
+   "rngCounter": 314,
+   "macIndex": 2420,
+   "macCounter": 314,
+   "equal": true
+  },
+  {
+   "tick": 240,
+   "rngIndex": 2549,
+   "rngCounter": 443,
+   "macIndex": 2549,
+   "macCounter": 443,
+   "equal": true
+  },
+  {
+   "tick": 243,
+   "rngIndex": 2683,
+   "rngCounter": 577,
+   "macIndex": 2683,
+   "macCounter": 577,
+   "equal": true
+  },
+  {
+   "tick": 246,
+   "rngIndex": 2815,
+   "rngCounter": 709,
+   "macIndex": 2815,
+   "macCounter": 709,
+   "equal": true
+  },
+  {
+   "tick": 249,
+   "rngIndex": 2961,
+   "rngCounter": 855,
+   "macIndex": 2961,
+   "macCounter": 855,
+   "equal": true
+  },
+  {
+   "tick": 252,
+   "rngIndex": 111,
+   "rngCounter": 1005,
+   "macIndex": 111,
+   "macCounter": 1005,
+   "equal": true
+  },
+  {
+   "tick": 255,
+   "rngIndex": 259,
+   "rngCounter": 1153,
+   "macIndex": 259,
+   "macCounter": 1153,
+   "equal": true
+  },
+  {
+   "tick": 258,
+   "rngIndex": 407,
+   "rngCounter": 67,
+   "macIndex": 407,
+   "macCounter": 67,
+   "equal": true
+  },
+  {
+   "tick": 261,
+   "rngIndex": 568,
+   "rngCounter": 228,
+   "macIndex": 568,
+   "macCounter": 228,
+   "equal": true
+  },
+  {
+   "tick": 264,
+   "rngIndex": 747,
+   "rngCounter": 407,
+   "macIndex": 747,
+   "macCounter": 407,
+   "equal": true
+  },
+  {
+   "tick": 267,
+   "rngIndex": 932,
+   "rngCounter": 592,
+   "macIndex": 932,
+   "macCounter": 592,
+   "equal": true
+  },
+  {
+   "tick": 270,
+   "rngIndex": 1120,
+   "rngCounter": 780,
+   "macIndex": 1120,
+   "macCounter": 780,
+   "equal": true
+  },
+  {
+   "tick": 273,
+   "rngIndex": 1312,
+   "rngCounter": 972,
+   "macIndex": 1312,
+   "macCounter": 972,
+   "equal": true
+  },
+  {
+   "tick": 276,
+   "rngIndex": 1484,
+   "rngCounter": 1144,
+   "macIndex": 1484,
+   "macCounter": 1144,
+   "equal": true
+  },
+  {
+   "tick": 279,
+   "rngIndex": 1652,
+   "rngCounter": 78,
+   "macIndex": 1652,
+   "macCounter": 78,
+   "equal": true
+  },
+  {
+   "tick": 282,
+   "rngIndex": 1827,
+   "rngCounter": 253,
+   "macIndex": 1827,
+   "macCounter": 253,
+   "equal": true
+  },
+  {
+   "tick": 285,
+   "rngIndex": 2003,
+   "rngCounter": 429,
+   "macIndex": 2003,
+   "macCounter": 429,
+   "equal": true
+  },
+  {
+   "tick": 288,
+   "rngIndex": 2182,
+   "rngCounter": 608,
+   "macIndex": 2182,
+   "macCounter": 608,
+   "equal": true
+  },
+  {
+   "tick": 291,
+   "rngIndex": 2370,
+   "rngCounter": 796,
+   "macIndex": 2370,
+   "macCounter": 796,
+   "equal": true
+  },
+  {
+   "tick": 294,
+   "rngIndex": 2562,
+   "rngCounter": 988,
+   "macIndex": 2562,
+   "macCounter": 988,
+   "equal": true
+  },
+  {
+   "tick": 297,
+   "rngIndex": 2749,
+   "rngCounter": 1175,
+   "macIndex": 2749,
+   "macCounter": 1175,
+   "equal": true
+  },
+  {
+   "tick": 300,
+   "rngIndex": 2935,
+   "rngCounter": 127,
+   "macIndex": 2935,
+   "macCounter": 127,
+   "equal": true
+  },
+  {
+   "tick": 303,
+   "rngIndex": 105,
+   "rngCounter": 297,
+   "macIndex": 105,
+   "macCounter": 297,
+   "equal": true
+  },
+  {
+   "tick": 306,
+   "rngIndex": 262,
+   "rngCounter": 454,
+   "macIndex": 262,
+   "macCounter": 454,
+   "equal": true
+  },
+  {
+   "tick": 309,
+   "rngIndex": 431,
+   "rngCounter": 623,
+   "macIndex": 431,
+   "macCounter": 623,
+   "equal": true
+  },
+  {
+   "tick": 312,
+   "rngIndex": 611,
+   "rngCounter": 803,
+   "macIndex": 611,
+   "macCounter": 803,
+   "equal": true
+  },
+  {
+   "tick": 315,
+   "rngIndex": 786,
+   "rngCounter": 978,
+   "macIndex": 786,
+   "macCounter": 978,
+   "equal": true
+  },
+  {
+   "tick": 318,
+   "rngIndex": 970,
+   "rngCounter": 1162,
+   "macIndex": 970,
+   "macCounter": 1162,
+   "equal": true
+  },
+  {
+   "tick": 321,
+   "rngIndex": 1172,
+   "rngCounter": 130,
+   "macIndex": 1172,
+   "macCounter": 130,
+   "equal": true
+  },
+  {
+   "tick": 324,
+   "rngIndex": 1343,
+   "rngCounter": 301,
+   "macIndex": 1343,
+   "macCounter": 301,
+   "equal": true
+  },
+  {
+   "tick": 327,
+   "rngIndex": 1483,
+   "rngCounter": 441,
+   "macIndex": 1483,
+   "macCounter": 441,
+   "equal": true
+  },
+  {
+   "tick": 330,
+   "rngIndex": 1618,
+   "rngCounter": 576,
+   "macIndex": 1618,
+   "macCounter": 576,
+   "equal": true
+  },
+  {
+   "tick": 333,
+   "rngIndex": 1753,
+   "rngCounter": 711,
+   "macIndex": 1753,
+   "macCounter": 711,
+   "equal": true
+  },
+  {
+   "tick": 336,
+   "rngIndex": 1886,
+   "rngCounter": 844,
+   "macIndex": 1886,
+   "macCounter": 844,
+   "equal": true
+  },
+  {
+   "tick": 339,
+   "rngIndex": 2020,
+   "rngCounter": 978,
+   "macIndex": 2020,
+   "macCounter": 978,
+   "equal": true
+  },
+  {
+   "tick": 342,
+   "rngIndex": 2155,
+   "rngCounter": 1113,
+   "macIndex": 2155,
+   "macCounter": 1113,
+   "equal": true
+  },
+  {
+   "tick": 345,
+   "rngIndex": 2312,
+   "rngCounter": 36,
+   "macIndex": 2312,
+   "macCounter": 36,
+   "equal": true
+  },
+  {
+   "tick": 348,
+   "rngIndex": 2443,
+   "rngCounter": 167,
+   "macIndex": 2443,
+   "macCounter": 167,
+   "equal": true
+  },
+  {
+   "tick": 351,
+   "rngIndex": 2575,
+   "rngCounter": 299,
+   "macIndex": 2575,
+   "macCounter": 299,
+   "equal": true
+  },
+  {
+   "tick": 354,
+   "rngIndex": 2711,
+   "rngCounter": 435,
+   "macIndex": 2711,
+   "macCounter": 435,
+   "equal": true
+  },
+  {
+   "tick": 357,
+   "rngIndex": 2849,
+   "rngCounter": 573,
+   "macIndex": 2849,
+   "macCounter": 573,
+   "equal": true
+  },
+  {
+   "tick": 360,
+   "rngIndex": 2990,
+   "rngCounter": 714,
+   "macIndex": 2990,
+   "macCounter": 714,
+   "equal": true
+  },
+  {
+   "tick": 363,
+   "rngIndex": 167,
+   "rngCounter": 891,
+   "macIndex": 167,
+   "macCounter": 891,
+   "equal": true
+  },
+  {
+   "tick": 366,
+   "rngIndex": 341,
+   "rngCounter": 1065,
+   "macIndex": 341,
+   "macCounter": 1065,
+   "equal": true
+  },
+  {
+   "tick": 369,
+   "rngIndex": 539,
+   "rngCounter": 29,
+   "macIndex": 539,
+   "macCounter": 29,
+   "equal": true
+  },
+  {
+   "tick": 372,
+   "rngIndex": 745,
+   "rngCounter": 235,
+   "macIndex": 745,
+   "macCounter": 235,
+   "equal": true
+  },
+  {
+   "tick": 375,
+   "rngIndex": 953,
+   "rngCounter": 443,
+   "macIndex": 953,
+   "macCounter": 443,
+   "equal": true
+  },
+  {
+   "tick": 378,
+   "rngIndex": 1149,
+   "rngCounter": 639,
+   "macIndex": 1149,
+   "macCounter": 639,
+   "equal": true
+  },
+  {
+   "tick": 381,
+   "rngIndex": 1343,
+   "rngCounter": 833,
+   "macIndex": 1343,
+   "macCounter": 833,
+   "equal": true
+  },
+  {
+   "tick": 384,
+   "rngIndex": 1523,
+   "rngCounter": 1013,
+   "macIndex": 1523,
+   "macCounter": 1013,
+   "equal": true
+  },
+  {
+   "tick": 387,
+   "rngIndex": 1706,
+   "rngCounter": 1196,
+   "macIndex": 1706,
+   "macCounter": 1196,
+   "equal": true
+  },
+  {
+   "tick": 390,
+   "rngIndex": 1865,
+   "rngCounter": 121,
+   "macIndex": 1865,
+   "macCounter": 121,
+   "equal": true
+  },
+  {
+   "tick": 393,
+   "rngIndex": 2016,
+   "rngCounter": 272,
+   "macIndex": 2016,
+   "macCounter": 272,
+   "equal": true
+  },
+  {
+   "tick": 396,
+   "rngIndex": 2166,
+   "rngCounter": 422,
+   "macIndex": 2166,
+   "macCounter": 422,
+   "equal": true
+  },
+  {
+   "tick": 399,
+   "rngIndex": 2305,
+   "rngCounter": 561,
+   "macIndex": 2305,
+   "macCounter": 561,
+   "equal": true
+  },
+  {
+   "tick": 402,
+   "rngIndex": 2415,
+   "rngCounter": 671,
+   "macIndex": 2415,
+   "macCounter": 671,
+   "equal": true
+  },
+  {
+   "tick": 405,
+   "rngIndex": 2539,
+   "rngCounter": 795,
+   "macIndex": 2539,
+   "macCounter": 795,
+   "equal": true
+  },
+  {
+   "tick": 408,
+   "rngIndex": 2669,
+   "rngCounter": 925,
+   "macIndex": 2669,
+   "macCounter": 925,
+   "equal": true
+  },
+  {
+   "tick": 411,
+   "rngIndex": 2801,
+   "rngCounter": 1057,
+   "macIndex": 2801,
+   "macCounter": 1057,
+   "equal": true
+  },
+  {
+   "tick": 414,
+   "rngIndex": 2949,
+   "rngCounter": 1205,
+   "macIndex": 2949,
+   "macCounter": 1205,
+   "equal": true
+  },
+  {
+   "tick": 417,
+   "rngIndex": 92,
+   "rngCounter": 114,
+   "macIndex": 92,
+   "macCounter": 114,
+   "equal": true
+  },
+  {
+   "tick": 420,
+   "rngIndex": 228,
+   "rngCounter": 250,
+   "macIndex": 228,
+   "macCounter": 250,
+   "equal": true
+  },
+  {
+   "tick": 423,
+   "rngIndex": 336,
+   "rngCounter": 358,
+   "macIndex": 336,
+   "macCounter": 358,
+   "equal": true
+  },
+  {
+   "tick": 426,
+   "rngIndex": 444,
+   "rngCounter": 466,
+   "macIndex": 444,
+   "macCounter": 466,
+   "equal": true
+  },
+  {
+   "tick": 429,
+   "rngIndex": 557,
+   "rngCounter": 579,
+   "macIndex": 557,
+   "macCounter": 579,
+   "equal": true
+  },
+  {
+   "tick": 432,
+   "rngIndex": 709,
+   "rngCounter": 731,
+   "macIndex": 709,
+   "macCounter": 731,
+   "equal": true
+  },
+  {
+   "tick": 435,
+   "rngIndex": 869,
+   "rngCounter": 891,
+   "macIndex": 869,
+   "macCounter": 891,
+   "equal": true
+  },
+  {
+   "tick": 438,
+   "rngIndex": 1069,
+   "rngCounter": 1091,
+   "macIndex": 1069,
+   "macCounter": 1091,
+   "equal": true
+  },
+  {
+   "tick": 441,
+   "rngIndex": 1243,
+   "rngCounter": 31,
+   "macIndex": 1243,
+   "macCounter": 31,
+   "equal": true
+  },
+  {
+   "tick": 444,
+   "rngIndex": 1421,
+   "rngCounter": 209,
+   "macIndex": 1421,
+   "macCounter": 209,
+   "equal": true
+  },
+  {
+   "tick": 447,
+   "rngIndex": 1601,
+   "rngCounter": 389,
+   "macIndex": 1601,
+   "macCounter": 389,
+   "equal": true
+  },
+  {
+   "tick": 450,
+   "rngIndex": 1779,
+   "rngCounter": 567,
+   "macIndex": 1779,
+   "macCounter": 567,
+   "equal": true
+  },
+  {
+   "tick": 453,
+   "rngIndex": 1955,
+   "rngCounter": 743,
+   "macIndex": 1955,
+   "macCounter": 743,
+   "equal": true
+  },
+  {
+   "tick": 456,
+   "rngIndex": 2120,
+   "rngCounter": 908,
+   "macIndex": 2120,
+   "macCounter": 908,
+   "equal": true
+  },
+  {
+   "tick": 459,
+   "rngIndex": 2294,
+   "rngCounter": 1082,
+   "macIndex": 2294,
+   "macCounter": 1082,
+   "equal": true
+  },
+  {
+   "tick": 462,
+   "rngIndex": 2439,
+   "rngCounter": 1227,
+   "macIndex": 2439,
+   "macCounter": 1227,
+   "equal": true
+  },
+  {
+   "tick": 465,
+   "rngIndex": 2585,
+   "rngCounter": 139,
+   "macIndex": 2585,
+   "macCounter": 139,
+   "equal": true
+  },
+  {
+   "tick": 468,
+   "rngIndex": 2733,
+   "rngCounter": 287,
+   "macIndex": 2733,
+   "macCounter": 287,
+   "equal": true
+  },
+  {
+   "tick": 471,
+   "rngIndex": 2877,
+   "rngCounter": 431,
+   "macIndex": 2877,
+   "macCounter": 431,
+   "equal": true
+  },
+  {
+   "tick": 474,
+   "rngIndex": 27,
+   "rngCounter": 581,
+   "macIndex": 27,
+   "macCounter": 581,
+   "equal": true
+  },
+  {
+   "tick": 477,
+   "rngIndex": 173,
+   "rngCounter": 727,
+   "macIndex": 173,
+   "macCounter": 727,
+   "equal": true
+  },
+  {
+   "tick": 480,
+   "rngIndex": 319,
+   "rngCounter": 873,
+   "macIndex": 319,
+   "macCounter": 873,
+   "equal": true
+  },
+  {
+   "tick": 483,
+   "rngIndex": 467,
+   "rngCounter": 1021,
+   "macIndex": 467,
+   "macCounter": 1021,
+   "equal": true
+  },
+  {
+   "tick": 486,
+   "rngIndex": 633,
+   "rngCounter": 1187,
+   "macIndex": 633,
+   "macCounter": 1187,
+   "equal": true
+  },
+  {
+   "tick": 489,
+   "rngIndex": 802,
+   "rngCounter": 122,
+   "macIndex": 802,
+   "macCounter": 122,
+   "equal": true
+  },
+  {
+   "tick": 492,
+   "rngIndex": 969,
+   "rngCounter": 289,
+   "macIndex": 969,
+   "macCounter": 289,
+   "equal": true
+  },
+  {
+   "tick": 495,
+   "rngIndex": 1136,
+   "rngCounter": 456,
+   "macIndex": 1136,
+   "macCounter": 456,
+   "equal": true
+  },
+  {
+   "tick": 498,
+   "rngIndex": 1277,
+   "rngCounter": 597,
+   "macIndex": 1277,
+   "macCounter": 597,
+   "equal": true
+  },
+  {
+   "tick": 501,
+   "rngIndex": 1372,
+   "rngCounter": 692,
+   "macIndex": 1372,
+   "macCounter": 692,
+   "equal": true
+  },
+  {
+   "tick": 504,
+   "rngIndex": 1477,
+   "rngCounter": 797,
+   "macIndex": 1477,
+   "macCounter": 797,
+   "equal": true
+  },
+  {
+   "tick": 507,
+   "rngIndex": 1604,
+   "rngCounter": 924,
+   "macIndex": 1604,
+   "macCounter": 924,
+   "equal": true
+  },
+  {
+   "tick": 510,
+   "rngIndex": 1726,
+   "rngCounter": 1046,
+   "macIndex": 1726,
+   "macCounter": 1046,
+   "equal": true
+  },
+  {
+   "tick": 513,
+   "rngIndex": 1847,
+   "rngCounter": 1167,
+   "macIndex": 1847,
+   "macCounter": 1167,
+   "equal": true
+  },
+  {
+   "tick": 516,
+   "rngIndex": 1961,
+   "rngCounter": 47,
+   "macIndex": 1961,
+   "macCounter": 47,
+   "equal": true
+  },
+  {
+   "tick": 519,
+   "rngIndex": 2095,
+   "rngCounter": 181,
+   "macIndex": 2095,
+   "macCounter": 181,
+   "equal": true
+  },
+  {
+   "tick": 522,
+   "rngIndex": 2237,
+   "rngCounter": 323,
+   "macIndex": 2237,
+   "macCounter": 323,
+   "equal": true
+  },
+  {
+   "tick": 525,
+   "rngIndex": 2352,
+   "rngCounter": 438,
+   "macIndex": 2352,
+   "macCounter": 438,
+   "equal": true
+  },
+  {
+   "tick": 528,
+   "rngIndex": 2467,
+   "rngCounter": 553,
+   "macIndex": 2467,
+   "macCounter": 553,
+   "equal": true
+  },
+  {
+   "tick": 531,
+   "rngIndex": 2608,
+   "rngCounter": 694,
+   "macIndex": 2608,
+   "macCounter": 694,
+   "equal": true
+  },
+  {
+   "tick": 534,
+   "rngIndex": 2762,
+   "rngCounter": 848,
+   "macIndex": 2762,
+   "macCounter": 848,
+   "equal": true
+  },
+  {
+   "tick": 537,
+   "rngIndex": 2918,
+   "rngCounter": 1004,
+   "macIndex": 2918,
+   "macCounter": 1004,
+   "equal": true
+  },
+  {
+   "tick": 540,
+   "rngIndex": 81,
+   "rngCounter": 1167,
+   "macIndex": 81,
+   "macCounter": 1167,
+   "equal": true
+  },
+  {
+   "tick": 543,
+   "rngIndex": 268,
+   "rngCounter": 120,
+   "macIndex": 268,
+   "macCounter": 120,
+   "equal": true
+  },
+  {
+   "tick": 546,
+   "rngIndex": 465,
+   "rngCounter": 317,
+   "macIndex": 465,
+   "macCounter": 317,
+   "equal": true
+  },
+  {
+   "tick": 549,
+   "rngIndex": 663,
+   "rngCounter": 515,
+   "macIndex": 663,
+   "macCounter": 515,
+   "equal": true
+  },
+  {
+   "tick": 552,
+   "rngIndex": 865,
+   "rngCounter": 717,
+   "macIndex": 865,
+   "macCounter": 717,
+   "equal": true
+  },
+  {
+   "tick": 555,
+   "rngIndex": 1068,
+   "rngCounter": 920,
+   "macIndex": 1068,
+   "macCounter": 920,
+   "equal": true
+  },
+  {
+   "tick": 558,
+   "rngIndex": 1266,
+   "rngCounter": 1118,
+   "macIndex": 1266,
+   "macCounter": 1118,
+   "equal": true
+  },
+  {
+   "tick": 561,
+   "rngIndex": 1465,
+   "rngCounter": 83,
+   "macIndex": 1465,
+   "macCounter": 83,
+   "equal": true
+  },
+  {
+   "tick": 564,
+   "rngIndex": 1668,
+   "rngCounter": 286,
+   "macIndex": 1668,
+   "macCounter": 286,
+   "equal": true
+  },
+  {
+   "tick": 567,
+   "rngIndex": 1871,
+   "rngCounter": 489,
+   "macIndex": 1871,
+   "macCounter": 489,
+   "equal": true
+  },
+  {
+   "tick": 570,
+   "rngIndex": 2070,
+   "rngCounter": 688,
+   "macIndex": 2070,
+   "macCounter": 688,
+   "equal": true
+  },
+  {
+   "tick": 573,
+   "rngIndex": 2270,
+   "rngCounter": 888,
+   "macIndex": 2270,
+   "macCounter": 888,
+   "equal": true
+  },
+  {
+   "tick": 576,
+   "rngIndex": 2457,
+   "rngCounter": 1075,
+   "macIndex": 2457,
+   "macCounter": 1075,
+   "equal": true
+  },
+  {
+   "tick": 579,
+   "rngIndex": 2650,
+   "rngCounter": 34,
+   "macIndex": 2650,
+   "macCounter": 34,
+   "equal": true
+  },
+  {
+   "tick": 582,
+   "rngIndex": 2839,
+   "rngCounter": 223,
+   "macIndex": 2839,
+   "macCounter": 223,
+   "equal": true
+  },
+  {
+   "tick": 585,
+   "rngIndex": 37,
+   "rngCounter": 421,
+   "macIndex": 37,
+   "macCounter": 421,
+   "equal": true
+  },
+  {
+   "tick": 588,
+   "rngIndex": 237,
+   "rngCounter": 621,
+   "macIndex": 237,
+   "macCounter": 621,
+   "equal": true
+  },
+  {
+   "tick": 591,
+   "rngIndex": 433,
+   "rngCounter": 817,
+   "macIndex": 433,
+   "macCounter": 817,
+   "equal": true
+  },
+  {
+   "tick": 594,
+   "rngIndex": 631,
+   "rngCounter": 1015,
+   "macIndex": 631,
+   "macCounter": 1015,
+   "equal": true
+  },
+  {
+   "tick": 597,
+   "rngIndex": 831,
+   "rngCounter": 1215,
+   "macIndex": 831,
+   "macCounter": 1215,
+   "equal": true
+  },
+  {
+   "tick": 600,
+   "rngIndex": 1024,
+   "rngCounter": 174,
+   "macIndex": 1024,
+   "macCounter": 174,
+   "equal": true
+  },
+  {
+   "tick": 603,
+   "rngIndex": 1207,
+   "rngCounter": 357,
+   "macIndex": 1207,
+   "macCounter": 357,
+   "equal": true
+  },
+  {
+   "tick": 606,
+   "rngIndex": 1397,
+   "rngCounter": 547,
+   "macIndex": 1397,
+   "macCounter": 547,
+   "equal": true
+  },
+  {
+   "tick": 609,
+   "rngIndex": 1581,
+   "rngCounter": 731,
+   "macIndex": 1581,
+   "macCounter": 731,
+   "equal": true
+  },
+  {
+   "tick": 612,
+   "rngIndex": 1754,
+   "rngCounter": 904,
+   "macIndex": 1754,
+   "macCounter": 904,
+   "equal": true
+  },
+  {
+   "tick": 615,
+   "rngIndex": 1900,
+   "rngCounter": 1050,
+   "macIndex": 1900,
+   "macCounter": 1050,
+   "equal": true
+  },
+  {
+   "tick": 618,
+   "rngIndex": 2057,
+   "rngCounter": 1207,
+   "macIndex": 2057,
+   "macCounter": 1207,
+   "equal": true
+  },
+  {
+   "tick": 621,
+   "rngIndex": 2212,
+   "rngCounter": 128,
+   "macIndex": 2212,
+   "macCounter": 128,
+   "equal": true
+  },
+  {
+   "tick": 624,
+   "rngIndex": 2370,
+   "rngCounter": 286,
+   "macIndex": 2370,
+   "macCounter": 286,
+   "equal": true
+  },
+  {
+   "tick": 627,
+   "rngIndex": 2530,
+   "rngCounter": 446,
+   "macIndex": 2530,
+   "macCounter": 446,
+   "equal": true
+  },
+  {
+   "tick": 630,
+   "rngIndex": 2665,
+   "rngCounter": 581,
+   "macIndex": 2665,
+   "macCounter": 581,
+   "equal": true
+  },
+  {
+   "tick": 633,
+   "rngIndex": 2772,
+   "rngCounter": 688,
+   "macIndex": 2772,
+   "macCounter": 688,
+   "equal": true
+  },
+  {
+   "tick": 636,
+   "rngIndex": 2871,
+   "rngCounter": 787,
+   "macIndex": 2871,
+   "macCounter": 787,
+   "equal": true
+  },
+  {
+   "tick": 639,
+   "rngIndex": 2975,
+   "rngCounter": 891,
+   "macIndex": 2975,
+   "macCounter": 891,
+   "equal": true
+  },
+  {
+   "tick": 642,
+   "rngIndex": 76,
+   "rngCounter": 992,
+   "macIndex": 76,
+   "macCounter": 992,
+   "equal": true
+  },
+  {
+   "tick": 645,
+   "rngIndex": 175,
+   "rngCounter": 1091,
+   "macIndex": 175,
+   "macCounter": 1091,
+   "equal": true
+  },
+  {
+   "tick": 648,
+   "rngIndex": 273,
+   "rngCounter": 1189,
+   "macIndex": 273,
+   "macCounter": 1189,
+   "equal": true
+  },
+  {
+   "tick": 651,
+   "rngIndex": 354,
+   "rngCounter": 36,
+   "macIndex": 354,
+   "macCounter": 36,
+   "equal": true
+  },
+  {
+   "tick": 654,
+   "rngIndex": 443,
+   "rngCounter": 125,
+   "macIndex": 443,
+   "macCounter": 125,
+   "equal": true
+  },
+  {
+   "tick": 657,
+   "rngIndex": 589,
+   "rngCounter": 271,
+   "macIndex": 589,
+   "macCounter": 271,
+   "equal": true
+  },
+  {
+   "tick": 660,
+   "rngIndex": 704,
+   "rngCounter": 386,
+   "macIndex": 704,
+   "macCounter": 386,
+   "equal": true
+  },
+  {
+   "tick": 663,
+   "rngIndex": 848,
+   "rngCounter": 530,
+   "macIndex": 848,
+   "macCounter": 530,
+   "equal": true
+  },
+  {
+   "tick": 666,
+   "rngIndex": 933,
+   "rngCounter": 615,
+   "macIndex": 933,
+   "macCounter": 615,
+   "equal": true
+  },
+  {
+   "tick": 669,
+   "rngIndex": 1012,
+   "rngCounter": 694,
+   "macIndex": 1012,
+   "macCounter": 694,
+   "equal": true
+  },
+  {
+   "tick": 672,
+   "rngIndex": 1113,
+   "rngCounter": 795,
+   "macIndex": 1113,
+   "macCounter": 795,
+   "equal": true
+  },
+  {
+   "tick": 675,
+   "rngIndex": 1233,
+   "rngCounter": 915,
+   "macIndex": 1233,
+   "macCounter": 915,
+   "equal": true
+  },
+  {
+   "tick": 678,
+   "rngIndex": 1362,
+   "rngCounter": 1044,
+   "macIndex": 1362,
+   "macCounter": 1044,
+   "equal": true
+  },
+  {
+   "tick": 681,
+   "rngIndex": 1493,
+   "rngCounter": 1175,
+   "macIndex": 1493,
+   "macCounter": 1175,
+   "equal": true
+  },
+  {
+   "tick": 684,
+   "rngIndex": 1656,
+   "rngCounter": 104,
+   "macIndex": 1656,
+   "macCounter": 104,
+   "equal": true
+  },
+  {
+   "tick": 687,
+   "rngIndex": 1835,
+   "rngCounter": 283,
+   "macIndex": 1835,
+   "macCounter": 283,
+   "equal": true
+  },
+  {
+   "tick": 690,
+   "rngIndex": 1996,
+   "rngCounter": 444,
+   "macIndex": 1996,
+   "macCounter": 444,
+   "equal": true
+  },
+  {
+   "tick": 693,
+   "rngIndex": 2202,
+   "rngCounter": 650,
+   "macIndex": 2202,
+   "macCounter": 650,
+   "equal": true
+  },
+  {
+   "tick": 696,
+   "rngIndex": 2416,
+   "rngCounter": 864,
+   "macIndex": 2416,
+   "macCounter": 864,
+   "equal": true
+  },
+  {
+   "tick": 699,
+   "rngIndex": 2640,
+   "rngCounter": 1088,
+   "macIndex": 2640,
+   "macCounter": 1088,
+   "equal": true
+  },
+  {
+   "tick": 702,
+   "rngIndex": 2855,
+   "rngCounter": 69,
+   "macIndex": 2855,
+   "macCounter": 69,
+   "equal": true
+  },
+  {
+   "tick": 705,
+   "rngIndex": 65,
+   "rngCounter": 279,
+   "macIndex": 65,
+   "macCounter": 279,
+   "equal": true
+  },
+  {
+   "tick": 708,
+   "rngIndex": 268,
+   "rngCounter": 482,
+   "macIndex": 268,
+   "macCounter": 482,
+   "equal": true
+  },
+  {
+   "tick": 711,
+   "rngIndex": 452,
+   "rngCounter": 666,
+   "macIndex": 452,
+   "macCounter": 666,
+   "equal": true
+  },
+  {
+   "tick": 714,
+   "rngIndex": 641,
+   "rngCounter": 855,
+   "macIndex": 641,
+   "macCounter": 855,
+   "equal": true
+  },
+  {
+   "tick": 717,
+   "rngIndex": 836,
+   "rngCounter": 1050,
+   "macIndex": 836,
+   "macCounter": 1050,
+   "equal": true
+  },
+  {
+   "tick": 720,
+   "rngIndex": 1013,
+   "rngCounter": 1227,
+   "macIndex": 1013,
+   "macCounter": 1227,
+   "equal": true
+  },
+  {
+   "tick": 723,
+   "rngIndex": 1160,
+   "rngCounter": 140,
+   "macIndex": 1160,
+   "macCounter": 140,
+   "equal": true
+  },
+  {
+   "tick": 726,
+   "rngIndex": 1310,
+   "rngCounter": 290,
+   "macIndex": 1310,
+   "macCounter": 290,
+   "equal": true
+  },
+  {
+   "tick": 729,
+   "rngIndex": 1451,
+   "rngCounter": 431,
+   "macIndex": 1451,
+   "macCounter": 431,
+   "equal": true
+  },
+  {
+   "tick": 732,
+   "rngIndex": 1610,
+   "rngCounter": 590,
+   "macIndex": 1610,
+   "macCounter": 590,
+   "equal": true
+  },
+  {
+   "tick": 735,
+   "rngIndex": 1777,
+   "rngCounter": 757,
+   "macIndex": 1777,
+   "macCounter": 757,
+   "equal": true
+  },
+  {
+   "tick": 738,
+   "rngIndex": 1949,
+   "rngCounter": 929,
+   "macIndex": 1949,
+   "macCounter": 929,
+   "equal": true
+  },
+  {
+   "tick": 741,
+   "rngIndex": 2120,
+   "rngCounter": 1100,
+   "macIndex": 2120,
+   "macCounter": 1100,
+   "equal": true
+  },
+  {
+   "tick": 744,
+   "rngIndex": 2298,
+   "rngCounter": 44,
+   "macIndex": 2298,
+   "macCounter": 44,
+   "equal": true
+  },
+  {
+   "tick": 747,
+   "rngIndex": 2466,
+   "rngCounter": 212,
+   "macIndex": 2466,
+   "macCounter": 212,
+   "equal": true
+  },
+  {
+   "tick": 750,
+   "rngIndex": 2670,
+   "rngCounter": 416,
+   "macIndex": 2670,
+   "macCounter": 416,
+   "equal": true
+  },
+  {
+   "tick": 753,
+   "rngIndex": 2878,
+   "rngCounter": 624,
+   "macIndex": 2878,
+   "macCounter": 624,
+   "equal": true
+  },
+  {
+   "tick": 756,
+   "rngIndex": 105,
+   "rngCounter": 851,
+   "macIndex": 105,
+   "macCounter": 851,
+   "equal": true
+  },
+  {
+   "tick": 759,
+   "rngIndex": 338,
+   "rngCounter": 1084,
+   "macIndex": 338,
+   "macCounter": 1084,
+   "equal": true
+  },
+  {
+   "tick": 762,
+   "rngIndex": 557,
+   "rngCounter": 69,
+   "macIndex": 557,
+   "macCounter": 69,
+   "equal": true
+  },
+  {
+   "tick": 765,
+   "rngIndex": 757,
+   "rngCounter": 269,
+   "macIndex": 757,
+   "macCounter": 269,
+   "equal": true
+  },
+  {
+   "tick": 768,
+   "rngIndex": 951,
+   "rngCounter": 463,
+   "macIndex": 951,
+   "macCounter": 463,
+   "equal": true
+  },
+  {
+   "tick": 771,
+   "rngIndex": 1140,
+   "rngCounter": 652,
+   "macIndex": 1140,
+   "macCounter": 652,
+   "equal": true
+  },
+  {
+   "tick": 774,
+   "rngIndex": 1316,
+   "rngCounter": 828,
+   "macIndex": 1316,
+   "macCounter": 828,
+   "equal": true
+  },
+  {
+   "tick": 777,
+   "rngIndex": 1485,
+   "rngCounter": 997,
+   "macIndex": 1485,
+   "macCounter": 997,
+   "equal": true
+  },
+  {
+   "tick": 780,
+   "rngIndex": 1647,
+   "rngCounter": 1159,
+   "macIndex": 1647,
+   "macCounter": 1159,
+   "equal": true
+  },
+  {
+   "tick": 783,
+   "rngIndex": 1796,
+   "rngCounter": 74,
+   "macIndex": 1796,
+   "macCounter": 74,
+   "equal": true
+  },
+  {
+   "tick": 786,
+   "rngIndex": 1948,
+   "rngCounter": 226,
+   "macIndex": 1948,
+   "macCounter": 226,
+   "equal": true
+  },
+  {
+   "tick": 789,
+   "rngIndex": 2100,
+   "rngCounter": 378,
+   "macIndex": 2100,
+   "macCounter": 378,
+   "equal": true
+  },
+  {
+   "tick": 792,
+   "rngIndex": 2200,
+   "rngCounter": 478,
+   "macIndex": 2200,
+   "macCounter": 478,
+   "equal": true
+  },
+  {
+   "tick": 795,
+   "rngIndex": 2284,
+   "rngCounter": 562,
+   "macIndex": 2284,
+   "macCounter": 562,
+   "equal": true
+  },
+  {
+   "tick": 798,
+   "rngIndex": 2380,
+   "rngCounter": 658,
+   "macIndex": 2380,
+   "macCounter": 658,
+   "equal": true
+  },
+  {
+   "tick": 801,
+   "rngIndex": 2473,
+   "rngCounter": 751,
+   "macIndex": 2473,
+   "macCounter": 751,
+   "equal": true
+  },
+  {
+   "tick": 804,
+   "rngIndex": 2565,
+   "rngCounter": 843,
+   "macIndex": 2565,
+   "macCounter": 843,
+   "equal": true
+  },
+  {
+   "tick": 807,
+   "rngIndex": 2654,
+   "rngCounter": 932,
+   "macIndex": 2654,
+   "macCounter": 932,
+   "equal": true
+  },
+  {
+   "tick": 810,
+   "rngIndex": 2749,
+   "rngCounter": 1027,
+   "macIndex": 2749,
+   "macCounter": 1027,
+   "equal": true
+  },
+  {
+   "tick": 813,
+   "rngIndex": 2833,
+   "rngCounter": 1111,
+   "macIndex": 2833,
+   "macCounter": 1111,
+   "equal": true
+  },
+  {
+   "tick": 816,
+   "rngIndex": 2918,
+   "rngCounter": 1196,
+   "macIndex": 2918,
+   "macCounter": 1196,
+   "equal": true
+  },
+  {
+   "tick": 819,
+   "rngIndex": 2982,
+   "rngCounter": 26,
+   "macIndex": 2982,
+   "macCounter": 26,
+   "equal": true
+  },
+  {
+   "tick": 822,
+   "rngIndex": 121,
+   "rngCounter": 165,
+   "macIndex": 121,
+   "macCounter": 165,
+   "equal": true
+  },
+  {
+   "tick": 825,
+   "rngIndex": 277,
+   "rngCounter": 321,
+   "macIndex": 277,
+   "macCounter": 321,
+   "equal": true
+  },
+  {
+   "tick": 828,
+   "rngIndex": 421,
+   "rngCounter": 465,
+   "macIndex": 421,
+   "macCounter": 465,
+   "equal": true
+  },
+  {
+   "tick": 831,
+   "rngIndex": 576,
+   "rngCounter": 620,
+   "macIndex": 576,
+   "macCounter": 620,
+   "equal": true
+  },
+  {
+   "tick": 834,
+   "rngIndex": 720,
+   "rngCounter": 764,
+   "macIndex": 720,
+   "macCounter": 764,
+   "equal": true
+  },
+  {
+   "tick": 837,
+   "rngIndex": 902,
+   "rngCounter": 946,
+   "macIndex": 902,
+   "macCounter": 946,
+   "equal": true
+  },
+  {
+   "tick": 840,
+   "rngIndex": 1075,
+   "rngCounter": 1119,
+   "macIndex": 1075,
+   "macCounter": 1119,
+   "equal": true
+  },
+  {
+   "tick": 843,
+   "rngIndex": 1269,
+   "rngCounter": 79,
+   "macIndex": 1269,
+   "macCounter": 79,
+   "equal": true
+  },
+  {
+   "tick": 846,
+   "rngIndex": 1484,
+   "rngCounter": 294,
+   "macIndex": 1484,
+   "macCounter": 294,
+   "equal": true
+  },
+  {
+   "tick": 849,
+   "rngIndex": 1681,
+   "rngCounter": 491,
+   "macIndex": 1681,
+   "macCounter": 491,
+   "equal": true
+  },
+  {
+   "tick": 852,
+   "rngIndex": 1880,
+   "rngCounter": 690,
+   "macIndex": 1880,
+   "macCounter": 690,
+   "equal": true
+  },
+  {
+   "tick": 855,
+   "rngIndex": 2072,
+   "rngCounter": 882,
+   "macIndex": 2072,
+   "macCounter": 882,
+   "equal": true
+  },
+  {
+   "tick": 858,
+   "rngIndex": 2265,
+   "rngCounter": 1075,
+   "macIndex": 2265,
+   "macCounter": 1075,
+   "equal": true
+  },
+  {
+   "tick": 861,
+   "rngIndex": 2431,
+   "rngCounter": 7,
+   "macIndex": 2431,
+   "macCounter": 7,
+   "equal": true
+  },
+  {
+   "tick": 864,
+   "rngIndex": 2603,
+   "rngCounter": 179,
+   "macIndex": 2603,
+   "macCounter": 179,
+   "equal": true
+  },
+  {
+   "tick": 867,
+   "rngIndex": 2777,
+   "rngCounter": 353,
+   "macIndex": 2777,
+   "macCounter": 353,
+   "equal": true
+  },
+  {
+   "tick": 870,
+   "rngIndex": 2957,
+   "rngCounter": 533,
+   "macIndex": 2957,
+   "macCounter": 533,
+   "equal": true
+  },
+  {
+   "tick": 873,
+   "rngIndex": 131,
+   "rngCounter": 707,
+   "macIndex": 131,
+   "macCounter": 707,
+   "equal": true
+  },
+  {
+   "tick": 876,
+   "rngIndex": 281,
+   "rngCounter": 857,
+   "macIndex": 281,
+   "macCounter": 857,
+   "equal": true
+  },
+  {
+   "tick": 879,
+   "rngIndex": 441,
+   "rngCounter": 1017,
+   "macIndex": 441,
+   "macCounter": 1017,
+   "equal": true
+  },
+  {
+   "tick": 882,
+   "rngIndex": 638,
+   "rngCounter": 1214,
+   "macIndex": 600,
+   "macCounter": 1176,
+   "equal": false
+  },
+  {
+   "tick": 885,
+   "rngIndex": 795,
+   "rngCounter": 137,
+   "macIndex": 770,
+   "macCounter": 112,
+   "equal": false
+  },
+  {
+   "tick": 888,
+   "rngIndex": 952,
+   "rngCounter": 294,
+   "macIndex": 884,
+   "macCounter": 226,
+   "equal": false
+  },
+  {
+   "tick": 891,
+   "rngIndex": 1117,
+   "rngCounter": 459,
+   "macIndex": 990,
+   "macCounter": 332,
+   "equal": false
+  },
+  {
+   "tick": 894,
+   "rngIndex": 1280,
+   "rngCounter": 622,
+   "macIndex": 1078,
+   "macCounter": 420,
+   "equal": false
+  },
+  {
+   "tick": 897,
+   "rngIndex": 1428,
+   "rngCounter": 770,
+   "macIndex": 1182,
+   "macCounter": 524,
+   "equal": false
+  },
+  {
+   "tick": 900,
+   "rngIndex": 1570,
+   "rngCounter": 912,
+   "macIndex": 1285,
+   "macCounter": 627,
+   "equal": false
+  },
+  {
+   "tick": 903,
+   "rngIndex": 1740,
+   "rngCounter": 1082,
+   "macIndex": 1426,
+   "macCounter": 768,
+   "equal": false
+  },
+  {
+   "tick": 906,
+   "rngIndex": 1937,
+   "rngCounter": 45,
+   "macIndex": 1637,
+   "macCounter": 979,
+   "equal": false
+  },
+  {
+   "tick": 909,
+   "rngIndex": 2143,
+   "rngCounter": 251,
+   "macIndex": 1869,
+   "macCounter": 1211,
+   "equal": false
+  },
+  {
+   "tick": 912,
+   "rngIndex": 2319,
+   "rngCounter": 427,
+   "macIndex": 2106,
+   "macCounter": 214,
+   "equal": false
+  },
+  {
+   "tick": 915,
+   "rngIndex": 2504,
+   "rngCounter": 612,
+   "macIndex": 2323,
+   "macCounter": 431,
+   "equal": false
+  },
+  {
+   "tick": 918,
+   "rngIndex": 2711,
+   "rngCounter": 819,
+   "macIndex": 2535,
+   "macCounter": 643,
+   "equal": false
+  },
+  {
+   "tick": 921,
+   "rngIndex": 2924,
+   "rngCounter": 1032,
+   "macIndex": 2793,
+   "macCounter": 901,
+   "equal": false
+  },
+  {
+   "tick": 924,
+   "rngIndex": 155,
+   "rngCounter": 29,
+   "macIndex": 7,
+   "macCounter": 1115,
+   "equal": false
+  },
+  {
+   "tick": 927,
+   "rngIndex": 355,
+   "rngCounter": 229,
+   "macIndex": 218,
+   "macCounter": 92,
+   "equal": false
+  },
+  {
+   "tick": 930,
+   "rngIndex": 559,
+   "rngCounter": 433,
+   "macIndex": 443,
+   "macCounter": 317,
+   "equal": false
+  },
+  {
+   "tick": 933,
+   "rngIndex": 755,
+   "rngCounter": 629,
+   "macIndex": 654,
+   "macCounter": 528,
+   "equal": false
+  },
+  {
+   "tick": 936,
+   "rngIndex": 950,
+   "rngCounter": 824,
+   "macIndex": 807,
+   "macCounter": 681,
+   "equal": false
+  },
+  {
+   "tick": 939,
+   "rngIndex": 1143,
+   "rngCounter": 1017,
+   "macIndex": 954,
+   "macCounter": 828,
+   "equal": false
+  },
+  {
+   "tick": 942,
+   "rngIndex": 1325,
+   "rngCounter": 1199,
+   "macIndex": 1099,
+   "macCounter": 973,
+   "equal": false
+  },
+  {
+   "tick": 945,
+   "rngIndex": 1509,
+   "rngCounter": 149,
+   "macIndex": 1255,
+   "macCounter": 1129,
+   "equal": false
+  },
+  {
+   "tick": 948,
+   "rngIndex": 1702,
+   "rngCounter": 342,
+   "macIndex": 1426,
+   "macCounter": 66,
+   "equal": false
+  },
+  {
+   "tick": 951,
+   "rngIndex": 1888,
+   "rngCounter": 528,
+   "macIndex": 1578,
+   "macCounter": 218,
+   "equal": false
+  },
+  {
+   "tick": 954,
+   "rngIndex": 2065,
+   "rngCounter": 705,
+   "macIndex": 1731,
+   "macCounter": 371,
+   "equal": false
+  },
+  {
+   "tick": 957,
+   "rngIndex": 2225,
+   "rngCounter": 865,
+   "macIndex": 1898,
+   "macCounter": 538,
+   "equal": false
+  },
+  {
+   "tick": 960,
+   "rngIndex": 2412,
+   "rngCounter": 1052,
+   "macIndex": 2062,
+   "macCounter": 702,
+   "equal": false
+  },
+  {
+   "tick": 963,
+   "rngIndex": 2610,
+   "rngCounter": 16,
+   "macIndex": 2219,
+   "macCounter": 859,
+   "equal": false
+  },
+  {
+   "tick": 966,
+   "rngIndex": 2842,
+   "rngCounter": 248,
+   "macIndex": 2362,
+   "macCounter": 1002,
+   "equal": false
+  },
+  {
+   "tick": 969,
+   "rngIndex": 37,
+   "rngCounter": 443,
+   "macIndex": 2508,
+   "macCounter": 1148,
+   "equal": false
+  },
+  {
+   "tick": 972,
+   "rngIndex": 261,
+   "rngCounter": 667,
+   "macIndex": 2658,
+   "macCounter": 64,
+   "equal": false
+  },
+  {
+   "tick": 975,
+   "rngIndex": 453,
+   "rngCounter": 859,
+   "macIndex": 2811,
+   "macCounter": 217,
+   "equal": false
+  },
+  {
+   "tick": 978,
+   "rngIndex": 647,
+   "rngCounter": 1053,
+   "macIndex": 7,
+   "macCounter": 413,
+   "equal": false
+  },
+  {
+   "tick": 981,
+   "rngIndex": 827,
+   "rngCounter": 1233,
+   "macIndex": 204,
+   "macCounter": 610,
+   "equal": false
+  },
+  {
+   "tick": 984,
+   "rngIndex": 983,
+   "rngCounter": 155,
+   "macIndex": 404,
+   "macCounter": 810,
+   "equal": false
+  },
+  {
+   "tick": 987,
+   "rngIndex": 1132,
+   "rngCounter": 304,
+   "macIndex": 590,
+   "macCounter": 996,
+   "equal": false
+  },
+  {
+   "tick": 990,
+   "rngIndex": 1301,
+   "rngCounter": 473,
+   "macIndex": 776,
+   "macCounter": 1182,
+   "equal": false
+  },
+  {
+   "tick": 993,
+   "rngIndex": 1468,
+   "rngCounter": 640,
+   "macIndex": 964,
+   "macCounter": 136,
+   "equal": false
+  },
+  {
+   "tick": 996,
+   "rngIndex": 1657,
+   "rngCounter": 829,
+   "macIndex": 1141,
+   "macCounter": 313,
+   "equal": false
+  },
+  {
+   "tick": 999,
+   "rngIndex": 1846,
+   "rngCounter": 1018,
+   "macIndex": 1348,
+   "macCounter": 520,
+   "equal": false
+  },
+  {
+   "tick": 1002,
+   "rngIndex": 2026,
+   "rngCounter": 1198,
+   "macIndex": 1530,
+   "macCounter": 702,
+   "equal": false
+  },
+  {
+   "tick": 1005,
+   "rngIndex": 2201,
+   "rngCounter": 139,
+   "macIndex": 1699,
+   "macCounter": 871,
+   "equal": false
+  },
+  {
+   "tick": 1008,
+   "rngIndex": 2372,
+   "rngCounter": 310,
+   "macIndex": 1858,
+   "macCounter": 1030,
+   "equal": false
+  },
+  {
+   "tick": 1011,
+   "rngIndex": 2540,
+   "rngCounter": 478,
+   "macIndex": 2042,
+   "macCounter": 1214,
+   "equal": false
+  },
+  {
+   "tick": 1014,
+   "rngIndex": 2710,
+   "rngCounter": 648,
+   "macIndex": 2226,
+   "macCounter": 164,
+   "equal": false
+  },
+  {
+   "tick": 1017,
+   "rngIndex": 2877,
+   "rngCounter": 815,
+   "macIndex": 2402,
+   "macCounter": 340,
+   "equal": false
+  },
+  {
+   "tick": 1020,
+   "rngIndex": 53,
+   "rngCounter": 991,
+   "macIndex": 2574,
+   "macCounter": 512,
+   "equal": false
+  },
+  {
+   "tick": 1023,
+   "rngIndex": 220,
+   "rngCounter": 1158,
+   "macIndex": 2744,
+   "macCounter": 682,
+   "equal": false
+  },
+  {
+   "tick": 1026,
+   "rngIndex": 363,
+   "rngCounter": 67,
+   "macIndex": 2936,
+   "macCounter": 874,
+   "equal": false
+  },
+  {
+   "tick": 1029,
+   "rngIndex": 528,
+   "rngCounter": 232,
+   "macIndex": 136,
+   "macCounter": 1074,
+   "equal": false
+  },
+  {
+   "tick": 1032,
+   "rngIndex": 702,
+   "rngCounter": 406,
+   "macIndex": 338,
+   "macCounter": 42,
+   "equal": false
+  },
+  {
+   "tick": 1035,
+   "rngIndex": 883,
+   "rngCounter": 587,
+   "macIndex": 512,
+   "macCounter": 216,
+   "equal": false
+  },
+  {
+   "tick": 1038,
+   "rngIndex": 1034,
+   "rngCounter": 738,
+   "macIndex": 626,
+   "macCounter": 330,
+   "equal": false
+  },
+  {
+   "tick": 1041,
+   "rngIndex": 1208,
+   "rngCounter": 912,
+   "macIndex": 742,
+   "macCounter": 446,
+   "equal": false
+  },
+  {
+   "tick": 1044,
+   "rngIndex": 1394,
+   "rngCounter": 1098,
+   "macIndex": 912,
+   "macCounter": 616,
+   "equal": false
+  },
+  {
+   "tick": 1047,
+   "rngIndex": 1578,
+   "rngCounter": 48,
+   "macIndex": 1107,
+   "macCounter": 811,
+   "equal": false
+  },
+  {
+   "tick": 1050,
+   "rngIndex": 1760,
+   "rngCounter": 230,
+   "macIndex": 1311,
+   "macCounter": 1015,
+   "equal": false
+  }
+ ]
+}
